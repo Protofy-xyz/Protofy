@@ -1,5 +1,7 @@
 {
+  "name": "visualui",
   "main": "",
+  "version": "0.0.1",
   "dependencies": {
     "react-topics": "0.1.7",
     "react-icons": "4.8.0",
