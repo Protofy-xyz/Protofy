@@ -1,0 +1,81 @@
+@font-face {
+  src: url("/fonts/seti.woff") format("woff");
+  font-family: "seti";
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.glassmorphismSidebar {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.allotment {
+  overflow-x: scroll;
+}
+
+.editorGroupContainer {
+  height: 100%;
+}
+
+.tabList {
+  display: flex;
+}
+
+.tabActions {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 28px;
+}
+
+.title {
+  background-color: rgb(37, 37, 38);
+}
+
+.editorContainer {
+  background-color: rgb(30, 30, 30);
+}
+
+.iconLabel {
+  display: flex;
+  line-height: 35px;
+}
+
+.iconLabel::before {
+  color: #519aba;
+  background-image: unset;
+  font-family: "seti";
+  font-size: 150%;
+}
+
+.typescriptReactFileIcon::before {
+  content: "\E099";
+}
+
+.cssLangFileIcon::before {
+  content: "\E01D";
+}
+
+.labelName {
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.actionLabel {
+  font-size: 16px !important;
+  padding: 2px;
+  width: 16px;
+  height: 16px;
+}

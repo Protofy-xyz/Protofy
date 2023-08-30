@@ -1,0 +1,226 @@
+.sidebar {
+  background-color: #252526;
+  flex: 1;
+  outline-color: rgba(83; 89, 93, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  font-size: 13px;
+}
+
+.title {
+  display: flex;
+  height: 35px;
+  display: flex;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.titleLabel {
+  line-height: 35px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 12px;
+}
+
+.titleLabel h2 {
+  color: rgb(187; 187, 187);
+  font-size: 11px;
+  cursor: default;
+  font-weight: 400;
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+.titleActions {
+  flex: 1;
+  padding-left: 5px;
+}
+
+.actionsContainer {
+  justify-content: flex-end;
+  display: flex;
+  margin: 0 auto;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+.listRow {
+  cursor: pointer;
+  height: 22px;
+  line-height: 22px;
+  padding-left: 22px;
+  display: flex;
+}
+
+.listRow:hover {
+  background-color: #2a2d2e;
+}
+
+.actionLabel {
+  align-items: center;
+}
+
+.iconLabelContainer {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.labelDescription {
+  font-style: italic;
+  opacity: 0.8;
+  margin-left: 0.5em;
+  font-size: 0.9em;
+  white-space: pre;
+}
+
+/* scrollbar: total width */
+.list::-webkit-scrollbar {
+  background-color: transparent;
+  width: 8px
+}
+
+/* background of the scrollbar except button or resizer */
+.list::-webkit-scrollbar-track {
+  opacity: 0
+}
+
+/* scrollbar itself */
+.list::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 16px;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a5;
+}
+
+/* Adds margin bottom and top to not exceed frame */
+.list::-webkit-scrollbar-track-piece:end {
+  background: transparent;
+  margin-bottom: 4px;
+}
+
+.list::-webkit-scrollbar-track-piece:start {
+  background: transparent;
+  margin-top: 4px;
+}
+
+.list::-webkit-scrollbar-button {
+  display: none
+}
+
+.deletePageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: fit-content;
+  width: fit-content;
+  background-color: #fff;
+  border-radius: 7px;
+  padding-inline: 25px;
+  padding-block: 20px;
+}
+
+.modalTitle {
+  font-size: 1.3rem;
+  font-weight: bolder;
+  text-align: center;
+  width: 100%;
+  height: fit-content;
+  padding-block: 15px;
+  color: #eb4034;
+  border-bottom: 1px solid #ececec;
+}
+
+.modalBodyText {
+  position: relative;
+  height: fit-content;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #4f4f4f;
+  width: 100%;
+  height: fit-content;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  padding-inline: 15px;
+  text-align: center;
+}
+
+.warning {
+  margin-block: 10px;
+  padding-block: 10px;
+  padding-inline: 15px;
+  background-color: #ffa6007f;
+  color: #b97800;
+  box-shadow: 0px 0px 0px 1px #b97800;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: fit-content;
+}
+
+.buttonsContainer {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 15px;
+  gap: 12px;
+}
+
+.modalButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 4px;
+  padding-block: 7px;
+  padding-inline: 13px;
+  font-size: 1rem;
+  font-weight: '400';
+  outline: none;
+  border: none;
+  background-color: transparent;
+  transition: all .12s ease-in-out;
+  cursor: pointer;
+}
+
+
+.modalButton:nth-child(1) {
+  color: #000000;
+}
+
+.modalButton:nth-child(1):hover {
+  background-color: #ececec;
+}
+
+.modalButton:nth-child(2) {
+  background-color: #eb4034;
+  color: #ffffff;
+}
+
+.modalButton:nth-child(2):hover {
+  background-color: #b32f25;
+}
