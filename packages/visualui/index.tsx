@@ -15,21 +15,20 @@ export function visualuiPublisher(target, action, payload) {
 
 export default () => {
 	const [sourceCode, setSourceCode] = useState();
-	const [filePath, setFilePath] = useState();
 	const [pages, setPages] = useState();
 	const [currentPage, setCurrentPage] = useState();
 
 	const onSave = (content: any) => {
-		visualuiPublisher('protofypanel', 'save', { path: filePath, content }) // Test publish to parent document
+		visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
 	}
-	const onSendMessage = (event) => {
+	const onSendMessage = (event: any) => {
 		const type = event.type
 		const payload = event.data
 		switch (type) {
 			case "loadPage":
 				const pagePath = payload.pageName
 				setCurrentPage(pagePath)
-				visualuiPublisher('protofypanel', 'readSourcecode', { file: pagePath }) // Test publish to parent document
+				visualuiPublisher('protofypanel', 'read', { file: pagePath }) // Test publish to parent document
 		}
 	}
 
@@ -39,15 +38,13 @@ export default () => {
 		const payload = eventData.data;
 
 		switch (type) {
-			case "protofypanel-visualui-readSourcecode-response":
-				setFilePath(payload.filePath)
-				setSourceCode(payload.sourceCode)
+			case "protofypanel-visualui-init":
+					setSourceCode(payload.sourceCode)
+					setPages(payload.pages??[])
+					setCurrentPage(payload.pages?payload.pages[0]:'')
 				break;
-			case "protofypanel-visualui-listPages-response":
-				const pageList = payload.pages
-				setPages(pageList)
-				setCurrentPage(pageList[0])
-				visualuiPublisher('protofypanel', 'readSourcecode', { file: pageList[0] })
+			case "protofypanel-visualui-read-response":
+				setSourceCode(payload.sourceCode)
 				break;
 			default:
 				console.error("Could not handle event of type: ", type);
@@ -56,7 +53,7 @@ export default () => {
 	}
 	useEffect(() => {
 		window.addEventListener("message", handleEvent)
-		visualuiPublisher('protofypanel', 'listPages', { directory: '/packages/web/app' })
+		visualuiPublisher('protofypanel', 'ready', {})
 	}, [])
 
 	return (

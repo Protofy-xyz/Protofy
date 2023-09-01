@@ -76,9 +76,6 @@ const PageMenu = ({ pages, sendMessage, currentPage }) => {
         if (Object.keys[templates]) return
         // readTemplates()
     }, [])
-    React.useEffect(() => {
-        console.log('DEV: pages: ', pages)
-    }, [pages])
 
     return (
         <div style={{ display: 'flex', flex: 1, flexDirection: 'column', maxHeight: window.outerHeight * 0.25 }}>
