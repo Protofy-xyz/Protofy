@@ -7,11 +7,17 @@ import { getIcon } from "visualui/utils/craftComponent";
 import { HiPuzzlePiece } from 'react-icons/hi2'
 
 export type SidebarProps = {
-	palettes: any[]
+	palettes: any[],
+	pages: any[],
+	sendMessage: Function,
+	currentPage: string
 };
 
 export const Sidebar = ({
-	palettes
+	palettes,
+	pages,
+	sendMessage,
+	currentPage
 }: SidebarProps) => {
 
 	const { connectors, query } = useEditor();
@@ -80,7 +86,7 @@ export const Sidebar = ({
 						}
 					</div>
 				</div>
-				{/* {!router.query.filename ? <PageMenu /> : <></>} */}
+				{ <PageMenu pages={pages} sendMessage={sendMessage} currentPage={currentPage}/>}
 			</div>
 		</div>
 	);

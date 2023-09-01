@@ -28,7 +28,7 @@ export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
 const uiStore = useFlowsStore()
 
-function UIEditor({ isActive = true, sourceCode = "", onSave = (content) => {} }) {
+function UIEditor({ isActive = true, sourceCode = "", onSave = (content) => {}, pages = [], sendMessage, currentPage }) {
 
 	const [codeEditorVisible, setCodeEditorVisible] = useState(false)
 	const currentPageContent = useEditorStore(state => state.currentPageContent)
@@ -92,9 +92,7 @@ function UIEditor({ isActive = true, sourceCode = "", onSave = (content) => {} }
 
 	useEffect(() => {
 		loadPage()
-	}, []);
-
-	useEffect(() => { console.log('DEV: sourceCode', sourceCode), [sourceCode] })
+	}, [sourceCode]);
 
 	const auxiliaryFlow = (
 		<div
@@ -138,6 +136,9 @@ function UIEditor({ isActive = true, sourceCode = "", onSave = (content) => {} }
 		>
 			<Sidebar
 				palettes={allPalletes}
+				pages={pages}
+				sendMessage={sendMessage}
+				currentPage={currentPage}
 			/>
 		</div>
 	);

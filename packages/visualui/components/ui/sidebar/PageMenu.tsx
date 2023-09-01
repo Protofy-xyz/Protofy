@@ -1,19 +1,16 @@
 import React from 'react'
 import { useEditorStore } from '../../../store/EditorStore'
-import { Input } from "native-base";
+// import { Input } from "native-base";
 import styles from "../sidebar.module.css";
 import TemplateModal from './TemplateModal';
 import EditorApi from '../../../api/EditorApi'
-import { Text, HStack, Icon, Button } from "native-base";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+// import { Text, HStack, Icon, Button } from "native-base";
+// import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FiX, FiTrash2, FiAlertTriangle } from 'react-icons/fi'
-import { Modal } from "native-base";
+// import { Modal } from "native-base";
 
-const PageMenu = () => {
+const PageMenu = ({ pages, sendMessage, currentPage }) => {
     const templatesEnabled = true
-    const currentPage = useEditorStore(state => state.currentPage)
-    const setCurrentPage = useEditorStore(state => state.setCurrentPage)
-    const pages = useEditorStore(state => state.pages)
     const createPage = useEditorStore(state => state.createPage)
     const platformPages = ["demo", "editor", "flows", "device"]
     const [modalVisible, setModalVisible] = React.useState(false);
@@ -27,7 +24,7 @@ const PageMenu = () => {
     const [deletingPage, setDeletingPage] = React.useState<string>();
 
     const changePage = (page: string) => {
-        setCurrentPage(page)
+        // setCurrentPage(page)
     }
     const onAddPage = async (templateName?: string) => {
         try {
@@ -67,55 +64,56 @@ const PageMenu = () => {
         }
     }
     const readTemplates = async () => {
-        try {
-            const templates = await EditorApi.getTemplates()
-            const visibleTemplates = { 'HomeAndMenu': templates['HomeAndMenu'] } // TODO: TO MAKE ALL OTHER TEMPLATES WORK AND DELETE THIS FILTER. NOW ONLY WORKS "HOME AND MENU" GROUP.
-            setTemplates(visibleTemplates)
-            // setTemplates(templates)
-            setSelectedSection(Object.keys(templates)[2])
-        } catch (e) { console.error(`Error reading templates. ${e}`) }
+        // try {
+        //     const templates = await EditorApi.getTemplates()
+        //     const visibleTemplates = { 'HomeAndMenu': templates['HomeAndMenu'] } // TODO: TO MAKE ALL OTHER TEMPLATES WORK AND DELETE THIS FILTER. NOW ONLY WORKS "HOME AND MENU" GROUP.
+        //     setTemplates(visibleTemplates)
+        //     // setTemplates(templates)
+        //     setSelectedSection(Object.keys(templates)[2])
+        // } catch (e) { console.error(`Error reading templates. ${e}`) }
     }
     React.useEffect(() => {
         if (Object.keys[templates]) return
-        readTemplates()
+        // readTemplates()
     }, [])
+    React.useEffect(() => {
+        console.log('DEV: pages: ', pages)
+    }, [pages])
+
     return (
         <div style={{ display: 'flex', flex: 1, flexDirection: 'column', maxHeight: window.outerHeight * 0.25 }}>
             <div style={{ paddingTop: '20px' }}>
-                <Text pl='18px' pt="20px" fontSize='xl' color="warmGray.300">Screens</Text>
+                <div style={{ padding: '20px 0px 0px 18px', fontSize: '20px', color: 'gray' }}>Screens</div>
             </div>
-            <div style={{ paddingBottom: '10px', overflow: 'auto', overflowX: 'hidden' }} className={styles.list}>
-                {pages.filter(page => !platformPages.includes(page.title)).map((document, index) => (
+            <div style={{ display: 'flex', flex: 1, flexDirection: 'column', paddingBottom: '10px', overflow: 'auto', overflowX: 'hidden' }} className={styles.list}>
+                {pages.filter(p => p).map((pageName, index) => (
                     <div
                         key={index}
                         className={styles.listRow}
-                        onClick={() => changePage(document.title)}
+                        onClick={() =>
+                            sendMessage({ type: 'loadPage', data: { pageName } })
+                        }
                     >
-                        <div className={styles.iconLabel} style={{ width: '100%'}}>
-                            <div className={styles.iconLabelContainer} >
-                                <span className={styles.iconNameContainer} >
-                                    <Text pt="20px" fontSize='xs' fontWeight={currentPage == document.title ? "700" : "400"} color={currentPage == document.title ? 'warmGray.100' : 'warmGray.300'}
-                                      style={{ width: '100%'}}>
-                                        {document.title}
-                                    </Text>
-                                </span>
-                            </div>
+                        <div className={styles.iconLabel} style={{ width: '100%', fontSize: '12px', color: 'gray', fontWeight: currentPage == pageName ? "700" : "400" }}>
+                            {pageName}
                         </div>
-                        <FiX style={{ paddingRight: '10px' }} size="1.5em" onClick={() => {setShowDeleteModal(true); setDeletingPage(document.title)}}/> 
+                        {/* <FiX
+                            style={{ paddingRight: '10px' }}
+                            size="1.5em"
+                            // onClick={() => { setShowDeleteModal(true); setDeletingPage(pageName) }}
+                        /> */}
                     </div>
                 ))}
             </div>
-            <Input
-                fontWeight={"400"}
-                placeholder={'New page +'}
-                variant="unstyled"
-                color="white"
-                onSubmitEditing={() => onNameIntro()}
-                value={newPageTitle}
-                style={{ paddingLeft: 22, paddingTop: 2 }}
-                onChange={(e) => onNameChange(e.target.value)}
-            />
-            {errorMsg ? <HStack space='5px' mx='22px'>
+            {/* <input
+                style={{ fontWeight: '400', paddingLeft: 22, marginTop: '30px', color: 'white' }}
+            // placeholder={'New page +'}
+            // variant="unstyled"
+            // onSubmitEditing={() => onNameIntro()}
+            // value={newPageTitle}
+            // onChange={(e) => onNameChange(e.target.value)}
+            /> */}
+            {/* {errorMsg ? <HStack space='5px' mx='22px'>
                 <Icon as={MaterialCommunityIcons} mt='1px' name="alert-circle-outline" color='error.600' />
                 <Text color='error.600' fontSize='xs'>{errorMsg}</Text>
             </HStack> : null}
@@ -130,38 +128,38 @@ const PageMenu = () => {
                 onSubmit={() => onAddPage(`${selectedSection}/${selectedTemplate}`)}
                 selectedSection={selectedSection}
                 setSelectedSection={setSelectedSection}
-            />
-            <DeletePageModal page={deletingPage} isVisible={showDeleteModal} onClose={() => { setShowDeleteModal(false); setDeletingPage()}}/>
-        </div>
+            /> */}
+            {/* <DeletePageModal page={deletingPage} isVisible={showDeleteModal} onClose={() => { setShowDeleteModal(false); setDeletingPage()}}/> */}
+        </div >
     )
 }
 
 export default PageMenu
 
 
-function DeletePageModal({page, isVisible, onClose}) {
-    const deletePage = useEditorStore(state => state.deletePage)
-    const setCurrentPage = useEditorStore(state => state.setCurrentPage)
-    const pages = useEditorStore(state => state.pages);
+// function DeletePageModal({page, isVisible, onClose}) {
+//     const deletePage = useEditorStore(state => state.deletePage)
+//     const setCurrentPage = useEditorStore(state => state.setCurrentPage)
+//     const pages = useEditorStore(state => state.pages);
 
-    const onDeletePage = async () => {
-        await deletePage(page);
-        const newPages = pages.filter(p => p.title != page);
-        console.log('newPages: ', newPages)
-        const newCurrentPage = newPages?.length ? newPages[0].title : undefined;
-        setCurrentPage(newCurrentPage)
-        onClose()
-    }
+//     const onDeletePage = async () => {
+//         await deletePage(page);
+//         const newPages = pages.filter(p => p.title != page);
+//         console.log('newPages: ', newPages)
+//         const newCurrentPage = newPages?.length ? newPages[0].title : undefined;
+//         setCurrentPage(newCurrentPage)
+//         onClose()
+//     }
 
-    return(
-        <Modal isOpen={isVisible} onClose={onClose} safeAreaTop={true}>
-            <Modal.Content maxWidth="350" px={30} py={36}>
-                <Text as="bold" fontSize={18}>Are you sure you want to delete page "{page}"?</Text>
-                <Button.Group space={2}>
-                    <Button flex={1} variant="outline" onPress={onClose}>Cancel</Button>
-                    <Button flex={1} onPress={onDeletePage} >Delete</Button>
-                </Button.Group>
-            </Modal.Content>
-        </Modal>
-    )
-}
+//     return(
+//         <Modal isOpen={isVisible} onClose={onClose} safeAreaTop={true}>
+//             <Modal.Content maxWidth="350" px={30} py={36}>
+//                 <Text as="bold" fontSize={18}>Are you sure you want to delete page "{page}"?</Text>
+//                 <Button.Group space={2}>
+//                     <Button flex={1} variant="outline" onPress={onClose}>Cancel</Button>
+//                     <Button flex={1} onPress={onDeletePage} >Delete</Button>
+//                 </Button.Group>
+//             </Modal.Content>
+//         </Modal>
+//     )
+// }
