@@ -28,7 +28,7 @@ export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
 const uiStore = useFlowsStore()
 
-function UIEditor({ isActive = true, sourceCode = "", onSave = (content) => {}, pages = [], sendMessage, currentPage }) {
+function UIEditor({ isActive = true, sourceCode = "", onSave = (content) => {}, pages = [], sendMessage, currentPage, userComponents }) {
 
 	const [codeEditorVisible, setCodeEditorVisible] = useState(false)
 	const currentPageContent = useEditorStore(state => state.currentPageContent)
@@ -36,7 +36,7 @@ function UIEditor({ isActive = true, sourceCode = "", onSave = (content) => {}, 
 	const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
 
 	// const allPalletes = { ...paletteComponents, ...userPalettes }
-	const allPalletes = { ...paletteComponents }
+	const allPalletes = { ...paletteComponents, project: userComponents }
 	const getCraftComponents = (enableDropable?: boolean) => { // FIX: If components of diferent palette has the same name will overwrite
 		let filteredPalettes = Object.keys(allPalletes)
 		if (enableDropable) {
