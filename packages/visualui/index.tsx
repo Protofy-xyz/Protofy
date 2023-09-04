@@ -4,7 +4,6 @@ import UIEditor from './components/ui/UIEditor'
 import { TopicsProvider } from "react-topics";
 import userComponents from "../../.protofy/visualui/components";
 
-
 export function visualuiPublisher(target, action, payload) {
 	const source = "visualui"
 	let message = {
@@ -20,9 +19,6 @@ export default () => {
 	const [pages, setPages] = useState();
 	const [currentPage, setCurrentPage] = useState();
 
-	const onSave = (content: any) => {
-		visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
-	}
 	const onSendMessage = (event: any) => {
 		const type = event.type
 		const payload = event.data
@@ -31,6 +27,11 @@ export default () => {
 				const pagePath = payload.pageName
 				setCurrentPage(pagePath)
 				visualuiPublisher('protofypanel', 'read', { file: pagePath }) // Test publish to parent document
+				break;
+			case "save":
+				const content = payload.content
+				visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
+				break;
 		}
 	}
 
@@ -62,7 +63,13 @@ export default () => {
 		<TopicsProvider>
 			{
 				sourceCode ?
-					<UIEditor sourceCode={sourceCode} onSave={onSave} sendMessage={onSendMessage} userComponents={userComponents} currentPage={currentPage} pages={pages} />
+					<UIEditor
+						sourceCode={sourceCode}
+						currentPage={currentPage}
+						pages={pages}
+						userComponents={userComponents}
+						sendMessage={onSendMessage}
+					/>
 					: null
 			}
 		</TopicsProvider>

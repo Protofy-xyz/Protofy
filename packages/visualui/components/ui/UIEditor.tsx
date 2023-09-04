@@ -28,7 +28,7 @@ export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
 const uiStore = useFlowsStore()
 
-function UIEditor({ isActive = true, sourceCode = "", onSave = (content) => {}, pages = [], sendMessage, currentPage, userComponents }) {
+function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, currentPage, userComponents }) {
 
 	const [codeEditorVisible, setCodeEditorVisible] = useState(false)
 	const currentPageContent = useEditorStore(state => state.currentPageContent)
@@ -73,7 +73,7 @@ function UIEditor({ isActive = true, sourceCode = "", onSave = (content) => {}, 
 					const newAstContent = astContent.insertText(lastImportPos, missingJsxImportsText)
 					content = newAstContent.getText()
 				}
-				onSave(content)
+				sendMessage({ type: 'save', data: { content } })
 				break;
 			case "editor":
 				break;
