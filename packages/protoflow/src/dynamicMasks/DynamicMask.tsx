@@ -2,6 +2,7 @@ import React from 'react';
 import Node, { FlowPort, NodeParams } from '../Node';
 import { MdOutlineComment } from "react-icons/md";
 import FallbackPort from '../FallbackPort';
+import Button from '../Button';
 
 const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
     return (
@@ -20,6 +21,9 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         }
                         case 'redirect': {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
+                        }
+                        case 'button': {
+                            return <Button onPress={()=>{console.log(element.params.onPress)}} label={element.params.label}></Button>
                         }
                     }
                 })
