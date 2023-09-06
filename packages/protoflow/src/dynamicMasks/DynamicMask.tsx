@@ -5,6 +5,8 @@ import FallbackPort from '../FallbackPort';
 import Button from '../Button';
 
 const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
+    const [result, setResult] = React.useState(""
+    )
     return (
         <Node icon={MdOutlineComment} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color="#BCAAA4" skipCustom={true}>
             {
@@ -23,7 +25,21 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
                         }
                         case 'button': {
-                            return <Button onPress={()=>{console.log(element.params.onPress)}} label={element.params.label}></Button>
+                            return <>
+                            <Button onPress={async () => {
+                                const func = new Function(`
+                                    return (async () => {
+                                        ${element.params.onPress}
+                                    })();
+                                `);
+                                const result = await func()
+                                setResult(result)
+                                console.log("result: ", result)
+                            }} label={element.params.label}></Button>
+                            {result && element.params.displayResult?<>
+                                <textarea style={{width:"100%", height: "150px", fontSize: "20px"}}>{JSON.stringify(result)}</textarea>
+                            </>:null}
+                            </>
                         }
                     }
                 })
