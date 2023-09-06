@@ -6,7 +6,6 @@ import Button from '../Button';
 
 const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const [result, setResult] = React.useState("")
-    console.log("NODEDATAAA", nodeData)
     return (
         <Node icon={MdOutlineComment} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color="#BCAAA4" skipCustom={true}>
             {
