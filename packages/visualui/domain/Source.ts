@@ -346,7 +346,7 @@ export default class Source {
         }, [])
     }
 
-    dumpImportDeclarations(craftNodes): string {
+    dumpImportDeclarations(craftNodes: any, resolveComponentsDir = "@/components/"): string {
         const flattenImportDeclarationsArr: any[] = this.flattenImportDeclarations()
         // Add NativeBaseProvider 
         if (flattenImportDeclarationsArr.findIndex(imp => [imp.namedImports?.length ? imp.namedImports[0]?.name : ""].includes("NativeBaseProvider")) === -1) {
@@ -374,7 +374,7 @@ export default class Source {
                     flattenImportDeclarationsArr[flattenImportDeclarationsArr.length] = {
                         namedImports: undefined,
                         defaultImport: name,
-                        moduleSpecifier: "'baseapp/palettes/uikit/" + name + "'"
+                        moduleSpecifier: `'${resolveComponentsDir}${name}'`
                     }
                 }
                 else {// If has matched import replace the info for the info inside node
@@ -516,14 +516,14 @@ export default class Source {
         return craftNodes;
     }
 
-    dump(craftNodes: any): string { // Dumps craftJS nodes back into source code
+    dump(craftNodes: any, resolveComponentsDir: string): string { // Dumps craftJS nodes back into source code
         craftNodes = Source.deleteCraftThemeNode(craftNodes)
         let dumpedNodes = this.traverseDump(craftNodes, "ROOT")
         const content = this.getContent()
         this.ast.replaceText([content.getPos(), content.getEnd()], dumpedNodes);
         const previousImportDeclarations: any[] = this.ast.getImportDeclarations();
         if (previousImportDeclarations?.length) {
-            const newImportsContent: string = this.dumpImportDeclarations(craftNodes);
+            const newImportsContent: string = this.dumpImportDeclarations(craftNodes, resolveComponentsDir);
             previousImportDeclarations.forEach(imp => imp.replaceWithText('')) // Remove all imports
             this.ast.insertText(0, newImportsContent);// Insert at top the new import content
         }

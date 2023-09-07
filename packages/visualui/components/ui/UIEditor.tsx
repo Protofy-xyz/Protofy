@@ -28,7 +28,7 @@ export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
 const uiStore = useFlowsStore()
 
-function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, currentPage, userComponents }) {
+function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, currentPage = "", userComponents = {}, resolveComponentsDir = ""  }) {
 
 	const [codeEditorVisible, setCodeEditorVisible] = useState(false)
 	const currentPageContent = useEditorStore(state => state.currentPageContent)
@@ -62,7 +62,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
 				if (!data) break
 				const astContent = getSource(content)
 				const previousImports = astContent.getImportDeclarations();
-				const missingJsxImports = getMissingJsxImports(data.nodes, data.nodesData)
+				const missingJsxImports = getMissingJsxImports(data.nodes, data.nodesData, resolveComponentsDir)
 				if (missingJsxImports.length) {
 					const missingJsxImportsText = missingJsxImports.reduce((total, impData) => {
 						const impText = "import " + impData.name + ' from "' + impData.module + '";\n'
@@ -144,7 +144,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
 	);
 	const editorContent = (
 		<div style={{ flex: 1, display: 'flex', minWidth: "280px", border: '1px solid #424242' }}>
-			<EditorComponent onSave={() => null}>
+			<EditorComponent onSave={() => null} resolveComponentsDir={resolveComponentsDir}>
 			</EditorComponent>
 		</div>
 	)

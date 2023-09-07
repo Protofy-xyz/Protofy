@@ -127,7 +127,7 @@ export const getSource = (sourceCode, filename = "customCode.tsx") => {
     return source
 }
 
-export const getMissingJsxImports = (nodes, nodeData) => {
+export const getMissingJsxImports = (nodes: any, nodeData: any, resolveComponentsDir: any) => {
     const importNodeIds: string[] = nodes.filter(n => n.type == 'ImportDeclaration')?.map(n => n.id)
     const jsxNodeIds: string[] = nodes.filter(n => ["JsxElement", "JsxSelfClosingElement"].includes(n.type))?.map(n => n.id)
     const importsNames = []
@@ -150,7 +150,7 @@ export const getMissingJsxImports = (nodes, nodeData) => {
     var missingImports =  Array.from(jsxNodeNames)?.filter(jsxName => !importsNames.includes(jsxName)).map(name => {
         return {
             name,
-            module: 'baseapp/palettes/uikit/' + name
+            module: resolveComponentsDir + name
         }
     })
 

@@ -25,11 +25,12 @@ export type EditorProps = {
 	children?: any;
 	onSave: Function;
 	topics: any;
+	resolveComponentsDir: string;
 };
 
 const ENABLE_EDIT_THEME = toggles.enableEditTheme ?? false;
 
-const Editor = ({ children, topics, onSave }: EditorProps) => {
+const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps) => {
 	const img = useRef()
 	const paper = useRef()
 	const [error, setError] = useState<string>();
@@ -203,7 +204,7 @@ const Editor = ({ children, topics, onSave }: EditorProps) => {
 						props: {},
 						custom: {
 							defaultImport: name,
-							moduleSpecifier: `"baseapp/palettes/uikit/${name}"`,
+							moduleSpecifier: `"${resolveComponentsDir}${name}"`,
 							_nodeType: "JsxElement"
 						},
 						hidden: false,
@@ -324,7 +325,7 @@ const Editor = ({ children, topics, onSave }: EditorProps) => {
 			event.preventDefault();
 			if (document.activeElement?.className.includes('monaco')) return onSave("monaco") //Save if monaco active
 			if (!sourceFile || error) return
-			const fileContent: string = sourceFile.dump(currentEditorNodes)
+			const fileContent: string = sourceFile.dump(currentEditorNodes, resolveComponentsDir)
 			onSave("editor", fileContent)
 			// if (ENABLE_EDIT_THEME) updateTheme() // Update theme
 			return

@@ -16,8 +16,10 @@ export function visualuiPublisher(target, action, payload) {
 
 export default () => {
 	const [sourceCode, setSourceCode] = useState();
+
 	const [pages, setPages] = useState();
 	const [currentPage, setCurrentPage] = useState();
+	const [resolveComponentsDir, setResolveComponentsDir] = useState("");
 
 	const onSendMessage = (event: any) => {
 		const type = event.type
@@ -43,6 +45,7 @@ export default () => {
 		switch (type) {
 			case "protofypanel-visualui-init":
 				setSourceCode(payload.sourceCode)
+				setResolveComponentsDir(payload.resolveComponentsDir)
 				setPages(payload.pages ?? [])
 				setCurrentPage(payload.pages ? payload.pages[0] : '')
 				break;
@@ -69,6 +72,7 @@ export default () => {
 						pages={pages}
 						userComponents={userComponents}
 						sendMessage={onSendMessage}
+						resolveComponentsDir={`${resolveComponentsDir}/`}
 					/>
 					: null
 			}
