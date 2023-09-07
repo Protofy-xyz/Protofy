@@ -79,9 +79,7 @@ const PageMenu = ({ pages, sendMessage, currentPage }) => {
 
     return (
         <div style={{ display: 'flex', flex: 1, flexDirection: 'column', maxHeight: window.outerHeight * 0.25 }}>
-            <div style={{ paddingTop: '20px' }}>
-                <div style={{ padding: '20px 0px 0px 18px', fontSize: '20px', color: 'gray' }}>Screens</div>
-            </div>
+            <div style={{ padding: '20px 0px 0px 18px', fontSize: '18px', color: 'white' }}>Screens</div>
             <div style={{ display: 'flex', flex: 1, flexDirection: 'column', paddingBottom: '10px', overflow: 'auto', overflowX: 'hidden' }} className={styles.list}>
                 {pages.filter(p => p).map((pageName, index) => (
                     <div
@@ -91,7 +89,7 @@ const PageMenu = ({ pages, sendMessage, currentPage }) => {
                             sendMessage({ type: 'loadPage', data: { pageName } })
                         }
                     >
-                        <div className={styles.iconLabel} style={{ width: '100%', fontSize: '12px', color: 'gray', fontWeight: currentPage == pageName ? "700" : "400" }}>
+                        <div className={styles.iconLabel} style={{ width: '100%', fontSize: '12px', color: currentPage == pageName ? 'white' : 'gray', fontWeight: currentPage == pageName ? "500" : "300" }}>
                             {pageName}
                         </div>
                         {/* <FiX

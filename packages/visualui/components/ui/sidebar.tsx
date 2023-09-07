@@ -41,13 +41,13 @@ export const Sidebar = ({
 		<div className={styles.sidebar}>
 			<div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '4px' }}>
 				<div style={{ padding: '4px', display: 'flex', flexDirection: "column", flex: 1, borderBottom: '1px solid #FFFFFF10', maxHeight: window.outerHeight * 0.5 }}>
-					<p style={{ padding: '20px 0px 0px 18px', fontSize: '20px', color: 'grey' }}>Components</p>
+					<p style={{ padding: '20px 0px 0px 18px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
 					<div className={styles.list} style={{ overflow: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }}>
 						{
 							palettesArr.map((palette, i) => {
 								return (
 									<div key={i} style={{ flexDirection: 'column', display: 'flex', marginBottom: '25px' }}>
-										<p style={{ paddingLeft: '18px', fontSize: '16px', color: 'grey' }}>{palette}</p>
+										<p style={{ paddingLeft: '18px', fontSize: '12px', color: 'grey' }}>{palette}</p>
 										<div className={styles.list} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start' }}>
 											{
 												Object.keys(dropableCraftComponents[palette]).map((componentName, i) => {
@@ -63,14 +63,14 @@ export const Sidebar = ({
 																		></Element>
 																		: React.createElement(dropableCraftComponents[palette][componentName].element)
 																})}
-																style={{ textAlign: 'center', marginTop: '10px', height: '50px', width: '50px' }}
+																style={{ textAlign: 'center', marginTop: '10px', height: '50px', width: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
 															>
 																<HiPuzzlePiece
 																	color={"#a8a29e"}
 																	size={32}
 																/>
 																<div style={{ marginTop: '5px' }}>
-																	<p style={{ fontSize: '10px', width: '100%', color: 'grey' }}>
+																	<p style={{ fontSize: '10px', width: '100%', color: 'white' }}>
 																		{truncate_with_ellipsis(componentName, 8)}
 																	</p>
 																</div>
