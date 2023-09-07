@@ -3,8 +3,8 @@ import { ROOT_NODE } from '@craftjs/utils';
 import React, { useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import styles from "../../styles/Editor.module.css";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Icon, Text, Flex } from "native-base"
+import {MdDelete, MdArrowDownward, MdRedo, MdArrowUpward} from "react-icons/md";
+import {GiMove} from "react-icons/gi";
 
 export const RenderNode = ({ render }) => {
     const enableEdit = true
@@ -80,84 +80,85 @@ export const RenderNode = ({ render }) => {
                 ?.removeEventListener('scroll', scroll);
         };
     }, [scroll]);
-    return (
+
+    return(
         <>
-            {(isHover || isActive) && enableEdit
-                ? ReactDOM.createPortal(
-                    <div
-                        ref={currentRef}
-                        style={{
-                            left: getPos(dom).left,
-                            top: getPos(dom).top,
-                            zIndex: 9999,
-                            position: "fixed",
-                            backgroundColor: "#2680EB",
-                            padding: "10px",
-                            color: "white",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            height: "30px",
-                            marginTop: "-29px",
-                            pointerEvent: 'auto'
-                        }}
-                    >
-                        <Text fontSize="xs" color="white" mr="10">{name}</Text>
-                        <Flex direction="row">
-                            {moveable ? (
-                                <div
-                                    ref={drag}
-                                    style={{ cursor: "grab" }}
-                                    title="Move"
-                                >
-                                    <Icon
-                                        as={MaterialCommunityIcons}
-                                        name="arrow-all"
-                                        size="xs"
-                                        color="white"
-                                    />
-                                </div>
-                            ) : null}
-                            {id !== ROOT_NODE && parent != "ROOT" ?
-                                <div
-                                    style={{ margin: "0px 8px 0px 8px", cursor: "pointer" }}
-                                    title="Go to parent"
-                                >
-                                    <Icon
+            {
+            ((isHover || isActive) && enableEdit ) 
+            ?
+            ReactDOM.createPortal(
+                <div
+                    ref={currentRef}
+                    style={{
+                        left: getPos(dom).left,
+                        top: getPos(dom).top,
+                        zIndex: 9999,
+                        position: "fixed",
+                        backgroundColor: "#2680EB",
+                        padding: "10px",
+                        color: "white",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        height: "30px",
+                        marginTop: "-29px",
+                        pointerEvent: 'auto'
+                    }}
+                >
+                    <div style={{ fontSize: 10, color:'white', marginRight:10}}>{name}</div>
+                    <div style={{display:'flex', flexDirection:"row", flex:1}}>
+                        {moveable ? (
+                            <div
+                                ref={drag}
+                                style={{ cursor: "grab" }}
+                                title="Move"
+                            >
+                                <GiMove
                                         onMouseDown={(e) => {
                                             actions.selectNode(parent);
                                             e.stopPropagation()
                                         }}
-                                        as={MaterialCommunityIcons}
-                                        name="arrow-up"
-                                        size="xs"
                                         color="white"
-                                    />
-                                </div>
-                                : null}
-                            {childs.length ?
-                                <div
-                                    style={{ marginRight: parent != "ROOT" ? "8px" : "", cursor: "pointer" }}
-                                    title="Go to first child"
-                                >
-                                    <Icon
+                                        size={14}
+                                />
+                            </div>
+                        ) : null}
+                        {id !== ROOT_NODE && parent != "ROOT" ?
+                            <div
+                                style={{ margin: "0px 8px 0px 8px", cursor: "pointer" }}
+                                title="Go to parent"
+                            >
+                                <MdArrowUpward
                                         onMouseDown={(e) => {
+                                            actions.selectNode(parent);
+                                            e.stopPropagation()
+                                        }}
+                                        color="white"
+                                        size={14}
+                                />
+                            </div>
+                            : null}
+                        {childs.length ?
+                            <div
+                                style={{ marginRight: parent != "ROOT" ? "8px" : "", cursor: "pointer" }}
+                                title="Go to first child"
+                            >
+                                <MdArrowDownward
+                                          onMouseDown={(e) => {
                                             actions.selectNode(childs[0]);
                                             e.stopPropagation()
                                         }}
-                                        as={MaterialCommunityIcons}
-                                        name="arrow-down"
-                                        size="xs"
                                         color="white"
-                                    />
-                                </div>
-                                : null}
-                            {nodeAndSiblings.length > 1 ?
-                                <div
-                                    style={{ margin: "0px 8px 0px 0px", cursor: "pointer" }}
-                                    title="Go to next sibling"
-                                >
-                                    <Icon
+                                        size={14}
+                                />
+                            </div>
+                            : null}
+                        {nodeAndSiblings.length > 1 ?
+                            <div
+                                style={{ margin: "0px 8px 0px 0px", cursor: "pointer" }}
+                                title="Go to next sibling"
+                            >
+                                      <MdRedo
                                         onMouseDown={(e) => {
                                             const currentIndex = nodeAndSiblings.indexOf(nodeId)
                                             const nextIndex = (currentIndex + 1) % nodeAndSiblings.length
@@ -165,37 +166,34 @@ export const RenderNode = ({ render }) => {
                                             actions.selectNode(nextNode);
                                             e.stopPropagation()
                                         }}
-                                        as={MaterialCommunityIcons}
-                                        name="redo"
-                                        size="xs"
                                         color="white"
-                                    />
-                                </div>
-                                : null}
-                            {deletable ? (
-                                <div
-                                    style={{ cursor: "pointer" }}
-                                    title="Delete"
-                                >
-                                    <Icon
-                                        onMouseDown={(e: React.MouseEvent) => {
-                                            e.stopPropagation();
-                                            actions.delete(id);
-                                        }}
-                                        as={MaterialCommunityIcons}
-                                        name="delete"
-                                        size="xs"
-                                        color="white"
-                                    />
-                                </div>
-                            ) : null}
+                                        size={14}
+                                />
+                            </div>
+                            : null}
+                        {deletable ? (
+                            <div
+                                style={{ cursor: "pointer" }}
+                                title="Delete"
+                            >
+                                <MdDelete
+                                  onMouseDown={(e: React.MouseEvent) => {
+                                    e.stopPropagation();
+                                    actions.delete(id);
+                                }}
+                                color="white"
+                                size={14}
+                                />
+                            </div>
+                        ) : null}
 
-                        </Flex>
-                    </div>,
-                    document.querySelector('.page-container')
-                )
-                : null}
-            {render}
+                    </div>
+                </div>,
+                document.querySelector('.page-container')
+            )
+            : null
+        }
+        {render}
         </>
-    );
+    )
 };

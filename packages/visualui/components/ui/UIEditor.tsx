@@ -6,7 +6,7 @@ import { useEditorStore } from '../../store/EditorStore';
 // import systemTheme from "baseapp/core/themes/protofyTheme";
 // import Modules from 'internalapp/generated/visualui/modules';
 // import userPalettes from 'internalapp/generated/visualui/palettes';
-// import { RenderNode } from './RenderNode';
+import { RenderNode } from './RenderNode';
 import paletteComponents from '../../palettes';
 // import PaletteLoader from "visualui/components/loaders/PaletteLoader";
 import EditorComponent from "./editor";
@@ -151,6 +151,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
 	return <div style={{ display: 'flex', flex: 1, width: '100%' }}>
 		<Editor
 			resolver={availableCraftComponents}
+			onRender={RenderNode}
 		>
 			<div style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
 				<SlidingPanel leftPanelContent={sidebar} centerPanelContent={editorContent} rightPanelContent={auxiliaryFlow} />
