@@ -153,8 +153,8 @@ const Diagram = React.forwardRef(({
     const zoomToNode = useCallback((selectedNodeId) => {
         const selectedNode = getNodes().find(n => n.id == selectedNodeId)
         if (!selectedNode) return
-        const posX = selectedNode.position.x
-        const posY = selectedNode.position.y
+        const posX = -selectedNode.position.x
+        const posY = -selectedNode.position.y
         setViewport({ x: posX, y: posY, zoom: 1 }, { duration: 800 });
     }, [setViewport]);
 
