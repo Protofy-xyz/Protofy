@@ -62,6 +62,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
 				if (!data) break
 				const astContent = getSource(content)
 				const previousImports = astContent.getImportDeclarations();
+				const useClient = "'use client'\n" // Restore use client for nextjs
 				const missingJsxImports = getMissingJsxImports(data.nodes, data.nodesData, resolveComponentsDir)
 				if (missingJsxImports.length) {
 					const missingJsxImportsText = missingJsxImports.reduce((total, impData) => {
@@ -71,7 +72,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
 					}, '\n')
 					const lastImportPos = previousImports ? previousImports[previousImports.length - 1].getEnd() : 0
 					const newAstContent = astContent.insertText(lastImportPos, missingJsxImportsText)
-					content = newAstContent.getText()
+					content = useClient + newAstContent.getText()
 				}
 				sendMessage({ type: 'save', data: { content } })
 				break;
