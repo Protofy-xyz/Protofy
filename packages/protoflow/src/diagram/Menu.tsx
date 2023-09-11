@@ -7,7 +7,6 @@ import { generateId } from '../lib/IdGenerator';
 import { POKA_HANDLE_TYPES, PORT_TYPES, createNode } from '../lib/Node';
 import { withTopics } from "react-topics";
 import { POKAYOKE_ENABLED } from '../toggles';
-import '../styles.css';
 import Text from './NodeText';
 import { MdSearch } from "react-icons/md";
 import useTheme from './Theme';

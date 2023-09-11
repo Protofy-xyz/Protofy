@@ -6,7 +6,6 @@ import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { TbBox } from 'react-icons/tb';
 import { MdOutlineFormatListNumbered, MdCheckBoxOutlineBlank } from 'react-icons/md';
-import '../styles.css'
 import { NODE_TREE } from '../toggles';
 import { DataOutput } from '../lib/types';
 import useTheme from '../diagram/Theme';

@@ -10,7 +10,6 @@ import ReactFlow, {
     SelectionDragHandler,
     useReactFlow
 } from 'reactflow';
-import 'reactflow/dist/style.css';
 import useUndoRedo from '../hooks/useUndoRedo';
 import useKeypress from 'react-use-keypress';
 import { FlowStoreContext } from "../store/FlowsStore"

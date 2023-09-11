@@ -4,7 +4,7 @@ import { useReactFlow } from 'reactflow';
 import { MdRefresh, MdCode, MdSave, MdOutlineErrorOutline, MdOutlineCropFree, MdChat } from 'react-icons/md/index.js'
 import { CgAlignLeft } from 'react-icons/cg'
 import layouts from "./diagram/layouts";
-import './styles.css'
+//import './styles.css'
 
 export type Props = {
   onSave?: Function

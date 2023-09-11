@@ -5,7 +5,7 @@ import {
     addEdge,
     Panel
 } from 'reactflow';
-import 'reactflow/dist/style.css';
+//import 'reactflow/dist/style.css';
 import { PORT_TYPES, createNode, getId, saveNodes } from './lib/Node';
 import { getDiffs } from './lib/diff'
 import { NodeTypes } from './nodes';

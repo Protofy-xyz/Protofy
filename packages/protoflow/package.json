@@ -1,8 +1,8 @@
 {
   "name": "protoflow",
   "version": "1.0.0",
-	"displayName": "Protofy JS/TS Low-code react component",
-	"description": "React component to generate automatic interactive Low-code diagrams from Javascript and Typescript code, with react support",
+  "displayName": "Protofy JS/TS Low-code react component",
+  "description": "React component to generate automatic interactive Low-code diagrams from Javascript and Typescript code, with react support",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
@@ -19,19 +19,19 @@
     "deep-diff": "1.0.2",
     "elkjs": "0.8.2",
     "immer": "9.0.5",
+    "normalize-css-color": "1.0.2",
     "prettier": "2.8.0",
+    "react": "18.2.0",
+    "react-color": "2.19.3",
+    "react-icons": "4.8.0",
+    "react-native-web": "0.19.6",
     "react-select": "5.7.0",
     "react-topics": "0.1.7",
     "react-use-keypress": "1.3.1",
     "reactflow": "11.5.3",
     "ts-morph": "17.0.1",
     "uuid": "9.0.0",
-    "zustand": "3.6.9",
-    "react-icons": "4.8.0",
-    "react-color": "2.19.3",
-    "react-native-web": "0.19.6",
-    "react": "18.2.0",
-    "normalize-css-color": "1.0.2"
+    "zustand": "3.6.9"
   },
   "devDependencies": {
     "@swc/core": "1.3.51",
