@@ -1,5 +1,5 @@
 'use client'
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useRef } from "react";
 import { Editor } from "@craftjs/core";
 import { useEditorStore } from '../../store/EditorStore';
 // import { NativeBaseProvider, extendTheme } from "native-base";
@@ -30,6 +30,8 @@ const uiStore = useFlowsStore()
 
 function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, currentPage = "", userComponents = {}, resolveComponentsDir = ""  }) {
 
+	const editorRef = useRef()
+	
 	const [codeEditorVisible, setCodeEditorVisible] = useState(false)
 	const currentPageContent = useEditorStore(state => state.currentPageContent)
 	const setCurrentPageContent = useEditorStore(state => state.setCurrentPageContent)
@@ -148,7 +150,12 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
 			</EditorComponent>
 		</div>
 	)
-	return <div style={{ display: 'flex', flex: 1, width: '100%' }}>
+	window.addEventListener('resize', () => {
+		const viewportHeight = window.innerHeight;
+		if (!editorRef.current) return
+		editorRef.current.style.height = viewportHeight + 'px'
+	});
+	return <div ref={editorRef} style={{ display: 'flex', flex: 1, width: '100%', height: window.innerHeight }}>
 		<Editor
 			resolver={availableCraftComponents}
 			onRender={RenderNode}
