@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../../styles/sidebar.module.css";
 import { Element, useEditor } from "@craftjs/core";
 import PageMenu from "./PageMenu";
-import { getIcon } from "visualui/utils/craftComponent";
+import { getIcon } from "../../utils/craftComponent";
 import { HiPuzzlePiece } from 'react-icons/hi2'
 
 export type SidebarProps = {
