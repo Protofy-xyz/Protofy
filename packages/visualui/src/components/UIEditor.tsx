@@ -24,7 +24,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
 
     // const allPalletes = { ...paletteComponents, ...userPalettes }
-    const allPalletes = { ...paletteComponents, project: userComponents }
+    const allPalletes = { ...paletteComponents, ...userComponents }
     const getCraftComponents = (enableDropable?: boolean) => { // FIX: If components of diferent palette has the same name will overwrite
         let filteredPalettes = Object.keys(allPalletes)
         if (enableDropable) {
