@@ -1,5 +1,5 @@
 {
-  "name": "visualui2",
+  "name": "visualui",
   "version": "0.0.1",
   "sideEffects": false,
   "source": "src/index.ts",
