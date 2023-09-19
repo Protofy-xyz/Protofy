@@ -2,7 +2,7 @@ import React from "react";
 import { useNode } from "@craftjs/core";
 import { dumpComponentProps } from "../../utils/utils";
 
-const Background = (props) => {
+const Page = (props) => {
     let {
         connectors: { connect },
         custom
@@ -32,18 +32,18 @@ const ContainerSettings = () => {
     )
 };
 
-Background.craft = {
+Page.craft = {
     related: {
         settings: ContainerSettings
     },
     props: {},
     custom: {
-        moduleSpecifier: '"baseapp/palettes/uikit/Background"',
-        defaultImport: "Background"
+        moduleSpecifier: '"@/uikit/Page"',
+        defaultImport: "Page"
     },
     rules: {
         canDrag: () => false
     }
 }
 
-export default Background
+export default Page

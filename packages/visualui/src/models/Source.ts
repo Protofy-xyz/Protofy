@@ -185,26 +185,6 @@ export default class Source {
     }
 
     static flatten(node: any, tree, parent: any): any {
-        /*
-            NOTE: If have NativeBaseProvider as parent it skips this node, and gets its childs,
-            the first level child has to be a single element like the following examples:
-            OK
-            <NativeBaseProvider>
-                <Background>
-                    <View></View>
-                    <Box></Box>
-                </Background>
-            </NativeBaseProvider>
-            WRONG
-            <NativeBaseProvider>
-                <Background>
-                </Background>
-                <View>
-                </View>
-            </NativeBaseProvider>
-
-            NOTE: The NativeBaseProvider doesn't generate a craftjs node
-        */
         if (!node || (!this.isKind(node, 'JsxElement') && !this.isKind(node, 'JsxSelfClosingElement'))) throw "Can't provide flatten to node that has not JsxElement or JsxSelfClosingElement kind"
         const uuid = Source.getIdentifier(node) ?? this.getIdFromSourceCode(node)
         const nodeData = this.getNodeData(node)
@@ -212,9 +192,6 @@ export default class Source {
         let childs = this.getJsxChildrenFirstLevel(node)
         for (let i = 0; i < childs?.length; i++) {
             const child: any = childs[i]
-            if (nodeData.displayName == "NativeBaseProvider") {
-                return this.flatten(child, tree, parent)
-            }
             nodes.push(this.flatten(child, tree, uuid))
         }
         let craftNode = {
@@ -245,20 +222,6 @@ export default class Source {
             "displayName": "Root",
             "custom": {},
             "hidden": false,
-            "nodes": [],
-            "linkedNodes": {}
-        }
-        let themeNodeData = {
-            "type": {
-                "resolvedName": "Theme"
-            },
-            "isCanvas": false,
-            "props": {
-
-            },
-            "displayName": "Theme",
-            "custom": {},
-            "hidden": true,
             "nodes": [],
             "linkedNodes": {}
         }
@@ -348,14 +311,6 @@ export default class Source {
 
     dumpImportDeclarations(craftNodes: any, resolveComponentsDir = "@/components/"): string {
         const flattenImportDeclarationsArr: any[] = this.flattenImportDeclarations()
-        // Add NativeBaseProvider 
-        if (flattenImportDeclarationsArr.findIndex(imp => [imp.namedImports?.length ? imp.namedImports[0]?.name : ""].includes("NativeBaseProvider")) === -1) {
-            flattenImportDeclarationsArr[flattenImportDeclarationsArr.length] = {
-                namedImports: [{ name: "NativeBaseProvider", alias: undefined }],
-                defaultImport: undefined,
-                moduleSpecifier: "`native-base`"
-            }
-        }
         Object.keys(craftNodes)
             .filter(nodeId => !['ReactCode', 'Root'].includes(craftNodes[nodeId].displayName)) // Delete ReactCode nodes and Root node
             .forEach(nodeId => {
@@ -587,9 +542,6 @@ export default class Source {
         let element; // JsxElement (or selfclosing) or JsxExpression block
         const displayName = craftNode.displayName
         switch (displayName) {
-            case "Root":
-                element = `<NativeBaseProvider theme={currentTheme}>${childElem}</NativeBaseProvider>`
-                break;
             case "ReactCode":
                 const jsxBlock = craftNode.props.codeBlock
                 element = `${jsxBlock}`
