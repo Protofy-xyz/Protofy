@@ -14,31 +14,19 @@ export function visualuiPublisher(target, action, payload) {
 
 
 type Props = {
-	userComponents: any
+	userComponents: any,
+	_sourceCode?: string,
+	_resolveComponentsDir?: string,
+	_currentPage?: string,
+	_pages?: any[],
+	isVSCode?: boolean
 }
 
-export default ({userComponents = {}}: Props) => {
-	const [sourceCode, setSourceCode] = useState();
-
-	const [pages, setPages] = useState();
-	const [currentPage, setCurrentPage] = useState();
-	const [resolveComponentsDir, setResolveComponentsDir] = useState("");
-
-	const onSendMessage = (event: any) => {
-		const type = event.type
-		const payload = event.data
-		switch (type) {
-			case "loadPage":
-				const pagePath = payload.pageName
-				setCurrentPage(pagePath)
-				visualuiPublisher('protofypanel', 'read', { file: pagePath }) // Test publish to parent document
-				break;
-			case "save":
-				const content = payload.content
-				visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
-				break;
-		}
-	}
+export default ({ userComponents = {}, isVSCode = true, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", _pages=[] }: Props) => {
+	const [pages, setPages] = useState(_pages);
+	const [currentPage, setCurrentPage] = useState(_currentPage);
+	const [resolveComponentsDir, setResolveComponentsDir] = useState(_resolveComponentsDir);
+	const [sourceCode, setSourceCode] = useState(_sourceCode);
 
 	async function handleEvent(event: any) {
 		const eventData = event.data;
@@ -60,9 +48,29 @@ export default ({userComponents = {}}: Props) => {
 				break;
 		}
 	}
+
+	const onSendMessage = (event: any) => {
+		const type = event.type
+		const payload = event.data
+		switch (type) {
+			case "loadPage":
+				const pagePath = payload.pageName
+				setCurrentPage(pagePath)
+				visualuiPublisher('protofypanel', 'read', { file: pagePath }) // Test publish to parent document
+				break;
+			case "save":
+				const content = payload.content
+				visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
+				break;
+		}
+	}
+
+
 	useEffect(() => {
-		window.addEventListener("message", handleEvent)
-		visualuiPublisher('protofypanel', 'ready', {})
+		if (isVSCode) {
+			window.addEventListener("message", handleEvent)
+			visualuiPublisher('protofypanel', 'ready', {})
+		}
 	}, [])
 
 	return (
