@@ -52,7 +52,8 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 					nodeId: newNodeId,
 					nodeName: currentEditorNodes[newNodeId]['displayName'],
 					parent: parentId,
-					childrenPos: childrenPos
+					childrenPos: childrenPos,
+					nodeProps: currentEditorNodes[newNodeId]['props']
 				}
 				notify(topicParams, publish)
 			} else if (nodesChanges.find(d => d.kind == 'D')) { //case delete
