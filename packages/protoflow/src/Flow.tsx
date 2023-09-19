@@ -64,9 +64,9 @@ interface FlowProps {
     theme?: any,
     bridgeNode: boolean,
     onViewPortChange?: Function,
-    defaultViewPort?: {x:number, y:number, zoom: number},
+    defaultViewPort?: { x: number, y: number, zoom: number },
     path?: string,
-    mode?:string
+    mode?: string
 }
 
 
@@ -97,8 +97,8 @@ const FlowComponent = ({
     theme = {},
     disableMiniMap = true,
     bridgeNode = false,
-    onViewPortChange=() => {},
-    defaultViewPort={x:100, y: window.innerHeight/4, zoom:0.8},
+    onViewPortChange = () => { },
+    defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
     path = "Start",
     mode = 'js'
 }: FlowProps) => {
@@ -125,7 +125,7 @@ const FlowComponent = ({
     const _customComponents = [...customComponents, ...(config?.masks?.map(m => GetDynamicCustomComponent(m)) ?? [])].filter(x => x)
     const nodeTypes = useMemo(() => (NodeTypes), []);
     const edgeTypes = useMemo(() => {
-        return { custom: (props) =>  CustomEdge(props, bridgeNode) }
+        return { custom: (props) => CustomEdge(props, bridgeNode) }
     }, []);
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -136,7 +136,7 @@ const FlowComponent = ({
 
     const reload = async () => {
         clearNodesData()
-        const {nodes, edges, nodeDataTable} = await readSourceFile()
+        const { nodes, edges, nodeDataTable } = await readSourceFile()
         setNodesData(nodeDataTable)
         setPrevNodeData(deleteAdditionalKeys(nodeDataTable))
         setNodes(nodes)
@@ -146,17 +146,17 @@ const FlowComponent = ({
     }
 
     const prepare = (sourceCode) => {
-        if(mode == 'json') {
-            return '('+sourceCode+')'; //ts-morph does not parse files with an object directly, so we put the object between ( and )
+        if (mode == 'json') {
+            return '(' + sourceCode + ')'; //ts-morph does not parse files with an object directly, so we put the object between ( and )
         } else {
             return sourceCode;
         }
     }
 
-    const layout = mode == 'json'? 'elk':'code'
+    const layout = mode == 'json' ? 'elk' : 'code'
 
     const getEnabledNodesForMode = () => {
-        if(mode == 'json') {
+        if (mode == 'json') {
             return ['ObjectLiteralExpression', 'ArrayLiteralExpression']
         } else {
             return ['*']
@@ -164,7 +164,7 @@ const FlowComponent = ({
     }
 
     const _getFirstNode = mode == 'json' ? (nodes) => nodes.find(n => n.id && n.id.startsWith('ObjectLiteralExpression')) : getFirstNode
-    
+
     const readSourceFile = async () => {
         const project = new Project({
             useInMemoryFileSystem: true,
@@ -177,10 +177,10 @@ const FlowComponent = ({
         })
         let source = project.createSourceFile('_temp1.tsx', prepare(sourceCode), { overwrite: true })
 
-        if(mode == 'json') {
+        if (mode == 'json') {
             //@ts-ignore
             const obj = (source.getStatements()[0])?.getExpression()?.getExpression()
-            if(obj) {
+            if (obj) {
                 source = obj
             }
         }
@@ -231,7 +231,7 @@ const FlowComponent = ({
                 }
 
                 if ((!flowNodeType.isShadow || !flowNodeType.isShadow(node, _data, mode, edges)) && (!flowNodeType.checkCreate || flowNodeType.checkCreate(node, _data)) && (node.getKindName() != 'SourceFile' || !disableStart)) {
-                    let newNodes = createNode([0, 0], node.getKindName(), getId(node), null,node.getKindName() != 'SourceFile' &&  deletable, edges, nodeDataTable[getId(node)])
+                    let newNodes = createNode([0, 0], node.getKindName(), getId(node), null, node.getKindName() != 'SourceFile' && deletable, edges, nodeDataTable[getId(node)])
                     // if (flowNodeType.getSize) {
                     //     newNodes = flowNodeType.getSize(newNodes, node, nodeDataTable[getId(node)])
                     // }
@@ -274,11 +274,11 @@ const FlowComponent = ({
 
         //add visual layers
         console.log('CONFIG IN FLOWS: ', config)
-        if(config && config.layers && config.layers.length) {
+        if (config && config.layers && config.layers.length) {
             nodes = [...nodes, ...config.layers.map(l => {
-                const layerId = 'Layer_'+generateId()
+                const layerId = 'Layer_' + generateId()
                 nodeDataTable[layerId] = l
-                return createNode(l.position ?? [0,0], 'Layer', layerId, {}, false, [], {})[0]
+                return createNode(l.position ?? [0, 0], 'Layer', layerId, {}, false, [], {})[0]
             })]
         }
 
@@ -337,8 +337,8 @@ const FlowComponent = ({
 
     const removeSizes = arr => arr.map(item => {
         const { draggable, height, width, position, selected, positionAbsolute, dragging, data, ...rest } = item;
-        const {layouted, ...cleanedData} = data ? data : {layouted: 1};
-        
+        const { layouted, ...cleanedData } = data ? data : { layouted: 1 };
+
         return { ...rest, data: cleanedData };
     });
 
@@ -648,9 +648,9 @@ const FlowComponent = ({
         const nodesDiffs = getDiffs(removeSizes(initialNodes), removeSizes(nodes))
         //look for non connected nodes and make them draggable
         const unconnected = nodes.filter(n => n.id != getFirstNode(nodes)?.id && !edges.find(e => e.source == n.id) && !n.draggable)
-        if(unconnected.length) {
+        if (unconnected.length) {
             setNodes(nodes.map(n => {
-                if(unconnected.find(u => u.id == n.id)) {
+                if (unconnected.find(u => u.id == n.id)) {
                     return {
                         ...n,
                         draggable: true
@@ -661,9 +661,9 @@ const FlowComponent = ({
         }
         //look for draggable nodes that are connected, and make them non draggable
         const connected = nodes.filter(n => n.id != getFirstNode(nodes)?.id && edges.find(e => e.source == n.id) && n.draggable)
-        if(connected.length) {
+        if (connected.length) {
             setNodes(nodes.map(n => {
-                if(connected.find(u => u.id == n.id)) {
+                if (connected.find(u => u.id == n.id)) {
                     return {
                         ...n,
                         draggable: false
@@ -675,7 +675,7 @@ const FlowComponent = ({
 
         if (nodesDiffs || edgesDiffs) {
             console.log('diffx: ', nodesDiffs, edgesDiffs)
-            if(edgesDiffs && !nodesDiffs) reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData)
+            if (edgesDiffs && !nodesDiffs) reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData)
             if (!showActionsBar) {
                 onGraphChanged()
             }
@@ -722,12 +722,28 @@ const FlowComponent = ({
                     var parentPos = nodes.find(n => n.id == uiData.parent)?.position
                     if (!parentPos) return
                     var newChildrenPos = uiData.childrenPos + 1;
-                    var newNodesData = { ...nodeData, [nodeId]: { name: nodeName } }
+                    var initialNodeData = uiData.nodeProps
+                    
+                    const addedNodeData = Object.keys(initialNodeData).reduce((total, key) => {
+                        const keyName = key == 'children' ? 'child-1' : `prop-${key}`
+                        return {
+                            ...total,
+                            [keyName]: {
+                                key: key,
+                                value: initialNodeData[key]
+                            }
+                        }
+                    }, {
+                        name: nodeName
+                    })
+
+                    var newNodesData = { ...nodeData, [nodeId]: addedNodeData }
                     var customNode = _customComponents.find((n: any) => n.id == nodeName)
                     if (customNode) { //Check if node has mask
                         var initialData = {}
                         newNodesData = { ...newNodesData, [nodeId]: { ...newNodesData[nodeId] } }
                     }
+
                     const newNode = createNode([parentPos.x + 500, parentPos.y], "JsxElement", uiData.nodeId, {}, true, {}, initialData)
                     setNodes((nds) => nds.concat(newNode));
                     // Add child to parent
@@ -784,7 +800,7 @@ const FlowComponent = ({
         }
     }, [_customComponents.length])
 
-    useEffect(() => {reload()}, [sourceCode])
+    useEffect(() => { reload() }, [sourceCode])
 
     useEffect(() => {
         const diffableNodeData = deleteAdditionalKeys(nodeData)
@@ -801,10 +817,10 @@ const FlowComponent = ({
     }, [nodeData])
 
     useEffect(() => {
-        if(nodes && nodes.length && nodes.filter(n => n.width && n.height).length == nodes.length) {
+        if (nodes && nodes.length && nodes.filter(n => n.width && n.height).length == nodes.length) {
             reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData)
         }
-    }, [nodes.reduce((total, n) => total += n.id+' '+(n.width && n.height ? '1':'0')+',', '')])
+    }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
 
     return (
         <div ref={diagramRef} style={{ height: '100%', width: '100%' }}>
@@ -830,7 +846,7 @@ const FlowComponent = ({
                             onEditDiagram={async (nodes, edges, focusElement) => {
                                 setNodes(nodes)
                                 setEdges(edges)
-                            } }
+                            }}
                             edges={edges}
                             diagramNodes={nodes}
                             setNodes={setNodes}
