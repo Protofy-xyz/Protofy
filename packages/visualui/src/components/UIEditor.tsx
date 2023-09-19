@@ -9,7 +9,7 @@ import SlidingPanel from "./SlidingPanel";
 import Monaco from "./Monaco";
 import { IoMdClose, IoMdSave } from "react-icons/io";
 import { FlowFactory, useFlowsStore } from 'protoflow';
-// import { getMissingJsxImports, getSource } from "../../utils/utils";
+import { getMissingJsxImports, getSource } from "../utils/utils";
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
