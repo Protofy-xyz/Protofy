@@ -1,7 +1,5 @@
 import React from "react";
 import { useNode } from "@craftjs/core";
-import { getStyleConfs, Conf, getPropConfs } from "visualui/components/conf";
-// import UIBackground, { defaultBackgroundProps } from 'baseapp/palettes/uikit/Background'
 import { dumpComponentProps } from "../../utils/utils";
 
 const Background = (props) => {
@@ -14,32 +12,22 @@ const Background = (props) => {
     }));
     const newProps = { ...props, ...dumpComponentProps(props, custom) }
     return (
-        <div id="editor-container" ref={connect}
+        <div id="editor-container" 
+            ref={connect}
             {...newProps}
+            style={{ display: 'flex', height: '100%', ...newProps.style }}
         ></div>
     )
 }
 
 const ContainerSettings = () => {
-    let { actions: { setProp, setCustom }, props, custom } = useNode((node) => ({
+    useNode((node) => ({
         props: node.data.props,
         custom: node.data.custom
     }));
 
-    const combinedProps = {
-        // ...defaultBackgroundProps,
-        ...props
-    }
-
     return (
         <div>
-            {/* <Conf caption={'Mode'} type={'select'} prop={'flexDir'} props={combinedProps} setProp={setProp} custom={custom} setCustom={setCustom} params={[
-                { value: 'column', caption: 'Column' },
-                { value: 'row', caption: 'Row' }
-            ]} /> */}
-            {/* <Conf caption={'Color'} type={'color'} prop={'bgColor'} props={combinedProps} setProp={setProp} custom={custom} setCustom={setCustom} /> */}
-            {/* {getPropConfs(props, setProp, custom, setCustom)} */}
-            {/* {getStyleConfs(props, setProp, custom, setCustom)} */}
         </div>
     )
 };

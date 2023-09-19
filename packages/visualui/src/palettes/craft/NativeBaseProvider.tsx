@@ -16,7 +16,7 @@ const NativeBaseProvider = forwardRef((props, ref) => {
 })
 
 const NativeBaseSettings = () => {
-    const { actions: { setProp }, props } = useNode((node) => ({
+    useNode((node) => ({
         props: node.data.props
     }));
     return (
