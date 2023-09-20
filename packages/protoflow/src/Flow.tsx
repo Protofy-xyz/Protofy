@@ -723,15 +723,17 @@ const FlowComponent = ({
                     if (!parentPos) return
                     var newChildrenPos = uiData.childrenPos + 1;
                     var initialNodeData = uiData.nodeProps
-                    
                     const addedNodeData = Object.keys(initialNodeData).reduce((total, key) => {
-                        const keyName = key == 'children' ? 'child-1' : `prop-${key}`
+                        const value = initialNodeData[key]
+                        var keyName = `prop-${key}`
+                        var propValue = { key, value }
+                        if (key == 'children') {
+                            keyName = 'child-1'
+                            propValue = value
+                        }
                         return {
                             ...total,
-                            [keyName]: {
-                                key: key,
-                                value: initialNodeData[key]
-                            }
+                            [keyName]: propValue
                         }
                     }, {
                         name: nodeName
