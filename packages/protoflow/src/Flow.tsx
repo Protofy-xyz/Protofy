@@ -729,7 +729,7 @@ const FlowComponent = ({
                         var propValue = { key, value }
                         if (key == 'children') {
                             keyName = 'child-1'
-                            propValue = value
+                        //     propValue = value
                         }
                         return {
                             ...total,
