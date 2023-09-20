@@ -353,7 +353,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
             {
                 !isDefaultCase ?
                     <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize+'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-                        <div className={"handleKey"} ref={textBoxRef} style={{display: 'flex', flexDirection: 'row', minWidth:0}}>
+                        <div className={"handleKey"} ref={textBoxRef} style={{display: 'flex', flexDirection: 'row'}}>
                             {(param?.deleteable && isDeletedLeft) ? <DeleteButton id={id} left={true} field={param.field} />: null}
                             {getValue()}
                         </div>
