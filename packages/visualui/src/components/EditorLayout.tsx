@@ -43,7 +43,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 		var skip = query.getOptions().skipTopic
 		if (!skip && nodesChanges?.length && JSON.stringify(nodesChanges) != previousDiffs) {
 			var topicParams = {}
-			if (nodesChanges.find(d => d.kind == 'N')) { //case add
+			if (nodesChanges.filter(d => d.kind == 'N').length == 1) { //case add
 				const newNodeId = nodesChanges.find(d => d.kind == 'N').path[0]
 				const parentId = currentEditorNodes[newNodeId]['parent']
 				const childrenPos = currentEditorNodes[parentId].nodes.findIndex(n => n == newNodeId)
@@ -65,7 +65,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 					parent: parentId
 				}
 				notify(topicParams, publish)
-			} else if (nodesChanges.filter(d => d.kind == 'E')) { //case edit
+			} else if (nodesChanges.find(d => d.kind == 'E')) { //case edit
 				const nodeIds_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == 'parent')
 				if (nodeIds_diff) { // moved changing parent
 					const nodeId_moved = nodeIds_diff.path[0];
@@ -277,7 +277,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 		}
 	});
 
-	
+
 
 	useEffect(() => {
 		const reload = async (retry: number) => {
