@@ -1,6 +1,6 @@
 import { API } from "./Api"
 import { RegisterSchema } from 'common';
-import {getPendingResult} from 'protoweb';
+import {getPendingResult} from 'protolib';
 import { z } from "zod";
 
 export const Auth = {

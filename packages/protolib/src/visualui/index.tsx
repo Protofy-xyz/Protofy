@@ -143,7 +143,7 @@ const visualUiComponents = {
 
 export default Object.keys(visualUiComponents).reduce((total, componentName) => {
   var importInfo = {
-    moduleSpecifier: 'protoweb',
+    moduleSpecifier: 'protolib',
     namedImports: [{ name: componentName, alias: undefined }]
     // defaultImport: componentName
   }

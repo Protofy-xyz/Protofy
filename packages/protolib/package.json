@@ -1,5 +1,5 @@
 {
-    "name": "protoweb",
+    "name": "protolib",
     "version": "0.0.1",
     "sideEffects": false,
     "source": "src/index.tsx",
