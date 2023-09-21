@@ -719,6 +719,7 @@ const FlowComponent = ({
                 case 'add-node':
                     var nodeName = uiData.nodeName
                     var parent = uiData.parent
+                    var _data = uiData?.data ?? {};
                     var parentPos = nodes.find(n => n.id == uiData.parent)?.position
                     if (!parentPos) return
                     var newChildrenPos = uiData.childrenPos + 1;
@@ -745,8 +746,7 @@ const FlowComponent = ({
                         var initialData = {}
                         newNodesData = { ...newNodesData, [nodeId]: { ...newNodesData[nodeId] } }
                     }
-
-                    const newNode = createNode([parentPos.x + 500, parentPos.y], "JsxElement", uiData.nodeId, {}, true, {}, initialData)
+                    const newNode = createNode([parentPos.x + 500, parentPos.y], "JsxElement", uiData.nodeId, _data, true, {}, initialData)
                     setNodes((nds) => nds.concat(newNode));
                     // Add child to parent
                     const dumpCode = dumpContent(nodes, edges, newNodesData, nodeId, 'JsxElement')
