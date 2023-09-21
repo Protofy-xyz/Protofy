@@ -1,0 +1,18 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+      "composite": true,
+      "paths": {
+        "tamagui": ["../tamagui"],
+        "@tamagui/*": ["../../packages/*"],
+        "@components/*": ["./components/*"],
+        "@lib/*": ["./lib/*"],
+        "@data/*": ["./data/*"],
+        "react-native": ["react-native-web"],
+        "@/*": ["./*"]
+      }
+    },
+    "references": [
+      { "path": "../tamagui" },
+    ]
+  }
