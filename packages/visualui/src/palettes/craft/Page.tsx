@@ -38,8 +38,8 @@ Page.craft = {
     },
     props: {},
     custom: {
-        moduleSpecifier: '"@/uikit/Page"',
-        defaultImport: "Page"
+        moduleSpecifier: '"protoweb"',
+        namedImports: [{name: "Page", alias: undefined}]
     },
     rules: {
         canDrag: () => false

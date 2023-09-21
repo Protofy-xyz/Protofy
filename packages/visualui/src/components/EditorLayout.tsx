@@ -47,12 +47,14 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 				const newNodeId = nodesChanges.find(d => d.kind == 'N').path[0]
 				const parentId = currentEditorNodes[newNodeId]['parent']
 				const childrenPos = currentEditorNodes[parentId].nodes.findIndex(n => n == newNodeId)
+				const _data = currentEditorNodes[newNodeId].custom
 				topicParams = {
 					action: 'add-node',
 					nodeId: newNodeId,
 					nodeName: currentEditorNodes[newNodeId]['displayName'],
 					parent: parentId,
 					childrenPos: childrenPos,
+					data: _data,
 					nodeProps: currentEditorNodes[newNodeId]['props']
 				}
 				notify(topicParams, publish)

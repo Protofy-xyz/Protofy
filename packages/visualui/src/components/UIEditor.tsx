@@ -52,9 +52,18 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
                 const missingJsxImports = getMissingJsxImports(data.nodes, data.nodesData, resolveComponentsDir)
                 if (missingJsxImports.length) {
                     const missingJsxImportsText = missingJsxImports.reduce((total, impData) => {
-                        const impText = "import " + impData.name + ' from "' + impData.module + '";\n'
+                        let impText;
+                        let moduleSpecifier = impData.moduleSpecifier;
+                        if (impData.namedImports?.length) { // is named import
+                            const namedImportName = impData.namedImports[0]?.alias
+                                ? (impData.namedImports[0]?.name + " as " + impData.namedImports[0]?.alias)
+                                : impData.namedImports[0]?.name;
+                            impText = "import {" + namedImportName + '} from ' + moduleSpecifier + ';\n'
+                        }
+                        else if(impData.defaultImport){ // is default import
+                            impText = "import " + impData.defaultImport + ' from ' + moduleSpecifier + ';\n'
+                        }
                         return total + impText
-
                     }, '\n')
                     const lastImportPos = previousImports ? previousImports[previousImports.length - 1].getEnd() : 0
                     const newAstContent = astContent.insertText(lastImportPos, missingJsxImportsText)

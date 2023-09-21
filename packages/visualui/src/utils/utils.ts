@@ -57,31 +57,31 @@ export const loadValue = (value, type: "JsxExpression" | "StringLiteral") => {
 }
 
 export function JSCodeToOBJ(jsCode) {
-    const fn =  new Function('return '+jsCode+';')
+    const fn = new Function('return ' + jsCode + ';')
     return fn()
 }
 
 export const dumpComponentProps = (props, custom) => {
     return Object.keys(props)
-    .reduce((newProps, propName) => {
-        if (!custom[propName]) return newProps //If has no custom on dump component its wrong, so skip this prop
-        let newProp = loadValue(props[propName], custom[propName])
-        try {
-            newProp = JSON.parse(newProp)
-        } catch (e) { // For objects without doublequotes
+        .reduce((newProps, propName) => {
+            if (!custom[propName]) return newProps //If has no custom on dump component its wrong, so skip this prop
+            let newProp = loadValue(props[propName], custom[propName])
             try {
-                // console.log('gonna evaluate: ', newProp)
-                newProp = JSCodeToOBJ(newProp)
-                // console.log('JString: ', newProp)
-            } catch(e) {
-                console.log('Error: ', e)
+                newProp = JSON.parse(newProp)
+            } catch (e) { // For objects without doublequotes
+                try {
+                    // console.log('gonna evaluate: ', newProp)
+                    newProp = JSCodeToOBJ(newProp)
+                    // console.log('JString: ', newProp)
+                } catch (e) {
+                    console.log('Error: ', e)
+                }
             }
-        }
-        return ({
-            ...newProps,
-            [propName]: newProp
-        })
-    }, {})
+            return ({
+                ...newProps,
+                [propName]: newProp
+            })
+        }, {})
 }
 
 export const notify = (topicParams: Object, publish: any, cb?: Function) => {
@@ -129,31 +129,77 @@ export const getSource = (sourceCode, filename = "customCode.tsx") => {
 export const getMissingJsxImports = (nodes: any, nodeData: any, resolveComponentsDir: any) => {
     const importNodeIds: string[] = nodes.filter(n => n.type == 'ImportDeclaration')?.map(n => n.id)
     const jsxNodeIds: string[] = nodes.filter(n => ["JsxElement", "JsxSelfClosingElement"].includes(n.type))?.map(n => n.id)
-    const importsNames = []
-    importNodeIds.map(nId => {
-        const importData = nodeData[nId]
-        const names = []
-        const module = importData.module
+    const currentImports = []
+    importNodeIds.forEach(nId => {
+        const importData = nodeData[nId];
+        const module = importData.module;
         Object.keys(importData).forEach(key => {
-            if (key == 'default' || key.startsWith('import-')) {
-                importsNames.push(importData[key])
+            let data
+            if (key == 'default' && importData[key]) {
+                data = {
+                    defaultImport: importData["default"],
+                    moduleSpecifier: module
+                }
+                currentImports.push(data)
+            }
+            else if (key.startsWith('import-') && importData[key]) {
+                data = {
+                    namedImports: [{ name: importData[key], alias: undefined }],
+                    moduleSpecifier: module
+                }
+                currentImports.push(data)
             }
         })
-        return { names, module }
     })
-
-
-    let jsxNodeNames = new Set()
-    jsxNodeIds.forEach(nId => jsxNodeNames.add(nodeData[nId].name))
-
-    var missingImports =  Array.from(jsxNodeNames)?.filter(jsxName => !importsNames.includes(jsxName)).map(name => {
-        return {
-            name,
-            module: resolveComponentsDir + name
+    const jsxElementsData = []
+    nodes.forEach(n => {
+        if (jsxNodeIds.includes(n.id)) {
+            jsxElementsData.push({
+                ...n.data,
+                tagName: nodeData[n.id].name
+            })
         }
-    })
+    });
 
-    return missingImports
+    function checkExistence(tagName) {
+        for (let imp of currentImports) {
+            if (imp.defaultImport === tagName) {
+                return true;
+            }
+
+            if (imp.namedImports) {
+                for (let named of imp.namedImports) {
+                    if (named.name === tagName) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    function processJsxData() {
+        let result = [];
+      
+        for (let element of jsxElementsData) {
+          const { tagName, namedImports, defaultImport } = element;
+      
+          // Caso en que "tagName" no exista en currentImports, y no tenga "namedImports" o "defaultImport".
+          if (!checkExistence(tagName) && !namedImports && !defaultImport) {
+            result.push({ defaultImport: tagName });
+          }
+      
+          // Caso en que "tagName" no exista en currentImports, pero tenga "namedImports" o "defaultImport".
+          if (!checkExistence(tagName) && (namedImports || defaultImport)) {
+            result.push(element);
+          }
+        }
+      
+        return result;
+      }
+
+    const result = processJsxData()
+    return result
 }
-
 export { capitalizeFirstLetter }
