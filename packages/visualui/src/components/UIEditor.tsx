@@ -23,14 +23,14 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
     const setCurrentPageContent = useEditorStore(state => state.setCurrentPageContent)
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
 
-    // const allPalletes = { ...paletteComponents, ...userPalettes }
-    const allPalletes = { ...paletteComponents, ...userComponents }
+    // const allPalettes = { ...paletteComponents, ...userPalettes }
+    const allPalettes = { ...paletteComponents, ...userComponents }
     const getCraftComponents = (enableDropable?: boolean) => { // FIX: If components of diferent palette has the same name will overwrite
-        let filteredPalettes = Object.keys(allPalletes)
+        let filteredPalettes = Object.keys(allPalettes)
         if (enableDropable) {
             filteredPalettes = filteredPalettes.filter(key => key != 'craft')
         }
-        return filteredPalettes.reduce((total, paletteName) => total = { ...total, ...allPalletes[paletteName] }, {})
+        return filteredPalettes.reduce((total, paletteName) => total = { ...total, ...allPalettes[paletteName] }, {})
     }
     const mergedPaletteComponents = getCraftComponents()
     // const availableCraftComponents = { ...mergedPaletteComponents, ...Modules[currentPage] }
@@ -132,7 +132,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
             style={{ display: 'flex', flex: 1, maxWidth: '290px', border: '1px solid #424242' }}
         >
             <Sidebar
-                palettes={allPalletes}
+                palettes={allPalettes}
                 pages={pages}
                 sendMessage={sendMessage}
                 currentPage={currentPage}
