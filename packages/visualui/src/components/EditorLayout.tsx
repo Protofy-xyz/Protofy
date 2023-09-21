@@ -12,6 +12,7 @@ import { withTopics } from "react-topics";
 import { ErrorBoundary } from 'react-error-boundary'
 import { JSCodeToOBJ } from "../utils/utils";
 import { notify, computePreviousPositions } from "../utils/utils";
+import { FrameSelector } from "./FrameSelector";
 
 export type EditorProps = {
 	children?: any;
@@ -27,7 +28,8 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 	const currentPageContent = useEditorStore(state => state.currentPageContent)
 	const currentPageInitialJson = useEditorStore(state => state.currentPageInitialJson)
 	const setCurrentPageInitialJson = useEditorStore(state => state.setCurrentPageInitialJson)
-	const currentFrame = frames['ipad11-horizontal'];
+	const [frameName, setFrameName] = useState('ipad11-horizontal');
+	const currentFrame = frames[frameName];
 	const [loading, setLoading] = useState(false);
 	const [previousNodes, setPreviousNodes] = useState({});
 
@@ -333,6 +335,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 					</div>
 				</div>
 			</div>
+			<FrameSelector frames={frames} setFrameSelected={setFrameName} selectedFrame={frameName}></FrameSelector>
 		</div>
 	);
 };
