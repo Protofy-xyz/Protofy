@@ -69,7 +69,6 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
                     const newAstContent = astContent.insertText(lastImportPos, missingJsxImportsText)
                     content = newAstContent.getText()
                 }
-                console.log('DEV: content', content)
                 sendMessage({ type: 'save', data: { content } })
                 break;
             case "editor":
