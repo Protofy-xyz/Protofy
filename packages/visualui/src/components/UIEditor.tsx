@@ -58,10 +58,10 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
                             const namedImportName = impData.namedImports[0]?.alias
                                 ? (impData.namedImports[0]?.name + " as " + impData.namedImports[0]?.alias)
                                 : impData.namedImports[0]?.name;
-                            impText = "import {" + namedImportName + '} from ' + moduleSpecifier + ';\n'
+                            impText = "import {" + namedImportName + '} from "' + moduleSpecifier + '";\n'
                         }
                         else if(impData.defaultImport){ // is default import
-                            impText = "import " + impData.defaultImport + ' from ' + moduleSpecifier + ';\n'
+                            impText = "import " + impData.defaultImport + ' from "' + moduleSpecifier + '";\n'
                         }
                         return total + impText
                     }, '\n')
@@ -69,6 +69,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
                     const newAstContent = astContent.insertText(lastImportPos, missingJsxImportsText)
                     content = newAstContent.getText()
                 }
+                console.log('DEV: content', content)
                 sendMessage({ type: 'save', data: { content } })
                 break;
             case "editor":
