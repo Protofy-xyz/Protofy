@@ -70,7 +70,7 @@ const cw = getComponentWrapper({
 })
 
 export default {
-  ...cw(ActiveGroup, 'EyeOff', 'ActiveGroup'),
+  ...cw(ActiveGroup, 'EyeOff', 'ActiveGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ActiveGroupButton, 'EyeOff', 'ActiveGroupButton'),
   ...cw(ActiveRender, 'EyeOff', 'ActiveRender'),
   ...cw(AnounceBubble, 'Tv2', 'AnounceBubble', { href: "/hello", children: "hello" }),
