@@ -1,3 +1,4 @@
+import React from "react"
 import { Button, ButtonProps, ButtonText, TextProps } from "tamagui"
 
 type MainButtonProps = {
@@ -6,8 +7,9 @@ type MainButtonProps = {
   children: any
 }
 
-const MainButton = ({buttonProps={}, buttonTextProps={}, children}:MainButtonProps) => (
+const MainButton = React.forwardRef(({ buttonProps = {}, buttonTextProps = {}, children }: MainButtonProps, ref: any) => (
   <Button
+    ref={ref}
     // layout shifts...
     accessibilityLabel="Get started (docs)"
     fontFamily="$silkscreen"
@@ -29,6 +31,6 @@ const MainButton = ({buttonProps={}, buttonTextProps={}, children}:MainButtonPro
       {children}
     </ButtonText>
   </Button>
-)
+))
 
 export default MainButton

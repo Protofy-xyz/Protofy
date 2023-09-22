@@ -3,7 +3,7 @@ import { H3, Paragraph, SizableText, XStack, YStack } from 'tamagui'
 
 import { FancyCard } from './FancyCard'
 
-export const TamaCard = ({
+export const TamaCard = React.forwardRef(({
   title,
   icon,
   subtitlePre,
@@ -12,7 +12,7 @@ export const TamaCard = ({
   children,
   grow,
   width='auto',
-}: any) => {
+}: any, ref:any) => {
   // const shadow = useHoverGlow({
   //   resist: 92,
   //   borderRadius: 0,
@@ -39,6 +39,7 @@ export const TamaCard = ({
   // const containerRef = useComposedRefs<any>(glow.parentRef, shadow.parentRef)
   return (
     <YStack
+    ref={ref}
       width={width}
       className="transition all ease-in ms100"
       position="relative"
@@ -102,4 +103,4 @@ export const TamaCard = ({
       </FancyCard>
     </YStack>
   )
-}
+})

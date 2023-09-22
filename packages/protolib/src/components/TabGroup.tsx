@@ -1,8 +1,6 @@
 import { useTint } from '@tamagui/logo'
-import { memo, useState } from 'react'
+import React, { memo, useState } from 'react'
 import { Button, ScrollView, XGroup, XStack, YStack, YStackProps } from 'tamagui'
-
-import React from 'react'
 
 type TabGroupProps = {
     title: any,
@@ -10,12 +8,12 @@ type TabGroupProps = {
     children: any,
     containerProps?: YStackProps
 }
-const TabGroup = memo(({ title, tabs, children, containerProps = {} }: TabGroupProps) => {
+const TabGroup = memo(React.forwardRef(({ title, tabs, children, containerProps = {} }: TabGroupProps, ref:any) => {
     const [activeIndex, setActiveIndex] = useState(0)
     const { tint } = useTint()
     const childArray = React.Children.toArray(children);
     return (
-        <YStack overflow="hidden" flex={1}>
+        <YStack ref={ref} overflow="hidden" flex={1}>
             <>
                 <ScrollView
                     alignSelf="center"
@@ -35,7 +33,7 @@ const TabGroup = memo(({ title, tabs, children, containerProps = {} }: TabGroupP
                             </XGroup.Item>
                         </XGroup>
                         <XGroup size="$2" bordered>
-                            {tabs.map((tab, i) => (
+                            {tabs? tabs.map((tab, i) => (
                                 <XGroup.Item key={i}>
                                     <Button
                                         accessibilityLabel={tab}
@@ -47,7 +45,7 @@ const TabGroup = memo(({ title, tabs, children, containerProps = {} }: TabGroupP
                                         {tab}
                                     </Button>
                                 </XGroup.Item>
-                            ))}
+                            )):null}
                         </XGroup>
                     </XStack>
                 </ScrollView>
@@ -90,6 +88,6 @@ const TabGroup = memo(({ title, tabs, children, containerProps = {} }: TabGroupP
             </XStack>
         </YStack>
     )
-})
+}))
 
 export default TabGroup

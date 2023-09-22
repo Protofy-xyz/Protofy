@@ -6,6 +6,7 @@ import {
 } from 'tamagui'
 import { useContext } from 'react'
 import HoveredGroup, { HoveredGroupContext } from './HoveredGroup'
+import React from 'react'
 
 const Subtitle = styled(Paragraph, {
     color: '$gray10',
@@ -61,16 +62,16 @@ const Tag = styled(Text, {
 })
 
 
-export const LinkGroupItem = ({id, themeColor, children, href}) => {
+export const LinkGroupItem = React.forwardRef(({id, themeColor, children, href}:any, ref:any) => {
     const {hovered, setHovered} = useContext(HoveredGroupContext);
     return (<NextLink prefetch={false} href={href}>
         <Tag theme={themeColor} onHoverIn={() => setHovered(id)} active={hovered === id}>
             {children}
         </Tag>
     </NextLink>)
-}
+})
 
-export const LinkGroup = ({children}) => {
+export const LinkGroup = React.forwardRef(({children}:any, ref:any) => {
     return (
         <Subtitle>
             <HoveredGroup>
@@ -78,4 +79,4 @@ export const LinkGroup = ({children}) => {
             </HoveredGroup>
         </Subtitle>
     )
-}
+})
