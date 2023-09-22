@@ -41,7 +41,7 @@ export * from "./components/PageGlow";
 export * from "./components/HeaderLink";
 export { default as AppBar } from "./components/AppBar";
 export * from "./components/AppBar";
-export *from "./components/Head3";
+export * from "./components/Head3";
 export * from "./components/DataTable";
 export * from "./components/unwrapText";
 export { default as HoveredGroup } from "./components/HoveredGroup";
@@ -73,16 +73,17 @@ export * from "./lib/createApiAtom";
 export * from "./lib/analytics";
 export * from "./lib/usePendingEffect";
 export * from "./lib/useOnIntersecting";
-export {default as Center} from './components/Center';
+export { default as Center } from './components/Center';
 export * from './components/LogoIcon';
 export * from './components/PanelMenuItem'
 export * from './lib/Auth';
 export * from './lib/Session';
 export * from './lib/Redirect'
 export * from './lib/Atom'
+export * from './lib/Sensors'
 export * from './components/jsonui'
 export * from './components/DataCard'
 export * from './components/Page'
 export * from './components/Search'
 export * from './components/SortableItem'
-export {default as visualuiComponents} from './visualui'
+export { default as visualuiComponents } from './visualui'
