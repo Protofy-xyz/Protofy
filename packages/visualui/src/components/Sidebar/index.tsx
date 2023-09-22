@@ -59,7 +59,7 @@ export const Sidebar = ({
                             palettesArr.map((palette, i) => {
                                 return (
                                     <div key={i} style={{ flexDirection: 'column', display: 'flex', marginBottom: '25px' }}>
-                                        <p style={{ paddingLeft: '18px', fontSize: '12px', color: 'grey' }}>{palette}</p>
+                                        <p style={{ paddingLeft: '18px', marginTop: '5px', fontSize: '12px', color: 'grey' }}>{palette}</p>
                                         <div className={styles.list} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start' }}>
                                             {
                                                 Object.keys(dropableCraftComponents[palette]).map((componentName, i) => {
@@ -85,7 +85,7 @@ export const Sidebar = ({
                                                                 />
                                                                 <div style={{ marginTop: '5px' }}>
                                                                     <p style={{ fontSize: '10px', width: '100%', color: 'white' }}>
-                                                                        {truncate_with_ellipsis(componentName, 8)}
+                                                                        {truncate_with_ellipsis(componentName, 12)}
                                                                     </p>
                                                                 </div>
                                                             </div>
