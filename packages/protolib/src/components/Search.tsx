@@ -2,7 +2,7 @@ import { Input, XStack } from "tamagui"
 import {Search as IconSearch} from '@tamagui/lucide-icons'
 import { useState, forwardRef, useRef, useEffect } from "react"
 
-export const Search = forwardRef(({placeholder='Search...', width=400, widthmd=300, closedWidth=50}:any, ref) => {
+export const Search = forwardRef(({onSearch=() => {}, placeholder='Search...', width=400, widthmd=300, closedWidth=50}:any, ref:any) => {
     const [opened, setOpened] = useState(false)
     const input = useRef()
     const [content, setContent] = useState('')
@@ -32,6 +32,7 @@ export const Search = forwardRef(({placeholder='Search...', width=400, widthmd=3
             placeholder={opened?placeholder:''} 
             onBlur={() => !content?setOpened(false):false}
             onChangeText={(text) => setContent(text)}
+            onSubmitEditing={() => onSearch(content)}
         />:null}
         <XStack position={"absolute"} right={15} top={8} cursor="pointer" opacity={0.5} hoverStyle={{ opacity: 1 }}>
             <IconSearch color="var(--color)" />
