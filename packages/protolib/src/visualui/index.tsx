@@ -89,7 +89,7 @@ export default {
   }),
   ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }),
-  ...cw(ButtonGroup, 'EyeOff', ButtonGroup),
+  ...cw(ButtonGroup, 'EyeOff', 'ButtonGroup'),
   ...cw(ButtonLink, 'ExternalLink', 'ButtonLink', { href: "/hello", children: "hello" }),
   ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "hello" }),
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, {children: <BasicPlaceHolder />}),
