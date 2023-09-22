@@ -38,7 +38,7 @@ export const DataTable = React.forwardRef(({
       >
         {!!title && (
           //@ts-ignore
-          <XStack f={1} ai="center" py="$2" px="$4" backgroundColor="$borderColor">
+          <XStack ai="center" py="$2" px="$4" backgroundColor="$borderColor">
             <H3 size="$3">{title}</H3>
           </XStack>
         )}
