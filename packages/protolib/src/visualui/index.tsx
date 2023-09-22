@@ -114,7 +114,7 @@ export default {
   ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }),
   ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }),
   ...cw(HeaderLink, 'Link2', 'HeaderLink', { href: "/hello", children: "hello" }),
-  ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox'),
+  ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HR, 'MinusSquare', 'HR'),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }),
