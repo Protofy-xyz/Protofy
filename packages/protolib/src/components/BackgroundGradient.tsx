@@ -11,6 +11,7 @@ const BackgroundGradient = React.forwardRef(({height=521, o=0.08}:any, ref: any)
     height={height}
     left={-1000}
     right={-1000}
+    flex={1}
     //@ts-ignore
     pe="none"
     o={o}
