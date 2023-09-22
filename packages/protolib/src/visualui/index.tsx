@@ -93,7 +93,7 @@ export default {
   ...cw(ButtonGroup, 'EyeOff', ButtonGroup),
   ...cw(ButtonLink, 'ExternalLink', 'ButtonLink', { href: "/hello", children: "hello" }),
   ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "hello" }),
-  ...cw(Center, 'AlignVerticalSpaceAround', 'Center'),
+  ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, {children: <BigTitle>Put your content here</BigTitle>}),
   ...cw(CheckCircle, 'Check', 'CheckCircle'),
   ...cw(Code, 'Code', 'Code', { children: "helloworld" }),
   ...cw(CodeInline, 'Terminal', 'CodeInLine', { children: "helloworld" }),

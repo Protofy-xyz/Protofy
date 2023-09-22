@@ -1,7 +1,7 @@
 import React from "react";
 import { useNode } from "@craftjs/core";
 
-export default (importInfo) => (Component, icon, name, defaultProps = {}, componentRules = {}) => {
+export default (importInfo) => (Component, icon, name, defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps:any = {}) => {
     const UiComponent = (props) => {
         let {
             connectors: { connect },
@@ -10,8 +10,8 @@ export default (importInfo) => (Component, icon, name, defaultProps = {}, compon
             selected: node.events.selected,
             custom: node.data.custom,
         }));
-        return <Component ref={connect} {...props}>
-            {props.children}
+        return <Component ref={connect} {...visualUIOnlyFallbackProps} {...props}>
+            {props.children ? props.children : visualUIOnlyFallbackProps.children}
         </Component>
     }
     UiComponent.craft = {
