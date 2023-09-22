@@ -3,8 +3,7 @@ import { ROOT_NODE } from '@craftjs/utils';
 import React, { useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import styles from "../styles/Editor.module.css";
-import {MdDelete, MdArrowDownward, MdRedo, MdArrowUpward} from "react-icons/md";
-import {GiMove} from "react-icons/gi";
+import { ArrowDown, Trash2, Redo, ArrowUp, Move } from 'lucide-react';
 
 export const RenderNode = ({ render }) => {
     const enableEdit = true
@@ -81,115 +80,115 @@ export const RenderNode = ({ render }) => {
         };
     }, [scroll]);
 
-    return(
+    return (
         <>
             {
-            ((isHover || isActive) && enableEdit ) 
-            ?
-            ReactDOM.createPortal(
-                <div
-                    ref={currentRef}
-                    style={{
-                        left: getPos(dom).left,
-                        top: getPos(dom).top,
-                        zIndex: 9999,
-                        position: "fixed",
-                        backgroundColor: "#2680EB",
-                        padding: "10px",
-                        color: "white",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        height: "30px",
-                        marginTop: "-29px",
-                        pointerEvents: 'auto'
-                    }}
-                >
-                    <div style={{ fontSize: 10, color:'white', marginRight:10}}>{name}</div>
-                    <div style={{display:'flex', flexDirection:"row", flex:1}}>
-                        {moveable ? (
-                            <div
-                                ref={drag}
-                                style={{ cursor: "grab" }}
-                                title="Move"
-                            >
-                                <GiMove
-                                        color="white"
-                                        size={14}
-                                />
-                            </div>
-                        ) : null}
-                        {id !== ROOT_NODE && parent != "ROOT" ?
-                            <div
-                                style={{ margin: "0px 8px 0px 8px", cursor: "pointer" }}
-                                title="Go to parent"
-                            >
-                                <MdArrowUpward
-                                        onMouseDown={(e) => {
-                                            actions.selectNode(parent);
-                                            e.stopPropagation()
-                                        }}
-                                        color="white"
-                                        size={14}
-                                />
-                            </div>
-                            : null}
-                        {childs.length ?
-                            <div
-                                style={{ marginRight: parent != "ROOT" ? "8px" : "", cursor: "pointer" }}
-                                title="Go to first child"
-                            >
-                                <MdArrowDownward
-                                          onMouseDown={(e) => {
-                                            actions.selectNode(childs[0]);
-                                            e.stopPropagation()
-                                        }}
-                                        color="white"
-                                        size={14}
-                                />
-                            </div>
-                            : null}
-                        {nodeAndSiblings.length > 1 ?
-                            <div
-                                style={{ margin: "0px 8px 0px 0px", cursor: "pointer" }}
-                                title="Go to next sibling"
-                            >
-                                      <MdRedo
-                                        onMouseDown={(e) => {
-                                            const currentIndex = nodeAndSiblings.indexOf(nodeId)
-                                            const nextIndex = (currentIndex + 1) % nodeAndSiblings.length
-                                            const nextNode = nodeAndSiblings[nextIndex]
-                                            actions.selectNode(nextNode);
-                                            e.stopPropagation()
-                                        }}
-                                        color="white"
-                                        size={14}
-                                />
-                            </div>
-                            : null}
-                        {deletable ? (
-                            <div
-                                style={{ cursor: "pointer" }}
-                                title="Delete"
-                            >
-                                <MdDelete
-                                  onMouseDown={(e: React.MouseEvent) => {
-                                    e.stopPropagation();
-                                    actions.delete(id);
-                                }}
-                                color="white"
-                                size={14}
-                                />
-                            </div>
-                        ) : null}
+                ((isHover || isActive) && enableEdit)
+                    ?
+                    ReactDOM.createPortal(
+                        <div
+                            ref={currentRef}
+                            style={{
+                                left: getPos(dom).left,
+                                top: getPos(dom).top,
+                                zIndex: 9999,
+                                position: "fixed",
+                                backgroundColor: "#2680EB",
+                                padding: "10px",
+                                color: "white",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                height: "30px",
+                                marginTop: "-29px",
+                                pointerEvents: 'auto'
+                            }}
+                        >
+                            <div style={{ fontSize: 10, color: 'white', marginRight: 10 }}>{name}</div>
+                            <div style={{ display: 'flex', flexDirection: "row", flex: 1 }}>
+                                {moveable ? (
+                                    <div
+                                        ref={drag}
+                                        style={{ cursor: "grab" }}
+                                        title="Move"
+                                    >
+                                        <Move
+                                            color="white"
+                                            size={14}
+                                        />
+                                    </div>
+                                ) : null}
+                                {id !== ROOT_NODE && parent != "ROOT" ?
+                                    <div
+                                        style={{ margin: "0px 8px 0px 8px", cursor: "pointer" }}
+                                        title="Go to parent"
+                                    >
+                                        <ArrowUp
+                                            onMouseDown={(e) => {
+                                                actions.selectNode(parent);
+                                                e.stopPropagation()
+                                            }}
+                                            color="white"
+                                            size={14}
+                                        />
+                                    </div>
+                                    : null}
+                                {childs.length ?
+                                    <div
+                                        style={{ marginRight: parent != "ROOT" ? "8px" : "", cursor: "pointer" }}
+                                        title="Go to first child"
+                                    >
+                                        <ArrowDown
+                                            onMouseDown={(e) => {
+                                                actions.selectNode(childs[0]);
+                                                e.stopPropagation()
+                                            }}
+                                            color="white"
+                                            size={14}
+                                        />
+                                    </div>
+                                    : null}
+                                {nodeAndSiblings.length > 1 ?
+                                    <div
+                                        style={{ margin: "0px 8px 0px 0px", cursor: "pointer" }}
+                                        title="Go to next sibling"
+                                    >
+                                        <Redo
+                                            onMouseDown={(e) => {
+                                                const currentIndex = nodeAndSiblings.indexOf(nodeId)
+                                                const nextIndex = (currentIndex + 1) % nodeAndSiblings.length
+                                                const nextNode = nodeAndSiblings[nextIndex]
+                                                actions.selectNode(nextNode);
+                                                e.stopPropagation()
+                                            }}
+                                            color="white"
+                                            size={14}
+                                        />
+                                    </div>
+                                    : null}
+                                {deletable ? (
+                                    <div
+                                        style={{ cursor: "pointer" }}
+                                        title="Delete"
+                                    >
+                                        <Trash2
+                                            onMouseDown={(e: React.MouseEvent) => {
+                                                e.stopPropagation();
+                                                actions.delete(id);
+                                            }}
+                                            color="white"
+                                            size={14}
+                                        />
+                                    </div>
+                                ) : null}
 
-                    </div>
-                </div>,
-                document.querySelector('.page-container')
-            )
-            : null
-        }
-        {render}
+                            </div>
+                        </div>,
+                        document.querySelector('.page-container')
+                    )
+                    : null
+            }
+            {render}
         </>
     )
 };

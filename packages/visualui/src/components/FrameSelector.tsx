@@ -1,5 +1,5 @@
 import Select, { components } from 'react-select';
-import { FiChevronUp } from "react-icons/fi";
+import { ChevronUp } from "lucide-react";
 
 export type PaneProps = {
     frames: any
@@ -60,7 +60,7 @@ export const FrameSelector = ({ selectedFrame, setFrameSelected, frames }: PaneP
         return (
             components.DropdownIndicator && (
                 <components.DropdownIndicator {...props}>
-                    <FiChevronUp size={'15px'} />
+                    <ChevronUp size={'15px'} />
                 </components.DropdownIndicator>
             )
         );

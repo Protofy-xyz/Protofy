@@ -3,8 +3,7 @@ import styles from "../../styles/sidebar.module.css";
 import { Element, useEditor } from "@craftjs/core";
 import PageMenu from "./PageMenu";
 import { getIcon } from "../../utils/craftComponent";
-import { HiPuzzlePiece } from 'react-icons/hi2'
-
+import { Component } from 'lucide-react';
 export type SidebarProps = {
     palettes: any[],
     pages: any[],
@@ -76,7 +75,7 @@ export const Sidebar = ({
                                                                 })}
                                                                 style={{ textAlign: 'center', marginTop: '10px', height: '50px', width: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                                             >
-                                                                <HiPuzzlePiece
+                                                                <Component
                                                                     color={"#a8a29e"}
                                                                     size={32}
                                                                 />

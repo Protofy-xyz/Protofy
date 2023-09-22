@@ -1,6 +1,6 @@
 import React from "react";
 import { PanelResizeHandle } from "react-resizable-panels";
-import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 type ResizeHandleProps = {
 	direction: "RIGHT" | "LEFT",
@@ -28,8 +28,8 @@ function ResizeHandle({ direction = "LEFT", onTogglePanel, disabled, onClick }: 
 					justifyContent: 'center'
 				}}>
 				{direction == "LEFT"
-					? <BiChevronLeft size={30} color="rgba(0,0,0,0.3)" />
-					: <BiChevronRight size={30} color="rgba(0,0,0,0.3)" />
+					? <ChevronLeft size={30} color="rgba(0,0,0,0.3)" />
+					: <ChevronRight size={30} color="rgba(0,0,0,0.3)" />
 				}
 			</div>
 		</PanelResizeHandle>

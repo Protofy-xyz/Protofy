@@ -7,7 +7,7 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import SlidingPanel from "./SlidingPanel";
 import Monaco from "./Monaco";
-import { IoMdClose, IoMdSave } from "react-icons/io";
+import { X, Save } from "lucide-react";
 import { FlowFactory, useFlowsStore } from 'protoflow';
 import { getMissingJsxImports, getSource } from "../utils/utils";
 
@@ -94,10 +94,10 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
                     ? <>
                         <div style={{ position: 'absolute', zIndex: 100, marginLeft: '-50px', marginTop: '20px' }}>
                             <div onClick={() => setCodeEditorVisible(false)} style={{ display: 'flex', backgroundColor: '#252526', borderRadius: '14px', width: '40px', padding: '5px', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                <IoMdClose color={'white'} size={25} />
+                                <X color={'white'} size={25} />
                             </div>
                             <div onClick={() => onEditorSave("monaco", monacoSourceCode)} style={{ display: 'flex', backgroundColor: '#252526', borderRadius: '14px', width: '40px', padding: '5px', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginTop: '10px' }}>
-                                <IoMdSave color={'white'} size={25} />
+                                <Save color={'white'} size={25} />
                             </div>
                         </div>
                         <Monaco
