@@ -2,6 +2,7 @@ import ActiveGroup from '../components/ActiveGroup'
 import ActiveGroupButton from '../components/ActiveGroupButton'
 import ActiveRender from '../components/ActiveRender'
 import AnounceBubble from '../components/AnounceBubble'
+import AppBar from '../components/AppBar'
 import AsyncView from '../components/AsyncView'
 import BackgroundGradient from '../components/BackgroundGradient'
 import BarChart from '../components/BarChart'
@@ -63,17 +64,14 @@ import { UL } from '../components/UL'
 import XCenterStack from '../components/XCenterStack'
 import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
 
-const cw = getComponentWrapper({
-  moduleSpecifier: 'protolib',
-  namedImports: [{ alias: undefined }]
-  // defaultImport: componentName
-})
+const cw = getComponentWrapper('protolib')
 
 export default {
   ...cw(ActiveGroup, 'EyeOff', 'ActiveGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ActiveGroupButton, 'EyeOff', 'ActiveGroupButton'),
   ...cw(ActiveRender, 'EyeOff', 'ActiveRender'),
   ...cw(AnounceBubble, 'Tv2', 'AnounceBubble', { href: "/hello", children: "hello" }),
+  ...cw(AppBar, 'CreditCard', 'AppBar'),
   ...cw(AsyncView, 'EyeOff', 'AsyncView'),
   ...cw(BackgroundGradient, 'Scroll', 'BackgroundGradient'),
   ...cw(BarChart, 'BarChartHorizontalBig', 'BarChart', {

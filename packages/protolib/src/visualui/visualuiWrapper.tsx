@@ -4,7 +4,12 @@ import { CopyPlus } from '@tamagui/lucide-icons'
 import { H4 } from 'tamagui'
 import Center from '../components/Center'
 
-export const getComponentWrapper = (importInfo) => (Component, icon, name, defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps:any = {}) => {
+export const getComponentWrapper = (importName) => (Component, icon, name, defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps:any = {}) => {
+    const importInfo = {
+        moduleSpecifier: importName,
+        namedImports: [{ alias: undefined }]
+        // defaultImport: componentName
+      }
     const UiComponent = (props) => {
         let {
             connectors: { connect },
