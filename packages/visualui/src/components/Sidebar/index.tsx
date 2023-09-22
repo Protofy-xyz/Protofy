@@ -72,7 +72,7 @@ export const Sidebar = ({
         <div className={styles.sidebar}>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '4px' }}>
                 <div ref={viewRef} style={{ padding: '4px', display: 'flex', flexDirection: "column", flex: 1, borderBottom: '1px solid #FFFFFF10' }}>
-                    <p style={{ padding: '18px 0px 0px 12px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
+                    <p style={{ padding: '18px 0px 0px 14px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
                     <div style={{display: 'flex', margin: '18px 12px 18px 2px', position: 'relative'}}>
                         <input
                             style={{

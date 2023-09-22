@@ -19,7 +19,7 @@ const PageMenu = ({ pages, sendMessage, currentPage }) => {
 
     return (
         <div ref={viewRef} style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-            <div style={{ padding: '20px 0px 0px 12px', fontSize: '18px', color: 'white' }}>Screens</div>
+            <div style={{ padding: '20px 0px 0px 14px', fontSize: '18px', color: 'white' }}>Screens</div>
             <div style={{ display: 'flex', flex: 1, flexDirection: 'column', paddingBottom: '10px', overflow: 'auto', overflowX: 'hidden' }} className={styles.list}>
                 {pages.filter(p => p).map((pageName, index) => (
                     <div
