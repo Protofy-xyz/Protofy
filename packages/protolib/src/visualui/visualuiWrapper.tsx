@@ -1,7 +1,9 @@
 import React from "react";
 import { useNode } from "@craftjs/core";
+import { CopyPlus } from '@tamagui/lucide-icons'
+import { H2 } from 'tamagui'
 
-export default (importInfo) => (Component, icon, name, defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps:any = {}) => {
+export const getComponentWrapper = (importInfo) => (Component, icon, name, defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps:any = {}) => {
     const UiComponent = (props) => {
         let {
             connectors: { connect },
@@ -31,3 +33,8 @@ export default (importInfo) => (Component, icon, name, defaultProps = {}, compon
     }
     return {[name]:UiComponent}
 }
+
+export const BasicPlaceHolder = ({text='Drag your content here'}) => <>
+    <CopyPlus size="$7" />
+    <H2>{text}</H2>
+</>

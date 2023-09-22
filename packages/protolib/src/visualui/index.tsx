@@ -61,10 +61,7 @@ import TooltipContainer from '../components/TooltipContainer'
 import { UL } from '../components/UL'
 //import { unwrapText } from '../components/unwrapText'
 import XCenterStack from '../components/XCenterStack'
-import { CopyPlus } from '@tamagui/lucide-icons'
-
-import getComponentWrapper from './visualuiWrapper'
-import { H2 } from 'tamagui'
+import {getComponentWrapper, BasicPlaceHolder} from './visualuiWrapper'
 
 const cw = getComponentWrapper({
   moduleSpecifier: 'protolib',
@@ -95,10 +92,7 @@ export default {
   ...cw(ButtonGroup, 'EyeOff', ButtonGroup),
   ...cw(ButtonLink, 'ExternalLink', 'ButtonLink', { href: "/hello", children: "hello" }),
   ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "hello" }),
-  ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, {children: <>
-  <CopyPlus size="$7" />
-  <H2>Drag your content here</H2>
-</>}),
+  ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, {children: <BasicPlaceHolder />}),
   ...cw(CheckCircle, 'Check', 'CheckCircle'),
   ...cw(Code, 'Code', 'Code', { children: "helloworld" }),
   ...cw(CodeInline, 'Terminal', 'CodeInLine', { children: "helloworld" }),
