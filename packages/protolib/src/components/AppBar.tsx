@@ -10,19 +10,19 @@ import {
 import { ContainerLarge } from './Container'
 
 export type AppBarProps = {
-    floating?: boolean,
-    position?: "top" | "bottom",
-    children?:any,
-    translucid?:boolean,
-    dettached?:boolean,
-    menuPlacement?: 'top' | 'bottom' | 'left' | 'right',
-    fullscreen?:boolean,
-    height: number|undefined,
-    containerProps?: StackProps,
-    backgroundColor?: string
+  floating?: boolean,
+  position?: "top" | "bottom",
+  children?: any,
+  translucid?: boolean,
+  dettached?: boolean,
+  menuPlacement?: 'top' | 'bottom' | 'left' | 'right',
+  fullscreen?: boolean,
+  height?: number | undefined,
+  containerProps?: StackProps,
+  backgroundColor?: string
 }
-  
-export function AppBar({backgroundColor="$background", containerProps={}, height=undefined, fullscreen=false,translucid=true, dettached=true, position='top', ...props}: AppBarProps) {
+
+export const AppBar = React.forwardRef(({ backgroundColor = "$background", containerProps = {}, height = undefined, fullscreen = false, translucid = true, dettached = true, position = 'top', ...props }: AppBarProps, ref: any) => {
   const [isScrolled, setIsScrolled] = React.useState(false)
 
   if (isClient) {
@@ -39,6 +39,7 @@ export function AppBar({backgroundColor="$background", containerProps={}, height
 
   const getContent = () => (<ThemeTint>
     <XStack
+      ref={ref}
       alignItems="center"
       tag="header"
       justifyContent="space-between"
@@ -51,14 +52,14 @@ export function AppBar({backgroundColor="$background", containerProps={}, height
         [props, translucid, position]
       )}
     </XStack>
-    </ThemeTint>)
+  </ThemeTint>)
   return (
     <>
       <XStack
         // @ts-ignore
         pos="fixed"
-        top={position=='top'?(dettached?0:-1):undefined}
-        bottom={position=='bottom'?-1:undefined}
+        top={position == 'top' ? (dettached ? 0 : -1) : undefined}
+        bottom={position == 'bottom' ? -1 : undefined}
         left={0}
         right={0}
         alignItems="center"
@@ -67,26 +68,25 @@ export function AppBar({backgroundColor="$background", containerProps={}, height
         // backgroundColor={dettached?'transparent':'$background'}
         $gtSm={{
           //@ts-ignore
-          px: dettached?'$4':'$0',
+          px: dettached ? '$4' : '$0',
         }}
         {...containerProps}
       >
         {/*@ts-ignore*/}
-        <XStack width="100%" maw={dettached?1120:undefined} pos="relative">
+        <XStack width="100%" maw={dettached ? 1120 : undefined} pos="relative">
           <XStack
-            className={`ease-out all ms200 ${
-              isScrolled && dettached ? 'blur-medium hover-highlights ' : ''
-            }`}
-            height={dettached?undefined:height}
+            className={`ease-out all ms200 ${isScrolled && dettached ? 'blur-medium hover-highlights ' : ''
+              }`}
+            height={dettached ? undefined : height}
             bbc="$borderColor"
-            py={dettached?"$1":"$2"}
-            y={dettached && position == 'top'?3:0}
+            py={dettached ? "$1" : "$2"}
+            y={dettached && position == 'top' ? 3 : 0}
             ov="hidden"
             contain="paint"
             width="100%"
             bw={1}
             boc="transparent"
-            br={dettached?"$10":0}
+            br={dettached ? "$10" : 0}
             $sm={{
               //@ts-ignore
               br: 0,
@@ -94,16 +94,16 @@ export function AppBar({backgroundColor="$background", containerProps={}, height
               py: '$2',
             }}
             {...(isScrolled && {
-              $gtSm: dettached?{
+              $gtSm: dettached ? {
                 py: '$2',
                 y: 5,
                 boc: '$borderColor',
-              }:{},
+              } : {},
             })}
           >
             {/*@ts-ignore*/}
-            <YStack o={translucid? (isScrolled ? 0.75 : 0):1} fullscreen bc={backgroundColor} />
-            {fullscreen?<YStack justifyContent="center" width={'100%'}>{getContent()}</YStack>:<ContainerLarge>{getContent()}</ContainerLarge>}
+            <YStack o={translucid ? (isScrolled ? 0.75 : 0) : 1} fullscreen bc={backgroundColor} />
+            {fullscreen ? <YStack justifyContent="center" width={'100%'}>{getContent()}</YStack> : <ContainerLarge>{getContent()}</ContainerLarge>}
           </XStack>
           {/* do shadow separate so we can contain paint because its causing perf issues */}
           <XStack
@@ -113,20 +113,20 @@ export function AppBar({backgroundColor="$background", containerProps={}, height
             br="$10"
             fullscreen
             {...(isScrolled && {
-              $gtSm: dettached? {
+              $gtSm: dettached ? {
                 py: '$2',
                 y: 5,
                 elevation: '$3',
                 boc: '$borderColor',
-              }:{},
+              } : {},
             })}
           />
         </XStack>
       </XStack>
       {/*@ts-ignore*/}
-      {dettached?<YStack height={54} w="100%" />:null}
+      {dettached ? <YStack height={54} w="100%" /> : null}
     </>
   )
-}
+})
 
 export default AppBar
