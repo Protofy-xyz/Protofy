@@ -1,6 +1,7 @@
 import { useOnIntersecting } from '../lib/useOnIntersecting'
 import { getTints } from '@tamagui/logo'
 import { useTint } from '@tamagui/logo'
+import React from 'react'
 import { useEffect, useMemo, useRef } from 'react'
 import { StackProps } from 'tamagui'
 import { GetProps, XStack, YStack, styled } from 'tamagui'
@@ -10,7 +11,7 @@ type Props = SectionProps & { containerProps: StackProps, themed?: boolean; inde
 // not use its fixed size
 const numIntersectingAtSection: number[] = getTints().tints.map((_) => 0)
 
-export const TintSection = ({ containerProps, children, index, themed, zIndex, ...props }: Props) => {
+export const TintSection = React.forwardRef(({ containerProps, children, index, themed, zIndex, ...props }: Props, ref:any) => {
   const top = useRef<HTMLElement>(null)
   const bottom = useRef<HTMLElement>(null)
   const mid = useRef<HTMLElement>(null)
@@ -50,7 +51,7 @@ export const TintSection = ({ containerProps, children, index, themed, zIndex, .
 
   return (
     //@ts-ignore
-    <YStack {...containerProps} zIndex={zIndex} pos="relative">
+    <YStack {...containerProps} zIndex={zIndex} pos="relative" ref={ref}>
       {useMemo(() => {
         return (
           <>
@@ -78,7 +79,7 @@ export const TintSection = ({ containerProps, children, index, themed, zIndex, .
       </HomeSection>
     </YStack>
   )
-}
+})
 
 let current = 0
 const listeners = new Set<Function>()
@@ -92,7 +93,7 @@ export const useTintSectionIndex = (cb: (index: number, str: number) => void) =>
   }, [])
 }
 
-export const HomeSection = styled(YStack, {
+const StyledHomeSection = styled(YStack, {
   //@ts-ignore
   name: 'Section',
   //@ts-ignore
@@ -107,6 +108,12 @@ export const HomeSection = styled(YStack, {
       },
     },
   } as const,
+})
+
+export const HomeSection = React.forwardRef((props: any, ref: any) => {
+  return <StyledHomeSection ref={ref} {...props}>
+    {props.children}
+  </StyledHomeSection>;
 })
 
 type SectionProps = GetProps<typeof HomeSection>

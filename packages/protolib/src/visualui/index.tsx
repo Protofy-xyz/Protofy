@@ -56,11 +56,11 @@ import { SubTitle } from '../components/SubTitle'
 import TabGroup from '../components/TabGroup'
 import { TamaCard } from '../components/TamaCard'
 import { ThemeToggle } from '../components/ThemeToggle'
-// import { TintSection } from '../components/TintSection'
-// import TooltipContainer from '../components/TooltipContainer'
-// import { UL } from '../components/UL'
-// import { unwrapText } from '../components/unwrapText'
-// import XCenterStack from '../components/XCenterStack'
+import { TintSection, HomeSection, useTintSectionIndex } from '../components/TintSection'
+import TooltipContainer from '../components/TooltipContainer'
+import { UL } from '../components/UL'
+//import { unwrapText } from '../components/unwrapText'
+import XCenterStack from '../components/XCenterStack'
 
 import componentWrapper from './visualuiWrapper'
 
@@ -137,7 +137,8 @@ const visualUiComponents = {
   PageGlow: [PageGlow],
   PanelMenuItem: [PanelMenuItem, { text: "hello world" }],
   Pre: [Pre],
-  Search: [Search], 
+  RainbowText: [RainbowText, { children: "hello world" }],
+  Search: [Search],
   Section: [Section],
   SectionBlock: [SectionBlock],
   TitleLink: [TitleLink, { href: "/hello", children: "hello" }],
@@ -150,8 +151,12 @@ const visualUiComponents = {
     description: "description",
     children: "Lorem ipsum dolor sit amet"
   }],
-  ThemeToggle: [ThemeToggle, {chromeless:true}],
-  RainbowText: [RainbowText, { children: "hello world" }]
+  ThemeToggle: [ThemeToggle, { chromeless: true }],
+  TintSection: [TintSection],
+  HomeSection: [HomeSection],
+  TooltipContainer: [TooltipContainer, {tooltipText:"Hello"}],
+  UL: [UL, { children: "hello world" }],
+  XCenterStack:[XCenterStack]
 }
 
 export default Object.keys(visualUiComponents).reduce((total, componentName) => {
