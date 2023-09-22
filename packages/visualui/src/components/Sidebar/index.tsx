@@ -4,6 +4,7 @@ import { Element, useEditor } from "@craftjs/core";
 import PageMenu from "./PageMenu";
 import { getIcon } from "../../utils/craftComponent";
 import Icon from '../Icon';
+import { Search, X } from 'lucide-react';
 
 export type SidebarProps = {
     palettes: any[],
@@ -19,6 +20,7 @@ export const Sidebar = ({
     currentPage
 }: SidebarProps) => {
     const viewRef = React.useRef(null)
+    const [searchValue, setSearchValue] = React.useState('')
     const { connectors, query } = useEditor();
     function truncate_with_ellipsis(s, maxLength) {
         if (s.length > maxLength) {
@@ -27,17 +29,34 @@ export const Sidebar = ({
         return s;
     };
 
-    const palettesArr = Object.keys(palettes).filter(p => p != "craft");
 
-    const dropableCraftComponents = Object.keys(palettes).reduce((total, paletteName) => {
+    const allDropableCraftComponents = Object.keys(palettes).reduce((total, paletteName) => {
         const paletteElements = Object.keys(palettes[paletteName]).reduce((totalComp, componentName) => (
             { ...totalComp, [componentName]: { dropable: true, element: palettes[paletteName][componentName], icon: getIcon(palettes[paletteName][componentName]) } }
         ), {})
         return { ...total, [paletteName]: paletteElements }
     }, {})
 
+    const filteredDropableComponents = searchValue ? Object.keys(allDropableCraftComponents).reduce((total, paletteName) => {
+        const paletteElements = allDropableCraftComponents[paletteName]
+        const paletteElementsName = Object.keys(paletteElements)
+        const filteredPaletteElements = paletteElementsName.filter(c => c.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+            .reduce((result, key) => {
+                return { ...result, [key]: paletteElements[key] }
+            }, {})
+        var palette = {}
+        if (Object.keys(filteredPaletteElements).length) {
+            palette = {
+                [paletteName]: filteredPaletteElements
+            }
+        }
+        return { ...total, ...palette }
+    }, {}) : allDropableCraftComponents
+
+    const palettesArr = Object.keys(filteredDropableComponents).filter(p => p != "craft");
+
     function handleResize(e = {} as any) {
-        const viewportHeight = window.outerHeight / 2;
+        const viewportHeight = window.outerHeight * 0.6;
         if (!viewRef.current) return
         viewRef.current.style.height = viewportHeight + 'px'
         viewRef.current.style.maxHeight = viewportHeight + 'px'
@@ -53,18 +72,41 @@ export const Sidebar = ({
         <div className={styles.sidebar}>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '4px' }}>
                 <div ref={viewRef} style={{ padding: '4px', display: 'flex', flexDirection: "column", flex: 1, borderBottom: '1px solid #FFFFFF10' }}>
-                    <p style={{ padding: '20px 0px 0px 18px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
+                    <p style={{ padding: '18px 0px 0px 12px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
+                    <div style={{display: 'flex', margin: '18px 12px 18px 2px', position: 'relative'}}>
+                        <input
+                            style={{
+                                fontFamily: 'Jost-Regular',
+                                padding: '8px 8px 8px 36px',
+                                // border: 'grey',
+                                display: 'flex',
+                                boxSizing: 'border-box',
+                                fontSize: '14px',
+                                backgroundColor: '#323232',
+                                borderRadius: '10px',
+                                borderWidth: '0px',
+                                outline: 'none',
+                                color: 'white',
+                                flex: 1
+                            }}
+                            value={searchValue}
+                            onChange={t => setSearchValue(t.target.value)}
+                            placeholder="Search..."
+                        />
+                        <Search color='grey' size={20} style={{ position: 'absolute', top: '8px', left: '10px' }} />
+                        {searchValue ? <X onClick={() => setSearchValue('')} color='white' size={20} style={{ position: 'absolute', top: '8px', right: '10px', cursor: 'pointer' }} /> : null}
+                    </div>
                     <div className={styles.list} style={{ overflow: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }}>
                         {
                             palettesArr.map((palette, i) => {
                                 return (
                                     <div key={i} style={{ flexDirection: 'column', display: 'flex', marginBottom: '25px' }}>
-                                        <p style={{ paddingLeft: '18px', marginTop: '5px', fontSize: '12px', color: 'grey' }}>{palette}</p>
+                                        <p style={{ paddingLeft: '18px', marginTop: '0px', fontSize: '12px', color: 'grey' }}>{palette}</p>
                                         <div className={styles.list} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start' }}>
                                             {
-                                                Object.keys(dropableCraftComponents[palette]).map((componentName, i) => {
-                                                    const data = dropableCraftComponents[palette][componentName]
-                                                    return (data.nonDeletable ?
+                                                Object.keys(filteredDropableComponents[palette]).map((componentName, i) => {
+                                                    const data = filteredDropableComponents[palette][componentName]
+                                                    return (data?.nonDeletable ?
                                                         null
                                                         : <div key={i} title={componentName} style={{ display: 'flex', margin: '8px', cursor: 'grab' }}>
                                                             <div

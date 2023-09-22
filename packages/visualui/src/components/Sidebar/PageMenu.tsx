@@ -4,9 +4,12 @@ import styles from "../../styles/sidebar.module.css";
 const PageMenu = ({ pages, sendMessage, currentPage }) => {
     const viewRef = React.useRef()
     function handleResize(e = {} as any) {
-        const viewportHeight = window.outerHeight/4;
+        const viewportHeight = window.outerHeight*0.4;
         if (!viewRef.current) return
+        //@ts-ignore
         viewRef.current.style.height = viewportHeight + 'px'
+        //@ts-ignore
+        viewRef.current.style.maxHeight = viewportHeight + 'px'
     }
     React.useEffect(() => {
         handleResize()
@@ -16,7 +19,7 @@ const PageMenu = ({ pages, sendMessage, currentPage }) => {
 
     return (
         <div ref={viewRef} style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-            <div style={{ padding: '20px 0px 0px 18px', fontSize: '18px', color: 'white' }}>Screens</div>
+            <div style={{ padding: '20px 0px 0px 12px', fontSize: '18px', color: 'white' }}>Screens</div>
             <div style={{ display: 'flex', flex: 1, flexDirection: 'column', paddingBottom: '10px', overflow: 'auto', overflowX: 'hidden' }} className={styles.list}>
                 {pages.filter(p => p).map((pageName, index) => (
                     <div
