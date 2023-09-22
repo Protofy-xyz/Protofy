@@ -34,24 +34,24 @@ import { HR } from '../components/HR'
 import { IconStack } from '../components/IconStack'
 import { ItemCard } from '../components/ItemCard'
 import { ButtonLink, Link, ParagraphLink } from '../components/Link'
-// import { LinkGroup } from '../components/LinkGroup'
+import { LinkGroup, LinkGroupItem } from '../components/LinkGroup'
 import { Logo } from '../components/Logo'
-// import { LogoIcon } from '../components/LogoIcon'
-// import MainButton from '../components/MainButton'
-// import { NextLink } from '../components/NextLink'
+import { LogoIcon } from '../components/LogoIcon'
+import MainButton from '../components/MainButton'
+import { NextLink } from '../components/NextLink'
 import { Notice } from '../components/Notice'
 import OverlayCard from '../components/OverlayCard'
 import OverlayCardBasic from '../components/OverlayCardBasic'
 import Page from '../components/Page'
 import { PageGlow } from '../components/PageGlow'
-// import { PanelMenuItem } from '../components/PanelMenuItem'
-// import { Pre } from '../components/Pre'
+import { PanelMenuItem } from '../components/PanelMenuItem'
+import { Pre } from '../components/Pre'
 import RainbowText from '../components/RainbowText'
-// import Section from '../components/Section'
+import Section from '../components/Section'
 import SectionBlock, { TitleLink } from '../components/SectionBlock'
 import SideBySide from '../components/SideBySide'
 import SpotLight from '../components/SpotLight'
-// import { SubTitle } from '../components/SubTitle'
+import { SubTitle } from '../components/SubTitle'
 import TabGroup from '../components/TabGroup'
 import { TamaCard } from '../components/TamaCard'
 // import { ThemeToggle } from '../components/ThemeToggle'
@@ -61,12 +61,7 @@ import { TamaCard } from '../components/TamaCard'
 // import { unwrapText } from '../components/unwrapText'
 // import XCenterStack from '../components/XCenterStack'
 
-
-
-
 import componentWrapper from './visualuiWrapper'
-
-
 
 
 const visualUiComponents = {
@@ -120,8 +115,13 @@ const visualUiComponents = {
   ItemCard: [ItemCard, { children: "hello world!" }],
   ButtonLink: [ButtonLink, { href: "/hello", children: "hello" }],
   Link: [Link, { href: "/hello", children: "hello" }],
+  LinkGroup: [LinkGroup, { href: "/hello", children: "hello" }],
+  LinkGroupItem: [LinkGroupItem, { href: "/hello", children: "hello" }],
   ParagraphLink: [ParagraphLink, { href: "/hello", children: "hello" }],
   Logo: [Logo, { text: "protofy" }],
+  LogoIcon: [LogoIcon, { children: "hello world!" }],
+  MainButton: [MainButton, { children: "hello world!" }],
+  NextLink: [NextLink, { href: "/hello", children: "hello" }],
   Notice: [Notice, { children: "Hello world!" }],
   OverlayCard: [OverlayCard],
   OverlayCardBasic: [OverlayCardBasic, {
@@ -134,10 +134,15 @@ const visualUiComponents = {
     canDrag: () => false
   }],
   PageGlow: [PageGlow],
+  PanelMenuItem: [PanelMenuItem, {text:"hello world"}],
+  Pre: [Pre],
+  Section: [Section],
   SectionBlock: [SectionBlock],
   TitleLink: [TitleLink, { href: "/hello", children: "hello" }],
   SideBySide: [SideBySide],
   SpotLight: [SpotLight],
+  SubTitle: [SubTitle, {children: "hello world"}],
+
   RainbowText: [RainbowText, { children: "hello world" }]
 }
 

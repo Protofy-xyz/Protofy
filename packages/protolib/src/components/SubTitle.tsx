@@ -18,7 +18,7 @@ export const nbspLastWord = (sentence: string) => {
   })
 }
 
-export const SubTitle = ({ children, ...props }) => {
+export const SubTitle = React.forwardRef(({ children, ...props }: any, ref: any) => {
   if (!children) {
     return null
   }
@@ -28,6 +28,7 @@ export const SubTitle = ({ children, ...props }) => {
   const childText = typeof children === 'string' ? children : children.props.children
   return (
     <H3
+      ref={ref}
       position="relative"
       color="$gray9"
       width="max-content"
@@ -49,4 +50,4 @@ export const SubTitle = ({ children, ...props }) => {
       {nbspLastWord(childText)}
     </H3>
   )
-}
+})
