@@ -1,9 +1,11 @@
+import React from "react"
 import { StackProps, XStack } from "tamagui"
 
-const XCenterStack = (props: StackProps) => (
+const XCenterStack = React.forwardRef((props: StackProps, ref:any) => (
     //@ts-ignore
-    <XStack ai="center" jc="center" $xxs={{ ai: 'center', fw: 'wrap' }} {...props}>
+    <XStack ref={ref} ai="center" jc="center" $xxs={{ ai: 'center', fw: 'wrap' }} {...props}>
         {props.children}
     </XStack>
-)
+))
+
 export default XCenterStack
