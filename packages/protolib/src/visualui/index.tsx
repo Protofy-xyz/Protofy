@@ -47,6 +47,7 @@ import { PageGlow } from '../components/PageGlow'
 import { PanelMenuItem } from '../components/PanelMenuItem'
 import { Pre } from '../components/Pre'
 import RainbowText from '../components/RainbowText'
+import { Search } from '../components/Search'
 import Section from '../components/Section'
 import SectionBlock, { TitleLink } from '../components/SectionBlock'
 import SideBySide from '../components/SideBySide'
@@ -136,6 +137,7 @@ const visualUiComponents = {
   PageGlow: [PageGlow],
   PanelMenuItem: [PanelMenuItem, { text: "hello world" }],
   Pre: [Pre],
+  Search: [Search], 
   Section: [Section],
   SectionBlock: [SectionBlock],
   TitleLink: [TitleLink, { href: "/hello", children: "hello" }],
