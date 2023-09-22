@@ -3,7 +3,8 @@ import styles from "../../styles/sidebar.module.css";
 import { Element, useEditor } from "@craftjs/core";
 import PageMenu from "./PageMenu";
 import { getIcon } from "../../utils/craftComponent";
-import { Component } from 'lucide-react';
+import Icon from '../Icon';
+
 export type SidebarProps = {
     palettes: any[],
     pages: any[],
@@ -30,13 +31,13 @@ export const Sidebar = ({
 
     const dropableCraftComponents = Object.keys(palettes).reduce((total, paletteName) => {
         const paletteElements = Object.keys(palettes[paletteName]).reduce((totalComp, componentName) => (
-            { ...totalComp, [componentName]: { dropable: true, element: palettes[paletteName][componentName], icon: getIcon(componentName) } }
+            { ...totalComp, [componentName]: { dropable: true, element: palettes[paletteName][componentName], icon: getIcon(palettes[paletteName][componentName]) } }
         ), {})
         return { ...total, [paletteName]: paletteElements }
     }, {})
 
     function handleResize(e = {} as any) {
-        const viewportHeight = window.outerHeight/2;
+        const viewportHeight = window.outerHeight / 2;
         if (!viewRef.current) return
         viewRef.current.style.height = viewportHeight + 'px'
     }
@@ -46,7 +47,7 @@ export const Sidebar = ({
         return () => window.removeEventListener('resize', handleResize);
     }, [])
 
-    
+
     return (
         <div className={styles.sidebar}>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '4px' }}>
@@ -61,21 +62,23 @@ export const Sidebar = ({
                                         <div className={styles.list} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start' }}>
                                             {
                                                 Object.keys(dropableCraftComponents[palette]).map((componentName, i) => {
-                                                    return (dropableCraftComponents[palette][componentName].nonDeletable ?
+                                                    const data = dropableCraftComponents[palette][componentName]
+                                                    return (data.nonDeletable ?
                                                         null
                                                         : <div key={i} title={componentName} style={{ display: 'flex', margin: '8px', cursor: 'grab' }}>
                                                             <div
                                                                 ref={ref => connectors.create(ref, () => {
-                                                                    return (dropableCraftComponents[palette][componentName].dropable) ?
+                                                                    return (data.dropable) ?
                                                                         <Element
-                                                                            is={dropableCraftComponents[palette][componentName].element}
+                                                                            is={data.element}
                                                                             canvas
                                                                         ></Element>
-                                                                        : React.createElement(dropableCraftComponents[palette][componentName].element)
+                                                                        : React.createElement(data.element)
                                                                 })}
                                                                 style={{ textAlign: 'center', marginTop: '10px', height: '50px', width: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                                             >
-                                                                <Component
+                                                                <Icon
+                                                                    name={data.icon}
                                                                     color={"#a8a29e"}
                                                                     size={32}
                                                                 />
