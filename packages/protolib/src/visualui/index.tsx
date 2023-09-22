@@ -61,7 +61,7 @@ import TooltipContainer from '../components/TooltipContainer'
 import { UL } from '../components/UL'
 //import { unwrapText } from '../components/unwrapText'
 import XCenterStack from '../components/XCenterStack'
-import {getComponentWrapper, BasicPlaceHolder} from './visualuiWrapper'
+import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
 
 const cw = getComponentWrapper({
   moduleSpecifier: 'protolib',
@@ -89,10 +89,10 @@ export default {
   }),
   ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }),
-  ...cw(ButtonGroup, 'EyeOff', 'ButtonGroup'),
+  ...cw(ButtonGroup, 'EyeOff', 'ButtonGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ButtonLink, 'ExternalLink', 'ButtonLink', { href: "/hello", children: "hello" }),
   ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "hello" }),
-  ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, {children: <BasicPlaceHolder />}),
+  ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(CheckCircle, 'Check', 'CheckCircle'),
   ...cw(Code, 'Code', 'Code', { children: "helloworld" }),
   ...cw(CodeInline, 'Terminal', 'CodeInLine', { children: "helloworld" }),
@@ -127,7 +127,7 @@ export default {
   ...cw(MainButton, 'MousePointerSquare', 'MainButton', { children: "hello world!" }),
   ...cw(NextLink, 'EyeOff', 'NextLink', { href: "/hello", children: "hello" }),
   ...cw(Notice, 'Globe2', 'Notice', { children: "Hello world!" }),
-  ...cw(OverlayCard, 'CreditCard', 'OverlayCard'),
+  ...cw(OverlayCard, 'CreditCard', 'OverlayCard', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(OverlayCardBasic, 'CreditCard', 'OverlayCardBasic', {
     title: "Hello",
     subtitle: "Hello World!",
@@ -136,9 +136,9 @@ export default {
   }),
   ...cw(Page, 'EyeOff', 'Page', {}, {
     canDrag: () => false
-  }),
+  }, { children: <BasicPlaceHolder /> }),
   ...cw(PageGlow, 'EyeOff', 'PageGlow'),
-  ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem',{ text: "hello world" }),
+  ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem', { text: "hello world" }),
   ...cw(Pre, 'EyeOff', 'Pre'),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }),
   ...cw(Search, 'Search', 'Search'),
