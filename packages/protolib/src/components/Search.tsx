@@ -2,7 +2,7 @@ import { Input, XStack } from "tamagui"
 import {Search as IconSearch} from '@tamagui/lucide-icons'
 import { useState, forwardRef, useRef, useEffect } from "react"
 
-export const Search = forwardRef((props, ref) => {
+export const Search = forwardRef(({placeholder='Search...', width=400, widthmd=300, closedWidth=50}:any, ref) => {
     const [opened, setOpened] = useState(false)
     const input = useRef()
     const [content, setContent] = useState('')
@@ -14,7 +14,13 @@ export const Search = forwardRef((props, ref) => {
         }
     }, [opened])
     //@ts-ignore
-    return <XStack onPress={() => setOpened(true)} ref={ref}>
+    return <XStack 
+        width={opened?width:closedWidth}
+        $md={{width: opened?widthmd: closedWidth}}
+        $sm={{ width: opened?'100%':closedWidth }} 
+        onPress={() => setOpened(true)} 
+        ref={ref}
+    >
         {opened?<Input 
             value={content}
             disabled={!opened}
@@ -22,10 +28,8 @@ export const Search = forwardRef((props, ref) => {
             focusStyle={{borderWidth:0}}
             //@ts-ignore
             ref={input}
-            $md={{width: "300px"}}
-            width={opened?"400px":"50px"} 
-            $sm={{ width: '100%' }} 
-            placeholder={opened?'Search...':''} 
+            width={opened?"100%":closedWidth} 
+            placeholder={opened?placeholder:''} 
             onBlur={() => !content?setOpened(false):false}
             onChangeText={(text) => setContent(text)}
         />:null}
