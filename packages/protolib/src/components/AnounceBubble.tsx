@@ -4,6 +4,7 @@ import {
   Button,
   Text,
   XStack,
+  StackProps
 } from 'tamagui'
 import React from 'react'
 
@@ -14,9 +15,9 @@ type AnounceBubbleProps = {
 }
 
 
-export default React.forwardRef(({ href, children, color = 2 }: AnounceBubbleProps, ref: any) => (
+export default React.forwardRef(({ href, children, color = 2, ...props}: AnounceBubbleProps & StackProps, ref: any) => (
   //@ts-ignore
-  <XStack als="center" y={-70} ref={ref}>
+  <XStack als="center" ref={ref} {...props}>
     <Link prefetch={false} href={href}>
       <ThemeTintAlt>
         <Button
