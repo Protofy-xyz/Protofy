@@ -1,7 +1,7 @@
 import React from "react";
 import { useNode } from "@craftjs/core";
 
-export default (Component, icon, name, defaultProps = {}, importInfo, componentRules = {}) => {
+export default (importInfo) => (Component, icon, name, defaultProps = {}, componentRules = {}) => {
     const UiComponent = (props) => {
         let {
             connectors: { connect },
@@ -20,6 +20,10 @@ export default (Component, icon, name, defaultProps = {}, importInfo, componentR
         custom: {
             icon,
             ...importInfo,
+            namedImports: {
+                ...importInfo,
+                name: name
+            }
         },
         props: defaultProps,
         displayName: name,

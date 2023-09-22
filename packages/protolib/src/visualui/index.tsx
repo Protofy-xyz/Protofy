@@ -62,17 +62,22 @@ import { UL } from '../components/UL'
 //import { unwrapText } from '../components/unwrapText'
 import XCenterStack from '../components/XCenterStack'
 
-import componentWrapper from './visualuiWrapper'
+import getComponentWrapper from './visualuiWrapper'
 
+const cw = getComponentWrapper({
+  moduleSpecifier: 'protolib',
+  namedImports: [{ alias: undefined }]
+  // defaultImport: componentName
+})
 
-const visualUiComponents = {
-  ActiveGroup: [ActiveGroup, 'EyeOff'],
-  ActiveGroupButton: [ActiveGroupButton, 'EyeOff'],
-  ActiveRender: [ActiveRender, 'EyeOff'],
-  AnounceBubble: [AnounceBubble, 'Tv2', { href: "/hello", children: "hello" }],
-  AsyncView: [AsyncView, 'EyeOff'],
-  BackgroundGradient: [BackgroundGradient, 'Scroll'],
-  BarChart: [BarChart, 'BarChartHorizontalBig', {
+export default {
+  ActiveGroup: cw(ActiveGroup, 'EyeOff', 'ActiveGroup'),
+  ActiveGroupButton: cw(ActiveGroupButton, 'EyeOff', 'ActiveGroupButton'),
+  ActiveRender: cw(ActiveRender, 'EyeOff', 'ActiveRender'),
+  AnounceBubble: cw(AnounceBubble, 'Tv2', 'AnounceBubble', { href: "/hello", children: "hello" }),
+  AsyncView: cw(AsyncView, 'EyeOff', 'AsyncView'),
+  BackgroundGradient: cw(BackgroundGradient, 'Scroll', 'BackgroundGradient'),
+  BarChart: cw(BarChart, 'BarChartHorizontalBig', 'BarChart', {
     data: [
       { color: '$pink9', name: 'one', value: 0.12 },
       { color: '$purple9', name: 'two', value: 0.063 },
@@ -82,92 +87,79 @@ const visualUiComponents = {
     large: true,
     animatedEnter: false,
     selectedElement: 'two'
-  }
-  ],
-  BigTitle: [BigTitle, 'Type', { children: "hello" }],
-  BlockTitle: [BlockTitle, 'Text', { title: "hello", subtitle: "world" }],
-  ButtonGroup: [ButtonGroup, 'EyeOff'],
-  ButtonLink: [ButtonLink, 'ExternalLink', { href: "/hello", children: "hello" }],
-  ButtonSimple: [ButtonSimple, 'MousePointerSquare', { children: "hello" }],
-  Center: [Center, 'AlignVerticalSpaceAround'],
-  CheckCircle: [CheckCircle, 'Check'],
-  Code: [Code, 'Code', { children: "helloworld" }],
-  CodeInLine: [CodeInline, 'Terminal', { children: "helloworld" }],
-  ColorToggleButton: [ColorToggleButton, 'ToggleRight'],
-  Container: [Container, 'Box'],
-  ContainerLarge: [ContainerLarge, 'Package'],
-  ContainerXL: [ContainerXL, 'Container'],
-  CopyBubble: [CopyBubble, 'Copy', { text: "copy" }],
-  DataCard: [DataCard, 'CreditCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }],
-  DataTable: [DataTable, 'Table2', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }],
-  EditableText: [EditableText, 'PencilLine', { description: "hello", text: "world" }],
-  ElevatedArea: [ElevatedArea, 'GalleryThumbnails'],
-  ErrorMessage: [ErrorMessage, 'AlertTriangle'],
-  FeatureItem: [FeatureItem, 'CheckCircle2', { label: "hello", children: "world" }],
-  FancyCard: [FancyCard, 'SquareAsterisk'],
-  Grid: [Grid, 'LayoutGrid'],
-  GridElement: [GridElement, 'LayoutGrid', { title: "hello", children: "world" }],
-  Head1: [Head1, 'Heading1', { children: "hello" }],
-  Head2: [Head2, 'Heading2', { children: "hello" }],
-  Head3: [Head3, 'Heading3', { children: "hello" }],
-  HeaderLink: [HeaderLink, 'Link2', { href: "/hello", children: "hello" }],
-  HorizontalBox: [HorizontalBox, 'RectangleHorizontal'],
-  HR: [HR, 'MinusSquare'],
-  IconStack: [IconStack, 'SquareStack'],
-  ItemCard: [ItemCard, 'CreditCard', { children: "hello world!" }],
-  Link: [Link, 'Link', { href: "/hello", children: "hello" }],
-  LinkGroup: [LinkGroup, 'Group', { href: "/hello", children: "hello" }],
-  LinkGroupItem: [LinkGroupItem, 'Puzzle', { href: "/hello", children: "hello" }],
-  ParagraphLink: [ParagraphLink, 'Link', { href: "/hello", children: "hello" }],
-  Logo: [Logo, 'Cherry', { text: "protofy" }],
-  LogoIcon: [LogoIcon, 'Hexagon', { children: "hello world!" }],
-  MainButton: [MainButton, 'MousePointerSquare', { children: "hello world!" }],
-  NextLink: [NextLink, 'EyeOff', { href: "/hello", children: "hello" }],
-  Notice: [Notice, 'Globe2', { children: "Hello world!" }],
-  OverlayCard: [OverlayCard, 'CreditCard'],
-  OverlayCardBasic: [OverlayCardBasic, 'CreditCard', {
+  }),
+  BigTitle: cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }),
+  BlockTitle: cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }),
+  ButtonGroup: cw(ButtonGroup, 'EyeOff', ButtonGroup),
+  ButtonLink: cw(ButtonLink, 'ExternalLink', 'ButtonLink', { href: "/hello", children: "hello" }),
+  ButtonSimple: cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "hello" }),
+  Center: cw(Center, 'AlignVerticalSpaceAround', 'Center'),
+  CheckCircle: cw(CheckCircle, 'Check', 'CheckCircle'),
+  Code: cw(Code, 'Code', 'Code', { children: "helloworld" }),
+  CodeInLine: cw(CodeInline, 'Terminal', 'CodeInLine', { children: "helloworld" }),
+  ColorToggleButton: cw(ColorToggleButton, 'ToggleRight', 'ColorToggleButton'),
+  Container: cw(Container, 'Box', 'Container'),
+  ContainerLarge: cw(ContainerLarge, 'Package', 'ContainerLarge'),
+  ContainerXL: cw(ContainerXL, 'Container', 'ContainerXL'),
+  CopyBubble: cw(CopyBubble, 'Copy', 'CopyBubble', { text: "copy" }),
+  DataCard: cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }),
+  DataTable: cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
+  EditableText: cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }),
+  ElevatedArea: cw(ElevatedArea, 'GalleryThumbnails', 'ElevatedArea'),
+  ErrorMessage: cw(ErrorMessage, 'AlertTriangle', 'ErrorMessage'),
+  FeatureItem: cw(FeatureItem, 'CheckCircle2', 'FeatureItem', { label: "hello", children: "world" }),
+  FancyCard: cw(FancyCard, 'SquareAsterisk', 'FancyCard'),
+  Grid: cw(Grid, 'LayoutGrid', 'Grid'),
+  GridElement: cw(GridElement, 'LayoutGrid', 'GridElement', { title: "hello", children: "world" }),
+  Head1: cw(Head1, 'Heading1', 'Head1', { children: "hello" }),
+  Head2: cw(Head2, 'Heading2', 'Head2', { children: "hello" }),
+  Head3: cw(Head3, 'Heading3', 'Head3', { children: "hello" }),
+  HeaderLink: cw(HeaderLink, 'Link2', 'HeaderLink', { href: "/hello", children: "hello" }),
+  HorizontalBox: cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox'),
+  HR: cw(HR, 'MinusSquare', 'HR'),
+  IconStack: cw(IconStack, 'SquareStack', 'IconStack'),
+  ItemCard: cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }),
+  Link: cw(Link, 'Link', 'Link', { href: "/hello", children: "hello" }),
+  LinkGroup: cw(LinkGroup, 'Group', 'LinkGroup', { href: "/hello", children: "hello" }),
+  LinkGroupItem: cw(LinkGroupItem, 'Puzzle', 'LinkGroupItem', { href: "/hello", children: "hello" }),
+  ParagraphLink: cw(ParagraphLink, 'Link', 'ParagraphLink', { href: "/hello", children: "hello" }),
+  Logo: cw(Logo, 'Cherry', 'Logo', { text: "protofy" }),
+  LogoIcon: cw(LogoIcon, 'Hexagon', 'LogoIcon', { children: "hello world!" }),
+  MainButton: cw(MainButton, 'MousePointerSquare', 'MainButton', { children: "hello world!" }),
+  NextLink: cw(NextLink, 'EyeOff', 'NextLink', { href: "/hello", children: "hello" }),
+  Notice: cw(Notice, 'Globe2', 'Notice', { children: "Hello world!" }),
+  OverlayCard: cw(OverlayCard, 'CreditCard', 'OverlayCard'),
+  OverlayCardBasic: cw(OverlayCardBasic, 'CreditCard', 'OverlayCardBasic', {
     title: "Hello",
     subtitle: "Hello World!",
     caption: "go",
     href: "http://google.com"
-  }],
-  Page: [Page, 'EyeOff', {}, {
+  }),
+  Page: cw(Page, 'EyeOff', 'Page', {}, {
     canDrag: () => false
-  }],
-  PageGlow: [PageGlow, 'EyeOff'],
-  PanelMenuItem: [PanelMenuItem, 'Puzzle', { text: "hello world" }],
-  Pre: [Pre, 'EyeOff'],
-  RainbowText: [RainbowText, 'Rainbow', { children: "hello world" }],
-  Search: [Search, 'Search'],
-  Section: [Section, 'EyeOff'],
-  SectionBlock: [SectionBlock, 'BoxSelect'],
-  TitleLink: [TitleLink, 'Link', { href: "/hello", children: "hello" }],
-  SideBySide: [SideBySide, 'PanelLeftInactive'],
-  SpotLight: [SpotLight, 'Sun'],
-  SubTitle: [SubTitle, 'Type', { children: "hello world" }],
-  TabGroup: [TabGroup, 'Group', { title: "hello" }],
-  TamaCard: [TamaCard, 'CreditCard', {
+  }),
+  PageGlow: cw(PageGlow, 'EyeOff', 'PageGlow'),
+  PanelMenuItem: cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem',{ text: "hello world" }),
+  Pre: cw(Pre, 'EyeOff', 'Pre'),
+  RainbowText: cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }),
+  Search: cw(Search, 'Search', 'Search'),
+  Section: cw(Section, 'EyeOff', 'Section'),
+  SectionBlock: cw(SectionBlock, 'BoxSelect', 'SectionBlock'),
+  TitleLink: cw(TitleLink, 'Link', 'TitleLink', { href: "/hello", children: "hello" }),
+  SideBySide: cw(SideBySide, 'PanelLeftInactive', 'SideBySide'),
+  SpotLight: cw(SpotLight, 'Sun', 'SpotLight'),
+  SubTitle: cw(SubTitle, 'Type', 'SubTitle', { children: "hello world" }),
+  TabGroup: cw(TabGroup, 'Group', 'TabGroup', { title: "hello" }),
+  TamaCard: cw(TamaCard, 'CreditCard', 'TamaCard', {
     title: "hello title",
     description: "description",
     children: "Lorem ipsum dolor sit amet"
-  }],
-  ThemeToggle: [ThemeToggle, 'Palette', { chromeless: true }],
-  TintSection: [TintSection, 'BoxSelect'],
-  HomeSection: [HomeSection, 'BoxSelect'],
-  TooltipContainer: [TooltipContainer, 'BoxSelect', { tooltipText: "Hello" }],
-  UL: [UL, 'MessageCircle', { children: "hello world" }],
-  XCenterStack: [XCenterStack, 'AlignVerticalSpaceAround']
+  }),
+  ThemeToggle: cw(ThemeToggle, 'Palette', 'ThemeToggle', { chromeless: true }),
+  TintSection: cw(TintSection, 'BoxSelect', 'TintSection'),
+  HomeSection: cw(HomeSection, 'BoxSelect', 'HomeSection'),
+  TooltipContainer: cw(TooltipContainer, 'BoxSelect', 'TooltipContainer', { tooltipText: "Hello" }),
+  UL: cw(UL, 'MessageCircle', 'UL', { children: "hello world" }),
+  XCenterStack: cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack')
 }
-
-export default Object.keys(visualUiComponents).reduce((total, componentName) => {
-  var importInfo = {
-    moduleSpecifier: 'protolib',
-    namedImports: [{ name: componentName, alias: undefined }]
-    // defaultImport: componentName
-  }
-  return {
-    ...total,
-    [componentName]: componentWrapper(visualUiComponents[componentName][0], visualUiComponents[componentName][1], componentName, visualUiComponents[componentName][2], importInfo, visualUiComponents[componentName][3])
-  }
-}, {})
 
