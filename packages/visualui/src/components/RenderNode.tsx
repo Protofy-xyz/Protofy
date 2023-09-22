@@ -102,7 +102,7 @@ export const RenderNode = ({ render }) => {
                         alignItems: "center",
                         height: "30px",
                         marginTop: "-29px",
-                        pointerEvent: 'auto'
+                        pointerEvents: 'auto'
                     }}
                 >
                     <div style={{ fontSize: 10, color:'white', marginRight:10}}>{name}</div>
@@ -114,10 +114,6 @@ export const RenderNode = ({ render }) => {
                                 title="Move"
                             >
                                 <GiMove
-                                        onMouseDown={(e) => {
-                                            actions.selectNode(parent);
-                                            e.stopPropagation()
-                                        }}
                                         color="white"
                                         size={14}
                                 />
