@@ -29,5 +29,5 @@ export default (importInfo) => (Component, icon, name, defaultProps = {}, compon
         displayName: name,
         rules: componentRules,
     }
-    return UiComponent
+    return {[name]:UiComponent}
 }
