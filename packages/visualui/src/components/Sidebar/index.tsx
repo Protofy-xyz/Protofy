@@ -40,6 +40,7 @@ export const Sidebar = ({
         const viewportHeight = window.outerHeight / 2;
         if (!viewRef.current) return
         viewRef.current.style.height = viewportHeight + 'px'
+        viewRef.current.style.maxHeight = viewportHeight + 'px'
     }
     React.useEffect(() => {
         handleResize()
