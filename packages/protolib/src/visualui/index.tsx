@@ -54,7 +54,7 @@ import SpotLight from '../components/SpotLight'
 import { SubTitle } from '../components/SubTitle'
 import TabGroup from '../components/TabGroup'
 import { TamaCard } from '../components/TamaCard'
-// import { ThemeToggle } from '../components/ThemeToggle'
+import { ThemeToggle } from '../components/ThemeToggle'
 // import { TintSection } from '../components/TintSection'
 // import TooltipContainer from '../components/TooltipContainer'
 // import { UL } from '../components/UL'
@@ -134,15 +134,21 @@ const visualUiComponents = {
     canDrag: () => false
   }],
   PageGlow: [PageGlow],
-  PanelMenuItem: [PanelMenuItem, {text:"hello world"}],
+  PanelMenuItem: [PanelMenuItem, { text: "hello world" }],
   Pre: [Pre],
   Section: [Section],
   SectionBlock: [SectionBlock],
   TitleLink: [TitleLink, { href: "/hello", children: "hello" }],
   SideBySide: [SideBySide],
   SpotLight: [SpotLight],
-  SubTitle: [SubTitle, {children: "hello world"}],
-
+  SubTitle: [SubTitle, { children: "hello world" }],
+  TabGroup: [TabGroup, { title: "hello" }],
+  TamaCard: [TamaCard, {
+    title: "hello title",
+    description: "description",
+    children: "Lorem ipsum dolor sit amet"
+  }],
+  ThemeToggle: [ThemeToggle, {chromeless:true}],
   RainbowText: [RainbowText, { children: "hello world" }]
 }
 
