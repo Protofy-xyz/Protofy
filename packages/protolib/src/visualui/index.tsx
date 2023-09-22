@@ -105,7 +105,7 @@ const visualUiComponents = {
   ErrorMessage: [ErrorMessage, 'AlertTriangle'],
   FeatureItem: [FeatureItem, 'CheckCircle2', { label: "hello", children: "world" }],
   FancyCard: [FancyCard, 'SquareAsterisk'],
-  Grid: [Grid, 'Grid2X2'],
+  Grid: [Grid, 'LayoutGrid'],
   GridElement: [GridElement, 'LayoutGrid', { title: "hello", children: "world" }],
   Head1: [Head1, 'Heading1', { children: "hello" }],
   Head2: [Head2, 'Heading2', { children: "hello" }],
