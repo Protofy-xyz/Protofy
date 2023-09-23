@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react"
 import { XStack } from "tamagui"
-import { Stack } from "tamagui"
 import { Paragraph, TamaguiTextElement, TextArea } from "tamagui"
 
 const EditableText = React.forwardRef(({ text='', placeHolder='' }: any, ref:any) => {
@@ -56,7 +55,6 @@ const EditableText = React.forwardRef(({ text='', placeHolder='' }: any, ref:any
             p={0}
             space={0}
             borderWidth={0}
-            readOnly={false}
             value={content}>
         </TextArea>
     </XStack>)

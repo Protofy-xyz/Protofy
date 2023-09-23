@@ -66,7 +66,6 @@ export { default as BarChart } from "./components/BarChart";
 export { default as ButtonSimple } from "./components/ButtonSimple";
 export { default as SpotLight } from "./components/SpotLight";
 export * from "./components/FancyCard";
-export * from "./lib/wdyr";
 export * from "./lib/Api";
 export * from "./lib/useClipboard";
 export * from "./lib/createApiAtom";

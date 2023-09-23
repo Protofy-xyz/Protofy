@@ -55,6 +55,7 @@ const SectionBlock = React.forwardRef(({ id, title, icon, children, href, hovere
   const { hovered, setHovered } = useContext(HoveredGroupContext);
   return (
     <Stack flex={1} ref={ref}>
+      {/*@ts-ignore*/}
       <Section theme={hovered == id ? hoveredTheme : nonHoveredTheme} onHoverIn={id !== undefined ? () => setHovered(id) : () => { }} {...props}>
         {icon ? <IconStack>
           {icon}

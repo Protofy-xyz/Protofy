@@ -1,7 +1,8 @@
-import { Grid, Spinner, Stack } from "tamagui"
+import { Spinner, Stack } from "tamagui"
 import ErrorMessage from "./ErrorMessage"
 import { TamaCard } from "./TamaCard"
 import React from "react"
+
 
 const AsyncView = React.forwardRef(({ atom, error=null, loading=null, children }:any, ref:any) => {
     if (atom?.isError) {
