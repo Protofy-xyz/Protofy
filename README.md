@@ -46,8 +46,8 @@ You can add other folders inside of `packages/` if you know what you're doing an
 
 ## 🏁 Start the app
 
+- The first time you should run: `node prepare.js` to initialize submodules (protoflow, protolib and visualui)
 - Install dependencies: `yarn`
-
 - local dev: `yarn start-dev`
 
 To run with optimizer on in dev mode (just for testing, it's faster to leave it off): `yarn web:extract`. To build for production `yarn start-prod`.
