@@ -45,21 +45,7 @@ export default function Admin({ pageSession, filesState, FileBrowser}) {
     usePendingEffect(() => API.get('/adminapi/v1/databases', setFiles), files)
 
     return (<PanelLayout menuContent={<Menu />}>
-        <XStack py="$4" px="$5">
-            {/* <YStack f={1}>
-                <Paragraph>
-                    <Text fontSize="$5">{currentDB}</Text>
-                </Paragraph>
-                <Paragraph>
-                    <Text o={0.5}>[total: {content?.data?.length}]</Text>
-                </Paragraph>
-            </YStack> */}
-
-            {/* <XStack>
-                <Search onCancel={onCancelSearch} onSearch={onSearch} />
-            </XStack> */}
-        </XStack>
-        <XStack f={1} flexWrap='wrap'>
+        <XStack f={1} px={"$4"} flexWrap='wrap'>
             <FileBrowser />
         </XStack>
     </PanelLayout>)

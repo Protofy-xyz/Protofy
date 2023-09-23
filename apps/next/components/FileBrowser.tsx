@@ -1,9 +1,14 @@
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
-setChonkyDefaults({ iconComponent: ChonkyIconFA });
-import { FullFileBrowser } from 'chonky';
+import { FileNavbar, FileBrowser, FileToolbar, FileList, FileContextMenu} from 'chonky';
+import { YStack } from '@tamagui/stacks';
+import { useTheme } from '@my/ui';
+import { useThemeSetting } from '@tamagui/next-theme'
 
-const FileBrowser = () => {
+setChonkyDefaults({ iconComponent: ChonkyIconFA });
+const WebFileBrowser = () => {
+
+    const {resolvedTheme} = useThemeSetting()
     const files = [
         { id: 'lht', name: 'Projects', isDir: true },
         {
@@ -13,11 +18,21 @@ const FileBrowser = () => {
         },
     ];
     const folderChain = [{ id: 'xcv', name: 'Demo', isDir: true }];
+    const theme = useTheme()
+    console.log('theme: ', theme.background)
+    const onScroll=() => {}
     return (
-        <div style={{ height: 300 }}>
-            <FullFileBrowser files={files} folderChain={folderChain} />
-        </div>
+        <YStack f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
+            <FileBrowser disableSelection={true} darkMode={resolvedTheme=='dark'} files={files} folderChain={folderChain}>
+                <FileNavbar />
+                <FileToolbar />
+                <FileList onScroll={onScroll}/>
+                {/* <FileContextMenu/> */}
+            </FileBrowser>
+        </YStack>
+
+  
     );
 };
 
-export default FileBrowser
+export default WebFileBrowser

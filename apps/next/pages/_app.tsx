@@ -5,7 +5,7 @@ import '../app.css'
 import 'raf/polyfill'
 import 'reactflow/dist/style.css';
 import 'protoflow/src/styles.css';
-
+import '../chonky.css'
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { Provider } from 'app/provider'
 import Head from 'next/head'

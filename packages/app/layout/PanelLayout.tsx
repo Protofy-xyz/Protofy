@@ -5,7 +5,7 @@ import { HeaderContents } from './HeaderContents'
 import { SideMenu } from './SideMenu'
 import { useTint } from '@tamagui/logo'
 
-export const PanelLayout = ({menuContent, children}) => {
+export const PanelLayout = ({panelBgColor='var(--color2)', menuContent, children}) => {
     const appBarHeight = 55
     const { tint, setNextTint } = useTint()
     return (
@@ -31,7 +31,7 @@ export const PanelLayout = ({menuContent, children}) => {
         }>
         {/* <Theme name={tint as any}> */}
         <ScrollView $sm={{br:"$0"}} btlr={"$6"} mt={appBarHeight} height={'calc(100vh - '+appBarHeight+'px)'}>
-          <YStack bc='var(--color2)' f={1} minHeight={'calc(100vh - '+appBarHeight+'px)'} flex={1}>
+          <YStack bc={panelBgColor} f={1} minHeight={'calc(100vh - '+appBarHeight+'px)'} flex={1}>
             {children}
           </YStack>
         </ScrollView>
