@@ -45,10 +45,17 @@ The main apps are:
 You can add other folders inside of `packages/` if you know what you're doing and have a good reason to.
 
 ## 🏁 Start the app
+  
+```sh
+node prepare.js
+yarn && yarn start-dev
+```
 
-- The first time you should run: `node prepare.js` to initialize submodules (protoflow, protolib and visualui)
+- `node prepare.js` to initialize submodules (protoflow, protolib and visualui). Only needed the first time.
 - Install dependencies: `yarn`
 - local dev: `yarn start-dev`
+
+
 
 To run with optimizer on in dev mode (just for testing, it's faster to leave it off): `yarn web:extract`. To build for production `yarn start-prod`.
 
