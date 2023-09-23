@@ -1,0 +1,7 @@
+services:
+  admin-api:
+    ports:
+      - 3002:3002
+    entrypoint: "yarn admin-api-dev"
+    volumes:
+      - ./:/workspace

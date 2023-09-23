@@ -1,0 +1,7 @@
+services:
+  admin-api:
+    container_name: 'admin-api'
+    image: "protofy/workspace"
+    entrypoint: "yarn admin-api-prod"
+    volumes:
+      - ./data:/workspace/data

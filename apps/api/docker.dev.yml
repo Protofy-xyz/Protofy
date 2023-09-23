@@ -1,0 +1,7 @@
+services:
+  api:
+    ports:
+      - 3001:3001
+    entrypoint: "yarn api-dev"
+    volumes:
+      - ./:/workspace

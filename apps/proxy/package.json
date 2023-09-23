@@ -1,0 +1,12 @@
+{
+    "name": "proxy",
+    "version": "1.0.0",
+    "private": true,
+    "source": "src",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "redbird": "0.10.0"
+    }
+}

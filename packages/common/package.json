@@ -1,0 +1,16 @@
+{
+    "version": "0.0.0",
+    "name": "common",
+    "main": "index.ts",
+    "private": true,
+    "scripts": {
+        "build": "tamagui-build",
+        "watch": "tamagui-build --watch"
+    },
+    "dependencies": {
+        "zod": "^3.22.2"
+    },
+    "devDependencies": {
+        "@tamagui/build": "latest"
+    }
+}
