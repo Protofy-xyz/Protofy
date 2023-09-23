@@ -1,6 +1,6 @@
 import { PendingAtomResult, getPendingResult } from "./createApiAtom";
 
-const SERVER = process?.env?.API_URL ?? 'http://localhost:3001'
+const SERVER = process?.env?.API_URL ?? 'http://localhost:8080'
 
 class ApiError extends Error {
     apiError: any;
