@@ -24,7 +24,7 @@
     /* display: none !important; */
     width: 120px !important;
     align-self: center;
-    background-color: transparent !important;
+    /* background-color: transparent !important; */
 }
 
 [class^="folderBackSideTop-"]::after {
@@ -53,7 +53,7 @@
 } */
 [class^="listFileEntrySelection-"] {
     background: none !important;
-    background-color: red !important
+    /* background-color: red !important */
 }
 
 .chonky-fileEntryClickableWrapper {

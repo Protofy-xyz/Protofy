@@ -42,12 +42,21 @@ export default function Admin({ pageSession, filesState, FileBrowser}) {
     const router = useRouter()
     const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
 
+    const _setFiles = (files) => {
+        if(!files) setFiles([])
+        setFiles(files.map(f => {
+            return {
+                ...f,
+                color: '#ff0000'
+            }
+        }))
+    }
     usePendingEffect(() => API.get('/adminapi/v1/files', setFiles), files)
  
     return (<PanelLayout menuContent={<Menu />}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
             <FileBrowser onOpen={(path) => {
-                API.get('/adminapi/v1/files'+path, setFiles)
+                API.get('/adminapi/v1/files/'+path, setFiles)
             }} files={files.data} />
         </XStack>
     </PanelLayout>)
