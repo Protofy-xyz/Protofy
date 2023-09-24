@@ -1,23 +1,37 @@
 import { app } from '../lib/app';
 import { promises as fs } from 'fs';
+import { constants } from 'fs';
 import path from 'path';
 var mime = require('mime-types')
 
 const PROJECT_WORKSPACE_DIR = "../../"; // Define where the workspace root dir is
 
+async function fileExists(filePath) {
+    try {
+        await fs.access(filePath, constants.F_OK);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 // Handler function to avoid repeating the same code for both routes
 const handleFilesRequest = async (req, res) => {
     const name = req.params[0] || ''; // Gets the path after /files/
-    
+
     const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
-    if(((await fs.stat(filepath)).isDirectory())) {
+    if(! await fileExists(filepath)) {
+        res.status(404).send('No such file or directory: '+filepath)
+        return
+    }
+    if (((await fs.stat(filepath)).isDirectory())) {
         try {
             const fileList = await fs.readdir(filepath);
-            
+
             res.send(await Promise.all(fileList.map(async (f) => {
                 const filePath = path.join(filepath, f);
                 const stats = await fs.stat(filePath);
-                
+
                 return {
                     id: Math.random(),
                     path: `${name}/${f}`,
@@ -55,7 +69,7 @@ const handleFilesWriteRequest = async (req, res) => {
     const name = req.params[0] || ''; // Gets the path after /files/
     const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
 
-    if(req.query.dir === 'true') { // Check if the query contains ?dir=true
+    if (req.query.dir === 'true') { // Check if the query contains ?dir=true
         try {
             await fs.mkdir(filepath, { recursive: true }); // Create the directory
             res.status(200).send(`Directory '${name}' created successfully.`);
