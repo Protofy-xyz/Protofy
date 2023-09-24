@@ -38,26 +38,34 @@ const Menu = () => {
     </YStack>)
 }
 
-export default function Admin({ pageSession, filesState, FileBrowser}) {
+export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath}) {
     const router = useRouter()
     const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
+    const [currentPath, setCurrentPath] = useState(CurrentPath)
+    
+    useUpdateEffect(() => {
+        console.log('current Path: ', currentPath)
+        //API.get('/adminapi/v1/files/'+currentPath, setFiles)
+        router.push('/admin/files'+(!currentPath.startsWith('/')?'/':'')+currentPath)
+    }, [currentPath])
 
-    const _setFiles = (files) => {
-        if(!files) setFiles([])
-        setFiles(files.map(f => {
-            return {
-                ...f,
-                color: '#ff0000'
-            }
-        }))
-    }
-    usePendingEffect(() => API.get('/adminapi/v1/files', setFiles), files)
+    useUpdateEffect(() => {
+        const r = router.asPath.substring('/admin/files'.length)
+        console.log('useEffect fired!', r);
+        setCurrentPath(r)
+    }, [router.asPath]);
  
     return (<PanelLayout menuContent={<Menu />}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
-            <FileBrowser onOpen={(path) => {
-                API.get('/adminapi/v1/files/'+path, setFiles)
-            }} files={files.data} />
+            <FileBrowser folderChain={[{id: '/', name: "Files", isDir: true}].concat(
+                ...currentPath.split('/').map((x, i, arr) => {
+                    return {
+                        name: x,
+                        id: arr.slice(0, i + 1).join('/'),
+                        isDir: true
+                    };
+                })
+            )} onOpen={(path) => setCurrentPath(path)} files={files.data} />
         </XStack>
     </PanelLayout>)
 }

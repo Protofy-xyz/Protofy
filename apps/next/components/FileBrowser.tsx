@@ -6,11 +6,9 @@ import { useTheme } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
-const WebFileBrowser = ({files=[], onOpen=(path:string) => {}}) => {
+const WebFileBrowser = ({folderChain=[{ id: 'xcv', name: 'Files', isDir: true }],files=[], onOpen=(path:string) => {}}) => {
 
     const {resolvedTheme} = useThemeSetting()
-
-    const folderChain = [{ id: 'xcv', name: 'Files', isDir: true }];
     const theme = useTheme()
 
     const onScroll=() => {}
@@ -28,8 +26,14 @@ const WebFileBrowser = ({files=[], onOpen=(path:string) => {}}) => {
         <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
             <FileBrowser 
                 onFileAction={(data) => {
-                    if(data.id == 'open_files' && data.payload.targetFile?.path) {
-                        onOpen(data.payload.targetFile.path)
+                    if(data.id == 'open_files') {
+                        if(data.payload.targetFile?.path) {
+                            onOpen(data.payload.targetFile.path)
+                        } else {
+                            onOpen(data.payload.targetFile.id)
+                        }
+                    } else {
+                        console.log('Action: ', data)
                     }
                 }}
                 disableDragAndDrop={true}
