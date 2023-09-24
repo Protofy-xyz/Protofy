@@ -54,6 +54,11 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
         console.log('useEffect fired!', r);
         setCurrentPath(r)
     }, [router.asPath]);
+
+    const onOpen = (file) => {
+        console.log('on open client: ', file)
+        if(file.isDir) setCurrentPath(file.path ?? file.id)
+    }
  
     return (<PanelLayout menuContent={<Menu />}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
@@ -65,7 +70,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
                         isDir: true
                     };
                 })
-            )} onOpen={(path) => setCurrentPath(path)} files={files.data.map(f => {
+            )} onOpen={onOpen} files={files.data.map(f => {
                 return {
                     ...f,
                     thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/'+f.path : undefined

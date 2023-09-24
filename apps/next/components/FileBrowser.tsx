@@ -27,11 +27,7 @@ const WebFileBrowser = ({folderChain=[{ id: 'xcv', name: 'Files', isDir: true }]
             <FileBrowser 
                 onFileAction={(data) => {
                     if(data.id == 'open_files') {
-                        if(data.payload.targetFile?.path) {
-                            onOpen(data.payload.targetFile.path)
-                        } else {
-                            onOpen(data.payload.targetFile.id)
-                        }
+                        onOpen(data.payload.targetFile)
                     } else {
                         console.log('Action: ', data)
                     }
