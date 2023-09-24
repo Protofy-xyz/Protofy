@@ -65,7 +65,12 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
                         isDir: true
                     };
                 })
-            )} onOpen={(path) => setCurrentPath(path)} files={files.data} />
+            )} onOpen={(path) => setCurrentPath(path)} files={files.data.map(f => {
+                return {
+                    ...f,
+                    thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/'+f.path : undefined
+                }
+            })} />
         </XStack>
     </PanelLayout>)
 }
