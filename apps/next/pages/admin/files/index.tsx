@@ -21,5 +21,6 @@ export default function FilesPage(props:any) {
 }
 
 export const getServerSideProps = SSR(async (context:NextPageContext) => {
-    return withSession(context, ['admin'])
+    const files = await API.get('/adminapi/v1/files') ?? { data: [] }
+    return withSession(context, ['admin'], {filesState: files})
 })
