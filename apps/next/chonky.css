@@ -1,4 +1,61 @@
 .chonky-chonkyRoot {
     background-color: transparent !important;
     border: 0px solid black !important;
+    font-family: Inter !important;
+}
+
+.chonky-gridContainer {
+    margin-top: 40px !important;
+}
+
+.chonky-activeButton .chonky-text  {
+    color: #52A9FF !important;
+}
+
+.chonky-activeButton .svg-inline--fa {
+    color: #52A9FF !important;
+}
+
+.chonky-text {
+    color: var('--color') !important;
+}
+
+[class^="previewFile-"] {
+    /* display: none !important; */
+    width: 120px !important;
+    align-self: center;
+    background-color: transparent !important;
+}
+
+[class^="folderBackSideTop-"]::after {
+    /* tus estilos aquí */
+    border-color: transparent !important;
+}
+
+[class^="folderBackSideMid-"] {
+    width: 100px !important;
+    height: 70px !important;
+    left: 10px !important;
+    top: 20px !important;
+    border-radius: 5px !important;
+}
+
+
+[class^="focusIndicator-"] {
+    box-shadow: red !important;
+    /* background-color: black; */
+    /* opacity: 0.9; */
+}
+
+
+/* .chonky-searchFieldContainer {
+    width: fit-content !important;
+} */
+[class^="listFileEntrySelection-"] {
+    background: none !important;
+    background-color: red !important
+}
+
+.chonky-fileEntryClickableWrapper {
+    cursor:pointer
 }
