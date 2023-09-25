@@ -9,7 +9,7 @@ import { jsonViewerDefaultStyles } from "./util";
 import { getKey } from "./util";
 import LabelAndValue from "./components/viewer/LabelAndValue";
 import Label from "./components/viewer/Label";
-import { XStack, YStack } from "tamagui";
+import { Stack, XStack, YStack } from "tamagui";
 import { AddArrayButton } from "./components/viewer/AddArrayButton";
 
 type JSONViewerProps = {
@@ -496,7 +496,7 @@ class JSONViewer extends React.Component {
     let elems = [];
     const { styles } = this.props;
     this.recursiveParseData("root", "", this.state.data, elems, 0, true);
-    return <div style={styles.root}>{elems}</div>;
+    return <Stack f={1} style={styles.root}>{elems}</Stack>;
   }
 }
 

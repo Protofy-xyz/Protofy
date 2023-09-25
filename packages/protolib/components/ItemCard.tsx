@@ -53,7 +53,7 @@ export const ItemCard = memo(React.forwardRef(
       ...cardProps
     } = props
     const tint = !alt ? null : (`alt${alt}` as ThemeName)
-    console.log('------------------------', containerElement)
+
     return (
       <YStack
         f={1}
@@ -116,15 +116,12 @@ export const ItemCard = memo(React.forwardRef(
               </>
             ) : null,
 
-            <XStack ai="center" p="$4">
+            <XStack ai="center" p="$4" f={1}>
               {/*@ts-ignore*/}
               {imageSrc ? <Square pos="relative" ov="hidden" br="$6" size="$8">
                 <Image {...imageProps} source={{ uri: imageSrc, width: 90, height: 90 }} />
               </Square> : null}
-             
                 {children}
-     
-
             </XStack>,
             bottomBar ? (
               <>

@@ -8,7 +8,7 @@ import { getPendingResult } from '../lib/createApiAtom'
 import React from 'react'
 import { IconContainer } from './IconContainer'
 
-export const DataCard = React.forwardRef(({extraIcons=[],iconProps={},itemCardProps={}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, hideDeleteIcon, ...props }: any, ref: any) => {
+export const DataCard = React.forwardRef(({ innerContainerProps = {}, extraIcons = [], iconProps = {}, itemCardProps = {}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, hideDeleteIcon, ...props }: any, ref: any) => {
     const { tint } = useTint()
     const [editable, setEditable] = useState(false)
     const [content, setContent] = useState(json)
@@ -37,19 +37,19 @@ export const DataCard = React.forwardRef(({extraIcons=[],iconProps={},itemCardPr
         <Stack ref={ref} {...props}>
             <ItemCard
                 topBarOutSideScrollArea={minimal}
-                backgroundColor={props.backgroundColor??"$color1"}
+                backgroundColor={props.backgroundColor ?? "$color1"}
                 {...itemCardProps}
-                elevation={minimal?0:"$3"}
-                borderWidth={minimal?0:1}
+                elevation={minimal ? 0 : "$3"}
+                borderWidth={minimal ? 0 : 1}
                 pointerEvents='none'
                 pointerEventsControls="none"
                 topBar={<Theme name={tint as any}
                 >
                     <XStack justifyContent="flex-start" alignItems={'center'} paddingHorizontal="$3" width="100%">
-                        <Paragraph flex={1} marginRight={"-$5"} opacity={0.8}>{!minimal?name:''}</Paragraph>
+                        <Paragraph flex={1} marginRight={"-$5"} opacity={0.8}>{!minimal ? name : ''}</Paragraph>
                         <Theme reset>
                             <XStack left={"-$10"}>
-                                {!hideDeleteIcon?<Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom-end">
+                                {!hideDeleteIcon ? <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom-end">
                                     <Popover.Trigger>
                                         <XStack cursor="pointer" onPress={() => setMenuOpened(true)}>
                                             <Stack marginRight={"$3"} opacity={0.5} cursor="pointer" hoverStyle={{ opacity: 0.8 }}>
@@ -66,13 +66,13 @@ export const DataCard = React.forwardRef(({extraIcons=[],iconProps={},itemCardPr
                                                     Are you sure?
                                                 </Text>
                                             </Paragraph>
-                                            <Button onPress={() => { onDelete(name) && setMenuOpened(false)}}><Trash2 size={"$1"} color="var(--red10)" /> Delete</Button>
+                                            <Button onPress={() => { onDelete(name) && setMenuOpened(false) }}><Trash2 size={"$1"} color="var(--red10)" /> Delete</Button>
                                         </YStack>
                                     </Popover.Content>
 
                                     {/* optionally change to sheet when small screen */}
 
-                                </Popover>:null}
+                                </Popover> : null}
 
                                 <XStack {...iconProps}>
                                     {editable ? <IconContainer paddingHorizontal={"$3"} onPress={onCancel}>
@@ -91,11 +91,8 @@ export const DataCard = React.forwardRef(({extraIcons=[],iconProps={},itemCardPr
                 </Theme>}
             >
                 <Stack
-                    padding={"$2"}
-                    maxWidth={700}
-                    minWidth={300}
-                    $md={{ maxWidth: 450 }}
-                    $sm={{ minWidth: 'calc(100vw - 65px)', maxWidth: 'calc(100vw - 65px)' }}
+                    f={1}
+                    {...innerContainerProps}
                 >
                     <Theme name={tint as any}>
                         <XStack y={0} maxHeight={-1} overflow={"hidden"}>
