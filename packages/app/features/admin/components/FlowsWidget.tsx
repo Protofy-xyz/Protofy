@@ -1,12 +1,18 @@
 import { FlowFactory, useFlowsStore } from 'protoflow';
-export const UIFLOWID = "flows-editor"
+import {IconContainer} from 'protolib';
 import { TopicsProvider } from "react-topics";
 import {getTokenValue} from '@tamagui/core'
-import { Stack, useTheme } from '@my/ui';
+import { Paragraph, SizableText, Stack, XStack, useTheme } from '@my/ui';
+import { Save, X } from '@tamagui/lucide-icons';
+import { useEffect, useState } from 'react';
+
+const UIFLOWID = "flows-editor"
 const Flow = FlowFactory(UIFLOWID)
 const uiStore = useFlowsStore()
 
 const FlowsWidget = (props: any) => {
+    const [content, setContent] = useState(props.content)
+    const [originalContent, setOriginalContent] = useState(props.content)
     const theme = useTheme()
     console.log('token: ', theme.borderColor.val)
     const bgColor = props.themeMode == 'dark'? '#282828' : '#FFFFFF'
@@ -33,7 +39,13 @@ const FlowsWidget = (props: any) => {
     }
 
     return <TopicsProvider>
-        
+        {props.isModified ?<XStack position="absolute" right={50} top={-32}>
+
+            <IconContainer onPress={() => {}}>
+                {/* <SizableText mr={"$2"}>Save</SizableText> */}
+                <Save color="var(--color)" size={"$1"} />
+            </IconContainer>
+        </XStack>:null}
         <Flow
             path={props.path}
             // onViewPortChange={(viewPort) => {
@@ -57,7 +69,7 @@ const FlowsWidget = (props: any) => {
             setSourceCode={props.setSourceCode}
             positions={[]}
             onSave={() => {
-
+                
             }}
             disableSideBar={true}
             onShowCode={() => { }}
@@ -67,15 +79,8 @@ const FlowsWidget = (props: any) => {
             flowId={"flows-editor"}
             theme={themeOverride}
             onEdit={(content) => {
-                //   if(vscode){
-                //     currentContent.current = content
-                //     if (vscode) vscode.setState({ text: content, config: config, viewport: viewPortRef.current});
-                //     console.log('to vscode: ', content)
-                //     vscode.postMessage({
-                //       type: 'contentChange',
-                //       text: content
-                //     });
-                //   }
+                if(props.setIsModified) props.setIsModified(true)
+                setContent(content)
             }}
             disableMiniMap={true}
             showActionsBar={false}

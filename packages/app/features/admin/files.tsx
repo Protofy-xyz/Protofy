@@ -5,7 +5,7 @@ import { ChevronDown, Cross, Database, Key, Plus, PlusCircle, X, XCircle, XSquar
 import { atom, useAtom } from 'jotai'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
-import { Accordion, Dialog, H1, Link, ScrollView, SizableText, Spinner, Square } from '@my/ui'
+import { Accordion, AlertDialog, Button, Dialog, H1, Link, ScrollView, SizableText, Spinner, Square } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { useTint } from '@tamagui/logo'
 import { ChonkyActions, FullFileBrowser } from 'chonky';
@@ -87,6 +87,8 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
     const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
     const [currentPath, setCurrentPath] = useState(CurrentPath)
     const [currentFile, setCurrentFile] = useState(CurrentFile ? CurrentFile : '')
+    const [isModified, setIsModified] = useState(false)
+    const [openAlert, setOpenAlert] = useState(false)
 
     const currentFileName = currentFile.split('/')[currentFile.split('/').length - 1]
     useUpdateEffect(() => {
@@ -151,8 +153,14 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
                         <FileWidget
+                            isModified={isModified}
+                            setIsModified={setIsModified}
                             icons={[
-                                <IconContainer onPress={() => { setCurrentFile(''); setDialogOpen(false) }}>
+                                <IconContainer onPress={() => {
+                                    if (isModified) return setOpenAlert(true)
+                                    setCurrentFile('');
+                                    setDialogOpen(false)
+                                }}>
                                     <X color="var(--color)" size={"$1"} />
                                 </IconContainer>
                             ]}
@@ -175,6 +183,44 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
                     </Dialog.Sheet>
                 </Dialog.Adapt>
             </Dialog>
+
+            <AlertDialog open={openAlert} onOpenChange={setOpenAlert} native>
+                <AlertDialog.Portal>
+                    <AlertDialog.Overlay
+                        key="overlay"
+                        opacity={0.5}
+                    />
+                    <AlertDialog.Content
+                        bordered
+                        elevate
+                        key="content"
+                        x={0}
+                        scale={1}
+                        opacity={1}
+                        y={0}
+                    >
+                        <YStack space>
+                            <AlertDialog.Description>
+                                The current file contains unsaved changes. Are you sure you want to close it without saving?
+                            </AlertDialog.Description>
+
+                            <XStack space="$3" justifyContent="flex-end">
+                                <AlertDialog.Cancel asChild>
+                                    <Button>Cancel</Button>
+                                </AlertDialog.Cancel>
+                                <AlertDialog.Action asChild>
+                                    <Button onPress={() => {
+                                        setIsModified(false)
+                                        setCurrentFile('');
+                                        setDialogOpen(false)
+                                        setOpenAlert(false)
+                                    }} theme="active">Close file</Button>
+                                </AlertDialog.Action>
+                            </XStack>
+                        </YStack>
+                    </AlertDialog.Content>
+                </AlertDialog.Portal>
+            </AlertDialog>
         </XStack>
     </PanelLayout>)
 }
