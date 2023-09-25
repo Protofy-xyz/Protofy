@@ -10,7 +10,10 @@ import { useTint } from '@tamagui/logo'
 import dynamic from 'next/dynamic'
  
 const FlowsWidget = dynamic(() => import('./FlowsWidget'), {
-  loading: () => <Spinner></Spinner>,
+  loading: () => <Center>
+  <Spinner size={'large'} scale={3} top={-50} />
+  Loading
+</Center>,
   ssr: false
 })
 

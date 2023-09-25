@@ -9,18 +9,19 @@ const uiStore = useFlowsStore()
 const FlowsWidget = (props: any) => {
     const theme = useTheme()
     console.log('token: ', theme.borderColor.val)
-    const bgColor = props.themeMode == 'dark'? '#000000' : '#FFFFFF'
-    const foreColor = props.themeMode == 'light'? '#888888' : '#DDDDDD'
+    const bgColor = props.themeMode == 'dark'? '#282828' : '#FFFFFF'
+    const foreColor = props.themeMode == 'light'? '#888888' : '#888888'
     const themeOverride = {
         edgeColor: theme.color9.val, //color of graph edges, the lines between the nodes
         nodeBackgroundColor: bgColor,
         inputBackgroundColor: bgColor,
         highlightInputBackgroundColor: theme.placeholderColor.val,
         inputBorder: '1px solid '+theme.shadowColor.val, //theme.red10.val,
-        textColor: theme.color11.val,
-        interactiveColor: theme.blue8.val,
-        interactiveHoverColor: theme.blue3.val,
-        borderColor: foreColor,
+        textColor: props.themeMode == 'light' ? theme.color12.val : theme.color11.val,
+        titleColor: props.themeMode == 'light'?theme.color12.val:theme.color8.val,
+        interactiveColor: props.themeMode == 'light'? theme.blue8.val : theme.color11.val,
+        interactiveHoverColor: props.themeMode == 'light'?theme.blue3.val:theme.color8.val,
+        borderColor: props.themeMode == 'light'? theme.color11.val : theme.color7.val,
         handleBorderColor: theme.borderColor.val,
         flowOutputColor: theme.color5.val,
         dataOutputColor: theme.color5.val,
