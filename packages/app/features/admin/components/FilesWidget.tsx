@@ -17,14 +17,14 @@ const FlowsWidget = dynamic(() => import('./FlowsWidget'), {
   ssr: false
 })
 
-export const FileWidget = ({icons=[], currentFile, currentFileName, ...props }: { icons?: React.ReactElement | [], extraIcons?: React.ReactElement[],title: string, currentFile: string, currentFileName: string} & YStackProps) => {
+export const FileWidget = ({isModified=false, setIsModified=() => {}, icons=[], currentFile, currentFileName, ...props }: { isModified: boolean, setIsModified: any, icons?: React.ReactElement | [], extraIcons?: React.ReactElement[],title: string, currentFile: string, currentFileName: string} & YStackProps) => {
     const url = ('/adminapi/v1/files/' + currentFile).replace(/\/+/g, '/')
     const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(getPendingResult('pending'))
     const { resolvedTheme } = useThemeSetting()
     const mime = lookup(currentFile)
     const {tint} = useTint()
     const type = mime ? mime.split('/')[0] : 'text'
-    console.log('Opening file: ', currentFile, 'mime: ', mime, 'type: ', type, 'url: ', url)
+    // console.log('Opening file: ', currentFile, 'mime: ', mime, 'type: ', type, 'url: ', url)
 
     useEffect(() => {
         if (type == 'text' || type == 'application' || (type == 'video' && mime == 'video/mp2t')) {
@@ -63,9 +63,12 @@ export const FileWidget = ({icons=[], currentFile, currentFileName, ...props }: 
                     return {
                         component: <XStack mt={30} f={1} width={"100%"}>
                             {/* <Theme name={tint as any}> */}
-                                <FlowsWidget setSourceCode={(sourceCode) => {
-                                    console.log('set new sourcecode from flows: ', sourceCode)
-                                }} sourceCode={currentFileContent.data} path={currentFile} themeMode={resolvedTheme}/>
+                                <FlowsWidget 
+                                    isModified={isModified}
+                                    setIsModified={setIsModified}
+                                    setSourceCode={(sourceCode) => {
+                                        console.log('set new sourcecode from flows: ', sourceCode)
+                                    }} sourceCode={currentFileContent.data} path={currentFile} themeMode={resolvedTheme}/>
                                 {/* </Theme> */}
                             </XStack>,
                         widget: 'flows'
