@@ -7,7 +7,7 @@ import JSONViewer from './jsonui/JSONViewer'
 import { getPendingResult } from '../lib/createApiAtom'
 import React from 'react'
 
-export const DataCard = React.forwardRef(({ json, name, onSave = (content) => { }, onDelete = () => { }, ...props }: any, ref: any) => {
+export const DataCard = React.forwardRef(({itemCardProps={}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, ...props }: any, ref: any) => {
     const { tint } = useTint()
     const [editable, setEditable] = useState(false)
     const [content, setContent] = useState(json)
@@ -32,19 +32,23 @@ export const DataCard = React.forwardRef(({ json, name, onSave = (content) => { 
         setContent(obj)
     }
 
-
     return (
         <Stack ref={ref} {...props}>
             <ItemCard
-                elevation="$3"
+                topBarOutSideScrollArea={minimal}
+                backgroundColor={props.backgroundColor??"$color1"}
+                {...itemCardProps}
+                elevation={minimal?0:"$3"}
+                borderWidth={minimal?0:1}
                 pointerEvents='none'
                 pointerEventsControls="none"
-                topBar={<Theme name={tint as any}>
+                topBar={<Theme name={tint as any}
+                >
                     <XStack justifyContent="flex-start" alignItems={'center'} paddingHorizontal="$3" width="100%">
-                        <Paragraph flex={1} marginRight={"-$5"} opacity={0.8}>{name}</Paragraph>
+                        <Paragraph flex={1} marginRight={"-$5"} opacity={0.8}>{!minimal?name:''}</Paragraph>
                         <Theme reset>
                             <XStack left={"-$10"}>
-                                <Popover  onOpenChange={setMenuOpened} open={menuOpened} placement="bottom-end">
+                                <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom-end">
                                     <Popover.Trigger>
                                         <XStack cursor="pointer" onPress={() => setMenuOpened(true)}>
                                             <Stack marginRight={"$3"} opacity={0.5} cursor="pointer" hoverStyle={{ opacity: 0.8 }}>
