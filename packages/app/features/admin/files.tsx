@@ -1,19 +1,18 @@
-import { YStack, XStack, Stack, Input, Theme, Paragraph, Text } from 'tamagui'
-import { IconContainer, Center, getPendingResult, PendingAtomResult, Monaco, API, withSession, createApiAtom, usePendingEffect, PanelMenuItem, redirect, useHydratedAtom, DataCard, ItemCard, BigTitle, Search } from 'protolib'
+import { YStack, XStack } from 'tamagui'
+import { IconContainer, createApiAtom, useHydratedAtom } from 'protolib'
 import { PanelLayout } from '../../layout/PanelLayout'
-import { ChevronDown, Cross, Database, Key, Plus, PlusCircle, X, XCircle, XSquare } from '@tamagui/lucide-icons'
-import { atom, useAtom } from 'jotai'
+import { X } from '@tamagui/lucide-icons'
+import { atom } from 'jotai'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
-import { Accordion, AlertDialog, Button, Dialog, H1, Link, ScrollView, SizableText, Spinner, Square } from '@my/ui'
+import { AlertDialog, Button, Dialog } from '@my/ui'
 import { useEffect, useState } from 'react'
-import { useTint } from '@tamagui/logo'
-import { ChonkyActions, FullFileBrowser } from 'chonky';
-import dynamic from 'next/dynamic'
+import { ChonkyActions } from 'chonky';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from './components/FilesWidget'
+import { PanelMenu } from './components/PanelMenu'
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 ChonkyActions.ToggleHiddenFiles.option.defaultValue = false;
@@ -31,52 +30,6 @@ const data = {
         { "name": "apps", "href": "/admin/files/apps" },
         { "name": "apps", "href": "/admin/files/apps" }
     ],
-}
-
-const subtabs = (subtabs) => {
-    return (subtabs.map((subtab, index) => {
-        return (
-            <Link href={subtab.href} onPressApp={() => { }} >
-                <PanelMenuItem
-                    mb={'$4'}
-                    selected={true}
-                    icon={<Database color="$color11" strokeWidth={1.5} />}
-                    text={subtab.name}
-                />
-            </Link>
-        )
-    }))
-}
-
-const tabs = (tabs) => {
-    return (Object.keys(tabs)?.map((tab, index) => {
-        return (<Accordion br={"$6"} overflow="hidden" type="multiple" mb={'$4'}>
-            <Accordion.Item value={"a" + index}>
-                <Accordion.Trigger bw={0} flexDirection="row" justifyContent="space-between">
-                    {({ open }) => (
-                        <XStack f={1}>
-                            <Stack mr={"$3"}>
-                                <Database color="$color11" strokeWidth={1.5} />
-                            </Stack>
-                            <SizableText f={1} size={"$5"} fontWeight={800}>{tab}</SizableText>
-                            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
-                                <ChevronDown size="$1" />
-                            </Square>
-                        </XStack>
-                    )}
-                </Accordion.Trigger>
-                <Accordion.Content pt={'$4'}>
-                        {subtabs(tabs[tab])}
-                </Accordion.Content>
-            </Accordion.Item>
-        </Accordion>)
-    }))
-}
-
-export const PanelMenu = () => {
-    return (<YStack mx={"$4"} pt="$10">
-        {tabs(data)}
-    </YStack>)
 }
 
 
@@ -132,7 +85,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
         router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file=' + file.name)
     }
 
-    return (<PanelLayout menuContent={<PanelMenu />}>
+    return (<PanelLayout menuContent={<PanelMenu menu={data}/>}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
             <FileBrowser folderChain={[{ id: '/', name: "Files", isDir: true }].concat(
                 ...currentPath.split('/').map((x, i, arr) => {
