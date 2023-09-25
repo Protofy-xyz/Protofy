@@ -23,6 +23,50 @@ const currentDbAtom = atom(0)
 
 const Menu = () => {
     return (<YStack mx={"$4"} pt="$10">
+        <Accordion br={"$6"} overflow="hidden" type="multiple" mb={'$4'}>
+            <Accordion.Item value="a1">
+                <Accordion.Trigger bw={0} flexDirection="row" justifyContent="space-between">
+                    {({ open }) => (
+                        <XStack f={1}>
+                            <Stack mr={"$3"}>
+                                <Database color="$color11" strokeWidth={1.5} />
+                            </Stack>
+
+                            <SizableText f={1} size={"$5"} fontWeight={800}>Files</SizableText>
+                            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+                                <ChevronDown size="$1" />
+                            </Square>
+                        </XStack>
+                    )}
+                </Accordion.Trigger>
+                <Accordion.Content pt={'$4'}>
+                    <Link
+                    
+                        href={"/admin/files/"}
+                        onPressApp={() => { }}
+                    >
+                        <PanelMenuItem
+                        mb={'$4'}
+                            selected={true}
+                            icon={<Database color="$color11" strokeWidth={1.5} />}
+                            text={'Files'}
+                        />
+                    </Link>
+                    <Link
+                     pb={'$4'}
+                        href={"/admin/files/"}
+                        onPressApp={() => { }}
+                    >
+                        <PanelMenuItem
+                            selected={true}
+                            icon={<Database color="$color11" strokeWidth={1.5} />}
+                            text={'Files'}
+                        />
+                    </Link>
+                </Accordion.Content>
+
+            </Accordion.Item>
+        </Accordion>
         <Accordion br={"$6"} overflow="hidden" type="multiple">
             <Accordion.Item value="a1">
                 <Accordion.Trigger bw={0} flexDirection="row" justifyContent="space-between">
@@ -39,8 +83,21 @@ const Menu = () => {
                         </XStack>
                     )}
                 </Accordion.Trigger>
-                <Accordion.Content>
+                <Accordion.Content pt={'$4'}>
                     <Link
+                    
+                        href={"/admin/files/"}
+                        onPressApp={() => { }}
+                    >
+                        <PanelMenuItem
+                        mb={'$4'}
+                            selected={true}
+                            icon={<Database color="$color11" strokeWidth={1.5} />}
+                            text={'Files'}
+                        />
+                    </Link>
+                    <Link
+                     pb={'$4'}
                         href={"/admin/files/"}
                         onPressApp={() => { }}
                     >
@@ -51,6 +108,7 @@ const Menu = () => {
                         />
                     </Link>
                 </Accordion.Content>
+
             </Accordion.Item>
         </Accordion>
     </YStack>)
