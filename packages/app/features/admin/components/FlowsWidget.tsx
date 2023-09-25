@@ -9,24 +9,26 @@ const uiStore = useFlowsStore()
 const FlowsWidget = (props: any) => {
     const theme = useTheme()
     console.log('token: ', theme.borderColor.val)
+    const bgColor = props.themeMode == 'dark'? '#000000' : '#FFFFFF'
+    const foreColor = props.themeMode == 'light'? '#888888' : '#DDDDDD'
     const themeOverride = {
-        edgeColor: theme.borderColor.val,
-        nodeBackgroundColor: theme.backgroundFocus.val,
-        inputBackgroundColor: theme.placeholderColor,
-        highlightInputBackgroundColor: theme.placeholderColor,
-        inputBorder: theme.borderColor.val,
-        textColor: theme.color.val,
-        interactiveColor: theme.backgroundPress.val,
-        interactiveHoverColor: theme.backgroundHover.val,
-        borderColor: theme.borderColorHover.val,
+        edgeColor: theme.color9.val, //color of graph edges, the lines between the nodes
+        nodeBackgroundColor: bgColor,
+        inputBackgroundColor: bgColor,
+        highlightInputBackgroundColor: theme.placeholderColor.val,
+        inputBorder: '1px solid '+theme.shadowColor.val, //theme.red10.val,
+        textColor: theme.color11.val,
+        interactiveColor: theme.blue8.val,
+        interactiveHoverColor: theme.blue3.val,
+        borderColor: foreColor,
         handleBorderColor: theme.borderColor.val,
-        flowOutputColor: theme.color1.val,
-        dataOutputColor: theme.color1.val,
+        flowOutputColor: theme.color5.val,
+        dataOutputColor: theme.color5.val,
         colorError: theme.red8.val,
-        blockPort: theme.color.val, //vsCodeTheme['--vscode-terminal-ansiBlack'],
-        flowPort: theme.color.val, //vsCodeTheme['--vscode-terminal-ansiBrightBlack'],
-        dataPort: theme.color.val, //vsCodeTheme['--vscode-terminal-ansiWhite'],
-        nodeBorderColor: theme.borderColor.val
+        blockPort: theme.color5.val, //vsCodeTheme['--vscode-terminal-ansiBlack'],
+        flowPort: theme.color5.val, //vsCodeTheme['--vscode-terminal-ansiBrightBlack'],
+        dataPort: theme.color5.val, //vsCodeTheme['--vscode-terminal-ansiWhite'],
+        nodeBorderColor: foreColor, //border of the small connectors, the circles
     }
 
     return <TopicsProvider>

@@ -1,10 +1,11 @@
 import { IconContainer, DataCard, Center, getPendingResult, PendingAtomResult, Monaco, API } from 'protolib'
-import { H2, H3, H4, Image, Paragraph, ScrollView, Spinner, Stack, XStack, YStack, YStackProps } from '@my/ui'
+import { H2, H3, H4, Image, Paragraph, ScrollView, Spinner, Stack, Theme, XStack, YStack, YStackProps } from '@my/ui'
 import React, { useEffect, useState } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { lookup } from 'mrmime';
 import { X, XCircle } from '@tamagui/lucide-icons';
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import { useTint } from '@tamagui/logo'
 
 import dynamic from 'next/dynamic'
  
@@ -18,6 +19,7 @@ export const FileWidget = ({icons=[], currentFile, currentFileName, ...props }: 
     const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(getPendingResult('pending'))
     const { resolvedTheme } = useThemeSetting()
     const mime = lookup(currentFile)
+    const {tint} = useTint()
     const type = mime ? mime.split('/')[0] : 'text'
     console.log('Opening file: ', currentFile, 'mime: ', mime, 'type: ', type, 'url: ', url)
 
@@ -57,9 +59,11 @@ export const FileWidget = ({icons=[], currentFile, currentFileName, ...props }: 
                 } else if(mime == 'application/javascript' || mime == 'video/mp2t') {
                     return {
                         component: <XStack mt={30} f={1} width={"100%"}>
-                            <FlowsWidget setSourceCode={(sourceCode) => {
-                                console.log('set new sourcecode from flows: ', sourceCode)
-                            }} sourceCode={currentFileContent.data} path={currentFile} themeMode={resolvedTheme}/>
+                            {/* <Theme name={tint as any}> */}
+                                <FlowsWidget setSourceCode={(sourceCode) => {
+                                    console.log('set new sourcecode from flows: ', sourceCode)
+                                }} sourceCode={currentFileContent.data} path={currentFile} themeMode={resolvedTheme}/>
+                                {/* </Theme> */}
                             </XStack>,
                         widget: 'flows'
                     }
