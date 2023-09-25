@@ -62,6 +62,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
             setCurrentFile(file)
         } else {
             setCurrentFile('')
+            setDialogOpen(false)
             console.log('useEffect fired!', r);
             setCurrentPath(r)
         }

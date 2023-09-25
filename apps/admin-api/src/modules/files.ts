@@ -17,9 +17,10 @@ async function fileExists(filePath) {
 
 // Handler function to avoid repeating the same code for both routes
 const handleFilesRequest = async (req, res) => {
-    const name = req.params[0] || ''; // Gets the path after /files/
+    const name = req.params.path || '';
 
     const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
+
     if(! await fileExists(filepath)) {
         res.status(404).send('No such file or directory: '+filepath)
         return
@@ -53,7 +54,13 @@ const handleFilesRequest = async (req, res) => {
             // if (contentType) {
             //     res.setHeader('Content-Type', contentType);
             // }
-            res.status(200).sendFile(path.resolve(filepath));
+            console.log('send file: ', filepath, path.resolve(filepath))
+            res.status(200).sendFile(path.resolve(filepath), { dotfiles: 'allow' }, (err) => {
+                if (err) {
+                  console.error('Error al enviar el archivo:', err);
+                  res.status(err.status || 500).send('Error al enviar el archivo');
+                }
+              });
         } catch (e) {
             console.error('Error reading file: ', e)
             res.status(500).send(`Failed to serve the file at path '${name}'`);
@@ -66,7 +73,7 @@ const handleFilesRequest = async (req, res) => {
 //the path to the file to write/directory to create, is extracted from req.params[0]
 //if path is /a/b/c, a and b should exist to create c
 const handleFilesWriteRequest = async (req, res) => {
-    const name = req.params[0] || ''; // Gets the path after /files/
+    const name = req.params.path || '';
     const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
 
     if (req.query.dir === 'true') { // Check if the query contains ?dir=true
@@ -94,13 +101,13 @@ const handleFilesWriteRequest = async (req, res) => {
 app.post('/adminapi/v1/files', handleFilesWriteRequest);
 
 // Route to write files or create directories in /adminapi/v1/files/*
-app.post('/adminapi/v1/files/*', handleFilesWriteRequest);
+app.post('/adminapi/v1/files/:path(*)', handleFilesWriteRequest);
 
 // Route for /adminapi/v1/files
 app.get('/adminapi/v1/files', handleFilesRequest);
 
 // Route for /adminapi/v1/files/*
-app.get('/adminapi/v1/files/*', handleFilesRequest);
+app.get('/adminapi/v1/files/:path(*)', handleFilesRequest);
 
 
 
