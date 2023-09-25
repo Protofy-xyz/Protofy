@@ -11,7 +11,7 @@ class ApiError extends Error {
     }
 }
 
-const _fetch = async (url, data?, update?):Promise<PendingAtomResult | undefined> => {
+const _fetch = async (url, data?, update?, plain?):Promise<PendingAtomResult | undefined> => {
     const realUrl = typeof window === 'undefined' ? SERVER + url : url
     const fn = async () => {
         update ? update(getPendingResult('loading')) : null
@@ -24,8 +24,8 @@ const _fetch = async (url, data?, update?):Promise<PendingAtomResult | undefined
                 body: JSON.stringify(data) 
             }:undefined);
 
-
-            const resData = await res.json()
+            
+            const resData = !plain ? await res.json() : await res.text()
             if (!res.ok) {
                 const err = getPendingResult('error', null, resData)
                 if (update) {
@@ -44,6 +44,7 @@ const _fetch = async (url, data?, update?):Promise<PendingAtomResult | undefined
         } catch (e: any) {
             let errStr = e.apiError ?? e.toString()
             if (e instanceof SyntaxError) {
+                console.error(e)
                 errStr = 'Server error. Check configuration and network connection.'
             }
             const err = getPendingResult('error', null, errStr)
@@ -63,6 +64,6 @@ const _fetch = async (url, data?, update?):Promise<PendingAtomResult | undefined
 }
 export const API = {
     fetch: _fetch,
-    get: (url, update?):Promise<PendingAtomResult | undefined> => _fetch(url, null, update),
-    post: (url, data, update?):Promise<PendingAtomResult | undefined> => _fetch(url, data, update)
+    get: (url, update?, plain?):Promise<PendingAtomResult | undefined> => _fetch(url, null, update, plain),
+    post: (url, data, update?, plain?):Promise<PendingAtomResult | undefined> => _fetch(url, data, update, plain)
 }
