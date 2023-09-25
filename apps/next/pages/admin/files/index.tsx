@@ -27,5 +27,9 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
     const nameSegments = context.query.name as string[];
     const path = nameSegments ? nameSegments.join('/') : '';
     const files = await API.get('/adminapi/v1/files/'+path) ?? { data: [] }
-    return withSession(context, ['admin'], {filesState: files})
+    return withSession(context, ['admin'], {
+      filesState: files,
+      CurrentPath: path,
+      CurrentFile: context.query.file ?? ''
+    })
 })

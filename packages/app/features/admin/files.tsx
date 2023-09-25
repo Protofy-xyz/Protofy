@@ -5,8 +5,8 @@ import { Cross, Database, Key, Plus, PlusCircle } from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
-import { Link } from '@my/ui'
-import { useState } from 'react'
+import { Dialog, Link } from '@my/ui'
+import { useEffect, useState } from 'react'
 import { useTint } from '@tamagui/logo'
 import { FullFileBrowser } from 'chonky';
 import dynamic from 'next/dynamic'
@@ -26,7 +26,7 @@ const Menu = () => {
 
         <Link
             href={"/admin/files/"}
-            onPressApp={() => {}}
+            onPressApp={() => { }}
         >
             <PanelMenuItem
                 selected={true}
@@ -38,31 +38,57 @@ const Menu = () => {
     </YStack>)
 }
 
-export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath}) {
+export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath, CurrentFile }) {
+    const [dialogOpen, setDialogOpen] = useState(false)
     const router = useRouter()
     const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
     const [currentPath, setCurrentPath] = useState(CurrentPath)
-    
+    const [currentFile, setCurrentFile] = useState(CurrentFile ? CurrentFile : '')
+
     useUpdateEffect(() => {
         console.log('current Path: ', currentPath)
         //API.get('/adminapi/v1/files/'+currentPath, setFiles)
-        router.push('/admin/files'+(!currentPath.startsWith('/')?'/':'')+currentPath)
+        router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath)
     }, [currentPath])
 
     useUpdateEffect(() => {
-        const r = router.asPath.substring('/admin/files'.length)
-        console.log('useEffect fired!', r);
-        setCurrentPath(r)
+        console.log('router q: ', router.query.file)
+        const r = router.asPath.split('?')[0].substring('/admin/files'.length)
+        if(router.query.file) {
+            const file = (r+'/'+router.query.file).replace(/\/+/g, '/')
+            console.log('router query: ', file)
+            setCurrentFile(file)
+        } else {
+            setCurrentFile('')
+            console.log('useEffect fired!', r);
+            setCurrentPath(r)
+        }
+
     }, [router.asPath]);
+
+
+    useEffect(() => {
+        if(currentFile) {
+            setDialogOpen(true)
+        } else {
+            const newQuery = { ...router.query };
+            delete newQuery.file;
+            router.push({
+                pathname: router.pathname,
+                query: newQuery
+            }, undefined, { shallow: true });
+        }
+    }, [currentFile])
 
     const onOpen = (file) => {
         console.log('on open client: ', file)
-        if(file.isDir) setCurrentPath(file.path ?? file.id)
+        if (file.isDir) return setCurrentPath(file.path ?? file.id)
+        router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file='+file.name)
     }
- 
+
     return (<PanelLayout menuContent={<Menu />}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
-            <FileBrowser folderChain={[{id: '/', name: "Files", isDir: true}].concat(
+            <FileBrowser folderChain={[{ id: '/', name: "Files", isDir: true }].concat(
                 ...currentPath.split('/').map((x, i, arr) => {
                     return {
                         name: x,
@@ -73,9 +99,34 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
             )} onOpen={onOpen} files={files.data.map(f => {
                 return {
                     ...f,
-                    thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/'+f.path : undefined
+                    thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
                 }
             })} />
+            <Dialog onOpenChange={(state) => {
+                if(!state) {
+                    setCurrentFile('')
+                }
+                setDialogOpen(state)
+            }} open={dialogOpen}>
+                <Dialog.Portal>
+                    <Dialog.Overlay />
+                    <Dialog.Content height={'90%'} width={"90%"} >
+                        <Dialog.Title>title</Dialog.Title>
+                        <Dialog.Description>juas description</Dialog.Description>
+                        <Dialog.Close />
+                    </Dialog.Content>
+                </Dialog.Portal>
+
+                {/* optionally change to sheet when small screen */}
+                <Dialog.Adapt when="sm">
+                    <Dialog.Sheet>
+                        <Dialog.Sheet.Frame>
+                            <Dialog.Adapt.Contents />
+                        </Dialog.Sheet.Frame>
+                        <Dialog.Sheet.Overlay />
+                    </Dialog.Sheet>
+                </Dialog.Adapt>
+            </Dialog>
         </XStack>
     </PanelLayout>)
 }
