@@ -20,97 +20,62 @@ ChonkyActions.ToggleHiddenFiles.option.defaultValue = false;
 const [filesArr, filesAtom] = createApiAtom([])
 const currentDbAtom = atom(0)
 
+const data = {
+    "Files": [
+        { "name": "apps", "href": "/admin/files/apps" },
+        { "name": "data", "href": "/admin/files/data" },
+        { "name": "packages", "href": "/admin/files/packages" }
+    ],
+    "Files 2": [
+        { "name": "apps", "href": "/admin/files/apps" },
+        { "name": "apps", "href": "/admin/files/apps" },
+        { "name": "apps", "href": "/admin/files/apps" }
+    ],
+}
 
-const Menu = () => {
+const subtabs = (subtabs) => {
+    return (subtabs.map((subtab, index) => {
+        return (
+            <Link href={subtab.href} onPressApp={() => { }} >
+                <PanelMenuItem
+                    mb={'$4'}
+                    selected={true}
+                    icon={<Database color="$color11" strokeWidth={1.5} />}
+                    text={subtab.name}
+                />
+            </Link>
+        )
+    }))
+}
+
+const tabs = (tabs) => {
+    return (Object.keys(tabs)?.map((tab, index) => {
+        return (<Accordion br={"$6"} overflow="hidden" type="multiple" mb={'$4'}>
+            <Accordion.Item value={"a" + index}>
+                <Accordion.Trigger bw={0} flexDirection="row" justifyContent="space-between">
+                    {({ open }) => (
+                        <XStack f={1}>
+                            <Stack mr={"$3"}>
+                                <Database color="$color11" strokeWidth={1.5} />
+                            </Stack>
+                            <SizableText f={1} size={"$5"} fontWeight={800}>{tab}</SizableText>
+                            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+                                <ChevronDown size="$1" />
+                            </Square>
+                        </XStack>
+                    )}
+                </Accordion.Trigger>
+                <Accordion.Content pt={'$4'}>
+                        {subtabs(tabs[tab])}
+                </Accordion.Content>
+            </Accordion.Item>
+        </Accordion>)
+    }))
+}
+
+export const PanelMenu = () => {
     return (<YStack mx={"$4"} pt="$10">
-        <Accordion br={"$6"} overflow="hidden" type="multiple" mb={'$4'}>
-            <Accordion.Item value="a1">
-                <Accordion.Trigger bw={0} flexDirection="row" justifyContent="space-between">
-                    {({ open }) => (
-                        <XStack f={1}>
-                            <Stack mr={"$3"}>
-                                <Database color="$color11" strokeWidth={1.5} />
-                            </Stack>
-
-                            <SizableText f={1} size={"$5"} fontWeight={800}>Files</SizableText>
-                            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
-                                <ChevronDown size="$1" />
-                            </Square>
-                        </XStack>
-                    )}
-                </Accordion.Trigger>
-                <Accordion.Content pt={'$4'}>
-                    <Link
-                    
-                        href={"/admin/files/"}
-                        onPressApp={() => { }}
-                    >
-                        <PanelMenuItem
-                        mb={'$4'}
-                            selected={true}
-                            icon={<Database color="$color11" strokeWidth={1.5} />}
-                            text={'Files'}
-                        />
-                    </Link>
-                    <Link
-                     pb={'$4'}
-                        href={"/admin/files/"}
-                        onPressApp={() => { }}
-                    >
-                        <PanelMenuItem
-                            selected={true}
-                            icon={<Database color="$color11" strokeWidth={1.5} />}
-                            text={'Files'}
-                        />
-                    </Link>
-                </Accordion.Content>
-
-            </Accordion.Item>
-        </Accordion>
-        <Accordion br={"$6"} overflow="hidden" type="multiple">
-            <Accordion.Item value="a1">
-                <Accordion.Trigger bw={0} flexDirection="row" justifyContent="space-between">
-                    {({ open }) => (
-                        <XStack f={1}>
-                            <Stack mr={"$3"}>
-                                <Database color="$color11" strokeWidth={1.5} />
-                            </Stack>
-
-                            <SizableText f={1} size={"$5"} fontWeight={800}>Files</SizableText>
-                            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
-                                <ChevronDown size="$1" />
-                            </Square>
-                        </XStack>
-                    )}
-                </Accordion.Trigger>
-                <Accordion.Content pt={'$4'}>
-                    <Link
-                    
-                        href={"/admin/files/"}
-                        onPressApp={() => { }}
-                    >
-                        <PanelMenuItem
-                        mb={'$4'}
-                            selected={true}
-                            icon={<Database color="$color11" strokeWidth={1.5} />}
-                            text={'Files'}
-                        />
-                    </Link>
-                    <Link
-                     pb={'$4'}
-                        href={"/admin/files/"}
-                        onPressApp={() => { }}
-                    >
-                        <PanelMenuItem
-                            selected={true}
-                            icon={<Database color="$color11" strokeWidth={1.5} />}
-                            text={'Files'}
-                        />
-                    </Link>
-                </Accordion.Content>
-
-            </Accordion.Item>
-        </Accordion>
+        {tabs(data)}
     </YStack>)
 }
 
@@ -165,7 +130,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
         router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file=' + file.name)
     }
 
-    return (<PanelLayout menuContent={<Menu />}>
+    return (<PanelLayout menuContent={<PanelMenu />}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
             <FileBrowser folderChain={[{ id: '/', name: "Files", isDir: true }].concat(
                 ...currentPath.split('/').map((x, i, arr) => {
