@@ -1,21 +1,19 @@
 import { YStack, XStack, Stack, Input, Theme, Paragraph, Text } from 'tamagui'
-import { API, withSession, createApiAtom, usePendingEffect, PanelMenuItem, redirect, useHydratedAtom, DataCard, ItemCard, BigTitle, Search } from 'protolib'
+import { PendingAtomResult, Monaco, API, withSession, createApiAtom, usePendingEffect, PanelMenuItem, redirect, useHydratedAtom, DataCard, ItemCard, BigTitle, Search } from 'protolib'
 import { PanelLayout } from '../../layout/PanelLayout'
 import { Cross, Database, Key, Plus, PlusCircle } from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
-import { Dialog, Link } from '@my/ui'
+import { Dialog, H1, Link, Spinner } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { useTint } from '@tamagui/logo'
 import { FullFileBrowser } from 'chonky';
 import dynamic from 'next/dynamic'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
+import { useThemeSetting } from '@tamagui/next-theme'
 
-// import FileBrowser from '../../../components/FileBrowser'
-
-// Somewhere in your `index.ts`:
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 
 const [filesArr, filesAtom] = createApiAtom([])
@@ -38,13 +36,16 @@ const Menu = () => {
     </YStack>)
 }
 
-export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath, CurrentFile }) {
-    const [dialogOpen, setDialogOpen] = useState(false)
+export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath, CurrentFile, CurrentFileContent}) {
+    const [dialogOpen, setDialogOpen] = useState(CurrentFile?true:false)
     const router = useRouter()
     const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
     const [currentPath, setCurrentPath] = useState(CurrentPath)
     const [currentFile, setCurrentFile] = useState(CurrentFile ? CurrentFile : '')
-
+    const {resolvedTheme} = useThemeSetting()
+    const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(CurrentFileContent)
+    console.log('current file content: ', currentFileContent)
+    const currentFileName = currentFile.split('/')[currentFile.split('/').length-1]
     useUpdateEffect(() => {
         console.log('current Path: ', currentPath)
         //API.get('/adminapi/v1/files/'+currentPath, setFiles)
@@ -56,7 +57,8 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
         const r = router.asPath.split('?')[0].substring('/admin/files'.length)
         if(router.query.file) {
             const file = (r+'/'+router.query.file).replace(/\/+/g, '/')
-            console.log('router query: ', file)
+            const url = ('/adminapi/v1/files/'+file).replace(/\/+/g, '/')
+            API.get(url, setCurrentFileContent, true);
             setCurrentFile(file)
         } else {
             setCurrentFile('')
@@ -110,9 +112,10 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
             }} open={dialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
-                    <Dialog.Content height={'90%'} width={"90%"} >
-                        <Dialog.Title>title</Dialog.Title>
-                        <Dialog.Description>juas description</Dialog.Description>
+                    <Dialog.Content backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} height={'90%'} width={"90%"} >
+                        <Dialog.Title mb={"$3"}>{currentFileName}</Dialog.Title>
+                        {currentFileContent.isLoaded?<Monaco path={currentFile} darkMode={resolvedTheme=='dark'} sourceCode={currentFileContent.data} />:(
+                            currentFileContent.isError?<div>ERROR</div>:<Spinner />)}   
                         <Dialog.Close />
                     </Dialog.Content>
                 </Dialog.Portal>

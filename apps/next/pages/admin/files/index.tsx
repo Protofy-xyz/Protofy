@@ -26,10 +26,13 @@ export default function FilesPage(props:any) {
 export const getServerSideProps = SSR(async (context:NextPageContext) => {
     const nameSegments = context.query.name as string[];
     const path = nameSegments ? nameSegments.join('/') : '';
-    const files = await API.get('/adminapi/v1/files/'+path) ?? { data: [] }
+    //@ts-ignore
+    const currentFile = context.query.file ? context.query.file.split('/')[0] : ''
+    const currentFilePath = path+'/'+currentFile.replace(/\/+/g, '/');
     return withSession(context, ['admin'], {
-      filesState: files,
+      filesState: await API.get('/adminapi/v1/files/'+path) ?? { data: [] },
       CurrentPath: path,
-      CurrentFile: context.query.file ?? ''
+      CurrentFile: currentFile,
+      CurrentFileContent: currentFile ? (await API.get('/adminapi/v1/files/'+currentFilePath, null, true)) : ''
     })
 })
