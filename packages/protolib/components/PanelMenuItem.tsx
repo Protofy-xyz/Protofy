@@ -15,22 +15,21 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
   return (
     <XStack
       ref={ref}
-      marginLeft={"$6"}
-      paddingLeft={"$6"}
+      paddingHorizontal={"$5"}
       paddingVertical={"$3"}
+      paddingTop={"$4"}
       hoverStyle={{
-        backgroundColor: "var(--color2)"
+        backgroundColor: "$backgroundHover"
       }}
       borderRadius={"$6"}
-      width={250}
-      alignItems={"center"}
+      width={230}
       onPress={onPress}
       cursor='pointer'
       {...(selected ? {
-        backgroundColor: "var(--color2)"
+        backgroundColor: "$backgroundHover"
       } : {})}
     >
-      {icon ? <Text marginTop={"$1"} marginRight={"$4"}>
+      {icon ? <Text marginTop={"$0"} marginRight={"$4"}>
         {icon}
       </Text> : null}
       {text ? <SizableText selectable={false} pointerEvents="none" color="var(--color12)" size="$5" fontWeight="800">
