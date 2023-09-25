@@ -1,7 +1,7 @@
 import { YStack, XStack, Stack, Input, Theme, Paragraph, Text } from 'tamagui'
-import { Center, getPendingResult, PendingAtomResult, Monaco, API, withSession, createApiAtom, usePendingEffect, PanelMenuItem, redirect, useHydratedAtom, DataCard, ItemCard, BigTitle, Search } from 'protolib'
+import { IconContainer, Center, getPendingResult, PendingAtomResult, Monaco, API, withSession, createApiAtom, usePendingEffect, PanelMenuItem, redirect, useHydratedAtom, DataCard, ItemCard, BigTitle, Search } from 'protolib'
 import { PanelLayout } from '../../layout/PanelLayout'
-import { Cross, Database, Key, Plus, PlusCircle } from '@tamagui/lucide-icons'
+import { Cross, Database, Key, Plus, PlusCircle, X, XCircle, XSquare } from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
@@ -104,16 +104,20 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
                     thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
                 }
             })} />
-            <Dialog onOpenChange={(state) => {
-                if(!state) {
-                    setCurrentFile('')
-                }
-                setDialogOpen(state)
-            }} open={dialogOpen}>
+            <Dialog open={dialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} height={'90%'} width={"90%"} >
-                        <FileWidget currentFileName={currentFileName} backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} currentFile={currentFile} />
+                        <FileWidget 
+                            extraIcons={[
+                                <IconContainer onPress={() => {setCurrentFile(''); setDialogOpen(false)}}>
+                                    <X color="var(--color)" size={"$1"} />
+                                </IconContainer>
+                            ]}
+                            currentFileName={currentFileName} 
+                            backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} 
+                            currentFile={currentFile} 
+                        />
                  
                         <Dialog.Close />
                     </Dialog.Content>

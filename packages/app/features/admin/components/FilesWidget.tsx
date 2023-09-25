@@ -1,10 +1,11 @@
-import { DataCard, Center, getPendingResult, PendingAtomResult, Monaco, API } from 'protolib'
+import { IconContainer, DataCard, Center, getPendingResult, PendingAtomResult, Monaco, API } from 'protolib'
 import { H2, H3, H4, Image, Paragraph, ScrollView, Spinner, XStack, YStack, YStackProps } from '@my/ui'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { lookup } from 'mrmime';
+import { X, XCircle } from '@tamagui/lucide-icons';
 
-export const FileWidget = ({currentFile, currentFileName, ...props }: { title: string, currentFile: string, currentFileName: string} & YStackProps) => {
+export const FileWidget = ({extraIcons=[], currentFile, currentFileName, ...props }: { extraIcons: React.ReactElement[],title: string, currentFile: string, currentFileName: string} & YStackProps) => {
     const url = ('/adminapi/v1/files/' + currentFile).replace(/\/+/g, '/')
     const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(getPendingResult('pending'))
     const { resolvedTheme } = useThemeSetting()
@@ -26,9 +27,11 @@ export const FileWidget = ({currentFile, currentFileName, ...props }: { title: s
                         const data = JSON.parse(currentFileContent.data)
                         return <XStack f={1} width={'100%'}>
                             <DataCard
+                            extraIcons={extraIcons}
+                            hideDeleteIcon={true}
                             itemCardProps={{topBarProps: {top: -10, backgroundColor: 'transparent'}}}
                             minimal={true}
-                            f={1}  
+                            f={1}
                             backgroundColor={'transprent'}
                             onDelete={() => { }}
                             onSave={(content) => { }}
@@ -63,14 +66,10 @@ export const FileWidget = ({currentFile, currentFileName, ...props }: { title: s
     }
 
     return <>
-    <XStack height={20}>
-
-    </XStack>
-    <YStack flex={1} alignItems='center' justifyContent='center' {...props}>
+        <XStack height={20} />
+        <YStack flex={1} alignItems='center' justifyContent='center' {...props}>
             {getComponent()}
         </YStack>
         <H4 position='absolute' left={15} top={10}>{currentFileName}</H4>
     </>
-    
-
 }
