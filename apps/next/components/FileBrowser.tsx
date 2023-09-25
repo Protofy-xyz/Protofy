@@ -24,7 +24,8 @@ const WebFileBrowser = ({folderChain=[{ id: 'xcv', name: 'Files', isDir: true }]
     ];
     return (
         <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
-            <FileBrowser 
+            <FileBrowser
+
                 onFileAction={(data) => {
                     if(data.id == 'open_files') {
                         onOpen(data.payload.targetFile)
@@ -34,7 +35,7 @@ const WebFileBrowser = ({folderChain=[{ id: 'xcv', name: 'Files', isDir: true }]
                 }}
                 disableDragAndDrop={true}
                 disableDefaultFileActions={actionsToDisable}
-                //defaultFileViewActionId={ChonkyActions.EnableListView.id} 
+                //defaultFileViewActionId={ChonkyActions.ToggleHiddenFiles.id} 
                 disableSelection={false} 
                 darkMode={resolvedTheme=='dark'} 
                 files={files} 

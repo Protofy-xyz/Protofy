@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { Dialog, H1, Link, ScrollView, Spinner } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { useTint } from '@tamagui/logo'
-import { FullFileBrowser } from 'chonky';
+import { ChonkyActions, FullFileBrowser } from 'chonky';
 import dynamic from 'next/dynamic'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
@@ -16,7 +16,7 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from './components/FilesWidget'
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
-
+ChonkyActions.ToggleHiddenFiles.option.defaultValue = false;
 const [filesArr, filesAtom] = createApiAtom([])
 const currentDbAtom = atom(0)
 
