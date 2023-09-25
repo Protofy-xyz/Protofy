@@ -75,7 +75,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
         } else {
             const newQuery = { ...router.query };
             delete newQuery.file;
-            router.push({
+            router.replace({
                 pathname: router.pathname,
                 query: newQuery
             }, undefined, { shallow: true });
