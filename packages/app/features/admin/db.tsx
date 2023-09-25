@@ -102,6 +102,12 @@ export default function Admin({ pageSession, databasesState, currentDbState, con
                 return (
                     <Stack key={i} p={"$5"}>
                         <DataCard
+                            innerContainerProps={{
+                                maxWidth: 700,
+                                $md: { maxWidth: 450 },
+                                $sm: { minWidth: 'calc(100vw - 65px)', maxWidth: 'calc(100vw - 65px)' },
+                                minWidth: 300
+                            }}
                             onDelete={onDelete}
                             key={renew}
                             onSave={(content) => onSave(content, element.key)}
