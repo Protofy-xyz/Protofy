@@ -17,6 +17,7 @@ import {
   YStack,
   YStackProps,
 } from 'tamagui'
+
 export const ItemCard = memo(React.forwardRef(
   (
     props: YStackProps & {
@@ -30,10 +31,12 @@ export const ItemCard = memo(React.forwardRef(
       imageProps?: ImageProps,
       children?: any,
       topBar?: any,
-      topBarOutSideScrollArea?: boolean
+      topBarOutSideScrollArea?: boolean,
+      containerElement: React.ReactElement
     }, ref:any
   ) => {
     const {
+      containerElement = ScrollView,
       topBarOutSideScrollArea = false,
       bottomBarProps = {},
       bottomBar,
@@ -50,7 +53,7 @@ export const ItemCard = memo(React.forwardRef(
       ...cardProps
     } = props
     const tint = !alt ? null : (`alt${alt}` as ThemeName)
-    console.log('------------------------', topBarProps)
+    console.log('------------------------', containerElement)
     return (
       <YStack
         f={1}
@@ -81,20 +84,17 @@ export const ItemCard = memo(React.forwardRef(
                 <Separator mb={-1} />
               </>
             ) : null}
-          <ScrollView
-            borderWidth={1}
-            borderColor="$borderColor"
-            backgroundColor="$color1"
-            //@ts-ignore
-            br="$7"
-            p={0}
-            ai="stretch"
-            // mb={40}
-            elevation="$2"
-            {...cardProps}
-          >
-
-            {!topBarOutSideScrollArea && topBar ? (
+          {React.createElement(containerElement as any, {
+            borderWidth: 1,
+            borderColor: "$borderColor",
+            backgroundColor: "$color1",
+            br: "$7",
+            p: 0,
+            ai: "stretch",
+            elevation: "$2",
+            ...cardProps
+          }, [
+            !topBarOutSideScrollArea && topBar ? (
               <>
                 <XStack
                   //@ts-ignore
@@ -114,8 +114,8 @@ export const ItemCard = memo(React.forwardRef(
                 {/*@ts-ignore*/}
                 <Separator mb={-1} />
               </>
-            ) : null}
-            {/*@ts-ignore*/}
+            ) : null,
+
             <XStack ai="center" p="$4">
               {/*@ts-ignore*/}
               {imageSrc ? <Square pos="relative" ov="hidden" br="$6" size="$8">
@@ -125,8 +125,8 @@ export const ItemCard = memo(React.forwardRef(
                 {children}
      
 
-            </XStack>
-            {bottomBar ? (
+            </XStack>,
+            bottomBar ? (
               <>
                 {/*@ts-ignore*/}
                 <Separator mb={-1} />
@@ -150,9 +150,8 @@ export const ItemCard = memo(React.forwardRef(
                 </XStack>
 
               </>
-            ) : null}
-
-          </ScrollView>
+            ) : null
+          ])}
         </Theme>
       </YStack>
     )
