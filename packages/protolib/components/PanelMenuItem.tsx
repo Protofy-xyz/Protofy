@@ -1,4 +1,4 @@
-import { YStack, XStack, Text, SizableText } from 'tamagui'
+import { YStack, XStack, Text, SizableText, StackProps } from 'tamagui'
 import { Database } from '@tamagui/lucide-icons'
 import { useAtom } from 'jotai'
 import React from 'react'
@@ -11,7 +11,7 @@ export type PanelMenuItemProps = {
   selected?: boolean
 }
 
-export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, icon, text }: PanelMenuItemProps, ref: any) => {
+export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, icon, text, ...props } : PanelMenuItemProps & StackProps, ref: any) => {
   return (
     <XStack
       ref={ref}
@@ -28,6 +28,7 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
       {...(selected ? {
         backgroundColor: "$backgroundHover"
       } : {})}
+      {...props}
     >
       {icon ? <Text marginTop={"$0"} marginRight={"$4"}>
         {icon}
