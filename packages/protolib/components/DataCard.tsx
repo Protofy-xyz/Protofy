@@ -6,8 +6,9 @@ import { ItemCard } from './ItemCard'
 import JSONViewer from './jsonui/JSONViewer'
 import { getPendingResult } from '../lib/createApiAtom'
 import React from 'react'
+import { IconContainer } from './IconContainer'
 
-export const DataCard = React.forwardRef(({itemCardProps={}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, ...props }: any, ref: any) => {
+export const DataCard = React.forwardRef(({extraIcons=[],iconProps={},itemCardProps={}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, hideDeleteIcon, ...props }: any, ref: any) => {
     const { tint } = useTint()
     const [editable, setEditable] = useState(false)
     const [content, setContent] = useState(json)
@@ -48,7 +49,7 @@ export const DataCard = React.forwardRef(({itemCardProps={}, minimal, json, name
                         <Paragraph flex={1} marginRight={"-$5"} opacity={0.8}>{!minimal?name:''}</Paragraph>
                         <Theme reset>
                             <XStack left={"-$10"}>
-                                <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom-end">
+                                {!hideDeleteIcon?<Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom-end">
                                     <Popover.Trigger>
                                         <XStack cursor="pointer" onPress={() => setMenuOpened(true)}>
                                             <Stack marginRight={"$3"} opacity={0.5} cursor="pointer" hoverStyle={{ opacity: 0.8 }}>
@@ -71,17 +72,19 @@ export const DataCard = React.forwardRef(({itemCardProps={}, minimal, json, name
 
                                     {/* optionally change to sheet when small screen */}
 
-                                </Popover>
+                                </Popover>:null}
 
-                                {editable ? <Stack paddingHorizontal={"$3"} onPress={onCancel} opacity={0.5} cursor="pointer" hoverStyle={{ opacity: 0.8 }}>
-                                    <X color="var(--red9)" size={"$1"} />
-                                </Stack> : null}
-                                {!editable ? <Stack onPress={() => setEditable(!editable)} opacity={0.5} cursor="pointer" hoverStyle={{ opacity: 0.8 }}>
-                                    <FileEdit size={"$1"} />
-                                </Stack> : <Stack onPress={onDone} opacity={0.5} cursor="pointer" hoverStyle={{ opacity: 0.8 }}>
-                                    <Check color="var(--color9)" size={"$1"} />
-                                </Stack>}
-
+                                <XStack {...iconProps}>
+                                    {editable ? <IconContainer paddingHorizontal={"$3"} onPress={onCancel}>
+                                        <X color="var(--red9)" size={"$1"} />
+                                    </IconContainer> : null}
+                                    {!editable ? <IconContainer onPress={() => setEditable(!editable)}>
+                                        <FileEdit size={"$1"} />
+                                    </IconContainer> : <IconContainer onPress={onDone}>
+                                        <Check color="var(--color9)" size={"$1"} />
+                                    </IconContainer>}
+                                    {extraIcons}
+                                </XStack>
                             </XStack>
                         </Theme>
                     </XStack>
