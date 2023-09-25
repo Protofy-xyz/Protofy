@@ -19,7 +19,6 @@
     "noUnusedParameters": false,
     "useUnknownInCatchVariables": false,
     "preserveConstEnums": true,
-    // DONT DO THIS so jsdoc will remain
     "removeComments": false,
     "skipLibCheck": true,
     "sourceMap": false,

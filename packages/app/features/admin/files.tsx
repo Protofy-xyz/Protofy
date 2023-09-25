@@ -5,7 +5,7 @@ import { Cross, Database, Key, Plus, PlusCircle } from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
-import { Dialog, H1, Link, Spinner } from '@my/ui'
+import { Dialog, H1, Link, ScrollView, Spinner } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { useTint } from '@tamagui/logo'
 import { FullFileBrowser } from 'chonky';
@@ -112,9 +112,9 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
             }} open={dialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
-                    <Dialog.Content backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} height={'90%'} width={"90%"} >
-                        <Dialog.Title mb={20}>{currentFileName}</Dialog.Title>
-                        <FileWidget top={-20} currentFile={currentFile} />
+                    <Dialog.Content p={0} backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} height={'90%'} width={"90%"} >
+                        <FileWidget currentFileName={currentFileName} backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} currentFile={currentFile} />
+                 
                         <Dialog.Close />
                     </Dialog.Content>
                 </Dialog.Portal>

@@ -1,36 +1,60 @@
-import { Center, getPendingResult, PendingAtomResult, Monaco, API } from 'protolib'
-import { Image, Spinner, XStack, YStack, YStackProps } from '@my/ui'
+import { DataCard, Center, getPendingResult, PendingAtomResult, Monaco, API } from 'protolib'
+import { H2, H3, H4, Image, Paragraph, ScrollView, Spinner, XStack, YStack, YStackProps } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { lookup } from 'mrmime';
 
-export const FileWidget = ({currentFile, ...props}: {currentFile: string} & YStackProps) => {
-    const url = ('/adminapi/v1/files/'+currentFile).replace(/\/+/g, '/')
+export const FileWidget = ({currentFile, currentFileName, ...props }: { title: string, currentFile: string, currentFileName: string} & YStackProps) => {
+    const url = ('/adminapi/v1/files/' + currentFile).replace(/\/+/g, '/')
     const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(getPendingResult('pending'))
-    const {resolvedTheme} = useThemeSetting()
+    const { resolvedTheme } = useThemeSetting()
     const mime = lookup(currentFile)
     const type = mime ? mime.split('/')[0] : 'text'
     console.log('Opening file: ', currentFile, 'mime: ', mime, 'type: ', type, 'url: ', url)
     useEffect(() => {
-        if(type == 'text' || type == 'application') {
+        if (type == 'text' || type == 'application') {
             API.get(url, setCurrentFileContent, true)
         }
-        
+
     }, [currentFile])
     const getComponent = () => {
-        if(type == 'text' || type == 'application') {
-            if(currentFileContent.isLoaded) {
-                return <Monaco path={currentFile} darkMode={resolvedTheme=='dark'} sourceCode={currentFileContent.data} />
-            } else if(currentFileContent.isError) {
+        if (type == 'text' || type == 'application') {
+            if (currentFileContent.isLoaded) {
+
+                if (mime == 'application/json') {
+                    try {
+                        const data = JSON.parse(currentFileContent.data)
+                        return <XStack f={1} width={'100%'}>
+                            <DataCard
+                            itemCardProps={{topBarProps: {top: -10, backgroundColor: 'transparent'}}}
+                            minimal={true}
+                            f={1}  
+                            backgroundColor={'transprent'}
+                            onDelete={() => { }}
+                            onSave={(content) => { }}
+                            json={data}
+                            name={currentFile}
+                        />
+                            </XStack>
+                    } catch (e) {
+
+                    }
+
+
+                }
+                return <XStack mt={30} f={1} width={"100%"}>
+                        <Monaco path={currentFile} darkMode={resolvedTheme == 'dark'} sourceCode={currentFileContent.data} />
+                    </XStack>
+            } else if (currentFileContent.isError) {
                 return <div>ERROR</div>
             } else {
                 return <Center>
-                        <Spinner size={'large'} scale={3} top={-50} />
-                        Loading
-                    </Center>
+                    <Spinner size={'large'} scale={3} top={-50} />
+                    Loading
+                </Center>
             }
         } else {
-            if(type == 'image') {
+            if (type == 'image') {
                 return <img src={url} />
             } else {
                 return <Center>Unknown file type</Center>
@@ -38,7 +62,15 @@ export const FileWidget = ({currentFile, ...props}: {currentFile: string} & YSta
         }
     }
 
-    return <YStack flex={1} alignItems='center' justifyContent='center' {...props}>
-        {getComponent()}
-    </YStack>
+    return <>
+    <XStack height={20}>
+
+    </XStack>
+    <YStack flex={1} alignItems='center' justifyContent='center' {...props}>
+            {getComponent()}
+        </YStack>
+        <H4 position='absolute' left={15} top={10}>{currentFileName}</H4>
+    </>
+    
+
 }
