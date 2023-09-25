@@ -8393,6 +8393,7 @@ __metadata:
     chonky-icon-fontawesome: latest
     expo-constants: ^14.2.1
     expo-linking: ^4.0.1
+    mrmime: 1.0.1
     react-native-reanimated: ^3.5.4
     react-native-safe-area-context: ^4.5.2
     solito: ^3.0.0
@@ -18489,6 +18490,13 @@ __metadata:
   version: 1.2.0
   resolution: "mri@npm:1.2.0"
   checksum: 83f515abbcff60150873e424894a2f65d68037e5a7fcde8a9e2b285ee9c13ac581b63cfc1e6826c4732de3aeb84902f7c1e16b7aff46cd3f897a0f757a894e85
+  languageName: node
+  linkType: hard
+
+"mrmime@npm:1.0.1":
+  version: 1.0.1
+  resolution: "mrmime@npm:1.0.1"
+  checksum: cc979da44bbbffebaa8eaf7a45117e851f2d4cb46a3ada6ceb78130466a04c15a0de9a9ce1c8b8ba6f6e1b8618866b1352992bf1757d241c0ddca558b9f28a77
   languageName: node
   linkType: hard
 

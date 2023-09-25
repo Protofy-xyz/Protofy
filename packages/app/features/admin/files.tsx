@@ -1,5 +1,5 @@
 import { YStack, XStack, Stack, Input, Theme, Paragraph, Text } from 'tamagui'
-import { PendingAtomResult, Monaco, API, withSession, createApiAtom, usePendingEffect, PanelMenuItem, redirect, useHydratedAtom, DataCard, ItemCard, BigTitle, Search } from 'protolib'
+import { Center, getPendingResult, PendingAtomResult, Monaco, API, withSession, createApiAtom, usePendingEffect, PanelMenuItem, redirect, useHydratedAtom, DataCard, ItemCard, BigTitle, Search } from 'protolib'
 import { PanelLayout } from '../../layout/PanelLayout'
 import { Cross, Database, Key, Plus, PlusCircle } from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai'
@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { useThemeSetting } from '@tamagui/next-theme'
+import { FileWidget } from './components/FilesWidget'
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 
@@ -36,15 +37,15 @@ const Menu = () => {
     </YStack>)
 }
 
-export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath, CurrentFile, CurrentFileContent}) {
+
+export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath, CurrentFile}) {
+    const {resolvedTheme} = useThemeSetting()
     const [dialogOpen, setDialogOpen] = useState(CurrentFile?true:false)
     const router = useRouter()
     const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
     const [currentPath, setCurrentPath] = useState(CurrentPath)
     const [currentFile, setCurrentFile] = useState(CurrentFile ? CurrentFile : '')
-    const {resolvedTheme} = useThemeSetting()
-    const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(CurrentFileContent)
-    console.log('current file content: ', currentFileContent)
+
     const currentFileName = currentFile.split('/')[currentFile.split('/').length-1]
     useUpdateEffect(() => {
         console.log('current Path: ', currentPath)
@@ -57,8 +58,6 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
         const r = router.asPath.split('?')[0].substring('/admin/files'.length)
         if(router.query.file) {
             const file = (r+'/'+router.query.file).replace(/\/+/g, '/')
-            const url = ('/adminapi/v1/files/'+file).replace(/\/+/g, '/')
-            API.get(url, setCurrentFileContent, true);
             setCurrentFile(file)
         } else {
             setCurrentFile('')
@@ -114,9 +113,8 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
                 <Dialog.Portal>
                     <Dialog.Overlay />
                     <Dialog.Content backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} height={'90%'} width={"90%"} >
-                        <Dialog.Title mb={"$3"}>{currentFileName}</Dialog.Title>
-                        {currentFileContent.isLoaded?<Monaco path={currentFile} darkMode={resolvedTheme=='dark'} sourceCode={currentFileContent.data} />:(
-                            currentFileContent.isError?<div>ERROR</div>:<Spinner />)}   
+                        <Dialog.Title mb={20}>{currentFileName}</Dialog.Title>
+                        <FileWidget top={-20} currentFile={currentFile} />
                         <Dialog.Close />
                     </Dialog.Content>
                 </Dialog.Portal>
