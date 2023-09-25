@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { lookup } from 'mrmime';
 import { X, XCircle } from '@tamagui/lucide-icons';
-
+import { Scrollbars } from 'react-custom-scrollbars-2';
 export const FileWidget = ({icons=[], currentFile, currentFileName, ...props }: { extraIcons: React.ReactElement[],title: string, currentFile: string, currentFileName: string} & YStackProps) => {
     const url = ('/adminapi/v1/files/' + currentFile).replace(/\/+/g, '/')
     const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(getPendingResult('pending'))
@@ -29,9 +29,10 @@ export const FileWidget = ({icons=[], currentFile, currentFileName, ...props }: 
                         const data = JSON.parse(currentFileContent.data)
                         return {component: <XStack f={1} width={'100%'}>
                             <DataCard
+                                
                                 extraIcons={icons}
                                 hideDeleteIcon={true}
-                                itemCardProps={{topBarProps: {top: -10, backgroundColor: 'transparent'}}}
+                                itemCardProps={{containerElement:Scrollbars, topBarProps: {top: -10, backgroundColor: 'transparent'}}}
                                 minimal={true}
                                 f={1}
                                 backgroundColor={'transprent'}
