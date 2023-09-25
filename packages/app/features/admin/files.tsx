@@ -109,7 +109,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} height={'90%'} width={"90%"} >
                         <FileWidget 
-                            extraIcons={[
+                            icons={[
                                 <IconContainer onPress={() => {setCurrentFile(''); setDialogOpen(false)}}>
                                     <X color="var(--color)" size={"$1"} />
                                 </IconContainer>

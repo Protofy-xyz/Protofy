@@ -1,23 +1,25 @@
 import { IconContainer, DataCard, Center, getPendingResult, PendingAtomResult, Monaco, API } from 'protolib'
-import { H2, H3, H4, Image, Paragraph, ScrollView, Spinner, XStack, YStack, YStackProps } from '@my/ui'
+import { H2, H3, H4, Image, Paragraph, ScrollView, Spinner, Stack, XStack, YStack, YStackProps } from '@my/ui'
 import React, { useEffect, useState } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { lookup } from 'mrmime';
 import { X, XCircle } from '@tamagui/lucide-icons';
 
-export const FileWidget = ({extraIcons=[], currentFile, currentFileName, ...props }: { extraIcons: React.ReactElement[],title: string, currentFile: string, currentFileName: string} & YStackProps) => {
+export const FileWidget = ({icons=[], currentFile, currentFileName, ...props }: { extraIcons: React.ReactElement[],title: string, currentFile: string, currentFileName: string} & YStackProps) => {
     const url = ('/adminapi/v1/files/' + currentFile).replace(/\/+/g, '/')
     const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(getPendingResult('pending'))
     const { resolvedTheme } = useThemeSetting()
     const mime = lookup(currentFile)
     const type = mime ? mime.split('/')[0] : 'text'
     console.log('Opening file: ', currentFile, 'mime: ', mime, 'type: ', type, 'url: ', url)
+
     useEffect(() => {
         if (type == 'text' || type == 'application') {
             API.get(url, setCurrentFileContent, true)
         }
 
     }, [currentFile])
+
     const getComponent = () => {
         if (type == 'text' || type == 'application') {
             if (currentFileContent.isLoaded) {
@@ -25,51 +27,56 @@ export const FileWidget = ({extraIcons=[], currentFile, currentFileName, ...prop
                 if (mime == 'application/json') {
                     try {
                         const data = JSON.parse(currentFileContent.data)
-                        return <XStack f={1} width={'100%'}>
+                        return {component: <XStack f={1} width={'100%'}>
                             <DataCard
-                            extraIcons={extraIcons}
-                            hideDeleteIcon={true}
-                            itemCardProps={{topBarProps: {top: -10, backgroundColor: 'transparent'}}}
-                            minimal={true}
-                            f={1}
-                            backgroundColor={'transprent'}
-                            onDelete={() => { }}
-                            onSave={(content) => { }}
-                            json={data}
-                            name={currentFile}
-                        />
-                            </XStack>
+                                extraIcons={icons}
+                                hideDeleteIcon={true}
+                                itemCardProps={{topBarProps: {top: -10, backgroundColor: 'transparent'}}}
+                                minimal={true}
+                                f={1}
+                                backgroundColor={'transprent'}
+                                onDelete={() => { }}
+                                onSave={(content) => { }}
+                                json={data}
+                                name={currentFile}
+                            />
+                        </XStack>, widget: 'jsonui', supportIcons: true}
                     } catch (e) {
 
                     }
 
 
                 }
-                return <XStack mt={30} f={1} width={"100%"}>
+                return {component: <XStack mt={30} f={1} width={"100%"}>
                         <Monaco path={currentFile} darkMode={resolvedTheme == 'dark'} sourceCode={currentFileContent.data} />
-                    </XStack>
+                    </XStack>, widget: 'text'}
             } else if (currentFileContent.isError) {
-                return <div>ERROR</div>
+                return {component: <div>ERROR</div>, widget: 'error'}
             } else {
-                return <Center>
+                return {component: <Center>
                     <Spinner size={'large'} scale={3} top={-50} />
                     Loading
-                </Center>
+                </Center>, widget: 'loading'}
             }
         } else {
             if (type == 'image') {
-                return <img src={url} />
+                return {component: <img src={url} />, widget: 'image'}
             } else {
-                return <Center>Unknown file type</Center>
+                return {component: <Center>Unknown file type</Center>, widget: 'unknown'}
             }
         }
     }
 
+    const resolved = getComponent()
+
     return <>
         <XStack height={20} />
         <YStack flex={1} alignItems='center' justifyContent='center' {...props}>
-            {getComponent()}
+            {resolved.component}
         </YStack>
         <H4 position='absolute' left={15} top={10}>{currentFileName}</H4>
+        {!resolved.supportIcons ?<Stack position="absolute" right={15} top={17}>
+            {icons}
+        </Stack>:null}
     </>
 }
