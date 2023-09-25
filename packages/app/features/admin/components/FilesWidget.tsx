@@ -57,7 +57,9 @@ export const FileWidget = ({icons=[], currentFile, currentFileName, ...props }: 
                 } else if(mime == 'application/javascript' || mime == 'video/mp2t') {
                     return {
                         component: <XStack mt={30} f={1} width={"100%"}>
-                            <FlowsWidget themeMode={resolvedTheme}/>
+                            <FlowsWidget setSourceCode={(sourceCode) => {
+                                console.log('set new sourcecode from flows: ', sourceCode)
+                            }} sourceCode={currentFileContent.data} path={currentFile} themeMode={resolvedTheme}/>
                             </XStack>,
                         widget: 'flows'
                     }
