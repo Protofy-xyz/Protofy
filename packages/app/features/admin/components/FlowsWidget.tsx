@@ -33,7 +33,7 @@ const FlowsWidget = (props: any) => {
     }
 
     return <TopicsProvider>
-        <Stack  backgroundColor={'$borderColor'}/>
+        
         <Flow
             path={props.path}
             // onViewPortChange={(viewPort) => {

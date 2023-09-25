@@ -1,11 +1,11 @@
 import { YStack, XStack, Stack, Input, Theme, Paragraph, Text } from 'tamagui'
 import { IconContainer, Center, getPendingResult, PendingAtomResult, Monaco, API, withSession, createApiAtom, usePendingEffect, PanelMenuItem, redirect, useHydratedAtom, DataCard, ItemCard, BigTitle, Search } from 'protolib'
 import { PanelLayout } from '../../layout/PanelLayout'
-import { Cross, Database, Key, Plus, PlusCircle, X, XCircle, XSquare } from '@tamagui/lucide-icons'
+import { ChevronDown, Cross, Database, Key, Plus, PlusCircle, X, XCircle, XSquare } from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
-import { Dialog, H1, Link, ScrollView, Spinner } from '@my/ui'
+import { Accordion, Dialog, H1, Link, ScrollView, SizableText, Spinner, Square } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { useTint } from '@tamagui/logo'
 import { ChonkyActions, FullFileBrowser } from 'chonky';
@@ -20,33 +20,52 @@ ChonkyActions.ToggleHiddenFiles.option.defaultValue = false;
 const [filesArr, filesAtom] = createApiAtom([])
 const currentDbAtom = atom(0)
 
+
 const Menu = () => {
-    return (<YStack pt="$10">
+    return (<YStack mx={"$4"} pt="$10">
+        <Accordion br={"$6"} overflow="hidden" type="multiple">
+            <Accordion.Item value="a1">
+                <Accordion.Trigger bw={0} flexDirection="row" justifyContent="space-between">
+                    {({ open }) => (
+                        <XStack f={1}>
+                            <Stack mr={"$3"}>
+                                <Database color="$color11" strokeWidth={1.5} />
+                            </Stack>
 
-        <Link
-            href={"/admin/files/"}
-            onPressApp={() => { }}
-        >
-            <PanelMenuItem
-                selected={true}
-                icon={<Database color="$color11" strokeWidth={1.5} />}
-                text={'Files'}
-            />
-        </Link>
-
+                            <SizableText f={1} size={"$5"} fontWeight={800}>Files</SizableText>
+                            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+                                <ChevronDown size="$1" />
+                            </Square>
+                        </XStack>
+                    )}
+                </Accordion.Trigger>
+                <Accordion.Content>
+                    <Link
+                        href={"/admin/files/"}
+                        onPressApp={() => { }}
+                    >
+                        <PanelMenuItem
+                            selected={true}
+                            icon={<Database color="$color11" strokeWidth={1.5} />}
+                            text={'Files'}
+                        />
+                    </Link>
+                </Accordion.Content>
+            </Accordion.Item>
+        </Accordion>
     </YStack>)
 }
 
 
-export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath, CurrentFile}) {
-    const {resolvedTheme} = useThemeSetting()
-    const [dialogOpen, setDialogOpen] = useState(CurrentFile?true:false)
+export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath, CurrentFile }) {
+    const { resolvedTheme } = useThemeSetting()
+    const [dialogOpen, setDialogOpen] = useState(CurrentFile ? true : false)
     const router = useRouter()
     const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
     const [currentPath, setCurrentPath] = useState(CurrentPath)
     const [currentFile, setCurrentFile] = useState(CurrentFile ? CurrentFile : '')
 
-    const currentFileName = currentFile.split('/')[currentFile.split('/').length-1]
+    const currentFileName = currentFile.split('/')[currentFile.split('/').length - 1]
     useUpdateEffect(() => {
         console.log('current Path: ', currentPath)
         //API.get('/adminapi/v1/files/'+currentPath, setFiles)
@@ -56,8 +75,8 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
     useUpdateEffect(() => {
         console.log('router q: ', router.query.file)
         const r = router.asPath.split('?')[0].substring('/admin/files'.length)
-        if(router.query.file) {
-            const file = (r+'/'+router.query.file).replace(/\/+/g, '/')
+        if (router.query.file) {
+            const file = (r + '/' + router.query.file).replace(/\/+/g, '/')
             setCurrentFile(file)
         } else {
             setCurrentFile('')
@@ -70,7 +89,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
 
 
     useEffect(() => {
-        if(currentFile) {
+        if (currentFile) {
             setDialogOpen(true)
         } else {
             const newQuery = { ...router.query };
@@ -85,7 +104,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
     const onOpen = (file) => {
         console.log('on open client: ', file)
         if (file.isDir) return setCurrentPath(file.path ?? file.id)
-        router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file='+file.name)
+        router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file=' + file.name)
     }
 
     return (<PanelLayout menuContent={<Menu />}>
@@ -107,18 +126,18 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
             <Dialog open={dialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
-                    <Dialog.Content p={0} backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} height={'90%'} width={"90%"} >
-                        <FileWidget 
+                    <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
+                        <FileWidget
                             icons={[
-                                <IconContainer onPress={() => {setCurrentFile(''); setDialogOpen(false)}}>
+                                <IconContainer onPress={() => { setCurrentFile(''); setDialogOpen(false) }}>
                                     <X color="var(--color)" size={"$1"} />
                                 </IconContainer>
                             ]}
-                            currentFileName={currentFileName} 
-                            backgroundColor={resolvedTheme=='dark'?"#1e1e1e":'white'} 
-                            currentFile={currentFile} 
+                            currentFileName={currentFileName}
+                            backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'}
+                            currentFile={currentFile}
                         />
-                 
+
                         <Dialog.Close />
                     </Dialog.Content>
                 </Dialog.Portal>
