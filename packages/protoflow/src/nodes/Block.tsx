@@ -50,7 +50,7 @@ const Block = (node) => {
     extraStyle.minHeight = height + 'px'
     extraStyle.border = 0
     extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px':'220px'
-    const borderColor =  useTheme('borderColor') // typeConf[type].color
+    const containerColor =  useTheme('containerColor')
     const typeConf = {
         SourceFile: {
             icon: Box,
@@ -60,7 +60,7 @@ const Block = (node) => {
         },
         Block: {
             icon: ListOrdered,
-            color: 'grey', //borderColor
+            color: 'grey',
             title: 'Block'
         },
         CaseClause: {
@@ -107,7 +107,7 @@ const Block = (node) => {
                     borderRadius: "0px "+nodeFontSize/4+"px "+nodeFontSize/4+ "px "+ nodeFontSize/4+'px',position:'absolute', 
                     width: metaData.childWidth+'px', 
                     height: height-headerSize-(nodeFontSize*2)+'px', 
-                    backgroundColor: borderColor,
+                    backgroundColor: containerColor,
                     borderLeft: nodeFontSize/2+'px solid grey'
                 }}></div>
             </>}
