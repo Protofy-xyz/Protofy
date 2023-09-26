@@ -2,8 +2,7 @@ import React from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { nodeColors } from '.';
-import { MdOutlineAvTimer } from 'react-icons/md';
-
+import { Timer } from 'lucide-react';
 
 const AwaitExpression =(node) => {
     const { id, type } = node
@@ -12,7 +11,7 @@ const AwaitExpression =(node) => {
     ]
 
     return (
-        <Node icon={MdOutlineAvTimer} node={node} isPreview={!id} title={"await"} id={id} params={nodeParams} color={nodeColors[type]}/>
+        <Node icon={Timer} node={node} isPreview={!id} title={"await"} id={id} params={nodeParams} color={nodeColors[type]}/>
     );
 }
 AwaitExpression.keyWords = ['await']

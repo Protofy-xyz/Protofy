@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useEffect, useRef, useState, useContext } from 'react';
 import Node, { Field, FlowPort, NodeParams } from './Node';
-import { MdOutlineComment } from "react-icons/md";
 import { filterCallback, restoreCallback, filterCallbackProp, restoreCallbackProp } from "./lib/Mask";
 import FallbackPort from './FallbackPort';
 import AddPropButton from './AddPropButton';

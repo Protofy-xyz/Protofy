@@ -3,7 +3,7 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { MdLan } from 'react-icons/md';
+import { Network } from 'lucide-react';
 
 const ElementAccessExpression = (node) => {
     const { id, type } = node
@@ -14,7 +14,7 @@ const ElementAccessExpression = (node) => {
         { label: 'Key', field: 'key', type: 'input', fieldType: nodeData.fieldType }]
     
     return (
-        <Node icon={MdLan} node={node} isPreview={!id} title={(nodeData?.accessName ?? 'x')+'['+(nodeData?.key ?? 'y')+']'} id={id} params={nodeParams} color={nodeColors[type]} />
+        <Node icon={Network} node={node} isPreview={!id} title={(nodeData?.accessName ?? 'x')+'['+(nodeData?.key ?? 'y')+']'} id={id} params={nodeParams} color={nodeColors[type]} />
     );
 }
 ElementAccessExpression.keyWords = ["[]"]

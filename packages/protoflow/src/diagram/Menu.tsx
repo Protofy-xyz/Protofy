@@ -8,9 +8,9 @@ import { POKA_HANDLE_TYPES, PORT_TYPES, createNode } from '../lib/Node';
 import { withTopics } from "react-topics";
 import { POKAYOKE_ENABLED } from '../toggles';
 import Text from './NodeText';
-import { MdSearch } from "react-icons/md";
 import useTheme from './Theme';
 import { splitOpenerEdge } from '../lib/Edge';
+import { Search } from 'lucide-react'
 
 const pokayokeEnabled = POKAYOKE_ENABLED ?? false
 
@@ -237,7 +237,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
                             onChange={t => setSearchValue(t.target.value)}
                             placeholder="search nodel"
                         />
-                        <MdSearch color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
+                        <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
                     </div>
                     <div ref={scrollRef} className={styles.list} style={{ height: `calc(${menuHeight}px - ${inputHeight}px - 20px)`, overflowY: 'scroll', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
                         {

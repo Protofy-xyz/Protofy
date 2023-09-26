@@ -4,7 +4,7 @@ import { dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import AddPropButton from '../AddPropButton';
 import Node, { Field, NodeParams } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { TbFileImport } from 'react-icons/tb';
+import { FileInput } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 
 const ImportDeclaration = (node) => {
@@ -23,7 +23,7 @@ const ImportDeclaration = (node) => {
     ].concat(named)
 
     return (
-        <Node icon={TbFileImport} node={node} isPreview={!id} title='import' id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
+        <Node icon={FileInput} node={node} isPreview={!id} title='import' id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
             <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '10px' }} />
             <AddPropButton id={id} nodeData={nodeData} type={"Import"} style={{marginBottom: '20px'}}/>
         </Node>

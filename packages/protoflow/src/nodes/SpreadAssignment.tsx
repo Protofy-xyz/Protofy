@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { nodeColors } from '.';
-import { BiTargetLock } from 'react-icons/bi';
+import { Crosshair } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 
 const SpreadAssignment = (node) => {
@@ -11,7 +11,7 @@ const SpreadAssignment = (node) => {
         { label: 'Expression', field: 'expression', type: 'input' },
     ]
     return (
-        <Node icon={BiTargetLock} node={node} isPreview={!id} title={"..."} color={nodeColors['SpreadAssignment']} id={id} params={nodeParams} dataOutput = {DataOutput.spread}/>
+        <Node icon={Crosshair} node={node} isPreview={!id} title={"..."} color={nodeColors['SpreadAssignment']} id={id} params={nodeParams} dataOutput = {DataOutput.spread}/>
     );;
 }
 SpreadAssignment.keyWords = ["spread", '...']

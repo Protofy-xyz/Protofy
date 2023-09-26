@@ -4,7 +4,7 @@ import Node, { Field, HandleOutput, NodeParams } from '../Node';
 import { nodeColors } from '.';
 import AddPropButton from '../AddPropButton';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { IoDuplicateOutline } from 'react-icons/io5';
+import { CopyPlus } from 'lucide-react';
 
 const NewExpression =(node) => {
     const { id, type } = node
@@ -19,7 +19,7 @@ const NewExpression =(node) => {
     const nodeOutput: Field = { label: 'Output', field: 'value', type: 'output' }
 
     return (
-        <Node icon={IoDuplicateOutline} output={{ label: 'Output', field: 'value', type: 'output' }} node={node} isPreview={!id} title={"new"} id={id}  color={nodeColors[type]}>
+        <Node icon={CopyPlus} output={{ label: 'Output', field: 'value', type: 'output' }} node={node} isPreview={!id} title={"new"} id={id}  color={nodeColors[type]}>
             <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '10px' }} />
             <AddPropButton id={id} nodeData={nodeData} type={"param"}/>
             <HandleOutput id={id} param={nodeOutput} />

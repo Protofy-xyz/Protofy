@@ -4,7 +4,7 @@ import Node, { Field, NodeParams } from '../Node';
 import { nodeColors } from '.';
 import { isPortConnected } from '../lib/Edge';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { MdOutlineWidgets } from 'react-icons/md';
+import { Blocks } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 import Button from '../Button';
 
@@ -42,7 +42,7 @@ export const ClassFactory = (classType) => {
         }
 
         return (
-            <Node icon={MdOutlineWidgets} node={node} isPreview={!id} title={`class ${classType}`} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
+            <Node icon={Blocks} node={node} isPreview={!id} title={`class ${classType}`} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
                 {classType == 'declaration' ? <NodeParams id={id} params={declarationParams} /> : null}
                 <NodeParams id={id} params={nodeParams} />
                 <div style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>

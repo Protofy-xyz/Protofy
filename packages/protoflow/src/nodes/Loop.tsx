@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { nodeColors } from '.';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
-import { MdLowPriority } from 'react-icons/md';
+import { Repeat } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 import useTheme from '../diagram/Theme';
 
@@ -19,7 +19,7 @@ export const LoopFactory = (mode, submode='') =>{
             nodeParams.push({ label: 'Incrementor', field: 'incrementor', type: 'input' })
         }
         return (
-            <Node icon={MdLowPriority} node={node} isPreview={!id} title={submode ? submode : mode} id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
+            <Node icon={Repeat} node={node} isPreview={!id} title={submode ? submode : mode} id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
                 <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '0px', marginBottom: fontNodeSize*3+'px' }} />
                 <FlowPort id={id} type='input' label='Loop' style={{ top: mode=='for' ? (fontNodeSize*11):(fontNodeSize*6.5)+'px' }} handleId={'loop'} />
             </Node>

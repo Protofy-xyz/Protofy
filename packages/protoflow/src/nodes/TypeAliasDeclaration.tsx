@@ -4,7 +4,7 @@ import Node, { Field, NodeParams } from '../Node';
 import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
-import { MdOutlineCategory } from 'react-icons/md';
+import { Shapes } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 
 const TypeAliasDeclaration = (node) => {
@@ -18,7 +18,7 @@ const TypeAliasDeclaration = (node) => {
         return { label: '[' + i + ']', field: param, type: 'input', deleteable: true } as Field
     }))
     return (
-        <Node icon={MdOutlineCategory} node={node} isPreview={!id} title={(nodeData.export ? 'export ' : '') + "type " + (nodeData.name ?? '')} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
+        <Node icon={Shapes} node={node} isPreview={!id} title={(nodeData.export ? 'export ' : '') + "type " + (nodeData.name ?? '')} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
             <NodeParams id={id} params={[{ label: 'Export', field: 'export', type: 'boolean', static: true }]} />
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton id={id} nodeData={nodeData} type='Union'/>

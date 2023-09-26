@@ -1,11 +1,11 @@
 import React from "react";
 import Node, { FlowPort, NodeParams } from '../../Node';
 import FallbackPort from "../../FallbackPort";
-import { MdMediation } from "react-icons/md";
+import { Merge } from "lucide-react";
 
 const Reduce = (node: any = {}, nodeData = {}) => {
     return (
-        <Node icon={MdMediation} node={node} isPreview={!node?.id} title='reduce' id={node.id} color="#9575CD" skipCustom={true}>
+        <Node icon={Merge} node={node} isPreview={!node?.id} title='reduce' id={node.id} color="#9575CD" skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Array', field: 'to', type: 'input', pre: (str) => str.replace(".reduce", ""), post: (str) => str + ".reduce" }]} />
             <NodeParams id={node.id} params={[{ label: 'Initial Value', field: 'param2', type: 'input' }]} />
             <div style={{ marginBottom: '50px' }}></div>

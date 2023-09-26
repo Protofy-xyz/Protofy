@@ -1,15 +1,15 @@
 import React from 'react';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
-import { IoCodeSharp } from 'react-icons/io5';
 import FallbackPort from '../FallbackPort';
 import AddPropButton from '../AddPropButton';
+import { Code } from 'lucide-react'
 
 const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const propsArray: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('prop-')).map((prop: any, i) => {
         return { label: prop.substr(5), field: prop, fieldType: 'prop', deleteable: true } as Field
     })
     return (
-        <Node icon={IoCodeSharp} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color="#C5E1A5" skipCustom={true}>
+        <Node icon={Code} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color="#C5E1A5" skipCustom={true}>
             {
                 mask.data.body.map(element => {
                     switch (element.type) {

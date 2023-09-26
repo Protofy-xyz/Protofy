@@ -151,8 +151,8 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                 {label ? <div style={{ display: 'flex', width: `${labelWidth}px`, marginLeft: ml, zIndex: -1, justifyContent: 'flex-end' }}>
                     <Text ref={textRef} style={{ marginRight: '5px', textAlign: position == Position.Right ? 'right' : 'left'}}>{label}</Text>
                 </div> : null}
-                {!connected ? <div style={{width: portSize+"px", height: portSize+"px",display: 'flex', justifyContent: 'center'}}>
-                        <Text style={{ position: 'relative', left: '-5px', display: "inline-block", lineHeight: '100%',textAlign: 'center', color: borderColor, fontSize: nodeFontSize-4, pointerEvents: 'none'}}>+</Text> 
+                {!connected ? <div style={{width: portSize+"px", height: portSize+"px",display: 'flex', justifyContent: 'flex-end'}}>
+                        <Text style={{ display: "inline-block", lineHeight: '100%',textAlign: 'left', color: plusColor, fontWeight: 'bold', fontSize: nodeFontSize-3, pointerEvents: 'none'}}>+</Text> 
                     </div>: null}
             </Handle>
         </>

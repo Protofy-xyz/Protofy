@@ -2,7 +2,7 @@ import React, { memo, useContext } from 'react';
 import { nodeColors } from '.';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { MdAltRoute } from 'react-icons/md';
+import { Trash } from 'lucide-react';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { DataOutput } from '../lib/types';
 
@@ -14,7 +14,7 @@ const DeleteExpression = (node) => {
         { label: 'Expression', field: 'expression', type: 'input' },
     ]
     return (
-        <Node icon={MdAltRoute}  node={node} isPreview={!id} title={"delete "+ nodeData?.expression ?? 'expression'} params={nodeParams} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
+        <Node icon={Trash}  node={node} isPreview={!id} title={"delete "+ nodeData?.expression ?? 'expression'} params={nodeParams} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
         </Node>
     );
 }

@@ -5,8 +5,8 @@ import { nodeColors } from '.';
 import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
-import { VscCombine } from 'react-icons/vsc';
 import { DataOutput } from '../lib/types';
+import { Combine } from 'lucide-react';
 
 const ObjectBindingPattern = (node) => {
     const { id, type } = node
@@ -17,7 +17,7 @@ const ObjectBindingPattern = (node) => {
     })
 
     return (
-        <Node icon={VscCombine} node={node} isPreview={!id} title={"object binding"} id={id} color={nodeColors[type]} dataOutput = {DataOutput.binding}>
+        <Node icon={Combine} node={node} isPreview={!id} title={"object binding"} id={id} color={nodeColors[type]} dataOutput = {DataOutput.binding}>
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton id={id} nodeData={nodeData} />
         </Node>

@@ -1,8 +1,7 @@
 import React, { useCallback, useContext } from "react";
 import { FlowStoreContext } from "./store/FlowsStore";
 import { useReactFlow } from 'reactflow';
-import { MdRefresh, MdCode, MdSave, MdOutlineErrorOutline, MdOutlineCropFree, MdChat } from 'react-icons/md/index.js'
-import { CgAlignLeft } from 'react-icons/cg'
+import { Save, Code, Maximize, AlignStartVertical, RefreshCcw, AlertTriangle } from 'lucide-react';
 import layouts from "./diagram/layouts";
 //import './styles.css'
 
@@ -60,7 +59,7 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
         >
           {saveStatus == 'loading'
             ? <div id="spinner" className="lds-ring"><div></div><div></div><div></div><div></div></div>
-            : (saveStatus == 'error' ? <MdOutlineErrorOutline color={'white'} size={size} /> : <MdSave color={'white'} size={size} />)}
+            : (saveStatus == 'error' ? <AlertTriangle color={'white'} size={size} /> : <Save color={'white'} size={size} />)}
         </div>
           : null}
         {onShowCode ? <div
@@ -71,7 +70,7 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
             borderRadius: '14px', width: '40px', padding: '5px', marginLeft: '6px', height: '35px'
           }}
         >
-          <MdCode
+          <Code
             color={'white'}
             size={size} />
         </div>
@@ -84,7 +83,7 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
             padding: '5px', marginLeft: '6px', height: '35px'
           }}
         >
-          <MdRefresh color={'white'} size={size} />
+          <RefreshCcw color={'white'} size={size} />
         </div> : null}
         <div
           onClick={() => handleTransform()}
@@ -94,7 +93,7 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
             padding: '5px', marginLeft: '6px', height: '35px'
           }}
         >
-          <MdOutlineCropFree color={'white'} size={size} />
+          <Maximize color={'white'} size={size} />
         </div>
         <div
           onClick={() => autoLayout()}
@@ -104,7 +103,7 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
             padding: '5px', marginLeft: '6px', height: '35px'
           }}
         >
-          <CgAlignLeft color={'white'} size={size} />
+          <AlignStartVertical color={'white'} size={size} />
         </div>
       </div>
     </>

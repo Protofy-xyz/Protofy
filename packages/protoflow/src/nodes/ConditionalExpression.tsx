@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { nodeColors } from '.';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { MdAltRoute } from 'react-icons/md';
+import { Split } from 'lucide-react';
 
 const ConditionalExpression = (node) => {
     const { id, type } = node
@@ -12,7 +12,7 @@ const ConditionalExpression = (node) => {
         { label: 'When false', field: 'whenFalse', type: 'input' },
     ]
     return (
-        <Node icon={MdAltRoute}  node={node} isPreview={!id} title='ternary' params={nodeParams} id={id} color={nodeColors[type]} >
+        <Node icon={Split}  node={node} isPreview={!id} title='ternary' params={nodeParams} id={id} color={nodeColors[type]} >
         </Node>
     );
 }

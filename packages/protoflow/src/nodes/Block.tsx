@@ -4,11 +4,10 @@ import Node, { FlowPort, headerSize } from '../Node';
 import { useEdges } from 'reactflow';
 import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { TbBox } from 'react-icons/tb';
-import { MdOutlineFormatListNumbered, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { NODE_TREE } from '../toggles';
 import { DataOutput } from '../lib/types';
 import useTheme from '../diagram/Theme';
+import { Box, ListOrdered, Square } from 'lucide-react';
 
 const blockOffset = 200
 const _marginTop = 222
@@ -51,26 +50,26 @@ const Block = (node) => {
     extraStyle.minHeight = height + 'px'
     extraStyle.border = 0
     extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px':'220px'
-    const borderColor =  useTheme('borderColor') // typeConf[type].color
+    const containerColor =  useTheme('containerColor')
     const typeConf = {
         SourceFile: {
-            icon: TbBox,
+            icon: Box,
             color: '#F7B500',
             output: false,
             title: currentPath.split(/[/\\]/).pop()
         },
         Block: {
-            icon: MdOutlineFormatListNumbered,
-            color: '#cccccc',
+            icon: ListOrdered,
+            color: 'grey',
             title: 'Block'
         },
         CaseClause: {
-            icon: MdCheckBoxOutlineBlank,
+            icon: Square,
             color: nodeColors[type],
             title: 'Case Clause'
         },
         DefaultClause: {
-            icon: MdCheckBoxOutlineBlank,
+            icon: Square,
             color: nodeColors['CaseClause'],
             title: 'Case Clause'
         }
@@ -108,7 +107,7 @@ const Block = (node) => {
                     borderRadius: "0px "+nodeFontSize/4+"px "+nodeFontSize/4+ "px "+ nodeFontSize/4+'px',position:'absolute', 
                     width: metaData.childWidth+'px', 
                     height: height-headerSize-(nodeFontSize*2)+'px', 
-                    backgroundColor: borderColor,
+                    backgroundColor: containerColor,
                     borderLeft: nodeFontSize/2+'px solid grey'
                 }}></div>
             </>}

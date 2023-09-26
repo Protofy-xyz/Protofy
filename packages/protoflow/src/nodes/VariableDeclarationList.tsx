@@ -3,7 +3,7 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType, getValueTrivia, getT
 import Node, { Field, isDataPortConnected } from '../Node';
 import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { TbEqual } from 'react-icons/tb';
+import { Equal } from 'lucide-react';
 import { useEdges } from 'reactflow';
 
 export const VariableDeclarationListNodeFactory = (declarationType) => {
@@ -31,7 +31,7 @@ export const VariableDeclarationListNodeFactory = (declarationType) => {
         )
 
         return (
-            <Node icon={TbEqual} node={node} isPreview={!id} title={(nodeData?.export ? 'export ' : '') + (nodeType) + ' ' + declarationArr.map(d => nodeData[d]).join(',')} id={id} params={nodeParams} color={nodeColors[nodeType + 'Node'] ?? nodeColors[type]} />
+            <Node icon={Equal} node={node} isPreview={!id} title={(nodeData?.export ? 'export ' : '') + (nodeType) + ' ' + declarationArr.map(d => nodeData[d]).join(',')} id={id} params={nodeParams} color={nodeColors[nodeType + 'Node'] ?? nodeColors[type]} />
         );
     }
 

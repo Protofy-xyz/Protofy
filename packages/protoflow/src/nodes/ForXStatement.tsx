@@ -3,7 +3,7 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
 import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { MdLan } from 'react-icons/md';
+import { Network } from 'lucide-react';
 
 export const ForXStatementFactory = (mode: 'in' | 'of') => {
     const ForXStatement = (node) => {
@@ -15,7 +15,7 @@ export const ForXStatementFactory = (mode: 'in' | 'of') => {
             { label: 'Iterator', field: 'iterator', type: 'input' }]
 
         return (
-            <Node icon={MdLan} node={node} isPreview={!id} title={"for(" + (nodeData?.element ?? 'element') + ` ${mode} ` + (nodeData?.iterator ?? 'item') + ")"} id={id} color={nodeColors[type]}>
+            <Node icon={Network} node={node} isPreview={!id} title={"for(" + (nodeData?.element ?? 'element') + ` ${mode} ` + (nodeData?.iterator ?? 'item') + ")"} id={id} color={nodeColors[type]}>
                 <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '0px', marginBottom: '80px' }} />
                 <FlowPort id={id} type='input' label='Loop' style={{ top: '180px' }} handleId={'loop'} />
             </Node>

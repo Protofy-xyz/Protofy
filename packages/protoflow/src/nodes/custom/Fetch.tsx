@@ -1,7 +1,7 @@
 import React from "react";
 import AddPropButton from "../../AddPropButton";
 import Node, { Field, NodeParams } from '../../Node';
-import { TbApi } from "react-icons/tb";
+import { MessagesSquare } from "lucide-react";
 
 const Fetch = (node: any = {}, nodeData = {}) => {
     const paramsArray = Object.keys(nodeData).filter(key => key.startsWith('param'))
@@ -10,7 +10,7 @@ const Fetch = (node: any = {}, nodeData = {}) => {
     }
     ) as Field[]
     return (
-        <Node icon={TbApi} node={node} isPreview={!node.id} title='fetch' id={node.id} color="#7986CB" skipCustom={true}>
+        <Node icon={MessagesSquare} node={node} isPreview={!node.id} title='fetch' id={node.id} color="#7986CB" skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
             <AddPropButton id={node.id} nodeData={nodeData} />
         </Node>
