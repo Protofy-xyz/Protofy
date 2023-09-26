@@ -16,20 +16,20 @@ function ResizeHandle({ direction = "LEFT", onTogglePanel, disabled, onClick }: 
 				onClick={onClick ? onClick : null}
 				onDoubleClick={!disabled ? onTogglePanel : null}
 				style={{
-					height: '50px', width: '30px',
-					borderTopLeftRadius: '10px',
-					borderBottomLeftRadius: '10px',
+					height: '40px', width: '30px',
+					borderTopLeftRadius: '12px',
+					borderBottomLeftRadius: '12px',
 					marginLeft: "-30px",
-					background: "white", position: "absolute",
-					border: '1px solid rgba(0,0,0,0.3)',
+					background: "grey", position: "absolute",
+					border: '1px solid grey',
 					display: "flex",
 					alignItems: 'center',
 					pointerEvents: 'all',
 					justifyContent: 'center'
 				}}>
 				{direction == "LEFT"
-					? <ChevronLeft size={30} color="rgba(0,0,0,0.3)" />
-					: <ChevronRight size={30} color="rgba(0,0,0,0.3)" />
+					? <ChevronLeft size={30} color="#252526" />
+					: <ChevronRight size={30} color="#252526" />
 				}
 			</div>
 		</PanelResizeHandle>
