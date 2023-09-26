@@ -29,7 +29,9 @@ export const FrameSelector = ({ selectedFrame, setFrameSelected, frames }: PaneP
             backgroundColor: inputBackgroundColor,
             borderColor: "transparent",
             textColor: textColor,
-            width: '220px'
+            width: '200px',
+            fontSize: '14px',
+            justifyContent: 'flex-end'
         }),
         singleValue: (styles) => {
             return ({
@@ -40,7 +42,8 @@ export const FrameSelector = ({ selectedFrame, setFrameSelected, frames }: PaneP
             return {
                 ...styles, color: textColor,
                 backgroundColor: inputBackgroundColor,
-                border: '1px solid rgba(83, 89, 93, 0.5)'
+                border: '1px solid rgba(83, 89, 93, 0.5)',
+                fontSize: '14px'
             }
         },
         option: (styles, { isFocused, isSelected }) => {
