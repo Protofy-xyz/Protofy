@@ -29,7 +29,11 @@ const Tabs = ({ tabs }: any) => {
                 return (
                     <Accordion br={"$6"} overflow="hidden" type="multiple" mb={'$4'} key={index}>
                         <Accordion.Item value={"a" + index}>
-                            <Accordion.Trigger bw={0} flexDirection="row" justifyContent="space-between">
+                            <Accordion.Trigger 
+                            backgroundColor={"$backgroundTransparent"} 
+                            focusStyle={{backgroundColor: "$backgroundTransparent"}}
+                            hoverStyle={{backgroundColor: "$backgroundTransparent"}}
+                            bw={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
                                     <XStack f={1}>
                                         <Stack mr={"$3"}>
@@ -42,7 +46,7 @@ const Tabs = ({ tabs }: any) => {
                                     </XStack>
                                 )}
                             </Accordion.Trigger>
-                            <Accordion.Content pt={'$4'}>
+                            <Accordion.Content backgroundColor={"$backgroundTransparent"} pt={'$4'}>
                                 <Subtabs subtabs={tabs[tab]} />
                             </Accordion.Content>
                         </Accordion.Item>
