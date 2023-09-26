@@ -28,6 +28,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
     const nameSegments = context.query.name as string[];
     
     let props = {}
+    const dbs = await API.get('/adminapi/v1/databases') ?? { data: [] }
 
     if(nameSegments && nameSegments.length) {
       if(nameSegments[0] == 'files') {
@@ -44,7 +45,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
         }
         console.log('Requesting to: *****************', '/adminapi/v1/files/'+path)
       } else if(nameSegments[0] == 'dbs') {
-        const dbs = await API.get('/adminapi/v1/databases') ?? { data: [] }
+        
         if (!context.query.name && dbs.data.length) {
             return redirect('/admin/dbs/' + dbs.data[0].name)
         }
@@ -66,8 +67,32 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
       }
     }
 
+    const workspace = JSON.parse((await fs.readFile('../../data/workspaces/basic.json')).toString())
+    //fill workspace
+    const parsedWorkspace:any = {}
+    Object.keys(workspace).forEach((key) => {
+      parsedWorkspace[key] = []
+      workspace[key].forEach((p:any) => {
+        if(p.name == '*' && p.type == 'database') {
+          dbs.data.forEach((db:any) => {
+            parsedWorkspace[key].push({
+              name: db.name, 
+              type: "database",
+              href: '/admin/dbs/' + db.name
+            })
+          })
+        } else {
+          parsedWorkspace[key].push({
+            ...p,
+            href: '/admin/'+p.type+'/'+p.path
+          })
+        }
+      })
+    })
+
+
     return withSession(context, ['admin'], {
       ...props,
-      workspace: JSON.parse((await fs.readFile('../../data/workspaces/basic.json')).toString())
+      workspace: parsedWorkspace
     })
 })

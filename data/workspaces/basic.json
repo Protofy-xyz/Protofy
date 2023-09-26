@@ -1,12 +1,10 @@
 {
     "Files": [
-        { "name": "Pages", "href": "/admin/files/apps/next/pages" },
-        { "name": "data", "href": "/admin/files/data" },
-        { "name": "common", "href": "/admin/files/packages/common" }
+        { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
+        { "name": "data", "type": "files", "path": "/data" },
+        { "name": "common", "type": "files", "path": "/packages/common" }
     ],
     "Databases": [
-        { "name": "apps", "href": "/admin/files/apps" },
-        { "name": "apps", "href": "/admin/files/apps" },
-        { "name": "apps", "href": "/admin/files/apps" }
+        { "name": "*", "type": "database", "path": "/" }
     ]
 }
