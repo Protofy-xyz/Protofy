@@ -7,9 +7,59 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from 'app/features/admin/components/FilesWidget';
 import { IconContainer } from 'protolib';
 import { X } from '@tamagui/lucide-icons';
+import {useUpdateEffect} from 'usehooks-ts'
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
-const WebFileBrowser = ({currentPath, currentFile, currentFileName, dialogOpen, setIsModified, openAlert, setOpenAlert, setDialogOpen, setCurrentFile, isModified,files=[], onOpen=(path:string) => {}}:any) => {
+
+const WebFileBrowser = ({file, path, setIsModified, openAlert, setOpenAlert, isModified,files=[]}:any) => {
+    const [dialogOpen, setDialogOpen] = useState(file ? true : false)
+    const [currentPath, setCurrentPath] = useState(path)
+    const [currentFile, setCurrentFile] = useState(file ? file : '')
+    const currentFileName = currentFile.split('/')[currentFile.split('/').length - 1]
+    const router = useRouter()
+
+    useUpdateEffect(() => {
+        console.log('current Path: ', currentPath)
+        //API.get('/adminapi/v1/files/'+currentPath, setFiles)
+        router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath)
+    }, [currentPath])
+
+    useEffect(() => {
+        if (currentFile) {
+            setDialogOpen(true)
+        } else {
+            const newQuery = { ...router.query };
+            delete newQuery.file;
+            router.replace({
+                pathname: router.pathname,
+                query: newQuery
+            }, undefined, { shallow: true });
+        }
+    }, [currentFile])
+
+    
+    useUpdateEffect(() => {
+        const r = router.asPath.split('?')[0].substring('/admin/files'.length)
+        if (router.query.file) {
+            const file = (r + '/' + router.query.file).replace(/\/+/g, '/')
+            setCurrentFile(file)
+        } else {
+            setCurrentFile('')
+            setDialogOpen(false)
+            console.log('useEffect fired!', r);
+            setCurrentPath(r)
+        }
+
+    }, [router.asPath]);
+
+    const onOpen = (file:any) => {
+        console.log('on open client: ', file)
+        if (file.isDir) return setCurrentPath(file.path ?? file.id)
+        router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file=' + file.name)
+    }
+    
     files = files.data.map((f:any) => {
         return {
             ...f,
