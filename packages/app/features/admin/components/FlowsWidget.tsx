@@ -39,13 +39,7 @@ const FlowsWidget = (props: any) => {
     }
 
     return <TopicsProvider>
-        {props.isModified ?<XStack position="absolute" right={50} top={-32}>
-
-            <IconContainer onPress={() => {}}>
-                {/* <SizableText mr={"$2"}>Save</SizableText> */}
-                <Save color="var(--color)" size={"$1"} />
-            </IconContainer>
-        </XStack>:null}
+        {props.isModified ?props.icons:null}
         <Flow
             path={props.path}
             // onViewPortChange={(viewPort) => {

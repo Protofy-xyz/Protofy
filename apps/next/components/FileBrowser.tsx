@@ -93,8 +93,29 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
     const actionsToDisable: string[] = [
         ChonkyActions.SelectAllFiles.id,
     ];
+
+    const isFull = router.query?.full
+    const getWidget = () => <FileWidget
+        isFull={isFull}
+        hideCloseIcon={isFull?true:false}
+        isModified={isModified}
+        setIsModified={setIsModified}
+        icons={[
+            <IconContainer onPress={() => {
+                if (isModified) return setOpenAlert(true)
+                setCurrentFile('');
+                setDialogOpen(false)
+            }}>
+                <X color="var(--color)" size={"$1"} />
+            </IconContainer>
+        ]}
+        currentFileName={currentFileName}
+        backgroundColor={isFull? '$colorTransparent':(resolvedTheme == 'dark' ? "#1e1e1e" : 'white')}
+        currentFile={currentFile}
+    />
+
     return (
-        <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
+        isFull?getWidget(): <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
             <FileBrowser
                 onFileAction={(data) => {
                     if(data.id == 'open_files') {
@@ -121,22 +142,7 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
                 <Dialog.Portal>
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
-                        <FileWidget
-                            isModified={isModified}
-                            setIsModified={setIsModified}
-                            icons={[
-                                <IconContainer onPress={() => {
-                                    if (isModified) return setOpenAlert(true)
-                                    setCurrentFile('');
-                                    setDialogOpen(false)
-                                }}>
-                                    <X color="var(--color)" size={"$1"} />
-                                </IconContainer>
-                            ]}
-                            currentFileName={currentFileName}
-                            backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'}
-                            currentFile={currentFile}
-                        />
+                        {getWidget()}
 
                         <Dialog.Close />
                     </Dialog.Content>

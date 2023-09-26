@@ -9,5 +9,8 @@
     ],
     "API": [
         { "name": "*", "type": "files", "path": "/apps/api/src/modules", "options": {"skipExtension": true}}
+    ],
+    "Public": [
+        { "name": "*", "type": "files", "path": "/apps/next/public"}
     ]
 }

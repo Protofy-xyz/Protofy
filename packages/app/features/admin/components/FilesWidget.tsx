@@ -3,7 +3,7 @@ import { H2, H3, H4, Image, Paragraph, ScrollView, Spinner, Stack, Theme, XStack
 import React, { useEffect, useState } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { lookup } from 'mrmime';
-import { X, XCircle } from '@tamagui/lucide-icons';
+import { Save, X, XCircle } from '@tamagui/lucide-icons';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useTint } from '@tamagui/logo'
 import { ChonkyActions } from 'chonky';
@@ -23,7 +23,7 @@ const FlowsWidget = dynamic(() => import('./FlowsWidget'), {
   ssr: false
 })
 
-export const FileWidget = ({isModified=false, setIsModified=() => {}, icons=[], currentFile, currentFileName, ...props }: { isModified: boolean, setIsModified: any, icons?: React.ReactElement | [], extraIcons?: React.ReactElement[],title: string, currentFile: string, currentFileName: string} & YStackProps) => {
+export const FileWidget = ({isFull, hideCloseIcon, isModified=false, setIsModified=() => {}, icons=[], currentFile, currentFileName, ...props }: { isFull: boolean, hideCloseIcon: boolean, headerStart: number, isModified: boolean, setIsModified: any, icons?: React.ReactElement | [], extraIcons?: React.ReactElement[],title: string, currentFile: string, currentFileName: string} & YStackProps) => {
     const url = ('/adminapi/v1/files/' + currentFile).replace(/\/+/g, '/')
     const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(getPendingResult('pending'))
     const { resolvedTheme } = useThemeSetting()
@@ -67,9 +67,15 @@ export const FileWidget = ({isModified=false, setIsModified=() => {}, icons=[], 
                     }
                 } else if(mime == 'application/javascript' || mime == 'video/mp2t') {
                     return {
-                        component: <XStack mt={30} f={1} width={"100%"}>
+                        component: <XStack mt={isFull?50:30} f={1} width={"100%"}>
                             {/* <Theme name={tint as any}> */}
                                 <FlowsWidget 
+                                    icons={<XStack position="absolute" right={isFull?0:50} top={isFull?-35:-32}>
+                                    <IconContainer onPress={() => {}}>
+                                        {/* <SizableText mr={"$2"}>Save</SizableText> */}
+                                        <Save color="var(--color)" size={isFull?"$2":"$1"} />
+                                    </IconContainer>
+                                </XStack>}
                                     isModified={isModified}
                                     setIsModified={setIsModified}
                                     setSourceCode={(sourceCode) => {
@@ -117,7 +123,7 @@ export const FileWidget = ({isModified=false, setIsModified=() => {}, icons=[], 
             {resolved.component}
         </YStack>
         <H4 position='absolute' left={15} top={10}>{currentFileName}</H4>
-        {!resolved.supportIcons ?<Stack position="absolute" right={15} top={17}>
+        {!resolved.supportIcons && !hideCloseIcon ?<Stack position="absolute" right={15} top={17}>
             {icons}
         </Stack>:null}
     </>
