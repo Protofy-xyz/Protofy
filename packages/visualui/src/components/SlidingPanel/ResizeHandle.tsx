@@ -11,16 +11,19 @@ type ResizeHandleProps = {
 
 function ResizeHandle({ direction = "LEFT", onTogglePanel, disabled, onClick }: ResizeHandleProps) {
 	return (
-		<PanelResizeHandle disabled={disabled} style={{ alignSelf: 'center', cursor: 'pointer', pointerEvents: 'all' }}>
+		<PanelResizeHandle disabled={disabled} style={{ alignSelf: 'center', cursor: 'pointer', pointerEvents: 'all', position: 'relative' }}>
 			<div
 				onClick={onClick ? onClick : null}
 				onDoubleClick={!disabled ? onTogglePanel : null}
 				style={{
-					height: '40px', width: '30px',
-					borderTopLeftRadius: '12px',
-					borderBottomLeftRadius: '12px',
+					height: '35px', width: '35px',
+					borderRadius: '20px',
+					position: 'absolute',
+					right: '10px',
+					// borderTopLeftRadius: '12px',
+					// borderBottomLeftRadius: '12px',
 					marginLeft: "-30px",
-					background: "grey", position: "absolute",
+					background: "grey",
 					border: '1px solid grey',
 					display: "flex",
 					alignItems: 'center',
@@ -28,8 +31,8 @@ function ResizeHandle({ direction = "LEFT", onTogglePanel, disabled, onClick }: 
 					justifyContent: 'center'
 				}}>
 				{direction == "LEFT"
-					? <ChevronLeft size={30} color="#252526" />
-					: <ChevronRight size={30} color="#252526" />
+					? <ChevronLeft size={25} style={{marginRight: '3px'}} color="#252526" />
+					: <ChevronRight size={25} style={{marginLeft: '3px'}} color="#252526" />
 				}
 			</div>
 		</PanelResizeHandle>
