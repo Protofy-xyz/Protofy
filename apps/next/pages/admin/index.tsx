@@ -18,7 +18,7 @@ export default function FilesPage(props:any) {
       <Head>
         <title>Protofy - Admin Panel</title>
       </Head>
-      <FilesAdmin  {...props} CurrentPath={(name?name as []:[]).join('/')} FileBrowser={FileBrowser} />
+      <FilesAdmin  {...props} FileBrowser={FileBrowser} />
     </>
   )
 }
@@ -34,10 +34,11 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
       const currentFile = context.query.file ? context.query.file.split('/')[0] : ''
       const currentFilePath = path+'/'+currentFile.replace(/\/+/g, '/');
       props = {
-        filesState: await API.get('/adminapi/v1/files/'+path) ?? { data: [] },
-        CurrentPath: path,
-        CurrentFile: currentFile,
-        CurrentFileContent: currentFile ? (await API.get('/adminapi/v1/files/'+currentFilePath, null, true)) : ''
+        fileData: {
+          filesState: await API.get('/adminapi/v1/files/'+path) ?? { data: [] },
+          CurrentPath: path,
+          CurrentFile: currentFile
+        }
       }
       console.log('Requesting to: *****************', '/adminapi/v1/files/'+path)
     }

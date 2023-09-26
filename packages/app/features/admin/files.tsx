@@ -17,20 +17,18 @@ const data = {
 }
 
 
-export default function Admin({ filesState, FileBrowser, CurrentPath, CurrentFile }) {
+export default function Admin({ fileData, FileBrowser }) {
     const router = useRouter()
     const parts = router.asPath.split('/')
-    const section = parts.length > 2 ? parts[2] : 'files' //TODO: redirect to first available path
+    const section = parts.length > 2 ? parts[2].split('?')[0] : 'files' //TODO: redirect to first available path
 
     const getComponent = () => {
         switch(section) {
             case 'db':
                 return <div>db</div>
             case 'files':
-                return <FileBrowser path={CurrentPath} file={CurrentFile} filesState={filesState} />
-            
+                return <FileBrowser path={fileData.CurrentPath} file={fileData.CurrentFile} filesState={fileData.filesState} />
         }
-        
     }
 
     return (<PanelLayout menuContent={<PanelMenu menu={data}/>}>
