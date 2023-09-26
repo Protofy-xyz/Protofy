@@ -26,7 +26,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
         return dbs.data.length ?
             redirect('/admin/db/' + dbs.data[0].name)
             :
-            redirect('/admin/db')
+            redirect('/admin')
     }
 
     return withSession(context, ['admin'], {

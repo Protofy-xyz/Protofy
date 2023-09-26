@@ -1,6 +1,7 @@
 **/node_modules
 .yarn/*
 data/*
+!data/workspaces
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases

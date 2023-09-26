@@ -13,26 +13,7 @@ const [dbsArr, dbsAtom] = createApiAtom([])
 const [contentArr, contentAtom] = createApiAtom([])
 const currentDbAtom = atom(0)
 
-const Menu = () => {
-    const [currentDB, setCurrentDB] = useAtom(currentDbAtom);
-    const [databases] = useAtom(dbsAtom)
-    return (<YStack pt="$10">
-        {databases.data?.map((db, i) => (
-            <Link
-                href={"/admin/db/" + db.name}
-                onPressApp={() => setCurrentDB(db.name)} key={i}
-            >
-                <PanelMenuItem
-                    selected={db.name == currentDB}
-                    icon={<Database color="$color11" strokeWidth={1.5} />}
-                    text={db.name}
-                />
-            </Link>
-        ))}
-    </YStack>)
-}
-
-export default function Admin({ pageSession, databasesState, currentDbState, contentState }) {
+export default function DBAdmin({ databasesState, currentDbState, contentState }) {
     const router = useRouter()
     const [databases, setDatabases] = useHydratedAtom(dbsArr, databasesState, dbsAtom)
     const [content, setContent] = useHydratedAtom(contentArr, contentState, contentAtom)
@@ -82,41 +63,44 @@ export default function Admin({ pageSession, databasesState, currentDbState, con
         setContent(originalContent)
     }
 
-    return (<PanelLayout menuContent={<Menu />}>
-        <XStack py="$4" px="$5">
-            <YStack f={1}>
-                <Paragraph>
-                    <Text fontSize="$5">{currentDB}</Text>
-                </Paragraph>
-                <Paragraph>
-                    <Text o={0.5}>[total: {content?.data?.length}]</Text>
-                </Paragraph>
-            </YStack>
+    return (
+        <YStack f={1}>
+            <XStack py="$4" px="$5">
+                <YStack f={1}>
+                    <Paragraph>
+                        <Text fontSize="$5">{currentDB}</Text>
+                    </Paragraph>
+                    <Paragraph>
+                        <Text o={0.5}>[total: {content?.data?.length}]</Text>
+                    </Paragraph>
+                </YStack>
 
-            <XStack>
-                <Search onCancel={onCancelSearch} onSearch={onSearch} />
+                <XStack>
+                    <Search onCancel={onCancelSearch} onSearch={onSearch} />
+                </XStack>
             </XStack>
-        </XStack>
-        <XStack f={1} flexWrap='wrap'>
-            {content?.data?.map((element, i) => {
-                return (
-                    <Stack key={i} p={"$5"}>
-                        <DataCard
-                            innerContainerProps={{
-                                maxWidth: 700,
-                                $md: { maxWidth: 450 },
-                                $sm: { minWidth: 'calc(100vw - 65px)', maxWidth: 'calc(100vw - 65px)' },
-                                minWidth: 300
-                            }}
-                            onDelete={onDelete}
-                            key={renew}
-                            onSave={(content) => onSave(content, element.key)}
-                            json={element.value}
-                            name={element.key}
-                        />
-                    </Stack>
-                )
-            })}
-        </XStack>
-    </PanelLayout>)
+            <XStack f={1} flexWrap='wrap'>
+                {content?.data?.map((element, i) => {
+                    return (
+                        <Stack key={i} p={"$5"}>
+                            <DataCard
+                                innerContainerProps={{
+                                    maxWidth: 700,
+                                    $md: { maxWidth: 450 },
+                                    $sm: { minWidth: 'calc(100vw - 65px)', maxWidth: 'calc(100vw - 65px)' },
+                                    minWidth: 300
+                                }}
+                                onDelete={onDelete}
+                                key={renew}
+                                onSave={(content) => onSave(content, element.key)}
+                                json={element.value}
+                                name={element.key}
+                            />
+                        </Stack>
+                    )
+                })}
+            </XStack>
+        </YStack>
+
+    )
 }

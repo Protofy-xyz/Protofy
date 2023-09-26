@@ -1,0 +1,12 @@
+{
+    "Files": [
+        { "name": "Pages", "href": "/admin/files/apps/next/pages" },
+        { "name": "data", "href": "/admin/files/data" },
+        { "name": "common", "href": "/admin/files/packages/common" }
+    ],
+    "Databases": [
+        { "name": "apps", "href": "/admin/files/apps" },
+        { "name": "apps", "href": "/admin/files/apps" },
+        { "name": "apps", "href": "/admin/files/apps" }
+    ]
+}
