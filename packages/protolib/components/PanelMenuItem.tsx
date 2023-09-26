@@ -19,7 +19,7 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
       paddingVertical={"$3"}
       paddingTop={"$4"}
       hoverStyle={{
-        backgroundColor: "$backgroundHover"
+        backgroundColor: "$backgroundFocus"
       }}
       borderRadius={"$6"}
       width={230}
