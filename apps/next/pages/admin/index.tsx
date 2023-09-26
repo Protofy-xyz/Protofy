@@ -77,6 +77,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
         if(p.name == '*' && p.type == 'database') {
           dbs.data.forEach((db:any) => {
             parsedWorkspace[key].push({
+              ...p,
               name: db.name, 
               type: "database",
               href: ('/admin/dbs/' + db.name).replace(/\/+/g, '/')
@@ -86,6 +87,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
           const myFiles = fsSync.readdirSync('../../'+p.path) //TODO: change for an async function
           myFiles.forEach((file:any) => {
             parsedWorkspace[key].push({
+              ...p,
               name: p.options?.skipExtension?file.split('.').slice(0, -1).join('.'):file, 
               type: "files",
               href: ('/admin/files/' + p.path + '?file='+file+'&full=1').replace(/\/+/g, '/')

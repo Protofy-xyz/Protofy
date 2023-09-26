@@ -5,12 +5,12 @@
         { "name": "Data", "type": "files", "path": "/data" }
     ],
     "Databases": [
-        { "name": "*", "type": "database", "path": "/" }
+        { "name": "*", "icon": "database", "type": "database", "path": "/" }
     ],
     "API": [
-        { "name": "*", "type": "files", "path": "/apps/api/src/modules", "options": {"skipExtension": true}}
+        { "name": "*", "icon": "api", "type": "files", "path": "/apps/api/src/modules", "options": {"skipExtension": true}}
     ],
     "Models": [
-        { "name": "*", "type": "files", "path": "/packages/common/schema", "options": {"skipExtension": true}}
+        { "name": "*", "icon": "model", "type": "files", "path": "/packages/common/schema", "options": {"skipExtension": true}}
     ]
 }
