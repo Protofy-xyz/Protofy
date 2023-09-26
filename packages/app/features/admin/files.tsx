@@ -32,6 +32,8 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
     const { resolvedTheme } = useThemeSetting()
     const [dialogOpen, setDialogOpen] = useState(CurrentFile ? true : false)
     const router = useRouter()
+
+    
     const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
     const [currentPath, setCurrentPath] = useState(CurrentPath)
     const [currentFile, setCurrentFile] = useState(CurrentFile ? CurrentFile : '')
@@ -82,7 +84,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
 
     return (<PanelLayout menuContent={<PanelMenu menu={data}/>}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
-            <FileBrowser folderChain={[{ id: '/', name: "Files", isDir: true }].concat(
+            <FileBrowser setOpenAlert={setOpenAlert} setIsModified={setIsModified} openAlert={openAlert} setDialogOpen={setDialogOpen} setCurrentFile={setCurrentFile} isModified={isModified} folderChain={[{ id: '/', name: "Files", isDir: true }].concat(
                 ...currentPath.split('/').map((x, i, arr) => {
                     return {
                         name: x,
@@ -131,44 +133,6 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
                     </Dialog.Sheet>
                 </Dialog.Adapt>
             </Dialog>
-
-            <AlertDialog open={openAlert} onOpenChange={setOpenAlert} native>
-                <AlertDialog.Portal>
-                    <AlertDialog.Overlay
-                        key="overlay"
-                        opacity={0.5}
-                    />
-                    <AlertDialog.Content
-                        bordered
-                        elevate
-                        key="content"
-                        x={0}
-                        scale={1}
-                        opacity={1}
-                        y={0}
-                    >
-                        <YStack space>
-                            <AlertDialog.Description>
-                                The current file contains unsaved changes. Are you sure you want to close it without saving?
-                            </AlertDialog.Description>
-
-                            <XStack space="$3" justifyContent="flex-end">
-                                <AlertDialog.Cancel asChild>
-                                    <Button>Cancel</Button>
-                                </AlertDialog.Cancel>
-                                <AlertDialog.Action asChild>
-                                    <Button onPress={() => {
-                                        setIsModified(false)
-                                        setCurrentFile('');
-                                        setDialogOpen(false)
-                                        setOpenAlert(false)
-                                    }} theme="active">Close file</Button>
-                                </AlertDialog.Action>
-                            </XStack>
-                        </YStack>
-                    </AlertDialog.Content>
-                </AlertDialog.Portal>
-            </AlertDialog>
         </XStack>
     </PanelLayout>)
 }
