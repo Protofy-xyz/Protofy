@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import UIEditor from './components/UIEditor'
 import { TopicsProvider } from "react-topics";
+import { API } from 'protolib'
 
 export function visualuiPublisher(target, action, payload) {
 	const source = "visualui"
@@ -22,7 +23,7 @@ type Props = {
 	isVSCode?: boolean
 }
 
-export default ({ userComponents = {}, isVSCode = true, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", _pages=[] }: Props) => {
+export default ({ userComponents = {}, isVSCode = true, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", _pages = [] }: Props) => {
 	const [pages, setPages] = useState(_pages);
 	const [currentPage, setCurrentPage] = useState(_currentPage);
 	const [resolveComponentsDir, setResolveComponentsDir] = useState(_resolveComponentsDir);
@@ -49,7 +50,7 @@ export default ({ userComponents = {}, isVSCode = true, _sourceCode = "", _resol
 		}
 	}
 
-	const onSendMessage = (event: any) => {
+	const onSendMessage = async (event: any) => {
 		const type = event.type
 		const payload = event.data
 		switch (type) {
@@ -60,18 +61,41 @@ export default ({ userComponents = {}, isVSCode = true, _sourceCode = "", _resol
 				break;
 			case "save":
 				const content = payload.content
-				visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
+				if (isVSCode) {
+					visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
+				}else {
+					const res = await savePage(currentPage, content);
+				}
 				break;
 		}
 	}
-
 
 	useEffect(() => {
 		if (isVSCode) {
 			window.addEventListener("message", handleEvent)
 			visualuiPublisher('protofypanel', 'ready', {})
+		} else {
+			readPages().then((response) => {
+				setPages(response);
+				if (response && !currentPage) {
+					// const defaultDocument = response.find(n => n == 'index.tsx') ?? response[0]
+					const defaultDocument = "test.tsx"
+					setCurrentPage(defaultDocument)
+				}
+			})
 		}
 	}, [])
+
+	useEffect(() => {
+		if (currentPage) {
+			readPage(currentPage).then((response) => {
+				if (response.isLoaded && response.data?.content !== undefined) {
+					const content = response.data?.content;
+					setSourceCode(content)
+				}
+			})
+		}
+	}, [currentPage])
 
 	return (
 		<TopicsProvider>
@@ -89,4 +113,59 @@ export default ({ userComponents = {}, isVSCode = true, _sourceCode = "", _resol
 			}
 		</TopicsProvider>
 	)
+}
+const folderToSearch = "next/pages"
+
+async function readPages() {
+	const payload = {
+		filename: folderToSearch,
+		recursive: true
+	}
+	let response
+	try {
+		response = await API.post('/api/v1/visualui/pages/list', payload)
+	}catch(e){
+		console.error('Error reading files')
+	}
+	let cookedData;
+	if (response && response?.isLoaded) {
+		cookedData = response?.data?.map((filename) => {
+			let name = filename.split(folderToSearch)[1];
+			if (name.startsWith('/')) {
+				name = name.slice(1)
+			}
+			return name;
+		})
+	}
+	return cookedData;
+}
+
+async function readPage(currentPage) {
+	const payload = {
+		filename: folderToSearch + "/" + currentPage,
+	}
+	let response
+	try {
+		response = await API.post('/api/v1/visualui/pages/read', payload)
+	}catch(e){
+		console.error('Error reading page.')
+	}
+	return response
+}
+
+async function savePage(currentPage, content) {
+	const payload = {
+		filename: folderToSearch + "/" + currentPage,
+		content
+	}
+	let response
+	try {
+		const response = await API.post('/api/v1/visualui/pages/write', payload)
+		if(response&& response.isLoaded) {
+			return response
+		}
+	}catch(e){
+		console.error('Error saving page.')
+	}
+	return response
 }
