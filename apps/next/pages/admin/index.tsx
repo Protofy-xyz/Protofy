@@ -6,6 +6,7 @@ import { API, redirect, withSession } from 'protolib'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
 import { promises as fs } from 'fs';
+import fsSync from 'fs'
 
 const FileBrowser = dynamic(() => import('../../components/FileBrowser'), {
   ssr: false,
@@ -79,6 +80,15 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
               name: db.name, 
               type: "database",
               href: '/admin/dbs/' + db.name
+            })
+          })
+        } else if(p.name == '*' && p.type == 'files') {
+          const myFiles = fsSync.readdirSync('../../'+p.path) //TODO: change for an async function
+          myFiles.forEach((file:any) => {
+            parsedWorkspace[key].push({
+              name: p.options?.skipExtension?file.split('.').slice(0, -1).join('.'):file, 
+              type: "files",
+              href: '/admin/files/' + p.path + '?file='+file+'&full=1'
             })
           })
         } else {
