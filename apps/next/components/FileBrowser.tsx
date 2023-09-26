@@ -9,8 +9,16 @@ import { IconContainer } from 'protolib';
 import { X } from '@tamagui/lucide-icons';
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
-const WebFileBrowser = ({currentFile, currentFileName, dialogOpen, setIsModified, openAlert, setOpenAlert, setDialogOpen, setCurrentFile, isModified,folderChain=[{ id: 'xcv', name: 'Files', isDir: true }],files=[], onOpen=(path:string) => {}}:any) => {
-
+const WebFileBrowser = ({currentPath, currentFile, currentFileName, dialogOpen, setIsModified, openAlert, setOpenAlert, setDialogOpen, setCurrentFile, isModified,files=[], onOpen=(path:string) => {}}:any) => {
+    const folderChain = [{ id: '/', name: "Files", isDir: true }].concat(
+        ...currentPath.split('/').map((x:any, i:any, arr:any) => {
+            return {
+                name: x,
+                id: arr.slice(0, i + 1).join('/'),
+                isDir: true
+            };
+        })
+    )
     const {resolvedTheme} = useThemeSetting()
     const theme = useTheme()
 
