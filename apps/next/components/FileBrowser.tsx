@@ -5,20 +5,24 @@ import { YStack } from '@tamagui/stacks';
 import { AlertDialog, Button, Dialog, XStack, useTheme } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from 'app/features/admin/components/FilesWidget';
-import { IconContainer } from 'protolib';
+import { IconContainer, createApiAtom, useHydratedAtom } from 'protolib';
 import { X } from '@tamagui/lucide-icons';
 import {useUpdateEffect} from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
+const [filesArr, filesAtom] = createApiAtom([])
 
-const WebFileBrowser = ({file, path, setIsModified, openAlert, setOpenAlert, isModified,files=[]}:any) => {
+const WebFileBrowser = ({file, path, filesState}:any) => {
+    const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
     const [dialogOpen, setDialogOpen] = useState(file ? true : false)
     const [currentPath, setCurrentPath] = useState(path)
     const [currentFile, setCurrentFile] = useState(file ? file : '')
     const currentFileName = currentFile.split('/')[currentFile.split('/').length - 1]
     const router = useRouter()
+    const [openAlert, setOpenAlert] = useState(false)
+    const [isModified, setIsModified] = useState(false)
 
     useUpdateEffect(() => {
         console.log('current Path: ', currentPath)
@@ -60,7 +64,7 @@ const WebFileBrowser = ({file, path, setIsModified, openAlert, setOpenAlert, isM
         router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file=' + file.name)
     }
     
-    files = files.data.map((f:any) => {
+    const parsedFiles = files.data.map((f:any) => {
         return {
             ...f,
             thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
@@ -104,7 +108,7 @@ const WebFileBrowser = ({file, path, setIsModified, openAlert, setOpenAlert, isM
                 //defaultFileViewActionId={ChonkyActions.ToggleHiddenFiles.id} 
                 disableSelection={false} 
                 darkMode={resolvedTheme=='dark'} 
-                files={files} 
+                files={parsedFiles} 
                 folderChain={folderChain}
                 fileActions={myFileActions}
             >

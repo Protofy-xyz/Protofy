@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { PanelMenu } from './components/PanelMenu'
 
-const [filesArr, filesAtom] = createApiAtom([])
+
 
 const data = {
     "Files": [
@@ -24,17 +24,12 @@ const data = {
 }
 
 
-export default function Admin({ pageSession, filesState, FileBrowser, CurrentPath, CurrentFile }) {
-
-    const [openAlert, setOpenAlert] = useState(false)
-
-    const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
-    const [isModified, setIsModified] = useState(false)
-
+export default function Admin({ filesState, FileBrowser, CurrentPath, CurrentFile }) {
+    
 
     return (<PanelLayout menuContent={<PanelMenu menu={data}/>}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
-            <FileBrowser path={CurrentPath} file={CurrentFile} setOpenAlert={setOpenAlert} setIsModified={setIsModified} openAlert={openAlert}  isModified={isModified} files={files} />
+            <FileBrowser path={CurrentPath} file={CurrentFile} filesState={filesState} />
         </XStack>
     </PanelLayout>)
 }
