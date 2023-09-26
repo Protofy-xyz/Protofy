@@ -4,7 +4,7 @@ import styles from "../../styles/sidebar.module.css";
 const PageMenu = ({ pages, sendMessage, currentPage }) => {
     const viewRef = React.useRef()
     function handleResize(e = {} as any) {
-        const viewportHeight = window.outerHeight*0.4;
+        const viewportHeight = window.outerHeight*0.22;
         if (!viewRef.current) return
         //@ts-ignore
         viewRef.current.style.height = viewportHeight + 'px'
