@@ -7,17 +7,12 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
 import { AlertDialog, Button, Dialog } from '@my/ui'
 import { useEffect, useState } from 'react'
-import { ChonkyActions } from 'chonky';
-import { setChonkyDefaults } from 'chonky';
-import { ChonkyIconFA } from 'chonky-icon-fontawesome';
+
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from './components/FilesWidget'
 import { PanelMenu } from './components/PanelMenu'
 
-setChonkyDefaults({ iconComponent: ChonkyIconFA });
-ChonkyActions.ToggleHiddenFiles.option.defaultValue = false;
 const [filesArr, filesAtom] = createApiAtom([])
-const currentDbAtom = atom(0)
 
 const data = {
     "Files": [

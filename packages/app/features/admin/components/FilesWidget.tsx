@@ -6,9 +6,15 @@ import { lookup } from 'mrmime';
 import { X, XCircle } from '@tamagui/lucide-icons';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useTint } from '@tamagui/logo'
-
+import { ChonkyActions } from 'chonky';
+import { setChonkyDefaults } from 'chonky';
+import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import dynamic from 'next/dynamic'
  
+setChonkyDefaults({ iconComponent: ChonkyIconFA });
+//@ts-ignore
+ChonkyActions.ToggleHiddenFiles.option.defaultValue = false;
+
 const FlowsWidget = dynamic(() => import('./FlowsWidget'), {
   loading: () => <Center>
   <Spinner size={'large'} scale={3} top={-50} />
