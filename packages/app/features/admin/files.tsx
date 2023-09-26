@@ -84,7 +84,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
 
     return (<PanelLayout menuContent={<PanelMenu menu={data}/>}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
-            <FileBrowser setOpenAlert={setOpenAlert} setIsModified={setIsModified} openAlert={openAlert} setDialogOpen={setDialogOpen} setCurrentFile={setCurrentFile} isModified={isModified} folderChain={[{ id: '/', name: "Files", isDir: true }].concat(
+            <FileBrowser currentFile={currentFile} currentFileName={currentFileName} dialogOpen={dialogOpen} setOpenAlert={setOpenAlert} setIsModified={setIsModified} openAlert={openAlert} setDialogOpen={setDialogOpen} setCurrentFile={setCurrentFile} isModified={isModified} folderChain={[{ id: '/', name: "Files", isDir: true }].concat(
                 ...currentPath.split('/').map((x, i, arr) => {
                     return {
                         name: x,
@@ -98,41 +98,6 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
                     thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
                 }
             })} />
-            <Dialog open={dialogOpen}>
-                <Dialog.Portal>
-                    <Dialog.Overlay />
-                    <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
-                        <FileWidget
-                            isModified={isModified}
-                            setIsModified={setIsModified}
-                            icons={[
-                                <IconContainer onPress={() => {
-                                    if (isModified) return setOpenAlert(true)
-                                    setCurrentFile('');
-                                    setDialogOpen(false)
-                                }}>
-                                    <X color="var(--color)" size={"$1"} />
-                                </IconContainer>
-                            ]}
-                            currentFileName={currentFileName}
-                            backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'}
-                            currentFile={currentFile}
-                        />
-
-                        <Dialog.Close />
-                    </Dialog.Content>
-                </Dialog.Portal>
-
-                {/* optionally change to sheet when small screen */}
-                <Dialog.Adapt when="sm">
-                    <Dialog.Sheet>
-                        <Dialog.Sheet.Frame>
-                            <Dialog.Adapt.Contents />
-                        </Dialog.Sheet.Frame>
-                        <Dialog.Sheet.Overlay />
-                    </Dialog.Sheet>
-                </Dialog.Adapt>
-            </Dialog>
         </XStack>
     </PanelLayout>)
 }

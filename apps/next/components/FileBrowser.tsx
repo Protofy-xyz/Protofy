@@ -2,11 +2,14 @@ import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { FileNavbar, FileBrowser, FileToolbar, FileList, FileContextMenu, ChonkyActions} from 'chonky';
 import { YStack } from '@tamagui/stacks';
-import { AlertDialog, Button, XStack, useTheme } from '@my/ui';
+import { AlertDialog, Button, Dialog, XStack, useTheme } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
+import { FileWidget } from 'app/features/admin/components/FilesWidget';
+import { IconContainer } from 'protolib';
+import { X } from '@tamagui/lucide-icons';
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
-const WebFileBrowser = ({setIsModified, openAlert, setOpenAlert, setDialogOpen, setCurrentFile, isModified,folderChain=[{ id: 'xcv', name: 'Files', isDir: true }],files=[], onOpen=(path:string) => {}}:any) => {
+const WebFileBrowser = ({currentFile, currentFileName, dialogOpen, setIsModified, openAlert, setOpenAlert, setDialogOpen, setCurrentFile, isModified,folderChain=[{ id: 'xcv', name: 'Files', isDir: true }],files=[], onOpen=(path:string) => {}}:any) => {
 
     const {resolvedTheme} = useThemeSetting()
     const theme = useTheme()
@@ -46,6 +49,41 @@ const WebFileBrowser = ({setIsModified, openAlert, setOpenAlert, setDialogOpen, 
                 <FileList onScroll={onScroll}/>
                 {/* <FileContextMenu/> */}
             </FileBrowser>
+            <Dialog open={dialogOpen}>
+                <Dialog.Portal>
+                    <Dialog.Overlay />
+                    <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
+                        <FileWidget
+                            isModified={isModified}
+                            setIsModified={setIsModified}
+                            icons={[
+                                <IconContainer onPress={() => {
+                                    if (isModified) return setOpenAlert(true)
+                                    setCurrentFile('');
+                                    setDialogOpen(false)
+                                }}>
+                                    <X color="var(--color)" size={"$1"} />
+                                </IconContainer>
+                            ]}
+                            currentFileName={currentFileName}
+                            backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'}
+                            currentFile={currentFile}
+                        />
+
+                        <Dialog.Close />
+                    </Dialog.Content>
+                </Dialog.Portal>
+
+                {/* optionally change to sheet when small screen */}
+                <Dialog.Adapt when="sm">
+                    <Dialog.Sheet>
+                        <Dialog.Sheet.Frame>
+                            <Dialog.Adapt.Contents />
+                        </Dialog.Sheet.Frame>
+                        <Dialog.Sheet.Overlay />
+                    </Dialog.Sheet>
+                </Dialog.Adapt>
+            </Dialog>
             <AlertDialog open={openAlert} onOpenChange={setOpenAlert} native>
                 <AlertDialog.Portal>
                     <AlertDialog.Overlay
