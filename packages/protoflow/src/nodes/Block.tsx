@@ -61,7 +61,7 @@ const Block = (node) => {
         },
         Block: {
             icon: MdOutlineFormatListNumbered,
-            color: borderColor,
+            color: 'grey', //borderColor
             title: 'Block'
         },
         CaseClause: {
