@@ -7,7 +7,7 @@ import Center from '../components/Center'
 export const getComponentWrapper = (importName) => (Component, icon, name, defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps:any = {}) => {
     const importInfo = {
         moduleSpecifier: importName,
-        namedImports: [{ alias: undefined }]
+        namedImports: [{ alias: undefined, name: name }]
         // defaultImport: componentName
       }
     const UiComponent = (props) => {
@@ -28,10 +28,6 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
         custom: {
             icon,
             ...importInfo,
-            namedImports: {
-                ...importInfo,
-                name: name
-            }
         },
         props: defaultProps,
         displayName: name,
