@@ -6,6 +6,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
+    "pull": "git pull",
     "build": "NODE_ENV=production tsup ./index.tsx --dts --minify terser --format esm && shx cp package.json dist/package.json",
     "build:dev": "NODE_ENV=development tsup ./index.tsx --dts"
   },

@@ -61,7 +61,7 @@ const Block = (node) => {
         },
         Block: {
             icon: MdOutlineFormatListNumbered,
-            color: borderColor,
+            color: '#cccccc',
             title: 'Block'
         },
         CaseClause: {
@@ -103,7 +103,7 @@ const Block = (node) => {
             {isEmpty?<div style={{height:nodeFontSize*2+'px'}}></div>:<>
                 <div style={{
                     top: nodeFontSize*2.13,
-                    opacity: '0.1',
+                    opacity: '0.05',
                     pointerEvents: 'none',
                     borderRadius: "0px "+nodeFontSize/4+"px "+nodeFontSize/4+ "px "+ nodeFontSize/4+'px',position:'absolute', 
                     width: metaData.childWidth+'px', 

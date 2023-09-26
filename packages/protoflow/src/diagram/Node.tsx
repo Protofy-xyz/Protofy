@@ -15,14 +15,14 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
     const flexRef = React.useRef()
     const boxRef = React.useRef()
 
-    const scale = chroma.scale([(chroma.scale([color, 'white']))(0.5).hex(), 'white']).mode('lab');
+    // const scale = chroma.scale([(chroma.scale([color, 'white']))(0.5).hex(), 'white']).mode('lab');
 
     const isError = id && id == errorData.id
     const isFloating = !id || id.indexOf('_') == -1
     const colorError = useTheme('colorError')
     color = isError ? colorError : (!isPreview && isFloating ? (chroma.scale([color, 'white']))(0.5).hex() : color)
     const hColor = (chroma.scale([color, 'black']))(0.6).hex()
-    const tColor = (chroma.scale([color, 'black']))(0.7).hex()
+    const tColor = useTheme('titleColor')
     const themeBorderColor = useTheme('borderColor')
     const borderColor = isError ? colorError : themeBorderColor
     const borderWidth = useTheme('borderWidth')
@@ -152,7 +152,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                     <Text ref={textRef} style={{ marginRight: '5px', textAlign: position == Position.Right ? 'right' : 'left'}}>{label}</Text>
                 </div> : null}
                 {!connected ? <div style={{width: portSize+"px", height: portSize+"px",display: 'flex', justifyContent: 'center'}}>
-                        <Text style={{ display: "inline-block", lineHeight: '100%',textAlign: 'center', color: plusColor, fontWeight: 'bold', fontSize: nodeFontSize-3, pointerEvents: 'none'}}>+</Text> 
+                        <Text style={{ position: 'relative', left: '-5px', display: "inline-block", lineHeight: '100%',textAlign: 'center', color: borderColor, fontSize: nodeFontSize-4, pointerEvents: 'none'}}>+</Text> 
                     </div>: null}
             </Handle>
         </>

@@ -423,7 +423,7 @@ export const HandleOutput = ({ id, param, position = null, style = {}, isConnect
     const instanceId = useFlowsStore(state => state.flowInstance)
     const portSize = useTheme('portSize')
     const borderColor = useTheme('nodeBorderColor')
-    const borderWidth = 0 //useTheme('nodeBorderWidth')
+    const borderWidth = useTheme('nodeBorderWidth')
     return (
         <div style={{ display: 'flex', flexDirection: 'column', zIndex: 222 }}>
             {param.label ? <div style={{ padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row' }}>
