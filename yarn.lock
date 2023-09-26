@@ -20322,11 +20322,11 @@ __metadata:
     deep-diff: 1.0.2
     elkjs: 0.8.2
     immer: 9.0.5
+    lucide-react: 0.279.0
     normalize-css-color: 1.0.2
     prettier: ^2.8.1
     react: ^18.2.0
     react-color: 2.19.3
-    react-icons: 4.8.0
     react-select: 5.7.0
     react-topics: 0.1.7
     react-use-keypress: 1.3.1
@@ -20777,15 +20777,6 @@ __metadata:
     react: ^16.6.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
   checksum: 7ca7e47f8af14ea186688b512a87ab912bf6041312b297f92516341b140b3f0f8aedf5a44d226d99e69ed067b0cc106e38aeb9c9b738ffcc63d10721c844db90
-  languageName: node
-  linkType: hard
-
-"react-icons@npm:4.8.0":
-  version: 4.8.0
-  resolution: "react-icons@npm:4.8.0"
-  peerDependencies:
-    react: "*"
-  checksum: 4dbba7ad989c295b410e19b2a702722dae44368cb04b6515f9471353552f31ac80bd350f121d5bff79f81504b84039ede44d09e9f035f48bb1032e6eace126c4
   languageName: node
   linkType: hard
 

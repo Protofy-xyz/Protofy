@@ -16,7 +16,7 @@ const genNewSession = (data:any) => {
     }
 }
 
-app.post('/api/v1/auth/login', handler(async (req:any, res:any) => {
+app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
     const request:LoginRequest = req.body
     LoginSchema.parse(request)
     try {
@@ -31,7 +31,7 @@ app.post('/api/v1/auth/login', handler(async (req:any, res:any) => {
     res.status(500).send('"Incorrect user or password"')
 }));
 
-app.post('/api/v1/auth/register', handler(async (req:any, res:any) => {
+app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
     const request:RegisterRequest = req.body
     RegisterSchema.parse(request)
     if(await existsKey(dbPath, request.username)) {
