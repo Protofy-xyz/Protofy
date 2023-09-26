@@ -2,7 +2,7 @@ import React from 'react';
 import { dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { nodeColors } from '.';
-import { RxLinkBreak1 } from 'react-icons/rx';
+import { Link2Off } from 'lucide-react';
 import useTheme from '../diagram/Theme';
 
 const BreakStatement =(node) => {
@@ -11,7 +11,7 @@ const BreakStatement =(node) => {
 
     const nodeFontSize = useTheme('nodeFontSize')
     return (
-        <Node icon={RxLinkBreak1} style={{minHeight: nodeFontSize*4+'px',minWidth: nodeFontSize*10+'px'}} node={node} isPreview={!id} title={"break"} id={id} params={nodeParams} color={nodeColors[type]}/>
+        <Node icon={Link2Off} style={{minHeight: nodeFontSize*4+'px',minWidth: nodeFontSize*10+'px'}} node={node} isPreview={!id} title={"break"} id={id} params={nodeParams} color={nodeColors[type]}/>
     );
 }
 BreakStatement.keyWords = ["break"]

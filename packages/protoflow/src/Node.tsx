@@ -10,14 +10,12 @@ import DiagramNode, { NodePort, NodePortProps, isHandleConnected, isNodeConnecte
 import { withTopics } from "react-topics";
 import { FlowStoreContext } from "./store/FlowsStore";
 import { DEVMODE, flowDirection } from './toggles';
-import { IoMdClose } from "react-icons/io";
-import { FiChevronUp } from "react-icons/fi";
-import { TbAlertCircleFilled } from "react-icons/tb";
 import { SketchPicker } from "react-color";
 import useTheme from './diagram/Theme';
 import { DataOutput } from './lib/types';
 import { read } from './lib/memory';
 import NodeSelect from './diagram/NodeSelect';
+import { X, ChevronUp, AlertCircle } from 'lucide-react';
 
 export interface Field {
     field: string,
@@ -53,7 +51,7 @@ export const DeleteButton = ({ id, left = false, field}) => {
     }
 
     return <div id={'deleteButton-' + id + field} style={{ alignSelf: 'center', cursor: 'pointer' }} onClick={onDeleteParam}>
-        <IoMdClose size={useTheme('nodeFontSize')} color={useTheme("colorError")} style={{ marginRight: left ? '7px' : '2px' }} />
+        <X size={useTheme('nodeFontSize')} color={useTheme("colorError")} style={{ marginRight: left ? '7px' : '2px' }} />
     </div>
 }
 
@@ -188,7 +186,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 const DropdownIndicator = props => {
                     return (
                         components.DropdownIndicator && (
-                            <components.DropdownIndicator {...props}> <FiChevronUp size={'15px'} /> </components.DropdownIndicator>
+                            <components.DropdownIndicator {...props}> <ChevronUp size={'15px'} /> </components.DropdownIndicator>
                         )
                     );
                 };
@@ -236,7 +234,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 const DropdownIndicatorMulti = props => {
                     return (
                         components.DropdownIndicator && (
-                            <components.DropdownIndicator {...props}> <FiChevronUp size={'15px'} /> </components.DropdownIndicator>
+                            <components.DropdownIndicator {...props}> <ChevronUp size={'15px'} /> </components.DropdownIndicator>
                         )
                     );
                 };
@@ -298,7 +296,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                                 marginRight: ["case", "child"].includes(param.fieldType) ? "20px" : "0px"
                             }}>
                     {param.error ? <div style={{ alignItems: 'center', marginTop: '5px', display: 'flex' }}>
-                        <TbAlertCircleFilled size={"14px"} color='red' style={{ alignSelf: 'center', marginRight: '5px' }} />
+                        <AlertCircle size={"14px"} color='red' style={{ alignSelf: 'center', marginRight: '5px' }} />
                         <Text style={{ color: 'red', fontSize: '12px' }}>
                             {param.error}
                         </Text> </div> : null}

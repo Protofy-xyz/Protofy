@@ -4,11 +4,10 @@ import Node, { FlowPort, headerSize } from '../Node';
 import { useEdges } from 'reactflow';
 import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { TbBox } from 'react-icons/tb';
-import { MdOutlineFormatListNumbered, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { NODE_TREE } from '../toggles';
 import { DataOutput } from '../lib/types';
 import useTheme from '../diagram/Theme';
+import { Box, ListOrdered, Square } from 'lucide-react';
 
 const blockOffset = 200
 const _marginTop = 222
@@ -54,23 +53,23 @@ const Block = (node) => {
     const borderColor =  useTheme('borderColor') // typeConf[type].color
     const typeConf = {
         SourceFile: {
-            icon: TbBox,
+            icon: Box,
             color: '#F7B500',
             output: false,
             title: currentPath.split(/[/\\]/).pop()
         },
         Block: {
-            icon: MdOutlineFormatListNumbered,
+            icon: ListOrdered,
             color: 'grey', //borderColor
             title: 'Block'
         },
         CaseClause: {
-            icon: MdCheckBoxOutlineBlank,
+            icon: Square,
             color: nodeColors[type],
             title: 'Case Clause'
         },
         DefaultClause: {
-            icon: MdCheckBoxOutlineBlank,
+            icon: Square,
             color: nodeColors['CaseClause'],
             title: 'Case Clause'
         }

@@ -1,13 +1,13 @@
 import React from 'react';
 import Node, { FlowPort, NodeParams } from '../Node';
-import { MdOutlineComment } from "react-icons/md";
 import FallbackPort from '../FallbackPort';
 import Button from '../Button';
+import { MessageSquare } from 'lucide-react'
 
 const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const [result, setResult] = React.useState("")
     return (
-        <Node icon={MdOutlineComment} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color="#BCAAA4" skipCustom={true}>
+        <Node icon={MessageSquare} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color="#BCAAA4" skipCustom={true}>
             {
                 mask.data.body.map(element => {
                     switch (element.type) {

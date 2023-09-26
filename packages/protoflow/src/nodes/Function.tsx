@@ -6,7 +6,7 @@ import AddPropButton from '../AddPropButton';
 import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { SyntaxKind } from "ts-morph";
-import { TbMathIntegralX } from 'react-icons/tb';
+import { FunctionSquare } from 'lucide-react';
 
 const Function = (node) => {
     const { id, type } = node
@@ -20,7 +20,7 @@ const Function = (node) => {
     }))
 
     return (
-        <Node icon={TbMathIntegralX} node={node} isPreview={!id} title={isArrow ? '=>' : nodeData.name?nodeData.name:'function'} id={id} color={nodeColors[type]}>
+        <Node icon={FunctionSquare} node={node} isPreview={!id} title={isArrow ? '=>' : nodeData.name?nodeData.name:'function'} id={id} color={nodeColors[type]}>
             <NodeParams id={id} params={[{ label: 'Call', field: 'call', fieldType: 'call', type: 'input' }]} />
             <NodeParams id={id} params={nodeParams} />
             {type != 'FunctionExpression' ?

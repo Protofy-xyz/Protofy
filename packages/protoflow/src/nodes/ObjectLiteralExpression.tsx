@@ -5,7 +5,7 @@ import { nodeColors } from '.';
 import AddPropButton from '../AddPropButton';
 import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { MdOutlineDocumentScanner } from 'react-icons/md';
+import { TableProperties } from 'lucide-react';
 
 export const ObjectFactory = (objectType) => {
     const component = (node) => {
@@ -19,7 +19,7 @@ export const ObjectFactory = (objectType) => {
         })
 
         return (
-            <Node icon={MdOutlineDocumentScanner} node={node} isPreview={!id} title={objectType == 'typeLiteral' ? "type literal" : "Object"} id={id} color={nodeColors[type]}>
+            <Node icon={TableProperties} node={node} isPreview={!id} title={objectType == 'typeLiteral' ? "type literal" : "Object"} id={id} color={nodeColors[type]}>
                 <div style={{ height: '5px' }}></div>
                 <NodeParams id={id} params={nodeParams} />
                 <AddPropButton label={"Add Property"} id={id} nodeData={nodeData} />

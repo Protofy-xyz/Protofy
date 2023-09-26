@@ -3,9 +3,8 @@ import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType, getTrivia, ge
 import Node, { Field, isDataPortConnected } from '../Node';
 import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { MdOutlineCalculate } from "react-icons/md";
-import { TbEqual } from "react-icons/tb";
 import { useEdges } from 'reactflow';
+import { Calculator, Equal } from 'lucide-react';
 
 export const BinaryExpressionFactory = (_operator: string) => {
     const getFielNameLeft = (operator) => operator == '=' ? 'setLeft' : 'left'
@@ -62,7 +61,7 @@ export const BinaryExpressionFactory = (_operator: string) => {
         nodeParams.push({ label: modeLabelTable[mode], field: 'right', type: 'input', fieldType: nodeData.rightType })
         return (
             <Node 
-                icon={(mode == 'operator')?MdOutlineCalculate:TbEqual} 
+                icon={(mode == 'operator')?Calculator:Equal} 
                 node={node} 
                 isPreview={!id} 
                 title={mode == 'operator'?(!isDataPortConnected(id, getFielNameLeft(operator), edges) && nodeData[getFielNameLeft(operator)]?nodeData[getFielNameLeft(operator)]:'...')+(nodeData.operator ? ' ' + nodeData.operator + ' ': ' + ')+(!isDataPortConnected(id, 'right', edges) && nodeData.right?nodeData.right:'...'):mode} 

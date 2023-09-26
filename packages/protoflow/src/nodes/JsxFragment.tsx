@@ -5,7 +5,7 @@ import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { SyntaxKind } from "ts-morph";
-import { IoCodeSharp } from 'react-icons/io5';
+import { Code } from 'lucide-react';
 
 const JsxFragment = (node) => {
     const { id, type } = node
@@ -18,7 +18,7 @@ const JsxFragment = (node) => {
     const nodeParamsChilds: Field[] = childs
 
     return (
-        <Node icon={IoCodeSharp}  node={node} isPreview={!id} title={"<></>"} id={id} color={nodeColors[type]}>
+        <Node icon={Code}  node={node} isPreview={!id} title={"<></>"} id={id} color={nodeColors[type]}>
             <NodeParams id={id} params={nodeParamsChilds} />
             <AddPropButton id={id} nodeData={nodeData} type={"Child"} />
         </Node>

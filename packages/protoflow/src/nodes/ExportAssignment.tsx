@@ -2,7 +2,7 @@ import React from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { nodeColors } from '.';
-import { TbFileExport } from 'react-icons/tb';
+import { FileSymlink } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 
 
@@ -13,7 +13,7 @@ const ExportAssignment =(node) => {
     ]
 
     return (
-        <Node icon={TbFileExport} node={node} isPreview={!id} title={"export default"} id={id} params={nodeParams} color={nodeColors[type]} dataOutput={DataOutput.flow}/>
+        <Node icon={FileSymlink} node={node} isPreview={!id} title={"export default"} id={id} params={nodeParams} color={nodeColors[type]} dataOutput={DataOutput.flow}/>
     );
 }
 

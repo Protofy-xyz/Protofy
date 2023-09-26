@@ -6,7 +6,7 @@ import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { SyntaxKind } from "ts-morph";
-import { MdOutlineCategory } from 'react-icons/md';
+import { Shapes } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 
 const InterfaceDeclaration = (node) => {
@@ -21,7 +21,7 @@ const InterfaceDeclaration = (node) => {
     }))
 
     return (
-        <Node icon={MdOutlineCategory} node={node} isPreview={!id} title={"interface"} id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
+        <Node icon={Shapes} node={node} isPreview={!id} title={"interface"} id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
             <NodeParams id={id} params={[{ label: 'Export', field: 'export', type: 'boolean', static: true }]} />
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton id={id} nodeData={nodeData} />

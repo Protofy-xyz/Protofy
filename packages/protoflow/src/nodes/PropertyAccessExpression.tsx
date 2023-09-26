@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { nodeColors } from '.';
-import { BiTargetLock } from 'react-icons/bi';
+import { Crosshair } from 'lucide-react';
 
 const PropertyAccessExpression = (node) => {
     const { id, type } = node
@@ -11,7 +11,7 @@ const PropertyAccessExpression = (node) => {
         { label: 'Property', field: 'prop', type: 'input' },
     ]
     return (
-        <Node icon={BiTargetLock} node={node} isPreview={!id} title={"property"} color={nodeColors[type]} id={id} params={nodeParams} />
+        <Node icon={Crosshair} node={node} isPreview={!id} title={"property"} color={nodeColors[type]} id={id} params={nodeParams} />
     );;
 }
 PropertyAccessExpression.keyWords = ["property"]

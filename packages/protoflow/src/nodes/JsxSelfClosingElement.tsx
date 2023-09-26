@@ -4,7 +4,7 @@ import Node, { Field, NodeParams } from '../Node';
 import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
-import { IoCodeSlashSharp } from 'react-icons/io5';
+import { Code } from 'lucide-react';
 
 const JsxSelfClosingElement = (node) => {
     const { id, type } = node
@@ -22,7 +22,7 @@ const JsxSelfClosingElement = (node) => {
     const nodeParamsProps: Field[] = name.concat(props)
 
     return (
-        <Node icon={IoCodeSlashSharp}  node={node} isPreview={!id} title={"<x ... />"} id={id} color={nodeColors[type]}>
+        <Node icon={Code}  node={node} isPreview={!id} title={"<x ... />"} id={id} color={nodeColors[type]}>
             <NodeParams id={id} params={nodeParamsProps} />
             <AddPropButton id={id} nodeData={nodeData} type={"Prop"} />
         </Node>

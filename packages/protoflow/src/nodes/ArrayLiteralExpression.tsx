@@ -4,7 +4,7 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType, getTrivia } from '..
 import AddPropButton from '../AddPropButton';
 import Node, { Field, NodeParams } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { MdOutlineAutoAwesomeMotion } from 'react-icons/md';
+import { SquareStack } from 'lucide-react';
 
 const ArrayLiteralExpression = (node) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -29,7 +29,7 @@ const ArrayLiteralExpression = (node) => {
     }
 
     return (
-        <Node icon={MdOutlineAutoAwesomeMotion} node={{ ...node, data: { ...node.data, width: 1 } }} isPreview={!id} title={'array' + (paramLength ? ' ['+paramLength+']':'')} id={id} color={nodeColors[type]} >
+        <Node icon={SquareStack} node={{ ...node, data: { ...node.data, width: 1 } }} isPreview={!id} title={'array' + (paramLength ? ' ['+paramLength+']':'')} id={id} color={nodeColors[type]} >
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton id={id} nodeData={nodeData} type={"Element"} />
         </Node>

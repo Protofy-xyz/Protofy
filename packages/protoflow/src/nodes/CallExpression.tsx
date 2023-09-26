@@ -4,7 +4,7 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType, getValueTrivia } fro
 import Node, { Field, NodeParams } from '../Node';
 import AddPropButton from '../AddPropButton';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { MdAirlineStops, MdCallMissedOutgoing } from 'react-icons/md';
+import { ArrowUpRight } from 'lucide-react';
 
 const CallExpression = (node) => {
     const { id, type } = node
@@ -28,7 +28,7 @@ const CallExpression = (node) => {
     ) as Field[]
 
     return (
-        <Node icon={MdAirlineStops} node={node} isPreview={!id} title={(nodeData.to ? nodeData.to : 'x') + '(' + (paramsArray.map(p => nodeData[p] ? nodeData[p] : '...').join(',')) + ')'} id={id} color={nodeColors[type]}>
+        <Node icon={ArrowUpRight} node={node} isPreview={!id} title={(nodeData.to ? nodeData.to : 'x') + '(' + (paramsArray.map(p => nodeData[p] ? nodeData[p] : '...').join(',')) + ')'} id={id} color={nodeColors[type]}>
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton keyId={'param' + nextId} id={id} nodeData={nodeData} />
         </Node>

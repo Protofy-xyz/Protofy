@@ -1,7 +1,7 @@
 import React from 'react';
 import Node, { Field } from '../Node';
 import { nodeColors } from '.';
-import { MdOutlineAbc } from 'react-icons/md';
+import { LayoutTemplate } from 'lucide-react';
 
 const TemplateExpression =(node) => {
     const { id, type } = node
@@ -10,7 +10,7 @@ const TemplateExpression =(node) => {
     ]
 
     return (
-        <Node icon={MdOutlineAbc} node={node} isPreview={!id} title={"template"} id={id} params={nodeParams} color={nodeColors[type]}/>
+        <Node icon={LayoutTemplate} node={node} isPreview={!id} title={"template"} id={id} params={nodeParams} color={nodeColors[type]}/>
     );
 }
 TemplateExpression.keyWords = ["Template"]

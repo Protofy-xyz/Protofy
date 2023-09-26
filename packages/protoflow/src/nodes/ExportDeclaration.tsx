@@ -3,7 +3,7 @@ import { dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { TbFileExport } from 'react-icons/tb';
+import { FileSymlink } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 
 const ExportDeclaration =(node) => {
@@ -16,7 +16,7 @@ const ExportDeclaration =(node) => {
     }) as Field[]
 
     return (
-        <Node icon={TbFileExport} node={node} isPreview={!id} title={"export"} id={id} params={nodeParams} color={nodeColors[type]} dataOutput={DataOutput.flow}/>
+        <Node icon={FileSymlink} node={node} isPreview={!id} title={"export"} id={id} params={nodeParams} color={nodeColors[type]} dataOutput={DataOutput.flow}/>
     );
 }
 

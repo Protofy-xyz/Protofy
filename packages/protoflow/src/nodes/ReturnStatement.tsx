@@ -2,9 +2,9 @@ import React, {useContext} from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { nodeColors } from '.';
-import { MdReply } from 'react-icons/md';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { DataOutput } from '../lib/types';
+import { Reply } from 'lucide-react';
 
 
 const ReturnStatement =(node) => {
@@ -17,7 +17,7 @@ const ReturnStatement =(node) => {
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
     return (
-        <Node icon={MdReply} node={node} isPreview={!id} title={"return"+(!node.id?'':(' '+nodeData.value))} id={id} params={nodeParams} color={nodeColors[type]} dataOutput = {DataOutput.flow}/>
+        <Node icon={Reply} node={node} isPreview={!id} title={"return"+(!node.id?'':(' '+nodeData.value))} id={id} params={nodeParams} color={nodeColors[type]} dataOutput = {DataOutput.flow}/>
     );
 }
 ReturnStatement.keyWords = ["return"]

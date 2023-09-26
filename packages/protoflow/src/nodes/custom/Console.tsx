@@ -1,8 +1,7 @@
 import React from "react";
 import AddPropButton from "../../AddPropButton";
 import Node, { Field, NodeParams } from '../../Node';
-import { BiCommentDetail } from "react-icons/bi";
-import { MdOutlineComment } from "react-icons/md";
+import { MessageSquare } from "lucide-react";
 
 const Console = (node:any={}, nodeData={}) => {
     const { id, type } = node
@@ -16,7 +15,7 @@ const Console = (node:any={}, nodeData={}) => {
         })
     ) as Field[]
     return (
-        <Node icon={MdOutlineComment} node={node} isPreview={!node.id} title='console' id={node.id} color="#BCAAA4" skipCustom={true}>
+        <Node icon={MessageSquare} node={node} isPreview={!node.id} title='console' id={node.id} color="#BCAAA4" skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
             <AddPropButton id={node.id} nodeData={nodeData} />
         </Node>

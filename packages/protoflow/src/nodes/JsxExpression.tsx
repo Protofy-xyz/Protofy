@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { dumpConnection, connectItem, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
 import { nodeColors } from '.';
-import { IoCodeSharp } from 'react-icons/io5';
+import { Code } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 
 const JsxExpression = (node) => {
@@ -12,7 +12,7 @@ const JsxExpression = (node) => {
     ]
 
     return (
-        <Node icon={IoCodeSharp}  node={node} isPreview={!id} title={"{Jsx}"} id={id} params={nodeParams} color={nodeColors[type]} dataOutput = {DataOutput.jsx}/>
+        <Node icon={Code}  node={node} isPreview={!id} title={"{Jsx}"} id={id} params={nodeParams} color={nodeColors[type]} dataOutput = {DataOutput.jsx}/>
     );
 }
 JsxExpression.keyWords = ["jsx", "jsxexpression", "expression", "tsx", "{}"]
