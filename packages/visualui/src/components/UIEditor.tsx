@@ -10,6 +10,7 @@ import Monaco from "./Monaco";
 import { X, Save } from "lucide-react";
 import { FlowFactory, useFlowsStore } from 'protoflow';
 import { getMissingJsxImports, getSource } from "../utils/utils";
+import theme from './Theme'
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
@@ -60,7 +61,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
                                 : impData.namedImports[0]?.name;
                             impText = "import {" + namedImportName + '} from "' + moduleSpecifier + '";\n'
                         }
-                        else if(impData.defaultImport){ // is default import
+                        else if (impData.defaultImport) { // is default import
                             impText = "import " + impData.defaultImport + ' from "' + moduleSpecifier + '";\n'
                         }
                         return total + impText
@@ -122,6 +123,9 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
                     // config={{masks: UIMasks}}
                     flowId={UIFLOWID}
                     showActionsBar
+                    themeMode={'dark'}
+                    bgColor={'#252526'}
+                    theme={theme}
                 />
             </div>
         </div>
