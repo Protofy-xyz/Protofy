@@ -32,11 +32,8 @@ const Theme = {
         blockPort: 'black',
         flowPort: 'grey',
         dataPort: 'white',
-<<<<<<< HEAD
-        titleColor: 'black'
-=======
+        titleColor: 'black',
         containerColor: 'black'
->>>>>>> ef6c39d98be24772ca057540f4e0fad5fd83af11
     },
     dark: {
         ...commonVars,
