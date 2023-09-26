@@ -2,16 +2,18 @@ import { YStack, XStack, Stack } from 'tamagui'
 import { PanelMenuItem } from 'protolib'
 import { ChevronDown, Database } from '@tamagui/lucide-icons'
 import { Accordion, Link, SizableText, Square } from '@my/ui'
-
+import { useRouter } from 'next/router';
 
 const Subtabs = ({ subtabs }: any) => {
+    const router = useRouter()
     return (
         <>
             {subtabs.map((subtab, index) => {
+                console.log('checking if: ', router.asPath, 'sarts with: ', subtab.href.replace(/\/$/, ''))
                 return <Link href={subtab.href} onPressApp={() => { }} >
                     <PanelMenuItem
                         mb={'$4'}
-                        selected={true}
+                        selected={router.asPath.startsWith(subtab.href.replace(/\/$/, ''))}
                         icon={<Database color="$color11" strokeWidth={1.5} />}
                         text={subtab.name}
                     />

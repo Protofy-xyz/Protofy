@@ -79,7 +79,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
             parsedWorkspace[key].push({
               name: db.name, 
               type: "database",
-              href: '/admin/dbs/' + db.name
+              href: ('/admin/dbs/' + db.name).replace(/\/+/g, '/')
             })
           })
         } else if(p.name == '*' && p.type == 'files') {
@@ -88,13 +88,13 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
             parsedWorkspace[key].push({
               name: p.options?.skipExtension?file.split('.').slice(0, -1).join('.'):file, 
               type: "files",
-              href: '/admin/files/' + p.path + '?file='+file+'&full=1'
+              href: ('/admin/files/' + p.path + '?file='+file+'&full=1').replace(/\/+/g, '/')
             })
           })
         } else {
           parsedWorkspace[key].push({
             ...p,
-            href: '/admin/'+p.type+'/'+p.path
+            href: ('/admin/'+p.type+'/'+p.path).replace(/\/+/g, '/')
           })
         }
       })
