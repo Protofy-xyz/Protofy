@@ -133,7 +133,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
     const SidebarPanel = (
         <div
             key="sidebar"
-            style={{ display: 'flex', flex: 1, maxWidth: '290px', border: '1px solid #424242' }}
+            style={{ display: 'flex', flex: 1, maxWidth: '290px' }}
         >
             <Sidebar
                 palettes={allPalettes}
@@ -144,7 +144,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
         </div>
     );
     const EditorPanel = (
-        <div style={{ flex: 1, display: 'flex', minWidth: "280px", border: '1px solid #424242' }}>
+        <div style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid #424242', borderLeft: '2px solid #424242' }}>
             <EditorLayout onSave={() => null} resolveComponentsDir={resolveComponentsDir}>
             </EditorLayout>
         </div>
