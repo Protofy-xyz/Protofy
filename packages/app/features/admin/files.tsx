@@ -84,12 +84,7 @@ export default function Admin({ pageSession, filesState, FileBrowser, CurrentPat
 
     return (<PanelLayout menuContent={<PanelMenu menu={data}/>}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
-            <FileBrowser currentPath={currentPath} currentFile={currentFile} currentFileName={currentFileName} dialogOpen={dialogOpen} setOpenAlert={setOpenAlert} setIsModified={setIsModified} openAlert={openAlert} setDialogOpen={setDialogOpen} setCurrentFile={setCurrentFile} isModified={isModified} onOpen={onOpen} files={files.data.map(f => {
-                return {
-                    ...f,
-                    thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
-                }
-            })} />
+            <FileBrowser currentPath={currentPath} currentFile={currentFile} currentFileName={currentFileName} dialogOpen={dialogOpen} setOpenAlert={setOpenAlert} setIsModified={setIsModified} openAlert={openAlert} setDialogOpen={setDialogOpen} setCurrentFile={setCurrentFile} isModified={isModified} onOpen={onOpen} files={files} />
         </XStack>
     </PanelLayout>)
 }

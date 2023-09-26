@@ -10,6 +10,12 @@ import { X } from '@tamagui/lucide-icons';
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const WebFileBrowser = ({currentPath, currentFile, currentFileName, dialogOpen, setIsModified, openAlert, setOpenAlert, setDialogOpen, setCurrentFile, isModified,files=[], onOpen=(path:string) => {}}:any) => {
+    files = files.data.map((f:any) => {
+        return {
+            ...f,
+            thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
+        }
+    })
     const folderChain = [{ id: '/', name: "Files", isDir: true }].concat(
         ...currentPath.split('/').map((x:any, i:any, arr:any) => {
             return {
