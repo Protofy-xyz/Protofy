@@ -20,19 +20,16 @@ function ResizeHandle({ direction = "LEFT", onTogglePanel, disabled, onClick }: 
 					borderRadius: '20px',
 					position: 'absolute',
 					right: '10px',
-					// borderTopLeftRadius: '12px',
-					// borderBottomLeftRadius: '12px',
 					marginLeft: "-30px",
-					background: "grey",
-					border: '1px solid grey',
+					background: "#252526",
 					display: "flex",
 					alignItems: 'center',
 					pointerEvents: 'all',
 					justifyContent: 'center'
 				}}>
 				{direction == "LEFT"
-					? <ChevronLeft size={25} style={{marginRight: '3px'}} color="#252526" />
-					: <ChevronRight size={25} style={{marginLeft: '3px'}} color="#252526" />
+					? <ChevronLeft size={25} style={{marginRight: '3px'}} color="white" />
+					: <ChevronRight size={25} style={{marginLeft: '3px'}} color="white" />
 				}
 			</div>
 		</PanelResizeHandle>
