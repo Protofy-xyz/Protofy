@@ -77,7 +77,7 @@ const fail = (returnUrl?) => {
     return {
         redirect: {
             permanent: false,
-            destination: "/login"+(returnUrl?"?return="+returnUrl:"")
+            destination: "/auth/login"+(returnUrl?"?return="+returnUrl:"")
         }
     }
 }
