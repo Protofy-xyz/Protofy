@@ -1,5 +1,6 @@
 {
     "App": [
+        { "name": "Workspace", "type": "files", "path": "/" },
         { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
         { "name": "Public", "type": "files", "path": "/apps/next/public" },
         { "name": "Data", "type": "files", "path": "/data" }
