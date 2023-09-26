@@ -1,20 +1,13 @@
 import { XStack } from 'tamagui'
-import { createApiAtom, useHydratedAtom } from 'protolib'
 import { PanelLayout } from '../../layout/PanelLayout'
-import { useUpdateEffect } from 'usehooks-ts'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-
-import { useThemeSetting } from '@tamagui/next-theme'
 import { PanelMenu } from './components/PanelMenu'
-
-
+import { useRouter } from 'next/router';
 
 const data = {
     "Files": [
-        { "name": "apps", "href": "/admin/files/apps" },
+        { "name": "Pages", "href": "/admin/files/apps/next/pages" },
         { "name": "data", "href": "/admin/files/data" },
-        { "name": "packages", "href": "/admin/files/packages" }
+        { "name": "common", "href": "/admin/files/packages/common" }
     ],
     "Files 2": [
         { "name": "apps", "href": "/admin/files/apps" },
@@ -25,11 +18,24 @@ const data = {
 
 
 export default function Admin({ filesState, FileBrowser, CurrentPath, CurrentFile }) {
-    
+    const router = useRouter()
+    const parts = router.asPath.split('/')
+    const section = parts.length > 2 ? parts[2] : 'files' //TODO: redirect to first available path
+
+    const getComponent = () => {
+        switch(section) {
+            case 'db':
+                return <div>db</div>
+            case 'files':
+                return <FileBrowser path={CurrentPath} file={CurrentFile} filesState={filesState} />
+            
+        }
+        
+    }
 
     return (<PanelLayout menuContent={<PanelMenu menu={data}/>}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
-            <FileBrowser path={CurrentPath} file={CurrentFile} filesState={filesState} />
+            {getComponent()}
         </XStack>
     </PanelLayout>)
 }

@@ -64,12 +64,12 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
         router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file=' + file.name)
     }
     
-    const parsedFiles = files.data.map((f:any) => {
+    const parsedFiles = files && files.data ? files.data.map((f:any) => {
         return {
             ...f,
             thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
         }
-    })
+    }):[]
     const folderChain = [{ id: '/', name: "Files", isDir: true }].concat(
         ...currentPath.split('/').map((x:any, i:any, arr:any) => {
             return {
