@@ -18,11 +18,10 @@ export default function Admin({ workspace, data, FileBrowser }) {
     const setCurrentWorkspace = useSetAtom(workspaceAtom)
     useEffect(() => setCurrentWorkspace(workspace), [workspace])
 
-
     const getComponent = () => {
         switch(section) {
             case 'dbs':
-                return <DBAdmin databasesState={data?.databasesState} currentDbState={data?.currentDbState} contentState={data?.contentState} />
+                return <DBAdmin currentDbState={data?.currentDbState} contentState={data?.contentState} />
             case 'files':
                 return <FileBrowser path={data?.CurrentPath} file={data?.CurrentFile} filesState={data?.filesState} />
         }

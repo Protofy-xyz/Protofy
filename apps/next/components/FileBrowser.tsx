@@ -5,17 +5,17 @@ import { YStack } from '@tamagui/stacks';
 import { AlertDialog, Button, Dialog, XStack, useTheme } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from 'app/features/admin/components/FilesWidget';
-import { IconContainer, createApiAtom, useHydratedAtom } from 'protolib';
+import { useAtom, IconContainer, createApiAtom } from 'protolib';
 import { X } from '@tamagui/lucide-icons';
 import {useUpdateEffect} from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
-const [filesArr, filesAtom] = createApiAtom([])
+const filesAtom = createApiAtom([])
 
 const WebFileBrowser = ({file, path, filesState}:any) => {
-    const [files, setFiles] = useHydratedAtom(filesArr, filesState, filesAtom)
+    const [files, setFiles] = useAtom(filesAtom, filesState)
     const [dialogOpen, setDialogOpen] = useState(file ? true : false)
     const [currentPath, setCurrentPath] = useState(path)
     const [currentFile, setCurrentFile] = useState(file ? file : '')

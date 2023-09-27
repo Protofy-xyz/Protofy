@@ -1,22 +1,16 @@
 
-import { DefaultLayout } from '@/layout/DefaultLayout'
+import { DefaultLayout } from '../layout/DefaultLayout'
 import { XStack, YStack, Stack } from 'tamagui'
-import { useAtom } from "jotai";
-import React from 'react';
-import { useHydrateAtoms } from 'jotai/utils'
-import { useTouchSensors, SortableItem, Page, getPendingResult, EditableText, AsyncView, usePendingEffect, createApiAtom, API, Grid, SpotLight, Section, TamaCard, BigTitle } from 'protolib'
-import { SSR } from '@/conf';
+import { useAtom, useTouchSensors, SortableItem, Page, getPendingResult, EditableText, AsyncView, usePendingEffect, createApiAtom, API, Grid, SpotLight, Section, TamaCard, BigTitle } from 'protolib'
 import { arrayMove, SortableContext, rectSortingStrategy} from '@dnd-kit/sortable';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 
-const [notesArr, notesAtom] = createApiAtom([])
+const notesAtom = createApiAtom([])
 
-export default function Notes({ notesState }) {
-  if (notesState) useHydrateAtoms([[notesArr, notesState]])
-  const [notes, setNotes] = useAtom(notesAtom)
-
-  usePendingEffect(() => API.get('/api/v1/notes', setNotes), notes)
-
+export default function Notes({ initialNotes }) {
+  const [notes,setNotes] = useAtom(notesAtom, initialNotes)
+  usePendingEffect((s) => API.get('/api/v1/notes', s), setNotes, initialNotes)
+  
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if(over && over.id && active && active.id) {
@@ -67,7 +61,3 @@ export default function Notes({ notesState }) {
 
   )
 }
-
-export const getServerSideProps = SSR(async () => {
-  return { props: { notesState: await API.get('/api/v1/notes') } }
-})

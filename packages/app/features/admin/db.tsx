@@ -1,34 +1,31 @@
 import { YStack, XStack, Stack, Paragraph, Text } from 'tamagui'
-import { API, createApiAtom, usePendingEffect, PanelMenuItem, useHydratedAtom, DataCard, Search } from 'protolib'
-import { PanelLayout } from '../../layout/PanelLayout'
-import { Database } from '@tamagui/lucide-icons'
-import { atom, useAtom } from 'jotai'
+import {useAtom, API, createApiAtom, DataCard, Search } from 'protolib'
+import { atom } from 'jotai'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
-import { Link } from '@my/ui'
 import { useState } from 'react'
 import { useTint } from '@tamagui/logo'
 
-const [dbsArr, dbsAtom] = createApiAtom([])
-const [contentArr, contentAtom] = createApiAtom([])
+const contentAtom = createApiAtom([])
 const currentDbAtom = atom(0)
 
-export default function DBAdmin({ databasesState, currentDbState, contentState }) {
+export default function DBAdmin({currentDbState, contentState }) {
     const router = useRouter()
-    const [databases, setDatabases] = useHydratedAtom(dbsArr, databasesState, dbsAtom)
-    const [content, setContent] = useHydratedAtom(contentArr, contentState, contentAtom)
-    const [currentDB] = useHydratedAtom(currentDbAtom, currentDbState ?? router.query.name)
+
+    const [content, setContent] = useAtom(contentAtom, contentState)
+    const [currentDB] = useAtom(currentDbAtom, currentDbState ?? router.query.name)
+
     const [renew, setRenew] = useState(1)
     const [originalContent, setOriginalContent] = useState<any>()
     const { tint } = useTint()
 
-    usePendingEffect(async () => {
-        const databases = await API.get('/adminapi/v1/databases')
-        setDatabases(databases)
-        if (databases?.isLoaded && databases?.data.length) {
-            API.get('/adminapi/v1/databases/' + currentDB, setContent)
-        }
-    }, databases)
+    // usePendingEffect(async () => {
+    //     const databases = await API.get('/adminapi/v1/databases')
+    //     setDatabases(databases)
+    //     if (databases?.isLoaded && databases?.data.length) {
+    //         API.get('/adminapi/v1/databases/' + currentDB, setContent)
+    //     }
+    // }, databases)
 
     useUpdateEffect(() => {
         API.get('/adminapi/v1/databases/' + currentDB, setContent)
