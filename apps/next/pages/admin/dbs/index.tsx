@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
 import { promises as fs } from 'fs';
 import fsSync from 'fs'
-import DBAdmin from 'app/features/admin/db'
+import DBAdmin from 'app/features/admin/components/db'
 
 const FileBrowser = dynamic(() => import('../../../components/FileBrowser'), {
   ssr: false,
