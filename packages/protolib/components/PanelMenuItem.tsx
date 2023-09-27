@@ -30,7 +30,7 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
       } : {})}
       {...props}
     >
-      {icon ? <Text marginTop={"$0"} marginRight={"$4"}>
+      {icon ? <Text marginTop={"$0"} marginRight={text?"$4":"$0"}>
         {icon}
       </Text> : null}
       {text ? <SizableText selectable={false} pointerEvents="none" color="var(--color12)" size="$5" fontWeight="800">
