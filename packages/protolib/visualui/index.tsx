@@ -63,6 +63,7 @@ import { UL } from '../components/UL'
 //import { unwrapText } from '../components/unwrapText'
 import XCenterStack from '../components/XCenterStack'
 import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
+import { AlertDialog } from '../components/AlertDialog'
 
 const cw = getComponentWrapper('protolib')
 
@@ -157,6 +158,7 @@ export default {
   ...cw(HomeSection, 'BoxSelect', 'HomeSection'),
   ...cw(TooltipContainer, 'BoxSelect', 'TooltipContainer', { tooltipText: "Hello" }),
   ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }),
-  ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack')
+  ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
+  ...cw(AlertDialog, 'Group', 'AlertDialog')
 }
 
