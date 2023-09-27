@@ -1,8 +1,9 @@
 import { XStack } from 'tamagui'
 import { Button, Dialog, Spacer } from '@my/ui'
+import { forwardRef } from 'react'
 
-export const AlertDialog = ({title,trigger, description, children, cancelCaption='Cancel', acceptCaption='Accept'}:any) => {
-    return (<Dialog>
+export const AlertDialog = forwardRef(({title,trigger, description, children, cancelCaption='Cancel', acceptCaption='Accept'}:any, ref:any) => {
+    return (<Dialog ref={ref}>
         <Dialog.Trigger>
             {trigger}
         </Dialog.Trigger>
@@ -14,7 +15,7 @@ export const AlertDialog = ({title,trigger, description, children, cancelCaption
                     {description}
                 </Dialog.Description>
                 
-                <XStack>
+                <XStack width={'100%'}>
                     {children}
                 </XStack>
                 
@@ -60,4 +61,4 @@ export const AlertDialog = ({title,trigger, description, children, cancelCaption
             </Dialog.Sheet>
         </Dialog.Adapt>
     </Dialog>)
-}
+})
