@@ -45,9 +45,18 @@ JsxElement.getData = (node, data, nodesData, edges) => {
     const jsxAttributes = node?.getOpeningElement()?.getAttributes();
 
     const props = jsxAttributes?.reduce((obj, attribute, i) => {
-        const sourceKey = attribute.getName()
-        const propName = 'prop-' + sourceKey
-        const sourceValue = connectItem(attribute.getInitializer(), 'output', node, propName, data, nodesData, edges, propName)
+        let sourceKey
+        let sourceValue
+        let propName
+        if (attribute.getKindName() == "JsxSpreadAttribute") {
+            propName = 'prop-spreaded-' + i;
+            sourceKey = '';
+            sourceValue = attribute.getText()
+        } else {
+            sourceKey = attribute.getName()
+            propName = 'prop-' + sourceKey
+            sourceValue = connectItem(attribute?.getInitializer(), 'output', node, propName, data, nodesData, edges, propName)
+        }
         return {
             ...obj,
             [propName]: {
@@ -71,7 +80,7 @@ JsxElement.getData = (node, data, nodesData, edges) => {
     return { ...tagName, ...props, ...childs }
 }
 
-JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level=0) => {
+JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level = 0) => {
     const data = nodesData[node.id] ?? {};
     const jsxTagName = data?.name
     const fallbackText = data._fallBack?.reduce((total, fb) => {
@@ -84,10 +93,15 @@ JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers
     }, "") ?? ''
     const fallbackProps = data._fallBack?.map(i => i.port) ?? []
     const props = Object.keys(data).filter(key => key.startsWith('prop-') && !fallbackProps.includes(key)).reduce((total, prop) => {
-        let objKey = data[prop]?.key
-        let objValue = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-        if (!objValue || !objKey) return total
-        const objParam = `${objKey}=${objValue} `
+        let objParam
+        if (prop.startsWith("prop-spreaded")) {
+            objParam = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+        } else {
+            let objKey = data[prop].key
+            let objValue = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            objParam = `${objKey}=${objValue} `
+            if (!objValue || !objKey) return total
+        }
         return total + objParam
     }, "")
     const childs = Object.keys(data).filter(key => key.startsWith('child-')).reduce((total, child) => {

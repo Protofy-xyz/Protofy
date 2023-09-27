@@ -22,7 +22,7 @@ const JsxSelfClosingElement = (node) => {
     const nodeParamsProps: Field[] = name.concat(props)
 
     return (
-        <Node icon={Code}  node={node} isPreview={!id} title={"<x ... />"} id={id} color={nodeColors[type]}>
+        <Node icon={Code} node={node} isPreview={!id} title={"<x ... />"} id={id} color={nodeColors[type]}>
             <NodeParams id={id} params={nodeParamsProps} />
             <AddPropButton id={id} nodeData={nodeData} type={"Prop"} />
         </Node>
@@ -31,13 +31,22 @@ const JsxSelfClosingElement = (node) => {
 JsxSelfClosingElement.keyWords = ["jsx", "jsxelement", "jsxselfclosingelement", "react", "tsx", "fragment", "selfclosed"]
 
 JsxSelfClosingElement.getData = (node, data, nodesData, edges) => {
-    const tagName = { name: node?.getTagNameNode()?.getText()}
+    const tagName = { name: node?.getTagNameNode()?.getText() }
     const jsxAttributes = node?.getAttributes()
 
     const props = jsxAttributes?.reduce((obj, attribute, i) => {
-        const sourceKey = attribute.getName()
-        const propName = 'prop-' + sourceKey
-        const sourceValue = connectItem(attribute.getInitializer(), 'output', node, propName, data, nodesData, edges, propName)
+        let sourceKey
+        let sourceValue
+        let propName
+        if (attribute.getKindName() == "JsxSpreadAttribute") {
+            propName = 'prop-spreaded-'+i;
+            sourceKey = '';
+            sourceValue = attribute.getText()
+        } else {
+            sourceKey = attribute.getName()
+            propName = 'prop-' + sourceKey
+            sourceValue = connectItem(attribute?.getInitializer(), 'output', node, propName, data, nodesData, edges, propName)
+        }
         return {
             ...obj,
             [propName]: {
@@ -47,16 +56,21 @@ JsxSelfClosingElement.getData = (node, data, nodesData, edges) => {
         }
     }, {})
 
-    return { ...tagName, ...props}
+    return { ...tagName, ...props }
 }
 
-JsxSelfClosingElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level=0) => {
+JsxSelfClosingElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level = 0) => {
     const data = nodesData[node.id] ?? {};
     const jsxTagName = data?.name
     const props = Object.keys(data).filter(key => key.startsWith('prop-')).reduce((total, prop) => {
-        let objKey = data[prop].key
-        let objValue = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-        const objParam = `${objKey}=${objValue} `
+        let objParam 
+        if(prop.startsWith("prop-spreaded")) {
+            objParam =  dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+        } else {
+            let objKey = data[prop].key
+            let objValue = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            objParam = `${objKey}=${objValue} `
+        }
         return total + objParam
     }, "")
     return `< ${jsxTagName} ${props} />` + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
