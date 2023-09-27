@@ -45,8 +45,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
           }
         }
         console.log('Requesting to: *****************', '/adminapi/v1/files/'+path)
-      } else if(nameSegments[0] == 'dbs') {
-        
+      } else if(nameSegments[0] == 'dbs' && dbs.data) {
         if (!context.query.name && dbs.data.length) {
             return redirect('/admin/dbs/' + dbs.data[0].name)
         }
@@ -75,7 +74,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
       parsedWorkspace[key] = []
       workspace[key].forEach((p:any) => {
         if(p.name == '*' && p.type == 'database') {
-          dbs.data.forEach((db:any) => {
+          dbs.data?.forEach((db:any) => {
             parsedWorkspace[key].push({
               ...p,
               name: db.name, 

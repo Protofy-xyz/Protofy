@@ -15,9 +15,9 @@ export default function Admin({ workspace, data, FileBrowser }) {
     const getComponent = () => {
         switch(section) {
             case 'dbs':
-                return <DBAdmin databasesState={data.databasesState} currentDbState={data.currentDbState} contentState={data.contentState} />
+                return <DBAdmin databasesState={data?.databasesState} currentDbState={data?.currentDbState} contentState={data?.contentState} />
             case 'files':
-                return <FileBrowser path={data.CurrentPath} file={data.CurrentFile} filesState={data.filesState} />
+                return <FileBrowser path={data?.CurrentPath} file={data?.CurrentFile} filesState={data?.filesState} />
         }
     }
 
