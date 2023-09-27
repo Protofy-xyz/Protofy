@@ -12,7 +12,7 @@ const FileBrowser = dynamic(() => import('../../../components/FileBrowser'), {
   ssr: false,
 })
 
-export default function FilesPage(props:any) {
+export default function FilesPage({workspace, data}:any) {
   const router = useRouter();
   const { name } = router.query;
   return (
@@ -20,7 +20,9 @@ export default function FilesPage(props:any) {
       <Head>
         <title>Protofy - Admin Panel</title>
       </Head>
-      <AdminPanel {...props} FileBrowser={FileBrowser} />
+      <AdminPanel workspace={workspace}>
+        <FileBrowser path={data?.CurrentPath} file={data?.CurrentFile} filesState={data?.filesState} />
+      </AdminPanel>
     </>
   )
 }

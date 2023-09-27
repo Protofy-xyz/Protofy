@@ -7,12 +7,13 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
 import { promises as fs } from 'fs';
 import fsSync from 'fs'
+import DBAdmin from 'app/features/admin/db'
 
 const FileBrowser = dynamic(() => import('../../../components/FileBrowser'), {
   ssr: false,
 })
 
-export default function FilesPage(props:any) {
+export default function FilesPage({workspace, data}:any) {
   const router = useRouter();
   const { name } = router.query;
   return (
@@ -20,7 +21,9 @@ export default function FilesPage(props:any) {
       <Head>
         <title>Protofy - Admin Panel</title>
       </Head>
-      <AdminPanel {...props} FileBrowser={FileBrowser} />
+      <AdminPanel workspace={workspace}>
+        <DBAdmin currentDbState={data?.currentDbState} contentState={data?.contentState} />
+      </AdminPanel>
     </>
   )
 }

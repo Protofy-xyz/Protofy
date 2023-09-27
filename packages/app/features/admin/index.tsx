@@ -10,26 +10,13 @@ import { useEffect } from 'react';
 const menuData = {}
 export const workspaceAtom = atom<PendingAtomResult>(getPendingResult("pending"))
 
-export default function Admin({ workspace, data, FileBrowser }) {
-    const router = useRouter()
-    const parts = router.asPath.split('/')
-    const section = parts.length > 2 ? parts[2].split('?')[0] : null //TODO: redirect to first available path
-
+export default function Admin({ workspace, children}) {
     const setCurrentWorkspace = useSetAtom(workspaceAtom)
     useEffect(() => setCurrentWorkspace(workspace), [workspace])
 
-    const getComponent = () => {
-        switch(section) {
-            case 'dbs':
-                return <DBAdmin currentDbState={data?.currentDbState} contentState={data?.contentState} />
-            case 'files':
-                return <FileBrowser path={data?.CurrentPath} file={data?.CurrentFile} filesState={data?.filesState} />
-        }
-    }
-
     return (<PanelLayout menuContent={<PanelMenu />}>
         <XStack f={1} px={"$4"} flexWrap='wrap'>
-            {getComponent()}
+            {children}
         </XStack>
     </PanelLayout>)
 }
