@@ -13,6 +13,7 @@ import React, { createContext } from 'react'
 import type { SolitoAppProps } from 'solito'
 import { SiteConfig } from 'conf'
 import {AppConfContext} from 'app/provider/AppConf'
+import { Provider as JotaiProvider } from 'jotai'
 
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css')
@@ -28,10 +29,11 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <ThemeProvider>
-        <AppConfContext.Provider value={SiteConfig}>
-          <Component {...pageProps} />
-        </AppConfContext.Provider>
-
+        <JotaiProvider>
+          <AppConfContext.Provider value={SiteConfig}>
+            <Component {...pageProps} />
+          </AppConfContext.Provider>
+        </JotaiProvider>
       </ThemeProvider>
     </>
   )
