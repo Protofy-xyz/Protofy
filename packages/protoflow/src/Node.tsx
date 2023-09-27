@@ -429,7 +429,7 @@ export const HandleOutput = ({ id, param, position = null, style = {}, isConnect
             </div> : null}
             <Handle
                 type={"source"}
-                style={{ marginLeft: '-10px',width: portSize + "px", height: portSize + "px", backgroundColor: backgroundColor, top: (portSize/100*110), border: borderWidth + " solid " + borderColor, ...style }}
+                style={{ marginLeft: '-12px',width: portSize + "px", height: portSize + "px", backgroundColor: backgroundColor, top: (portSize/100*110), border: borderWidth + " solid " + borderColor, ...style }}
                 position={position ?? (flowDirection == 'LEFT' ? Position.Left : Position.Right)}
                 title={DEVMODE ? `${id}${PORT_TYPES.data}output` : undefined}
                 id={`${id}${PORT_TYPES.data}output`}
