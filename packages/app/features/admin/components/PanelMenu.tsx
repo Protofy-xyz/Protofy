@@ -4,6 +4,8 @@ import { Box, ChevronDown, Database, Folder, Plus, PlusCircle, Workflow, X } fro
 import { Accordion, Button, Dialog, Fieldset, Input, Label, Link, Paragraph, SizableText, Spacer, Square, TooltipSimple, Unspaced } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import {useAtom, useSetAtom} from 'jotai'
+import { workspaceAtom } from '..';
 
 const iconTable = {
     database: <Database color="$color11" strokeWidth={1.5} />,
@@ -21,6 +23,8 @@ const getIcon = (icon) => {
 
 const CreateDialog = ({subtab}) => {
     const [name, setName] = useState('')
+    const setWorkspace = useSetAtom(workspaceAtom)
+    // console.log('databases: ', databases)
     return <XStack onPress={() => { }}>
         <AlertDialog
             onAccept={async (setOpen) => {
@@ -28,8 +32,10 @@ const CreateDialog = ({subtab}) => {
                     name: name,
                     data: {...subtab}
                 })
-                // setName('')
-                // setOpen(false)
+                //@ts-ignore
+                setWorkspace(await API.get('/adminapi/v1/workspaces'))
+                setName('')
+                setOpen(false)
             }}
             title={subtab.options?.title??"Create a new "+subtab.options.template}
             trigger={<PanelMenuItem
@@ -100,8 +106,9 @@ const Tabs = ({ tabs }: any) => {
     );
 };
 
-export const PanelMenu = ({ menu }: any) => {
+export const PanelMenu = () => {
+    const [workspace] = useAtom(workspaceAtom)
     return (<YStack mx={"$4"} pt="$10">
-        <Tabs tabs={menu} />
+        <Tabs tabs={workspace.data} />
     </YStack>)
 }

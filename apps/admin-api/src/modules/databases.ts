@@ -5,8 +5,16 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { connectDB, getDB } from '../lib/db';
 
+export const getDatabases = async () => {
+    return (await fs.promises.readdir('../../'+path.join('data', 'databases'))).map((name)=>{
+        return {
+            name: name
+        }
+    })
+}
+
 app.get('/adminapi/v1/databases', handler(async (req, res) => {
-    res.send([{name:'auth'},{name:'db'}])
+    res.send(await getDatabases())
 }));
 
 app.get('/adminapi/v1/databases/:dbname', handler(async (req, res) => {
