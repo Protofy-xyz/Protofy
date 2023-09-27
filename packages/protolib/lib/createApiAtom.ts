@@ -23,13 +23,4 @@ export const getPendingResult = (status:PendingAtomStatus, data?, error?):Pendin
     }
 }
   
-export const createApiAtom = (initialState) => {
-    const stateAtom = atom<PendingAtomResult>(getPendingResult("pending", initialState))
-    const apiAtom = atom(
-      (get) => get(stateAtom), 
-      (get, set, update: any) => {
-        set(stateAtom, update);
-      }
-    );
-    return [stateAtom, apiAtom]
-}
+export const createApiAtom = (initialState) => atom<PendingAtomResult>(getPendingResult("pending", initialState))

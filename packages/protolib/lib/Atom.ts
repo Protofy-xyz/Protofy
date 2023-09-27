@@ -1,14 +1,9 @@
 import {useUpdateEffect} from 'usehooks-ts'
-import {useAtom} from 'jotai'
 import {useHydrateAtoms} from 'jotai/utils'
+import {useAtom as _useAtom} from 'jotai'
+import { PendingAtomResult } from './createApiAtom'
 
-export const useHydratedAtom= (atomState, hydrateState, userAtom?):any => {
-    if(hydrateState) {
-        useHydrateAtoms([[atomState, hydrateState]])
-    }
-    let atomVal = useAtom(userAtom??atomState)
-    useUpdateEffect(() => {
-        atomVal[1](hydrateState)
-    }, [hydrateState])
-    return atomVal
+export const useAtom = (atom, initialState?) => {
+    const [content, setContent] = _useAtom<PendingAtomResult>(atom)
+    return (initialState && (content.isError || content.isLoaded)) ? [content, setContent] : [initialState, setContent]
 }
