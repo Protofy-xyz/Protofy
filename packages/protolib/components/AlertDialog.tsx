@@ -1,9 +1,10 @@
 import { XStack } from 'tamagui'
 import { Button, Dialog, Spacer } from '@my/ui'
-import { forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
 
-export const AlertDialog = forwardRef(({title,trigger, description, children, cancelCaption='Cancel', acceptCaption='Accept'}:any, ref:any) => {
-    return (<Dialog ref={ref}>
+export const AlertDialog = forwardRef(({onAccept=() => {}, onCancel=() => {},title,trigger, description, children, cancelCaption='Cancel', acceptCaption='Accept'}:any, ref:any) => {
+    const [open, setOpen] = useState(false) 
+    return (<Dialog ref={ref} open={open} onOpenChange={setOpen}>
         <Dialog.Trigger>
             {trigger}
         </Dialog.Trigger>
@@ -22,17 +23,17 @@ export const AlertDialog = forwardRef(({title,trigger, description, children, ca
                 
                 <Spacer flex={1} height="$4" />
                 <XStack alignSelf="flex-end" gap="$4">
-                    <Dialog.Close displayWhenAdapted asChild>
+                    <Dialog.Close onPress={onCancel} displayWhenAdapted asChild>
                         <Button backgroundColor={"transparent"} theme="alt1" aria-label="Close">
                             {cancelCaption}
                         </Button>
                     </Dialog.Close>
 
-                    <Dialog.Close displayWhenAdapted asChild>
-                        <Button theme="alt1" aria-label="Close">
-                            {acceptCaption}
-                        </Button>
-                    </Dialog.Close>
+        
+                    <Button onPress={() => onAccept(setOpen)} theme="alt1" aria-label="Close">
+                        {acceptCaption}
+                    </Button>
+    
                 </XStack>
 {/* 
                 <Unspaced>
