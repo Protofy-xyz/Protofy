@@ -1,7 +1,8 @@
-import React from 'react'
+import { forwardRef } from 'react'
 
-export const GithubIcon = (props) => (
+export const GithubIcon = forwardRef((props, ref: any) => (
   <svg
+    ref={ref}
     width="30"
     height="30"
     viewBox="0 0 15 15"
@@ -16,4 +17,4 @@ export const GithubIcon = (props) => (
       clipRule="evenodd"
     ></path>
   </svg>
-)
+))

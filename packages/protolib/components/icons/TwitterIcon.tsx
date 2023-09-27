@@ -1,5 +1,8 @@
-export const TwitterIcon = (props) => (
+import { forwardRef } from 'react'
+
+export const TwitterIcon = forwardRef((props, ref: any) => (
   <svg
+    ref={ref}
     width="30"
     height="31"
     viewBox="0 0 30 31"
@@ -21,4 +24,4 @@ export const TwitterIcon = (props) => (
       </clipPath>
     </defs>
   </svg>
-)
+))

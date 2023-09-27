@@ -18,6 +18,8 @@ import { Container, ContainerLarge, ContainerXL } from '../components/Container'
 import { CopyBubble } from '../components/CopyBubble'
 import { DataCard } from '../components/DataCard'
 import { DataTable } from '../components/DataTable'
+import { DiscordIcon } from '../components/icons/DiscordIcon'
+import { GithubIcon } from '../components/icons/GithubIcon'
 import EditableText from '../components/EditableText'
 import ElevatedArea from '../components/ElevatedArea'
 //import { ErrorBoundary } from '../components/ErrorBoundary'
@@ -31,6 +33,7 @@ import { Head2 } from '../components/Head2'
 import { Head3 } from '../components/Head3'
 import { HeaderLink } from '../components/HeaderLink'
 import HorizontalBox from '../components/HorizontalBox'
+import HoveredGroup from '../components/HoveredGroup'
 import { HR } from '../components/HR'
 import { IconStack } from '../components/IconStack'
 import { ItemCard } from '../components/ItemCard'
@@ -50,6 +53,7 @@ import { Pre } from '../components/Pre'
 import RainbowText from '../components/RainbowText'
 import { Search } from '../components/Search'
 import Section from '../components/Section'
+import SectionBox from '../components/SectionBox'
 import SectionBlock, { TitleLink } from '../components/SectionBlock'
 import SideBySide from '../components/SideBySide'
 import SpotLight from '../components/SpotLight'
@@ -59,9 +63,21 @@ import { TamaCard } from '../components/TamaCard'
 import { ThemeToggle } from '../components/ThemeToggle'
 import { TintSection, HomeSection, useTintSectionIndex } from '../components/TintSection'
 import TooltipContainer from '../components/TooltipContainer'
+import { TwitterIcon } from '../components/icons/TwitterIcon'
+
 import { UL } from '../components/UL'
 //import { unwrapText } from '../components/unwrapText'
 import XCenterStack from '../components/XCenterStack'
+
+import {
+  // TwitterIcon,
+  // DiscordIcon,
+  // GithubIcon,
+  // HoveredGroup,
+  // SectionBox,
+  // useSession,
+} from 'protolib'
+
 import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
 import { AlertDialog } from '../components/AlertDialog'
 
@@ -102,11 +118,13 @@ export default {
   ...cw(CopyBubble, 'Copy', 'CopyBubble', { text: "copy" }),
   ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
+  ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
   ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }),
   ...cw(ElevatedArea, 'GalleryThumbnails', 'ElevatedArea'),
   ...cw(ErrorMessage, 'AlertTriangle', 'ErrorMessage'),
   ...cw(FeatureItem, 'CheckCircle2', 'FeatureItem', { label: "hello", children: "world" }),
   ...cw(FancyCard, 'SquareAsterisk', 'FancyCard'),
+  ...cw(GithubIcon, 'LogoIcon', 'GithubIcon', { width: 23, plain: true }),
   ...cw(Grid, 'LayoutGrid', 'Grid'),
   ...cw(GridElement, 'LayoutGrid', 'GridElement', { title: "hello", children: "world" }),
   ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }),
@@ -114,6 +132,7 @@ export default {
   ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }),
   ...cw(HeaderLink, 'Link2', 'HeaderLink', { href: "/hello", children: "hello" }),
   ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HR, 'MinusSquare', 'HR'),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }),
@@ -142,6 +161,7 @@ export default {
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }),
   ...cw(Search, 'Search', 'Search'),
   ...cw(Section, 'EyeOff', 'Section'),
+  ...cw(SectionBox, 'RectangleHorizontal', 'SectionBox', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(SectionBlock, 'BoxSelect', 'SectionBlock'),
   ...cw(TitleLink, 'Link', 'TitleLink', { href: "/hello", children: "hello" }),
   ...cw(SideBySide, 'PanelLeftInactive', 'SideBySide'),
@@ -157,6 +177,7 @@ export default {
   ...cw(TintSection, 'BoxSelect', 'TintSection'),
   ...cw(HomeSection, 'BoxSelect', 'HomeSection'),
   ...cw(TooltipContainer, 'BoxSelect', 'TooltipContainer', { tooltipText: "Hello" }),
+  ...cw(TwitterIcon, 'LogoIcon', 'TwitterIcon', { width: 23 }),
   ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }),
   ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
   ...cw(AlertDialog, 'Group', 'AlertDialog')
