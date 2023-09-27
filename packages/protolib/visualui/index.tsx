@@ -33,7 +33,7 @@ import { Head2 } from '../components/Head2'
 import { Head3 } from '../components/Head3'
 import { HeaderLink } from '../components/HeaderLink'
 import HorizontalBox from '../components/HorizontalBox'
-import HoveredGroup from '../components/HoveredGroup'
+// import HoveredGroup from '../components/HoveredGroup'
 import { HR } from '../components/HR'
 import { IconStack } from '../components/IconStack'
 import { ItemCard } from '../components/ItemCard'
@@ -68,15 +68,6 @@ import { TwitterIcon } from '../components/icons/TwitterIcon'
 import { UL } from '../components/UL'
 //import { unwrapText } from '../components/unwrapText'
 import XCenterStack from '../components/XCenterStack'
-
-import {
-  // TwitterIcon,
-  // DiscordIcon,
-  // GithubIcon,
-  // HoveredGroup,
-  // SectionBox,
-  // useSession,
-} from 'protolib'
 
 import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
 import { AlertDialog } from '../components/AlertDialog'
@@ -132,7 +123,7 @@ export default {
   ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }),
   ...cw(HeaderLink, 'Link2', 'HeaderLink', { href: "/hello", children: "hello" }),
   ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
+  // ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HR, 'MinusSquare', 'HR'),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }),
