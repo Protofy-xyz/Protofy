@@ -1,7 +1,7 @@
 import { YStack, XStack, Stack } from 'tamagui'
-import { PanelMenuItem } from 'protolib'
-import { Box, ChevronDown, Database, Folder, Workflow } from '@tamagui/lucide-icons'
-import { Accordion, Link, SizableText, Square } from '@my/ui'
+import { PanelMenuItem, AlertDialog} from 'protolib'
+import { Box, ChevronDown, Database, Folder, Plus, PlusCircle, Workflow, X } from '@tamagui/lucide-icons'
+import { Accordion, Button, Dialog, Fieldset, Input, Label, Link, Paragraph, SizableText, Spacer, Square, TooltipSimple, Unspaced } from '@my/ui'
 import { useRouter } from 'next/router';
 
 const Subtabs = ({ subtabs }: any) => {
@@ -10,18 +10,37 @@ const Subtabs = ({ subtabs }: any) => {
     const iconTable = {
         database: <Database color="$color11" strokeWidth={1.5} />,
         model: <Box color="$color11" strokeWidth={1.5} />,
-        api: <Workflow color="$color11" strokeWidth={1.5} />
+        api: <Workflow color="$color11" strokeWidth={1.5} />,
+        create: <Plus color="$color11" strokeWidth={1.5} />
     }
     const getIcon = (icon) => {
-        if(!iconTable[icon]) {
+        if (!iconTable[icon]) {
             return <Folder color="$color11" strokeWidth={1.5} />
         } else {
             return iconTable[icon]
         }
-    } 
+    }
     return (
         <>
             {subtabs.map((subtab, index) => {
+                if (subtab.type == 'create') return <XStack onPress={() => { }}>
+                    <AlertDialog
+                        onAccept={(setOpen) => setOpen(false)}
+                        title={subtab.options?.title??"Create a new "+subtab.options.template}
+                        trigger={<PanelMenuItem
+                            icon={getIcon(subtab.icon)}
+                            text={subtab.name}
+                            mb={'$4'}
+                        />}
+                        description={subtab.options?.description ?? ("Use a simple name for your "+subtab.options.template+", related to what your "+subtab.options.template+" does.")}
+
+                    >
+                        <XStack f={1} jc="center" ai="center">
+                            <Input f={1} mx={"$8"} textAlign='center' id="name" placeholder={subtab.options?.placeholder} />
+                        </XStack>
+                        
+                    </AlertDialog>
+                </XStack>
                 return <Link href={subtab.href} onPressApp={() => { }} >
                     <PanelMenuItem
                         mb={'$4'}
@@ -41,11 +60,11 @@ const Tabs = ({ tabs }: any) => {
                 return (
                     <Accordion br={"$6"} overflow="hidden" type="multiple" mb={'$4'} key={index}>
                         <Accordion.Item value={"a" + index}>
-                            <Accordion.Trigger 
-                            backgroundColor={"$backgroundTransparent"} 
-                            focusStyle={{backgroundColor: "$backgroundTransparent"}}
-                            hoverStyle={{backgroundColor: "$backgroundTransparent"}}
-                            bw={0} flexDirection="row" justifyContent="space-between">
+                            <Accordion.Trigger
+                                backgroundColor={"$backgroundTransparent"}
+                                focusStyle={{ backgroundColor: "$backgroundTransparent" }}
+                                hoverStyle={{ backgroundColor: "$backgroundTransparent" }}
+                                bw={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
                                     <XStack f={1}>
                                         {/* <Stack mr={"$3"}>
