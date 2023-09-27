@@ -65,6 +65,8 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
           }
         }
       }
+    } else {
+      return redirect('/admin/dbs/auth')
     }
 
 

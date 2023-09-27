@@ -13,7 +13,7 @@ export const workspaceAtom = atom<PendingAtomResult>(getPendingResult("pending")
 export default function Admin({ workspace, data, FileBrowser }) {
     const router = useRouter()
     const parts = router.asPath.split('/')
-    const section = parts.length > 2 ? parts[2].split('?')[0] : 'files' //TODO: redirect to first available path
+    const section = parts.length > 2 ? parts[2].split('?')[0] : null //TODO: redirect to first available path
 
     const setCurrentWorkspace = useSetAtom(workspaceAtom)
     useEffect(() => setCurrentWorkspace(workspace), [workspace])
