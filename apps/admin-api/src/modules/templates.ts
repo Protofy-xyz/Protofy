@@ -13,8 +13,12 @@ app.post('/adminapi/v1/templates/:tplname', handler(async (req, res) => {
     if(!templates[tplname]) {
         throw "No such template: "+tplname
     }
-
-    await templates[tplname]({connectDB},params)
+    
+    const name = params.name.replace(/[^a-zA-Z0-9_-]/g, '');
+    const path = params.data.path.replace(/\.\./g, '')
+    const fullpath = '../..'+path+"/"+name
+    console.log('Executing template: ', tplname, 'in: ', fullpath, 'with vars: ', params)
+    await templates[tplname]({connectDB, fs},fullpath, params)
 
     res.send({"result":"created"})
     return

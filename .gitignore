@@ -2,6 +2,7 @@
 .yarn/*
 data/*
 !data/workspaces
+!data/templates
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases

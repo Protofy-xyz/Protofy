@@ -1,7 +1,11 @@
-import { api } from "./api";
+import { file } from "./file";
 import { database } from "./database";
 
 export const templates = {
-    api,
+    file,
     database
+}
+
+export const getTemplate = (name: string) => {
+    return templates[name]
 }

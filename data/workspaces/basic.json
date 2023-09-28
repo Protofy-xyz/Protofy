@@ -7,15 +7,14 @@
     "Databases": [
         { "name": "*", "icon": "database", "type": "database", "path": "/" },
         { "name": "Add", "icon": "create", "type": "create", "path": "/data/databases", "options": {
-            "template":"database",
-            "title": "Create a new database", 
-            "description": "Use a simple and short name for your database. Specials characters are not allowed, keep it simple.",
-            "placeholder": "Name: accounts, products, customers..."
+            "templates":["database"]
         }}
     ],
     "API": [
         { "name": "*", "icon": "api", "type": "files", "path": "/apps/api/src/modules", "options": {"skipExtension": true}},
-        { "name": "Add", "icon": "create", "type": "create", "path": "/apps/api/src/modules", "options": {"template":"api"}}
+        { "name": "Add", "icon": "create", "type": "create", "path": "/apps/api/src/modules", "options": {
+            "templates":["basicApi"]
+        }}    
     ],
     "Models": [
         { "name": "*", "icon": "model", "type": "files", "path": "/packages/common/schema", "options": {"skipExtension": true}}

@@ -1,11 +1,12 @@
 import { YStack, XStack, Stack } from 'tamagui'
-import { API, PanelMenuItem, AlertDialog} from 'protolib'
+import { getPendingResult, API, PanelMenuItem, AlertDialog} from 'protolib'
 import { Box, ChevronDown, Database, Folder, Plus, PlusCircle, Workflow, X } from '@tamagui/lucide-icons'
 import { Accordion, Button, Dialog, Fieldset, Input, Label, Link, Paragraph, SizableText, Spacer, Square, TooltipSimple, Unspaced } from '@my/ui'
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {useAtom, useSetAtom} from 'jotai'
 import { workspaceAtom } from '..';
+import {getTemplate} from 'common';
 
 const iconTable = {
     database: <Database color="$color11" strokeWidth={1.5} />,
@@ -23,31 +24,46 @@ const getIcon = (icon) => {
 
 const CreateDialog = ({subtab}) => {
     const [name, setName] = useState('')
+    const [result, setResult] = useState(getPendingResult("pending"))
     const setWorkspace = useSetAtom(workspaceAtom)
-    // console.log('databases: ', databases)
+    const template = subtab.options.templates[0]
+
+    if(!template) {
+        throw "Invalid template specified in workspace file: "+ subtab.options.templates[0]
+    }
+
     return <XStack onPress={() => { }}>
         <AlertDialog
             onAccept={async (setOpen) => {
-                await API.post('/adminapi/v1/templates/'+subtab.options.template, {
+                const response = await API.post('/adminapi/v1/templates/'+subtab.options.templates[0].options.type, {
                     name: name,
-                    data: {...subtab}
+                    data: {
+                        options: subtab.options.templates[0].options,
+                        path: subtab.path
+                    }
                 })
                 //@ts-ignore
-                setWorkspace(await API.get('/adminapi/v1/workspaces'))
-                setName('')
-                setOpen(false)
+                if(response.isLoaded) {
+                    setWorkspace(await API.get('/adminapi/v1/workspaces'))
+                    setName('')
+                    setOpen(false)
+                    setResult(getPendingResult("pending"))
+                } else {
+                    setResult(response)
+                }
             }}
-            title={subtab.options?.title??"Create a new "+subtab.options.template}
+            title={template.title??"Create a new "+subtab.options.templates[0]}
             trigger={<PanelMenuItem
                 icon={getIcon(subtab.icon)}
                 text={subtab.name}
                 mb={'$4'}
             />}
-            description={subtab.options?.description ?? ("Use a simple name for your "+subtab.options.template+", related to what your "+subtab.options.template+" does.")}
+            description={template.description ?? ("Use a simple name for your "+subtab.options.templates[0]+", related to what your "+subtab.options.templates[0]+" does.")}
         >
-            <XStack f={1} jc="center" ai="center">
-                <Input value={name} onChangeText={(text) => setName(text)} f={1} mx={"$8"} textAlign='center' id="name" placeholder={subtab.options?.placeholder ?? 'name...'} />
-            </XStack>
+            <YStack f={1} jc="center" ai="center">
+                {result.isError?<Paragraph mb={"$5"} color="$red10">Error: {result.error?.error}</Paragraph>:null}
+                <Input value={name} onChangeText={(text) => setName(text)} f={1} mx={"$8"} textAlign='center' id="name" placeholder={template.placeholder ?? 'name...'} />
+            </YStack>
             
         </AlertDialog>
     </XStack>

@@ -1,0 +1,9 @@
+{
+    "name": "database",
+    "title": "Create a new database", 
+    "description": "Use a simple and short name for your database. Specials characters are not allowed, keep it simple.",
+    "placeholder": "Name: accounts, products, customers...",
+    "options": {
+        "type": "database"
+    }
+}

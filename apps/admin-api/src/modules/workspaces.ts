@@ -31,8 +31,13 @@ app.get('/adminapi/v1/workspaces', handler(async (req, res) => {
             })
           })
         } else {
+          const options:any = {}
+          if(p.options?.templates) {
+            options.options = {templates: p.options.templates.map(t => JSON.parse(fs.readFileSync('../../data/templates/'+t+'/'+t+'.json').toString()))}
+          }
           parsedWorkspace[key].push({
             ...p,
+            ...options,
             href: ('/admin/'+p.type+'/'+p.path).replace(/\/+/g, '/')
           })
         }

@@ -1,0 +1,11 @@
+{
+    "name": "basicApi",
+    "title": "Create a new api", 
+    "description": "Use a simple and short name for your api. Specials characters are not allowed, keep it simple.",
+    "placeholder": "Name: accounts, products, customers...",
+    "options": {
+        "type": "file",
+        "template": "/data/templates/basicApi/template.tpl",
+        "variables": []
+    }
+}
