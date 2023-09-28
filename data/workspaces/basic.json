@@ -1,22 +1,24 @@
 {
-    "App": [
-        { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
-        { "name": "Public", "type": "files", "path": "/apps/next/public" },
-        { "name": "Data", "type": "files", "path": "/data" }
-    ],
-    "Databases": [
-        { "name": "*", "icon": "database", "type": "database", "path": "/" },
-        { "name": "Add", "icon": "create", "type": "create", "path": "/data/databases", "options": {
-            "templates":["database"]
-        }}
-    ],
-    "API": [
-        { "name": "*", "icon": "api", "type": "files", "path": "/apps/api/src/modules", "options": {"skipExtension": true}},
-        { "name": "Add", "icon": "create", "type": "create", "path": "/apps/api/src/modules", "options": {
-            "templates":["basicApi"]
-        }}    
-    ],
-    "Models": [
-        { "name": "*", "icon": "model", "type": "files", "path": "/packages/common/schema", "options": {"skipExtension": true}}
-    ]
+    "menu": {
+        "App": [
+            { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
+            { "name": "Public", "type": "files", "path": "/apps/next/public" },
+            { "name": "Data", "type": "files", "path": "/data" }
+        ],
+        "Databases": [
+            { "name": "*", "icon": "database", "type": "database", "path": "/" },
+            { "name": "Add", "icon": "create", "type": "create", "path": "/data/databases", "options": {
+                "templates":["database"]
+            }}
+        ],
+        "API": [
+            { "name": "*", "icon": "api", "type": "files", "path": "/apps/api/src/modules", "options": {"skipExtension": true}},
+            { "name": "Add", "icon": "create", "type": "create", "path": "/apps/api/src/modules", "options": {
+                "templates":["basicApi"]
+            }}    
+        ],
+        "Models": [
+            { "name": "*", "icon": "model", "type": "files", "path": "/packages/common/schema", "options": {"skipExtension": true}}
+        ]
+    }
 }
