@@ -10,7 +10,7 @@
   "scripts": {
     "prepare-dev": "node prepare.js",
     "start": "ts-node src/index.ts",
-    "start-dev": "nodemon -L 'src/**' --ext 'ts,json' --ignore 'src/**/*.spec.ts' --exec 'ts-node src/index.ts'"
+    "start-dev": "nodemon -L"
   },
   "dependencies": {
     "dotenv": "^16.3.1",

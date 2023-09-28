@@ -11,7 +11,7 @@
     "add-user": "ts-node src/cmd/addUser.ts",
     "prepare-dev": "node prepare.js",
     "start": "ts-node src/index.ts",
-    "start-dev": "nodemon -L 'src/**' --ext 'ts,json' --ignore 'src/**/*.spec.ts' --exec 'ts-node src/index.ts'"
+    "start-dev": "nodemon -L"
   },
   "dependencies": {
     "aedes": "^0.50.0",
