@@ -75,7 +75,7 @@ export default function DBAdmin({contentState}) {
                     <Search onCancel={onCancelSearch} onSearch={onSearch} />
                 </XStack>
             </XStack>
-            <XStack f={1} flexWrap='wrap'>
+            <XStack flexWrap='wrap'>
                 {content?.data?.map((element, i) => {
                     return (
                         <Stack key={i} p={"$5"}>
