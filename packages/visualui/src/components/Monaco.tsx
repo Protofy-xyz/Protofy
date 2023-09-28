@@ -2,7 +2,7 @@ import React from 'react';
 import Editor from '@monaco-editor/react'
 import useKeypress from 'react-use-keypress';
 
-type Props = {Monaco
+type Props = {
     sourceCode: string,
     onChange: any,
     onSave?:  any
