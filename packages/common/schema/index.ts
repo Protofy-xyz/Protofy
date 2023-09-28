@@ -1,2 +1,2 @@
 export * from './AuthSchema'
-export * from './WorkspaceSchema'
+export * from 'protolib/schema'

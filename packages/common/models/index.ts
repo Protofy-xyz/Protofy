@@ -1,1 +1,1 @@
-export * from './WorkspaceModel'
+export * from 'protolib/models'
