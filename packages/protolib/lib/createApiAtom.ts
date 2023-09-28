@@ -3,7 +3,7 @@ import { atom } from "jotai";
 type PendingAtomStatus = "pending" | "loading" | "loaded" | "error"
 export type PendingAtomResult = {
     status: PendingAtomStatus
-    error?: string|null,
+    error?: any,
     data: any
     isLoading: boolean,
     isPending: boolean,

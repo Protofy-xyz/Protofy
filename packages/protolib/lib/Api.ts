@@ -64,6 +64,8 @@ const _fetch = async (url, data?, update?, plain?):Promise<PendingAtomResult | u
 }
 export const API = {
     fetch: _fetch,
-    get: (url, update?, plain?):Promise<PendingAtomResult | undefined> => _fetch(url, null, update, plain),
-    post: (url, data, update?, plain?):Promise<PendingAtomResult | undefined> => _fetch(url, data, update, plain)
+    //@ts-ignore
+    get: (url, update?, plain?):Promise<PendingAtomResult> => _fetch(url, null, update, plain),
+    //@ts-ignore
+    post: (url, data, update?, plain?):Promise<PendingAtomResult> => _fetch(url, data, update, plain)
 }
