@@ -10,7 +10,7 @@
   "scripts": {
     "prepare-dev": "node prepare.js",
     "start": "ts-node src/index.ts",
-    "start-dev": "nodemon -L"
+    "start-dev": "nodemon --exitcrash -L"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
