@@ -1,4 +1,13 @@
 {
+    "resources": [
+        {
+            "type": "template",
+            "options": {
+                "templates":["basicApi"],
+                "paths": ["/apps/api/src/modules"]
+            }
+        }
+    ],
     "menu": {
         "App": [
             { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
