@@ -5,5 +5,5 @@ import { PendingAtomResult } from './createApiAtom'
 
 export const useAtom = (atom, initialState?) => {
     const [content, setContent] = _useAtom<PendingAtomResult>(atom)
-    return (initialState && (content.isError || content.isLoaded || content.isLoading)) ? [content, setContent] : [initialState, setContent]
+    return (initialState && (content.isPending)) ? [initialState, setContent] : [content, setContent]
 }
