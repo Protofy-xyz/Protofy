@@ -2,7 +2,7 @@ import {app} from '../lib/app';
 import { handler } from '../lib/handler';
 import * as fs from 'fs';
 import { getDatabases } from './databases';
-import { WorkspaceModel } from 'protolib';
+import { WorkspaceModel } from 'protolib/models';
 
 app.get('/adminapi/v1/workspaces', handler(async (req, res) => {
     const dbs = await getDatabases()
