@@ -1,7 +1,29 @@
 const fs = require('fs')
 const { execSync } = require('child_process');
+
+const isLatest = process.argv.length > 2 && process.argv[2] == '--latest'
+
+const modules = JSON.parse(fs.readFileSync('./modules.json').toString())
+// console.log('modules', modules)
+
 function isEmpty(path) {
     return fs.readdirSync(path).length === 0;
+}
+
+const storeLibVersion = (moduleDir, moduleName) => {
+    //console.log('store lib version executed for: ', moduleDir, moduleName)
+    const currentRevision = exec('cd '+moduleDir+' && git rev-parse HEAD')
+    if(modules[moduleName].revision !== currentRevision) {
+        console.log('Updating revision for library '+moduleName+'. Setting revision to: '+currentRevision)
+        modules[moduleName].revision = currentRevision
+        fs.writeFileSync('./modules.json', JSON.stringify(modules, null, 4))
+    }
+
+}
+
+const exec = (cmd) => {
+    //console.log('[*] Executing: ', cmd)
+    return execSync(cmd).toString().trim()
 }
 
 if(!fs.existsSync("./data")) {
@@ -12,17 +34,22 @@ if(!fs.existsSync("./data/databases")) {
     fs.mkdirSync('./data/databases')
 }
 
-if(!fs.existsSync("./packages/visualui") || isEmpty("./packages/visualui") ) {
-    console.log('VisualUi not found, cloning into packages/visualui/ ...')
-    execSync("git clone git@github.com:Protofy-xyz/protofy-visualui.git packages/visualui")
-}
 
-if(!fs.existsSync("./packages/protoflow") || isEmpty("./packages/protoflow")) {
-    console.log('Protoflow not found, cloning into packages/protoflow/ ...')
-    execSync("git clone git@github.com:Protofy-xyz/Protoflow.git packages/protoflow")
-}
 
-if(!fs.existsSync("./packages/protolib") || isEmpty("./packages/protolib")) {
-    console.log('Protolib not found, cloning into packages/protolib/ ...')
-    execSync("git clone git@github.com:Protofy-xyz/protolib.git packages/protolib")
-}
+Object.keys(modules).forEach((moduleName) => {
+    //console.log('Preparing', moduleName, '...')
+    const moduleDir = "packages/"+moduleName
+    if(!fs.existsSync(moduleDir) || isEmpty(moduleDir) ) {
+        console.log(moduleName+ ' not found, cloning into', moduleDir)
+        exec('git clone '+modules[moduleName].url+' '+moduleDir)
+    } 
+
+    if(!isLatest) {
+        exec('cd '+moduleDir+' && git checkout '+modules[moduleName].revision)
+    } else {
+        console.log('[*] Warning: --latest flag was specified. Using the latest version of', moduleName)
+        exec('cd '+moduleDir+' && git checkout main')
+    }
+
+    storeLibVersion(moduleDir, moduleName)
+})

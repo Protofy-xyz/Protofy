@@ -8,9 +8,11 @@
   "scripts": {
     "start": "yarn start-dev",
     "start-prod": "npm-run-all --parallel api-prod admin-api-prod web:prod:serve proxy",
-    "start-dev": "yarn prepare-dev && yarn && yarn build && yarn start-dev-fast",
+    "start-dev": "yarn prepare-dev && node prepare.js && yarn start-build",
+    "start-dev-latest": "yarn prepare-dev && node prepare.js --latest && yarn start-build",
     "start-dev-fast": "npm-run-all --parallel watch admin-api-dev api-dev web proxy",
-    "prepare-dev": "yarn workspace api prepare-dev && yarn workspaces foreach run prepare-dev && node prepare.js",
+    "start-build": "yarn && yarn build && yarn start-dev-fast",
+    "prepare-dev": "yarn workspace api prepare-dev && yarn workspaces foreach run prepare-dev",
     "native": "cd apps/expo && yarn start",
     "watch": "yarn workspaces foreach -pi run watch",
     "vercel:install": "yarn set version 3.5 && yarn install",
