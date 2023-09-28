@@ -2,50 +2,11 @@ import {app} from '../lib/app';
 import { handler } from '../lib/handler';
 import * as fs from 'fs';
 import { getDatabases } from './databases';
+import { WorkspaceModel } from 'common';
 
 app.get('/adminapi/v1/workspaces', handler(async (req, res) => {
     const dbs = await getDatabases()
-    const workspace = JSON.parse((await fs.promises.readFile('../../data/workspaces/basic.json')).toString())
-    //fill workspace
-    const parsedWorkspaceMenu:any = {}
-    Object.keys(workspace.menu).forEach((key) => {
-      parsedWorkspaceMenu[key] = []
-      workspace.menu[key].forEach((p:any) => {
-        if(p.name == '*' && p.type == 'database') {
-          dbs.forEach((db:any) => {
-            parsedWorkspaceMenu[key].push({
-              ...p,
-              name: db.name, 
-              type: "database",
-              href: ('/admin/dbs/' + db.name).replace(/\/+/g, '/')
-            })
-          })
-        } else if(p.name == '*' && p.type == 'files') {
-          const myFiles = fs.readdirSync('../../'+p.path) //TODO: change for an async function
-          myFiles.forEach((file:any) => {
-            parsedWorkspaceMenu[key].push({
-              ...p,
-              name: p.options?.skipExtension?file.split('.').slice(0, -1).join('.'):file, 
-              type: "files",
-              href: ('/admin/files/' + p.path + '?file='+file+'&full=1').replace(/\/+/g, '/')
-            })
-          })
-        } else {
-          const options:any = {}
-          if(p.options?.templates) {
-            options.options = {templates: p.options.templates.map(t => JSON.parse(fs.readFileSync('../../data/templates/'+t+'/'+t+'.json').toString()))}
-          }
-          parsedWorkspaceMenu[key].push({
-            ...p,
-            ...options,
-            href: ('/admin/'+p.type+'/'+p.path).replace(/\/+/g, '/')
-          })
-        }
-      })
-    })
-
-    res.send({
-      ...workspace,
-      menu: parsedWorkspaceMenu
-    })
+    const workspaceRawData = JSON.parse((await fs.promises.readFile('../../data/workspaces/basic.json')).toString())
+    const workspace = WorkspaceModel.parse(workspaceRawData, dbs, fs)
+    res.send(workspace)
 }));
