@@ -59,3 +59,12 @@
 .chonky-fileEntryClickableWrapper {
     cursor:pointer
 }
+
+.MuiPopover-paper {
+    margin-top: 40px !important;
+}
+
+.MuiMenuItem-root {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}

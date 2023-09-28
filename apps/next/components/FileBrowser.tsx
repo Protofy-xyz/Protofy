@@ -1,6 +1,6 @@
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
-import { FileNavbar, FileBrowser, FileToolbar, FileList, FileContextMenu, ChonkyActions} from 'chonky';
+import { FileNavbar, FileBrowser, FileToolbar, FileList, FileContextMenu, ChonkyActions, defineFileAction} from 'chonky';
 import { YStack } from '@tamagui/stacks';
 import { AlertDialog, Button, Dialog, XStack, useTheme } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
@@ -10,7 +10,8 @@ import { X } from '@tamagui/lucide-icons';
 import {useUpdateEffect} from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
+import { workspaceAtom} from 'app/features/admin'
+import { WorkspaceModel } from 'common';
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const filesAtom = createApiAtom([])
 
@@ -23,6 +24,7 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
     const router = useRouter()
     const [openAlert, setOpenAlert] = useState(false)
     const [isModified, setIsModified] = useState(false)
+    const [workspace] = useAtom(workspaceAtom)
 
     useUpdateEffect(() => {
         console.log('current Path: ', currentPath)
@@ -84,14 +86,43 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
 
     const onScroll=() => {}
 
+    var templateActions:any = []
+    if(workspace.isLoaded) {
+        WorkspaceModel.load(workspace.data)
+            .getResources()
+            .byType('template')
+            .byPath(currentPath)
+            .forEach((resource) => {
+                resource.getOption('templates').forEach((template:any) => {
+                    templateActions.push(defineFileAction({
+                        id: 'template_'+template.name,
+                        button: {
+                            name: template.title,
+                            toolbar: true,
+                            group: 'Templates'
+                        }
+                    }))
+                })
+            })
+    }
+
+    console.log('tppppppl', templateActions)
+
+
+
     const myFileActions = [
+        ...templateActions,
         ChonkyActions.UploadFiles,
-        ChonkyActions.DownloadFiles,
-        ChonkyActions.DeleteFiles,
+        // ChonkyActions.DownloadFiles,
+        // ChonkyActions.DeleteFiles,
     ];
+
+    
 
     const actionsToDisable: string[] = [
         ChonkyActions.SelectAllFiles.id,
+        ChonkyActions.ClearSelection.id,
+        ChonkyActions.OpenSelection.id
     ];
 
     const isFull = router.query?.full

@@ -1,8 +1,6 @@
 import { XStack } from 'tamagui'
 import { PanelLayout } from '../../layout/PanelLayout'
 import { PanelMenu } from './components/PanelMenu'
-import { useRouter } from 'next/router';
-import DBAdmin from './db';
 import {getPendingResult, PendingAtomResult} from 'protolib';
 import {atom, useSetAtom} from 'jotai'
 import { useEffect } from 'react';
