@@ -3,18 +3,16 @@ import {useAtom, API, createApiAtom, DataCard, Search } from 'protolib'
 import { atom } from 'jotai'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTint } from '@tamagui/logo'
 
 const contentAtom = createApiAtom([])
-const currentDbAtom = atom(0)
 
-export default function DBAdmin({currentDbState, contentState }) {
+export default function DBAdmin({contentState}) {
     const router = useRouter()
 
     const [content, setContent] = useAtom(contentAtom, contentState)
-    const [currentDB] = useAtom(currentDbAtom, currentDbState ?? router.query.name)
-
+    const currentDB = router.query.name
     const [renew, setRenew] = useState(1)
     const [originalContent, setOriginalContent] = useState<any>()
     const { tint } = useTint()
@@ -26,8 +24,9 @@ export default function DBAdmin({currentDbState, contentState }) {
     //         API.get('/adminapi/v1/databases/' + currentDB, setContent)
     //     }
     // }, databases)
-
+    console.log('currentDB', currentDB)
     useUpdateEffect(() => {
+        console.log('refreshing database content')
         API.get('/adminapi/v1/databases/' + currentDB, setContent)
     }, [currentDB])
 

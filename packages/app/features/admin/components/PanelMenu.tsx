@@ -75,7 +75,7 @@ const Subtabs = ({ subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} />
-                return <Link href={subtab.href} onPressApp={() => { }} >
+                return <Link href={subtab.href}>
                     <PanelMenuItem
                         mb={'$4'}
                         selected={router.asPath.startsWith(subtab.href.replace(/\/$/, ''))}

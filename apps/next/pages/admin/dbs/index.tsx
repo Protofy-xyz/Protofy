@@ -48,8 +48,6 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
     }
     props = {
       data: {
-        databasesState: dbs,
-        currentDbState: db.name,
         contentState: dbs.data.length ? await API.get('/adminapi/v1/databases/' + db.name) : []
       }
     }
