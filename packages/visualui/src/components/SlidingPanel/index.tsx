@@ -1,8 +1,10 @@
 
 import React, { memo, useRef, useEffect } from "react";
-import { PanelGroup, Panel, ImperativePanelHandle } from "react-resizable-panels";
-import ResizeHandle from "./ResizeHandle";
 import { withTopics } from "react-topics";
+import SPanel from 'react-sliding-side-panel';
+import 'react-sliding-side-panel/lib/index.css';
+import { Component } from 'lucide-react';
+import FloatingPanel from "./FloatingPanel";
 
 type Props = {
     rightPanelContent: React.Component | any,
@@ -13,13 +15,14 @@ type Props = {
 
 const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, topics }: Props) => {
 
-    const leftPanel = useRef<ImperativePanelHandle>(null);
-    const rightPanel = useRef<ImperativePanelHandle>(null);
-    const [collapsedWidth, setCollapsedWidth] = React.useState(0);
-    const { data } = topics;
+    const rightPanel = useRef(null);
+    const [acollapsedWidth, setCollapsedWidth] = React.useState(0);
+    const collapsedWidth = 0;
+    // const { data } = topics;
+    const [openPanel, setOpenPanel] = React.useState(false);
 
     const [isFlowExpanded, setIsFlowExpanded] = React.useState(false)
-    
+
     var expandedWidth = 50
 
     const onClick = () => {
@@ -31,54 +34,59 @@ const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent,
             setIsFlowExpanded(true)
         }
     }
-    
-    useEffect(() => {
-        setCollapsedWidth((335 / window.innerWidth)* 100)
-    },[])
 
     useEffect(() => {
-        if(!data['menuState']) return
-        const menuState = data['menuState'].state
-        if (menuState == 'open' && rightPanel?.current?.getSize() < expandedWidth) {
-          onClick()
-        }
-    }, [data['menuState']])
+        setCollapsedWidth((335 / window.innerWidth) * 100)
+    }, [])
+
+    // useEffect(() => {
+    //     if(!data['menuState']) return
+    //     const menuState = data['menuState'].state
+    //     if (menuState == 'open' && rightPanel?.current?.getSize() < expandedWidth) {
+    //       onClick()
+    //     }
+    // }, [data['menuState']])
 
     useEffect(() => {
-        if(!isFlowExpanded && rightPanel?.current?.getSize() > collapsedWidth){
+        if (!isFlowExpanded && rightPanel?.current?.getSize() > collapsedWidth) {
             rightPanel.current?.resize(collapsedWidth)
         }
     }, [rightPanel?.current?.getSize()])
+    useEffect(() => {
+        window.addEventListener('dragenter', () => setOpenPanel(false))
+    })
 
     return (
-            <div style={{ flex: 1, display: 'flex' }}>
-                <PanelGroup autoSaveId="example" direction="horizontal" style={{ flex: 1, display: 'flex' }}>
-                    <Panel
-                        ref={leftPanel}
-                        style={{ flex: 1, display: 'flex' }}
-                        collapsible={false}
-                        minSize={20}
-                        order={1}
-                    >
-                        {!isFlowExpanded ? leftPanelContent : null}
-                        {centerPanelContent}
-                    </Panel>
-                    {rightPanelContent ?
-                        <>
-                            <ResizeHandle disabled direction={!isFlowExpanded ? "LEFT" : "RIGHT"} onClick={onClick} />
-                            <Panel
-                                ref={rightPanel}
-                                style={{ flex: 1, display: 'flex' }}
-                                collapsible={true}
-                                order={2}
-                                minSize={25}
-                            >
-                                {rightPanelContent}
-                            </Panel>
-                        </> : null}
-                </PanelGroup>
+        <div style={{ flex: 1, display: 'flex' }}>
+            <div style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute' }} onClick={() => setOpenPanel(false)} >
+                <SPanel
+                    key="sidebar"
+                    type={'left'}
+                    isOpen={true}
+                    size={30}
+                // noBackdrop={true}
+                >
+                    {leftPanelContent}
+                </SPanel>
             </div>
+            <div
+                style={{ display: 'flex', position: 'fixed', alignSelf: 'center', left: '20px', backgroundColor: 'black', zIndex: 10000, cursor: 'pointer', padding: '10px', alignItems: 'center', borderRadius: '40px' }}
+            >
+                <Component
+                    onClick={() => setOpenPanel(true)}
+                    color="white"
+                />
+            </div>
+            <div style={{ position: 'absolute', zIndex: 1000, border: "1px solid red", width: '0px', height: '0px' }}>
+                <FloatingPanel>
+                    {rightPanelContent}
+                </FloatingPanel>
+            </div>
+            {centerPanelContent}
+        </div>
     );
 }
 
-export default memo(withTopics(SlidingPanel, {topics: ['menuState'] }));
+
+
+export default memo(withTopics(SlidingPanel, { topics: ['menuState'] }));

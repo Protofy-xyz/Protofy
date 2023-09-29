@@ -5,14 +5,12 @@ import { Frame, useEditor } from "@craftjs/core";
 import { useEditorStore } from "../store/EditorStore";
 import { frames } from '../utils/frames';
 import useKeypress from 'react-use-keypress';
-import ReactResizeDetector from "react-resize-detector";
 import Diff from 'deep-diff'
 import Source from "../models/Source";
 import { withTopics } from "react-topics";
 import { ErrorBoundary } from 'react-error-boundary'
 import { JSCodeToOBJ } from "../utils/utils";
 import { notify, computePreviousPositions } from "../utils/utils";
-import { FrameSelector } from "./FrameSelector";
 
 export type EditorProps = {
 	children?: any;
@@ -23,7 +21,6 @@ export type EditorProps = {
 
 
 const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps) => {
-	const img = useRef()
 	const paper = useRef()
 	const currentPageContent = useEditorStore(state => state.currentPageContent)
 	const currentPageInitialJson = useEditorStore(state => state.currentPageInitialJson)
@@ -252,21 +249,8 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 		}
 	}
 
-	const onChange = (e) => {
-		if (!img.current || !paper.current) return
-		const imgWidth = img.current.width / currentFrame.widthRatio;
-		const imgHeight = img.current.height / currentFrame.heightRatio;
-		const zoom = currentFrame.zoom;
-
-		paper.current.style.zoom = zoom
-		paper.current.style.width = (imgWidth / zoom) + 'px'
-		paper.current.style.height = (imgHeight / zoom) + 'px'
-		paper.current.style.marginTop = ((currentFrame.marginTop + (imgWidth / currentFrame.frameRatio)) / zoom) + 'px'
-		paper.current.style.borderRadius = (img.current.width / currentFrame.radiusRatio) + 'px'
-	}
 	useKeypress(['z', 'Z', 's', 'S', 'c', 'C', 'Delete', 'Backspace'], (event) => {
 		const isEditorVisible = paper.current?.getBoundingClientRect()?.height > 0
-		const userIsWritting = !(document.activeElement == document.body)
 		if (!isEditorVisible) return
 		if ((event.key == "z" || event.key == "Z") && (event.ctrlKey || event.metaKey) && event.shiftKey) {
 			try {
@@ -312,30 +296,26 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 					{currentFrame.scrollbar}
 				</style>
 			</Head>
-			<div style={{ width: '100%', minWidth: '110px', display: 'flex', position: 'relative', flex: 1, justifyContent: 'center' }}>
-				<ReactResizeDetector handleWidth onResize={onChange} />
-				<img onLoad={onChange} alt="device container" ref={img} style={{ position: 'absolute', top: '-50px', padding: '100px', maxWidth: '100%', maxHeight: '100%', margin: '0 auto', left: 0, right: 0 }} src={currentFrame.source} />
+			<div
+				className={"page-container"}
+				style={{ width: '100%', height: '100%' }}
+			>
 				<div
-					className={"page-container"}
+					id="editor"
+					className={"craftjs-renderer"}
+					ref={(ref) => { paper.current = ref; connectors.select(connectors.hover(ref, null), null) }}
+					style={{ flex: 1, position: 'relative', overflow: 'auto', color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto', left: 0, right: 0, width: '100%', height: '100%' }}
 				>
-					<div
-						id="editor"
-						className={"craftjs-renderer"}
-						ref={(ref) => { paper.current = ref; connectors.select(connectors.hover(ref, null), null) }}
-						style={{ flex: 1, position: 'relative', top: '-50px', overflow: 'auto', color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto', left: 0, right: 0, width: '50%' }}
-					>
-						{
-							loading ?
-								<div>Loading content...</div>
-								:
-								<ErrorBoundary FallbackComponent={<div style={{ margin: '20px' }}>There seems to be an error in your page preventing the editor from loading it. Please check the code and fix the errors. </div>}>
-									<Frame />
-								</ErrorBoundary>
-						}
-					</div>
+					{
+						loading ?
+							<div>Loading content...</div>
+							:
+							<ErrorBoundary FallbackComponent={<div style={{ margin: '20px' }}>There seems to be an error in your page preventing the editor from loading it. Please check the code and fix the errors. </div>}>
+								<Frame />
+							</ErrorBoundary>
+					}
 				</div>
 			</div>
-			<FrameSelector frames={frames} setFrameSelected={setFrameName} selectedFrame={frameName}></FrameSelector>
 		</div>
 	);
 };
