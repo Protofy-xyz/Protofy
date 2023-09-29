@@ -1,17 +1,17 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Rnd from 'react-rnd';
 import { GripHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
 
 export default ({ children }) => {
     const [visibleFlows, setVisibleFlows] = React.useState(false);
-    const [height, setHeight] = React.useState();
-    const rndRef = useRef()
+
+    const defaultHeight = window.innerHeight
+    const defaultWidth = 450
+    const defaultMargin = 20
+
     const borderRadius = 20
 
     const onChange = (visible) => {
-        if (!rndRef.current) return
-        // console.log('DEV: rndRef.current: ', rndRef.current.style)
-        // const currentHeight = rndRef.current?.style.height
         if (visible) {
             setVisibleFlows(false)
         } else {
@@ -22,10 +22,10 @@ export default ({ children }) => {
     return (
         <Rnd
             default={{
-                x: 150,
-                y: 205,
-                width: 500,
-                height: 400,
+                x: window.outerWidth - (defaultWidth + defaultMargin),
+                y: defaultMargin,
+                width: defaultWidth,
+                height: defaultHeight-(defaultMargin*2),
             }}
             minWidth={300}
             minHeight={400}
