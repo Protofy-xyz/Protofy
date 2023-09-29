@@ -5,7 +5,7 @@ import { RenderNode } from './RenderNode';
 import paletteComponents from '../palettes';
 import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
-import SlidingPanel from "./SlidingPanel";
+import MainPanel from "./MainPanel";
 import Monaco from "./Monaco";
 import { X, Save } from "lucide-react";
 import { FlowFactory, useFlowsStore } from 'protoflow';
@@ -166,7 +166,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             onRender={RenderNode}
         >
             <div style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
-                <SlidingPanel
+                <MainPanel
                     leftPanelContent={SidebarPanel}
                     centerPanelContent={EditorPanel}
                     rightPanelContent={FlowPanel}
