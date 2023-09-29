@@ -23,7 +23,7 @@ type Props = {
 	isVSCode?: boolean
 }
 
-export default ({ userComponents = {}, isVSCode = true, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", _pages = [] }: Props) => {
+export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", _pages = [] }: Props) => {
 	const [pages, setPages] = useState(_pages);
 	const [currentPage, setCurrentPage] = useState(_currentPage);
 	const [resolveComponentsDir, setResolveComponentsDir] = useState(_resolveComponentsDir);
