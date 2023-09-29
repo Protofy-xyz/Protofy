@@ -7,15 +7,13 @@ import Icon from '../Icon';
 import { Search, X } from 'lucide-react';
 
 export type SidebarProps = {
-    palettes: any[],
-    pages: any[],
+    palettes: any,
     sendMessage: Function,
     currentPage: string
 };
 
 export const Sidebar = ({
     palettes,
-    pages,
     sendMessage,
     currentPage
 }: SidebarProps) => {
@@ -56,7 +54,7 @@ export const Sidebar = ({
     const palettesArr = Object.keys(filteredDropableComponents).filter(p => p != "craft");
 
     function handleResize(e = {} as any) {
-        const viewportHeight = window.outerHeight * 0.6;
+        const viewportHeight = window.outerHeight * 0.7;
         if (!viewRef.current) return
         viewRef.current.style.height = viewportHeight + 'px'
         viewRef.current.style.maxHeight = viewportHeight + 'px'
@@ -142,7 +140,6 @@ export const Sidebar = ({
                         }
                     </div>
                 </div>
-                {<PageMenu pages={pages} sendMessage={sendMessage} currentPage={currentPage} />}
             </div>
         </div>
     );

@@ -19,12 +19,10 @@ type Props = {
 	_sourceCode?: string,
 	_resolveComponentsDir?: string,
 	_currentPage?: string,
-	_pages?: any[],
 	isVSCode?: boolean
 }
 
-export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", _pages = [] }: Props) => {
-	const [pages, setPages] = useState(_pages);
+export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "" }: Props) => {
 	const [currentPage, setCurrentPage] = useState(_currentPage);
 	const [resolveComponentsDir, setResolveComponentsDir] = useState(_resolveComponentsDir);
 	const [sourceCode, setSourceCode] = useState(_sourceCode);
@@ -38,7 +36,6 @@ export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _reso
 			case "protofypanel-visualui-init":
 				setSourceCode(payload.sourceCode)
 				setResolveComponentsDir(payload.resolveComponentsDir)
-				setPages(payload.pages ?? [])
 				setCurrentPage(payload.pages ? payload.pages[0] : '')
 				break;
 			case "protofypanel-visualui-read-response":
@@ -63,7 +60,7 @@ export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _reso
 				const content = payload.content
 				if (isVSCode) {
 					visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
-				}else {
+				} else {
 					const res = await savePage(currentPage, content);
 				}
 				break;
@@ -71,19 +68,8 @@ export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _reso
 	}
 
 	useEffect(() => {
-		if (isVSCode) {
-			window.addEventListener("message", handleEvent)
-			visualuiPublisher('protofypanel', 'ready', {})
-		} else {
-			readPages().then((response) => {
-				setPages(response);
-				if (response && !currentPage) {
-					// const defaultDocument = response.find(n => n == 'index.tsx') ?? response[0]
-					const defaultDocument = "test.tsx"
-					setCurrentPage(defaultDocument)
-				}
-			})
-		}
+		window.addEventListener("message", handleEvent)
+		visualuiPublisher('protofypanel', 'ready', {})
 	}, [])
 
 	useEffect(() => {
@@ -104,7 +90,6 @@ export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _reso
 					<UIEditor
 						sourceCode={sourceCode}
 						currentPage={currentPage}
-						pages={pages}
 						userComponents={userComponents}
 						sendMessage={onSendMessage}
 						resolveComponentsDir={`${resolveComponentsDir}/`}
@@ -116,30 +101,6 @@ export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _reso
 }
 const folderToSearch = "next/pages"
 
-async function readPages() {
-	const payload = {
-		filename: folderToSearch,
-		recursive: true
-	}
-	let response
-	try {
-		response = await API.post('/api/v1/visualui/pages/list', payload)
-	}catch(e){
-		console.error('Error reading files')
-	}
-	let cookedData;
-	if (response && response?.isLoaded) {
-		cookedData = response?.data?.map((filename) => {
-			let name = filename.split(folderToSearch)[1];
-			if (name.startsWith('/')) {
-				name = name.slice(1)
-			}
-			return name;
-		})
-	}
-	return cookedData;
-}
-
 async function readPage(currentPage) {
 	const payload = {
 		filename: folderToSearch + "/" + currentPage,
@@ -147,7 +108,7 @@ async function readPage(currentPage) {
 	let response
 	try {
 		response = await API.post('/api/v1/visualui/pages/read', payload)
-	}catch(e){
+	} catch (e) {
 		console.error('Error reading page.')
 	}
 	return response
@@ -161,10 +122,10 @@ async function savePage(currentPage, content) {
 	let response
 	try {
 		const response = await API.post('/api/v1/visualui/pages/write', payload)
-		if(response&& response.isLoaded) {
+		if (response && response.isLoaded) {
 			return response
 		}
-	}catch(e){
+	} catch (e) {
 		console.error('Error saving page.')
 	}
 	return response

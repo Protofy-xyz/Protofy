@@ -16,7 +16,7 @@ export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
 const uiStore = useFlowsStore()
 
-function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, currentPage = "", userComponents = {}, resolveComponentsDir = "" }) {
+function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userComponents = {}, resolveComponentsDir = "" }) {
 
     const editorRef = useRef()
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
@@ -137,7 +137,6 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
         >
             <Sidebar
                 palettes={allPalettes}
-                pages={pages}
                 sendMessage={sendMessage}
                 currentPage={currentPage}
             />
