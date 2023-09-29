@@ -88,7 +88,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
     const FlowPanel = (
         <div
             key="auxiliarySidebar"
-            style={{ width: '100%', display: 'flex', flex: 1 }}
+            style={{ width: '100%', display: 'flex', flex: 1, height: '100%' }}
         >
             {
                 codeEditorVisible
@@ -133,7 +133,7 @@ function UIEditor({ isActive = true, sourceCode = "", pages = [], sendMessage, c
     const SidebarPanel = (
         <div
             key="sidebar"
-            style={{ display: 'flex', flex: 1, maxWidth: '290px' }}
+            style={{ display: 'flex', flex: 1, maxWidth: '290px', height: '100%' }}
         >
             <Sidebar
                 palettes={allPalettes}
