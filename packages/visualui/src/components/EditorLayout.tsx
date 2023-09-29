@@ -3,7 +3,6 @@ import styles from "../styles/EditorLayout.module.css";
 import Head from 'next/head'
 import { Frame, useEditor } from "@craftjs/core";
 import { useEditorStore } from "../store/EditorStore";
-import { frames } from '../utils/frames';
 import useKeypress from 'react-use-keypress';
 import Diff from 'deep-diff'
 import Source from "../models/Source";
@@ -25,8 +24,6 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 	const currentPageContent = useEditorStore(state => state.currentPageContent)
 	const currentPageInitialJson = useEditorStore(state => state.currentPageInitialJson)
 	const setCurrentPageInitialJson = useEditorStore(state => state.setCurrentPageInitialJson)
-	const [frameName, setFrameName] = useState('ipad11-horizontal');
-	const currentFrame = frames[frameName];
 	const [loading, setLoading] = useState(false);
 	const [previousNodes, setPreviousNodes] = useState({});
 
@@ -292,9 +289,6 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 			<Head>
 				<title>Platform UI</title>
 				<link rel="icon" type="image/png" sizes="16x16" alt="logo" href={require("../assets/logo.png")}></link>
-				<style type="text/css">
-					{currentFrame.scrollbar}
-				</style>
 			</Head>
 			<div
 				className={"page-container"}
