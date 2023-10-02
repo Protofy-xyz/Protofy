@@ -1,22 +1,24 @@
-import { setChonkyDefaults } from 'chonky';
-import { ChonkyIconFA } from 'chonky-icon-fontawesome';
-import { FileNavbar, FileBrowser, FileToolbar, FileList, FileContextMenu, ChonkyActions, defineFileAction} from 'chonky';
+
 import { YStack } from '@tamagui/stacks';
 import { AlertDialog, Button, Dialog, XStack, useTheme } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from 'app/features/admin/components/FilesWidget';
 import { useAtom, IconContainer, createApiAtom } from 'protolib';
 import { X } from '@tamagui/lucide-icons';
-import {useUpdateEffect} from 'usehooks-ts'
+import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { workspaceAtom} from 'app/features/admin'
+import { workspaceAtom } from 'app/features/admin'
 import { WorkspaceModel } from 'common';
-setChonkyDefaults({ iconComponent: ChonkyIconFA });
-const filesAtom = createApiAtom([])
+import { Uploader } from './Uploader';
+import Dropzone from 'react-dropzone'
+import { Explorer } from './Explorer';
+import {defineFileAction} from 'chonky';
 
-const WebFileBrowser = ({file, path, filesState}:any) => {
-    const [files, setFiles] = useAtom(filesAtom, filesState)
+
+
+const WebFileBrowser = ({ file, path, filesState }: any) => {
+    
     const [dialogOpen, setDialogOpen] = useState(file ? true : false)
     const [currentPath, setCurrentPath] = useState(path)
     const [currentFile, setCurrentFile] = useState(file ? file : '')
@@ -25,6 +27,7 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
     const [openAlert, setOpenAlert] = useState(false)
     const [isModified, setIsModified] = useState(false)
     const [workspace] = useAtom(workspaceAtom)
+    const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
     useUpdateEffect(() => {
         console.log('current Path: ', currentPath)
@@ -45,7 +48,7 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
         }
     }, [currentFile])
 
-    
+
     useUpdateEffect(() => {
         const r = router.asPath.split('?')[0].substring('/admin/files'.length)
         if (router.query.file) {
@@ -60,42 +63,30 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
 
     }, [router.asPath]);
 
-    const onOpen = (file:any) => {
+    const onOpen = (file: any) => {
         console.log('on open client: ', file)
         if (file.isDir) return setCurrentPath(file.path ?? file.id)
         router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file=' + file.name)
     }
-    
-    const parsedFiles = files && files.data ? files.data.map((f:any) => {
-        return {
-            ...f,
-            thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
-        }
-    }):[]
-    const folderChain = [{ id: '/', name: "Files", isDir: true }].concat(
-        ...currentPath.split('/').map((x:any, i:any, arr:any) => {
-            return {
-                name: x,
-                id: arr.slice(0, i + 1).join('/'),
-                isDir: true
-            };
-        })
-    )
-    const {resolvedTheme} = useThemeSetting()
-    const theme = useTheme()
 
-    const onScroll=() => {}
+    const onUpload = () => {
+        console.log('upload to: ', currentPath)
+        setUploadDialogOpen(true)
+    }
 
-    var templateActions:any = []
-    if(workspace.isLoaded) {
+    const { resolvedTheme } = useThemeSetting()
+
+
+    var templateActions: any = []
+    if (workspace.isLoaded) {
         WorkspaceModel.load(workspace.data)
             .getResources()
             .byType('template')
             .byPath(currentPath)
             .forEach((resource) => {
-                resource.getOption('templates').forEach((template:any) => {
+                resource.getOption('templates').forEach((template: any) => {
                     templateActions.push(defineFileAction({
-                        id: 'template_'+template.name,
+                        id: 'template_' + template.name,
                         button: {
                             name: template.title,
                             toolbar: true,
@@ -109,26 +100,10 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
     console.log('tppppppl', templateActions)
 
 
-
-    const myFileActions = [
-        ...templateActions,
-        ChonkyActions.UploadFiles,
-        // ChonkyActions.DownloadFiles,
-        // ChonkyActions.DeleteFiles,
-    ];
-
-    
-
-    const actionsToDisable: string[] = [
-        ChonkyActions.SelectAllFiles.id,
-        ChonkyActions.ClearSelection.id,
-        ChonkyActions.OpenSelection.id
-    ];
-
     const isFull = router.query?.full
     const getWidget = () => <FileWidget
         isFull={isFull}
-        hideCloseIcon={isFull?true:false}
+        hideCloseIcon={isFull ? true : false}
         isModified={isModified}
         setIsModified={setIsModified}
         icons={[
@@ -141,34 +116,34 @@ const WebFileBrowser = ({file, path, filesState}:any) => {
             </IconContainer>
         ]}
         currentFileName={currentFileName}
-        backgroundColor={isFull? '$colorTransparent':(resolvedTheme == 'dark' ? "#1e1e1e" : 'white')}
+        backgroundColor={isFull ? '$colorTransparent' : (resolvedTheme == 'dark' ? "#1e1e1e" : 'white')}
         currentFile={currentFile}
     />
 
     return (
-        isFull?getWidget(): <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
-            <FileBrowser
-                onFileAction={(data) => {
-                    if(data.id == 'open_files') {
-                        onOpen(data.payload.targetFile)
-                    } else {
-                        console.log('Action: ', data)
-                    }
-                }}
-                disableDragAndDrop={true}
-                disableDefaultFileActions={actionsToDisable}
-                //defaultFileViewActionId={ChonkyActions.ToggleHiddenFiles.id} 
-                disableSelection={false} 
-                darkMode={resolvedTheme=='dark'} 
-                files={parsedFiles} 
-                folderChain={folderChain}
-                fileActions={myFileActions}
-            >
-                <FileNavbar />
-                <FileToolbar />
-                <FileList onScroll={onScroll}/>
-                {/* <FileContextMenu/> */}
-            </FileBrowser>
+        isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
+            <Explorer currentPath={currentPath} filesState={filesState} templateActions={templateActions} onOpen={onOpen} onUpload={onUpload} />
+
+            <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
+                <Dialog.Portal>
+                    <Dialog.Overlay />
+                    <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} width="50%" height="50%">
+                        <Uploader />
+
+                        <Dialog.Close />
+                    </Dialog.Content>
+                </Dialog.Portal>
+
+                {/* optionally change to sheet when small screen */}
+                <Dialog.Adapt when="sm">
+                    <Dialog.Sheet>
+                        <Dialog.Sheet.Frame>
+                            <Dialog.Adapt.Contents />
+                        </Dialog.Sheet.Frame>
+                        <Dialog.Sheet.Overlay />
+                    </Dialog.Sheet>
+                </Dialog.Adapt>
+            </Dialog>
             <Dialog open={dialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
