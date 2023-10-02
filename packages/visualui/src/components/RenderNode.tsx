@@ -91,7 +91,7 @@ export const RenderNode = ({ render }) => {
                             style={{
                                 left: getPos(dom).left,
                                 top: getPos(dom).top,
-                                zIndex: 9999,
+                                zIndex: 900,
                                 position: "fixed",
                                 backgroundColor: "#2680EB",
                                 padding: "10px",
