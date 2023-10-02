@@ -1,67 +1,142 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Rnd from 'react-rnd';
-import { GripHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
+import { GripHorizontal, Expand, Minimize, X, Workflow } from 'lucide-react';
 
 export default ({ children }) => {
+    const rndRef: any = useRef()
     const [visibleFlows, setVisibleFlows] = React.useState(false);
+    const [expanded, setExpanded] = React.useState(false);
+    const compressedSize = 50
+    const compressedPosition = { x: window.outerWidth * 0.5, y: window.innerHeight - 80 }
 
-    const defaultHeight = window.innerHeight
-    const defaultWidth = 450
-    const defaultMargin = 20
+    const borderRadius = expanded ? '10px' : '100%'
+    const [size, setSize] = React.useState({ x: compressedSize, y: compressedSize });
+    const [previewState, setPreviewState] = React.useState({ size: { x: 400, y: 400 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
+    const [expandedState, setExpandedState] = React.useState({ size: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
 
-    const borderRadius = 20
-
-    const onChange = (visible) => {
-        if (visible) {
-            setVisibleFlows(false)
+    const onShowToggle = () => {
+        const newState = !visibleFlows
+        setVisibleFlows(newState)
+        if (newState) { // visible
+            setSize(previewState.size)
         } else {
-            setVisibleFlows(true)
+            setPreviewState(s => { return ({ ...s, size: size }) })
+            setSize({ x: compressedSize, y: compressedSize })
+        }
+    }
+    const onExpandToggle = () => {
+        const newState = !expanded
+        setExpanded(newState)
+        if (newState) {
+            if (!rndRef.current) return
+            const currentYPos = rndRef.current.props.position.y
+            const expandedHeight = expandedState.size.y
+            const windowHeight = window.innerHeight
+            if ((currentYPos + expandedHeight) > windowHeight) {
+                rndRef.current.props.position.y = windowHeight - expandedHeight
+            }
+            setSize(expandedState.size)
+        } else {
+            setSize({ x: previewState.size.x, y: previewState.size.x })
+        }
+    }
+
+    const onResize = (e, direction, ref) => {
+        if (expanded) {
+            setExpandedState(s => { return ({ ...s, size: size }) })
+        } else {
+            setPreviewState(s => { return ({ ...s, size: size }) })
+        }
+        setSize({ x: ref.offsetWidth, y: ref.offsetHeight })
+    }
+
+    const onDragStop = (e, d) => {
+        if (visibleFlows) {
+            setPreviewState(s => { return ({ ...s, position: { x: d.x, y: d.y } }) })
         }
     }
 
     return (
-        <Rnd
-            default={{
-                x: window.outerWidth - (defaultWidth + defaultMargin),
-                y: defaultMargin,
-                width: defaultWidth,
-                height: defaultHeight-(defaultMargin*2),
-            }}
-            minWidth={300}
-            minHeight={400}
-            bounds="window"
-            style={{ borderRadius: borderRadius, overflow: 'hidden', border: '0px solid red' }}
-        >
-            <div  style={{ height: '100%', width: '100%', display: 'flex', flex: 1, flexDirection: 'column' }}>
-                <div
-                    onDoubleClick={() => onChange(!visibleFlows)}
-                    style={{
-                        width: '100%', backgroundColor: 'black', height: '50px',
-                        justifyContent: 'space-between', display: 'flex',
-                        padding: '10px', cursor: 'grab'
-                    }}
-                >
-                    {
-                        visibleFlows
-                            ?
-                            <ChevronUp onClick={() => onChange(false)} color={'white'} style={{ cursor: 'pointer' }} />
-                            : <ChevronDown onClick={() => onChange(true)} color={'white'} style={{ cursor: 'pointer' }} />
-                    }
-                    <div style={{ color: 'white' }}>Flows</div>
-                    <GripHorizontal color="white" style={{ cursor: 'grab' }} />
-                </div>
-                {<div style={{
-                    width: '100%',
-                    backgroundColor: 'black',
-                    height: '100%',
-                    // display: visibleFlows ? 'flex' : 'none',
-
-                    display: 'flex',
-                    cursor: 'grab'
-                }}>
-                    {children}
-                </div>}
+        <>
+            <div
+                onClick={() => onShowToggle()}
+                style={{
+                    backgroundColor: 'black', height: '40px', width: '40px',
+                    padding: '10px', cursor: 'grab', position: 'absolute',
+                    zIndex: 1000, borderRadius: '100%', display: 'flex',
+                    alignItems: 'center', alignSelf: 'center',
+                    top: window.innerHeight * 0.4 - 20, left: 20
+                }}
+            >
+                <Workflow color="white" style={{ cursor: 'grab' }} />
             </div>
-        </Rnd>
+            {visibleFlows
+                // RESIZABLE
+                ? <Rnd
+                    ref={rndRef}
+                    minWidth={0}
+                    minHeight={0}
+                    size={{ height: size.y, width: size.x }}
+                    position={visibleFlows ? previewState.position : compressedPosition}
+                    onResize={onResize}
+                    onDragStop={onDragStop}
+                    bounds="window"
+                    lockAspectRatio={!expanded}
+                >
+                    {/* ACTIONS BUTTONS */}
+                    <div style={{ position: 'absolute', zIndex: 1000, top: '1rem', left: '-50px', display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+                        <div
+                            style={{
+                                backgroundColor: 'black', height: '40px', width: '40px',
+                                padding: '10px', cursor: 'grab',
+                                zIndex: 1000, borderRadius: '100%', display: 'flex',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <GripHorizontal color="white" style={{ cursor: 'grab' }} />
+                        </div>
+                        <div
+                            onClick={() => onExpandToggle()}
+                            onMouseDown={e => e.stopPropagation()}
+                            style={{
+                                backgroundColor: 'black', height: '40px', width: '40px',
+                                padding: '10px', cursor: 'grab',
+                                zIndex: 1000, borderRadius: '100%', display: 'flex', alignItems: 'center',
+                                top: '-32px'
+                            }}
+                        >
+                            {expanded
+                                ? <Minimize color="white" style={{ cursor: 'pointer' }} />
+                                : <Expand color="white" style={{ cursor: 'pointer' }} />
+                            }
+
+                        </div>
+                        <div
+                            onClick={onShowToggle}
+                            onMouseDown={e => e.stopPropagation()}
+                            style={{
+                                backgroundColor: 'black', height: '40px', width: '40px',
+                                padding: '10px', cursor: 'pointer',
+                                zIndex: 1000, borderRadius: '100%', display: 'flex',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <X color="white" style={{ cursor: 'grab' }} />
+                        </div>
+                    </div>
+
+                    {/* FLOWS */}
+                    <div style={{
+                        height: '100%', width: '100%', display: 'flex',
+                        flex: 1, overflow: 'hidden', borderRadius: borderRadius,
+                        flexDirection: 'column', cursor: 'grab'
+                    }}
+                    >
+                        {children}
+                    </div>
+                </Rnd>
+                : <> </>
+            }
+        </>
     )
 };

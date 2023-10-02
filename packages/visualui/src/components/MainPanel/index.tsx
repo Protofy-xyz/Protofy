@@ -77,7 +77,7 @@ const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent,
                     color="white"
                 />
             </div>
-            <div style={{ position: 'absolute', zIndex: 1000, border: "1px solid red", width: '0px', height: '0px' }}>
+            <div style={{ position: 'absolute', zIndex: 1000, width: '0px' }}>
                 <FloatingPanel>
                     {rightPanelContent}
                 </FloatingPanel>
