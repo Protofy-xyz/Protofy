@@ -50,20 +50,20 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
         })
     )
 
+    const onAddFiles = (acceptedFiles:any) => {
+        console.log('files: ', acceptedFiles)
+        setShowUploadDialog(true)
+        setShowDropMessage(false)
+    }
+
     return (
         <Dropzone
-
             onDragEnter={() => setShowDropMessage(true)}
             onDragLeave={() => setShowDropMessage(false)}
             noClick={false}
-            onDrop={(acceptedFiles: any) => {
-                setShowUploadDialog(true)
-                setShowDropMessage(false)
-            }}
-            onUpload={(acceptedFiles: any) => {
-                setShowUploadDialog(true)
-                setShowDropMessage(false)
-            }}
+            onDrop={onAddFiles}
+            //@ts-ignore
+            onUpload={onAddFiles}
             >
             {({ getRootProps, getInputProps }) => (
                 //@ts-ignore
@@ -142,9 +142,8 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
                         <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
                             <Dialog.Portal>
                                 <Dialog.Overlay />
-                                <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'50%'} width={"50%"} >
+                                <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'600px'} width={"500px"} >
                                     test
-
                                     <Dialog.Close />
                                 </Dialog.Content>
                             </Dialog.Portal>
