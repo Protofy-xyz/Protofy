@@ -79,38 +79,45 @@ export class WorkspaceModel {
         const parsedWorkspaceMenu: any = {}
         Object.keys(this.data.menu).forEach((key) => {
             parsedWorkspaceMenu[key] = []
-            this.data.menu[key].forEach((p: any) => {
-                if (p.name == '*' && p.type == 'database') {
-                    dbs.forEach((db: any) => {
-                        parsedWorkspaceMenu[key].push({
-                            ...p,
-                            name: db.name,
-                            type: "database",
-                            href: ('/admin/dbs/' + db.name).replace(/\/+/g, '/')
-                        })
-                    })
-                } else if (p.name == '*' && p.type == 'files') {
-                    const myFiles = fs.readdirSync('../../' + p.path) //TODO: change for an async function
-                    myFiles.forEach((file: any) => {
-                        parsedWorkspaceMenu[key].push({
-                            ...p,
-                            name: p.options?.skipExtension ? file.split('.').slice(0, -1).join('.') : file,
-                            type: "files",
-                            href: ('/admin/files/' + p.path + '?file=' + file + '&full=1').replace(/\/+/g, '/')
-                        })
-                    })
-                } else {
-                    const options: any = {}
-                    if (p.options?.templates) {
-                        options.options = { templates: p.options.templates.map(t => JSON.parse(fs.readFileSync('../../data/templates/' + t + '/' + t + '.json').toString())) }
-                    }
-                    parsedWorkspaceMenu[key].push({
-                        ...p,
-                        ...options,
-                        href: ('/admin/' + p.type + '/' + p.path).replace(/\/+/g, '/')
-                    })
+            if (this.data.menu[key].length === undefined) {
+                parsedWorkspaceMenu[key] = {
+                    ...this.data.menu[key], 
+                    href: this.getHref(this.data.menu[key])
                 }
-            })
+            } else {
+                this.data.menu[key].forEach((p: any) => {
+                    if (p.name == '*' && p.type == 'database') {
+                        dbs.forEach((db: any) => {
+                            parsedWorkspaceMenu[key].push({
+                                ...p,
+                                name: db.name,
+                                type: "database",
+                                href: ('/admin/database/' + db.name).replace(/\/+/g, '/')
+                            })
+                        })
+                    } else if (p.name == '*' && p.type == 'files') {
+                        const myFiles = fs.readdirSync('../../' + p.path) //TODO: change for an async function
+                        myFiles.forEach((file: any) => {
+                            parsedWorkspaceMenu[key].push({
+                                ...p,
+                                name: p.options?.skipExtension ? file.split('.').slice(0, -1).join('.') : file,
+                                type: "files",
+                                href: ('/admin/files/' + p.path + '?file=' + file + '&full=1').replace(/\/+/g, '/')
+                            })
+                        })
+                    } else {
+                        const options: any = {}
+                        if (p.options?.templates) {
+                            options.options = { templates: p.options.templates.map(t => JSON.parse(fs.readFileSync('../../data/templates/' + t + '/' + t + '.json').toString())) }
+                        }
+                        parsedWorkspaceMenu[key].push({
+                            ...p,
+                            ...options,
+                            href: this.getHref(p)
+                        })
+                    }
+                })
+            }
         })
 
         return new WorkspaceModel({
@@ -126,6 +133,9 @@ export class WorkspaceModel {
                 }
             })
         })
+    }
+    getHref(p: any) {
+        return ('/admin/' + p.type + '/' + p.path).replace(/\/+/g, '/')
     }
 
 
