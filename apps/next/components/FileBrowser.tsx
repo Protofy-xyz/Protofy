@@ -69,11 +69,6 @@ const WebFileBrowser = ({ file, path, filesState }: any) => {
         router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file=' + file.name)
     }
 
-    const onUpload = () => {
-        console.log('upload to: ', currentPath)
-        setUploadDialogOpen(true)
-    }
-
     const { resolvedTheme } = useThemeSetting()
 
 
@@ -122,28 +117,7 @@ const WebFileBrowser = ({ file, path, filesState }: any) => {
 
     return (
         isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
-            <Explorer currentPath={currentPath} filesState={filesState} templateActions={templateActions} onOpen={onOpen} onUpload={onUpload} />
-
-            <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
-                <Dialog.Portal>
-                    <Dialog.Overlay />
-                    <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} width="50%" height="50%">
-                        <Uploader />
-
-                        <Dialog.Close />
-                    </Dialog.Content>
-                </Dialog.Portal>
-
-                {/* optionally change to sheet when small screen */}
-                <Dialog.Adapt when="sm">
-                    <Dialog.Sheet>
-                        <Dialog.Sheet.Frame>
-                            <Dialog.Adapt.Contents />
-                        </Dialog.Sheet.Frame>
-                        <Dialog.Sheet.Overlay />
-                    </Dialog.Sheet>
-                </Dialog.Adapt>
-            </Dialog>
+            <Explorer currentPath={currentPath} filesState={filesState} templateActions={templateActions} onOpen={onOpen} />
             <Dialog open={dialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
