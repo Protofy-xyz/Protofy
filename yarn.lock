@@ -20328,7 +20328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:*, prop-types@npm:^15.5.10, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:*, prop-types@npm:^15.5.10, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.1, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -20409,6 +20409,7 @@ __metadata:
     jotai: ^2.4.2
     jsonwebtoken: ^9.0.2
     mqtt-react-hooks: ^3.0.0-alpha.2
+    react-contenteditable: 3.3.7
     react-custom-scrollbars-2: 4.5.0
     react-use-keypress: 1.3.1
     tamagui: latest
@@ -20720,6 +20721,18 @@ __metadata:
   peerDependencies:
     react: "*"
   checksum: 40b49e1aa2ab27a099cc37a3fa2d5bb906b8def4dbe2d922c0e42365e386d82b03f9b06a2b29a44a51f1e114cef72e61c0ba0740581a128d951936ea4617429b
+  languageName: node
+  linkType: hard
+
+"react-contenteditable@npm:3.3.7":
+  version: 3.3.7
+  resolution: "react-contenteditable@npm:3.3.7"
+  dependencies:
+    fast-deep-equal: ^3.1.3
+    prop-types: ^15.7.1
+  peerDependencies:
+    react: ">=16.3"
+  checksum: 5157ccd3221063fcb12c556b71bb7135727f6e8f515abe3ad9741a361628ccce92aa654fc92a44494fb2c56d3c349cc683605d69439af3f8748f57ad854f42cf
   languageName: node
   linkType: hard
 
