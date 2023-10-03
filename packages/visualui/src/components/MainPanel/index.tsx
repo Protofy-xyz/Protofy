@@ -3,7 +3,7 @@ import React, { memo, useRef, useEffect } from "react";
 import { withTopics } from "react-topics";
 import SPanel from 'react-sliding-side-panel';
 import 'react-sliding-side-panel/lib/index.css';
-import { Component, Workflow } from 'lucide-react';
+import { Component, Workflow, Save } from 'lucide-react';
 import FloatingPanel from "./FloatingPanel";
 import './floatingBar.css';
 
@@ -21,7 +21,7 @@ const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent,
     const [openPanel, setOpenPanel] = React.useState(false);
     const [openPreview, setOpenPreview] = React.useState(false);
     const [isFlowExpanded, setIsFlowExpanded] = React.useState(false)
-
+    const { publish } = topics;
 
     useEffect(() => {
         if (!isFlowExpanded && rightPanel?.current?.getSize() > collapsedWidth) {
@@ -61,9 +61,9 @@ const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent,
                     className="floatingIcon"
                     style={{ marginBottom: 20 }}
                 >
-                    <Component
-                        onClick={() => alert('HELLL')}
-                        color="red"
+                    <Save
+                        onClick={() => publish("savenodes", {})}
+                        color="white"
                     />
                 </div>
                 <div
