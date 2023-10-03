@@ -1,65 +1,21 @@
-import React, { useRef, useEffect } from 'react';
+import  { forwardRef } from 'react';
 import Rnd from 'react-rnd';
 import { GripHorizontal, Expand, Minimize, X } from 'lucide-react';
 
-export default ({ children, visibleFlows, size, setSize, previewState, setPreviewState, onShowToggle }) => {
-    const rndRef: any = useRef()
-    const [isDragging, setIsDragging] = React.useState(false);
-    const [expanded, setExpanded] = React.useState(false);
-    const [mousePos, setMousePos] = React.useState({x: 0, y: 0});
+export default forwardRef(({ children, visibleFlows, size, expanded, previewState, onShowToggle, onExpandToggle, onResize, onDragStop }: any, ref: any) => {
 
     const compressedPosition = { x: window.outerWidth * 0.5, y: window.innerHeight - 80 }
-
-    const [expandedState, setExpandedState] = React.useState({ size: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
-
-    const onExpandToggle = () => {
-        const newState = !expanded
-        setExpanded(newState)
-        if (newState) {
-            if (!rndRef.current) return
-            const currentYPos = rndRef.current.props.position.y
-            const expandedHeight = expandedState.size.y
-            const windowHeight = window.innerHeight
-            if ((currentYPos + expandedHeight) > windowHeight) {
-                rndRef.current.props.position.y = windowHeight - expandedHeight
-            }
-            setSize(expandedState.size)
-        } else {
-            setSize({ x: previewState.size.x, y: previewState.size.x })
-        }
-    }
-    const onResize = (e, direction, ref) => {
-        if (expanded) {
-            setExpandedState(s => { return ({ ...s, size: size }) })
-        } else {
-            setPreviewState(s => { return ({ ...s, size: size }) })
-        }
-        setSize({ x: ref.offsetWidth, y: ref.offsetHeight })
-    }
-    const onDragStop = (e, d) => {
-        setIsDragging(false)
-        if (visibleFlows) {
-            setPreviewState(s => { return ({ ...s, position: { x: d.x, y: d.y } }) })
-        }
-    }
-
-    useEffect(() => {
-        const handleMouse = (e) => setMousePos({x: e.clientX, y: e.clientY})
-        window.addEventListener('mousemove', handleMouse)
-        return () => window.removeEventListener('mousemove', handleMouse)
-    }, [])
 
     return (
         <>
             <Rnd
-                ref={rndRef}
+                ref={ref}
                 minWidth={0}
                 minHeight={0}
                 size={{ height: size.y, width: size.x }}
                 default={{ height: previewState.size.y, width: previewState.size.x, x: previewState.position.x, y: previewState.position.y }}
                 position={visibleFlows ? previewState.position : compressedPosition}
                 onResize={onResize}
-                onDragStart={() => setIsDragging(true)}
                 onDragStop={onDragStop}
                 bounds="window"
                 lockAspectRatio={!expanded}
@@ -119,4 +75,4 @@ export default ({ children, visibleFlows, size, setSize, previewState, setPrevie
             </Rnd>
         </>
     )
-};
+});
