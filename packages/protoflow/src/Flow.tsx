@@ -794,6 +794,10 @@ const FlowComponent = ({
                     break;
             }
         }, [data[flowId + '/ui']])
+
+        useEffect(() => { // Send response
+            onSaveNodes()
+        }, [data["savenodes"]])
     }
 
     useEffect(() => {
@@ -873,7 +877,14 @@ const FlowComponent = ({
                 {
                     showActionsBar ?
                         <Panel position="top-center">
-                            <ActionsBar getFirstNode={_getFirstNode} layout={layout} onSave={onSave ? onSaveNodes : null} onReload={onReload ? onReloadNodes : null} onShowCode={onShowCode ? onShowCode : null} hasChanges={hasChanges} />
+                            <ActionsBar 
+                                getFirstNode={_getFirstNode} 
+                                layout={layout} 
+                                onSave={null}  // removes save nodes
+                                onReload={onReload ? onReloadNodes : null} 
+                                onShowCode={onShowCode ? onShowCode : null} 
+                                hasChanges={hasChanges} 
+                            />
                         </Panel>
                         : null
                 }
@@ -891,4 +902,4 @@ const Flow = (props) => {
     )
 }
 
-export default (flowId) => withTopics(Flow, { topics: [flowId + '/play', flowId + '/ui'] })
+export default (flowId) => withTopics(Flow, { topics: [flowId + '/play', flowId + '/ui', 'savenodes'] })
