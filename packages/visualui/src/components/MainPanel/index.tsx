@@ -3,8 +3,9 @@ import React, { memo, useRef, useEffect } from "react";
 import { withTopics } from "react-topics";
 import SPanel from 'react-sliding-side-panel';
 import 'react-sliding-side-panel/lib/index.css';
-import { Component } from 'lucide-react';
+import { Component, Workflow } from 'lucide-react';
 import FloatingPanel from "./FloatingPanel";
+import './floatingBar.css';
 
 type Props = {
     rightPanelContent: React.Component | any,
@@ -16,42 +17,18 @@ type Props = {
 const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, topics }: Props) => {
 
     const rightPanel = useRef(null);
-    const [acollapsedWidth, setCollapsedWidth] = React.useState(0);
     const collapsedWidth = 0;
-    // const { data } = topics;
     const [openPanel, setOpenPanel] = React.useState(false);
-
+    const [openPreview, setOpenPreview] = React.useState(false);
     const [isFlowExpanded, setIsFlowExpanded] = React.useState(false)
 
-    var expandedWidth = 50
-
-    const onClick = () => {
-        if (rightPanel?.current?.getSize() >= expandedWidth) {
-            rightPanel.current?.resize(collapsedWidth)
-            setIsFlowExpanded(false)
-        } else {
-            rightPanel.current?.resize(expandedWidth)
-            setIsFlowExpanded(true)
-        }
-    }
-
-    useEffect(() => {
-        setCollapsedWidth((335 / window.innerWidth) * 100)
-    }, [])
-
-    // useEffect(() => {
-    //     if(!data['menuState']) return
-    //     const menuState = data['menuState'].state
-    //     if (menuState == 'open' && rightPanel?.current?.getSize() < expandedWidth) {
-    //       onClick()
-    //     }
-    // }, [data['menuState']])
 
     useEffect(() => {
         if (!isFlowExpanded && rightPanel?.current?.getSize() > collapsedWidth) {
             rightPanel.current?.resize(collapsedWidth)
         }
     }, [rightPanel?.current?.getSize()])
+
     useEffect(() => {
         window.addEventListener('dragenter', () => setOpenPanel(false))
     })
@@ -64,21 +41,40 @@ const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent,
                     type={'left'}
                     isOpen={true}
                     size={30}
-                // noBackdrop={true}
                 >
                     {leftPanelContent}
                 </SPanel>
             </div>
             <div
-                style={{ display: 'flex', position: 'fixed', alignSelf: 'center', left: '20px', backgroundColor: 'black', zIndex: 10000, cursor: 'pointer', padding: '10px', alignItems: 'center', borderRadius: '40px' }}
+                style={{ display: 'flex', position: 'fixed', flexDirection: 'column', alignSelf: 'center', left: '20px', zIndex: 10000 }}
             >
-                <Component
-                    onClick={() => setOpenPanel(true)}
-                    color="white"
-                />
+                <div
+                    className="floatingIcon"
+                    style={{ marginBottom: 20 }}
+                >
+                    <Component
+                        onClick={() => setOpenPanel(true)}
+                        color="white"
+                    />
+                </div>
+                <div
+                    className="floatingIcon"
+                    style={{ marginBottom: 20 }}
+                >
+                    <Component
+                        onClick={() => alert('HELLL')}
+                        color="red"
+                    />
+                </div>
+                <div
+                    onClick={() => setOpenPreview(!openPreview)}
+                    className="floatingIcon"
+                >
+                    <Workflow color="white" style={{ cursor: 'grab' }} />
+                </div>
             </div>
             <div style={{ position: 'absolute', zIndex: 1000, width: '0px' }}>
-                <FloatingPanel>
+                <FloatingPanel showTrigger={openPreview}>
                     {rightPanelContent}
                 </FloatingPanel>
             </div>

@@ -1,14 +1,16 @@
 import React, { useRef, useEffect } from 'react';
 import Rnd from 'react-rnd';
-import { GripHorizontal, Expand, Minimize, X, Workflow } from 'lucide-react';
+import { GripHorizontal, Expand, Minimize, X } from 'lucide-react';
 import { withTopics } from "react-topics";
 
-const FloatingPanel = ({ children, topics }) => {
+const FloatingPanel = ({ children, topics, showTrigger }) => {
     const { data } = topics;
     const rndRef: any = useRef()
     const [visibleFlows, setVisibleFlows] = React.useState(false);
+    const [isDragging, setIsDragging] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
     const [selectedId, setSelectedId] = React.useState();
+    const [mousePos, setMousePos] = React.useState({x: 0, y: 0});
 
     const compressedSize = 50
     const compressedPosition = { x: window.outerWidth * 0.5, y: window.innerHeight - 80 }
@@ -17,7 +19,7 @@ const FloatingPanel = ({ children, topics }) => {
     const [previewState, setPreviewState] = React.useState({ size: { x: 400, y: 400 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
     const [expandedState, setExpandedState] = React.useState({ size: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
 
-    const onShowToggle = (e) => {
+    const onShowToggle = () => {
         const newState = !visibleFlows
         setVisibleFlows(newState)
         if (newState) { // visible
@@ -26,7 +28,6 @@ const FloatingPanel = ({ children, topics }) => {
             setPreviewState(s => { return ({ ...s, size: size }) })
             setSize({ x: compressedSize, y: compressedSize })
         }
-        return e.stopPropagation()
     }
     const onExpandToggle = () => {
         const newState = !expanded
@@ -53,6 +54,7 @@ const FloatingPanel = ({ children, topics }) => {
         setSize({ x: ref.offsetWidth, y: ref.offsetHeight })
     }
     const onDragStop = (e, d) => {
+        setIsDragging(false)
         if (visibleFlows) {
             setPreviewState(s => { return ({ ...s, position: { x: d.x, y: d.y } }) })
         }
@@ -66,20 +68,19 @@ const FloatingPanel = ({ children, topics }) => {
         }
     }, [data['zoomToNode']])
 
+
+    useEffect(() => {
+        onShowToggle();
+    },[showTrigger])
+
+    useEffect(() => {
+        const handleMouse = (e) => setMousePos({x: e.clientX, y: e.clientY})
+        window.addEventListener('mousemove', handleMouse)
+        return () => window.removeEventListener('mousemove', handleMouse)
+    }, [])
+
     return (
         <>
-            <div
-                onClick={onShowToggle}
-                style={{
-                    backgroundColor: 'black', height: '40px', width: '40px',
-                    padding: '10px', cursor: 'grab', position: 'absolute',
-                    zIndex: 1000, borderRadius: '100%', display: 'flex',
-                    alignItems: 'center', alignSelf: 'center',
-                    top: window.innerHeight * 0.4 - 20, left: 20
-                }}
-            >
-                <Workflow color="white" style={{ cursor: 'grab' }} />
-            </div>
             <Rnd
                 ref={rndRef}
                 minWidth={0}
@@ -88,6 +89,7 @@ const FloatingPanel = ({ children, topics }) => {
                 default={{ height: previewState.size.y, width: previewState.size.x, x: previewState.position.x, y: previewState.position.y }}
                 position={visibleFlows ? previewState.position : compressedPosition}
                 onResize={onResize}
+                onDragStart={() => setIsDragging(true)}
                 onDragStop={onDragStop}
                 bounds="window"
                 lockAspectRatio={!expanded}
@@ -101,6 +103,7 @@ const FloatingPanel = ({ children, topics }) => {
                             zIndex: 1000, borderRadius: '100%', display: 'flex',
                             alignItems: 'center'
                         }}
+                        onMouseUp={e => e.stopPropagation()}
                     >
                         <GripHorizontal color="white" style={{ cursor: 'grab' }} />
                     </div>
