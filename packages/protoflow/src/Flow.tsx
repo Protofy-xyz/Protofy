@@ -756,6 +756,14 @@ const FlowComponent = ({
                     newEdges = addEdgeChildAndReorder(edges, nodeId, parent, newChildrenPos)
                     setEdges(newEdges)
                     break;
+                case 'edit-node':
+                    // edit node only edit child
+                    var newNodesData = { ...nodeData, [nodeId]: {
+                        ...nodeData[nodeId],
+                        "child-1": uiData.newChildValue
+                    } }
+                    setNodesData(newNodesData)
+                    break;
                 case 'move-node':
                     const isSameParent = uiData.isSameParent
                     if (isSameParent) {
