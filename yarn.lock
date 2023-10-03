@@ -1942,6 +1942,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.1.2":
+  version: 7.23.1
+  resolution: "@babel/runtime@npm:7.23.1"
+  dependencies:
+    regenerator-runtime: ^0.14.0
+  checksum: 0cd0d43e6e7dc7f9152fda8c8312b08321cda2f56ef53d6c22ebdd773abdc6f5d0a69008de90aa41908d00e2c1facb24715ff121274e689305c858355ff02c70
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.4.4, @babel/runtime@npm:^7.8.3, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.22.15
   resolution: "@babel/runtime@npm:7.22.15"
@@ -18728,8 +18737,8 @@ __metadata:
     raf: ^3.4.1
     react: ^18.2.0
     react-dom: ^18.2.0
-    react-drag-drop-files: 2.3.10
     react-dropzone: 14.2.3
+    react-dropzone-uploader: 2.11.0
     react-native: ^0.71.4
     react-native-web: ^0.18.12
     react-native-web-lite: latest
@@ -20781,19 +20790,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-drag-drop-files@npm:2.3.10":
-  version: 2.3.10
-  resolution: "react-drag-drop-files@npm:2.3.10"
-  dependencies:
-    prop-types: ^15.7.2
-    styled-components: ^5.3.0
-  peerDependencies:
-    react: ^18.0.0
-    react-dom: ^18.0.0
-  checksum: d739ad5b21ee147ebea0ef9c3496ea71f30742b684a9297f91252a62b84d296c319bc706d6219585df3531b45d3cb517f384fdece0d2ffd23a81e9ac1b5fe75d
-  languageName: node
-  linkType: hard
-
 "react-draggable@npm:3.0.5":
   version: 3.0.5
   resolution: "react-draggable@npm:3.0.5"
@@ -20801,6 +20797,19 @@ __metadata:
     classnames: ^2.2.5
     prop-types: ^15.6.0
   checksum: 6fed972c971dca0b6a5afc51c0820e5c40d85fd272989e1b562835b2a60ef82b97636b36b4b6a495dcea8b4599b915fa1f4b7aaebce6831a72b04fe759212c6e
+  languageName: node
+  linkType: hard
+
+"react-dropzone-uploader@npm:2.11.0":
+  version: 2.11.0
+  resolution: "react-dropzone-uploader@npm:2.11.0"
+  dependencies:
+    "@babel/runtime": ^7.1.2
+  peerDependencies:
+    prop-types: ">=15.5.10"
+    react: ">=16.2.0"
+    react-dom: ">=16.2.0"
+  checksum: 62a320f22d753d3916d0de4921e138892e02adeafe4fced1e9cd8e0199867f06317a631c256e83d0e2b06022fe45c89401f51a6f71ed2004328dcbfde5371009
   languageName: node
   linkType: hard
 
