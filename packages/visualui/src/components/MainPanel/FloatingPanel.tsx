@@ -1,21 +1,17 @@
 import React, { useRef, useEffect } from 'react';
 import Rnd from 'react-rnd';
 import { GripHorizontal, Expand, Minimize, X } from 'lucide-react';
-import { withTopics } from "react-topics";
 
-const FloatingPanel = ({ children, topics, visibleFlows, setVisibleFlows, size, setSize, previewState, setPreviewState, onShowToggle }) => {
-    const { data } = topics;
+export default ({ children, visibleFlows, size, setSize, previewState, setPreviewState, onShowToggle }) => {
     const rndRef: any = useRef()
     const [isDragging, setIsDragging] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
-    const [selectedId, setSelectedId] = React.useState();
     const [mousePos, setMousePos] = React.useState({x: 0, y: 0});
 
     const compressedPosition = { x: window.outerWidth * 0.5, y: window.innerHeight - 80 }
 
     const [expandedState, setExpandedState] = React.useState({ size: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
 
-    
     const onExpandToggle = () => {
         const newState = !expanded
         setExpanded(newState)
@@ -46,14 +42,6 @@ const FloatingPanel = ({ children, topics, visibleFlows, setVisibleFlows, size, 
             setPreviewState(s => { return ({ ...s, position: { x: d.x, y: d.y } }) })
         }
     }
-
-    useEffect(() => {
-        if (data['zoomToNode']?.id != selectedId && !visibleFlows) {
-            setSelectedId(data['zoomToNode'].id)
-            setVisibleFlows(true)
-            setSize(previewState.size)
-        }
-    }, [data['zoomToNode']])
 
     useEffect(() => {
         const handleMouse = (e) => setMousePos({x: e.clientX, y: e.clientY})
@@ -132,5 +120,3 @@ const FloatingPanel = ({ children, topics, visibleFlows, setVisibleFlows, size, 
         </>
     )
 };
-
-export default withTopics(FloatingPanel, { topics: ["zoomToNode"] })

@@ -17,7 +17,8 @@ type Props = {
 const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, topics }: Props) => {
 
     const [openPanel, setOpenPanel] = React.useState(false);
-    const { publish } = topics;
+    const [selectedId, setSelectedId] = React.useState();
+    const { publish, data } = topics;
     
     const compressedSize = 50
 
@@ -35,6 +36,14 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
             setSize({ x: compressedSize, y: compressedSize })
         }
     }
+
+    useEffect(() => {
+        if (data['zoomToNode']?.id != selectedId && !visibleFlows) {
+            setSelectedId(data['zoomToNode'].id)
+            setVisibleFlows(true)
+            setSize(previewState.size)
+        }
+    }, [data['zoomToNode']])
 
     useEffect(() => {
         window.addEventListener('dragenter', () => setOpenPanel(false))
@@ -83,7 +92,6 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
             <div style={{ position: 'absolute', zIndex: 1000, width: '0px' }}>
                 <FloatingPanel
                     visibleFlows={visibleFlows}
-                    setVisibleFlows={setVisibleFlows}
                     size={size}
                     setSize={setSize}
                     previewState={previewState}
@@ -100,4 +108,4 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
 
 
 
-export default memo(withTopics(MainPanel, { topics: ['menuState'] }));
+export default memo(withTopics(MainPanel, { topics: ["zoomToNode"] }));
