@@ -14,20 +14,27 @@ type Props = {
     topics: any
 };
 
-const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, topics }: Props) => {
+const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, topics }: Props) => {
 
-    const rightPanel = useRef(null);
-    const collapsedWidth = 0;
     const [openPanel, setOpenPanel] = React.useState(false);
-    const [openPreview, setOpenPreview] = React.useState(false);
-    const [isFlowExpanded, setIsFlowExpanded] = React.useState(false)
     const { publish } = topics;
+    
+    const compressedSize = 50
 
-    useEffect(() => {
-        if (!isFlowExpanded && rightPanel?.current?.getSize() > collapsedWidth) {
-            rightPanel.current?.resize(collapsedWidth)
+    const [visibleFlows, setVisibleFlows] = React.useState(false);
+    const [size, setSize] = React.useState({ x: compressedSize, y: compressedSize });
+    const [previewState, setPreviewState] = React.useState({ size: { x: 400, y: 400 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
+
+    const onShowFlows = () => {
+        const newState = !visibleFlows
+        setVisibleFlows(newState)
+        if (newState) { // visible
+            setSize(previewState.size)
+        } else {
+            setPreviewState(s => { return ({ ...s, size: size }) })
+            setSize({ x: compressedSize, y: compressedSize })
         }
-    }, [rightPanel?.current?.getSize()])
+    }
 
     useEffect(() => {
         window.addEventListener('dragenter', () => setOpenPanel(false))
@@ -67,14 +74,22 @@ const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent,
                     />
                 </div>
                 <div
-                    onClick={() => setOpenPreview(!openPreview)}
+                    onClick={() => onShowFlows()}
                     className="floatingIcon"
                 >
                     <Workflow color="white" style={{ cursor: 'grab' }} />
                 </div>
             </div>
             <div style={{ position: 'absolute', zIndex: 1000, width: '0px' }}>
-                <FloatingPanel showTrigger={openPreview}>
+                <FloatingPanel
+                    visibleFlows={visibleFlows}
+                    setVisibleFlows={setVisibleFlows}
+                    size={size}
+                    setSize={setSize}
+                    previewState={previewState}
+                    setPreviewState={setPreviewState}
+                    onShowToggle={onShowFlows}
+                >
                     {rightPanelContent}
                 </FloatingPanel>
             </div>
@@ -85,4 +100,4 @@ const SlidingPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent,
 
 
 
-export default memo(withTopics(SlidingPanel, { topics: ['menuState'] }));
+export default memo(withTopics(MainPanel, { topics: ['menuState'] }));

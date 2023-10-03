@@ -3,32 +3,19 @@ import Rnd from 'react-rnd';
 import { GripHorizontal, Expand, Minimize, X } from 'lucide-react';
 import { withTopics } from "react-topics";
 
-const FloatingPanel = ({ children, topics, showTrigger }) => {
+const FloatingPanel = ({ children, topics, visibleFlows, setVisibleFlows, size, setSize, previewState, setPreviewState, onShowToggle }) => {
     const { data } = topics;
     const rndRef: any = useRef()
-    const [visibleFlows, setVisibleFlows] = React.useState(false);
     const [isDragging, setIsDragging] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
     const [selectedId, setSelectedId] = React.useState();
     const [mousePos, setMousePos] = React.useState({x: 0, y: 0});
 
-    const compressedSize = 50
     const compressedPosition = { x: window.outerWidth * 0.5, y: window.innerHeight - 80 }
 
-    const [size, setSize] = React.useState({ x: compressedSize, y: compressedSize });
-    const [previewState, setPreviewState] = React.useState({ size: { x: 400, y: 400 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
     const [expandedState, setExpandedState] = React.useState({ size: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
 
-    const onShowToggle = () => {
-        const newState = !visibleFlows
-        setVisibleFlows(newState)
-        if (newState) { // visible
-            setSize(previewState.size)
-        } else {
-            setPreviewState(s => { return ({ ...s, size: size }) })
-            setSize({ x: compressedSize, y: compressedSize })
-        }
-    }
+    
     const onExpandToggle = () => {
         const newState = !expanded
         setExpanded(newState)
@@ -67,11 +54,6 @@ const FloatingPanel = ({ children, topics, showTrigger }) => {
             setSize(previewState.size)
         }
     }, [data['zoomToNode']])
-
-
-    useEffect(() => {
-        onShowToggle();
-    },[showTrigger])
 
     useEffect(() => {
         const handleMouse = (e) => setMousePos({x: e.clientX, y: e.clientY})
