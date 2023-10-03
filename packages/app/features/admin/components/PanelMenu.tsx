@@ -91,6 +91,9 @@ const Tabs = ({ tabs }: any) => {
     return (tabs ?
         <>
             {Object.keys(tabs).map((tab, index) => {
+                if(tabs[tab].length === undefined){
+                    return <Subtabs subtabs={[tabs[tab]]} />
+                }
                 return (
                     <Accordion br={"$6"} overflow="hidden" type="multiple" mb={'$4'} key={index}>
                         <Accordion.Item value={"a" + index}>
