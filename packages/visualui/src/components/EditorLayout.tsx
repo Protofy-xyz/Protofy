@@ -64,11 +64,20 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 				}
 				notify(topicParams, publish)
 			} else if (nodesChanges.find(d => d.kind == 'E')) { //case edit
-				const nodeIds_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == 'parent')
-				if (nodeIds_diff) { // moved changing parent
-					const nodeId_moved = nodeIds_diff.path[0];
-					const nodeId_newParent = nodeIds_diff.rhs;
-					const nodeId_oldParent = nodeIds_diff.lhs;
+				const movedParent_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == 'parent')
+				const children_diff = nodesChanges.find(d => d.kind == 'E' && d.path[2] == 'children')
+				if (children_diff) { // edited child text
+					const nodeId = children_diff.path[0]
+					const newChildValue = children_diff.rhs
+					topicParams = {
+						action: 'edit-node',
+						nodeId: nodeId,
+						newChildValue: newChildValue
+					}
+				} else if (movedParent_diff) { // moved changing parent
+					const nodeId_moved = movedParent_diff.path[0];
+					const nodeId_newParent = movedParent_diff.rhs;
+					const nodeId_oldParent = movedParent_diff.lhs;
 					const oldPos = previousNodes[nodeId_oldParent].nodes.findIndex(n => n == nodeId_moved);
 					const newPos_diff = nodesChanges.find(d => d.kind == 'E' && d.path[0] == nodeId_newParent && d.rhs == nodeId_moved)
 					const newPos = newPos_diff?.path[2] ?? -1; // If no find change position, then means that is added to the last position of parent childs
