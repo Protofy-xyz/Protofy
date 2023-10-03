@@ -19,6 +19,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
     const floatingRef: any = useRef()
     const [openPanel, setOpenPanel] = React.useState(false);
     const [selectedId, setSelectedId] = React.useState();
+    const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
     const { publish, data } = topics;
 
     const compressedSize = 50
@@ -70,16 +71,28 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
     }
 
     useEffect(() => {
+        setSelectedId(data['zoomToNode'].id)
         if (data['zoomToNode']?.id != selectedId && !visibleFlows) {
-            setSelectedId(data['zoomToNode'].id)
             setVisibleFlows(true)
             setSize(previewState.size)
+            setPreviewState(s => {
+                return {...s, position: mousePos}
+            })
         }
     }, [data['zoomToNode']])
 
     useEffect(() => {
-        window.addEventListener('dragenter', () => setOpenPanel(false))
-    })
+        const handleOpenPanel = () => setOpenPanel(false)
+        const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY })
+
+        window.addEventListener('dragenter', handleOpenPanel)
+        window.addEventListener('mousemove', handleMouseMove)
+        
+        return () => {
+            window.removeEventListener('dragenter', handleOpenPanel)
+            window.removeEventListener('mousemove', handleMouseMove)
+        }
+    }, [])
 
     return (
         <div style={{ flex: 1, display: 'flex' }}>
