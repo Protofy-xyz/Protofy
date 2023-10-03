@@ -7,7 +7,7 @@ import { FileNavbar, FileBrowser, FileToolbar, FileList, FileContextMenu, Chonky
 import { BigTitle, createApiAtom, useAtom } from 'protolib';
 import { useState } from 'react';
 import { UploadCloud } from '@tamagui/lucide-icons'
-import { H2, H4, Text, useTheme } from '@my/ui';
+import { Dialog, H2, H4, Text, useTheme } from '@my/ui';
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const filesAtom = createApiAtom([])
@@ -18,6 +18,7 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
     const borderColor = theme.color.val.replace(/^#/, '%23')
     const [files, setFiles] = useAtom(filesAtom, filesState)
     const [showDropMessage, setShowDropMessage] = useState(false)
+    const [showUploadDialog, setShowUploadDialog] = useState(false)
     const onScroll = () => { }
     const myFileActions = [
         ...templateActions,
@@ -55,23 +56,30 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
             onDragEnter={() => setShowDropMessage(true)}
             onDragLeave={() => setShowDropMessage(false)}
             noClick={false}
-            onDrop={(acceptedFiles: any) => console.log("uploaded: ", acceptedFiles)
-            }>
+            onDrop={(acceptedFiles: any) => {
+                setShowUploadDialog(true)
+                setShowDropMessage(false)
+            }}
+            onUpload={(acceptedFiles: any) => {
+                setShowUploadDialog(true)
+                setShowDropMessage(false)
+            }}
+            >
             {({ getRootProps, getInputProps }) => (
                 //@ts-ignore
                 <YStack flex={1} {...getRootProps()} >
                     <YStack f={1} onPress={(e) => {
-                        let current:any = e.target;
+                        let current: any = e.target;
                         let found = false
-                        while(current && !found){
-                            if(current.type == 'button' && current.title == 'Upload files') {
+                        while (current && !found) {
+                            if (current.type == 'button' && current.title == 'Upload files') {
                                 found = true
                             } else {
                                 current = current.parentNode
                             }
                         }
 
-                        if(!found) {
+                        if (!found) {
                             e.stopPropagation()
                         }
                     }}>
@@ -130,6 +138,29 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
                                     <H2 mt="$5">Drop files to upload</H2>
                                 </YStack>
                             </YStack></> : null}
+
+                        <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
+                            <Dialog.Portal>
+                                <Dialog.Overlay />
+                                <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'50%'} width={"50%"} >
+                                    test
+
+                                    <Dialog.Close />
+                                </Dialog.Content>
+                            </Dialog.Portal>
+
+                            {/* optionally change to sheet when small screen */}
+                            <Dialog.Adapt when="sm">
+                                <Dialog.Sheet>
+                                    <Dialog.Sheet.Frame>
+                                        <Dialog.Adapt.Contents />
+                                    </Dialog.Sheet.Frame>
+                                    <Dialog.Sheet.Overlay />
+                                </Dialog.Sheet>
+                            </Dialog.Adapt>
+                        </Dialog>
+
+
                     </YStack>
                 </YStack>
             )}
