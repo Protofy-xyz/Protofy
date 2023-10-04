@@ -1,1 +1,1 @@
-export {default, getServerSideProps} from 'protolib/adminpanel/pages/database'
+export {default, getServerSideProps} from 'protolib/adminpanel/next/database'

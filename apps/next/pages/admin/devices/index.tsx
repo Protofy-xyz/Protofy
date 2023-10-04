@@ -1,1 +1,1 @@
-export {default, getServerSideProps} from 'protolib/adminpanel/pages/devices'
+export {default, getServerSideProps} from 'protolib/adminpanel/next/devices'
