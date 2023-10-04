@@ -133,7 +133,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const SidebarPanel = (
         <div
             key="sidebar"
-            style={{ display: 'flex', flex: 1, maxWidth: '290px', height: '100%' }}
+            style={{ display: 'flex', flex: 1, height: '100%' }}
         >
             <Sidebar
                 palettes={allPalettes}

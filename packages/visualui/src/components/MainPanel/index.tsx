@@ -30,6 +30,11 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
     const [expandedState, setExpandedState] = React.useState({ size: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
     const [expanded, setExpanded] = React.useState(false);
 
+    const getLeftWidth = () => {
+        const totalWidth = window.innerWidth
+        let percentage = (290 / totalWidth) * 100;
+        return percentage;
+    }
     const onExpandFlows = () => {
         const newState = !expanded
         setExpanded(newState)
@@ -82,26 +87,27 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
     }, [data['zoomToNode']])
 
     useEffect(() => {
-        const handleOpenPanel = () => setOpenPanel(false)
+        const handleClosePanel = () => setOpenPanel(false)
         const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY })
 
-        window.addEventListener('dragenter', handleOpenPanel)
+        window.addEventListener('dragenter', handleClosePanel)
         window.addEventListener('mousemove', handleMouseMove)
         
         return () => {
-            window.removeEventListener('dragenter', handleOpenPanel)
+            window.removeEventListener('dragenter', handleClosePanel)
             window.removeEventListener('mousemove', handleMouseMove)
         }
     }, [])
-
+  
     return (
         <div style={{ flex: 1, display: 'flex' }}>
-            <div style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute' }} onClick={() => setOpenPanel(false)} >
+            <div style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute', width: getLeftWidth() }}>
                 <SPanel
                     key="sidebar"
                     type={'left'}
                     isOpen={true}
-                    size={30}
+                    size={getLeftWidth()}
+                    backdropClicked={() => setOpenPanel(false)}
                 >
                     {leftPanelContent}
                 </SPanel>
