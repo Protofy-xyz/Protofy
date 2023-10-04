@@ -149,7 +149,7 @@ export default {
   ...cw(PageGlow, 'EyeOff', 'PageGlow'),
   ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem', { text: "hello world" }),
   ...cw(Pre, 'EyeOff', 'Pre'),
-  ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }),
+  ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
   ...cw(Search, 'Search', 'Search'),
   ...cw(Section, 'EyeOff', 'Section'),
   ...cw(SectionBox, 'RectangleHorizontal', 'SectionBox', {}, {}, { children: <BasicPlaceHolder /> }),
@@ -157,7 +157,7 @@ export default {
   ...cw(TitleLink, 'Link', 'TitleLink', { href: "/hello", children: "hello" }),
   ...cw(SideBySide, 'PanelLeftInactive', 'SideBySide'),
   ...cw(SpotLight, 'Sun', 'SpotLight'),
-  ...cw(SubTitle, 'Type', 'SubTitle', { children: "hello world" }),
+  // ...cw(SubTitle, 'Type', 'SubTitle', { children: "hello world" }),
   ...cw(TabGroup, 'Group', 'TabGroup', { title: "hello" }),
   ...cw(TamaCard, 'CreditCard', 'TamaCard', {
     title: "hello title",
@@ -169,7 +169,7 @@ export default {
   ...cw(HomeSection, 'BoxSelect', 'HomeSection'),
   ...cw(TooltipContainer, 'BoxSelect', 'TooltipContainer', { tooltipText: "Hello" }),
   ...cw(TwitterIcon, 'LogoIcon', 'TwitterIcon', { width: 23 }),
-  ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }),
+  ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }, {}, {}, true),
   ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
   ...cw(AlertDialog, 'Group', 'AlertDialog')
 }

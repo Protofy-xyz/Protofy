@@ -7,6 +7,7 @@ const StyledUL = styled(YStack, {
   my: '$1',
   ml: '$4',
   mr: '$2',
+  display: 'inline'
 })
 
 
