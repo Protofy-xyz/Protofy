@@ -1,10 +1,10 @@
-import AdminPanel from 'app/features/admin'
+import AdminPanel from '../features'
 import Head from 'next/head'
 import { SSR } from 'common'
 import { NextPageContext } from 'next'
 import { API, withSession } from 'protolib'
 import { useRouter } from 'next/router';
-import DevicesAdmin from 'app/features/admin/components/devices'
+import DevicesAdmin from '../features/components/devices'
 
 export default function DevicesPage({workspace, data}:any) {
   const router = useRouter();

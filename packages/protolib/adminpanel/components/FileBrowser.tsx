@@ -2,13 +2,13 @@
 import { YStack } from '@tamagui/stacks';
 import { AlertDialog, Button, Dialog, XStack, useTheme } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
-import { FileWidget } from 'app/features/admin/components/FilesWidget';
+import { FileWidget } from '../features/components/FilesWidget';
 import { useAtom, IconContainer, createApiAtom } from 'protolib';
 import { X } from '@tamagui/lucide-icons';
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { workspaceAtom } from 'app/features/admin'
+import { workspaceAtom } from '../features'
 import { WorkspaceModel } from 'common';
 import { Uploader } from './Uploader';
 import Dropzone from 'react-dropzone'

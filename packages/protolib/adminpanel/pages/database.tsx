@@ -1,10 +1,10 @@
-import AdminPanel from 'app/features/admin'
+import AdminPanel from '../features'
 import Head from 'next/head'
 import { SSR } from 'common'
 import { NextPageContext } from 'next'
 import { API, redirect, withSession } from 'protolib'
 import { useRouter } from 'next/router';
-import DBAdmin from 'app/features/admin/components/db'
+import DBAdmin from '../features/components/db'
 
 export default function DatabasePage({workspace, data}:any) {
   const router = useRouter();
