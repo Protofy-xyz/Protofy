@@ -1,5 +1,6 @@
 
-import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest, getInitialData } from 'common';
+import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'app/schema';
+import {getInitialData} from 'app/initialData'
 import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app} from 'protolib/api'
 
 console.log(`API Module loaded: ${__filename.split('.')[0]}`);

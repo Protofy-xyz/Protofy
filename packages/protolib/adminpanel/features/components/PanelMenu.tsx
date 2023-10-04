@@ -1,12 +1,11 @@
-import { YStack, XStack, Stack } from 'tamagui'
+import { YStack, XStack } from 'tamagui'
 import { getPendingResult, API, PanelMenuItem, AlertDialog} from 'protolib'
-import { Box, ChevronDown, Database, Folder, Plus, PlusCircle, Workflow, X } from '@tamagui/lucide-icons'
-import { Accordion, Button, Dialog, Fieldset, Input, Label, Link, Paragraph, SizableText, Spacer, Square, TooltipSimple, Unspaced } from '@my/ui'
+import { Box, ChevronDown, Database, Folder, Plus, Workflow } from '@tamagui/lucide-icons'
+import { Accordion, Input, Link, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {useAtom, useSetAtom} from 'jotai'
 import { workspaceAtom } from '..';
-import {getTemplate} from 'common';
 
 const iconTable = {
     database: <Database color="$color11" strokeWidth={1.5} />,

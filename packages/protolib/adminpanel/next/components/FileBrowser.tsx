@@ -9,7 +9,7 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { workspaceAtom } from '../../features'
-import { WorkspaceModel } from 'common';
+import { WorkspaceModel } from 'app/models';
 import { Uploader } from './Uploader';
 import Dropzone from 'react-dropzone'
 import { Explorer } from './Explorer';

@@ -2,7 +2,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import {connectDB, getDB, handler, app} from 'protolib/api'
-import { getInitialData } from 'common';
+import { getInitialData } from 'app/initialData';
 
 console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 

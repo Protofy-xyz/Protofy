@@ -1,5 +1,5 @@
 import { API } from "./Api"
-import { RegisterSchema } from 'common';
+import { RegisterSchema } from 'app/schema';
 import {getPendingResult} from 'protolib';
 import { z } from "zod";
 
