@@ -11,6 +11,7 @@ module.exports = function (api) {
           alias: {
             // define aliases to shorten the import paths
             protolib: '../../packages/protolib',
+            common: '../../packages/common',
             app: '../../packages/app',
             '@my/ui': '../../packages/ui',
           },
