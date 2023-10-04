@@ -32,6 +32,14 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
             }
         </Component>
     }
+
+    var defaultRules = {}
+    if (editableText) {
+        defaultRules = {
+            canMoveIn: () => false
+        }
+    }
+    
     UiComponent.craft = {
         related: {
         },
@@ -41,7 +49,10 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
         },
         props: defaultProps,
         displayName: name,
-        rules: componentRules,
+        rules: {
+            ...defaultRules,
+            ...componentRules
+        },
     }
     return { [name]: UiComponent }
 }
