@@ -9,7 +9,7 @@ import { promises as fs } from 'fs';
 import fsSync from 'fs'
 
 const FileBrowser = dynamic<any>(() =>
-    import('protolib/components/adminpanel/FileBrowser').then(module => module.FileBrowser),
+    import('protolib/adminpanel/FileBrowser').then(module => module.FileBrowser),
     { ssr: false }
 );
 console.log('filebrowser', FileBrowser)
