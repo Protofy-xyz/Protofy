@@ -4,10 +4,16 @@
   "private": true,
   "scripts": {
     "prepare-dev": "node prepare.js",
-    "dev": "next dev",
-    "build": "cd ../.. && yarn build && cd apps/next && next build",
     "start": "next start",
-    "serve": "NODE_ENV=production next start --port 8151",
+    "dev": "next dev",
+    "service-start": "NODE_ENV=production pm2 start pm2.config.js",
+    "service-start-dev": "pm2 start pm2.config.js",
+    "logs": "pm2 logs",
+    "stop": "pm2 stop api",
+    "kill": "pm2 kill",
+    "status": "pm2 status api",
+    "build": "cd ../.. && yarn build && cd apps/next && next build",
+    "serve": "NODE_ENV=production next start --port 3000",
     "lint": "next lint"
   },
   "dependencies": {
@@ -29,6 +35,7 @@
   "devDependencies": {
     "@tamagui/next-plugin": "latest",
     "@types/node": "20.6.0",
-    "eslint-config-next": "^13.0.4"
+    "eslint-config-next": "^13.0.4",
+    "pm2": "^5.3.0"
   }
 }

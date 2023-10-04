@@ -10,7 +10,13 @@
   "scripts": {
     "prepare-dev": "node prepare.js",
     "start": "ts-node src/index.ts",
-    "start-dev": "nodemon --exitcrash -L"
+    "start-dev": "nodemon --exitcrash -L",
+    "service-start": "NODE_ENV=production pm2 start pm2.config.js",
+    "service-start-dev": "pm2 start pm2.config.js",
+    "logs": "pm2 logs",
+    "stop": "pm2 stop admin-api",
+    "kill": "pm2 kill",
+    "status": "pm2 status admin-api"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
@@ -19,6 +25,7 @@
     "level-party": "^5.1.1",
     "mime-types": "^2.1.35",
     "nodemon": "3.0.1",
+    "pm2": "^5.3.0",
     "ts-node": "10.9.1",
     "tslib": "2.6.2",
     "typescript": "^5.2.2",
