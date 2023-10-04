@@ -1,9 +1,12 @@
-import  { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import Rnd from 'react-rnd';
 import { Move, Maximize, Minimize, X } from 'lucide-react';
 
-export default forwardRef(({ children, visibleFlows, size, expanded, previewState, onShowToggle, onExpandToggle, onResize, onDragStop }: any, ref: any) => {
+export default forwardRef(({ children, visibleFlows, size, expanded, previewState, onShowCropToggle, onExpandToggle, onResize, onDragStop }: any, ref: any) => {
 
+    const isVisibleCrop = visibleFlows == 'crop'
+    const isVisibleFull = visibleFlows == 'full'
+    
     const compressedPosition = { x: window.outerWidth * 0.5, y: window.innerHeight - 80 }
 
     return (
@@ -14,14 +17,14 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
                 minHeight={0}
                 size={{ height: size.y, width: size.x }}
                 default={{ height: previewState.size.y, width: previewState.size.x, x: previewState.position.x, y: previewState.position.y }}
-                position={visibleFlows ? previewState.position : compressedPosition}
+                position={isVisibleCrop ? previewState.position : compressedPosition}
                 onResize={onResize}
                 onDragStop={onDragStop}
                 bounds="window"
                 lockAspectRatio={!expanded}
             >
                 {/* ACTIONS BUTTONS */}
-                <div style={{ position: 'absolute', zIndex: 1000, top: '1rem', left: '-50px', display: visibleFlows ? 'flex' : 'none', gap: '1rem', flexDirection: 'column' }}>
+                <div style={{ position: 'absolute', zIndex: 1000, top: '1rem', left: '-50px', display: isVisibleCrop ? 'flex' : 'none', gap: '1rem', flexDirection: 'column' }}>
                     <div
                         style={{
                             backgroundColor: 'black', height: '40px', width: '40px',
@@ -50,7 +53,7 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
 
                     </div>
                     <div
-                        onClick={onShowToggle}
+                        onClick={onShowCropToggle}
                         onMouseDown={e => { e.stopPropagation(); e.preventDefault() }}
                         style={{
                             backgroundColor: 'black', height: '40px', width: '40px',
@@ -67,12 +70,20 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
                 <div style={{
                     height: '100%', width: '100%', position: 'absolute',
                     flex: 1, overflow: 'hidden', borderRadius: expanded ? '10px' : '100%',
-                    flexDirection: 'column', cursor: 'grab', top: visibleFlows ? '' : window.outerHeight * 3
+                    flexDirection: 'column', cursor: 'grab', top: isVisibleCrop ? '' : window.outerHeight * 3
                 }}
                 >
                     {children}
                 </div>
             </Rnd>
+            <div style={{
+                width: window.innerWidth,
+                height: window.innerHeight,
+                position: 'absolute',
+                display: isVisibleFull ? 'flex' : 'none'
+            }}>
+                {children}
+            </div>
         </>
     )
 });

@@ -3,7 +3,7 @@ import React, { memo, useRef, useEffect } from "react";
 import { withTopics } from "react-topics";
 import SPanel from 'react-sliding-side-panel';
 import 'react-sliding-side-panel/lib/index.css';
-import { Component, Workflow, Save } from 'lucide-react';
+import { Component, Workflow, Save, X } from 'lucide-react';
 import FloatingPanel from "./FloatingPanel";
 import './floatingBar.css';
 
@@ -24,7 +24,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
 
     const compressedSize = 50
 
-    const [visibleFlows, setVisibleFlows] = React.useState(false);
+    const [visibleFlows, setVisibleFlows] = React.useState('');
     const [size, setSize] = React.useState({ x: compressedSize, y: compressedSize });
     const [previewState, setPreviewState] = React.useState({ size: { x: 400, y: 400 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
     const [expandedState, setExpandedState] = React.useState({ size: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
@@ -59,9 +59,9 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
         }
         setSize({ x: ref.offsetWidth, y: ref.offsetHeight })
     }
-    const onShowFlows = () => {
+    const onShowCropedFlows = () => {
         const newState = !visibleFlows
-        setVisibleFlows(newState)
+        setVisibleFlows(newState ? 'crop' : '')
         if (newState) { // visible
             setSize(previewState.size)
         } else {
@@ -78,10 +78,10 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
     useEffect(() => {
         setSelectedId(data['zoomToNode'].id)
         if (data['zoomToNode']?.id != selectedId && !visibleFlows) {
-            setVisibleFlows(true)
+            setVisibleFlows('crop')
             setSize(previewState.size)
             setPreviewState(s => {
-                return {...s, position: mousePos}
+                return { ...s, position: mousePos }
             })
         }
     }, [data['zoomToNode']])
@@ -92,13 +92,13 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
 
         window.addEventListener('dragenter', handleClosePanel)
         window.addEventListener('mousemove', handleMouseMove)
-        
+
         return () => {
             window.removeEventListener('dragenter', handleClosePanel)
             window.removeEventListener('mousemove', handleMouseMove)
         }
     }, [])
-  
+
     return (
         <div style={{ flex: 1, display: 'flex' }}>
             <div style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute', width: getLeftWidth() }}>
@@ -115,7 +115,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
             <div
                 style={{ display: 'flex', position: 'fixed', flexDirection: 'column', alignSelf: 'center', left: '20px', zIndex: 10000 }}
             >
-                <div
+                {visibleFlows != 'full' ? <div
                     className="floatingIcon"
                     style={{ marginBottom: 20 }}
                 >
@@ -123,7 +123,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                         onClick={() => setOpenPanel(true)}
                         color="white"
                     />
-                </div>
+                </div> : null}
                 <div
                     className="floatingIcon"
                     style={{ marginBottom: 20 }}
@@ -134,10 +134,13 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     />
                 </div>
                 <div
-                    onClick={() => onShowFlows()}
+                    onClick={() => setVisibleFlows(visibleFlows == 'full' ? '' : 'full')}
                     className="floatingIcon"
                 >
-                    <Workflow color="white" style={{ cursor: 'grab' }} />
+                    {visibleFlows == 'full'
+                        ? <X color="white"></X>
+                        : <Workflow color="white" />
+                    }
                 </div>
             </div>
             <div style={{ position: 'absolute', zIndex: 1000, width: '0px' }}>
@@ -147,7 +150,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     size={size}
                     expanded={expanded}
                     previewState={previewState}
-                    onShowToggle={onShowFlows}
+                    onShowCropToggle={onShowCropedFlows}
                     onExpandToggle={onExpandFlows}
                     onResize={onResize}
                     onDragStop={onDragStop}
