@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from "react";
 import { FlowStoreContext } from "./store/FlowsStore";
 import { useReactFlow } from 'reactflow';
-import { Save, Code, Maximize, AlignStartVertical, RefreshCcw, AlertTriangle } from 'lucide-react';
+import { Save, Code, CircleDot, RefreshCcw, AlertTriangle } from 'lucide-react';
 import layouts from "./diagram/layouts";
 //import './styles.css'
 
@@ -43,9 +43,6 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
     fitView({ zoom: 1, duration: 800, padding: 0.5 })
   }, [fitView]);
   
-  const autoLayout = async () => (await reLayout(layout, getNodes(), getEdges(), setNodes, setEdges, getFirstNode)).layoutedNodes
-
-
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'row', margin: 'auto', right: 0, left: 0, justifyContent: 'center', marginTop: '20px' }}>
@@ -93,17 +90,7 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
             padding: '5px', marginLeft: '6px', height: '35px'
           }}
         >
-          <Maximize color={'white'} size={size} />
-        </div>
-        <div
-          onClick={() => autoLayout()}
-          style={{
-            display: 'flex', flexDirection: 'row', justifyContent: 'center',
-            backgroundColor: '#373737', borderRadius: '14px', width: '40px',
-            padding: '5px', marginLeft: '6px', height: '35px'
-          }}
-        >
-          <AlignStartVertical color={'white'} size={size} />
+          <CircleDot color={'white'} size={size} />
         </div>
       </div>
     </>
