@@ -31,6 +31,7 @@ The main apps are:
 - `next` (web)
 - `api` (express API to create the web or app)
 - `admin-api` (express API with the admin API)
+- `proxy` (redbird reverse proxy)
 
 - `packages` shared packages across apps
   - `common` includes shared code, like entities, validators, etc
@@ -48,12 +49,12 @@ You can add other folders inside of `packages/` if you know what you're doing an
   
 ```sh
 node prepare.js
-yarn && yarn start-dev
+yarn && yarn dev
 ```
 
 - `node prepare.js` to initialize submodules (protoflow, protolib and visualui). Only needed the first time.
 - Install dependencies: `yarn`
-- local dev: `yarn start-dev`
+- local dev: `yarn dev`
 
 
 
