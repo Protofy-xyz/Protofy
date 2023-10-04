@@ -7,10 +7,9 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
 
 const FileBrowser = dynamic<any>(() =>
-    import('protolib/adminpanel/components/FileBrowser').then(module => module.FileBrowser),
+    import('./components/FileBrowser').then(module => module.FileBrowser),
     { ssr: false }
 );
-console.log('filebrowser', FileBrowser)
 
 export default function FilesPage({workspace, data}:any) {
   const router = useRouter();
