@@ -675,7 +675,10 @@ const FlowComponent = ({
 
         if (nodesDiffs || edgesDiffs) {
             console.log('diffx: ', nodesDiffs, edgesDiffs)
-            if (edgesDiffs && !nodesDiffs) reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData)
+            if (edgesDiffs && !nodesDiffs) {
+                reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData)
+                setInitialEdges(edges)
+            }
             if (!showActionsBar) {
                 onGraphChanged()
             }
@@ -758,10 +761,12 @@ const FlowComponent = ({
                     break;
                 case 'edit-node':
                     // edit node only edit child
-                    var newNodesData = { ...nodeData, [nodeId]: {
-                        ...nodeData[nodeId],
-                        "child-1": uiData.newChildValue
-                    } }
+                    var newNodesData = {
+                        ...nodeData, [nodeId]: {
+                            ...nodeData[nodeId],
+                            "child-1": uiData.newChildValue
+                        }
+                    }
                     setNodesData(newNodesData)
                     break;
                 case 'move-node':
@@ -775,7 +780,9 @@ const FlowComponent = ({
                         const newParentNodeData = reorderDataChilds(prevParentNodeData, childrenIndexes, offset)
                         setNodeData(parent, newParentNodeData)
                         const newEdges = reorderEdgeChilds(edges, parent, offset, childrenIndexes)
+                        console.log('DEV: new edges: ', newEdges)
                         setEdges(newEdges)
+                        return
                     }
                     else {
                         // start-remove child from old parent
@@ -885,13 +892,13 @@ const FlowComponent = ({
                 {
                     showActionsBar ?
                         <Panel position="top-center">
-                            <ActionsBar 
-                                getFirstNode={_getFirstNode} 
-                                layout={layout} 
+                            <ActionsBar
+                                getFirstNode={_getFirstNode}
+                                layout={layout}
                                 onSave={null}  // removes save nodes
-                                onReload={onReload ? onReloadNodes : null} 
-                                onShowCode={onShowCode ? onShowCode : null} 
-                                hasChanges={hasChanges} 
+                                onReload={onReload ? onReloadNodes : null}
+                                onShowCode={onShowCode ? onShowCode : null}
+                                hasChanges={hasChanges}
                             />
                         </Panel>
                         : null
