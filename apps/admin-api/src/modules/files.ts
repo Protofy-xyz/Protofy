@@ -1,7 +1,8 @@
-import { app } from '../lib/app';
+
 import { promises as fs } from 'fs';
 import { constants } from 'fs';
 import path from 'path';
+import {app} from 'protolib/api';
 
 const PROJECT_WORKSPACE_DIR = "../../"; // Define where the workspace root dir is
 

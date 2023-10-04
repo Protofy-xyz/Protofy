@@ -1,7 +1,6 @@
-import {app} from '../lib/app';
 import * as fs from 'fs';
 import {templates} from 'common'
-import {connectDB, handler} from 'protolib/api'
+import {connectDB, handler, app} from 'protolib/api'
 
 
 app.post('/adminapi/v1/templates/:tplname', handler(async (req, res) => {

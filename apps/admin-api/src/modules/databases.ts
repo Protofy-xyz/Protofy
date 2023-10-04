@@ -1,7 +1,7 @@
-import {app} from '../lib/app';
+
 import * as path from 'path';
 import * as fs from 'fs';
-import {connectDB, getDB, handler} from 'protolib/api'
+import {connectDB, getDB, handler, app} from 'protolib/api'
 import { getInitialData } from '../initialData';
 
 export const getDatabases = async () => {

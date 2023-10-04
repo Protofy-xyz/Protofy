@@ -1,5 +1,4 @@
-import {app} from '../lib/app';
-import { connectDB, getDB, response } from 'protolib/api';
+import { connectDB, getDB, response, app } from 'protolib/api';
 import { getInitialData } from '../initialData';
 
 const dbPath = '../../data/databases/db'

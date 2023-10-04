@@ -1,4 +1,4 @@
-import {app} from './lib/app'
+import {app} from 'protolib/api'
 import * as path from 'path';
 import * as fs from 'fs';
 

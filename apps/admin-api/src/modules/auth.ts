@@ -1,7 +1,6 @@
 
-import {app} from '../lib/app';
 import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'common';
-import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken} from 'protolib/api'
+import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app} from 'protolib/api'
 import { getInitialData } from '../initialData';
 
 const dbPath = '../../data/databases/auth'
