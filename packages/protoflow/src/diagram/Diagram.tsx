@@ -39,7 +39,7 @@ type DiagramParams = {
     onNodesDelete?: any,
     themeMode?: "light" | "dark",
     theme?: any,
-    defaultViewPort?: {x:number, y:number, zoom: number},
+    defaultViewPort?: { x: number, y: number, zoom: number },
     onViewPortChange?: any
 }
 
@@ -63,8 +63,8 @@ const Diagram = React.forwardRef(({
     topics,
     themeMode = "light",
     theme = {},
-    defaultViewPort = {x:100, y: window.innerHeight/4, zoom:0.8},
-    onViewPortChange = () => {}
+    defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
+    onViewPortChange = () => { }
 }: DiagramParams, ref) => {
     const reactFlowWrapper = useRef(null);
     const isDiagramVisible = reactFlowWrapper.current?.getBoundingClientRect()?.height > 0
@@ -72,7 +72,7 @@ const Diagram = React.forwardRef(({
     const nodeData = useFlowsStore(state => state.nodeData)
     const setThemeMode = useFlowsStore(state => state.setTemeMode)
     const [internalData, setInternalData] = useState([])
-    const { project, setViewport, getNodes, getViewport } = useReactFlow();
+    const { project, setViewport, getNodes, getViewport, setCenter } = useReactFlow();
     const { undo, redo, takeSnapshot, clearNodes } = useUndoRedo();
     const connectingNode = useRef(null);
     const setMenu = useFlowsStore(state => state.setMenu)
@@ -106,13 +106,13 @@ const Diagram = React.forwardRef(({
         deletedEdges.forEach(edge => {
             const parentId = edge.target
             const parentData = nodeData[parentId]
-            const deletedKey = edge.targetHandle.replace(parentId,'').slice(1)
+            const deletedKey = edge.targetHandle.replace(parentId, '').slice(1)
             let parentType = nodeTypes[parentId.split('_')[0]]
-            if(parentType.type) parentType = parentType.type
+            if (parentType.type) parentType = parentType.type
             console.log('parent type: ', parentType)
 
             if (deletedKey) {
-                if(parentType.onDeleteConnection) {
+                if (parentType.onDeleteConnection) {
                     setNodeData(parentId, parentType.onDeleteConnection(parentData, deletedKey))
                 } else {
                     setNodeData(parentId, { ...parentData, [deletedKey]: '' })
@@ -152,10 +152,12 @@ const Diagram = React.forwardRef(({
     const zoomToNode = useCallback((selectedNodeId) => {
         const selectedNode = getNodes().find(n => n.id == selectedNodeId)
         if (!selectedNode) return
-        const posX = -selectedNode.position.x
-        const posY = -selectedNode.position.y
-        setViewport({ x: posX, y: posY, zoom: 1 }, { duration: 800 });
-    }, [setViewport]);
+        const flowsWidth = reactFlowWrapper.current.offsetWidth
+        if (!flowsWidth) return // skip if diagram is not visible
+        const posX = selectedNode.position.x + selectedNode.width / 2
+        const posY = selectedNode.position.y + selectedNode.height / 2
+        setTimeout(() => setCenter(posX, posY, { zoom: 0.6, duration: 800 }), 50);
+    }, [setCenter]);
 
     useKeypress(['z', 'Z'], async (event) => {
         if (!isDiagramVisible) return
@@ -232,7 +234,7 @@ const Diagram = React.forwardRef(({
                     onInit(reactFlowInstance)
                 }}
             >
-                {!disableMiniMap ? <MiniMap zoomable pannable/> : null}
+                {!disableMiniMap ? <MiniMap zoomable pannable /> : null}
                 {!disableDots ? <Background /> : null}
                 {cloneElement(componentsMenu, { takeSnapshot: takeSnapshot, reactFlowWrapper: reactFlowWrapper })}
                 {children}
