@@ -1,4 +1,4 @@
-export const getInitialData = (dbPath:string) => {
+export const getInitialData = (dbPath:string):any[] => {
   //you can return custom initial data depending on the database being created
   console.log('************************ dbPath: ', dbPath)
   if(dbPath == '../../data/databases/db') return [{
@@ -20,6 +20,19 @@ export const getInitialData = (dbPath:string) => {
       { id: 14, title: "note 1", description: "Toskope Cortador de Vegetales 15 en 1, Mandolina Verduras con 7 Cuchillas Iintercambiables, Corta Verduras Mandolina Adecuado para Cortar Verduras en la Cocina" }
     ])
   }]
+  if(dbPath == '../../data/databases/notes') return [
+    {
+      key: '0',
+      value: JSON.stringify({id: 0, title: "test title1", body: "test body1"}),
+    },
+    {
+      key: '1',
+      value: JSON.stringify({id: 1, title: "test title2", body: "test body2"}),
+    },    {
+      key: '2',
+      value: JSON.stringify({id: 2, title: "test title3", body: "test body3"}),
+    }
+  ]
   if(dbPath == '../../data/databases/auth') return []
   return []
 }

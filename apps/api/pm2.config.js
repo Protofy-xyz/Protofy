@@ -8,7 +8,7 @@ module.exports = {
             name: 'api',
             script: path.join(currentDir, '../../node_modules/ts-node/dist/bin.js'),
             args: '--project tsconfig.json src/index.ts',
-            watch: isProduction ? false : ["src/**", "../../packages/protolib/**"],
+            watch: isProduction ? false : ["src/**", "../../packages/protolib/**", "../../packages/app/bundles/**"],
             autorestart: !isProduction,
             ignore_watch: ["src/**/*.spec.ts"],
             watch_options: {
