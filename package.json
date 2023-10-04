@@ -6,12 +6,16 @@
     "packages/*"
   ],
   "scripts": {
+    "service-start": "NODE_ENV=production pm2 start ecosystem.config.js && yarn monit",
+    "service-start-dev": "yarn kill && yarn prepare-dev && node prepare.js && yarn pre-build && yarn service-start-dev-fast",
+    "service-start-dev-latest": "yarn kill && yarn prepare-dev && node prepare.js --latest && yarn pre-build && yarn service-start-dev-fast",
+    "service-start-dev-fast": "pm2 start ecosystem.config.js && yarn monit",
     "start": "yarn start-dev",
     "start-prod": "npm-run-all --parallel api-prod admin-api-prod web:prod:serve proxy",
-    "start-dev": "yarn prepare-dev && node prepare.js && yarn start-build",
-    "start-dev-latest": "yarn prepare-dev && node prepare.js --latest && yarn start-build",
+    "start-dev": "yarn prepare-dev && node prepare.js && yarn pre-build && yarn start-dev-fast",
+    "start-dev-latest": "yarn prepare-dev && node prepare.js --latest && yarn pre-build && yarn start-dev-fast",
     "start-dev-fast": "npm-run-all --parallel watch admin-api-dev api-dev web proxy",
-    "start-build": "yarn && yarn build && yarn start-dev-fast",
+    "pre-build": "yarn && yarn build",
     "prepare-dev": "yarn workspace api prepare-dev && yarn workspaces foreach run prepare-dev",
     "native": "cd apps/expo && yarn start",
     "watch": "yarn workspaces foreach -pi run watch",
@@ -37,7 +41,8 @@
     "monit": "pm2 monit",
     "dashboard": "pm2 plus",
     "kill": "pm2 kill",
-    "stop": "pm2 stop all"
+    "stop": "pm2 stop all",
+    "logs": "pm2 logs"
   },
   "resolutions": {
     "react": "^18.2.0",

@@ -11,7 +11,8 @@ module.exports = {
         watch: false,
         env: {
             NODE_ENV: isProduction ? 'production' : 'development'
-        }
+        },
+        cwd: currentDir
       }
     ]
   };
