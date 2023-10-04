@@ -1,13 +1,11 @@
 
 import {app} from '../lib/app';
-import { connectDB, existsKey, getDB } from '../lib/db';
-import { response } from '../lib/response';
 import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'common';
-import {handler} from "../lib/handler";
-import { checkPassword, hash, genToken } from '../lib/crypt';
+import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken} from 'protolib/api'
+import { getInitialData } from '../initialData';
 
 const dbPath = '../../data/databases/auth'
-connectDB(dbPath) //preconnect database
+connectDB(dbPath, getInitialData) //preconnect database
 
 const genNewSession = (data:any) => {
     return {

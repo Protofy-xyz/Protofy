@@ -1,6 +1,3 @@
-import express from 'express';
-import { connectDB, getDB } from './lib/db';
-import { response } from './lib/response';
 import aedes from 'aedes';
 import http from 'http';
 import WebSocket, { Server } from 'ws';

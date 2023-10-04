@@ -1,5 +1,5 @@
 import {app} from '../lib/app';
-import { handler } from '../lib/handler';
+import { handler } from 'protolib/api';
 import * as fs from 'fs';
 import { getDatabases } from './databases';
 import { WorkspaceModel } from 'protolib/models';
