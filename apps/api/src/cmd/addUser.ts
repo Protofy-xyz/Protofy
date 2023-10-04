@@ -1,6 +1,6 @@
 
 import { existsKey, getDB, hash } from 'protolib/api';
-import { CmdRegisterSchema,  CmdRegisterRequest} from 'common';
+import { CmdRegisterSchema} from 'protolib/schema';
 
 if (process.argv.length !== 5) {
     console.error('Usage: yarn add-user email password type',process.argv.length)

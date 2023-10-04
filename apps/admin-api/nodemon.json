@@ -1,5 +1,5 @@
 {
-    "watch": ["src/**",  "../../packages/common/**", "../../packages/protolib/**"],
+    "watch": ["src/**", "../../packages/protolib/**"],
     "ext": "ts,js,json",
     "ignore": ["src/**/*.spec.ts"],
     "exec": "ts-node src/index.ts"

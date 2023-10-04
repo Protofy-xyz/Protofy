@@ -34,7 +34,6 @@ The main apps are:
 - `proxy` (redbird reverse proxy)
 
 - `packages` shared packages across apps
-  - `common` includes shared code, like entities, validators, etc
   - `ui` includes your custom UI kit that will be optimized by Tamagui
   - `app` you'll be importing most files from `app/`
     - `features` (don't use a `screens` folder. organize by feature.)

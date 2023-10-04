@@ -1,6 +1,6 @@
 import Notes from 'app/features/notes'
 import Head from 'next/head'
-import { SSR } from 'common'
+import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
 import { API, withSession } from 'protolib'
 

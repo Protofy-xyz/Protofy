@@ -12,7 +12,7 @@ import { Provider } from 'app/provider'
 import Head from 'next/head'
 import React, { createContext } from 'react'
 import type { SolitoAppProps } from 'solito'
-import { SiteConfig } from 'common'
+import { SiteConfig } from 'app/conf'
 import {AppConfContext} from 'app/provider/AppConf'
 import { Provider as JotaiProvider } from 'jotai'
 

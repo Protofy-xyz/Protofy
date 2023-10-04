@@ -1,6 +1,6 @@
 import { HomeScreen } from 'app/features/home'
 import Head from 'next/head'
-import { SSR } from 'common'
+import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
 import { withSession } from 'protolib'
 

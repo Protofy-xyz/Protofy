@@ -1,5 +1,0 @@
-export * from './schema'
-export * from './templates'
-export * from './models'
-export * from './initialData'
-export * from './conf'

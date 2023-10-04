@@ -8548,10 +8548,12 @@ __metadata:
     chonky-icon-fontawesome: latest
     expo-constants: ^14.2.1
     expo-linking: ^4.0.1
+    handlebars: 4.7.8
     mrmime: 1.0.1
     react-native-reanimated: ^3.5.4
     react-native-safe-area-context: ^4.5.2
     solito: ^3.0.0
+    zod: ^3.22.2
   languageName: unknown
   linkType: soft
 
@@ -10385,16 +10387,6 @@ __metadata:
   checksum: 4ad08c6e600f880834b2f9c3e2d3e38b12bb88f2d1a54b4be35caccf5ed567e71fc4d3770d010d004ed702cda9b43b56048ce52558e9eade66b684b529bbd906
   languageName: node
   linkType: hard
-
-"common@workspace:packages/common":
-  version: 0.0.0-use.local
-  resolution: "common@workspace:packages/common"
-  dependencies:
-    "@tamagui/build": latest
-    handlebars: 4.7.8
-    zod: ^3.22.2
-  languageName: unknown
-  linkType: soft
 
 "commondir@npm:^1.0.1":
   version: 1.0.1
