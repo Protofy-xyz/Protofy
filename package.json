@@ -8,6 +8,9 @@
   "scripts": {
     "service-start": "NODE_ENV=production pm2 start ecosystem.config.js && yarn monit",
     "service-start-dev": "yarn kill && yarn prepare-dev && node prepare.js && yarn pre-build && yarn service-start-dev-fast",
+    "dev": "yarn service-start-dev",
+    "dev-latest": "yarn service-start-dev-latest",
+    "dev-fast": "yarn service-start-dev-fast",
     "service-start-dev-latest": "yarn kill && yarn prepare-dev && node prepare.js --latest && yarn pre-build && yarn service-start-dev-fast",
     "service-start-dev-fast": "pm2 start ecosystem.config.js && yarn monit",
     "start": "yarn start-dev",
