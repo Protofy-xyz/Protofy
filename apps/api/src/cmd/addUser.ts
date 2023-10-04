@@ -1,7 +1,7 @@
 
-import { existsKey, getDB } from '../lib/db';
+import { existsKey, getDB, hash } from 'protolib/api';
 import { CmdRegisterSchema,  CmdRegisterRequest} from 'common';
-import { hash } from '../lib/crypt';
+
 if (process.argv.length !== 5) {
     console.error('Usage: yarn add-user email password type',process.argv.length)
     process.exit(1)

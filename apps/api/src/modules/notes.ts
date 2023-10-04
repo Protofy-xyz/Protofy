@@ -1,5 +1,5 @@
 import { connectDB, getDB, response, app } from 'protolib/api';
-import { getInitialData } from '../initialData';
+import { getInitialData } from 'common';
 
 const dbPath = '../../data/databases/db'
 connectDB(dbPath, getInitialData) //preconnect database

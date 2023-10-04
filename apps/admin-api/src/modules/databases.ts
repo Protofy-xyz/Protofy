@@ -2,7 +2,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import {connectDB, getDB, handler, app} from 'protolib/api'
-import { getInitialData } from '../initialData';
+import { getInitialData } from 'common';
 
 export const getDatabases = async () => {
     return (await fs.promises.readdir('../../'+path.join('data', 'databases'))).map((name)=>{
