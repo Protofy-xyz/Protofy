@@ -20963,6 +20963,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"protodevice@workspace:packages/protodevice":
+  version: 0.0.0-use.local
+  resolution: "protodevice@workspace:packages/protodevice"
+  dependencies:
+    immer: 9.0.5
+    nodemon: 3.0.1
+    react-topics: 0.1.7
+    react-use-websocket: 4.5.0
+    ts-node: 10.9.1
+    tslib: 2.6.2
+    typescript: ^5.2.2
+    zustand: 3.6.9
+  languageName: unknown
+  linkType: soft
+
 "protoflow@workspace:packages/protoflow":
   version: 0.0.0-use.local
   resolution: "protoflow@workspace:packages/protoflow"
@@ -21931,6 +21946,16 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || 17 || 18
   checksum: cfcea44def30f59a5699633d2c19724795e19d6bf7fa12d5a2ee79de78dc922d57d9abe7853bc48ff69af4274c12eef980560afb8c30a7acc2984843bf32546e
+  languageName: node
+  linkType: hard
+
+"react-use-websocket@npm:4.5.0":
+  version: 4.5.0
+  resolution: "react-use-websocket@npm:4.5.0"
+  peerDependencies:
+    react: ">= 18.0.0"
+    react-dom: ">= 18.0.0"
+  checksum: 0bae0716f0675fa9414736a3b7d846e7cab4e86dfc3933eb0fda74eef9477708b67cee4c1000a877d7db65c9125ee7d68215e43b5b9cdb82bfefb16e995b55b9
   languageName: node
   linkType: hard
 
