@@ -1,6 +1,6 @@
 import { Profile } from 'app/features/profile'
 import Head from 'next/head'
-import { SSR } from '../conf'
+import { SSR } from 'common'
 import { NextPageContext } from 'next'
 import { withSession } from 'protolib'
 

@@ -1,6 +1,6 @@
 import AdminPanel from 'app/features/admin'
 import Head from 'next/head'
-import { SSR } from '../../../conf'
+import { SSR } from 'common'
 import { NextPageContext } from 'next'
 import { API, redirect, withSession } from 'protolib'
 import dynamic from 'next/dynamic'

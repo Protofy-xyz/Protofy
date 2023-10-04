@@ -1,6 +1,6 @@
 import { SignInPage } from 'app/features/auth/login'
 import Head from 'next/head'
-import { SSR } from '../../conf'
+import { SSR } from 'common'
 import { hasSessionCookie } from 'protolib'
 import { NextPageContext } from 'next'
 
