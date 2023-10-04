@@ -66,10 +66,10 @@ const Home = () => {
   }`
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
-export default ({ isVSCode = false, code = CODE }) => {
+export default ({ isVSCode = false, code = CODE, onSave = () => null }) => {
   return (
     <main className='h-screen flex flex-col items-center justify-center'>
-      <UiManager userComponents={userComponents} isVSCode={isVSCode} _sourceCode={code}></UiManager>
+      <UiManager userComponents={userComponents} isVSCode={isVSCode} _sourceCode={code} onSave={onSave}></UiManager>
     </main>
   )
 }
