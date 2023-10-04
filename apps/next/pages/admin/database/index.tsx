@@ -9,10 +9,6 @@ import { promises as fs } from 'fs';
 import fsSync from 'fs'
 import DBAdmin from 'app/features/admin/components/db'
 
-const FileBrowser = dynamic(() => import('../../../components/FileBrowser'), {
-  ssr: false,
-})
-
 export default function FilesPage({workspace, data}:any) {
   const router = useRouter();
   const { name } = router.query;
@@ -22,7 +18,7 @@ export default function FilesPage({workspace, data}:any) {
         <title>Protofy - Admin Panel</title>
       </Head>
       <AdminPanel workspace={workspace}>
-        <DBAdmin currentDbState={data?.currentDbState} contentState={data?.contentState} />
+        <DBAdmin contentState={data?.contentState} />
       </AdminPanel>
     </>
   )
