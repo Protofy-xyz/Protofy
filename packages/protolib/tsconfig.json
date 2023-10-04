@@ -7,7 +7,8 @@
       "@lib/*": ["./lib/*"],
       "@data/*": ["./data/*"],
       "react-native": ["react-native-web"],
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@my/ui": ["../ui"]
     }
   }
 }
