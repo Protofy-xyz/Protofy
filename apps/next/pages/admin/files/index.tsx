@@ -3,14 +3,16 @@ import Head from 'next/head'
 import { SSR } from 'common'
 import { NextPageContext } from 'next'
 import { API, redirect, withSession } from 'protolib'
-import dynamic from 'next/dynamic'
+import dynamic, { noSSR } from 'next/dynamic'
 import { useRouter } from 'next/router';
 import { promises as fs } from 'fs';
 import fsSync from 'fs'
 
-const FileBrowser = dynamic(() => import('../../../components/FileBrowser'), {
-  ssr: false,
-})
+const FileBrowser = dynamic<any>(() =>
+    import('../../../components/FileBrowser').then(module => module.FileBrowser),
+    { ssr: false }
+);
+console.log('filebrowser', FileBrowser)
 
 export default function FilesPage({workspace, data}:any) {
   const router = useRouter();

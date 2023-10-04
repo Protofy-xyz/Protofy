@@ -17,8 +17,7 @@ import {defineFileAction} from 'chonky';
 
 
 
-const WebFileBrowser = ({ file, path, filesState }: any) => {
-    
+export const FileBrowser = ({ file, path, filesState }: any) => {
     const [dialogOpen, setDialogOpen] = useState(file ? true : false)
     const [currentPath, setCurrentPath] = useState(path)
     const [currentFile, setCurrentFile] = useState(file ? file : '')
@@ -178,5 +177,3 @@ const WebFileBrowser = ({ file, path, filesState }: any) => {
         </YStack>
     );
 };
-
-export default WebFileBrowser
