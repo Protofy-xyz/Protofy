@@ -1,13 +1,11 @@
 import React from "react";
-import { AddPropButton } from "../../flowslib";
-import { Node, NodeParams } from '../../flowslib';
+import { AddPropButton, PORT_TYPES, Node, NodeParams } from 'protoflow';
 import { Box, Text, HStack, Icon, Button } from 'native-base'
 import { Handle, Position, useEdges } from "reactflow";
-import { PORT_TYPES } from "../../flowslib";
-import { useAppStore } from "../../../../../context/appStore";
-import { useDeviceStore } from "../../../store/DeviceStore";
+// import { useAppStore } from "../../../../../context/appStore";
+import { useDeviceStore } from "../oldThings/DeviceStore";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { pinTable } from "../../../lib/device/Device";
+import { pinTable } from "../device/Device";
 
 const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId))
 
@@ -48,9 +46,12 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     ]
     const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME
     const mqttTopic = `${projectName}/${currentDevice}/status`
-    const addChannel = useAppStore(state => state.addChannel)
-    const lastMessage = useAppStore(state => state.lastMessageByTopic[mqttTopic]) ?? []
-    addChannel(mqttTopic);
+    // const addChannel = useAppStore(state => state.addChannel)
+    // const lastMessage = useAppStore(state => state.lastMessageByTopic[mqttTopic]) ?? []
+    // addChannel(mqttTopic);
+    // TODO: Replace mqtt connectivity
+    const [lastMessage,setLastMessage] = React.useState({message: "online"})
+    // END-TODO
     const [connected, setConnected] = React.useState("offline");
 
     const onCompile = () => {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NativeBaseProvider, extendTheme } from "native-base";
 import { Transport, ESPLoader } from "./device/esptool-js";
 import { sleep } from "./sleep";
 import { Build, FlashError } from "./const";
@@ -8,13 +7,12 @@ import ApiCaller from './oldThings/apiCaller';
 import Settings from './oldThings/settings';
 import useWebSocket from 'react-use-websocket';
 import { FlowFactory } from 'protoflow';
-import systemTheme from "baseapp/core/themes/protofyTheme";
 import { useFetch } from 'usehooks-ts'
 import deviceFunctions from './device'
-import DeviceModal from "./DeviceModal";
+// import DeviceModal from "./DeviceModal";
 import customComponents from "./nodes"
-import { useDeviceStore } from "../../store/DeviceStore";
-import DeviceSelector from "./DeviceSelector";
+import { useDeviceStore } from "./oldThings/DeviceStore";
+// import DeviceSelector from "./DeviceSelector";
 import { withTopics } from "react-topics";
 import { useFlowsStore } from 'protoflow';
 
@@ -432,9 +430,8 @@ const DeviceScreen = ({ isActive, topics }) => {
   }, [topicData.data['device/changedDeviceName']])
 
   return (
-    <NativeBaseProvider theme={extendTheme(systemTheme)}>
       <div style={{ width: '100%', display: 'flex', flex: 1 }}>
-        <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
+        {/* <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} /> */}
         {sourceCode ?
           <Flow
             flowId={'device'}
@@ -453,9 +450,8 @@ const DeviceScreen = ({ isActive, topics }) => {
             showActionsBar
             layout="elk"
           /> : null}
-        <DeviceSelector devicesList={devicesList} currentDevice={currentDevice} onCreateDevice={onCreateDevice} onSelectDevice={onSelectDevice} />
+        {/* <DeviceSelector devicesList={devicesList} currentDevice={currentDevice} onCreateDevice={onCreateDevice} onSelectDevice={onSelectDevice} /> */}
       </div>
-    </NativeBaseProvider>
   )
 };
 
