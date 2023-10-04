@@ -20,7 +20,7 @@ app.get('/adminapi/v1/databases', handler(async (req, res) => {
 
 app.get('/adminapi/v1/databases/:dbname', handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    await connectDB(dbname, getInitialData)
+    await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)
     const total = []
     for await (const [key, value] of db.iterator()) {
@@ -32,7 +32,7 @@ app.get('/adminapi/v1/databases/:dbname', handler(async (req, res) => {
 
 app.post('/adminapi/v1/databases/:dbname/:key', handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    await connectDB(dbname, getInitialData)
+    await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)
     await db.put(req.params.key, JSON.stringify(req.body))
     res.send(req.body)
@@ -41,7 +41,7 @@ app.post('/adminapi/v1/databases/:dbname/:key', handler(async (req, res) => {
 
 app.get('/adminapi/v1/databases/:dbname/:key/delete', handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    await connectDB(dbname, getInitialData)
+    await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)
     await db.del(req.params.key)
     res.send({"result": "deleted"})
@@ -50,7 +50,7 @@ app.get('/adminapi/v1/databases/:dbname/:key/delete', handler(async (req, res) =
 
 app.post('/adminapi/v1/dbsearch/:dbname', handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    await connectDB(dbname, getInitialData)
+    await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)
     const total = []
     for await (const [key, value] of db.iterator()) {

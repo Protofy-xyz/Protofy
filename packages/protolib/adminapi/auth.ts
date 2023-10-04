@@ -6,7 +6,7 @@ import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app
 console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 
 const dbPath = '../../data/databases/auth'
-connectDB(dbPath, getInitialData) //preconnect database
+connectDB(dbPath, getInitialData(dbPath)) //preconnect database
 
 const genNewSession = (data:any) => {
     return {

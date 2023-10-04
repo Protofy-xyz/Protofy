@@ -2,7 +2,7 @@ import { Level } from 'level';
 
 const level = require('level-party')
 const dbHandlers:any = {}
-export const connectDB = (dbPath:string, getInitialData?: any) => {
+export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
     return new Promise((resolve, reject) => {
         console.log('connecting to database: ', dbPath)
         let timer:any;
@@ -25,8 +25,8 @@ export const connectDB = (dbPath:string, getInitialData?: any) => {
             } catch (e) {
                 console.log('database not initialized, loading initialData...')
                 try {
-                    const initialData = getInitialData ? getInitialData(dbPath) : []
-                    for (let item of initialData) {
+                    const _initialData = initialData ? initialData : []
+                    for (let item of _initialData) {
                         await db.put(item.key, item.value)
                         console.log(`Added: ${item.key} -> ${item.value}`)
                     }
