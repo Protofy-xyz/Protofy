@@ -1,6 +1,6 @@
 import  { forwardRef } from 'react';
 import Rnd from 'react-rnd';
-import { GripHorizontal, Expand, Minimize, X } from 'lucide-react';
+import { Move, Maximize, Minimize, X } from 'lucide-react';
 
 export default forwardRef(({ children, visibleFlows, size, expanded, previewState, onShowToggle, onExpandToggle, onResize, onDragStop }: any, ref: any) => {
 
@@ -31,7 +31,7 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
                         }}
                         onMouseUp={e => e.stopPropagation()}
                     >
-                        <GripHorizontal color="white" style={{ cursor: 'grab' }} />
+                        <Move color="white" style={{ cursor: 'grab' }} />
                     </div>
                     <div
                         onClick={() => onExpandToggle()}
@@ -45,7 +45,7 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
                     >
                         {expanded
                             ? <Minimize color="white" style={{ cursor: 'pointer' }} />
-                            : <Expand color="white" style={{ cursor: 'pointer' }} />
+                            : <Maximize color="white" style={{ cursor: 'pointer' }} />
                         }
 
                     </div>
