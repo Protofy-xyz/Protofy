@@ -87,7 +87,7 @@ const handleFilesWriteRequest = async (req, res) => {
     } else {
         // write the file
         try {
-            const content = req.body; // Extract the content from the post request
+            const content = req.body.content; // Extract the content from the post request
             await fs.writeFile(filepath, content); // Write content to file
             res.status(200).send(`File at path '${name}' written successfully.`);
         } catch (e) {
@@ -99,16 +99,9 @@ const handleFilesWriteRequest = async (req, res) => {
 
 // Route to write files or create directories directly in /adminapi/v1/files
 app.post('/adminapi/v1/files', handleFilesWriteRequest);
-
 // Route to write files or create directories in /adminapi/v1/files/*
 app.post('/adminapi/v1/files/:path(*)', handleFilesWriteRequest);
-
 // Route for /adminapi/v1/files
 app.get('/adminapi/v1/files', handleFilesRequest);
-
 // Route for /adminapi/v1/files/*
 app.get('/adminapi/v1/files/:path(*)', handleFilesRequest);
-
-
-
-
