@@ -2,14 +2,12 @@ import AdminPanel from 'app/features/admin'
 import Head from 'next/head'
 import { SSR } from 'common'
 import { NextPageContext } from 'next'
-import { API, redirect, withSession } from 'protolib'
-import dynamic, { noSSR } from 'next/dynamic'
+import { API, withSession } from 'protolib'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
-import { promises as fs } from 'fs';
-import fsSync from 'fs'
 
 const FileBrowser = dynamic<any>(() =>
-    import('protolib/adminpanel/FileBrowser').then(module => module.FileBrowser),
+    import('protolib/adminpanel/components/FileBrowser').then(module => module.FileBrowser),
     { ssr: false }
 );
 console.log('filebrowser', FileBrowser)

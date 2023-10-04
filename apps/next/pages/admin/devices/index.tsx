@@ -2,11 +2,8 @@ import AdminPanel from 'app/features/admin'
 import Head from 'next/head'
 import { SSR } from 'common'
 import { NextPageContext } from 'next'
-import { API, redirect, withSession } from 'protolib'
-import dynamic from 'next/dynamic'
+import { API, withSession } from 'protolib'
 import { useRouter } from 'next/router';
-import { promises as fs } from 'fs';
-import fsSync from 'fs'
 import DevicesAdmin from 'app/features/admin/components/devices'
 
 export default function FilesPage({workspace, data}:any) {
