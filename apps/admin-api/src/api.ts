@@ -1,8 +1,12 @@
 import {app} from 'protolib/api'
 import * as path from 'path';
 import * as fs from 'fs';
+import adminModules from 'protolib/adminapi'
 
 const modulesDir = path.join(__dirname, 'modules');
+
+console.log('Admin modules: ', adminModules)
+
 
 fs.readdir(modulesDir, (error, files) => {
     if (error) {
