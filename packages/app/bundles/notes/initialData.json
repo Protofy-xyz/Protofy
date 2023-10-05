@@ -1,14 +1,5 @@
 [
-    {
-        "key": "test",
-        "value": { "id": "test", "title": "test title1", "body": "test body1" }
-    },
-    {
-        "key": "test2",
-        "value": { "id": "test2", "title": "test title2", "body": "test body2" }
-    }, 
-    {
-        "key": "bomb",
-        "value": { "id": "bomb", "title": "test title3", "body": "test body3" }
-    }
+    { "id": "test", "title": "test title1", "body": "test body1" },
+    { "id": "test2", "title": "test title2", "body": "test body2" },
+    { "id": "bomb", "title": "test title3", "body": "test body3" }
 ]
