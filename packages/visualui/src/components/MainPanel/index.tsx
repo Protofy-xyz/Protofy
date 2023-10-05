@@ -2,7 +2,6 @@
 import React, { memo, useRef, useEffect } from "react";
 import { withTopics } from "react-topics";
 import SPanel from 'react-sliding-side-panel';
-import 'react-sliding-side-panel/lib/index.css';
 import { Component, Workflow, Save, X } from 'lucide-react';
 import FloatingPanel from "./FloatingPanel";
 import './floatingBar.css';
