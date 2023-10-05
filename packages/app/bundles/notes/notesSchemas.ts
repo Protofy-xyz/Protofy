@@ -1,8 +1,8 @@
 import { z } from "zod";
+import {BaseSchema} from 'protolib/base'
 
 export const NoteSchema = z.object({
-    id: z.string(),
-    _deleted: z.boolean().optional(),
+    ...BaseSchema.shape,
     title: z.string(),
     body: z.string()
 });
