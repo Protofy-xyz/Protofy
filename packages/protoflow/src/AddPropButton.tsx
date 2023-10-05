@@ -3,7 +3,16 @@ import { generateId } from './lib/IdGenerator';
 import { FlowStoreContext } from "./store/FlowsStore";
 import Button from './Button';
 
-export default ({ nodeData, id, type = 'Param', style = {}, keyId = null, label=null}) => {
+type ComponentProps = {
+    nodeData: any;
+    id: any;
+    type?: string;
+    style?: React.CSSProperties;
+    keyId?: any | null;
+    label?: string | null;
+};
+
+export default ({ nodeData, id, type = 'Param', style = {}, keyId = null, label=null}: ComponentProps) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const typeMap = {
