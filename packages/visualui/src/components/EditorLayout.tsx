@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from "react";
-import styles from "../styles/EditorLayout.module.css";
 import Head from 'next/head'
 import { Frame, useEditor } from "@craftjs/core";
 import { useEditorStore } from "../store/EditorStore";
@@ -20,7 +19,7 @@ export type EditorProps = {
 
 
 const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps) => {
-	const paper = useRef()
+	const paper = useRef<any>()
 	const currentPageContent = useEditorStore(state => state.currentPageContent)
 	const currentPageInitialJson = useEditorStore(state => state.currentPageInitialJson)
 	const setCurrentPageInitialJson = useEditorStore(state => state.setCurrentPageInitialJson)
@@ -294,10 +293,16 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 	}, [currentPageContent])
 
 	return (
-		<div className={styles.content}>
+		<div style={{
+			backgroundColor: "rgb(50, 50, 50)",
+			overflow: "hidden",
+			flex: 1,
+			display: "flex",
+			flexDirection: "column"
+		}}>
 			<Head>
 				<title>Platform UI</title>
-				<link rel="icon" type="image/png" sizes="16x16" alt="logo" href={require("../assets/logo.png")}></link>
+				<link rel="icon" type="image/png" sizes="16x16" href={require("../assets/logo.png")}></link>
 			</Head>
 			<div
 				className={"page-container"}
@@ -313,7 +318,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 						loading ?
 							<div>Loading content...</div>
 							:
-							<ErrorBoundary FallbackComponent={<div style={{ margin: '20px' }}>There seems to be an error in your page preventing the editor from loading it. Please check the code and fix the errors. </div>}>
+							<ErrorBoundary FallbackComponent={<div style={{ margin: '20px' }}>There seems to be an error in your page preventing the editor from loading it. Please check the code and fix the errors. </div> as any}>
 								<Frame />
 							</ErrorBoundary>
 					}
