@@ -1,7 +1,7 @@
 import { YStack, XStack } from 'tamagui'
-import { getPendingResult, API, PanelMenuItem, AlertDialog} from 'protolib'
+import { getPendingResult, API, PanelMenuItem, AlertDialog, Link} from 'protolib'
 import { Box, ChevronDown, Database, Folder, Plus, Workflow } from '@tamagui/lucide-icons'
-import { Accordion, Input, Link, Paragraph, SizableText, Square } from '@my/ui'
+import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {useAtom, useSetAtom} from 'jotai'
