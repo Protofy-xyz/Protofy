@@ -4,8 +4,9 @@ import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
 import { API, withSession } from 'protolib'
 import { useRouter } from 'next/router';
-import DevicesAdmin from '../features/components/devices'
-import { useSession } from '../../lib/Session'
+import dynamic from 'next/dynamic';
+
+const  DevicesAdmin = dynamic(() => import('../features/components/devices'), { ssr: false })
 
 export default function DevicesPage({workspace, data, pageSession}:any) {
   const router = useRouter();
