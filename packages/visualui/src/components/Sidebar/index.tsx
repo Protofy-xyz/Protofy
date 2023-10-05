@@ -53,7 +53,7 @@ export const Sidebar = ({
     const palettesArr = Object.keys(filteredDropableComponents).filter(p => p != "craft");
 
     function handleResize(e = {} as any) {
-        const viewportHeight = window.outerHeight * 0.7;
+        const viewportHeight = window.innerHeight * 0.95;
         if (!viewRef.current) return
         viewRef.current.style.height = viewportHeight + 'px'
         viewRef.current.style.maxHeight = viewportHeight + 'px'
@@ -66,9 +66,9 @@ export const Sidebar = ({
 
 
     return (
-        <div className={'visualui-sidebar'}>
+        <div className={'visualui-sidebar'} style={{backgroundColor: 'rgb(37, 37, 38)'}}>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '4px' }}>
-                <div ref={viewRef} style={{ padding: '4px', display: 'flex', flexDirection: "column", flex: 1, borderBottom: '1px solid #FFFFFF10' }}>
+                <div ref={viewRef} style={{ padding: '4px', display: 'flex', flexDirection: "column", flex: 1 }}>
                     <p style={{ padding: '18px 0px 0px 14px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
                     <div style={{ display: 'flex', margin: '18px 12px 18px 2px', position: 'relative' }}>
                         <input
@@ -93,7 +93,7 @@ export const Sidebar = ({
                         <Search color='grey' size={20} style={{ position: 'absolute', top: '8px', left: '10px' }} />
                         {searchValue ? <X onClick={() => setSearchValue('')} color='white' size={20} style={{ position: 'absolute', top: '8px', right: '10px', cursor: 'pointer' }} /> : null}
                     </div>
-                    <div className={'visualui-sidebar-list'} style={{ overflow: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <div className={'visualui-sidebar-list'} style={{ overflow: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }} >
                         {
                             palettesArr.map((palette, i) => {
                                 return (

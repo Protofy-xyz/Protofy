@@ -34,7 +34,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
 
     const getLeftWidth = () => {
         const totalWidth = window.innerWidth
-        let percentage = (290 / totalWidth) * 100;
+        let percentage = (300 / totalWidth) * 100;
         return percentage;
     }
     const onExpandFlows = () => {
