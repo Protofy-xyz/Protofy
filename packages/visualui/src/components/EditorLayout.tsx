@@ -35,7 +35,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 		if (selectedNodeId) publish("zoomToNode", { id: selectedNodeId })
 		const hasChanges = diffs?.length > 0
 		const nodesChanges = Diff.diff(previousNodes, currentEditorNodes)
-		var skip = query.getOptions().skipTopic
+		var skip = (query.getOptions() as any).skipTopic
 		if (!skip && nodesChanges?.length && JSON.stringify(nodesChanges) != previousDiffs) {
 			var topicParams = {}
 			if (nodesChanges.filter(d => d.kind == 'N').length == 1) { //case add
