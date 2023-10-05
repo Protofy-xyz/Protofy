@@ -4,7 +4,6 @@ import { withTopics } from "react-topics";
 import SPanel from 'react-sliding-side-panel';
 import { Component, Workflow, Save, X } from 'lucide-react';
 import FloatingPanel from "./FloatingPanel";
-import './floatingBar.css';
 
 type Props = {
     rightPanelContent: React.Component | any,
@@ -115,7 +114,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                 style={{ display: 'flex', position: 'fixed', flexDirection: 'column', alignSelf: 'center', left: '20px', zIndex: 10000 }}
             >
                 {visibleFlows != 'full' ? <div
-                    className="floatingIcon"
+                    className="visualui-floatingIcon"
                     style={{ marginBottom: 20 }}
                     onClick={() => setOpenPanel(true)}
                 >
@@ -124,7 +123,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     />
                 </div> : null}
                 <div
-                    className="floatingIcon"
+                    className="visualui-floatingIcon"
                     style={{ marginBottom: 20 }}
                     onClick={() => publish("savenodes", {})}
                 >
@@ -134,7 +133,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                 </div>
                 <div
                     onClick={() => setVisibleFlows(visibleFlows == 'full' ? '' : 'full')}
-                    className="floatingIcon"
+                    className="visualui-floatingIcon"
                 >
                     {visibleFlows == 'full'
                         ? <X color="white"></X>
