@@ -1,4 +1,18 @@
-import { connectDB, getDB, handler } from "../api";
+import { connectDB, getDB } from "./db";
+import {handler} from './handler'
+import fs from 'fs';
+import path from 'path';
+
+export const CreateApi = (modelName: string, modelType: any, dir: string) => {
+    const initialData = JSON.parse(fs.readFileSync(path.join(dir, 'initialData.json')).toString()).map(x => {
+        return {
+            key: x.id,
+            value: JSON.stringify(x)
+        }
+    })
+
+    return (app) => BaseApi(app, modelName, modelType, initialData)
+}
 
 export const BaseApi = (app, entityName, modelClass, initialData) => {
     const dbPath = '../../data/databases/'+entityName
