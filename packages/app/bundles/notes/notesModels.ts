@@ -1,9 +1,12 @@
 import { NoteSchema, NoteType } from "./notesSchemas"
+import { createSession, SessionDataType } from 'protolib/api'
 
 export class NoteModel {
     data: NoteType
-    constructor(data: NoteType) {
+    session: SessionDataType
+    constructor(data: NoteType, session?: SessionDataType) {
         this.data = data
+        this.session = session ?? createSession()
     }
 
     getId() {
@@ -14,7 +17,7 @@ export class NoteModel {
         return new NoteModel({
             ...this.data,
             id: id
-        })
+        }, this.session)
     }
 
     //generates a new notemodal with a generated id
@@ -22,7 +25,11 @@ export class NoteModel {
         return new NoteModel({
             ...this.data,
             id: ""+Math.random()
-        })
+        }, this.session)
+    }
+
+    isVisible() {
+        return this.isDeleted()
     }
 
     //true if deleted, false otherwise
@@ -42,7 +49,9 @@ export class NoteModel {
 
     //get data from storage to client
     read() {
-        return this.data
+        return {
+            ...this.data
+        }
     }
 
     //asks for an update, can throw or change things
@@ -55,7 +64,7 @@ export class NoteModel {
         return new NoteModel({
             ...this.data,
             _deleted: true
-        })
+        }, this.session)
     }
 
     //validate model
@@ -70,8 +79,8 @@ export class NoteModel {
     }
 
     //called when being recovered from storage
-    static unserialize(data:string) {
-        return new NoteModel(JSON.parse(data))
+    static unserialize(data:string, session?: SessionDataType) {
+        return new NoteModel(JSON.parse(data), session)
     }
 
     //get raw data
@@ -79,8 +88,8 @@ export class NoteModel {
         return this.data
     }
 
-    static load(data: NoteType) {
-        return new NoteModel(data)
+    static load(data: NoteType, session?: SessionDataType) {
+        return new NoteModel(data, session)
     }
 }
 
