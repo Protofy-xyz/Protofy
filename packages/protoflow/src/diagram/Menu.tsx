@@ -1,7 +1,6 @@
 import React, { useState, useRef, useLayoutEffect, useContext, useEffect, useCallback } from 'react';
 import { Panel, useReactFlow } from 'reactflow';
 import nodes from '../nodes'
-import styles from "./menu.module.css";
 import { FlowStoreContext } from "../store/FlowsStore";
 import { generateId } from '../lib/IdGenerator';
 import { POKA_HANDLE_TYPES, PORT_TYPES, createNode } from '../lib/Node';
@@ -239,7 +238,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
                         />
                         <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
                     </div>
-                    <div ref={scrollRef} className={styles.list} style={{ height: `calc(${menuHeight}px - ${inputHeight}px - 20px)`, overflowY: 'scroll', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div ref={scrollRef} className={".list-protoflow"} style={{ height: `calc(${menuHeight}px - ${inputHeight}px - 20px)`, overflowY: 'scroll', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
                         {
                             !hideBaseComponents && customNodeList.length
                                 ? <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>Custom {hasPokaResults && !searchValue.length ? '(Suggestions)' : ''}</Text>

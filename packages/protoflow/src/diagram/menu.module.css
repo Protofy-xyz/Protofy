@@ -1,31 +1,31 @@
   /* scrollbar: total width */
-  .list::-webkit-scrollbar {
+  .list-protoflow::-webkit-scrollbar {
     background-color: transparent;
     width:8px
   }
   
   /* background of the scrollbar except button or resizer */
-  .list::-webkit-scrollbar-track {
+  .list-protoflow::-webkit-scrollbar-track {
     opacity: 0
   }
   
   /* scrollbar itself */
-  .list::-webkit-scrollbar-thumb {
+  .list-protoflow::-webkit-scrollbar-thumb {
     background-color:#babac0;
     border-radius:16px;
   }
-  .list::-webkit-scrollbar-thumb:hover {
+  .list-protoflow::-webkit-scrollbar-thumb:hover {
     background-color:#a0a0a5;
   }
   
   /* Adds margin bottom and top to not exceed frame */
-  .list::-webkit-scrollbar-track-piece:end {
+  .list-protoflow::-webkit-scrollbar-track-piece:end {
     background: transparent;
     margin-bottom: 4px; 
   }
-  .list::-webkit-scrollbar-track-piece:start {
+  .list-protoflow::-webkit-scrollbar-track-piece:start {
     background: transparent;
     margin-top: 4px;
   }
   
-  .list::-webkit-scrollbar-button {display:none}
+  .list-protoflow::-webkit-scrollbar-button {display:none}
