@@ -13,8 +13,8 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
         <>
             <Rnd
                 ref={ref}
-                minWidth={0}
-                minHeight={0}
+                minWidth={300}
+                minHeight={300}
                 size={{ height: size.y, width: size.x }}
                 default={{ height: previewState.size.y, width: previewState.size.x, x: previewState.position.x, y: previewState.position.y }}
                 position={isVisibleCrop ? previewState.position : compressedPosition}
