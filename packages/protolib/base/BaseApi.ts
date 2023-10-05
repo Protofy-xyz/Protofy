@@ -26,8 +26,11 @@ export const BaseApi = (app, entityName, modelClass, initialData) => {
     app.get('/api/v1/'+entityName+'/:key', handler(async (req, res, session) => {
         const db = getDB(dbPath)
         try {
-            const content = modelClass.unserialize(await db.get(req.params.key), session).read()
-            res.send(content)
+            const note = modelClass.unserialize(await db.get(req.params.key), session)
+            if(!note.isVisible()) {
+                throw "not found"
+            }
+            res.send(note.read())
         } catch(e) {
             console.error("Error reading from database: ", e)
             res.status(404).send({result: "not found"})
