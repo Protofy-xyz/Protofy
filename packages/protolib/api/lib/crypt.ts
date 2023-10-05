@@ -8,3 +8,7 @@ export const genToken = (data:any) => {
     console.log('************** signing: ', data, 'with: ', process.env.TOKEN_SECRET)
     return jwt.sign(data, process.env.TOKEN_SECRET ?? '', { expiresIn: '3600000s' });
 }
+
+export const verifyToken = (token: string) => { 
+    return jwt.verify(token, process.env.TOKEN_SECRET ?? '');
+}

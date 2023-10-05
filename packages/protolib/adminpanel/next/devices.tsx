@@ -5,9 +5,11 @@ import { NextPageContext } from 'next'
 import { API, withSession } from 'protolib'
 import { useRouter } from 'next/router';
 import DevicesAdmin from '../features/components/devices'
+import { useSession } from '../../lib/Session'
 
-export default function DevicesPage({workspace, data}:any) {
+export default function DevicesPage({workspace, data, pageSession}:any) {
   const router = useRouter();
+  useSession(pageSession)
   const { name } = router.query;
   return (
     <>

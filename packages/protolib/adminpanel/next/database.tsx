@@ -5,10 +5,10 @@ import { NextPageContext } from 'next'
 import { API, redirect, withSession } from 'protolib'
 import { useRouter } from 'next/router';
 import DBAdmin from '../features/components/db'
+import { useSession } from '../../lib/Session'
 
-export default function DatabasePage({workspace, data}:any) {
-  const router = useRouter();
-  const { name } = router.query;
+export default function DatabasePage({workspace, data, pageSession}:any) {
+  useSession(pageSession)
   return (
     <>
       <Head>

@@ -5,14 +5,16 @@ import { NextPageContext } from 'next'
 import { API, withSession } from 'protolib'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
+import { useSession } from '../../lib/Session'
 
 const FileBrowser = dynamic<any>(() =>
     import('./components/FileBrowser').then(module => module.FileBrowser),
     { ssr: false }
 );
 
-export default function FilesPage({workspace, data}:any) {
+export default function FilesPage({workspace, data, pageSession}:any) {
   const router = useRouter();
+  useSession(pageSession)
   const { name } = router.query;
   return (
     <>
