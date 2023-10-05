@@ -211,7 +211,7 @@ const Diagram = React.forwardRef(({
     const proOptions = { hideAttribution: true };
     return (<div style={{ width: '100%', height: "100%" }}>
         <SelectionListener onSelectionChange={onSelectionChange} />
-        <div style={{ height: '100%' }} ref={reactFlowWrapper}>
+        <div style={{ height: '100%' }} ref={reactFlowWrapper as any}>
             <ReactFlow
                 onMoveEnd={(e) => onViewPortChange(getViewport())}
                 defaultViewport={defaultViewPort}
