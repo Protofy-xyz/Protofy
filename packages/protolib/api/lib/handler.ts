@@ -1,27 +1,29 @@
 
 import type {Request, RequestHandler, Response} from 'express';
 import { z } from "zod";
-import {verifyToken, createSession} from 'protolib/api';
+import {verifyToken, createSession, SessionDataType} from 'protolib/api';
 
 type Handler = (
-    fn: (req: Request, res: Response) => Promise<void> | void
+    fn: (req: Request, res: Response, session: SessionDataType) => Promise<void> | void
 ) => RequestHandler;
 
 export const handler: Handler = fn => async (req:any, res:any) => {
     //try to recover identify from token
+    let decoded;
     if(req.query.token || req.get('Auth-token')) {
         const token = req.query.token ? req.query.token : req.get('Auth-token')
-        var decoded;
         try {
-            decoded = verifyToken(token)
+            decoded = createSession(verifyToken(token))
         } catch(e) {
             console.error('Error reading token: ', e)
             decoded = createSession()
         }
         console.log('decoded: ', decoded)
+    } else {
+        createSession()
     }
     try {
-        await fn(req, res);
+        await fn(req, res, decoded);
     } catch (e:any) {
         if (e instanceof z.ZodError) {
             const err = (e as z.ZodError).flatten()
