@@ -18,7 +18,7 @@ export const useEdit = (fn) => {
 }
 
 const VisualUILoader = () => { // Should be in a component
-  const [res, setRes] = useState()
+  const [res, setRes] = useState<any>()
   const [fileContent, setFileContent] = useState()
   const page = "test"
   const folderRoute = "/apps/next/pages/"
