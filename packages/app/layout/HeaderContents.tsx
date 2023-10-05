@@ -91,6 +91,7 @@ export const HeaderContents = React.memo(({menuPlacement='bottom', logoSize=30}:
                   <VisuallyHidden>
                     <Text>Github</Text>
                   </VisuallyHidden>
+                  {/* @ts-ignore */}
                   <GithubIcon width={23} />
                 </YStack>
               </TooltipSimple>
