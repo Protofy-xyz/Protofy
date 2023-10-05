@@ -9,9 +9,7 @@
     ],
     "scripts": {
         "pull": "git pull",
-        "start": "ts-node src/index.ts",
-        "watch": "nodemon --watch 'src/**' --ext 'ts,json' --ignore 'src/**/*.spec.ts' --exec 'ts-node src/index.ts'"
-    },
+        "start": "ts-node src/index.ts"    },
     "dependencies": {
         "immer": "9.0.5",
         "nodemon": "3.0.1",
