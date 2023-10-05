@@ -18,7 +18,7 @@ const uiStore = useFlowsStore()
 
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userComponents = {}, resolveComponentsDir = "" }) {
 
-    const editorRef = useRef()
+    const editorRef = useRef<any>()
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const currentPageContent = useEditorStore(state => state.currentPageContent)
     const setCurrentPageContent = useEditorStore(state => state.setCurrentPageContent)
