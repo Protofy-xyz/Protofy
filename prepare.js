@@ -34,8 +34,6 @@ if(!fs.existsSync("./data/databases")) {
     fs.mkdirSync('./data/databases')
 }
 
-
-
 Object.keys(modules).forEach((moduleName) => {
     //console.log('Preparing', moduleName, '...')
     const moduleDir = "packages/"+moduleName
