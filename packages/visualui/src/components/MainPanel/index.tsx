@@ -118,18 +118,18 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                 {visibleFlows != 'full' ? <div
                     className="floatingIcon"
                     style={{ marginBottom: 20 }}
+                    onClick={() => setOpenPanel(true)}
                 >
                     <Component
-                        onClick={() => setOpenPanel(true)}
                         color="white"
                     />
                 </div> : null}
                 <div
                     className="floatingIcon"
                     style={{ marginBottom: 20 }}
+                    onClick={() => publish("savenodes", {})}
                 >
                     <Save
-                        onClick={() => publish("savenodes", {})}
                         color="white"
                     />
                 </div>
