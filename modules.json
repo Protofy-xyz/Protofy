@@ -9,7 +9,7 @@
     },
     "visualui": {
         "url": "git@github.com:Protofy-xyz/protofy-visualui.git",
-        "revision": "d49661b01d4bed8146ac5e5ec5d31ddf5324355c"
+        "revision": "784b31575cde34ff3d918b61fb7abedfbbf0a395"
     },
     "protodevice": {
         "url": "git@github.com:Protofy-xyz/protodevice.git",
