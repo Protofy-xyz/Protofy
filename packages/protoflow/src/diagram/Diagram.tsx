@@ -66,7 +66,7 @@ const Diagram = React.forwardRef(({
     defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
     onViewPortChange = () => { }
 }: DiagramParams, ref) => {
-    const reactFlowWrapper = useRef(null);
+    const reactFlowWrapper = useRef<HTMLElement | null>(null);
     const isDiagramVisible = reactFlowWrapper.current?.getBoundingClientRect()?.height > 0
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData)
@@ -74,7 +74,11 @@ const Diagram = React.forwardRef(({
     const [internalData, setInternalData] = useState([])
     const { project, setViewport, getNodes, getViewport, setCenter } = useReactFlow();
     const { undo, redo, takeSnapshot, clearNodes } = useUndoRedo();
-    const connectingNode = useRef(null);
+    const connectingNode = useRef<{
+        handleType?: string;
+        nodeId?: string;
+        handleId?: string;
+    } | null>(null);
     const setMenu = useFlowsStore(state => state.setMenu)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const [pastZoomNodes, setPastZoomNodes] = useState([])
