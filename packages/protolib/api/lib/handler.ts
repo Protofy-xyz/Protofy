@@ -1,7 +1,8 @@
 
 import type {Request, RequestHandler, Response} from 'express';
 import { z } from "zod";
-import {verifyToken, createSession, SessionDataType} from 'protolib/api';
+import {createSession, SessionDataType} from './session';
+import {verifyToken} from './crypt';
 
 type Handler = (
     fn: (req: Request, res: Response, session: SessionDataType) => Promise<void> | void
