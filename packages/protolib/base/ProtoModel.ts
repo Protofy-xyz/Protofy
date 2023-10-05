@@ -1,4 +1,4 @@
-import { createSession, SessionDataType } from 'protolib'
+import { createSession, SessionDataType } from 'protolib/api/lib/session'
 
 export abstract class ProtoModel<T extends ProtoModel<T>> {
     data: any;
@@ -25,7 +25,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     isVisible(): boolean {
-        return this.isDeleted();
+        return !this.isDeleted();
     }
 
     isDeleted(): boolean {

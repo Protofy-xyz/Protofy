@@ -2,22 +2,21 @@ import { useState, useEffect } from 'react'
 import { API, withSession } from 'protolib'
 import { useSearchParams } from 'next/navigation'
 import dynamic from 'next/dynamic';
-import userComponents from "app/features/visualui/components"
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
-export const useEdit = (fn) => {
+export const useEdit = (fn, userComponents) => {
   const searchParams = useSearchParams()
   const edit = searchParams.get('_visualui_edit_')
   if (edit) {
-    return <VisualUILoader />
+    return <VisualUILoader userComponents={userComponents} />
   }
   else {
     return fn()
   }
 }
 
-const VisualUILoader = () => { // Should be in a component
+const VisualUILoader = ({userComponents}) => { // Should be in a component
   const [res, setRes] = useState<any>()
   const [fileContent, setFileContent] = useState()
   const page = "test"

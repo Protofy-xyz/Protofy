@@ -9,7 +9,7 @@ export const BaseApi = (app, entityName, modelClass, initialData) => {
         const db = getDB(dbPath)
         const total: any[] = []
         for await (const [key, value] of db.iterator()) {
-            if(key != 'initialized' && !modelClass.unserialize(value, session).isDeleted()) total.push(modelClass.unserialize(value, session).list())
+            if(key != 'initialized' && modelClass.unserialize(value, session).isVisible()) total.push(modelClass.unserialize(value, session).list())
         }
         res.send(total)
     }));
