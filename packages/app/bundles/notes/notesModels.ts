@@ -1,5 +1,5 @@
 import { NoteSchema, NoteType } from "./notesSchemas"
-import { SessionDataType } from 'protolib'
+import { SessionDataType } from 'protolib/api/lib/session'
 import { ProtoModel, ProtoCollection } from 'protolib/base'
 
 export class NoteModel extends ProtoModel<NoteModel> {
