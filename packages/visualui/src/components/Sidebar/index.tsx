@@ -28,9 +28,9 @@ export const Sidebar = ({
 
 
     const allDropableCraftComponents = Object.keys(palettes).reduce((total, paletteName) => {
-        const paletteElements = Object.keys(palettes[paletteName]).reduce((totalComp, componentName) => (
+        const paletteElements = palettes[paletteName] ? Object.keys(palettes[paletteName]).reduce((totalComp, componentName) => (
             { ...totalComp, [componentName]: { dropable: true, element: palettes[paletteName][componentName], icon: getIcon(palettes[paletteName][componentName]) } }
-        ), {})
+        ), {}) : { ...total }
         return { ...total, [paletteName]: paletteElements }
     }, {})
 
@@ -70,7 +70,7 @@ export const Sidebar = ({
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '4px' }}>
                 <div ref={viewRef} style={{ padding: '4px', display: 'flex', flexDirection: "column", flex: 1, borderBottom: '1px solid #FFFFFF10' }}>
                     <p style={{ padding: '18px 0px 0px 14px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
-                    <div style={{display: 'flex', margin: '18px 12px 18px 2px', position: 'relative'}}>
+                    <div style={{ display: 'flex', margin: '18px 12px 18px 2px', position: 'relative' }}>
                         <input
                             style={{
                                 fontFamily: 'Jost-Regular',
