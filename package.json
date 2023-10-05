@@ -35,7 +35,6 @@
     "add-user": "yarn workspace api add-user",
     "pull": "git pull && yarn workspaces foreach run pull",
     "fix": "manypkg fix",
-    "postinstall": "yarn check-deps && yarn build",
     "build": "yarn workspace @my/ui build && yarn workspaces foreach --exclude next-app run build",
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest react-native-web-lite@latest",
     "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary react-native-web-lite@canary",
