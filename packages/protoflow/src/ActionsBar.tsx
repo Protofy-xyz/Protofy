@@ -21,9 +21,7 @@ export const reLayout = async (layout, nodes, edges, setNodes, setEdges, getFirs
     edges,
     getFirstNode(_nodes)
   );
-  if(setNodesMetaData) {
-    await setNodesMetaData(metadata)
-  }
+  await (setNodesMetaData as any)(metadata)
   await setNodes(layoutedNodes)
   await setEdges(edges)
 
