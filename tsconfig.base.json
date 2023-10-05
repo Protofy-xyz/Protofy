@@ -22,7 +22,7 @@
     "removeComments": false,
     "skipLibCheck": true,
     "sourceMap": false,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "target": "es2020",
     "types": ["node"],
     "lib": ["dom", "esnext"]
