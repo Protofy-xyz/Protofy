@@ -12,6 +12,10 @@ type Props = {
     topics: any
 };
 
+const FloatingIcon = ({ children, onClick }) => <div onClick={onClick} style={{ marginBottom: 20, backgroundColor: 'black', borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex' }}>
+    {children}
+</div>
+
 const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, topics }: Props) => {
 
     const floatingRef: any = useRef()
@@ -113,33 +117,28 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
             <div
                 style={{ display: 'flex', position: 'fixed', flexDirection: 'column', alignSelf: 'center', left: '20px', zIndex: 10000 }}
             >
-                {visibleFlows != 'full' ? <div
-                    className="visualui-floatingIcon"
-                    style={{ marginBottom: 20 }}
-                    onClick={() => setOpenPanel(true)}
-                >
-                    <Component
-                        color="white"
-                    />
-                </div> : null}
-                <div
-                    className="visualui-floatingIcon"
-                    style={{ marginBottom: 20 }}
+                {visibleFlows != 'full'
+                    ? <FloatingIcon onClick={() => setOpenPanel(true)}>
+                        <Component
+                            color="white"
+                        />
+                    </FloatingIcon>
+                    : null}
+                <FloatingIcon
                     onClick={() => publish("savenodes", {})}
                 >
                     <Save
                         color="white"
                     />
-                </div>
-                <div
+                </FloatingIcon>
+                <FloatingIcon
                     onClick={() => setVisibleFlows(visibleFlows == 'full' ? '' : 'full')}
-                    className="visualui-floatingIcon"
                 >
                     {visibleFlows == 'full'
                         ? <X color="white"></X>
                         : <Workflow color="white" />
                     }
-                </div>
+                </FloatingIcon>
             </div>
             <div style={{ position: 'absolute', zIndex: 1000, width: '0px' }}>
                 <FloatingPanel
