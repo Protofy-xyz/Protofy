@@ -1,4 +1,4 @@
-import { SessionDataType } from "../api/lib";
+import { SessionDataType } from "../api/lib/session";
 import { ProtoModel } from "./ProtoModel";
 
 export class ProtoCollection<T extends ProtoModel<any>> {

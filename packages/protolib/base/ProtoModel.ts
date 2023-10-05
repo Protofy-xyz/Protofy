@@ -1,4 +1,4 @@
-import { createSession, SessionDataType } from 'protolib/api'
+import { createSession, SessionDataType } from 'protolib'
 
 export abstract class ProtoModel<T extends ProtoModel<T>> {
     data: any;
