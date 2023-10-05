@@ -408,6 +408,7 @@ export default class Source {
             try {
                 Source.getJsxAttribute(allJsxElements[i], '_nodeId')
             } catch (e) { // If _nodeId is not found add it
+                //@ts-ignore
                 additionalProp += ` _nodeId="${useTestUUID ? testUUID() : Source.getSameIdAsFlows(allJsxElements[i])}" `
             }
             if (!jsxElementAttributes.length) {
