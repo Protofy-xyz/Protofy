@@ -5,6 +5,7 @@ import '../app.css'
 import 'raf/polyfill'
 import 'reactflow/dist/style.css';
 import 'protoflow/src/styles.css';
+import 'protoflow/src/diagram/menu.module.css';
 import '../chonky.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
