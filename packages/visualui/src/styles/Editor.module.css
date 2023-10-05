@@ -1,8 +1,8 @@
-.componentselected {
+.visual-componentselected {
     position: relative;
     /* border: 10px solid lightgreen; */
 }
-.componentselected::after {
+.visualui-componentselected::after {
     content: ' ';
     border: 1px dashed #2680EB;
     height: 100%;
@@ -12,9 +12,5 @@
     top: 0;
     pointer-events: none;
     display: block;
-}
-
-.fancyText {
-    color: grey
 }
   

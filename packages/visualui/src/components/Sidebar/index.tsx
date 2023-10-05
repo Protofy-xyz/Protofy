@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "../../styles/sidebar.module.css";
 import { Element, useEditor } from "@craftjs/core";
 import PageMenu from "./PageMenu";
 import { getIcon } from "../../utils/craftComponent";
@@ -67,7 +66,7 @@ export const Sidebar = ({
 
 
     return (
-        <div className={styles.sidebar}>
+        <div className={'visualui-sidebar'}>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '4px' }}>
                 <div ref={viewRef} style={{ padding: '4px', display: 'flex', flexDirection: "column", flex: 1, borderBottom: '1px solid #FFFFFF10' }}>
                     <p style={{ padding: '18px 0px 0px 14px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
@@ -94,13 +93,13 @@ export const Sidebar = ({
                         <Search color='grey' size={20} style={{ position: 'absolute', top: '8px', left: '10px' }} />
                         {searchValue ? <X onClick={() => setSearchValue('')} color='white' size={20} style={{ position: 'absolute', top: '8px', right: '10px', cursor: 'pointer' }} /> : null}
                     </div>
-                    <div className={styles.list} style={{ overflow: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <div className={'visualui-sidebar-list'} style={{ overflow: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }}>
                         {
                             palettesArr.map((palette, i) => {
                                 return (
                                     <div key={i} style={{ flexDirection: 'column', display: 'flex', marginBottom: '25px' }}>
                                         <p style={{ paddingLeft: '18px', marginTop: '0px', fontSize: '12px', color: 'grey' }}>{palette}</p>
-                                        <div className={styles.list} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start' }}>
+                                        <div className={'visualui-sidebar-list'} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start' }}>
                                             {
                                                 Object.keys(filteredDropableComponents[palette]).map((componentName, i) => {
                                                     const data = filteredDropableComponents[palette][componentName]

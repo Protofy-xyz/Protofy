@@ -2,7 +2,6 @@ import { useNode, useEditor } from '@craftjs/core';
 import { ROOT_NODE } from '@craftjs/utils';
 import React, { useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
-import styles from "../styles/Editor.module.css";
 import { ArrowDown, Trash2, Redo, ArrowUp, Move } from 'lucide-react';
 
 export const RenderNode = ({ render }) => {
@@ -44,8 +43,8 @@ export const RenderNode = ({ render }) => {
 
     useEffect(() => {
         if (dom) {
-            if ((isActive || isHover) && enableEdit) dom.classList.add(styles.componentselected);
-            else dom.classList.remove(styles.componentselected);
+            if ((isActive || isHover) && enableEdit) dom.classList.add('visual-componentselected');
+            else dom.classList.remove('visual-componentselected');
         }
     }, [dom, isActive, isHover, enableEdit]);
 
