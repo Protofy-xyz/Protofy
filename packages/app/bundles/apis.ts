@@ -1,5 +1,5 @@
-import {NotesAPI} from './notes'
+//import {NotesAPI} from './notes'
 
 export default (app) => {
-    NotesAPI(app)
+    //NotesAPI(app)
 }

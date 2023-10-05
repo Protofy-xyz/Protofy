@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Popover, YStack } from 'tamagui'
 import { HeaderLink } from 'protolib'
 import { useAtom } from 'jotai'
-import { createSession } from 'protolib/api'
+import { createSession } from 'protolib'
 import {Session} from 'protolib'
 
 export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
