@@ -14,6 +14,7 @@
         "@dnd-kit/modifiers": "^6.0.1",
         "@dnd-kit/sortable": "^7.0.2",
         "@monaco-editor/react": "4.4.6",
+        "@my/ui": "0.0.1",
         "@tamagui/font-cherry-bomb": "latest",
         "@tamagui/font-dm-sans": "latest",
         "@tamagui/font-dm-serif-display": "latest",
