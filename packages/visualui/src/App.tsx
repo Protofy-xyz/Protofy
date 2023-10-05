@@ -19,10 +19,11 @@ type Props = {
 	_sourceCode?: string,
 	_resolveComponentsDir?: string,
 	_currentPage?: string,
-	isVSCode?: boolean
+	isVSCode?: boolean,
+	onSave?: Function
 }
 
-export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "" }: Props) => {
+export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", onSave = () => null }: Props) => {
 	const [currentPage, setCurrentPage] = useState(_currentPage);
 	const [resolveComponentsDir, setResolveComponentsDir] = useState(_resolveComponentsDir);
 	const [sourceCode, setSourceCode] = useState(_sourceCode);
@@ -61,7 +62,7 @@ export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _reso
 				if (isVSCode) {
 					visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
 				} else {
-					const res = await savePage(currentPage, content);
+					onSave(content)
 				}
 				break;
 		}
@@ -72,16 +73,6 @@ export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _reso
 		visualuiPublisher('protofypanel', 'ready', {})
 	}, [])
 
-	useEffect(() => {
-		if (currentPage) {
-			readPage(currentPage).then((response) => {
-				if (response.isLoaded && response.data?.content !== undefined) {
-					const content = response.data?.content;
-					setSourceCode(content)
-				}
-			})
-		}
-	}, [currentPage])
 
 	return (
 		<TopicsProvider>
@@ -98,35 +89,4 @@ export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _reso
 			}
 		</TopicsProvider>
 	)
-}
-const folderToSearch = "next/pages"
-
-async function readPage(currentPage) {
-	const payload = {
-		filename: folderToSearch + "/" + currentPage,
-	}
-	let response
-	try {
-		response = await API.post('/api/v1/visualui/pages/read', payload)
-	} catch (e) {
-		console.error('Error reading page.')
-	}
-	return response
-}
-
-async function savePage(currentPage, content) {
-	const payload = {
-		filename: folderToSearch + "/" + currentPage,
-		content
-	}
-	let response
-	try {
-		const response = await API.post('/api/v1/visualui/pages/write', payload)
-		if (response && response.isLoaded) {
-			return response
-		}
-	} catch (e) {
-		console.error('Error saving page.')
-	}
-	return response
 }
