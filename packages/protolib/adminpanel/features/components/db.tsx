@@ -3,7 +3,7 @@ import { useAtom, API, createApiAtom, DataCard, Search, Popover } from 'protolib
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { PlusCircle } from '@tamagui/lucide-icons'
+import { Plus } from '@tamagui/lucide-icons'
 
 const contentAtom = createApiAtom([])
 
@@ -47,7 +47,7 @@ export default function DBAdmin({ contentState }) {
     }
     const onCreateItem = () => {
         const keyExist = content.data.find(i => i.key == newKey)
-        if (keyExist || !newKey) return setError(true)
+        if (keyExist || !newKey) return setError(true)
         const newTmpItem = { key: newKey, value: emptyItemValue }
         content.data.unshift(newTmpItem)
         setTmpItem(newTmpItem)
@@ -92,46 +92,46 @@ export default function DBAdmin({ contentState }) {
 
                 <XStack>
                     <Search onCancel={onCancelSearch} onSearch={onSearch} />
+
+                    {Object.keys(tmpItem).length == 0
+                        ?
+                        <Popover isOpen={isPopoverOpen} onOpenChange={setIsPopoverOpen} trigger={
+                            <Button
+                                size="$3"
+                                chromeless
+                                circular
+                                hoverStyle={{
+                                    //@ts-ignore
+                                    bc: 'transparent',
+                                }}
+
+                                noTextWrap
+                                //@ts-ignore
+                                onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+                                theme={isPopoverOpen ? 'alt1' : undefined}
+                            >
+                                <Plus style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
+                            </Button>
+                        }
+                        >
+                            <YStack padding={'$6'} gap='$6'>
+                                <Text w={'$16'}>{'Please enter a unique key\n\n for the new DB item.'}</Text >
+                                <Input
+                                    placeholder='Enter new item key'
+                                    onChangeText={text => { setNewKey(text); setError(false) }}
+                                    value={newKey}
+                                    color={error ? '$red10' : ''}
+                                    onSubmitEditing={onCreateItem}
+                                ></Input>
+                                <Button hoverStyle={{ bc: 'var(--blue8)' }} disabled={error} onClick={onCreateItem} backgroundColor={error ? '$red10' : 'var(--blue9)'} >
+                                    <Text color={"white"}>{error ? "Item already exists" : "Create"}</Text>
+                                </Button>
+                            </YStack>
+                        </Popover>
+                        : null}
                 </XStack>
             </XStack>
-            {Object.keys(tmpItem).length == 0
-                ?
-                <XStack justifyContent='center'>
-                    <Popover isOpen={isPopoverOpen} onOpenChange={setIsPopoverOpen} trigger={
-                        <Button
-                            size="$3"
-                            chromeless
-                            circular
-                            hoverStyle={{
-                                //@ts-ignore
-                                bc: 'transparent',
-                            }}
 
-                            noTextWrap
-                            //@ts-ignore
-                            onClick={() => setIsPopoverOpen(!isPopoverOpen)}
-                            theme={isPopoverOpen ? 'alt1' : undefined}
-                        >
-                            <PlusCircle style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
-                        </Button>
-                    }
-                    >
-                        <YStack padding={'$6'} gap='$6'>
-                            <Text w={'$16'}>{'Please enter a unique key\n\n for the new DB item.'}</Text >
-                            <Input
-                                placeholder='Enter new item key'
-                                onChangeText={text => { setNewKey(text); setError(false) }}
-                                value={newKey}
-                                color={error ? '$red10' : ''}
-                                onSubmitEditing={onCreateItem}
-                            ></Input>
-                            <Button hoverStyle={{bc: 'var(--blue8)' }} disabled={error} onClick={onCreateItem} backgroundColor={error ? '$red10' : 'var(--blue9)'} >
-                                <Text color={"white"}>{error ? "Item already exists" : "Create"}</Text>
-                            </Button>
-                        </YStack>
-                    </Popover>
-                </XStack>
-                : null}
             <XStack flexWrap='wrap'>
                 {content?.data?.map((element, i) => {
                     return (
