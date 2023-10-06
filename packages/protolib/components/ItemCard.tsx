@@ -32,7 +32,7 @@ export const ItemCard = memo(React.forwardRef(
       children?: any,
       topBar?: any,
       topBarOutSideScrollArea?: boolean,
-      containerElement: React.ReactElement
+      containerElement?: any
     }, ref:any
   ) => {
     const {
