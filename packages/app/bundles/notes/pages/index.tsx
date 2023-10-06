@@ -1,5 +1,7 @@
 import { ListNotes } from "./list"
+import { ViewNote } from "./view"
 
 export default {
-    list: ListNotes
+    list: ListNotes,
+    view: ViewNote
 }
