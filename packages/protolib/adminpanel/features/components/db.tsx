@@ -120,7 +120,7 @@ export default function DBAdmin({ contentState }) {
                                     color={error ? '$red10' : ''}
                                     onSubmitEditing={onCreateItem}
                                 ></Input>
-                                <Button hoverStyle={{ bc: 'var(--blue8)' }} disabled={error} onClick={onCreateItem} backgroundColor={error ? '$red10' : 'var(--blue9)'} >
+                                <Button hoverStyle={{ bc: 'var(--blue8)' }} disabled={error} onPress={onCreateItem} backgroundColor={error ? '$red10' : 'var(--blue9)'} >
                                     <Text color={"white"}>{error ? "Item already exists" : "Create"}</Text>
                                 </Button>
                             </YStack>
