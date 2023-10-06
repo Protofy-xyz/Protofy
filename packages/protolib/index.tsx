@@ -70,6 +70,7 @@ export * from "./lib/Api";
 export * from "./lib/useClipboard";
 export * from "./lib/createApiAtom";
 export * from "./lib/analytics";
+export * from "./components/Popover"
 export * from "./lib/usePendingEffect";
 export * from "./lib/useOnIntersecting";
 export { default as Center } from './components/Center';
