@@ -76,14 +76,16 @@ const saveYaml = async (yaml) => {
 }
 
 
-const DeviceScreen = ({ isActive, topics }) => {
+
+const DeviceScreen = ({ isActive,topics}) => {
   const topicData = topics;
-  const [sourceCode, setSourceCode] = useState('')
+  const p = {"config":"[\n  \"mydevice\",\n  \"esp32dev\",\n  \"CraneRouter\",\n  \"06341374\",\n  \"none\",\n  \"141.94.192.178\",\n  false,\n  \"10\",\n  \"10\",\n  34,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n"}
+  const [sourceCode, setSourceCode] = useState(p.config)
   const currentDevice = useDeviceStore(state => state.electronicDevice);
   const setCurrentDevice = useDeviceStore(state => state.setElectronicDevice);
   // console.log('currentDevice: ', currentDevice)
   // console.log('sourceCode: ', sourceCode)
-  const [positions, setPositions] = useState();
+  // const [positions, setPositions] = useState();
   const devicesList = useDeviceStore(state => state.devicesList)
   const setDevicesList = useDeviceStore(state => state.setDevicesList)
   const [showModal, setShowModal] = useState(false)
@@ -250,47 +252,48 @@ const DeviceScreen = ({ isActive, topics }) => {
     cb({ message: "All done!" })
   }
 
-  const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(Settings.getMqttURL().replace('/ws', '') + '/electronics/compile', {
-    onOpen: () => {
-      console.log('WebSocket connection established.');
-    },
-    onClose: () => {
-      console.log('WebSocket connection closed.');
-    },
-    shouldReconnect: (closeEvent) => true
-  });
+  // const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(Settings.getMqttURL().replace('/ws', '') + '/electronics/compile', {
+  //   onOpen: () => {
+  //     console.log('WebSocket connection established.');
+  //   },
+  //   onClose: () => {
+  //     console.log('WebSocket connection closed.');
+  //   },
+  //   shouldReconnect: (closeEvent) => true
+  // });
 
   const compile = async () => {
     setModalFeedback({ message: `Compiling firmware...`, details: { error: false } })
     const compileMsg = { type: "spawn", configuration: "test.yaml" };
-    sendMessage(JSON.stringify(compileMsg));
+    // sendMessage(JSON.stringify(compileMsg));
   }
 
-  React.useEffect(() => {
-    console.log("Compile Message: ", lastMessage);
-    try {
-      if (lastMessage?.data) {
-        const data = JSON.parse(lastMessage?.data);
-        if (data.event == 'exit' && data.code == 0) {
-          console.log("Succesfully compiled");
-          setStage('upload')
+  // React.useEffect(() => {
+  //   console.log("Compile Message: ", lastMessage);
+  //   try {
+  //     if (lastMessage?.data) {
+  //       const data = JSON.parse(lastMessage?.data);
+  //       if (data.event == 'exit' && data.code == 0) {
+  //         console.log("Succesfully compiled");
+  //         setStage('upload')
 
-        } else if (data.event == 'exit' && data.code != 0) {
-          console.error('Error compiling')
-          setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }, [lastMessage])
+  //       } else if (data.event == 'exit' && data.code != 0) {
+  //         console.error('Error compiling')
+  //         setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [lastMessage])
 
 
   const { error, data } = useFetch(`/api/v1/device/${currentDevice}/config`)
   const readDevices = async () => {
     try {
-      const listOfDevicesStr = await fetch('/api/v1/device/list')
-      const listOfDevices = await listOfDevicesStr.json()
+      // const listOfDevicesStr = await fetch('/api/v1/device/list')
+      // const listOfDevices = await listOfDevicesStr.json()
+      const listOfDevices ={"mydevice":{"light":{"type":"switch","mqttMessages":{"options":["ON","OFF"]}}}} 
       setDevicesList(listOfDevices)
     } catch (e) { console.log(e) }
   }
@@ -376,59 +379,70 @@ const DeviceScreen = ({ isActive, topics }) => {
 
 
 
-  useEffect(() => {
-    if (data) {
-      console.log(data.config)
-      //@ts-ignore
-      setSourceCode(data.config)
-      setPositions(JSON.parse(data.positions))
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log(data.config)
+  //     //@ts-ignore
+  //     setSourceCode(data.config)
+  //     // setPositions(JSON.parse(data.positions))
+  //   }
+  // }, [data])
 
   //TODO CHANGE FOR useFETCH
-  useEffect(() => {
-    readDevices()
-  }, [])
+  // useEffect(() => {
+  //   readDevices()
+  // }, [])
 
-  useEffect(() => {
-    const process = async () => {
-      if (stage == 'yaml') {
-        await saveYaml(yamlRef.current)
-        setStage('compile')
-      } else if (stage == 'compile') {
-        await compile()
-      } else if (stage == 'write') {
-        try {
-          await flash(flashCb)
-          setStage('idle')
-        } catch (e) { flashCb({ message: 'Error writing the device. Check that the USB connection and serial port are correctly configured.', details: { error: true } }) }
-      } else if (stage == 'upload') {
-        getWebSocket()?.close()
-        const chromiumBasedAgent =
-          (navigator.userAgent.includes('Chrome') ||
-            navigator.userAgent.includes('Edge') ||
-            navigator.userAgent.includes('Opera'))
+  // useEffect(() => {
+  //   const process = async () => {
+  //     if (stage == 'yaml') {
+  //       await saveYaml(yamlRef.current)
+  //       setStage('compile')
+  //     } else if (stage == 'compile') {
+  //       //await compile()
+  //     } else if (stage == 'write') {
+  //       try {
+  //         await flash(flashCb)
+  //         setStage('idle')
+  //       } catch (e) { flashCb({ message: 'Error writing the device. Check that the USB connection and serial port are correctly configured.', details: { error: true } }) }
+  //     } else if (stage == 'upload') {
+  //       // getWebSocket()?.close()
+  //       const chromiumBasedAgent =
+  //         (navigator.userAgent.includes('Chrome') ||
+  //           navigator.userAgent.includes('Edge') ||
+  //           navigator.userAgent.includes('Opera'))
 
-        if (chromiumBasedAgent) {
-          setModalFeedback({ message: 'Connect your device and click select to chose the port. ', details: { error: false } })
-          console.log('chormium based true')
-        } else {
-          console.log('chormium based very false')
-          setModalFeedback({ message: 'You need Chrome, Opera or Edge to upload the code to the device.', details: { error: true } })
-        }
-      }
-    }
-    process()
-  }, [stage])
+  //       if (chromiumBasedAgent) {
+  //         setModalFeedback({ message: 'Connect your device and click select to chose the port. ', details: { error: false } })
+  //         console.log('chormium based true')
+  //       } else {
+  //         console.log('chormium based very false')
+  //         setModalFeedback({ message: 'You need Chrome, Opera or Edge to upload the code to the device.', details: { error: true } })
+  //       }
+  //     }
+  //   }
+  //   process()
+  // }, [stage])
 
-  useEffect(() => {
-    if (topicData.data['device/changedDeviceName']) {
-      if (topicData.data['device/changedDeviceName'].deviceName) {
-        alert("deviceNameChanged")
-      }
-    }
-  }, [topicData.data['device/changedDeviceName']])
-
+  // useEffect(() => {
+  //   if (topicData.data['device/changedDeviceName']) {
+  //     if (topicData.data['device/changedDeviceName'].deviceName) {
+  //       alert("deviceNameChanged")
+  //     }
+  //   }
+  // }, [topicData.data['device/changedDeviceName']])
+  const theme = {
+    nodeBackgroundColor: '#252526',
+    borderColor: 'grey',
+    blockPort: 'grey',
+    flowPort: 'grey',
+    dataPort: 'grey',
+    textColor: '#CCCCCC',
+    dataOutputColor: 'grey',
+    nodeBorderColor: 'grey',
+    edgeColor: 'grey',
+    titleColor: 'black'
+}
   return (
       <div style={{ width: '100%', display: 'flex', flex: 1 }}>
         {/* <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} /> */}
@@ -437,7 +451,7 @@ const DeviceScreen = ({ isActive, topics }) => {
             flowId={'device'}
             disableDots={!isActive}
             hideBaseComponents={true}
-            positions={positions}
+            // positions={positions}
             customComponents={customComponents}
             getFirstNode={(nodes) => {
               return nodes.find(n => n.type == 'ArrayLiteralExpression')
@@ -447,7 +461,9 @@ const DeviceScreen = ({ isActive, topics }) => {
             onPlay={onPlay}
             sourceCode={sourceCode}
             store={deviceStore}
-            showActionsBar
+            themeMode={'dark'}
+            bgColor={'#252526'}
+            theme={theme}
             layout="elk"
           /> : null}
         {/* <DeviceSelector devicesList={devicesList} currentDevice={currentDevice} onCreateDevice={onCreateDevice} onSelectDevice={onSelectDevice} /> */}
@@ -455,4 +471,7 @@ const DeviceScreen = ({ isActive, topics }) => {
   )
 };
 
+// export default DeviceScreen;
 export default withTopics(DeviceScreen, { topics: ['device/changedDeviceName'] });
+
+// export default ()=><div>Hello</div>

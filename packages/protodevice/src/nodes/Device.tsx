@@ -1,10 +1,9 @@
 import React from "react";
 import { AddPropButton, PORT_TYPES, Node, NodeParams } from 'protoflow';
-import { Box, Text, HStack, Icon, Button } from 'native-base'
 import { Handle, Position, useEdges } from "reactflow";
 // import { useAppStore } from "../../../../../context/appStore";
 import { useDeviceStore } from "../oldThings/DeviceStore";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+// import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { pinTable } from "../device/Device";
 
 const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId))
@@ -50,7 +49,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     // const lastMessage = useAppStore(state => state.lastMessageByTopic[mqttTopic]) ?? []
     // addChannel(mqttTopic);
     // TODO: Replace mqtt connectivity
-    const [lastMessage,setLastMessage] = React.useState({message: "online"})
+    const [lastMessage,setLastMessage] = React.useState({message: "offline"})
     // END-TODO
     const [connected, setConnected] = React.useState("offline");
 
@@ -66,15 +65,16 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     }, [lastMessage])
     return (
         <Node output={false} skipCustom={true} node={node} color='#8FCAF9' isPreview={!id} title='ESP32' id={id}  >
-            <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button>
-            <HStack alignItems={'center'} justifyContent={'flex-end'} px="14px" pt="10px">
-                <Text color={connected == 'online' ? 'warmGray.300' : 'warmGray.300'} mr='5px'>{connected}</Text>
-                <Icon as={MaterialCommunityIcons} color={connected == 'online' ? 'green.500' : 'error.600'} name={'circle'} />
-            </HStack>
+            {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
+            <button onClick={onCompile} style={{width:"40%", alignSelf:'center',margin:"14px"}}>Upload</button>
+            <div style={{alignItems:'center',justifyContent:'flex-end', paddingLeft:"14px", paddingRight:"14px", paddingTop:"10px"}}>
+                <p style={{marginRight:'5px'}}>{connected}</p>
+                {/* <Icon as={MaterialCommunityIcons} color={connected == 'online' ? 'green.500' : 'error.600'} name={'circle'} /> */}
+            </div>
             {<NodeParams id={id} params={params} />}
-            <Box marginY={'20px'}>
-                <img src={require('../../../assets/deviceassets/esp32c4.png')} />
-            </Box>
+            <div style={{marginTop:'20px', marginBottom:'20px'}}>
+                <img src={require('./../assets/esp32c4.png')} />
+            </div>
             {Array(34).fill(1).map((x, i) => i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28 ? <Handle
                 key={i}
                 isConnectable={!isHandleConnected(edges, `${id}${PORT_TYPES.data}element-${i + 10}`)}

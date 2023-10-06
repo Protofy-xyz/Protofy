@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import { Modal, Box, Text, Button, Image } from "native-base";
+import React from "react";
+import { Modal } from "native-base";
 
 const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
     const isError = modalFeedback?.details?.error
@@ -18,8 +18,7 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
 
     const ModalText = () => {
         return ( 
-            <Text textAlign='center' color={isError ? 'warning.600' : ''} 
-                mb={'0px'} mt={isError ? '80px' : ''}>
+            <div style={{textAlign:'center', color: isError?'red':'', marginTop: isError? '80px': '', marginBottom:'0px'}}>
                 {
                     stage === 'upload' 
                     && !isError
@@ -35,7 +34,7 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                         </a>
                     </> 
                 }
-            </Text>
+            </div>
         )
     }
 
@@ -46,72 +45,59 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
         'idle': '4'
     }
 
-    return (<Modal isOpen={showModal} onClose={() => onCancel()} backgroundColor="yellow" style={{ position: 'relative'}}>
-        <Modal.Content h="350" style={{ position: 'relative', overflow: 'visible'}}>
-            <Box justifyContent='space-between' flex="1" px="50px" py="20px" style={{ borderRadius: '20px'}}>
-                <Box>
-                    <Text textAlign='center' fontWeight="bold" fontSize='xs'>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</Text>
-                    <Text textAlign='center' color={isError ? 'warning.600' : ''} 
-                        mb={'0px'} mt={stepsTranslator[stage] === '2' ? '80px': '0px'}>
+    return (<Modal isOpen={showModal} onClose={() => onCancel()} style={{ position: 'relative',backgroundColor: "yellow"}}>
+        <div style={{height:"350", position: 'relative', overflow: 'visible'}}>
+            <div style={{ borderRadius: '20px', flex:"1", justifyContent:"space-between", paddingLeft: "50px", paddingRight: "50px", paddingTop: "20px", paddingBottom: "20px"}}>
+                <div>
+                    <p style={{textAlign:'center', fontWeight:'bold', fontSize:'xs'}}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</p>
+                    <p style={{textAlign:'center', color:isError ? 'red' : '',marginBottom:"0px", marginTop:stepsTranslator[stage] === '2' ? '80px': '0px'}}>
                         {
                             modalFeedback && ['write', 'compile', 'upload'].includes(stage) 
                                 ?  modalFeedback.message : msg
                         }
-                    </Text>
-                    <ModalText/>
+                    </p>
+                    {/* <ModalText/> */}
                     {isLoading
-                        ? <Image
+                        ? <img
                             alt="protofito loading"
-                            h={'160px'}
-                            w={'300px'}
-                            alignSelf='center'
-                            mt='60px'
-                            mb='10px'
-                            source={require('../../assets/protofitos/protofito-loading.gif')}
+                            style={{height: "160px", width: "300px", alignSelf:"center", marginTop:"60px",marginBottom:"10px"}}
+                            src={require('../../assets/protofitos/protofito-loading.gif')}
                         />
                         : null}
                     {stage == 'idle' && !isError
-                        ? <Image
+                        ? <img
                             alt="protofito dancing"
-                            h={'160px'}
-                            w={'190px'}
-                            alignSelf='center'
-                            mt='60px'
-                            mb='10px'
-                            source={require('../../assets/protofitos/protofito-dancing.gif')}
+                            style={{height: "160px", width: "190px", alignSelf:"center", marginTop:"60px",marginBottom:"10px"}}
+                            src={require('../../assets/protofitos/protofito-dancing.gif')}
                         />
                         : null}
                     {stage == 'compile' && !isError
-                        ? <Image
+                        ? <img
                             alt="protofito compiling"
-                            h={'160px'}
-                            w={'180px'}
-                            alignSelf='center'
-                            mt='60px'
-                            mb='10px'
-                            source={require('../../assets/protofitos/protofito-compiling.gif')}
+                            style={{height: "160px", width: "180px", alignSelf:"center", marginTop:"60px",marginBottom:"10px"}}
+                            src={require('../../assets/protofitos/protofito-compiling.gif')}
                         />
                         : null}
-                </Box>
-                <Button.Group space={2} justifyContent={'center'}>
-                    {stage != 'write' && stage != 'idle' || isError ? <Button variant="ghost" colorScheme="warmGray" onPress={() => {
+                </div>
+                <div  style={{justifyContent:'center'}}>
+                    {stage != 'write' && stage != 'idle' || isError ? <button style={{color:"warmGray"}} onClick={() => {
                         onCancel()
                     }}>
                         Cancel
-                    </Button> : <></>}
-                    {stage == 'upload' ? <Button onPress={() => {
+                    </button> : <></>}
+                    {stage == 'upload' ? <button onClick={() => {
                         onSelect()
                     }}>
                         Select
-                    </Button> : <></>}
-                    {stage == 'idle' ? <Button onPress={() => {
+                    </button> : <></>}
+                    {stage == 'idle' ? <button onClick={() => {
                         onCancel()
                     }}>
                         Done!
-                    </Button> : <></>}
-                </Button.Group>
-            </Box>
-        </Modal.Content>
+                    </button> : <></>}
+                </div>
+            </div>
+        </div>
     </Modal >)
 }
 

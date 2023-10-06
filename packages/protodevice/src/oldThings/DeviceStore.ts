@@ -8,7 +8,7 @@ type DeviceStoreData = {
     setElectronicDevice: Function,
 }
 
-export const useDeviceStore = create<DeviceStoreData>((set, get) => ({
+export const useDeviceStore = create<DeviceStoreData>((set,get) => ({
     devicesList: {},
     electronicDevice: "mydevice",
     setElectronicDevice: (electronicDevice: string) => set(produce((draft: DeviceStoreData) => {
