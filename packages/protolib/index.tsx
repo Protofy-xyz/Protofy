@@ -93,6 +93,7 @@ export * from './visualui/tamagui'
 export * from './components/Monaco'
 export * from './components/IconContainer'
 export * from './components/AlertDialog'
+export * from './components/Tinted'
 export * from './models'
 export * from './schema'
 export * from './api/lib/session' //this is an exception
