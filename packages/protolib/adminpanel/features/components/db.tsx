@@ -123,7 +123,7 @@ export default function DBAdmin({ contentState }) {
                                     onSubmitEditing={onCreateItem}
                                 ></Input>
                                 <Theme name={tint as any}>
-                                    <Button hoverStyle={{ bc: 'var(--color8)' }} disabled={error} onPress={onCreateItem} backgroundColor={error ? '$red10' : '$color9'} >
+                                    <Button hoverStyle={{ bc: '$color8' }} disabled={error} onPress={onCreateItem} backgroundColor={error ? '$red10' : '$color9'} >
                                         <Text color={"white"}>{error ? "Item already exists" : "Create"}</Text>
                                     </Button>
                                 </Theme>
