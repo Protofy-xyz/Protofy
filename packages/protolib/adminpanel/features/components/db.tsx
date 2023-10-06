@@ -101,13 +101,10 @@ export default function DBAdmin({ contentState }) {
                                 chromeless
                                 circular
                                 hoverStyle={{
-                                    //@ts-ignore
                                     bc: 'transparent',
                                 }}
-
                                 noTextWrap
-                                //@ts-ignore
-                                onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+                                onPress={() => setIsPopoverOpen(!isPopoverOpen)}
                                 theme={isPopoverOpen ? 'alt1' : undefined}
                             >
                                 <Plus style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
