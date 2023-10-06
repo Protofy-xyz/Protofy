@@ -1,9 +1,10 @@
-import { YStack, XStack, Stack, Paragraph, Text, Button, Input } from 'tamagui'
+import { YStack, XStack, Stack, Paragraph, Text, Button, Input, Theme } from 'tamagui'
 import { useAtom, API, createApiAtom, DataCard, Search, Popover } from 'protolib'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Plus } from '@tamagui/lucide-icons'
+import { useTint } from '@tamagui/logo'
 
 const contentAtom = createApiAtom([])
 
@@ -20,6 +21,7 @@ export default function DBAdmin({ contentState }) {
     const [newKey, setNewKey] = useState('')
     const emptyItemValue = { exapmle: "exampleValue" }
     const [tmpItem, setTmpItem] = useState({})
+    const { tint } = useTint()
 
     // usePendingEffect(async () => {
     //     const databases = await API.get('/adminapi/v1/databases')
@@ -120,9 +122,12 @@ export default function DBAdmin({ contentState }) {
                                     color={error ? '$red10' : ''}
                                     onSubmitEditing={onCreateItem}
                                 ></Input>
-                                <Button hoverStyle={{ bc: 'var(--blue8)' }} disabled={error} onPress={onCreateItem} backgroundColor={error ? '$red10' : 'var(--blue9)'} >
-                                    <Text color={"white"}>{error ? "Item already exists" : "Create"}</Text>
-                                </Button>
+                                <Theme name={tint as any}>
+                                    <Button hoverStyle={{ bc: 'var(--color8)' }} disabled={error} onPress={onCreateItem} backgroundColor={error ? '$red10' : '$color9'} >
+                                        <Text color={"white"}>{error ? "Item already exists" : "Create"}</Text>
+                                    </Button>
+                                </Theme>
+
                             </YStack>
                         </Popover>
                         : null}
