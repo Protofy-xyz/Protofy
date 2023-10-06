@@ -1,10 +1,10 @@
-import { XStack } from 'tamagui'
+import { Stack, XStack, YStack } from 'tamagui'
 import { Button, Dialog, Spacer } from '@my/ui'
 import { forwardRef, useState } from 'react'
 
-export const AlertDialog = forwardRef(({onAccept=() => {}, onCancel=() => {},title,trigger, description, children, cancelCaption='Cancel', acceptCaption='Accept'}:any, ref:any) => {
-    const [open, setOpen] = useState(false) 
-    return (<Dialog ref={ref} open={open} onOpenChange={setOpen}>
+export const AlertDialog = forwardRef(({onAccept=() => {}, onCancel=() => {},title,trigger, description, children, cancelCaption='Cancel', acceptCaption='Accept', open, setOpen}:any, ref:any) => {
+    const [_open, _setOpen] = useState(false) 
+    return (<Dialog ref={ref} open={open !== undefined ? open : _open} onOpenChange={setOpen !== undefined ? setOpen : _setOpen}>
         <Dialog.Trigger>
             {trigger}
         </Dialog.Trigger>
@@ -30,7 +30,7 @@ export const AlertDialog = forwardRef(({onAccept=() => {}, onCancel=() => {},tit
                     </Dialog.Close>
 
         
-                    <Button onPress={() => onAccept(setOpen)} theme="alt1" aria-label="Close">
+                    <Button onPress={() => onAccept(setOpen !== undefined ? setOpen : _setOpen)} theme="alt1" aria-label="Close">
                         {acceptCaption}
                     </Button>
     
@@ -56,7 +56,10 @@ export const AlertDialog = forwardRef(({onAccept=() => {}, onCancel=() => {},tit
         <Dialog.Adapt when="sm">
             <Dialog.Sheet>
                 <Dialog.Sheet.Frame>
-                    <Dialog.Adapt.Contents />
+                    <YStack p={"$5"} f={1}>
+                        <Dialog.Adapt.Contents />
+                    </YStack>
+
                 </Dialog.Sheet.Frame>
                 <Dialog.Sheet.Overlay />
             </Dialog.Sheet>
