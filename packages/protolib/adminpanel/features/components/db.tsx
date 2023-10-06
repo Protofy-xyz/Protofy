@@ -112,7 +112,7 @@ export default function DBAdmin({ contentState }) {
                         }
                         >
                             <YStack padding={'$6'} gap='$6'>
-                                <Text w={'$16'}>{'Please enter a unique key\n\n for the new DB item.'}</Text >
+                                <Text w={'$16'}>{'Please enter a unique key for the new DB item.'}</Text >
                                 <Input
                                     placeholder='Enter new item key'
                                     onChangeText={text => { setNewKey(text); setError(false) }}
