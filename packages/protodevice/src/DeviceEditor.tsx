@@ -464,6 +464,7 @@ const DeviceScreen = ({ isActive,topics}) => {
             themeMode={'dark'}
             bgColor={'#252526'}
             theme={theme}
+            showActionsBar={true}
             layout="elk"
           /> : null}
         {/* <DeviceSelector devicesList={devicesList} currentDevice={currentDevice} onCreateDevice={onCreateDevice} onSelectDevice={onSelectDevice} /> */}

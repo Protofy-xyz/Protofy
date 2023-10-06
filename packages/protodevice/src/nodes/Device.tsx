@@ -26,17 +26,17 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
 
     const params = [
         // { label: 'Name', onBlur:()=>changeDeviceName(), field: 'element-0', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"'},
-        { label: 'Name', isDisabled: true, field: 'element-0', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"' },
-        { label: 'WiFi SSID', field: 'element-2', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str + '"' },
-        { label: 'WiFi Password', field: 'element-3', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str + '"' },
+        { label: 'Name', isDisabled: true, field: 'element-0', type: 'input', static: true},
+        { label: 'WiFi SSID', field: 'element-2', type: 'input', static: true},
+        { label: 'WiFi Password', field: 'element-3', type: 'input', static: true},
         {
             label: 'WiFi Power mode', field: 'element-4', type: 'select', static: true,
             data: ['"none"', '"light"', '"high"'],
         },
-        { label: 'MQTT Address', field: 'element-5', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str + '"' },
+        { label: 'MQTT Address', field: 'element-5', type: 'input', static: true},
         { label: 'Enable Deep-Sleep', static: true, field: 'element-6', type: 'boolean'},
-        { label: 'Deep-Sleep run duration', field: 'element-7', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str + '"' },
-        { label: 'Deep-Sleep sleep duration', field: 'element-8', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str + '"' },
+        { label: 'Deep-Sleep run duration', field: 'element-7', type: 'input', static: true},
+        { label: 'Deep-Sleep sleep duration', field: 'element-8', type: 'input', static: true},
         {
             label: 'Wakeup Pin', static: true, field: 'element-9', type: 'select',
             data: pinTable.filter(item => !['GND', 'CMD', '0'].includes(item))
