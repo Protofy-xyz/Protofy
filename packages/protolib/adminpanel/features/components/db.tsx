@@ -20,7 +20,7 @@ export default function DBAdmin({ contentState }) {
     const [error, setError] = useState(false)
     const [newKey, setNewKey] = useState('')
     const emptyItemValue = { exapmle: "exampleValue" }
-    const [tmpItem, setTmpItem] = useState({})
+    const [tmpItem, setTmpItem] = useState<string | null>(null)
     const { tint } = useTint()
 
     // usePendingEffect(async () => {
@@ -37,7 +37,7 @@ export default function DBAdmin({ contentState }) {
 
     const onDelete = async (key, isTemplate) => {
         if (isTemplate) {
-            setTmpItem({})
+            setTmpItem(null)
             content.data.shift()
         } else {
             const result = await API.get('/adminapi/v1/databases/' + currentDB + '/' + key + '/delete')
@@ -52,7 +52,7 @@ export default function DBAdmin({ contentState }) {
         if (keyExist || !newKey) return setError(true)
         const newTmpItem = { key: newKey, value: emptyItemValue }
         content.data.unshift(newTmpItem)
-        setTmpItem(newTmpItem)
+        setTmpItem(newKey)
         setContent({ ...content })
         setIsPopoverOpen(false)
         setNewKey("")
@@ -67,7 +67,7 @@ export default function DBAdmin({ contentState }) {
             )
             setRenew(renew + 1)
         }
-        setTmpItem({})
+        setTmpItem(null)
         return result
     }
 
@@ -95,7 +95,7 @@ export default function DBAdmin({ contentState }) {
                 <XStack>
                     <Search onCancel={onCancelSearch} onSearch={onSearch} />
 
-                    {Object.keys(tmpItem).length == 0
+                    {!tmpItem
                         ?
                         <Popover isOpen={isPopoverOpen} onOpenChange={setIsPopoverOpen} trigger={
                             <Button
@@ -150,7 +150,7 @@ export default function DBAdmin({ contentState }) {
                                 onSave={(content) => onSave(content, element.key)}
                                 json={element.value}
                                 name={element.key}
-                                isTemplate={element.key == tmpItem['key'] ? true : false}
+                                isTemplate={element.key == tmpItem}
                             />
                         </Stack>
                     )
