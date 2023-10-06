@@ -33,17 +33,14 @@ export function ListNotes({ initialElements }) {
 
 
     <DefaultLayout title="notes" footer={null}>
-      <Section sectionProps={{ index: 0, p: 0 }}>
         <ContainerLarge contain="layout" pos="relative">
           <YStack mt="$5" p="$5">
-            <XStack f={1} mb={"$5"} ml="$5" jc="center" ai="center">
+            <XStack f={1} mb={"$5"} ml={"$5"} $sm={{ml:"$0"}} jc="center" ai="center">
               <XStack f={1}>
                 <BlockTitle title="Notes"></BlockTitle>
               </XStack>
               <XStack>
-
-
-                <Button onPress={() => setOpen(true)} chromeless={true}>
+                <Button $sm={{mr:"$0"}} mr="$2" onPress={() => setOpen(true)} chromeless={true}>
                   <Plus />
                 </Button>
               </XStack>
@@ -52,7 +49,6 @@ export function ListNotes({ initialElements }) {
           </YStack>
         </ContainerLarge>
         {/* <YStack pe="none" zi={0} fullscreen className="bg-dot-grid mask-gradient-down" /> */}
-      </Section>
     </DefaultLayout>
   </Page>
 }
