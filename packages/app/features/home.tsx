@@ -52,7 +52,6 @@ import { ThemeTint } from '@tamagui/logo'
 import { DefaultLayout } from '../layout/DefaultLayout'
 
 export function HomeScreen ({pageSession}) {
-  useSession(pageSession)
   return (
     <Page>
       <DefaultLayout title="Protofy"

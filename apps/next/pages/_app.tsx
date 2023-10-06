@@ -23,13 +23,12 @@ if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css')
 }
 
-
 function MyApp({ Component, pageProps }: SolitoAppProps) {
   return (
     <>
       <Head>
-        <title>Tamagui Example App</title>
-        <meta name="description" content="Tamagui, Solito, Expo & Next.js" />
+        <title>Protofy Starter</title>
+        <meta name="description" content="Protofy Starter" />
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <ThemeProvider>

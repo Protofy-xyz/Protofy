@@ -4,7 +4,7 @@ import { XStack, YStack } from 'tamagui'
 import { Page, SpotLight, Section, BigTitle } from 'protolib'
 import { ObjectListView } from 'protolib/base'
 
-export default function Notes({ initialNotes }) {
+export default function Notes({ initialElements }) {
   return (
     <Page>
       <DefaultLayout title="notes" header={null} footer={null}>
@@ -17,7 +17,7 @@ export default function Notes({ initialNotes }) {
                 <span className="all ease-in ms250 rainbow clip-text">Notes</span>
               </BigTitle>
             </XStack>
-            <ObjectListView initialElements={initialNotes} name={'notes'}/>
+            <ObjectListView initialElements={initialElements} name={'notes'}/>
           </YStack>
         </Section>
       </DefaultLayout>

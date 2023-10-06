@@ -1,9 +1,13 @@
 import { DefaultLayout } from 'app/layout/DefaultLayout'
 import { AlertTriangle } from '@tamagui/lucide-icons'
 import { H2, YStack } from 'tamagui'
-import {Page} from 'protolib'
+import {Page, useSession} from 'protolib'
+import { SSR } from 'app/conf'
+import { NextPageContext } from 'next'
+import { withSession } from 'protolib'
 
-export default function Custom404() {
+export default function Custom404(props:any) {
+  useSession(props.pageSession)
   return (
     <Page>
       <DefaultLayout>
@@ -15,3 +19,5 @@ export default function Custom404() {
     </Page>
   )
 }
+
+export const getServerSideProps = SSR(async (context:NextPageContext) => withSession(context))

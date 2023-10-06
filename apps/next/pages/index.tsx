@@ -2,9 +2,10 @@ import { HomeScreen } from 'app/features/home'
 import Head from 'next/head'
 import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
-import { withSession } from 'protolib'
+import { useSession, withSession } from 'protolib'
 
 export default function Page(props:any) {
+  useSession(props.pageSession)
   return (
     <>
       <Head>
