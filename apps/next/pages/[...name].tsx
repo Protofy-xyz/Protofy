@@ -19,17 +19,17 @@ export default function NotesPage(props: any) {
   const pages = (nextPages as any)[objectName]
   if (!pages) return <Custom404 />
 
-  var pageComponent;
+  var page;
   
   if(name.length > 1) {
     objectName = name[1]
-    pageComponent = pages['view']
+    page = pages['view']
   } else {
-    pageComponent = pages['list']
+    page = pages['list']
   }
 
-  if (!pageComponent) return <Custom404 />
-  return React.createElement(pageComponent, {...props, id: objectName})
+  if (!page) return <Custom404 />
+  return React.createElement(page.component, {...props, id: objectName})
 }
 
 export const getServerSideProps = SSR(async (context: NextPageContext) => {
@@ -40,11 +40,13 @@ export const getServerSideProps = SSR(async (context: NextPageContext) => {
   }
 
   if(context.query.name && context.query.name.length > 1) {
+    console.log('request: ', '/api/v1/'+objectName+'/'+context.query.name[1])
     return withSession(context, undefined, {
       initialElement: await API.get('/api/v1/'+objectName+'/'+context.query.name[1])
     })
   }
 
+  console.log('request: ', '/api/v1/'+objectName)
   return withSession(context, undefined, {
     initialElements: await API.get('/api/v1/'+objectName)
   })
