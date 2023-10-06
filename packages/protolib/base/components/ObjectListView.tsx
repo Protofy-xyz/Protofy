@@ -17,6 +17,7 @@ export function ObjectListView({ elements, listItem }) {
                     $sm={{ minWidth: 'calc(100vw - 120px)', maxWidth: 'calc(100vw - 65px)' }}
                     minWidth={300}
                     containerElement={YStack}
+                    hoverStyle={{bc:"$backgroundHover"}}
                 >
                   {React.createElement(listItem, {data}, [])}
                 </ItemCard>
