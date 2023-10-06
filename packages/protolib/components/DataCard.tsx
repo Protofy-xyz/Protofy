@@ -8,9 +8,9 @@ import { getPendingResult } from '../lib/createApiAtom'
 import React from 'react'
 import { IconContainer } from './IconContainer'
 
-export const DataCard = React.forwardRef(({ innerContainerProps = {}, extraIcons = [], iconProps = {}, itemCardProps = {}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, hideDeleteIcon, ...props }: any, ref: any) => {
+export const DataCard = React.forwardRef(({ innerContainerProps = {}, extraIcons = [], iconProps = {}, itemCardProps = {}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, hideDeleteIcon, isTemplate = false, ...props }: any, ref: any) => {
     const { tint } = useTint()
-    const [editable, setEditable] = useState(false)
+    const [editable, setEditable] = useState(isTemplate)
     const [content, setContent] = useState(json)
     const [childKey, setChildKey] = useState(0);
     const [loadingState, setLoadingState] = useState(getPendingResult('pending'))
@@ -50,14 +50,14 @@ export const DataCard = React.forwardRef(({ innerContainerProps = {}, extraIcons
                         <Theme reset>
                             <XStack left={"-$10"}>
                                 {!hideDeleteIcon ? <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom-end">
-                                    <Popover.Trigger>
+                                    {!isTemplate ? <Popover.Trigger>
                                         <XStack cursor="pointer" onPress={() => setMenuOpened(true)}>
                                             <Stack marginRight={"$3"} opacity={0.5} cursor="pointer" hoverStyle={{ opacity: 0.8 }}>
                                                 <Trash2 size={"$1"} />
                                             </Stack>
                                         </XStack>
 
-                                    </Popover.Trigger>
+                                    </Popover.Trigger> : null}
 
                                     <Popover.Content padding={0} space={0} top={"$2"}>
                                         <YStack alignItems="center" justifyContent="center" padding={"$5"} paddingVertical={"$5"}>
@@ -75,7 +75,7 @@ export const DataCard = React.forwardRef(({ innerContainerProps = {}, extraIcons
                                 </Popover> : null}
 
                                 <XStack {...iconProps}>
-                                    {editable ? <IconContainer paddingHorizontal={"$3"} onPress={onCancel}>
+                                    {editable ? <IconContainer paddingHorizontal={"$3"} onPress={() => { isTemplate ? onDelete(name, isTemplate) : onCancel() }}>
                                         <X color="var(--red9)" size={"$1"} />
                                     </IconContainer> : null}
                                     {!editable ? <IconContainer onPress={() => setEditable(!editable)}>
