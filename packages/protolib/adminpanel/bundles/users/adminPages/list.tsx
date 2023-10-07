@@ -12,7 +12,7 @@ export default function ListUsersPage({workspace, data, pageSession}:any) {
   return (
     <>
       <Head>
-        <title>Protofy - Admin Panel</title>
+        <title>Admin &gt; Users</title>
       </Head>
       <AdminPanel workspace={workspace}>
         <ListUsers />
@@ -23,6 +23,6 @@ export default function ListUsersPage({workspace, data, pageSession}:any) {
 
 export const getServerSideProps = SSR(async (context:NextPageContext) => {
     return withSession(context, ['admin'], {
-      workspace: await API.get('/adminapi/v1/users')
+      workspace: await API.get('/adminapi/v1/workspaces')
     })
 })

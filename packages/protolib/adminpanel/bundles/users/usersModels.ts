@@ -11,6 +11,10 @@ export class UserModel extends ProtoModel<UserModel> {
         return new UserModel(data, session);
     }
 
+    getId() {
+        return this.data.username
+    }
+
     validate(): this {
         UserSchema.parse(this.data); //validate
         return this;
