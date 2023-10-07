@@ -27,12 +27,11 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
     let props = {}
     const dbs = await API.get('/adminapi/v1/databases') ?? { data: [] }
 
-
     if (!context.query.name && dbs.data?.length) {
         return redirect('/admin/database/' + dbs.data[0].name)
     }
 
-    const db = dbs.data?.find((db:any) => db.name == nameSegments[0])
+    const db = dbs.data?.find((db:any) => db.name == nameSegments[2])
     if (!db) {
         return dbs.data?.length ?
             redirect('/admin/database/' + dbs.data[0].name)

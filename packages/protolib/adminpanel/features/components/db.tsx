@@ -5,13 +5,11 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Plus } from '@tamagui/lucide-icons'
 
-const contentAtom = createApiAtom([])
-
 export default function DBAdmin({ contentState }) {
     const router = useRouter()
 
-    const [content, setContent] = useAtom(contentAtom, contentState)
-    const currentDB = router.query.name
+    const [content, setContent] = useState(contentState)
+    const currentDB = router.query.name[2]
     const [renew, setRenew] = useState(1)
     const [originalContent, setOriginalContent] = useState<any>()
 
