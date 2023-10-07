@@ -9,6 +9,9 @@
         }
     ],
     "menu": {
+        "System": [
+            { "name": "Users", "type": "users", "path": "/" }
+        ],
         "App": [
             { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
             { "name": "Public", "type": "files", "path": "/apps/next/public" },
