@@ -3,12 +3,11 @@ import { YStack } from 'tamagui'
 import { withSession, AsyncView, createApiAtom, usePendingEffect, API, useAtom, Page, Section, ContainerLarge } from 'protolib'
 import { NoteView } from '../components/NoteView'
 import { NextPageContext } from 'next'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import {useRouter} from 'next/router'
 
 export function ViewNote({ initialElement, id }) {
-    const dataAtom = useMemo(() => createApiAtom(null), [])
-    const [element, setElement] = useAtom(dataAtom, initialElement)
+    const [element, setElement] = useState(initialElement)
     const router = useRouter()
     usePendingEffect((s) => API.get('/api/v1/notes/' + router.asPath.split('/')[2], s), setElement, element)
 

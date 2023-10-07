@@ -1,18 +1,15 @@
 import { DefaultLayout } from '../../../layout/DefaultLayout'
 import { XStack, YStack, Button } from 'tamagui'
-import { withSession, AlertDialog, Link, createApiAtom, API, Page, SpotLight, Section, BlockTitle, ContainerLarge, useAtom, usePendingEffect } from 'protolib'
+import { withSession, AlertDialog, API, Page, BlockTitle, ContainerLarge, usePendingEffect } from 'protolib'
 import { ObjectListView } from 'protolib/base/components'
 import { NotePreview } from '../components/NotePreview'
 import { Plus } from '@tamagui/lucide-icons'
-import { Paragraph } from '@my/ui'
 import { useState } from 'react'
 import { NoteAdd } from '../components/NoteAdd'
 import {NextPageContext} from 'next'
 
-const listAtom = createApiAtom([])
-
 export function ListNotes({ initialElements }) {
-  const [elements, setElements] = useAtom(listAtom, initialElements)
+  const [elements, setElements] = useState(initialElements)
   const [open, setOpen] = useState(false)
   usePendingEffect((s) => API.get('/api/v1/notes', s), setElements, initialElements)
   return <Page>
