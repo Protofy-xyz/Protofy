@@ -41,9 +41,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
         CurrentPath: path,
         CurrentFile: currentFile
       }
-    }
-    console.log('Requesting to: *****************', '/adminapi/v1/files/'+path)
-    
+    }    
 
     return withSession(context, ['admin'], {
       ...props,
