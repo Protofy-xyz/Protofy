@@ -32,7 +32,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
     const nameSegments = context.query.name as string[];
     
     let props = {}
-    const path = nameSegments ? nameSegments.join('/') : '';
+    const path = nameSegments ? nameSegments.slice(2).join('/') : '';
     //@ts-ignore
     const currentFile = context.query.file ? context.query.file.split('/')[0] : ''
     props = {
