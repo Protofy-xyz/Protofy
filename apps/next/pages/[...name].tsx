@@ -22,25 +22,29 @@ const getRoute = (routePath: string | string[] | undefined) => Object.keys(nextP
   return valid
 })
 
-export default function NotesPage(props: any) {
+export default function BundlePage(props: any) {
   useSession(props.pageSession)
   const router = useRouter();
   const route = getRoute(router.query.name)
   if(!route) return <Custom404 />
 
   const page = nextPages[route]
-  return React.createElement(page.component, {...props, id: 'lol'})
+  return React.createElement(page.component, {...props})
 }
 
 export const getServerSideProps = SSR(async (context: NextPageContext) => {
   const route = getRoute(context.query.name)
+
   if(!route) { //has no exposed pages
     return withSession(context)
   }
 
   const page = nextPages[route]
+
   if(page.getServerSideProps) {
-    return await page.getServerSideProps(context)
+    const ret = await page.getServerSideProps(context)
+    //console.log('going to route: ', route, page, ret)
+    return ret
   }
 
   return withSession(context)
