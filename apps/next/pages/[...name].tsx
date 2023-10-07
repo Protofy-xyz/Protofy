@@ -15,6 +15,9 @@ const getRoute = (routePath: string | string[] | undefined) => Object.keys(nextP
   const route = key.split('/')
   let valid = true
   for(var i=0;i<path.length && valid;i++) {
+    if(route[i] == '**') {
+      return true
+    }
     if(route[i] != '*' && route[i] != path[i]) {
       valid = false
     }
