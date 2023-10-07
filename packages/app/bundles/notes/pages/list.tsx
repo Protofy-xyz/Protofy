@@ -1,12 +1,13 @@
 import { DefaultLayout } from '../../../layout/DefaultLayout'
 import { XStack, YStack, Button } from 'tamagui'
-import { AlertDialog, Link, createApiAtom, API, Page, SpotLight, Section, BlockTitle, ContainerLarge, useAtom, usePendingEffect } from 'protolib'
+import { withSession, AlertDialog, Link, createApiAtom, API, Page, SpotLight, Section, BlockTitle, ContainerLarge, useAtom, usePendingEffect } from 'protolib'
 import { ObjectListView } from 'protolib/base/components'
 import { NotePreview } from '../components/NotePreview'
 import { Plus } from '@tamagui/lucide-icons'
 import { Paragraph } from '@my/ui'
 import { useState } from 'react'
 import { NoteAdd } from '../components/NoteAdd'
+import {NextPageContext} from 'next'
 
 const listAtom = createApiAtom([])
 
@@ -51,4 +52,10 @@ export function ListNotes({ initialElements }) {
         {/* <YStack pe="none" zi={0} fullscreen className="bg-dot-grid mask-gradient-down" /> */}
     </DefaultLayout>
   </Page>
+}
+
+export const getServerSideProps = async (context: NextPageContext) => {
+  return withSession(context, undefined, {
+    initialElements: await API.get('/api/v1/notes')
+  })
 }

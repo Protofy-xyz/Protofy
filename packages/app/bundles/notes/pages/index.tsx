@@ -1,9 +1,7 @@
-import { ListNotes } from "./list"
-import { ViewNote } from "./view"
+import { ListNotes, getServerSideProps as getServerSidePropsNotesList } from "./list"
+import { ViewNote, getServerSideProps as getServerSidePropsNotesView } from "./view"
 
 export default {
-    notes: {
-        list: {component: ListNotes},
-        view: {component: ViewNote}
-    }
-}
+    'notes': {component: ListNotes, getServerSideProps: getServerSidePropsNotesList},
+    'notes/*': {component: ViewNote, getServerSideProps: getServerSidePropsNotesView}
+} as any

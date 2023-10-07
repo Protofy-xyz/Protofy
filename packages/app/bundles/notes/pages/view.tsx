@@ -1,16 +1,16 @@
 import { DefaultLayout } from '../../../layout/DefaultLayout'
-import { XStack, YStack } from 'tamagui'
-import { AsyncView, createApiAtom, usePendingEffect, API, useAtom, Page, SpotLight, Section, BlockTitle, ContainerLarge } from 'protolib'
-import { ObjectListView } from 'protolib/base/components'
-import { NotePreview } from '../components/NotePreview'
+import { YStack } from 'tamagui'
+import { withSession, AsyncView, createApiAtom, usePendingEffect, API, useAtom, Page, Section, ContainerLarge } from 'protolib'
 import { NoteView } from '../components/NoteView'
-
-const dataAtom = createApiAtom(null)
+import { NextPageContext } from 'next'
+import { useMemo } from 'react'
+import {useRouter} from 'next/router'
 
 export function ViewNote({ initialElement, id }) {
-
+    const dataAtom = useMemo(() => createApiAtom(null), [])
     const [element, setElement] = useAtom(dataAtom, initialElement)
-    usePendingEffect((s) => API.get('/api/v1/notes/' + id, s), setElement, element)
+    const router = useRouter()
+    usePendingEffect((s) => API.get('/api/v1/notes/' + router.asPath.split('/')[2], s), setElement, element)
 
     return <Page>
         <DefaultLayout title="notes" footer={null}>
@@ -27,3 +27,9 @@ export function ViewNote({ initialElement, id }) {
         </DefaultLayout>
     </Page>
 }
+
+export const getServerSideProps = async (context: NextPageContext) => {
+    return withSession(context, undefined, {
+        initialElement: await API.get('/api/v1/notes/'+context.query.name[1])
+    }
+)}

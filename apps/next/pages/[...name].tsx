@@ -9,45 +9,39 @@ import { useRouter } from 'next/router'
 import nextPages from 'app/bundles/nextPages'
 import React from 'react'
 
+const getRoute = (routePath: string | string[] | undefined) => Object.keys(nextPages).find(key => {
+  if(!routePath) return false
+  const path = Array.isArray(routePath) ? (routePath as string[]) : [routePath as string]
+  const route = key.split('/')
+  let valid = true
+  for(var i=0;i<path.length && valid;i++) {
+    if(route[i] != '*' && route[i] != path[i]) {
+      valid = false
+    }
+  }
+  return valid
+})
+
 export default function NotesPage(props: any) {
   useSession(props.pageSession)
   const router = useRouter();
-  const { name } = router.query;
+  const route = getRoute(router.query.name)
+  if(!route) return <Custom404 />
 
-  if (!name || !name.length) return <Custom404 />
-  let objectName = name[0]
-  const pages = (nextPages as any)[objectName]
-  if (!pages) return <Custom404 />
-
-  var page;
-  
-  if(name.length > 1) {
-    objectName = name[1]
-    page = pages['view']
-  } else {
-    page = pages['list']
-  }
-
-  if (!page) return <Custom404 />
-  return React.createElement(page.component, {...props, id: objectName})
+  const page = nextPages[route]
+  return React.createElement(page.component, {...props, id: 'lol'})
 }
 
 export const getServerSideProps = SSR(async (context: NextPageContext) => {
-  const objectName = context.query.name ? context.query.name[0] : ''
-  const getNextPage = (nextPages as any)[objectName]
-  if(!getNextPage) { //has no exposed pages
+  const route = getRoute(context.query.name)
+  if(!route) { //has no exposed pages
     return withSession(context)
   }
 
-  if(context.query.name && context.query.name.length > 1) {
-    console.log('request: ', '/api/v1/'+objectName+'/'+context.query.name[1])
-    return withSession(context, undefined, {
-      initialElement: await API.get('/api/v1/'+objectName+'/'+context.query.name[1])
-    })
+  const page = nextPages[route]
+  if(page.getServerSideProps) {
+    return await page.getServerSideProps(context)
   }
 
-  console.log('request: ', '/api/v1/'+objectName)
-  return withSession(context, undefined, {
-    initialElements: await API.get('/api/v1/'+objectName)
-  })
+  return withSession(context)
 })
