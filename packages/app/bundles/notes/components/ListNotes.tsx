@@ -1,18 +1,18 @@
 import { DefaultLayout } from '../../../layout/DefaultLayout'
 import { XStack, YStack, Button } from 'tamagui'
-import { withSession, AlertDialog, API, Page, BlockTitle, ContainerLarge, usePendingEffect } from 'protolib'
+import { AlertDialog, API, Page, BlockTitle, ContainerLarge, usePendingEffect } from 'protolib'
 import { ObjectListView } from 'protolib/base/components'
-import { NotePreview } from '../components/NotePreview'
+import { NotePreview } from './NotePreview'
 import { Plus } from '@tamagui/lucide-icons'
 import { useState } from 'react'
 import { NoteAdd } from '../components/NoteAdd'
-import {NextPageContext} from 'next'
 
-export function ListNotes({ initialElements }) {
-  const [elements, setElements] = useState(initialElements)
-  const [open, setOpen] = useState(false)
-  usePendingEffect((s) => API.get('/api/v1/notes', s), setElements, initialElements)
-  return <Page>
+export const ListNotes = ({initialElements}) => {
+    const [elements, setElements] = useState(initialElements)
+    const [open, setOpen] = useState(false)
+    usePendingEffect((s) => API.get('/api/v1/notes', s), setElements, initialElements)
+
+    return <Page>
 
     <AlertDialog
       acceptCaption="Add"
@@ -49,10 +49,4 @@ export function ListNotes({ initialElements }) {
         {/* <YStack pe="none" zi={0} fullscreen className="bg-dot-grid mask-gradient-down" /> */}
     </DefaultLayout>
   </Page>
-}
-
-export const getServerSideProps = async (context: NextPageContext) => {
-  return withSession(context, undefined, {
-    initialElements: await API.get('/api/v1/notes')
-  })
 }

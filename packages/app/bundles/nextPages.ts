@@ -1,4 +1,4 @@
-import notesPages from './notes/pages'
+import notesPages from './notes/nextPages'
 
 export default {
     ...notesPages
