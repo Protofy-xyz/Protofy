@@ -6,6 +6,7 @@ import {
   YStack,
 } from 'tamagui'
 import React from 'react'
+import { useTint } from '@tamagui/logo'
 
 
 export const DataTable = React.forwardRef(({
@@ -24,6 +25,7 @@ export const DataTable = React.forwardRef(({
   'aria-labelledby'?: string
 }, ref:any) => {
   const hasAriaLabel = !!(ariaLabel || ariaLabelledBy)  
+  const {tint} = useTint()
   return (
       <YStack
         ref={ref}
@@ -59,7 +61,11 @@ export const DataTable = React.forwardRef(({
               px="$4"
               jc="space-around"
               $sm={{ flexDirection: 'column' }}
-              bc={x%2?"$backgroundPress":"$background"}
+              bc={x%2?"$background":"$background"}
+              cursor='pointer'
+              borderColor={'$borderColor'}
+              borderBottomWidth={x === 0?1:0}
+              hoverStyle={x === 0? {} :{bc:'$'+tint+'3'}}
             >
               {items.map((item, i) => (
                 <H4

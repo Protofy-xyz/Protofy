@@ -1,6 +1,6 @@
 import { YStack, XStack } from 'tamagui'
 import { getPendingResult, API, PanelMenuItem, AlertDialog, Link} from 'protolib'
-import { Box, ChevronDown, Database, Folder, Plus, Workflow } from '@tamagui/lucide-icons'
+import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users} from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -11,7 +11,8 @@ const iconTable = {
     database: <Database color="$color11" strokeWidth={1.5} />,
     model: <Box color="$color11" strokeWidth={1.5} />,
     api: <Workflow color="$color11" strokeWidth={1.5} />,
-    create: <Plus color="$color11" strokeWidth={1.5} />
+    create: <Plus color="$color11" strokeWidth={1.5} />,
+    users: <Users color="$color11" strokeWidth={1.5} />
 }
 const getIcon = (icon) => {
     if (!iconTable[icon]) {
@@ -76,7 +77,6 @@ const Subtabs = ({ subtabs }: any) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} />
                 return <Link href={subtab.href}>
                     <PanelMenuItem
-                        mb={'$4'}
                         selected={router.asPath.startsWith(subtab.href.replace(/\/$/, ''))}
                         icon={getIcon(subtab.icon)}
                         text={subtab.name}
@@ -94,7 +94,7 @@ const Tabs = ({ tabs }: any) => {
                     return <Subtabs subtabs={[tabs[tab]]} />
                 }
                 return (
-                    <Accordion br={"$6"} overflow="hidden" type="multiple" mb={'$4'} key={index}>
+                    <Accordion br={"$6"} overflow="hidden" type="multiple" key={index}>
                         <Accordion.Item value={"a" + index}>
                             <Accordion.Trigger
                                 backgroundColor={"$backgroundTransparent"}
@@ -106,7 +106,7 @@ const Tabs = ({ tabs }: any) => {
                                         {/* <Stack mr={"$3"}>
                                             <Database color="$color11" strokeWidth={1.5} />
                                         </Stack> */}
-                                        <SizableText f={1} size={"$5"} fontWeight={800}>{tab}</SizableText>
+                                        <SizableText f={1} size={"$5"}>{tab}</SizableText>
                                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                                             <ChevronDown size="$1" />
                                         </Square>
@@ -126,7 +126,7 @@ const Tabs = ({ tabs }: any) => {
 
 export const PanelMenu = () => {
     const [workspace] = useAtom(workspaceAtom)
-    return (<YStack mx={"$4"} pt="$10">
+    return (<YStack mx={"$4"} pt="$6">
         <Tabs tabs={workspace.data?.menu} />
     </YStack>)
 }
