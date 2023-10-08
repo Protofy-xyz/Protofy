@@ -1,10 +1,11 @@
-import { YStack, XStack, Stack, Paragraph, Text, Button, Input, Theme } from 'tamagui'
+import { YStack, XStack, Stack, Paragraph, Text, Button, Input, Theme, Label } from 'tamagui'
 import { AlertDialog, DataTable, useAtom, API, createApiAtom, DataCard, Search, Popover, Tinted } from 'protolib'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Plus } from '@tamagui/lucide-icons'
 import moment from 'moment';
+import CreateUser from './CreateUser'
 
 export default function ListUsers({ initialUsers }) {
     const [createOpen, setCreateOpen] = useState(false)
@@ -35,11 +36,11 @@ export default function ListUsers({ initialUsers }) {
                 onAccept={async (setOpen) => {
                     setCreateOpen(false)
                 }}
-                title={'Create new user'}
+                title={<Text><Tinted><Text color="$color9">Create</Text></Tinted><Text color="$color11"> account</Text></Text>}
                 description={""}
             >
                 <YStack f={1} jc="center" ai="center">
-                    Pending
+                    <CreateUser />
                 </YStack>
             </AlertDialog>
             <AlertDialog
