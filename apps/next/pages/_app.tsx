@@ -8,6 +8,7 @@ import 'protoflow/src/styles.css'
 import 'protoflow/src/diagram/menu.module.css'
 import 'visualui/src/styles/Editor.module.css'
 import 'react-sliding-side-panel/lib/index.css'
+import 'react-data-table-component-extensions/dist/index.css';
 import '../chonky.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'

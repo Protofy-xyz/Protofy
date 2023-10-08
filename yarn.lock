@@ -8553,8 +8553,11 @@ __metadata:
     handlebars: 4.7.8
     moment: 2.29.4
     mrmime: 1.0.1
+    react-data-table-component: ^7.5.4
+    react-data-table-component-extensions: ^1.6.0
     react-native-reanimated: ^3.5.4
     react-native-safe-area-context: ^4.5.2
+    react-table: ^7.8.0
     solito: ^3.0.0
     zod: ^3.22.2
   languageName: unknown
@@ -21391,6 +21394,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-data-table-component-extensions@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "react-data-table-component-extensions@npm:1.6.0"
+  dependencies:
+    react: ^16.9.0
+  checksum: 6fe81ee69a38492f186a04d538815a36f6b291489e5b81191191ef16aec602827097a98ceaba791a91c96f9e347101d83da47975c60f2f27ed7fe6f030de8b0e
+  languageName: node
+  linkType: hard
+
+"react-data-table-component@npm:^7.5.4":
+  version: 7.5.4
+  resolution: "react-data-table-component@npm:7.5.4"
+  dependencies:
+    deepmerge: ^4.2.2
+  peerDependencies:
+    react: ">= 16.8.3"
+    styled-components: ">= 4"
+  checksum: 3f11466a2c0428ac948fc29a5a2bd18c605dca7e330d43be6b8fd81411db9ed2d2b25858178826e5b1061005037b3f5e7ff8642806e341d175b589dcbbc0a9aa
+  languageName: node
+  linkType: hard
+
 "react-devtools-core@npm:^4.26.1":
   version: 4.27.6
   resolution: "react-devtools-core@npm:4.27.6"
@@ -21916,6 +21940,15 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 7ee8ef3aab74c7ae1d70ff34a27643d11ba1a8d62d072c767827d9ff9a520905223e567002e0bf6c772929d8ea1c781a3ba0cc4a563e92b1e3dc2eaa817ecbe8
+  languageName: node
+  linkType: hard
+
+"react-table@npm:^7.8.0":
+  version: 7.8.0
+  resolution: "react-table@npm:7.8.0"
+  peerDependencies:
+    react: ^16.8.3 || ^17.0.0-0 || ^18.0.0
+  checksum: 44ca0fb848c6869cd793cede8dc33072b38ebb8f8d2833565afe7cf3eac5d1fa455ac5fb9d06838b16fab0523d5d03e3e82f7645032f71245096e67b892313b9
   languageName: node
   linkType: hard
 

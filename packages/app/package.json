@@ -24,8 +24,11 @@
     "handlebars": "4.7.8",
     "moment": "2.29.4",
     "mrmime": "1.0.1",
+    "react-data-table-component": "^7.5.4",
+    "react-data-table-component-extensions": "^1.6.0",
     "react-native-reanimated": "^3.5.4",
     "react-native-safe-area-context": "^4.5.2",
+    "react-table": "^7.8.0",
     "solito": "^3.0.0",
     "zod": "^3.22.2"
   },
