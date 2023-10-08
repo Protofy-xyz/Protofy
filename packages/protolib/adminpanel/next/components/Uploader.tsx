@@ -1,8 +1,8 @@
 import Dropzone from 'react-dropzone-uploader'
 
-export const Uploader = () => {
+export const Uploader = ({path}) => {
     // specify upload params and url for your files
-    const getUploadParams = ({ meta }) => { return { url: '/upload' } }
+    const getUploadParams = ({ meta }) => { return { url: '/adminapi/v1/files/'+path } }
     
     // called every time a file's `status` changes
     const handleChangeStatus = ({ meta, file }, status) => { console.log(status, meta, file) }

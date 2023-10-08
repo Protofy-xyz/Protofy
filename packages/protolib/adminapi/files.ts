@@ -2,9 +2,24 @@
 import { promises as fs } from 'fs';
 import { constants } from 'fs';
 import path from 'path';
-import {app} from 'protolib/api';
+import { app } from 'protolib/api';
+import multer from 'multer';
+import fsExtra from 'fs-extra';
 
 const PROJECT_WORKSPACE_DIR = "../../"; // Define where the workspace root dir is
+
+const storage = multer.diskStorage({
+    destination: async (req, file, cb) => {
+        const destPath = path.join(process.cwd()+ '/' +PROJECT_WORKSPACE_DIR, req.params.path);
+        await fsExtra.ensureDir(destPath);
+        cb(null, destPath);
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
 
 async function fileExists(filePath) {
     try {
@@ -21,8 +36,8 @@ const handleFilesRequest = async (req, res) => {
 
     const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
 
-    if(! await fileExists(filepath)) {
-        res.status(404).send('No such file or directory: '+filepath)
+    if (! await fileExists(filepath)) {
+        res.status(404).send('No such file or directory: ' + filepath)
         return
     }
     if (((await fs.stat(filepath)).isDirectory())) {
@@ -57,10 +72,10 @@ const handleFilesRequest = async (req, res) => {
             console.log('send file: ', filepath, path.resolve(filepath))
             res.status(200).sendFile(path.resolve(filepath), { dotfiles: 'allow' }, (err) => {
                 if (err) {
-                  console.error('Error al enviar el archivo:', err);
-                  res.status(err.status || 500).send('Error al enviar el archivo');
+                    console.error('Error al enviar el archivo:', err);
+                    res.status(err.status || 500).send('Error al enviar el archivo');
                 }
-              });
+            });
         } catch (e) {
             console.error('Error reading file: ', e)
             res.status(500).send(`Failed to serve the file at path '${name}'`);
@@ -75,32 +90,13 @@ const handleFilesRequest = async (req, res) => {
 const handleFilesWriteRequest = async (req, res) => {
     const name = req.params.path || '';
     const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
-
-    if (req.query.dir === 'true') { // Check if the query contains ?dir=true
-        try {
-            await fs.mkdir(filepath, { recursive: true }); // Create the directory
-            res.status(200).send(`Directory '${name}' created successfully.`);
-        } catch (e) {
-            console.error('Error creating directory: ', e);
-            res.status(501).send(`Error creating directory: '${name}'`);
-        }
-    } else {
-        // write the file
-        try {
-            const content = req.body.content; // Extract the content from the post request
-            await fs.writeFile(filepath, content); // Write content to file
-            res.status(200).send(`File at path '${name}' written successfully.`);
-        } catch (e) {
-            console.error('Error writing file: ', e);
-            res.status(500).send(`Failed to write the file at path '${name}'`);
-        }
-    }
+    res.status(200).send({result: "uploaded"});
 };
 
 // Route to write files or create directories directly in /adminapi/v1/files
-app.post('/adminapi/v1/files', handleFilesWriteRequest);
+app.post('/adminapi/v1/files', upload.single('file'), handleFilesWriteRequest);
 // Route to write files or create directories in /adminapi/v1/files/*
-app.post('/adminapi/v1/files/:path(*)', handleFilesWriteRequest);
+app.post('/adminapi/v1/files/:path(*)', upload.single('file'), handleFilesWriteRequest);
 // Route for /adminapi/v1/files
 app.get('/adminapi/v1/files', handleFilesRequest);
 // Route for /adminapi/v1/files/*
