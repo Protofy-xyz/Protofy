@@ -68,7 +68,7 @@ export const DataTable = React.forwardRef(({
               borderColor={'$borderColor'}
               borderBottomWidth={x === 0?1:0}
               hoverStyle={x === 0? {} :{bc:'$'+tint+'3'}}
-              onPress={() => onRowPress(items)}
+              onPress={() => x !== 0? onRowPress(items):null}
             >
               {items.map((item, i) => (
                 <H4
