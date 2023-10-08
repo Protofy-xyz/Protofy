@@ -10,6 +10,7 @@ import { useTint } from '@tamagui/logo'
 
 
 export const DataTable = React.forwardRef(({
+  onRowPress=()=>{},
   dataStyles=[],
   firstRowIsHeader,
   title = '',
@@ -17,6 +18,7 @@ export const DataTable = React.forwardRef(({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }: {
+  onRowPress?:any,
   dataStyles?: any[],
   firstRowIsHeader?: boolean,
   title?: string
@@ -66,6 +68,7 @@ export const DataTable = React.forwardRef(({
               borderColor={'$borderColor'}
               borderBottomWidth={x === 0?1:0}
               hoverStyle={x === 0? {} :{bc:'$'+tint+'3'}}
+              onPress={() => onRowPress(items)}
             >
               {items.map((item, i) => (
                 <H4
