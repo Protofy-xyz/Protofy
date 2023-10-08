@@ -43,6 +43,7 @@ export { default as AppBar } from "./components/AppBar";
 export * from "./components/AppBar";
 export * from "./components/Head3";
 export * from "./components/DataTable";
+export * from "./components/DataTable2";
 export * from "./components/unwrapText";
 export { default as HoveredGroup } from "./components/HoveredGroup";
 export * from "./components/Head2";

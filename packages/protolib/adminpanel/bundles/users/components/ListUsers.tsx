@@ -1,8 +1,8 @@
 import { YStack, XStack, Stack, Paragraph, Text, Button, Input, Theme, Label } from 'tamagui'
-import { AlertDialog, DataTable, useAtom, API, createApiAtom, DataCard, Search, Popover, Tinted } from 'protolib'
+import { AlertDialog, DataTable2, useAtom, API, createApiAtom, DataCard, Search, Popover, Tinted } from 'protolib'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Plus } from '@tamagui/lucide-icons'
 import moment from 'moment';
 import CreateUser from './CreateUser'
@@ -13,19 +13,25 @@ export default function ListUsers({ initialUsers }) {
     const router = useRouter()
     const _initialUsers = initialUsers.data ?? []
     const format = 'YYYY-MM-DD HH:mm:ss'
-    const [users, setUsers] = useState([
-        ["username", "type", "from", "created", "last login"]
-        , ..._initialUsers.map(u => [u.username, u.type, u.from, moment(u.createdAt).format(format), u.lastLogin ? moment(u.lastLogin).format(format) : '-'])]);
+    const [users, setUsers] = useState(_initialUsers);
 
     const [currentUsers, setCurrentUsers] = useState(users)
     const [currentUser, setCurrentUser] = useState<any>()
     const onSearch = async (text) => {
-        setCurrentUsers(users.filter((user, i) => i === 0 || user[0].includes(text) || user[1].includes(text)))
+        setCurrentUsers(users.filter((user, i) => i === 0 || user.username.includes(text) || user.type.includes(text)))
     }
 
     const onCancelSearch = async () => {
         setCurrentUsers(users)
     }
+
+    const columns = [
+                { name: "email", selector: "username", sortable: true},
+                { name: "type", selector: "type", sortable: true},
+                { name: "from", selector: "from", sortable: true}
+                // { Header: "from", accessor: "user.from"},
+                // { Header: "created", accessor: "user.createdAt"}
+            ]
 
     return (
         <YStack f={1}>
@@ -60,28 +66,31 @@ export default function ListUsers({ initialUsers }) {
             <XStack pt="$3" px="$4">
                 <YStack left={-12} top={9} f={1}>
                     <Paragraph>
-                        <Text fontSize="$5">Users</Text>
-                        <Text ml={"$2"} o={0.5}>[total: {currentUsers.length - 1}]</Text>
+                        <Text fontSize="$6" color="$color11">Users [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentUsers.length}</Text></Tinted>]</Text>
                     </Paragraph>
                 </YStack>
 
                 <XStack position={"absolute"} right={0}>
                     <Search onCancel={onCancelSearch} onSearch={onSearch} />
-                    <XStack top={-3} o={0.5}>
-                        <Button onPress={() => setCreateOpen(true)} chromeless={true}>
-                            <Plus />
-                        </Button>
+                    <XStack top={-3}>
+                        <Tinted>
+                            <Button hoverStyle={{o:1}} o={0.7} circular onPress={() => setCreateOpen(true)} chromeless={true}>
+                                <Plus />
+                            </Button>
+                        </Tinted>
                     </XStack>
 
                 </XStack>
             </XStack>
 
             <XStack pt="$1" flexWrap='wrap'>
-                <DataTable
-                    onRowPress={(element) => {setCurrentUser(element);setEditOpen(true)}}
-                    dataStyles={[{ whiteSpace: 'nowrap' }]}
-                    firstRowIsHeader={true}
+                <DataTable2
+                    //onRowPress={(element) => {setCurrentUser(element);setEditOpen(true)}}
+                    //dataStyles={[{ whiteSpace: 'nowrap' }]}
+                    //firstRowIsHeader={true}
+                    columns={columns}
                     rows={currentUsers}
+                    // rows={currentUsers}
                 />
             </XStack>
         </YStack>

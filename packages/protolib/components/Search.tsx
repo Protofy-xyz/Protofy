@@ -39,7 +39,7 @@ export const Search = forwardRef(({onCancel=() => {},onSearch=() => {}, placehol
             onBlur={() => !content?setOpened(false):false}
             onChangeText={(text) => {setContent(text); onSearch(text)}}
         />:null}
-        <XStack position={"absolute"} right={15} top={6} cursor="pointer" opacity={0.5} hoverStyle={{ opacity: 1 }}>
+        <XStack position={"absolute"} right={15} top={6} cursor="pointer" opacity={0.7} hoverStyle={{ opacity: 1 }}>
             <IconSearch color="var(--color)" />
         </XStack>
     </XStack>
