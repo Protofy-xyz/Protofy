@@ -30,7 +30,7 @@ export default function ListUsers({initialUsers}) {
                 <YStack left={-12} top={9} f={1}>
                     <Paragraph>
                         <Text fontSize="$5">Users</Text>
-                        <Text ml={"$2"} o={0.5}>[total: 0]</Text>
+                        <Text ml={"$2"} o={0.5}>[total: {currentUsers.length-1}]</Text>
                     </Paragraph>
                 </YStack>
 
