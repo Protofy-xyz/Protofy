@@ -43,6 +43,8 @@ app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
         await getDB(dbPath).put(request.username, JSON.stringify({
             ...newUserData, 
             password: await hash(newUserData.password),
+            createdAt: moment().toISOString(),
+            from: 'register',
             type: 'user'
         }))
         res.send(genNewSession({id:request.username, type: "user"}))
