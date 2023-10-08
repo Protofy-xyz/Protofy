@@ -31,15 +31,15 @@ export const Search = forwardRef(({onCancel=() => {},onSearch=() => {}, placehol
             disabled={!opened}
             outlineStyle="none"
             focusStyle={{borderWidth:0}}
+            height={'$3'}
             //@ts-ignore
             ref={input}
             width={opened?"100%":closedWidth} 
             placeholder={opened?placeholder:''} 
             onBlur={() => !content?setOpened(false):false}
-            onChangeText={(text) => setContent(text)}
-            onSubmitEditing={() => onSearch(content)}
+            onChangeText={(text) => {setContent(text); onSearch(text)}}
         />:null}
-        <XStack position={"absolute"} right={15} top={8} cursor="pointer" opacity={0.5} hoverStyle={{ opacity: 1 }}>
+        <XStack position={"absolute"} right={15} top={6} cursor="pointer" opacity={0.5} hoverStyle={{ opacity: 1 }}>
             <IconSearch color="var(--color)" />
         </XStack>
     </XStack>

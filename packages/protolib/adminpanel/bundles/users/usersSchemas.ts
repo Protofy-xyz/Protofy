@@ -1,14 +1,12 @@
 import { z } from "zod";
-import {BaseSchema} from '../../../base'
 
-export const BaseUserSchema = z.object({
+export const UserSchema = z.object({
     username: z.string(),
     password: z.string(),
+    createdAt: z.string(),
+    lastLogin: z.string().optional(),
+    from: z.string(),
     type: z.string()
 }) 
-export const UserSchema = z.object({
-    ...BaseSchema.shape,
-    ...BaseUserSchema.shape
-});
 
 export type UserType = z.infer<typeof UserSchema>;

@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import ListUsers from '../components/ListUsers'
 import { useSession } from '../../../../lib/Session'
 
-export default function ListUsersPage({workspace, data, pageSession}:any) {
+export default function ListUsersPage({workspace, initialUsers, pageSession}:any) {
   useSession(pageSession)
   return (
     <>
@@ -15,7 +15,7 @@ export default function ListUsersPage({workspace, data, pageSession}:any) {
         <title>Admin &gt; Users</title>
       </Head>
       <AdminPanel workspace={workspace}>
-        <ListUsers />
+        <ListUsers initialUsers={initialUsers}/>
       </AdminPanel>
     </>
   )
@@ -23,6 +23,7 @@ export default function ListUsersPage({workspace, data, pageSession}:any) {
 
 export const getServerSideProps = SSR(async (context:NextPageContext) => {
     return withSession(context, ['admin'], {
-      workspace: await API.get('/adminapi/v1/workspaces')
+      workspace: await API.get('/adminapi/v1/workspaces'),
+      initialUsers: await API.get('/adminapi/v1/users')
     })
 })

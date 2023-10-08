@@ -2,6 +2,7 @@
 import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'app/schema';
 import {getInitialData} from 'app/initialData'
 import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app} from 'protolib/api'
+import moment from 'moment';
 
 console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 
@@ -21,6 +22,8 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
     try {
         const storedUser = JSON.parse(await getDB(dbPath).get(request.username))
         if(await checkPassword(request.password, storedUser.password)) {
+            //update lastLogin
+            await getDB(dbPath).put(storedUser.username, JSON.stringify({...storedUser, lastLogin: moment().toISOString()}))
             res.send(genNewSession({id:storedUser.username, type: storedUser.type}))
             return
         }

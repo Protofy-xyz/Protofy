@@ -9,11 +9,15 @@ import React from 'react'
 
 
 export const DataTable = React.forwardRef(({
+  dataStyles=[],
+  firstRowIsHeader,
   title = '',
   rows,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }: {
+  dataStyles?: any[],
+  firstRowIsHeader?: boolean,
   title?: string
   rows: string[][]
   'aria-label'?: string
@@ -43,9 +47,9 @@ export const DataTable = React.forwardRef(({
           </XStack>
         )}
 
-        {rows.map((items, i) => (
+        {rows.map((items, x) => (
           //@ts-ignore
-          <ListItem key={i} p={0}>
+          <ListItem key={x} p={0}>
             <XStack
               //@ts-ignore
               f={1}
@@ -55,7 +59,7 @@ export const DataTable = React.forwardRef(({
               px="$4"
               jc="space-around"
               $sm={{ flexDirection: 'column' }}
-              bc={i%2?"$backgroundStrong":"$background"}
+              bc={x%2?"$backgroundPress":"$background"}
             >
               {items.map((item, i) => (
                 <H4
@@ -73,6 +77,8 @@ export const DataTable = React.forwardRef(({
                   size="$4"
                   //@ts-ignore
                   f={1}
+                  fontWeight={x==0 && firstRowIsHeader?"bold": "normal"}
+                  {...(dataStyles && dataStyles[i] ? dataStyles[i]:{})}
                 >
                   {item}
                 </H4>
