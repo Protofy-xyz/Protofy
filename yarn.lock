@@ -8213,6 +8213,7 @@ __metadata:
     level: 8.0.0
     level-party: ^5.1.1
     mime-types: ^2.1.35
+    moment: 2.29.4
     nodemon: 3.0.1
     pm2: ^5.3.0
     ts-node: 10.9.1
@@ -8519,6 +8520,7 @@ __metadata:
     level: 8.0.0
     level-party: ^5.1.1
     mime-types: ^2.1.35
+    moment: 2.29.4
     nodemon: 3.0.1
     pm2: ^5.3.0
     ts-node: 10.9.1
@@ -8549,6 +8551,7 @@ __metadata:
     expo-constants: ^14.2.1
     expo-linking: ^4.0.1
     handlebars: 4.7.8
+    moment: 2.29.4
     mrmime: 1.0.1
     react-native-reanimated: ^3.5.4
     react-native-safe-area-context: ^4.5.2
@@ -18854,6 +18857,13 @@ __metadata:
   version: 1.0.2
   resolution: "module-error@npm:1.0.2"
   checksum: 5d653e35bd55b3e95f8aee2cdac108082ea892e71b8f651be92cde43e4ee86abee4fa8bd7fc3fe5e68b63926d42f63c54cd17b87a560c31f18739295575a3962
+  languageName: node
+  linkType: hard
+
+"moment@npm:2.29.4":
+  version: 2.29.4
+  resolution: "moment@npm:2.29.4"
+  checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
   languageName: node
   linkType: hard
 

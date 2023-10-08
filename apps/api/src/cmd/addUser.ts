@@ -1,6 +1,7 @@
 
 import { existsKey, getDB, hash } from 'protolib/api';
 import { CmdRegisterSchema} from 'protolib/schema';
+import moment from 'moment';
 
 if (process.argv.length !== 5) {
     console.error('Usage: yarn add-user email password type',process.argv.length)
@@ -14,6 +15,7 @@ const dbPath = '../../data/databases/auth'
 
 const addUser = async () => {
     console.log('Adding user: ', username, 'type: ', type)
+    const currentDateISO = moment().toISOString();
     try {
         CmdRegisterSchema.parse({username, password, type})
     } catch(e:any) {
@@ -27,6 +29,8 @@ const addUser = async () => {
         await getDB(dbPath).put(username, JSON.stringify({
             username: username, 
             password: await hash(password),
+            createdAt: currentDateISO,
+            from: 'cmd',
             type: type
         }))
         console.log("Done!")
