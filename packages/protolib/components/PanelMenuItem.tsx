@@ -15,9 +15,8 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
   return (
     <XStack
       ref={ref}
-      paddingHorizontal={"$5"}
+      paddingHorizontal={"$4"}
       paddingVertical={"$3"}
-      paddingTop={"$4"}
       hoverStyle={{
         backgroundColor: "$backgroundHover"
       }}

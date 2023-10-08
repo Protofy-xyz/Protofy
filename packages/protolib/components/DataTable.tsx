@@ -61,7 +61,7 @@ export const DataTable = React.forwardRef(({
               px="$4"
               jc="space-around"
               $sm={{ flexDirection: 'column' }}
-              bc={x%2?"$background":"$background"}
+              bc={x%2?"$backgroundHover":"$background"}
               cursor='pointer'
               borderColor={'$borderColor'}
               borderBottomWidth={x === 0?1:0}

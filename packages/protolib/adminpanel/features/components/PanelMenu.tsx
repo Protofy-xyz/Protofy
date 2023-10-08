@@ -1,5 +1,5 @@
 import { YStack, XStack } from 'tamagui'
-import { getPendingResult, API, PanelMenuItem, AlertDialog, Link} from 'protolib'
+import { getPendingResult, API, PanelMenuItem, AlertDialog, Link, Tinted} from 'protolib'
 import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users} from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
@@ -7,16 +7,19 @@ import { useState } from 'react';
 import {useAtom, useSetAtom} from 'jotai'
 import { workspaceAtom } from '..';
 
+const opacity = 0.7
+const strokeWidth = 0.6
+const color = '$color8'
 const iconTable = {
-    database: <Database color="$color11" strokeWidth={1.5} />,
-    model: <Box color="$color11" strokeWidth={1.5} />,
-    api: <Workflow color="$color11" strokeWidth={1.5} />,
-    create: <Plus color="$color11" strokeWidth={1.5} />,
-    users: <Users color="$color11" strokeWidth={1.5} />
+    database: <Database color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    model: <Box color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    api: <Workflow color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    create: <Plus color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    users: <Users color={color} opacity={opacity} strokeWidth={strokeWidth} />
 }
 const getIcon = (icon) => {
     if (!iconTable[icon]) {
-        return <Folder color="$color11" strokeWidth={1.5} />
+        return <Folder color={color} opacity={opacity} strokeWidth={strokeWidth} />
     } else {
         return iconTable[icon]
     }
@@ -76,11 +79,14 @@ const Subtabs = ({ subtabs }: any) => {
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} />
                 return <Link href={subtab.href}>
-                    <PanelMenuItem
-                        selected={router.asPath.startsWith(subtab.href.replace(/\/$/, ''))}
-                        icon={getIcon(subtab.icon)}
-                        text={subtab.name}
-                    />
+                    <Tinted>
+                        <PanelMenuItem
+                            selected={router.asPath.startsWith(subtab.href.replace(/\/$/, ''))}
+                            icon={getIcon(subtab.icon)}
+                            text={subtab.name}
+                        />
+                    </Tinted>
+
                 </Link>
             })}
         </>)
@@ -113,7 +119,7 @@ const Tabs = ({ tabs }: any) => {
                                     </XStack>
                                 )}
                             </Accordion.Trigger>
-                            <Accordion.Content backgroundColor={"$backgroundTransparent"} pt={'$4'}>
+                            <Accordion.Content backgroundColor={"$backgroundTransparent"} pt={'$0'}>
                                 <Subtabs subtabs={tabs[tab]} />
                             </Accordion.Content>
                         </Accordion.Item>
