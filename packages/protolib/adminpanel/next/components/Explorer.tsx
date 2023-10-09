@@ -91,7 +91,7 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
                             setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] })
                         }}
                         acceptTint="red"
-                        title={<Text><Text color="$red9">Delete</Text>{(selectedFiles.length > 1?' '+selectedFiles.length+' files?': '?')}</Text>}
+                        title={<Text color="$red9">Delete{(selectedFiles.length > 1?' '+selectedFiles.length+' files?': '?')}</Text>}
                         description={"The following files will be deleted:"}
                     >
                         <YStack f={1}>
