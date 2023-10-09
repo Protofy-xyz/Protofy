@@ -1,12 +1,21 @@
-import { Stack, Unspaced, XStack, YStack } from 'tamagui'
-import { Button, Dialog, Spacer } from '@my/ui'
-import { forwardRef, useState } from 'react'
-import { Tinted } from 'protolib'
+import { Paragraph, Spinner, Stack, Unspaced, XStack, YStack } from 'tamagui'
+import { Button, Dialog, Spacer, getErrorMessage } from '@my/ui'
+import { forwardRef, useEffect, useState } from 'react'
+import { Tinted, Notice } from 'protolib'
 import { X, UserPlus, Check, Mail} from '@tamagui/lucide-icons'
 
 export const AlertDialog = forwardRef(({ onAccept = () => { }, onCancel = () => { }, title, trigger, description, children, cancelCaption = 'Cancel', acceptCaption = 'Accept', open, setOpen, ...props }: any, ref: any) => {
     const [_open, _setOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<any>()
     const seter = setOpen !== undefined ? setOpen : _setOpen
+    const status = setOpen !== undefined ? open : _open
+
+    useEffect(() => {
+        if(!status) {
+            setError(undefined)
+        }
+    }, [status])
     return (<Dialog ref={ref} open={open !== undefined ? open : _open} onOpenChange={setOpen !== undefined ? setOpen : _setOpen}>
         <Dialog.Trigger>
             {trigger}
@@ -33,6 +42,12 @@ export const AlertDialog = forwardRef(({ onAccept = () => { }, onCancel = () => 
                             {description}
                         </Dialog.Description>
 
+                        {error && (
+                        <Notice>
+                            <Paragraph>{getErrorMessage(error.error)}</Paragraph>
+                        </Notice>
+                        )}
+
                         <XStack width={'100%'}>
                             {children}
                         </XStack>
@@ -40,8 +55,19 @@ export const AlertDialog = forwardRef(({ onAccept = () => { }, onCancel = () => 
                         <Spacer flex={1} height="$4" />
                         <YStack p="$2" pt="$0" width="100%" f={1} alignSelf="center">
                             <Tinted>
-                                <Button f={1} onPress={() => onAccept(setOpen !== undefined ? setOpen : _setOpen)} aria-label="Close">
-                                    {acceptCaption}
+                                <Button f={1} onPress={async () => {
+                                    setLoading(true)
+                                    try {
+                                        await onAccept(setOpen !== undefined ? setOpen : _setOpen)
+                                    } catch(e) {
+
+                                        setError(e)
+                                        console.log('e: ', e)
+                                    }
+                                    setLoading(false)
+                                    seter(false)
+                                }} aria-label="Close">
+                                    {loading?<Spinner /> : acceptCaption}
                                 </Button>
                             </Tinted>
                         </YStack>

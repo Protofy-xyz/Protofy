@@ -24,6 +24,6 @@ export default function ListUsersPage({workspace, initialUsers, pageSession}:any
 export const getServerSideProps = SSR(async (context:NextPageContext) => {
     return withSession(context, ['admin'], {
       workspace: await API.get('/adminapi/v1/workspaces'),
-      initialUsers: await API.get('/adminapi/v1/users')
+      initialUsers: await API.get('/adminapi/v1/accounts')
     })
 })

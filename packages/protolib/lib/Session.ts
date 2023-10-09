@@ -69,7 +69,7 @@ export const withSession = (context:any, validTypes?:[string]|[], props?:any) =>
     }
 }
 
-export const useSession = (pageSession) => {
+export const useSession = (pageSession?) => {
     initSession(pageSession)
     return useAtom(Session)
 }

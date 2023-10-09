@@ -12,7 +12,7 @@ const DataTableExtensions = dynamic<any>(() =>
     { ssr: false }
 );
 
-export function DataTable2({ columns, rows}) {
+export function DataTable2({ columns, rows, onRowPress}) {
   const tableData = {
     columns,
     data: rows
@@ -27,6 +27,7 @@ export function DataTable2({ columns, rows}) {
     data={rows}
     defaultSortField="created"
     defaultSortAsc={false}
+    onRowClicked={onRowPress}
     // sortIcon={<ArrowUpDown />}
     // pagination
   />
