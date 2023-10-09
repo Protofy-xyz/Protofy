@@ -59,23 +59,19 @@ export const AlertDialog = forwardRef(({ onAccept = () => { }, onCancel = () => 
                                     setLoading(true)
                                     try {
                                         await onAccept(setOpen !== undefined ? setOpen : _setOpen)
+                                        seter(false)
                                     } catch(e) {
-
                                         setError(e)
                                         console.log('e: ', e)
                                     }
                                     setLoading(false)
-                                    seter(false)
                                 }} aria-label="Close">
                                     {loading?<Spinner /> : acceptCaption}
                                 </Button>
                             </Tinted>
                         </YStack>
                     </YStack>
-
-
                 </YStack>
-
                 <Dialog.Close />
             </Dialog.Content>
         </Dialog.Portal>

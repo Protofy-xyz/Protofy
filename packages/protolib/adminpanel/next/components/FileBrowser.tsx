@@ -3,7 +3,7 @@ import { YStack } from '@tamagui/stacks';
 import { AlertDialog, Button, Dialog, XStack } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from '../../features/components/FilesWidget';
-import { useAtom, IconContainer } from 'protolib';
+import { useAtom, IconContainer, Tinted } from 'protolib';
 import { X } from '@tamagui/lucide-icons';
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
@@ -109,7 +109,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
     return (
         isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
-            <Explorer currentPath={currentPath} filesState={filesState} templateActions={templateActions} onOpen={onOpen} />
+            <Tinted><Explorer currentPath={currentPath} filesState={filesState} templateActions={templateActions} onOpen={onOpen} /></Tinted>
             <Dialog open={dialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
