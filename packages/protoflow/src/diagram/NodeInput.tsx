@@ -9,8 +9,8 @@ const NodeInput = React.forwardRef((props:any, ref) => {
       style={{
         fontSize: useTheme('nodeFontSize'),
         fontFamily: 'Jost-Regular', 
-        border:useTheme('inputBorder'),
-        color: useTheme("textColor"),
+        border: useTheme('inputBorder'),
+        color: props.readOnly ? useTheme('disableTextColor') : useTheme("textColor"),
         backgroundColor: useTheme("inputBackgroundColor"), 
         padding: '0.35ch', 
         paddingLeft: '1ch',
@@ -19,6 +19,7 @@ const NodeInput = React.forwardRef((props:any, ref) => {
         flex: 1,
         width: '100%',
         boxSizing: 'border-box',
+        cursor: props.readOnly ? 'grab' : 'text',
         ...props.style
       }}
     >

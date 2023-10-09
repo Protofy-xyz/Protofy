@@ -3,7 +3,7 @@ import { FlowStoreContext } from "../store/FlowsStore"
 
 type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "textColor" | "interactiveColor" | 'interactiveHoverColor' | 'inputBorder' | 'borderColor' 
 | 'borderWidth' | 'borderWidthSelected' | 'colorError' | 'handleBorderColor' | 'flowOutputColor' | 'dataOutputColor' | 'highlightInputBackgroundColor' | 'blockPort' | 'flowPort'
-| 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor'
+| 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor' | 'disableTextColor'
 
 const commonVars:any = {
     nodeBorderWidth: '2px',
@@ -20,6 +20,7 @@ const Theme = {
         inputBackgroundColor: "white",
         inputBorder: '1px solid #ccc',
         textColor: "black",
+        disableTextColor: "#ccc",
         interactiveColor: "#4fc2f7",
         interactiveHoverColor: 'rgba(79, 194, 247, 0.1)',
         borderColor: 'black',
@@ -43,6 +44,7 @@ const Theme = {
         inputBackgroundColor: "#404040",
         inputBorder: '0',
         textColor: "#e5e5e5",
+        disableTextColor: "grey",
         interactiveColor: "#4772b3",
         interactiveHoverColor: '#252525',
         borderColor: 'grey',
