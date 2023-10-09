@@ -1,16 +1,23 @@
 import Dropzone from 'react-dropzone-uploader'
 
-export const Uploader = () => {
+export const Uploader = ({path, onUpload, setShowUploadDialog}) => {
     // specify upload params and url for your files
-    const getUploadParams = ({ meta }) => { return { url: '/upload' } }
+    const getUploadParams = ({ meta }) => { return { url: '/adminapi/v1/files/'+path } }
     
     // called every time a file's `status` changes
-    const handleChangeStatus = ({ meta, file }, status) => { console.log(status, meta, file) }
+    const handleChangeStatus = ({ meta, file }, status) => { 
+      if (status=="done") {
+        console.log("CHANGE STATUS", status, meta, file) 
+        onUpload();
+      }
+      
+    }
     
     // receives array of files that are done uploading when submit button is clicked
     const handleSubmit = (files, allFiles) => {
       console.log(files.map(f => f.meta))
       allFiles.forEach(f => f.remove())
+      setShowUploadDialog(false)
     }
   
     return (
@@ -19,6 +26,7 @@ export const Uploader = () => {
         getUploadParams={getUploadParams}
         onChangeStatus={handleChangeStatus}
         onSubmit={handleSubmit}
+        submitButtonContent="Close"
       />
     )
   }

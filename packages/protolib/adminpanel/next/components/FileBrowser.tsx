@@ -1,17 +1,15 @@
 
 import { YStack } from '@tamagui/stacks';
-import { AlertDialog, Button, Dialog, XStack, useTheme } from '@my/ui';
+import { AlertDialog, Button, Dialog, XStack } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from '../../features/components/FilesWidget';
-import { useAtom, IconContainer, createApiAtom } from 'protolib';
+import { useAtom, IconContainer } from 'protolib';
 import { X } from '@tamagui/lucide-icons';
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { workspaceAtom } from '../../features'
 import { WorkspaceModel } from 'app/models';
-import { Uploader } from './Uploader';
-import Dropzone from 'react-dropzone'
 import { Explorer } from './Explorer';
 import {defineFileAction} from 'chonky';
 
@@ -26,10 +24,8 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const [openAlert, setOpenAlert] = useState(false)
     const [isModified, setIsModified] = useState(false)
     const [workspace] = useAtom(workspaceAtom)
-    const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
     useUpdateEffect(() => {
-        console.log('current Path: ', currentPath)
         //API.get('/adminapi/v1/files/'+currentPath, setFiles)
         router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath)
     }, [currentPath])
@@ -90,9 +86,6 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
                 })
             })
     }
-
-    console.log('tppppppl', templateActions)
-
 
     const isFull = router.query?.full
     const getWidget = () => <FileWidget

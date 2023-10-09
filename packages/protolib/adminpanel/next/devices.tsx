@@ -5,6 +5,7 @@ import { NextPageContext } from 'next'
 import { API, withSession, useSession } from 'protolib'
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import {TopicsProvider } from 'react-topics';
 
 const  DevicesAdmin = dynamic(() => import('../features/components/devices'), { ssr: false })
 
@@ -13,14 +14,14 @@ export default function DevicesPage({workspace, data, pageSession}:any) {
   useSession(pageSession)
   const { name } = router.query;
   return (
-    <>
+    <TopicsProvider>
       <Head>
         <title>Protofy - Admin Panel</title>
       </Head>
       <AdminPanel workspace={workspace}>
         <DevicesAdmin />
       </AdminPanel>
-    </>
+    </TopicsProvider>
   )
 }
 
