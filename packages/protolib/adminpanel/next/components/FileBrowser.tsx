@@ -109,7 +109,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
     return (
         isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
-            <Tinted><Explorer currentPath={currentPath} filesState={filesState} templateActions={templateActions} onOpen={onOpen} /></Tinted>
+            <Explorer currentPath={currentPath} filesState={filesState} templateActions={templateActions} onOpen={onOpen} />
             <Dialog open={dialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay />

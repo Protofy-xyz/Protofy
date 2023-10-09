@@ -4,9 +4,9 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { FileNavbar, FileBrowser, FileToolbar, FileList, ChonkyActions } from 'chonky';
-import { createApiAtom, useAtom, API } from 'protolib';
+import { Tinted, AlertDialog, createApiAtom, useAtom, API } from 'protolib';
 import { useState } from 'react';
-import { Dialog, useTheme } from '@my/ui';
+import { Dialog, Paragraph, useTheme, Text } from '@my/ui';
 import { Uploader } from './Uploader';
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
@@ -18,9 +18,11 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
     const [files, setFiles] = useAtom(filesAtom, filesState)
     const [showDropMessage, setShowDropMessage] = useState(false)
     const [showUploadDialog, setShowUploadDialog] = useState(false)
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
+    const [selectedFiles, setSelectedFiles] = useState([])
 
-    const onUploadFiles = async() => {
-        setFiles(await API.get('/adminapi/v1/files/'+currentPath) ?? { data: [] })
+    const onUploadFiles = async () => {
+        setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] })
     }
     const onScroll = () => { }
     const myFileActions = [
@@ -29,7 +31,7 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
         // ChonkyActions.EnableCompactView
         // ChonkyActions.CreateFolder
         // ChonkyActions.DownloadFiles,
-        // ChonkyActions.DeleteFiles,
+        ChonkyActions.DeleteFiles
     ];
 
     const actionsToDisable: string[] = [
@@ -55,10 +57,16 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
         })
     )
 
-    const onAddFiles = (acceptedFiles:any) => {
+    const onAddFiles = (acceptedFiles: any) => {
         console.log('files: ', acceptedFiles)
         setShowUploadDialog(true)
         setShowDropMessage(false)
+    }
+
+    const onDeleteFiles = (data: any) => {
+        const filesToDelete = data.state.selectedFilesForAction.map(f => f.name)
+        setSelectedFiles(filesToDelete)
+        setOpenDeleteDialog(true)
     }
 
     return (
@@ -68,42 +76,65 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
             onDrop={onAddFiles}
             //@ts-ignore
             onUpload={onAddFiles}
-            >
+        >
             {({ getRootProps, getInputProps }) => (
                 //@ts-ignore
                 <YStack flex={1} {...getRootProps()} >
+                    <AlertDialog
+                        acceptButtonProps={{color:"white",backgroundColor:"$red9"}}
+                        p="$5"
+                        acceptCaption="Delete"
+                        setOpen={setOpenDeleteDialog}
+                        open={openDeleteDialog}
+                        onAccept={async (seter) => {
+                            seter(false)
+                        }}
+                        acceptTint="red"
+                        title={<Text><Text color="$red9">Delete</Text>{(selectedFiles.length > 1?' '+selectedFiles.length+' files?': '?')}</Text>}
+                        description={"The following files will be deleted:"}
+                    >
+                        <YStack f={1}>
+                            {selectedFiles.map(f => <Paragraph>{f}</Paragraph>)}
+                        </YStack>
+                    </AlertDialog>
+
                     <YStack f={1}>
                         <input {...getInputProps()} />
-                        <FileBrowser
-                            onFileAction={(data) => {
-                                if (data.id == 'open_files') {
-                                    onOpen(data.payload.targetFile)
-                                } else if (data.id == 'upload_files') {
-                                    setShowUploadDialog(true)
-                                } else {
-                                    console.log('Action: ', data)
-                                }
-                            }}
-                            disableDragAndDrop={true}
-                            disableDefaultFileActions={actionsToDisable}
-                            //defaultFileViewActionId={ChonkyActions.ToggleHiddenFiles.id} 
-                            disableSelection={false}
-                            darkMode={resolvedTheme == 'dark'}
-                            files={parsedFiles}
-                            folderChain={folderChain}
-                            fileActions={myFileActions}
-                        >
-                            <FileNavbar />
-                            <FileToolbar />
-                            <FileList onScroll={onScroll} />
-                            {/* <FileContextMenu/> */}
-                        </FileBrowser>
+                        <Tinted>
+                            <FileBrowser
+                                onFileAction={(data) => {
+                                    if (data.id == 'open_files') {
+                                        onOpen(data.payload.targetFile)
+                                    } else if (data.id == 'upload_files') {
+                                        setShowUploadDialog(true)
+                                    } else if (data.id == 'delete_files') {
+                                        onDeleteFiles(data)
+                                    } else {
+                                        console.log('Action: ', data)
+                                    }
+                                }}
+                                disableDragAndDrop={true}
+                                disableDefaultFileActions={actionsToDisable}
+                                //defaultFileViewActionId={ChonkyActions.ToggleHiddenFiles.id} 
+                                disableSelection={false}
+                                darkMode={resolvedTheme == 'dark'}
+                                files={parsedFiles}
+                                folderChain={folderChain}
+                                fileActions={myFileActions}
+                            >
+                                <FileNavbar />
+                                <FileToolbar />
+                                <FileList onScroll={onScroll} />
+                                {/* <FileContextMenu/> */}
+                            </FileBrowser>
+                        </Tinted>
+
 
                         <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
                             <Dialog.Portal>
                                 <Dialog.Overlay />
                                 <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'600px'} width={"600px"} >
-                                    <Uploader path={currentPath} onUpload={onUploadFiles} setShowUploadDialog={setShowUploadDialog}/>
+                                    <Uploader path={currentPath} onUpload={onUploadFiles} setShowUploadDialog={setShowUploadDialog} />
                                     <Dialog.Close />
                                 </Dialog.Content>
                             </Dialog.Portal>

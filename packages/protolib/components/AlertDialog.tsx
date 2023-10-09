@@ -4,7 +4,7 @@ import { forwardRef, useEffect, useState } from 'react'
 import { Tinted, Notice } from 'protolib'
 import { X, UserPlus, Check, Mail} from '@tamagui/lucide-icons'
 
-export const AlertDialog = forwardRef(({ onAccept = () => { }, onCancel = () => { }, title, trigger, description, children, cancelCaption = 'Cancel', acceptCaption = 'Accept', open, setOpen, ...props }: any, ref: any) => {
+export const AlertDialog = forwardRef(({ onAccept = () => { }, onCancel = () => { }, title, trigger, description, children, cancelCaption = 'Cancel', acceptCaption = 'Accept', acceptTint, acceptButtonProps={}, open, setOpen, ...props }: any, ref: any) => {
     const [_open, _setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
@@ -54,7 +54,7 @@ export const AlertDialog = forwardRef(({ onAccept = () => { }, onCancel = () => 
 
                         <Spacer flex={1} height="$4" />
                         <YStack p="$2" pt="$0" width="100%" f={1} alignSelf="center">
-                            <Tinted>
+                            <Tinted tint={acceptTint}>
                                 <Button f={1} onPress={async () => {
                                     setLoading(true)
                                     try {
@@ -65,7 +65,7 @@ export const AlertDialog = forwardRef(({ onAccept = () => { }, onCancel = () => 
                                         console.log('e: ', e)
                                     }
                                     setLoading(false)
-                                }} aria-label="Close">
+                                }} aria-label="Close" {...acceptButtonProps}>
                                     {loading?<Spinner /> : acceptCaption}
                                 </Button>
                             </Tinted>
