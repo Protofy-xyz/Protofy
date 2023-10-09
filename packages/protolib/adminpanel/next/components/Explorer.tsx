@@ -4,7 +4,7 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { FileNavbar, FileBrowser, FileToolbar, FileList, ChonkyActions } from 'chonky';
-import { createApiAtom, useAtom } from 'protolib';
+import { createApiAtom, useAtom, API } from 'protolib';
 import { useState } from 'react';
 import { Dialog, useTheme } from '@my/ui';
 import { Uploader } from './Uploader';
@@ -18,6 +18,11 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
     const [files, setFiles] = useAtom(filesAtom, filesState)
     const [showDropMessage, setShowDropMessage] = useState(false)
     const [showUploadDialog, setShowUploadDialog] = useState(false)
+
+    const onUploadFiles = async() => {
+        console.log("upload in ", currentPath)
+        setFiles(await API.get('/adminapi/v1/files/'+currentPath) ?? { data: [] })
+    }
     const onScroll = () => { }
     const myFileActions = [
         ...templateActions,
@@ -97,7 +102,7 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
                             <Dialog.Portal>
                                 <Dialog.Overlay />
                                 <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'600px'} width={"600px"} >
-                                    <Uploader path={currentPath}/>
+                                    <Uploader path={currentPath} onUpload={onUploadFiles}/>
                                     <Dialog.Close />
                                 </Dialog.Content>
                             </Dialog.Portal>
