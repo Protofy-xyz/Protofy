@@ -24,6 +24,15 @@
     color: var(--color7) !important;
 }
 
+.chonky-selectionSizeText {
+    color: var(--color7) !important;
+}
+
+[class^="listFileEntryProperties-"] {
+    display: none !important;
+}
+
+
 [class^="previewFile-"] {
     /* display: none !important; */
     width: 120px !important;
