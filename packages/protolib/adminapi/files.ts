@@ -5,6 +5,7 @@ import path from 'path';
 import { app } from 'protolib/api';
 import multer from 'multer';
 import fsExtra from 'fs-extra';
+import syncFs from 'fs'
 
 const PROJECT_WORKSPACE_DIR = "../../"; // Define where the workspace root dir is
 
@@ -83,6 +84,17 @@ const handleFilesRequest = async (req, res) => {
     }
 };
 
+const handleFilesDeleteRequest = (req, res) => {
+    const name = req.params.path || '';
+    const filesToDelete = req.body;
+    const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
+    if(!filesToDelete || !filesToDelete.length) return res.status(500).send('error')
+    const fullPathFilesToDelete = filesToDelete.map(f => path.join(filepath,f))
+    console.log('** DELETING FILES: ', fullPathFilesToDelete)
+    fullPathFilesToDelete.forEach(f => syncFs.unlinkSync(f))
+    res.send({result: 'deleted'})
+}
+
 //received post requests and creates directories or write files, dependeing on query string param
 //the content of the file is readed from req.body
 //the path to the file to write/directory to create, is extracted from req.params[0]
@@ -101,3 +113,5 @@ app.post('/adminapi/v1/files/:path(*)', upload.single('file'), handleFilesWriteR
 app.get('/adminapi/v1/files', handleFilesRequest);
 // Route for /adminapi/v1/files/*
 app.get('/adminapi/v1/files/:path(*)', handleFilesRequest);
+
+app.post('/adminapi/v1/deleteFiles/:path(*)', handleFilesDeleteRequest);

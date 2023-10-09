@@ -87,7 +87,8 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
                         setOpen={setOpenDeleteDialog}
                         open={openDeleteDialog}
                         onAccept={async (seter) => {
-                            seter(false)
+                            await API.post('/adminapi/v1/deleteFiles/'+currentPath, selectedFiles)
+                            setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] })
                         }}
                         acceptTint="red"
                         title={<Text><Text color="$red9">Delete</Text>{(selectedFiles.length > 1?' '+selectedFiles.length+' files?': '?')}</Text>}
