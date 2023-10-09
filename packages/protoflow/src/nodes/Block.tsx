@@ -53,7 +53,7 @@ const Block = (node) => {
     const containerColor =  useTheme('containerColor')
     const typeConf = {
         SourceFile: {
-            icon: Box,
+            // icon: Box,
             color: '#F7B500',
             output: false,
             title: currentPath.split(/[/\\]/).pop()
@@ -90,7 +90,7 @@ const Block = (node) => {
             //contentStyle={{borderLeft:borderWidth+'px solid '+borderColor}}
             container={!isEmpty}
             style={extraStyle}
-            icon={typeConf[type].icon}
+            icon={typeConf[type].icon??null}
             node={node}
             output={typeConf[type]['output'] == false ? null : { field: 'value', type: 'output' }}
             isPreview={!id}
