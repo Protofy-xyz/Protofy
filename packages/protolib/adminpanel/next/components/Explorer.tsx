@@ -20,13 +20,14 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
     const [showUploadDialog, setShowUploadDialog] = useState(false)
 
     const onUploadFiles = async() => {
-        console.log("upload in ", currentPath)
         setFiles(await API.get('/adminapi/v1/files/'+currentPath) ?? { data: [] })
     }
     const onScroll = () => { }
     const myFileActions = [
         ...templateActions,
         ChonkyActions.UploadFiles,
+        // ChonkyActions.EnableCompactView
+        // ChonkyActions.CreateFolder
         // ChonkyActions.DownloadFiles,
         // ChonkyActions.DeleteFiles,
     ];

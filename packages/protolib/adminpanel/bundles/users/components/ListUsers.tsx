@@ -36,7 +36,7 @@ export default function ListUsers({ initialUsers }) {
             }
         },
         { name: "created", selector: "createdAt", sortable: true, cell: row => <Chip text={moment(row.createdAt).format(format)} color={'$color5'} /> },
-        { name: "last login", selector: "lastLogin", sortable: true, cell: row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$color5'} /> : <Chip text={'NEVER'} color={'$orange5'} /> }
+        { name: "last login", selector: "lastLogin", sortable: true, cell: row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$color5'} /> : <Chip text={'NEVER'} color={'$red5'} /> }
         // { Header: "from", accessor: "user.from"},
         // { Header: "created", accessor: "user.createdAt"}
     ]
