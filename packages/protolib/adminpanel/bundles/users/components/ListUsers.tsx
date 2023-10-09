@@ -1,11 +1,12 @@
-import { YStack, XStack, Stack, Paragraph, Text, Button, Input, Theme, Label } from 'tamagui'
-import { AlertDialog, DataTable2, useAtom, API, createApiAtom, DataCard, Search, Popover, Tinted } from 'protolib'
+import { YStack, XStack, Stack, Paragraph, Text, Button, Input, Theme, Label, SizableText, ColorProp } from 'tamagui'
+import { AlertDialog, Chip, DataTable2, useAtom, API, createApiAtom, DataCard, Search, Popover, Tinted } from 'protolib'
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
-import { Plus } from '@tamagui/lucide-icons'
+import { Plus, TerminalSquare } from '@tamagui/lucide-icons'
 import moment from 'moment';
 import CreateUser from './CreateUser'
+import React from 'react'
 
 export default function ListUsers({ initialUsers }) {
     const [createOpen, setCreateOpen] = useState(false)
@@ -18,7 +19,7 @@ export default function ListUsers({ initialUsers }) {
     const [currentUsers, setCurrentUsers] = useState(users)
     const [currentUser, setCurrentUser] = useState<any>()
     const onSearch = async (text) => {
-        setCurrentUsers(users.filter((user, i) => i === 0 || user.username.includes(text) || user.type.includes(text)))
+        setCurrentUsers(users.filter((user, i) => user.username.includes(text) || user.type.includes(text)))
     }
 
     const onCancelSearch = async () => {
@@ -26,12 +27,18 @@ export default function ListUsers({ initialUsers }) {
     }
 
     const columns = [
-                { name: "email", selector: "username", sortable: true},
-                { name: "type", selector: "type", sortable: true},
-                { name: "from", selector: "from", sortable: true}
-                // { Header: "from", accessor: "user.from"},
-                // { Header: "created", accessor: "user.createdAt"}
-            ]
+        { name: "email", selector: "username", sortable: true, cell: row => <Chip text={row.username} color={'$color5'} /> },
+        { name: "type", selector: "type", sortable: true, cell: row => <Chip text={row.type.toUpperCase()} color={row.type == 'admin' ? '$red5':'$blue5'} />},
+        {
+            name: "from", selector: "from", sortable: true, cell: row => {
+                return <Chip text={row.from.toUpperCase()} color={row.from == 'cmd' ? '$orange5':'$blue5'} />
+            }
+        },
+        { name: "created", selector: "createdAt", sortable: true, cell: row => <Chip text={moment(row.createdAt).format(format)} color={'$color5'} /> },
+        { name: "last login", selector: "lastLogin", sortable: true, cell: row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$color5'} /> : <Chip text={'NEVER'} color={'$red5'} /> }
+        // { Header: "from", accessor: "user.from"},
+        // { Header: "created", accessor: "user.createdAt"}
+    ]
 
     return (
         <YStack f={1}>
@@ -74,7 +81,7 @@ export default function ListUsers({ initialUsers }) {
                     <Search onCancel={onCancelSearch} onSearch={onSearch} />
                     <XStack top={-3}>
                         <Tinted>
-                            <Button hoverStyle={{o:1}} o={0.7} circular onPress={() => setCreateOpen(true)} chromeless={true}>
+                            <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => setCreateOpen(true)} chromeless={true}>
                                 <Plus />
                             </Button>
                         </Tinted>
@@ -90,7 +97,7 @@ export default function ListUsers({ initialUsers }) {
                     //firstRowIsHeader={true}
                     columns={columns}
                     rows={currentUsers}
-                    // rows={currentUsers}
+                // rows={currentUsers}
                 />
             </XStack>
         </YStack>

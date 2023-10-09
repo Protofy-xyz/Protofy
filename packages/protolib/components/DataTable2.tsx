@@ -18,17 +18,17 @@ export function DataTable2({ columns, rows}) {
     data: rows
   };
 
-  return <DataTableExtensions filter={false} {...tableData}>
+  return <DataTableExtensions print={false} export={false} filter={false} {...tableData}>
   <DataTableComp
     responsive
     striped
     pointerOnHover	
     columns={columns}
     data={rows}
-    // defaultSortField="id"
-    sortIcon={<ArrowUpDown />}
+    defaultSortField="created"
+    defaultSortAsc={false}
+    // sortIcon={<ArrowUpDown />}
     // pagination
-    highlightOnHover
   />
 </DataTableExtensions>
 }
