@@ -102,7 +102,7 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
                             <Dialog.Portal>
                                 <Dialog.Overlay />
                                 <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'600px'} width={"600px"} >
-                                    <Uploader path={currentPath} onUpload={onUploadFiles}/>
+                                    <Uploader path={currentPath} onUpload={onUploadFiles} setShowUploadDialog={setShowUploadDialog}/>
                                     <Dialog.Close />
                                 </Dialog.Content>
                             </Dialog.Portal>

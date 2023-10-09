@@ -24,7 +24,6 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const [openAlert, setOpenAlert] = useState(false)
     const [isModified, setIsModified] = useState(false)
     const [workspace] = useAtom(workspaceAtom)
-    const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
     useUpdateEffect(() => {
         //API.get('/adminapi/v1/files/'+currentPath, setFiles)

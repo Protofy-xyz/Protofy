@@ -1,6 +1,6 @@
 import Dropzone from 'react-dropzone-uploader'
 
-export const Uploader = ({path, onUpload}) => {
+export const Uploader = ({path, onUpload, setShowUploadDialog}) => {
     // specify upload params and url for your files
     const getUploadParams = ({ meta }) => { return { url: '/adminapi/v1/files/'+path } }
     
@@ -17,6 +17,7 @@ export const Uploader = ({path, onUpload}) => {
     const handleSubmit = (files, allFiles) => {
       console.log(files.map(f => f.meta))
       allFiles.forEach(f => f.remove())
+      setShowUploadDialog(false)
     }
   
     return (
@@ -25,6 +26,7 @@ export const Uploader = ({path, onUpload}) => {
         getUploadParams={getUploadParams}
         onChangeStatus={handleChangeStatus}
         onSubmit={handleSubmit}
+        submitButtonContent="Close"
       />
     )
   }
