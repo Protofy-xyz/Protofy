@@ -25,6 +25,7 @@
     "level-party": "^5.1.1",
     "mime-types": "^2.1.35",
     "moment": "2.29.4",
+    "multer": "1.4.5-lts.1",
     "nodemon": "3.0.1",
     "pm2": "^5.3.0",
     "ts-node": "10.9.1",
