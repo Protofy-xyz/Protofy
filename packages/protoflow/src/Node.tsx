@@ -288,7 +288,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                                 setChecked(!checked)
                         }}
                         checked={checked?true:false}
-                        style={{ width: nodeFontSize, transform: `scale(${useTheme('nodeFontSize')/15}`,margin: "2px 0px 2px 0px", accentColor: useTheme("interactiveColor"), all: "revert" }} />
+                        style={{ all: "revert", width: nodeFontSize, margin: "2px 0px 2px 0px", accentColor: useTheme("interactiveColor"), transform: `scale(${useTheme('nodeFontSize')/15})`, marginRight: '5px' }} />
                 </span>
             default:
                 return <NodeInput
@@ -361,7 +361,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                             {(param?.deleteable && isDeletedLeft) ? <DeleteButton id={id} left={true} field={param.field} />: null}
                             {getValue()}
                         </div>
-                        <div className={"handleValue"} title={param.description} style={{ minWidth: '180px', marginRight: '10px', display: 'flex', flexDirection: 'row', flexGrow: 1, justifyContent: param.type == 'boolean' ? 'flex-end' : '' }}>
+                        <div className={"handleValue"} title={param.description} style={{ minWidth: '180px', marginRight: '10px', display: 'flex', flexDirection: 'row', flexGrow: 1, justifyContent: param.type == 'boolean' ? 'flex-end' : '', alignItems: 'center' }}>
                             {getInput(isConnected)}
                             {(param?.deleteable && !isDeletedLeft) ? <DeleteButton id={id} field={param.field} /> : null}
                         </div>
