@@ -13,10 +13,10 @@ import { Search } from 'lucide-react'
 
 const pokayokeEnabled = POKAYOKE_ENABLED ?? false
 
-export default withTopics(({enabledNodes=['*'], hideBaseComponents, customComponents = [], style = {}, diagramNodes, setNodes, setNodeData, edges, setEdges, takeSnapshot = () => null, reactFlowWrapper = null, topics, onAddNode = (node: any, newEdge: any, initialData: any) => null, onEditDiagram=(nodes, edges, focus) => {}}) => {
+export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customComponents = [], style = {}, diagramNodes, setNodes, setNodeData, edges, setEdges, takeSnapshot = () => null, reactFlowWrapper = null, topics, onAddNode = (node: any, newEdge: any, initialData: any) => null, onEditDiagram = (nodes, edges, focus) => { } }) => {
     const panelRef = useRef()
     const inputRef = useRef()
-    const scrollRef = useRef()
+    const scrollRef: any = useRef()
     const inputHeight = 50
     const [searchValue, setSearchValue] = useState('')
     const [selectedNode, setSelectedNode] = useState(0)
@@ -53,7 +53,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
             return reactFlowWrapper?.current.offsetWidth - menuWidth - menuMargin
         }
     }
-    const _nodes:any = Object.fromEntries(
+    const _nodes: any = Object.fromEntries(
         Object.entries(nodes).filter(([key, value]) => enabledNodes.includes(key) || enabledNodes.includes('*'))
     );
 
@@ -119,20 +119,20 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
             newEdges.push(newEdge)
             onAddNode(newNode[0], newEdge, initialData) // createNode returns array, get frist position
         }
-        
+
         const finalEdges = edges.filter((e) => !edgesToDelete.includes(e.id)).concat(newEdges)
         const finalNodes = diagramNodes.concat(newNode);
         setMenu('closed')
         const focusElement = (newNodes, diagramRef) => {
-            if(!diagramRef) return
+            if (!diagramRef) return
             const diagramRect = diagramRef.getBoundingClientRect();
-            const viewport = getViewport()            
+            const viewport = getViewport()
             //console.log('infocus', scaledContainerWidth, scaledContainerHeight)
             const myNode = newNodes.find(n => n.id == newNode[0].id)
             const elem = document.getElementById(id)
             const posX = -myNode.position.x //+ (diagramRect.width / 2)
             const posY = -myNode.position.y //+ (diagramRect.height / 2)
-    
+
             if (!elem) return
             const firstInput = elem.querySelector('input:first-of-type')
             if (firstInput) {
@@ -144,7 +144,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
             if (firstButton) {
                 //@ts-ignore
                 firstButton.focus()
-                handleTransform(posX, posY, viewport.zoom) 
+                handleTransform(posX, posY, viewport.zoom)
             }
         }
         onEditDiagram(finalNodes, finalEdges, focusElement)
@@ -180,7 +180,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
         return (
             <div style={{
                 display: 'flex', border: props.isSelected ? `${useTheme("borderWidth")}px solid black` : '0px solid transparent',
-                borderRadius: useTheme("borderWidthSelected")*2, alignItems: 'stretch', backgroundColor: 'rgba(0, 0, 0, 0)',
+                borderRadius: useTheme("borderWidthSelected") * 2, alignItems: 'stretch', backgroundColor: 'rgba(0, 0, 0, 0)',
                 boxSizing: 'border-box', flexBasis: 'auto', flexDirection: 'column', flexShrink: '0',
                 listStyle: 'none', margin: '0px', minHeight: '0px', minWidth: '0px',
                 padding: '0px', position: 'relative', textDecoration: 'none', zIndex: '0'
@@ -211,7 +211,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
                 style={{ display: menuState == 'closed' ? 'none' : 'flex', height: '100vh', width: '100vw', position: 'absolute' }}>
             </div>
             <div style={{ display: 'flex', flexDirection: "column", height: menuHeight, margin: '0px', position: 'absolute', border: useTheme("borderWidth") + ' solid grey', borderRadius: '10px', ...extraStyle }}>
-                <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, backgroundColor: useTheme("nodeBackgroundColor"), borderRadius: '10px', paddingBottom: '20px', padding: '10px', border:`${useTheme('borderWidth')}px solid ${useTheme('borderColor')}` }}>
+                <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, backgroundColor: useTheme("nodeBackgroundColor"), borderRadius: '10px', paddingBottom: '20px', padding: '10px', border: `${useTheme('borderWidth')}px solid ${useTheme('borderColor')}` }}>
                     <div style={{ height: inputHeight }}>
                         <input
                             ref={inputRef}
@@ -238,7 +238,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
                         />
                         <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
                     </div>
-                    <div ref={scrollRef} className={".list-protoflow"} style={{ height: `calc(${menuHeight}px - ${inputHeight}px - 20px)`, overflowY: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div ref={scrollRef} className={".list-protoflow"} style={{ height: `calc(${menuHeight}px - ${inputHeight}px - 20px)`, overflowY: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', paddingRight: scrollRef?.current?.scrollHeight > scrollRef?.current?.clientHeight ? '10px' : '0px' }}>
                         {
                             !hideBaseComponents && customNodeList.length
                                 ? <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>Custom {hasPokaResults && !searchValue.length ? '(Suggestions)' : ''}</Text>
