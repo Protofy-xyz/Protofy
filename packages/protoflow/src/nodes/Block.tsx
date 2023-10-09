@@ -49,7 +49,7 @@ const Block = (node) => {
     let extraStyle: any = {}
     extraStyle.minHeight = height + 'px'
     extraStyle.border = 0
-    extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px':'220px'
+    extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px':'200px'
     const containerColor =  useTheme('containerColor')
     const typeConf = {
         SourceFile: {

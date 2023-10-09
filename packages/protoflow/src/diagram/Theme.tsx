@@ -6,13 +6,12 @@ type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "
 | 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor'
 
 const commonVars:any = {
-    nodeBorderWidth: '5px',
-    nodeBorderColor: 'white',
+    nodeBorderWidth: '2px',
     nodeFontSize: 30
 }
 commonVars.portSize = commonVars.nodeFontSize
 commonVars.borderWidth = commonVars.nodeFontSize / 8
-commonVars.borderWidthSelected = commonVars.nodeFontSize / 4
+commonVars.borderWidthSelected = commonVars.nodeFontSize / 5
 const Theme = {
     light: {
         ...commonVars,
@@ -28,10 +27,11 @@ const Theme = {
         handleBorderColor: 'white',
         flowOutputColor: 'white',
         dataOutputColor: 'black',
-        highlightInputBackgroundColor: 'rgb(231, 229, 228)',
-        blockPort: 'black',
-        flowPort: 'grey',
+        highlightInputBackgroundColor: '#F1F1F1',
+        blockPort: 'white',
+        flowPort: 'white',
         dataPort: 'white',
+        nodeBorderColor: 'black',
         titleColor: 'black',
         containerColor: 'black'
     },
@@ -45,15 +45,16 @@ const Theme = {
         textColor: "#e5e5e5",
         interactiveColor: "#4772b3",
         interactiveHoverColor: '#252525',
-        borderColor: 'transparent',
+        borderColor: 'grey',
         colorError: '#EF4444',
-        flowOutputColor: 'white',
+        flowOutputColor: 'grey',
         dataOutputColor: 'black',
-        highlightInputBackgroundColor: "#404040",
+        highlightInputBackgroundColor: "#222222",
         blockPort: 'black',
         flowPort: 'grey',
-        dataPort: 'white',
-        titleColor: 'white',
+        dataPort: 'grey',
+        nodeBorderColor: '#e5e5e5',
+        titleColor: 'black',
         containerColor: 'white'
     }
 }

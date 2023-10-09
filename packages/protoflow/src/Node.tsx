@@ -536,7 +536,7 @@ const Node = ({ adaptiveTitleSize=true, modeParams='column', mode='column', drag
 
     const extraStyle: any = {}
     if(!id) {
-        extraStyle.minWidth = '220px';
+        extraStyle.minWidth = '200px';
     }
     if (node && node.data && node.data.width) extraStyle.minWidth = node.data.width + 'px'
     if (node && node.data && node.data.height) extraStyle.minHeight = node.data.height + 'px'

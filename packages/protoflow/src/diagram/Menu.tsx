@@ -28,7 +28,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
     const { project, setViewport, getViewport, setCenter } = useReactFlow();
     const { publish } = topics;
 
-    const menuWidth = 230
+    const menuWidth = 259
     const menuHeight = 500
     const menuMargin = 100
 
@@ -179,8 +179,8 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
     const SelectedBorder = (props) => {
         return (
             <div style={{
-                display: 'flex', border: props.isSelected ? '2px solid black' : '0px solid transparent',
-                borderRadius: '12px', alignItems: 'stretch', backgroundColor: 'rgba(0, 0, 0, 0)',
+                display: 'flex', border: props.isSelected ? `${useTheme("borderWidth")}px solid black` : '0px solid transparent',
+                borderRadius: useTheme("borderWidthSelected")*2, alignItems: 'stretch', backgroundColor: 'rgba(0, 0, 0, 0)',
                 boxSizing: 'border-box', flexBasis: 'auto', flexDirection: 'column', flexShrink: '0',
                 listStyle: 'none', margin: '0px', minHeight: '0px', minWidth: '0px',
                 padding: '0px', position: 'relative', textDecoration: 'none', zIndex: '0'
@@ -211,7 +211,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
                 style={{ display: menuState == 'closed' ? 'none' : 'flex', height: '100vh', width: '100vw', position: 'absolute' }}>
             </div>
             <div style={{ display: 'flex', flexDirection: "column", height: menuHeight, margin: '0px', position: 'absolute', border: useTheme("borderWidth") + ' solid grey', borderRadius: '10px', ...extraStyle }}>
-                <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, backgroundColor: useTheme("nodeBackgroundColor"), borderRadius: '10px', paddingBottom: '20px', padding: '10px' }}>
+                <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, backgroundColor: useTheme("nodeBackgroundColor"), borderRadius: '10px', paddingBottom: '20px', padding: '10px', border:`${useTheme('borderWidth')}px solid ${useTheme('borderColor')}` }}>
                     <div style={{ height: inputHeight }}>
                         <input
                             ref={inputRef}
@@ -238,7 +238,7 @@ export default withTopics(({enabledNodes=['*'], hideBaseComponents, customCompon
                         />
                         <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
                     </div>
-                    <div ref={scrollRef} className={".list-protoflow"} style={{ height: `calc(${menuHeight}px - ${inputHeight}px - 20px)`, overflowY: 'scroll', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div ref={scrollRef} className={".list-protoflow"} style={{ height: `calc(${menuHeight}px - ${inputHeight}px - 20px)`, overflowY: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
                         {
                             !hideBaseComponents && customNodeList.length
                                 ? <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>Custom {hasPokaResults && !searchValue.length ? '(Suggestions)' : ''}</Text>

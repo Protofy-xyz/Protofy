@@ -29,7 +29,7 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
     const borderWidthSelected = useTheme('borderWidthSelected')
     const themeBackgroundColor = useTheme('nodeBackgroundColor')
         
-    const currentBorder = isPreview? 1 : (node?.selected ? borderWidthSelected  : borderWidth)
+    const currentBorder = isPreview? 0 : (node?.selected ? borderWidthSelected  : borderWidth)
     const titleSize = (useTheme('nodeFontSize')/100)*125
 
     const innerRadius = currentBorder+'px '
@@ -43,12 +43,11 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
             style={{
                 //@ts-ignore
                 display: 'flex', minHeight: !isPreview ? "80px" : "30px", flexDirection: mode,
-                backgroundColor: container ? "transparent" : borderColor,
                 border: currentBorder + "px solid " + borderColor,
                 position: 'relative',
                 top: '-'+currentBorder+'px',
                 left: '-'+currentBorder+'px',
-                // borderWidth: isPreview ? "1px" : "2px",
+                borderWidth: isPreview ? "0px" : "2px",
                 borderRadius: currentBorder*2,
                 textAlign: "center",
                 fontSize: useTheme('nodeFontSize'),
@@ -151,8 +150,8 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                 {label ? <div style={{ display: 'flex', width: `${labelWidth}px`, marginLeft: ml, zIndex: -1, justifyContent: 'flex-end' }}>
                     <Text ref={textRef} style={{ marginRight: '5px', textAlign: position == Position.Right ? 'right' : 'left'}}>{label}</Text>
                 </div> : null}
-                {!connected ? <div style={{width: portSize+"px", height: portSize+"px",display: 'flex', justifyContent: 'flex-end'}}>
-                        <Text style={{ display: "inline-block", lineHeight: '100%',textAlign: 'left', color: plusColor, fontWeight: 'bold', fontSize: nodeFontSize-3, pointerEvents: 'none'}}>+</Text> 
+                {!connected ? <div style={{width: portSize+"px", height: portSize+"px",display: 'flex', justifyContent: 'center'}}>
+                        <Text style={{ lineHeight: '100%',textAlign: 'center', color: plusColor, fontSize: nodeFontSize-3, pointerEvents: 'none', padding: 0}}>+</Text> 
                     </div>: null}
             </Handle>
         </>
