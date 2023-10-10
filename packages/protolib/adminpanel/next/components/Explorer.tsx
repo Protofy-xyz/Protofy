@@ -72,7 +72,8 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
     }
 
     const onDownloadFiles = (data: any) => {
-        const filesToDownload = data.state.selectedFilesForAction.map(f => f.name)
+        const filesToDownload = data.state.selectedFilesForAction.filter(f => !f.isDir).map(f => f.name)
+        if(!filesToDownload.length) return
         if(filesToDownload.length == 1) {
             window.open("/adminapi/v1/files/"+currentPath+'/'+filesToDownload[0]+'?download=1', '_new')
         } else {
