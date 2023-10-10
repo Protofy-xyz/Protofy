@@ -4,10 +4,11 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { FileNavbar, FileBrowser, FileToolbar, FileList, ChonkyActions } from 'chonky';
-import { Tinted, AlertDialog, createApiAtom, useAtom, API } from 'protolib';
+import { Chip, Tinted, AlertDialog, createApiAtom, useAtom, API } from 'protolib';
 import { useState } from 'react';
-import { Dialog, Paragraph, useTheme, Text } from '@my/ui';
+import { Dialog, Paragraph, useTheme, Text, SizableText, Stack, XStack } from '@my/ui';
 import { Uploader } from './Uploader';
+import {Download} from '@tamagui/lucide-icons'
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const filesAtom = createApiAtom([])
@@ -19,6 +20,7 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
     const [showDropMessage, setShowDropMessage] = useState(false)
     const [showUploadDialog, setShowUploadDialog] = useState(false)
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
+    const [openDownloadDialog, setOpenDownloadDialog] = useState(false)
     const [selectedFiles, setSelectedFiles] = useState([])
 
     const onUploadFiles = async () => {
@@ -30,7 +32,7 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
         ChonkyActions.UploadFiles,
         // ChonkyActions.EnableCompactView
         // ChonkyActions.CreateFolder
-        // ChonkyActions.DownloadFiles,
+        ChonkyActions.DownloadFiles,
         ChonkyActions.DeleteFiles
     ];
 
@@ -69,6 +71,16 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
         setOpenDeleteDialog(true)
     }
 
+    const onDownloadFiles = (data: any) => {
+        const filesToDownload = data.state.selectedFilesForAction.map(f => f.name)
+        if(filesToDownload.length == 1) {
+            window.open("/adminapi/v1/files/"+currentPath+'/'+filesToDownload[0]+'?download=1', '_new')
+        } else {
+            setSelectedFiles(filesToDownload)
+            setOpenDownloadDialog(true)
+        }
+    }
+
     return (
         <Dropzone
             onDragEnter={() => setShowUploadDialog(true)}
@@ -80,6 +92,24 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
             {({ getRootProps, getInputProps }) => (
                 //@ts-ignore
                 <YStack flex={1} {...getRootProps()} >
+                    <AlertDialog
+                        p="$5"
+                        acceptCaption="Close"
+                        setOpen={setOpenDownloadDialog}
+                        open={openDownloadDialog}
+                        hideAccept={true}
+                        title={<Tinted><Text color="$color7">Download</Text></Tinted>}
+                        description="Use those links to download:"
+                    >
+                        <YStack f={1}>
+                            {selectedFiles.map(f => <a href={"/adminapi/v1/files/"+currentPath+'/'+f+'?download=1'} target="_new">
+                                <XStack mb="$2" br="$radius.12" p="$2" px="$4" backgroundColor={"$color4"} hoverStyle={{backgroundColor:"$color6", o: 1}} o={0.7} ai="center" jc="center">
+                                    <Download />
+                                    <SizableText ml="$2">{f}</SizableText>
+                                </XStack>
+                            </a>)}
+                        </YStack>
+                    </AlertDialog>
                     <AlertDialog
                         acceptButtonProps={{color:"white",backgroundColor:"$red9"}}
                         p="$5"
@@ -110,6 +140,8 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
                                         setShowUploadDialog(true)
                                     } else if (data.id == 'delete_files') {
                                         onDeleteFiles(data)
+                                    } else if(data.id == 'download_files') {
+                                        onDownloadFiles(data)
                                     } else {
                                         console.log('Action: ', data)
                                     }

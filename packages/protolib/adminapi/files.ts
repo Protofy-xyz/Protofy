@@ -34,6 +34,7 @@ async function fileExists(filePath) {
 // Handler function to avoid repeating the same code for both routes
 const handleFilesRequest = async (req, res) => {
     const name = req.params.path || '';
+    const isDownload = req.query.download
 
     const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
 
@@ -71,6 +72,10 @@ const handleFilesRequest = async (req, res) => {
             //     res.setHeader('Content-Type', contentType);
             // }
             console.log('send file: ', filepath, path.resolve(filepath))
+            if (isDownload) {
+                // Establece el encabezado para forzar la descarga
+                res.setHeader('Content-Disposition', 'attachment; filename='+name);
+            }
             res.status(200).sendFile(path.resolve(filepath), { dotfiles: 'allow' }, (err) => {
                 if (err) {
                     console.error('Error al enviar el archivo:', err);
