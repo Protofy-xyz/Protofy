@@ -4,12 +4,21 @@ import fs from 'fs';
 import path from 'path';
 
 export const CreateApi = (modelName: string, modelType: any, dir: string, prefix='/api/v1/', dbName?) => {
-    const initialData = JSON.parse(fs.readFileSync(path.join(dir, 'initialData.json')).toString()).map(x => {
-        return {
-            key: x.id,
-            value: JSON.stringify(x)
+    let initialData;
+    try {
+        if(fs.existsSync(path.join(dir, 'initialData.json'))) {
+            initialData = JSON.parse(fs.readFileSync(path.join(dir, 'initialData.json')).toString()).map(x => {
+                return {
+                    key: x.id,
+                    value: JSON.stringify(x)
+                }
+            })
         }
-    })
+    } catch(e) {
+        console.log('Error loading initial data for model ', modelName, 'error: ', e);
+        initialData = undefined;
+    }
+
 
     return (app) => BaseApi(app, modelName, modelType, initialData, prefix, dbName)
 }
