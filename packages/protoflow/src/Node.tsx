@@ -43,7 +43,7 @@ export const isDataPortConnected = (id, port, edges) => edges.find(e => e.target
 
 export const headerSize = 55;
 
-export const DeleteButton = ({ id, left = false, field}) => {
+export const DeleteButton = ({ id, left = false, field }) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const deletePropNodeData = useFlowsStore(state => state.deletePropNodeData)
     const onDeleteParam = () => {
@@ -56,7 +56,7 @@ export const DeleteButton = ({ id, left = false, field}) => {
 }
 
 
-export const NodeInput = ({id, disabled, post=(t)=>t, pre=(t)=>t, onBlur, field, children, style={}, editing=false}:any) => {
+export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlur, field, children, style = {}, editing = false }: any) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const { setNodes } = useReactFlow()
@@ -67,11 +67,11 @@ export const NodeInput = ({id, disabled, post=(t)=>t, pre=(t)=>t, onBlur, field,
     const nodeFontSize = useTheme('nodeFontSize')
     const ref = React.useRef();
     React.useEffect(() => {
-      console.log('editing: ', editing,)
-      if(ref.current && editing) {
-          //@ts-ignore
-          ref.current?.focus()
-      }
+        // console.log('editing: ', editing,)
+        if (ref.current && editing) {
+            //@ts-ignore
+            ref.current?.focus()
+        }
     }, [editing])
 
     const dataNotify = (data) => {
@@ -99,13 +99,13 @@ export const NodeInput = ({id, disabled, post=(t)=>t, pre=(t)=>t, onBlur, field,
 
     const _onBlur = () => {
         if (!disabled) {
-            setNodeData(id, { ...nodeData, [field]: post(tmpInputValue)})
+            setNodeData(id, { ...nodeData, [field]: post(tmpInputValue) })
             dataNotify({ id: id, paramField: field, newValue: tmpInputValue })
         }
         if (onBlur) onBlur(tmpInputValue);
     }
 
-    return (<div className={'nodrag'} style={{flex:1}}>
+    return (<div className={'nodrag'} style={{ flex: 1 }}>
         <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }} >
             <Input
                 ref={ref}
@@ -113,7 +113,7 @@ export const NodeInput = ({id, disabled, post=(t)=>t, pre=(t)=>t, onBlur, field,
                 onBlur={_onBlur}
                 readOnly={disabled}
                 style={{
-                    fontSize: nodeFontSize+'px',
+                    fontSize: nodeFontSize + 'px',
                     fontWeight: 'medium',
                     ...style
                 }}
@@ -125,7 +125,7 @@ export const NodeInput = ({id, disabled, post=(t)=>t, pre=(t)=>t, onBlur, field,
     </div>)
 }
 
-const HandleField = ({ id, param, index = 0, portId = null, editing = false, onRequestEdit=(param)=>{}, onCancelEdit=()=>{}}) => {
+const HandleField = ({ id, param, index = 0, portId = null, editing = false, onRequestEdit = (param) => { }, onCancelEdit = () => { } }) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const notify = useFlowsStore(state => state.dataNotify)
@@ -157,46 +157,15 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     setNodeData(id, { ...nodeData, [param.field]: nodeData[param.field]?.value ? { key: param.label, value: data?.value } : data?.value })
                     dataNotify({ id: id, paramField: param.field, newValue: data?.value })
                 }
-                const inputBorder = useTheme("inputBorder");
-                const textColor = useTheme("textColor")
-                const colourStyles = {
-                    control: (styles, state) => ({
-                        ...styles,
-                        backgroundColor: useTheme("inputBackgroundColor"),
-                        borderColor: state.isSelected ? inputBorder : "transparent",
-                        textColor: textColor,
-                        width: '100%'
-                    }),
-                    singleValue: (styles, { data }) => {
-                        return ({
-                            ...styles, minWidth: '95px', textAlign: 'left', color: textColor
-                        })
-                    },
-                    menu: (styles) => {
-                        return {
-                            ...styles, color: textColor,
-                            backgroundColor: useTheme("inputBackgroundColor"),
-                        }
-                    },
-                };
                 const options = param.data?.map((item, index) => {
                     var extraProps = item.color ? { color: item.color } : {}
                     return { label: item, value: item, ...extraProps }
                 })
-                const DropdownIndicator = props => {
-                    return (
-                        components.DropdownIndicator && (
-                            <components.DropdownIndicator {...props}> <ChevronUp size={'15px'} /> </components.DropdownIndicator>
-                        )
-                    );
-                };
-                return <div style={{flex:1,zIndex: 1000 }}>
+                return <div style={{ flex: 1, zIndex: 1000 }}>
                     <NodeSelect
-                        components={{ DropdownIndicator }}
-                        menuPlacement="top"
                         onChange={onChangeSelect}
                         defaultValue={{ value: nodeData[param.field]?.value ?? nodeData[param.field], label: nodeData[param.field]?.value ?? nodeData[param.field] }}
-                        className={'nodrag'} options={options} styles={colourStyles} />
+                        options={options} />
                 </div>
             case 'select-multi':
                 const onChangeSelectMulti = (data) => {
@@ -273,9 +242,9 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '5px', left: '7px' }}>{nodeData[param.field] ? nodeData[param.field] : min}</div> : null}
                 </>
             case 'boolean':
-                const stringToBolean = (myVar)=>{
+                const stringToBolean = (myVar) => {
                     if (typeof myVar === 'string' || myVar instanceof String)
-                        return myVar=="true"?true:false;
+                        return myVar == "true" ? true : false;
                     else
                         return myVar;
                 }
@@ -287,26 +256,26 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                             setNodeData(id, { ...nodeData, [param.field]: !checked }),
                                 setChecked(!checked)
                         }}
-                        checked={checked?true:false}
-                        style={{ all: "revert", width: nodeFontSize, margin: "2px 0px 2px 0px", accentColor: useTheme("interactiveColor"), transform: `scale(${useTheme('nodeFontSize')/15})`, marginRight: '5px' }} />
+                        checked={checked ? true : false}
+                        style={{ all: "revert", width: nodeFontSize, margin: "2px 0px 2px 0px", accentColor: useTheme("interactiveColor"), transform: `scale(${useTheme('nodeFontSize') / 15})`, marginRight: '5px' }} />
                 </span>
             default:
                 return <NodeInput
-                            id={id}
-                            post={(v) => isParameter || isProp ? { key: nodeData[param.field].key, value: post(v) } : post(v)} 
-                            pre={(v) => (v?.value ?? v) ?? ''}
-                            field={param.field}
-                            onBlur={param.onBlur} 
-                            disabled={disabled || param.isDisabled}
-                            style={{
-                                marginRight: ["case", "child"].includes(param.fieldType) ? "20px" : "0px"
-                            }}>
+                    id={id}
+                    post={(v) => isParameter || isProp ? { key: nodeData[param.field].key, value: post(v) } : post(v)}
+                    pre={(v) => (v?.value ?? v) ?? ''}
+                    field={param.field}
+                    onBlur={param.onBlur}
+                    disabled={disabled || param.isDisabled}
+                    style={{
+                        marginRight: ["case", "child"].includes(param.fieldType) ? "20px" : "0px"
+                    }}>
                     {param.error ? <div style={{ alignItems: 'center', marginTop: '5px', display: 'flex' }}>
                         <AlertCircle size={"14px"} color='red' style={{ alignSelf: 'center', marginRight: '5px' }} />
                         <Text style={{ color: 'red', fontSize: '12px' }}>
                             {param.error}
                         </Text> </div> : null}
-            </NodeInput>
+                </NodeInput>
         }
     }
     const getValue = () => {
@@ -314,31 +283,31 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
         if ((isParameter || isProp) && !param.static) {
             label = keyPre(nodeData[param.field]?.key ?? '')
 
-            if(editing) {
+            if (editing) {
                 return (<>
                     <NodeInput
                         editing={editing}
                         id={id}
                         post={(v) => {
                             return { key: keyPost(v), value: nodeData[param.field]?.value ?? "" }
-                        }} 
+                        }}
                         pre={() => keyPre(nodeData[param.field]?.key ?? '')}
                         field={param.field}
                         onBlur={(val) => {
-                            if(val) {
+                            if (val) {
                                 onCancelEdit()
                             }
-                        }} 
+                        }}
                         style={{
                             marginRight: '16px'
-                    }} />
+                        }} />
                 </>)
             }
-        } 
+        }
         return (
-            <Text adaptiveSize={true} onClick={()=> {
-                if(isParameter || isProp) onRequestEdit(param)
-            }} style={{ marginRight: '12px', marginTop: '8px', textAlign: 'left', whiteSpace: 'nowrap', cursor: 'pointer' }}>{label??' '}</Text>
+            <Text adaptiveSize={true} onClick={() => {
+                if (isParameter || isProp) onRequestEdit(param)
+            }} style={{ marginRight: '12px', marginTop: '8px', textAlign: 'left', whiteSpace: 'nowrap', cursor: 'pointer' }}>{label ?? ' '}</Text>
         )
     }
     const isDefaultCase = (param.field == 'default')
@@ -356,9 +325,9 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
         <div ref={parentRef} style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', zIndex: param.type == 'select' || param.type == 'colorPicker' ? 1100 : 0, flexDirection: "column" }}>
             {
                 !isDefaultCase ?
-                    <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize+'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-                        <div className={"handleKey"} ref={textBoxRef} style={{display: 'flex', flexDirection: 'row'}}>
-                            {(param?.deleteable && isDeletedLeft) ? <DeleteButton id={id} left={true} field={param.field} />: null}
+                    <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+                        <div className={"handleKey"} ref={textBoxRef} style={{ display: 'flex', flexDirection: 'row' }}>
+                            {(param?.deleteable && isDeletedLeft) ? <DeleteButton id={id} left={true} field={param.field} /> : null}
                             {getValue()}
                         </div>
                         <div className={"handleValue"} title={param.description} style={{ minWidth: '180px', marginRight: '10px', display: 'flex', flexDirection: 'row', flexGrow: 1, justifyContent: param.type == 'boolean' ? 'flex-end' : '', alignItems: 'center' }}>
@@ -435,7 +404,7 @@ export const HandleOutput = ({ id, param, position = null, style = {}, isConnect
             </div> : null}
             <Handle
                 type={"source"}
-                style={{ marginLeft: '-12px',width: portSize + "px", height: portSize + "px", backgroundColor: backgroundColor, top: (portSize/100*110), border: borderWidth + " solid " + borderColor, ...style }}
+                style={{ marginLeft: '-12px', width: portSize + "px", height: portSize + "px", backgroundColor: backgroundColor, top: (portSize / 100 * 110), border: borderWidth + " solid " + borderColor, ...style }}
                 position={position ?? (flowDirection == 'LEFT' ? Position.Left : Position.Right)}
                 title={DEVMODE ? `${id}${PORT_TYPES.data}output` : undefined}
                 id={`${id}${PORT_TYPES.data}output`}
@@ -454,20 +423,20 @@ export const HandleOutput = ({ id, param, position = null, style = {}, isConnect
 export const NodeParams = ({ mode = 'column', id, params, boxStyle = {}, children = null, portId = null }) => {
     const [editing, setEditing] = React.useState('')
     const [currentParams, setCurrentParams] = React.useState(null)
-    useEffect(()=> {
-        if(editing && !params || !params.length || !params.find((p) => p.field == editing)) setEditing('')
-        if(currentParams !== null) {
+    useEffect(() => {
+        if (editing && !params || !params.length || !params.find((p) => p.field == editing)) setEditing('')
+        if (currentParams !== null) {
             const newParam = params.find(p => !currentParams.includes(p.field))
-            if(newParam) {
+            if (newParam) {
                 setEditing(newParam.field)
             }
         }
         setCurrentParams(params.map(p => p.field))
-    },[params])
+    }, [params])
     //@ts-ignore
     return <div style={{ flex: 1, display: 'flex', flexDirection: mode, ...boxStyle }}>
         {params.map((param: Field, i) => {
-            return <HandleField onCancelEdit={() => setEditing('')} editing={param.field == editing} onRequestEdit={(param) => !editing?setEditing(param.field):null} key={i} id={id} param={param} index={i} portId={portId} />
+            return <HandleField onCancelEdit={() => setEditing('')} editing={param.field == editing} onRequestEdit={(param) => !editing ? setEditing(param.field) : null} key={i} id={id} param={param} index={i} portId={portId} />
         })}
         {children}
     </div>
@@ -505,12 +474,12 @@ interface NodeProps {
     dataOutput?: OutputNodeType
     contentStyle?: any
     draggable?: boolean,
-    mode?:'column'|'row',
-    modeParams?:'column'|'row',
+    mode?: 'column' | 'row',
+    modeParams?: 'column' | 'row',
     adaptiveTitleSize?: boolean
 }
 
-const Node = ({ adaptiveTitleSize=true, modeParams='column', mode='column', draggable = true, icon = null, container = false, title = '', children, isPreview = false, id, params = [], output = { label: '', field: 'value', type: 'output' }, color = nodeColors['defaultColor'], node, skipCustom = false, topics, style = {}, dataOutput = DataOutput.data, contentStyle = {} }: NodeProps) => {
+const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column', draggable = true, icon = null, container = false, title = '', children, isPreview = false, id, params = [], output = { label: '', field: 'value', type: 'output' }, color = nodeColors['defaultColor'], node, skipCustom = false, topics, style = {}, dataOutput = DataOutput.data, contentStyle = {} }: NodeProps) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const customComponents = useFlowsStore(state => state.customComponents)
@@ -535,7 +504,7 @@ const Node = ({ adaptiveTitleSize=true, modeParams='column', mode='column', drag
 
 
     const extraStyle: any = {}
-    if(!id) {
+    if (!id) {
         extraStyle.minWidth = '200px';
     }
     if (node && node.data && node.data.width) extraStyle.minWidth = node.data.width + 'px'
@@ -544,7 +513,7 @@ const Node = ({ adaptiveTitleSize=true, modeParams='column', mode='column', drag
     if (node.id && !nodeData?._metadata?.layouted) extraStyle.opacity = '0'
 
     const computeLayout = () => {
-        if(content.current) {
+        if (content.current) {
             //@ts-ignore
             const elements = content.current.querySelectorAll('.handleKey')
 
@@ -564,7 +533,7 @@ const Node = ({ adaptiveTitleSize=true, modeParams='column', mode='column', drag
             });
         }
     }
-    
+
     useEffect(() => computeLayout())
 
     return (
