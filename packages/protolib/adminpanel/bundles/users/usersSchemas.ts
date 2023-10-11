@@ -13,5 +13,4 @@ export const UserSchema = Schema.object({
 })
 
 export type UserType = z.infer<typeof UserSchema>;
-
 export const UserModel = AutoModel.createDerived<UserType>("UserModel", UserSchema);

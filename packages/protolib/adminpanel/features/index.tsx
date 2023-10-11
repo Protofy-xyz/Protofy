@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 const menuData = {}
 export const workspaceAtom = atom<PendingAtomResult>(getPendingResult("pending"))
 
-export default function Admin({ workspace, children}) {
+export const AdminPanel = ({ workspace, children}) => {
     const setCurrentWorkspace = useSetAtom(workspaceAtom)
     useEffect(() => setCurrentWorkspace(workspace), [workspace])
 

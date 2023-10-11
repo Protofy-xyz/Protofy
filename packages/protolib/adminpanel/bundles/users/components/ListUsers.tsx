@@ -12,14 +12,14 @@ import {getErrorMessage} from '@my/ui'
 const UserIcons = {username: Mail, type: Tag, passwod: Key, repassword: Key}
 const format = 'YYYY-MM-DD HH:mm:ss'
 
-export default function ListUsers({ initialItems }) {
+export default function ListUsers({ initialItems, sourceUrl}) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [currentItem, setCurrentItem] = useState<any>()
     const [createOpen, setCreateOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
 
-    usePendingEffect((s) => API.get('/adminapi/v1/accounts', s), setItems, initialItems)
+    usePendingEffect((s) => API.get(sourceUrl, s), setItems, initialItems)
 
     useEffect(() => {
         if(items && items.isLoaded) {
@@ -61,8 +61,8 @@ export default function ListUsers({ initialItems }) {
                     mode={'add'} 
                     onSave={async (data) => {
                         try {
-                            await API.post('/adminapi/v1/accounts', UserModel.load(data).create().getData())
-                            const users = await API.get('/adminapi/v1/accounts')
+                            await API.post(sourceUrl, UserModel.load(data).create().getData())
+                            const users = await API.get(sourceUrl)
                             setItems(users)
                         } catch (e) {
                             throw getPendingResult('error', null, (e as z.ZodError).flatten())
@@ -91,8 +91,8 @@ export default function ListUsers({ initialItems }) {
                         mode={'edit'} 
                         onSave={async (data) => {
                             try {
-                                await API.post('/adminapi/v1/accounts', UserModel.load(data).create().getData())
-                                const users = await API.get('/adminapi/v1/accounts')
+                                await API.post(sourceUrl, UserModel.load(data).create().getData())
+                                const users = await API.get(sourceUrl)
                                 setItems(users)
                             } catch (e) {
                                 throw getPendingResult('error', null, (e as z.ZodError).flatten())

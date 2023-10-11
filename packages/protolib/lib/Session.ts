@@ -53,7 +53,7 @@ const fail = (returnUrl?) => {
         }
     }
 }
-export const withSession = (context:any, validTypes?:[string]|[], props?:any) => {
+export const withSession = (context:any, validTypes?:string[]|any[], props?:any) => {
     const session = getSessionCookie(context.req.headers.cookie)
     if(validTypes) {
         if(!session) return fail(context.req.url)

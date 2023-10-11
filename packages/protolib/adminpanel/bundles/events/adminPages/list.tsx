@@ -1,4 +1,4 @@
-import AdminPanel from '../../../features'
+import {AdminPanel} from '../../../features'
 import Head from 'next/head'
 import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
