@@ -9,6 +9,7 @@ interface ZodExtensions {
     after(field: string): this;
     secret(): this;
     static(): this;
+    id(): this;
 }
 
 declare module 'zod' {
