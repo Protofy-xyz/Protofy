@@ -78,17 +78,10 @@ export default function ListUsers({ initialItems }) {
                 </YStack>
             </AlertDialog>
             <AlertDialog
+                hideAccept={true}
                 acceptCaption="Save"
                 setOpen={setEditOpen}
                 open={editOpen && currentItem}
-                onAccept={async (setOpen) => {
-                    return new Promise<void>((resolve) => {
-                        setTimeout(() => {
-                            setEditOpen(false);
-                            resolve();
-                        }, 3000);  // 3000 milisegundos (3 segundos)
-                    });
-                }}
                 title={<Text><Tinted><Text color="$color9">Edit</Text></Tinted><Text color="$color11"> account</Text></Text>}
                 description={""}
             >
@@ -104,7 +97,7 @@ export default function ListUsers({ initialItems }) {
                             } catch (e) {
                                 throw getPendingResult('error', null, (e as z.ZodError).flatten())
                             }
-                            setCreateOpen(false);
+                            setEditOpen(false);
                         }} 
                         model={UserModel.load(currentItem)}
                         extraFields={{ 
@@ -114,6 +107,7 @@ export default function ListUsers({ initialItems }) {
                     />
                 </YStack>
             </AlertDialog>
+            
             <XStack pt="$3" px="$4">
                 <YStack left={-12} top={9} f={1}>
                     <Paragraph>

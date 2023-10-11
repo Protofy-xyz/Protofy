@@ -12,10 +12,6 @@ export class UserModel extends ProtoModel<UserModel> {
         return new UserModel(data, session);
     }
 
-    generateId(): UserModel {
-        return this
-    }
-
     setId(id: string): UserModel {
         return new (this.constructor as new (data: any, session?: SessionDataType) => UserModel)({
             ...this.data,

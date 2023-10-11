@@ -28,10 +28,6 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }, this.session);
     }
 
-    generateId(): T {
-        return this.setId("" + Math.random());
-    }
-
     isVisible(): boolean {
         return !this.isDeleted();
     }
@@ -46,7 +42,9 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     create(): T {
         //loop through fieldDetails keys and find the marked as autogenerate
-        return this.generateId().validate();
+        const newData = this.getObjectSchema().apply(this.data)
+        console.log('generating new obj with data: ', newData)
+        return (new(this.constructor as new (data: any, session?: SessionDataType) => T)(newData, this.session)).validate();
     }
 
     read(): any {

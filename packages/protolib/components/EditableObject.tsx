@@ -25,7 +25,6 @@ export const EditableObject = ({ initialData, onSave, mode = 'add', model, icons
 
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields)) 
     const formFields = model.getObjectSchema().merge(extraFieldsObject).isNot('hidden').getLayout(2)
-    console.log('form fields: ', formFields)
     return <YStack ai="center" jc="center">
         {error && (
             <Notice>
@@ -38,7 +37,6 @@ export const EditableObject = ({ initialData, onSave, mode = 'add', model, icons
                     {
                         row.map((ele, i) => {
                             const icon = icons[ele.name] ? icons[ele.name] : Pencil
-                            console.log('ele: ', ele)
                             return <Fieldset ml={!i?"$0":"$5"}  key={i} gap="$2">
                                 <Label><Tinted><Stack mr="$2">{React.createElement(icon, {color: "var(--color9)", size: "$1", strokeWidth: 1})}</Stack></Tinted> {ele.label}</Label>
                                 <Input disabled={mode=='edit' && ele.static} secureTextEntry={ele.secret} value={data[ele.name] ?? ''} onChangeText={(t) => setData({ ...data, [ele.name]: t })} placeholder={ele.hint} autoFocus={x == 0 && i == 0}></Input>

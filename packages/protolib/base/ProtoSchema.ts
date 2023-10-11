@@ -21,6 +21,20 @@ export class ProtoSchema {
         this.fields = fields
     }
 
+    //apply generative schema to data
+    apply(data: any) {
+        const newData = {...data}
+        Object.keys(this.fields).forEach((key) => {
+            if(this.fields[key].generate) {
+                const gen = this.fields[key].generate;
+                if(!data[key] || gen.force) {
+                    newData[key] = typeof gen.generator === 'function' ? gen.generator(data) : gen.generator
+                }
+            }
+        })
+        return newData
+    }
+
     getLayout(num: Number) {
         const elements = [[]]
         let curIndex = 0
@@ -34,6 +48,16 @@ export class ProtoSchema {
             elements[curIndex].push(field)
         })
         return elements;
+    }
+
+    is(field: string) {
+        const validFields = {}
+        Object.keys(this.fields).forEach((key) => {
+            if (this.fields[key][field]) {
+                validFields[key] = this.fields[key]
+            }
+        })
+        return new ProtoSchema(validFields)
     }
 
     isNot(field: string) {

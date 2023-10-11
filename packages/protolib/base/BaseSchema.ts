@@ -1,26 +1,7 @@
 import { z } from 'zod'
 
-export const BaseSchema = z.object({
-    id: z.string(),
-    _deleted: z.boolean().optional(),
-})
-
 initSchemaSystem()
 export const Schema = z
-
-export const hidden = (field, where = ['view', 'list', 'add']) => {
-    field.hidden = where;
-    return field
-}
-
-export const label = (field, caption: string) => {
-    field.label = caption;
-    return field
-}
-
-export const hint = (field, hint: string) => {
-    field.hint = hint
-}
 
 function extendZodTypePrototype(type: any) {
     type.prototype.label = function (caption: string) {
@@ -38,8 +19,8 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.generate = function (val) {
-        this._def.generate = val;
+    type.prototype.generate = function (val, force?) {
+        this._def.generate = {generator: val, force};
         return this;
     };
 
@@ -70,4 +51,9 @@ export function initSchemaSystem() {
 
     zodTypes.forEach(type => extendZodTypePrototype(type));
 }
+
+export const BaseSchema = Schema.object({
+    id: z.string().generate(() => ""+Math.random()),
+    _deleted: z.boolean().optional(),
+})
 

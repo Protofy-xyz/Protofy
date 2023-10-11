@@ -11,17 +11,6 @@ export class EventModel extends ProtoModel<EventModel> {
     protected static _newInstance(data: any, session?: SessionDataType): EventModel {
         return new EventModel(data, session);
     }
-
-    create(): EventModel {
-        const now = moment().toISOString()
-        const {repassword, ...data} = this.data
-        return (new EventModel({
-            ...data,
-            createdAt: now,
-            status: 'pending',
-            lastUpdated: now
-        }, this.session)).validate();
-    }
 }
 
 export class EventCollection extends ProtoCollection<EventModel> {
