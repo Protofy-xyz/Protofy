@@ -1,5 +1,5 @@
 import { YStack, XStack, Paragraph, Text, Button } from 'tamagui'
-import { getPendingResult, AlertDialog, Chip, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect} from 'protolib'
+import { getPendingResult, AlertDialog, Chip, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice} from 'protolib'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Plus, Mail, Tag, Key } from '@tamagui/lucide-icons'
@@ -7,14 +7,14 @@ import moment from 'moment';
 import { UserModel } from '../usersModels'
 import { z } from "zod";
 import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
-
+import {getErrorMessage} from '@my/ui'
 
 const UserIcons = {username: Mail, type: Tag, passwod: Key, repassword: Key}
 const format = 'YYYY-MM-DD HH:mm:ss'
 
 export default function ListUsers({ initialItems }) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
-    const [currentItems, setCurrentItems] = useState(initialItems)
+    const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [currentItem, setCurrentItem] = useState<any>()
     const [createOpen, setCreateOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
@@ -27,7 +27,10 @@ export default function ListUsers({ initialItems }) {
         }
     }, [items])
     const onSearch = async (text) => {
-        setCurrentItems(items.data.filter((item, i) => item.username.includes(text) || item.type.includes(text)))
+        setCurrentItems({
+            ...items, 
+            data: items.data.filter((item, i) => item.username.includes(text) || item.type.includes(text))
+        })
     }
 
     const onCancelSearch = async () => {
@@ -131,13 +134,23 @@ export default function ListUsers({ initialItems }) {
                 </XStack>
             </XStack>
 
-            <XStack pt="$1" flexWrap='wrap'>
-                <DataTable2.component
-                    columns={columns}
-                    rows={currentItems?.data}
-                    onRowPress={(rowData)=>{const {password, ...data} = rowData;setCurrentItem(data);setEditOpen(true)}}
-                />
-            </XStack>
+            {items && items.isError && (
+                <Notice>
+                    <Paragraph>{getErrorMessage(items.error)}</Paragraph>
+                </Notice>
+            )}
+
+
+            <AsyncView atom={currentItems}>
+                <XStack pt="$1" flexWrap='wrap'>
+                    <DataTable2.component
+                        columns={columns}
+                        rows={currentItems?.data}
+                        onRowPress={(rowData)=>{const {password, ...data} = rowData;setCurrentItem(data);setEditOpen(true)}}
+                    />
+                </XStack>
+            </AsyncView>           
+
         </YStack>
     )
 }
