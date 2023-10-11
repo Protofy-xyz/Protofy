@@ -1,14 +1,14 @@
-import { YStack, XStack, Stack, Paragraph, Text, Button, Input, Theme, Label, SizableText, ColorProp } from 'tamagui'
-import { getPendingResult, useSession, AlertDialog, Chip, DataTable2, useAtom, API, createApiAtom, DataCard, Search, Popover, Tinted } from 'protolib'
-import { useUpdateEffect } from 'usehooks-ts'
+import { YStack, XStack, Paragraph, Text, Button } from 'tamagui'
+import { getPendingResult, AlertDialog, Chip, DataTable2, API, Search, Tinted, EditableObject} from 'protolib'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
-import { Plus, TerminalSquare } from '@tamagui/lucide-icons'
+import { useState } from 'react'
+import { Plus, Mail, Tag, Key } from '@tamagui/lucide-icons'
 import moment from 'moment';
-import EditableUser from './EditableUser'
-import React from 'react'
 import { UserModel } from '../usersModels'
 import { z } from "zod";
+
+
+const UserIcons = {username: Mail, type: Tag, passwod: Key, repassword: Key}
 
 export default function ListUsers({ initialUsers }) {
     const [createOpen, setCreateOpen] = useState(false)
@@ -52,9 +52,11 @@ export default function ListUsers({ initialUsers }) {
                 description={""}
             >
                 <YStack f={1} jc="center" ai="center">
-                    <EditableUser mode='add' data={currentUser} onSave={async (data) => {
+                <EditableObject 
+                    initialData={currentUser} 
+                    mode={'add'} 
+                    onSave={async (data) => {
                         try {
-                            console.log('data: ', data)
                             await API.post('/adminapi/v1/accounts', UserModel.load(data).create().getData())
                             const users = await API.get('/adminapi/v1/accounts')
                             setCurrentUsers(users.data)
@@ -63,7 +65,13 @@ export default function ListUsers({ initialUsers }) {
                             throw getPendingResult('error', null, (e as z.ZodError).flatten())
                         }
                         setCreateOpen(false);
-                    }}/>
+                    }} 
+                    model={UserModel.load(currentUser)}
+                    extraFields={{ 
+                        repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()
+                    }}
+                    icons={UserIcons}
+                />
                 </YStack>
             </AlertDialog>
             <AlertDialog
@@ -82,7 +90,26 @@ export default function ListUsers({ initialUsers }) {
                 description={""}
             >
                 <YStack f={1} jc="center" ai="center">
-                    <EditableUser mode='edit' data={currentUser} onSave={(data) => setCurrentUser(data)} />
+                    <EditableObject 
+                        initialData={currentUser} 
+                        mode={'edit'} 
+                        onSave={async (data) => {
+                            try {
+                                await API.post('/adminapi/v1/accounts', UserModel.load(data).create().getData())
+                                const users = await API.get('/adminapi/v1/accounts')
+                                setCurrentUsers(users.data)
+                                setUsers(users.data)
+                            } catch (e) {
+                                throw getPendingResult('error', null, (e as z.ZodError).flatten())
+                            }
+                            setCreateOpen(false);
+                        }} 
+                        model={UserModel.load(currentUser)}
+                        extraFields={{ 
+                            repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()
+                        }}
+                        icons={UserIcons}
+                    />
                 </YStack>
             </AlertDialog>
             <XStack pt="$3" px="$4">

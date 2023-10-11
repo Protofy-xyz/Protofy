@@ -99,3 +99,4 @@ export * from './components/Chip'
 export * from './models'
 export * from './schema'
 export * from './api/lib/session' //this is an exception
+export * from './components/EditableObject'
