@@ -51,7 +51,6 @@ export default function ListUsers({ initialUsers }) {
                         try {
                             await API.post('/adminapi/v1/accounts', UserModel.load(currentUser).create().getData())
                             const users = await API.get('/adminapi/v1/accounts')
-                            console.log('users: ', users)
                             setCurrentUsers(users.data)
                             setUsers(users.data)
                         } catch (e) {

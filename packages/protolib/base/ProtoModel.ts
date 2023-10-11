@@ -1,12 +1,14 @@
 import { createSession, SessionDataType } from 'protolib/api/lib/session'
-
+import {z} from 'zod'
 export abstract class ProtoModel<T extends ProtoModel<T>> {
     data: any;
     session: SessionDataType;
+    schema: z.ZodSchema<any>
 
-    constructor(data: any, session?: SessionDataType) {
+    constructor(data: any, schema: z.ZodSchema<any>, session?: SessionDataType) {
         this.data = data;
         this.session = session ?? createSession();
+        this.schema = schema
     }
 
     getId() {
@@ -56,6 +58,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     validate(): this {
+        this.schema.parse(this.data); //validate
         return this;
     }
 

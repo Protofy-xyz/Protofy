@@ -5,7 +5,7 @@ import moment from 'moment'
 
 export class UserModel extends ProtoModel<UserModel> {
     constructor(data: UserType, session?: SessionDataType) {
-        super(data, session);
+        super(data, UserSchema, session);
     }
 
     protected static _newInstance(data: any, session?: SessionDataType): UserModel {
@@ -33,11 +33,6 @@ export class UserModel extends ProtoModel<UserModel> {
 
     getId() {
         return this.data.username
-    }
-
-    validate(): this {
-        UserSchema.parse(this.data); //validate
-        return this;
     }
 }
 
