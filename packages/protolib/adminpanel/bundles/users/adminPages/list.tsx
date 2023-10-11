@@ -15,7 +15,7 @@ export default function ListUsersPage({workspace, initialUsers, pageSession}:any
         <title>Admin &gt; Users</title>
       </Head>
       <AdminPanel workspace={workspace}>
-        <ListUsers initialUsers={initialUsers}/>
+        <ListUsers initialItems={initialUsers}/>
       </AdminPanel>
     </>
   )
@@ -24,6 +24,6 @@ export default function ListUsersPage({workspace, initialUsers, pageSession}:any
 export const getServerSideProps = SSR(async (context:NextPageContext) => {
     return withSession(context, ['admin'], {
       workspace: await API.get('/adminapi/v1/workspaces'),
-      // initialUsers: await API.get('/adminapi/v1/accounts')
+      initialUsers: await API.get('/adminapi/v1/accounts')
     })
 })
