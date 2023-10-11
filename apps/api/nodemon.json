@@ -2,5 +2,5 @@
     "watch": ["src/**", "../../packages/protolib/**", "../../packages/app/bundles/**"],
     "ext": "ts,js,json",
     "ignore": ["src/**/*.spec.ts"],
-    "exec": "ts-node src/index.ts"
+    "exec": "ts-node --files --project tsconfig.json src/index.ts"
   }

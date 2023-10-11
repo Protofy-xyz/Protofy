@@ -12,7 +12,7 @@
       "removeComments": true,            // Remove comments from the output files
       "typeRoots": [                     // Specifies a list of directories for type definitions
         "./node_modules/@types",
-        "../../node_modules/@types"
+        "../../node_modules/@types",
       ],
       "lib": [                           // List of library files to be included in the compilation
         "es6",
@@ -21,7 +21,8 @@
       ]
     },
     "include": [
-      "src/**/*.ts"
+      "src/**/*.ts",
+      "../../.types/*.ts"
     ],
     "exclude": [
       "node_modules"

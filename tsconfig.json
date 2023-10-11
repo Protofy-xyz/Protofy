@@ -3,11 +3,28 @@
     "strictNullChecks": false,
     "noUncheckedIndexedAccess": true,
     "paths": {
-      "app/*": ["./packages/app/*"],
-      "protolib/*": ["./packages/protolib/*"],
-      "@my/ui/*": ["./packages/ui/*"]
+      "app/*": [
+        "./packages/app/*"
+      ],
+      "protolib/*": [
+        "./packages/protolib/*"
+      ],
+      "@my/ui/*": [
+        "./packages/ui/*"
+      ]
     }
   },
+  "typeRoots": [ // Specifies a list of directories for type definitions
+    "./node_modules/@types",
+    "./.types"
+  ],
   "extends": "expo/tsconfig.base",
-  "exclude": ["**/node_modules", "**/dist", "**/types", "apps/next/out", "apps/next/.next", "apps/next/.tamagui"]
+  "exclude": [
+    "**/node_modules",
+    "**/dist",
+    "**/types",
+    "apps/next/out",
+    "apps/next/.next",
+    "apps/next/.tamagui"
+  ]
 }

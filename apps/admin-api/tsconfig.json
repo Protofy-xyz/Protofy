@@ -10,6 +10,7 @@
       "outDir": "./dist",                // Redirect output structure to the directory
       "rootDir": "./src",                // Specify the root directory of input files
       "removeComments": true,            // Remove comments from the output files
+      // "moduleResolution": "node",
       "typeRoots": [                     // Specifies a list of directories for type definitions
         "./node_modules/@types",
         "../../node_modules/@types"
@@ -18,10 +19,11 @@
         "es6",
         "dom",
         "esnext.asynciterable"
-      ]
+      ],
     },
     "include": [
-      "src/**/*.ts"
+      "src/**/*.ts",
+      "../../.types/*.ts"
     ],
     "exclude": [
       "node_modules"
