@@ -49,7 +49,7 @@ const EditableObject = ({ initialData, onSave, mode = 'add', model, icons={}, ex
     // }
 
 
-    console.log('final elements: ', model.getObjectSchema().merge(extraFields).isNot('hidden'))
+    console.log('final elements: ', model.getObjectSchema().merge(extraFields).isNot('hidden').getLayout(2))
 
     return <YStack ai="center" jc="center">
         {error && (
@@ -117,9 +117,6 @@ export default function EditableUser({ data, onSave, mode = 'add' }: { data: any
         mode={mode} 
         onSave={onSave} 
         model={UserModel.load(data)}
-        // extraFields={[
-        //     { after: 'password', schema: extractFieldDetails((z.object({ repassword: label(z.string().min(6), 'Repeat password')}).shape))}
-        // ]}
         extraFields={ProtoSchema.load(Schema.object({ 
             repassword: z.string().min(6).hint('Repeat password').after('password')
         }))}
