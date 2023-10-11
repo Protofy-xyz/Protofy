@@ -3,12 +3,16 @@ import {z} from 'zod'
 export abstract class ProtoModel<T extends ProtoModel<T>> {
     data: any;
     session: SessionDataType;
-    schema: z.ZodSchema<any>
+    schema: z.ZodObject<any>
 
-    constructor(data: any, schema: z.ZodSchema<any>, session?: SessionDataType) {
+    constructor(data: any, schema: z.ZodObject<any>, session?: SessionDataType) {
         this.data = data;
         this.session = session ?? createSession();
         this.schema = schema
+    }
+
+    getObjectShape() {
+        return this.schema.shape
     }
 
     getId() {

@@ -52,8 +52,9 @@ export const AlertDialog = forwardRef(({ hideAccept, onAccept = () => { }, onCan
                             {children}
                         </XStack>
 
-                        <Spacer flex={1} height="$4" />
+                        
                         {!hideAccept && <YStack p="$2" pt="$0" width="100%" f={1} alignSelf="center">
+                        <Spacer flex={1} height="$4" />
                             <Tinted tint={acceptTint}>
                                 <Button f={1} onPress={async () => {
                                     setLoading(true)

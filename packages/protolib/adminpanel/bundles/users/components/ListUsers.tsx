@@ -44,25 +44,24 @@ export default function ListUsers({ initialUsers }) {
     return (
         <YStack f={1}>
             <AlertDialog
-                acceptCaption="Create"
                 setOpen={setCreateOpen}
                 open={createOpen}
-                onAccept={async (setOpen) => {
+                hideAccept={true}
+                title={<Text><Tinted><Text color="$color9">Create</Text></Tinted><Text color="$color11"> account</Text></Text>}
+                description={""}
+            >
+                <YStack f={1} jc="center" ai="center">
+                    <EditableUser mode='add' data={currentUser} onSave={async (data) => {
                         try {
-                            await API.post('/adminapi/v1/accounts', UserModel.load(currentUser).create().getData())
+                            await API.post('/adminapi/v1/accounts', UserModel.load(data).create().getData())
                             const users = await API.get('/adminapi/v1/accounts')
                             setCurrentUsers(users.data)
                             setUsers(users.data)
                         } catch (e) {
                             throw getPendingResult('error', null, (e as z.ZodError).flatten())
                         }
-                        setEditOpen(false);
-                }}
-                title={<Text><Tinted><Text color="$color9">Create</Text></Tinted><Text color="$color11"> account</Text></Text>}
-                description={""}
-            >
-                <YStack f={1} jc="center" ai="center">
-                    <EditableUser mode='add' data={currentUser} setData={setCurrentUser}/>
+                        setCreateOpen(false);
+                    }}/>
                 </YStack>
             </AlertDialog>
             <AlertDialog
@@ -81,7 +80,7 @@ export default function ListUsers({ initialUsers }) {
                 description={""}
             >
                 <YStack f={1} jc="center" ai="center">
-                    <EditableUser mode='edit' data={currentUser} setData={setCurrentUser}/>
+                    <EditableUser mode='edit' data={currentUser} onSave={(data) => setCurrentUser(data)} />
                 </YStack>
             </AlertDialog>
             <XStack pt="$3" px="$4">
