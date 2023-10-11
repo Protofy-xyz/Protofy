@@ -43,6 +43,11 @@ function extendZodTypePrototype(type: any) {
         this._def.static = true;
         return this;
     };
+
+    type.prototype.id = function () {
+        this._def.id = true;
+        return this;
+    };
 }
 
 // Extiende el prototipo general de todos los tipos de Zod
@@ -53,7 +58,7 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: z.string().generate(() => ""+Math.random()),
+    id: z.string().generate(() => ""+Math.random()).id(),
     _deleted: z.boolean().optional(),
 })
 

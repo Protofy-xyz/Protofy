@@ -50,6 +50,14 @@ export class ProtoSchema {
         return elements;
     }
 
+    getFirst(field: string):string|undefined {
+        return Object.keys(this.fields).find((key) => {
+            if (this.fields[key][field]) {
+                return key
+            }
+        })
+    }
+
     is(field: string) {
         const validFields = {}
         Object.keys(this.fields).forEach((key) => {
@@ -117,6 +125,7 @@ export class ProtoSchema {
             const before = field._def.before
             const after = field._def.after
             const secret = field._def.secret 
+            const id = field._def.id 
             if (field._def.typeName === 'ZodOptional') {
                 optional = true
                 field = field._def.innerType;
@@ -131,6 +140,7 @@ export class ProtoSchema {
             if (before) fields[key].before = before
             if (after) fields[key].after = after
             if (secret) fields[key].secret = secret
+            if (id) fields[key].id = id
         }
         return new ProtoSchema(fields)
     }

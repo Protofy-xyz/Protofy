@@ -1,10 +1,10 @@
 import { z } from "zod";
 import {Schema} from 'protolib/base'
 import moment from "moment";
-
+import { AutoModel } from 'protolib/base'
 
 export const UserSchema = Schema.object({
-    username: z.string().email().label('email').hint('user@example.com').static(),
+    username: z.string().email().label('email').hint('user@example.com').static().id(),
     type: z.string().min(1).hint('user, admin, ...'),
     password: z.string().min(6).hint('**********').secret(),
     createdAt: z.string().min(1).hidden().generate((obj) => moment().toISOString()),
@@ -13,3 +13,5 @@ export const UserSchema = Schema.object({
 })
 
 export type UserType = z.infer<typeof UserSchema>;
+
+export const UserModel = AutoModel.createDerived<UserType>("UserModel", UserSchema);

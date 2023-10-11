@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Plus, Mail, Tag, Key } from '@tamagui/lucide-icons'
 import moment from 'moment';
-import { UserModel } from '../usersModels'
+import { UserModel } from '../'
 import { z } from "zod";
 import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
 import {getErrorMessage} from '@my/ui'
@@ -107,7 +107,7 @@ export default function ListUsers({ initialItems }) {
                     />
                 </YStack>
             </AlertDialog>
-            
+
             <XStack pt="$3" px="$4">
                 <YStack left={-12} top={9} f={1}>
                     <Paragraph>
