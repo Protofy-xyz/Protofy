@@ -1,7 +1,7 @@
 import { Button, Fieldset, Input, Label, Spacer, Stack, XStack, YStack, Paragraph, Spinner } from "tamagui";
 import { Mail, Tag, Key } from '@tamagui/lucide-icons';
 import { Tinted, Notice } from 'protolib'
-import { ProtoModel, extractFieldDetails } from "protolib/base";
+import { ProtoModel, extractFieldDetails, label } from "protolib/base";
 import { UserModel } from "../usersModels";
 import { useState } from "react";
 import { getErrorMessage } from "@my/ui";
@@ -13,22 +13,31 @@ type EditableObjectProps = {
     model: ProtoModel<any>,
     mode: 'add' | 'edit',
     icons?: any,
-    extraFields?: []
+    extraFields?: [],
+    numColumns: number
 }
 
-const EditableObject = ({ initialData, onSave, mode = 'add', model, icons={}, extraFields=[]}: EditableObjectProps) => {
+const EditableObject = ({ initialData, onSave, mode = 'add', model, icons={}, extraFields=[], numColumns=2}: EditableObjectProps) => {
     const [data, setData] = useState(initialData)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
+    console.log('shapeoko:', model.getObjectShape())
     console.log('shaaaaaaaaaaaape: ', Object.keys(extractFieldDetails(model.getObjectShape())))
 
     const fields = extractFieldDetails(model.getObjectShape())
 
+    const elements = [[]]
+    let curIndex = 0
     const generate = (fields, skipExtraFields?) => {
         Object.keys(fields).forEach((key) => {
             const field = fields[key]
             if(!field.hidden) {
                 console.log('adding: ', key)
+                if(elements[curIndex].length == numColumns) {
+                    elements.push([])
+                    curIndex++
+                }
+                elements[curIndex].push(field)
                 //check if there are any after elements in extrafields for this element
                 if(!skipExtraFields) {
                     extraFields.filter(ef => ef['after'] == key).forEach(ef => generate(ef['schema'], true))
@@ -39,6 +48,7 @@ const EditableObject = ({ initialData, onSave, mode = 'add', model, icons={}, ex
     }
 
     generate(fields)
+    console.log('final elements: ', elements)
 
     return <YStack ai="center" jc="center">
         {error && (
@@ -46,6 +56,19 @@ const EditableObject = ({ initialData, onSave, mode = 'add', model, icons={}, ex
                 <Paragraph>{getErrorMessage(error.error)}</Paragraph>
             </Notice>
         )}
+
+        {
+            elements.map((row, i) => <XStack key={i} mb={i==0?"$5":"$0"}>
+                {
+                    row.map((ele, i) => {
+                        <Fieldset gap="$2">
+                            <Label><Tinted><Stack mr="$2"><Mail color="var(--color9)" size={"$1"} strokeWidth={1} /></Stack></Tinted> {ele.label}</Label>
+                            <Input value={data[ele.name] ?? ''} onChangeText={(t) => setData({ ...data, [data[ele.name]]: t })} placeholder="user@example.com" inputMode="email" autoFocus={mode == 'add'}></Input>
+                        </Fieldset>
+                    })
+                }
+            </XStack>)
+        }
         <XStack mb="$5">
             <Fieldset gap="$2">
                 <Label><Tinted><Stack mr="$2"><Mail color="var(--color9)" size={"$1"} strokeWidth={1} /></Stack></Tinted> Email</Label>
@@ -94,7 +117,7 @@ export default function EditableUser({ data, onSave, mode = 'add' }: { data: any
         onSave={onSave} 
         model={UserModel.load(data)}
         extraFields={[
-            { after: 'password', schema: extractFieldDetails((z.object({ repassword: z.string().min(6)}).shape))}
+            { after: 'password', schema: extractFieldDetails((z.object({ repassword: label(z.string().min(6), 'Repeat password')}).shape))}
         ]}
         icons={{username: Mail, type: Tag, passwod: Key, repassword: Key}}
     />
