@@ -50,7 +50,6 @@ export const hint = (field, hint: string) => {
 
 function extendZodTypePrototype(type: any) {
     type.prototype.label = function(caption: string) {
-        console.log('extending: ', this, this._def, caption)
         this._def.label = caption;
         return this;
     };
