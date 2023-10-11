@@ -4,16 +4,11 @@ import { ProtoModel, ProtoCollection } from 'protolib/base'
 
 export class NoteModel extends ProtoModel<NoteModel> {
     constructor(data: NoteType, session?: SessionDataType) {
-        super(data, session);
+        super(data, NoteSchema, session);
     }
 
     protected static _newInstance(data: any, session?: SessionDataType): NoteModel {
         return new NoteModel(data, session);
-    }
-
-    validate(): this {
-        NoteSchema.parse(this.data); //validate
-        return this;
     }
 }
 
