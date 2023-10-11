@@ -3,9 +3,9 @@ import {Schema} from 'protolib/base'
 
 
 export const UserSchema = Schema.object({
-    username: z.string().email().label('email'),
-    type: z.string().min(1),
-    password: z.string().min(6),
+    username: z.string().email().label('email').hint('user@example.com').static(),
+    type: z.string().min(1).hint('user, admin, ...'),
+    password: z.string().min(6).hint('**********').secret(),
     createdAt: z.string().min(1).hidden().generate("fecha"),
     lastLogin: z.string().optional().hidden(),
     from: z.string().min(1).hidden()

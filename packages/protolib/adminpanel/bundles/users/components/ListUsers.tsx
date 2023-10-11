@@ -44,6 +44,7 @@ export default function ListUsers({ initialUsers }) {
     return (
         <YStack f={1}>
             <AlertDialog
+                p="$3"
                 setOpen={setCreateOpen}
                 open={createOpen}
                 hideAccept={true}
@@ -53,6 +54,7 @@ export default function ListUsers({ initialUsers }) {
                 <YStack f={1} jc="center" ai="center">
                     <EditableUser mode='add' data={currentUser} onSave={async (data) => {
                         try {
+                            console.log('data: ', data)
                             await API.post('/adminapi/v1/accounts', UserModel.load(data).create().getData())
                             const users = await API.get('/adminapi/v1/accounts')
                             setCurrentUsers(users.data)

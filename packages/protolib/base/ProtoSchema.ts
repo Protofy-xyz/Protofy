@@ -10,7 +10,8 @@ export type FieldDefinitionType = {
     subtypes: string[],
     hidden: string[],
     before?: string,
-    after?: string
+    after?: string,
+    secret?:boolean
 }
 
 export class ProtoSchema {
@@ -91,6 +92,7 @@ export class ProtoSchema {
             const generate = field._def.generate
             const before = field._def.before
             const after = field._def.after
+            const secret = field._def.secret 
             if (field._def.typeName === 'ZodOptional') {
                 optional = true
                 field = field._def.innerType;
@@ -104,6 +106,7 @@ export class ProtoSchema {
             fields[key] = { generate: generate, hint: hint ?? (label ?? key), label: label ?? key, name: key, type: field.constructor.name.substr(3), optional: optional, subtypes: checks, hidden }
             if (before) fields[key].before = before
             if (after) fields[key].after = after
+            if (secret) fields[key].secret = secret
         }
         return new ProtoSchema(fields)
     }

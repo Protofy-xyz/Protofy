@@ -7,6 +7,8 @@ interface ZodExtensions {
     generate(val: any): this;
     before(field: string): this;
     after(field: string): this;
+    secret(): this;
+    static(): this;
 }
 
 declare module 'zod' {

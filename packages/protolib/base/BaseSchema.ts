@@ -52,6 +52,16 @@ function extendZodTypePrototype(type: any) {
         this._def.after = val;
         return this;
     };
+
+    type.prototype.secret = function () {
+        this._def.secret = true;
+        return this;
+    };
+
+    type.prototype.static = function () {
+        this._def.static = true;
+        return this;
+    };
 }
 
 // Extiende el prototipo general de todos los tipos de Zod
