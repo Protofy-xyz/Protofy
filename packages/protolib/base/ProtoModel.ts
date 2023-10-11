@@ -1,5 +1,7 @@
 import { createSession, SessionDataType } from 'protolib/api/lib/session'
 import {z} from 'zod'
+import { ProtoSchema } from './ProtoSchema';
+
 export abstract class ProtoModel<T extends ProtoModel<T>> {
     data: any;
     session: SessionDataType;
@@ -11,8 +13,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         this.schema = schema
     }
 
-    getObjectShape() {
-        return this.schema.shape
+    getObjectSchema() {
+        return ProtoSchema.load(this.schema)
     }
 
     getId() {
@@ -43,6 +45,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     create(): T {
+        //loop through fieldDetails keys and find the marked as autogenerate
         return this.generateId().validate();
     }
 

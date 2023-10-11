@@ -23,13 +23,13 @@ export class UserModel extends ProtoModel<UserModel> {
         }, this.session);
     }
 
-    create(): UserModel {
-        const {repassword, ...data} = this.data 
-        return (new (this.constructor as new (data: any, session?: SessionDataType) => UserModel)({
-            ...data,
-            createdAt: moment().toISOString()
-        }, this.session)).validate();
-    }
+    // create(): UserModel {
+    //     const {repassword, ...data} = this.data 
+    //     return (new (this.constructor as new (data: any, session?: SessionDataType) => UserModel)({
+    //         ...data,
+    //         createdAt: moment().toISOString()
+    //     }, this.session)).validate();
+    // }
 
     getId() {
         return this.data.username

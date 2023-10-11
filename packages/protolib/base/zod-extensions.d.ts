@@ -1,9 +1,12 @@
-import { ZodString, ZodNumber, ZodBoolean, ZodArray, ZodAny} from 'zod';
+import { ZodString, ZodNumber, ZodBoolean, ZodArray, ZodAny, ZodOptional} from 'zod';
 
 interface ZodExtensions {
     label(caption: string): this;
     hint(hintText: string): this;
     hidden(): this;
+    generate(val: any): this;
+    before(field: string): this;
+    after(field: string): this;
 }
 
 declare module 'zod' {
@@ -11,4 +14,5 @@ declare module 'zod' {
     interface ZodNumber extends ZodExtensions {}
     interface ZodBoolean extends ZodExtensions {}
     interface ZodAny extends ZodExtensions {}
+    interface ZodOptional extends ZodExtensions {}
 }
