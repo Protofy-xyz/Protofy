@@ -1,22 +1,45 @@
 import { Button, Fieldset, Input, Label, Spacer, Stack, XStack, YStack, Paragraph, Spinner } from "tamagui";
 import { Mail, Tag, Key } from '@tamagui/lucide-icons';
-import { Tinted, Notice} from 'protolib'
-import { ProtoModel } from "protolib/base";
+import { Tinted, Notice } from 'protolib'
+import { ProtoModel, extractFieldDetails } from "protolib/base";
 import { UserModel } from "../usersModels";
 import { useState } from "react";
-import {getErrorMessage} from "@my/ui";
+import { getErrorMessage } from "@my/ui";
+import {z} from 'zod'
 
 type EditableObjectProps = {
     initialData: any,
     onSave: Function,
     model: ProtoModel<any>,
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit',
+    icons?: any,
+    extraFields?: []
 }
 
-const EditableObject = ({ initialData, onSave, mode = 'add', model }: EditableObjectProps) => {
+const EditableObject = ({ initialData, onSave, mode = 'add', model, icons={}, extraFields=[]}: EditableObjectProps) => {
     const [data, setData] = useState(initialData)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
+    console.log('shaaaaaaaaaaaape: ', Object.keys(extractFieldDetails(model.getObjectShape())))
+
+    const fields = extractFieldDetails(model.getObjectShape())
+
+    const generate = (fields, skipExtraFields?) => {
+        Object.keys(fields).forEach((key) => {
+            const field = fields[key]
+            if(!field.hidden) {
+                console.log('adding: ', key)
+                //check if there are any after elements in extrafields for this element
+                if(!skipExtraFields) {
+                    extraFields.filter(ef => ef['after'] == key).forEach(ef => generate(ef['schema'], true))
+                }
+
+            }
+        })
+    }
+
+    generate(fields)
+
     return <YStack ai="center" jc="center">
         {error && (
             <Notice>
@@ -31,7 +54,7 @@ const EditableObject = ({ initialData, onSave, mode = 'add', model }: EditableOb
             <Spacer size="$5" />
             <Fieldset gap="$2">
                 <Label><Tinted><Stack mr="$2"><Tag color="var(--color9)" size={"$1"} strokeWidth={1} /></Stack></Tinted> Type</Label>
-                <Input value={data.type ?? ''} onChangeText={(t) => setData({ ...data, type: t })} placeholder="user, admin, ..." inputMode="email" autoFocus={mode == 'edit'}></Input>
+                <Input value={data.type ?? ''} onChangeText={(t) => setData({ ...data, type: t })} placeholder="user, admin, ..." autoFocus={mode == 'edit'}></Input>
             </Fieldset>
         </XStack>
         <XStack>
@@ -57,7 +80,7 @@ const EditableObject = ({ initialData, onSave, mode = 'add', model }: EditableOb
                     }
                     setLoading(false)
                 }}>
-                    {loading ? <Spinner /> : mode=='add' ? 'Create' :  'Save'}
+                    {loading ? <Spinner /> : mode == 'add' ? 'Create' : 'Save'}
                 </Button>
             </Tinted>
         </YStack>
@@ -65,7 +88,16 @@ const EditableObject = ({ initialData, onSave, mode = 'add', model }: EditableOb
 }
 
 export default function EditableUser({ data, onSave, mode = 'add' }: { data: any, onSave: Function, mode: 'add' | 'edit' }) {
-    return <EditableObject initialData={data} mode={mode} onSave={onSave} model={UserModel.load(data)} />
+    return <EditableObject 
+        initialData={data} 
+        mode={mode} 
+        onSave={onSave} 
+        model={UserModel.load(data)}
+        extraFields={[
+            { after: 'password', schema: extractFieldDetails((z.object({ repassword: z.string().min(6)}).shape))}
+        ]}
+        icons={{username: Mail, type: Tag, passwod: Key, repassword: Key}}
+    />
 }
 
 /*
