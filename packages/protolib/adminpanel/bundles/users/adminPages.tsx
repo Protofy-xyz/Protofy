@@ -8,7 +8,7 @@ import { Mail, Tag, Key } from '@tamagui/lucide-icons';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const UserIcons =  {username: Mail, type: Tag, passwod: Key, repassword: Key}
-const rowsPerPage = 25
+const rowsPerPage = 20
 export default {
     'admin/users': {
         component: ({workspace, initialItems, pageSession}:any) => {

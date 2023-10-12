@@ -218,3 +218,31 @@
 .rdt_TableBody{
   color: var(--color) !important;
 }
+
+.rdt_Pagination {
+  background-color: var(--background) !important;
+  color: var(--color) !important;
+  border-top-width: 0px !important;
+  justify-content: flex-end !important;
+  text-align: right !important;
+}
+
+button > svg {
+  fill: var(--color) !important;
+  opacity: 0.6;
+}
+
+.rdt_Table > div:not(.rdt_TableHead):not(.rdt_TableBody) {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  color: var(--color);
+  font-size: 20px;
+  opacity: 0.4;
+  background-color: var(--backgroundHover);
+}
+
+.data-table-extensions + * + * {
+  width: 100% !important;
+  justify-content: flex-end !important;
+  text-align: right !important;
+}
