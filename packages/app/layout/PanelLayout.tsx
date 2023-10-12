@@ -1,9 +1,10 @@
 import { DefaultLayout } from './DefaultLayout'
-import { YStack, ScrollView } from 'tamagui'
+import { YStack, ScrollView, Theme } from 'tamagui'
 import {AppBar} from 'protolib'
 import { HeaderContents } from './HeaderContents'
 import { SideMenu } from './SideMenu'
 import { useTint } from '@tamagui/logo'
+import {Tinted} from 'protolib'
 
 export const PanelLayout = ({panelBgColor='var(--color2)', menuContent, children}) => {
     const appBarHeight = 55
@@ -31,9 +32,15 @@ export const PanelLayout = ({panelBgColor='var(--color2)', menuContent, children
         }>
         {/* <Theme name={tint as any}> */}
         <ScrollView $sm={{br:"$0"}} btlr={"$6"} mt={appBarHeight} height={'calc(100vh - '+appBarHeight+'px)'}>
-          <YStack bc={panelBgColor} f={1} minHeight={'calc(100vh - '+appBarHeight+'px)'} flex={1}>
-            {children}
-          </YStack>
+          {/* <Tinted> */}
+            <YStack bc={panelBgColor} f={1} minHeight={'calc(100vh - '+appBarHeight+'px)'} flex={1}>
+              {/* <Theme reset> */}
+                {children}
+              {/* </Theme> */}
+
+            </YStack>
+          {/* </Tinted> */}
+
         </ScrollView>
         {/* </Theme> */}
       </DefaultLayout>
