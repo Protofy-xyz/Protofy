@@ -248,3 +248,17 @@ button > svg {
   justify-content: flex-end !important;
   text-align: right !important;
 }
+
+.rdt_TableCell input {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--borderColor)
+}
+
+.rdt_TableCol input {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--borderColor)
+}
