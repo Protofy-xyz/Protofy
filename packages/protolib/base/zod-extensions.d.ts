@@ -11,6 +11,12 @@ interface ZodExtensions {
     static(): this;
     id(): this;
     search(): this;
+    onList(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    onCreate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    onRead(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    onUpdate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    onDelete(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    on(eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
 }
 
 declare module 'zod' {

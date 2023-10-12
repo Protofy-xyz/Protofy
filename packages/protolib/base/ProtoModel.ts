@@ -12,22 +12,21 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         this.data = data;
         this.session = session ?? createSession();
         this.schema = schema
-        this.objectSchema = this.getObjectSchema()
+        this.objectSchema = ProtoSchema.load(this.schema)
         this.idField = this.objectSchema.getFirst('id') ?? 'id'
-
     }
 
     getObjectSchema() {
-        return ProtoSchema.load(this.schema)
+        return this.objectSchema
     }
 
     getId() {
         return this.data[this.idField]
     }
 
-    setId(id: string): T {
+    setId(id: string, newData?): T {
         return new (this.constructor as new (data: any, session?: SessionDataType) => T)({
-            ...this.data,
+            ...(newData? newData : this.data),
             [this.idField]: id
         }, this.session);
     }
@@ -41,36 +40,42 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     list(search?): any {
-        if(search) {
-            const searchFields = this.objectSchema.is('search').getFields()
-            for(var i=0;i<searchFields.length;i++) {
-                if((this.data[searchFields[i]]+"").includes(search)) {
-                    return this.read();
+        const result = (() => {
+            if(search) {
+                const searchFields = this.objectSchema.is('search').getFields()
+                for(var i=0;i<searchFields.length;i++) {
+                    if((this.data[searchFields[i]]+"").includes(search)) {
+                        return this.read();
+                    }
                 }
+            } else {
+                return this.read();
             }
-        } else {
-            return this.read();
+        })();
+        if(result) {
+            return this.getObjectSchema().apply('list', result);
         }
     }
 
     create(): T {
         //loop through fieldDetails keys and find the marked as autogenerate
-        const newData = this.getObjectSchema().apply(this.data)
+        const newData = this.getObjectSchema().apply('create', {...this.data})
+
         return (new(this.constructor as new (data: any, session?: SessionDataType) => T)(newData, this.session)).validate();
     }
 
     read(): any {
-        return { ...this.data };
+        return this.getObjectSchema().apply('read',{ ...this.data });
     }
 
     update(updatedModel: T): T {
-        return updatedModel.setId(this.getId());
+        return updatedModel.setId(this.getId(), this.getObjectSchema().apply('create', {...this.data}));
     }
 
     delete(): T {
         return new (this.constructor as new (data: any, session?: SessionDataType) => T)({
-            ...this.data,
-            _deleted: true
+            _deleted: true,
+            ...this.getObjectSchema().apply('delete',{...this.data})
         }, this.session);
     }
 

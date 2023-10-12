@@ -3,6 +3,19 @@ import { z } from 'zod'
 initSchemaSystem()
 export const Schema = z
 
+const onEvent = (that, eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) => {
+    if(!that._def.events) {
+        that._def.events = []
+    }
+    that._def.events.push({
+        eventName: eventName,
+        eventHandler,
+        eventContext: eventContext ?? 'server',
+        eventParams
+    })
+    return that
+}
+
 function extendZodTypePrototype(type: any) {
     type.prototype.label = function (caption: string) {
         this._def.label = caption;
@@ -53,6 +66,30 @@ function extendZodTypePrototype(type: any) {
         this._def.search = true;
         return this;
     };
+
+    type.prototype.on = function(eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+        return onEvent(this, eventName, eventHandler, eventContext, eventParams)
+    }
+
+    type.prototype.onList = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+        return onEvent(this, 'list', eventHandler, eventContext, eventParams)
+    }
+
+    type.prototype.onCreate = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+        return onEvent(this, 'create', eventHandler, eventContext, eventParams)
+    };
+
+    type.prototype.onRead = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+        return onEvent(this, 'read', eventHandler, eventContext, eventParams)
+    }
+
+    type.prototype.onUpdate = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+        return onEvent(this, 'update', eventHandler, eventContext, eventParams)
+    }
+
+    type.prototype.onDelete = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+        return onEvent(this, 'delete', eventHandler, eventContext, eventParams)
+    }
 }
 
 // Extiende el prototipo general de todos los tipos de Zod

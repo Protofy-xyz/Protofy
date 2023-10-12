@@ -26,16 +26,18 @@ export class ProtoSchema {
     }
 
     //apply generative schema to data
-    apply(data: any) {
+    apply(eventName:string, data: any) {
         const newData = {...data}
-        Object.keys(this.fields).forEach((key) => {
-            if(this.fields[key].generate) {
-                const gen = this.fields[key].generate;
-                if(!data[key] || gen.force) {
-                    newData[key] = typeof gen.generator === 'function' ? gen.generator(data) : gen.generator
+        if(eventName == 'create') {
+            Object.keys(this.fields).forEach((key) => {
+                if(this.fields[key].generate) {
+                    const gen = this.fields[key].generate;
+                    if(!data[key] || gen.force) {
+                        newData[key] = typeof gen.generator === 'function' ? gen.generator(data) : gen.generator
+                    }
                 }
-            }
-        })
+            })
+        }
         return newData
     }
 
