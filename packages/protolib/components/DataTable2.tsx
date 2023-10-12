@@ -30,7 +30,6 @@ export const DataTable2 = {
         defaultSortAsc={false}
         onRowClicked={onRowPress}
       // sortIcon={<ArrowUpDown />}
-      // pagination
       />
     </DataTableExtensions>
   },

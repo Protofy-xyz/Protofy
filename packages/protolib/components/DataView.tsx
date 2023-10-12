@@ -1,18 +1,13 @@
 import { YStack, XStack, Paragraph, Text, Button } from 'tamagui'
 import { getPendingResult, AlertDialog, Chip, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice} from 'protolib'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { Plus, Mail, Tag, Key } from '@tamagui/lucide-icons'
+import { Plus } from '@tamagui/lucide-icons'
 import moment from 'moment';
-import { UserModel } from '../'
 import { z } from "zod";
 import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
 import {getErrorMessage} from '@my/ui'
 
-const UserIcons = {username: Mail, type: Tag, passwod: Key, repassword: Key}
-const format = 'YYYY-MM-DD HH:mm:ss'
-
-export default function ListUsers({ initialItems, sourceUrl}) {
+export function DataView({ initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [currentItem, setCurrentItem] = useState<any>()
@@ -36,14 +31,6 @@ export default function ListUsers({ initialItems, sourceUrl}) {
     const onCancelSearch = async () => {
         setCurrentItems(items)
     }
-
-    const columns = DataTable2.columns(
-        DataTable2.column("email", "username", true, row => <Chip text={row.username} color={'$color5'} />),
-        DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'admin' ? '$blue5':'$color5'} />),
-        DataTable2.column("from", "from", true, row => <Chip text={row.from.toUpperCase()} color={row.from == 'cmd' ? '$blue5':'$color5'} />),
-        DataTable2.column("created", "createdAt", true, row => <Chip text={moment(row.createdAt).format(format)} color={'$color5'} />),
-        DataTable2.column("last login", "lastLogin",true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$color5'} /> : <Chip text={'NEVER'} color={'$red5'} /> )
-    )
         
     return (
         <YStack f={1}>
@@ -61,19 +48,17 @@ export default function ListUsers({ initialItems, sourceUrl}) {
                     mode={'add'} 
                     onSave={async (data) => {
                         try {
-                            await API.post(sourceUrl, UserModel.load(data).create().getData())
-                            const users = await API.get(sourceUrl)
-                            setItems(users)
+                            await API.post(sourceUrl, onAdd(model.load(data).create().getData()))
+                            const items = await API.get(sourceUrl)
+                            setItems(items)
                         } catch (e) {
-                            throw getPendingResult('error', null, (e as z.ZodError).flatten())
+                            throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten(): e)
                         }
                         setCreateOpen(false);
                     }} 
-                    model={UserModel.load(currentItem)}
-                    extraFields={{ 
-                        repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()
-                    }}
-                    icons={UserIcons}
+                    model={model.load(currentItem)}
+                    extraFields={extraFields}
+                    icons={icons}
                 />
                 </YStack>
             </AlertDialog>
@@ -91,19 +76,17 @@ export default function ListUsers({ initialItems, sourceUrl}) {
                         mode={'edit'} 
                         onSave={async (data) => {
                             try {
-                                await API.post(sourceUrl, UserModel.load(data).create().getData())
-                                const users = await API.get(sourceUrl)
-                                setItems(users)
+                                await API.post(sourceUrl, onEdit(model.load(data).create().getData()))
+                                const items = await API.get(sourceUrl)
+                                setItems(items)
                             } catch (e) {
-                                throw getPendingResult('error', null, (e as z.ZodError).flatten())
+                                throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten(): e)
                             }
                             setEditOpen(false);
                         }} 
-                        model={UserModel.load(currentItem)}
-                        extraFields={{ 
-                            repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()
-                        }}
-                        icons={UserIcons}
+                        model={model.load(currentItem)}
+                        extraFields={extraFields}
+                        icons={icons}
                     />
                 </YStack>
             </AlertDialog>
@@ -119,7 +102,7 @@ export default function ListUsers({ initialItems, sourceUrl}) {
                     <Search onCancel={onCancelSearch} onSearch={onSearch} />
                     <XStack top={-3}>
                         <Tinted>
-                            <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {setCurrentItem({from: 'admin'});setCreateOpen(true)}} chromeless={true}>
+                            <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {setCurrentItem(defaultCreateData);setCreateOpen(true)}} chromeless={true}>
                                 <Plus />
                             </Button>
                         </Tinted>
@@ -140,7 +123,7 @@ export default function ListUsers({ initialItems, sourceUrl}) {
                     <DataTable2.component
                         columns={columns}
                         rows={currentItems?.data}
-                        onRowPress={(rowData)=>{const {password, ...data} = rowData;setCurrentItem(data);setEditOpen(true)}}
+                        onRowPress={(rowData)=>{setCurrentItem(rowData);setEditOpen(true)}}
                     />
                 </XStack>
             </AsyncView>           
