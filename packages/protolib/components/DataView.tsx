@@ -124,6 +124,7 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
 
             <AsyncView atom={currentItems}>
                 <XStack pt="$1" flexWrap='wrap'>
+                    {/* <Tinted> */}
                     <DataTable2.component
                         rowsPerPage={rowsPage}
                         handleSort={(selectedColumn, sortDirection, sortedRows) => {
@@ -137,6 +138,7 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                         rows={currentItems?.data.items}
                         onRowPress={(rowData)=>{setCurrentItem(rowData);setEditOpen(true)}}
                     />
+                    {/* </Tinted> */}
                 </XStack>
             </AsyncView>           
 

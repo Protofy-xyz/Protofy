@@ -168,18 +168,23 @@
 }
 
 .rdt_TableRow:last-of-type {
+  border-bottom: 1px solid var(--color5) !important;
+}
 
-  border-bottom: 1px solid var(--borderColor) !important;
+.rdt_TableRow{
+  color: var(--color) !important;
+  border: 0 !important;
+  border-top: 1px solid var(--color5) !important;
 }
 
 .rdt_TableHeadRow {
-  background-color: var(--background) !important;
+  background-color: transparent !important;
   border-bottom: 0 !important;
   border-radius: 13px 13px 0px 0px !important;
 }
 
 .rdt_TableHead {
-    background-color: var(--color1) !important;
+    background-color: transparent !important;
     border-radius: 13px 13px 0px 0px !important;
 }
 
@@ -190,18 +195,14 @@
 }
 
 .rdt_TableRow:nth-child(odd) {
-  background-color: var(--background) !important;
+  background-color: var(--color2) !important;
 }
 
 .rdt_TableRow:nth-child(even) {
-  background-color: var(--backgroundHover) !important;
+  background-color: var(--color3) !important;
 }
 
-.rdt_TableRow{
-  color: var(--color) !important;
-  border: 0 !important;
-  border-top: 1px solid var(--borderColor) !important;
-}
+
 
 .rdt_TableCol_Sortable > span {
   margin-left: 5px;
@@ -210,11 +211,11 @@
 }
 
 .rdt_TableRow:hover{
-  background-color: var(--backgroundPress) !important;
+  background-color: var(--background) !important;
 }
 
 .rdt_TableCol_Sortable {
-  color: var(--color) !important;
+  color: var(--color8) !important;
 }
 
 .rdt_TableBody{
@@ -222,7 +223,7 @@
 }
 
 .rdt_Pagination {
-  background-color: var(--background) !important;
+  background-color: transparent !important;
   color: var(--color) !important;
   border-top-width: 0px !important;
   justify-content: flex-end !important;
@@ -230,8 +231,8 @@
 }
 
 button > svg {
-  fill: var(--color) !important;
-  opacity: 0.6;
+  fill: var(--color7) !important;
+  opacity: 1;
 }
 
 .rdt_Table > div:not(.rdt_TableHead):not(.rdt_TableBody) {
@@ -253,12 +254,12 @@ button > svg {
   cursor: pointer;
   width: 16px;
   height: 16px;
-  border: 1px solid var(--borderColor)
+  border: 1px solid var(--color6);
 }
 
 .rdt_TableCol input {
   cursor: pointer;
   width: 16px;
   height: 16px;
-  border: 1px solid var(--borderColor)
+  border: 1px solid var(--color6);
 }
