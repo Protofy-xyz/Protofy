@@ -16,9 +16,10 @@ export function DataView({ initialItems, sourceUrl, icons={}, model, defaultCrea
     const [editOpen, setEditOpen] = useState(false)
     const [sort, setSort] = useState<any>()
     const [currentPage, setCurrentPage] = useState(1)
+    const [search, setSearch] = useState('')
 
     const fetch = () => {
-        API.get(sourceUrl+'?page='+(currentPage-1)+(sort?'&orderBy='+sort.orderBy+'&direction='+sort.direction:''), setItems)
+        API.get(sourceUrl+'?page='+(currentPage-1)+(sort?'&orderBy='+sort.orderBy+'&direction='+sort.direction:'')+(search?'&search='+search:''), setItems)
     }
 
     usePendingEffect((s) => API.get(sourceUrl, s), setItems, initialItems)
@@ -29,20 +30,11 @@ export function DataView({ initialItems, sourceUrl, icons={}, model, defaultCrea
         }
     }, [items])
 
-    useUpdateEffect(() => fetch(), [currentPage])
-    useUpdateEffect(() => fetch(), [sort])
+    useUpdateEffect(() => fetch(), [currentPage, sort, search])
 
-    const onSearch = async (text) => {
-        setCurrentItems({
-            ...items, 
-            data: items.data.filter((item, i) => item.username.includes(text) || item.type.includes(text))
-        })
-    }
+    const onSearch = async (text) => setSearch(text)
+    const onCancelSearch = async () => setCurrentItems(items)
 
-    const onCancelSearch = async () => {
-        setCurrentItems(items)
-    }
-        
     return (
         <YStack f={1}>
             <AlertDialog
