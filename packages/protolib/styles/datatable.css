@@ -211,7 +211,7 @@
 }
 
 .rdt_TableRow:hover{
-  background-color: var(--background) !important;
+  background-color: var(--backgroundPress) !important;
 }
 
 .rdt_TableCol_Sortable {
@@ -231,7 +231,7 @@
 }
 
 button > svg {
-  fill: var(--color7) !important;
+  fill: var(--color9) !important;
   opacity: 1;
 }
 
@@ -254,12 +254,12 @@ button > svg {
   cursor: pointer;
   width: 16px;
   height: 16px;
-  border: 1px solid var(--color6);
+  border: 1px solid var(--color7);
 }
 
 .rdt_TableCol input {
   cursor: pointer;
   width: 16px;
   height: 16px;
-  border: 1px solid var(--color6);
+  border: 1px solid var(--color7);
 }
