@@ -38,6 +38,13 @@ export class ProtoSchema {
                 }
             })
         }
+        const withEvents = this.is('events')
+        Object.keys(withEvents.fields).forEach((key) => {
+            const currField:any = withEvents.fields[key]
+            const isNode = typeof process !== 'undefined' && process.versions && process.versions.node
+            const events = currField.events.filter(e => e.eventName == eventName && (!e.eventContext || (e.eventContext == 'client' && !isNode) || (e.eventContext == 'server' && isNode)))
+            console.log('final detect events: ', events)
+        })
         return newData
     }
 
@@ -133,6 +140,7 @@ export class ProtoSchema {
             const secret = field._def.secret 
             const id = field._def.id
             const search = field._def.search
+            const events = field._def.events
             if (field._def.typeName === 'ZodOptional') {
                 optional = true
                 field = field._def.innerType;
@@ -149,6 +157,7 @@ export class ProtoSchema {
             if (secret) fields[key].secret = secret
             if (id) fields[key].id = id
             if (search) fields[key].search = search
+            if (events) fields[key].events = events
         }
         return new ProtoSchema(fields)
     }
