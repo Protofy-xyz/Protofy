@@ -48,6 +48,11 @@ function extendZodTypePrototype(type: any) {
         this._def.id = true;
         return this;
     };
+
+    type.prototype.search = function () {
+        this._def.search = true;
+        return this;
+    };
 }
 
 // Extiende el prototipo general de todos los tipos de Zod

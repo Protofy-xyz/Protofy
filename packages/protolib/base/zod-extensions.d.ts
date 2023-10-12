@@ -10,6 +10,7 @@ interface ZodExtensions {
     secret(): this;
     static(): this;
     id(): this;
+    search(): this;
 }
 
 declare module 'zod' {

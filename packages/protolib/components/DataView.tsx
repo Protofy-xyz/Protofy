@@ -94,7 +94,7 @@ export function DataView({ initialItems, sourceUrl, icons={}, model, defaultCrea
             <XStack pt="$3" px="$4">
                 <YStack left={-12} top={9} f={1}>
                     <Paragraph>
-                        <Text fontSize="$6" color="$color11">Users [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.length}</Text></Tinted>]</Text>
+                        <Text fontSize="$6" color="$color11">Users [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.items?.length}</Text></Tinted>]</Text>
                     </Paragraph>
                 </YStack>
 
@@ -121,8 +121,11 @@ export function DataView({ initialItems, sourceUrl, icons={}, model, defaultCrea
             <AsyncView atom={currentItems}>
                 <XStack pt="$1" flexWrap='wrap'>
                     <DataTable2.component
+                        handlePageChange={(page) => API.get(sourceUrl+'?page='+(page-1), setItems)}
+                        currentPage={1}
+                        totalRows={currentItems?.data.total}
                         columns={columns}
-                        rows={currentItems?.data}
+                        rows={currentItems?.data.items}
                         onRowPress={(rowData)=>{setCurrentItem(rowData);setEditOpen(true)}}
                     />
                 </XStack>

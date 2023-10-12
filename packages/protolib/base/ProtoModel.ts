@@ -7,11 +7,14 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     session: SessionDataType;
     schema: z.ZodObject<any>
     idField: string
+    objectSchema: ProtoSchema
     constructor(data: any, schema: z.ZodObject<any>, session?: SessionDataType) {
         this.data = data;
         this.session = session ?? createSession();
         this.schema = schema
-        this.idField = this.getObjectSchema().getFirst('id') ?? 'id'
+        this.objectSchema = this.getObjectSchema()
+        this.idField = this.objectSchema.getFirst('id') ?? 'id'
+
     }
 
     getObjectSchema() {
@@ -37,14 +40,22 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.data._deleted ? true : false;
     }
 
-    list(): any {
-        return this.read();
+    list(search?): any {
+        if(search) {
+            const searchFields = this.objectSchema.is('search').getFields()
+            for(var i=0;i<searchFields.length;i++) {
+                if((this.data[searchFields[i]]+"").includes(search)) {
+                    return this.read();
+                }
+            }
+        } else {
+            return this.read();
+        }
     }
 
     create(): T {
         //loop through fieldDetails keys and find the marked as autogenerate
         const newData = this.getObjectSchema().apply(this.data)
-        console.log('generating new obj with data: ', newData)
         return (new(this.constructor as new (data: any, session?: SessionDataType) => T)(newData, this.session)).validate();
     }
 

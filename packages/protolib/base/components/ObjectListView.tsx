@@ -10,7 +10,7 @@ export function ObjectListView({ elements, listItem }) {
   return (
     <AsyncView atom={elements}>
           <Grid itemMinWidth={300}>
-            {elements?.data?.map((data, index) => <Stack style={{ touchAction: 'none' }} $sm={{mx:"$0"}} mx={"$5"} p={"$1"} py={"$5"}>
+            {elements?.data?.items?.map((data, index) => <Stack style={{ touchAction: 'none' }} $sm={{mx:"$0"}} mx={"$5"} p={"$1"} py={"$5"}>
                 <ItemCard
                     maxWidth={700}
                     $md={{ maxWidth: 450 }}

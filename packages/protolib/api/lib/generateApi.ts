@@ -28,13 +28,36 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     connectDB(dbPath, initialData) //preconnect database
 
     //list
-    app.get(prefix+entityName, handler(async (req, res, session) => {
-        const db = getDB(dbPath)
-        const total: any[] = []
+    app.get(prefix + entityName, handler(async (req, res, session) => {
+        const db = getDB(dbPath);
+        const totalResults: any[] = [];
+        const itemsPerPage = Math.min(Number(req.query.itemsPerPage) || 10, 100);
+        const page = Number(req.query.page) || 0;
+        const search = req.query.search;
+    
+        let currentIndex = 0;
+        let itemsAdded = 0;
+    
         for await (const [key, value] of db.iterator()) {
-            if(key != 'initialized' && modelClass.unserialize(value, session).isVisible()) total.push(modelClass.unserialize(value, session).list())
+            if (key != 'initialized') {
+                const model = modelClass.unserialize(value, session);
+                const listItem = model.list(search);
+    
+                if (listItem && model.isVisible()) {
+                    if (currentIndex >= page * itemsPerPage && itemsAdded < itemsPerPage) {
+                        totalResults.push(listItem);
+                        itemsAdded++;
+                    }
+                    currentIndex++;
+                }
+            }
         }
-        res.send(total)
+        res.send({
+            items: totalResults,
+            total: currentIndex,
+            page: page,
+            pages: Math.ceil(currentIndex / itemsPerPage)
+        });
     }));
 
     //create

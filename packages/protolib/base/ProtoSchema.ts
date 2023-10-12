@@ -21,6 +21,10 @@ export class ProtoSchema {
         this.fields = fields
     }
 
+    getFields() {
+        return Object.keys(this.fields)
+    }
+
     //apply generative schema to data
     apply(data: any) {
         const newData = {...data}
@@ -125,7 +129,8 @@ export class ProtoSchema {
             const before = field._def.before
             const after = field._def.after
             const secret = field._def.secret 
-            const id = field._def.id 
+            const id = field._def.id
+            const search = field._def.search
             if (field._def.typeName === 'ZodOptional') {
                 optional = true
                 field = field._def.innerType;
@@ -141,6 +146,7 @@ export class ProtoSchema {
             if (after) fields[key].after = after
             if (secret) fields[key].secret = secret
             if (id) fields[key].id = id
+            if (search) fields[key].search = search
         }
         return new ProtoSchema(fields)
     }
