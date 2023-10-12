@@ -8,7 +8,7 @@ import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
 import {getErrorMessage} from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 
-export function DataView({ initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
+export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [currentItem, setCurrentItem] = useState<any>()
@@ -17,9 +17,10 @@ export function DataView({ initialItems, sourceUrl, icons={}, model, defaultCrea
     const [sort, setSort] = useState<any>()
     const [currentPage, setCurrentPage] = useState(1)
     const [search, setSearch] = useState('')
+    const [rowsPage, setRowsPage] = useState(rowsPerPage)
 
     const fetch = () => {
-        API.get(sourceUrl+'?page='+(currentPage-1)+(sort?'&orderBy='+sort.orderBy+'&direction='+sort.direction:'')+(search?'&search='+search:''), setItems)
+        API.get(sourceUrl+'?itemsPerPage='+rowsPage+'&page='+(currentPage-1)+(sort?'&orderBy='+sort.orderBy+'&direction='+sort.direction:'')+(search?'&search='+search:''), setItems)
     }
 
     usePendingEffect((s) => API.get(sourceUrl, s), setItems, initialItems)
@@ -30,7 +31,7 @@ export function DataView({ initialItems, sourceUrl, icons={}, model, defaultCrea
         }
     }, [items])
 
-    useUpdateEffect(() => fetch(), [currentPage, sort, search])
+    useUpdateEffect(() => fetch(), [currentPage, sort, search, rowsPage])
 
     const onSearch = async (text) => setSearch(text)
     const onCancelSearch = async () => setCurrentItems(items)
@@ -124,9 +125,11 @@ export function DataView({ initialItems, sourceUrl, icons={}, model, defaultCrea
             <AsyncView atom={currentItems}>
                 <XStack pt="$1" flexWrap='wrap'>
                     <DataTable2.component
+                        rowsPerPage={rowsPage}
                         handleSort={(selectedColumn, sortDirection, sortedRows) => {
                             setSort({orderBy:selectedColumn.selector ??selectedColumn.name, direction: sortDirection})
                         }}
+                        handlePerRowsChange={(rowPerPage)=>setRowsPage(rowPerPage)}
                         handlePageChange={(page) => setCurrentPage(page)}
                         currentPage={1}
                         totalRows={currentItems?.data.total}
