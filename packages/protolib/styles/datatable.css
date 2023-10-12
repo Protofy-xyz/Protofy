@@ -163,16 +163,17 @@
 }
 
 .rdt_Table {
-    border: 1px solid var(--borderColor);
+    border: 0px solid var(--borderColor);
     border-radius: 13px 13px 13px 13px !important;
 }
 
 .rdt_TableRow:last-of-type {
-  border-radius: 0px 0px 13px 13px !important;
+
+  border-bottom: 1px solid var(--borderColor) !important;
 }
 
 .rdt_TableHeadRow {
-  background-color: var(--backgroundHover) !important;
+  background-color: var(--background) !important;
   border-bottom: 0 !important;
   border-radius: 13px 13px 0px 0px !important;
 }
@@ -184,21 +185,22 @@
 
 .rdt_Table {
   background-color: transparent !important;
-  border: 1px solid var(--borderColor);
+  border: 0px solid var(--borderColor);
   border-radius: 13px 13px 13px 13px !important;
 }
 
 .rdt_TableRow:nth-child(odd) {
-  background-color: var(--color1) !important;
+  background-color: var(--background) !important;
 }
 
 .rdt_TableRow:nth-child(even) {
-  background-color: var(--color2) !important;
+  background-color: var(--backgroundHover) !important;
 }
 
 .rdt_TableRow{
   color: var(--color) !important;
   border: 0 !important;
+  border-top: 1px solid var(--borderColor) !important;
 }
 
 .rdt_TableCol_Sortable > span {
