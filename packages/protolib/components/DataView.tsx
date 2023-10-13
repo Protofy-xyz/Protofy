@@ -57,8 +57,7 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                             if(result.isError) {
                                 throw result.error
                             }
-                            const items = await API.get(sourceUrl)
-                            setItems(items)
+                            fetch()
                             setCreateOpen(false);
                             toast.show('User created', {
                                 message: user.getId()
@@ -92,8 +91,7 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                                 if(result.isError) {
                                     throw result.error
                                 }
-                                const items = await API.get(sourceUrl)
-                                setItems(items)
+                                fetch()
                                 setEditOpen(false);
                                 toast.show('User updated', {
                                     message: "Saved new settings for user: "+id
