@@ -19,7 +19,7 @@ export function PaginatedDataSSR(initialItemsUrl ,rowsPerPage=20, initialPage=0,
   return _SSR(async (context:NextPageContext) => {
     return withSession(context, allowdUserTypes, {
       workspace: await API.get('/adminapi/v1/workspaces'),
-      initialItems: await API.get(initialItemsUrl+'?itemsPerPage='+(context.query.page??rowsPerPage+'&page='+(context.query.page??initialPage))),
+      initialItems: await API.get(initialItemsUrl+'?itemsPerPage='+(context.query.itemsPerPage??rowsPerPage)+'&page='+(context.query.page??initialPage)),
       rowsPerPage: context.query.itemsPerPage??rowsPerPage,
       initialPage: context.query.page??initialPage,
       ...props

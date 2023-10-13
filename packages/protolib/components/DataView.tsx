@@ -1,12 +1,12 @@
 import { YStack, XStack, Paragraph, Text, Button } from 'tamagui'
-import { getPendingResult, AlertDialog, Chip, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice} from 'protolib'
+import { getPendingResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice} from 'protolib'
 import { useEffect, useState } from 'react'
 import { Plus } from '@tamagui/lucide-icons'
-import moment from 'moment';
 import { z } from "zod";
 import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
-import {Toast, getErrorMessage, useToastController, useToastState} from '@my/ui'
+import {getErrorMessage, useToastController} from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
+import { useRouter } from 'next/router';
 
 export function DataView({numColumnsForm=1,name,hideAdd=false,initialPage=1,rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
@@ -15,9 +15,10 @@ export function DataView({numColumnsForm=1,name,hideAdd=false,initialPage=1,rows
     const [createOpen, setCreateOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
     const [sort, setSort] = useState<any>()
-    const [currentPage, setCurrentPage] = useState(initialPage)
+    const [currentPage, setCurrentPage] = useState(parseInt(initialPage as any, 10))
     const [search, setSearch] = useState('')
     const [rowsPage, setRowsPage] = useState(rowsPerPage)
+    const {push, query} = useRouter();
 
     const fetch = () => {
         API.get(sourceUrl+'?itemsPerPage='+rowsPage+'&page='+currentPage+(sort?'&orderBy='+sort.orderBy+'&direction='+sort.direction:'')+(search?'&search='+search:''), setItems)
@@ -31,6 +32,8 @@ export function DataView({numColumnsForm=1,name,hideAdd=false,initialPage=1,rows
         }
     }, [items])
 
+    useUpdateEffect(() => {push({ query: { ...query, page: currentPage } }, undefined, { shallow: true })}, [currentPage])
+    useUpdateEffect(() => {push({ query: { ...query, itemsPerPage: rowsPage } }, undefined, { shallow: true })}, [rowsPage])
     useUpdateEffect(() => fetch(), [currentPage, sort, search, rowsPage])
 
     const onSearch = async (text) => setSearch(text)
