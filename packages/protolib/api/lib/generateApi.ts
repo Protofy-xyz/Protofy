@@ -95,7 +95,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     //update
     app.post(prefix+entityName+'/:key', handler(async (req, res, session) => {
         const db = getDB(dbPath)
-        const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session).validate(), transformers))
+        const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session), transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
         res.send(await entityModel.readTransformed(transformers))
     }));

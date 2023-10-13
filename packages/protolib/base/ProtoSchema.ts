@@ -40,7 +40,7 @@ export class ProtoSchema {
     }
 
     //apply generative schema to data
-    async apply(eventName:string, data: any, transformers: any) {
+    async apply(eventName:string, data: any, transformers: any, prevData?: any) {
         let newData = {...data}
         const withEvents = this.is('events')
         const keys = Object.keys(withEvents.fields)
@@ -52,7 +52,7 @@ export class ProtoSchema {
             for(var x=0;x < events.length; x++) {
                 const e = events[x]
                 if(transformers[e.eventHandler]) {
-                    newData = await transformers[e.eventHandler](key,e,newData)
+                    newData = await transformers[e.eventHandler](key,e,newData, prevData)
                 }
             }
         }

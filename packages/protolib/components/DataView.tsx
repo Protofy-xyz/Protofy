@@ -83,13 +83,16 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                         mode={'edit'} 
                         onSave={async (data) => {
                             try {
-                                await API.post(sourceUrl, onEdit(model.load(data).create().getData()))
+                                const result = await API.post(sourceUrl+'/'+model.load(data).getId(), onEdit(model.load(currentItem).update(model.load(data)).getData()))
+                                if(result.isError) {
+                                    throw result.error
+                                }
                                 const items = await API.get(sourceUrl)
                                 setItems(items)
+                                setEditOpen(false);
                             } catch (e) {
                                 throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten(): e)
                             }
-                            setEditOpen(false);
                         }} 
                         model={model.load(currentItem)}
                         extraFields={extraFields}

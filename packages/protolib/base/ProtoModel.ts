@@ -79,12 +79,12 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return result;
     }
 
-    update(updatedModel: T, data:any): T {
-        return updatedModel.setId(this.getId(), {...(data ? data : this.data)});
+    update(updatedModel: T, data?:any): T {
+        return updatedModel.setId(this.getId(), {...(data ? data : updatedModel.data)});
     }
 
     async updateTransformed(updatedModel: T, transformers={}): Promise<T> {
-        const newData = await this.getObjectSchema().apply('create', {...this.data}, transformers)
+        const newData = await this.getObjectSchema().apply('update', {...updatedModel.data}, transformers, {...this.data})
         return this.update(updatedModel, newData);
     }
 

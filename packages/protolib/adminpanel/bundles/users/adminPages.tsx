@@ -21,6 +21,14 @@ export default {
                         const {repassword, ...finalData} = data
                         return finalData
                     }}
+                    onEdit={data => {
+                        if(data.password != data.repassword) {
+                            throw "Passwords do not match"
+                        }
+                        const {repassword, ...finalData} = data
+                        return finalData
+                    }}
+
                     columns={DataTable2.columns(
                         DataTable2.column("email", "username", true),
                         DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'admin' ? '$blue5':'$color5'} />),
