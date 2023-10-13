@@ -1,12 +1,11 @@
 import { UserModel } from "./";
-import {CreateApi} from '../../../api'
+import {CreateApi, hash} from '../../../api'
 
 export const UsersAPI = CreateApi('accounts', UserModel, __dirname, '/adminapi/v1/', 'auth', {
-    cypher: (field, e, data) => {
-        console.log('executing transformer: ', field, e, data)
+    cypher: async (field, e, data) => {
         return {
             ...data,
-            [field]: Math.random()
+            [field]: await hash(data[field])
         }
     }
 })
