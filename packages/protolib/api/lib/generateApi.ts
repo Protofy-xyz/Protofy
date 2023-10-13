@@ -37,7 +37,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const page = Number(req.query.page) || 0;
         const search = req.query.search;
         const orderBy:string = req.query.orderBy as string;
-        const orderDirection = req.query.direction || 'asc';
+        const orderDirection = req.query.orderDirection || 'asc';
     
         for await (const [key, value] of db.iterator()) {
             if (key != 'initialized') {
