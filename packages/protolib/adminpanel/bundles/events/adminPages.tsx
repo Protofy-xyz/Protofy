@@ -11,9 +11,11 @@ const EventIcons =  {}
 const rowsPerPage = 20
 export default {
     'admin/events': {
-        component: ({workspace, initialItems, pageSession}:any) => {
+        component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
             return (<AdminPage title="Events" workspace={workspace} pageSession={pageSession}>
                 <DataView
+                    sourceUrl={sourceUrl}
+                    initialItems={initialItems}
                     numColumnsForm={2}
                     name="event"
                     // hideAdd={true}
@@ -26,13 +28,11 @@ export default {
                         DataTable2.column("lastUpdated", "lastUpdated", true, row => moment(row.lastUpdated).format(format))
                     )}
                     model={EventModel} 
-                    sourceUrl="/adminapi/v1/events" 
-                    initialItems={initialItems} 
+                    pageState={pageState}
                     icons={EventIcons}
-                    rowsPerPage={rowsPerPage} 
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/events?itemsPerPage='+rowsPerPage)
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/events')
     }
 }
