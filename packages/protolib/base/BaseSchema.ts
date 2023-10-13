@@ -100,7 +100,7 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: z.string().generate(() => ""+Math.random()).id(),
-    _deleted: z.boolean().optional(),
+    id: z.string().generate(() => ""+Math.random()).id().hidden(),
+    _deleted: z.boolean().optional().hidden(),
 })
 

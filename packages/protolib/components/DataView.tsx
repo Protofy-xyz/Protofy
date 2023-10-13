@@ -8,7 +8,7 @@ import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
 import {Toast, getErrorMessage, useToastController, useToastState} from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 
-export function DataView({name,hideAdd=false,rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
+export function DataView({numColumnsForm=1,name,hideAdd=false,rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [currentItem, setCurrentItem] = useState<any>()
@@ -48,6 +48,7 @@ export function DataView({name,hideAdd=false,rowsPerPage=10, initialItems, sourc
             >
                 <YStack f={1} jc="center" ai="center">
                 <EditableObject 
+                    numColumns={numColumnsForm}
                     initialData={currentItem} 
                     mode={'add'} 
                     onSave={async (data) => {
@@ -82,6 +83,7 @@ export function DataView({name,hideAdd=false,rowsPerPage=10, initialItems, sourc
             >
                 <YStack f={1} jc="center" ai="center">
                     <EditableObject 
+                        numColumns={2}
                         initialData={currentItem} 
                         mode={'edit'} 
                         onSave={async (data) => {

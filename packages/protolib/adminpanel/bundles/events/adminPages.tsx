@@ -14,8 +14,9 @@ export default {
         component: ({workspace, initialItems, pageSession}:any) => {
             return (<AdminPage title="Events" workspace={workspace} pageSession={pageSession}>
                 <DataView
+                    numColumnsForm={2}
                     name="event"
-                    hideAdd={true}
+                    // hideAdd={true}
                     columns={DataTable2.columns(
                         DataTable2.column("path", "path", true),
                         DataTable2.column("from", "from", true, row => <Chip text={row.type.toUpperCase()} color={'$blue5'} />),

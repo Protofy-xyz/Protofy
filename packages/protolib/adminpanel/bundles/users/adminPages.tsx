@@ -14,6 +14,7 @@ export default {
         component: ({workspace, initialItems, pageSession}:any) => {
             return (<AdminPage title="Users" workspace={workspace} pageSession={pageSession}>
                 <DataView
+                    numColumnsForm={2}
                     name="user"
                     onAdd={data => {
                         if(data.password != data.repassword) {

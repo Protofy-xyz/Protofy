@@ -17,14 +17,14 @@ type EditableObjectProps = {
     numColumns?: number
 }
 
-export const EditableObject = ({ initialData, onSave, mode = 'add', model, icons={}, extraFields, numColumns=2}: EditableObjectProps) => {
+export const EditableObject = ({ initialData, onSave, mode = 'add', model, icons={}, extraFields, numColumns=1}: EditableObjectProps) => {
     const [data, setData] = useState(initialData)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
 
 
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields)) 
-    const formFields = model.getObjectSchema().merge(extraFieldsObject).isNot('hidden').getLayout(2)
+    const formFields = model.getObjectSchema().merge(extraFieldsObject).isNot('hidden').getLayout(numColumns)
     return <YStack ai="center" jc="center">
         {error && (
             <Notice>
@@ -33,7 +33,7 @@ export const EditableObject = ({ initialData, onSave, mode = 'add', model, icons
         )}
         <YStack ai="center" jc="center">
             {
-                formFields.map((row, x) => <XStack key={x} mb={x==0?"$5":"$0"}>
+                formFields.map((row, x) => <XStack key={x} mb={x!=formFields.length-1?'$5':'$0'}>
                     {
                         row.map((ele, i) => {
                             const icon = icons[ele.name] ? icons[ele.name] : Pencil
