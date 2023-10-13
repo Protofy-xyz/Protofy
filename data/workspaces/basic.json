@@ -10,7 +10,8 @@
     ],
     "menu": {
         "System": [
-            { "name": "Users", "icon": "users", "type": "users", "path": "/" }
+            { "name": "Users", "icon": "users", "type": "users", "path": "/" },
+            { "name": "Events", "icon": "events", "type": "events", "path": "/" }
         ],
         "App": [
             { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
