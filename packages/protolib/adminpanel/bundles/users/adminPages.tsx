@@ -12,8 +12,9 @@ const rowsPerPage = 20
 export default {
     'admin/users': {
         component: ({workspace, initialItems, pageSession}:any) => {
-            return (<AdminPage workspace={workspace} pageSession={pageSession}>
+            return (<AdminPage title="Users" workspace={workspace} pageSession={pageSession}>
                 <DataView
+                    name="user"
                     onAdd={data => {
                         if(data.password != data.repassword) {
                             throw "Passwords do not match"

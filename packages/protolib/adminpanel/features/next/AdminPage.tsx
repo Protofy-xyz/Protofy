@@ -2,12 +2,12 @@ import {AdminPanel} from '../'
 import Head from 'next/head'
 import { useSession } from 'protolib'
 
-export function AdminPage({workspace, pageSession, children}:any) {
+export function AdminPage({workspace, pageSession, title, children}:any) {
     useSession(pageSession)
     return (
       <>
         <Head>
-          <title>Admin &gt; Users</title>
+          <title>Admin &gt; {title}</title>
         </Head>
         <AdminPanel workspace={workspace}>
           {children}

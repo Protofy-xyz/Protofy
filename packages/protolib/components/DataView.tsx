@@ -8,7 +8,7 @@ import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
 import {Toast, getErrorMessage, useToastController, useToastState} from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 
-export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
+export function DataView({name,hideAdd=false,rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [currentItem, setCurrentItem] = useState<any>()
@@ -43,7 +43,7 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                 setOpen={setCreateOpen}
                 open={createOpen}
                 hideAccept={true}
-                title={<Text><Tinted><Text color="$color9">Create</Text></Tinted><Text color="$color11"> account</Text></Text>}
+                title={<Text><Tinted><Text color="$color9">Create</Text></Tinted><Text color="$color11"> {name}</Text></Text>}
                 description={""}
             >
                 <YStack f={1} jc="center" ai="center">
@@ -110,13 +110,13 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
             <XStack pt="$3" px="$4">
                 <YStack left={-12} top={9} f={1}>
                     <Paragraph>
-                        <Text fontSize="$6" color="$color11">Users [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.items?.length}</Text></Tinted>]</Text>
+                        <Text fontSize="$6" color="$color11">{name.charAt(0).toUpperCase() + name.slice(1)}s [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.items?.length}</Text></Tinted>]</Text>
                     </Paragraph>
                 </YStack>
 
                 <XStack position={"absolute"} right={0}>
                     <Search onCancel={onCancelSearch} onSearch={onSearch} />
-                    <XStack top={-3}>
+                    {!hideAdd && <XStack top={-3}>
                         <Tinted>
                             <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
                                 setCurrentItem(defaultCreateData);
@@ -125,7 +125,7 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                                 <Plus />
                             </Button>
                         </Tinted>
-                    </XStack>
+                    </XStack>}
 
                 </XStack>
             </XStack>

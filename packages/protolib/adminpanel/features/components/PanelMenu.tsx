@@ -1,6 +1,6 @@
 import { YStack, XStack } from 'tamagui'
 import { getPendingResult, API, PanelMenuItem, AlertDialog, Link, Tinted} from 'protolib'
-import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users} from '@tamagui/lucide-icons'
+import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users, Repeat, Zap} from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -8,14 +8,16 @@ import {useAtom, useSetAtom} from 'jotai'
 import { workspaceAtom } from '..';
 
 const opacity = 0.7
-const strokeWidth = 0.6
+const strokeWidth = 0.8
 const color = '$color8'
 const iconTable = {
     database: <Database color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     model: <Box color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     api: <Workflow color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     create: <Plus color={color} opacity={opacity} strokeWidth={strokeWidth} />,
-    users: <Users color={color} opacity={opacity} strokeWidth={strokeWidth} />
+    users: <Users color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    events: <Zap color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    automation: <Repeat color={color} opacity={opacity} strokeWidth={strokeWidth} />
 }
 const getIcon = (icon) => {
     if (!iconTable[icon]) {

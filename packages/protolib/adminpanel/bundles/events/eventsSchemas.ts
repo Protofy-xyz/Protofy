@@ -1,5 +1,7 @@
 import { z } from "zod";
-import {BaseSchema} from 'protolib/base'
+import {Schema, BaseSchema} from 'protolib/base'
+import moment from "moment";
+import { AutoModel } from 'protolib/base'
 
 const statusSchema = z.union([
     z.literal("running"),
@@ -25,3 +27,4 @@ export const EventSchema = z.object({
 });
 
 export type EventType = z.infer<typeof EventSchema>;
+export const EventModel = AutoModel.createDerived<EventType>("EventModel", EventSchema);
