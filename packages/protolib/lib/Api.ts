@@ -26,6 +26,7 @@ const _fetch = async (url, data?, update?, plain?):Promise<PendingAtomResult | u
 
             
             const resData = !plain ? await res.json() : await res.text()
+
             if (!res.ok) {
                 const err = getPendingResult('error', null, resData)
                 if (update) {

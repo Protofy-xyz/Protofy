@@ -40,43 +40,64 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     list(search?): any {
-        const result = (() => {
-            if(search) {
-                const searchFields = this.objectSchema.is('search').getFields()
-                for(var i=0;i<searchFields.length;i++) {
-                    if((this.data[searchFields[i]]+"").includes(search)) {
-                        return this.read();
-                    }
+
+        if(search) {
+            const searchFields = this.objectSchema.is('search').getFields()
+            for(var i=0;i<searchFields.length;i++) {
+                if((this.data[searchFields[i]]+"").includes(search)) {
+                    return this.read();
                 }
-            } else {
-                return this.read();
             }
-        })();
-        if(result) {
-            return this.getObjectSchema().apply('list', result);
+        } else {
+            return this.read();
         }
     }
 
-    create(): T {
-        //loop through fieldDetails keys and find the marked as autogenerate
-        const newData = this.getObjectSchema().apply('create', {...this.data})
+    async listTransformed(search?, transformers={}): Promise<any> {
+        const result = this.list(search)
+        if(result) {
+            return await (this.getObjectSchema().apply('list', result, transformers));
+        }
+    }
 
-        return (new(this.constructor as new (data: any, session?: SessionDataType) => T)(newData, this.session)).validate();
+    create(data?): T {
+        return (new(this.constructor as new (data: any, session?: SessionDataType) => T)({...(this.getObjectSchema().applyGenerators(data?data:this.data))}, this.session)).validate();
+    }
+
+    async createTransformed(transformers={}): Promise<T> {
+        //loop through fieldDetails keys and find the marked as autogenerate
+        const newData = await this.getObjectSchema().apply('create', {...this.data}, transformers)
+        return this.create(newData);
     }
 
     read(): any {
-        return this.getObjectSchema().apply('read',{ ...this.data });
+        return {...this.data}
     }
 
-    update(updatedModel: T): T {
-        return updatedModel.setId(this.getId(), this.getObjectSchema().apply('create', {...this.data}));
+    async readTransformed(transformers={}): Promise<any> {
+        const result = await (this.getObjectSchema().apply('read', this.read(), transformers))
+        return result;
     }
 
-    delete(): T {
+    update(updatedModel: T, data:any): T {
+        return updatedModel.setId(this.getId(), {...(data ? data : this.data)});
+    }
+
+    async updateTransformed(updatedModel: T, transformers={}): Promise<T> {
+        const newData = await this.getObjectSchema().apply('create', {...this.data}, transformers)
+        return this.update(updatedModel, newData);
+    }
+
+    delete(data?): T {
         return new (this.constructor as new (data: any, session?: SessionDataType) => T)({
             _deleted: true,
-            ...this.getObjectSchema().apply('delete',{...this.data})
+            ...(data ? data : this.data)
         }, this.session);
+    }
+
+    async deleteTransformed(transformers={}): Promise<T> {
+        const newData = await this.getObjectSchema().apply('delete',{...this.data}, transformers)
+        return this.delete(newData)
     }
 
     validate(): this {

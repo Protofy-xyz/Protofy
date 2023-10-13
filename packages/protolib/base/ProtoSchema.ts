@@ -25,26 +25,38 @@ export class ProtoSchema {
         return Object.keys(this.fields)
     }
 
-    //apply generative schema to data
-    apply(eventName:string, data: any) {
-        const newData = {...data}
-        if(eventName == 'create') {
-            Object.keys(this.fields).forEach((key) => {
-                if(this.fields[key].generate) {
-                    const gen = this.fields[key].generate;
-                    if(!data[key] || gen.force) {
-                        newData[key] = typeof gen.generator === 'function' ? gen.generator(data) : gen.generator
-                    }
+    applyGenerators(data: any) {
+        let newData = {...data}
+        Object.keys(this.fields).forEach((key) => {
+            if(this.fields[key].generate) {
+                const gen = this.fields[key].generate;
+                if(!data[key] || gen.force) {
+                    newData[key] = typeof gen.generator === 'function' ? gen.generator(data) : gen.generator
                 }
-            })
-        }
+            }
+        })
+
+        return newData;
+    }
+
+    //apply generative schema to data
+    async apply(eventName:string, data: any, transformers: any) {
+        let newData = {...data}
         const withEvents = this.is('events')
-        Object.keys(withEvents.fields).forEach((key) => {
+        const keys = Object.keys(withEvents.fields)
+        for(var i =0;i<keys.length; i++) {
+            const key = keys[i]
             const currField:any = withEvents.fields[key]
             const isNode = typeof process !== 'undefined' && process.versions && process.versions.node
             const events = currField.events.filter(e => e.eventName == eventName && (!e.eventContext || (e.eventContext == 'client' && !isNode) || (e.eventContext == 'server' && isNode)))
-            console.log('final detect events: ', events)
-        })
+            for(var x=0;x < events.length; x++) {
+                const e = events[x]
+                if(transformers[e.eventHandler]) {
+                    newData = await transformers[e.eventHandler](key,e,newData)
+                }
+            }
+        }
+
         return newData
     }
 

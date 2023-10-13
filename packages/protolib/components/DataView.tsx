@@ -52,13 +52,16 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                     mode={'add'} 
                     onSave={async (data) => {
                         try {
-                            await API.post(sourceUrl, onAdd(model.load(data).create().getData()))
+                            const result = await API.post(sourceUrl, onAdd(model.load(data).create().getData()))
+                            if(result.isError) {
+                                throw result.error
+                            }
                             const items = await API.get(sourceUrl)
                             setItems(items)
+                            setCreateOpen(false);
                         } catch (e) {
                             throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten(): e)
                         }
-                        setCreateOpen(false);
                     }} 
                     model={model.load(currentItem)}
                     extraFields={extraFields}
