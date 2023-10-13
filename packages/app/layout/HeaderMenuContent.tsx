@@ -11,7 +11,7 @@ export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
         <YStack miw={230} p="$3" ai="flex-end">
           {session.loggedIn?<>
             <HeaderLink href="/profile">Profile</HeaderLink>
-            {session.user?.type == 'admin' ? <HeaderLink href="/admin/files">Control Panel</HeaderLink>:null} 
+            {session.user?.type == 'admin' ? <HeaderLink href="/admin/files">Workspace</HeaderLink>:null} 
             <HeaderLink onClick={() => setSession(createSession())} href="">Logout</HeaderLink>
           </>:<HeaderLink href="/auth/login">Login</HeaderLink>}
           {/* <Separator my="$4" w="100%" />
