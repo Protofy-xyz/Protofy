@@ -7,7 +7,6 @@ import protofito from '../resources/protofito-face.png';
 
 export const ViewNote = ({id, initialElement}) => {
     const [element, setElement] = useState(initialElement)
-    console.log('protofito face: ', protofito)
     usePendingEffect((s) => API.get('/api/v1/notes/' + id, s), setElement, element)
 
     return <Page>
