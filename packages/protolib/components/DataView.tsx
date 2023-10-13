@@ -8,23 +8,19 @@ import {getErrorMessage, useToastController} from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 import { useRouter } from 'next/router';
 
-export function DataView({numColumnsForm=1,name,hideAdd=false,initialPage=1,rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
+export function DataView({initialItems, sourceUrl, numColumnsForm=1,name,hideAdd=false,pageState, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [currentItem, setCurrentItem] = useState<any>()
     const [createOpen, setCreateOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
-    const [sort, setSort] = useState<any>()
-    const [currentPage, setCurrentPage] = useState(parseInt(initialPage as any, 10))
-    const [search, setSearch] = useState('')
-    const [rowsPage, setRowsPage] = useState(rowsPerPage)
     const {push, query} = useRouter();
+    const [state, setState] = useState(pageState)
 
-    const fetch = () => {
-        API.get(sourceUrl+'?itemsPerPage='+rowsPage+'&page='+currentPage+(sort?'&orderBy='+sort.orderBy+'&direction='+sort.direction:'')+(search?'&search='+search:''), setItems)
+    const fetch = async () => {
+        return API.get({url: sourceUrl, ...state})
     }
-
-    usePendingEffect((s) => API.get(sourceUrl, s), setItems, initialItems)
+    usePendingEffect((s) => API.get({url: sourceUrl, ...pageState}, s), setItems, initialItems)
 
     useEffect(() => {
         if(items && items.isLoaded) {
@@ -32,13 +28,27 @@ export function DataView({numColumnsForm=1,name,hideAdd=false,initialPage=1,rows
         }
     }, [items])
 
-    useUpdateEffect(() => {push({ query: { ...query, page: currentPage } }, undefined, { shallow: true })}, [currentPage])
-    useUpdateEffect(() => {push({ query: { ...query, itemsPerPage: rowsPage } }, undefined, { shallow: true })}, [rowsPage])
-    useUpdateEffect(() => fetch(), [currentPage, sort, search, rowsPage])
+    useUpdateEffect(() => {
+        const update = async () => {
+            setItems(await fetch())
+            push({ query: { 
+                ...query, 
+                ...state
+            } }, undefined, { shallow: true })
+        }
+        update()
+    }, [state])
 
-    const onSearch = async (text) => setSearch(text)
+    // useUpdateEffect(() => setCurrentPage(parseInt(query.page as string, 10)), [query.page])
+    // useUpdateEffect(() => setRowsPage(parseInt(query.itemsPerPage as string, 10)), [query.itemsPerPage])
+    // useUpdateEffect(() => setOrderDirection(query.orderDirection as string), [query.direction])
+    // useUpdateEffect(() => setOrderBy(query.orderBy as string), [query.orderBy])
+    // useUpdateEffect(() => setSearch(query.search as string), [query.search])
+
+    const onSearch = async (text) => setState({...state, search: text})
     const onCancelSearch = async () => setCurrentItems(items)
     const toast = useToastController()
+
     return (
         <YStack f={1}>
             <AlertDialog
@@ -57,7 +67,7 @@ export function DataView({numColumnsForm=1,name,hideAdd=false,initialPage=1,rows
                     onSave={async (data) => {
                         try {
                             const user = model.load(data)
-                            const result = await API.post(sourceUrl, onAdd(user.create().getData()))
+                            const result = await API.post(pageState.sourceUrl, onAdd(user.create().getData()))
                             if(result.isError) {
                                 throw result.error
                             }
@@ -92,7 +102,7 @@ export function DataView({numColumnsForm=1,name,hideAdd=false,initialPage=1,rows
                         onSave={async (data) => {
                             try {
                                 const id = model.load(data).getId()
-                                const result = await API.post(sourceUrl+'/'+id, onEdit(model.load(currentItem).update(model.load(data)).getData()))
+                                const result = await API.post(pageState.sourceUrl+'/'+id, onEdit(model.load(currentItem).update(model.load(data)).getData()))
                                 if(result.isError) {
                                     throw result.error
                                 }
@@ -146,13 +156,11 @@ export function DataView({numColumnsForm=1,name,hideAdd=false,initialPage=1,rows
                 <XStack pt="$1" flexWrap='wrap'>
                     {/* <Tinted> */}
                     <DataTable2.component
-                        rowsPerPage={rowsPage}
-                        handleSort={(selectedColumn, sortDirection, sortedRows) => {
-                            setSort({orderBy:selectedColumn.selector ??selectedColumn.name, direction: sortDirection})
-                        }}
-                        handlePerRowsChange={(rowPerPage)=>setRowsPage(rowPerPage)}
-                        handlePageChange={(page) => setCurrentPage(page-1)}
-                        currentPage={currentPage+1}
+                        rowsPerPage={state.itemsPerPage}
+                        handleSort={(column, orderDirection) => setState({...state, orderBy: column.selector, orderDirection})}
+                        handlePerRowsChange={(itemsPerPage)=>setState({...state, itemsPerPage})}
+                        handlePageChange={(page) => setState({...state, page: parseInt(page,10)-1})}
+                        currentPage={parseInt(state.page, 10)+1}
                         totalRows={currentItems?.data.total}
                         columns={columns}
                         rows={currentItems?.data.items}

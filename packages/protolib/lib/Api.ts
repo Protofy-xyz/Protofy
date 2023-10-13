@@ -11,8 +11,25 @@ class ApiError extends Error {
     }
 }
 
-const _fetch = async (url, data?, update?, plain?):Promise<PendingAtomResult | undefined> => {
-    const realUrl = typeof window === 'undefined' ? SERVER + url : url
+const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingAtomResult | undefined> => {
+    let realUrl;
+
+    if (typeof urlOrData === 'string') {
+      realUrl = typeof window === 'undefined' ? SERVER + urlOrData : urlOrData;
+    } else if (typeof urlOrData === 'object' && urlOrData.url) {
+      const baseUrl = typeof window === 'undefined' ? SERVER + urlOrData.url : urlOrData.url;
+      const params = new URLSearchParams();
+  
+      for (let key in urlOrData) {
+        if (key !== 'url') {
+          params.append(key, urlOrData[key]);
+        }
+      }
+  
+      realUrl = `${baseUrl}?${params.toString()}`;
+    } else {
+      throw new Error("Invalid params for API");
+    }
     const fn = async () => {
         update ? update(getPendingResult('loading')) : null
         try {

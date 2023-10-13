@@ -11,9 +11,11 @@ const UserIcons =  {username: Mail, type: Tag, passwod: Key, repassword: Key}
 
 export default {
     'admin/users': {
-        component: ({workspace, initialItems, rowsPerPage, initialPage, pageSession}:any) => {
+        component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
             return (<AdminPage title="Users" workspace={workspace} pageSession={pageSession}>
                 <DataView
+                    sourceUrl={sourceUrl}
+                    initialItems={initialItems}
                     numColumnsForm={2}
                     name="user"
                     onAdd={data => {
@@ -43,11 +45,8 @@ export default {
                     }}
                     defaultCreateData={{from:'admin'}} 
                     model={UserModel} 
-                    sourceUrl="/adminapi/v1/accounts" 
-                    initialItems={initialItems} 
+                    pageState={pageState}
                     icons={UserIcons}
-                    rowsPerPage={rowsPerPage} 
-                    initialPage={initialPage}
                 />
             </AdminPage>)
         }, 
