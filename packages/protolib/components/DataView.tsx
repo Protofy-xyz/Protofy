@@ -5,7 +5,7 @@ import { Plus } from '@tamagui/lucide-icons'
 import moment from 'moment';
 import { z } from "zod";
 import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
-import {getErrorMessage} from '@my/ui'
+import {Toast, getErrorMessage, useToastController, useToastState} from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 
 export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
@@ -35,7 +35,7 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
 
     const onSearch = async (text) => setSearch(text)
     const onCancelSearch = async () => setCurrentItems(items)
-
+    const toast = useToastController()
     return (
         <YStack f={1}>
             <AlertDialog
@@ -52,13 +52,17 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                     mode={'add'} 
                     onSave={async (data) => {
                         try {
-                            const result = await API.post(sourceUrl, onAdd(model.load(data).create().getData()))
+                            const user = model.load(data)
+                            const result = await API.post(sourceUrl, onAdd(user.create().getData()))
                             if(result.isError) {
                                 throw result.error
                             }
                             const items = await API.get(sourceUrl)
                             setItems(items)
                             setCreateOpen(false);
+                            toast.show('User created', {
+                                message: user.getId()
+                            })
                         } catch (e) {
                             throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten(): e)
                         }
@@ -83,13 +87,17 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                         mode={'edit'} 
                         onSave={async (data) => {
                             try {
-                                const result = await API.post(sourceUrl+'/'+model.load(data).getId(), onEdit(model.load(currentItem).update(model.load(data)).getData()))
+                                const id = model.load(data).getId()
+                                const result = await API.post(sourceUrl+'/'+id, onEdit(model.load(currentItem).update(model.load(data)).getData()))
                                 if(result.isError) {
                                     throw result.error
                                 }
                                 const items = await API.get(sourceUrl)
                                 setItems(items)
                                 setEditOpen(false);
+                                toast.show('User updated', {
+                                    message: "Saved new settings for user: "+id
+                                })
                             } catch (e) {
                                 throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten(): e)
                             }
@@ -112,7 +120,10 @@ export function DataView({rowsPerPage=10, initialItems, sourceUrl, icons={}, mod
                     <Search onCancel={onCancelSearch} onSearch={onSearch} />
                     <XStack top={-3}>
                         <Tinted>
-                            <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {setCurrentItem(defaultCreateData);setCreateOpen(true)}} chromeless={true}>
+                            <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
+                                setCurrentItem(defaultCreateData);
+                                setCreateOpen(true)
+                            }} chromeless={true}>
                                 <Plus />
                             </Button>
                         </Tinted>
