@@ -125,12 +125,12 @@ export function DataView({initialItems, sourceUrl, numColumnsForm=1,name,hideAdd
             <XStack pt="$3" px="$4">
                 <YStack left={-12} top={9} f={1}>
                     <Paragraph>
-                        <Text fontSize="$6" color="$color11">{name.charAt(0).toUpperCase() + name.slice(1)}s [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.items?.length}</Text></Tinted>]</Text>
+                        <Text fontSize="$6" color="$color11">{name.charAt(0).toUpperCase() + name.slice(1)}s [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.total}</Text></Tinted>]</Text>
                     </Paragraph>
                 </YStack>
 
                 <XStack position={"absolute"} right={0}>
-                    <Search onCancel={onCancelSearch} onSearch={onSearch} />
+                    <Search initialState={state?.search} onCancel={onCancelSearch} onSearch={onSearch} />
                     {!hideAdd && <XStack top={-3}>
                         <Tinted>
                             <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
@@ -161,9 +161,9 @@ export function DataView({initialItems, sourceUrl, numColumnsForm=1,name,hideAdd
                         handlePerRowsChange={(itemsPerPage)=>setState({...state, itemsPerPage})}
                         handlePageChange={(page) => setState({...state, page: parseInt(page,10)-1})}
                         currentPage={parseInt(state.page, 10)+1}
-                        totalRows={currentItems?.data.total}
+                        totalRows={currentItems?.data?.total}
                         columns={columns}
-                        rows={currentItems?.data.items}
+                        rows={currentItems?.data?.items}
                         onRowPress={(rowData)=>{setCurrentItem(rowData);setEditOpen(true)}}
                     />
                     {/* </Tinted> */}
