@@ -1,5 +1,5 @@
 
-import {AdminPage, SSR} from 'protolib/adminpanel/features/next'
+import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { EventModel } from '.'
 import {z} from 'zod'
 import {DataTable2, Chip, DataView} from 'protolib'
@@ -33,6 +33,6 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: SSR('/adminapi/v1/events?itemsPerPage='+rowsPerPage)
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/events?itemsPerPage='+rowsPerPage)
     }
 }

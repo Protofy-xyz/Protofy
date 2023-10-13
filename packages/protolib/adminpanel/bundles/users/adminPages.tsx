@@ -1,5 +1,5 @@
 
-import {AdminPage, SSR} from 'protolib/adminpanel/features/next'
+import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { UserModel } from '.'
 import {z} from 'zod'
 import {DataTable2, Chip, DataView} from 'protolib'
@@ -8,10 +8,10 @@ import { Mail, Tag, Key } from '@tamagui/lucide-icons';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const UserIcons =  {username: Mail, type: Tag, passwod: Key, repassword: Key}
-const rowsPerPage = 20
+
 export default {
     'admin/users': {
-        component: ({workspace, initialItems, pageSession}:any) => {
+        component: ({workspace, initialItems, rowsPerPage, initialPage, pageSession}:any) => {
             return (<AdminPage title="Users" workspace={workspace} pageSession={pageSession}>
                 <DataView
                     numColumnsForm={2}
@@ -47,9 +47,10 @@ export default {
                     initialItems={initialItems} 
                     icons={UserIcons}
                     rowsPerPage={rowsPerPage} 
+                    initialPage={initialPage}
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: SSR('/adminapi/v1/accounts?itemsPerPage='+rowsPerPage)
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/accounts')
     }
 }

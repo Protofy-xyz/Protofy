@@ -8,19 +8,19 @@ import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
 import {Toast, getErrorMessage, useToastController, useToastState} from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 
-export function DataView({numColumnsForm=1,name,hideAdd=false,rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
+export function DataView({numColumnsForm=1,name,hideAdd=false,initialPage=1,rowsPerPage=10, initialItems, sourceUrl, icons={}, model, defaultCreateData={}, extraFields={}, columns, onEdit=(data) => data, onAdd=(data) => data}) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [currentItem, setCurrentItem] = useState<any>()
     const [createOpen, setCreateOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
     const [sort, setSort] = useState<any>()
-    const [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, setCurrentPage] = useState(initialPage)
     const [search, setSearch] = useState('')
     const [rowsPage, setRowsPage] = useState(rowsPerPage)
 
     const fetch = () => {
-        API.get(sourceUrl+'?itemsPerPage='+rowsPage+'&page='+(currentPage-1)+(sort?'&orderBy='+sort.orderBy+'&direction='+sort.direction:'')+(search?'&search='+search:''), setItems)
+        API.get(sourceUrl+'?itemsPerPage='+rowsPage+'&page='+currentPage+(sort?'&orderBy='+sort.orderBy+'&direction='+sort.direction:'')+(search?'&search='+search:''), setItems)
     }
 
     usePendingEffect((s) => API.get(sourceUrl, s), setItems, initialItems)
@@ -148,8 +148,8 @@ export function DataView({numColumnsForm=1,name,hideAdd=false,rowsPerPage=10, in
                             setSort({orderBy:selectedColumn.selector ??selectedColumn.name, direction: sortDirection})
                         }}
                         handlePerRowsChange={(rowPerPage)=>setRowsPage(rowPerPage)}
-                        handlePageChange={(page) => setCurrentPage(page)}
-                        currentPage={1}
+                        handlePageChange={(page) => setCurrentPage(page-1)}
+                        currentPage={currentPage+1}
                         totalRows={currentItems?.data.total}
                         columns={columns}
                         rows={currentItems?.data.items}
