@@ -175,7 +175,7 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                     <Stack pr={"$1"} f={1}>
                         <Scrollbars universal={true} height={"100%"} >
                             <ActiveRender activeId={1}>
-                                    <DataTableCard items={currentItems?.data?.items} />
+                                    <DataTableCard model={model} items={currentItems?.data?.items} />
                             </ActiveRender>
                             <ActiveRender activeId={0}>
                                 <XStack mr="$3" pt="$1" flexWrap='wrap'>

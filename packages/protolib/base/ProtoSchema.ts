@@ -86,6 +86,7 @@ export class ProtoSchema {
     is(field: string) {
         const validFields = {}
         Object.keys(this.fields).forEach((key) => {
+            console.log('checkingk key: ', key, 'fields: ', field, 'for object: ', this.fields[key])
             if (this.fields[key][field]) {
                 validFields[key] = this.fields[key]
             }
@@ -143,7 +144,7 @@ export class ProtoSchema {
             let optional = false;
 
             const checks = field._def.checks
-            const editUI = field._def.editUI
+            const display = field._def.display
             const label = field._def.label
             const hint = field._def.hint
             const generate = field._def.generate
@@ -153,6 +154,7 @@ export class ProtoSchema {
             const id = field._def.id
             const search = field._def.search
             const events = field._def.events
+            
             if (field._def.typeName === 'ZodOptional') {
                 optional = true
                 field = field._def.innerType;
@@ -170,7 +172,7 @@ export class ProtoSchema {
             if (id) fields[key].id = id
             if (search) fields[key].search = search
             if (events) fields[key].events = events
-            if (editUI) fields[key].editUI = editUI
+            if (display) fields[key].display = display
         }
         return new ProtoSchema(fields)
     }

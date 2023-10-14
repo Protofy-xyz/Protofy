@@ -42,7 +42,7 @@ export default {
                         DataTable2.column("last login", "lastLogin",true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'NEVER'} color={'$yellow6'} /> )
                     )}
                     extraFields={{ 
-                        repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()
+                        repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret().display()
                     }}
                     defaultCreateData={{from:'admin'}} 
                     model={UserModel} 

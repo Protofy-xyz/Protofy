@@ -3,7 +3,7 @@ import { ZodString, ZodNumber, ZodBoolean, ZodArray, ZodAny, ZodOptional} from '
 interface ZodExtensions {
     label(caption: string): this;
     hint(hintText: string): this;
-    editUI(): this;
+    display(views?: string[] | undefined): this;
     generate(val: any): this;
     before(field: string): this;
     after(field: string): this;
@@ -25,4 +25,6 @@ declare module 'zod' {
     interface ZodBoolean extends ZodExtensions {}
     interface ZodAny extends ZodExtensions {}
     interface ZodOptional extends ZodExtensions {}
+    interface ZodArray extends ZodExtensions {}
+    interface ZodUnion extends ZodExtensions {}
 }

@@ -1,3 +1,4 @@
 [
-    {}
+    {"name": "admin", "workspaces": ["*"]},
+    {"name": "user", "workspaces": []}
 ]

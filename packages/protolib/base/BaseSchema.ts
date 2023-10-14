@@ -27,8 +27,8 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.editUI = function () {
-        this._def.editUI = true;
+    type.prototype.display = function (views: string[] | undefined) {
+        this._def.display = !views ?['*'] : views;
         return this;
     };
 
@@ -94,7 +94,7 @@ function extendZodTypePrototype(type: any) {
 
 // Extiende el prototipo general de todos los tipos de Zod
 export function initSchemaSystem() {
-    const zodTypes = [z.ZodString, z.ZodNumber, z.ZodBoolean, z.ZodArray, z.ZodAny, z.ZodOptional];
+    const zodTypes = [z.ZodString, z.ZodNumber, z.ZodBoolean, z.ZodArray, z.ZodAny, z.ZodOptional, z.ZodArray, z.ZodUnion];
 
     zodTypes.forEach(type => extendZodTypePrototype(type));
 }

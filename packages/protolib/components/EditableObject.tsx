@@ -24,7 +24,7 @@ export const EditableObject = ({ initialData, onSave, mode = 'add', model, icons
 
 
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields)) 
-    const formFields = model.getObjectSchema().merge(extraFieldsObject).is('editUI').getLayout(numColumns)
+    const formFields = model.getObjectSchema().merge(extraFieldsObject).is('display').getLayout(numColumns)
     return <YStack ai="center" jc="center">
         {error && (
             <Notice>

@@ -8,11 +8,18 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
     try {
         if(fs.existsSync(path.join(dir, 'initialData.json'))) {
             initialData = JSON.parse(fs.readFileSync(path.join(dir, 'initialData.json')).toString()).map(x => {
-                return {
-                    key: x.id,
-                    value: JSON.stringify(x)
+                try {
+                    console.log('loading: ', x)
+                    const element = modelType.load(x).create()
+                    return {
+                        key: element.getId(),
+                        value: element.serialize()
+                    }
+                } catch(e) {
+                    console.log('Error inserting initialData for: ', modelName)
+                    console.log('Erro: ', e)
                 }
-            })
+            }).filter(x => x)
         }
     } catch(e) {
         console.log('Error loading initial data for model ', modelName, 'error: ', e);

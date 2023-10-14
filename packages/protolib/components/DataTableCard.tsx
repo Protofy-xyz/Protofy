@@ -1,9 +1,11 @@
 import { Stack, XStack } from "tamagui"
 import { DataCard } from "./DataCard"
 
-export const DataTableCard = ({ items }) => {
+export const DataTableCard = ({ items, model }) => {
+
     return <XStack flexWrap='wrap'>
         {items?.map((element, i) => {
+            const modelItem = model.load(element)
             return (
                 <Stack key={element.key} mt="$5" p={"$5"}>
                     <DataCard
@@ -18,7 +20,7 @@ export const DataTableCard = ({ items }) => {
                         key={i}
                         // onSave={(content) => onSave(content, element.key)}
                         json={element}
-                        name={element.username}
+                        name={modelItem.getId()}
                         isTemplate={false}
                     />
                 </Stack>

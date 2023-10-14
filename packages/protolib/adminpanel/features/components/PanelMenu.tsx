@@ -1,6 +1,6 @@
 import { YStack, XStack } from 'tamagui'
 import { getPendingResult, API, PanelMenuItem, AlertDialog, Link, Tinted} from 'protolib'
-import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users, Repeat, Zap} from '@tamagui/lucide-icons'
+import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users, Repeat, Zap, Tag} from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -17,7 +17,8 @@ const iconTable = {
     create: <Plus color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     users: <Users color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     events: <Zap color={color} opacity={opacity} strokeWidth={strokeWidth} />,
-    automation: <Repeat color={color} opacity={opacity} strokeWidth={strokeWidth} />
+    automation: <Repeat color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    groups: <Tag color={color} opacity={opacity} strokeWidth={strokeWidth} />
 }
 const getIcon = (icon) => {
     if (!iconTable[icon]) {
