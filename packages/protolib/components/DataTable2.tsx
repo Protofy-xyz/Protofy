@@ -38,7 +38,7 @@ export const DataTable2 = {
         pagination
         paginationServer
         sortServer
-        selectableRows
+        // selectableRows
         paginationPerPage={rowsPerPage}
         onSort={handleSort}
         paginationRowsPerPageOptions={[10, 20, 25, 50, 100, 500, 1000]}
@@ -46,8 +46,8 @@ export const DataTable2 = {
     </DataTableExtensions>
   },
 
-  column: (name, selector?, sortable?, cell?) => {
-    return { name, selector, sortable, cell }
+  column: (name, selector?, sortable?, cell?, shrink?, minWidth='') => {
+    return { name, selector, sortable, cell, grow: shrink, minWidth }
   },
 
   columns: (...args) => {

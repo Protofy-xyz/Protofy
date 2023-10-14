@@ -1,14 +1,15 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack } from 'tamagui'
-import { DataTableCard, getPendingResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup, XCenterStack, ActiveRender } from 'protolib'
+import { Chip, DataTableCard, getPendingResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup, XCenterStack, ActiveRender } from 'protolib'
 import { useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Trash2, Cross, X } from '@tamagui/lucide-icons'
 import { z } from "zod";
 import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 import { useRouter } from 'next/router';
+import React from 'react';
 
-export function DataView({ disableViewSelector=false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, defaultCreateData = {}, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data }) {
+export function DataView({ rowIcon, disableViewSelector=false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, defaultCreateData = {}, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data }:any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [currentItem, setCurrentItem] = useState<any>()
@@ -53,7 +54,7 @@ export function DataView({ disableViewSelector=false, initialItems, sourceUrl, n
 
     return (
         <YStack f={1}>
-            <ActiveGroup initialState={state.view == 'list'?0:1}>
+            <ActiveGroup initialState={!state || state.view == 'list'?0:1}>
                 <AlertDialog
                     p="$3"
                     setOpen={setCreateOpen}
@@ -177,7 +178,7 @@ export function DataView({ disableViewSelector=false, initialItems, sourceUrl, n
                                 handlePageChange={(page) => setState({ ...state, page: parseInt(page, 10) - 1 })}
                                 currentPage={parseInt(state.page, 10) + 1}
                                 totalRows={currentItems?.data?.total}
-                                columns={columns}
+                                columns={rowIcon?[DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, {size: "$1"})}</Stack>, true, '50px'), ...columns]:columns}
                                 rows={currentItems?.data?.items}
                                 onRowPress={(rowData) => { setCurrentItem(rowData); setEditOpen(true) }}
                             />

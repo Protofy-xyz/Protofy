@@ -502,7 +502,7 @@ class JSONViewer extends React.Component {
   render() {
     let elems = [];
     const { styles } = this.props;
-    this.recursiveParseData("root", "", this.state.data, elems, 0, true);
+    this.recursiveParseData("root", "", this.state.data, elems, this.props.compact?-2:0, true);
     return <Stack f={1} style={styles.root}>{elems}</Stack>;
   }
 }

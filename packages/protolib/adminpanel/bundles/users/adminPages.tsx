@@ -4,7 +4,7 @@ import { UserModel } from '.'
 import {z} from 'zod'
 import {DataTable2, Chip, DataView} from 'protolib'
 import moment  from 'moment'
-import { Mail, Tag, Key } from '@tamagui/lucide-icons';
+import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const UserIcons =  {username: Mail, type: Tag, passwod: Key, repassword: Key}
@@ -14,6 +14,7 @@ export default {
         component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
             return (<AdminPage title="Users" workspace={workspace} pageSession={pageSession}>
                 <DataView
+                    rowIcon={User}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={2}
