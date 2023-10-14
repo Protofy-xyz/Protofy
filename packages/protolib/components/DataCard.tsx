@@ -8,7 +8,7 @@ import { getPendingResult } from '../lib/createApiAtom'
 import React from 'react'
 import { IconContainer } from './IconContainer'
 
-export const DataCard = React.forwardRef(({ innerContainerProps = {}, extraIcons = [], iconProps = {}, itemCardProps = {}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, hideDeleteIcon, isTemplate = false, ...props }: any, ref: any) => {
+export const DataCard = React.forwardRef(({ compact=false, innerContainerProps = {}, extraIcons = [], iconProps = {}, itemCardProps = {}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, hideDeleteIcon, isTemplate = false, ...props }: any, ref: any) => {
     const { tint } = useTint()
     const [editable, setEditable] = useState(isTemplate)
     const [content, setContent] = useState(json)
@@ -100,7 +100,7 @@ export const DataCard = React.forwardRef(({ innerContainerProps = {}, extraIcons
                                 <Spinner /> :
                                 loadingState.isError ?
                                     <Text>ERROR</Text> :
-                                    <JSONViewer key={childKey} onChange={onJsonUpdate} editable={editable} data={content} collapsible />
+                                    <JSONViewer compact={compact} key={childKey} onChange={onJsonUpdate} editable={editable} data={content} collapsible />
                             }
                         </XStack>
                     </Theme>
