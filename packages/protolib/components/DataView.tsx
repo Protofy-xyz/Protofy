@@ -172,53 +172,57 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                 )}
 
                 <AsyncView atom={currentItems}>
-                    <Scrollbars height={"100%"} >
-                        <ActiveRender activeId={1}>
-                            <DataTableCard items={currentItems?.data?.items} />
-                        </ActiveRender>
-                        <ActiveRender activeId={0}>
-                            <XStack pt="$1" flexWrap='wrap'>
-                                <Tinted>
-                                <DataTable2.component
-                                    conditionalRowStyles={conditionalRowStyles}
-                                    rowsPerPage={state.itemsPerPage}
-                                    handleSort={(column, orderDirection) => setState({ ...state, orderBy: column.selector, orderDirection })}
-                                    handlePerRowsChange={(itemsPerPage) => setState({ ...state, itemsPerPage })}
-                                    handlePageChange={(page) => setState({ ...state, page: parseInt(page, 10) - 1 })}
-                                    currentPage={parseInt(state.page, 10) + 1}
-                                    totalRows={currentItems?.data?.total}
-                                    columns={[DataTable2.column(
-                                        <Theme reset><Stack ml="$3" o={0.6}>
-                                        <Checkbox focusStyle={{outlineWidth:0}} checked={selected.length > 1} onPress={(e) => {
+                    <Stack pr={"$1"} f={1}>
+                        <Scrollbars universal={true} height={"100%"} >
+                            <ActiveRender activeId={1}>
+                                    <DataTableCard items={currentItems?.data?.items} />
+                            </ActiveRender>
+                            <ActiveRender activeId={0}>
+                                <XStack mr="$3" pt="$1" flexWrap='wrap'>
+                                    <Tinted>
+                                    <DataTable2.component
+                                        pagination={false}
+                                        conditionalRowStyles={conditionalRowStyles}
+                                        rowsPerPage={state.itemsPerPage}
+                                        handleSort={(column, orderDirection) => setState({ ...state, orderBy: column.selector, orderDirection })}
+                                        handlePerRowsChange={(itemsPerPage) => setState({ ...state, itemsPerPage })}
+                                        handlePageChange={(page) => setState({ ...state, page: parseInt(page, 10) - 1 })}
+                                        currentPage={parseInt(state.page, 10) + 1}
+                                        totalRows={currentItems?.data?.total}
+                                        columns={[DataTable2.column(
+                                            <Theme reset><Stack ml="$3" o={0.8}>
+                                            <Checkbox focusStyle={{outlineWidth:0}} checked={selected.length > 1} onPress={(e) => {
 
-                                            if(selected.length) {
-                                                setSelected([])
-                                            } else {
-                                                console.log('selection all: ', currentItems?.data?.items.map(x => model.load(x).getId()))
-                                                setSelected(currentItems?.data?.items.map(x => model.load(x).getId()))
-                                            }
-                                        }}>
-                                            <Checkbox.Indicator>
-                                                <CheckCheck />
-                                            </Checkbox.Indicator>
-                                        </Checkbox>
-                                    </Stack></Theme>, "", false, row => <Theme reset><Stack ml="$3" o={0.6}>
-                                        <Checkbox focusStyle={{outlineWidth:0}} onPress={() => {
-                                            const id = model.load(row).getId()
-                                            setSelected(selected.indexOf(id) != -1 ? selected.filter((ele) => ele !== id) : [...selected, id])
-                                        }} checked={selected.includes(model.load(row).getId())}>
-                                            <Checkbox.Indicator>
-                                                <Check />
-                                            </Checkbox.Indicator>
-                                        </Checkbox>
-                                    </Stack></Theme>, true, '65px'),...tableColumns]}
-                                    rows={currentItems?.data?.items}
-                                    onRowPress={(rowData) => { setCurrentItem(rowData); setEditOpen(true) }}
-                                />
-                                </Tinted>
-                            </XStack>
-                        </ActiveRender>
-                    </Scrollbars>
+                                                if(selected.length) {
+                                                    setSelected([])
+                                                } else {
+                                                    console.log('selection all: ', currentItems?.data?.items.map(x => model.load(x).getId()))
+                                                    setSelected(currentItems?.data?.items.map(x => model.load(x).getId()))
+                                                }
+                                            }}>
+                                                <Checkbox.Indicator>
+                                                    <CheckCheck />
+                                                </Checkbox.Indicator>
+                                            </Checkbox>
+                                        </Stack></Theme>, "", false, row => <Theme reset><Stack ml="$3" o={0.8}>
+                                            <Checkbox focusStyle={{outlineWidth:0}} onPress={() => {
+                                                const id = model.load(row).getId()
+                                                setSelected(selected.indexOf(id) != -1 ? selected.filter((ele) => ele !== id) : [...selected, id])
+                                            }} checked={selected.includes(model.load(row).getId())}>
+                                                <Checkbox.Indicator>
+                                                    <Check />
+                                                </Checkbox.Indicator>
+                                            </Checkbox>
+                                        </Stack></Theme>, true, '65px'),...tableColumns]}
+                                        rows={currentItems?.data?.items}
+                                        onRowPress={(rowData) => { setCurrentItem(rowData); setEditOpen(true) }}
+                                    />
+                                    </Tinted>
+                                </XStack>
+                            </ActiveRender>
+                        </Scrollbars>
+                    </Stack>
+
                 </AsyncView>
             </ActiveGroup>
         </YStack>

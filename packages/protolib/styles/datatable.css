@@ -180,12 +180,16 @@
 .rdt_TableHeadRow {
   background-color: transparent !important;
   border-bottom: 0 !important;
-  border-radius: 13px 13px 0px 0px !important;
+  /* border-radius: 13px 13px 0px 0px !important; */
 }
 
 .rdt_TableHead {
-    background-color: transparent !important;
-    border-radius: 13px 13px 0px 0px !important;
+    background-color: var(--gray2) !important;
+    /* border-radius: 13px 13px 0px 0px !important; */
+    position: fixed;
+    z-index: 1000;
+    border-bottom: 1px solid var(--gray5) !important;
+    margin-top: -3px;
 }
 
 .rdt_Table {
@@ -220,6 +224,8 @@
 
 .rdt_TableBody{
   color: var(--color) !important;
+  margin-top: 49px;
+  margin-bottom: 50px;
 }
 
 .rdt_Pagination {
@@ -262,4 +268,7 @@ button > svg {
   width: 16px;
   height: 16px;
   border: 1px solid var(--color7);
+}
+.data-table-extensions {
+  display: none;
 }

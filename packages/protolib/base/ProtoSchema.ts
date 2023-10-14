@@ -143,7 +143,7 @@ export class ProtoSchema {
             let optional = false;
 
             const checks = field._def.checks
-            const hidden = field._def.hidden
+            const editUI = field._def.editUI
             const label = field._def.label
             const hint = field._def.hint
             const generate = field._def.generate
@@ -163,13 +163,14 @@ export class ProtoSchema {
                 continue;
             }
 
-            fields[key] = { generate: generate, hint: hint ?? (label ?? key), label: label ?? key, name: key, type: field.constructor.name.substr(3), optional: optional, subtypes: checks, hidden }
+            fields[key] = { generate: generate, hint: hint ?? (label ?? key), label: label ?? key, name: key, type: field.constructor.name.substr(3), optional: optional, subtypes: checks }
             if (before) fields[key].before = before
             if (after) fields[key].after = after
             if (secret) fields[key].secret = secret
             if (id) fields[key].id = id
             if (search) fields[key].search = search
             if (events) fields[key].events = events
+            if (editUI) fields[key].editUI = editUI
         }
         return new ProtoSchema(fields)
     }

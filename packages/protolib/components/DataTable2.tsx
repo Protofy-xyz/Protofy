@@ -13,7 +13,7 @@ const DataTableExtensions = dynamic<any>(() =>
 );
 
 export const DataTable2 = {
-  component: ({conditionalRowStyles, rowsPerPage, columns, rows, onRowPress, handlePerRowsChange, handlePageChange, totalRows, currentPage, handleSort}) => {
+  component: ({pagination,conditionalRowStyles, rowsPerPage, columns, rows, onRowPress, handlePerRowsChange, handlePageChange, totalRows, currentPage, handleSort}) => {
     const tableData = {
       columns,
       data: rows
@@ -35,9 +35,11 @@ export const DataTable2 = {
         onChangePage={handlePageChange}
         paginationTotalRows={totalRows}
         paginationDefaultPage={currentPage}
-        pagination
+        pagination={pagination}
         paginationServer
         sortServer
+        
+
         // selectableRows
         paginationPerPage={rowsPerPage}
         onSort={handleSort}

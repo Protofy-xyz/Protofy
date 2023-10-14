@@ -3,7 +3,7 @@ import { ZodString, ZodNumber, ZodBoolean, ZodArray, ZodAny, ZodOptional} from '
 interface ZodExtensions {
     label(caption: string): this;
     hint(hintText: string): this;
-    hidden(): this;
+    editUI(): this;
     generate(val: any): this;
     before(field: string): this;
     after(field: string): this;

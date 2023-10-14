@@ -27,8 +27,8 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.hidden = function () {
-        this._def.hidden = true;
+    type.prototype.editUI = function () {
+        this._def.editUI = true;
         return this;
     };
 
@@ -100,7 +100,7 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: z.string().generate(() => ""+Math.random()).id().hidden(),
-    _deleted: z.boolean().optional().hidden(),
+    id: z.string().generate(() => ""+Math.random()).id(),
+    _deleted: z.boolean().optional(),
 })
 
