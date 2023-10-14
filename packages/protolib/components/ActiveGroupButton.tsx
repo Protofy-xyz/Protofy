@@ -9,6 +9,8 @@ const ActiveGroupButton = React.forwardRef(({ activeId, onSetActive=(activeId)=>
             <Button {...{
                 onPress: () => {onSetActive(activeId); setActive(activeId)},
                 theme: activeId === active ? 'active' : null,
+                border: 0,
+                focusStyle: {outlineWidth:0},
                 chromeless: activeId !== active,
                 borderRadius: 0,
                 size: "$3",

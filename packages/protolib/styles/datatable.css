@@ -241,7 +241,7 @@ button > svg {
   color: var(--color);
   font-size: 20px;
   opacity: 0.4;
-  background-color: var(--backgroundHover);
+  background-color: var(--gray);
 }
 
 .data-table-extensions + * + * {

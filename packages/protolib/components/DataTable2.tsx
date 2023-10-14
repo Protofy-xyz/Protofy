@@ -41,7 +41,7 @@ export const DataTable2 = {
         // selectableRows
         paginationPerPage={rowsPerPage}
         onSort={handleSort}
-        paginationRowsPerPageOptions={[10, 20, 25, 50, 100, 500, 1000]}
+        paginationRowsPerPageOptions={[10, 15, 20, 25, 50, 100, 500, 1000]}
       />
     </DataTableExtensions>
   },

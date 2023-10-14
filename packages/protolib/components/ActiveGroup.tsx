@@ -8,7 +8,7 @@ export const ActiveGroupContext = createContext({ active: 0, setActive: (next: n
 const ActiveGroup = React.forwardRef(({ initialState = 0, children }: any, ref:any) => {
     const [active, setActive] = useState(initialState)
 
-    return (<Stack ref={ref}>
+    return (<Stack f={1} ref={ref}>
         <ActiveGroupContext.Provider value={{ active, setActive }}>
             {children}
         </ActiveGroupContext.Provider>
