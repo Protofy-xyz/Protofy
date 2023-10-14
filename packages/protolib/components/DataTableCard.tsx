@@ -7,6 +7,7 @@ export const DataTableCard = ({ items }) => {
             return (
                 <Stack key={element.key} mt="$5" p={"$5"}>
                     <DataCard
+                        
                         innerContainerProps={{
                             maxWidth: 700,
                             $md: { maxWidth: 450 },

@@ -70,7 +70,7 @@ export function DataView({ disableViewSelector=false, initialItems, sourceUrl, n
                             onSave={async (data) => {
                                 try {
                                     const user = model.load(data)
-                                    const result = await API.post(pageState.sourceUrl, onAdd(user.create().getData()))
+                                    const result = await API.post(sourceUrl, onAdd(user.create().getData()))
                                     if (result.isError) {
                                         throw result.error
                                     }
@@ -105,7 +105,7 @@ export function DataView({ disableViewSelector=false, initialItems, sourceUrl, n
                             onSave={async (data) => {
                                 try {
                                     const id = model.load(data).getId()
-                                    const result = await API.post(pageState.sourceUrl + '/' + id, onEdit(model.load(currentItem).update(model.load(data)).getData()))
+                                    const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(currentItem).update(model.load(data)).getData()))
                                     if (result.isError) {
                                         throw result.error
                                     }
