@@ -25,22 +25,14 @@ export const AlertDialog = forwardRef(({ hideAccept, onAccept = () => { }, onCan
             <Dialog.Content scale={1} p="$5" ai="flex-start" jc="flex-start" {...props}>
                 <YStack f={1}>
                     <YStack p={"$5"} f={1}>
-                        <XStack width={"100%"} f={1}>
+                        {title && <XStack width={"100%"} f={1}>
                             <XStack f={1}>
                                 <Dialog.Title>{title}</Dialog.Title>
                             </XStack>
-
-                            {/* <Button
-                        onPress={() => { seter(false); onCancel() }}
-                        backgroundColor={"$backgroundTransparent"}
-                        size="$5"
-                        circular
-                        icon={X}
-                    /> */}
-                        </XStack>
-                        <Dialog.Description mt="$3" mb="$6">
+                        </XStack>}
+                        { description && <Dialog.Description mt="$3" mb="$6">
                             {description}
-                        </Dialog.Description>
+                        </Dialog.Description> }
 
                         {error && (
                         <Notice>

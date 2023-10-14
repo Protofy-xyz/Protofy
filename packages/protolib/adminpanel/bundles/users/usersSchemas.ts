@@ -9,7 +9,7 @@ export const UserSchema = Schema.object({
     password: z.string().min(6).hint('**********').secret().onCreate('cypher').onUpdate('update').onRead('clearPassword').onList('clearPassword').display(),
     createdAt: z.string().min(1).generate((obj) => moment().toISOString()).search(),
     lastLogin: z.string().optional().search(),
-    from: z.string().min(1).search()
+    from: z.string().min(1).search().generate((obj) => 'admin')
 })
 export type UserType = z.infer<typeof UserSchema>;
 export const UserModel = AutoModel.createDerived<UserType>("UserModel", UserSchema);

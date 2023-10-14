@@ -38,8 +38,6 @@ export const DataTable2 = {
         pagination={pagination}
         paginationServer
         sortServer
-        
-
         // selectableRows
         paginationPerPage={rowsPerPage}
         onSort={handleSort}

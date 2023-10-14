@@ -14,6 +14,7 @@ export default {
         component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
             return (<AdminPage title="Users" workspace={workspace} pageSession={pageSession}>
                 <DataView
+                
                     rowIcon={User}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
@@ -44,7 +45,6 @@ export default {
                     extraFields={{ 
                         repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret().display()
                     }}
-                    defaultCreateData={{from:'admin'}} 
                     model={UserModel} 
                     pageState={pageState}
                     icons={UserIcons}

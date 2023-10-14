@@ -86,7 +86,6 @@ export class ProtoSchema {
     is(field: string) {
         const validFields = {}
         Object.keys(this.fields).forEach((key) => {
-            console.log('checkingk key: ', key, 'fields: ', field, 'for object: ', this.fields[key])
             if (this.fields[key][field]) {
                 validFields[key] = this.fields[key]
             }

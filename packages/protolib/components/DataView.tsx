@@ -1,4 +1,4 @@
-import { Theme, YStack, XStack, Paragraph, Text, Button, Stack, Checkbox } from 'tamagui'
+import { Theme, YStack, XStack, Paragraph, Text, Button, Stack, Checkbox, Dialog } from 'tamagui'
 import { Chip, DataTableCard, getPendingResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup, XCenterStack, ActiveRender } from 'protolib'
 import { useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Trash2, Cross, CheckCheck, Check } from '@tamagui/lucide-icons'
@@ -6,23 +6,23 @@ import { z } from "zod";
 import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
-import { useRouter } from 'next/router';
+import { usePageParams} from 'protolib/next'
+
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
-export function DataView({ rowIcon, disableViewSelector=false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, defaultCreateData = {}, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data }:any) {
+export function DataView({ rowIcon, disableViewSelector=false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data }:any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
-    const [currentItem, setCurrentItem] = useState<any>()
     const [createOpen, setCreateOpen] = useState(false)
-    const [editOpen, setEditOpen] = useState(false)
-    const { push, query } = useRouter();
     const [state, setState] = useState(pageState)
+    const {push, mergePush, removePush} = usePageParams(pageState, state, setState)
     const [selected, setSelected] = useState([])
 
     const fetch = async () => {
-        return API.get({ url: sourceUrl, ...state })
+        return API.get({ url: sourceUrl, ...state }, setItems)
     }
+
     usePendingEffect((s) => API.get({ url: sourceUrl, ...pageState }, s), setItems, initialItems)
 
     useEffect(() => {
@@ -32,19 +32,10 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
     }, [items])
 
     useUpdateEffect(() => {
-        const update = async () => {
-            setItems(await fetch())
-            push({
-                query: {
-                    ...query,
-                    ...state
-                }
-            }, undefined, { shallow: true })
-        }
-        update()
+        fetch();
     }, [state])
 
-    const onSearch = async (text) => setState({ ...state, search: text })
+    const onSearch = async (text) => push("search", text)
     const onCancelSearch = async () => setCurrentItems(items)
     const toast = useToastController()
     const tableColumns = rowIcon?[DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, {size: "$1"})}</Stack>, true, '50px'), ...columns]:columns
@@ -68,15 +59,14 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                     setOpen={setCreateOpen}
                     open={createOpen}
                     hideAccept={true}
-                    title={<Text><Tinted><Text color="$color9">Create</Text></Tinted><Text color="$color11"> {name}</Text></Text>}
                     description={""}
                 >
                     <YStack f={1} jc="center" ai="center">
                         <EditableObject
+                            name={name}
                             numColumns={numColumnsForm}
-                            initialData={currentItem}
                             mode={'add'}
-                            onSave={async (data) => {
+                            onSave={async (originalData, data) => {
                                 try {
                                     const user = model.load(data)
                                     const result = await API.post(sourceUrl, onAdd(user.create().getData()))
@@ -92,7 +82,7 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                                     throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
                                 }
                             }}
-                            model={model.load(currentItem)}
+                            model={model}
                             extraFields={extraFields}
                             icons={icons}
                         />
@@ -101,25 +91,31 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                 <AlertDialog
                     hideAccept={true}
                     acceptCaption="Save"
-                    setOpen={setEditOpen}
-                    open={editOpen && currentItem}
-                    title={<Text><Tinted><Text color="$color9">Edit</Text></Tinted><Text color="$color11"> account</Text></Text>}
+                    setOpen={(s) => removePush('item')}
+                    open={state.item}
                     description={""}
                 >
                     <YStack f={1} jc="center" ai="center">
                         <EditableObject
+                            name={name}
+                            minHeight={350} minWidth={490}
+                            spinnerSize={75}
+                            loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
+                            objectId={state.item}
+                            sourceUrl={sourceUrl+'/'+state.item}
                             numColumns={2}
-                            initialData={currentItem}
+                            initialData={{}}
                             mode={'edit'}
-                            onSave={async (data) => {
+                            onSave={async (original, data) => {
                                 try {
                                     const id = model.load(data).getId()
-                                    const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(currentItem).update(model.load(data)).getData()))
+                                    const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(original).update(model.load(data)).getData()))
                                     if (result.isError) {
                                         throw result.error
                                     }
                                     fetch()
-                                    setEditOpen(false);
+                                    const {item, ...rest} = state; 
+                                    setState(rest)
                                     toast.show('User updated', {
                                         message: "Saved new settings for user: " + id
                                     })
@@ -127,7 +123,7 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                                     throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
                                 }
                             }}
-                            model={model.load(currentItem)}
+                            model={model}
                             extraFields={extraFields}
                             icons={icons}
                         />
@@ -145,16 +141,15 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                         <Search top={1} initialState={state?.search} onCancel={onCancelSearch} onSearch={onSearch} />
                         {!hideAdd && <XStack marginLeft="$3" top={-3}>
                                 {!disableViewSelector && <ButtonGroup marginRight="$3">
-                                    <ActiveGroupButton onSetActive={() => setState({...state, view: 'list'})} activeId={0}>
+                                    <ActiveGroupButton onSetActive={() => push('view','list')} activeId={0}>
                                         <List size="$1" strokeWidth={1} />
                                     </ActiveGroupButton>
-                                    <ActiveGroupButton onSetActive={() => setState({...state, view: 'cards'})} activeId={1}>
+                                    <ActiveGroupButton onSetActive={() => push('view', 'cards')} activeId={1}>
                                         <LayoutGrid size='$1' strokeWidth={1} />
                                     </ActiveGroupButton>
                                 </ButtonGroup>}
                                 <Tinted>
                                 <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
-                                    setCurrentItem(defaultCreateData);
                                     setCreateOpen(true)
                                 }} chromeless={true}>
                                     <Plus />
@@ -181,12 +176,12 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                                 <XStack mr="$3" pt="$1" flexWrap='wrap'>
                                     <Tinted>
                                     <DataTable2.component
-                                        pagination={false}
+                                        pagination={true}
                                         conditionalRowStyles={conditionalRowStyles}
                                         rowsPerPage={state.itemsPerPage}
-                                        handleSort={(column, orderDirection) => setState({ ...state, orderBy: column.selector, orderDirection })}
-                                        handlePerRowsChange={(itemsPerPage) => setState({ ...state, itemsPerPage })}
-                                        handlePageChange={(page) => setState({ ...state, page: parseInt(page, 10) - 1 })}
+                                        handleSort={(column, orderDirection) => mergePush({ orderBy: column.selector, orderDirection })}
+                                        handlePerRowsChange={(itemsPerPage) => push('itemsPerPage', itemsPerPage)}
+                                        handlePageChange={(page) => push('page', parseInt(page, 10) - 1 )}
                                         currentPage={parseInt(state.page, 10) + 1}
                                         totalRows={currentItems?.data?.total}
                                         columns={[DataTable2.column(
@@ -215,7 +210,7 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                                             </Checkbox>
                                         </Stack></Theme>, true, '65px'),...tableColumns]}
                                         rows={currentItems?.data?.items}
-                                        onRowPress={(rowData) => { setCurrentItem(rowData); setEditOpen(true) }}
+                                        onRowPress={(rowData) => push('item', model.load(rowData).getId())}
                                     />
                                     </Tinted>
                                 </XStack>
