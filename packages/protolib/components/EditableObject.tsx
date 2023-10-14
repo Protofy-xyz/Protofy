@@ -40,7 +40,8 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
     const elementObj = model.load(data)
 
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
-    const formFields = model.load({}).getObjectSchema().merge(extraFieldsObject).is('display').getLayout(numColumns)
+    const formFields = elementObj.getObjectSchema().merge(extraFieldsObject).is('display').getLayout(numColumns)
+
     return <Stack {...props}>
         <AsyncView forceLoad={mode=='add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop??-30} atom={originalData}>
             {title??<Dialog.Title><Text><Tinted><Text color="$color9">{capitalize(mode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text></Dialog.Title>}
@@ -52,13 +53,13 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                 )}
                 <YStack ai="center" jc="center">
                     {
-                        (data || mode == 'add') && formFields.map((row, x) => <XStack key={x} mb={x != formFields.length - 1 ? '$5' : '$0'}>
+                        formFields.map((row, x) => <XStack key={x} mb={x != formFields.length - 1 ? '$5' : '$0'}>
                             {
                                 row.map((ele, i) => {
                                     const icon = icons[ele.name] ? icons[ele.name] : Pencil
                                     return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2">
                                         <Label><Tinted><Stack mr="$2">{React.createElement(icon, { color: "var(--color9)", size: "$1", strokeWidth: 1 })}</Stack></Tinted> {ele.label}</Label>
-                                        <Input focusStyle={{outlineWidth:1}} disabled={mode == 'edit' && ele.static} secureTextEntry={ele.secret} value={data[ele.name] ?? ''} onChangeText={(t) => setData({ ...data, [ele.name]: t })} placeholder={ele.hint} autoFocus={x == 0 && i == 0}></Input>
+                                        <Input focusStyle={{outlineWidth:1}} disabled={mode == 'edit' && ele.static} secureTextEntry={ele.secret} value={(data && data[ele.name]) ?? ''} onChangeText={(t) => setData({ ...data, [ele.name]: t })} placeholder={!data ? '' : ele.hint} autoFocus={x == 0 && i == 0}></Input>
                                     </Fieldset>
                                 })
                             }
