@@ -11,14 +11,14 @@ import { usePageParams} from 'protolib/next'
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
-export function DataView({ rowIcon, disableViewSelector=false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data }:any) {
+export function DataView({ itemData, rowIcon, disableViewSelector=false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data }:any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
     const [state, setState] = useState(pageState)
     const {push, mergePush, removePush} = usePageParams(pageState, state, setState)
     const [selected, setSelected] = useState([])
-
+    const [currentItemData, setCurrentItemData] = useState(itemData)
     const fetch = async () => {
         return API.get({ url: sourceUrl, ...state }, setItems)
     }
@@ -91,12 +91,16 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                 <AlertDialog
                     hideAccept={true}
                     acceptCaption="Save"
-                    setOpen={(s) => removePush('item')}
+                    setOpen={(s) => {
+                        setCurrentItemData(undefined); 
+                        removePush('item')
+                    }}
                     open={state.item}
                     description={""}
                 >
                     <YStack f={1} jc="center" ai="center">
                         <EditableObject
+                            initialData={currentItemData}
                             name={name}
                             minHeight={350} minWidth={490}
                             spinnerSize={75}
@@ -104,10 +108,10 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                             objectId={state.item}
                             sourceUrl={sourceUrl+'/'+state.item}
                             numColumns={2}
-                            initialData={{}}
                             mode={'edit'}
                             onSave={async (original, data) => {
                                 try {
+                                    setCurrentItemData(undefined)
                                     const id = model.load(data).getId()
                                     const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(original).update(model.load(data)).getData()))
                                     if (result.isError) {

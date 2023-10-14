@@ -8,10 +8,12 @@ export const UsersAPI = CreateApi('accounts', UserModel, __dirname, '/adminapi/v
             [field]: await hash(data[field])
         }
     },
+
     clearPassword: async(field, e, data) => {
         const {password, ...rest} = data
         return rest
     },
+    
     update: async(field, e, data, prevData) => {
         if(!data.password) {
             data.password = prevData.password

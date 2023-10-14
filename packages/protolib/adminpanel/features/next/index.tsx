@@ -25,12 +25,14 @@ export function PaginatedDataSSR(sourceUrl,allowdUserTypes=['admin'], props={}) 
       orderBy: context.query.orderBy ?? '',
       orderDirection: context.query.orderDirection ?? '',
       view: context.query.view?? 'list',
+      item: context.query.item?? '',
       ...props,
     }
     return withSession(context, allowdUserTypes, {
       workspace: await API.get('/adminapi/v1/workspaces'),
       sourceUrl: sourceUrl,
       initialItems: await API.get({url: sourceUrl, ...dataProps}),
+      itemData: context.query.item ? await API.get(sourceUrl+'/'+context.query.item) : '',
       pageState: {
         ...dataProps,
       }
