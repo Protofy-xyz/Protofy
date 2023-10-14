@@ -1,7 +1,7 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack } from 'tamagui'
+import { Theme, YStack, XStack, Paragraph, Text, Button, Stack, Checkbox } from 'tamagui'
 import { Chip, DataTableCard, getPendingResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup, XCenterStack, ActiveRender } from 'protolib'
 import { useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List, Trash2, Cross, X } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Trash2, Cross, CheckCheck, Check } from '@tamagui/lucide-icons'
 import { z } from "zod";
 import { PendingAtomResult } from '@/packages/protolib/lib/createApiAtom'
 import { getErrorMessage, useToastController } from '@my/ui'
@@ -17,6 +17,7 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
     const [editOpen, setEditOpen] = useState(false)
     const { push, query } = useRouter();
     const [state, setState] = useState(pageState)
+    const [selected, setSelected] = useState([])
 
     const fetch = async () => {
         return API.get({ url: sourceUrl, ...state })
@@ -42,16 +43,22 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
         update()
     }, [state])
 
-    // useUpdateEffect(() => setCurrentPage(parseInt(query.page as string, 10)), [query.page])
-    // useUpdateEffect(() => setRowsPage(parseInt(query.itemsPerPage as string, 10)), [query.itemsPerPage])
-    // useUpdateEffect(() => setOrderDirection(query.orderDirection as string), [query.direction])
-    // useUpdateEffect(() => setOrderBy(query.orderBy as string), [query.orderBy])
-    // useUpdateEffect(() => setSearch(query.search as string), [query.search])
-
     const onSearch = async (text) => setState({ ...state, search: text })
     const onCancelSearch = async () => setCurrentItems(items)
     const toast = useToastController()
+    const tableColumns = rowIcon?[DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, {size: "$1"})}</Stack>, true, '50px'), ...columns]:columns
 
+    const conditionalRowStyles = [
+        {
+          when: row => selected.includes(model.load(row).getId()),
+          style: {
+            backgroundColor: 'var(--color4)'
+          },
+          '&:hover': {
+            backgroundColor: 'var(--color4)'
+          }
+        },
+    ];
     return (
         <YStack f={1}>
             <ActiveGroup initialState={!state || state.view == 'list'?0:1}>
@@ -170,19 +177,44 @@ export function DataView({ rowIcon, disableViewSelector=false, initialItems, sou
                     </ActiveRender>
                     <ActiveRender activeId={0}>
                         <XStack pt="$1" flexWrap='wrap'>
-                            {/* <Tinted> */}
+                            <Tinted>
                             <DataTable2.component
+                                conditionalRowStyles={conditionalRowStyles}
                                 rowsPerPage={state.itemsPerPage}
                                 handleSort={(column, orderDirection) => setState({ ...state, orderBy: column.selector, orderDirection })}
                                 handlePerRowsChange={(itemsPerPage) => setState({ ...state, itemsPerPage })}
                                 handlePageChange={(page) => setState({ ...state, page: parseInt(page, 10) - 1 })}
                                 currentPage={parseInt(state.page, 10) + 1}
                                 totalRows={currentItems?.data?.total}
-                                columns={rowIcon?[DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, {size: "$1"})}</Stack>, true, '50px'), ...columns]:columns}
+                                columns={[DataTable2.column(
+                                    <Theme reset><Stack o={0.6}>
+                                    <Checkbox checked={selected.length > 1} onPress={(e) => {
+
+                                        if(selected.length) {
+                                            setSelected([])
+                                        } else {
+                                            console.log('selection all: ', currentItems?.data?.items.map(x => model.load(x).getId()))
+                                            setSelected(currentItems?.data?.items.map(x => model.load(x).getId()))
+                                        }
+                                    }}>
+                                        <Checkbox.Indicator>
+                                            <CheckCheck />
+                                        </Checkbox.Indicator>
+                                    </Checkbox>
+                                </Stack></Theme>, "", false, row => <Theme reset><Stack o={0.6}>
+                                    <Checkbox onPress={() => {
+                                        const id = model.load(row).getId()
+                                        setSelected(selected.indexOf(id) != -1 ? selected.filter((ele) => ele !== id) : [...selected, id])
+                                    }} checked={selected.includes(model.load(row).getId())}>
+                                        <Checkbox.Indicator>
+                                            <Check />
+                                        </Checkbox.Indicator>
+                                    </Checkbox>
+                                </Stack></Theme>, true, '52px'),...tableColumns]}
                                 rows={currentItems?.data?.items}
                                 onRowPress={(rowData) => { setCurrentItem(rowData); setEditOpen(true) }}
                             />
-                            {/* </Tinted> */}
+                            </Tinted>
                         </XStack>
                     </ActiveRender>
                 </AsyncView>

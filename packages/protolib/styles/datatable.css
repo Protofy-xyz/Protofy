@@ -168,13 +168,13 @@
 }
 
 .rdt_TableRow:last-of-type {
-  border-bottom: 1px solid var(--color5) !important;
+  border-bottom: 1px solid var(--gray5) !important;
 }
 
 .rdt_TableRow{
   color: var(--color) !important;
   border: 0 !important;
-  border-top: 1px solid var(--color5) !important;
+  border-top: 1px solid var(--gray5) !important;
 }
 
 .rdt_TableHeadRow {
@@ -195,11 +195,11 @@
 }
 
 .rdt_TableRow:nth-child(odd) {
-  background-color: var(--color2) !important;
+  background-color: var(--gray2);
 }
 
 .rdt_TableRow:nth-child(even) {
-  background-color: var(--color3) !important;
+  background-color: var(--gray3);
 }
 
 
@@ -211,7 +211,7 @@
 }
 
 .rdt_TableRow:hover{
-  background-color: var(--backgroundPress) !important;
+  background-color: var(--color4);
 }
 
 .rdt_TableCol_Sortable {

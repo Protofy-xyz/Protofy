@@ -13,7 +13,7 @@ const DataTableExtensions = dynamic<any>(() =>
 );
 
 export const DataTable2 = {
-  component: ({ rowsPerPage, columns, rows, onRowPress, handlePerRowsChange, handlePageChange, totalRows, currentPage, handleSort}) => {
+  component: ({conditionalRowStyles, rowsPerPage, columns, rows, onRowPress, handlePerRowsChange, handlePageChange, totalRows, currentPage, handleSort}) => {
     const tableData = {
       columns,
       data: rows
@@ -21,7 +21,7 @@ export const DataTable2 = {
 
     return <DataTableExtensions print={false} export={false} filter={false} {...tableData}>
       <DataTableComp
-
+        conditionalRowStyles={conditionalRowStyles}
         responsive
         striped
         pointerOnHover
