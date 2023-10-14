@@ -11,6 +11,7 @@
     "menu": {
         "System": [
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
+            { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
             { "name": "Events", "icon": "events", "type": "events", "path": "/" }
         ],
         "App": [

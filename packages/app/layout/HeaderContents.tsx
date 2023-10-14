@@ -85,18 +85,6 @@ export const HeaderContents = React.memo(({menuPlacement='bottom', logoSize=30}:
       >
         <XStack ai="center" space="$3">
             {session.loggedIn?<HeaderLink href="/profile">{session.user.id}</HeaderLink>:<HeaderLink href="/auth/login">Login</HeaderLink>}
-            <NextLink target="_blank" href="https://github.com/Protofy-xyz">
-              <TooltipSimple delay={0} restMs={25} label="Star on Github">
-                <YStack p="$2" opacity={0.7} hoverStyle={{ opacity: 1 }}>
-                  <VisuallyHidden>
-                    <Text>Github</Text>
-                  </VisuallyHidden>
-                  {/* @ts-ignore */}
-                  <GithubIcon width={23} />
-                </YStack>
-              </TooltipSimple>
-            </NextLink>
-
           <HeaderMenu menuPlacement={menuPlacement}>
             <HeaderMenuContent />
           </HeaderMenu>
