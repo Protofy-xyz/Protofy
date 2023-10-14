@@ -12,7 +12,6 @@ const ButtonGroup = React.forwardRef((props: GroupProps, ref:any) => {
             maxWidth="100%"
             als="center"
             ov="hidden"
-            mt="$-6"
             {...props}
         >
             {props.children}

@@ -24,6 +24,7 @@ export function PaginatedDataSSR(sourceUrl,allowdUserTypes=['admin'], props={}) 
       search: context.query.search ?? '',
       orderBy: context.query.orderBy ?? '',
       orderDirection: context.query.orderDirection ?? '',
+      view: context.query.view?? 'list',
       ...props,
     }
     return withSession(context, allowdUserTypes, {
