@@ -14,7 +14,6 @@ export default {
         component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
             return (<AdminPage title="Users" workspace={workspace} pageSession={pageSession}>
                 <DataView
-                    disableViewSelector={true}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={2}

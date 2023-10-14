@@ -101,3 +101,4 @@ export * from './schema'
 export * from './api/lib/session' //this is an exception
 export * from './components/EditableObject'
 export * from './components/DataView'
+export * from './components/DataTableCard'

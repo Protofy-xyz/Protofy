@@ -1,5 +1,5 @@
-import { YStack, XStack, Paragraph, Text, Button } from 'tamagui'
-import { Center, getPendingResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup, XCenterStack, ActiveRender } from 'protolib'
+import { YStack, XStack, Paragraph, Text, Button, Stack } from 'tamagui'
+import { DataTableCard, getPendingResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup, XCenterStack, ActiveRender } from 'protolib'
 import { useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List } from '@tamagui/lucide-icons'
 import { z } from "zod";
@@ -164,7 +164,8 @@ export function DataView({ disableViewSelector=false, initialItems, sourceUrl, n
 
                 <AsyncView atom={currentItems}>
                     <ActiveRender activeId={1}>
-                        <Center>card view</Center>
+                        <DataTableCard items={currentItems?.data?.items} />
+
                     </ActiveRender>
                     <ActiveRender activeId={0}>
                         <XStack pt="$1" flexWrap='wrap'>
