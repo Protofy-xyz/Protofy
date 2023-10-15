@@ -3,7 +3,7 @@ import {handler} from './handler'
 import fs from 'fs';
 import path from 'path';
 
-export const CreateApi = (modelName: string, modelType: any, dir: string, prefix='/api/v1/', dbName?, transformers={}) => {
+export const CreateApi = (modelName: string, modelType: any, dir: string, prefix='/api/v1/', dbName?, transformers={}, _connectDB?, _getDB?) => {
     let initialData;
     try {
         if(fs.existsSync(path.join(dir, 'initialData.json'))) {
@@ -26,19 +26,18 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
         initialData = undefined;
     }
 
-
     return (app) => BaseApi(app, modelName, modelType, initialData, prefix, dbName, {
         ...transformers
-    })
+    }, _connectDB??connectDB, _getDB??getDB)
 }
 
-export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName, transformers) => {
+export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName, transformers, connectDB, getDB) => {
     const dbPath = '../../data/databases/'+(dbName?dbName:entityName)
     connectDB(dbPath, initialData) //preconnect database
 
     //list
     app.get(prefix + entityName, handler(async (req, res, session) => {
-        const db = getDB(dbPath);
+        const db = getDB(dbPath, req, session);
         const allResults: any[] = [];
         const itemsPerPage = Math.min(Number(req.query.itemsPerPage) || 10, 100);
         const page = Number(req.query.page) || 0;
@@ -78,7 +77,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //create
     app.post(prefix+entityName, handler(async (req, res, session) => {
-        const db = getDB(dbPath)
+        const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.load(req.body, session).createTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
         res.send(await entityModel.readTransformed(transformers))
@@ -86,7 +85,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //read
     app.get(prefix+entityName+'/:key', handler(async (req, res, session) => {
-        const db = getDB(dbPath)
+        const db = getDB(dbPath, req, session)
         try {
             const note = modelClass.unserialize(await db.get(req.params.key), session)
             if(!note.isVisible()) {
@@ -101,7 +100,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //update
     app.post(prefix+entityName+'/:key', handler(async (req, res, session) => {
-        const db = getDB(dbPath)
+        const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session), transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
         res.send(await entityModel.readTransformed(transformers))
@@ -109,7 +108,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //delete
     app.get(prefix+entityName+'/:key/delete', handler(async (req, res, session) => {
-        const db = getDB(dbPath)
+        const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).deleteTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
         res.send({"result": "deleted"})

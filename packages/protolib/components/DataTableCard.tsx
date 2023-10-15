@@ -11,7 +11,7 @@ export const DataTableCard = ({ items, model }) => {
                     <DataCard
                         compact={true}
                         innerContainerProps={{
-                            maxWidth: 700,
+                            maxWidth: 600,
                             $md: { maxWidth: 450 },
                             $sm: { minWidth: 'calc(100vw - 65px)', maxWidth: 'calc(100vw - 65px)' },
                             minWidth: 350

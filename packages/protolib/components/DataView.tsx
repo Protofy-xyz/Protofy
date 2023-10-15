@@ -11,7 +11,7 @@ import { usePageParams} from 'protolib/next'
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
-export function DataView({ itemData, rowIcon, disableViewSelector=false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data }:any) {
+export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data }:any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
@@ -214,7 +214,7 @@ export function DataView({ itemData, rowIcon, disableViewSelector=false, initial
                                             </Checkbox>
                                         </Stack></Theme>, true, '65px'),...tableColumns]}
                                         rows={currentItems?.data?.items}
-                                        onRowPress={(rowData) => push('item', model.load(rowData).getId())}
+                                        onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : push('item', model.load(rowData).getId())}
                                     />
                                     </Tinted>
                                 </XStack>

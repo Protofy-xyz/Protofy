@@ -67,7 +67,7 @@ export const existsKey = async (dbPath: string, key: string) => {
         }
     }
 }
-export const getDB = (dbPath:string):Level => {
+export const getDB = (dbPath:string, req?, session?):Level => {
     if (!(dbPath in dbHandlers)) {
         //@ts-ignore
         dbHandlers[dbPath] = level(dbPath, { valueEncoding: 'json' })
