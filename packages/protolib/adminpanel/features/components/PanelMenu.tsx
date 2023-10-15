@@ -1,6 +1,6 @@
 import { YStack, XStack } from 'tamagui'
 import { getPendingResult, API, PanelMenuItem, AlertDialog, Link, Tinted} from 'protolib'
-import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users, Repeat, Zap, Tag} from '@tamagui/lucide-icons'
+import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users, Repeat, Zap, Tag, Library, Lamp} from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ import { workspaceAtom } from '..';
 const opacity = 0.7
 const strokeWidth = 0.8
 const color = '$color8'
+
 const iconTable = {
     database: <Database color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     model: <Box color={color} opacity={opacity} strokeWidth={strokeWidth} />,
@@ -18,7 +19,9 @@ const iconTable = {
     users: <Users color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     events: <Zap color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     automation: <Repeat color={color} opacity={opacity} strokeWidth={strokeWidth} />,
-    groups: <Tag color={color} opacity={opacity} strokeWidth={strokeWidth} />
+    groups: <Tag color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    library: <Library color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    lamp: <Lamp color={color} opacity={opacity} strokeWidth={strokeWidth} />
 }
 const getIcon = (icon) => {
     if (!iconTable[icon]) {
@@ -103,7 +106,7 @@ const Tabs = ({ tabs }: any) => {
                     return <Subtabs subtabs={[tabs[tab]]} />
                 }
                 return (
-                    <Accordion br={"$6"} overflow="hidden" type="multiple" key={index}>
+                    <Accordion defaultValue={["a"+index]} br={"$6"} overflow="hidden" type="multiple" key={index}>
                         <Accordion.Item value={"a" + index}>
                             <Accordion.Trigger
                                 backgroundColor={"$backgroundTransparent"}
@@ -112,9 +115,6 @@ const Tabs = ({ tabs }: any) => {
                                 bw={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
                                     <XStack f={1}>
-                                        {/* <Stack mr={"$3"}>
-                                            <Database color="$color11" strokeWidth={1.5} />
-                                        </Stack> */}
                                         <SizableText f={1} size={"$5"}>{tab}</SizableText>
                                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                                             <ChevronDown size="$1" />
