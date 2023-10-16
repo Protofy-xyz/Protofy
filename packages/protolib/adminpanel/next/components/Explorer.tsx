@@ -144,7 +144,7 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
                                     } else if(data.id == 'download_files') {
                                         onDownloadFiles(data)
                                     } else {
-                                        console.log('Action: ', data)
+                                        //console.log('Action: ', data)
                                     }
                                 }}
                                 disableDragAndDrop={true}

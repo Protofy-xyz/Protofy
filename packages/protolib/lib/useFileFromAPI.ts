@@ -1,0 +1,16 @@
+import { useState } from "react"
+import { getPendingResult } from "./createApiAtom"
+import { useUpdateEffect } from "usehooks-ts"
+import { API } from "./Api"
+import { usePendingEffect } from "./usePendingEffect"
+
+export const useFileFromAPI = (path, json?) => {
+    const [fileContent, setFileContent] = useState(getPendingResult('pending'))
+
+    useUpdateEffect(() => {
+        setFileContent(getPendingResult('pending'))
+    }, [path])
+
+    usePendingEffect((s) => API.get('/adminapi/v1/files/'+path.replace(/\/+/g, '/'), s, true), setFileContent, fileContent, !json)
+    return [fileContent, setFileContent]
+}

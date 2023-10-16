@@ -13,8 +13,6 @@ import { WorkspaceModel } from 'app/models';
 import { Explorer } from './Explorer';
 import {defineFileAction} from 'chonky';
 
-
-
 export const FileBrowser = ({ file, path, filesState }: any) => {
     const [dialogOpen, setDialogOpen] = useState(file ? true : false)
     const [currentPath, setCurrentPath] = useState(path)
@@ -110,12 +108,11 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     return (
         isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
             <Explorer currentPath={currentPath} filesState={filesState} templateActions={templateActions} onOpen={onOpen} />
-            <Dialog open={dialogOpen}>
+            <Dialog open={dialogOpen} onOpenChange={(state) => {setDialogOpen(state); setCurrentFile('')}}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
                         {getWidget()}
-
                         <Dialog.Close />
                     </Dialog.Content>
                 </Dialog.Portal>

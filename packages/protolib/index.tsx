@@ -102,3 +102,5 @@ export * from './api/lib/session' //this is an exception
 export * from './components/EditableObject'
 export * from './components/DataView'
 export * from './components/DataTableCard'
+export * from './lib/Intent'
+export * from './lib/useFileFromAPI'
