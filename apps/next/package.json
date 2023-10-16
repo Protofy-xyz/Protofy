@@ -17,6 +17,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "^9.88.2",
+    "@react-three/fiber": "^8.14.5",
     "@tamagui/config": "latest",
     "@tamagui/next-theme": "latest",
     "app": "0.0.0",
@@ -30,7 +32,8 @@
     "react-native": "^0.71.4",
     "react-native-web": "^0.18.12",
     "react-native-web-lite": "latest",
-    "vercel": "latest"
+    "vercel": "latest",
+    "three": "^0.157.0"
   },
   "devDependencies": {
     "@tamagui/next-plugin": "latest",
