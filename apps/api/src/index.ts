@@ -1,12 +1,12 @@
+import dotenv from 'dotenv'
+// get config vars
+dotenv.config();
+
 import aedes from 'aedes';
 import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
 import app from './api'
-import dotenv from 'dotenv'
-
-// get config vars
-dotenv.config();
 
 const aedesInstance = new aedes();
 
