@@ -7,7 +7,7 @@ import multer from 'multer';
 import fsExtra from 'fs-extra';
 import syncFs from 'fs'
 
-const PROJECT_WORKSPACE_DIR = "../../"; // Define where the workspace root dir is
+const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../"; // Define where the workspace root dir is
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
