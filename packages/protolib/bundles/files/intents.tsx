@@ -18,7 +18,9 @@ import GLTFViewer from '../../adminpanel/features/components/ModelViewer'
 import { Monaco } from '../../components/Monaco'
 
 const JSONViewer = ({ extraIcons, name, path }) => {
-    const [fileContent, setFileContent] = useFileFromAPI(path, true)
+    const [fileContent, setFileContent] = useFileFromAPI(path)
+    console.log('file content: ', fileContent)
+    const data = fileContent.isLoaded ? JSON.parse(fileContent.data) : ''
     return <AsyncView waitForLoading={1000} key={path} atom={fileContent}>
         <XStack f={1} width={'100%'}>
             <DataCard
@@ -30,7 +32,7 @@ const JSONViewer = ({ extraIcons, name, path }) => {
                 backgroundColor={'transprent'}
                 onDelete={() => { }}
                 onSave={(content) => { }}
-                json={fileContent.data}
+                json={data}
                 name={name}
             />
         </XStack>
