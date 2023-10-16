@@ -431,18 +431,7 @@ const DeviceScreen = ({ isActive,topics}) => {
   //     }
   //   }
   // }, [topicData.data['device/changedDeviceName']])
-  const theme = {
-    nodeBackgroundColor: '#252526',
-    borderColor: 'grey',
-    blockPort: 'grey',
-    flowPort: 'grey',
-    dataPort: 'grey',
-    textColor: '#CCCCCC',
-    dataOutputColor: 'grey',
-    nodeBorderColor: 'grey',
-    edgeColor: 'grey',
-    titleColor: 'black'
-}
+
   return (
       <div style={{ width: '100%', display: 'flex', flex: 1 }}>
         {/* <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} /> */}
@@ -461,11 +450,8 @@ const DeviceScreen = ({ isActive,topics}) => {
             onPlay={onPlay}
             sourceCode={sourceCode}
             store={deviceStore}
-            themeMode={'dark'}
-            bgColor={'#252526'}
-            theme={theme}
             showActionsBar={true}
-            layout="elk"
+            mode="device"
           /> : null}
         {/* <DeviceSelector devicesList={devicesList} currentDevice={currentDevice} onCreateDevice={onCreateDevice} onSelectDevice={onSelectDevice} /> */}
       </div>
