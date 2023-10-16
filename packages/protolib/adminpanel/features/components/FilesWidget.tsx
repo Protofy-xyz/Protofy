@@ -10,6 +10,7 @@ import { ChonkyActions } from 'chonky';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import dynamic from 'next/dynamic'
+import GLTFViewer from './ModelViewer';
  
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 //@ts-ignore
@@ -33,14 +34,14 @@ export const FileWidget = ({isFull, hideCloseIcon, isModified=false, setIsModifi
     // console.log('Opening file: ', currentFile, 'mime: ', mime, 'type: ', type, 'url: ', url)
 
     useEffect(() => {
-        if (type == 'text' || type == 'application' || (type == 'video' && mime == 'video/mp2t')) {
+        if (type == 'text' || type == 'application' || (type == 'video' && mime == 'video/mp2t' || mime == 'model/gltf-binary')) {
             API.get(url, setCurrentFileContent, true)
         }
 
     }, [currentFile])
 
     const getComponent = () => {
-        if (type == 'text' || type == 'application' || (type == 'video' && mime == 'video/mp2t')) {
+        if (type == 'text' || type == 'application' || (type == 'video' && mime == 'video/mp2t' || mime == 'model/gltf-binary')) {
             if (currentFileContent.isLoaded) {
                 if (mime == 'application/json') {
                     try {
@@ -84,6 +85,11 @@ export const FileWidget = ({isFull, hideCloseIcon, isModified=false, setIsModifi
                                 {/* </Theme> */}
                             </XStack>,
                         widget: 'flows'
+                    }
+                } else if (mime == 'model/gltf-binary') {
+                    return {
+                        component: <GLTFViewer path={url} />, 
+                        widget: 'text'
                     }
                 }
                 return {
