@@ -1,12 +1,10 @@
-import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, SelectProps, Select, Adapt, Sheet, getFontSize } from "tamagui";
-import { Pencil, ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
-import { AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList } from 'protolib'
-import { ProtoModel } from "protolib/base";
-import React, { useEffect, useMemo, useState } from "react";
+import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog } from "tamagui";
+import { Pencil } from '@tamagui/lucide-icons';
+import { AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider } from 'protolib'
+import React, { useEffect, useState } from "react";
 import { getErrorMessage } from "@my/ui";
 import { ProtoSchema } from "protolib/base";
 import { Schema } from "../base";
-import { useUpdateEffect } from "usehooks-ts";
 
 type EditableObjectProps = {
     initialData?: any,
@@ -21,37 +19,47 @@ type EditableObjectProps = {
     objectId?: string,
     title?: any,
     loadingText?: any,
-    loadingTop?:number,
-    spinnerSize?:number,
-    name?:string
+    loadingTop?: number,
+    spinnerSize?: number,
+    name?: string
 }
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 
 export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loadingText, title, initialContent, sourceUrl, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
-    const [data, setData] = useState(mode == 'add'?{}:undefined)
+    const [data, setData] = useState(mode == 'add' ? {} : undefined)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
 
-    usePendingEffect((s) => {mode != 'add' && API.get(sourceUrl, s)}, setOriginalData, initialContent)
-    useEffect(() => {originalData.data && setData(originalData.data)}, [originalData])
+    usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialContent)
+    useEffect(() => { originalData.data && setData(originalData.data) }, [originalData])
 
     const elementObj = model.load(data)
 
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
     const formFields = elementObj.getObjectSchema().merge(extraFieldsObject).is('display').getLayout(numColumns)
 
-    const getInputElement = (ele,i, x) => {
+    const getInputElement = (ele, i, x) => {
         const elementDef = ele.schemaField._def
         console.log('ele: ', ele)
-        if(elementDef.typeName == 'ZodUnion') {
+        if (elementDef.typeName == 'ZodUnion') {
             const _rawOptions = elementDef.options.map(o => o._def.value)
             const options = ele.displayOptions ? ele.displayOptions : elementDef.options.map(o => o._def.value)
-            return <SelectList title={ele.name} elements={options} value={(data && data[ele.name]) ?? ''} setValue={(v) => setData({ ...data, [ele.name]: _rawOptions[options.indexOf(v)]})} />
+            return <SelectList f={1} title={ele.name} elements={options} value={(data && data[ele.name]) ?? ''} setValue={(v) => setData({ ...data, [ele.name]: _rawOptions[options.indexOf(v)] })} />
+        } else if (elementDef.typeName == 'ZodNumber') {
+            if (elementDef.checks) {
+                const min = elementDef.checks.find(c => c.kind == 'min')
+                const max = elementDef.checks.find(c => c.kind == 'max')
+                if (min && max) {
+                    return <Tinted><Stack f={1} mt="$4"><SimpleSlider onValueChange={v => setData({ ...data, [ele.name]: v })} value={[(data && data[ele.name]) ?? min.value]} width={190} min={min.value} max={max.value} /></Stack></Tinted>
+                }
+            }
         }
 
-        return <Input focusStyle={{outlineWidth:1}} disabled={mode == 'edit' && ele.static} secureTextEntry={ele.secret} value={(data && data[ele.name]) ?? ''} onChangeText={(t) => setData({ ...data, [ele.name]: t })} placeholder={!data ? '' : ele.hint} autoFocus={x == 0 && i == 0}></Input>
+        return <Stack f={1}>
+            <Input focusStyle={{ outlineWidth: 1 }} disabled={mode == 'edit' && ele.static} secureTextEntry={ele.secret} value={(data && data[ele.name]) ?? ''} onChangeText={(t) => setData({ ...data, [ele.name]: t })} placeholder={!data ? '' : ele.hint} autoFocus={x == 0 && i == 0}></Input>
+            </Stack>
     }
 
     const getElement = (ele, icon, i, x) => {
@@ -61,8 +69,8 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
         </Fieldset>
     }
     return <Stack {...props}>
-        <AsyncView forceLoad={mode=='add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop??-30} atom={originalData}>
-            {title??<Dialog.Title><Text><Tinted><Text color="$color9">{capitalize(mode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text></Dialog.Title>}
+        <AsyncView forceLoad={mode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={originalData}>
+            {title ?? <Dialog.Title><Text><Tinted><Text color="$color9">{capitalize(mode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text></Dialog.Title>}
             <YStack mt={"$7"} ai="center" jc="center">
                 {error && (
                     <Notice>
