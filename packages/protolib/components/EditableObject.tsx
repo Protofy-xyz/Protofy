@@ -62,26 +62,17 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
             let target = formData;
 
             path.forEach((p, index) => {
-                if ((typeof target === 'object' && !target.hasOwnProperty(p))) {
+                if (!target.hasOwnProperty(p)) {
                     target[p] = {};
-                } else if (Array.isArray(target) && target.length <= p) {
-                    while (target.length < p) {
-                        target.push(null); // Agregar elementos nulos hasta llegar al índice deseado.
-                    }
-                    target.push({}); // Agregar un objeto vacío en el índice deseado.
-                }
+                } 
 
                 if (index !== path.length - 1) {
                     target = target[p];
                 }
             });
 
-            if (path.length === 0) {
-                target[key] = value;
-            } else {
-                target[path[path.length - 1]][key] = value;
-            }
-
+            target[key] = value;
+        
             console.log('after: ', formData);
             setData(formData);
         }
@@ -95,7 +86,9 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                     target = target[p];
                 }
             }
-
+            if(typeof target === 'string') {
+                return target
+            }
             // Retorna el valor de ele.name o un valor predeterminado.
             return target && target[key] ? target[key] : '';
         }
@@ -132,9 +125,6 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
             // console.log('array ele: ', ele)
             const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
             console.log('array data: ', arrData)
-            arrData.map((d, i) => {
-                console.log('tadaaa:',{ ...(elementDef.type._def.shape()), label: i, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])
-            })
             // // // return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
             // // //     <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
             // // //     {Object.keys(ele.schemaField?.shape ?? ele._def.shape()).map((s) => {
@@ -146,10 +136,14 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                 <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
                 {
                     arrData.map((d, i) => {
-                        return getElement({ ...(elementDef.type._def.shape()), label: i, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])
+                        console.log('element def: ', elementDef)
+                        return getElement({ ...elementDef.type._def, label: i, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])
                     })
                 }
-                <Button>Add {ele.name}</Button>
+                <Button onPress={() => {
+                    console.log('voy a agregar: ', ele.name, arrData)
+                    setFormData(ele.name, [...arrData, {}])
+                }}>Add {ele.name}</Button>
             </YStack>
         }
 
@@ -192,6 +186,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                 <YStack mt="$8" p="$2" pt="$0" width="100%" f={1} alignSelf="center">
                     <Tinted>
                         <Button f={1} onPress={async () => {
+                            console.log('final data: ', data)
                             setLoading(true)
                             try {
                                 await onSave(originalData.data, data)
