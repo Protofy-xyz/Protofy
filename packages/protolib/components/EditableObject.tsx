@@ -54,7 +54,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
 
     const getElement = (ele, icon, i, x, path = []) => {
         const elementDef = ele.schemaField ? ele.schemaField._def : ele._def
-        console.log('ele: ', ele)
+        console.log('ele: ', ele,elementDef)
         const setFormData = (key, value) => {
             console.log('set form data: ', key, value, path);
             console.log('before: ', data);
@@ -130,19 +130,26 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                 {console.log('elexxxxxxxxxxx:', ele)}
             </YStack>
         } else if (elementDef.typeName == 'ZodArray') {
-            console.log('array ele: ', elementDef.type._def.shape())
-            // return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
-            //     <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
-            //     {Object.keys(ele.schemaField?.shape ?? ele._def.shape()).map((s) => {
-            //         return getElement({ ...((ele.schemaField?.shape ?? ele._def.shape())[s]), label: s, ...((ele.schemaField?.shape ?? ele._def.shape())[s]._def), name: s }, icon, 0, 0, [...path, ele.name])
-            //     })}
-            //     {console.log('elexxxxxxxxxxx:', ele)}
-            // </YStack>
+            // console.log('array ele: ', ele)
+            const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
+            console.log('array data: ', arrData)
+            arrData.map((d, i) => {
+                console.log('tadaaa:',{ ...(elementDef.type._def.shape()), label: i, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])
+            })
+            // // // return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
+            // // //     <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
+            // // //     {Object.keys(ele.schemaField?.shape ?? ele._def.shape()).map((s) => {
+            // // //         return getElement({ ...((ele.schemaField?.shape ?? ele._def.shape())[s]), label: s, ...((ele.schemaField?.shape ?? ele._def.shape())[s]._def), name: s }, icon, 0, 0, [...path, ele.name])
+            // // //     })}
+            // // //     {console.log('elexxxxxxxxxxx:', ele)}
+            // // // </YStack>
             return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
                 <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
-                {Object.keys(elementDef.type._def.shape()).map((s) => {
-                    return getElement({ ...((elementDef.type._def.shape())[s]), label: s, ...(elementDef.type._def.shape()._def), name: s }, icon, 0, 0, [...path, ele.name])
-                })}
+                {
+                    arrData.map((d, i) => {
+                        return getElement({ ...(elementDef.type._def.shape()), label: i, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])
+                    })
+                }
                 <Button>Add {ele.name}</Button>
             </YStack>
         }
