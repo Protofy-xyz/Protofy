@@ -154,7 +154,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                     disabled={mode == 'edit' && ele.static}
                     secureTextEntry={ele.secret}
                     value={getFormData(ele.name)}
-                    onChangeText={(t) => setFormData(ele.name, t)}
+                    onChangeText={(t) => setFormData(ele.name, ele.type == 'Number' ? parseFloat(t) : t)}
                     placeholder={!data ? '' : ele.hint}
                     autoFocus={x == 0 && i == 0}>
                 </Input>
