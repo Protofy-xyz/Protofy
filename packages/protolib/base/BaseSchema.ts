@@ -99,7 +99,7 @@ function extendZodTypePrototype(type: any) {
 
 // Extiende el prototipo general de todos los tipos de Zod
 export function initSchemaSystem() {
-    const zodTypes = [z.ZodString, z.ZodNumber, z.ZodBoolean, z.ZodArray, z.ZodAny, z.ZodOptional, z.ZodArray, z.ZodUnion];
+    const zodTypes = [z.ZodString, z.ZodNumber, z.ZodBoolean, z.ZodArray, z.ZodAny, z.ZodOptional, z.ZodArray, z.ZodUnion, z.ZodObject];
 
     zodTypes.forEach(type => extendZodTypePrototype(type));
 }

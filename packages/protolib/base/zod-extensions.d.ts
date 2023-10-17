@@ -28,4 +28,5 @@ declare module 'zod' {
     interface ZodOptional extends ZodExtensions {}
     interface ZodArray extends ZodExtensions {}
     interface ZodUnion extends ZodExtensions {}
+    interface ZodObject extends ZodExtensions {}
 }

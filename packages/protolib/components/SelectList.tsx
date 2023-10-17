@@ -2,14 +2,13 @@ import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize } from "tamagui"
 import { ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
 import { useMemo, useState } from "react";
 
-export function SelectList({title, value, elements, setValue, ...props}: SelectProps & {title: any, elements: any[], value: any, setValue: Function}) {
-    const [val, setVal] = useState('apple')
+export function SelectList({title, value, elements, setValue, ...props}: SelectProps & {title: any, elements: any[], value: any, setValue: any}) {
   
     return (
       <Select
         id="select"
-        value={val}
-        onValueChange={setVal}
+        value={value}
+        onValueChange={setValue}
         disablePreventBodyScroll
         {...props}
       >
