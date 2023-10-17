@@ -69,15 +69,15 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                             mode={'add'}
                             onSave={async (originalData, data) => {
                                 try {
-                                    const user = model.load(data)
-                                    const result = await API.post(sourceUrl, onAdd(user.create().getData()))
+                                    const obj = model.load(data)
+                                    const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
                                     if (result.isError) {
                                         throw result.error
                                     }
                                     fetch()
                                     setCreateOpen(false);
-                                    toast.show('User created', {
-                                        message: user.getId()
+                                    toast.show(name+' created', {
+                                        message: obj.getId()
                                     })
                                 } catch (e) {
                                     throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
