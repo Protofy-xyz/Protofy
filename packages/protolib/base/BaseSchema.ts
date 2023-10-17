@@ -47,6 +47,11 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
+    type.prototype.displayOptions = function (options) {
+        this._def.displayOptions = options;
+        return this;
+    };
+
     type.prototype.secret = function () {
         this._def.secret = true;
         return this;

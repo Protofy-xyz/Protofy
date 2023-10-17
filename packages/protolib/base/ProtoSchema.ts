@@ -11,14 +11,18 @@ export type FieldDefinitionType = {
     hidden: string[],
     before?: string,
     after?: string,
-    secret?:boolean
+    secret?:boolean,
+    static?:boolean,
+    displayOptions?:boolean
 }
 
 export class ProtoSchema {
     fields: Record<string, FieldDefinitionType> = {};
+    schema: Zod.ZodObject<any>
 
-    constructor(fields: Record<string, FieldDefinitionType>) {
+    constructor(fields: Record<string, FieldDefinitionType>, schema: Zod.ZodObject<any>) {
         this.fields = fields
+        this.schema = schema
     }
 
     getFields() {
@@ -90,7 +94,7 @@ export class ProtoSchema {
                 validFields[key] = this.fields[key]
             }
         })
-        return new ProtoSchema(validFields)
+        return new ProtoSchema(validFields, this.schema)
     }
 
     isNot(field: string) {
@@ -100,7 +104,7 @@ export class ProtoSchema {
                 validFields[key] = this.fields[key]
             }
         })
-        return new ProtoSchema(validFields)
+        return new ProtoSchema(validFields, this.schema)
     }
 
     isAfter(afterField: string) {
@@ -110,7 +114,7 @@ export class ProtoSchema {
                 validFields[field] = this.fields[field]
             }
         })
-        return new ProtoSchema(validFields)
+        return new ProtoSchema(validFields, this.schema)
     }
 
     isBefore(beforeField: string) {
@@ -120,7 +124,7 @@ export class ProtoSchema {
                 validFields[field] = this.fields[field]
             }
         })
-        return new ProtoSchema(validFields)
+        return new ProtoSchema(validFields, this.schema)
     }
 
     merge(schema: ProtoSchema) {
@@ -132,7 +136,7 @@ export class ProtoSchema {
             const afterFields = schema.isAfter(key)
             newfields = { ...newfields, ...afterFields.fields }
         })
-        return new ProtoSchema(newfields)
+        return new ProtoSchema(newfields, this.schema)
     }
 
     //generate a protoSchema from a extended zodSchema
@@ -153,6 +157,8 @@ export class ProtoSchema {
             const id = field._def.id
             const search = field._def.search
             const events = field._def.events
+            const staticVar = field._def.static
+            const displayOptions = field._def.displayOptions
             
             if (field._def.typeName === 'ZodOptional') {
                 optional = true
@@ -172,7 +178,10 @@ export class ProtoSchema {
             if (search) fields[key].search = search
             if (events) fields[key].events = events
             if (display) fields[key].display = display
+            if (staticVar) fields[key].static = staticVar
+            if (displayOptions) fields[key].displayOptions = displayOptions
+            fields[key].schemaField = field
         }
-        return new ProtoSchema(fields)
+        return new ProtoSchema(fields, schema)
     }
 }
