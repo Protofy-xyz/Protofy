@@ -3,7 +3,20 @@ import {handler} from './handler'
 import fs from 'fs';
 import path from 'path';
 
-export const CreateApi = (modelName: string, modelType: any, dir: string, prefix='/api/v1/', dbName?, transformers={}, _connectDB?, _getDB?) => {
+/*
+    modelName: name of the model, used to generate api urls. for example, if model name is 'test' and prefix is '/api/v1/', then to read an item is: /api/v1/test
+                the separation from prefix is to allow less parameters for the default scenario (so you dont to write /api/v1/ all the time)
+    modelType: a class to interact with the data returned by the storage
+    dir: the directory where your api is located. Used to load initialData.json if it exists
+    prefix: exaplined in modelName
+    dbName: name of the database, used by the storage engine
+    transformers: a key->value object with transformations, invocable from the schema. See protolib/adminpanel/bundles/users
+    _connectDB: function used by the api to preconnect the database. Its optional, used to provide your own database implementation
+    _getDB: function used by the api to retrieve the database object to interact with the database. Its optional, used to provide your own database implementation (json...)
+    operations: list of provided operations, by default ['create', 'read', 'update', 'delete', 'list']
+    single: most apis are used to expose a list of things. Single means a single entity, not a list of things. So /api/v1/test returns the entity, not a list of things
+*/
+export const CreateApi = (modelName: string, modelType: any, dir: string, prefix='/api/v1/', dbName?, transformers={}, _connectDB?, _getDB?, operations?, single?) => {
     let initialData;
     try {
         if(fs.existsSync(path.join(dir, 'initialData.json'))) {
@@ -28,15 +41,15 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
 
     return (app) => BaseApi(app, modelName, modelType, initialData, prefix, dbName, {
         ...transformers
-    }, _connectDB??connectDB, _getDB??getDB)
+    }, _connectDB??connectDB, _getDB??getDB, operations)
 }
 
-export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName, transformers, connectDB, getDB) => {
+export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName, transformers, connectDB, getDB, operations=['create', 'read', 'update', 'delete', 'list'], single?) => {
     const dbPath = '../../data/databases/'+(dbName?dbName:entityName)
     connectDB(dbPath, initialData) //preconnect database
 
     //list
-    app.get(prefix + entityName, handler(async (req, res, session) => {
+    !single && operations.includes('list') && app.get(prefix + entityName, handler(async (req, res, session) => {
         const db = getDB(dbPath, req, session);
         const allResults: any[] = [];
         const itemsPerPage = Math.min(Number(req.query.itemsPerPage) || 10, 100);
@@ -76,7 +89,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     }));
 
     //create
-    app.post(prefix+entityName, handler(async (req, res, session) => {
+    operations.includes('create') && app.post(prefix+entityName, handler(async (req, res, session) => {
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.load(req.body, session).createTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
@@ -84,7 +97,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     }));
 
     //read
-    app.get(prefix+entityName+'/:key', handler(async (req, res, session) => {
+    operations.includes('read') && app.get(prefix+entityName+'/:key', handler(async (req, res, session) => {
+
         const db = getDB(dbPath, req, session)
         try {
             const note = modelClass.unserialize(await db.get(req.params.key), session)
@@ -99,7 +113,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     }));
 
     //update
-    app.post(prefix+entityName+'/:key', handler(async (req, res, session) => {
+    operations.includes('update') && app.post(prefix+entityName+'/:key', handler(async (req, res, session) => {
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session), transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
@@ -107,7 +121,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     }));
 
     //delete
-    app.get(prefix+entityName+'/:key/delete', handler(async (req, res, session) => {
+    operations.includes('delete') && app.get(prefix+entityName+'/:key/delete', handler(async (req, res, session) => {
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).deleteTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
