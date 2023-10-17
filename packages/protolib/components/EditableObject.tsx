@@ -50,8 +50,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
     const elementObj = model.load(data)
 
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
-    const formFields = elementObj.getObjectSchema().merge(extraFieldsObject).getLayout(numColumns)
-
+    const formFields = elementObj.getObjectSchema().is('display').merge(extraFieldsObject).getLayout(numColumns)
     const getElement = (ele, icon, i, x, path = []) => {
         const elementDef = ele.schemaField ? ele.schemaField._def : ele._def
         console.log('ele: ', ele,elementDef)

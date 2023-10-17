@@ -62,7 +62,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                     description={""}
                 >
                     <YStack f={1} jc="center" ai="center">
-                        <Scrollbars universal={true} height={"100%"} >
+                    <ScrollView maxHeight={"90vh"}>
                         <EditableObject
                             name={name}
                             numColumns={numColumnsForm}
@@ -87,7 +87,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                             extraFields={extraFields}
                             icons={icons}
                         />
-                        </Scrollbars>
+                        </ScrollView>
                     </YStack>
                 </AlertDialog>
                 <AlertDialog
