@@ -20,10 +20,10 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
     const fetch = async () => {
-        return API.get({ url: sourceUrl, ...state }, setItems)
+        API.get({ url: sourceUrl, ...state }, setItems)
     }
 
-    usePendingEffect((s) => API.get({ url: sourceUrl, ...pageState }, s), setItems, initialItems)
+    usePendingEffect((s) => {API.get({ url: sourceUrl, ...pageState }, s)}, setItems, initialItems)
 
     useEffect(() => {
         if (items && items.isLoaded) {
