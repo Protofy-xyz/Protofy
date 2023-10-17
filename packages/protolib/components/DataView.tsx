@@ -1,4 +1,4 @@
-import { Theme, YStack, XStack, Paragraph, Text, Button, Stack, Checkbox, Dialog } from 'tamagui'
+import { Theme, YStack, XStack, Paragraph, Text, Button, Stack, Checkbox, Dialog, ScrollView } from 'tamagui'
 import { Chip, DataTableCard, getPendingResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup, XCenterStack, ActiveRender } from 'protolib'
 import { useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Trash2, Cross, CheckCheck, Check } from '@tamagui/lucide-icons'
@@ -62,6 +62,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                     description={""}
                 >
                     <YStack f={1} jc="center" ai="center">
+                        <Scrollbars universal={true} height={"100%"} >
                         <EditableObject
                             name={name}
                             numColumns={numColumnsForm}
@@ -86,6 +87,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                             extraFields={extraFields}
                             icons={icons}
                         />
+                        </Scrollbars>
                     </YStack>
                 </AlertDialog>
                 <AlertDialog
@@ -99,6 +101,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                     description={""}
                 >
                     <YStack f={1} jc="center" ai="center">
+                    <ScrollView maxHeight={"90vh"}>
                         <EditableObject
                             initialData={currentItemData}
                             name={name}
@@ -107,7 +110,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                             loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
                             objectId={state.item}
                             sourceUrl={sourceUrl+'/'+state.item}
-                            numColumns={2}
+                            numColumns={numColumnsForm}
                             mode={'edit'}
                             onSave={async (original, data) => {
                                 try {
@@ -131,6 +134,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                             extraFields={extraFields}
                             icons={icons}
                         />
+                        </ScrollView>
                     </YStack>
                 </AlertDialog>
 

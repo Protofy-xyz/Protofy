@@ -50,47 +50,53 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
     const elementObj = model.load(data)
 
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
-    const formFields = elementObj.getObjectSchema().merge(extraFieldsObject).is('display').getLayout(numColumns)
+    const formFields = elementObj.getObjectSchema().merge(extraFieldsObject).getLayout(numColumns)
 
-    const getElement = (ele, icon, i, x, path=[]) => {
+    const getElement = (ele, icon, i, x, path = []) => {
         const elementDef = ele.schemaField ? ele.schemaField._def : ele._def
         console.log('ele: ', ele)
         const setFormData = (key, value) => {
             console.log('set form data: ', key, value, path);
             console.log('before: ', data);
-            
+
             const formData = { ...data };
             let target = formData;
-            
+
             path.forEach((p, index) => {
-                if (!target.hasOwnProperty(p)) {
+                if ((typeof target === 'object' && !target.hasOwnProperty(p))) {
                     target[p] = {};
+                } else if (Array.isArray(target) && target.length <= p) {
+                    while (target.length < p) {
+                        target.push(null); // Agregar elementos nulos hasta llegar al índice deseado.
+                    }
+                    target.push({}); // Agregar un objeto vacío en el índice deseado.
                 }
-                
+
                 if (index !== path.length - 1) {
                     target = target[p];
                 }
             });
-    
+
             if (path.length === 0) {
                 target[key] = value;
             } else {
                 target[path[path.length - 1]][key] = value;
             }
-    
+
             console.log('after: ', formData);
             setData(formData);
         }
 
         const getFormData = (key) => {
             let target = data ?? {};
-        
+
             for (const p of path) {
-                if (target.hasOwnProperty(p)) {
+                if ((typeof target === 'object' && target.hasOwnProperty(p)) ||
+                    (Array.isArray(target) && target.length > p)) {
                     target = target[p];
                 }
             }
-        
+
             // Retorna el valor de ele.name o un valor predeterminado.
             return target && target[key] ? target[key] : '';
         }
@@ -98,8 +104,8 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
         if (elementDef.typeName == 'ZodUnion') {
             const _rawOptions = elementDef.options.map(o => o._def.value)
             const options = ele.displayOptions ? ele.displayOptions : elementDef.options.map(o => o._def.value)
-            return <FormElement ele={ele} icon={icon} i={i}>    
-                <SelectList f={1} title={ele.name} elements={options} value={getFormData(ele.name)} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)] )} />
+            return <FormElement ele={ele} icon={icon} i={i}>
+                <SelectList f={1} title={ele.name} elements={options} value={getFormData(ele.name)} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
             </FormElement>
         } else if (elementDef.typeName == 'ZodNumber') {
             if (elementDef.checks) {
@@ -109,7 +115,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                     return <FormElement ele={ele} icon={icon} i={i}>
                         <Tinted>
                             <Stack f={1} mt="$4">
-                                <SimpleSlider onValueChange={v => setFormData(ele.name, v )} value={[getFormData(ele.name) ?? min.value]} width={190} min={min.value} max={max.value} />
+                                <SimpleSlider onValueChange={v => setFormData(ele.name, v)} value={[getFormData(ele.name) ?? min.value]} width={190} min={min.value} max={max.value} />
                             </Stack>
                         </Tinted>
                     </FormElement>
@@ -119,20 +125,36 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
             return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
                 <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
                 {Object.keys(ele.schemaField?.shape ?? ele._def.shape()).map((s) => {
-                    return getElement({...((ele.schemaField?.shape ?? ele._def.shape())[s]), label:s, ...((ele.schemaField?.shape ?? ele._def.shape())[s]._def), name: s}, icon, 0, 0, [...path, ele.name]) 
+                    return getElement({ ...((ele.schemaField?.shape ?? ele._def.shape())[s]), label: s, ...((ele.schemaField?.shape ?? ele._def.shape())[s]._def), name: s }, icon, 0, 0, [...path, ele.name])
                 })}
                 {console.log('elexxxxxxxxxxx:', ele)}
+            </YStack>
+        } else if (elementDef.typeName == 'ZodArray') {
+            console.log('array ele: ', elementDef.type._def.shape())
+            // return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
+            //     <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
+            //     {Object.keys(ele.schemaField?.shape ?? ele._def.shape()).map((s) => {
+            //         return getElement({ ...((ele.schemaField?.shape ?? ele._def.shape())[s]), label: s, ...((ele.schemaField?.shape ?? ele._def.shape())[s]._def), name: s }, icon, 0, 0, [...path, ele.name])
+            //     })}
+            //     {console.log('elexxxxxxxxxxx:', ele)}
+            // </YStack>
+            return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
+                <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
+                {Object.keys(elementDef.type._def.shape()).map((s) => {
+                    return getElement({ ...((elementDef.type._def.shape())[s]), label: s, ...(elementDef.type._def.shape()._def), name: s }, icon, 0, 0, [...path, ele.name])
+                })}
+                <Button>Add {ele.name}</Button>
             </YStack>
         }
 
         return <FormElement ele={ele} icon={icon} i={i}>
             <Stack f={1}>
-                <Input 
+                <Input
                     focusStyle={{ outlineWidth: 1 }}
                     disabled={mode == 'edit' && ele.static}
-                    secureTextEntry={ele.secret} 
-                    value={getFormData(ele.name)} 
-                    onChangeText={(t) => setFormData(ele.name,t )}
+                    secureTextEntry={ele.secret}
+                    value={getFormData(ele.name)}
+                    onChangeText={(t) => setFormData(ele.name, t)}
                     placeholder={!data ? '' : ele.hint}
                     autoFocus={x == 0 && i == 0}>
                 </Input>
