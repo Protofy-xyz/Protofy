@@ -11,6 +11,7 @@ interface ZodExtensions {
     static(): this;
     id(): this;
     search(): this;
+    displayOptions(options:any): this;
     onList(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
     onCreate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
     onRead(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
