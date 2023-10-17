@@ -35,7 +35,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
     const [error, setError] = useState<any>()
 
     usePendingEffect((s) => {mode != 'add' && API.get(sourceUrl, s)}, setOriginalData, initialContent)
-    useEffect(() => originalData.data && setData(originalData.data), [originalData])
+    useEffect(() => {originalData.data && setData(originalData.data)}, [originalData])
 
     const elementObj = model.load(data)
 
