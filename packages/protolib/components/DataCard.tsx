@@ -96,9 +96,9 @@ export const DataCard = React.forwardRef(({ compact=false, innerContainerProps =
                 >
                     <Theme name={tint as any}>
                         <XStack y={0} maxHeight={-1} overflow={"hidden"}>
-                            {loadingState.isLoading ?
+                            {loadingState?.isLoading ?
                                 <Spinner /> :
-                                loadingState.isError ?
+                                loadingState?.isError ?
                                     <Text>ERROR</Text> :
                                     <JSONViewer compact={compact} key={childKey} onChange={onJsonUpdate} editable={editable} data={content} collapsible />
                             }

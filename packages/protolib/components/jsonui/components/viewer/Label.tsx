@@ -2,7 +2,7 @@ import React from "react";
 import { Stack, Text, Input, Switch, XStack, YStack, Paragraph } from "tamagui";
 import { DeleteButton } from "./DeleteButton";
 import { useUpdateEffect } from 'usehooks-ts'
-import { ChevronDown, Binary, Type, ToggleLeft, Layers, LayoutList} from '@tamagui/lucide-icons'
+import { ChevronDown, Binary, Type, ToggleLeft, Layers, LayoutList } from '@tamagui/lucide-icons'
 import { Popover } from '@tamagui/popover'
 
 function extractNumbers(data) {
@@ -60,11 +60,11 @@ const Label = (props) => {
   const left = insideArray ? 23 : (type == 'property' ? 27 : 5)
   // console.log('value: ', value, 'insideArray: ', insideArray, 'parents: ', props.parents, 'type:', type)
   const dataTypes = [
-    {defaultValue: '', display: 'Text', value: 'text', icon: <Type size={20} color="var(--color7)" />},
-    {defaultValue: 0,display: 'Number', value: 'number', icon: <Binary size={20} color="var(--color7)" />},
-    {defaultValue: true, display: 'Boolean', value: 'boolean', icon: <ToggleLeft size={20} color="var(--color7)" />},
-    {defaultValue: [], display: 'List', value: 'array', icon: <Layers size={20} color="var(--color7)" />},
-    {defaultValue: {}, display: "Object", value: 'object', icon: <LayoutList size={20} color="var(--color7)" />}
+    { defaultValue: '', display: 'Text', value: 'text', icon: <Type size={20} color="var(--color7)" /> },
+    { defaultValue: 0, display: 'Number', value: 'number', icon: <Binary size={20} color="var(--color7)" /> },
+    { defaultValue: true, display: 'Boolean', value: 'boolean', icon: <ToggleLeft size={20} color="var(--color7)" /> },
+    { defaultValue: [], display: 'List', value: 'array', icon: <Layers size={20} color="var(--color7)" /> },
+    { defaultValue: {}, display: "Object", value: 'object', icon: <LayoutList size={20} color="var(--color7)" /> }
   ]
   const getInput = () => {
     switch (type) {
@@ -88,33 +88,33 @@ const Label = (props) => {
           <XStack
 
           >
-          <Input
-            focusStyle={{borderColor: 'transparent'}}
-            padding={isTextNode ? "$1" : 0}
-            value={content}
-            borderColor={'transparent'}
-            borderWidth={0}
-            borderRadius={isTextNode ? "$3" : 0}
-            paddingHorizontal={"$1"}
-            paddingRight={0}
-            fontSize={"14px"}
-            maxHeight={"$2"}
-            width={width + (type == 'property' ? 1:5) + 'ch'}
-            fontFamily={"monospace"}
-            onBlur={() => props.onChange('update', [...props.parents, props.currentKey], content, type)}
-            //@ts-ignore
-            onLayout={(e) => e.nativeEvent?.target?.focus()}
-            onChangeText={(text) => setContent(type == 'number' ? extractNumbers(text) : text)}
-            {...style}
-          ></Input>
-              {type != 'property' ? <XStack marginLeft={-25} position={'absolute'} top={5} left={width + 4 + 'ch'}>{/*marginLeft={width+'ch'}*/}
-                
+            <Input
+              focusStyle={{ borderColor: 'transparent' }}
+              padding={isTextNode ? "$1" : 0}
+              value={content}
+              borderColor={'transparent'}
+              borderWidth={0}
+              borderRadius={isTextNode ? "$3" : 0}
+              paddingHorizontal={"$1"}
+              paddingRight={0}
+              fontSize={"14px"}
+              maxHeight={"$2"}
+              width={width + (type == 'property' ? 1 : 5) + 'ch'}
+              fontFamily={"monospace"}
+              onBlur={() => props.onChange('update', [...props.parents, props.currentKey], content, type)}
+              //@ts-ignore
+              onLayout={(e) => e.nativeEvent?.target?.focus()}
+              onChangeText={(text) => setContent(type == 'number' ? extractNumbers(text) : text)}
+              {...style}
+            ></Input>
+            {type != 'property' ? <XStack marginLeft={-25} position={'absolute'} top={5} left={width + 4 + 'ch'}>{/*marginLeft={width+'ch'}*/}
+
               <Popover placement="bottom">
                 <Popover.Trigger>
                   <XStack cursor="pointer">
                     <ChevronDown size={"$1"} />
                   </XStack>
-                  
+
                 </Popover.Trigger>
 
                 <Popover.Content padding={0} space={0} top={"$2"}>
@@ -124,14 +124,14 @@ const Label = (props) => {
                         onPress={() => {
                           setContent(t.defaultValue)
                           props.onChange('type', [...props.parents, props.currentKey], t.defaultValue, t.value)
-                        }} 
-                        hoverStyle={{backgroundColor: "$backgroundHover"}} paddingHorizontal={"$3"} paddingVertical={4} cursor="pointer">
+                        }}
+                        hoverStyle={{ backgroundColor: "$backgroundHover" }} paddingHorizontal={"$3"} paddingVertical={4} cursor="pointer">
                         <XStack top={3} marginRight={10}>
                           {t.icon}
                         </XStack>
-                        
+
                         <Paragraph marginBottom={3} marginRight={10}>
-                          <Text color={type == t.value?"$color10":"$color7"} fontSize={13}>{t.display}</Text>
+                          <Text color={type == t.value ? "$color10" : "$color7"} fontSize={13}>{t.display}</Text>
                         </Paragraph>
                       </XStack>
                     ))}
@@ -141,7 +141,7 @@ const Label = (props) => {
                 {/* optionally change to sheet when small screen */}
 
               </Popover>
-              </XStack>:null}
+            </XStack> : null}
           </XStack>
         </XStack>
     }
@@ -150,7 +150,15 @@ const Label = (props) => {
   const getComponent = () => {
     switch (type) {
       case "boolean":
-        return <Switch left={"$4"} top="$1" size="$1">
+        return <Switch
+          left={"$4"}
+          top="$1"
+          size="$1"
+          disabled={!editable}
+          defaultChecked={content == 'true'}
+          onCheckedChange={(checked) => {
+            props.onChange('update', [...props.parents, props.currentKey], checked, type)
+          }} >
           <Switch.Thumb backgroundColor={"$color9"} animation="bouncy" />
         </Switch>
       case "property":
@@ -162,7 +170,7 @@ const Label = (props) => {
         >
           {(type == 'property' || (type == 'builtin' && insideArray && (value == '[' || value == '{'))) && editable ? <Stack display="inline"><DeleteButton onPress={() => {
             if (props.childType == 'builtin' || (type == 'builtin' && insideArray && (value == '[' || value == '{')))
-              props.onChange('delete', [...props.parents], null, insideArray?'array':type)
+              props.onChange('delete', [...props.parents], null, insideArray ? 'array' : type)
             else
               props.onChange('delete', [...props.parents, props.currentKey])
           }} />&nbsp;</Stack> : null}
@@ -173,7 +181,7 @@ const Label = (props) => {
             onPress={() => isTextNode ? setEditing(!editing) : null}
             cursor="pointer"
             textOverflow="ellipsis"
-            marginLeft={insideArray && !editable && type != 'builtin' ? marginLeft * 10 : (editable && type == 'builtin' && insideArray && (value == '{' || value == '[')?-5:0)}
+            marginLeft={insideArray && !editable && type != 'builtin' ? marginLeft * 10 : (editable && type == 'builtin' && insideArray && (value == '{' || value == '[') ? -5 : 0)}
             hoverStyle={{
               ...(isTextNode ? {
                 backgroundColor: "$backgroundHover"
