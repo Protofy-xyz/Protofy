@@ -62,31 +62,31 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                     description={""}
                 >
                     <YStack f={1} jc="center" ai="center">
-                    <ScrollView maxHeight={"90vh"}>
-                        <EditableObject
-                            name={name}
-                            numColumns={numColumnsForm}
-                            mode={'add'}
-                            onSave={async (originalData, data) => {
-                                try {
-                                    const obj = model.load(data)
-                                    const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
-                                    if (result.isError) {
-                                        throw result.error
+                        <ScrollView maxHeight={"90vh"}>
+                            <EditableObject
+                                name={name}
+                                numColumns={numColumnsForm}
+                                mode={'add'}
+                                onSave={async (originalData, data) => {
+                                    try {
+                                        const obj = model.load(data)
+                                        const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
+                                        if (result.isError) {
+                                            throw result.error
+                                        }
+                                        fetch()
+                                        setCreateOpen(false);
+                                        toast.show(name+' created', {
+                                            message: obj.getId()
+                                        })
+                                    } catch (e) {
+                                        throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
                                     }
-                                    fetch()
-                                    setCreateOpen(false);
-                                    toast.show(name+' created', {
-                                        message: obj.getId()
-                                    })
-                                } catch (e) {
-                                    throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
-                                }
-                            }}
-                            model={model}
-                            extraFields={extraFields}
-                            icons={icons}
-                        />
+                                }}
+                                model={model}
+                                extraFields={extraFields}
+                                icons={icons}
+                            />
                         </ScrollView>
                     </YStack>
                 </AlertDialog>

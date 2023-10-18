@@ -27,7 +27,7 @@ type EditableObjectProps = {
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 
 const FormElement = ({ ele, i, icon, children }) => {
-    return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2">
+    return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2" f={1}>
         <Label>
             <Tinted>
                 <Stack mr="$2">{React.createElement(icon, { color: "var(--color9)", size: "$1", strokeWidth: 1 })}</Stack>
@@ -38,13 +38,13 @@ const FormElement = ({ ele, i, icon, children }) => {
     </Fieldset>
 }
 
-export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loadingText, title, initialContent, sourceUrl, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps) => {
+export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [data, setData] = useState(mode == 'add' ? {} : undefined)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
 
-    usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialContent)
+    usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialData)
     useEffect(() => { originalData.data && setData(originalData.data) }, [originalData])
 
     const elementObj = model.load(data)
