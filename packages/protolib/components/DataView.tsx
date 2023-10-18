@@ -16,9 +16,9 @@ type DataViewState = {
     model: any,
     selected: any[],
     setSelected: Function,
-    onSelectItem: Function | undefined
+    onSelectItem: Function | undefined
     state: any,
-    push: Function, 
+    push: Function,
     mergePush: Function,
     removePush: Function,
     tableColumns: any[],
@@ -64,22 +64,24 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
     const onCancelSearch = async () => setCurrentItems(items)
     const toast = useToastController()
     const tableColumns = rowIcon ? [DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, { size: "$1" })}</Stack>, true, '50px'), ...columns] : columns
-    
-    const conditionalRowStyles = [
+
+    const views = [
         {
-            when: row => selected.includes(model.load(row).getId()),
-            style: {
-                backgroundColor: 'var(--color4)'
-            },
-            '&:hover': {
-                backgroundColor: 'var(--color4)'
-            }
+            name: 'list',
+            icon: List,
+            component: DataTableList
         },
-    ];
+        {
+            name: 'cards',
+            icon: LayoutGrid,
+            component: DataTableCard
+        }
+    ]
+    const activeViewIndex = views.findIndex(v => v.name == state.view) ?? 0
     return (
         <YStack f={1}>
-            <DataViewContext.Provider value={{items: currentItems, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, tableColumns }}>
-                <ActiveGroup initialState={!state || state.view == 'list' ? 0 : 1}>
+            <DataViewContext.Provider value={{ items: currentItems, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, tableColumns }}>
+                <ActiveGroup initialState={activeViewIndex}>
                     <AlertDialog
                         p="$3"
                         setOpen={setCreateOpen}
@@ -181,12 +183,11 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
                             <Search top={1} initialState={state?.search} onCancel={onCancelSearch} onSearch={onSearch} />
                             {!hideAdd && <XStack marginLeft="$3" top={-3}>
                                 {!disableViewSelector && <ButtonGroup marginRight="$3">
-                                    <ActiveGroupButton onSetActive={() => push('view', 'list')} activeId={0}>
-                                        <List size="$1" strokeWidth={1} />
-                                    </ActiveGroupButton>
-                                    <ActiveGroupButton onSetActive={() => push('view', 'cards')} activeId={1}>
-                                        <LayoutGrid size='$1' strokeWidth={1} />
-                                    </ActiveGroupButton>
+                                    {
+                                        views.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
+                                            {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
+                                        </ActiveGroupButton>)
+                                    }
                                 </ButtonGroup>}
                                 <Tinted>
                                     <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
@@ -209,8 +210,9 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
                     <AsyncView atom={currentItems}>
                         <Stack pr={"$1"} f={1}>
                             <Scrollbars universal={true} height={"100%"} >
-                                <DataTableList activeId={0}/>
-                                <DataTableCard activeId={1}/>
+                                {
+                                    views.map((v, index) => React.createElement(v.component, { activeId: index, key: index }))
+                                }
                             </Scrollbars>
                         </Stack>
 
