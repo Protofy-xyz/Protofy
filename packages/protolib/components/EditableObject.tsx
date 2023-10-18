@@ -1,5 +1,5 @@
-import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText, StackProps } from "tamagui";
-import { Pencil } from '@tamagui/lucide-icons';
+import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText, StackProps, Accordion, Square } from "tamagui";
+import { Pencil, ChevronDown } from '@tamagui/lucide-icons';
 import { AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider } from 'protolib'
 import React, { useEffect, useState } from "react";
 import { getErrorMessage } from "@my/ui";
@@ -122,22 +122,38 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
             // console.log('array ele: ', ele)
             const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
             console.log('arr data: ', arrData);
-            return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
-                <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}>
+            return <Accordion type="multiple" br="$5" bw={1} mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
+                <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
                     <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
                 </Stack>
                 
                 {
                     arrData.map((d, i) => {
-                        return <Stack top={-20} mt={i?"$5":0}>{getElement({ ...elementDef.type._def, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])}</Stack>
+                        return <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={i?"$2":"$0"} value={"item-"+i}>
+                            <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
+                            {({ open }) => (
+                                <>
+                                <Paragraph>{ele.name + ' #'+i}</Paragraph>
+                                <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+                                    <ChevronDown size="$1" />
+                                </Square>
+                                </>
+                            )}
+                            </Accordion.Trigger>
+                            <Accordion.Content br="$5">
+                                <Stack top={-10}>
+                                    {getElement({ ...elementDef.type._def, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])}
+                                </Stack>
+                            </Accordion.Content>
+                        </Accordion.Item>
                     })
                 }
                 
-                <Button onPress={() => {
+                <Button mt="$3" onPress={() => {
                     console.log('voy a agregar: ', ele.name, arrData)
                     setFormData(ele.name, [...arrData, {}])
                 }}>Add {ele.name}</Button>
-            </YStack>
+            </Accordion>
         }
 
         return <FormElement ele={ele} icon={icon} i={i}>
