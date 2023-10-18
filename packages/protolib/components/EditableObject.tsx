@@ -55,25 +55,22 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
         const elementDef = ele._def
    
         const setFormData = (key, value) => {
-            // console.log('set form data: ', key, value, path);
-            // console.log('before: ', data);
+            console.log('set form data: ', key, value, path);
+            console.log('before: ', data);
 
             const formData = { ...data };
             let target = formData;
 
-            path.forEach((p, index) => {
+            path.forEach((p) => {
                 if (!target.hasOwnProperty(p)) {
                     target[p] = {};
                 } 
-
-                if (index !== path.length - 1) {
-                    target = target[p];
-                }
+                target = target[p];
             });
 
             target[key] = value;
         
-            // console.log('after: ', formData);
+            console.log('after: ', formData);
             setData(formData);
         }
 
@@ -117,12 +114,14 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
             return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
                 <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
                 {Object.keys(ele._def.shape()).map((s) => {
-                    return getElement({ ...((ele._def.shape())[s]), label: s, ...((ele._def.shape())[s]._def), name: s }, icon, 0, 0, [...path, ele.name])
+                    const shape = ele._def.shape();
+                    return getElement({ ...shape[s], name: s }, icon, 0, 0, [...path, ele.name])
                 })}
             </YStack>
         } else if (elementDef.typeName == 'ZodArray') {
             // console.log('array ele: ', ele)
             const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
+            console.log('arr data: ', arrData);
             return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
                 <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
                 {
