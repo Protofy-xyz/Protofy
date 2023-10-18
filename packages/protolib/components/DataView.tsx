@@ -10,6 +10,7 @@ import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { getPendingResult } from '../lib/createApiAtom'
 import { DataTableList } from './DataTableList'
+import ActiveRender from "./ActiveRender"
 
 type DataViewState = {
     items: PendingAtomResult,
@@ -212,8 +213,10 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
                         <Stack pr={"$1"} f={1}>
                             <Scrollbars universal={true} height={"100%"} >
                                 {
-                                    tableViews.map((v, index) => React.createElement(v.component, { activeId: index, key: index }))
-                                }
+                                    tableViews.map((v, index) => <ActiveRender key={index} activeId={index}>
+                                        {React.createElement(v.component, {})}
+                                    </ActiveRender>
+                                    )}
                             </Scrollbars>
                         </Stack>
 

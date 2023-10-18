@@ -6,7 +6,7 @@ import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
 import { CheckCheck, Check } from '@tamagui/lucide-icons'
 
-export const DataTableList = ({ activeId }) => {
+export const DataTableList = () => {
     const { items, model, selected, setSelected, state, push, mergePush, tableColumns, onSelectItem } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
@@ -19,8 +19,7 @@ export const DataTableList = ({ activeId }) => {
             }
         },
     ];
-    return <ActiveRender activeId={activeId}>
-        <XStack mr="$3" pt="$1" flexWrap='wrap'>
+    return <XStack mr="$3" pt="$1" flexWrap='wrap'>
             <Tinted>
                 <DataTable2.component
                     pagination={true}
@@ -61,5 +60,4 @@ export const DataTableList = ({ activeId }) => {
                 />
             </Tinted>
         </XStack>
-    </ActiveRender>
 }
