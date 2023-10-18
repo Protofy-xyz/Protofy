@@ -91,6 +91,9 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                     </YStack>
                 </AlertDialog>
                 <AlertDialog
+                    p={"$0"}
+                    py="$5"
+                    pl="$5"
                     hideAccept={true}
                     acceptCaption="Save"
                     setOpen={(s) => {
@@ -102,38 +105,41 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                 >
                     <YStack f={1} jc="center" ai="center">
                     <ScrollView maxHeight={"90vh"}>
-                        <EditableObject
-                            initialData={currentItemData}
-                            name={name}
-                            minHeight={350} minWidth={490}
-                            spinnerSize={75}
-                            loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
-                            objectId={state.item}
-                            sourceUrl={sourceUrl+'/'+state.item}
-                            numColumns={numColumnsForm}
-                            mode={'edit'}
-                            onSave={async (original, data) => {
-                                try {
-                                    setCurrentItemData(undefined)
-                                    const id = model.load(data).getId()
-                                    const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(original).update(model.load(data)).getData()))
-                                    if (result.isError) {
-                                        throw result.error
+                        <Stack mr="$5">
+                            <EditableObject
+                                initialData={currentItemData}
+                                name={name}
+                                minHeight={350} 
+                                minWidth={490}
+                                spinnerSize={75}
+                                loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
+                                objectId={state.item}
+                                sourceUrl={sourceUrl+'/'+state.item}
+                                numColumns={numColumnsForm}
+                                mode={'edit'}
+                                onSave={async (original, data) => {
+                                    try {
+                                        setCurrentItemData(undefined)
+                                        const id = model.load(data).getId()
+                                        const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(original).update(model.load(data)).getData()))
+                                        if (result.isError) {
+                                            throw result.error
+                                        }
+                                        fetch()
+                                        const {item, ...rest} = state; 
+                                        setState(rest)
+                                        toast.show('User updated', {
+                                            message: "Saved new settings for user: " + id
+                                        })
+                                    } catch (e) {
+                                        throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
                                     }
-                                    fetch()
-                                    const {item, ...rest} = state; 
-                                    setState(rest)
-                                    toast.show('User updated', {
-                                        message: "Saved new settings for user: " + id
-                                    })
-                                } catch (e) {
-                                    throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
-                                }
-                            }}
-                            model={model}
-                            extraFields={extraFields}
-                            icons={icons}
-                        />
+                                }}
+                                model={model}
+                                extraFields={extraFields}
+                                icons={icons}
+                            />
+                        </Stack>
                         </ScrollView>
                     </YStack>
                 </AlertDialog>

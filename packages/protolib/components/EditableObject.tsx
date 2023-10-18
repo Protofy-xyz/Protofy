@@ -1,4 +1,4 @@
-import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText } from "tamagui";
+import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText, StackProps } from "tamagui";
 import { Pencil } from '@tamagui/lucide-icons';
 import { AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider } from 'protolib'
 import React, { useEffect, useState } from "react";
@@ -38,7 +38,7 @@ const FormElement = ({ ele, i, icon, children }) => {
     </Fieldset>
 }
 
-export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps) => {
+export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [data, setData] = useState(mode == 'add' ? {} : undefined)
     const [loading, setLoading] = useState(false)
@@ -112,10 +112,10 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
             }
         } else if (elementDef.typeName == 'ZodObject') {
             return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
-                <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
-                {Object.keys(ele._def.shape()).map((s) => {
+                <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack>
+                {Object.keys(ele._def.shape()).map((s, i) => {
                     const shape = ele._def.shape();
-                    return getElement({ ...shape[s], name: s }, icon, 0, 0, [...path, ele.name])
+                    return <Stack mt={i?"$5":"$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0, [...path, ele.name])}</Stack>
                 })}
             </YStack>
         } else if (elementDef.typeName == 'ZodArray') {
@@ -123,12 +123,16 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
             const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
             console.log('arr data: ', arrData);
             return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
-                <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
+                <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}>
+                    <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
+                </Stack>
+                
                 {
                     arrData.map((d, i) => {
-                        return getElement({ ...elementDef.type._def, label: i, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])
+                        return <Stack top={-20} mt={i?"$5":0}>{getElement({ ...elementDef.type._def, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])}</Stack>
                     })
                 }
+                
                 <Button onPress={() => {
                     console.log('voy a agregar: ', ele.name, arrData)
                     setFormData(ele.name, [...arrData, {}])
@@ -189,5 +193,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                         </Button>
                     </Tinted>
                 </YStack>
-            </YStack></AsyncView></Stack>
+            </YStack>
+        </AsyncView>
+    </Stack>
 }

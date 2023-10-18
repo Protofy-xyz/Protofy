@@ -24,7 +24,7 @@ export const AlertDialog = forwardRef(({ hideAccept, onAccept = () => { }, onCan
             <Dialog.Overlay />
             <Dialog.Content scale={1} p="$5" ai="flex-start" jc="flex-start" {...props}>
                 <YStack f={1}>
-                    <YStack p={"$5"} f={1}>
+                    <YStack f={1}>
                         {title && <XStack width={"100%"} f={1}>
                             <XStack f={1}>
                                 <Dialog.Title>{title}</Dialog.Title>
