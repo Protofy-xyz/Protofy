@@ -176,7 +176,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                         </XStack>)
                     }
                 </YStack>
-                <YStack mt="$8" p="$2" pt="$0" width="100%" f={1} alignSelf="center">
+                <YStack mt="$8" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
                     <Tinted>
                         <Button f={1} onPress={async () => {
                             console.log('final data: ', data)

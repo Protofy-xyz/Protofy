@@ -92,7 +92,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector=
                 </AlertDialog>
                 <AlertDialog
                     p={"$0"}
-                    py="$5"
+                    pt="$5"
                     pl="$5"
                     hideAccept={true}
                     acceptCaption="Save"
