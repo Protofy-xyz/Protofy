@@ -4,7 +4,7 @@ import { H4, Paragraph, Text, XStack, YStack } from 'tamagui'
 
 export const SideMenu = ({sideBarColor='$background', children, ...props}:any) => {
     return <YStack bc={sideBarColor} {...props}>
-        <YStack $sm={{display:'none'}} width={300}>
+        <YStack $sm={{display:'none'}} width={300} height="100%" overflow='scroll'>
             {children}
         </YStack>
     </YStack>
