@@ -32,7 +32,7 @@ const FormElement = ({ ele, i, icon, children }) => {
             <Tinted>
                 <Stack mr="$2">{React.createElement(icon, { color: "var(--color9)", size: "$1", strokeWidth: 1 })}</Stack>
             </Tinted>
-            {ele.label}
+            {ele._def.label ?? ele.name}
         </Label>
         {children}
     </Fieldset>
@@ -52,11 +52,11 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
     const formFields = elementObj.getObjectSchema().is('display').merge(extraFieldsObject).getLayout(numColumns)
     const getElement = (ele, icon, i, x, path = []) => {
-        const elementDef = ele.schemaField ? ele.schemaField._def : ele._def
-        console.log('ele: ', ele,elementDef)
+        const elementDef = ele._def
+   
         const setFormData = (key, value) => {
-            console.log('set form data: ', key, value, path);
-            console.log('before: ', data);
+            // console.log('set form data: ', key, value, path);
+            // console.log('before: ', data);
 
             const formData = { ...data };
             let target = formData;
@@ -73,7 +73,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
 
             target[key] = value;
         
-            console.log('after: ', formData);
+            // console.log('after: ', formData);
             setData(formData);
         }
 
@@ -95,7 +95,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
 
         if (elementDef.typeName == 'ZodUnion') {
             const _rawOptions = elementDef.options.map(o => o._def.value)
-            const options = ele.displayOptions ? ele.displayOptions : elementDef.options.map(o => o._def.value)
+            const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
             return <FormElement ele={ele} icon={icon} i={i}>
                 <SelectList f={1} title={ele.name} elements={options} value={getFormData(ele.name)} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
             </FormElement>
@@ -116,27 +116,17 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
         } else if (elementDef.typeName == 'ZodObject') {
             return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
                 <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
-                {Object.keys(ele.schemaField?.shape ?? ele._def.shape()).map((s) => {
-                    return getElement({ ...((ele.schemaField?.shape ?? ele._def.shape())[s]), label: s, ...((ele.schemaField?.shape ?? ele._def.shape())[s]._def), name: s }, icon, 0, 0, [...path, ele.name])
+                {Object.keys(ele._def.shape()).map((s) => {
+                    return getElement({ ...((ele._def.shape())[s]), label: s, ...((ele._def.shape())[s]._def), name: s }, icon, 0, 0, [...path, ele.name])
                 })}
-                {console.log('elexxxxxxxxxxx:', ele)}
             </YStack>
         } else if (elementDef.typeName == 'ZodArray') {
             // console.log('array ele: ', ele)
             const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
-            console.log('array data: ', arrData)
-            // // // return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
-            // // //     <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
-            // // //     {Object.keys(ele.schemaField?.shape ?? ele._def.shape()).map((s) => {
-            // // //         return getElement({ ...((ele.schemaField?.shape ?? ele._def.shape())[s]), label: s, ...((ele.schemaField?.shape ?? ele._def.shape())[s]._def), name: s }, icon, 0, 0, [...path, ele.name])
-            // // //     })}
-            // // //     {console.log('elexxxxxxxxxxx:', ele)}
-            // // // </YStack>
             return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
                 <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={-7} top={-37}><SizableText >{ele.name}</SizableText></Stack>
                 {
                     arrData.map((d, i) => {
-                        console.log('element def: ', elementDef)
                         return getElement({ ...elementDef.type._def, label: i, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])
                     })
                 }
@@ -151,11 +141,11 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
             <Stack f={1}>
                 <Input
                     focusStyle={{ outlineWidth: 1 }}
-                    disabled={mode == 'edit' && ele.static}
-                    secureTextEntry={ele.secret}
+                    disabled={mode == 'edit' && ele._def.static}
+                    secureTextEntry={ele._def.secret}
                     value={getFormData(ele.name)}
-                    onChangeText={(t) => setFormData(ele.name, ele.type == 'Number' ? parseFloat(t) : t)}
-                    placeholder={!data ? '' : ele.hint}
+                    onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? parseFloat(t) : t)}
+                    placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? ele.name}
                     autoFocus={x == 0 && i == 0}>
                 </Input>
             </Stack>
