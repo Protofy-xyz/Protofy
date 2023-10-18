@@ -38,6 +38,44 @@ const FormElement = ({ ele, i, icon, children }) => {
     </Fieldset>
 }
 
+
+const ArrayComp = ({ele, elementDef, icon, path, arrData, getElement, setFormData}) => {
+    const [opened, setOpened] = useState([])
+
+    return <Accordion value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" bw={1} mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
+    <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
+        <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
+    </Stack>
+    
+    {
+        arrData.map((d, i) => {
+            return <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={i?"$2":"$0"} value={"item-"+i}>
+                <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
+                {({ open }) => (
+                    <>
+                    <Paragraph>{ele.name + ' #'+i}</Paragraph>
+                    <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+                        <ChevronDown size="$1" />
+                    </Square>
+                    </>
+                )}
+                </Accordion.Trigger>
+                <Accordion.Content br="$5">
+                    <Stack top={-10}>
+                        {getElement({ ...elementDef.type._def, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])}
+                    </Stack>
+                </Accordion.Content>
+            </Accordion.Item>
+        })
+    }
+    
+    <Button mt="$3" onPress={() => {
+        setFormData(ele.name, [...arrData, {}])
+        setOpened([...opened, 'item-'+arrData.length])
+    }}>Add {ele.name}</Button>
+</Accordion>
+}
+
 export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [data, setData] = useState(mode == 'add' ? {} : undefined)
@@ -119,41 +157,8 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                 })}
             </YStack>
         } else if (elementDef.typeName == 'ZodArray') {
-            // console.log('array ele: ', ele)
             const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
-            console.log('arr data: ', arrData);
-            return <Accordion type="multiple" br="$5" bw={1} mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
-                <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
-                    <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
-                </Stack>
-                
-                {
-                    arrData.map((d, i) => {
-                        return <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={i?"$2":"$0"} value={"item-"+i}>
-                            <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
-                            {({ open }) => (
-                                <>
-                                <Paragraph>{ele.name + ' #'+i}</Paragraph>
-                                <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
-                                    <ChevronDown size="$1" />
-                                </Square>
-                                </>
-                            )}
-                            </Accordion.Trigger>
-                            <Accordion.Content br="$5">
-                                <Stack top={-10}>
-                                    {getElement({ ...elementDef.type._def, _def:elementDef.type._def, name: i }, icon, 0, 0, [...path, ele.name, i])}
-                                </Stack>
-                            </Accordion.Content>
-                        </Accordion.Item>
-                    })
-                }
-                
-                <Button mt="$3" onPress={() => {
-                    console.log('voy a agregar: ', ele.name, arrData)
-                    setFormData(ele.name, [...arrData, {}])
-                }}>Add {ele.name}</Button>
-            </Accordion>
+            return <ArrayComp ele={ele} elementDef={elementDef} icon={icon} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
         }
 
         return <FormElement ele={ele} icon={icon} i={i}>
