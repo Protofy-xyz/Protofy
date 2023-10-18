@@ -36,7 +36,7 @@ export const DataViewContext = createContext<DataViewState>({
     tableColumns: []
 });
 
-export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector = false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data }: any) {
+export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector = false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data, views = undefined, extraViews = [] }: any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
@@ -65,7 +65,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
     const toast = useToastController()
     const tableColumns = rowIcon ? [DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, { size: "$1" })}</Stack>, true, '50px'), ...columns] : columns
 
-    const views = [
+    const defaultViews = [
         {
             name: 'list',
             icon: List,
@@ -77,7 +77,8 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
             component: DataTableCard
         }
     ]
-    const activeViewIndex = views.findIndex(v => v.name == state.view) ?? 0
+    const tableViews = views ?? [...defaultViews, ...extraViews]
+    const activeViewIndex = tableViews.findIndex(v => v.name == state.view) ?? 0
     return (
         <YStack f={1}>
             <DataViewContext.Provider value={{ items: currentItems, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, tableColumns }}>
@@ -184,7 +185,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
                             {!hideAdd && <XStack marginLeft="$3" top={-3}>
                                 {!disableViewSelector && <ButtonGroup marginRight="$3">
                                     {
-                                        views.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
+                                        tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
                                             {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
                                         </ActiveGroupButton>)
                                     }
@@ -211,7 +212,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
                         <Stack pr={"$1"} f={1}>
                             <Scrollbars universal={true} height={"100%"} >
                                 {
-                                    views.map((v, index) => React.createElement(v.component, { activeId: index, key: index }))
+                                    tableViews.map((v, index) => React.createElement(v.component, { activeId: index, key: index }))
                                 }
                             </Scrollbars>
                         </Stack>
