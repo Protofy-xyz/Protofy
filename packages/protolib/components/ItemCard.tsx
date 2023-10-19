@@ -33,7 +33,7 @@ export const ItemCard = memo(React.forwardRef(
       topBar?: any,
       topBarOutSideScrollArea?: boolean,
       containerElement?: any,
-      stackProps: any
+      stackProps?: any
     }, ref:any
   ) => {
     const {
@@ -51,7 +51,7 @@ export const ItemCard = memo(React.forwardRef(
       onHoverSection,
       pointerEvents,
       pointerEventsControls,
-      stackProps,
+      stackProps = {},
       ...cardProps
     } = props
     const tint = !alt ? null : (`alt${alt}` as ThemeName)
