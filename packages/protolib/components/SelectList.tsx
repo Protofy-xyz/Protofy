@@ -12,7 +12,7 @@ export function SelectList({title, value, elements, setValue, ...props}: SelectP
         disablePreventBodyScroll
         {...props}
       >
-        <Select.Trigger width={220} iconAfter={ChevronDown}>
+        <Select.Trigger f={1} iconAfter={ChevronDown}>
           <Select.Value placeholder="..." />
         </Select.Trigger>
   

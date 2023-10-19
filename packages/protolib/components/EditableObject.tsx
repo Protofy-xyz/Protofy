@@ -25,12 +25,12 @@ type EditableObjectProps = {
 }
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
-const columnWidth = 250
+const columnWidth = 350
 const columnMargin = 30
 
 const FormElement = ({ ele, i, icon, children }) => {
     return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2" f={1}>
-        <Label>
+        <Label fontWeight={"bold"}>
             <Tinted>
                 <Stack mr="$2">{React.createElement(icon, { color: "var(--color9)", size: "$1", strokeWidth: 1 })}</Stack>
             </Tinted>
@@ -46,7 +46,7 @@ const ArrayComp = ({ele, elementDef, icon, path, arrData, getElement, setFormDat
 
     return <Accordion value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" bw={1} mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
     <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
-        <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
+        <SizableText fontWeight={"bold"} >{ele.name + ' (' + arrData.length + ')'}</SizableText>
     </Stack>
     
     {
@@ -74,7 +74,7 @@ const ArrayComp = ({ele, elementDef, icon, path, arrData, getElement, setFormDat
     <Button mt="$3" onPress={() => {
         setFormData(ele.name, [...arrData, {}])
         setOpened([...opened, 'item-'+arrData.length])
-    }}>Add {ele.name}</Button>
+    }}>Add{ele.name}</Button>
 </Accordion>
 }
 const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
@@ -156,7 +156,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
                     <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
                     {({ open }) => (
                         <>
-                        <Paragraph>{ele.name}</Paragraph>
+                        <Paragraph fontWeight={"bold"}>{ele.name}</Paragraph>
                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                             <ChevronDown size="$1" />
                         </Square>
