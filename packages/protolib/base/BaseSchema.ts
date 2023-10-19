@@ -72,6 +72,16 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
+    type.prototype.size = function (size) {
+        this._def.size = size;
+        return this;
+    };
+
+    type.prototype.group = function (group:number) {
+        this._def.group = group;
+        return this;
+    };
+
     type.prototype.on = function(eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
         return onEvent(this, eventName, eventHandler, eventContext, eventParams)
     }

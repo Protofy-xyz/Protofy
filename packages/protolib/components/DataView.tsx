@@ -85,7 +85,9 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
             <DataViewContext.Provider value={{ items: currentItems, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, tableColumns }}>
                 <ActiveGroup initialState={activeViewIndex}>
                     <AlertDialog
-                        p="$3"
+                        p={"$2"}
+                        pt="$5"
+                        pl="$5"
                         setOpen={setCreateOpen}
                         open={createOpen}
                         hideAccept={true}
@@ -93,7 +95,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
                     >
                         <YStack f={1} jc="center" ai="center">
                             <ScrollView maxHeight={"90vh"}>
-                                <EditableObject
+                                <XStack mr="$5"><EditableObject
                                     name={name}
                                     numColumns={numColumnsForm}
                                     mode={'add'}
@@ -116,12 +118,12 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
                                     model={model}
                                     extraFields={extraFields}
                                     icons={icons}
-                                />
+                                /></XStack>
                             </ScrollView>
                         </YStack>
                     </AlertDialog>
                     <AlertDialog
-                        p={"$0"}
+                        p={"$1"}
                         pt="$5"
                         pl="$5"
                         hideAccept={true}

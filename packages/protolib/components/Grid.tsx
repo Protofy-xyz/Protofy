@@ -1,30 +1,21 @@
 import { isWeb } from '@tamagui/core'
 import { XStack } from '@tamagui/stacks'
 import React from 'react'
+import { Masonry } from "masonic";
 
 export type GridProps = {
   children?: any
   itemMinWidth?: number
   gap?: any
   columns?: number
+  data?:any
+  card: any
 }
 
-export const Grid = React.forwardRef(({ children, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {
-  if (isWeb) {
+export const Grid = React.forwardRef(({ spacing, children, data, card, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {
+  if (isWeb && data && card) {
     return (
-      <div
-        ref={ref}
-        style={{
-          gap,
-          display: 'grid',
-        //   justifyContent: 'stretch',
-          // gridTemplateRows: 'repeat(4, 1fr)',
-          gridTemplateColumns: `repeat( auto-fill, minmax(${itemMinWidth}px, 1fr) )`,
-          // gridTemplateColumns: '1fr 1fr',
-        }}
-      >
-        {children}
-      </div>
+      <Masonry columnGutter={spacing} columnWidth={itemMinWidth} items={data} render={card} />
     )
   }
 

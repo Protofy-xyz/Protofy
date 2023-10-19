@@ -26,6 +26,7 @@
         "cookie": "^0.5.0",
         "jotai": "^2.4.2",
         "jsonwebtoken": "^9.0.2",
+        "masonic": "^3.7.0",
         "moment": "2.29.4",
         "mqtt-react-hooks": "^3.0.0-alpha.2",
         "multer": "1.4.5-lts.1",
