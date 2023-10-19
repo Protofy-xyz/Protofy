@@ -122,7 +122,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
             return target
         }
         // Retorna el valor de ele.name o un valor predeterminado.
-        return target && target[key] ? target[key] : '';
+        return target && target.hasOwnProperty(key) ? target[key] : '';
     }
 
     const elementType = elementDef.typeName
@@ -186,7 +186,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
                 disabled={mode == 'edit' && ele._def.static}
                 secureTextEntry={ele._def.secret}
                 value={getFormData(ele.name)}
-                onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? parseFloat(t) : t)}
+                onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
                 placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? ele.name}
                 autoFocus={x == 0 && i == 0}>
             </Input>
