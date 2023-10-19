@@ -32,7 +32,8 @@ export const ItemCard = memo(React.forwardRef(
       children?: any,
       topBar?: any,
       topBarOutSideScrollArea?: boolean,
-      containerElement?: any
+      containerElement?: any,
+      stackProps: any
     }, ref:any
   ) => {
     const {
@@ -50,6 +51,7 @@ export const ItemCard = memo(React.forwardRef(
       onHoverSection,
       pointerEvents,
       pointerEventsControls,
+      stackProps,
       ...cardProps
     } = props
     const tint = !alt ? null : (`alt${alt}` as ThemeName)
@@ -92,6 +94,7 @@ export const ItemCard = memo(React.forwardRef(
             p: 0,
             ai: "stretch",
             elevation: "$2",
+            stackProps,
             ...cardProps
           }, [
             !topBarOutSideScrollArea && topBar ? (
@@ -116,7 +119,7 @@ export const ItemCard = memo(React.forwardRef(
               </>
             ) : null,
 
-            <XStack ai="center" p="$4" f={1}>
+            <XStack ai="center" p="$4" f={1} {...stackProps}>
               {/*@ts-ignore*/}
               {imageSrc ? <Square pos="relative" ov="hidden" br="$6" size="$8">
                 <Image {...imageProps} source={{ uri: imageSrc, width: 90, height: 90 }} />
