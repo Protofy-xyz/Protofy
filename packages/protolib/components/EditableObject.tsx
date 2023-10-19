@@ -148,13 +148,32 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
             }
         }
     } else if (elementType == 'ZodObject') {
-        return <YStack br="$3" bw={1} boc={"$gray6"} f={1} p={"$5"}>
-            <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack>
-            {Object.keys(ele._def.shape()).map((s, i) => {
-                const shape = ele._def.shape();
-                return <Stack mt={i?"$5":"$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0,data, setData, mode, [...path, ele.name])}</Stack>
-            })}
-        </YStack>
+        return <Accordion type="multiple" br="$5" boc={"$gray6"} f={1}>
+        {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
+            <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
+        </Stack> */}
+            <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-"+i}>
+                    <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
+                    {({ open }) => (
+                        <>
+                        <Paragraph>{ele.name}</Paragraph>
+                        <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+                            <ChevronDown size="$1" />
+                        </Square>
+                        </>
+                    )}
+                    </Accordion.Trigger>
+                    <Accordion.Content br="$5">
+                        <Stack>
+                            {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
+                            {Object.keys(ele._def.shape()).map((s, i) => {
+                                const shape = ele._def.shape();
+                                return <Stack mt={i?"$5":"$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0,data, setData, mode, [...path, ele.name])}</Stack>
+                            })}
+                        </Stack>
+                    </Accordion.Content>
+            </Accordion.Item>
+        </Accordion>
     } else if (elementType == 'ZodArray') {
         const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
         return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
