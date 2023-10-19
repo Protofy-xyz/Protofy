@@ -17,6 +17,22 @@ export const Grid = React.forwardRef(({ spacing, children, data, card, columns, 
     return (
       <Masonry columnGutter={spacing} columnWidth={itemMinWidth} items={data} render={card} />
     )
+  } else if (isWeb) {
+    return (
+      <div
+        ref={ref}
+        style={{
+          gap,
+          display: 'grid',
+        //   justifyContent: 'stretch',
+          // gridTemplateRows: 'repeat(4, 1fr)',
+          gridTemplateColumns: `repeat( auto-fill, minmax(${itemMinWidth}px, 1fr) )`,
+          // gridTemplateColumns: '1fr 1fr',
+        }}
+      >
+        {children}
+      </div>
+    )
   }
 
   const childrenList = React.Children.toArray(children)
