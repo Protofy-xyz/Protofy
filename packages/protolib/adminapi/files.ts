@@ -6,7 +6,7 @@ import { app } from 'protolib/api';
 import multer from 'multer';
 import fsExtra from 'fs-extra';
 import syncFs from 'fs'
-
+import { v4 as uuidv4 } from 'uuid';
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../"; // Define where the workspace root dir is
 
 const storage = multer.diskStorage({
@@ -51,7 +51,7 @@ const handleFilesRequest = async (req, res) => {
                 const stats = await fs.stat(filePath);
 
                 return {
-                    id: Math.random(),
+                    id: uuidv4(),
                     path: `${name}/${f}`,
                     isHidden: f.startsWith('.'),
                     name: f,
