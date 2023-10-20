@@ -123,7 +123,12 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     const elementType = elementDef.typeName
 
     // TODO Check if custom element
-    
+    if(customFields.hasOwnProperty(ele.name)){
+        const customField = customFields[ele.name]
+        const comp = typeof customField.component == 'function' ? customField.component(path,getFormData(ele.name)) : customField.component
+        if(comp) return !customField.hideLabel ? <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>{comp}</FormElement> : comp
+    }
+
     if (elementType == 'ZodUnion') {
         const _rawOptions = elementDef.options.map(o => o._def.value)
         const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)

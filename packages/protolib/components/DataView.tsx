@@ -196,6 +196,7 @@ export function DataView({
                                         model={model}
                                         extraFields={extraFields}
                                         icons={icons}
+                                        customFields={customFields}
                                     />
                                 </Stack>
                             </ScrollView>
