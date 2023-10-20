@@ -1,5 +1,5 @@
-import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText, StackProps, Accordion, Square } from "tamagui";
-import { Pencil, Tag, ChevronDown, X } from '@tamagui/lucide-icons';
+import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText, StackProps, Accordion, Square, Spacer } from "tamagui";
+import { Pencil, Tag, ChevronDown, X, Tags, List, ListOrdered } from '@tamagui/lucide-icons';
 import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog } from 'protolib'
 import React, { useEffect, useState } from "react";
 import { getErrorMessage } from "@my/ui";
@@ -29,15 +29,17 @@ type EditableObjectProps = {
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 const columnWidth = 350
 const columnMargin = 30
+const iconStyle = { color: "var(--color9)", size: "$1", strokeWidth: 1 }
 
-const FormElement = ({ ele, i, icon, children }) => {
+const FormElement = ({ ele, i, icon, children, inArray=false }) => {
     return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2" f={1}>
-        <Label fontWeight={"bold"}>
+        {!inArray && <Label fontWeight={"bold"}>
             <Tinted>
-                <Stack mr="$2">{React.createElement(icon, { color: "var(--color9)", size: "$1", strokeWidth: 1 })}</Stack>
+                <Stack mr="$2">{React.createElement(icon, iconStyle)}</Stack>
             </Tinted>
             {ele._def.label ?? ele.name}
-        </Label>
+        </Label>}
+        {inArray && <Spacer size="$1" />}
         {children}
     </Fieldset>
 }
@@ -47,39 +49,29 @@ const ArrayComp = ({ele, elementDef, icon, path, arrData, getElement, setFormDat
     const [opened, setOpened] = useState([])
 
     return <Accordion value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" bw={1} mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
-    <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
+    <XStack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
+        {/* <Tinted><ListOrdered {...iconStyle} /></Tinted> */}
         <SizableText fontWeight={"bold"} >{ele.name + ' (' + arrData.length + ')'}</SizableText>
-    </Stack>
+    </XStack>
     
     {
         arrData.map((d, i) => {
-            return <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={i?"$2":"$0"} value={"item-"+i}>
-                <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
-                {({ open }) => (
-                    <>
-                    <Paragraph>{ele.name + ' #'+i}</Paragraph>
-                    <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
-                        <ChevronDown size="$1" />
-                    </Square>
-                    </>
-                )}
-                </Accordion.Trigger>
-                <Accordion.Content br="$5">
-                    <Stack top={-10}>
-                        {getElement({ ...elementDef.type._def, _def:elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, [...path, ele.name, i])}
-                    </Stack>
-                </Accordion.Content>
-            </Accordion.Item>
+            return <Stack top={-10}>
+                <XStack ml="$1">
+                    {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} />:<Tags {...iconStyle} />}</XStack></Tinted>}
+                    {getElement({ ...elementDef.type._def, _def:elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, [...path, ele.name, i], true, ele.name)}
+                </XStack>
+            </Stack>
         })
     }
     
-    <Button mt="$3" onPress={() => {
+    {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
         setFormData(ele.name, [...arrData, {}])
         setOpened([...opened, 'item-'+arrData.length])
-    }}>Add{ele.name}</Button>
+    }}>Add{ele.name}</Button>}
 </Accordion>
 }
-const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
+const getElement = (ele, icon, i, x, data, setData, mode, path = [], inArray?, arrayName?) => {
     const elementDef = ele._def?.innerType?._def??ele._def 
 
     const setFormData = (key, value) => {
@@ -132,7 +124,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
     if (elementType == 'ZodUnion') {
         const _rawOptions = elementDef.options.map(o => o._def.value)
         const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
-        return <FormElement ele={ele} icon={icon} i={i}>
+        return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <SelectList f={1} title={ele.name} elements={options} value={getFormData(ele.name)} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
         </FormElement>
     } else if (elementType == 'ZodNumber') {
@@ -140,7 +132,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
             const min = elementDef.checks.find(c => c.kind == 'min')
             const max = elementDef.checks.find(c => c.kind == 'max')
             if (min && max) {
-                return <FormElement ele={ele} icon={icon} i={i}>
+                return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
                     <Tinted>
                         <Stack f={1} mt="$4">
                             <SimpleSlider onValueChange={v => setFormData(ele.name, v)} value={[getFormData(ele.name) ?? min.value]} width={190} min={min.value} max={max.value} />
@@ -158,7 +150,8 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
                     <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
                     {({ open }) => (
                         <>
-                        <Paragraph fontWeight={"bold"}>{ele.name}</Paragraph>
+                        <Tinted><List {...iconStyle} /></Tinted>
+                        <Paragraph fontWeight={"bold"}>{inArray?arrayName+' #'+(ele.name+1):ele.name}</Paragraph>
                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                             <ChevronDown size="$1" />
                         </Square>
@@ -181,7 +174,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
         return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
     }
 
-    return <FormElement ele={ele} icon={icon} i={i}>
+    return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
         <Stack f={1}>
             <Input
                 {...(mode != 'edit' && mode != 'add' ? {bw:0, forceStyle:"hover"}:{})}
