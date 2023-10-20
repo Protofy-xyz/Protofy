@@ -23,7 +23,8 @@ type EditableObjectProps = {
     loadingText?: any,
     loadingTop?: number,
     spinnerSize?: number,
-    name?: string
+    name?: string,
+    customFields?: any
 }
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
@@ -45,7 +46,7 @@ const FormElement = ({ ele, i, icon, children, inArray=false }) => {
 }
 
 
-const ArrayComp = ({ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode}) => {
+const ArrayComp = ({ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields}) => {
     const [opened, setOpened] = useState([])
 
     return <Accordion value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" bw={1} mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
@@ -59,7 +60,7 @@ const ArrayComp = ({ele, elementDef, icon, path, arrData, getElement, setFormDat
             return <Stack top={-10}>
                 <XStack ml="$1">
                     {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} />:<Tags {...iconStyle} />}</XStack></Tinted>}
-                    {getElement({ ...elementDef.type._def, _def:elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, [...path, ele.name, i], true, ele.name)}
+                    {getElement({ ...elementDef.type._def, _def:elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name, i], true, ele.name)}
                 </XStack>
             </Stack>
         })
@@ -71,7 +72,7 @@ const ArrayComp = ({ele, elementDef, icon, path, arrData, getElement, setFormDat
     }}>Add{ele.name}</Button>}
 </Accordion>
 }
-const getElement = (ele, icon, i, x, data, setData, mode, path = [], inArray?, arrayName?) => {
+const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray?, arrayName?) => {
     const elementDef = ele._def?.innerType?._def??ele._def 
 
     const setFormData = (key, value) => {
@@ -121,6 +122,8 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = [], inArray?, a
 
     const elementType = elementDef.typeName
 
+    // TODO Check if custom element
+    
     if (elementType == 'ZodUnion') {
         const _rawOptions = elementDef.options.map(o => o._def.value)
         const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
@@ -163,7 +166,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = [], inArray?, a
                             {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
                             {Object.keys(ele._def.shape()).map((s, i) => {
                                 const shape = ele._def.shape();
-                                return <Stack mt={i?"$5":"$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0,data, setData, mode, [...path, ele.name])}</Stack>
+                                return <Stack mt={i?"$5":"$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0,data, setData, mode, customFields,[...path, ele.name])}</Stack>
                             })}
                         </Stack>
                     </Accordion.Content>
@@ -171,7 +174,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = [], inArray?, a
         </Accordion>
     } else if (elementType == 'ZodArray') {
         const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
-        return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
+        return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
     }
 
     return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
@@ -207,11 +210,11 @@ const GridElement = ({ index, data, width }) => {
     // console.log('colwidth: ', colWidth, realSize, columnMargin/Math.max(1,((colWidth*2)-(realSize*2))))
     
     return <XStack f={1} width={(width*realSize)+((realSize-1)*(columnMargin/realSize))} key={data.x} mb={'$0'}>
-        {getElement(data.ele, data.icon, data.i, data.x, data.data, data.setData, data.mode)}
+        {getElement(data.ele, data.icon, data.i, data.x, data.data, data.setData, data.mode, data.customFields)}
     </XStack>
 }
 
-export const EditableObject = ({ disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, customFields={},...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [data, setData] = useState({})
@@ -259,6 +262,7 @@ export const EditableObject = ({ disableToggleMode, name, initialData, loadingTo
             mode: currentMode,
             size: ele._def.size ?? 1,
             numColumns: numColumns,
+            customFields
         })
     }))
 

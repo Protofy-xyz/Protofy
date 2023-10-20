@@ -60,7 +60,8 @@ export function DataView({
     views = undefined,
     extraViews = [],
     openMode = 'edit',
-    disableToggleMode
+    disableToggleMode,
+    customFields = {}
 }: {openMode: 'edit' | 'view'} & any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
@@ -141,6 +142,7 @@ export function DataView({
                                     model={model}
                                     extraFields={extraFields}
                                     icons={icons}
+                                    customFields={customFields}
                                 /></XStack>
                             </ScrollView>
                         </YStack>
