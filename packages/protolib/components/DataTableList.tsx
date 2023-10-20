@@ -22,7 +22,8 @@ export const DataTableList = () => {
     ];
 
     const elementObj = model.load({})
-    const fields = elementObj.getObjectSchema().is('display');
+    const fields = elementObj.getObjectSchema().isDisplay('table')
+
     const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean']
     const cols = tableColumns ?? DataTable2.columns(...(Object.keys(fields.shape).filter(key => validTypes.includes(fields.shape[key]._def?.typeName)).map(key => DataTable2.column(fields.shape[key]._def?.label ?? key, key, true))))
     const finalColumns = rowIcon ? [DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, { size: "$1" })}</Stack>, true, '50px'), ...cols] : cols
