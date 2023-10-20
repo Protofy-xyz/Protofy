@@ -48,6 +48,7 @@ export function DataView({
     sourceUrl,
     numColumnsForm = 1,
     name,
+    pluralName,
     hideAdd = false,
     pageState,
     icons = {},
@@ -57,8 +58,9 @@ export function DataView({
     onEdit = (data) => data,
     onAdd = (data) => data,
     views = undefined,
-    extraViews = [] 
-}: any) {
+    extraViews = [],
+    openMode = 'edit'
+}: {openMode: 'edit' | 'view'} & any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
@@ -168,7 +170,7 @@ export function DataView({
                                         objectId={state.item}
                                         sourceUrl={sourceUrl + '/' + state.item}
                                         numColumns={numColumnsForm}
-                                        mode={'edit'}
+                                        mode={openMode}
                                         onSave={async (original, data) => {
                                             try {
                                                 setCurrentItemData(undefined)
@@ -199,7 +201,7 @@ export function DataView({
                     <XStack pt="$3" px="$7" mb="$5">
                         <YStack left={-12} top={9} f={1}>
                             <Paragraph>
-                                <Text fontSize="$6" color="$color11">{name.charAt(0).toUpperCase() + name.slice(1)}s [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.total}</Text></Tinted>]</Text>
+                                <Text fontSize="$6" color="$color11">{pluralName? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'} [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.total}</Text></Tinted>]</Text>
                             </Paragraph>
                         </YStack>
 

@@ -1,10 +1,10 @@
 import { Paragraph, Spinner, Stack, Unspaced, XStack, YStack } from 'tamagui'
 import { Button, Dialog, Spacer, getErrorMessage } from '@my/ui'
 import { forwardRef, useEffect, useState } from 'react'
-import { Tinted, Notice } from 'protolib'
+import { Tinted, Notice, Center } from 'protolib'
 import { X, UserPlus, Check, Mail} from '@tamagui/lucide-icons'
 
-export const AlertDialog = forwardRef(({ hideAccept, onAccept = () => { }, onCancel = () => { }, title, trigger, description, children, cancelCaption = 'Cancel', acceptCaption = 'Accept', acceptTint, acceptButtonProps={}, open, setOpen, ...props }: any, ref: any) => {
+export const AlertDialog = forwardRef(({ showCancel, hideAccept, onAccept = () => { }, onCancel = () => { }, title, trigger, description, children, cancelCaption = 'Cancel', acceptCaption = 'Accept', acceptTint, cancelTint='gray',  acceptButtonProps={}, cancelButtonProps={},open, setOpen, ...props }: any, ref: any) => {
     const [_open, _setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
@@ -22,7 +22,7 @@ export const AlertDialog = forwardRef(({ hideAccept, onAccept = () => { }, onCan
         </Dialog.Trigger>
         <Dialog.Portal>
             <Dialog.Overlay />
-            <Dialog.Content scale={1} p="$5" ai="flex-start" jc="flex-start" {...props}>
+            <Dialog.Content scale={1} p="$7" ai="flex-start" jc="flex-start" {...props}>
                 <YStack f={1}>
                     <YStack f={1}>
                         {title && <XStack width={"100%"} f={1}>
@@ -31,7 +31,7 @@ export const AlertDialog = forwardRef(({ hideAccept, onAccept = () => { }, onCan
                             </XStack>
                         </XStack>}
                         { description && <Dialog.Description mt="$3" mb="$6">
-                            {description}
+                            <Center>{description}</Center>
                         </Dialog.Description> }
 
                         {error && (
@@ -46,6 +46,15 @@ export const AlertDialog = forwardRef(({ hideAccept, onAccept = () => { }, onCan
 
                         {!hideAccept && <YStack p="$2" pt="$0" width="100%" f={1} alignSelf="center">
                         <Spacer flex={1} height="$4" />
+                        <XStack>
+                        {showCancel && 
+                            <Tinted tint={cancelTint}>
+                                <Button mr="$5" f={1} onPress={() => {
+                                    seter(false)
+                                }} aria-label="Close" {...cancelButtonProps}>
+                                    {cancelCaption}
+                                </Button>
+                            </Tinted>}
                             <Tinted tint={acceptTint}>
                                 <Button f={1} onPress={async () => {
                                     setLoading(true)
@@ -61,6 +70,8 @@ export const AlertDialog = forwardRef(({ hideAccept, onAccept = () => { }, onCan
                                     {loading?<Spinner /> : acceptCaption}
                                 </Button>
                             </Tinted>
+
+                        </XStack>
                         </YStack>}
                     </YStack>
                 </YStack>

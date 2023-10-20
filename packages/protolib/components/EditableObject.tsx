@@ -1,10 +1,12 @@
 import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText, StackProps, Accordion, Square } from "tamagui";
-import { Pencil, ChevronDown } from '@tamagui/lucide-icons';
-import { Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider } from 'protolib'
+import { Pencil, Tag, ChevronDown, X } from '@tamagui/lucide-icons';
+import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog } from 'protolib'
 import React, { useEffect, useState } from "react";
 import { getErrorMessage } from "@my/ui";
 import { ProtoSchema } from "protolib/base";
 import { Schema } from "../base";
+import { useUpdateEffect } from "usehooks-ts";
+import { useTint } from '@tamagui/logo'
 
 type EditableObjectProps = {
     initialData?: any,
@@ -182,8 +184,9 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = []) => {
     return <FormElement ele={ele} icon={icon} i={i}>
         <Stack f={1}>
             <Input
-                focusStyle={{ outlineWidth: 1 }}
-                disabled={mode == 'edit' && ele._def.static}
+                {...(mode != 'edit' && mode != 'add' ? {bw:0, forceStyle:"hover"}:{})}
+                focusStyle={{outlineWidth: 1 }}
+                disabled={(mode == 'view' || (mode == 'edit' && ele._def.static))}
                 secureTextEntry={ele._def.secret}
                 value={getFormData(ele.name)}
                 onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
@@ -208,12 +211,27 @@ const GridElement = ({ index, data, width }) => {
 
 export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
-    const [data, setData] = useState(mode == 'add' ? {} : undefined)
+    const [currentMode, setCurrentMode] = useState(mode)
+    const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
-
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [edited, setEdited] = useState(false)
+    const [ready, setReady] = useState(false)
     usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialData)
-    useEffect(() => { originalData.data && setData(originalData.data) }, [originalData])
+    
+    useEffect(() => { if(originalData.data) {
+        setData(originalData.data) 
+    }}, [originalData])
+    useUpdateEffect(() => setCurrentMode(mode), [mode])
+
+    useUpdateEffect(() => {
+        if(ready) {
+            setEdited(true)
+        } else {
+            setReady(true)
+        }
+    }, [data])
 
     const elementObj = model.load(data)
 
@@ -223,7 +241,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
 
     const groups = {}
     formFields.forEach((row, x) => row.forEach((ele, i) => {
-        const icon = icons[ele.name] ? icons[ele.name] : Pencil
+        const icon = icons[ele.name] ? icons[ele.name] : (currentMode == 'edit' || currentMode == 'add' ? Pencil : Tag)
         const groupId = ele._def.group ?? 0
         if(!groups.hasOwnProperty(groupId)) {
             groups[groupId] = []
@@ -236,15 +254,50 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
             ele: ele,
             data,
             setData,
-            mode,
+            mode: currentMode,
             size: ele._def.size ?? 1,
-            numColumns: numColumns
+            numColumns: numColumns,
         })
     }))
 
+    const { tint } = useTint()
+
     return <Stack {...props}>
-        <AsyncView forceLoad={mode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={originalData}>
-            {title ?? <Dialog.Title><Text><Tinted><Text color="$color9">{capitalize(mode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text></Dialog.Title>}
+        <AlertDialog 
+            showCancel={true}
+            acceptCaption="Discard"
+            cancelCaption="Keep editing"
+            onAccept={async () => {
+                const data = await API.get(sourceUrl)
+                setOriginalData(data)
+                setCurrentMode('view')
+            }}
+            cancelTint={tint}
+            acceptTint="red"
+            open={dialogOpen}
+            setOpen={setDialogOpen}
+            title="Are you sure you want to leave?"
+            description=""
+        >
+            <Center mt="$5">All unsaved changes will be lost</Center>
+        </AlertDialog>
+        <AsyncView forceLoad={currentMode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={originalData}>
+            <XStack>
+                <XStack f={1}>
+                {title ?? <Dialog.Title><Text><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text></Dialog.Title>}
+                </XStack>
+                {(currentMode == 'view' || currentMode == 'edit') && <XStack pressStyle={{o:0.8}} onPress={async () => {
+                    if(currentMode == 'edit' && edited) {
+                        setDialogOpen(true)
+                    } else {
+                        setCurrentMode(currentMode=='view'?'edit':'view')
+                    }
+                }} cursor="pointer">
+                    <Tinted>
+                        {currentMode == 'view'?<Pencil color="var(--color8)" />:<X color="var(--color8)" />}
+                    </Tinted>
+                </XStack>}
+            </XStack>
             <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
                 {error && (
                     <Notice>
@@ -257,7 +310,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                 </YStack>)}
 
                 <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
-                    <Tinted>
+                {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
                         <Button f={1} onPress={async () => {
                             console.log('final data: ', data)
                             setLoading(true)
@@ -269,10 +322,10 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                             }
                             setLoading(false)
                         }}>
-                            {loading ? <Spinner /> : mode == 'add' ? 'Create' : 'Save'}
+                            {loading ? <Spinner /> : currentMode == 'add' ? 'Create' : 'Save'}
                         </Button>
-                    </Tinted>
-                </YStack>
+                    </Tinted>}
+                </YStack> 
             </YStack>
         </AsyncView>
     </Stack>
