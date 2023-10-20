@@ -5,9 +5,10 @@ import { DataViewContext } from "./DataView";
 import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
 import { CheckCheck, Check } from '@tamagui/lucide-icons'
+import React from "react";
 
 export const DataTableList = () => {
-    const { items, model, selected, setSelected, state, push, mergePush, tableColumns, onSelectItem } = useContext(DataViewContext);
+    const { items, model, selected, setSelected, state, push, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
             when: row => selected.includes(model.load(row).getId()),
@@ -19,6 +20,13 @@ export const DataTableList = () => {
             }
         },
     ];
+
+    const elementObj = model.load({})
+    const fields = elementObj.getObjectSchema().is('display');
+    const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean']
+    const cols = tableColumns ?? DataTable2.columns(...(Object.keys(fields.shape).filter(key => validTypes.includes(fields.shape[key]._def?.typeName)).map(key => DataTable2.column(fields.shape[key]._def?.label ?? key, key, true))))
+    const finalColumns = rowIcon ? [DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, { size: "$1" })}</Stack>, true, '50px'), ...cols] : cols
+
     return <XStack mr="$3" pt="$1" flexWrap='wrap'>
             <Tinted>
                 <DataTable2.component
@@ -54,7 +62,7 @@ export const DataTableList = () => {
                                     <Check />
                                 </Checkbox.Indicator>
                             </Checkbox>
-                        </Stack></Theme>, true, '65px'), ...tableColumns]}
+                        </Stack></Theme>, true, '65px'), ...finalColumns]}
                     rows={items?.data?.items}
                     onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : push('item', model.load(rowData).getId())}
                 />

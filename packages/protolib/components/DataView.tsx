@@ -23,6 +23,7 @@ type DataViewState = {
     mergePush: Function,
     removePush: Function,
     tableColumns: any[],
+    rowIcon: any
 }
 export const DataViewContext = createContext<DataViewState>({
     items: getPendingResult('pending'),
@@ -34,10 +35,30 @@ export const DataViewContext = createContext<DataViewState>({
     push: () => null,
     mergePush: () => null,
     removePush: () => null,
-    tableColumns: []
+    tableColumns: [],
+    rowIcon: null
 });
 
-export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector = false, initialItems, sourceUrl, numColumnsForm = 1, name, hideAdd = false, pageState, icons = {}, model, extraFields = {}, columns, onEdit = (data) => data, onAdd = (data) => data, views = undefined, extraViews = [] }: any) {
+export function DataView({
+    onSelectItem,
+    itemData,
+    rowIcon,
+    disableViewSelector = false,
+    initialItems,
+    sourceUrl,
+    numColumnsForm = 1,
+    name,
+    hideAdd = false,
+    pageState,
+    icons = {},
+    model,
+    extraFields = {},
+    columns,
+    onEdit = (data) => data,
+    onAdd = (data) => data,
+    views = undefined,
+    extraViews = [] 
+}: any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
@@ -64,7 +85,6 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
     const onSearch = async (text) => push("search", text)
     const onCancelSearch = async () => setCurrentItems(items)
     const toast = useToastController()
-    const tableColumns = rowIcon ? [DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, { size: "$1" })}</Stack>, true, '50px'), ...columns] : columns
 
     const defaultViews = [
         {
@@ -82,7 +102,7 @@ export function DataView({ onSelectItem, itemData, rowIcon, disableViewSelector 
     const activeViewIndex = tableViews.findIndex(v => v.name == state.view) ?? 0
     return (
         <YStack f={1}>
-            <DataViewContext.Provider value={{ items: currentItems, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, tableColumns }}>
+            <DataViewContext.Provider value={{ items: currentItems, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, tableColumns:columns, rowIcon}}>
                 <ActiveGroup initialState={activeViewIndex}>
                     <AlertDialog
                         p={"$2"}
