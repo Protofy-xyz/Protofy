@@ -125,7 +125,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     // TODO Check if custom element
     if(customFields.hasOwnProperty(ele.name)){
         const customField = customFields[ele.name]
-        const comp = typeof customField.component == 'function' ? customField.component(path,getFormData(ele.name)) : customField.component
+        const comp = typeof customField.component == 'function' ? customField.component(path,getFormData(ele.name), (data)=>setFormData(ele.name, data)) : customField.component
         if(comp) return !customField.hideLabel ? <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>{comp}</FormElement> : comp
     }
 
