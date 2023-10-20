@@ -13,7 +13,7 @@ export function SelectList({title, value, elements, setValue, ...props}: SelectP
         {...props}
       >
         <Select.Trigger f={1} iconAfter={ChevronDown}>
-          <Select.Value placeholder="..." />
+          <Select.Value placeholder="Choose an option" />
         </Select.Trigger>
   
         <Adapt when="sm" platform="touch">
