@@ -1,6 +1,6 @@
 import { YStack, XStack } from 'tamagui'
 import { getPendingResult, API, PanelMenuItem, AlertDialog, Link, Tinted} from 'protolib'
-import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users, Repeat, Zap, Tag, Library, Lamp} from '@tamagui/lucide-icons'
+import { Box, ChevronDown, Database, Folder, Plus, Workflow, Users, Repeat, Zap, Tag, Library, Lamp, FunctionSquare, Factory, Leaf, LineChart, Replace, ReplaceAll} from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -21,7 +21,13 @@ const iconTable = {
     automation: <Repeat color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     groups: <Tag color={color} opacity={opacity} strokeWidth={strokeWidth} />,
     library: <Library color={color} opacity={opacity} strokeWidth={strokeWidth} />,
-    lamp: <Lamp color={color} opacity={opacity} strokeWidth={strokeWidth} />
+    lamp: <Lamp color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    function: <FunctionSquare color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    factory: <Factory color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    leaf: <Leaf color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    chart: <LineChart color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    replace: <Replace color={color} opacity={opacity} strokeWidth={strokeWidth} />,
+    replaceAll: <ReplaceAll color={color} opacity={opacity} strokeWidth={strokeWidth} />
 }
 const getIcon = (icon) => {
     if (!iconTable[icon]) {
