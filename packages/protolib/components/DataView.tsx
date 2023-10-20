@@ -59,7 +59,8 @@ export function DataView({
     onAdd = (data) => data,
     views = undefined,
     extraViews = [],
-    openMode = 'edit'
+    openMode = 'edit',
+    disableToggleMode
 }: {openMode: 'edit' | 'view'} & any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
@@ -161,6 +162,7 @@ export function DataView({
                             <ScrollView maxHeight={"90vh"}>
                                 <Stack mr="$5">
                                     <EditableObject
+                                        disableToggleMode={disableToggleMode}
                                         initialData={currentItemData}
                                         name={name}
                                         minHeight={350}

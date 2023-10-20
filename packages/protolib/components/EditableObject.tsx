@@ -209,7 +209,7 @@ const GridElement = ({ index, data, width }) => {
     </XStack>
 }
 
-export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [data, setData] = useState({})
@@ -286,7 +286,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                 <XStack f={1}>
                 {title ?? <Dialog.Title><Text><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text></Dialog.Title>}
                 </XStack>
-                {(currentMode == 'view' || currentMode == 'edit') && <XStack pressStyle={{o:0.8}} onPress={async () => {
+                {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{o:0.8}} onPress={async () => {
                     if(currentMode == 'edit' && edited) {
                         setDialogOpen(true)
                     } else {
@@ -298,6 +298,7 @@ export const EditableObject = ({ name, initialData, loadingTop, spinnerSize, loa
                     </Tinted>
                 </XStack>}
             </XStack>
+
             <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
                 {error && (
                     <Notice>
