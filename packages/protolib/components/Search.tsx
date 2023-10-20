@@ -3,8 +3,8 @@ import { Search as IconSearch } from '@tamagui/lucide-icons'
 import { useState, forwardRef, useRef, useEffect } from "react"
 import { useUpdateEffect } from 'usehooks-ts'
 
-export const Search = forwardRef(({ defaultOpen , initialState, onCancel = () => { }, onSearch = () => { }, placeholder = 'Search...', width = 400, widthmd = 300, closedWidth = 50, ...props }: any, ref: any) => {
-    const [opened, setOpened] = useState(defaultOpen || initialState ? true : false)
+export const Search = forwardRef(({ initialState, onCancel = () => { }, onSearch = () => { }, placeholder = 'Search...', width = 400, widthmd = 300, closedWidth = 50, ...props }: any, ref: any) => {
+    const [opened, setOpened] = useState(initialState ? true : false)
     const input = useRef()
     const [content, setContent] = useState(initialState)
 
