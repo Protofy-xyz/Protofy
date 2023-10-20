@@ -184,7 +184,16 @@ const getElement = (ele, icon, i, x, data, setData, mode, path = [], inArray?, a
                 value={getFormData(ele.name)}
                 onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
                 placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? ele.name}
-                autoFocus={x == 0 && i == 0}>
+                autoFocus={x == 0 && i == 0}
+                onBlur={() => {
+                    if (ele._def.typeName == 'ZodNumber') {
+                        const numericValue = parseFloat(getFormData(ele.name));
+                        if (!isNaN(numericValue)) {
+                            setFormData(ele.name, numericValue);
+                        }
+                    }
+                }}
+            >
             </Input>
         </Stack>
     </FormElement>
