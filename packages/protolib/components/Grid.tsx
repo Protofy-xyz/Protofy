@@ -1,7 +1,14 @@
 import { isWeb } from '@tamagui/core'
 import { XStack } from '@tamagui/stacks'
 import React from 'react'
-import { Masonry } from "masonic";
+import dynamic from 'next/dynamic'
+import Center from './Center'
+import { Spinner } from 'tamagui'
+// import { Masonry } from 'masonic'
+const Masonry = dynamic(() => import('masonic').then(mod => mod.Masonry), {
+  ssr: false,
+  loading: () => <Center><Spinner /></Center>, 
+});
 
 export type GridProps = {
   children?: any
@@ -9,7 +16,8 @@ export type GridProps = {
   gap?: any
   columns?: number
   data?:any
-  card: any
+  card: any,
+  spacing?:number
 }
 
 export const Grid = React.forwardRef(({ spacing, children, data, card, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {
