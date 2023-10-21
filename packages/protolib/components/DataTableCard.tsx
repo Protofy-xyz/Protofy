@@ -37,5 +37,5 @@ export const DataTableCard = ({ }) => {
         }
     })
 
-    return <Grid spacing={15} data={data} card={GridElementCard} itemMinWidth={300} columns={2}/>
+    return <Grid spacing={15} data={data} card={GridElementCard} itemMinWidth={400} columns={2}/>
 }
