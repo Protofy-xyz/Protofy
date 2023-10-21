@@ -11,12 +11,15 @@ const GridElementCard = ({ index, data, width }) => {
     const modelItem = data.model.load(element)
 
     return <ItemCard
+        cursor="pointer"
         topBarOutSideScrollArea={false}
         backgroundColor={"$color1"}
-        elevation={"$3"}
+        elevation={"$0"}
+        hoverStyle={{elevation:"$3"}}
         borderWidth={1}
         pointerEvents='none'
         pointerEventsControls="none"
+
     >
         <Stack mx={"$7"} mb={"$4"} key={element.key} width={width}>
             <EditableObject
