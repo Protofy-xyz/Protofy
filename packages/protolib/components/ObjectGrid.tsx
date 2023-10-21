@@ -27,7 +27,7 @@ const GridElementCard = ({ index, data, width }) => {
             hasPicture: true
         }:{})}
     >
-        <Stack mb={"$4"} key={element.key} width={width}>
+        {data.getBody ? data.getBody(element, width) : <Stack mb={"$4"} key={element.key} width={width}>
             <EditableObject
                 title={''}
                 initialData={data.element}
@@ -44,11 +44,11 @@ const GridElementCard = ({ index, data, width }) => {
                 columnWidth={width-data.contentMargin}
                 columnMargin={0}
             />
-        </Stack>
+        </Stack>}
     </ItemCard>
 }
 
-export const ObjectGrid = ({itemMinWidth=400, contentMargin=40, spacing=20, getPicture, model, items, sourceUrl, customFields, extraFields, icons, ...props}: any & StackProps) => {
+export const ObjectGrid = ({itemMinWidth=400, contentMargin=40, spacing=20, getPicture, getBody, model, items, sourceUrl, customFields, extraFields, icons, ...props}: any & StackProps) => {
     const data = items?.data?.items?.map((element, i) => {
         return {
             id: 'item_'+i,
@@ -60,6 +60,7 @@ export const ObjectGrid = ({itemMinWidth=400, contentMargin=40, spacing=20, getP
             icons,
             itemMinWidth,
             getPicture,
+            getBody,
             spacing,
             contentMargin
         }
