@@ -9,6 +9,7 @@ import {
   Paragraph,
   ScrollView,
   Separator,
+  SizableText,
   Square,
   StackProps,
   Theme,
@@ -17,6 +18,8 @@ import {
   YStack,
   YStackProps,
 } from 'tamagui'
+import Center from './Center'
+import { ImageOff } from '@tamagui/lucide-icons'
 
 export const ItemCard = memo(React.forwardRef(
   (
@@ -24,7 +27,7 @@ export const ItemCard = memo(React.forwardRef(
       topBarProps?: StackProps,
       bottomBarProps?: StackProps,
       bottomBar?: any
-      imageSrc?: string,
+      image?: {src: string, width:number, height: number} | null,
       alt?: number | null
       onHoverSection?: (name: string) => void
       pointerEventsControls?: any
@@ -32,8 +35,9 @@ export const ItemCard = memo(React.forwardRef(
       children?: any,
       topBar?: any,
       topBarOutSideScrollArea?: boolean,
-      containerElement?: any
-    }, ref:any
+      containerElement?: any,
+      hasPicture?: boolean
+    }, ref: any
   ) => {
     const {
       containerElement = YStack,
@@ -44,7 +48,8 @@ export const ItemCard = memo(React.forwardRef(
       topBar,
       children,
       imageProps = {},
-      imageSrc = '',
+      image = null,
+      hasPicture,
       theme,
       alt,
       onHoverSection,
@@ -62,92 +67,94 @@ export const ItemCard = memo(React.forwardRef(
         alignItems="stretch"
       >
         {topBarOutSideScrollArea && topBar ? (
-              <>
-                <XStack
-                  //@ts-ignore
-                  zi={1000}
-                  w="100%"
-                  px="$2"
-                  py="$2"
-                  bc="$backgroundHover"
-                  btrr={18}
-                  btlr={18}
-                  space="$5"
-                  jc="center"
-                  {...topBarProps}
-                >
-                  {topBar}
-                </XStack>
-                {/*@ts-ignore*/}
-                <Separator mb={-1} />
-              </>
-            ) : null}
-          {React.createElement(containerElement as any, {
-            borderWidth: 1,
-            borderColor: "$borderColor",
-            backgroundColor: "$color1",
-            br: "$7",
-            p: 0,
-            ai: "stretch",
-            elevation: "$2",
-            overflow: 'hidden',
-            ...cardProps
-          }, [
-            !topBarOutSideScrollArea && topBar ? (
-              <>
-                <XStack
-                  //@ts-ignore
-                  zi={1000}
-                  w="100%"
-                  px="$2"
-                  py="$2"
-                  bc="$backgroundHover"
-                  btrr={18}
-                  btlr={18}
-                  space="$5"
-                  jc="center"
-                  {...topBarProps}
-                >
-                  {topBar}
-                </XStack>
-                {/*@ts-ignore*/}
-                <Separator mb={-1} />
-              </>
-            ) : null,
-
-            <XStack ai="center" f={1}>
+          <>
+            <XStack
+              //@ts-ignore
+              zi={1000}
+              w="100%"
+              bc="$backgroundHover"
+              btrr={18}
+              btlr={18}
+              jc="center"
+              {...topBarProps}
+            >
+              {topBar}
+            </XStack>
+            {/*@ts-ignore*/}
+            <Separator mb={-1} />
+          </>
+        ) : null}
+        {React.createElement(containerElement as any, {
+          borderWidth: 1,
+          borderColor: "$borderColor",
+          backgroundColor: "$color1",
+          br: "$7",
+          p: 0,
+          ai: "stretch",
+          elevation: "$2",
+          overflow: 'hidden',
+          ...cardProps
+        }, [
+          !topBarOutSideScrollArea && topBar ? (
+            <>
+              <XStack
+                //@ts-ignore
+                zi={1000}
+                w="100%"
+                px="$2"
+                py="$2"
+                bc="$backgroundHover"
+                btrr={18}
+                btlr={18}
+                space="$5"
+                jc="center"
+                {...topBarProps}
+              >
+                {topBar}
+              </XStack>
               {/*@ts-ignore*/}
-              {imageSrc ? <Square pos="relative" ov="hidden" br="$6" size="$8">
-                <Image {...imageProps} source={{ uri: imageSrc, width: 90, height: 90 }} />
-              </Square> : null}
-                {children}
-            </XStack>,
-            bottomBar ? (
-              <>
-                {/*@ts-ignore*/}
-                <Separator mb={-1} />
+              <Separator mb={-1} />
+            </>
+          ) : null,
 
-                <XStack
-                  //@ts-ignore
-                  zi={1000}
-                  w="100%"
-                  px="$2"
-                  py="$2"
-                  bc="$backgroundHover"
-                  bbrr={17}
-                  bblr={17}
-                  ai="center"
-                  space="$5"
-                  jc="center"
-                  pointerEvents={pointerEvents}
-                  {...bottomBarProps}
-                >
-                  {bottomBar}
-                </XStack>
+          <YStack ai="center" f={1}>
+            {/*@ts-ignore*/}
+            {hasPicture ? <Center>
+              {image && image.src ? <Image btrr={20} btlr={20} top={-20} source={{ uri: image.src, width: image.width, height: image.height }} /> :
+                <YStack o={0.2} btrr={20} btlr={20} width={image?.width} height={image?.height} jc="center" ai="center">
+                  <ImageOff />
+                  <SizableText>No photo</SizableText>
+                </YStack>
+              }
+            </Center> : null}
+          </YStack>,
+          children,
+          bottomBar ? (
+            <>
+              {/*@ts-ignore*/}
+              <Separator mb={-1} />
 
-              </>
-            ) : null
-          ])}
+              <XStack
+                //@ts-ignore
+                zi={1000}
+                w="100%"
+                px="$2"
+                py="$2"
+                bc="$backgroundHover"
+                bbrr={17}
+                bblr={17}
+                ai="center"
+                space="$5"
+                jc="center"
+                pointerEvents={pointerEvents}
+                {...bottomBarProps}
+              >
+                {bottomBar}
+              </XStack>
+
+            </>
+          ) : null
+        ])}
       </YStack>
     )
   }

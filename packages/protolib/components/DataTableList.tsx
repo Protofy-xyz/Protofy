@@ -8,7 +8,7 @@ import { CheckCheck, Check } from '@tamagui/lucide-icons'
 import React from "react";
 
 export const DataTableList = () => {
-    const { items, model, selected, setSelected, state, push, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
+    const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
             when: row => selected.includes(model.load(row).getId()),
@@ -65,7 +65,7 @@ export const DataTableList = () => {
                             </Checkbox>
                         </Stack></Theme>, true, '65px'), ...finalColumns]}
                     rows={items?.data?.items}
-                    onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : push('item', model.load(rowData).getId())}
+                    onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}
                 />
             </Tinted>
         </XStack>

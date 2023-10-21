@@ -18,7 +18,7 @@ export default {
                     rowIcon={User}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
-                    numColumnsForm={2}
+                    numColumnsForm={1}
                     name="user"
                     onAdd={data => {
                         if(data.password != data.repassword) {
@@ -48,8 +48,7 @@ export default {
                     model={UserModel} 
                     pageState={pageState}
                     icons={UserIcons}
-                    dataTableCardProps={{itemMinWidth: 380}}
-                    dataTableGridProps={{itemMinWidth: 300}}
+                    dataTableGridProps={{itemMinWidth: 300, spacing:20}}
                 />
             </AdminPage>)
         }, 

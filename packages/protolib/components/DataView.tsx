@@ -22,6 +22,7 @@ type DataViewState = {
     push: Function,
     mergePush: Function,
     removePush: Function,
+    replace: Function,
     tableColumns: any[],
     rowIcon: any,
     sourceUrl: string
@@ -36,6 +37,7 @@ export const DataViewContext = createContext<DataViewState>({
     push: () => null,
     mergePush: () => null,
     removePush: () => null,
+    replace: () => null,
     tableColumns: [],
     rowIcon: null,
     sourceUrl: ""
@@ -68,13 +70,14 @@ export function DataView({
     dataTableListProps = {},
     dataTableGridProps = {},
     extraFieldsForms = {},
-    customFieldsForms = {}
+    customFieldsForms = {},
+    defaultView = 'list'
 }: {openMode: 'edit' | 'view'} & any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
     const [state, setState] = useState(pageState)
-    const { push, mergePush, removePush } = usePageParams(pageState, state, setState)
+    const { push, mergePush, removePush, replace } = usePageParams(pageState, state, setState)
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
     const fetch = async () => {
@@ -107,7 +110,7 @@ export function DataView({
             name: 'grid',
             icon: LayoutGrid,
             component: ObjectGrid,
-            props: {...dataTableGridProps, model, items, sourceUrl, customFields, extraFields, icons, p:"$5", mt:"$5"}
+            props: {model, items, sourceUrl, customFields, extraFields, icons, p:"$5", mt:"$5", ...dataTableGridProps}
         },
         {
             name: 'raw',
@@ -117,11 +120,14 @@ export function DataView({
         }
     ]
     const tableViews = views ?? [...defaultViews, ...extraViews]
-    const activeViewIndex = tableViews.findIndex(v => v.name == state.view) ?? 0
+    console.log('view state:', state.view)
+
+    const activeViewIndex = tableViews.findIndex(v => v.name == state.view) != -1 ? tableViews.findIndex(v => v.name == state.view) : tableViews.findIndex(v => v.name == defaultView)
+
     return (
         <YStack f={1}>
-            <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, tableColumns:columns, rowIcon}}>
-                <ActiveGroup initialState={activeViewIndex}>
+            <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns:columns, rowIcon}}>
+                <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
                     <AlertDialog
                         p={"$2"}
                         pt="$5"

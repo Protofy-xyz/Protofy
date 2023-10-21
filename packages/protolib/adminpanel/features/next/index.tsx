@@ -24,7 +24,7 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       search: context.query.search ?? '',
       orderBy: context.query.orderBy ?? '',
       orderDirection: context.query.orderDirection ?? '',
-      view: context.query.view?? 'list',
+      view: context.query.view?? '',
       item: context.query.item?? '',
       ...(typeof props === "function"? await props() : props),
     }

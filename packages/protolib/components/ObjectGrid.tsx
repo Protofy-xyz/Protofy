@@ -11,6 +11,7 @@ const GridElementCard = ({ index, data, width }) => {
     const element = data.element.data
     const modelItem = data.model.load(element)
     const tint = useTint()
+
     return <ItemCard
         cursor="pointer"
         topBarOutSideScrollArea={false}
@@ -20,9 +21,13 @@ const GridElementCard = ({ index, data, width }) => {
         borderWidth={1}
         pointerEvents='none'
         pointerEventsControls="none"
-
+        onPress={() => {}}
+        {...(data.getPicture ? { 
+            image: data.getPicture(element, width),
+            hasPicture: true
+        }:{})}
     >
-        <Stack mx={"$7"} mb={"$4"} key={element.key} width={width}>
+        <Stack mb={"$4"} key={element.key} width={width}>
             <EditableObject
                 title={''}
                 initialData={data.element}
@@ -36,14 +41,14 @@ const GridElementCard = ({ index, data, width }) => {
                 extraFields={data.extraFields}
                 icons={data.icons}
                 customFields={data.customFields}
-                columnWidth={data.itemMinWidth}
-                
+                columnWidth={width-data.contentMargin}
+                columnMargin={0}
             />
         </Stack>
     </ItemCard>
 }
 
-export const ObjectGrid = ({itemMinWidth=400, spacing=20, model, items, sourceUrl, customFields, extraFields, icons, ...props}: any & StackProps) => {
+export const ObjectGrid = ({itemMinWidth=400, contentMargin=40, spacing=20, getPicture, model, items, sourceUrl, customFields, extraFields, icons, ...props}: any & StackProps) => {
     const data = items?.data?.items?.map((element, i) => {
         return {
             id: 'item_'+i,
@@ -53,7 +58,10 @@ export const ObjectGrid = ({itemMinWidth=400, spacing=20, model, items, sourceUr
             customFields, 
             extraFields,
             icons,
-            itemMinWidth
+            itemMinWidth,
+            getPicture,
+            spacing,
+            contentMargin
         }
     })
 
