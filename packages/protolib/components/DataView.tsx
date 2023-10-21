@@ -61,7 +61,9 @@ export function DataView({
     extraViews = [],
     openMode = 'edit',
     disableToggleMode,
-    customFields = {}
+    customFields = {},
+    dataTableCardProps = {},
+    dataTableListProps = {}
 }: {openMode: 'edit' | 'view'} & any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
@@ -94,12 +96,14 @@ export function DataView({
         {
             name: 'list',
             icon: List,
-            component: DataTableList
+            component: DataTableList,
+            props: dataTableListProps
         },
         {
             name: 'raw',
             icon: LayoutGrid,
-            component: DataTableCard
+            component: DataTableCard,
+            props: dataTableCardProps
         }
     ]
     const tableViews = views ?? [...defaultViews, ...extraViews]
@@ -243,7 +247,7 @@ export function DataView({
                             <Scrollbars universal={true} height={"100%"} >
                                 {
                                     tableViews.map((v, index) => <ActiveRender key={index} activeId={index}>
-                                        {React.createElement(v.component, {})}
+                                        {React.createElement(v.component, {...v.props} ?? {})}
                                     </ActiveRender>
                                     )}
                             </Scrollbars>

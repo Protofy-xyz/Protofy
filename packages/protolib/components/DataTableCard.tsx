@@ -12,10 +12,9 @@ const GridElementCard = ({ index, data, width }) => {
     <DataCard
         compact={true}
         innerContainerProps={{
-            maxWidth: 600,
-            $md: { maxWidth: 450 },
-            $sm: { minWidth: 'calc(100vw - 65px)', maxWidth: 'calc(100vw - 65px)' },
-            minWidth: 350
+            mb:"$3",
+            mt:"$5",
+            mx:"$3",
         }}
         // onDelete={onDelete}
         // onSave={(content) => onSave(content, element.key)}
@@ -26,7 +25,7 @@ const GridElementCard = ({ index, data, width }) => {
 </Stack>
 }
 
-export const DataTableCard = ({ }) => {
+export const DataTableCard = ({itemMinWidth=400, spacing=0}) => {
     const { items, model } = useContext(DataViewContext);
 
     const data = items?.data?.items?.map((element, i) => {
@@ -37,5 +36,5 @@ export const DataTableCard = ({ }) => {
         }
     })
 
-    return <Grid spacing={15} data={data} card={GridElementCard} itemMinWidth={400} columns={2}/>
+    return <Grid spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
 }

@@ -18,23 +18,17 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={2}
                     name="group"
-                    onAdd={data => {
-                        return data
-                    }}
-                    onEdit={data => {
-                        return data;
-                    }}
-
                     columns={DataTable2.columns(
                     )}
                     model={GroupModel} 
                     pageState={pageState}
                     icons={GroupIcons}
+                    dataTableCardProps={{itemMinWidth: 300}}
                 />
             </AdminPage>)
         }, 
         getServerSideProps: PaginatedDataSSR('/adminapi/v1/groups', ['admin'],{
-            view: 'cards'
+            view: 'raw'
         })
     }
 }

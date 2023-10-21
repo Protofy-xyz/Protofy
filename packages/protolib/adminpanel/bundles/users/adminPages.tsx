@@ -48,6 +48,7 @@ export default {
                     model={UserModel} 
                     pageState={pageState}
                     icons={UserIcons}
+                    dataTableCardProps={{itemMinWidth: 380}}
                 />
             </AdminPage>)
         }, 
