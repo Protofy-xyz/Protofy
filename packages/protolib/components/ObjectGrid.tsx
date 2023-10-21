@@ -5,17 +5,18 @@ import {getPendingResult} from '../lib/createApiAtom'
 import { ItemCard } from "./ItemCard";
 import { useTint } from "@tamagui/logo";
 import { useMemo } from "react";
+import {Tinted} from './Tinted'
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element.data
     const modelItem = data.model.load(element)
-
+    const tint = useTint()
     return <ItemCard
         cursor="pointer"
         topBarOutSideScrollArea={false}
         backgroundColor={"$color1"}
         elevation={"$0"}
-        hoverStyle={{elevation:"$3"}}
+        hoverStyle={{backgroundColor: '$'+tint.tint+'1',elevation:"$3"}}
         borderWidth={1}
         pointerEvents='none'
         pointerEventsControls="none"
