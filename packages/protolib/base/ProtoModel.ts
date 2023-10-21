@@ -44,7 +44,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         if(search) {
             const searchFields = this.objectSchema.is('search').getFields()
             for(var i=0;i<searchFields.length;i++) {
-                if((this.data[searchFields[i]]+"").includes(search)) {
+                if(((this.data[searchFields[i]]+"").toLowerCase()).includes(search.toLowerCase())) {
                     return this.read();
                 }
             }
