@@ -89,8 +89,8 @@ const Subtabs = ({ subtabs }: any) => {
     return (
         <>
             {subtabs.map((subtab, index) => {
-                if (subtab.type == 'create') return <CreateDialog subtab={subtab} />
-                return <Link href={subtab.href}>
+                if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
+                return <Link href={subtab.href} key={index}>
                     <Tinted>
                         <PanelMenuItem
                             selected={router.asPath.startsWith(subtab.href.replace(/\/$/, ''))}

@@ -97,7 +97,7 @@ export function DataView({
             component: DataTableList
         },
         {
-            name: 'cards',
+            name: 'raw',
             icon: LayoutGrid,
             component: DataTableCard
         }
