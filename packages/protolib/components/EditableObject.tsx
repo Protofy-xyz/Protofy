@@ -1,7 +1,7 @@
 import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText, StackProps, Accordion, Square, Spacer } from "tamagui";
 import { Pencil, Tag, ChevronDown, X, Tags, List, ListOrdered } from '@tamagui/lucide-icons';
 import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog } from 'protolib'
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { getErrorMessage } from "@my/ui";
 import { ProtoSchema } from "protolib/base";
 import { Schema } from "../base";
@@ -13,7 +13,7 @@ type EditableObjectProps = {
     sourceUrl: string,
     onSave: Function,
     model: any,
-    mode: 'add' | 'edit' | 'view',
+    mode: 'add' | 'edit' | 'view' | 'preview',
     icons?: any,
     extraFields?: any,
     numColumns?: number,
@@ -24,12 +24,13 @@ type EditableObjectProps = {
     loadingTop?: number,
     spinnerSize?: number,
     name?: string,
-    customFields?: any
+    customFields?: any,
+    columnWidth?:number,
+    disableToggleMode?:boolean,
+    columnMargin?: number
 }
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
-const columnWidth = 350
-const columnMargin = 30
 const iconStyle = { color: "var(--color9)", size: "$1", strokeWidth: 1 }
 
 const FormElement = ({ ele, i, icon, children, inArray=false }) => {
@@ -129,13 +130,13 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         if(comp) return !customField.hideLabel ? <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>{comp}</FormElement> : comp
     }
 
-    if (elementType == 'ZodUnion') {
+    if (elementType == 'ZodUnion' && mode != 'preview') {
         const _rawOptions = elementDef.options.map(o => o._def.value)
         const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <SelectList f={1} title={ele.name} elements={options} value={getFormData(ele.name)} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
         </FormElement>
-    } else if (elementType == 'ZodNumber') {
+    } else if (elementType == 'ZodNumber' && mode != 'preview') {
         if (elementDef.checks) {
             const min = elementDef.checks.find(c => c.kind == 'min')
             const max = elementDef.checks.find(c => c.kind == 'max')
@@ -187,7 +188,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
             <Input
                 {...(mode != 'edit' && mode != 'add' ? {bw:0, forceStyle:"hover"}:{})}
                 focusStyle={{outlineWidth: 1 }}
-                disabled={(mode == 'view' || (mode == 'edit' && ele._def.static))}
+                disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static))}
                 secureTextEntry={ele._def.secret}
                 value={getFormData(ele.name)}
                 onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
@@ -201,6 +202,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                         }
                     }
                 }}
+                bc="$backgroundTransparent"
             >
             </Input>
         </Stack>
@@ -214,12 +216,12 @@ const GridElement = ({ index, data, width }) => {
     const realSize = data.ele._def.size || 1
     // console.log('colwidth: ', colWidth, realSize, columnMargin/Math.max(1,((colWidth*2)-(realSize*2))))
     
-    return <XStack f={1} width={(width*realSize)+((realSize-1)*(columnMargin/realSize))} key={data.x} mb={'$0'}>
+    return <XStack f={1} width={(width*realSize)+((realSize-1)*(data.columnMargin/realSize))} key={data.x} mb={'$0'}>
         {getElement(data.ele, data.icon, data.i, data.x, data.data, data.setData, data.mode, data.customFields)}
     </XStack>
 }
 
-export const EditableObject = ({ disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, customFields={},...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({columnMargin=30, columnWidth=350, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl=null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, customFields={},...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [data, setData] = useState({})
@@ -228,11 +230,13 @@ export const EditableObject = ({ disableToggleMode, name, initialData, loadingTo
     const [dialogOpen, setDialogOpen] = useState(false)
     const [edited, setEdited] = useState(false)
     const [ready, setReady] = useState(false)
+    
     usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialData)
     
     useEffect(() => { if(originalData.data) {
         setData(originalData.data) 
     }}, [originalData])
+    
     useUpdateEffect(() => setCurrentMode(mode), [mode])
 
     useUpdateEffect(() => {
@@ -243,33 +247,40 @@ export const EditableObject = ({ disableToggleMode, name, initialData, loadingTo
         }
     }, [data])
 
-    const elementObj = model.load(data)
+    const getGroups = () => {
+        const elementObj = model.load(data)
 
-    const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
-    const formFields = elementObj.getObjectSchema().is('display').merge(extraFieldsObject).getLayout(1)
-
-
-    const groups = {}
-    formFields.forEach((row, x) => row.forEach((ele, i) => {
-        const icon = icons[ele.name] ? icons[ele.name] : (currentMode == 'edit' || currentMode == 'add' ? Pencil : Tag)
-        const groupId = ele._def.group ?? 0
-        if(!groups.hasOwnProperty(groupId)) {
-            groups[groupId] = []
-        }
-        groups[groupId].push({
-            id: x+'_'+i,
-            icon: icon, 
-            i: i,
-            x: x,
-            ele: ele,
-            data,
-            setData,
-            mode: currentMode,
-            size: ele._def.size ?? 1,
-            numColumns: numColumns,
-            customFields
-        })
-    }))
+        const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
+        const formFields = elementObj.getObjectSchema().is('display').merge(extraFieldsObject).getLayout(1)
+        const groups = {}
+        formFields.forEach((row, x) => row.forEach((ele, i) => {
+            const icon = icons[ele.name] ? icons[ele.name] : (currentMode == 'edit' || currentMode == 'add' ? Pencil : Tag)
+            const groupId = ele._def.group ?? 0
+            if(!groups.hasOwnProperty(groupId)) {
+                groups[groupId] = []
+            }
+            groups[groupId].push({
+                id: x+'_'+i,
+                icon: icon, 
+                i: i,
+                x: x,
+                ele: ele,
+                data,
+                setData,
+                mode: currentMode,
+                size: ele._def.size ?? 1,
+                numColumns: numColumns,
+                customFields,
+                columnMargin: columnMargin
+            })
+        }))
+        return groups
+    }
+    const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode])
+    
+    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <YStack mt={i?"$5":"$0"} width={columnWidth*(numColumns)+columnMargin} f={1}>
+        <Grid spacing={columnMargin/2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
+    </YStack>), [columnMargin, groups, columnWidth, numColumns])
 
     const { tint } = useTint()
 
@@ -295,7 +306,7 @@ export const EditableObject = ({ disableToggleMode, name, initialData, loadingTo
         <AsyncView forceLoad={currentMode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={originalData}>
             <XStack>
                 <XStack f={1}>
-                {title ?? <Dialog.Title><Text><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text></Dialog.Title>}
+                {title ?? <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>}
                 </XStack>
                 {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{o:0.8}} onPress={async () => {
                     if(currentMode == 'edit' && edited) {
@@ -309,19 +320,16 @@ export const EditableObject = ({ disableToggleMode, name, initialData, loadingTo
                     </Tinted>
                 </XStack>}
             </XStack>
-
             <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
                 {error && (
                     <Notice>
                         <Paragraph>{getErrorMessage(error.error)}</Paragraph>
                     </Notice>
                 )}
-                
-                {Object.keys(groups).map((k, i) => <YStack mt={i?"$5":"$0"} width={columnWidth*(numColumns)+30} f={1}>
-                    <Grid spacing={columnMargin/2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
-                </YStack>)}
 
-                <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
+                {gridView}
+
+                {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
                 {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
                         <Button f={1} onPress={async () => {
                             console.log('final data: ', data)
@@ -337,7 +345,7 @@ export const EditableObject = ({ disableToggleMode, name, initialData, loadingTo
                             {loading ? <Spinner /> : currentMode == 'add' ? 'Create' : 'Save'}
                         </Button>
                     </Tinted>}
-                </YStack> 
+                </YStack>}
             </YStack>
         </AsyncView>
     </Stack>

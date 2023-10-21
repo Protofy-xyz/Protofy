@@ -103,7 +103,7 @@ export class ProtoSchema {
     isAfter(afterField: string) {
         const validFields = {}
         Object.keys(this.shape).forEach((field) => {
-            if (this.shape[field]._def.after && this.shape[field]._def.after == afterField) {
+            if (this.shape[field]._def?.after && this.shape[field]._def.after == afterField) {
                 validFields[field] = this.shape[field]
             }
         })
@@ -113,7 +113,7 @@ export class ProtoSchema {
     isBefore(beforeField: string) {
         const validFields = {}
         Object.keys(this.shape).forEach((field) => {
-            if (this.shape[field]._def.before && this.shape[field]._def.before == beforeField) {
+            if (this.shape[field]._def?.before && this.shape[field]._def.before == beforeField) {
                 validFields[field] = this.shape[field]
             }
         })

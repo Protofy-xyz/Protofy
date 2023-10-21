@@ -57,7 +57,6 @@ export const Grid = React.forwardRef(({masonry=true, spacing, children, data, ca
 
     return <XStack flexWrap='wrap'>
       {data.map(ele => {
-        console.log('eeleeee', ele)
         return React.createElement(card, {index: ele.index, data: {...ele}, width: itemMinWidth})
       })}
     </XStack>

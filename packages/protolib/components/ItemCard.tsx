@@ -36,7 +36,7 @@ export const ItemCard = memo(React.forwardRef(
     }, ref:any
   ) => {
     const {
-      containerElement = ScrollView,
+      containerElement = YStack,
       topBarOutSideScrollArea = false,
       bottomBarProps = {},
       bottomBar,
@@ -61,8 +61,6 @@ export const ItemCard = memo(React.forwardRef(
         display="flex"
         alignItems="stretch"
       >
-        <Theme name={tint}>
-          
         {topBarOutSideScrollArea && topBar ? (
               <>
                 <XStack
@@ -150,7 +148,6 @@ export const ItemCard = memo(React.forwardRef(
               </>
             ) : null
           ])}
-        </Theme>
       </YStack>
     )
   }

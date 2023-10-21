@@ -1,7 +1,7 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView } from 'tamagui'
-import { DataTableCard, PendingAtomResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Layers } from '@tamagui/lucide-icons'
 import { z } from "zod";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
@@ -23,7 +23,8 @@ type DataViewState = {
     mergePush: Function,
     removePush: Function,
     tableColumns: any[],
-    rowIcon: any
+    rowIcon: any,
+    sourceUrl: string
 }
 export const DataViewContext = createContext<DataViewState>({
     items: getPendingResult('pending'),
@@ -36,7 +37,8 @@ export const DataViewContext = createContext<DataViewState>({
     mergePush: () => null,
     removePush: () => null,
     tableColumns: [],
-    rowIcon: null
+    rowIcon: null,
+    sourceUrl: ""
 });
 
 export function DataView({
@@ -62,8 +64,11 @@ export function DataView({
     openMode = 'edit',
     disableToggleMode,
     customFields = {},
-    dataTableCardProps = {},
-    dataTableListProps = {}
+    dataTableRawProps = {},
+    dataTableListProps = {},
+    dataTableGridProps = {},
+    extraFieldsForms = {},
+    customFieldsForms = {}
 }: {openMode: 'edit' | 'view'} & any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
@@ -73,7 +78,8 @@ export function DataView({
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
     const fetch = async () => {
-        API.get({ url: sourceUrl, ...state }, setItems)
+        const data = await API.get({ url: sourceUrl, ...state })
+        setItems(data)
     }
 
     usePendingEffect((s) => { API.get({ url: sourceUrl, ...pageState }, s) }, setItems, initialItems)
@@ -84,9 +90,7 @@ export function DataView({
         }
     }, [items])
 
-    useUpdateEffect(() => {
-        fetch();
-    }, [state])
+    useUpdateEffect(() => {fetch()}, [state])
 
     const onSearch = async (text) => push("search", text, false)
     const onCancelSearch = async () => setCurrentItems(items)
@@ -100,17 +104,23 @@ export function DataView({
             props: dataTableListProps
         },
         {
-            name: 'raw',
+            name: 'grid',
             icon: LayoutGrid,
+            component: ObjectGrid,
+            props: {...dataTableGridProps, model, items, sourceUrl, customFields, extraFields, icons, p:"$5", mt:"$5"}
+        },
+        {
+            name: 'raw',
+            icon: Layers,
             component: DataTableCard,
-            props: dataTableCardProps
+            props: dataTableRawProps
         }
     ]
     const tableViews = views ?? [...defaultViews, ...extraViews]
     const activeViewIndex = tableViews.findIndex(v => v.name == state.view) ?? 0
     return (
         <YStack f={1}>
-            <DataViewContext.Provider value={{ items: currentItems, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, tableColumns:columns, rowIcon}}>
+            <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, tableColumns:columns, rowIcon}}>
                 <ActiveGroup initialState={activeViewIndex}>
                     <AlertDialog
                         p={"$2"}
@@ -144,9 +154,9 @@ export function DataView({
                                         }
                                     }}
                                     model={model}
-                                    extraFields={extraFields}
+                                    extraFields={{...extraFields, ...extraFieldsForms}}
                                     icons={icons}
-                                    customFields={customFields}
+                                    customFields={{...customFields, ...customFieldsForms}}
                                 /></XStack>
                             </ScrollView>
                         </YStack>
@@ -198,9 +208,9 @@ export function DataView({
                                             }
                                         }}
                                         model={model}
-                                        extraFields={extraFields}
+                                        extraFields={{...extraFields, ...extraFieldsForms}}
                                         icons={icons}
-                                        customFields={customFields}
+                                        customFields={{...customFields, customFieldsForms}}
                                     />
                                 </Stack>
                             </ScrollView>

@@ -42,13 +42,14 @@ export default {
                         DataTable2.column("created", "createdAt", true, row => moment(row.createdAt).format(format)),
                         DataTable2.column("last login", "lastLogin",true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'NEVER'} color={'$yellow6'} /> )
                     )}
-                    extraFields={{ 
+                    extraFieldsForms={{ 
                         repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret().display()
                     }}
                     model={UserModel} 
                     pageState={pageState}
                     icons={UserIcons}
                     dataTableCardProps={{itemMinWidth: 380}}
+                    dataTableGridProps={{itemMinWidth: 300}}
                 />
             </AdminPage>)
         }, 
