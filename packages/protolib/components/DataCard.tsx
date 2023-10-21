@@ -1,7 +1,7 @@
 import { Theme, XStack, Paragraph, Stack, Spinner, Text, Dialog, Button, Popover, YStack } from 'tamagui'
 import { useTint } from '@tamagui/logo'
 import { Check, FileEdit, X, Trash2 } from '@tamagui/lucide-icons'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ItemCard } from './ItemCard'
 import JSONViewer from './jsonui/JSONViewer'
 import { getPendingResult } from '../lib/createApiAtom'
@@ -32,6 +32,19 @@ export const DataCard = React.forwardRef(({ compact=false, innerContainerProps =
     const onJsonUpdate = (obj) => {
         setContent(obj)
     }
+
+    const memoizedJSONViewer = useMemo(() => {
+        return (
+            <JSONViewer
+                compact={compact}
+                key={childKey}
+                onChange={onJsonUpdate}
+                editable={editable}
+                data={content}
+                collapsible
+            />
+        );
+    }, [compact, childKey, onJsonUpdate, editable, content]);
 
     return (
         <Stack ref={ref} {...props}>
@@ -99,8 +112,7 @@ export const DataCard = React.forwardRef(({ compact=false, innerContainerProps =
                             {loadingState?.isLoading ?
                                 <Spinner /> :
                                 loadingState?.isError ?
-                                    <Text>ERROR</Text> :
-                                    <JSONViewer compact={compact} key={childKey} onChange={onJsonUpdate} editable={editable} data={content} collapsible />
+                                    <Text>ERROR</Text> : memoizedJSONViewer
                             }
                         </XStack>
                     </Theme>

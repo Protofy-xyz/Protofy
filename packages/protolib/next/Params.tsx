@@ -14,14 +14,14 @@ export const usePageParams = (initialState, state, setState) => {
     }, [query])
 
     return {
-        push:(key, value) => {
+        push:(key, value, shallow=true) => {
             push({
                 query: {
                     ...query,
                     ...state,
                     [key]: value
                 }
-            }, undefined, { shallow: true })
+            }, undefined, { shallow: shallow })
         },
     
         mergePush: (obj) => {

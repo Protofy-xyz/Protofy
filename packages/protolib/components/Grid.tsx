@@ -19,39 +19,49 @@ export type GridProps = {
   columns?: number
   data?:any
   card: any,
-  spacing?:number
+  spacing?:number,
+  masonry?:boolean
 }
 
-export const Grid = React.forwardRef(({ spacing, children, data, card, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {
+export const Grid = React.forwardRef(({masonry=true, spacing, children, data, card, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {
   if (isWeb && data && card) {
+    if(masonry) {
+      const containerRef = React.useRef(null);
+      const windowSize = useWindowSize();
+      const { offset, width } = useContainerPosition(containerRef, [
+        windowSize.width,
+        windowSize.height
+      ]);
+      const { scrollTop, isScrolling } = useScroller(offset);
+      const positioner = usePositioner(
+        { width, columnGutter: spacing, columnWidth: itemMinWidth },
+        [data.length]
+      );
+      const resizeObserver = useResizeObserver(positioner);
+  
+      return (
+        // <Masonry positioner={positioner} resizeObservercolumnGutter={spacing} columnWidth={itemMinWidth} items={data} render={card} />
+        useMasonry({
+          positioner,
+          scrollTop,
+          isScrolling,
+          height: windowSize.height,
+          containerRef,
+          items: data,
+          // overscanBy: 5,
+          resizeObserver,
+          render: card
+        })
+      )
+    } 
 
-    const containerRef = React.useRef(null);
-    const windowSize = useWindowSize();
-    const { offset, width } = useContainerPosition(containerRef, [
-      windowSize.width,
-      windowSize.height
-    ]);
-    const { scrollTop, isScrolling } = useScroller(offset);
-    const positioner = usePositioner(
-      { width, columnGutter: spacing, columnWidth: itemMinWidth },
-      [data.length]
-    );
-    const resizeObserver = useResizeObserver(positioner);
+    return <XStack flexWrap='wrap'>
+      {data.map(ele => {
+        console.log('eeleeee', ele)
+        return React.createElement(card, {index: ele.index, data: {...ele}, width: itemMinWidth})
+      })}
+    </XStack>
 
-    return (
-      // <Masonry positioner={positioner} resizeObservercolumnGutter={spacing} columnWidth={itemMinWidth} items={data} render={card} />
-      useMasonry({
-        positioner,
-        scrollTop,
-        isScrolling,
-        height: windowSize.height,
-        containerRef,
-        items: data,
-        overscanBy: 5,
-        resizeObserver,
-        render: card
-      })
-    )
   } else if (isWeb) {
     return (
       <div

@@ -88,7 +88,7 @@ export function DataView({
         fetch();
     }, [state])
 
-    const onSearch = async (text) => push("search", text)
+    const onSearch = async (text) => push("search", text, false)
     const onCancelSearch = async () => setCurrentItems(items)
     const toast = useToastController()
 
