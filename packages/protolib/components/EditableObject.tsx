@@ -49,7 +49,7 @@ const FormElement = ({ ele, i, icon, children, inArray = false }) => {
 const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
     const [opened, setOpened] = useState([])
 
-    return <Accordion onPress={(e)=>e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
+    return <Accordion onPress={(e) => e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
         <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} bc="$transparent" value={"item-"}>
             <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between" bc="$transparent">
                 {({ open }) => (
@@ -189,9 +189,35 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
         return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
     } else if (elementType == 'ZodRecord') {
+        const recordData = getFormData(ele.name)
         return <Accordion type="multiple" br="$5" boc={"$gray6"} f={1}>
             <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
+                <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
+                    {({ open }) => (
+                        <>
+                            <Tinted><List {...iconStyle} /></Tinted>
+                            <Paragraph fontWeight={"bold"}>{inArray ? arrayName + ' #' + (ele.name + 1) : ele.name}</Paragraph>
+                            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+                                <ChevronDown size="$1" />
+                            </Square>
+                        </>
+                    )}
+                </Accordion.Trigger>
+                <Accordion.Content br="$5">
+                <Stack>
+                    {recordData?Object.keys(recordData).map((key, i) => {
+                        return <XStack key={i} ml="$1">
+                            {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
+                            {getElement({...elementDef.valueType, name: key }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}
+                        </XStack>
+                    }):null}
+                </Stack>
+                {/* {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
+                    setFormData(ele.name, [...arrData, {}])
+                    setOpened([...opened, 'item-' + arrData.length])
+                }}>Add{ele.name}</Button>} */}
 
+                </Accordion.Content>
             </Accordion.Item>
         </Accordion>
     }
@@ -293,9 +319,9 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
         return groups
     }
     const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode])
-    
-    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <YStack ref={containerRef} mt={i?"$0":"$0"} width={columnWidth*(numColumns)+columnMargin} f={1}>
-        <Grid masonry={false} containerRef={containerRef} spacing={columnMargin/2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
+
+    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <YStack ref={containerRef} mt={i ? "$0" : "$0"} width={columnWidth * (numColumns) + columnMargin} f={1}>
+        <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>), [columnMargin, groups, columnWidth, numColumns])
 
     const { tint } = useTint()
