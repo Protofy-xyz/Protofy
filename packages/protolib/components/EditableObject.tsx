@@ -49,7 +49,11 @@ const FormElement = ({ ele, i, icon, children, inArray = false }) => {
 const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
     const [opened, setOpened] = useState([])
 
+<<<<<<< HEAD
     return <Accordion onPress={(e) => e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
+=======
+    return <Accordion onPress={(e)=>e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" boc={"$gray6"} f={1}>
+>>>>>>> 6e0073cb9a505df01f48ff84b390b9b733f0afe6
         <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} bc="$transparent" value={"item-"}>
             <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between" bc="$transparent">
                 {({ open }) => (
@@ -141,7 +145,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const _rawOptions = elementDef.options.map(o => o._def.value)
         const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-            <SelectList f={1} title={ele.name} elements={options} value={getFormData(ele.name)} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+            <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
         </FormElement>
     } else if (elementType == 'ZodNumber' && mode != 'preview') {
         if (elementDef.checks) {
