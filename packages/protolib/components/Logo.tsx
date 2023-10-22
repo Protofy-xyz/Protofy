@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
 import { Circle, XStack, XStackProps, Text, Paragraph } from 'tamagui'
 
-import { useTint } from '@tamagui/logo'
+import { useTint } from 'protolib'
 
 export const Logo = React.forwardRef(
   ({

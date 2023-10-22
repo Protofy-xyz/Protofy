@@ -1,4 +1,4 @@
-import { ThemeTintAlt } from '@tamagui/logo'
+import { ThemeTintAlt } from 'protolib'
 import Link from 'next/link'
 import {
   Button,

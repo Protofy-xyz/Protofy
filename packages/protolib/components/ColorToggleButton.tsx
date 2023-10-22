@@ -1,4 +1,4 @@
-import { useTint } from '@tamagui/logo'
+import { useTint } from 'protolib'
 import { Button, ButtonProps, Circle, Stack, TooltipSimple } from 'tamagui'
 import React from 'react'
 

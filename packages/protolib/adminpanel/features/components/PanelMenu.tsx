@@ -141,7 +141,7 @@ const Tabs = ({ tabs }: any) => {
 
 export const PanelMenu = () => {
     const [workspace] = useAtom(workspaceAtom)
-    return (<YStack mx={"$4"} pt="$6">
+    return (<YStack pt="$6">
         <Tabs tabs={workspace.data?.menu} />
     </YStack>)
 }

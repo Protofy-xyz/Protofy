@@ -6,7 +6,7 @@ import { getErrorMessage } from "@my/ui";
 import { ProtoSchema } from "protolib/base";
 import { Schema } from "../base";
 import { useUpdateEffect } from "usehooks-ts";
-import { useTint } from '@tamagui/logo'
+import { useTint } from 'protolib'
 
 type EditableObjectProps = {
     initialData?: any,

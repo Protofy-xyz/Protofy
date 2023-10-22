@@ -1,11 +1,10 @@
-import { getIntent, IconContainer, DataCard, Center, getPendingResult, PendingAtomResult, Monaco, API } from 'protolib'
+import { getIntent, IconContainer, DataCard, Center, getPendingResult, PendingAtomResult, Monaco, API, useTint} from 'protolib'
 import { H2, H3, H4, Image, Paragraph, ScrollView, Spinner, Stack, Theme, XStack, YStack, YStackProps } from '@my/ui'
 import React, { useEffect, useState } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { lookup } from 'mrmime';
 import { Save, X, XCircle } from '@tamagui/lucide-icons';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import { useTint } from '@tamagui/logo'
 import { ChonkyActions } from 'chonky';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';

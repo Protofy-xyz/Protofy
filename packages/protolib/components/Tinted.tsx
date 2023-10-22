@@ -1,4 +1,4 @@
-import { useTint } from "@tamagui/logo";
+import { useTint } from "protolib";
 import React from "react"
 import { Theme } from "tamagui";
 export const Tinted = React.forwardRef((props: any, ref: any) => {
