@@ -1,11 +1,11 @@
 import { isWeb } from '@tamagui/core'
 import { XStack } from '@tamagui/stacks'
-import React from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Center from './Center'
-import { Spinner } from 'tamagui'
-import { useContainerPosition, useMasonry, usePositioner, useResizeObserver, useScroller } from 'masonic'
-import { useWindowSize } from 'usehooks-ts'
+import { Spinner, Stack } from 'tamagui'
+import { useContainerPosition, useMasonry, usePositioner, useResizeObserver } from 'masonic'
+import { useTimeout, useWindowSize } from 'usehooks-ts'
 import { Masonry } from 'masonic'
 // const Masonry = dynamic(() => import('masonic').then(mod => mod.Masonry), {
 //   ssr: false,
@@ -20,45 +20,125 @@ export type GridProps = {
   data?:any
   card: any,
   spacing?:number,
-  masonry?:boolean
+  masonry?:boolean,
+  containerRef?: any,
+  rightGap?: number
 }
 
-export const Grid = React.forwardRef(({masonry=true, spacing, children, data, card, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {
+const defaultSize = {width: 0, height: 0}
+export const useSize = <T extends HTMLElement = HTMLElement>(
+  ref: React.MutableRefObject<T | null>,
+  deps: any[] = []
+): {width: number; height: number} => {
+  const [size, setSize] = useState<{width: number; height: number}>(defaultSize)
+
+  useLayoutEffect(() => {
+    const {current} = ref
+
+    if (current) {
+      const handleResize = () => {
+        const computedStyle = getComputedStyle(current)
+        const float = parseFloat
+        const width =
+          current.clientWidth -
+          float(computedStyle.paddingTop) -
+          float(computedStyle.paddingBottom)
+        const height =
+          current.clientHeight -
+          float(computedStyle.paddingLeft) -
+          float(computedStyle.paddingRight)
+        setSize({height, width})
+      }
+
+      handleResize()
+      window.addEventListener('resize', handleResize)
+      window.addEventListener('orientationchange', handleResize)
+      return () => {
+        window.removeEventListener('resize', handleResize)
+        window.removeEventListener('orientationchange', handleResize)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps.concat(ref.current))
+
+  return size
+}
+
+export const useScroller = <T extends HTMLElement = HTMLElement>(
+  ref: React.MutableRefObject<T | null>
+): {scrollTop: number; isScrolling: boolean} => {
+  const [isScrolling, setIsScrolling] = useState(false)
+  const [scrollTop, setScrollTop] = useState(0)
+
+  useLayoutEffect(() => {
+    const {current} = ref
+    let tick: number | undefined
+
+    if (current) {
+      const scrollAbleNode = current
+      const handleScroll = () => {
+        if (tick) return
+        tick = window.requestAnimationFrame(() => {
+          setScrollTop(scrollAbleNode.scrollTop)
+          tick = void 0
+        })
+      }
+      console.log('scrollAbleNode: ', scrollAbleNode)
+      scrollAbleNode.addEventListener('scroll', handleScroll)
+      return () => {
+        scrollAbleNode.removeEventListener('scroll', handleScroll)
+        if (tick) window.cancelAnimationFrame(tick)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref.current])
+
+  useLayoutEffect(() => {
+    setIsScrolling(true)
+    const to = window.setTimeout(() => {
+      // This is here to prevent premature bail outs while maintaining high resolution
+      // unsets. Without it there will always bee a lot of unnecessary DOM writes to style.
+      setIsScrolling(false)
+    }, 1000 / 6)
+    return () => window.clearTimeout(to)
+  }, [scrollTop])
+
+  return {scrollTop, isScrolling}
+}
+
+
+export const Grid = React.forwardRef(({masonry=true, containerRef, rightGap=0, spacing, children, data, card, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {  
   if (isWeb && data && card) {
-    if(masonry) {
-      const containerRef = React.useRef(null);
-      const windowSize = useWindowSize();
-      const { offset, width } = useContainerPosition(containerRef, [
-        windowSize.width,
-        windowSize.height
-      ]);
-      const { scrollTop, isScrolling } = useScroller(offset);
+    if(masonry && containerRef) {
+      const container = {current: containerRef.current?.container? containerRef?.current?.container.firstChild: containerRef.current}
+      const { width, height } = useSize(container);
+      const { scrollTop, isScrolling } = useScroller(container);
       const positioner = usePositioner(
-        { width, columnGutter: spacing, columnWidth: itemMinWidth },
-        [data.length]
+        { width:Math.max(0,width-rightGap), columnGutter: spacing, columnWidth: itemMinWidth }
       );
       const resizeObserver = useResizeObserver(positioner);
-  
       return (
-        // <Masonry positioner={positioner} resizeObservercolumnGutter={spacing} columnWidth={itemMinWidth} items={data} render={card} />
-        useMasonry({
-          positioner,
-          scrollTop,
-          isScrolling,
-          height: windowSize.height,
-          containerRef,
-          items: data,
-          // overscanBy: 5,
-          resizeObserver,
-          render: card
-        })
+        useMasonry(
+          {
+            positioner,
+            scrollTop,
+            isScrolling,
+            height:height,
+            items: data,
+            overscanBy: 5,
+            resizeObserver,
+            render: card
+          }
+        )
       )
     } 
 
     return <XStack flexWrap='wrap'>
-      {data.map(ele => {
-        return React.createElement(card, {index: ele.index, data: {...ele}, width: itemMinWidth})
-      })}
+      {
+        data.map(ele => {
+          return <Stack m={spacing/2}> { React.createElement(card, {index: ele.index, data: {...ele}, width: itemMinWidth}) } </Stack>
+        })
+      }
     </XStack>
 
   } else if (isWeb) {

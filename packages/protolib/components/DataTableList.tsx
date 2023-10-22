@@ -6,6 +6,7 @@ import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
 import { CheckCheck, Check } from '@tamagui/lucide-icons'
 import React from "react";
+import Scrollbars from "react-custom-scrollbars-2";
 
 export const DataTableList = () => {
     const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
@@ -28,7 +29,8 @@ export const DataTableList = () => {
     const cols = tableColumns ?? DataTable2.columns(...(Object.keys(fields.shape).filter(key => validTypes.includes(fields.shape[key]._def?.typeName)).map(key => DataTable2.column(fields.shape[key]._def?.label ?? key, key, true))))
     const finalColumns = rowIcon ? [DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, { size: "$1" })}</Stack>, true, '50px'), ...cols] : cols
 
-    return <XStack mr="$3" pt="$1" flexWrap='wrap'>
+    return <Scrollbars universal={true}>
+        <XStack mr="$3" pt="$1" flexWrap='wrap'>
             <Tinted>
                 <DataTable2.component
                     pagination={true}
@@ -69,4 +71,5 @@ export const DataTableList = () => {
                 />
             </Tinted>
         </XStack>
+    </Scrollbars>
 }

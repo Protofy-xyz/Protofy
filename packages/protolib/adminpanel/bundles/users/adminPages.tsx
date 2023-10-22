@@ -18,7 +18,7 @@ export default {
                     rowIcon={User}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
-                    numColumnsForm={1}
+                    numColumnsForm={2}
                     name="user"
                     onAdd={data => {
                         if(data.password != data.repassword) {

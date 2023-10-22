@@ -1,11 +1,13 @@
-import { H1, Paragraph, Stack, StackProps, Theme, XStack, YStack } from "tamagui"
+import { H1, Paragraph, ScrollView, Stack, StackProps, Theme, XStack, YStack } from "tamagui"
 import {Grid} from './Grid';
 import { EditableObject } from "./EditableObject";
 import {getPendingResult} from '../lib/createApiAtom'
 import { ItemCard } from "./ItemCard";
 import { useTint } from "@tamagui/logo";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import {Tinted} from './Tinted'
+import Scrollbars from "react-custom-scrollbars-2";
+import { useEffectOnce } from "usehooks-ts";
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element.data
@@ -13,15 +15,16 @@ const GridElementCard = ({ index, data, width }) => {
     const tint = useTint()
 
     return <ItemCard
+        height={data.itemHeight}
         cursor="pointer"
         topBarOutSideScrollArea={false}
         backgroundColor={"$color1"}
         elevation={"$0"}
-        hoverStyle={{backgroundColor: '$'+tint.tint+'1',elevation:"$3"}}
+        hoverStyle={{o: 0.8, backgroundColor: '$'+tint.tint+'1',elevation:"$3"}}
         borderWidth={1}
         pointerEvents='none'
         pointerEventsControls="none"
-        onPress={() => {}}
+        onPress={() => data.onSelectItem(modelItem)}
         {...(data.getPicture ? { 
             image: data.getPicture(element, width),
             hasPicture: true
@@ -48,7 +51,9 @@ const GridElementCard = ({ index, data, width }) => {
     </ItemCard>
 }
 
-export const ObjectGrid = ({itemMinWidth=400, contentMargin=40, spacing=20, getPicture, getBody, model, items, sourceUrl, customFields, extraFields, icons, ...props}: any & StackProps) => {
+export const ObjectGrid = ({itemMinWidth=400, itemHeight, rightGap=30, contentMargin=40, onSelectItem=(id) => {}, spacing=20, getPicture, getBody, model, items, sourceUrl, customFields, extraFields, icons, ...props}: any & StackProps) => {
+    const containerRef = useRef(null)
+
     const data = items?.data?.items?.map((element, i) => {
         return {
             id: 'item_'+i,
@@ -62,11 +67,15 @@ export const ObjectGrid = ({itemMinWidth=400, contentMargin=40, spacing=20, getP
             getPicture,
             getBody,
             spacing,
-            contentMargin
+            contentMargin,
+            onSelectItem,
+            itemHeight
         }
     })
 
-    return <Stack {...props}>
-        <Grid spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
+    return <Stack f={1}  {...props}>
+        <Scrollbars universal={true} ref={containerRef}>
+            <Grid rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
+        </Scrollbars>
     </Stack>
 }

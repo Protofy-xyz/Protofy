@@ -1,7 +1,7 @@
 import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText, StackProps, Accordion, Square, Spacer } from "tamagui";
 import { Pencil, Tag, ChevronDown, X, Tags, List, ListOrdered } from '@tamagui/lucide-icons';
 import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog } from 'protolib'
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getErrorMessage } from "@my/ui";
 import { ProtoSchema } from "protolib/base";
 import { Schema } from "../base";
@@ -230,6 +230,7 @@ export const EditableObject = ({columnMargin=30, columnWidth=350, disableToggleM
     const [dialogOpen, setDialogOpen] = useState(false)
     const [edited, setEdited] = useState(false)
     const [ready, setReady] = useState(false)
+    const containerRef = useRef()
     
     usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialData)
     
@@ -278,8 +279,8 @@ export const EditableObject = ({columnMargin=30, columnWidth=350, disableToggleM
     }
     const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode])
     
-    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <YStack mt={i?"$5":"$0"} width={columnWidth*(numColumns)+columnMargin} f={1}>
-        <Grid spacing={columnMargin/2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
+    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <YStack ref={containerRef} mt={i?"$5":"$0"} width={columnWidth*(numColumns)+columnMargin} f={1}>
+        <Grid masonry={false} containerRef={containerRef} spacing={columnMargin/2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>), [columnMargin, groups, columnWidth, numColumns])
 
     const { tint } = useTint()
