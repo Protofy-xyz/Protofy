@@ -1,8 +1,9 @@
-import { Stack, XStack } from "tamagui"
+import { Stack, StackProps, XStack } from "tamagui"
 import { DataCard } from "./DataCard"
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { DataViewContext } from "./DataView";
 import {Grid} from './Grid';
+import Scrollbars from "react-custom-scrollbars-2";
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element
@@ -25,7 +26,8 @@ const GridElementCard = ({ index, data, width }) => {
 </Stack>
 }
 
-export const DataTableCard = ({itemMinWidth=400, spacing=0}) => {
+export const DataTableCard = ({itemMinWidth=400, spacing=0, ...props}: any & StackProps) => {
+    const containerRef = useRef(null)
     const { items, model } = useContext(DataViewContext);
 
     const data = items?.data?.items?.map((element, i) => {
@@ -36,5 +38,9 @@ export const DataTableCard = ({itemMinWidth=400, spacing=0}) => {
         }
     })
 
-    return <Grid spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
+    return <Stack f={1}  {...props}>
+        <Scrollbars universal={true} ref={containerRef}>
+            <Grid containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
+        </Scrollbars>
+    </Stack>
 }

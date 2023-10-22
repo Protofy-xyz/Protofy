@@ -80,6 +80,8 @@ export function DataView({
     const { push, mergePush, removePush, replace } = usePageParams(pageState, state, setState)
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
+    const containerRef = React.useRef(null)
+
     const fetch = async () => {
         const data = await API.get({ url: sourceUrl, ...state })
         setItems(data)
@@ -110,13 +112,23 @@ export function DataView({
             name: 'grid',
             icon: LayoutGrid,
             component: ObjectGrid,
-            props: {model, items, sourceUrl, customFields, extraFields, icons, p:"$5", mt:"$5", ...dataTableGridProps}
+            props: {
+                model, 
+                items, 
+                sourceUrl, 
+                customFields, 
+                extraFields, 
+                icons, 
+                ml:"$5",
+                onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
+                ...dataTableGridProps
+            }
         },
         {
             name: 'raw',
             icon: Layers,
             component: DataTableCard,
-            props: dataTableRawProps
+            props: {...dataTableRawProps}
         }
     ]
     const tableViews = views ?? [...defaultViews, ...extraViews]
@@ -124,8 +136,7 @@ export function DataView({
 
     const activeViewIndex = tableViews.findIndex(v => v.name == state.view) != -1 ? tableViews.findIndex(v => v.name == state.view) : tableViews.findIndex(v => v.name == defaultView)
 
-    return (
-        <YStack f={1}>
+    return (<YStack height="100%" f={1}>
             <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns:columns, rowIcon}}>
                 <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
                     <AlertDialog
@@ -139,31 +150,33 @@ export function DataView({
                     >
                         <YStack f={1} jc="center" ai="center">
                             <ScrollView maxHeight={"90vh"}>
-                                <XStack mr="$5"><EditableObject
-                                    name={name}
-                                    numColumns={numColumnsForm}
-                                    mode={'add'}
-                                    onSave={async (originalData, data) => {
-                                        try {
-                                            const obj = model.load(data)
-                                            const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
-                                            if (result.isError) {
-                                                throw result.error
+                                <XStack mr="$5">
+                                    <EditableObject
+                                        name={name}
+                                        numColumns={numColumnsForm}
+                                        mode={'add'}
+                                        onSave={async (originalData, data) => {
+                                            try {
+                                                const obj = model.load(data)
+                                                const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
+                                                if (result.isError) {
+                                                    throw result.error
+                                                }
+                                                fetch()
+                                                setCreateOpen(false);
+                                                toast.show(name + ' created', {
+                                                    message: obj.getId()
+                                                })
+                                            } catch (e) {
+                                                throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
                                             }
-                                            fetch()
-                                            setCreateOpen(false);
-                                            toast.show(name + ' created', {
-                                                message: obj.getId()
-                                            })
-                                        } catch (e) {
-                                            throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
-                                        }
-                                    }}
-                                    model={model}
-                                    extraFields={{...extraFields, ...extraFieldsForms}}
-                                    icons={icons}
-                                    customFields={{...customFields, ...customFieldsForms}}
-                                /></XStack>
+                                        }}
+                                        model={model}
+                                        extraFields={{...extraFields, ...extraFieldsForms}}
+                                        icons={icons}
+                                        customFields={{...customFields, ...customFieldsForms}}
+                                    />
+                                </XStack>
                             </ScrollView>
                         </YStack>
                     </AlertDialog>
@@ -187,8 +200,6 @@ export function DataView({
                                         disableToggleMode={disableToggleMode}
                                         initialData={currentItemData}
                                         name={name}
-                                        minHeight={350}
-                                        minWidth={490}
                                         spinnerSize={75}
                                         loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
                                         objectId={state.item}
@@ -257,19 +268,15 @@ export function DataView({
                             <Paragraph>{getErrorMessage(items.error)}</Paragraph>
                         </Notice>
                     )}
-
-                    <AsyncView atom={currentItems}>
-                        <Stack pr={"$1"} f={1}>
-                            <Scrollbars universal={true} height={"100%"} >
-                                {
-                                    tableViews.map((v, index) => <ActiveRender key={index} activeId={index}>
-                                        {React.createElement(v.component, {...v.props} ?? {})}
-                                    </ActiveRender>
-                                    )}
-                            </Scrollbars>
-                        </Stack>
-
-                    </AsyncView>
+                    <Stack f={1}>
+                        <AsyncView atom={currentItems}>
+                            {
+                                tableViews.map((v, index) => <ActiveRender height="100%" key={index} activeId={index}>
+                                    {React.createElement(v.component, {...v.props} ?? {})}
+                                </ActiveRender>
+                            )}
+                        </AsyncView>
+                    </Stack>
                 </ActiveGroup>
             </DataViewContext.Provider>
         </YStack>
