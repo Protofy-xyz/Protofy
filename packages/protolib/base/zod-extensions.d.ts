@@ -1,4 +1,4 @@
-import { ZodString, ZodNumber, ZodBoolean, ZodArray, ZodAny, ZodOptional} from 'zod';
+import { ZodString, ZodNumber, ZodBoolean, ZodArray, ZodAny, ZodOptional, ZodRecord} from 'zod';
 
 interface ZodExtensions {
     label(caption: string): this;
@@ -31,4 +31,5 @@ declare module 'zod' {
     interface ZodArray extends ZodExtensions {}
     interface ZodUnion extends ZodExtensions {}
     interface ZodObject extends ZodExtensions {}
+    interface ZodRecord extends ZodExtensions {}
 }
