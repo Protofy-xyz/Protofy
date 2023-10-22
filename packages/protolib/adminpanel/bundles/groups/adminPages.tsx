@@ -28,7 +28,7 @@ export default {
             </AdminPage>)
         }, 
         getServerSideProps: PaginatedDataSSR('/adminapi/v1/groups', ['admin'],{
-            view: 'raw'
+            view: 'grid'
         })
     }
 }
