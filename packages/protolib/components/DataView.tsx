@@ -168,6 +168,7 @@ export function DataView({
                                                     message: obj.getId()
                                                 })
                                             } catch (e) {
+                                                console.log('original error: ', e, e.flatten())
                                                 throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
                                             }
                                         }}
@@ -241,7 +242,7 @@ export function DataView({
                             </Paragraph>
                         </YStack>
 
-                        <XStack position={"absolute"} right={0}>
+                        <XStack position={"absolute"} right={20}>
                             <Search top={1} initialState={state?.search} onCancel={onCancelSearch} onSearch={onSearch} />
                             {!hideAdd && <XStack marginLeft="$3" top={-3}>
                                 {!disableViewSelector && <ButtonGroup marginRight="$3">
