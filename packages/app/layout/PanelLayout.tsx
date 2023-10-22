@@ -5,7 +5,6 @@ import { HeaderContents } from './HeaderContents'
 import { SideMenu } from './SideMenu'
 import { useTint } from '@tamagui/logo'
 import {Tinted} from 'protolib'
-import { Stack } from '@my/ui'
 
 export const PanelLayout = ({panelBgColor='var(--color2)', menuContent, children}) => {
     const appBarHeight = 55
@@ -32,16 +31,17 @@ export const PanelLayout = ({panelBgColor='var(--color2)', menuContent, children
           // </AppBar>
         }>
         {/* <Theme name={tint as any}> */}
-        <Stack $sm={{br:"$0"}} btlr={"$6"} mt={appBarHeight} height={'calc(100vh - '+appBarHeight+'px)'}>
+        <ScrollView $sm={{br:"$0"}} btlr={"$6"} mt={appBarHeight} height={'calc(100vh - '+appBarHeight+'px)'}>
           {/* <Tinted> */}
-            <YStack $sm={{br:"$0"}} btlr={"$6"} bc={panelBgColor} f={1} minHeight={'calc(100vh - '+appBarHeight+'px)'} flex={1}>
+            <YStack bc={panelBgColor} f={1} minHeight={'calc(100vh - '+appBarHeight+'px)'} flex={1}>
               {/* <Theme reset> */}
                 {children}
               {/* </Theme> */}
+
             </YStack>
           {/* </Tinted> */}
 
-        </Stack>
+        </ScrollView>
         {/* </Theme> */}
       </DefaultLayout>
     )
