@@ -71,7 +71,8 @@ export function DataView({
     dataTableGridProps = {},
     extraFieldsForms = {},
     customFieldsForms = {},
-    defaultView = 'list'
+    defaultView = 'list',
+    disableViews = []
 }: {openMode: 'edit' | 'view'} & any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
@@ -131,8 +132,7 @@ export function DataView({
             props: {...dataTableRawProps}
         }
     ]
-    const tableViews = views ?? [...defaultViews, ...extraViews]
-    console.log('view state:', state.view)
+    const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))
 
     const activeViewIndex = tableViews.findIndex(v => v.name == state.view) != -1 ? tableViews.findIndex(v => v.name == state.view) : tableViews.findIndex(v => v.name == defaultView)
 

@@ -16,7 +16,7 @@ export default {
                     rowIcon={Group}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
-                    numColumnsForm={2}
+                    numColumnsForm={1}
                     name="group"
                     columns={DataTable2.columns(
                     )}

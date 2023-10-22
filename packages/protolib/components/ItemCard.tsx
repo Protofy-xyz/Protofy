@@ -1,5 +1,5 @@
 import { FastForward, Pause, Rewind } from '@tamagui/lucide-icons'
-import React, { memo, useMemo } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import {
   Button,
   Card,
@@ -58,7 +58,7 @@ export const ItemCard = memo(React.forwardRef(
       ...cardProps
     } = props
     const tint = !alt ? null : (`alt${alt}` as ThemeName)
-
+    const [error, setError] = useState(false)
     return (
       <YStack
         f={1}
@@ -120,7 +120,7 @@ export const ItemCard = memo(React.forwardRef(
           <YStack ai="center" f={1}>
             {/*@ts-ignore*/}
             {hasPicture ? <Center>
-              {image && image.src ? <Image btrr={20} btlr={20} top={-20} source={{ uri: image.src, width: image.width, height: image.height }} /> :
+              {image && image.src && !error ? <Image onError={() => setError(true)} btrr={20} btlr={20} top={-20} source={{ uri: image.src, width: image.width, height: image.height }} /> :
                 <YStack o={0.2} btrr={20} btlr={20} width={image?.width} height={image?.height} jc="center" ai="center">
                   <ImageOff />
                   <SizableText>No photo</SizableText>
