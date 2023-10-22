@@ -46,14 +46,18 @@ const FormElement = ({ ele, i, icon, children, inArray = false }) => {
     </Fieldset>
 }
 
+const defaultValueTable = {
+    ZodString: "",
+    ZodNumber: "0",
+    ZodObject: {},
+    ZodArry: [],
+    ZodBoolean: true
+}
+
 const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
     const [opened, setOpened] = useState([])
-
-<<<<<<< HEAD
-    return <Accordion onPress={(e) => e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" mt="$2" pt="$2" boc={"$gray6"} f={1} pb="$3" px={"$3"}>
-=======
-    return <Accordion onPress={(e)=>e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" boc={"$gray6"} f={1}>
->>>>>>> 6e0073cb9a505df01f48ff84b390b9b733f0afe6
+    console.log("ELEEEEEEARRAY", ele)
+    return <Accordion onPress={(e) => e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" boc={"$gray6"} f={1}>
         <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} bc="$transparent" value={"item-"}>
             <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between" bc="$transparent">
                 {({ open }) => (
@@ -71,12 +75,12 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                     {arrData.map((d, i) => {
                         return <XStack ml="$1">
                             {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>}
-                            {getElement({ ...elementDef.type._def, _def: elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name, i], true, ele.name)}
+                            {getElement({ ...elementDef.type._def, _def: elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name], true, ele.name)}
                         </XStack>
                     })}
                 </Stack>
                 {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
-                    setFormData(ele.name, [...arrData, {}])
+                    setFormData(ele.name, [...arrData, defaultValueTable[ele._def.typeName]??""])
                     setOpened([...opened, 'item-' + arrData.length])
                 }}>Add{ele.name}</Button>}
             </Accordion.Content>
@@ -97,7 +101,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         let prevTarget;
         let prevKey;
         path.forEach((p) => {
-            if (typeof prevKey !== 'number' && !Array.isArray(target) && !target.hasOwnProperty(p)) {
+            if (!Array.isArray(target) && !target.hasOwnProperty(p)) {
                 target[p] = {};
             }
             prevTarget = target
@@ -106,12 +110,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         });
 
         console.log('prev target: ', prevTarget)
-        if (typeof prevKey == 'number') {
-            console.log('setting arrays')
-            prevTarget[key] = value;
-        } else {
-            target[key] = value;
-        }
+        target[key] = value;
         console.log('after: ', formData);
         setData(formData);
     }
@@ -193,6 +192,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
         return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
     } else if (elementType == 'ZodRecord') {
+        const [opened, setOpened] = useState([])
         const recordData = getFormData(ele.name)
         return <Accordion type="multiple" br="$5" boc={"$gray6"} f={1}>
             <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
@@ -208,18 +208,18 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                     )}
                 </Accordion.Trigger>
                 <Accordion.Content br="$5">
-                <Stack>
-                    {recordData?Object.keys(recordData).map((key, i) => {
-                        return <XStack key={i} ml="$1">
-                            {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
-                            {getElement({...elementDef.valueType, name: key }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}
-                        </XStack>
-                    }):null}
-                </Stack>
-                {/* {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
-                    setFormData(ele.name, [...arrData, {}])
-                    setOpened([...opened, 'item-' + arrData.length])
-                }}>Add{ele.name}</Button>} */}
+                    <Stack>
+                        {recordData ? Object.keys(recordData).map((key, i) => {
+                            return <XStack key={i} ml="$1">
+                                {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
+                                {getElement({ ...elementDef.valueType, name: key }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}
+                            </XStack>
+                        }) : null}
+                    </Stack>
+                    {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
+                        // setFormData(ele.name, [...arrData, {}])
+                        // setOpened([...opened, 'item-' + arrData.length])
+                    }}>Add{ele.name}</Button>}
 
                 </Accordion.Content>
             </Accordion.Item>
@@ -235,7 +235,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                 secureTextEntry={ele._def.secret}
                 value={getFormData(ele.name)}
                 onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
-                placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? ele.name}
+                placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? (typeof ele.name == "number"?"...":ele.name)}
                 autoFocus={x == 0 && i == 0}
                 onBlur={() => {
                     if (ele._def.typeName == 'ZodNumber') {
