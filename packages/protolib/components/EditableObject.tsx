@@ -294,8 +294,8 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
     }
     const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode])
     
-    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <YStack ref={containerRef} mt={i?"$5":"$0"} width={columnWidth*(numColumns)+columnMargin} f={1}>
-        <Grid containerRef={containerRef} spacing={columnMargin/2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
+    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <YStack ref={containerRef} mt={i?"$0":"$0"} width={columnWidth*(numColumns)+columnMargin} f={1}>
+        <Grid masonry={false} containerRef={containerRef} spacing={columnMargin/2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>), [columnMargin, groups, columnWidth, numColumns])
 
     const { tint } = useTint()
