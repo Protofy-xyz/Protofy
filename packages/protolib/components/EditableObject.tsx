@@ -141,7 +141,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const _rawOptions = elementDef.options.map(o => o._def.value)
         const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-            <SelectList f={1} title={ele.name} elements={options} value={getFormData(ele.name)} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+            <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
         </FormElement>
     } else if (elementType == 'ZodNumber' && mode != 'preview') {
         if (elementDef.checks) {
