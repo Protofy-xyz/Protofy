@@ -3,7 +3,8 @@ import { YStack } from '@tamagui/stacks';
 import { AlertDialog, Button, Dialog, XStack } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from '../../features/components/FilesWidget';
-import { useAtom, IconContainer, Tinted } from 'protolib';
+import { IconContainer } from '../../../components/IconContainer';
+import {useAtom} from '../../../lib/Atom'
 import { X } from '@tamagui/lucide-icons';
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
@@ -11,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { workspaceAtom } from '../../features'
 import { WorkspaceModel } from 'app/models';
 import { Explorer } from './Explorer';
-import {defineFileAction} from 'chonky';
+import { defineFileAction } from 'chonky';
 
 export const FileBrowser = ({ file, path, filesState }: any) => {
     const [dialogOpen, setDialogOpen] = useState(file ? true : false)

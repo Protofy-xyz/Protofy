@@ -1,8 +1,9 @@
 import { Paragraph, Spinner, Stack, Unspaced, XStack, YStack } from 'tamagui'
 import { Button, Dialog, Spacer, getErrorMessage } from '@my/ui'
 import { forwardRef, useEffect, useState } from 'react'
-import { Tinted, Notice, Center } from 'protolib'
-import { X, UserPlus, Check, Mail} from '@tamagui/lucide-icons'
+import { Tinted } from './Tinted'
+import { Notice } from './Notice'
+import Center from './Center'
 
 export const AlertDialog = forwardRef(({ showCancel, hideAccept, onAccept = () => { }, onCancel = () => { }, title, trigger, description, children, cancelCaption = 'Cancel', acceptCaption = 'Accept', acceptTint, cancelTint='gray',  acceptButtonProps={}, cancelButtonProps={},open, setOpen, ...props }: any, ref: any) => {
     const [_open, _setOpen] = useState(false)

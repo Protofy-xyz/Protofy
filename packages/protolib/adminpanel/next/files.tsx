@@ -2,14 +2,16 @@ import {AdminPanel} from '../features'
 import Head from 'next/head'
 import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
-import { API, withSession } from 'protolib'
+import { API, withSession, Center } from 'protolib'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
 import { useSession } from '../../lib/Session'
+import { Spinner } from 'tamagui'
+import { Tinted } from '../../components/Tinted'
 
 const FileBrowser = dynamic<any>(() =>
     import('./components/FileBrowser').then(module => module.FileBrowser),
-    { ssr: false }
+    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
 );
 
 export default function FilesPage({workspace, data, pageSession}:any) {
