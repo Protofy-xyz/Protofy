@@ -44,11 +44,11 @@ import {
   withSession,
   useSession,
   Page,
-  Grid
+  Grid,
+  ThemeTint
 } from 'protolib'
 import { ChevronRight, Code, Cpu, FastForward, Layers, Star } from '@tamagui/lucide-icons'
 import Link from 'next/link'
-import { ThemeTint } from '@tamagui/logo'
 import { DefaultLayout } from '../layout/DefaultLayout'
 
 export function HomeScreen ({pageSession}) {
