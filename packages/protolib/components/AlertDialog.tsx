@@ -41,7 +41,7 @@ export const AlertDialog = forwardRef(({ showCancel, hideAccept, onAccept = () =
                         </Notice>
                         )}
 
-                        <XStack width={'100%'}>
+                        <XStack f={1}>
                             {children}
                         </XStack>
 
