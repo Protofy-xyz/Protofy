@@ -39,7 +39,11 @@ export const DefaultLayout = React.forwardRef(({
   children,
   sideMenu = null,
   footer = <Footer />,
-  header = <AppBar><HeaderContents menu={<HeaderMenu menuPlacement={'bottom'}><HeaderMenuContent /></HeaderMenu>} /></AppBar>,
+  header = <AppBar>
+    <HeaderContents menu={<HeaderMenu menuPlacement={'bottom'}>
+      <HeaderMenuContent />
+    </HeaderMenu>} />
+  </AppBar>,
   seoProps = {},
   title = "Protofy",
   description = "Protofy",
