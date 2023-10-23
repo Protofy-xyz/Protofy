@@ -9,8 +9,8 @@ import { X } from '@tamagui/lucide-icons';
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { workspaceAtom } from '../../features'
-import { WorkspaceModel } from 'app/models';
+import { workspaceAtom } from '../../features/atoms'
+import { WorkspaceModel } from '../../../models';
 import { Explorer } from './Explorer';
 import { defineFileAction } from 'chonky';
 

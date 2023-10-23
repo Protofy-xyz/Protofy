@@ -4,13 +4,13 @@ import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {useAtom, useSetAtom} from 'jotai'
-import { workspaceAtom } from '..';
 import { getPendingResult } from '../../../lib/createApiAtom';
 import { AlertDialog } from '../../../components/AlertDialog';
 import { API } from '../../../lib/Api';
 import { Link } from '../../../components/Link';
 import { Tinted } from '../../../components/Tinted';
 import { PanelMenuItem } from '../../../components/PanelMenuItem';
+import { workspaceAtom } from '../atoms';
 
 const opacity = 0.7
 const strokeWidth = 0.8

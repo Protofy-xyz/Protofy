@@ -1,12 +1,11 @@
 import { XStack } from 'tamagui'
 import { PanelLayout } from 'app/layout/PanelLayout'
 import { PanelMenu } from './components/PanelMenu'
-import {getPendingResult, PendingAtomResult} from '../../lib/createApiAtom';
-import {atom, useSetAtom} from 'jotai'
+import {useSetAtom} from 'jotai'
 import { useEffect } from 'react';
+import { workspaceAtom } from './atoms';
 
 const menuData = {}
-export const workspaceAtom = atom<PendingAtomResult>(getPendingResult("pending"))
 
 export const AdminPanel = ({ workspace, children}) => {
     const setCurrentWorkspace = useSetAtom(workspaceAtom)
