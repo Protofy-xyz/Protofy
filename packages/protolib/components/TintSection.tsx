@@ -1,6 +1,5 @@
 import { useOnIntersecting } from '../lib/useOnIntersecting'
-import { getTints } from '@tamagui/logo'
-import { useTint } from '@tamagui/logo'
+import { getTints,useTint} from '../lib/Tints'
 import React from 'react'
 import { useEffect, useMemo, useRef } from 'react'
 import { StackProps } from 'tamagui'

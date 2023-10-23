@@ -1,5 +1,5 @@
 import { forwardRef } from "react"
-import { useTint } from "@tamagui/logo"
+import { useTint } from "protolib"
 import { useMemo } from "react"
 import { YStack } from "tamagui"
 

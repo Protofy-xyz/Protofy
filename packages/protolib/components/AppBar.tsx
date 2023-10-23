@@ -1,4 +1,4 @@
-import { ThemeTint } from '@tamagui/logo'
+import { ThemeTint, useTint } from 'protolib'
 import * as React from 'react'
 import {
   StackProps,
@@ -24,7 +24,6 @@ export type AppBarProps = {
 
 export const AppBar = React.forwardRef(({ backgroundColor = "$background", containerProps = {}, height = undefined, fullscreen = false, translucid = true, dettached = true, position = 'top', ...props }: AppBarProps, ref: any) => {
   const [isScrolled, setIsScrolled] = React.useState(false)
-
   if (isClient) {
     React.useEffect(() => {
       const onScroll = () => {
@@ -58,8 +57,8 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
       <XStack
         // @ts-ignore
         pos="fixed"
-        top={position == 'top' ? (dettached ? 0 : -1) : undefined}
-        bottom={position == 'bottom' ? -1 : undefined}
+        top={position == 'top' ? 0 : undefined}
+        bottom={position == 'bottom' ? 0 : undefined}
         left={0}
         right={0}
         alignItems="center"
@@ -84,7 +83,7 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
             ov="hidden"
             contain="paint"
             width="100%"
-            bw={1}
+            bw={0}
             boc="transparent"
             br={dettached ? "$10" : 0}
             $sm={{

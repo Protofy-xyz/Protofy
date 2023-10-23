@@ -1,5 +1,5 @@
 import { TintSection } from "./TintSection"
-import { useTint } from "@tamagui/logo"
+import { useTint } from "protolib"
 import React from "react"
 import { StackProps, YStack } from "tamagui"
 import { Theme } from "tamagui"

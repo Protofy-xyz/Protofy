@@ -6,7 +6,7 @@ import {
   YStack,
 } from 'tamagui'
 import React from 'react'
-import { useTint } from '@tamagui/logo'
+import { useTint } from 'protolib'
 
 
 export const DataTable = React.forwardRef(({

@@ -1,6 +1,4 @@
-import { YStack, XStack, Text, SizableText, StackProps } from 'tamagui'
-import { Database } from '@tamagui/lucide-icons'
-import { useAtom } from 'jotai'
+import { XStack, Text, SizableText, StackProps } from 'tamagui'
 import React from 'react'
 
 export type PanelMenuItemProps = {

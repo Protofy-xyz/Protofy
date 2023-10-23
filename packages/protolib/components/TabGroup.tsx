@@ -1,4 +1,4 @@
-import { useTint } from '@tamagui/logo'
+import { useTint } from '../lib/Tints'
 import React, { memo, useState } from 'react'
 import { Button, ScrollView, XGroup, XStack, YStack, YStackProps } from 'tamagui'
 

@@ -3,7 +3,7 @@ import {Grid} from './Grid';
 import { EditableObject } from "./EditableObject";
 import {getPendingResult} from '../lib/createApiAtom'
 import { ItemCard } from "./ItemCard";
-import { useTint } from "@tamagui/logo";
+import { useTint } from "protolib";
 import { useEffect, useMemo, useRef } from "react";
 import {Tinted} from './Tinted'
 import Scrollbars from "react-custom-scrollbars-2";

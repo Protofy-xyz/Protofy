@@ -4,7 +4,7 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { FileNavbar, FileBrowser, FileToolbar, FileList, ChonkyActions } from 'chonky';
-import { Chip, Tinted, AlertDialog, createApiAtom, useAtom, API } from 'protolib';
+import { Tinted, AlertDialog, createApiAtom, useAtom, API } from 'protolib';
 import { useState } from 'react';
 import { Dialog, Paragraph, useTheme, Text, SizableText, Stack, XStack } from '@my/ui';
 import { Uploader } from './Uploader';
