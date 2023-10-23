@@ -191,13 +191,9 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
         return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
     } else if (elementType == 'ZodRecord') {
-        const [opened, setOpened] = useState([])
         const recordData = getFormData(ele.name)
         const [menuOpened, setMenuOpened] = useState(false)
         const [name, setName] = useState("")
-
-
-
 
         return <Accordion type="multiple" br="$5" boc={"$gray6"} f={1}>
             <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
@@ -221,7 +217,6 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                             </XStack>
                         }) : null}
                     </Stack>
-
                     <AlertDialog
                         acceptCaption="Add"
                         setOpen={setMenuOpened}
@@ -237,9 +232,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                             <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='name...' />     
                         </YStack>
                     </AlertDialog>
-
                     {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {setMenuOpened(true)}}> Add{ele.name} </Button>}
-
                 </Accordion.Content>
             </Accordion.Item>
         </Accordion>
