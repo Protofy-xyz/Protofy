@@ -1,5 +1,5 @@
 import { Theme, XStack, Paragraph, Stack, Spinner, Text, Dialog, Button, Popover, YStack } from 'tamagui'
-import { useTint } from 'protolib'
+import { useTint } from '../lib/Tints'
 import { Check, FileEdit, X, Trash2 } from '@tamagui/lucide-icons'
 import { useMemo, useState } from 'react'
 import { ItemCard } from './ItemCard'
