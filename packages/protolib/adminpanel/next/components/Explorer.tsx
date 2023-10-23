@@ -4,11 +4,15 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { FileNavbar, FileBrowser, FileToolbar, FileList, ChonkyActions } from 'chonky';
-import { Tinted, AlertDialog, createApiAtom, useAtom, API } from 'protolib';
 import { useState } from 'react';
 import { Dialog, Paragraph, useTheme, Text, SizableText, Stack, XStack } from '@my/ui';
 import { Uploader } from './Uploader';
 import {Download} from '@tamagui/lucide-icons'
+import { createApiAtom } from '../../../lib/createApiAtom';
+import { useAtom } from '../../../lib/Atom';
+import { AlertDialog } from '../../../components/AlertDialog';
+import { API } from '../../../lib/Api';
+import { Tinted } from '../../../components/Tinted';
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const filesAtom = createApiAtom([])

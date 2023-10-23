@@ -1,21 +1,33 @@
-import { IntentType } from 'protolib'
-import { useEffect, useState } from 'react'
-import { useEffectOnce, useUpdateEffect } from 'usehooks-ts'
-import { API } from '../../lib/Api'
-import Center from '../../components/Center'
 import { Spinner, XStack } from 'tamagui'
 import { DataCard } from '../../components/DataCard'
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import AsyncView from '../../components/AsyncView'
-import { getPendingResult } from '../../lib/createApiAtom'
-import { usePendingEffect } from '../../lib/usePendingEffect'
 import { useFileFromAPI } from '../../lib/useFileFromAPI'
 import { IconContainer } from '../../components/IconContainer'
-import { Save, X, XCircle } from '@tamagui/lucide-icons';
+import { Save } from '@tamagui/lucide-icons';
 import { useThemeSetting } from '@tamagui/next-theme'
-import FlowsWidget from '../../adminpanel/features/components/FlowsWidget'
-import GLTFViewer from '../../adminpanel/features/components/ModelViewer'
+// import FlowsWidget from '../../adminpanel/features/components/FlowsWidget'
+// import GLTFViewer from '../../adminpanel/features/components/ModelViewer'
 import { Monaco } from '../../components/Monaco'
+import {IntentType} from '../../lib/Intent'
+import Center from '../../components/Center'
+import dynamic from 'next/dynamic'
+
+const FlowsWidget = dynamic(() => import('../../adminpanel/features/components/FlowsWidget'), {
+    loading: () => <Center>
+    <Spinner size={'large'} scale={3} top={-50} />
+    Loading
+  </Center>,
+    ssr: false
+})
+
+const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
+    loading: () => <Center>
+    <Spinner size={'large'} scale={3} top={-50} />
+    Loading
+  </Center>,
+    ssr: false
+})
 
 const JSONViewer = ({ extraIcons, name, path }) => {
     const [fileContent, setFileContent] = useFileFromAPI(path)
