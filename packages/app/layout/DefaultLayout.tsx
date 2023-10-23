@@ -6,6 +6,8 @@ import { ToastProvider, ToastViewport } from '@tamagui/toast'
 import React from 'react'
 import { Stack, StackProps, XStack, YStack } from 'tamagui'
 import { Toast, useToastState } from '@my/ui'
+import { HeaderMenu } from './HeaderMenu'
+import { HeaderMenuContent } from './HeaderMenuContent'
 
 const ToastArea = () => {
   const currentToast = useToastState()
@@ -37,7 +39,7 @@ export const DefaultLayout = React.forwardRef(({
   children,
   sideMenu = null,
   footer = <Footer />,
-  header = <AppBar><HeaderContents /></AppBar>,
+  header = <AppBar><HeaderContents menu={<HeaderMenu menuPlacement={'bottom'}><HeaderMenuContent /></HeaderMenu>} /></AppBar>,
   seoProps = {},
   title = "Protofy",
   description = "Protofy",
