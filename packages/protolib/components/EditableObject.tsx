@@ -279,6 +279,7 @@ const GridElement = ({ index, data, width }) => {
 export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
+    const [prevCurrentMode, setPrevCurrentMode] = useState('')
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
@@ -370,11 +371,12 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
                     if (currentMode == 'edit' && edited) {
                         setDialogOpen(true)
                     } else {
+                        setPrevCurrentMode(currentMode)
                         setCurrentMode(currentMode == 'view' ? 'edit' : 'view')
                     }
                 }} cursor="pointer">
                     <Tinted>
-                        {currentMode == 'view' ? <Pencil color="var(--color8)" /> : <X color="var(--color8)" />}
+                        {currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" />:null)}
                     </Tinted>
                 </XStack>}
             </XStack>
