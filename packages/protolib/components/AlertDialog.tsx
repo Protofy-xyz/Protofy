@@ -46,7 +46,7 @@ export const AlertDialog = forwardRef(({ showCancel, hideAccept, onAccept = () =
                         </XStack>
 
                         {!hideAccept && <YStack p="$2" pt="$0" width="100%" f={1} alignSelf="center">
-                        <Spacer flex={1} height="$4" />
+                            <Spacer flex={1} height="$4" />
                         <XStack>
                         {showCancel && 
                             <Tinted tint={cancelTint}>

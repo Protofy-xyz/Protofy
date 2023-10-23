@@ -14,10 +14,9 @@ export default {
         component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
             return (<AdminPage title="Events" workspace={workspace} pageSession={pageSession}>
                 <DataView
-                    
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
-                    numColumnsForm={2}
+                    numColumnsForm={1}
                     name="event"
                     // hideAdd={true}
                     model={EventModel} 

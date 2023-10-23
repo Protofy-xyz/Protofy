@@ -218,21 +218,21 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                         }) : null}
                     </Stack>
                     <AlertDialog
-                        acceptCaption="Add"
+                        acceptCaption="Add field"
                         setOpen={setMenuOpened}
                         open={menuOpened}
                         onAccept={async (setMenuOpened) => {
                             setMenuOpened(false)
                             setFormData(ele.name, { ...recordData, [name]: defaultValueTable[ele._def.typeName] })
                         }}
-                        title={'Add new key'}
+                        title={'Add new field'}
                         description={""}
                     >
-                        <YStack f={1} alignItems="center" justifyContent="center" padding={"$5"} paddingVertical={"$5"}>
-                            <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='name...' />     
+                        <YStack f={1} alignItems="center" mt="$6" justifyContent="center">
+                            <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='Field name...' />     
                         </YStack>
                     </AlertDialog>
-                    {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {setMenuOpened(true)}}> Add{ele.name} </Button>}
+                    {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {setMenuOpened(true)}}> Add field</Button>}
                 </Accordion.Content>
             </Accordion.Item>
         </Accordion>
