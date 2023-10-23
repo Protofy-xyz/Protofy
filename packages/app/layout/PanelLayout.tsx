@@ -6,5 +6,5 @@ import { HeaderMenu } from './HeaderMenu'
 import { HeaderMenuContent } from './HeaderMenuContent'
 
 export const PanelLayout = (props) => <ProtoPanelLayout menu={<HeaderMenu menuPlacement={'bottom'} />} Layout={DefaultLayout} headerContents={<HeaderContents menu={<HeaderMenu menuPlacement={'bottom'}>
-<HeaderMenuContent />
+  <HeaderMenuContent />
 </HeaderMenu>} />} SideMenu={SideMenu} {...props} />
