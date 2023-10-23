@@ -1,5 +1,5 @@
-import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, Dialog, H1, SizableText, StackProps, Accordion, Square, Spacer } from "tamagui";
-import { Pencil, Tag, ChevronDown, X, Tags, List, ListOrdered, Layers } from '@tamagui/lucide-icons';
+import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, StackProps, Accordion, Square, Spacer } from "tamagui";
+import { Pencil, Tag, ChevronDown, X, Tags, List, Layers } from '@tamagui/lucide-icons';
 import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog } from 'protolib'
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getErrorMessage } from "@my/ui";
@@ -56,7 +56,6 @@ const defaultValueTable = {
 
 const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
     const [opened, setOpened] = useState([])
-    console.log("ELEEEEEEARRAY", ele)
     return <Accordion onPress={(e) => e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" boc={"$gray6"} f={1}>
         <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} bc="$transparent" value={"item-"}>
             <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between" bc="$transparent">
@@ -80,7 +79,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                     })}
                 </Stack>
                 {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
-                    setFormData(ele.name, [...arrData, defaultValueTable[ele._def.typeName]??""])
+                    setFormData(ele.name, [...arrData, defaultValueTable[ele._def.typeName] ?? ""])
                     setOpened([...opened, 'item-' + arrData.length])
                 }}>Add{ele.name}</Button>}
             </Accordion.Content>
@@ -194,6 +193,12 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     } else if (elementType == 'ZodRecord') {
         const [opened, setOpened] = useState([])
         const recordData = getFormData(ele.name)
+        const [menuOpened, setMenuOpened] = useState(false)
+        const [name, setName] = useState("")
+
+
+
+
         return <Accordion type="multiple" br="$5" boc={"$gray6"} f={1}>
             <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
                 <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
@@ -216,10 +221,24 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                             </XStack>
                         }) : null}
                     </Stack>
-                    {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
-                        // setFormData(ele.name, [...arrData, {}])
-                        // setOpened([...opened, 'item-' + arrData.length])
-                    }}>Add{ele.name}</Button>}
+
+                    <AlertDialog
+                        acceptCaption="Add"
+                        setOpen={setMenuOpened}
+                        open={menuOpened}
+                        onAccept={async (setMenuOpened) => {
+                            setMenuOpened(false)
+                            setFormData(ele.name, { ...recordData, [name]: defaultValueTable[ele._def.typeName] })
+                        }}
+                        title={'Add new key'}
+                        description={""}
+                    >
+                        <YStack f={1} alignItems="center" justifyContent="center" padding={"$5"} paddingVertical={"$5"}>
+                            <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='name...' />     
+                        </YStack>
+                    </AlertDialog>
+
+                    {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {setMenuOpened(true)}}> Add{ele.name} </Button>}
 
                 </Accordion.Content>
             </Accordion.Item>
@@ -235,7 +254,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                 secureTextEntry={ele._def.secret}
                 value={getFormData(ele.name)}
                 onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
-                placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? (typeof ele.name == "number"?"...":ele.name)}
+                placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? (typeof ele.name == "number" ? "..." : ele.name)}
                 autoFocus={x == 0 && i == 0}
                 onBlur={() => {
                     if (ele._def.typeName == 'ZodNumber') {
