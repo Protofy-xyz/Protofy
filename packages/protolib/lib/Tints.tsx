@@ -2,9 +2,7 @@ import { useEffect, useState, startTransition, useMemo, useSyncExternalStore } f
 import { Theme, ThemeName } from 'tamagui'
 
 const familiesValues = {
-  tamagui: ['orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'red'],
-  xmas: ['red', 'green', 'red', 'green', 'red', 'green', 'red'],
-  easter: ['yellow', 'pink', 'yellow', 'pink', 'yellow', 'pink', 'yellow'],
+  tamagui: ['gray', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'red']
 }
 
 type Family = keyof typeof familiesValues
