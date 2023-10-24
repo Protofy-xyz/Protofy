@@ -98,7 +98,8 @@ export const jsonViewerDefaultStyles = {
     color: "$purple9"
   },
   property: {
-    color: "var(--blue8)",
+    fontWeight: "bold",
+    color: "var(--color7)",
   },
   collapseIcon: {
     cursor: "pointer",

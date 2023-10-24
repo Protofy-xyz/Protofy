@@ -184,7 +184,7 @@
 }
 
 .rdt_TableHead {
-    background-color: var(--gray2) !important;
+    background-color: transparent !important;
     /* border-radius: 13px 13px 0px 0px !important; */
     position: fixed;
     z-index: 1000;
@@ -199,11 +199,11 @@
 }
 
 .rdt_TableRow:nth-child(odd) {
-  background-color: var(--gray2);
+  background-color: transparent;
 }
 
 .rdt_TableRow:nth-child(even) {
-  background-color: var(--gray3);
+  background-color: transparent;
 }
 
 

@@ -238,7 +238,7 @@ export function DataView({
                     <XStack pt="$3" px="$7" mb="$5">
                         <YStack left={-12} top={9} f={1}>
                             <Paragraph>
-                                <Text fontSize="$6" color="$color11">{pluralName? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'} [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.total}</Text></Tinted>]</Text>
+                                <Text fontSize="$5" color="$color11">{pluralName? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'} [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.total}</Text></Tinted>]</Text>
                             </Paragraph>
                         </YStack>
 

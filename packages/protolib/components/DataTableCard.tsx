@@ -9,7 +9,7 @@ const GridElementCard = ({ index, data, width }) => {
     const element = data.element
     const modelItem = data.model.load(element)
 
-    return <Stack key={element.key} width={width} mt="$5" p={"$5"}>
+    return <Stack key={element.key} width={width}>
     <DataCard
         compact={true}
         innerContainerProps={{
@@ -38,7 +38,7 @@ export const DataTableCard = ({itemMinWidth=400, spacing=0, ...props}: any & Sta
         }
     })
 
-    return <Stack f={1}  {...props}>
+    return <Stack f={1} p={"$5"} pt={"$3"} {...props}>
         <Scrollbars universal={true} ref={containerRef}>
             <Grid containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
         </Scrollbars>

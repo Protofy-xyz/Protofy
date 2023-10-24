@@ -30,7 +30,7 @@ export const DataTableList = () => {
     const finalColumns = rowIcon ? [DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, { size: "$1" })}</Stack>, true, '50px'), ...cols] : cols
 
     return <Scrollbars universal={true}>
-        <XStack mr="$3" pt="$1" flexWrap='wrap'>
+        <XStack pt="$1" flexWrap='wrap'>
             <Tinted>
                 <DataTable2.component
                     pagination={true}

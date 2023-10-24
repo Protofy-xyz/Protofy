@@ -52,11 +52,12 @@ export const DataCard = React.forwardRef(({ compact=false, innerContainerProps =
                 topBarOutSideScrollArea={minimal}
                 backgroundColor={props.backgroundColor ?? "$color1"}
                 {...itemCardProps}
-                elevation={minimal ? 0 : "$3"}
+                elevation={minimal ? 0 : 1}
                 borderWidth={minimal ? 0 : 1}
                 pointerEvents='none'
                 pointerEventsControls="none"
                 topBar={<Theme name={tint as any}
+
                 >
                     <XStack justifyContent="flex-start" alignItems={'center'} paddingHorizontal="$3" width="100%">
                         <Paragraph flex={1} marginRight={"-$5"} opacity={0.8}>{!minimal ? name : ''}</Paragraph>
@@ -108,7 +109,7 @@ export const DataCard = React.forwardRef(({ compact=false, innerContainerProps =
                     {...innerContainerProps}
                 >
                     <Theme name={tint as any}>
-                        <XStack y={0} maxHeight={-1} overflow={"hidden"}>
+                        <XStack y={0} p={"$0"} pt="$0" maxHeight={-1} overflow={"hidden"}>
                             {loadingState?.isLoading ?
                                 <Spinner /> :
                                 loadingState?.isError ?

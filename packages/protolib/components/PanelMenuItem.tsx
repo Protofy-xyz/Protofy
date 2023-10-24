@@ -1,4 +1,4 @@
-import { XStack, Text, SizableText, StackProps } from 'tamagui'
+import { XStack, Text, SizableText, StackProps, Paragraph, Stack } from 'tamagui'
 import React from 'react'
 
 export type PanelMenuItemProps = {
@@ -13,24 +13,26 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
   return (
     <XStack
       ref={ref}
-      paddingHorizontal={"$4"}
-      paddingVertical={"$3"}
+      paddingHorizontal={"$8"}
+      paddingVertical={8}
       hoverStyle={{
-        backgroundColor: "$backgroundHover"
+        backgroundColor: "$gray3"
       }}
-      borderRadius={"$6"}
-      width={230}
+      ai="center"
+      btrr={"$10"}
+      bbrr={"$10"}
+      f={1}
       onPress={onPress}
       cursor='pointer'
       {...(selected ? {
-        backgroundColor: "$backgroundHover"
+        backgroundColor: "$color4"
       } : {})}
       {...props}
     >
-      {icon ? <Text marginTop={"$0"} marginRight={text?"$4":"$0"}>
+      {icon ? <Stack marginRight={text?"$4":"$0"}>
         {icon}
-      </Text> : null}
-      {text ? <SizableText selectable={false} pointerEvents="none" color="$color12" size="$5">
+      </Stack> : null}
+      {text ? <SizableText selectable={false} pointerEvents="none" color="$color12" o={1} size="$4" >
         {text}
       </SizableText> : null}
       {children}
