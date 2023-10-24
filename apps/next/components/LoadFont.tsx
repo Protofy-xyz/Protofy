@@ -44,6 +44,10 @@ export const LoadInter700 = () => (
   />
 )
 
+export const LoadInter900 = () => (
+  <LoadFont woff2File="/fonts/subset-Inter-Black.woff2" cssFile="/fonts/inter-900.css" />
+)
+
 export const LoadJostRegular = () => (
   <LoadFont
     woff2File="/fonts/Jost-Regular.ttf"
@@ -56,10 +60,6 @@ export const LoadJostMedium = () => (
     woff2File="/fonts/Jost-Medium.ttf"
     cssFile="/fonts/Jost-Medium.css"
   />
-)
-
-export const LoadInter900 = () => (
-  <LoadFont woff2File="/fonts/subset-Inter-Black.woff2" cssFile="/fonts/inter-900.css" />
 )
 
 export const LoadGlusp = () => (
