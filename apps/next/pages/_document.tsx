@@ -9,7 +9,13 @@ import {
   LoadMunro,
   LoadCherryBomb,
   LoadJostMedium,
-  LoadJostRegular
+  LoadJostRegular,
+  LoadInter100,
+  LoadInter200,
+  LoadInter300,
+  LoadInter500,
+  LoadInter600,
+  LoadInter800
 } from '../components/LoadFont'
 import Tamagui from '../tamagui.config'
 
@@ -51,11 +57,16 @@ export default class Document extends NextDocument {
 
           <meta name="docsearch:language" content="en" />
           <meta name="docsearch:version" content="1.0.0,latest" />
-
-          <LoadInter700 />
+          {/* <LoadInter100 /> */}
+          <LoadInter200 />
+          <LoadInter300 />
           <LoadInter400 />
-          <LoadSilkscreen />
+          <LoadInter500 />
+          <LoadInter600 />
+          <LoadInter700 />
+          <LoadInter800 />
           <LoadInter900 />
+          <LoadSilkscreen />
           <LoadMunro />
           <LoadCherryBomb />
           <LoadJostMedium />

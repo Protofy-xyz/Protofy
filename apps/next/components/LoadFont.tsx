@@ -30,6 +30,27 @@ export const LoadSilkscreen = () => (
   <LoadFont woff2File="/fonts/slkscr.woff2" cssFile="/fonts/silkscreen.css" />
 )
 
+export const LoadInter100 = () => (
+  <LoadFont
+    woff2File="/fonts/subset-Inter-Thin.woff2"
+    cssFile="/fonts/inter-100.css"
+  />
+)
+
+export const LoadInter200 = () => (
+  <LoadFont
+    woff2File="/fonts/subset-Inter-ExtraLight.woff2"
+    cssFile="/fonts/inter-200.css"
+  />
+)
+
+export const LoadInter300 = () => (
+  <LoadFont
+    woff2File="/fonts/subset-Inter-Light.woff2"
+    cssFile="/fonts/inter-300.css"
+  />
+)
+
 export const LoadInter400 = () => (
   <LoadFont
     woff2File="/fonts/subset-Inter-Regular.woff2"
@@ -37,10 +58,31 @@ export const LoadInter400 = () => (
   />
 )
 
+export const LoadInter500 = () => (
+  <LoadFont
+    woff2File="/fonts/subset-Inter-Medium.woff2"
+    cssFile="/fonts/inter-500.css"
+  />
+)
+
+export const LoadInter600 = () => (
+  <LoadFont
+    woff2File="/fonts/subset-Inter-SemiBold.woff2"
+    cssFile="/fonts/inter-600.css"
+  />
+)
+
 export const LoadInter700 = () => (
   <LoadFont
-    woff2File="/fonts/subset-Inter-ExtraBold.woff2"
+    woff2File="/fonts/subset-Inter-Bold.woff2"
     cssFile="/fonts/inter-700.css"
+  />
+)
+
+export const LoadInter800 = () => (
+  <LoadFont
+    woff2File="/fonts/subset-Inter-ExtraBold.woff2"
+    cssFile="/fonts/inter-800.css"
   />
 )
 
