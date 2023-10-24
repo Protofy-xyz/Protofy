@@ -13,9 +13,9 @@ import { PanelMenuItem } from '../../../components/PanelMenuItem';
 import { workspaceAtom } from '../atoms';
 
 const opacity = 1
-const strokeWidth = 1.6
+const strokeWidth = 2
 const color = '$color7'
-const size = 22
+const size = 20
 
 const iconTable = {
     database: <Server color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,

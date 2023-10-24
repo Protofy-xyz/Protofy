@@ -7,9 +7,9 @@ export const PanelLayout = ({panelBgColor=undefined, menuContent, children, Side
     const { tint, setNextTint } = useTint()
     const { resolvedTheme } = useThemeSetting()
     const isDark = resolvedTheme == 'dark'
-    const bgPanels = '$gray2'//isDark ? '$color1': '$'+tint+'2'
+    const bgPanels = isDark ? '$color1': '$color2'
     const _panelBgColor = isDark ? '$color2' : '$color1'
-    console.log('bgpanels: ', bgPanels)
+
     return (
       <Layout
         header={
