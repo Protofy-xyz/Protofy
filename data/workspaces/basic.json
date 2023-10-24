@@ -25,12 +25,6 @@
                 "templates":["database"]
             }}
         ],
-        "API": [
-            { "name": "*", "icon": "api", "type": "files", "path": "/apps/api/src/modules", "options": {"skipExtension": true}},
-            { "name": "Add", "icon": "create", "type": "create", "path": "/apps/api/src/modules", "options": {
-                "templates":["basicApi"]
-            }}    
-        ],
         "Models": [
             { "name": "*", "icon": "model", "type": "files", "path": "/packages/app/schema", "options": {"skipExtension": true}}
         ]
