@@ -1,6 +1,4 @@
 import { connectNodes } from './Edge';
-import parserTypeScript from "prettier/parser-typescript.js";
-import prettier from "prettier/standalone.js";
 import { NodeTypes } from '../nodes';
 import { generateId } from './IdGenerator';
 
@@ -64,11 +62,6 @@ export function saveNodes(nodes: any[], edges: any[], nodesData: any, getFirstNo
 }
 
 export function validateCode(content: string, mode: string) {
-    const formatedCurrentPageContent = prettier.format(content, {
-        quoteProps: "consistent",
-        parser: "typescript",
-        plugins: [parserTypeScript]
-    })
     return content
 }
 
