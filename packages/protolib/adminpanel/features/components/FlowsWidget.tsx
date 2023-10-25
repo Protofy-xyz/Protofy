@@ -1,17 +1,12 @@
-import { FlowFactory, useFlowsStore } from 'protoflow';
+import { FlowFactory } from 'protoflow';
 import { TopicsProvider } from "react-topics";
-import { useTheme } from '@my/ui';
 import { useState } from 'react';
 
 const UIFLOWID = "flows-editor"
 const Flow = FlowFactory(UIFLOWID)
-const uiStore = useFlowsStore()
 
 const FlowsWidget = (props: any) => {
     const [content, setContent] = useState(props.content)
-    const theme = useTheme()
-    console.log('token: ', theme.borderColor.val)
-
 
     return <TopicsProvider>
         {props.isModified ?props.icons:null}
@@ -43,7 +38,7 @@ const FlowsWidget = (props: any) => {
             disableSideBar={true}
             onShowCode={() => { }}
             onReload={() => { }}
-            store={uiStore}
+            // store={uiStore}
             display={true}
             flowId={"flows-editor"}
             onEdit={(content) => {

@@ -15,9 +15,9 @@ import dynamic from 'next/dynamic'
 
 const FlowsWidget = dynamic(() => import('../../adminpanel/features/components/FlowsWidget'), {
     loading: () => <Center>
-    <Spinner size={'large'} scale={3} top={-50} />
-    Loading
-  </Center>,
+        <Spinner size={'large'} scale={3} top={-50} />
+        Loading
+    </Center>,
     ssr: false
 })
 
@@ -55,22 +55,24 @@ const FlowsViewer = ({ isFull, path, isModified, setIsModified }) => {
     const [fileContent, setFileContent] = useFileFromAPI(path)
     const { resolvedTheme } = useThemeSetting()
     console.log('data: ', fileContent)
-    return <XStack mt={isFull ? 50 : 30} f={1} width={"100%"}>
-        {/* <Theme name={tint as any}> */}
-        <FlowsWidget
-            icons={<XStack position="absolute" right={isFull ? 0 : 50} top={isFull ? -35 : -32}>
-                <IconContainer onPress={() => { }}>
-                    {/* <SizableText mr={"$2"}>Save</SizableText> */}
-                    <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
-                </IconContainer>
-            </XStack>}
-            isModified={isModified}
-            setIsModified={setIsModified}
-            setSourceCode={(sourceCode) => {
-                console.log('set new sourcecode from flows: ', sourceCode)
-            }} sourceCode={fileContent.data} path={path} themeMode={resolvedTheme} />
-        {/* </Theme> */}
-    </XStack>
+    return <AsyncView atom={fileContent}>
+            <XStack mt={isFull ? 50 : 30} f={1} width={"100%"}>
+                {/* <Theme name={tint as any}> */}
+                <FlowsWidget
+                    icons={<XStack position="absolute" right={isFull ? 0 : 50} top={isFull ? -35 : -32}>
+                        <IconContainer onPress={() => { }}>
+                            {/* <SizableText mr={"$2"}>Save</SizableText> */}
+                            <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
+                        </IconContainer>
+                    </XStack>}
+                    isModified={isModified}
+                    setIsModified={setIsModified}
+                    setSourceCode={(sourceCode) => {
+                        console.log('set new sourcecode from flows: ', sourceCode)
+                    }} sourceCode={fileContent.data} path={path} themeMode={resolvedTheme} />
+                {/* </Theme> */}
+            </XStack>
+        </AsyncView>
 }
 
 const MonacoViewer = ({ path }) => {
