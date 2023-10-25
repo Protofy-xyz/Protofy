@@ -88,44 +88,44 @@ export default function DBAdmin({ contentState }) {
                     </Paragraph>
                 </YStack>
 
-                <XStack>
+                <XStack gap="$2">
                     <Search onCancel={onCancelSearch} onSearch={onSearch} />
 
                     {!tmpItem
                         ?
-                        <Popover isOpen={isPopoverOpen} onOpenChange={setIsPopoverOpen} trigger={
-                            <Button
-                                size="$3"
-                                chromeless
-                                circular
-                                hoverStyle={{
-                                    bc: 'transparent',
-                                }}
-                                noTextWrap
-                                onPress={() => setIsPopoverOpen(!isPopoverOpen)}
-                                theme={isPopoverOpen ? 'alt1' : undefined}
+                        <Tinted>
+                            <Popover isOpen={isPopoverOpen} onOpenChange={setIsPopoverOpen} trigger={
+                                <Button
+                                    hoverStyle={{ o: 1 }} o={0.7}
+                                    size="$3"
+                                    chromeless
+                                    circular
+                                    noTextWrap
+                                    onPress={() => setIsPopoverOpen(!isPopoverOpen)}
+                                    theme={isPopoverOpen ? 'alt1' : undefined}
+                                >
+                                    <Plus style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
+                                </Button>
+                            }
                             >
-                                <Plus style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
-                            </Button>
-                        }
-                        >
-                            <YStack padding={'$6'} gap='$6'>
-                                <Text w={'$16'}>{'Please enter a unique key for the new DB item.'}</Text >
-                                <Input
-                                    placeholder='Enter new item key'
-                                    onChangeText={text => { setNewKey(text); setError(false) }}
-                                    value={newKey}
-                                    color={error ? '$red10' : ''}
-                                    onSubmitEditing={onCreateItem}
-                                ></Input>
-                                <Tinted>
-                                    <Button hoverStyle={{ bc: '$color8' }} disabled={error} onPress={onCreateItem} backgroundColor={error ? '$red10' : '$color9'} >
-                                        <Text color={"white"}>{error ? "Item already exists" : "Create"}</Text>
-                                    </Button>
-                                </Tinted>
+                                <YStack padding={'$6'} gap='$6'>
+                                    <Text w={'$16'}>{'Please enter a unique key for the new DB item.'}</Text >
+                                    <Input
+                                        placeholder='Enter new item key'
+                                        onChangeText={text => { setNewKey(text); setError(false) }}
+                                        value={newKey}
+                                        color={error ? '$red10' : ''}
+                                        onSubmitEditing={onCreateItem}
+                                    ></Input>
+                                    <Tinted>
+                                        <Button hoverStyle={{ bc: '$color8' }} disabled={error} onPress={onCreateItem} backgroundColor={error ? '$red10' : '$color9'} >
+                                            <Text color={"white"}>{error ? "Item already exists" : "Create"}</Text>
+                                        </Button>
+                                    </Tinted>
 
-                            </YStack>
-                        </Popover>
+                                </YStack>
+                            </Popover>
+                        </Tinted>
                         : null}
                 </XStack>
             </XStack>
