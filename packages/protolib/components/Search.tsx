@@ -1,4 +1,4 @@
-import { Input, XStack } from "tamagui"
+import { Button, Input, XStack } from "tamagui"
 import { Search as IconSearch } from '@tamagui/lucide-icons'
 import { useState, forwardRef, useRef, useEffect } from "react"
 import { useUpdateEffect } from 'usehooks-ts'
@@ -42,8 +42,10 @@ export const Search = forwardRef(({ initialState, onCancel = () => { }, onSearch
             onChangeText={(text) => { setContent(text); if (!text) onSearch('') }}
             onSubmitEditing={(e) => { onSearch(content) }}
         /> : null}
-        <XStack position={"absolute"} right={15} top={6} cursor="pointer" opacity={0.7} hoverStyle={{ opacity: 1 }}>
-            <IconSearch color="var(--color)" />
+        <XStack position={"absolute"} right={0} top={-4} cursor="pointer" opacity={0.7} hoverStyle={{ opacity: 1 }}>
+            <Button disabled={opened} bc={"transparent"}>
+                <IconSearch fillOpacity={0} color="var(--color)" />
+            </Button>
         </XStack>
     </XStack>
 })
