@@ -11,6 +11,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 import { getPendingResult } from '../lib/createApiAtom'
 import { DataTableList } from './DataTableList'
 import ActiveRender from "./ActiveRender"
+import { useThemeSetting } from '@tamagui/next-theme'
 
 type DataViewState = {
     items: PendingAtomResult,
@@ -135,6 +136,7 @@ export function DataView({
     const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))
 
     const activeViewIndex = tableViews.findIndex(v => v.name == state.view) != -1 ? tableViews.findIndex(v => v.name == state.view) : tableViews.findIndex(v => v.name == defaultView)
+    const { resolvedTheme } = useThemeSetting()
 
     return (<YStack height="100%" f={1}>
             <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns:columns, rowIcon}}>
@@ -193,6 +195,7 @@ export function DataView({
                         }}
                         open={state.item}
                         description={""}
+                        //bc={resolvedTheme == 'dark' ? "$background": "$color1"}
                     >
                         <YStack f={1} jc="center" ai="center">
                             <ScrollView maxHeight={"90vh"}>
@@ -228,7 +231,7 @@ export function DataView({
                                         model={model}
                                         extraFields={{...extraFields, ...extraFieldsForms}}
                                         icons={icons}
-                                        customFields={{...customFields, customFieldsForms}}
+                                        customFields={{...customFields, ...customFieldsForms}}
                                     />
                                 </Stack>
                             </ScrollView>
