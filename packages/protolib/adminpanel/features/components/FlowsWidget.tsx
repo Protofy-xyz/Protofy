@@ -9,7 +9,6 @@ const uiStore = useFlowsStore()
 
 const FlowsWidget = (props: any) => {
     const [content, setContent] = useState(props.content)
-    const [originalContent, setOriginalContent] = useState(props.content)
     const theme = useTheme()
     console.log('token: ', theme.borderColor.val)
 
