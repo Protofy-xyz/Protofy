@@ -8,7 +8,7 @@ export const Uploader = ({path, onUpload, setShowUploadDialog}) => {
     const handleChangeStatus = ({ meta, file }, status) => { 
       if (status=="done") {
         console.log("CHANGE STATUS", status, meta, file) 
-        onUpload();
+        onUpload({ meta, file });
       }
       
     }
