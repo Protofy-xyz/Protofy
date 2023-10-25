@@ -16,12 +16,10 @@
   "license": "MIT",
   "dependencies": {
     "chroma-js": "2.4.2",
-    "dagre": "0.8.5",
     "deep-diff": "1.0.2",
     "elkjs": "0.8.2",
     "immer": "9.0.5",
     "lucide-react": "0.279.0",
-    "normalize-css-color": "1.0.2",
     "react": "^18.2.0",
     "react-color": "2.19.3",
     "react-select": "5.7.0",
