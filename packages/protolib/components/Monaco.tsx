@@ -73,10 +73,10 @@ export const Monaco = ({
             inherit: true,
             rules: [
                 { token: 'keyword', foreground: tokenColor },
-                { token: 'punctuation', foreground: tokenColor } 
+                { token: 'punctuation', foreground: tokenColor },
             ],
             colors: {
-                'editor.background': theme.background.val
+                'editor.background': theme.background.val,
             }
         });
     }
