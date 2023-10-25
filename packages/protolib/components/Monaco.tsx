@@ -72,7 +72,8 @@ export const Monaco = ({
             base: resolvedTheme === 'dark' ? 'vs-dark' : 'vs',
             inherit: true,
             rules: [
-                { token: 'keyword', foreground: tokenColor }
+                { token: 'keyword', foreground: tokenColor },
+                { token: 'punctuation', foreground: tokenColor } 
             ],
             colors: {
                 'editor.background': theme.background.val

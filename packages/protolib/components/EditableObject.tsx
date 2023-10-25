@@ -58,7 +58,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
     const [opened, setOpened] = useState([])
     return <Accordion onPress={(e) => e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" boc={"$gray6"} f={1}>
         <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} bc="$transparent" value={"item-"}>
-            <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between" bc="$transparent">
+            <Accordion.Trigger br="$5" bw="$0" flexDirection="row" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent'}} justifyContent="space-between" bc="$transparent">
                 {({ open }) => (
                     <>
                         <Tinted><Layers {...iconStyle} /></Tinted>
@@ -166,7 +166,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
             <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
         </Stack> */}
             <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
-                <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
+                <Accordion.Trigger br="$5" bw="$0" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent'}} flexDirection="row" justifyContent="space-between">
                     {({ open }) => (
                         <>
                             <Tinted><List {...iconStyle} /></Tinted>
