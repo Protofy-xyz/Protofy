@@ -75,7 +75,14 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                         return <XStack ml="$1">
                             {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>}
                             {getElement({ ...elementDef.type._def, _def: elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name], true, ele.name)}
-                            {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"} top={13} br={"$5"} p={"$2"} als="flex-start" cursor='pointer' pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}>
+                            {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
+                                top={13} br={"$5"} p={"$2"}
+                                als="flex-start" cursor='pointer'
+                                pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
+                                onPress={() => {
+                                    arrData.splice(i, 1)
+                                    setFormData(ele.name, [...arrData])
+                                }}>
                                 <X color={'var(--red7)'} strokeWidth={2} size={20} />
                             </Stack>}
                         </XStack>
