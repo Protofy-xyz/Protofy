@@ -18,7 +18,7 @@ export type GridProps = {
   gap?: any
   columns?: number
   data?:any
-  card: any,
+  card?: any,
   spacing?:number,
   masonry?:boolean,
   containerRef?: any,
