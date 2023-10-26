@@ -44,6 +44,9 @@ const FlowsWidget = (props: any) => {
             onEdit={(content) => {
                 if(props.setIsModified) props.setIsModified(true)
                 setContent(content)
+                if(props.onEdit) {
+                    props.onEdit(content)
+                }
             }}
             disableMiniMap={true}
             showActionsBar={false}
