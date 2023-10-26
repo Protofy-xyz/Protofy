@@ -48,6 +48,7 @@ const FlowsWidget = (props: any) => {
                     props.onEdit(content)
                 }
             }}
+            theme={props.theme ?? {}}
             disableMiniMap={true}
             showActionsBar={false}
             bridgeNode={true}
