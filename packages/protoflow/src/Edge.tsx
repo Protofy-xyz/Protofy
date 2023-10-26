@@ -37,6 +37,7 @@ export default function CustomEdge(props: EdgeProps, bridgeNode: boolean = false
   }
 
   const edgeColor = useTheme('edgeColor')
+  const portSize = useTheme('portSize')
   const flowOutputColor = useTheme('flowOutputColor')
 
   return isSourceLayouted?(
@@ -45,12 +46,12 @@ export default function CustomEdge(props: EdgeProps, bridgeNode: boolean = false
     >
       {bridgeNode ? <g transform={`translate(${edgeCenterX}, ${edgeCenterY})`}>
         <rect
-          style={{ cursor: 'pointer', pointerEvents: 'all', strokeWidth: '2px', stroke: edgeColor, fill: flowOutputColor }}
+          style={{ cursor: 'pointer', pointerEvents: 'all', strokeWidth: '1px', stroke: edgeColor, fill: flowOutputColor }}
           onClick={onOpenMenu}
-          x={-10} y={-10} width={20} ry={20} rx={20} height={20}
+          x={-10} y={-10} width={portSize} ry={portSize} rx={portSize} height={portSize}
         />
         <text
-          style={{ fontWeight: 600, pointerEvents: 'none', userSelect: 'none', fill: edgeColor, fontSize: '18px' }}
+          style={{ fontWeight: 600, pointerEvents: 'none', userSelect: 'none', fill: edgeColor, fontSize: '17px' }}
           y={5} x={-6}
         >
           {'+'}

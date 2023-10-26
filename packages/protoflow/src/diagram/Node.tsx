@@ -1,4 +1,4 @@
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useRef } from 'react';
 import Text from "./NodeText"
 import { Handle, Position } from 'reactflow';
 import chroma from "chroma-js";
@@ -9,6 +9,8 @@ import useTheme from './Theme';
 import { NodeTypes } from './../nodes';
 import { write } from '../lib/memory';
 import { Plus } from 'lucide-react';
+import { generateBoxShadow } from '../lib/shadow';
+import {useHover} from 'usehooks-ts'
 
 const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = null, container = false, title = '', children, isPreview = false, id, color = 'white', node, headerContent = null, style = {}, contentStyle = {}}) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -29,11 +31,11 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
     const borderWidth = useTheme('borderWidth')
     const borderWidthSelected = useTheme('borderWidthSelected')
     const themeBackgroundColor = useTheme('nodeBackgroundColor')
-        
+    const isHover = useHover(flexRef)
     const currentBorder = isPreview? 0 : (node?.selected ? borderWidthSelected  : borderWidth)
     const titleSize = (useTheme('nodeFontSize')/100)*100
 
-    const innerRadius = (13)+'px '
+    const innerRadius = '12px '
     const innerBorderRadius = (mode == 'column'? innerRadius+innerRadius+' 0px 0px': innerRadius+'0px 0px '+innerRadius)
 
     return (
@@ -44,19 +46,19 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
             style={{
                 //@ts-ignore
                 display: 'flex', minHeight: !isPreview ? "80px" : "30px", flexDirection: mode,
-                border: currentBorder + "px solid " + borderColor,
-                position: 'relative',
-                top: '-'+currentBorder+'px',
-                left: '-'+currentBorder+'px',
-                borderWidth: isPreview ? "0px" : "2px",
-                borderRadius: 16,
+                // border: currentBorder + "px solid " + borderColor,
+                // position: 'relative',
+                // top: '-'+currentBorder+'px',
+                // left: '-'+currentBorder+'px',
+                borderRadius: 13,
                 textAlign: "center",
                 fontSize: useTheme('nodeFontSize'),
+                boxShadow: generateBoxShadow(container? 0:isHover? 10: !isPreview && node?.selected ? 10 : 3),    
                 ...style
             }}
             className={draggable?'':'nodrag'}
         >
-            {title || headerContent ? <div ref={boxRef} style={{ position: 'relative', left: mode=='column'?'0px':'0.045px', top: '0.01px', display: 'flex', backgroundColor: color, borderRadius: isPreview ? '8px' : innerBorderRadius, borderBottom: mode == 'column' && !isPreview ? borderWidth + ' solid ' + borderColor : '0px', paddingBottom: '10px', justifyContent: 'center' }}>
+            {title || headerContent ? <div ref={boxRef} style={{ display: 'flex', backgroundColor: color, borderRadius: isPreview ? '8px' : innerBorderRadius, borderBottom: mode == 'column' && !isPreview ? borderWidth + ' solid ' + borderColor : '0px', paddingBottom: '10px', justifyContent: 'center' }}>
                 {icon && flowDirection == "LEFT" ? <div style={{ display: 'flex', right: '15px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id?titleSize:'18px', color: hColor })}</div> : null}
                 {title ? <Text style={{ fontSize: id?titleSize:'18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '15ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{title}</Text> : null}
                 {icon && flowDirection == "RIGHT" ? <div style={{ display: 'flex', left: '10px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id?titleSize:'18px', color: hColor })}</div> : null}
@@ -98,7 +100,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
     const connected = isHandleConnected(edges, id)
 
     const portSize = useTheme('portSize')
-    const plusColor = useTheme('textColor')
+    const plusColor = useTheme('plusColor')
     const borderColor = useTheme('nodeBorderColor')
     const borderWidth = useTheme('nodeBorderWidth')
     const nodeFontSize = useTheme('nodeFontSize')
@@ -116,7 +118,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
         write(instanceId, id, allowedTypes)
     }, [allowedTypes])
 
-    const marginRight = Math.floor((portSize*-1)/2.3)
+    const marginRight = Math.floor(((portSize/3.5)*-1))
     return (
         <>
             <Handle
@@ -160,7 +162,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                         alignItems: 'center', 
                         justifyContent: 'center', 
                     }}>
-                            <Plus size={16} strokeWidth={3} />
+                            <Plus color={plusColor} size={10} strokeWidth={5} />
                     </div>
                     : null
                 }
