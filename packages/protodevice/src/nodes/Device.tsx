@@ -68,9 +68,10 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     }, [lastMessage])
     const devicePositioning = Array(34).fill(1).map((x,i)=>{
         if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
-            return `${i + 10}-${i>14?'l':'r'}`
+            return `${i + 10}-${i>14?'l':'r'}-${i}`
         }
     })
+    console.log("DevicePositioning: ", devicePositioning)
     if(!nodeData._devicePositioning){
         setNodeData(node.id,{...nodeData, _devicePositioning: devicePositioning})
     }
