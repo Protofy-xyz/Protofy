@@ -89,7 +89,8 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                     })}
                 </Stack>
                 {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
-                    setFormData(ele.name, [...arrData, defaultValueTable[ele._def.type._def.typeName] ?? ""])
+                    const defaultValue = ele._def.typeName == "ZodOptional" ? ele._def.innerType._def.type._def.typeName : ele._def.type._def.typeName
+                    setFormData(ele.name, [...arrData, (elementDef.type._def.typeName != 'ZodObject' ? defaultValueTable[defaultValue] : { ...defaultValueTable[defaultValue] }) ?? ""])
                     setOpened([...opened, 'item-' + arrData.length])
                 }}>Add{ele.name}</Button>}
             </Accordion.Content>
