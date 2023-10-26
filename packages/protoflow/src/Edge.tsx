@@ -50,7 +50,7 @@ export default function CustomEdge(props: EdgeProps, bridgeNode: boolean = false
           x={-10} y={-10} width={20} ry={20} rx={20} height={20}
         />
         <text
-          style={{ pointerEvents: 'none', userSelect: 'none', fill: edgeColor, fontSize: '18px' }}
+          style={{ fontWeight: 600, pointerEvents: 'none', userSelect: 'none', fill: edgeColor, fontSize: '18px' }}
           y={5} x={-6}
         >
           {'+'}

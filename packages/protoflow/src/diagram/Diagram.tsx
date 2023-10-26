@@ -232,7 +232,7 @@ const Diagram = React.forwardRef(({
                 style={{ cursor: "pointer", backgroundColor: 'white', ...style }}
                 onDragOver={onDragOver}
                 edgeTypes={edgeTypes}
-                minZoom={0.02}
+                minZoom={0.3}
                 maxZoom={2}
                 onInit={(reactFlowInstance: any) => {
                     onInit(reactFlowInstance)
