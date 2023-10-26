@@ -58,7 +58,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
     const [opened, setOpened] = useState([])
     return <Accordion onPress={(e) => e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" boc={"$gray6"} f={1}>
         <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} bc="$transparent" value={"item-"}>
-            <Accordion.Trigger br="$5" bw="$0" flexDirection="row" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent'}} justifyContent="space-between" bc="$transparent">
+            <Accordion.Trigger br="$5" bw="$0" flexDirection="row" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent' }} justifyContent="space-between" bc="$transparent">
                 {({ open }) => (
                     <>
                         <Tinted><Layers {...iconStyle} /></Tinted>
@@ -75,6 +75,9 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                         return <XStack ml="$1">
                             {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>}
                             {getElement({ ...elementDef.type._def, _def: elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name], true, ele.name)}
+                            {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"} top={13} br={"$5"} p={"$2"} als="flex-start" cursor='pointer' pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}>
+                                <X color={'var(--red7)'} strokeWidth={2} size={20} />
+                            </Stack>}
                         </XStack>
                     })}
                 </Stack>
@@ -166,7 +169,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
             <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
         </Stack> */}
             <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
-                <Accordion.Trigger br="$5" bw="$0" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent'}} flexDirection="row" justifyContent="space-between">
+                <Accordion.Trigger br="$5" bw="$0" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent' }} flexDirection="row" justifyContent="space-between">
                     {({ open }) => (
                         <>
                             <Tinted><List {...iconStyle} /></Tinted>
@@ -230,10 +233,10 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                         description={""}
                     >
                         <YStack f={1} alignItems="center" mt="$6" justifyContent="center">
-                            <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='Field name...' />     
+                            <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='Field name...' />
                         </YStack>
                     </AlertDialog>
-                    {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {setMenuOpened(true)}}> Add field</Button>}
+                    {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
                 </Accordion.Content>
             </Accordion.Item>
         </Accordion>
@@ -378,7 +381,7 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
                         }
                     }} cursor="pointer">
                         <Tinted>
-                            {currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" />:null)}
+                            {currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" /> : null)}
                         </Tinted>
                     </XStack>}
                 </XStack>
