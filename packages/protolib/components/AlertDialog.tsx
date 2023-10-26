@@ -5,7 +5,27 @@ import { Tinted } from './Tinted'
 import { Notice } from './Notice'
 import Center from './Center'
 
-export const AlertDialog = forwardRef(({ showCancel, hideAccept, onAccept = () => { }, onCancel = () => { }, title, trigger, description, children, cancelCaption = 'Cancel', acceptCaption = 'Accept', acceptTint, cancelTint = 'gray', acceptButtonProps = {}, cancelButtonProps = {}, open, setOpen, ...props }: any, ref: any) => {
+export const AlertDialog = forwardRef(({
+    showCancel,
+    hideAccept,
+    onAccept = () => { },
+    onCancel = () => { },
+    title,
+    trigger,
+    description,
+    children,
+    cancelCaption = 'Cancel',
+    acceptCaption = 'Accept',
+    acceptTint,
+    cancelTint = 'gray',
+    acceptButtonProps = {},
+    cancelButtonProps = {},
+    open,
+    setOpen,
+    disableDrag = false,
+    ...props
+}: any, ref: any) => {
+    
     const [_open, _setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
@@ -81,7 +101,7 @@ export const AlertDialog = forwardRef(({ showCancel, hideAccept, onAccept = () =
         </Dialog.Portal>
 
         <Dialog.Adapt when="sm" >
-            <Dialog.Sheet >
+            <Dialog.Sheet disableDrag={disableDrag}>
                 {/* ml -18 because there is an bug centering the dialog on sm screen */}
                 <Dialog.Sheet.Frame ml="-18px">
                     <YStack p={"$5"} pb="$12"  f={1}>

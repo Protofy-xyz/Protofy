@@ -89,7 +89,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                     })}
                 </Stack>
                 {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
-                    setFormData(ele.name, [...arrData, defaultValueTable[ele._def.typeName] ?? ""])
+                    setFormData(ele.name, [...arrData, defaultValueTable[ele._def.type._def.typeName] ?? ""])
                     setOpened([...opened, 'item-' + arrData.length])
                 }}>Add{ele.name}</Button>}
             </Accordion.Content>
