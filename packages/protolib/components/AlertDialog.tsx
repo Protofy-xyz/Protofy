@@ -84,7 +84,7 @@ export const AlertDialog = forwardRef(({ showCancel, hideAccept, onAccept = () =
             <Dialog.Sheet >
                 {/* ml -18 because there is an bug centering the dialog on sm screen */}
                 <Dialog.Sheet.Frame ml="-18px">
-                    <YStack p={"$5"} f={1}>
+                    <YStack p={"$5"} pb="$12"  f={1}>
                         <Dialog.Adapt.Contents />
                     </YStack>
                 </Dialog.Sheet.Frame>
