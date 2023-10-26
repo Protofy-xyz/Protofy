@@ -39,6 +39,7 @@ function getEdgeFromSource(edges,source){
     return out[0];
 }
 
+const metas = []
 
 const computeLayout = (nodes, edges, node, nodeData,pos={x:0, y: 0}, metadata={}, tracker={x:0}) => {
     console.log("----- ENTER ON computeLayout -----")
@@ -54,15 +55,11 @@ const computeLayout = (nodes, edges, node, nodeData,pos={x:0, y: 0}, metadata={}
         const edge = getEdgeFromSource(edges,node.id)
         nodePositionReference = parentNode._devicePositioning.filter((positionTag: string|undefined)=>{
             if(positionTag){
-                // console.log("positionTag: ",positionTag)
                 return positionTag.includes(edge.targetHandle.split('element-')[1])
-                //return e.includes(c.edge.targetHandle.split('element-')[1])
             }
         })[0].split('-')[1]
         console.log("nodePositionReference: ",nodePositionReference);
     }
-    // const orientationValue = getOrientation[0].split('-')[1];
-    // console.log("orientationValue: ", orientationValue)
 
     node.position =  {
         x: nodePositionReference=='r'?-1500+pos.x:pos.x,
@@ -74,7 +71,8 @@ const computeLayout = (nodes, edges, node, nodeData,pos={x:0, y: 0}, metadata={}
         layouted: true
     }
 
-
+    metas.push({node})
+    console.log("Metas: ",metas)
 
     if (flowNode) {
         const flowNodeType = flowNode.type ?? flowNode
