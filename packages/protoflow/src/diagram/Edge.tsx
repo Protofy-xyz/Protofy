@@ -1,5 +1,6 @@
 import React from 'react';
 import { EdgeProps, getBezierPath } from 'reactflow';
+import useTheme from './Theme';
 
 export default function CustomEdge({
   id,
@@ -30,16 +31,20 @@ export default function CustomEdge({
     targetY,
     targetPosition,
   });
-  
+
+  const borderWidth = useTheme('nodeBorderWidth')
+  const nodeEdgeWidth = useTheme('nodeEdgeWidth')
+  const nodeEdgeStyle = useTheme('nodeEdgeStyle')
   return (
     <>
       <path
         id={id}
-        strokeWidth={selected ? 4 : 2}
+        strokeWidth={selected ? nodeEdgeWidth*2 : nodeEdgeWidth}
         stroke={color}
         className="react-flow__edge"
         d={edgePath}
         fill="none"
+        stroke-dasharray={nodeEdgeStyle}
       />
       <path
         id={id}

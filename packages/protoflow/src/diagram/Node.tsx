@@ -8,6 +8,7 @@ import { useEdges } from 'reactflow';
 import useTheme from './Theme';
 import { NodeTypes } from './../nodes';
 import { write } from '../lib/memory';
+import { Plus } from 'lucide-react';
 
 const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = null, container = false, title = '', children, isPreview = false, id, color = 'white', node, headerContent = null, style = {}, contentStyle = {}}) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -30,9 +31,9 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
     const themeBackgroundColor = useTheme('nodeBackgroundColor')
         
     const currentBorder = isPreview? 0 : (node?.selected ? borderWidthSelected  : borderWidth)
-    const titleSize = (useTheme('nodeFontSize')/100)*125
+    const titleSize = (useTheme('nodeFontSize')/100)*100
 
-    const innerRadius = currentBorder+'px '
+    const innerRadius = (13)+'px '
     const innerBorderRadius = (mode == 'column'? innerRadius+innerRadius+' 0px 0px': innerRadius+'0px 0px '+innerRadius)
 
     return (
@@ -48,7 +49,7 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
                 top: '-'+currentBorder+'px',
                 left: '-'+currentBorder+'px',
                 borderWidth: isPreview ? "0px" : "2px",
-                borderRadius: currentBorder*2,
+                borderRadius: 16,
                 textAlign: "center",
                 fontSize: useTheme('nodeFontSize'),
                 ...style
@@ -57,7 +58,7 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
         >
             {title || headerContent ? <div ref={boxRef} style={{ position: 'relative', left: mode=='column'?'0px':'0.045px', top: '0.01px', display: 'flex', backgroundColor: color, borderRadius: isPreview ? '8px' : innerBorderRadius, borderBottom: mode == 'column' && !isPreview ? borderWidth + ' solid ' + borderColor : '0px', paddingBottom: '10px', justifyContent: 'center' }}>
                 {icon && flowDirection == "LEFT" ? <div style={{ display: 'flex', right: '15px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id?titleSize:'18px', color: hColor })}</div> : null}
-                {title ? <Text adaptiveSize={adaptiveTitleSize} style={{ fontSize: id?titleSize:'18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '15ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{title}</Text> : null}
+                {title ? <Text style={{ fontSize: id?titleSize:'18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '15ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{title}</Text> : null}
                 {icon && flowDirection == "RIGHT" ? <div style={{ display: 'flex', left: '10px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id?titleSize:'18px', color: hColor })}</div> : null}
                 {headerContent}
             </div> : null}
@@ -115,7 +116,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
         write(instanceId, id, allowedTypes)
     }, [allowedTypes])
 
-    const marginRight = (portSize*-1)/2
+    const marginRight = Math.floor((portSize*-1)/2.3)
     return (
         <>
             <Handle
@@ -150,9 +151,19 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                 {label ? <div style={{ display: 'flex', width: `${labelWidth}px`, marginLeft: ml, zIndex: -1, justifyContent: 'flex-end' }}>
                     <Text ref={textRef} style={{ marginRight: '5px', textAlign: position == Position.Right ? 'right' : 'left'}}>{label}</Text>
                 </div> : null}
-                {!connected ? <div style={{width: portSize+"px", height: portSize+"px",display: 'flex', justifyContent: 'center'}}>
-                        <Text style={{ lineHeight: '100%',textAlign: 'center', color: plusColor, fontSize: nodeFontSize-3, pointerEvents: 'none', padding: 0}}>+</Text> 
-                    </div>: null}
+                {
+                    !connected ? 
+                    <div style={{
+                        width: portSize + "px", 
+                        height: portSize + "px", 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                    }}>
+                            <Plus size={16} strokeWidth={3} />
+                    </div>
+                    : null
+                }
             </Handle>
         </>
     )

@@ -149,7 +149,7 @@ export const deleteAdditionalKeys = (data) => (
         const currentNode = data[nodeId]
         // rawData contain keys that no start with "_"
         const rawData = Object.keys(currentNode).reduce((total, key) => {
-            if (!key.startsWith('_') && key != 'connections') { //WARNING: we are deleting connections from some nodes (Block)
+            if (!key.startsWith('_') && key != 'connections' && key != 'SourceFile_0_0') { //WARNING: we are deleting connections from some nodes (Block)
                 total = { ...total, [key]: currentNode[key] }
             }
             return total

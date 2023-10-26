@@ -646,6 +646,7 @@ const FlowComponent = ({
     useEffect(() => {
         const edgesDiffs = getDiffs(removeSizes(initialEdges), removeSizes(edges))
         const nodesDiffs = getDiffs(removeSizes(initialNodes), removeSizes(nodes))
+        
         //look for non connected nodes and make them draggable
         const unconnected = nodes.filter(n => n.id != getFirstNode(nodes)?.id && !edges.find(e => e.source == n.id) && !n.draggable)
         if (unconnected.length) {
@@ -910,11 +911,13 @@ const FlowComponent = ({
 }
 
 const Flow = (props) => {
+    const store = useMemo(useFlowsStore, []);
+
     return (
-        <FlowStoreContext.Provider value={props.store ?? useFlowsStore()}>
+        <FlowStoreContext.Provider value={store}>
             <FlowComponent {...props} />
         </FlowStoreContext.Provider>
-    )
+    );
 }
 
 export default (flowId) => withTopics(Flow, { topics: [flowId + '/play', flowId + '/ui', 'savenodes'] })

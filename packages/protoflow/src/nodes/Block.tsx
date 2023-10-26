@@ -87,7 +87,7 @@ const Block = (node) => {
     return (
         <Node
             draggable={type != 'SourceFile'}
-            //contentStyle={{borderLeft:borderWidth+'px solid '+borderColor}}
+            // contentStyle={{borderLeft:borderWidth+'px solid '+borderColor}}
             container={!isEmpty}
             style={extraStyle}
             icon={typeConf[type].icon??null}
@@ -101,10 +101,10 @@ const Block = (node) => {
             dataOutput={DataOutput.block}>
             {isEmpty?<div style={{height:nodeFontSize*2+'px'}}></div>:<>
                 <div style={{
-                    top: nodeFontSize*2.13,
+                    top: nodeFontSize*1.75,
                     opacity: '0.05',
                     pointerEvents: 'none',
-                    borderRadius: "0px "+nodeFontSize/4+"px "+nodeFontSize/4+ "px "+ nodeFontSize/4+'px',position:'absolute', 
+                    borderRadius: "0px "+nodeFontSize/1.3+"px "+nodeFontSize/1.3+ "px "+ nodeFontSize/1.3+'px',position:'absolute', 
                     width: metaData.childWidth+'px', 
                     height: height-headerSize-(nodeFontSize*2)+'px', 
                     backgroundColor: containerColor,
