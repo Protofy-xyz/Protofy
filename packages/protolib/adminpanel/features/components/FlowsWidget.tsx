@@ -28,7 +28,7 @@ const FlowsWidget = (props: any) => {
             }}
             themeMode={props.themeMode}
             disableDots={false}
-            customComponents={[]}
+            customComponents={props.customComponents ?? []}
             sourceCode={props.sourceCode}
             setSourceCode={props.setSourceCode}
             positions={[]}

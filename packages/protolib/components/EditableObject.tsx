@@ -9,7 +9,7 @@ import { useUpdateEffect } from "usehooks-ts";
 import { useTint } from 'protolib'
 import { ItemMenu } from "./ItemMenu";
 
-type EditableObjectProps = {
+export type EditableObjectProps = {
     initialData?: any,
     sourceUrl: string,
     onSave: Function,
@@ -91,7 +91,8 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                     })}
                 </Stack>
                 {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
-                    const defaultValue = ele._def.typeName == "ZodOptional" ? ele._def.innerType._def.type._def.typeName : ele._def.type._def.typeName
+                    const eleDef = ele._def.typeName == 'ZodLazy' ? ele._def.getter()._def : ele._def
+                    const defaultValue = eleDef.typeName == "ZodOptional" ? eleDef.innerType._def.type._def.typeName : eleDef.type._def.typeName
                     setFormData(ele.name, [...arrData, (elementDef.type._def.typeName != 'ZodObject' ? defaultValueTable[defaultValue] : { ...defaultValueTable[defaultValue] }) ?? ""])
                     setOpened([...opened, 'item-' + arrData.length])
                 }}>Add{ele.name}</Button>}
@@ -101,7 +102,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
 }
 
 const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray?, arrayName?) => {
-    const elementDef = ele._def?.innerType?._def ?? ele._def
+    let elementDef = ele._def?.innerType?._def ?? ele._def
 
     const setFormData = (key, value) => {
         console.log('set form data: ', key, value, path);
@@ -143,9 +144,17 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         return target && target.hasOwnProperty(key) ? target[key] : '';
     }
 
-    const elementType = elementDef.typeName
+    let elementType = elementDef.typeName
+    if(elementType == 'ZodLazy') {
+        let newele = elementDef.getter()
+        elementDef = newele._def
+        elementType = newele.constructor.name
+        newele.name = ele.name
+        ele = newele
+    }
 
-    console.log('custom fields: ', customFields, 'ele: ', ele.name)
+    console.log('custom fields: ', customFields, 'ele: ', ele.name, elementType)
+
     // TODO Check if custom element
     if (customFields.hasOwnProperty(ele.name) || customFields.hasOwnProperty('*')) {
         const customField = customFields.hasOwnProperty(ele.name) ? customFields[ele.name] : customFields['*']
@@ -174,12 +183,12 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
             }
         }
     } else if (elementType == 'ZodObject') {
-        return <Accordion type="multiple" br="$5" boc={"$gray6"} f={1}>
+        return <Accordion bc="transparent" type="multiple" br="$5" boc={"$gray6"} f={1}>
             {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
             <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
         </Stack> */}
             <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
-                <Accordion.Trigger br="$5" bw="$0" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent' }} flexDirection="row" justifyContent="space-between">
+                <Accordion.Trigger br="$5" bw="$0" bc="transparent" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent' }} flexDirection="row" justifyContent="space-between">
                     {({ open }) => (
                         <>
                             <Tinted><List {...iconStyle} /></Tinted>
@@ -190,7 +199,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                         </>
                     )}
                 </Accordion.Trigger>
-                <Accordion.Content br="$5">
+                <Accordion.Content bc="transparent" br="$5">
                     <Stack>
                         {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
                         {Object.keys(ele._def.shape()).map((s, i) => {

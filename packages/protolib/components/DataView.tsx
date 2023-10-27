@@ -12,6 +12,7 @@ import { getPendingResult } from '../lib/createApiAtom'
 import { DataTableList } from './DataTableList'
 import ActiveRender from "./ActiveRender"
 import { useThemeSetting } from '@tamagui/next-theme'
+import { EditableObjectProps } from './EditableObject';
 
 type DataViewState = {
     items: PendingAtomResult,
@@ -73,8 +74,10 @@ export function DataView({
     extraFieldsForms = {},
     customFieldsForms = {},
     defaultView = 'list',
-    disableViews = []
-}: {openMode: 'edit' | 'view'} & any) {
+    disableViews = [],
+    toolBarContent = null,
+    objectProps = {}
+}: {objectProps?: EditableObjectProps, openMode: 'edit' | 'view'} & any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
@@ -179,6 +182,7 @@ export function DataView({
                                         extraFields={{...extraFields, ...extraFieldsForms}}
                                         icons={icons}
                                         customFields={{...customFields, ...customFieldsForms}}
+                                        {...objectProps}
                                     />
                                 </XStack>
                             </ScrollView>
@@ -233,6 +237,7 @@ export function DataView({
                                         extraFields={{...extraFields, ...extraFieldsForms}}
                                         icons={icons}
                                         customFields={{...customFields, ...customFieldsForms}}
+                                        {...objectProps}
                                     />
                                 </Stack>
                             </ScrollView>
@@ -240,11 +245,12 @@ export function DataView({
                     </AlertDialog>
 
                     <XStack pt="$3" px="$7" mb="$5">
-                        <YStack left={-12} top={9} f={1}>
+                        <XStack left={-12} top={9} f={1} ai="center">
                             <Paragraph>
                                 <Text fontSize="$5" color="$color11">{pluralName? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'} [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.total}</Text></Tinted>]</Text>
                             </Paragraph>
-                        </YStack>
+                            {toolBarContent}
+                        </XStack>
 
                         <XStack position={"absolute"} right={20}>
                             <Search top={1} initialState={state?.search} onCancel={onCancelSearch} onSearch={onSearch} />
