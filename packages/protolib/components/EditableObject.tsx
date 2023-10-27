@@ -7,6 +7,7 @@ import { ProtoSchema } from "protolib/base";
 import { Schema } from "../base";
 import { useUpdateEffect } from "usehooks-ts";
 import { useTint } from 'protolib'
+import { ItemMenu } from "./ItemMenu";
 
 type EditableObjectProps = {
     initialData?: any,
@@ -27,7 +28,8 @@ type EditableObjectProps = {
     customFields?: any,
     columnWidth?: number,
     disableToggleMode?: boolean,
-    columnMargin?: number
+    columnMargin?: number,
+    onDelete?: Function
 }
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
@@ -288,7 +290,7 @@ const GridElement = ({ index, data, width }) => {
     </XStack>
 }
 
-export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, onDelete = () => { }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [prevCurrentMode, setPrevCurrentMode] = useState('')
@@ -349,9 +351,14 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
     }
     const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode])
 
-    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <YStack ref={containerRef} mt={i ? "$0" : "$0"} width={columnWidth * (numColumns) + columnMargin} f={1}>
-        <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
-    </YStack>), [columnMargin, groups, columnWidth, numColumns])
+    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} mt={i ? "$0" : "$0"} width={columnWidth * (numColumns) + columnMargin} f={1}>
+        <YStack f={1}>
+            <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
+        </YStack>
+        {currentMode == 'preview' && <Stack t={"$-5"}>
+            <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} />
+        </Stack>}
+    </XStack>), [columnMargin, groups, columnWidth, numColumns])
 
     const { tint } = useTint()
 

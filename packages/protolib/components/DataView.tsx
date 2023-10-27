@@ -122,6 +122,7 @@ export function DataView({
                 extraFields, 
                 icons, 
                 ml:"$5",
+                onDelete:fetch,
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 ...dataTableGridProps
             }

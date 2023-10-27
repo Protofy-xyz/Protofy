@@ -69,7 +69,7 @@ export const DataTableList = ({sourceUrl, onDelete=()=>{}}) => {
                                     </Checkbox.Indicator>
                                 </Checkbox>
                             </Stack>
-                            <ItemMenu sourceUrl={sourceUrl} id={model.load(row).getId()} onDelete={onDelete}/>
+                            <ItemMenu sourceUrl={sourceUrl+"/"+model.load(row).getId()} onDelete={onDelete}/>
                         </XStack></Theme>, true, '85px'), ...finalColumns]}
                     rows={items?.data?.items}
                     onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}

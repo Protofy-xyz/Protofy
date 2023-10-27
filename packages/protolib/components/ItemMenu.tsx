@@ -5,7 +5,7 @@ import { Tinted } from "./Tinted";
 import { MoreVertical, Trash2 } from '@tamagui/lucide-icons'
 
 
-export const ItemMenu = ({id, sourceUrl, onDelete}) => {
+export const ItemMenu = ({sourceUrl, onDelete}) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
 
@@ -15,8 +15,8 @@ export const ItemMenu = ({id, sourceUrl, onDelete}) => {
             setOpen={setOpen}
             open={open}
             onAccept={async (setOpen) => {
-                await API.get(sourceUrl +'/'+ id + '/delete')
-                await onDelete(id)
+                await API.get(sourceUrl + '/delete')
+                await onDelete(sourceUrl)
                 setOpen(false)
             }}
             title={'Delete '}
@@ -29,7 +29,7 @@ export const ItemMenu = ({id, sourceUrl, onDelete}) => {
         </AlertDialog>
         <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom">
             <Popover.Trigger>
-                <XStack cursor="pointer" onPress={() => setMenuOpened(true)}>
+                <XStack cursor="pointer" onPress={(e) => {e.stopPropagation();setMenuOpened(true)}}>
                     <Stack ml={"$3"}
                         o={0.5}
                         br={"$5"} p={"$2"}
@@ -45,7 +45,7 @@ export const ItemMenu = ({id, sourceUrl, onDelete}) => {
                     <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"}>
                         <XStack>
                             <XStack ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start" cursor='pointer' pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$color5" }}
-                                onPress={() => { setOpen(true); setMenuOpened(false) }}>
+                                onPress={(e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}>
                                 <Text mr={"$3"} >Delete</Text>
                                 <Trash2 size={"$1"} color="var(--color9)" strokeWidth={2} />
                             </XStack>
