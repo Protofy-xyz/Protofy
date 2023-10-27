@@ -108,7 +108,9 @@ export function DataView({
             name: 'list',
             icon: List,
             component: DataTableList,
-            props: {sourceUrl, onDelete:fetch, ...dataTableListProps}
+            props: {sourceUrl, 
+                onDelete:fetch, 
+                ...dataTableListProps}
         },
         {
             name: 'grid',

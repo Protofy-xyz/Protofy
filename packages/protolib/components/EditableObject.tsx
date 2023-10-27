@@ -75,7 +75,11 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                 <Stack>
                     {arrData.map((d, i) => {
                         return <XStack ml="$1">
-                            {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>}
+                            {elementDef.type._def.typeName != 'ZodObject' && <Tinted>
+                                <XStack mr="$2" top={20}>
+                                    {mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}
+                                </XStack>
+                            </Tinted>}
                             {getElement({ ...elementDef.type._def, _def: elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name], true, ele.name)}
                             {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
                                 top={13} br={"$5"} p={"$2"}

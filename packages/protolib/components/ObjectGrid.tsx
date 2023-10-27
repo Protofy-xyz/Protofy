@@ -75,7 +75,7 @@ export const ObjectGrid = ({ itemMinWidth = 400, itemHeight, rightGap = 30, cont
         }
     })
 
-    return <Stack f={1}  {...props}>
+    return <Stack f={1} {...props}>
         <Scrollbars universal={true} ref={containerRef}>
             <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth} />
         </Scrollbars>
