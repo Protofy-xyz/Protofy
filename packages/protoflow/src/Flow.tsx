@@ -153,7 +153,7 @@ const FlowComponent = ({
         }
     }
 
-    const layout = mode == 'json' ? 'elk' : 'code'
+    const layout = mode == 'json' ? 'elk' : mode== 'device'?'device':'code';
 
     const getEnabledNodesForMode = () => {
         if (mode == 'json') {
@@ -677,7 +677,7 @@ const FlowComponent = ({
         if (nodesDiffs || edgesDiffs) {
             console.log('diffx: ', nodesDiffs, edgesDiffs)
             if (edgesDiffs && !nodesDiffs) {
-                reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData)
+                reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData,nodeData)
                 setInitialEdges(edges)
             }
             if (!showActionsBar) {
@@ -840,7 +840,7 @@ const FlowComponent = ({
 
     useEffect(() => {
         if (nodes && nodes.length && nodes.filter(n => n.width && n.height).length == nodes.length) {
-            reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData)
+            reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData,nodeData)
         }
     }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
 

@@ -10,16 +10,21 @@ export type Props = {
   onShowCode?: Function
   onReload: Function
   hasChanges?: boolean,
-  layout: 'elk' | 'code',
+  layout: 'elk' | 'code' | 'device',
   getFirstNode: Function
 };
 
-export const reLayout = async (layout, nodes, edges, setNodes, setEdges, getFirstNode, setNodesMetaData=null) => {
+export const reLayout = async (layout, nodes, edges, setNodes, setEdges, getFirstNode, setNodesMetaData=null,nodeData=null) => {
   const _nodes = nodes.map(node => ({ ...node })) // Remove positions
-  const { nodes: layoutedNodes, edges: layoutedEdges, metadata } = await layouts[layout??'code'](
+  const { nodes: layoutedNodes, edges: layoutedEdges, metadata } = layout!='device'? await layouts[layout??'code'](
     _nodes,
     edges,
     getFirstNode(_nodes)
+  ):await layouts[layout](
+    _nodes,
+    edges,
+    getFirstNode(_nodes),
+    nodeData
   );
   await (setNodesMetaData as any)(metadata)
   await setNodes(layoutedNodes)
