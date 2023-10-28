@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react'
 import { API, withSession } from 'protolib'
 import { useSearchParams } from 'next/navigation'
 import dynamic from 'next/dynamic';
+import protolibPalette from './index'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
-export const useEdit = (fn, userComponents) => {
+export const useEdit = (fn, userComponents = {}) => {
   const searchParams = useSearchParams()
   const edit = searchParams.get('_visualui_edit_')
   if (edit) {
@@ -45,6 +46,6 @@ const VisualUILoader = ({userComponents}) => { // Should be in a component
       setFileContent(res.data)
     }
   }, [res])
-  return <UiManager userComponents={userComponents} _sourceCode={fileContent} onSave={onSave} />
+  return <UiManager userPalettes={{protolib: protolibPalette, user: userComponents}} _sourceCode={fileContent} onSave={onSave} />
 
 }
