@@ -6,7 +6,7 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
 
     const isVisibleCrop = visibleFlows == 'crop'
     const isVisibleFull = visibleFlows == 'full'
-    
+
     const compressedPosition = { x: window.outerWidth * 0.5, y: window.innerHeight - 80 }
 
     return (
@@ -73,7 +73,7 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
                     flexDirection: 'column', cursor: 'grab', top: isVisibleCrop ? '' : window.outerHeight * 3
                 }}
                 >
-                    {children}
+                    {!isVisibleFull ? children : null}
                 </div>
             </Rnd>
             <div style={{
@@ -82,7 +82,7 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
                 position: 'absolute',
                 display: isVisibleFull ? 'flex' : 'none'
             }}>
-                {children}
+                {isVisibleFull ? children : null}
             </div>
         </>
     )
