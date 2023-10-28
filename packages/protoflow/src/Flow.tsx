@@ -253,18 +253,25 @@ const FlowComponent = ({
 
             const customComponent = getCustomComponent(_data[getId(node)]?.value, nodeDataTable[getId(node)] ?? {}, _customComponents)
 
+            const fakeSetNodeData = (id, data) => {
+                nodeDataTable[id] = data
+            }
             if (customComponent && customComponent.filterChildren) {
-                setNodeData(getId(node), { ...nodeDataTable[getId(node)], _initialNodes: childNodeList, _initialEdges: JSON.parse(JSON.stringify(edges)) })
+                fakeSetNodeData(getId(node), { ...nodeDataTable[getId(node)], _initialNodes: childNodeList, _initialEdges: JSON.parse(JSON.stringify(edges)) })
             }
 
             const flowNodeType = flowNode && flowNode.type ? flowNode.type : flowNode
+
+
             const result = [
                 ...nodeList,
-                ...(customComponent && customComponent.filterChildren ? customComponent.filterChildren(node, childNodeList, edges, nodeDataTable, setNodeData) : childNodeList),
+                ...(customComponent && customComponent.filterChildren ? customComponent.filterChildren(node, childNodeList, edges, nodeDataTable, fakeSetNodeData) : childNodeList),
             ]
 
+            console.log('result: ', result)
+
             if (flowNodeType && flowNodeType.filterChildren) {
-                return flowNodeType.filterChildren(node, result, edges, nodeDataTable, setNodeData)
+                return flowNodeType.filterChildren(node, result, edges, nodeDataTable, fakeSetNodeData)
             }
 
             return result;

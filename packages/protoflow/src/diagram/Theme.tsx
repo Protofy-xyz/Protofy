@@ -4,45 +4,48 @@ import { FlowStoreContext } from "../store/FlowsStore"
 type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "textColor" | "interactiveColor" | 'interactiveHoverColor' | 'inputBorder' | 'borderColor' 
 | 'borderWidth' | 'borderWidthSelected' | 'colorError' | 'handleBorderColor' | 'flowOutputColor' | 'dataOutputColor' | 'highlightInputBackgroundColor' | 'blockPort' | 'flowPort'
 | 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor' | 'disableTextColor' | 'nodeEdgeWidth' | 'nodeEdgeStyle'
+| 'plusColor'
 
 const commonVars:any = {
-    nodeBorderWidth: '3px',
-    nodeFontSize: 30,
-    nodeEdgeWidth: 4,
+    nodeBorderWidth: '1px',
+    nodeFontSize: 20,
+    nodeEdgeWidth: 3,
     nodeEdgeStyle: "7 5"
 }
-commonVars.portSize = Math.floor(commonVars.nodeFontSize / 1.1)
-commonVars.borderWidth = Math.floor(commonVars.nodeFontSize / 10)
-commonVars.borderWidthSelected = Math.floor(commonVars.nodeFontSize / 7)
+commonVars.portSize = 20
+commonVars.borderWidth = 0//Math.floor(commonVars.nodeFontSize / 10)
+commonVars.borderWidthSelected = 0.5
 
 const outlineColorLight = '#222'
 const outlineColorDark = '#888'
 const Theme = {
     light: {
         ...commonVars,
-        edgeColor: outlineColorLight,
-        nodeBackgroundColor: "white",
+        plusColor: '#999',
+        edgeColor: '#888',
+        nodeBackgroundColor: "#fdfdfd",
         inputBackgroundColor: "white",
         inputBorder: '1px solid #ccc',
-        textColor: "black",
+        textColor: "#666",
         disableTextColor: "#ccc",
         interactiveColor: "#4fc2f7",
         interactiveHoverColor: 'rgba(79, 194, 247, 0.1)',
-        borderColor: outlineColorLight,
+        borderColor: '#888',
         colorError: '#EF4444',
         handleBorderColor: 'white',
         flowOutputColor: 'white',
         dataOutputColor: 'black',
         highlightInputBackgroundColor: '#F1F1F1',
-        blockPort: 'white',
-        flowPort: 'white',
-        dataPort: 'white',
-        nodeBorderColor: outlineColorLight,
-        titleColor: 'black',
-        containerColor: 'black'
+        blockPort: '#fefefe',
+        flowPort: '#fefefe',
+        dataPort: '#fefefe',
+        nodeBorderColor: '#aaa',
+        titleColor: '#222',
+        containerColor: '#00000005'
     },
     dark: {
         ...commonVars,
+        plusColor: 'white',
         handleBorderColor: 'black',
         edgeColor: outlineColorDark,
         nodeBackgroundColor: "#303030", //bg of nodes
@@ -62,7 +65,7 @@ const Theme = {
         dataPort: 'grey',
         nodeBorderColor: outlineColorDark,
         titleColor: 'black',
-        containerColor: 'white'
+        containerColor: '#FFFFFF05'
     }
 }
 

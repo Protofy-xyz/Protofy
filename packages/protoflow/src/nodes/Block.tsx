@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType, createNode } from '../lib/Node';
 import Node, { FlowPort, headerSize } from '../Node';
 import { useEdges } from 'reactflow';
@@ -8,6 +8,7 @@ import { NODE_TREE } from '../toggles';
 import { DataOutput } from '../lib/types';
 import useTheme from '../diagram/Theme';
 import { Box, ListOrdered, Square } from 'lucide-react';
+import { generateBoxShadow } from '../lib/shadow';
 
 const blockOffset = 200
 const _marginTop = 222
@@ -26,7 +27,7 @@ const Block = (node) => {
     const currentPath = useFlowsStore(state => state.currentPath)
     const nodeFontSize = useTheme('nodeFontSize')
     const portColor = useTheme('blockPort')
-
+    
     const isEmpty = !metaData.childHeight
     const borderWidth = isEmpty? 0 : nodeFontSize / 3
     const marginTop = _marginTop + (useTheme('nodeFontSize')/2)
@@ -60,7 +61,7 @@ const Block = (node) => {
         },
         Block: {
             icon: ListOrdered,
-            color: 'grey',
+            color: '#ccc',
             title: 'Block'
         },
         CaseClause: {
@@ -83,7 +84,9 @@ const Block = (node) => {
             }
         }, [edges, nodeData?.connections?.length])
     }
-    
+
+
+    const lineColor = "#00000025"
     return (
         <Node
             draggable={type != 'SourceFile'}
@@ -101,24 +104,25 @@ const Block = (node) => {
             dataOutput={DataOutput.block}>
             {isEmpty?<div style={{height:nodeFontSize*2+'px'}}></div>:<>
                 <div style={{
-                    top: nodeFontSize*1.75,
-                    opacity: '0.05',
+                    top: nodeFontSize*1.90,
+                    opacity: 1,
                     pointerEvents: 'none',
                     borderRadius: "0px "+nodeFontSize/1.3+"px "+nodeFontSize/1.3+ "px "+ nodeFontSize/1.3+'px',position:'absolute', 
                     width: metaData.childWidth+'px', 
                     height: height-headerSize-(nodeFontSize*2)+'px', 
                     backgroundColor: containerColor,
-                    borderLeft: nodeFontSize/2+'px solid grey'
+                    borderLeft: nodeFontSize/2+'px solid '+typeConf[type].color,
+                    boxShadow: generateBoxShadow(1.5)
                 }}></div>
             </>}
             <div>
                 {/* {nodeData.connections?.map((ele, i) => <FlowPort id={id} type='input' label='' style={{ top: 60 + (i * 60) + 'px' }} handleId={'block' + i} />)} */}
                 {nodeData.connections?.map((ele, i) => {
                     let pos = i && metaData && metaData && metaData.childHeight && metaData.childHeights && metaData.childHeights[i-1]? metaData.childHeights[i-1].height : 0
-                    pos = pos + (nodeData.connections.length == 1 ? singleNodeOffset : marginTop) 
+                    pos = pos + (nodeData.connections.length == 1 ? singleNodeOffset : marginTop)-10
                     //pos = 60 + (i * 60)
                     return <>
-                        <div style={{opacity: '0.075', left: (nodeFontSize/2)+'px', position: 'absolute', top: (pos-(nodeFontSize/4)) + 'px', width: nodeFontSize+'px', height: (nodeFontSize/2)+'px', backgroundColor: 'grey'}} />
+                        <div style={{left: (nodeFontSize/2-1)+'px', position: 'absolute', top: (pos-(nodeFontSize/4)) + 'px', width: nodeFontSize+'px', height: (nodeFontSize/2)+'px', backgroundColor: typeConf[type].color}} />
                         <FlowPort key={i} id={id} type='input' label='' style={{ left:isEmpty?'':(nodeFontSize)+'px',top: pos + 'px' }} handleId={'block' + i} allowedTypes={["data", "flow"]}/>
                     </>
                 })}
