@@ -21,7 +21,7 @@ const VisualUILoader = ({userComponents, path}) => { // Should be in a component
   const [res, setRes] = useState<any>()
   const [fileContent, setFileContent] = useState()
   const onSave = (content: string) => {
-    // writeFileContent(content)
+    writeFileContent(content)
   }
   const getFileContent = () => {
     const url = ('/adminapi/v1/files/' + path).replace(/\/+/g, '/')
