@@ -27,7 +27,7 @@ import Relay from "./Relay";
 // import SEN55 from "./SEN55";
 // import MHZ19 from "./MHZ19";
 
-export default [
+const deviceMasks = [
   {
     id: 'esp32dev',
     type: 'ArrayLiteralExpression',
@@ -232,3 +232,10 @@ export default [
   //   getInitialData: () => { return { to: 'mhz19', param1: '""', param2: '', param3: '"30s"'} }
   // }
 ]
+
+export default deviceMasks.map((e) => {
+  return {
+      ...e,
+      capabilities: ["esphome"]
+  };
+});
