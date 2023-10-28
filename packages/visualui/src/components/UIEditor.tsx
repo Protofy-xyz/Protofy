@@ -16,7 +16,7 @@ export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
 const uiStore = useFlowsStore()
 
-function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userComponents = {}, resolveComponentsDir = "" }) {
+function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "" }) {
 
     const editorRef = useRef<any>()
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
@@ -24,8 +24,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const setCurrentPageContent = useEditorStore(state => state.setCurrentPageContent)
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
 
-    // const allPalettes = { ...paletteComponents, ...userPalettes }
-    const allPalettes = { ...paletteComponents, ...userComponents }
+    const allPalettes = { ...paletteComponents, ...userPalettes }
+
     const getCraftComponents = (enableDropable?: boolean) => { // FIX: If components of diferent palette has the same name will overwrite
         let filteredPalettes = Object.keys(allPalettes)
         if (enableDropable) {
@@ -33,9 +33,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         }
         return filteredPalettes.reduce((total, paletteName) => total = { ...total, ...allPalettes[paletteName] }, {})
     }
-    const mergedPaletteComponents = getCraftComponents()
-    // const availableCraftComponents = { ...mergedPaletteComponents, ...Modules[currentPage] }
-    const availableCraftComponents = { ...mergedPaletteComponents }
+    const availableCraftComponents = getCraftComponents()
+
     const loadPage = async () => {
         setCurrentPageContent(sourceCode)
     }
@@ -158,7 +157,6 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize);
     }, [])
-
 
     return <div ref={editorRef} style={{ display: 'flex', flex: 1, width: '100%' }}>
         <Editor

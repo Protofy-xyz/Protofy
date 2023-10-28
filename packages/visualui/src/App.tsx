@@ -15,7 +15,7 @@ export function visualuiPublisher(target, action, payload) {
 
 
 type Props = {
-	userComponents: any,
+	userPalettes: any,
 	_sourceCode?: string,
 	_resolveComponentsDir?: string,
 	_currentPage?: string,
@@ -23,7 +23,7 @@ type Props = {
 	onSave?: Function
 }
 
-export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", onSave = () => null }: Props) => {
+export default ({ userPalettes = {}, isVSCode = false, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", onSave = () => null }: Props) => {
 	const [currentPage, setCurrentPage] = useState(_currentPage);
 	const [resolveComponentsDir, setResolveComponentsDir] = useState(_resolveComponentsDir);
 	const [sourceCode, setSourceCode] = useState(_sourceCode);
@@ -81,7 +81,7 @@ export default ({ userComponents = {}, isVSCode = false, _sourceCode = "", _reso
 					<UIEditor
 						sourceCode={sourceCode}
 						currentPage={currentPage}
-						userComponents={userComponents}
+						userPalettes={userPalettes}
 						sendMessage={onSendMessage}
 						resolveComponentsDir={`${resolveComponentsDir}/`}
 					/>
