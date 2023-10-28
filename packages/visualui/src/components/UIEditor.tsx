@@ -14,7 +14,7 @@ import theme from './Theme'
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
-const uiStore = useFlowsStore()
+// const uiStore = useFlowsStore()
 
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "" }) {
 
@@ -118,7 +118,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     onSave={(code, _, data) => onEditorSave('flows', code, data)}
                     onShowCode={() => setCodeEditorVisible(true)}
                     enableCommunicationInterface={true}
-                    store={uiStore}
+                    // store={uiStore}
                     // config={{masks: UIMasks}}
                     flowId={UIFLOWID}
                     showActionsBar

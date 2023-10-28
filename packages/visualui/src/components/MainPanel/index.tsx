@@ -125,7 +125,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     </FloatingIcon>
                     : null}
                 <FloatingIcon
-                    onClick={() => publish("savenodes", {})}
+                    onClick={() => publish("savenodes", {value: 'visual-ui'})}
                 >
                     <Save
                         color="white"
