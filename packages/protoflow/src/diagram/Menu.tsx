@@ -210,7 +210,7 @@ export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customCom
                 onClick={() => setMenu('closed')}
                 style={{ display: menuState == 'closed' ? 'none' : 'flex', height: '100vh', width: '100vw', position: 'absolute' }}>
             </div>
-            <div style={{ display: 'flex', flexDirection: "column", height: menuHeight, margin: '0px', position: 'absolute', border: useTheme("borderWidth") + ' solid grey', borderRadius: '10px', ...extraStyle }}>
+            <div style={{ display: 'flex', flexDirection: "column", height: menuHeight, margin: '0px', position: 'absolute', border: '1px solid grey', borderRadius: '10px', ...extraStyle }}>
                 <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, backgroundColor: useTheme("nodeBackgroundColor"), borderRadius: '10px', paddingBottom: '20px', padding: '10px', border: `${useTheme('borderWidth')}px solid ${useTheme('borderColor')}` }}>
                     <div style={{ height: inputHeight }}>
                         <input
@@ -238,7 +238,7 @@ export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customCom
                         />
                         <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
                     </div>
-                    <div ref={scrollRef} className={".list-protoflow"} style={{ height: `calc(${menuHeight}px - ${inputHeight}px - 20px)`, overflowY: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', paddingRight: scrollRef?.current?.scrollHeight > scrollRef?.current?.clientHeight ? '10px' : '0px' }}>
+                    <div ref={scrollRef} className={".list-protoflow"} style={{ height: `calc(${menuHeight}px - ${inputHeight}px - 22px)`, overflowY: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', paddingRight: scrollRef?.current?.scrollHeight > scrollRef?.current?.clientHeight ? '10px' : '0px' }}>
                         {
                             !hideBaseComponents && customNodeList.length
                                 ? <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>Custom {hasPokaResults && !searchValue.length ? '(Suggestions)' : ''}</Text>
