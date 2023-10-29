@@ -2,8 +2,9 @@
 import React, { memo, useRef, useEffect } from "react";
 import { withTopics } from "react-topics";
 import SPanel from 'react-sliding-side-panel';
-import { Component, Workflow, Save, X } from 'lucide-react';
+import { Component, Workflow, Save, X, ChevronLeft } from 'lucide-react';
 import FloatingPanel from "./FloatingPanel";
+import { useRouter } from "next/router"
 
 type Props = {
     rightPanelContent: React.Component | any,
@@ -12,7 +13,7 @@ type Props = {
     topics: any
 };
 
-const FloatingIcon = ({ children, onClick }) => <div onClick={onClick} style={{ marginBottom: 20, backgroundColor: 'black', borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex' }}>
+const FloatingIcon = ({ children, onClick, disabled = false }) => <div onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex' }}>
     {children}
 </div>
 
@@ -23,10 +24,11 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
     const [selectedId, setSelectedId] = React.useState();
     const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
     const { publish, data } = topics;
+    const router = useRouter();
 
     const compressedSize = 50
 
-    const [visibleFlows, setVisibleFlows] = React.useState('');
+    const [visibleFlows, setVisibleFlows] = React.useState<"" | "full" | "crop">('');
     const [size, setSize] = React.useState({ x: compressedSize, y: compressedSize });
     const [previewState, setPreviewState] = React.useState({ size: { x: 400, y: 400 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
     const [expandedState, setExpandedState] = React.useState({ size: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
@@ -76,6 +78,11 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
             setPreviewState(s => { return ({ ...s, position: { x: d.x, y: d.y } }) })
         }
     }
+    const onCancelEdit = () => {
+        router.push({
+            query: {}
+        })
+    }
 
     useEffect(() => {
         setSelectedId(data['zoomToNode'].id)
@@ -103,7 +110,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
 
     return (
         <div style={{ flex: 1, display: 'flex' }}>
-            <div style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute', width: getLeftWidth() }}>
+            <div style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute', width: getLeftWidth(), zIndex: 99999999 }}>
                 <SPanel
                     key="sidebar"
                     type={'left'}
@@ -116,7 +123,8 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
             </div>
             <div
                 style={{
-                    display: !openPanel ? 'flex' : 'none',
+                    display: !openPanel || visibleFlows == "full" ? 'flex' : 'none',
+                    // display: 'flex',
                     position: 'fixed',
                     zIndex: 99999999999999999999,
                     flexDirection: 'column',
@@ -124,13 +132,19 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     top: 'calc(50vh - 80px)'
                 }}
             >
-                {visibleFlows != 'full'
-                    ? <FloatingIcon onClick={() => setOpenPanel(true)}>
-                        <Component
-                            color="white"
-                        />
-                    </FloatingIcon>
-                    : null}
+                <FloatingIcon disabled={visibleFlows == 'full'} onClick={() => setOpenPanel(true)}>
+                    <Component
+                        color="white"
+                    />
+                </FloatingIcon>
+                <FloatingIcon
+                    onClick={() => setVisibleFlows(visibleFlows == 'full' ? '' : 'full')}
+                >
+                    {visibleFlows == 'full'
+                        ? <ChevronLeft color="white"></ChevronLeft>
+                        : <Workflow color="white" />
+                    }
+                </FloatingIcon>
                 <FloatingIcon
                     onClick={() => publish("savenodes", { value: 'visual-ui' })}
                 >
@@ -139,17 +153,14 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     />
                 </FloatingIcon>
                 <FloatingIcon
-                    onClick={() => setVisibleFlows(visibleFlows == 'full' ? '' : 'full')}
+                    onClick={onCancelEdit}
                 >
-                    {visibleFlows == 'full'
-                        ? <X color="white"></X>
-                        : <Workflow color="white" />
-                    }
+                    <X color="white"></X>
                 </FloatingIcon>
             </div>
             <div style={{
                 position: 'fixed',
-                zIndex: 99999999999999999999,
+                zIndex: 999999999,
                 width: '0px'
             }}>
                 <FloatingPanel
