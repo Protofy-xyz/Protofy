@@ -57,54 +57,60 @@ const defaultValueTable = {
 }
 
 const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
-    const [opened, setOpened] = useState([])
-    return <Accordion onPress={(e) => e.stopPropagation()} value={opened} onValueChange={(value) => setOpened(value)} type="multiple" br="$5" boc={"$gray6"} f={1}>
-        <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} bc="$transparent" value={"item-"}>
-            <Accordion.Trigger br="$5" bw="$0" flexDirection="row" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent' }} justifyContent="space-between" bc="$transparent">
+    return <FormGroup title={<>
+        <Tinted><Layers {...iconStyle} /></Tinted>
+        <Paragraph fontWeight={"bold"}>{ele.name + ' (' + arrData.length + ')'}</Paragraph>
+    </>}>
+        <Stack>
+            {arrData.map((d, i) => {
+                return <XStack ml="$1">
+                    {elementDef.type._def.typeName != 'ZodObject' && <Tinted>
+                        <XStack mr="$2" top={20}>
+                            {mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}
+                        </XStack>
+                    </Tinted>}
+                    {getElement({ ...elementDef.type._def, _def: elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name], true, ele.name)}
+                    {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
+                        top={13} br={"$5"} p={"$2"}
+                        als="flex-start" cursor='pointer'
+                        {...elementDef.type._def.typeName != 'ZodObject' ? {} : {
+                            position: "absolute",
+                            left: '$6',
+                            top: 18.5
+                        }}
+                        pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
+                        onPress={() => {
+                            arrData.splice(i, 1)
+                            setFormData(ele.name, [...arrData])
+                        }}>
+                        <X color={'var(--red7)'} strokeWidth={2} size={20} />
+                    </Stack>}
+                </XStack>
+            })}
+        </Stack>
+        {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
+            const eleDef = ele._def.typeName == 'ZodLazy' ? ele._def.getter()._def : ele._def
+            const defaultValue = eleDef.typeName == "ZodOptional" ? eleDef.innerType._def.type._def.typeName : eleDef.type._def.typeName
+            setFormData(ele.name, [...arrData, (elementDef.type._def.typeName != 'ZodObject' ? defaultValueTable[defaultValue] : { ...defaultValueTable[defaultValue] }) ?? ""])
+        }}>Add{ele.name}</Button>}
+    </FormGroup>
+}
+
+const FormGroup = ({ title, children }) => {
+    return <Accordion onPress={(e) => e.stopPropagation()} type="multiple" br="$5" boc={"$gray6"} f={1}>
+        <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item"}>
+            <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
                 {({ open }) => (
                     <>
-                        <Tinted><Layers {...iconStyle} /></Tinted>
-                        <Paragraph fontWeight={"bold"}>{ele.name + ' (' + arrData.length + ')'}</Paragraph>
+                        {title}
                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                             <ChevronDown size="$1" />
                         </Square>
                     </>
                 )}
             </Accordion.Trigger>
-            <Accordion.Content br="$5" bc="$transparent">
-                <Stack>
-                    {arrData.map((d, i) => {
-                        return <XStack ml="$1">
-                            {elementDef.type._def.typeName != 'ZodObject' && <Tinted>
-                                <XStack mr="$2" top={20}>
-                                    {mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}
-                                </XStack>
-                            </Tinted>}
-                            {getElement({ ...elementDef.type._def, _def: elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name], true, ele.name)}
-                            {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
-                                top={13} br={"$5"} p={"$2"}
-                                als="flex-start" cursor='pointer'
-                                {...elementDef.type._def.typeName != 'ZodObject' ? {} : {
-                                    position: "absolute",
-                                    left: '$6',
-                                    top: 18.5
-                                }}
-                                pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
-                                onPress={() => {
-                                    arrData.splice(i, 1)
-                                    setFormData(ele.name, [...arrData])
-                                }}>
-                                <X color={'var(--red7)'} strokeWidth={2} size={20} />
-                            </Stack>}
-                        </XStack>
-                    })}
-                </Stack>
-                {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
-                    const eleDef = ele._def.typeName == 'ZodLazy' ? ele._def.getter()._def : ele._def
-                    const defaultValue = eleDef.typeName == "ZodOptional" ? eleDef.innerType._def.type._def.typeName : eleDef.type._def.typeName
-                    setFormData(ele.name, [...arrData, (elementDef.type._def.typeName != 'ZodObject' ? defaultValueTable[defaultValue] : { ...defaultValueTable[defaultValue] }) ?? ""])
-                    setOpened([...opened, 'item-' + arrData.length])
-                }}>Add{ele.name}</Button>}
+            <Accordion.Content br="$5">
+                {children}
             </Accordion.Content>
         </Accordion.Item>
     </Accordion>
@@ -192,33 +198,18 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
             }
         }
     } else if (elementType == 'ZodObject') {
-        return <Accordion bc="transparent" type="multiple" br="$5" boc={"$gray6"} f={1}>
-            {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
-            <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
-        </Stack> */}
-            <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
-                <Accordion.Trigger br="$5" bw="$0" bc="transparent" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent' }} flexDirection="row" justifyContent="space-between">
-                    {({ open }) => (
-                        <>
-                            <Tinted><List {...iconStyle} /></Tinted>
-                            <Paragraph fontWeight={"bold"}>{inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name}</Paragraph>
-                            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
-                                <ChevronDown size="$1" />
-                            </Square>
-                        </>
-                    )}
-                </Accordion.Trigger>
-                <Accordion.Content bc="transparent" br="$5">
-                    <Stack>
-                        {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
-                        {Object.keys(ele._def.shape()).map((s, i) => {
-                            const shape = ele._def.shape();
-                            return <Stack mt={i ? "$5" : "$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}</Stack>
-                        })}
-                    </Stack>
-                </Accordion.Content>
-            </Accordion.Item>
-        </Accordion>
+        return <FormGroup title={<>
+            <Tinted><List {...iconStyle} /></Tinted>
+            <Paragraph fontWeight={"bold"}>{inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name}</Paragraph>
+        </>}>
+            <Stack>
+                {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
+                {Object.keys(ele._def.shape()).map((s, i) => {
+                    const shape = ele._def.shape();
+                    return <Stack mt={i ? "$5" : "$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}</Stack>
+                })}
+            </Stack>
+        </FormGroup>
     } else if (elementType == 'ZodArray') {
         const arrData = getFormData(ele.name) ? getFormData(ele.name) : []
         return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
@@ -227,47 +218,36 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const [menuOpened, setMenuOpened] = useState(false)
         const [name, setName] = useState("")
 
-        return <Accordion type="multiple" br="$5" boc={"$gray6"} f={1}>
-            <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
-                <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
-                    {({ open }) => (
-                        <>
-                            <Tinted><List {...iconStyle} /></Tinted>
-                            <Paragraph fontWeight={"bold"}>{inArray ? arrayName + ' #' + (ele.name + 1) : ele.name}</Paragraph>
-                            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
-                                <ChevronDown size="$1" />
-                            </Square>
-                        </>
-                    )}
-                </Accordion.Trigger>
-                <Accordion.Content br="$5">
-                    <Stack>
-                        {recordData ? Object.keys(recordData).map((key, i) => {
-                            return <XStack key={i} ml="$1">
-                                {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
-                                {getElement({ ...elementDef.valueType, name: key }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}
-                            </XStack>
-                        }) : null}
-                    </Stack>
-                    <AlertDialog
-                        acceptCaption="Add field"
-                        setOpen={setMenuOpened}
-                        open={menuOpened}
-                        onAccept={async (setMenuOpened) => {
-                            setMenuOpened(false)
-                            setFormData(ele.name, { ...recordData, [name]: defaultValueTable[ele._def.typeName] })
-                        }}
-                        title={'Add new field'}
-                        description={""}
-                    >
-                        <YStack f={1} alignItems="center" mt="$6" justifyContent="center">
-                            <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='Field name...' />
-                        </YStack>
-                    </AlertDialog>
-                    {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
-                </Accordion.Content>
-            </Accordion.Item>
-        </Accordion>
+        return <FormGroup title={<>
+            <Tinted><List {...iconStyle} /></Tinted>
+            <Paragraph fontWeight={"bold"}>{inArray ? arrayName + ' #' + (ele.name + 1) : ele.name}</Paragraph>
+        </>}>
+
+            <Stack>
+                {recordData ? Object.keys(recordData).map((key, i) => {
+                    return <XStack key={i} ml="$1">
+                        {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
+                        {getElement({ ...elementDef.valueType, name: key }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}
+                    </XStack>
+                }) : null}
+            </Stack>
+            <AlertDialog
+                acceptCaption="Add field"
+                setOpen={setMenuOpened}
+                open={menuOpened}
+                onAccept={async (setMenuOpened) => {
+                    setMenuOpened(false)
+                    setFormData(ele.name, { ...recordData, [name]: defaultValueTable[ele._def.typeName] })
+                }}
+                title={'Add new field'}
+                description={""}
+            >
+                <YStack f={1} alignItems="center" mt="$6" justifyContent="center">
+                    <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='Field name...' />
+                </YStack>
+            </AlertDialog>
+            {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
+        </FormGroup>
     }
 
     return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
@@ -371,7 +351,7 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
 
     const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} mt={i ? "$0" : "$0"} width={columnWidth * (numColumns) + columnMargin} f={1}>
         <YStack f={1}>
-            <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
+            <Grid masonry={true} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
         </YStack>
         {currentMode == 'preview' && <Stack t={"$-5"}>
             <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} />
