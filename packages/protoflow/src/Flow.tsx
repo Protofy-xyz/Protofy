@@ -819,7 +819,9 @@ const FlowComponent = ({
         }, [data[flowId + '/ui']])
 
         useEffect(() => { // Send response
-            onSaveNodes()
+            if (data["savenodes"]?.value ) {
+                onSaveNodes()
+            }
         }, [data["savenodes"]])
     }
 
