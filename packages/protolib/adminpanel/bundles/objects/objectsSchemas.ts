@@ -36,7 +36,7 @@ export const BaseObjectSchema = z.object({
                 z.literal("onList"),
                 z.literal("name")
             ])
-        }))
+        }).name('name'))
     }).name('name')).display()
     // data: z.string().search().display(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
     //from: z.string().search().display(), // system entity where the event was generated (next, api, cmd...)
