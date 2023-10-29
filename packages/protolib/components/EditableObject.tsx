@@ -87,7 +87,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                                 {...elementDef.type._def.typeName != 'ZodObject'? {} : {
                                     position: "absolute",
                                     left: '$6',
-                                    top:18
+                                    top:18.5
                                 }}
                                 pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
                                 onPress={() => {

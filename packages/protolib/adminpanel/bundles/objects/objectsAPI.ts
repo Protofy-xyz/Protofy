@@ -55,27 +55,11 @@ const getSchemas = async () => {
             return obj
         }, [])
 
-
-        // for (const schema in schemas) {
-        //     console.log("SCHEMA", schema)
-        //     if (schemas.hasOwnProperty(schema)) {
-        //         const path = fspath.join("../../packages", getImport(schemas[schema], sourceFile))+".ts"
-        //         //const sourceCode = (await fs.readFile(path+".ts")).toString()
-        //         schemas[schema] = path;
-        //         // console.log("IMOIIrttTTT", path)
-        //         // console.log("SCHEMAAAAAAAAAAAAAA", sourceCode)
-        //     }
-        // }
         console.log(schemas)
         return schemas
     }
 
-
-
-    // console.log("SCHEMAAAAAAAAAAAAAA", (await fs.readFile(SchemaFile)).toString())
-
     return []
-
 }
 
 const getSchema = async (idSchema) => {
