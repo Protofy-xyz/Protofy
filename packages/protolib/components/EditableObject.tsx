@@ -84,10 +84,10 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                             {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
                                 top={13} br={"$5"} p={"$2"}
                                 als="flex-start" cursor='pointer'
-                                {...elementDef.type._def.typeName != 'ZodObject'? {} : {
+                                {...elementDef.type._def.typeName != 'ZodObject' ? {} : {
                                     position: "absolute",
                                     left: '$6',
-                                    top:18.5
+                                    top: 18.5
                                 }}
                                 pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
                                 onPress={() => {
@@ -137,10 +137,10 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         setData(formData);
     }
 
-    const getFormData = (key) => {
+    const getFormData = (key, customPath?) => {
         let target = data ?? {};
-
-        for (const p of path) {
+        let _path = customPath ?? path
+        for (const p of _path) {
             if ((typeof target === 'object' && target.hasOwnProperty(p)) ||
                 (Array.isArray(target) && target.length > p)) {
                 target = target[p];
@@ -154,7 +154,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     }
 
     let elementType = elementDef.typeName
-    if(elementType == 'ZodLazy') {
+    if (elementType == 'ZodLazy') {
         let newele = elementDef.getter()
         elementDef = newele._def
         elementType = newele.constructor.name
@@ -201,7 +201,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                     {({ open }) => (
                         <>
                             <Tinted><List {...iconStyle} /></Tinted>
-                            <Paragraph fontWeight={"bold"}>{inArray ? arrayName + ' #' + (ele.name + 1) : ele.name}</Paragraph>
+                            <Paragraph fontWeight={"bold"}>{inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name}</Paragraph>
                             <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                                 <ChevronDown size="$1" />
                             </Square>

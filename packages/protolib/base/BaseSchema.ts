@@ -27,6 +27,11 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
+    type.prototype.name = function (key: string) {
+        this._def.keyName = key;
+        return this;
+    };
+
     type.prototype.display = function (views: string[] | undefined) {
         this._def.display = !views ?['*'] : views;
         return this;
