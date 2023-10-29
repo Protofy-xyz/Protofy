@@ -115,7 +115,14 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                 </SPanel>
             </div>
             <div
-                style={{ display: 'flex', position: 'fixed', flexDirection: 'column', alignSelf: 'center', left: '20px', zIndex: 10000 }}
+                style={{
+                    display: !openPanel ? 'flex' : 'none',
+                    position: 'fixed',
+                    zIndex: 99999999999999999999,
+                    flexDirection: 'column',
+                    left: '20px',
+                    top: 'calc(50vh - 80px)'
+                }}
             >
                 {visibleFlows != 'full'
                     ? <FloatingIcon onClick={() => setOpenPanel(true)}>
@@ -125,7 +132,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     </FloatingIcon>
                     : null}
                 <FloatingIcon
-                    onClick={() => publish("savenodes", {value: 'visual-ui'})}
+                    onClick={() => publish("savenodes", { value: 'visual-ui' })}
                 >
                     <Save
                         color="white"
@@ -140,7 +147,11 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     }
                 </FloatingIcon>
             </div>
-            <div style={{ position: 'absolute', zIndex: 1000, width: '0px' }}>
+            <div style={{
+                position: 'fixed',
+                zIndex: 99999999999999999999,
+                width: '0px'
+            }}>
                 <FloatingPanel
                     ref={floatingRef}
                     visibleFlows={visibleFlows}
