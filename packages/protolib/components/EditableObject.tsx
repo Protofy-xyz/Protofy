@@ -39,7 +39,7 @@ const FormElement = ({ ele, i, icon, children, inArray = false }) => {
     return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2" f={1}>
         {!inArray && <Label fontWeight={"bold"}>
             <Tinted>
-                <Stack mr="$2">{React.createElement(icon, iconStyle)}</Stack>
+                <Stack  mr="$2">{React.createElement(icon, iconStyle)}</Stack>
             </Tinted>
             {ele._def.label ?? ele.name}
         </Label>}
@@ -57,10 +57,7 @@ const defaultValueTable = {
 }
 
 const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
-    return <FormGroup title={<>
-        <Tinted><Layers {...iconStyle} /></Tinted>
-        <Paragraph fontWeight={"bold"}>{ele.name + ' (' + arrData.length + ')'}</Paragraph>
-    </>}>
+    return <FormGroup title={ele.name + ' (' + arrData.length + ')'} icon={<Layers {...iconStyle} />}>
         <Stack>
             {arrData.map((d, i) => {
                 return <XStack ml="$1">
@@ -96,13 +93,16 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
     </FormGroup>
 }
 
-const FormGroup = ({ title, children }) => {
-    return <Accordion onPress={(e) => e.stopPropagation()} type="multiple" br="$5" boc={"$gray6"} f={1}>
+const FormGroup = ({ title, children, icon }) => {
+    const [opened, setOpened] = useState([''])
+    return <Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
         <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item"}>
-            <Accordion.Trigger br="$5" bw="$0" flexDirection="row" justifyContent="space-between">
+            <Accordion.Trigger bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes("item") ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row">
                 {({ open }) => (
                     <>
-                        {title}
+                        <Tinted>{icon}</Tinted>
+                        <Paragraph ml={"$2"} fontWeight={"bold"}>title</Paragraph>
+                        <Spacer flex={1} />
                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                             <ChevronDown size="$1" />
                         </Square>
@@ -198,10 +198,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
             }
         }
     } else if (elementType == 'ZodObject') {
-        return <FormGroup title={<>
-            <Tinted><List {...iconStyle} /></Tinted>
-            <Paragraph fontWeight={"bold"}>{inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name}</Paragraph>
-        </>}>
+        return <FormGroup title={inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name} icon={<List {...iconStyle} />}>
             <Stack>
                 {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
                 {Object.keys(ele._def.shape()).map((s, i) => {
@@ -218,11 +215,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const [menuOpened, setMenuOpened] = useState(false)
         const [name, setName] = useState("")
 
-        return <FormGroup title={<>
-            <Tinted><List {...iconStyle} /></Tinted>
-            <Paragraph fontWeight={"bold"}>{inArray ? arrayName + ' #' + (ele.name + 1) : ele.name}</Paragraph>
-        </>}>
-
+        return <FormGroup title={inArray ? arrayName + ' #' + (ele.name + 1) : ele.name} icon={<List {...iconStyle} />}>
             <Stack>
                 {recordData ? Object.keys(recordData).map((key, i) => {
                     return <XStack key={i} ml="$1">
