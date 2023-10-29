@@ -39,7 +39,7 @@ const FormElement = ({ ele, i, icon, children, inArray = false }) => {
     return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2" f={1}>
         {!inArray && <Label fontWeight={"bold"}>
             <Tinted>
-                <Stack  mr="$2">{React.createElement(icon, iconStyle)}</Stack>
+                <Stack mr="$2">{React.createElement(icon, iconStyle)}</Stack>
             </Tinted>
             {ele._def.label ?? ele.name}
         </Label>}
@@ -57,10 +57,10 @@ const defaultValueTable = {
 }
 
 const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
-    return <FormGroup title={ele.name + ' (' + arrData.length + ')'} icon={<Layers {...iconStyle} />}>
+    return <FormGroup ele={ele} title={' (' + arrData.length + ')'} icon={Layers}>
         <Stack>
             {arrData.map((d, i) => {
-                return <XStack ml="$1">
+                return <XStack key={i} ml="$1">
                     {elementDef.type._def.typeName != 'ZodObject' && <Tinted>
                         <XStack mr="$2" top={20}>
                             {mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}
@@ -72,8 +72,8 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                         als="flex-start" cursor='pointer'
                         {...elementDef.type._def.typeName != 'ZodObject' ? {} : {
                             position: "absolute",
-                            left: '$6',
-                            top: 18.5
+                            right: '$6',
+                            top: 6
                         }}
                         pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
                         onPress={() => {
@@ -85,7 +85,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                 </XStack>
             })}
         </Stack>
-        {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
+        {(mode == 'edit' || mode == 'add') && <Button mt="$4" onPress={() => {
             const eleDef = ele._def.typeName == 'ZodLazy' ? ele._def.getter()._def : ele._def
             const defaultValue = eleDef.typeName == "ZodOptional" ? eleDef.innerType._def.type._def.typeName : eleDef.type._def.typeName
             setFormData(ele.name, [...arrData, (elementDef.type._def.typeName != 'ZodObject' ? defaultValueTable[defaultValue] : { ...defaultValueTable[defaultValue] }) ?? ""])
@@ -93,15 +93,15 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
     </FormGroup>
 }
 
-const FormGroup = ({ title, children, icon }) => {
+const FormGroup = ({ ele, title, children, icon, simple=false }) => {
     const [opened, setOpened] = useState([''])
-    return <Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
-        <Accordion.Item br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item"}>
-            <Accordion.Trigger bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes("item") ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row">
+    const content = <Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
+        <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={"item"}>
+            <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes("item") ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
                 {({ open }) => (
                     <>
-                        <Tinted>{icon}</Tinted>
-                        <Paragraph ml={"$2"} fontWeight={"bold"}>title</Paragraph>
+                        <Tinted>{simple ? React.createElement(icon, iconStyle):<></>}</Tinted>
+                        <Paragraph ml={"$2"}>{title}</Paragraph>
                         <Spacer flex={1} />
                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                             <ChevronDown size="$1" />
@@ -114,6 +114,9 @@ const FormGroup = ({ title, children, icon }) => {
             </Accordion.Content>
         </Accordion.Item>
     </Accordion>
+    return simple?content:<FormElement ele={ele} icon={icon} i={0}>
+        {content}
+    </FormElement>
 }
 
 const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray?, arrayName?) => {
@@ -198,12 +201,12 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
             }
         }
     } else if (elementType == 'ZodObject') {
-        return <FormGroup title={inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name} icon={<List {...iconStyle} />}>
+        return <FormGroup simple={true} ele={ele} title={inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name} icon={List}>
             <Stack>
                 {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
                 {Object.keys(ele._def.shape()).map((s, i) => {
                     const shape = ele._def.shape();
-                    return <Stack mt={i ? "$5" : "$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}</Stack>
+                    return <Stack key={i} mt={i ? "$5" : "$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}</Stack>
                 })}
             </Stack>
         </FormGroup>
@@ -215,10 +218,10 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const [menuOpened, setMenuOpened] = useState(false)
         const [name, setName] = useState("")
 
-        return <FormGroup title={inArray ? arrayName + ' #' + (ele.name + 1) : ele.name} icon={<List {...iconStyle} />}>
+        return <FormGroup ele={ele} title={inArray ? ' #' + (ele.name + 1) : '...'} icon={List}>
             <Stack>
                 {recordData ? Object.keys(recordData).map((key, i) => {
-                    return <XStack key={i} ml="$1">
+                    return <XStack key={i} mt={i?"$2": "$0"} ml="$1">
                         {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
                         {getElement({ ...elementDef.valueType, name: key }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}
                     </XStack>
@@ -239,7 +242,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                     <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='Field name...' />
                 </YStack>
             </AlertDialog>
-            {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
+            {(mode == 'edit' || mode == 'add') && <Button mt="$5" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
         </FormGroup>
     }
 

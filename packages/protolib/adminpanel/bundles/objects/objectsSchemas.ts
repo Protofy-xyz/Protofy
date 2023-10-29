@@ -5,8 +5,7 @@ import { AutoModel } from 'protolib/base'
 export const BaseObjectSchema = z.object({
     id: z.string().search().id().display(),
     name: z.string().search().display(),
-    keys: z.array(z.object({
-        name: z.string(),
+    keys: z.record(z.string(), z.object({
         type: z.union([
             z.literal("string"),
             z.literal("number"),

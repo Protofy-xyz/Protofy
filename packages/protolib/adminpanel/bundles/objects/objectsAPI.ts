@@ -78,12 +78,17 @@ const getSchema = async (idSchema) => {
                 node.getProperties().forEach(prop => {
                     if (prop instanceof PropertyAssignment) {
                         // obj[prop.getName()] = prop.getInitializer().getText();
-                        obj.push({ name: prop.getName(), id: prop.getInitializer().getText() }) //= prop.getInitializer().getText();
+                        obj[prop.getName()] = {
+                            type: "string",
+                            modifiers: [
+                                {name: "display"}
+                            ]
+                        }
                     }
                 });
             }
             return obj
-        }, [])
+        }, {})
     }
 
     return {name: idSchema, id: idSchema, keys: keys}
