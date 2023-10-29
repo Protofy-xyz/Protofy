@@ -33,7 +33,7 @@ import { Head2 } from '../components/Head2'
 import { Head3 } from '../components/Head3'
 import { HeaderLink } from '../components/HeaderLink'
 import HorizontalBox from '../components/HorizontalBox'
-// import HoveredGroup from '../components/HoveredGroup'
+import HoveredGroup from '../components/HoveredGroup'
 import { HR } from '../components/HR'
 import { IconStack } from '../components/IconStack'
 import { ItemCard } from '../components/ItemCard'
@@ -60,6 +60,7 @@ import SpotLight from '../components/SpotLight'
 import { SubTitle } from '../components/SubTitle'
 import TabGroup from '../components/TabGroup'
 import { TamaCard } from '../components/TamaCard'
+import { ThemeTint } from '../lib/Tints'
 import { ThemeToggle } from '../components/ThemeToggle'
 import { TintSection, HomeSection, useTintSectionIndex } from '../components/TintSection'
 import TooltipContainer from '../components/TooltipContainer'
@@ -123,7 +124,7 @@ export default {
   ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, {}, {}, true),
   ...cw(HeaderLink, 'Link2', 'HeaderLink', { href: "/hello", children: "hello" }),
   ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
-  // ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HR, 'MinusSquare', 'HR'),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }, {}, {}, true),
@@ -164,6 +165,7 @@ export default {
     description: "description",
     children: "Lorem ipsum dolor sit amet"
   }),
+  ...cw(ThemeTint, 'Palette', 'ThemeTint'),
   ...cw(ThemeToggle, 'Palette', 'ThemeToggle', { chromeless: true }),
   ...cw(TintSection, 'BoxSelect', 'TintSection'),
   ...cw(HomeSection, 'BoxSelect', 'HomeSection'),
