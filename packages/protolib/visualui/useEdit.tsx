@@ -6,14 +6,20 @@ import { useSearchParams } from 'next/navigation'
 import { useRouter } from "next/router"
 import dynamic from 'next/dynamic';
 import protolibPalette from './index'
+import { Session } from 'protolib'
+import { useAtom } from 'jotai'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
 export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx") => {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const [session] = useAtom(Session)
+
   const edit = searchParams.get('_visualui_edit_')
-  if (edit) {
+  const isAdmin = session.user?.type == 'admin'
+  if (!isAdmin) return fn()
+  else if (edit) {
     return <VisualUILoader userComponents={userComponents} path={path} />
   }
   else {
