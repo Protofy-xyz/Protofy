@@ -37,6 +37,7 @@ export default function CustomEdge(props: EdgeProps, bridgeNode: boolean = false
   }
 
   const edgeColor = useTheme('edgeColor')
+  const plusColor = useTheme('plusColor')
   const portSize = useTheme('portSize')
   const flowOutputColor = useTheme('flowOutputColor')
 
@@ -51,7 +52,7 @@ export default function CustomEdge(props: EdgeProps, bridgeNode: boolean = false
           x={-10} y={-10} width={portSize} ry={portSize} rx={portSize} height={portSize}
         />
         <text
-          style={{ fontWeight: 600, pointerEvents: 'none', userSelect: 'none', fill: edgeColor, fontSize: '17px' }}
+          style={{ fontWeight: 600, pointerEvents: 'none', userSelect: 'none', fill: plusColor, fontSize: '17px' }}
           y={5} x={-6}
         >
           {'+'}
