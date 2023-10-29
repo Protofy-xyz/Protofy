@@ -1,14 +1,16 @@
-import { Checkbox, Stack, Theme, XStack } from "tamagui"
-import ActiveRender from "./ActiveRender"
-import { useContext } from "react";
+import { Checkbox, Popover, Stack, Theme, XStack, YStack, Text } from "tamagui"
+import { AlertDialog, API } from 'protolib'
+import { useContext, useState } from "react";
 import { DataViewContext } from "./DataView";
 import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
-import { CheckCheck, Check } from '@tamagui/lucide-icons'
+import { CheckCheck, Check, MoreVertical, Trash2 } from '@tamagui/lucide-icons'
 import React from "react";
 import Scrollbars from "react-custom-scrollbars-2";
+import { ItemMenu } from "./ItemMenu";
 
-export const DataTableList = () => {
+
+export const DataTableList = ({sourceUrl, onDelete=()=>{}}) => {
     const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
@@ -56,16 +58,19 @@ export const DataTableList = () => {
                                     <CheckCheck />
                                 </Checkbox.Indicator>
                             </Checkbox>
-                        </Stack></Theme>, "", false, row => <Theme reset><Stack ml="$3" o={0.8}>
-                            <Checkbox focusStyle={{ outlineWidth: 0 }} onPress={() => {
-                                const id = model.load(row).getId()
-                                setSelected(selected.indexOf(id) != -1 ? selected.filter((ele) => ele !== id) : [...selected, id])
-                            }} checked={selected.includes(model.load(row).getId())}>
-                                <Checkbox.Indicator>
-                                    <Check />
-                                </Checkbox.Indicator>
-                            </Checkbox>
-                        </Stack></Theme>, true, '65px'), ...finalColumns]}
+                        </Stack></Theme>, "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
+                            <Stack mt={"$2"}>
+                                <Checkbox focusStyle={{ outlineWidth: 0 }} onPress={() => {
+                                    const id = model.load(row).getId()
+                                    setSelected(selected.indexOf(id) != -1 ? selected.filter((ele) => ele !== id) : [...selected, id])
+                                }} checked={selected.includes(model.load(row).getId())}>
+                                    <Checkbox.Indicator>
+                                        <Check />
+                                    </Checkbox.Indicator>
+                                </Checkbox>
+                            </Stack>
+                            <ItemMenu sourceUrl={sourceUrl+"/"+model.load(row).getId()} onDelete={onDelete}/>
+                        </XStack></Theme>, true, '85px'), ...finalColumns]}
                     rows={items?.data?.items}
                     onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}
                 />

@@ -1,13 +1,11 @@
-import { H1, Paragraph, ScrollView, Stack, StackProps, Theme, XStack, YStack } from "tamagui"
-import {Grid} from './Grid';
+import { Paragraph, Stack, StackProps, YStack } from "tamagui"
+import { Grid } from './Grid';
 import { EditableObject } from "./EditableObject";
-import {getPendingResult} from '../lib/createApiAtom'
+import { getPendingResult } from '../lib/createApiAtom'
 import { ItemCard } from "./ItemCard";
 import { useTint } from "protolib";
-import { useEffect, useMemo, useRef } from "react";
-import {Tinted} from './Tinted'
+import { useRef } from "react";
 import Scrollbars from "react-custom-scrollbars-2";
-import { useEffectOnce } from "usehooks-ts";
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element.data
@@ -20,17 +18,18 @@ const GridElementCard = ({ index, data, width }) => {
         topBarOutSideScrollArea={false}
         backgroundColor={"$color1"}
         elevation={"$0"}
-        hoverStyle={{o: 0.8, backgroundColor: '$'+tint.tint+'1',elevation:"$3"}}
+        hoverStyle={{ o: 0.8, backgroundColor: '$' + tint.tint + '1', elevation: "$3" }}
         borderWidth={1}
         pointerEvents='none'
         pointerEventsControls="none"
         onPress={() => data.onSelectItem(modelItem)}
-        {...(data.getPicture ? { 
+        {...(data.getPicture ? {
             image: data.getPicture(element, width),
             hasPicture: true
-        }:{})}
+        } : {})}
     >
-        {data.getBody ? data.getBody(element, width) : <Stack mb={"$4"} key={element.key} width={width}>
+        {data.getBody ? data.getBody(element, width) : 
+        <Stack mb={"$4"} key={element.key} width={width}>
             <EditableObject
                 title={''}
                 initialData={data.element}
@@ -44,23 +43,25 @@ const GridElementCard = ({ index, data, width }) => {
                 extraFields={data.extraFields}
                 icons={data.icons}
                 customFields={data.customFields}
-                columnWidth={width-data.contentMargin}
+                columnWidth={width - data.contentMargin}
                 columnMargin={0}
+                onDelete={data.onDelete}
             />
-        </Stack>}
+        </Stack>
+        }
     </ItemCard>
 }
 
-export const ObjectGrid = ({itemMinWidth=400, itemHeight, rightGap=30, contentMargin=40, onSelectItem=(id) => {}, spacing=20, getPicture, getBody, model, items, sourceUrl, customFields, extraFields, icons, ...props}: any & StackProps) => {
+export const ObjectGrid = ({ itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, spacing = 20, getPicture, getBody, model, items, sourceUrl, customFields, onDelete, extraFields, icons, ...props }: any & StackProps) => {
     const containerRef = useRef(null)
 
     const data = items?.data?.items?.map((element, i) => {
         return {
-            id: 'item_'+i,
+            id: 'item_' + i,
             element: getPendingResult("loaded", element),
             model,
             sourceUrl,
-            customFields, 
+            customFields,
             extraFields,
             icons,
             itemMinWidth,
@@ -69,13 +70,14 @@ export const ObjectGrid = ({itemMinWidth=400, itemHeight, rightGap=30, contentMa
             spacing,
             contentMargin,
             onSelectItem,
+            onDelete,
             itemHeight
         }
     })
 
-    return <Stack f={1}  {...props}>
+    return <Stack f={1} {...props}>
         <Scrollbars universal={true} ref={containerRef}>
-            <Grid rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
+            <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth} />
         </Scrollbars>
     </Stack>
 }

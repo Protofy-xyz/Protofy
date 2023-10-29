@@ -107,6 +107,9 @@ const handleFilesDeleteRequest = (req, res) => {
 const handleFilesWriteRequest = async (req, res) => {
     const name = req.params.path || '';
     const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
+    if (req.body.content) {
+        await fs.writeFile(filepath, req.body.content)
+    }
     res.status(200).send({result: "uploaded"});
 };
 

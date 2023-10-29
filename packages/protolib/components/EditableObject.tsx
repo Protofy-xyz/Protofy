@@ -7,8 +7,9 @@ import { ProtoSchema } from "protolib/base";
 import { Schema } from "../base";
 import { useUpdateEffect } from "usehooks-ts";
 import { useTint } from 'protolib'
+import { ItemMenu } from "./ItemMenu";
 
-type EditableObjectProps = {
+export type EditableObjectProps = {
     initialData?: any,
     sourceUrl: string,
     onSave: Function,
@@ -27,7 +28,8 @@ type EditableObjectProps = {
     customFields?: any,
     columnWidth?: number,
     disableToggleMode?: boolean,
-    columnMargin?: number
+    columnMargin?: number,
+    onDelete?: Function
 }
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
@@ -73,7 +75,11 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                 <Stack>
                     {arrData.map((d, i) => {
                         return <XStack ml="$1">
-                            {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>}
+                            {elementDef.type._def.typeName != 'ZodObject' && <Tinted>
+                                <XStack mr="$2" top={20}>
+                                    {mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}
+                                </XStack>
+                            </Tinted>}
                             {getElement({ ...elementDef.type._def, _def: elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name], true, ele.name)}
                             {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
                                 top={13} br={"$5"} p={"$2"}
@@ -89,7 +95,8 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                     })}
                 </Stack>
                 {(mode == 'edit' || mode == 'add') && <Button mt="$3" onPress={() => {
-                    const defaultValue = ele._def.typeName == "ZodOptional" ? ele._def.innerType._def.type._def.typeName : ele._def.type._def.typeName
+                    const eleDef = ele._def.typeName == 'ZodLazy' ? ele._def.getter()._def : ele._def
+                    const defaultValue = eleDef.typeName == "ZodOptional" ? eleDef.innerType._def.type._def.typeName : eleDef.type._def.typeName
                     setFormData(ele.name, [...arrData, (elementDef.type._def.typeName != 'ZodObject' ? defaultValueTable[defaultValue] : { ...defaultValueTable[defaultValue] }) ?? ""])
                     setOpened([...opened, 'item-' + arrData.length])
                 }}>Add{ele.name}</Button>}
@@ -99,7 +106,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
 }
 
 const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray?, arrayName?) => {
-    const elementDef = ele._def?.innerType?._def ?? ele._def
+    let elementDef = ele._def?.innerType?._def ?? ele._def
 
     const setFormData = (key, value) => {
         console.log('set form data: ', key, value, path);
@@ -141,9 +148,17 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         return target && target.hasOwnProperty(key) ? target[key] : '';
     }
 
-    const elementType = elementDef.typeName
+    let elementType = elementDef.typeName
+    if(elementType == 'ZodLazy') {
+        let newele = elementDef.getter()
+        elementDef = newele._def
+        elementType = newele.constructor.name
+        newele.name = ele.name
+        ele = newele
+    }
 
-    console.log('custom fields: ', customFields, 'ele: ', ele.name)
+    console.log('custom fields: ', customFields, 'ele: ', ele.name, elementType)
+
     // TODO Check if custom element
     if (customFields.hasOwnProperty(ele.name) || customFields.hasOwnProperty('*')) {
         const customField = customFields.hasOwnProperty(ele.name) ? customFields[ele.name] : customFields['*']
@@ -172,12 +187,12 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
             }
         }
     } else if (elementType == 'ZodObject') {
-        return <Accordion type="multiple" br="$5" boc={"$gray6"} f={1}>
+        return <Accordion bc="transparent" type="multiple" br="$5" boc={"$gray6"} f={1}>
             {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={6} top={-20}>
             <SizableText >{ele.name + ' (' + arrData.length + ')'}</SizableText>
         </Stack> */}
             <Accordion.Item key={i} br="$5" bw={1} boc={"$gray6"} mt={"$2"} value={"item-" + i}>
-                <Accordion.Trigger br="$5" bw="$0" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent' }} flexDirection="row" justifyContent="space-between">
+                <Accordion.Trigger br="$5" bw="$0" bc="transparent" focusStyle={{ bc: "$transparent" }} hoverStyle={{ bc: '$transparent' }} flexDirection="row" justifyContent="space-between">
                     {({ open }) => (
                         <>
                             <Tinted><List {...iconStyle} /></Tinted>
@@ -188,7 +203,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                         </>
                     )}
                 </Accordion.Trigger>
-                <Accordion.Content br="$5">
+                <Accordion.Content bc="transparent" br="$5">
                     <Stack>
                         {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
                         {Object.keys(ele._def.shape()).map((s, i) => {
@@ -288,7 +303,7 @@ const GridElement = ({ index, data, width }) => {
     </XStack>
 }
 
-export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, onDelete = () => { }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [prevCurrentMode, setPrevCurrentMode] = useState('')
@@ -349,9 +364,14 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
     }
     const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode])
 
-    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <YStack ref={containerRef} mt={i ? "$0" : "$0"} width={columnWidth * (numColumns) + columnMargin} f={1}>
-        <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
-    </YStack>), [columnMargin, groups, columnWidth, numColumns])
+    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} mt={i ? "$0" : "$0"} width={columnWidth * (numColumns) + columnMargin} f={1}>
+        <YStack f={1}>
+            <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
+        </YStack>
+        {currentMode == 'preview' && <Stack t={"$-5"}>
+            <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} />
+        </Stack>}
+    </XStack>), [columnMargin, groups, columnWidth, numColumns])
 
     const { tint } = useTint()
 
