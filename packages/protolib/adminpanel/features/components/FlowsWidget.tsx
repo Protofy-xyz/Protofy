@@ -1,12 +1,16 @@
 import { FlowFactory } from 'protoflow';
 import { TopicsProvider } from "react-topics";
 import { useState } from 'react';
+import customMasks from '../../../../app/bundles/masks';
+
+console.log("CUUUUUUSTOMMMM MASKS: ", customMasks)
 
 const UIFLOWID = "flows-editor"
 const Flow = FlowFactory(UIFLOWID)
 
 const FlowsWidget = (props: any) => {
     const [content, setContent] = useState(props.content)
+    console.log("PROPS.MODE: ",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
 
     return <TopicsProvider>
         {props.isModified ?props.icons:null}
@@ -18,9 +22,9 @@ const FlowsWidget = (props: any) => {
             // }}
             // defaultViewPort={viewPortRef.current}
             key={'flow'}
-            mode={props.path.endsWith('.json') ? 'json' : (props.path.endsWith('yml') || props.path.endsWith('yaml') ? 'yaml' : 'js')}
+            mode={props.mode?props.mode:props.path.endsWith('.json') ? 'json' : (props.path.endsWith('yml') || props.path.endsWith('yaml') ? 'yaml' : 'js')}
             config={{ masks: [], layers: [] }}
-            bgColor='transparent'
+            bgColor={props.bgColor??'transparent'}
             dataNotify={(data: any) => {
                 if (data.notifyId) {
                     //mqttPub('datanotify/' + data.notifyId, JSON.stringify(data))
@@ -28,14 +32,16 @@ const FlowsWidget = (props: any) => {
             }}
             themeMode={props.themeMode}
             disableDots={false}
-            customComponents={[]}
+            customComponents={customMasks}
             sourceCode={props.sourceCode}
             setSourceCode={props.setSourceCode}
             positions={[]}
-            onSave={() => {
-                
-            }}
+            getFirstNode={props.getFirstNode}
+            onSave={props.onSave}
+            onPlay={props.onPlay}
+            hideBaseComponents={props.hideBaseComponents??false}
             disableSideBar={true}
+            disableStart={props.disableStart??false}
             onShowCode={() => { }}
             onReload={() => { }}
             // store={uiStore}
@@ -50,8 +56,8 @@ const FlowsWidget = (props: any) => {
             }}
             theme={props.theme ?? {}}
             disableMiniMap={true}
-            showActionsBar={false}
-            bridgeNode={true}
+            showActionsBar={props.showActionsBar??false}
+            bridgeNode={props.bridgeNode??true}
         />
     </TopicsProvider>
 }
