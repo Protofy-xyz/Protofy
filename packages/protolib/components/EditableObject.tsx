@@ -84,6 +84,11 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
                             {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
                                 top={13} br={"$5"} p={"$2"}
                                 als="flex-start" cursor='pointer'
+                                {...elementDef.type._def.typeName != 'ZodObject'? {} : {
+                                    position: "absolute",
+                                    left: '$6',
+                                    top:18
+                                }}
                                 pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
                                 onPress={() => {
                                     arrData.splice(i, 1)
