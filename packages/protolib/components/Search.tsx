@@ -43,7 +43,7 @@ export const Search = forwardRef(({ initialState, onCancel = () => { }, onSearch
             onChangeText={(text) => { setContent(text); if (!text) onSearch('') }}
             onSubmitEditing={(e) => { onSearch(content) }}
         /> : null}
-        <XStack position={"absolute"} right={0} top={-4} cursor="pointer" opacity={0.7} hoverStyle={{ opacity: 1 }}>
+        <XStack position={"absolute"} right={0} top={-4} cursor="pointer">
             <Tinted>
                 <Button disabled={opened} hoverStyle={{ o: 1 }} o={0.7} circular chromeless={true}>
                     <IconSearch fillOpacity={0} color="var(--color)" />
