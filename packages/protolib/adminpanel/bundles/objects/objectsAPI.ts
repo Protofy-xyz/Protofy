@@ -62,6 +62,24 @@ const getSchemas = async () => {
     return []
 }
 
+function extractChainCalls(callExpr) {
+    const calls = [];
+
+    let currentExpression = callExpr;
+    while (currentExpression && currentExpression.getKind() === SyntaxKind.CallExpression) {
+        const signature = {
+            name: currentExpression.getExpression().getLastChild().getText(),
+            params: currentExpression.getArguments().map(arg => arg.getText())
+        };
+        calls.unshift(signature);
+
+        // Navegamos al CallExpression padre o PropertyAccessExpression
+        currentExpression = currentExpression.getExpression().getFirstChildIfKind(SyntaxKind.CallExpression);
+    }
+    return calls;
+}
+
+
 const getSchema = async (idSchema) => {
     let project = new Project();
     let SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/schemas.ts")
@@ -78,11 +96,15 @@ const getSchema = async (idSchema) => {
                 node.getProperties().forEach(prop => {
                     if (prop instanceof PropertyAssignment) {
                         // obj[prop.getName()] = prop.getInitializer().getText();
-                        obj[prop.getName()] = {
-                            type: "string",
-                            modifiers: [
-                                {name: "display"}
-                            ]
+                        console.log('looking chain for: ', prop.getInitializer().getText())
+                        const chain = extractChainCalls(prop.getInitializer())
+                        if(chain.length) {
+                            const typ = chain.shift()
+                            obj[prop.getName()] = {
+                                type: typ.name,
+                                params: typ.params,
+                                modifiers: chain
+                            }
                         }
                     }
                 });

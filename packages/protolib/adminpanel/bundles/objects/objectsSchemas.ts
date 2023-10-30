@@ -3,7 +3,7 @@ import {BaseSchema} from 'protolib/base'
 import { AutoModel } from 'protolib/base'
 
 export const BaseObjectSchema = z.object({
-    id: z.string().search().id().display(),
+    id: z.string().search().id(),
     name: z.string().search().display(),
     keys: z.record(z.string(), z.object({
         type: z.union([
@@ -15,6 +15,7 @@ export const BaseObjectSchema = z.object({
             z.literal("record"),
             z.literal("union")
         ]),
+        params: z.string(),
         modifiers: z.array(z.object({
             name: z.union([
                 z.literal("id"),
@@ -35,7 +36,8 @@ export const BaseObjectSchema = z.object({
                 z.literal("onDelete"),
                 z.literal("onList"),
                 z.literal("name")
-            ])
+            ]),
+            params: z.string()
         }).name('name'))
     }).name('name')).display()
     // data: z.string().search().display(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online

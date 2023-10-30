@@ -60,7 +60,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
     return <FormGroup ele={ele} title={' (' + arrData.length + ')'} icon={Layers}>
         <Stack>
             {arrData.map((d, i) => {
-                return <XStack key={i} ml="$1">
+                return <XStack key={i} mt={i?"$2":"$0"} ml="$1">
                     {elementDef.type._def.typeName != 'ZodObject' && <Tinted>
                         <XStack mr="$2" top={20}>
                             {mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}
@@ -95,7 +95,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
 
 const FormGroup = ({ ele, title, children, icon, simple=false }) => {
     const [opened, setOpened] = useState([''])
-    const content = <Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
+    const content = <XStack br="$5" f={1} elevation={opened.includes('item')?10:0} hoverStyle={{elevation:10}}><Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
         <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={"item"}>
             <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes("item") ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
                 {({ open }) => (
@@ -113,7 +113,7 @@ const FormGroup = ({ ele, title, children, icon, simple=false }) => {
                 {children}
             </Accordion.Content>
         </Accordion.Item>
-    </Accordion>
+    </Accordion></XStack>
     return simple?content:<FormElement ele={ele} icon={icon} i={0}>
         {content}
     </FormElement>
@@ -347,7 +347,7 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
 
     const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} mt={i ? "$0" : "$0"} width={columnWidth * (numColumns) + columnMargin} f={1}>
         <YStack f={1}>
-            <Grid masonry={true} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
+            <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
         </YStack>
         {currentMode == 'preview' && <Stack t={"$-5"}>
             <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} />
