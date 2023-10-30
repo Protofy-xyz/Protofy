@@ -233,7 +233,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                 open={menuOpened}
                 onAccept={async (setMenuOpened) => {
                     setMenuOpened(false)
-                    setFormData(ele.name, { ...recordData, [name]: defaultValueTable[ele._def.typeName] })
+                    setFormData(ele.name, { ...recordData, [name]: defaultValueTable[ele._def.valueType._def.typeName] })
                 }}
                 title={'Add new field'}
                 description={""}

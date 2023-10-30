@@ -15,7 +15,7 @@ export const BaseObjectSchema = z.object({
             z.literal("record"),
             z.literal("union")
         ]),
-        params: z.string(),
+        params: z.string().optional(),
         modifiers: z.array(z.object({
             name: z.union([
                 z.literal("id"),
@@ -37,7 +37,7 @@ export const BaseObjectSchema = z.object({
                 z.literal("onList"),
                 z.literal("name")
             ]),
-            params: z.string()
+            params: z.string().optional()
         }).name('name'))
     }).name('name')).display()
     // data: z.string().search().display(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
