@@ -4,7 +4,7 @@ import { AutoModel } from 'protolib/base'
 
 export const BaseObjectSchema = z.object({
     id: z.string().search().id(),
-    name: z.string().search().display(),
+    name: z.string().search().display().static(),
     keys: z.record(z.string(), z.object({
         type: z.union([
             z.literal("string"),

@@ -35,11 +35,15 @@ const getDefinitions = (sourceFile, def) => {
     return callsToDef
 }
 
-const getSchemas = async () => {
+const getSourceFile = () => {
     const project = new Project();
     const SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/schemas.ts")
     const sourceFile = project.addSourceFileAtPath(SchemaFile)
-    const definitions = getDefinitions(sourceFile, '"schemas"')
+    return sourceFile
+}
+
+const getSchemas = async (sourceFile?) => {
+    const definitions = getDefinitions(sourceFile??getSourceFile(), '"schemas"')
 
     if (definitions.length) {
         const schemas = definitions.reduce((obj, current) => {
@@ -84,6 +88,9 @@ const getSchema = async (idSchema) => {
     let project = new Project();
     let SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/schemas.ts")
     let sourceFile = project.addSourceFileAtPath(SchemaFile)
+    const schemas = await getSchemas(sourceFile)
+    const currentSchema = schemas.find(s => s.id == idSchema)
+
     const path = fspath.join("../../packages", getImport(idSchema, sourceFile))
     project = new Project();
     sourceFile = project.addSourceFileAtPath(path+".ts")
@@ -96,7 +103,6 @@ const getSchema = async (idSchema) => {
                 node.getProperties().forEach(prop => {
                     if (prop instanceof PropertyAssignment) {
                         // obj[prop.getName()] = prop.getInitializer().getText();
-                        console.log('looking chain for: ', prop.getInitializer().getText())
                         const chain = extractChainCalls(prop.getInitializer())
                         if(chain.length) {
                             const typ = chain.shift()
@@ -113,7 +119,7 @@ const getSchema = async (idSchema) => {
         }, {})
     }
 
-    return {name: idSchema, id: idSchema, keys: keys}
+    return {name: currentSchema.name, id: idSchema, keys: keys}
 }
 
 const getDB = (path, req, session) => {
@@ -126,11 +132,10 @@ const getDB = (path, req, session) => {
         },
 
         async put(key, value) {
-
+            console.log('save: ', key, value)
         },
 
         async get(key) {
-            
             return JSON.stringify(await getSchema(key))
         }
     };
