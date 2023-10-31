@@ -9,15 +9,50 @@ import useWebSocket from 'react-use-websocket';
 import { FlowFactory } from 'protoflow';
 import { useFetch } from 'usehooks-ts'
 import deviceFunctions from './device'
-// import DeviceModal from "./DeviceModal";
+import DeviceModal from "./DeviceModal";
 import customComponents from "./nodes"
 import { useDeviceStore } from "./oldThings/DeviceStore";
 // import DeviceSelector from "./DeviceSelector";
 import { withTopics } from "react-topics";
 import { useFlowsStore } from 'protoflow';
+import { Spinner, XStack } from 'tamagui'
+import dynamic from 'next/dynamic'
+import { useThemeSetting } from '@tamagui/next-theme'
+import { Connector, useMqttState, useSubscription  } from 'mqtt-react-hooks';
+
 
 const Flow = FlowFactory('device')
 const deviceStore = useFlowsStore()
+const MqttStatus = ({})=> {
+  /*
+   * Status list
+   * - Offline
+   * - Connected
+   * - Reconnecting
+   * - Closed
+   * - Error: printed in console too
+   */
+  const { connectionStatus } = useMqttState();
+  useEffect(()=>{
+    console.log("STATUS -----> ", connectionStatus)
+  },[connectionStatus])
+
+  return(<></>)
+}
+
+
+
+const FlowsWidget = dynamic(() => import('../../protolib/adminpanel/features/components/FlowsWidget'), {
+    // loading: () => <Center>
+    //     <Spinner size={'large'} scale={3} top={-50} />
+    //     Loading
+    // </Center>,
+    loading: () => <>
+        <Spinner size={'large'} scale={3} top={-50} />
+        Loading
+    </>,
+    ssr: false
+})
 
 if (typeof window !== 'undefined') {
   Object.keys(deviceFunctions).forEach(k => (window as any)[k] = deviceFunctions[k])
@@ -72,7 +107,7 @@ const callText = async (url: string, method: string, params?: string, token?: st
 
 const saveYaml = async (yaml) => {
   console.log("Save Yaml")
-  console.log(await callText("/electronics/edit?configuration=test.yaml", 'POST', yaml));
+  //console.log(await callText("/electronics/edit?configuration=test.yaml", 'POST', yaml));
 }
 
 
@@ -251,8 +286,11 @@ const DeviceScreen = ({ isActive,topics}) => {
     await transport.disconnect();
     cb({ message: "All done!" })
   }
-
-  // const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(Settings.getMqttURL().replace('/ws', '') + '/electronics/compile', {
+  // wss://dev-vault.dev-cloud.protofy.xyz/electronics/compile
+  // const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket("ws://bo-firmware.protofy.xyz/electronics/compile", {
+  //   onError: (err)=>{
+  //     console.error(err)
+  //   },
   //   onOpen: () => {
   //     console.log('WebSocket connection established.');
   //   },
@@ -262,10 +300,15 @@ const DeviceScreen = ({ isActive,topics}) => {
   //   shouldReconnect: (closeEvent) => true
   // });
 
+  const sendMessage = async (notUsed)=>{
+    await fetch('http://bo-firmware.protofy.xyz/api/v1/device/compile')
+  }
+  const { message } = useSubscription(['device/compile']);
+
   const compile = async () => {
     setModalFeedback({ message: `Compiling firmware...`, details: { error: false } })
     const compileMsg = { type: "spawn", configuration: "test.yaml" };
-    // sendMessage(JSON.stringify(compileMsg));
+    sendMessage(JSON.stringify(compileMsg));
   }
 
   // React.useEffect(() => {
@@ -287,8 +330,27 @@ const DeviceScreen = ({ isActive,topics}) => {
   //   }
   // }, [lastMessage])
 
+  React.useEffect(() => {
+      console.log("Compile Message: ", message);
+      try {
+        if (message?.message) {
+          const data = JSON.parse(message?.message.toString());
+          if (data.event == 'exit' && data.code == 0) {
+            console.log("Succesfully compiled");
+            setStage('upload')
+  
+          } else if (data.event == 'exit' && data.code != 0) {
+            console.error('Error compiling')
+            setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }, [message])
 
-  const { error, data } = useFetch(`/api/v1/device/${currentDevice}/config`)
+
+  // const { error, data } = useFetch(`/api/v1/device/${currentDevice}/config`)
   const readDevices = async () => {
     try {
       // const listOfDevicesStr = await fetch('/api/v1/device/list')
@@ -334,7 +396,7 @@ const DeviceScreen = ({ isActive,topics}) => {
     } catch (e) { console.error(e) }
   }
   const onPlay = (code) => {
-    const deviceCode = 'device(' + code.slice(0, -2) + ')';
+    const deviceCode = 'device(' + code + ')';
 
     const deviceObj = eval(deviceCode)
     const yaml = deviceObj.setMqttPrefix(process.env.NEXT_PUBLIC_PROJECT_NAME).create()
@@ -393,36 +455,37 @@ const DeviceScreen = ({ isActive,topics}) => {
   //   readDevices()
   // }, [])
 
-  // useEffect(() => {
-  //   const process = async () => {
-  //     if (stage == 'yaml') {
-  //       await saveYaml(yamlRef.current)
-  //       setStage('compile')
-  //     } else if (stage == 'compile') {
-  //       //await compile()
-  //     } else if (stage == 'write') {
-  //       try {
-  //         await flash(flashCb)
-  //         setStage('idle')
-  //       } catch (e) { flashCb({ message: 'Error writing the device. Check that the USB connection and serial port are correctly configured.', details: { error: true } }) }
-  //     } else if (stage == 'upload') {
-  //       // getWebSocket()?.close()
-  //       const chromiumBasedAgent =
-  //         (navigator.userAgent.includes('Chrome') ||
-  //           navigator.userAgent.includes('Edge') ||
-  //           navigator.userAgent.includes('Opera'))
+  useEffect(() => {
+    const process = async () => {
+      if (stage == 'yaml') {
+        await saveYaml(yamlRef.current)
+        setStage('compile')
+      } else if (stage == 'compile') {
+        console.log("stage - compile")
+        await compile()
+      } else if (stage == 'write') {
+        try {
+          await flash(flashCb)
+          setStage('idle')
+        } catch (e) { flashCb({ message: 'Error writing the device. Check that the USB connection and serial port are correctly configured.', details: { error: true } }) }
+      } else if (stage == 'upload') {
+        // getWebSocket()?.close()
+        const chromiumBasedAgent =
+          (navigator.userAgent.includes('Chrome') ||
+            navigator.userAgent.includes('Edge') ||
+            navigator.userAgent.includes('Opera'))
 
-  //       if (chromiumBasedAgent) {
-  //         setModalFeedback({ message: 'Connect your device and click select to chose the port. ', details: { error: false } })
-  //         console.log('chormium based true')
-  //       } else {
-  //         console.log('chormium based very false')
-  //         setModalFeedback({ message: 'You need Chrome, Opera or Edge to upload the code to the device.', details: { error: true } })
-  //       }
-  //     }
-  //   }
-  //   process()
-  // }, [stage])
+        if (chromiumBasedAgent) {
+          setModalFeedback({ message: 'Connect your device and click select to chose the port. ', details: { error: false } })
+          console.log('chormium based true')
+        } else {
+          console.log('chormium based very false')
+          setModalFeedback({ message: 'You need Chrome, Opera or Edge to upload the code to the device.', details: { error: true } })
+        }
+      }
+    }
+    process()
+  }, [stage])
 
   // useEffect(() => {
   //   if (topicData.data['device/changedDeviceName']) {
@@ -432,33 +495,61 @@ const DeviceScreen = ({ isActive,topics}) => {
   //   }
   // }, [topicData.data['device/changedDeviceName']])
 
+  // const [fileContent, setFileContent] = useFileFromAPI(path)
+  const { resolvedTheme } = useThemeSetting()
+
   return (
       <div style={{ width: '100%', display: 'flex', flex: 1 }}>
-        {/* <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} /> */}
+      <MqttStatus/>
+        <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
         {sourceCode ?
-          <Flow
-            flowId={'device'}
-            disableDots={!isActive}
-            hideBaseComponents={true}
-            // positions={positions}
-            customComponents={customComponents}
-            getFirstNode={(nodes) => {
-              return nodes.find(n => n.type == 'ArrayLiteralExpression')
-            }}
-            disableStart={true}
-            onSave={onSave}
-            onPlay={onPlay}
-            sourceCode={sourceCode}
-            store={deviceStore}
-            showActionsBar={true}
-            mode="device"
-          /> : null}
+          // <Flow
+          //   flowId={'device'}
+          //   disableDots={!isActive}
+          //   hideBaseComponents={true}
+          //   // positions={positions}
+          //   customComponents={customComponents}
+          //   getFirstNode={(nodes) => {
+          //     return nodes.find(n => n.type == 'ArrayLiteralExpression')
+          //   }}
+          //   disableStart={true}
+          //   onSave={onSave}
+          //   onPlay={onPlay}
+          //   sourceCode={sourceCode}
+          //   store={deviceStore}
+          //   showActionsBar={true}
+          //   mode="device"
+          // /> : null}
+          <FlowsWidget
+                    // icons={<XStack position="absolute" right={isFull ? 0 : 50} top={isFull ? -35 : -32}>
+                    //     <IconContainer onPress={() => { }}>
+                    //         {/* <SizableText mr={"$2"}>Save</SizableText> */}
+                    //         <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
+                    //     </IconContainer>
+                    // </XStack>}
+                    // isModified={isModified}
+                    // setIsModified={setIsModified}
+                    onPlay={onPlay}
+                    onSave={(o)=>{console.log("ON SAVE: ",o)}}
+                    hideBaseComponents={true}
+                    disableStart={true}
+                    getFirstNode={(nodes) => {
+                          return nodes.find(n => n.type == 'ArrayLiteralExpression')
+                    }}
+                    showActionsBar={true}
+                    mode={"device"}
+                    bridgeNode={false}
+                    setSourceCode={(sourceCode) => {
+                        console.log('set new sourcecode from flows: ', sourceCode)
+                    }} 
+                    sourceCode={sourceCode} themeMode={resolvedTheme} />:null}
         {/* <DeviceSelector devicesList={devicesList} currentDevice={currentDevice} onCreateDevice={onCreateDevice} onSelectDevice={onSelectDevice} /> */}
       </div>
   )
 };
 
 // export default DeviceScreen;
+
 export default withTopics(DeviceScreen, { topics: ['device/changedDeviceName'] });
 
 // export default ()=><div>Hello</div>

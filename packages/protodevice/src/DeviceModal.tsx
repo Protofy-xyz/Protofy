@@ -1,5 +1,9 @@
 import React from "react";
-import { Modal } from "native-base";
+// import { Modal } from "native-base";
+import compiling from './assets/protofitoCompiling.gif';
+import loading from './assets/protofitoLoading.gif';
+import dancing from './assets/protofitoDancing.gif';
+import { Dialog } from 'tamagui'
 
 const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
     const isError = modalFeedback?.details?.error
@@ -45,7 +49,8 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
         'idle': '4'
     }
 
-    return (<Modal isOpen={showModal} onClose={() => onCancel()} style={{ position: 'relative',backgroundColor: "yellow"}}>
+    // return (<Modal isOpen={showModal} onClose={() => onCancel()} style={{ position: 'relative',backgroundColor: "yellow"}}>
+    return (<Dialog open={showModal}>
         <div style={{height:"350", position: 'relative', overflow: 'visible'}}>
             <div style={{ borderRadius: '20px', flex:"1", justifyContent:"space-between", paddingLeft: "50px", paddingRight: "50px", paddingTop: "20px", paddingBottom: "20px"}}>
                 <div>
@@ -56,26 +61,26 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                                 ?  modalFeedback.message : msg
                         }
                     </p>
-                    {/* <ModalText/> */}
+                    <ModalText/>
                     {isLoading
                         ? <img
                             alt="protofito loading"
                             style={{height: "160px", width: "300px", alignSelf:"center", marginTop:"60px",marginBottom:"10px"}}
-                            src={require('../../assets/protofitos/protofito-loading.gif')}
+                            src={loading.src}
                         />
                         : null}
                     {stage == 'idle' && !isError
                         ? <img
                             alt="protofito dancing"
                             style={{height: "160px", width: "190px", alignSelf:"center", marginTop:"60px",marginBottom:"10px"}}
-                            src={require('../../assets/protofitos/protofito-dancing.gif')}
+                            src={dancing.src}
                         />
                         : null}
                     {stage == 'compile' && !isError
                         ? <img
                             alt="protofito compiling"
                             style={{height: "160px", width: "180px", alignSelf:"center", marginTop:"60px",marginBottom:"10px"}}
-                            src={require('../../assets/protofitos/protofito-compiling.gif')}
+                            src={compiling.src}
                         />
                         : null}
                 </div>
@@ -98,7 +103,7 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                 </div>
             </div>
         </div>
-    </Modal >)
+    </Dialog >)
 }
 
 export default DeviceModal

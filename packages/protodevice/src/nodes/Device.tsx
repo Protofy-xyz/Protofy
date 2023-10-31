@@ -15,8 +15,8 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const currentDevice = useDeviceStore(state => state.electronicDevice);
-    const offsetY = 1320 //This value is for setting the initial point where the available pins start to draw
-    const spacing = 67
+    const offsetY = 956 //This value is for setting the initial point where the available pins start to draw
+    const spacing = 46
     const edges = useEdges();
 
     const changeDeviceName = () => {
@@ -57,7 +57,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     const [connected, setConnected] = React.useState("offline");
 
     const onCompile = () => {
-        publish('device/play', { ts: Date.now() })
+        publish('flows-editor/play', { ts: Date.now() })
     }
     React.useEffect(() => {
         if (lastMessage.message == 'online') {
@@ -101,11 +101,11 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
                         style={{
                             position: 'absolute',
                             top: i > 14 ? (spacing * (i - 15)) + (offsetY - (spacing * 4)) + 'px' : (spacing * i) + offsetY + 'px',
-                            width: "45px",
-                            height: "45px",
+                            width: "26px",
+                            height: "26px",
                             backgroundColor: isHandleConnected(edges, idString) ? "#BA68C8" : "white",
-                            marginLeft: i > 14 ? '0px' : '10px',
-                            marginRight: i > 14 ? '11px' : '0px',
+                            marginLeft: i > 14 ? '0px' : '14px',
+                            marginRight: i > 14 ? '14px' : '0px',
                             border: isHandleConnected(edges, idString) ? "2px solid #BA68C8" : "2px solid white"
                         }}
                         position={i > 14 ? Position.Right : Position.Left}
