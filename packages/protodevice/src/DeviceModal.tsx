@@ -3,7 +3,7 @@ import React from "react";
 import compiling from './assets/protofitoCompiling.gif';
 import loading from './assets/protofitoLoading.gif';
 import dancing from './assets/protofitoDancing.gif';
-import { Dialog } from 'tamagui'
+import {AlertDialog } from 'protolib'
 
 const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
     const isError = modalFeedback?.details?.error
@@ -50,17 +50,17 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
     }
 
     // return (<Modal isOpen={showModal} onClose={() => onCancel()} style={{ position: 'relative',backgroundColor: "yellow"}}>
-    return (<Dialog open={showModal}>
+    return (<AlertDialog open={showModal} hideAccept={true}>
         <div style={{height:"350", position: 'relative', overflow: 'visible'}}>
             <div style={{ borderRadius: '20px', flex:"1", justifyContent:"space-between", paddingLeft: "50px", paddingRight: "50px", paddingTop: "20px", paddingBottom: "20px"}}>
                 <div>
-                    <p style={{textAlign:'center', fontWeight:'bold', fontSize:'xs'}}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</p>
-                    <p style={{textAlign:'center', color:isError ? 'red' : '',marginBottom:"0px", marginTop:stepsTranslator[stage] === '2' ? '80px': '0px'}}>
+                    <div style={{textAlign:'center', fontWeight:'bold', fontSize:'xs'}}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</div>
+                    <div style={{textAlign:'center', color:isError ? 'red' : '',marginBottom:"0px", marginTop:stepsTranslator[stage] === '2' ? '80px': '0px'}}>
                         {
                             modalFeedback && ['write', 'compile', 'upload'].includes(stage) 
                                 ?  modalFeedback.message : msg
                         }
-                    </p>
+                    </div>
                     <ModalText/>
                     {isLoading
                         ? <img
@@ -84,7 +84,7 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                         />
                         : null}
                 </div>
-                <div  style={{justifyContent:'center'}}>
+                <div style={{justifyContent:'center'}}>
                     {stage != 'write' && stage != 'idle' || isError ? <button style={{color:"warmGray"}} onClick={() => {
                         onCancel()
                     }}>
@@ -103,7 +103,7 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                 </div>
             </div>
         </div>
-    </Dialog >)
+    </AlertDialog >)
 }
 
 export default DeviceModal

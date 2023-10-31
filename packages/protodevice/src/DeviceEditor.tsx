@@ -93,8 +93,8 @@ const callText = async (url: string, method: string, params?: string, token?: st
   }
 
   var defUrl = url + (token ? separator + "token=" + token : "");
-
-  return fetch(Settings.getApiURL().replace('/api', '') + defUrl, fetchParams)
+  console.log("Deff URL: ", defUrl)
+  return fetch(defUrl, fetchParams)
     .then(function (response) {
       if (response.status == 200) {
         return "ok";
@@ -107,14 +107,14 @@ const callText = async (url: string, method: string, params?: string, token?: st
 
 const saveYaml = async (yaml) => {
   console.log("Save Yaml")
-  //console.log(await callText("/electronics/edit?configuration=test.yaml", 'POST', yaml));
+  console.log(await callText("http://bo-firmware.protofy.xyz/api/v1/device/edit?configuration=test.yaml", 'POST', yaml));
 }
 
 
 
 const DeviceScreen = ({ isActive,topics}) => {
   const topicData = topics;
-  const p = {"config":"[\n  \"mydevice\",\n  \"esp32dev\",\n  \"CraneRouter\",\n  \"06341374\",\n  \"none\",\n  \"141.94.192.178\",\n  false,\n  \"10\",\n  \"10\",\n  34,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n"}
+  const p = {"config":"[\n  \"mydevice\",\n  \"esp32dev\",\n  \"POLOFAI\",\n  \"PR0T0FY100\",\n  \"none\",\n  \"51.68.45.86\",\n  false,\n  \"10\",\n  \"10\",\n  34,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n"}
   const [sourceCode, setSourceCode] = useState(p.config)
   const currentDevice = useDeviceStore(state => state.electronicDevice);
   const setCurrentDevice = useDeviceStore(state => state.setElectronicDevice);
@@ -205,7 +205,10 @@ const DeviceScreen = ({ isActive,topics}) => {
 
     const filePromises = build.parts.map(async (part) => {
 
-      const url = Settings.getApiURL().replace('/api', '') + "/electronics/download.bin?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
+      // const url = "http://bo-firmware.protofy.xyz/api/v1" + "/electronics/download.bin?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
+
+      const url = "http://bo-firmware.protofy.xyz/api/v1" + "/device/download?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
+      
       const resp = await fetch(url);
       if (!resp.ok) {
         throw new Error(
@@ -399,7 +402,8 @@ const DeviceScreen = ({ isActive,topics}) => {
     const deviceCode = 'device(' + code + ')';
 
     const deviceObj = eval(deviceCode)
-    const yaml = deviceObj.setMqttPrefix(process.env.NEXT_PUBLIC_PROJECT_NAME).create()
+    // const yaml = deviceObj.setMqttPrefix(process.env.NEXT_PUBLIC_PROJECT_NAME).create()
+    const yaml = deviceObj.setMqttPrefix("newplatform").create()
     yamlRef.current = yaml
 
     setShowModal(true)
