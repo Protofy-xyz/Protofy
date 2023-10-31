@@ -6,6 +6,7 @@ import { useDeviceStore } from "../oldThings/DeviceStore";
 // import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { pinTable } from "../device/Device";
 import esp32c4 from '../assets/esp32c4.png';
+import { useSubscription  } from 'mqtt-react-hooks';
 
 const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId))
 
@@ -15,7 +16,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const currentDevice = useDeviceStore(state => state.electronicDevice);
-    const offsetY = 956 //This value is for setting the initial point where the available pins start to draw
+    const offsetY = 996 //This value is for setting the initial point where the available pins start to draw
     const spacing = 46
     const edges = useEdges();
 
@@ -38,7 +39,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
         },
         { label: 'MQTT Address', field: 'element-5', type: 'input', static: true },
         { label: 'Enable Deep-Sleep', static: true, field: 'element-6', type: 'boolean' },
-        { label: 'Deep-Sleep run duration', field: 'element-7', type: 'input', static: true },
+        { label: 'Deep-Sleep run duration', field: 'element-7', type: 'input', static: true},
         { label: 'Deep-Sleep sleep duration', field: 'element-8', type: 'input', static: true },
         {
             label: 'Wakeup Pin', static: true, field: 'element-9', type: 'select',
@@ -48,6 +49,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     ]
     const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME
     const mqttTopic = `${projectName}/${currentDevice}/status`
+    const { message } = useSubscription(['newplatform/mydevice/status']);
     // const addChannel = useAppStore(state => state.addChannel)
     // const lastMessage = useAppStore(state => state.lastMessageByTopic[mqttTopic]) ?? []
     // addChannel(mqttTopic);
@@ -59,13 +61,21 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     const onCompile = () => {
         publish('flows-editor/play', { ts: Date.now() })
     }
+    // React.useEffect(() => {
+    //     if (lastMessage.message == 'online') {
+    //         setConnected("online");
+    //     } else {
+    //         setConnected("offline")
+    //     }
+    // }, [lastMessage])
+
     React.useEffect(() => {
-        if (lastMessage.message == 'online') {
+        if (message?.message == 'online') {
             setConnected("online");
         } else {
             setConnected("offline")
         }
-    }, [lastMessage])
+    }, [message])
     const devicePositioning = Array(34).fill(1).map((x,i)=>{
         if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
             return `${i + 10}-${i>14?'l':'r'}-${i}`
@@ -78,9 +88,9 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     return (
         <Node output={false} skipCustom={true} node={node} color='#8FCAF9' isPreview={!id} title='ESP32' id={id}  >
             {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
-            <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border: "1px solid white" }}>Upload</button>
-            <div style={{ alignItems: 'center', justifyContent: 'flex-end', paddingLeft: "14px", paddingRight: "14px", paddingTop: "10px" }}>
-                <p style={{ marginRight: '5px' }}>{connected}</p>
+            <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button>
+            <div style={{ alignItems: 'center', justifyContent: 'flex-end', paddingLeft: "14px", paddingRight: "14px", paddingTop: "10px",paddingBottom: "10px" }}>
+                <p style={{ marginRight: '5px' }}>{connected}<span style={{backgroundColor: connected=="online"?"green":"red",display:"inline-block", width: "12px", height: "12px", borderRadius: "40px", marginLeft: "15px"}}></span></p>
                 {/* <Icon as={MaterialCommunityIcons} color={connected == 'online' ? 'green.500' : 'error.600'} name={'circle'} /> */}
             </div>
             {<NodeParams id={id} params={params} />}
