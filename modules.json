@@ -1,11 +1,11 @@
 {
     "protoflow": {
         "url": "git@github.com:Protofy-xyz/protoflow.git",
-        "revision": "6210612260d309646921b6388e269b9c6a5b7d6b"
+        "revision": "85a172a6d7a0c2e9bd9f5705a06aa4e6187659bb"
     },
     "protolib": {
         "url": "git@github.com:Protofy-xyz/protolib.git",
-        "revision": "06c0474383c9075a5852901acd62818eab1c24d1"
+        "revision": "605343ad6acaf1712fbe7c54e00c4e940a20185e"
     },
     "visualui": {
         "url": "git@github.com:Protofy-xyz/protofy-visualui.git",
