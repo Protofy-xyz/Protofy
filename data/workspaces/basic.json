@@ -27,6 +27,12 @@
         ],
         "Models": [
             { "name": "*", "icon": "model", "type": "files", "path": "/packages/app/schema", "options": {"skipExtension": true}}
+        ],
+        "Devices":[
+            { "name": "mydevice", "icon": "model", "type":"devices", "path": "/"},
+            { "name": "Add", "icon": "create", "type": "create", "path": "/data/databases", "options": {
+                "templates":["database"]
+            }}
         ]
     }
 }
