@@ -93,6 +93,38 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
     </FormGroup>
 }
 
+const RecordComp = ({ele, inArray, recordData, elementDef, icon, data, setData, mode, customFields, path, setFormData}) => {
+    const [menuOpened, setMenuOpened] = useState(false)
+    const [name, setName] = useState("")
+
+    return <FormGroup ele={ele} title={inArray ? ' #' + (ele.name + 1) : '...'} icon={List}>
+        <Stack>
+            {recordData ? Object.keys(recordData).map((key, i) => {
+                return <XStack key={i} mt={i?"$2": "$0"} ml="$1">
+                    {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
+                    {getElement({ ...elementDef.valueType, name: key }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}
+                </XStack>
+            }) : null}
+        </Stack>
+        <AlertDialog
+            acceptCaption="Add field"
+            setOpen={setMenuOpened}
+            open={menuOpened}
+            onAccept={async (setMenuOpened) => {
+                setMenuOpened(false)
+                setFormData(ele.name, { ...recordData, [name]: defaultValueTable[ele._def.valueType._def.typeName] })
+            }}
+            title={'Add new field'}
+            description={""}
+        >
+            <YStack f={1} alignItems="center" mt="$6" justifyContent="center">
+                <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='Field name...' />
+            </YStack>
+        </AlertDialog>
+        {(mode == 'edit' || mode == 'add') && <Button mt="$5" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
+    </FormGroup>
+}
+
 const FormGroup = ({ ele, title, children, icon, simple=false }) => {
     const [opened, setOpened] = useState([''])
     const content = <XStack br="$5" f={1} elevation={opened.includes('item')?10:0} hoverStyle={{elevation:10}}><Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
@@ -215,35 +247,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
     } else if (elementType == 'ZodRecord') {
         const recordData = getFormData(ele.name)
-        const [menuOpened, setMenuOpened] = useState(false)
-        const [name, setName] = useState("")
-
-        return <FormGroup ele={ele} title={inArray ? ' #' + (ele.name + 1) : '...'} icon={List}>
-            <Stack>
-                {recordData ? Object.keys(recordData).map((key, i) => {
-                    return <XStack key={i} mt={i?"$2": "$0"} ml="$1">
-                        {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
-                        {getElement({ ...elementDef.valueType, name: key }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}
-                    </XStack>
-                }) : null}
-            </Stack>
-            <AlertDialog
-                acceptCaption="Add field"
-                setOpen={setMenuOpened}
-                open={menuOpened}
-                onAccept={async (setMenuOpened) => {
-                    setMenuOpened(false)
-                    setFormData(ele.name, { ...recordData, [name]: defaultValueTable[ele._def.valueType._def.typeName] })
-                }}
-                title={'Add new field'}
-                description={""}
-            >
-                <YStack f={1} alignItems="center" mt="$6" justifyContent="center">
-                    <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='Field name...' />
-                </YStack>
-            </AlertDialog>
-            {(mode == 'edit' || mode == 'add') && <Button mt="$5" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
-        </FormGroup>
+        return <RecordComp ele={ele} inArray={inArray} recordData={recordData} elementDef={elementDef} icon={icon} data={data} setData={setData} mode={mode} customFields={customFields} path={path} setFormData={setFormData} />
     }
 
     return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
