@@ -123,6 +123,25 @@ const getSchema = async (idSchema) => {
     return {name: currentSchema.name, id: idSchema, keys: keys}
 }
 
+const setSchema = (path, content) => {
+    let project = new Project();
+    let SchemaFile = fspath.join(path)
+    let sourceFile = project.addSourceFileAtPath(SchemaFile)
+    const definitions = getDefinitions(sourceFile, '"schema"')
+    if(!definitions.length) {
+        throw "No schema marker found for file: "+path
+    }
+    const definition = definitions[0]
+    console.log('definitions: ', definition)
+
+    if (definition.getArguments().length > 1) {
+        const secondArgument = definition.getArguments()[1];
+        secondArgument.replaceWithText(content);
+    } 
+
+    sourceFile.saveSync();
+}
+
 const getDB = (path, req, session) => {
     const db = {
         async *iterator() {
@@ -240,7 +259,7 @@ const getDB = (path, req, session) => {
         async put(key, value) {
             value = JSON.parse(value)
             let exists
-            const filePath = '../../packages/app/bundles/custom/schemas/'+value.name.replace(/[^a-zA-Z0-9_.-]/g, '')+'.ts'
+            const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/schemas/'+value.name.replace(/[^a-zA-Z0-9_.-]/g, '')+'.ts'
             try {
                 await fs.access(filePath, fs.constants.F_OK)
                 exists = true
@@ -260,12 +279,14 @@ const getDB = (path, req, session) => {
                 })
             }
 
-            const result = Object.keys(value.keys).reduce((total, current, i) => {
+            const result = "{"+Object.keys(value.keys).reduce((total, current, i) => {
                 const v = value.keys[current]
-                return total + "\n" + current + ": " + "z." + v.type + "("+ v.params.join(',') + ")" + v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + current.params.join(',') + ")" , '') + ","
-            }, '').slice(0, -1)
+                return total + "\n\t" + current + ": " + "z." + v.type + "("+ (v.params && v.params.length ? v.params.join(',') : '') + ")" + v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ?current.params.join(','):'') + ")" , '') + ","
+            }, '').slice(0, -1)+"\n}"
 
             console.log('result: ', result)
+
+            await setSchema(filePath, result)
         },
 
         async get(key) {
