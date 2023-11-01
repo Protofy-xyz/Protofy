@@ -2,7 +2,7 @@ import Handlebars from "handlebars"
 
 export const file = async (lib, path, vars) => {
     console.log('template file executed: ', vars, path)
-    const apiPath = path + '.ts'
+    const apiPath = path
     if(lib.fs.existsSync(apiPath)) {
         throw "File already exists"
     }
