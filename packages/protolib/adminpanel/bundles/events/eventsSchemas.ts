@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { def } from 'protolib/base'
+import { Protofy } from 'protolib/base'
 import { Schema, BaseSchema } from 'protolib/base'
 import moment from "moment";
 import { AutoModel } from 'protolib/base'
 
-export const BaseEventSchema = z.object(def("schema", {
+export const BaseEventSchema = z.object(Protofy("schema", {
     path: z.string().search().display(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
     from: z.string().search().display(), // system entity where the event was generated (next, api, cmd...)
     user: z.string().generate((obj) => 'me').search(), // the original user that generates the action, 'system' if the event originated in the system itself

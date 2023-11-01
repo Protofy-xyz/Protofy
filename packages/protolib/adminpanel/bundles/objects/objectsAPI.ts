@@ -31,7 +31,7 @@ const getDefinitions = (sourceFile, def) => {
     const callsToDef = callExpressions.filter(callExpr => {
         const args = callExpr.getArguments()
         const expression = callExpr.getExpression();
-        return expression.getKind() === SyntaxKind.Identifier && expression.getText() === 'def' && args.length && args[0].getText() == def;
+        return expression.getKind() === SyntaxKind.Identifier && expression.getText() === 'Protofy' && args.length && args[0].getText() == def;
     });
     return callsToDef
 }
