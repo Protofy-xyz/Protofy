@@ -12,7 +12,7 @@ app.post('/adminapi/v1/templates/:tplname', handler(async (req, res) => {
         throw "No such template: "+tplname
     }
     
-    const name = params.name.replace(/[^a-zA-Z0-9_-]/g, '');
+    const name = params.name.replace(/[^a-zA-Z0-9_.-]/g, '')
     const path = params.data.path.replace(/\.\./g, '')
     const fullpath = '../..'+path+"/"+name
     console.log('Executing template: ', tplname, 'in: ', fullpath, 'with vars: ', params)

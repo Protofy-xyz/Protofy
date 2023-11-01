@@ -15,7 +15,7 @@ export const BaseObjectSchema = z.object({
             z.literal("record"),
             z.literal("union")
         ]),
-        params: z.string().optional(),
+        params: z.array(z.string()).optional(),
         modifiers: z.array(z.object({
             name: z.union([
                 z.literal("id"),

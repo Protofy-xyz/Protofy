@@ -3,6 +3,7 @@ import { CreateApi } from '../../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
+import axios from 'axios';
 
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
@@ -131,8 +132,133 @@ const getDB = (path, req, session) => {
             }
         },
 
+        /*
+        {
+  "name": "event",
+  "id": "EventSchema",
+  "keys": {
+    "path": {
+      "type": "string",
+      "params": [],
+      "modifiers": [
+        {
+          "name": "search",
+          "params": []
+        },
+        {
+          "name": "display",
+          "params": []
+        }
+      ]
+    },
+    "from": {
+      "type": "string",
+      "params": [],
+      "modifiers": [
+        {
+          "name": "search",
+          "params": []
+        },
+        {
+          "name": "display",
+          "params": []
+        }
+      ]
+    },
+    "user": {
+      "type": "string",
+      "params": [],
+      "modifiers": [
+        {
+          "name": "generate",
+          "params": [
+            "(obj) => 'me'"
+          ]
+        },
+        {
+          "name": "search",
+          "params": []
+        }
+      ]
+    },
+    "payload": {
+      "type": "record",
+      "params": [
+        "z.number()"
+      ],
+      "modifiers": [
+        {
+          "name": "search",
+          "params": []
+        },
+        {
+          "name": "display",
+          "params": []
+        }
+      ]
+    },
+    "created": {
+      "type": "string",
+      "params": [],
+      "modifiers": [
+        {
+          "name": "generate",
+          "params": [
+            "(obj) => moment().toISOString()"
+          ]
+        },
+        {
+          "name": "search",
+          "params": []
+        }
+      ]
+    },
+    "status": {
+      "type": "display",
+      "params": [],
+      "modifiers": []
+    },
+    "lastUpdated": {
+      "type": "string",
+      "params": [],
+      "modifiers": [
+        {
+          "name": "generate",
+          "params": [
+            "(obj) => moment().toISOString()"
+          ]
+        },
+        {
+          "name": "search",
+          "params": []
+        }
+      ]
+    }
+  }
+}
+*/
         async put(key, value) {
-            console.log('save: ', key, value)
+            value = JSON.parse(value)
+            let exists
+            const filePath = '../../packages/app/bundles/custom/schemas/'+value.name.replace(/[^a-zA-Z0-9_.-]/g, '')+'.ts'
+            try {
+                await fs.access(filePath, fs.constants.F_OK)
+                exists = true
+            } catch(error) {
+                exists = false
+            }
+
+            if(exists) {
+                console.log('File: ' + filePath + ' already exists, not executing template')
+            } else {
+                await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+                    name: value.name+'.ts',
+                    data: {
+                        options: {template: '/packages/protolib/adminpanel/bundles/objects/templateSchema.tpl', variables: {name: value.name.charAt(0).toUpperCase() + value.name.slice(1)}},
+                        path: '/packages/app/bundles/custom/schemas'
+                    }
+                })
+            }
         },
 
         async get(key) {
