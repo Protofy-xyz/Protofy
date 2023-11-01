@@ -259,6 +259,13 @@ const getDB = (path, req, session) => {
                     }
                 })
             }
+
+            const result = Object.keys(value.keys).reduce((total, current, i) => {
+                const v = value.keys[current]
+                return total + "\n" + current + ": " + "z." + v.type + "("+ v.params.join(',') + ")" + v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + current.params.join(',') + ")" , '') + ","
+            }, '').slice(0, -1)
+
+            console.log('result: ', result)
         },
 
         async get(key) {
