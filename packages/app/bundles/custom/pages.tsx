@@ -1,6 +1,6 @@
 
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import {DataView} from 'protolib'
-import {def} from 'protolib/base'
+import {Protofy} from 'protolib/base'
 
-export default def("pages", {})
+export default Protofy("pages", {})
