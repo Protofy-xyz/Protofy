@@ -51,9 +51,21 @@ const FormElement = ({ ele, i, icon, children, inArray = false }) => {
 const defaultValueTable = {
     ZodString: "",
     ZodNumber: "0",
-    ZodObject: {},
-    ZodArry: [],
-    ZodBoolean: true
+    ZodBoolean: true,
+    default: ""
+}
+
+const getDefaultValue = (type) => {
+    if(defaultValueTable.hasOwnProperty(type)) {
+        return defaultValueTable[type]
+    }
+
+    //dynamic values. Do not put them in defaultValueTable, since they will be references
+    //all values in valuetable are variables passed as values, not passed as reference
+    if(type == 'ZodArray') return [] 
+    else if(type == 'ZodObject') return {}
+
+    return defaultValueTable.default
 }
 
 const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
@@ -88,7 +100,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
         {(mode == 'edit' || mode == 'add') && <Button mt="$4" onPress={() => {
             const eleDef = ele._def.typeName == 'ZodLazy' ? ele._def.getter()._def : ele._def
             const defaultValue = eleDef.typeName == "ZodOptional" ? eleDef.innerType._def.type._def.typeName : eleDef.type._def.typeName
-            setFormData(ele.name, [...arrData, (elementDef.type._def.typeName != 'ZodObject' ? defaultValueTable[defaultValue] : { ...defaultValueTable[defaultValue] }) ?? ""])
+            setFormData(ele.name, [...arrData, getDefaultValue(elementDef.type._def.typeName)])
         }}>Add{ele.name}</Button>}
     </FormGroup>
 }
@@ -112,7 +124,9 @@ const RecordComp = ({ele, inArray, recordData, elementDef, icon, data, setData, 
             open={menuOpened}
             onAccept={async (setMenuOpened) => {
                 setMenuOpened(false)
-                setFormData(ele.name, { ...recordData, [name]: defaultValueTable[ele._def.valueType._def.typeName] })
+                setName("")
+                const val = getDefaultValue(ele._def.valueType._def.typeName)
+                setFormData(ele.name, { ...recordData, [name]: val })
             }}
             title={'Add new field'}
             description={""}
@@ -203,7 +217,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         ele = newele
     }
 
-    console.log('custom fields: ', customFields, 'ele: ', ele.name, elementType)
+    // console.log('custom fields: ', customFields, 'ele: ', ele.name, elementType)
 
     // TODO Check if custom element
     if (customFields.hasOwnProperty(ele.name) || customFields.hasOwnProperty('*')) {
@@ -299,6 +313,8 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
     const [edited, setEdited] = useState(false)
     const [ready, setReady] = useState(false)
     const containerRef = useRef()
+
+    console.log('data: ', data)
 
     usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialData)
 
