@@ -7,6 +7,8 @@ import groupsPages from 'protolib/adminpanel/bundles/groups/adminPages'
 import eventsPages from 'protolib/adminpanel/bundles/events/adminPages'
 import automationPages from 'protolib/adminpanel/bundles/automation/adminPages'
 import objectsPages from 'protolib/adminpanel/bundles/objects/adminPages'
+import pagesPages from 'protolib/adminpanel/bundles/pages/adminPages'
+import customPages from './custom/pages'
 
 
 export default {
@@ -18,5 +20,7 @@ export default {
     ...groupsPages,
     ...eventsPages,
     ...automationPages,
-    ...objectsPages
+    ...objectsPages,
+    ...pagesPages,
+    ...customPages
 }

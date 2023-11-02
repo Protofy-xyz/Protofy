@@ -13,12 +13,9 @@
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
             { "name": "Events", "icon": "events", "type": "events", "path": "/" },
-            { "name": "Objects", "icon": "objects", "type": "objects", "path": "/" }
-        ],
-        "App": [
-            { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
-            { "name": "Public", "type": "files", "path": "/apps/next/public" },
-            { "name": "Data", "type": "files", "path": "/data" }
+            { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },
+            { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
+            { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" }
         ],
         "Databases": [
             { "name": "*", "icon": "database", "type": "database", "path": "/" },
@@ -27,10 +24,10 @@
             }}
         ],
         "Devices":[
-            { "name": "Cores", "icon": "model", "type":"deviceCores", "path": "/"},
-            { "name": "Boards", "icon": "model", "type":"deviceBoards", "path": "/"},
-            { "name": "Definitions", "icon": "model", "type":"deviceDefinitions", "path": "/"},
-            { "name": "Devices", "icon": "model", "type":"devices", "path": "/"}
+            { "name": "Devices", "icon": "model", "type":"devices", "path": "/"},
+            { "name": "Configs", "icon": "cable", "type":"deviceDefinitions", "path": "/"},
+            { "name": "Boards", "icon": "board", "type":"deviceBoards", "path": "/"},
+            { "name": "Cores", "icon": "cpu", "type":"deviceCores", "path": "/"}
         ]
     }
 }
