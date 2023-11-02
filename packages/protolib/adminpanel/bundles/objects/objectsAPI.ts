@@ -7,6 +7,7 @@ import axios from 'axios';
 
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
+const indexFile = "/packages/app/bundles/custom/schemas/index.ts"
 
 const getImport = (identifier, sourceFile) => {
     const importDeclarations = sourceFile.getImportDeclarations();
@@ -38,7 +39,7 @@ const getDefinitions = (sourceFile, def) => {
 
 const getSourceFile = () => {
     const project = new Project();
-    const SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/schemas.ts")
+    const SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, indexFile)
     const sourceFile = project.addSourceFileAtPath(SchemaFile)
     return sourceFile
 }
@@ -87,12 +88,11 @@ function extractChainCalls(callExpr) {
 
 const getSchema = async (idSchema) => {
     let project = new Project();
-    let SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/schemas.ts")
+    let SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, indexFile)
     let sourceFile = project.addSourceFileAtPath(SchemaFile)
     const schemas = await getSchemas(sourceFile)
     const currentSchema = schemas.find(s => s.id == idSchema)
-
-    const path = fspath.join("../../packages", getImport(idSchema, sourceFile))
+    const path = fspath.join("../../packages/app/bundles/custom/schemas/", getImport(idSchema, sourceFile))
     project = new Project();
     sourceFile = project.addSourceFileAtPath(path+".ts")
     const definitions = getDefinitions(sourceFile, '"schema"')
@@ -123,7 +123,75 @@ const getSchema = async (idSchema) => {
     return {name: currentSchema.name, id: idSchema, keys: keys}
 }
 
-const setSchema = (path, content) => {
+function isKeyImportedInFile(sourceFile, key: string): boolean {
+  const imports = sourceFile.getImportDeclarations();
+
+  for (const imp of imports) {
+      // get named imports, like: { Users } from '...'
+      const namedImports = imp.getNamedImports();
+      for (const namedImport of namedImports) {
+          if (namedImport.getName() === key) {
+              return true;
+          }
+      }
+
+      // get default import, like: Users from '...'
+      const defaultImport = imp.getDefaultImport();
+      if (defaultImport && defaultImport.getText() === key) {
+          return true;
+      }
+  }
+
+  return false;
+}
+
+enum ImportType {
+  DEFAULT,
+  NAMED
+}
+
+function addImportToSourceFile(sourceFile, key: string, type: ImportType, path: string): void {
+  // Verificar si el key ya ha sido importado
+  if (isKeyImportedInFile(sourceFile, key)) {
+      console.warn(`El key "${key}" ya ha sido importado en el archivo.`);
+      return;
+  }
+
+  // Agregar import en función de su tipo
+  switch (type) {
+      case ImportType.DEFAULT:
+          sourceFile.addImportDeclaration({
+              defaultImport: key,
+              moduleSpecifier: path
+          });
+          break;
+      case ImportType.NAMED:
+          sourceFile.addImportDeclaration({
+              namedImports: [key],
+              moduleSpecifier: path
+          });
+          break;
+  }
+}
+
+function addObjectLiteralProperty(objectLiteral: ObjectLiteralExpression, key: string, value: string): void {
+  // Verificar si el ObjectLiteralExpression ya tiene esa key
+  const property = objectLiteral.getProperty(key);
+  
+  if (property) {
+      console.warn(`Object already has key: "${key}".`);
+      return;
+  }
+
+  // Agregar la nueva propiedad con el value correspondiente
+  objectLiteral.addPropertyAssignment({
+      name: key,
+      initializer: value
+  });
+}
+
+
+const setSchema = (path, content, value) => {
     let project = new Project();
     let SchemaFile = fspath.join(path)
     let sourceFile = project.addSourceFileAtPath(SchemaFile)
@@ -140,6 +208,28 @@ const setSchema = (path, content) => {
     } 
 
     sourceFile.saveSync();
+
+    //link in index.ts
+    project = new Project();
+    SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, indexFile)
+    sourceFile = project.addSourceFileAtPath(SchemaFile)
+
+    addImportToSourceFile(sourceFile, value.id, ImportType.NAMED, './'+value.name)
+
+    const linkDefinitions = getDefinitions(sourceFile, '"schemas"')
+    if(!linkDefinitions.length) {
+      throw "No link definition schema marker found for file: "+path
+    }
+
+    const linkDef = linkDefinitions[0]
+    console.log('linkdef: ', linkDef)
+    if (linkDef.getArguments().length > 1) {
+      const secondArgument = linkDef.getArguments()[1];
+      console.log('second argument: ', secondArgument)
+      //secondArgument.replaceWithText(content);
+      addObjectLiteralProperty(secondArgument, value.name, value.id)
+    } 
+    sourceFile.saveSync();
 }
 
 const getDB = (path, req, session) => {
@@ -151,111 +241,6 @@ const getDB = (path, req, session) => {
             }
         },
 
-        /*
-        {
-  "name": "event",
-  "id": "EventSchema",
-  "keys": {
-    "path": {
-      "type": "string",
-      "params": [],
-      "modifiers": [
-        {
-          "name": "search",
-          "params": []
-        },
-        {
-          "name": "display",
-          "params": []
-        }
-      ]
-    },
-    "from": {
-      "type": "string",
-      "params": [],
-      "modifiers": [
-        {
-          "name": "search",
-          "params": []
-        },
-        {
-          "name": "display",
-          "params": []
-        }
-      ]
-    },
-    "user": {
-      "type": "string",
-      "params": [],
-      "modifiers": [
-        {
-          "name": "generate",
-          "params": [
-            "(obj) => 'me'"
-          ]
-        },
-        {
-          "name": "search",
-          "params": []
-        }
-      ]
-    },
-    "payload": {
-      "type": "record",
-      "params": [
-        "z.number()"
-      ],
-      "modifiers": [
-        {
-          "name": "search",
-          "params": []
-        },
-        {
-          "name": "display",
-          "params": []
-        }
-      ]
-    },
-    "created": {
-      "type": "string",
-      "params": [],
-      "modifiers": [
-        {
-          "name": "generate",
-          "params": [
-            "(obj) => moment().toISOString()"
-          ]
-        },
-        {
-          "name": "search",
-          "params": []
-        }
-      ]
-    },
-    "status": {
-      "type": "display",
-      "params": [],
-      "modifiers": []
-    },
-    "lastUpdated": {
-      "type": "string",
-      "params": [],
-      "modifiers": [
-        {
-          "name": "generate",
-          "params": [
-            "(obj) => moment().toISOString()"
-          ]
-        },
-        {
-          "name": "search",
-          "params": []
-        }
-      ]
-    }
-  }
-}
-*/
         async put(key, value) {
             value = JSON.parse(value)
             let exists
@@ -281,12 +266,12 @@ const getDB = (path, req, session) => {
 
             const result = "{"+Object.keys(value.keys).reduce((total, current, i) => {
                 const v = value.keys[current]
-                return total + "\n\t" + current + ": " + "z." + v.type + "("+ (v.params && v.params.length ? v.params.join(',') : '') + ")" + v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ?current.params.join(','):'') + ")" , '') + ","
+                const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ?current.params.join(','):'') + ")" , '') : ''
+                return total + "\n\t" + current + ": " + "z." + v.type + "("+ (v.params && v.params.length ? v.params.join(',') : '') + ")" + modifiers + ","
             }, '').slice(0, -1)+"\n}"
 
-            console.log('result: ', result)
 
-            await setSchema(filePath, result)
+            await setSchema(filePath, result, value)
         },
 
         async get(key) {

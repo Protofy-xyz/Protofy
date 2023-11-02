@@ -3,7 +3,7 @@ import {BaseSchema} from 'protolib/base'
 import { AutoModel } from 'protolib/base'
 
 export const BaseObjectSchema = z.object({
-    id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1)),
+    id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Schema'),
     name: z.string().search().display().static(),
     keys: z.record(z.string(), z.object({
         type: z.union([
@@ -38,7 +38,7 @@ export const BaseObjectSchema = z.object({
                 z.literal("name")
             ]),
             params: z.array(z.string()).optional()
-        }).name('name'))
+        }).name('name')).optional()
     }).name('name')).display()
     // data: z.string().search().display(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
     //from: z.string().search().display(), // system entity where the event was generated (next, api, cmd...)
