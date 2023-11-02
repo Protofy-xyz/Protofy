@@ -1,4 +1,4 @@
-import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, StackProps, Accordion, Square, Spacer } from "tamagui";
+import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, StackProps, Accordion, Square, Spacer, Switch } from "tamagui";
 import { Pencil, Tag, ChevronDown, X, Tags, List, Layers } from '@tamagui/lucide-icons';
 import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog } from 'protolib'
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -262,6 +262,18 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     } else if (elementType == 'ZodRecord') {
         const recordData = getFormData(ele.name)
         return <RecordComp ele={ele} inArray={inArray} recordData={recordData} elementDef={elementDef} icon={icon} data={data} setData={setData} mode={mode} customFields={customFields} path={path} setFormData={setFormData} />
+    } else if (elementType == 'ZodBoolean') {
+        const recordData:any = getFormData(ele.name)
+        return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+            <Tinted>
+                <Stack f={1} mt="$4">
+                    <Switch checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$3">
+                        <Switch.Thumb animation="quick" />
+                    </Switch>
+                    {/* <SimpleSlider onValueChange={v => setFormData(ele.name, v)} value={[getFormData(ele.name) ?? min.value]} width={190} min={min.value} max={max.value} /> */}
+                </Stack>
+            </Tinted>
+        </FormElement>
     }
 
     return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
