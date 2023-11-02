@@ -16,7 +16,7 @@ export function DataSSR(sourceUrl, allowdUserTypes=['admin'], props={}) {
     })
 }
 
-export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin'], dataProps:any={}, props:any={}) {
+export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin'], dataProps:any={}, extraData:any={}) {
   return _SSR(async (context:NextPageContext) => {
     const _dataProps = {
       itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : 25,
@@ -35,7 +35,7 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       initialItems: await API.get({url: _sourceUrl, ..._dataProps}),
       itemData: context.query.item ? await API.get(_sourceUrl+'/'+context.query.item) : '',
       route: context.query.name,
-      ...props,
+      extraData: {...extraData},
       pageState: {
         ..._dataProps,
       }
