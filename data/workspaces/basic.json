@@ -13,7 +13,7 @@
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
             { "name": "Events", "icon": "events", "type": "events", "path": "/" },
-            { "name": "Objects", "icon": "objects", "type": "objects", "path": "/" }
+            { "name": "Objects", "icon": "book", "type": "objects", "path": "/" }
         ],
         "App": [
             { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
