@@ -1,5 +1,32 @@
 import { YStack, XStack } from 'tamagui'
-import { Server, Box, Boxes, ChevronDown, Database, Folder, Plus, Workflow, Users, Repeat, Zap, Tag, Library, Lamp, FunctionSquare, Factory, Leaf, LineChart, Replace, ReplaceAll, Book, Milk} from '@tamagui/lucide-icons'
+import { 
+    Server,
+    Box,
+    Boxes,
+    ChevronDown,
+    Database,
+    Folder,
+    Plus,
+    Workflow,
+    Users,
+    Repeat,
+    Zap,
+    Tag,
+    Library,
+    Lamp,
+    FunctionSquare,
+    Factory,
+    Leaf,
+    LineChart,
+    Replace,
+    ReplaceAll,
+    Book,
+    Milk,
+    Layout,
+    DoorOpen,
+    Cpu,
+    CircuitBoard,
+} from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -35,9 +62,15 @@ const iconTable = {
     replace: <Replace color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     replaceAll: <ReplaceAll color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     boxes: <Boxes color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    box: <Box color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     book: <Book color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    bottle: <Milk color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
+    bottle: <Milk color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    layout: <Layout color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    doorOpen: <DoorOpen color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    cpu: <Cpu color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    board: <CircuitBoard color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
 }
+
 const getIcon = (icon) => {
     if (!iconTable[icon]) {
         return <Folder color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
