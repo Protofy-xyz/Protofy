@@ -1,5 +1,5 @@
 import { ObjectModel } from ".";
-import { CreateApi, getImport, getDefinitions, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getFirstDefinition } from '../../../api'
+import { CreateApi, getImport, getDefinitions, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition } from '../../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
@@ -9,7 +9,7 @@ const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const indexFile = "/packages/app/bundles/custom/schemas/index.ts"
 
 const getSchemas = async (sourceFile?) => {
-  const definition = getFirstDefinition(sourceFile ?? getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile)), '"schemas"')
+  const definition = getDefinition(sourceFile ?? getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile)), '"schemas"')
 
   if (definition) {
     const schemas = []
@@ -35,7 +35,7 @@ const getSchema = async (idSchema) => {
   const currentSchema = schemas.find(s => s.id == idSchema)
 
   sourceFile = getSourceFile(fspath.join("../../packages/app/bundles/custom/schemas/", getImport(sourceFile, idSchema)) + ".ts")
-  const definition = getFirstDefinition(sourceFile, '"schema"')
+  const definition = getDefinition(sourceFile, '"schema"')
   let keys = {}
   if (definition) {
     const node = definition.getArguments()[1]
@@ -61,7 +61,7 @@ const getSchema = async (idSchema) => {
 
 const setSchema = (path, content, value) => {
   let sourceFile = getSourceFile(path)
-  const definition = getFirstDefinition(sourceFile, '"schema"')
+  const definition = getDefinition(sourceFile, '"schema"')
   if (!definition) {
     throw "No schema marker found for file: " + path
   }
@@ -79,7 +79,7 @@ const setSchema = (path, content, value) => {
 
   addImportToSourceFile(sourceFile, value.id, ImportType.NAMED, './' + value.name)
 
-  const linkDefinition = getFirstDefinition(sourceFile, '"schemas"')
+  const linkDefinition = getDefinition(sourceFile, '"schemas"')
   if (!linkDefinition) {
     throw "No link definition schema marker found for file: " + path
   }

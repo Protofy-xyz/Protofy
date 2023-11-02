@@ -27,7 +27,7 @@ export const getDefinitions = (sourceFile, def) => {
     return callsToDef
 }
 
-export const getFirstDefinition = (sourceFile, def) => {
+export const getDefinition = (sourceFile, def) => {
     const callExpressions = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression);
     const callToDef = callExpressions.find(callExpr => {
         const args = callExpr.getArguments()
