@@ -1,3 +1,4 @@
+const jsYaml = require("js-yaml");
 // const pinTable = [
 //     '34', '35', '32', '33', '25', '26', '27', '14', '12', '13', 'D2', 'D3',
 //     '23', '22', 'TX', 'RX', '21', '19', '18', '5', '17', '16', '4', '0', '2', '15', 'D1', 'D0'
@@ -269,35 +270,74 @@ class Device {
     }
 
     dump() {
-        var dumpStr = `esphome:
-    name: ${this.name}
-    ${this.onBoot == '' ? '' : "on_boot:"}
-    ${this.onBoot}
-    ${this.onShutdown == '' ? '' : "on_shutdown:"}
-    ${this.onShutdown}
-
-esp32:
-    board: ${this.type}
-    framework:
-        type: arduino
-
-logger:
-
-wifi:
-    ssid: "${this.ssid}"
-    password: "${this.password}"
-    power_save_mode: ${this.wifiPowerMode} 
-
-mqtt:
-    broker: ${this.mqtt}
-    topic_prefix: ${this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name}
-    ${this.onJsonMessage == '' ? '' : "on_json_message:"}
-    ${this.onJsonMessage}
-    ${this.onMessage == '' ? '' : "on_message:"}
-    ${this.onMessage}
-`;
-    return dumpStr
+        const esphomeJson = {
+            esphome: {
+                name: this.name,
+            },
+            esp32: {
+                board: this.type,
+                framework: {
+                    type: 'arduino'
+                }
+            },
+            logger: {},
+            wifi: {
+                ssid: this.ssid,
+                password: this.password,
+                power_save_mode: this.wifiPowerMode
+            },
+            mqtt: {
+                broker: this.mqtt,
+                topic_prefix: this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name,
+            }
+        }
+        if (this.onBoot !== '') {
+            esphomeJson['on_boot'] = this.onBoot
+        }
+        if (this.onShutdown !== '') {
+            esphomeJson['on_boot'] = this.onBoot
+        }
+        if (this.onJsonMessage !== '') {
+            esphomeJson['on_json_message'] = this.onJsonMessage
+        }
+        if (this.onMessage !== '') {
+            esphomeJson['on_message'] = this.onMessage
+        }
+        var dumpStr = jsYaml.dump(esphomeJson)
+        return dumpStr;
+        
     }
+
+//     dump() {
+//         var dumpStr = `esphome:
+//     name: ${this.name}
+//     ${this.onBoot == '' ? '' : "on_boot:"}
+//     ${this.onBoot}
+//     ${this.onShutdown == '' ? '' : "on_shutdown:"}
+//     ${this.onShutdown}
+
+// esp32:
+//     board: ${this.type}
+//     framework:
+//         type: arduino
+
+// logger:
+
+// wifi:
+//     ssid: "${this.ssid}"
+//     password: "${this.password}"
+//     power_save_mode: ${this.wifiPowerMode} 
+
+// mqtt:
+//     broker: ${this.mqtt}
+//     topic_prefix: ${this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name}
+//     ${this.onJsonMessage == '' ? '' : "on_json_message:"}
+//     ${this.onJsonMessage}
+//     ${this.onMessage == '' ? '' : "on_message:"}
+//     ${this.onMessage}
+// `;
+//     return dumpStr
+//     }
 }
 
 export default function device(deviceInfo) {
