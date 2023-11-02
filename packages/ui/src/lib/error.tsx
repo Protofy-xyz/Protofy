@@ -7,11 +7,11 @@ export const getErrorMessage = (err) => {
       {typeof err == 'string' ? <Text color="$red9" fontWeight={"bold"}>Error: {err}</Text> : <>
         <Text>Error:</Text>
         <Spacer />
-        {Object.keys(err.fieldErrors).map((field) => {
+        {err && err.fieldErrors ? Object.keys(err.fieldErrors).map((field) => {
           return <Text>
             - [<Text color="$red9" fontWeight={"bold"}>{field}</Text>] {err.fieldErrors[field]}
           </Text>
-        })}</>
+        }) : <Text>Server Error</Text>}</>
       }
     </YStack>
   )
