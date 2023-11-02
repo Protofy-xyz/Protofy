@@ -17,17 +17,17 @@
             { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" }
         ],
-        "Databases": [
-            { "name": "*", "icon": "database", "type": "database", "path": "/" },
-            { "name": "Add", "icon": "create", "type": "create", "path": "/data/databases", "options": {
-                "templates":["database"]
-            }}
-        ],
         "Devices":[
             { "name": "Devices", "icon": "model", "type":"devices", "path": "/"},
             { "name": "Configs", "icon": "cable", "type":"deviceDefinitions", "path": "/"},
             { "name": "Boards", "icon": "board", "type":"deviceBoards", "path": "/"},
             { "name": "Cores", "icon": "cpu", "type":"deviceCores", "path": "/"}
+        ],
+        "Databases": [
+            { "name": "*", "icon": "database", "type": "database", "path": "/" },
+            { "name": "Add", "icon": "create", "type": "create", "path": "/data/databases", "options": {
+                "templates":["database"]
+            }}
         ]
     }
 }
