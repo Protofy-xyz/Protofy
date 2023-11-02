@@ -27,6 +27,16 @@ export const getDefinitions = (sourceFile, def) => {
     return callsToDef
 }
 
+export const getFirstDefinition = (sourceFile, def) => {
+    const callExpressions = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression);
+    const callToDef = callExpressions.find(callExpr => {
+        const args = callExpr.getArguments()
+        const expression = callExpr.getExpression();
+        return expression.getKind() === SyntaxKind.Identifier && expression.getText() === 'Protofy' && args.length && args[0].getText() == def;
+    });
+    return callToDef;
+}
+
 export const getSourceFile = (path) => {
     const project = new Project();
     const sourceFile = project.addSourceFileAtPath(path)
