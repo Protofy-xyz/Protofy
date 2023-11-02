@@ -1,3 +1,4 @@
+import { generateEvent } from "../../adminpanel/bundles/events/eventsLibrary";
 import { connectDB, getDB } from "./db";
 import {handler} from './handler'
 import fs from 'fs';
@@ -16,7 +17,7 @@ import path from 'path';
     operations: list of provided operations, by default ['create', 'read', 'update', 'delete', 'list']
     single: most apis are used to expose a list of things. Single means a single entity, not a list of things. So /api/v1/test returns the entity, not a list of things
 */
-export const CreateApi = (modelName: string, modelType: any, dir: string, prefix='/api/v1/', dbName?, transformers={}, _connectDB?, _getDB?, operations?, single?) => {
+export const CreateApi = (modelName: string, modelType: any, dir: string, prefix='/api/v1/', dbName?, transformers={}, _connectDB?, _getDB?, operations?, single?, options={}) => {
     let initialData;
     try {
         if(fs.existsSync(path.join(dir, 'initialData.json'))) {
@@ -41,15 +42,16 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
 
     return (app) => BaseApi(app, modelName, modelType, initialData, prefix, dbName, {
         ...transformers
-    }, _connectDB??connectDB, _getDB??getDB, operations)
+    }, _connectDB??connectDB, _getDB??getDB, operations, single, options)
 }
 
-export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName, transformers, connectDB, getDB, operations=['create', 'read', 'update', 'delete', 'list'], single?) => {
+export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName, transformers, connectDB, getDB, operations=['create', 'read', 'update', 'delete', 'list'], single?, options?) => {
     const dbPath = '../../data/databases/'+(dbName?dbName:entityName)
     connectDB(dbPath, initialData) //preconnect database
 
     //list
     !single && operations.includes('list') && app.get(prefix + entityName, handler(async (req, res, session) => {
+        console.log('session: ', session)
         const db = getDB(dbPath, req, session);
         const allResults: any[] = [];
         const itemsPerPage = Math.min(Number(req.query.itemsPerPage) || 10, 100);
@@ -93,6 +95,19 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.load(req.body, session).createTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
+        if(!options.disableEvents) {
+            generateEvent({
+                path: entityName+'/create', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                from: 'api', // system entity where the event was generated (next, api, cmd...)
+                user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+                payload: {
+                    who: '-', //TODO: wire session in dataview to api,
+                    id: entityModel.getId(),
+                    data: JSON.stringify(entityModel.read())
+                }, // event payload, event-specific data
+                status: 'pending'
+            })
+        }
         res.send(await entityModel.readTransformed(transformers))
     }));
 
@@ -117,6 +132,19 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session), transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
+        if(!options.disableEvents) {
+            generateEvent({
+                path: entityName+'/update', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                from: 'api', // system entity where the event was generated (next, api, cmd...)
+                user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+                payload: {
+                    who: '-', //TODO: wire session in dataview to api,
+                    id: entityModel.getId(),
+                    data: JSON.stringify(entityModel.read())
+                }, // event payload, event-specific data
+                status: 'pending'
+            })
+        }
         res.send(await entityModel.readTransformed(transformers))
     }));
 
@@ -125,6 +153,19 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).deleteTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
+        if(!options.disableEvents) {
+            generateEvent({
+                path: entityName+'/delete', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                from: 'api', // system entity where the event was generated (next, api, cmd...)
+                user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+                payload: {
+                    who: '-', //TODO: wire session in dataview to api,
+                    id: entityModel.getId(),
+                    data: JSON.stringify(entityModel.read())
+                }, // event payload, event-specific data
+                status: 'pending'
+            })
+        }
         res.send({"result": "deleted"})
     }));
 }
