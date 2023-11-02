@@ -1,19 +1,18 @@
 import { ObjectModel } from ".";
-import { CreateApi, getImport, getDefinitions, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition } from '../../../api'
+import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition } from '../../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
-import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
+import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import axios from 'axios';
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const indexFile = "/packages/app/bundles/custom/schemas/index.ts"
 
 const getSchemas = async (sourceFile?) => {
-  const definition = getDefinition(sourceFile ?? getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile)), '"schemas"')
+  const node = getDefinition(sourceFile ?? getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile)), '"schemas"')
 
-  if (definition) {
+  if (node) {
     const schemas = []
-    const node = definition.getArguments()[1]
     if (node instanceof ObjectLiteralExpression) {
       node.getProperties().forEach(prop => {
         if (prop instanceof PropertyAssignment) {
@@ -35,10 +34,9 @@ const getSchema = async (idSchema) => {
   const currentSchema = schemas.find(s => s.id == idSchema)
 
   sourceFile = getSourceFile(fspath.join("../../packages/app/bundles/custom/schemas/", getImport(sourceFile, idSchema)) + ".ts")
-  const definition = getDefinition(sourceFile, '"schema"')
+  const node = getDefinition(sourceFile, '"schema"')
   let keys = {}
-  if (definition) {
-    const node = definition.getArguments()[1]
+  if (node) {
     if (node instanceof ObjectLiteralExpression) {
       node.getProperties().forEach(prop => {
         if (prop instanceof PropertyAssignment) {
@@ -61,35 +59,23 @@ const getSchema = async (idSchema) => {
 
 const setSchema = (path, content, value) => {
   let sourceFile = getSourceFile(path)
-  const definition = getDefinition(sourceFile, '"schema"')
-  if (!definition) {
+  const secondArgument = getDefinition(sourceFile, '"schema"')
+  if (!secondArgument) {
     throw "No schema marker found for file: " + path
   }
-  console.log('definitions: ', definition)
 
-  if (definition.getArguments().length > 1) {
-    const secondArgument = definition.getArguments()[1];
-    secondArgument.replaceWithText(content);
-  }
-
+  secondArgument.replaceWithText(content);
   sourceFile.saveSync();
 
   //link in index.ts
   sourceFile = getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile))
-
   addImportToSourceFile(sourceFile, value.id, ImportType.NAMED, './' + value.name)
 
-  const linkDefinition = getDefinition(sourceFile, '"schemas"')
-  if (!linkDefinition) {
+  const arg = getDefinition(sourceFile, '"schemas"')
+  if (!arg) {
     throw "No link definition schema marker found for file: " + path
   }
-
-  if (linkDefinition.getArguments().length > 1) {
-    const secondArgument = linkDefinition.getArguments()[1];
-    console.log('second argument: ', secondArgument)
-    //secondArgument.replaceWithText(content);
-    addObjectLiteralProperty(secondArgument, value.name, value.id)
-  }
+  addObjectLiteralProperty(arg, value.name, value.id)
   sourceFile.saveSync();
 }
 

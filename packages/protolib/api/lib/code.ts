@@ -17,24 +17,24 @@ export const getImport = (sourceFile, identifier) => {
     }
 }
 
-export const getDefinitions = (sourceFile, def) => {
+export const getDefinitions = (sourceFile, def, numParam=1) => {
     const callExpressions = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression);
     const callsToDef = callExpressions.filter(callExpr => {
         const args = callExpr.getArguments()
         const expression = callExpr.getExpression();
         return expression.getKind() === SyntaxKind.Identifier && expression.getText() === 'Protofy' && args.length && args[0].getText() == def;
-    });
+    }).map(x => x.getArguments()[numParam])
     return callsToDef
 }
 
-export const getDefinition = (sourceFile, def) => {
+export const getDefinition = (sourceFile, def, numParam=1) => {
     const callExpressions = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression);
     const callToDef = callExpressions.find(callExpr => {
         const args = callExpr.getArguments()
         const expression = callExpr.getExpression();
         return expression.getKind() === SyntaxKind.Identifier && expression.getText() === 'Protofy' && args.length && args[0].getText() == def;
     });
-    return callToDef;
+    return callToDef.getArguments()[numParam];
 }
 
 export const getSourceFile = (path) => {
