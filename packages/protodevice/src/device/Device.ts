@@ -295,7 +295,7 @@ class Device {
             esphomeJson['on_boot'] = this.onBoot
         }
         if (this.onShutdown !== '') {
-            esphomeJson['on_boot'] = this.onBoot
+            esphomeJson['on_boot'] = this.onShutdown
         }
         if (this.onJsonMessage !== '') {
             esphomeJson['on_json_message'] = this.onJsonMessage
