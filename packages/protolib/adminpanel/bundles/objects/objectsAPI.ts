@@ -1,5 +1,5 @@
 import { ObjectModel } from ".";
-import { CreateApi } from '../../../api'
+import { CreateApi, getImport } from '../../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
@@ -9,22 +9,7 @@ import axios from 'axios';
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const indexFile = "/packages/app/bundles/custom/schemas/index.ts"
 
-const getImport = (identifier, sourceFile) => {
-    const importDeclarations = sourceFile.getImportDeclarations();
 
-    for (const importDeclaration of importDeclarations) {
-        const namedImports = importDeclaration.getNamedImports();
-        for (const namedImport of namedImports) {
-            if (namedImport.getName() === identifier) {
-                return importDeclaration.getModuleSpecifierValue();
-            }
-        }
-        const defaultImport = importDeclaration.getDefaultImport();
-        if (defaultImport && defaultImport.getText() === identifier) {
-            return importDeclaration.getModuleSpecifierValue();
-        }
-    }
-}
 
 const getDefinitions = (sourceFile, def) => {
     const callExpressions = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression);
@@ -92,7 +77,7 @@ const getSchema = async (idSchema) => {
     let sourceFile = project.addSourceFileAtPath(SchemaFile)
     const schemas = await getSchemas(sourceFile)
     const currentSchema = schemas.find(s => s.id == idSchema)
-    const path = fspath.join("../../packages/app/bundles/custom/schemas/", getImport(idSchema, sourceFile))
+    const path = fspath.join("../../packages/app/bundles/custom/schemas/", getImport(sourceFile, idSchema))
     project = new Project();
     sourceFile = project.addSourceFileAtPath(path+".ts")
     const definitions = getDefinitions(sourceFile, '"schema"')
@@ -123,27 +108,7 @@ const getSchema = async (idSchema) => {
     return {name: currentSchema.name, id: idSchema, keys: keys}
 }
 
-function isKeyImportedInFile(sourceFile, key: string): boolean {
-  const imports = sourceFile.getImportDeclarations();
 
-  for (const imp of imports) {
-      // get named imports, like: { Users } from '...'
-      const namedImports = imp.getNamedImports();
-      for (const namedImport of namedImports) {
-          if (namedImport.getName() === key) {
-              return true;
-          }
-      }
-
-      // get default import, like: Users from '...'
-      const defaultImport = imp.getDefaultImport();
-      if (defaultImport && defaultImport.getText() === key) {
-          return true;
-      }
-  }
-
-  return false;
-}
 
 enum ImportType {
   DEFAULT,
@@ -152,7 +117,7 @@ enum ImportType {
 
 function addImportToSourceFile(sourceFile, key: string, type: ImportType, path: string): void {
   // Verificar si el key ya ha sido importado
-  if (isKeyImportedInFile(sourceFile, key)) {
+  if (getImport(sourceFile, key)) {
       console.warn(`El key "${key}" ya ha sido importado en el archivo.`);
       return;
   }
