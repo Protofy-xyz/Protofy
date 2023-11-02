@@ -31,14 +31,12 @@ const getSchemas = async (sourceFile?) => {
 }
 
 const getSchema = async (idSchema) => {
-    let project = new Project();
     let SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, indexFile)
-    let sourceFile = project.addSourceFileAtPath(SchemaFile)
+    let sourceFile = getSourceFile(SchemaFile)
     const schemas = await getSchemas(sourceFile)
     const currentSchema = schemas.find(s => s.id == idSchema)
-    const path = fspath.join("../../packages/app/bundles/custom/schemas/", getImport(sourceFile, idSchema))
-    project = new Project();
-    sourceFile = project.addSourceFileAtPath(path + ".ts")
+    
+    sourceFile = getSourceFile(fspath.join("../../packages/app/bundles/custom/schemas/", getImport(sourceFile, idSchema)) + ".ts")
     const definitions = getDefinitions(sourceFile, '"schema"')
     let keys = []
     if (definitions.length) {
@@ -67,9 +65,7 @@ const getSchema = async (idSchema) => {
 }
 
 const setSchema = (path, content, value) => {
-    let project = new Project();
-    let SchemaFile = fspath.join(path)
-    let sourceFile = project.addSourceFileAtPath(SchemaFile)
+    let sourceFile = getSourceFile(path)
     const definitions = getDefinitions(sourceFile, '"schema"')
     if (!definitions.length) {
         throw "No schema marker found for file: " + path
@@ -85,9 +81,7 @@ const setSchema = (path, content, value) => {
     sourceFile.saveSync();
 
     //link in index.ts
-    project = new Project();
-    SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, indexFile)
-    sourceFile = project.addSourceFileAtPath(SchemaFile)
+    sourceFile = getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile))
 
     addImportToSourceFile(sourceFile, value.id, ImportType.NAMED, './' + value.name)
 

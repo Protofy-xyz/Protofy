@@ -29,8 +29,7 @@ export const getDefinitions = (sourceFile, def) => {
 
 export const getSourceFile = (path) => {
     const project = new Project();
-    const SchemaFile = path
-    const sourceFile = project.addSourceFileAtPath(SchemaFile)
+    const sourceFile = project.addSourceFileAtPath(path)
     return sourceFile
 }
 
