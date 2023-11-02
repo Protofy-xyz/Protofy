@@ -13,7 +13,7 @@
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
             { "name": "Events", "icon": "events", "type": "events", "path": "/" },
-            { "name": "Objects", "icon": "book", "type": "objects", "path": "/" }
+            { "name": "Objects", "icon": "objects", "type": "objects", "path": "/" }
         ],
         "App": [
             { "name": "Pages", "type": "files", "path": "/apps/next/pages" },
@@ -27,10 +27,10 @@
             }}
         ],
         "Devices":[
-            { "name": "mydevice", "icon": "model", "type":"devices", "path": "/"},
-            { "name": "Add", "icon": "create", "type": "create", "path": "/data/databases", "options": {
-                "templates":["database"]
-            }}
+            { "name": "Cores", "icon": "model", "type":"deviceCores", "path": "/"},
+            { "name": "Boards", "icon": "model", "type":"deviceBoards", "path": "/"},
+            { "name": "Definitions", "icon": "model", "type":"deviceDefinitions", "path": "/"},
+            { "name": "Devices", "icon": "model", "type":"devices", "path": "/"}
         ]
     }
 }
