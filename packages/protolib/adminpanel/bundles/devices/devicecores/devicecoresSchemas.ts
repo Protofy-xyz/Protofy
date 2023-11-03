@@ -4,8 +4,8 @@ import { AutoModel } from 'protolib/base'
 import { v4 as uuidV4 } from 'uuid';
 
 export const DeviceCoreSchema = Schema.object({
-    id: z.string().generate((obj) => uuidV4()).display(),
-    name: z.array(z.union([
+    id: z.string().generate((obj) => uuidV4()),
+    name: z.union([
         z.literal("ESP32"),
         z.literal("ESP32S3"),
         z.literal("RASPI-PICO"),
@@ -13,7 +13,7 @@ export const DeviceCoreSchema = Schema.object({
         z.literal(" AT-MEGA3801"),
         z.literal("ARMv7"),
         z.literal("Protofy"),
-    ])).hint("ESP32, AT-MEGA2560  ARMv7, Protofy, ...").display(),
+    ]).hint("ESP32, AT-MEGA2560  ARMv7, Protofy, ...").display(),
     sdks: z.array(z.union([ 
         z.literal("esphome"),
         z.literal("platformio"),
