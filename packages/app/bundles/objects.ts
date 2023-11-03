@@ -4,7 +4,7 @@ import { EventModel } from 'protolib/adminpanel/bundles/events/eventsSchemas'
 import { ObjectModel } from 'protolib/adminpanel/bundles/objects/objectsSchemas'
 import LocalObjects from './custom/objects'
 
-export const Schemas = {
+export const Objects = {
     event: EventModel,
     user: UserModel,
     group: GroupModel,
