@@ -3,7 +3,7 @@ import { Schema } from 'protolib/base'
 import { AutoModel } from 'protolib/base'
 
 export const DeviceCoreSchema = Schema.object({
-  name: z.string().hint("ESP32, AT-MEGA2560  ARMv7, Protofy, ...").display().id(),
+  name: z.string().hint("ESP32, AT-MEGA2560  ARMv7, Protofy, ...").static().display().id(),
   sdks: z.array(z.string()).hint("esphome, platformio, wled, javascript, ...").display(),
   config: z.record(z.string(), z.string()).generate(() => { return {} }).display()
 })
