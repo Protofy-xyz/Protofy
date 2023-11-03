@@ -191,10 +191,10 @@ if (value > 0){
                   priority: 600,
                   then:{
                       lambda: 
-`  ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to at boot: %d",  id(dp_run_duration));
-  id(ds).set_run_duration(id(dp_run_duration)*1000);
-  ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to at boot: %d",  id(dp_sleep_duration));
-  id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);
+`ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to at boot: %d",  id(dp_run_duration));
+id(ds).set_run_duration(id(dp_run_duration)*1000);
+ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to at boot: %d",  id(dp_sleep_duration));
+id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);
 `
                   }
               }
@@ -285,8 +285,8 @@ if (value > 0){
             }
         })
 
-        console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ this.dump() + jsYaml.dump(outJson):", this.dump() + jsYaml.dump(outJson))
-        return this.dump() + jsYaml.dump(outJson);
+        console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ this.dump() + jsYaml.dump(outJson):", this.dump() + jsYaml.dump(outJson, {lineWidth: -1}))
+        return this.dump() + jsYaml.dump(outJson, {lineWidth: -1});
     }
 
     dump() {
@@ -323,7 +323,7 @@ if (value > 0){
         if (this.onMessage.length > 0) {
             esphomeJson['mqtt']['on_message'] = this.onMessage
         }
-        var dumpStr = jsYaml.dump(esphomeJson)
+        var dumpStr = jsYaml.dump(esphomeJson, {lineWidth: -1})
         return dumpStr;
         
     }
