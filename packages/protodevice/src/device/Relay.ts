@@ -1,3 +1,4 @@
+const jsYaml = require("js-yaml");
 class Relay {
     name;
     platform;
@@ -11,14 +12,16 @@ class Relay {
 //
 
     attach(pin) {
-        return {componentName: 'switch',payload:
-`    - platform: ${this.platform}
-      pin: ${pin}
-      id: ${this.name}
-      name: ${this.name}
-      restore_mode: ${this.restoreMode}
-`
-    }
+        return {componentName: 'switch',payload: 
+        {
+            switch: {
+                platform: this.platform,
+                pin: pin,
+                id: this.name,
+                restore_mode: this.restoreMode
+            }
+        }
+        }
     }
 }
 
