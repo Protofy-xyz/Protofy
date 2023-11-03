@@ -72,6 +72,8 @@ export function DataView({
     dataTableListProps = {},
     dataTableGridProps = {},
     extraFieldsForms = {},
+    extraFieldsFormsEdit = {},
+    extraFieldsFormsAdd = {},
     customFieldsForms = {},
     defaultView = 'list',
     disableViews = [],
@@ -181,7 +183,7 @@ export function DataView({
                                             }
                                         }}
                                         model={model}
-                                        extraFields={{...extraFields, ...extraFieldsForms}}
+                                        extraFields={{...extraFields, ...extraFieldsForms, ...extraFieldsFormsAdd}}
                                         icons={icons}
                                         customFields={{...customFields, ...customFieldsForms}}
                                         {...objectProps}
@@ -236,7 +238,7 @@ export function DataView({
                                             }
                                         }}
                                         model={model}
-                                        extraFields={{...extraFields, ...extraFieldsForms}}
+                                        extraFields={{...extraFields, ...extraFieldsForms, ...extraFieldsFormsEdit}}
                                         icons={icons}
                                         customFields={{...customFields, ...customFieldsForms}}
                                         {...objectProps}

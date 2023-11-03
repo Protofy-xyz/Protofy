@@ -21,13 +21,11 @@ const getPage = (pagePath) => {
     permissions = permissions.getText()
   }
 
-  const template = getDefinition(sourceFile, '"template"')
-  if(!route || !permissions || !template || !prot) return undefined
+  if(!route || !permissions || !prot) return undefined
 
   return {
     name: fspath.basename(pagePath, fspath.extname(pagePath)),
     route: route.getText().replace(/^["']|["']$/g, ''),
-    template: template.getText().replace(/^["']|["']$/g, ''),
     protected: prot.getText() == 'false' ? false : true,
     permissions: permissions
   }
@@ -45,7 +43,8 @@ const getDB = (path, req, session) => {
     },
 
     async put(key, value) {
-
+      value = JSON.parse(value)
+      console.log('value: ', value)
     },
 
     async get(key) {

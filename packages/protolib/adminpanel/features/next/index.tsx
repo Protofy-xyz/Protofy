@@ -35,7 +35,7 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       initialItems: await API.get({url: _sourceUrl, ..._dataProps}),
       itemData: context.query.item ? await API.get(_sourceUrl+'/'+context.query.item) : '',
       route: context.query.name,
-      extraData: {...extraData},
+      extraData: {...(typeof extraData === "function"? await extraData() : extraData)},
       pageState: {
         ..._dataProps,
       }

@@ -5,7 +5,6 @@ import { AutoModel, Schema } from 'protolib/base'
 export const PageSchema = Schema.object({
     name: z.string().search().id().display(),
     route: z.string().search().display(),
-    template: z.union([z.literal("blank"), z.literal("default"), z.literal("admin")]).display().generate(() => 'default'),
     protected: z.boolean().display().generate(() => false).label("Require user"),
     permissions: z.array(z.string()).optional().label("Permissions").display(),
 }) 

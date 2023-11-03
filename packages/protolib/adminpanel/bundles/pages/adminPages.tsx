@@ -2,14 +2,15 @@
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { PageModel } from '.'
 import {DataView} from 'protolib'
-import { DataTable2, Chip } from 'protolib'
+import { DataTable2, Chip, API } from 'protolib'
+import {z} from 'zod'
 
-const format = 'YYYY-MM-DD HH:mm:ss'
 const PageIcons =  {}
-const rowsPerPage = 20
+
 export default {
     'admin/pages': {
-        component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
+        component: ({workspace, pageState, sourceUrl, initialItems, pageSession, extraData}:any) => {
+            console.log('extra data: ', extraData)
             return (<AdminPage title="Pages" workspace={workspace} pageSession={pageSession}>
                 <DataView
                     sourceUrl={sourceUrl}
@@ -27,13 +28,21 @@ export default {
                         // DataTable2.column("created", "createdAt", true, row => moment(row.createdAt).format(format)),
                         // DataTable2.column("last login", "lastLogin",true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'NEVER'} color={'$yellow6'} /> )
                     )}
-                    // hideAdd={true}
+                    extraFieldsFormsAdd={{
+                        template: z.union([z.literal("blank"), z.literal("default"), z.literal("admin")]).display().generate(() => 'default').after("route"),
+                        object: z.union([z.literal("without object"), ...extraData.objects.map(o => z.literal(o.name))] as any).after('route').display(),
+                    }}
                     model={PageModel} 
                     pageState={pageState}
                     icons={PageIcons}
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/pages')
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/pages', ['admin'], {}, async () => {
+            const objects = await API.get('/adminapi/v1/objects?itemsPerPage=1000')
+            return {
+                objects: objects.isLoaded ? objects.data.items : []
+            }
+        })
     }
 }
