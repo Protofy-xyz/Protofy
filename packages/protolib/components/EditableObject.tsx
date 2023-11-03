@@ -267,7 +267,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <Tinted>
                 <Stack f={1} mt="$4">
-                    <Switch checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$3">
+                    <Switch checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$2">
                         <Switch.Thumb animation="quick" />
                     </Switch>
                     {/* <SimpleSlider onValueChange={v => setFormData(ele.name, v)} value={[getFormData(ele.name) ?? min.value]} width={190} min={min.value} max={max.value} /> */}
