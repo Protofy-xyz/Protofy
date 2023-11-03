@@ -73,160 +73,192 @@ class Device {
         this.wifiPowerMode === mode // for "high" mode cases on this.wifiPowerMode
     }
 
-    getComponentsJSON() {
-        var finalJSON = {}
-        var prevComponentsOut = []
-        console.log('components', this.components)
+//     getComponentsJSON() {
+//         var finalJSON = {}
+//         var prevComponentsOut = []
+//         console.log('components', this.components)
+//         this.components.forEach((component, i) => {
+//             if (component) {
+//                 try {
+//                     component.setMqttTopicPrefix(`${this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name}`);
+//                 } catch (e) {
+
+//                 }
+
+//                 try {
+//                     this.setWifiPowerMode(component.getWifiPowerMode())
+//                 } catch (e) {
+
+//                 }
+//                 try {
+//                     component.setDeepSleep(this.deepSleep);
+//                 } catch (e) {
+
+//                 }
+
+//                 console.log('component', component)
+//                 var repeated = false
+//                 const componentsOut = component.attach(pinTable[i]);
+//                 if (!componentsOut.length) {
+//                     if (finalJSON.hasOwnProperty(componentsOut.componentName)) {
+//                         finalJSON[componentsOut.componentName].push(componentsOut.payload);
+//                     } else {
+//                         finalJSON[componentsOut.componentName] = [componentsOut.payload];
+//                     }
+//                 } else {
+//                     componentsOut.map((componentOut) => {
+//                     if (finalJSON.hasOwnProperty(componentOut.componentName)) {
+//                         prevComponentsOut.forEach(component => {
+//                             if(component.payload === componentOut.payload) repeated = true
+//                         })
+//                         if(!repeated) finalJSON[componentOut.componentName].push(componentOut.payload);
+//                         repeated = false
+//                     } else {
+//                         finalJSON[componentOut.componentName] = [componentOut.payload]
+//                     }
+//                     prevComponentsOut.push(componentOut)
+//                     })
+//                 }
+//             }
+//         })
+//         this.dsComponents = [
+//             {componentName: 'deep_sleep', payload:{
+//                 deep_sleep: {
+//                     id: "ds",
+//                     sleep_duration: this.deepSleepSleepDuration+"s",
+//                     wakeup_pin: this.wakeupPin,
+//                     wakeup_pin_mode: "KEEP_AWAKE"
+
+//                 }
+//             }},
+//             {componentName: 'globals', payload:{
+//                 globals: {
+//                     id: "dp_run_duration",
+//                     type: "int",
+//                     restore_value: "yes",
+//                     initial_value: this.deepSleepRunDuration
+//                 }
+//             }},
+//             {componentName: 'globals', payload:{
+//                 globals: {
+//                     id: "dp_sleep_duration",
+//                     type: "int",
+//                     restore_value: "yes",
+//                     initial_value: this.deepSleepSleepDuration
+//                 }
+//             }},
+//             {componentName: 'on_message', payload:{
+//                 on_message:{
+//                     topic: `${this.mqttPrefix !== '' ? this.mqttPrefix + '/' + this.name : this.name}/deep_sleep/dp_sleep_duration/command`,
+//                     then:{
+//                         lambda: 
+// `int value = atoi(x.c_str());
+// if (value == 0) {
+//     id(ds).prevent_deep_sleep();
+//     ESP_LOGD("Deep Sleep", "Deep Sleep disabled");
+// } else if (value > 0) {
+//     id(ds).allow_deep_sleep();
+//     id(dp_sleep_duration) = value;
+//     id(ds).set_sleep_duration(value * 1000);
+//     ESP_LOGD("Deep Sleep", "Deep Sleep sleep duration set to: %d", value);
+//     ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to: %d", id(dp_run_duration));
+// } else {
+//     ESP_LOGD("Deep Sleep", "Invalid sleep duration value");
+// }`
+//                     }
+//                 }
+//             }},
+//             {componentName: 'on_message', payload:{
+//                 on_message:{
+//                     topic: `${this.mqttPrefix !== '' ? this.mqttPrefix + '/' + this.name : this.name}/deep_sleep/dp_run_duration/command`,
+//                     then:{
+//                         lambda: 
+// `int value = atoi(x.c_str());
+// if (value > 0){
+//     id(dp_run_duration) = value;
+//     id(ds).set_run_duration(value*1000);
+//     ESP_LOGD("Deep Sleep", "Deep Sleep run duration set to: %d",  value);
+//     ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to: %d",  id(dp_run_duration));       
+//     } 
+//     else {
+//     ESP_LOGD("Deep Sleep", "Invalid run duration value");
+// }`
+//                     }
+//                 }
+//             }},
+//             {componentName: 'on_boot', payload:{
+//               on_boot:{
+//                   priority: 600,
+//                   then:{
+//                       lambda: 
+// `ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to at boot: %d",  id(dp_run_duration));
+// id(ds).set_run_duration(id(dp_run_duration)*1000);
+// ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to at boot: %d",  id(dp_sleep_duration));
+// id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);
+// `
+//                   }
+//               }
+//           }},
+//         ]
+//         console.log("dscomponents ", this.dsComponents)
+//         if(this.deepSleep) this.dsComponents.forEach((component, i) => {
+//             console.log('component', component)
+//             var repeated = false
+//             const componentsOut = component
+//             if (!componentsOut.length) {
+//                 if (finalJSON.hasOwnProperty(componentsOut.componentName)) {
+//                     finalJSON[componentsOut.componentName].push(componentsOut.payload);
+//                 } else {
+//                     finalJSON[componentsOut.componentName] = [componentsOut.payload];
+//                 }
+//             } else {
+//                 componentsOut.map((componentOut) => {
+//                 if (finalJSON.hasOwnProperty(componentOut.componentName)) {
+//                     prevComponentsOut.forEach(component => {
+//                         if(component.payload === componentOut.payload) repeated = true
+//                     })
+//                     if(!repeated) finalJSON[componentOut.componentName].push(componentOut.payload);
+//                     repeated = false
+//                 } else {
+//                     finalJSON[componentOut.componentName] = [componentOut.payload]
+//                 }
+//                 prevComponentsOut.push(componentOut)
+//                 })
+//             }
+//         })
+//         return finalJSON
+//     }
+    getComponents(){
+        const components = {}
+        console.log("🚀 ~ file: Device.ts:257 ~ Device ~ this.components.forEach ~ this.components:", this.components)
         this.components.forEach((component, i) => {
-            if (component) {
-                try {
-                    component.setMqttTopicPrefix(`${this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name}`);
-                } catch (e) {
-
-                }
-
-                try {
-                    this.setWifiPowerMode(component.getWifiPowerMode())
-                } catch (e) {
-
-                }
-                try {
-                    component.setDeepSleep(this.deepSleep);
-                } catch (e) {
-
-                }
-
-                console.log('component', component)
-                var repeated = false
-                const componentsOut = component.attach(pinTable[i]);
-                if (!componentsOut.length) {
-                    if (finalJSON.hasOwnProperty(componentsOut.componentName)) {
-                        finalJSON[componentsOut.componentName].push(componentsOut.payload);
-                    } else {
-                        finalJSON[componentsOut.componentName] = [componentsOut.payload];
+            if(component){
+                const componentObjects = component.attach(pinTable[i])
+                componentObjects.forEach((element, j)=>{
+                    if(!components[element.name]){
+                        components[element.name] = [element.config]
+                    }else{
+                        components[element.name] = [...components[element.name],element.config]
                     }
-                } else {
-                    componentsOut.map((componentOut) => {
-                    if (finalJSON.hasOwnProperty(componentOut.componentName)) {
-                        prevComponentsOut.forEach(component => {
-                            if(component.payload === componentOut.payload) repeated = true
-                        })
-                        if(!repeated) finalJSON[componentOut.componentName].push(componentOut.payload);
-                        repeated = false
-                    } else {
-                        finalJSON[componentOut.componentName] = [componentOut.payload]
-                    }
-                    prevComponentsOut.push(componentOut)
-                    })
-                }
-            }
-        })
-        this.dsComponents = [
-            {componentName: 'deep_sleep', payload:{
-                deep_sleep: {
-                    id: "ds",
-                    sleep_duration: this.deepSleepSleepDuration+"s",
-                    wakeup_pin: this.wakeupPin,
-                    wakeup_pin_mode: "KEEP_AWAKE"
-
-                }
-            }},
-            {componentName: 'globals', payload:{
-                globals: {
-                    id: "dp_run_duration",
-                    type: "int",
-                    restore_value: "yes",
-                    initial_value: this.deepSleepRunDuration
-                }
-            }},
-            {componentName: 'globals', payload:{
-                globals: {
-                    id: "dp_sleep_duration",
-                    type: "int",
-                    restore_value: "yes",
-                    initial_value: this.deepSleepSleepDuration
-                }
-            }},
-            {componentName: 'on_message', payload:{
-                on_message:{
-                    topic: `${this.mqttPrefix !== '' ? this.mqttPrefix + '/' + this.name : this.name}/deep_sleep/dp_sleep_duration/command`,
-                    then:{
-                        lambda: 
-`int value = atoi(x.c_str());
-if (value == 0) {
-    id(ds).prevent_deep_sleep();
-    ESP_LOGD("Deep Sleep", "Deep Sleep disabled");
-} else if (value > 0) {
-    id(ds).allow_deep_sleep();
-    id(dp_sleep_duration) = value;
-    id(ds).set_sleep_duration(value * 1000);
-    ESP_LOGD("Deep Sleep", "Deep Sleep sleep duration set to: %d", value);
-    ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to: %d", id(dp_run_duration));
-} else {
-    ESP_LOGD("Deep Sleep", "Invalid sleep duration value");
-}`
-                    }
-                }
-            }},
-            {componentName: 'on_message', payload:{
-                on_message:{
-                    topic: `${this.mqttPrefix !== '' ? this.mqttPrefix + '/' + this.name : this.name}/deep_sleep/dp_run_duration/command`,
-                    then:{
-                        lambda: 
-`int value = atoi(x.c_str());
-if (value > 0){
-    id(dp_run_duration) = value;
-    id(ds).set_run_duration(value*1000);
-    ESP_LOGD("Deep Sleep", "Deep Sleep run duration set to: %d",  value);
-    ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to: %d",  id(dp_run_duration));       
-    } 
-    else {
-    ESP_LOGD("Deep Sleep", "Invalid run duration value");
-}`
-                    }
-                }
-            }},
-            {componentName: 'on_boot', payload:{
-              on_boot:{
-                  priority: 600,
-                  then:{
-                      lambda: 
-`ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to at boot: %d",  id(dp_run_duration));
-id(ds).set_run_duration(id(dp_run_duration)*1000);
-ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to at boot: %d",  id(dp_sleep_duration));
-id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);
-`
-                  }
-              }
-          }},
-        ]
-        console.log("dscomponents ", this.dsComponents)
-        if(this.deepSleep) this.dsComponents.forEach((component, i) => {
-            console.log('component', component)
-            var repeated = false
-            const componentsOut = component
-            if (!componentsOut.length) {
-                if (finalJSON.hasOwnProperty(componentsOut.componentName)) {
-                    finalJSON[componentsOut.componentName].push(componentsOut.payload);
-                } else {
-                    finalJSON[componentsOut.componentName] = [componentsOut.payload];
-                }
-            } else {
-                componentsOut.map((componentOut) => {
-                if (finalJSON.hasOwnProperty(componentOut.componentName)) {
-                    prevComponentsOut.forEach(component => {
-                        if(component.payload === componentOut.payload) repeated = true
-                    })
-                    if(!repeated) finalJSON[componentOut.componentName].push(componentOut.payload);
-                    repeated = false
-                } else {
-                    finalJSON[componentOut.componentName] = [componentOut.payload]
-                }
-                prevComponentsOut.push(componentOut)
                 })
+                
+                // if(componentsOut.length==1){
+                //     if(components.hasOwnProperty(componentsOut.name)){
+                //         console.log("🚀 Patata", component)
+                //         components[componentsOut.name].push(componentsOut.config)
+                //         console.log("🚀 Patatuela")
+                //     }
+                //     else {
+                        
+                //         components[componentsOut.name] = componentsOut.config
+                //     }
+                // }else{
+                    
+                // }
             }
         })
-        return finalJSON
+        return components
+
     }
 
     extractOnJSONMessage(components) {
@@ -265,28 +297,33 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);
 
 
     create() {
-        var components = this.getComponentsJSON()
-        var outJson = {}
+        //var components = this.getComponentsJSON()
+        var components = this.getComponents()
+        // var outJson = {}
         components = this.extractOnJSONMessage(components)
         components = this.extractOnMessage(components)
         components = this.extractOnBoot(components)
         components= this.extractOnShutdown(components)
 
-        Object.keys(components).map((k) => {
-            if (components[k].length > 1) {
-                if (outJson[k] === undefined) {
-                    outJson[k] = [];
-                }
-                components[k].forEach((component) => {
-                    outJson[k].push(component[k]);
-                });
-            } else {
-                    outJson[k] = components[k][0][k];
-            }
-        })
+        console.log("🚀 ~ file: Device.ts:290 ~ Device ~ create ~ components: ",components)
 
-        console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ this.dump() + jsYaml.dump(outJson):", this.dump() + jsYaml.dump(outJson, {lineWidth: -1}))
-        return this.dump() + jsYaml.dump(outJson, {lineWidth: -1});
+        // Object.keys(components).map((k) => {
+        //     if (components[k].length > 1) {
+        //         if (outJson[k] === undefined) {
+        //             outJson[k] = [];
+        //         }
+        //         components[k].forEach((component) => {
+        //             outJson[k].push(component[k]);
+        //         });
+        //     } else {
+        //             outJson[k] = components[k][0][k];
+        //     }
+        // })
+
+        console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ this.dump() + jsYaml.dump(components):", this.dump() + jsYaml.dump(components, {lineWidth: -1}))
+        
+        // console.log("🚀 ~ file: Device.ts:290 ~ Device ~ create ~ outJson:", outJson)
+        return this.dump() + jsYaml.dump(components, {lineWidth: -1});
     }
 
     dump() {
