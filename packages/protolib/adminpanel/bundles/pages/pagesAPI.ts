@@ -15,7 +15,7 @@ const getPage = (pagePath) => {
   const prot = getDefinition(sourceFile, '"protected"')
   let permissions = getDefinition(sourceFile, '"permissions"')
 
-  if(ArrayLiteralExpression.is(permissions)) {
+  if(ArrayLiteralExpression.is(permissions) && permissions.getElements) {
     permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
   } else {
     permissions = permissions.getText()
@@ -43,8 +43,41 @@ const getDB = (path, req, session) => {
     },
 
     async put(key, value) {
+      /*
+      value:  {
+        template: 'default',
+        object: 'lol',
+        name: 'pururu',
+        route: 'ororo',
+        protected: false
+      }
+*/
       value = JSON.parse(value)
-      console.log('value: ', value)
+      const filePath = fspath.join(pagesDir, fspath.basename(value.name)+'.tsx')
+      const template = fspath.basename(value.template ?? 'default')
+      const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
+      try {
+        await fs.access(filePath, fs.constants.F_OK)
+        console.log('File: ' + filePath + ' already exists, not executing template')
+      } catch (error) {
+        console.log('executing template: ', `/packages/protolib/adminpanel/bundles/pages/templates/${template}.tpl`)
+        await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+          name: value.name + '.tsx',
+          data: {
+            options: { 
+              template: `/packages/protolib/adminpanel/bundles/pages/templates/${template}.tpl`, 
+              variables: {
+                ...value,
+                route: value.route.startsWith('/') ? value.route : '/' + value.route,
+                permissions: value.permissions ?? '[]',
+                object: object,
+                apiUrl: '/api/v1/'+value.object+'s'
+              } 
+            },
+            path: pagesDir
+          }
+        })
+      }
     },
 
     async get(key) {

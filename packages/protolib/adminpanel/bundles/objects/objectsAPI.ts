@@ -6,10 +6,10 @@ import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import axios from 'axios';
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
-const indexFile = "/packages/app/bundles/custom/schemas/index.ts"
+const indexFile = "/packages/app/bundles/custom/objects/index.ts"
 
 const getSchemas = async (sourceFile?) => {
-  const node = getDefinition(sourceFile ?? getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile)), '"schemas"')
+  const node = getDefinition(sourceFile ?? getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile)), '"objects"')
 
   if (node) {
     const schemas = []
@@ -33,7 +33,7 @@ const getSchema = async (idSchema) => {
   const schemas = await getSchemas(sourceFile)
   const currentSchema = schemas.find(s => s.id == idSchema)
 
-  sourceFile = getSourceFile(fspath.join("../../packages/app/bundles/custom/schemas/", getImport(sourceFile, idSchema)) + ".ts")
+  sourceFile = getSourceFile(fspath.join("../../packages/app/bundles/custom/objects/", getImport(sourceFile, idSchema)) + ".ts")
   const node = getDefinition(sourceFile, '"schema"')
   let keys = {}
   if (node) {
@@ -71,7 +71,7 @@ const setSchema = (path, content, value) => {
   sourceFile = getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile))
   addImportToSourceFile(sourceFile, value.id, ImportType.NAMED, './' + value.name)
 
-  const arg = getDefinition(sourceFile, '"schemas"')
+  const arg = getDefinition(sourceFile, '"objects"')
   if (!arg) {
     throw "No link definition schema marker found for file: " + path
   }
@@ -91,7 +91,7 @@ const getDB = (path, req, session) => {
     async put(key, value) {
       value = JSON.parse(value)
       let exists
-      const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/schemas/' + value.name.replace(/[^a-zA-Z0-9_.-]/g, '') + '.ts'
+      const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/objects/' + value.name.replace(/[^a-zA-Z0-9_.-]/g, '') + '.ts'
       try {
         await fs.access(filePath, fs.constants.F_OK)
         exists = true
@@ -106,7 +106,7 @@ const getDB = (path, req, session) => {
           name: value.name + '.ts',
           data: {
             options: { template: '/packages/protolib/adminpanel/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
-            path: '/packages/app/bundles/custom/schemas'
+            path: '/packages/app/bundles/custom/objects'
           }
         })
       }
