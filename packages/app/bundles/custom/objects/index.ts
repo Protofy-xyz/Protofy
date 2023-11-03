@@ -1,3 +1,3 @@
 import {Protofy} from 'protolib/base'
 
-export default Protofy("schemas", {})
+export default Protofy("objects", {})
