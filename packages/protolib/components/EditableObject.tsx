@@ -101,7 +101,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
             const eleDef = ele._def.typeName == 'ZodLazy' ? ele._def.getter()._def : ele._def
             const defaultValue = eleDef.typeName == "ZodOptional" ? eleDef.innerType._def.type._def.typeName : eleDef.type._def.typeName
             setFormData(ele.name, [...arrData, getDefaultValue(elementDef.type._def.typeName)])
-        }}>Add{ele.name}</Button>}
+        }}>Add{ele._def.label ?? ele.name}</Button>}
     </FormGroup>
 }
 
