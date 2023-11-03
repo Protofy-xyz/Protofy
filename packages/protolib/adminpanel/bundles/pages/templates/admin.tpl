@@ -1,9 +1,7 @@
-
+import {Protofy} from 'protolib/base'
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
-import { {{object}}Model } from '.'
+import {Objects} from 'app/bundles/objects'
 import {DataView} from 'protolib'
-import { DataTable2, Chip, API } from 'protolib'
-import {z} from 'zod'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
@@ -17,7 +15,7 @@ export default {
                 initialItems={initialItems}
                 numColumnsForm={1}
                 name="{{object}}"
-                model={ {{object}}Model} 
+                model={Objects.{{_object}} } 
                 pageState={pageState}
                 icons={Icons}
             />

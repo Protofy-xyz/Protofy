@@ -65,7 +65,7 @@ export enum ImportType {
 
 export const addImportToSourceFile = (sourceFile, key: string, type: ImportType, path: string): void => {
     if (getImport(sourceFile, key)) {
-        console.warn(`El key "${key}" ya ha sido importado en el archivo.`);
+        console.warn(`"${key}" is already imported`);
         return;
     }
     switch (type) {
@@ -84,14 +84,30 @@ export const addImportToSourceFile = (sourceFile, key: string, type: ImportType,
     }
 }
 
-export const addObjectLiteralProperty = (objectLiteral: ObjectLiteralExpression, key: string, value: string): void => {
-    const property = objectLiteral.getProperty(key);
-    if (property) {
-        console.warn(`Object already has key: "${key}".`);
-        return;
+export const addObjectLiteralProperty = (
+    objectLiteral: ObjectLiteralExpression,
+    key: string,
+    value: string
+  ): void => {
+    // Intentar obtener la propiedad por clave como identificador o como una propiedad computada.
+    const existingProperty = objectLiteral.getProperty(p =>
+      p instanceof PropertyAssignment &&
+      ((p.getNameNode().getKind() === SyntaxKind.Identifier && p.getName() === key) ||
+      (p.getNameNode().getKind() === SyntaxKind.ComputedPropertyName &&
+       p.getNameNode().getText() === `["${key}"]`))
+    );
+  
+    if (existingProperty) {
+      console.warn(`Object already has key: "${key}".`);
+      return;
     }
+  
+    // Añadir la propiedad como una propiedad computada si la clave tiene caracteres especiales.
+    const isNormalIdentifier = /^[a-zA-Z_$][a-zA-Z\d_$]*$/.test(key);
+    const propertyName = isNormalIdentifier ? key : `["${key}"]`;
+  
     objectLiteral.addPropertyAssignment({
-        name: key,
-        initializer: value
+      name: propertyName,
+      initializer: value,
     });
-  }
+  };

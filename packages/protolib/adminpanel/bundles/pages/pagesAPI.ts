@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const pagesDir = fspath.join(PROJECT_WORKSPACE_DIR,"/packages/app/bundles/custom/pages/")
-const indexFile = pagesDir + "index.ts"
+const indexFile = pagesDir + "index.tsx"
 
 const getPage = (pagePath) => {
   const sourceFile = getSourceFile(pagePath)
@@ -43,15 +43,6 @@ const getDB = (path, req, session) => {
     },
 
     async put(key, value) {
-      /*
-      value:  {
-        template: 'default',
-        object: 'lol',
-        name: 'pururu',
-        route: 'ororo',
-        protected: false
-      }
-*/
       value = JSON.parse(value)
       const filePath = fspath.join(pagesDir, fspath.basename(value.name)+'.tsx')
       const template = fspath.basename(value.template ?? 'default')
@@ -71,6 +62,7 @@ const getDB = (path, req, session) => {
                 route: value.route.startsWith('/') ? value.route : '/' + value.route,
                 permissions: value.permissions ?? '[]',
                 object: object,
+                _object: object.toLowerCase(),
                 apiUrl: '/api/v1/'+value.object+'s'
               } 
             },
@@ -78,6 +70,17 @@ const getDB = (path, req, session) => {
           }
         })
       }
+      const sourceFile = getSourceFile(indexFile)
+       //link in index.ts
+      addImportToSourceFile(sourceFile, value.name, ImportType.DEFAULT, './' + value.name)
+
+      const arg = getDefinition(sourceFile, '"pages"')
+      if (!arg) {
+        throw "No link definition schema marker found for file: " + path
+      }
+      addObjectLiteralProperty(arg, value.route, value.name)
+      sourceFile.saveSync();
+
     },
 
     async get(key) {

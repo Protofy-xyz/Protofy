@@ -3,7 +3,7 @@ import {BaseSchema} from 'protolib/base'
 import { AutoModel } from 'protolib/base'
 
 export const BaseObjectSchema = z.object({
-    id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Schema'),
+    id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Model'),
     name: z.string().search().display().static(),
     keys: z.record(z.string(), z.object({
         type: z.union([
