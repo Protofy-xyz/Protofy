@@ -1,7 +1,7 @@
 
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { ObjectModel } from '.'
-import {DataView} from 'protolib'
+import {DataView, DataTable2, Chip, API} from 'protolib'
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const ObjectIcons =  {}
@@ -15,6 +15,10 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="object"
+                    columns={DataTable2.columns(
+                        DataTable2.column("name", "name", true),
+                        DataTable2.column("api", "api", true, row => !row.api ? <Chip text={'no'} color={'$gray5'} />: <Chip text={'yes'} color={'$color5'} />),
+                    )}
                     // hideAdd={true}
                     model={ObjectModel} 
                     pageState={pageState}

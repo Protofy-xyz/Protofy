@@ -7,30 +7,41 @@ import axios from 'axios';
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
+const apiDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/apis/")
 
 const getSchemas = async (sourceFile?) => {
-  const node = getDefinition(sourceFile ?? getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile)), '"objects"')
+  const node = getDefinition(
+    sourceFile ?? getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile)),
+    '"objects"'
+  );
 
   if (node) {
-    const schemas = []
+    const schemas = [];
     if (node instanceof ObjectLiteralExpression) {
-      node.getProperties().forEach(prop => {
+      for (const prop of node.getProperties()) {
         if (prop instanceof PropertyAssignment) {
-          // obj[prop.getName()] = prop.getInitializer().getText();
-          schemas.push({ name: prop.getName(), id: prop.getInitializer().getText() }) //= prop.getInitializer().getText();
+          const schemaId = prop.getInitializer().getText();
+          const apiPath = fspath.join(apiDir, prop.getName()+'.ts')
+          let hasApi;
+          try {
+            await fs.access(apiPath, fs.constants.F_OK)
+            hasApi = true
+          } catch (error) {
+            hasApi = false
+          }
+          schemas.push({ name: prop.getName(), api: hasApi, id: schemaId });
         }
-      });
+      }
     }
-    // console.log(schemas)
-    return schemas
+    return schemas;
   }
-  return []
+  return [];
 }
 
-const getSchema = async (idSchema) => {
+const getSchema = async (idSchema, schemas) => {
   let SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, indexFile)
   let sourceFile = getSourceFile(SchemaFile)
-  const schemas = await getSchemas(sourceFile)
+
   const currentSchema = schemas.find(s => s.id == idSchema)
 
   sourceFile = getSourceFile(fspath.join("../../packages/app/bundles/custom/objects/", getImport(sourceFile, idSchema)) + ".ts")
@@ -54,7 +65,7 @@ const getSchema = async (idSchema) => {
       });
     }
   }
-  return { name: currentSchema.name, id: idSchema, keys: keys }
+  return { name: currentSchema.name, api: currentSchema.api, id: idSchema, keys: keys }
 }
 
 const setSchema = (path, content, value) => {
@@ -111,6 +122,32 @@ const getDB = (path, req, session) => {
         })
       }
 
+      //sync api
+      let apiExists
+      const apiPath = fspath.join(apiDir, fspath.basename(value.name)+'.ts')
+      try {
+        await fs.access(apiPath, fs.constants.F_OK)
+        apiExists = true
+      } catch (error) {
+        apiExists = false
+      }
+
+      if (apiExists) {
+        if(!value.api) {
+          await fs.unlink(apiPath)
+        }
+      } else {
+        if(value.api) {
+          await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+            name: value.name + '.ts',
+            data: {
+              options: { template: '/packages/protolib/adminpanel/bundles/objects/templateApi.tpl', variables: { name: value.name, capitalizedName: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
+              path: '/packages/app/bundles/custom/apis'
+            }
+          })
+        }
+      }
+
       const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
         const v = value.keys[current]
         const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ? current.params.join(',') : '') + ")", '') : ''
@@ -122,7 +159,10 @@ const getDB = (path, req, session) => {
     },
 
     async get(key) {
-      return JSON.stringify(await getSchema(key))
+      let SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, indexFile)
+      let sourceFile = getSourceFile(SchemaFile)
+      const schemas = await getSchemas(sourceFile)
+      return JSON.stringify(await getSchema(key, schemas))
     }
   };
 

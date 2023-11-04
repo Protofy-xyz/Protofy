@@ -5,6 +5,7 @@ import { AutoModel } from 'protolib/base'
 export const BaseObjectSchema = z.object({
     id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Model'),
     name: z.string().search().display().static(),
+    api: z.boolean().display().generate(() => false),
     keys: z.record(z.string(), z.object({
         type: z.union([
             z.literal("string"),
