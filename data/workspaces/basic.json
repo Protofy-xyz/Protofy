@@ -14,7 +14,6 @@
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
             { "name": "Events", "icon": "events", "type": "events", "path": "/" },
             { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },
-            { "name": "Apis", "icon": "unplug", "type": "apis", "path": "/" },
             { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" }
         ],
