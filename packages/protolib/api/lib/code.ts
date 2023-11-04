@@ -17,7 +17,7 @@ export const getImport = (sourceFile, identifier) => {
     }
 }
 
-export const getDefinitions = (sourceFile, def, numParam=1) => {
+export const getDefinitions = (sourceFile, def, numParam = 1) => {
     const callExpressions = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression);
     const callsToDef = callExpressions.filter(callExpr => {
         const args = callExpr.getArguments()
@@ -27,7 +27,7 @@ export const getDefinitions = (sourceFile, def, numParam=1) => {
     return callsToDef
 }
 
-export const getDefinition = (sourceFile, def, numParam=1) => {
+export const getDefinition = (sourceFile, def, numParam = 1) => {
     const callExpressions = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression);
     const callToDef = callExpressions.find(callExpr => {
         const args = callExpr.getArguments()
@@ -46,7 +46,7 @@ export const getSourceFile = (path) => {
 export const extractChainCalls = (callExpr) => {
     const calls = [];
     let currentExpression = callExpr;
-    
+
     while (currentExpression && currentExpression.getKind() === SyntaxKind.CallExpression) {
         const signature = {
             name: currentExpression.getExpression().getLastChild().getText(),
@@ -84,30 +84,59 @@ export const addImportToSourceFile = (sourceFile, key: string, type: ImportType,
     }
 }
 
+export const removeImportFromSourceFile = (sourceFile, path: string): void => {
+    const importDeclarations = sourceFile.getImportDeclarations();
+
+    for (const importDeclaration of importDeclarations) {
+        if (importDeclaration.getModuleSpecifierValue() === path) {
+            importDeclaration.remove();
+            break;
+        }
+    }
+}
+
 export const addObjectLiteralProperty = (
     objectLiteral: ObjectLiteralExpression,
     key: string,
     value: string
-  ): void => {
+): void => {
     // Intentar obtener la propiedad por clave como identificador o como una propiedad computada.
     const existingProperty = objectLiteral.getProperty(p =>
-      p instanceof PropertyAssignment &&
-      ((p.getNameNode().getKind() === SyntaxKind.Identifier && p.getName() === key) ||
-      (p.getNameNode().getKind() === SyntaxKind.ComputedPropertyName &&
-       p.getNameNode().getText() === `["${key}"]`))
+        p instanceof PropertyAssignment &&
+        ((p.getNameNode().getKind() === SyntaxKind.Identifier && p.getName() === key) ||
+            (p.getNameNode().getKind() === SyntaxKind.ComputedPropertyName &&
+                p.getNameNode().getText() === `["${key}"]`))
     );
-  
+
     if (existingProperty) {
-      console.warn(`Object already has key: "${key}".`);
-      return;
+        console.warn(`Object already has key: "${key}".`);
+        return;
     }
-  
+
     // Añadir la propiedad como una propiedad computada si la clave tiene caracteres especiales.
     const isNormalIdentifier = /^[a-zA-Z_$][a-zA-Z\d_$]*$/.test(key);
     const propertyName = isNormalIdentifier ? key : `["${key}"]`;
-  
+
     objectLiteral.addPropertyAssignment({
-      name: propertyName,
-      initializer: value,
+        name: propertyName,
+        initializer: value,
     });
+};
+
+export const removeObjectLiteralProperty = (
+    objectLiteral: ObjectLiteralExpression,
+    key: string
+  ): void => {
+    const existingProperty = objectLiteral.getProperty(p =>
+      p instanceof PropertyAssignment &&
+      ((p.getNameNode().getKind() === SyntaxKind.Identifier && p.getName() === key) ||
+       (p.getNameNode().getKind() === SyntaxKind.ComputedPropertyName &&
+        p.getNameNode().getText() === `["${key}"]`))
+    );
+  
+    if (existingProperty) {
+      existingProperty.remove();
+    } else {
+      console.warn(`Key "${key}" does not exist on the object.`);
+    }
   };

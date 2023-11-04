@@ -1,5 +1,5 @@
 import { ObjectModel } from ".";
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition } from '../../../api'
+import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty } from '../../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
@@ -8,6 +8,7 @@ import axios from 'axios';
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
 const apiDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/apis/")
+const apiIndex = fspath.join(apiDir, 'index.ts')
 
 const getSchemas = async (sourceFile?) => {
   const node = getDefinition(
@@ -21,7 +22,7 @@ const getSchemas = async (sourceFile?) => {
       for (const prop of node.getProperties()) {
         if (prop instanceof PropertyAssignment) {
           const schemaId = prop.getInitializer().getText();
-          const apiPath = fspath.join(apiDir, prop.getName()+'.ts')
+          const apiPath = fspath.join(apiDir, prop.getName() + '.ts')
           let hasApi;
           try {
             await fs.access(apiPath, fs.constants.F_OK)
@@ -124,7 +125,7 @@ const getDB = (path, req, session) => {
 
       //sync api
       let apiExists
-      const apiPath = fspath.join(apiDir, fspath.basename(value.name)+'.ts')
+      const apiPath = fspath.join(apiDir, fspath.basename(value.name) + '.ts')
       try {
         await fs.access(apiPath, fs.constants.F_OK)
         apiExists = true
@@ -133,11 +134,22 @@ const getDB = (path, req, session) => {
       }
 
       if (apiExists) {
-        if(!value.api) {
+        if (!value.api) {
+          //unlink in index.ts
+          const sourceFile = getSourceFile(apiIndex)
+          const arg = getDefinition(sourceFile, '"apis"')
+          if (!arg) {
+            throw "No link definition schema marker found for file: " + path
+          }
+
+          removeObjectLiteralProperty(arg, value.name)
+          removeImportFromSourceFile(sourceFile, './' + value.name)
+          sourceFile.saveSync();
+
           await fs.unlink(apiPath)
         }
       } else {
-        if(value.api) {
+        if (value.api) {
           await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
             name: value.name + '.ts',
             data: {
@@ -146,6 +158,17 @@ const getDB = (path, req, session) => {
             }
           })
         }
+
+        //link in index.ts
+        const sourceFile = getSourceFile(apiIndex)
+        addImportToSourceFile(sourceFile, value.name+'Api', ImportType.DEFAULT, './' + value.name)
+
+        const arg = getDefinition(sourceFile, '"apis"')
+        if (!arg) {
+          throw "No link definition schema marker found for file: " + path
+        }
+        addObjectLiteralProperty(arg, value.name, value.name+'Api')
+        sourceFile.saveSync();
       }
 
       const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
