@@ -1,8 +1,8 @@
 import { PageModel } from ".";
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition } from '../../../api'
+import { CreateApi, getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition } from '../../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
-import { ObjectLiteralExpression, PropertyAssignment, ArrayLiteralExpression } from 'ts-morph';
+import { ArrayLiteralExpression } from 'ts-morph';
 import axios from 'axios';
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";

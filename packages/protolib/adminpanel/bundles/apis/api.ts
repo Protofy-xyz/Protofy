@@ -9,11 +9,23 @@ const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const APIDir = fspath.join(PROJECT_WORKSPACE_DIR,"/packages/app/bundles/custom/apis/")
 const indexFile = APIDir + "index.ts"
 
+const getAPI = (apiPath) => {
+  return {
+    name: ''
+  }
+} 
+
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
+      const files = (await fs.readdir(APIDir)).filter(f => f != 'index.ts')
+      const apis = await Promise.all(files.map(async f => getAPI(fspath.join(APIDir, f))));
 
+      for (const api of apis) {
+        if(api) yield [api.name, JSON.stringify(api)];
+      }
     },
+
 
     async put(key, value) {
 
