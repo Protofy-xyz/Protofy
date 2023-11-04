@@ -10,4 +10,4 @@ export const {{name}}Schema = Schema.object({
 });
 
 export type {{name}}Type = z.infer<typeof {{name}}Schema>;
-export const {{name}}Model = AutoModel.createDerived<{{name}}Type>("{{name}}Model", {{name}}Schema);
+export const {{name}}Model = AutoModel.createDerived<{{name}}Type>("{{name}}Model", {{name}}Schema, '{{pluralName}}', '/api/v1/');

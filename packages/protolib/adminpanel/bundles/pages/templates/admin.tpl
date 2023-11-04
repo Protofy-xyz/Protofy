@@ -5,6 +5,7 @@ import {DataView} from 'protolib'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
+const {name, prefix} = Objects.{{_object}}.getApiOptions()
 
 export default {
     route: Protofy("route", "{{route}}"),
@@ -21,5 +22,5 @@ export default {
             />
         </AdminPage>)
     }, 
-    getServerSideProps: PaginatedDataSSR('{{apiUrl}}', isProtected?Protofy("permissions", {{permissions}}):undefined)
+    getServerSideProps: PaginatedDataSSR(prefix + name, isProtected?Protofy("permissions", {{permissions}}):undefined)
 }

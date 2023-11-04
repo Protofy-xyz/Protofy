@@ -60,7 +60,7 @@ const getDB = (path, req, session) => {
               variables: {
                 ...value,
                 route: value.route.startsWith('/') ? value.route : '/' + value.route,
-                permissions: value.permissions ?? '[]',
+                permissions: value.permissions ? JSON.stringify(value.permissions) : '[]',
                 object: object,
                 _object: object.toLowerCase(),
                 apiUrl: '/api/v1/'+value.object+'s'

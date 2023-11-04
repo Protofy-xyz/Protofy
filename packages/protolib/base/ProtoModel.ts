@@ -109,6 +109,10 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return JSON.stringify(this.data);
     }
 
+    static getApiOptions():any {
+        throw new Error("Derived class must implement getApiOptions");
+    }
+
     protected static _newInstance(data: any, session?: SessionDataType): ProtoModel<any> {
         throw new Error("Derived class must implement _newInstance.");
     }
@@ -137,7 +141,7 @@ export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
         throw new Error("Derived class must implement _newInstance.");
     }
 
-    static createDerived<D>(name: string, schema: z.ZodObject<any>) {
+    static createDerived<D>(name: string, schema: z.ZodObject<any>, apiName?, apiPrefix?) {
         class DerivedModel extends AutoModel<D> {
             constructor(data: D, session?: SessionDataType) {
                 super(data, schema, session);
@@ -146,6 +150,13 @@ export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
             // Hacemos _newInstance y schemaInstance públicos sólo para esta clase generada
             public static _newInstance(data: any, session?: SessionDataType): AutoModel<any> {
                 return new DerivedModel(data, session);
+            }
+
+            public static getApiOptions() {
+                return {
+                    name: apiName,
+                    prefix: apiPrefix
+                }
             }
 
             public static schemaInstance = schema;

@@ -117,7 +117,7 @@ const getDB = (path, req, session) => {
         await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
           name: value.name + '.ts',
           data: {
-            options: { template: '/packages/protolib/adminpanel/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
+            options: { template: '/packages/protolib/adminpanel/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },
             path: '/packages/app/bundles/custom/objects'
           }
         })
@@ -153,7 +153,7 @@ const getDB = (path, req, session) => {
           await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
             name: value.name + '.ts',
             data: {
-              options: { template: '/packages/protolib/adminpanel/bundles/objects/templateApi.tpl', variables: { name: value.name, pluralName: value.name.endsWith('s') ? value.name : value.name + 's', capitalizedName: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
+              options: { template: '/packages/protolib/adminpanel/bundles/objects/templateApi.tpl', variables: { name: value.name, capitalizedName: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
               path: '/packages/app/bundles/custom/apis'
             }
           })

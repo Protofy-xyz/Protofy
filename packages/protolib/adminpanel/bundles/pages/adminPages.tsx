@@ -10,7 +10,6 @@ const PageIcons =  {}
 export default {
     'admin/pages': {
         component: ({workspace, pageState, sourceUrl, initialItems, pageSession, extraData}:any) => {
-            console.log('extra data: ', extraData)
             return (<AdminPage title="Pages" workspace={workspace} pageSession={pageSession}>
                 <DataView
                     sourceUrl={sourceUrl}
@@ -25,7 +24,7 @@ export default {
                     )}
                     extraFieldsFormsAdd={{
                         template: z.union([z.literal("blank"), z.literal("default"), z.literal("admin")]).display().after("route"),
-                        object: z.union([z.literal("without object"), ...extraData.objects.map(o => z.literal(o.name))] as any).after('route').display(),
+                        object: z.union([z.literal("without object"), ...extraData.objects.filter(o => o.api).map(o => z.literal(o.name))] as any).after('route').display(),
                     }}
                     model={PageModel} 
                     pageState={pageState}

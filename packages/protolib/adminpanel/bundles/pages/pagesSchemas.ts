@@ -6,7 +6,7 @@ export const PageSchema = Schema.object({
     name: z.string().search().id().display(),
     route: z.string().search().display(),
     protected: z.boolean().display().generate(() => false).label("Require user"),
-    permissions: z.array(z.string()).optional().label("Permissions").display(),
+    permissions: z.array(z.string()).label("Permissions").display().generate(() => []),
 }) 
 
 export type PageType = z.infer<typeof PageSchema>;
