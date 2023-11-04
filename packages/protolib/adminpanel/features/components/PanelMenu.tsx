@@ -26,6 +26,8 @@ import {
     DoorOpen,
     Cpu,
     CircuitBoard,
+    Columns,
+    LayoutList
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
@@ -68,7 +70,9 @@ const iconTable = {
     layout: <Layout color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     doorOpen: <DoorOpen color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     cpu: <Cpu color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    board: <CircuitBoard color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
+    board: <CircuitBoard color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    layoutList: <LayoutList color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    columns: <Columns color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
 }
 
 const getIcon = (icon) => {

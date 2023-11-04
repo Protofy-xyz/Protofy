@@ -10,7 +10,7 @@ export const BaseEventSchema = z.object(Protofy("schema", {
     user: z.string().generate((obj) => 'me').search(), // the original user that generates the action, 'system' if the event originated in the system itself
     payload: z.record(z.string(), z.any()).search().display(), // event payload, event-specific data
     created: z.string().generate((obj) => moment().toISOString()).search(), // event date (iso)
-    status: z.union([
+    status: z.union([ 
         z.literal("running"),
         z.literal("error"),
         z.literal("done"),

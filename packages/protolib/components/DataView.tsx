@@ -230,8 +230,8 @@ export function DataView({
                                                 fetch()
                                                 const { item, ...rest } = state;
                                                 setState(rest)
-                                                toast.show('User updated', {
-                                                    message: "Saved new settings for user: " + id
+                                                toast.show(name + ' updated', {
+                                                    message: "Saved new settings for: " + id
                                                 })
                                             } catch (e) {
                                                 throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
