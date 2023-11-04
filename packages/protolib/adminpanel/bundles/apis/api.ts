@@ -6,7 +6,7 @@ import { ObjectLiteralExpression, PropertyAssignment, ArrayLiteralExpression } f
 import axios from 'axios';
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
-const APIDir = fspath.join(PROJECT_WORKSPACE_DIR,"/packages/app/bundles/custom/api/")
+const APIDir = fspath.join(PROJECT_WORKSPACE_DIR,"/packages/app/bundles/custom/apis/")
 const indexFile = APIDir + "index.ts"
 
 const getDB = (path, req, session) => {
