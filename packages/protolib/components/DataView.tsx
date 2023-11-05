@@ -123,7 +123,7 @@ export function DataView({
             component: ObjectGrid,
             props: {
                 model, 
-                items, 
+                items: items?.data?.items, 
                 sourceUrl, 
                 customFields, 
                 extraFields, 

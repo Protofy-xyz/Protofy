@@ -18,7 +18,7 @@ const GridElementCard = ({ index, data, width }) => {
         topBarOutSideScrollArea={false}
         backgroundColor={"$color1"}
         elevation={"$0"}
-        hoverStyle={{ o: 0.8, backgroundColor: '$' + tint.tint + '1', elevation: "$3" }}
+        hoverStyle={{ o: 0.8, backgroundColor: '$' + tint.tint + '1', elevation: "$1" }}
         borderWidth={1}
         pointerEvents='none'
         pointerEventsControls="none"
@@ -52,10 +52,9 @@ const GridElementCard = ({ index, data, width }) => {
     </ItemCard>
 }
 
-export const ObjectGrid = ({ itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, spacing = 20, getPicture, getBody, model, items, sourceUrl, customFields, onDelete, extraFields, icons, ...props }: any & StackProps) => {
+export const ObjectGrid = ({ gridElementCard=undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, spacing = 20, getPicture, getBody, model, items, sourceUrl, customFields, onDelete, extraFields, icons, ...props }: any & StackProps) => {
     const containerRef = useRef(null)
-
-    const data = items?.data?.items?.map((element, i) => {
+    const data = items.map((element, i) => {
         return {
             id: 'item_' + i,
             element: getPendingResult("loaded", element),
@@ -75,9 +74,9 @@ export const ObjectGrid = ({ itemMinWidth = 400, itemHeight, rightGap = 30, cont
         }
     })
 
-    return <Stack f={1} {...props}>
+    return <Stack height={1} f={1} {...props}>
         <Scrollbars universal={true} ref={containerRef}>
-            <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth} />
+            <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth} />
         </Scrollbars>
     </Stack>
 }
