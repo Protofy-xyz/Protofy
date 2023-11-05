@@ -1,21 +1,24 @@
-import { Popover, Stack, XStack, YStack, Text } from "tamagui"
+import { Popover, Stack, XStack, YStack, Text, StackProps } from "tamagui"
 import { AlertDialog, API } from 'protolib'
 import { useState } from "react";
 import { Tinted } from "./Tinted";
 import { MoreVertical, Trash2 } from '@tamagui/lucide-icons'
 
 
-export const ItemMenu = ({sourceUrl, onDelete}) => {
+export const ItemMenu = ({sourceUrl='', onDelete, ...props}:{sourceUrl: string, onDelete: any} & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
 
-    return <>
+    return <Stack {...props}>
         <AlertDialog
             acceptCaption="Delete"
             setOpen={setOpen}
             open={open}
             onAccept={async (setOpen) => {
-                await API.get(sourceUrl + '/delete')
+                if(sourceUrl) {
+                    await API.get(sourceUrl + '/delete')
+                }
+
                 await onDelete(sourceUrl)
                 setOpen(false)
             }}
@@ -54,5 +57,5 @@ export const ItemMenu = ({sourceUrl, onDelete}) => {
                 </Tinted>
             </Popover.Content>
         </Popover>
-    </>
+    </Stack>
 }

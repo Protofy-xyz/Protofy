@@ -11,6 +11,7 @@ import {
   Separator,
   SizableText,
   Square,
+  Stack,
   StackProps,
   Theme,
   ThemeName,
@@ -117,7 +118,7 @@ export const ItemCard = memo(React.forwardRef(
             </>
           ) : null,
 
-          <YStack ai="center" f={1}>
+          <YStack ai="center">
             {/*@ts-ignore*/}
             {hasPicture ? <Center>
               {image && image.src && !error ? <Image onError={() => setError(true)} btrr={20} btlr={20} top={-20} source={{ uri: image.src, width: image.width, height: image.height }} /> :
@@ -126,7 +127,7 @@ export const ItemCard = memo(React.forwardRef(
                   <SizableText>No photo</SizableText>
                 </YStack>
               }
-            </Center> : null}
+            </Center> : <></>}
           </YStack>,
           children,
           bottomBar ? (
