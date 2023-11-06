@@ -52,6 +52,11 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
+    type.prototype.dependsOn = function (val) {
+      this._def.dependsOn = val
+      return this; 
+    }
+
     type.prototype.displayOptions = function (options) {
         this._def.displayOptions = options;
         return this;
