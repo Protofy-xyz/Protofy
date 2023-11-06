@@ -45,12 +45,91 @@ class Device {
         this.components = deviceInfo.slice(10)
         this.dsComponents = []
         this.mqttJsonEndpoints = ''
-        this.onJsonMessage = []
-        this.onMessage = []
-        this.onBoot = []
-        this.onShutdown= []
+        this.onJsonMessage = undefined
+        this.onMessage = undefined
+        this.onBoot = undefined
+        this.onShutdown= undefined
+        this.dsComponents = [
+        {
+            name: 'deep_sleep', 
+            config:{
+                id: "ds",
+                sleep_duration: this.deepSleepSleepDuration+"s",
+                wakeup_pin: this.wakeupPin,
+                wakeup_pin_mode: "KEEP_AWAKE"
+
+        }},
+        {
+            name: 'globals', 
+            config:{
+                id: "dp_run_duration",
+                type: "int",
+                restore_value: "yes",
+                initial_value: this.deepSleepRunDuration
+        }},
+        {
+            name: 'globals',
+            config: {
+                id: "dp_sleep_duration",
+                type: "int",
+                restore_value: "yes",
+                initial_value: this.deepSleepSleepDuration
+        }},
+        {
+            name: 'on_message',
+            config:{
+                topic: `${this.mqttPrefix !== '' ? this.mqttPrefix + '/' + this.name : this.name}/deep_sleep/dp_sleep_duration/command`,
+                then:{
+                    lambda: 
+`int value = atoi(x.c_str());
+if (value == 0) {
+id(ds).prevent_deep_sleep();
+ESP_LOGD("Deep Sleep", "Deep Sleep disabled");
+} else if (value > 0) {
+id(ds).allow_deep_sleep();
+id(dp_sleep_duration) = value;
+id(ds).set_sleep_duration(value * 1000);
+ESP_LOGD("Deep Sleep", "Deep Sleep sleep duration set to: %d", value);
+ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to: %d", id(dp_run_duration));
+} else {
+ESP_LOGD("Deep Sleep", "Invalid sleep duration value");
+}`
+                }
+        }},
+        {
+            name: 'on_message',
+            config:{
+                topic: `${this.mqttPrefix !== '' ? this.mqttPrefix + '/' + this.name : this.name}/deep_sleep/dp_run_duration/command`,
+                then:{
+                    lambda: 
+`int value = atoi(x.c_str());
+if (value > 0){
+id(dp_run_duration) = value;
+id(ds).set_run_duration(value*1000);
+ESP_LOGD("Deep Sleep", "Deep Sleep run duration set to: %d",  value);
+ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to: %d",  id(dp_run_duration));       
+} 
+else {
+ESP_LOGD("Deep Sleep", "Invalid run duration value");
+}`
+                }
+        }},
+        {
+            name: 'on_boot',
+            config:{
+                priority: 600,
+                then:{
+                  lambda: 
+`ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to at boot: %d",  id(dp_run_duration));
+id(ds).set_run_duration(id(dp_run_duration)*1000);
+ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to at boot: %d",  id(dp_sleep_duration));
+id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
+              }
+      }},
+    ]
 
     }
+
 
     setMqttPrefix(mqttPrefix) {
         this.mqttPrefix = mqttPrefix
@@ -230,67 +309,85 @@ class Device {
 //     }
     getComponents(){
         const components = {}
-        console.log("🚀 ~ file: Device.ts:257 ~ Device ~ this.components.forEach ~ this.components:", this.components)
+
+        const exctractComponents = (componentObjects) => {
+            componentObjects.forEach((element, j)=>{
+                if(!components[element.name]){
+                    components[element.name] = element.config
+                }else{
+                    if(!Array.isArray(components[element.name])){
+                        components[element.name] = [components[element.name]]
+                    }
+                    components[element.name] = [...components[element.name],element.config]
+                }
+            })
+        }
+        
         this.components.forEach((component, i) => {
             if(component){
                 const componentObjects = component.attach(pinTable[i])
-                componentObjects.forEach((element, j)=>{
-                    if(!components[element.name]){
-                        components[element.name] = [element.config]
-                    }else{
-                        components[element.name] = [...components[element.name],element.config]
-                    }
-                })
-                
-                // if(componentsOut.length==1){
-                //     if(components.hasOwnProperty(componentsOut.name)){
-                //         console.log("🚀 Patata", component)
-                //         components[componentsOut.name].push(componentsOut.config)
-                //         console.log("🚀 Patatuela")
-                //     }
-                //     else {
-                        
-                //         components[componentsOut.name] = componentsOut.config
-                //     }
-                // }else{
-                    
-                // }
+                exctractComponents(componentObjects)
             }
         })
+        if(this.deepSleep) exctractComponents(this.dsComponents)
         return components
 
     }
 
     extractOnJSONMessage(components) {
         if (!components.on_json_message) return components;
-        components.on_json_message.map(e => {
-            this.onJsonMessage.push(e["on_json_message"])
-        })
+        if(Array.isArray(components.on_json_message)){
+            this.onJsonMessage = []
+            components.on_json_message.map(e => {
+                this.onJsonMessage.push(e)
+            })
+        }else{
+            this.onJsonMessage = components.on_json_message
+
+        }
         delete components.on_json_message
         return components
     }
 
     extractOnMessage(components) {
         if (!components.on_message) return components;
-        components.on_message.map(e => {
-            this.onMessage.push(e["on_message"])          
-        })
+        if(Array.isArray(components.on_message)){
+            this.onMessage = []
+            components.on_message.map(e => {
+                this.onMessage.push(e)
+            })
+        }else{
+            this.onMessage = components.on_message
+
+        }
         delete components.on_message
         return components
     }
     extractOnBoot(components) {
         if (!components.on_boot) return components;
-        components.on_boot.map(e => {
-            this.onBoot.push(e["on_boot"])
-        })
+        if(Array.isArray(components.on_boot)){
+            this.onBoot = []
+            components.on_boot.map(e => {
+                this.onBoot.push(e)
+            })
+        }else{
+            this.onBoot = components.on_boot
+
+        }
         delete components.on_boot
         return components
     }
     extractOnShutdown(components) {
         if (!components.on_shutdown) return components;
-        components.on_shutdown.map(e => {
-            this.onShutdown.push(e["on_shutdown"])
-        })
+        if(Array.isArray(components.on_shutdown)){
+            this.onShutdown = []
+            components.on_shutdown.map(e => {
+                this.onShutdown.push(e)
+            })
+        }else{
+            this.onShutdown = components.on_shutdown
+
+        }
         delete components.on_shutdown
         return components
     }
@@ -304,9 +401,6 @@ class Device {
         components = this.extractOnMessage(components)
         components = this.extractOnBoot(components)
         components= this.extractOnShutdown(components)
-
-        console.log("🚀 ~ file: Device.ts:290 ~ Device ~ create ~ components: ",components)
-
         // Object.keys(components).map((k) => {
         //     if (components[k].length > 1) {
         //         if (outJson[k] === undefined) {
@@ -348,16 +442,16 @@ class Device {
                 topic_prefix: this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name,
             }
         }
-        if (this.onBoot.length > 0) {
+        if (this.onBoot != undefined) {
             esphomeJson['esphome']['on_boot'] = this.onBoot
         }
-        if (this.onShutdown.length > 0) {
+        if (this.onShutdown != undefined) {
             esphomeJson['esphome']['on_shutdown'] = this.onShutdown
         }
-        if (this.onJsonMessage.length > 0) {
+        if (this.onJsonMessage != undefined) {
             esphomeJson['mqtt']['on_json_message'] = this.onJsonMessage
         }
-        if (this.onMessage.length > 0) {
+        if (this.onMessage != undefined) {
             esphomeJson['mqtt']['on_message'] = this.onMessage
         }
         var dumpStr = jsYaml.dump(esphomeJson, {lineWidth: -1})
