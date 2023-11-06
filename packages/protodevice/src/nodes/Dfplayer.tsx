@@ -5,7 +5,7 @@ import { pinTable } from "../device/Device";
 const Dfplayer = (node: any = {}, nodeData = {}, children) => {
 
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input', pre: (str) => str?.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"' },
+        { label: 'Name', static: true, field: 'param1', type: 'input'},
         {
             label: 'Rx Pin', static: true, field: 'param2', type: 'select',
             data: pinTable.filter(item => !['GND', 'CMD', '0'].includes(item))

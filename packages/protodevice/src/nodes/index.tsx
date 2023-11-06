@@ -180,7 +180,7 @@ const deviceMasks = [
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('modbusLoadCell'),
     getComponent: ModbusLoadCell,
-    getInitialData: () => { return { to: 'modbusLoadCell', param1: '""', param2: '""', param3: '""', param4: '"2s"', param5: '"3"', param6: '"2"', param7: '"5"'} }
+    getInitialData: () => { return { to: 'modbusLoadCell', param1: '""', param2: '""', param3: '""', param4: '"2s"', param5: '3', param6: '2', param7: '5'} }
   }
   // {
   //   id: 'BH1750',
