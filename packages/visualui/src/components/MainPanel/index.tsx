@@ -1,10 +1,10 @@
 
-import React, { memo, useRef, useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import { withTopics } from "react-topics";
-import SPanel from 'react-sliding-side-panel';
+import { Panel, PanelGroup } from "react-resizable-panels";
 import { Component, Workflow, Save, X, ChevronLeft } from 'lucide-react';
-import FloatingPanel from "./FloatingPanel";
 import { useRouter } from "next/router"
+import SPanel from 'react-sliding-side-panel';
 
 type Props = {
     rightPanelContent: React.Component | any,
@@ -13,71 +13,19 @@ type Props = {
     topics: any
 };
 
-const FloatingIcon = ({ children, onClick, disabled = false }) => <div onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex' }}>
+const FloatingIcon = ({ children, onClick, disabled = false }) => <div onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex', cursor:'pointer' }}>
     {children}
 </div>
 
 const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, topics }: Props) => {
 
-    const floatingRef: any = useRef()
-    const [openPanel, setOpenPanel] = React.useState(false);
     const [selectedId, setSelectedId] = React.useState();
-    const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
-    const { publish, data } = topics;
+    const { data, publish } = topics;
+    const [openPanel, setOpenPanel] = React.useState(false);
+    const elem = React.useRef(null);
     const router = useRouter();
+    const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
 
-    const compressedSize = 50
-
-    const [visibleFlows, setVisibleFlows] = React.useState<"" | "full" | "crop">('');
-    const [size, setSize] = React.useState({ x: compressedSize, y: compressedSize });
-    const [previewState, setPreviewState] = React.useState({ size: { x: 400, y: 400 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
-    const [expandedState, setExpandedState] = React.useState({ size: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 }, position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 } });
-    const [expanded, setExpanded] = React.useState(false);
-
-    const getLeftWidth = () => {
-        const totalWidth = window.innerWidth
-        let percentage = (300 / totalWidth) * 100;
-        return percentage;
-    }
-    const onExpandFlows = () => {
-        const newState = !expanded
-        setExpanded(newState)
-        if (newState) {
-            if (!floatingRef && !floatingRef.current) return
-            const currentYPos = floatingRef.current.props.position.y
-            const expandedHeight = expandedState.size.y
-            const windowHeight = window.innerHeight
-            if ((currentYPos + expandedHeight) > windowHeight) {
-                floatingRef.current.props.position.y = windowHeight - expandedHeight
-            }
-            setSize(expandedState.size)
-        } else {
-            setSize({ x: previewState.size.x, y: previewState.size.x })
-        }
-    }
-    const onResize = (e, direction, ref) => {
-        if (expanded) {
-            setExpandedState(s => { return ({ ...s, size: size }) })
-        } else {
-            setPreviewState(s => { return ({ ...s, size: size }) })
-        }
-        setSize({ x: ref.offsetWidth, y: ref.offsetHeight })
-    }
-    const onShowCropedFlows = () => {
-        const newState = !visibleFlows
-        setVisibleFlows(newState ? 'crop' : '')
-        if (newState) { // visible
-            setSize(previewState.size)
-        } else {
-            setPreviewState(s => { return ({ ...s, size: size }) })
-            setSize({ x: compressedSize, y: compressedSize })
-        }
-    }
-    const onDragStop = (e, d) => {
-        if (visibleFlows) {
-            setPreviewState(s => { return ({ ...s, position: { x: d.x, y: d.y } }) })
-        }
-    }
     const onCancelEdit = () => {
         router.push({
             query: {}
@@ -86,13 +34,6 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
 
     useEffect(() => {
         setSelectedId(data['zoomToNode'].id)
-        if (data['zoomToNode']?.id != selectedId && !visibleFlows) {
-            setVisibleFlows('crop')
-            setSize(previewState.size)
-            setPreviewState(s => {
-                return { ...s, position: mousePos }
-            })
-        }
     }, [data['zoomToNode']])
 
     useEffect(() => {
@@ -107,6 +48,12 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
             window.removeEventListener('mousemove', handleMouseMove)
         }
     }, [])
+
+    const getLeftWidth = () => {
+        const totalWidth = window.innerWidth
+        let percentage = (300 / totalWidth) * 100;
+        return percentage;
+    }
 
     return (
         <div style={{ flex: 1, display: 'flex' }}>
@@ -123,8 +70,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
             </div>
             <div
                 style={{
-                    display: !openPanel || visibleFlows == "full" ? 'flex' : 'none',
-                    // display: 'flex',
+                    display: openPanel ? "none":"flex",
                     position: 'fixed',
                     zIndex: 99999999999999999999,
                     flexDirection: 'column',
@@ -132,18 +78,10 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     top: 'calc(50vh - 80px)'
                 }}
             >
-                <FloatingIcon disabled={visibleFlows == 'full'} onClick={() => setOpenPanel(true)}>
+                <FloatingIcon onClick={() => setOpenPanel(true)}>
                     <Component
                         color="white"
                     />
-                </FloatingIcon>
-                <FloatingIcon
-                    onClick={() => setVisibleFlows(visibleFlows == 'full' ? '' : 'full')}
-                >
-                    {visibleFlows == 'full'
-                        ? <ChevronLeft color="white"></ChevronLeft>
-                        : <Workflow color="white" />
-                    }
                 </FloatingIcon>
                 <FloatingIcon
                     onClick={() => publish("savenodes", { value: 'visual-ui' })}
@@ -158,26 +96,18 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                     <X color="white"></X>
                 </FloatingIcon>
             </div>
-            <div style={{
-                position: 'fixed',
-                zIndex: 999999999,
-                width: '0px'
-            }}>
-                <FloatingPanel
-                    ref={floatingRef}
-                    visibleFlows={visibleFlows}
-                    size={size}
-                    expanded={expanded}
-                    previewState={previewState}
-                    onShowCropToggle={onShowCropedFlows}
-                    onExpandToggle={onExpandFlows}
-                    onResize={onResize}
-                    onDragStop={onDragStop}
-                >
-                    {rightPanelContent}
-                </FloatingPanel>
-            </div>
-            {centerPanelContent}
+            <PanelGroup autoSaveId="example" direction="horizontal" style={{ height: '100vh', display: "flex" }}>
+                <Panel>
+                    <div style={{ flex: 1, height: '100%', overflowY: 'auto' }}>
+                        {centerPanelContent}
+                    </div>
+                </Panel>
+                <Panel collapsible={true}>
+                    <div style={{ flex: 1, height: '100%', display: 'flex' }}>
+                        {rightPanelContent}
+                    </div>
+                </Panel>
+            </PanelGroup>
         </div>
     );
 }
