@@ -1,6 +1,6 @@
 import React from "react";
-import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
-import { pinTable } from '../../../lib/device/Device'
+import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
+import { pinTable } from "../device/Device";
 
 const ModbusLoadCell = (node: any = {}, nodeData = {}, children) => {
     const transitionErrorMsg = 'Add units s/ms'
@@ -22,7 +22,7 @@ const ModbusLoadCell = (node: any = {}, nodeData = {}, children) => {
         { label: 'Weight register', static: true, field: 'param5', type: 'input', pre: (str) => str?.replace(/['"]+/g, ''), post: (str) => '"' + str + '"' },
         {
             label: 'Weight registers to read', static: true, field: 'param6', type: 'select',
-            data: ['"1"', '"2"']
+            data: ['1', '2']
         },
         { label: 'State flags register', static: true, field: 'param7', type: 'input', pre: (str) => str?.replace(/['"]+/g, ''), post: (str) => '"' + str + '"' }
     ] as Field[]

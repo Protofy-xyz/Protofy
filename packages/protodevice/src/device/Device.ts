@@ -331,6 +331,11 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
                 } catch (e) {
                     
                 }
+                try {
+                    component.setDeepSleep(this.deepSleep);
+                } catch (e) {
+
+                }
                 const componentObjects = component.attach(parseInt(pinTable[i]))
                 exctractComponents(componentObjects)
             }

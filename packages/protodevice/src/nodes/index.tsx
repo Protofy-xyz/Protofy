@@ -18,7 +18,7 @@ import Dfplayer from "./Dfplayer";
 // import Servo from "./Servo";
 // import Mpr121 from "./Mpr121";
 // import TempHumidity from "./TempHumidity";
-// import ModbusLoadCell from "./ModbusLoadCell";
+import ModbusLoadCell from "./ModbusLoadCell";
 // import BH1750 from "./BH1750";
 // import HM3301 from "./HM3301";
 // import SEN0377 from "./SEN0377";
@@ -111,7 +111,7 @@ const deviceMasks = [
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('dfplayer'),
     getComponent: Dfplayer,
     getInitialData: () => { return { to: 'dfplayer', param1: '""', param2: '', param3: '' } }
-  }
+  },
   // {
   //   id: 'UltrasonicDistanceSensor',
   //   type: 'CallExpression',
@@ -175,13 +175,13 @@ const deviceMasks = [
   //   getComponent: TempHumidity,
   //   getInitialData: () => { return { to: 'tempHumidity', param1: '""', param2: '"DHT11"', param3: '"60s"' } }
   // },
-  // {
-  //   id: 'ModbusLoadCell',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('modbusLoadCell'),
-  //   getComponent: ModbusLoadCell,
-  //   getInitialData: () => { return { to: 'modbusLoadCell', param1: '""', param2: '""', param3: '""', param4: '"2s"', param5: '"3"', param6: '"2"', param7: '"5"'} }
-  // },
+  {
+    id: 'ModbusLoadCell',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('modbusLoadCell'),
+    getComponent: ModbusLoadCell,
+    getInitialData: () => { return { to: 'modbusLoadCell', param1: '""', param2: '""', param3: '""', param4: '"2s"', param5: '"3"', param6: '"2"', param7: '"5"'} }
+  }
   // {
   //   id: 'BH1750',
   //   type: 'CallExpression',
