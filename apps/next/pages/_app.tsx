@@ -6,7 +6,6 @@ import 'raf/polyfill'
 import 'reactflow/dist/style.css'
 import 'protoflow/src/styles.css'
 import 'protoflow/src/diagram/menu.module.css'
-import 'visualui/src/styles/Editor.module.css'
 import 'react-sliding-side-panel/lib/index.css'
 import 'protolib/styles/datatable.css';
 import '../chonky.css'
