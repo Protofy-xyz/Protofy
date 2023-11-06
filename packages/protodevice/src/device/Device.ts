@@ -310,6 +310,7 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
     getComponents(){
         const components = {}
 
+        
         const exctractComponents = (componentObjects) => {
             componentObjects.forEach((element, j)=>{
                 if(!components[element.name]){
@@ -325,7 +326,12 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
         
         this.components.forEach((component, i) => {
             if(component){
-                const componentObjects = component.attach(pinTable[i])
+                try {
+                    component.setMqttTopicPrefix(`${this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name}`);
+                } catch (e) {
+                    
+                }
+                const componentObjects = component.attach(parseInt(pinTable[i]))
                 exctractComponents(componentObjects)
             }
         })

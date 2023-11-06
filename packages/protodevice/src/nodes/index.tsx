@@ -12,7 +12,7 @@ import Relay from "./Relay";
 // import NFCReader from "./NFCReader";
 // import UltrasonicDistanceSensor from "./UltrasonicDistanceSensor";
 // import ISOutput from "./ISOutput";
-// import Dfplayer from "./Dfplayer";
+import Dfplayer from "./Dfplayer";
 // import XiaomiMiFlora from "./XiaomiMiFlora";
 // import ClimateIR from "./ClimateIR";
 // import Servo from "./Servo";
@@ -105,13 +105,13 @@ const deviceMasks = [
   //   getComponent: HX711,
   //   getInitialData: () => { return { to: 'hx711', param1: '""', param2: '', param3: '"128"', param4: '"60s"' } }
   // },
-  // {
-  //   id: 'Dfplayer',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('dfplayer'),
-  //   getComponent: Dfplayer,
-  //   getInitialData: () => { return { to: 'dfplayer', param1: '""', param2: '', param3: '' } }
-  // },
+  {
+    id: 'Dfplayer',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('dfplayer'),
+    getComponent: Dfplayer,
+    getInitialData: () => { return { to: 'dfplayer', param1: '""', param2: '', param3: '' } }
+  }
   // {
   //   id: 'UltrasonicDistanceSensor',
   //   type: 'CallExpression',

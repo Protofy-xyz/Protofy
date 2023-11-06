@@ -1,6 +1,6 @@
 import React from "react";
-import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
-import { pinTable } from '../../../lib/device/Device'
+import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
+import { pinTable } from "../device/Device";
 
 const Dfplayer = (node: any = {}, nodeData = {}, children) => {
 
