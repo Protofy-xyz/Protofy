@@ -230,7 +230,18 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const _rawOptions = elementDef.options.map(o => o._def.value)
         const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-            <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+            {
+              ele._def.dependsOn 
+                ? data[ele._def.dependsOn] 
+                  ? <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+                  : <Input
+                      focusStyle={{ outlineWidth: 1 }}
+                      disabled={true}
+                      placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + ele._def.dependsOn + ' property first' }
+                      bc="$backgroundTransparent"
+                    ></Input> 
+                : <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+            }
         </FormElement>
     } else if (elementType == 'ZodNumber' && mode != 'preview') {
         if (elementDef.checks) {
