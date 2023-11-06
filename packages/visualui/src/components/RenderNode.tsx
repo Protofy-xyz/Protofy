@@ -43,8 +43,8 @@ export const RenderNode = ({ render }) => {
 
     useEffect(() => {
         if (dom) {
-            if ((isActive || isHover) && enableEdit) dom.classList.add('visual-componentselected');
-            else dom.classList.remove('visual-componentselected');
+            if ((isActive || isHover) && enableEdit) dom.style.border = "1px dashed #2680EB"
+            else dom.style.border = ""
         }
     }, [dom, isActive, isHover, enableEdit]);
 
@@ -90,7 +90,7 @@ export const RenderNode = ({ render }) => {
                             style={{
                                 left: getPos(dom).left,
                                 top: getPos(dom).top,
-                                zIndex: 900,
+                                zIndex: 9999999999999999999999999999999,
                                 position: "fixed",
                                 backgroundColor: "#2680EB",
                                 padding: "10px",
