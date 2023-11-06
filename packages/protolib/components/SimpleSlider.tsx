@@ -1,8 +1,8 @@
-import { Stack, XStack, SliderProps, Slider } from "tamagui";
+import { Stack, XStack, SliderProps, Slider, StackProps } from "tamagui";
 
-export function SimpleSlider({ defaultValue, children, ...props }: SliderProps) {
+export function SimpleSlider({ showLabel=true, containerProps, defaultValue, children, ...props }: {showLabel?: boolean,containerProps: StackProps} & SliderProps) {
     return (
-        <XStack f={1}>
+        <XStack f={1} {...containerProps}>
             <XStack f={1}>
                 <Slider f={1} defaultValue={[50]} min={0} max={100} step={1} {...props}>
                     <Slider.Track f={1}>
@@ -12,7 +12,7 @@ export function SimpleSlider({ defaultValue, children, ...props }: SliderProps) 
                     {children}
                 </Slider>
             </XStack>
-            <Stack ai="flex-end" minWidth={40} top={-8}>{props.value}</Stack>
+            {showLabel && <Stack ai="flex-end" minWidth={40} top={-8}>{props.value}</Stack>}
         </XStack>
     )
 }
