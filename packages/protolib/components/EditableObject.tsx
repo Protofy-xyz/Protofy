@@ -230,7 +230,18 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         const _rawOptions = elementDef.options.map(o => o._def.value)
         const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-            <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+            {
+              ele._def.dependsOn 
+                ? data[ele._def.dependsOn] 
+                  ? <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+                  : <Input
+                      focusStyle={{ outlineWidth: 1 }}
+                      disabled={true}
+                      placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + ele._def.dependsOn + ' property first' }
+                      bc="$backgroundTransparent"
+                    ></Input> 
+                : <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+            }
         </FormElement>
     } else if (elementType == 'ZodNumber' && mode != 'preview') {
         if (elementDef.checks) {
@@ -281,7 +292,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
             <Input
                 {...(mode != 'edit' && mode != 'add' ? { bw: 0, forceStyle: "hover" } : {})}
                 focusStyle={{ outlineWidth: 1 }}
-                disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static))}
+                disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static) || (ele._def.dependsOn && !data[ele._def.dependsOn]))}
                 secureTextEntry={ele._def.secret}
                 value={getFormData(ele.name)}
                 onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}

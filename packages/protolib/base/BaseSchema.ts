@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { v4 as uuidv4 } from 'uuid';
 
 initSchemaSystem()
 export const Schema = z
@@ -51,6 +52,11 @@ function extendZodTypePrototype(type: any) {
         this._def.after = val;
         return this;
     };
+
+    type.prototype.dependsOn = function (val) {
+      this._def.dependsOn = val
+      return this; 
+    }
 
     type.prototype.displayOptions = function (options) {
         this._def.displayOptions = options;
@@ -120,7 +126,7 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: z.string().generate(() => ""+Math.random()).id(),
+    id: z.string().generate(() => uuidv4()).id(),
     _deleted: z.boolean().optional(),
 })
 

@@ -19,7 +19,7 @@ export const handler: Handler = fn => async (req:any, res:any) => {
             console.error('Error reading token: ', e)
             decoded = createSession()
         }
-        console.log('decoded: ', decoded)
+        // console.log('decoded: ', decoded)
     } else {
         createSession()
     }
