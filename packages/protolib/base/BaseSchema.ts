@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { v4 as uuidv4 } from 'uuid';
 
 initSchemaSystem()
 export const Schema = z
@@ -125,7 +126,7 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: z.string().generate(() => ""+Math.random()).id(),
+    id: z.string().generate(() => uuidv4()).id(),
     _deleted: z.boolean().optional(),
 })
 

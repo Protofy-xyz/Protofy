@@ -16,6 +16,10 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         this.idField = this.objectSchema.getFirst('id') ?? 'id'
     }
 
+    get(key: string, defaultValue?) {
+        return this.data[key] ?? defaultValue
+    }
+
     getObjectSchema() {
         return this.objectSchema
     }
