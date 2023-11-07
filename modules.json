@@ -5,7 +5,7 @@
     },
     "protolib": {
         "url": "git@github.com:Protofy-xyz/protolib.git",
-        "revision": "7f8d771de59a1599b63425b70435268a57824e96"
+        "revision": "59bdb19be5b85b83681b755366cd0caad9d0586a"
     },
     "visualui": {
         "url": "git@github.com:Protofy-xyz/protofy-visualui.git",
@@ -13,6 +13,6 @@
     },
     "protodevice": {
         "url": "git@github.com:Protofy-xyz/protodevice.git",
-        "revision": "d9abd544c4cd0b7e89d79a1086838858c8df0470"
+        "revision": "32b69707a6919a03a8833d4e853987422955327e"
     }
 }
