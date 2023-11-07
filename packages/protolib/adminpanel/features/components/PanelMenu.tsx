@@ -29,7 +29,9 @@ import {
     Columns,
     LayoutList,
     Unplug,
-    PersonStanding
+    PersonStanding, 
+    BookOpen, 
+    ServerCog
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
@@ -76,7 +78,9 @@ const iconTable = {
     layoutList: <LayoutList color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     columns: <Columns color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     unplug: <Unplug color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    human: <PersonStanding color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
+    human: <PersonStanding color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />, 
+    bookOpen: <BookOpen color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />, 
+    serverConf: <ServerCog color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
 }
 
 const getIcon = (icon) => {
