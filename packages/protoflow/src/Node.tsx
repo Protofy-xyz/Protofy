@@ -534,7 +534,7 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
         }
     }
 
-    useEffect(() => computeLayout())
+    useEffect(() => computeLayout(),[])
 
     return (
         <DiagramNode
