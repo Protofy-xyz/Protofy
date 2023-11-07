@@ -7,17 +7,33 @@ class BinarySensor {
     }
 
     attach(pin) {
-        return {componentName: "binary_sensor",payload:
-`    - platform: ${this.platform}
-      pin: ${pin}
-      id: ${this.name}
-      name: ${this.name}
-      filters:
-        - invert:
-        - delayed_on: 100ms
-        - delayed_off: 100ms
-`
-    }
+        return [
+            {
+                name: "binary_sensor",
+                config: {
+                    platform: this.platform,
+                    pin: pin,
+                    name: this.name,
+                    id: this.name,
+                    filters: [
+                        { invert: null },
+                        { delayed_off: "100ms" },
+                        { delayed_on: "100ms" }
+                    ]
+                },
+                subsystem:{ //de aqui podemos derivar todas las posibles acciones que permite este componente
+                    monitors:[
+                        {
+                            name: "Get status",
+                            description: "Get sensor status",
+                            endpoint: "/state",
+                            connectionType: "mqtt",
+                        }
+                    ]
+                }
+                
+            },
+        ]
     }
 }
 
