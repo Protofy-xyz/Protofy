@@ -74,12 +74,10 @@ export const ObjectGrid = ({ gridElementCard = undefined, itemMinWidth = 400, it
         }
     })
 
-    return <XStack f={1}>
-        <XStack {...props}>
-            <Scrollbars universal={true} ref={containerRef}>
-                <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard ?? GridElementCard} itemMinWidth={itemMinWidth} />
-            </Scrollbars>
-        </XStack>
+    return <Stack height={1} f={1} {...props}>
+        <Scrollbars universal={true} ref={containerRef}>
+            <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth} />
+        </Scrollbars>
         {children}
-    </XStack>
+    </Stack>
 }
