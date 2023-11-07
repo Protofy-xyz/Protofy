@@ -167,7 +167,6 @@ const FormGroup = ({ ele, title, children, icon, simple=false }) => {
 
 const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray?, arrayName?) => {
     let elementDef = ele._def?.innerType?._def ?? ele._def
-
     const setFormData = (key, value) => {
         console.log('set form data: ', key, value, path);
         console.log('before: ', data);
@@ -227,8 +226,16 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     }
 
     if (elementType == 'ZodUnion' && mode != 'preview') {
-        const _rawOptions = elementDef.options.map(o => o._def.value)
-        const options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
+        let options = []
+        let _rawOptions = []
+        if (typeof ele._def.generateOptions === 'function') {
+          options = ele._def.generateOptions(data)
+          _rawOptions = options
+        } else {
+          _rawOptions = elementDef.options.map(o => o._def.value)
+          options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
+        }  
+
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             {
               ele._def.dependsOn 
