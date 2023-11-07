@@ -8,6 +8,7 @@ interface ZodExtensions {
     before(field: string): this;
     after(field: string): this;
     dependsOn(field: string): this;
+    generateOptions(call: Function): this; 
     secret(): this;
     static(): this;
     id(): this;
