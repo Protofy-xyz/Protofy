@@ -10,6 +10,10 @@ export const pinTable = [
     '19', '18', '5', '17', '16', '4', '0', '2', '15', 'D1', 'D0'
 ]
 
+export function getDeviceName() {
+    return device.name
+}
+
 class Device {
     name;
     type;
