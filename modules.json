@@ -5,14 +5,14 @@
     },
     "protolib": {
         "url": "git@github.com:Protofy-xyz/protolib.git",
-        "revision": "0b82aba622df68afaed6351d31dd2af554b7082f"
+        "revision": "7f8d771de59a1599b63425b70435268a57824e96"
     },
     "visualui": {
         "url": "git@github.com:Protofy-xyz/protofy-visualui.git",
-        "revision": "e98798eec22c9d00bf35104b71cb37d747e3aab1"
+        "revision": "fc7f3815f1cec96af374adebdfd7d67953194b6c"
     },
     "protodevice": {
         "url": "git@github.com:Protofy-xyz/protodevice.git",
-        "revision": "d1281dd06b30368f2cc18bd5815ae783d7c94370"
+        "revision": "d9abd544c4cd0b7e89d79a1086838858c8df0470"
     }
 }
