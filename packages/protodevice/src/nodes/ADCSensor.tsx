@@ -32,7 +32,7 @@ const ADCSensor = (node: any = {}, nodeData = {}, children) => {
     const { message }  = useSubscription(mqttTopic)
    
     React.useEffect(() => {
-        setAdcValue(parseInt(message?.message?.toString()))
+        setAdcValue(parseFloat(message?.message?.toString())*100/3.3)
     }, [message])
     return (
         <Node node={node} isPreview={!node.id} title='Analog Sensor' color="#FFCC80" id={node.id} skipCustom={true}>
