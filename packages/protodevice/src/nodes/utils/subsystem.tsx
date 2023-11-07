@@ -4,15 +4,15 @@ import { XStack, YStack, Text } from '@my/ui';
 import { getDeviceName } from '../../device/Device';
 
 const projectName = 'projectName'
-const deviceName = getDeviceName()
+const deviceName = "deviceName"
 
 const subsystem = (subsystem, nodeData, type) => {
     const { client } = useMqttState();
-    const mqttUrlBase = projectName + '/mydevice/'+ type + '/' + nodeData["param1"]?.replaceAll('"','')
+    const mqttUrlBase = projectName + '/'+ deviceName +'/'+ type + '/' + nodeData["param1"]?.replaceAll('"','')
 
     const buttonAction = (action) => {
         if(action.connectionType == "mqtt"){
-            client.publish(mqttUrlBase+action.endpoint, action.payload.value)
+            //client.publish(mqttUrlBase+action.endpoint, action.payload.value)
         }
     }
     
@@ -29,11 +29,11 @@ const subsystem = (subsystem, nodeData, type) => {
     const monitorLabels = subsystem.monitors?.map(monitor => {
         // Define the state hook outside of JSX mapping
         const [value, setValue] = useState('');
-        const { message } = useSubscription(mqttUrlBase+monitor.endpoint)
+        //const { message } = useSubscription(mqttUrlBase+monitor.endpoint)
     
-        React.useEffect(() => {
-            setValue(message?.message?.toString())
-        }, [message])
+        // React.useEffect(() => {
+        //     setValue(message?.message?.toString())
+        // }, [message])
         return (
           <XStack>
             <Text marginLeft={4} textAlign={"left"} color="warmGray.300">{monitor.name}: </Text>
