@@ -97,12 +97,12 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, to
                 </FloatingIcon>
             </div>
             <PanelGroup autoSaveId="example" direction="horizontal" style={{ height: '100vh', display: "flex" }}>
-                <Panel>
+                <Panel style={{ flex: 2 }}>
                     <div style={{ flex: 1, height: '100%', overflowY: 'auto' }}>
                         {centerPanelContent}
                     </div>
                 </Panel>
-                <Panel collapsible={true}>
+                <Panel  style={{ flex: 1 }} collapsible={true}>
                     <div style={{ flex: 1, height: '100%', display: 'flex' }}>
                         {rightPanelContent}
                     </div>
