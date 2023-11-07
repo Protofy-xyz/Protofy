@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "id": "1",
+        "name": "Empty device",
+        "board": "1",
+        "sdk": 0,
+        "subsystems": {},
+        "config": {
+            "board": "esp32dev",
+            "framework": {
+                "type": "arduino"
+            }
+        }
+    }
+]
