@@ -25,14 +25,14 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 	const setCurrentPageInitialJson = useEditorStore(state => state.setCurrentPageInitialJson)
 	const [loading, setLoading] = useState(false);
 	const [previousNodes, setPreviousNodes] = useState({});
+	const [selectedNodeId, setSelectedNodeId] = useState();
 
 	const { publish, data } = topics;
 	var previousDiffs
 	const { actions, query, connectors } = useEditor((state, query) => {
 		const currentEditorNodes: any = JSON.parse(query.serialize())
 		const diffs = Diff.diff(currentPageInitialJson, JSON.parse(query.serialize()))
-		const selectedNodeId: any = state.events.selected?.keys().next().value; // state.events.selected returns a Set{}, keys() reutnrs an iterator, and then we get the first element of iterator doing next()
-		if (selectedNodeId) publish("zoomToNode", { id: selectedNodeId })
+		setSelectedNodeId(state.events.selected?.keys().next().value) // state.events.selected returns a Set{}, keys() reutnrs an iterator, and then we get the first element of iterator doing next()
 		const hasChanges = diffs?.length > 0
 		const nodesChanges = Diff.diff(previousNodes, currentEditorNodes)
 		var skip = (query.getOptions() as any).skipTopic
@@ -120,6 +120,9 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 		let newNodes = prevNodes;
 		return newNodes
 	}
+	useEffect(() => {
+		if (selectedNodeId) publish("zoomToNode", { id: selectedNodeId })
+	},[selectedNodeId])
 
 	useEffect(() => {
 		const flowData = data['flow/editor']
