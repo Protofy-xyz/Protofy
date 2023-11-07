@@ -18,8 +18,8 @@
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" }
         ],
         "Devices":[
-            { "name": "Devices", "icon": "model", "type":"devices", "path": "/"},
-            { "name": "Configs", "icon": "cable", "type":"deviceDefinitions", "path": "/"},
+            { "name": "Devices", "icon": "serverConf", "type":"devices", "path": "/"},
+            { "name": "Definitions", "icon": "bookOpen", "type":"deviceDefinitions", "path": "/"},
             { "name": "Boards", "icon": "board", "type":"deviceBoards", "path": "/"},
             { "name": "Cores", "icon": "cpu", "type":"deviceCores", "path": "/"}
         ],
