@@ -50,7 +50,7 @@ class Relay {
                         },
                         {
                             name: "Turn off",
-                            description: "turn off the gpio",
+                            description: "turns off the gpio",
                             endpoint: "/command",
                             connectionType: "mqtt",
                             payload: {
@@ -60,7 +60,7 @@ class Relay {
                         },
                         {
                             name: "Togle",
-                            description: "Toggle the gpio",
+                            description: "Toggles the gpio",
                             endpoint: "/command",
                             connectionType: "mqtt",
                             payload: {
@@ -72,7 +72,7 @@ class Relay {
                     monitors:[
                         {
                             name: "Get status",
-                            description: "turns on the gpio",
+                            description: "Gets the status of the GPIO",
                             endpoint: "/state",
                             connectionType: "mqtt",
                         }
