@@ -10,18 +10,31 @@ class ADCSensor {
         this.attenuation = attenuation? attenuation:"auto"
     }
 
-//
-
     attach(pin) {
-        return {componentName: 'sensor',payload:
-`    - platform: ${this.platform}
-      pin: ${pin}
-      id: ${this.name}
-      name: ${this.name}
-      update_interval: ${this.updateInterval}
-      attenuation: ${this.attenuation}
-`
-    }
+        return [
+            {
+                name: "sensor",
+                config: {
+                    platform: this.platform,
+                    pin: pin,
+                    name: this.name,
+                    id: this.name,
+                    update_interval: this.updateInterval,
+                    attenuation: this.attenuation
+                },
+                subsystem:{ //de aqui podemos derivar todas las posibles acciones que permite este componente
+                    monitors:[
+                        {
+                            name: "Get status",
+                            description: "Get sensor status",
+                            endpoint: "/state",
+                            connectionType: "mqtt",
+                        }
+                    ]
+                }
+                
+            },
+        ]
     }
 }
 

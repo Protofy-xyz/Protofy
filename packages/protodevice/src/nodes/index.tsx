@@ -1,9 +1,9 @@
 // import OutputPin from "./OutputPin";
 import Device from "./Device";
-// import BinarySensor from "./BinarySensor";
+import BinarySensor from "./BinarySensor";
 // import NeopixelsBus from "./NeopixelsBus";
 import Relay from "./Relay";
-// import ADCSensor from "./ADCSensor";
+import ADCSensor from "./ADCSensor";
 // import PulseCounter from "./PulseCounter";
 // import LEDCOutput from "./LEDCOutput";
 // import PIRSensor from "./PIRSensor"
@@ -56,13 +56,13 @@ const deviceMasks = [
   // },
 
 
-  // {
-  //   id: 'BinarySensor',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('binarySensor'), //TODO: Change output function name
-  //   getComponent: BinarySensor,
-  //   getInitialData: () => { return { to: 'binarySensor', param1: '""' } }
-  // },
+  {
+    id: 'BinarySensor',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('binarySensor'), //TODO: Change output function name
+    getComponent: BinarySensor,
+    getInitialData: () => { return { to: 'binarySensor', param1: '""' } }
+  },
   // {
   //   id: 'NeopixelsBus',
   //   type: 'CallExpression',
@@ -70,13 +70,13 @@ const deviceMasks = [
   //   getComponent: NeopixelsBus,
   //   getInitialData: () => { return { to: 'neopixelsBus', param1: '', param2: '', param3: '"GRB"', param4: '"WS2811"', param5: '"ALWAYS_ON"', param6: '"1s"', param7: '0', param8: false, param9: false, param10: false, param11: false, param12: false, param13: false, param14: false, param15: false, param16: false, param17: false, param18: false } }
   // },
-  // {
-  //   id: 'ADCSensor',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('adcSensor'),
-  //   getComponent: ADCSensor,
-  //   getInitialData: () => { return { to: 'adcSensor', param1: '""', param2: '"30s"', param3: '"auto"' } }
-  // },
+  {
+    id: 'ADCSensor',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('adcSensor'),
+    getComponent: ADCSensor,
+    getInitialData: () => { return { to: 'adcSensor', param1: '""', param2: '"30s"', param3: '"auto"' } }
+  },
   // {
   //   id: 'PulseCounter',
   //   type: 'CallExpression',
