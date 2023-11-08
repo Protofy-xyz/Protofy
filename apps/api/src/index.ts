@@ -49,7 +49,6 @@ generateEvent({
   from: 'api', // system entity where the event was generated (next, api, cmd...)
   user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
   payload: {}, // event payload, event-specific data
-  status: 'pending'
 })
 
 
