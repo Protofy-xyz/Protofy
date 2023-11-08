@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState, useRef } from "react";
+import { memo, useEffect, useState, useRef } from "react";
 import { Editor } from "@craftjs/core";
 import { useEditorStore } from '../store/EditorStore';
 import { RenderNode } from './RenderNode';
@@ -7,11 +7,12 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import MainPanel from "./MainPanel";
 import Monaco from "./Monaco";
-import { X, Save, Workflow, SlidersHorizontal } from "lucide-react";
-import { FlowFactory, useFlowsStore } from 'protoflow';
+import { X, Workflow, SlidersHorizontal, Code } from "lucide-react";
+import { FlowFactory } from 'protoflow';
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
+import { ToggleGroup, Button } from "@my/ui"
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
@@ -104,60 +105,62 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             key="auxiliarySidebar"
             style={{ width: '100%', display: 'flex', flex: 1, height: '100%' }}
         >
-            {
-                codeEditorVisible
-                    ? <>
-                        <div style={{ position: 'absolute', zIndex: 100, marginLeft: '-50px', marginTop: '20px' }}>
-                            <div onClick={() => setCodeEditorVisible(false)} style={{ display: 'flex', backgroundColor: '#252526', borderRadius: '14px', width: '40px', padding: '5px', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                <X color={'white'} size={25} />
-                            </div>
-                            <div onClick={() => onEditorSave("monaco", monacoSourceCode)} style={{ display: 'flex', backgroundColor: '#252526', borderRadius: '14px', width: '40px', padding: '5px', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginTop: '10px' }}>
-                                <Save color={'white'} size={25} />
-                            </div>
-                        </div>
-                        <Monaco
-                            onEscape={() => setCodeEditorVisible(false)}
-                            onSave={() => onEditorSave("monaco", monacoSourceCode)}
-                            onChange={setMonacoSourceCode}
-                            sourceCode={monacoSourceCode}
-                        />
-                    </>
-                    : <></>
-            }
-            <div style={{ display: !codeEditorVisible ? 'flex' : 'none', flexDirection: 'column', width: '100%', height: '100vh' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
                 <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526' }}>
-                    <div style={{ color: preview ? 'white' : 'transparent' }}>Component: {pastZoomNodes[0]}</div>
-                    <div>
-                        <button onClick={() => setPreview(!preview)} style={{ cursor: 'pointer' }}>
-                            {preview
-                                ? <Workflow color="white" fillOpacity={0} />
-                                : <SlidersHorizontal color="white" fillOpacity={0} />
-                            }
-                        </button>
-                        <button onClick={(e) => { setIsSideBarVisible(false); e.stopPropagation() }} style={{ marginLeft: '10px', cursor: 'pointer' }}>
-                            <X color="white" fillOpacity={0} />
-                        </button>
+                    <div style={{ color: preview ? 'white' : 'transparent' }}>{pastZoomNodes[0]}</div>
+                    <div style={{ display:'flex'}}>
+                        <ToggleGroup type="single" defaultValue="preview" disableDeactivation>
+                            <ToggleGroup.Item value="code" onPress={() => setCodeEditorVisible(true)} >
+                                <Code />
+                            </ToggleGroup.Item>
+                            <ToggleGroup.Item value="flow" onPress={() => { setPreview(false); setCodeEditorVisible(false) }}>
+                                <Workflow />
+                            </ToggleGroup.Item>
+                            <ToggleGroup.Item value="preview" onPress={() => { setPreview(true); setCodeEditorVisible(false) }}>
+                                <SlidersHorizontal />
+                            </ToggleGroup.Item>
+                        </ToggleGroup>
+                        <Button
+                            onPress={(e) => { setIsSideBarVisible(false); setCodeEditorVisible(false); e.stopPropagation() }}
+                            hoverStyle={{ opacity: 1 }} opacity={0.7}
+                            size="$3"
+                            chromeless
+                            circular
+                            noTextWrap
+                        >
+                            <X style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
+                        </Button>
                     </div>
                 </div>
-                <Flow
-                    disableDots={!isActive || preview}
-                    sourceCode={currentPageContent}
-                    setSourceCode={setCurrentPageContent}
-                    customComponents={[]}
-                    onSave={(code, _, data) => onEditorSave('flows', code, data)}
-                    onShowCode={() => setCodeEditorVisible(true)}
-                    enableCommunicationInterface={true}
-                    // store={uiStore}
-                    // config={{masks: UIMasks}}
-                    flowId={UIFLOWID}
-                    showActionsBar={!preview}
-                    themeMode={'dark'}
-                    bgColor={'#252526'}
-                    theme={theme}
-                    nodePreview={preview}
-                />
+
+                <div style={{ display: codeEditorVisible ? 'flex' : 'none', flex: 1 }}>
+                    <Monaco
+                        onEscape={() => setCodeEditorVisible(false)}
+                        onSave={() => onEditorSave("monaco", monacoSourceCode)}
+                        onChange={setMonacoSourceCode}
+                        sourceCode={monacoSourceCode}
+                    />
+                </div>
+                <div style={{ display: !codeEditorVisible ? 'flex' : 'none', flex: 1 }}>
+                    <Flow
+                        disableDots={!isActive || preview}
+                        sourceCode={currentPageContent}
+                        setSourceCode={setCurrentPageContent}
+                        customComponents={[]}
+                        onSave={(code, _, data) => onEditorSave('flows', code, data)}
+                        enableCommunicationInterface={true}
+                        // store={uiStore}
+                        // config={{masks: UIMasks}}
+                        flowId={UIFLOWID}
+                        showActionsBar={!preview}
+                        themeMode={'dark'}
+                        bgColor={'#252526'}
+                        theme={theme}
+                        nodePreview={preview}
+                    />
+                </div>
             </div>
-        </div>
+        </div >
     )
     const SidebarPanel = (
         <div
@@ -198,7 +201,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     leftPanelContent={SidebarPanel}
                     centerPanelContent={EditorPanel}
                     rightPanelContent={FlowPanel}
-                    rightPanelResizable={!preview}
+                    rightPanelResizable={!preview || codeEditorVisible}
                     rightPanelVisible={isSideBarVisible}
                 />
             </div>
