@@ -11,12 +11,18 @@ import { useAtom } from 'jotai'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
-export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx") => {
+export const useIsEditing = ()=> {
   const searchParams = useSearchParams()
+  const edit = searchParams.get('_visualui_edit_')
+  return edit
+}
+
+export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx") => {
+
   const router = useRouter()
   const [session] = useAtom(Session)
+  const edit = useIsEditing()
 
-  const edit = searchParams.get('_visualui_edit_')
   const isAdmin = session.user?.type == 'admin'
   if (!isAdmin) return fn()
   else if (edit) {
