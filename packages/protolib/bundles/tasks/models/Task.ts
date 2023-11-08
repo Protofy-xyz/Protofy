@@ -19,7 +19,8 @@ export const TaskSchema = z.object(Protofy("schema", {
             z.literal("object"),
             z.literal("any")
         ]),
-    })).display().generate(()=>{return{}})
+    })).display().generate(()=>{return{}}),
+    numExecutions: z.number().generate(() => 0)
 }))
 
 export type TaskType = z.infer<typeof TaskSchema>;

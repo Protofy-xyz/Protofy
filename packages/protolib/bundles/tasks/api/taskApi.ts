@@ -75,6 +75,7 @@ const getTask = async (taskPath) => {
   
   let hasApi
   let apiRoute = ''
+
   try {
     await fs.access(apiPath, fs.constants.F_OK)
     const sourceFile = getSourceFile(apiPath)
@@ -108,7 +109,7 @@ const getTask = async (taskPath) => {
   return {
     name: name,
     path: 'packages/app/bundles/custom/tasks/',
-    hasApi: hasApi,
+    api: hasApi,
     apiRoute: apiRoute,
     params: keys
   }
@@ -127,7 +128,6 @@ const getDB = (path, req, session) => {
 
     async put(key, value) {
         value = JSON.parse(value)
-        console.log('value: ', value)
         const capitalizedName = value.name.charAt(0).toUpperCase() + value.name.slice(1)
         const params = "{" + Object.keys(value.params).reduce((total, current, i) => {
             const v = value.params[current]
@@ -135,7 +135,6 @@ const getDB = (path, req, session) => {
           }, '').slice(0, -1) + "\n}"
     
         
-        console.log('result: ', params)
 
         let exists
         const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/tasks/' + fspath.basename(value.name) + '.ts'
@@ -160,7 +159,7 @@ const getDB = (path, req, session) => {
 
         //sync api
         let apiExists
-        const apiPath = fspath.join(apiDir, fspath.basename(value.name) + 'taskApi.ts')
+        const apiPath = fspath.join(apiDir, fspath.basename(value.name) + 'TaskApi.ts')
         try {
             await fs.access(apiPath, fs.constants.F_OK)
             apiExists = true
@@ -178,7 +177,7 @@ const getDB = (path, req, session) => {
               }
     
               removeObjectLiteralProperty(arg, value.name+'taskApi')
-              removeImportFromSourceFile(sourceFile, './' + value.name+'taskApi')
+              removeImportFromSourceFile(sourceFile, './' + value.name+'TaskApi')
               sourceFile.saveSync();
     
               await fs.unlink(apiPath)
@@ -186,9 +185,9 @@ const getDB = (path, req, session) => {
         } else {
             if (value.api) {
                 await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
-                name: value.name + '.ts',
+                name: value.name + 'TaskApi.ts',
                 data: {
-                    options: { template: '/packages/protolib/bundles/tasks/templateTaskApi.tpl', variables: { apiRoute: value.apiRoute, name: value.name, capitalizedName: capitalizedName } },
+                    options: { template: '/packages/protolib/bundles/tasks/templateTaskApi.tpl', variables: { apiRoute: value.apiRoute, name: value.name, capitalizedName: capitalizedName} },
                     path: '/packages/app/bundles/custom/apis'
                 }
                 })
@@ -196,7 +195,7 @@ const getDB = (path, req, session) => {
 
             //link in index.ts
             const sourceFile = getSourceFile(apiIndex)
-            addImportToSourceFile(sourceFile, capitalizedName+'TaskApi', ImportType.NAMED, './' + value.name)
+            addImportToSourceFile(sourceFile, capitalizedName+'TaskApi', ImportType.NAMED, './' + value.name+'TaskApi')
 
             const arg = getDefinition(sourceFile, '"apis"')
             if (!arg) {
