@@ -2,7 +2,7 @@
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { EventModel } from '.'
 import {z} from 'zod'
-import {DataTable2, Chip, DataView} from 'protolib'
+import {DataTable2, Chip, DataView, Tooltip} from 'protolib'
 import moment  from 'moment'
 import { Mail, Tag, Key } from '@tamagui/lucide-icons';
 
@@ -23,7 +23,7 @@ export default {
                         DataTable2.column("user", "user", true, undefined, true, '200px'),
                         DataTable2.column("from", "from", true, (row) => <Chip text={row.from} color={'$gray5'} />, true),
                         DataTable2.column("crated", "created", true, (row) => moment(row.created).format(format), true, '200px'),
-                        DataTable2.column("payload", "payload", true, (row) => <pre>{JSON.stringify(row.payload, null, 4)}</pre>),
+                        DataTable2.column("payload", "payload", true, (row) => Object.keys(row.payload).length?Object.keys(row.payload).map((k,i) => <Tooltip trigger={<Chip ml={i?'$2':'$0'} key={k} text={k} color={'$color5'} />}>{row.payload[k]}</Tooltip>):<Chip text='empty' color={'$gray5'} />),
                     )}
                     // hideAdd={true}
                     model={EventModel} 
