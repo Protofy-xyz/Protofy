@@ -1,1 +1,1 @@
-export * from 'protolib/adminpanel/bundles/events/eventsLibrary'
+export * from 'protolib/bundles/events/eventsLibrary'

@@ -1,7 +1,7 @@
-import { UserModel } from 'protolib/adminpanel/bundles/users/usersSchemas'
-import { GroupModel } from 'protolib/adminpanel/bundles/groups/groupsSchemas'
-import { EventModel } from 'protolib/adminpanel/bundles/events/eventsSchemas'
-import { ObjectModel } from 'protolib/adminpanel/bundles/objects/objectsSchemas'
+import { UserModel } from 'protolib/bundles/users/usersSchemas'
+import { GroupModel } from 'protolib/bundles/groups/groupsSchemas'
+import { EventModel } from 'protolib/bundles/events/eventsSchemas'
+import { ObjectModel } from 'protolib/bundles/objects/objectsSchemas'
 import LocalObjects from './custom/objects'
 
 export const Objects = {
