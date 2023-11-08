@@ -1,11 +1,12 @@
 import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { Cpu, Layers, Tag } from '@tamagui/lucide-icons';
 import { DeviceCoreModel } from './devicecoresSchemas';
-import { Chip, DataTable2, DataView } from 'protolib'
+import { z } from 'zod';
+import { API, Chip, DataTable2, DataView } from 'protolib'
 
 const DeviceCoreIcons = { name: Tag, sdk: Layers }
 export default {
-  component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession }: any) => {
+  component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
     return (<AdminPage title="Device Cores" workspace={workspace} pageSession={pageSession}>
       <DataView
         itemData={itemData}
@@ -27,6 +28,9 @@ export default {
           </div>),
         )
         }
+        extraFieldsForms={{
+          sdks: z.array(z.union(extraData.sdks.map(o => z.literal(o.name)))).max(extraData.sdks.length).after('name').display(),
+        }}
         model={DeviceCoreModel}
         pageState={pageState}
         icons={DeviceCoreIcons}
@@ -34,5 +38,11 @@ export default {
       />
     </AdminPage >)
   },
-  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devicecores')
+  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devicecores', ['admin'], {}, async () => {
+    const sdks = await API.get('/adminapi/v1/devicesdks?itemsPerPage=1000')
+
+    return {
+      sdks: sdks.isLoaded ? sdks.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
+    }
+  })
 }
