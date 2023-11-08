@@ -32,7 +32,8 @@ import {
     PersonStanding, 
     BookOpen, 
     ServerCog,
-    ClipboardList
+    ClipboardList,
+    AlertTriangle
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
@@ -83,7 +84,8 @@ const iconTable = {
     human: <PersonStanding color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />, 
     bookOpen: <BookOpen color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />, 
     serverConf: <ServerCog color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    activity: <ClipboardList color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
+    activity: <ClipboardList color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    alert: <AlertTriangle color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
 }
 
 const getIcon = (icon) => {
