@@ -97,15 +97,14 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         await db.put(entityModel.getId(), entityModel.serialize())
         if(!options.disableEvents) {
             generateEvent({
-                path: entityName+'/create', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                path: entityName+'/create/'+entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
                     who: '-', //TODO: wire session in dataview to api,
                     id: entityModel.getId(),
                     data: JSON.stringify(entityModel.read())
-                }, // event payload, event-specific data
-                status: 'pending'
+                } // event payload, event-specific data
             })
         }
         res.send(await entityModel.readTransformed(transformers))
@@ -134,15 +133,14 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         await db.put(entityModel.getId(), entityModel.serialize())
         if(!options.disableEvents) {
             generateEvent({
-                path: entityName+'/update', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                path: entityName+'/update/'+entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
                     who: '-', //TODO: wire session in dataview to api,
                     id: entityModel.getId(),
                     data: JSON.stringify(entityModel.read())
-                }, // event payload, event-specific data
-                status: 'pending'
+                } // event payload, event-specific data
             })
         }
         res.send(await entityModel.readTransformed(transformers))
@@ -155,15 +153,14 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         await db.put(entityModel.getId(), entityModel.serialize())
         if(!options.disableEvents) {
             generateEvent({
-                path: entityName+'/delete', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                path: entityName+'/delete/'+entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
                     who: '-', //TODO: wire session in dataview to api,
                     id: entityModel.getId(),
                     data: JSON.stringify(entityModel.read())
-                }, // event payload, event-specific data
-                status: 'pending'
+                } // event payload, event-specific data
             })
         }
         res.send({"result": "deleted"})

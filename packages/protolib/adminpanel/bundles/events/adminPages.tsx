@@ -18,6 +18,13 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="event"
+                    columns={DataTable2.columns(
+                        DataTable2.column("path", "path", true, undefined, true, '250px'),
+                        DataTable2.column("user", "user", true, undefined, true, '200px'),
+                        DataTable2.column("from", "from", true, (row) => <Chip text={row.from} color={'$gray5'} />, true),
+                        DataTable2.column("crated", "created", true, (row) => moment(row.created).format(format), true, '200px'),
+                        DataTable2.column("payload", "payload", true, (row) => <pre>{JSON.stringify(row.payload, null, 4)}</pre>),
+                    )}
                     // hideAdd={true}
                     model={EventModel} 
                     pageState={pageState}

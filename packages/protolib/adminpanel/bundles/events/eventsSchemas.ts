@@ -10,16 +10,6 @@ export const BaseEventSchema = z.object(Protofy("schema", {
     user: z.string().generate((obj) => 'me').search(), // the original user that generates the action, 'system' if the event originated in the system itself
     payload: z.record(z.string(), z.any()).search().display(), // event payload, event-specific data
     created: z.string().generate((obj) => moment().toISOString()).search(), // event date (iso)
-    status: z.union([ 
-        z.literal("running"),
-        z.literal("error"),
-        z.literal("done"),
-        z.literal("pending")
-    ]).display(),
-    lastUpdated: z.string().generate((obj) => moment().toISOString()).search() //last event date (iso), the same as created if no updates were made
-    //optional: z.array(z.object({name:z.string()})).optional().display(),
-    // normal: z.array(z.object({name:z.string()})).display(),
-    // testarray:z.array(z.string()).display(),
 }))
 
 export const EventSchema = z.object({
