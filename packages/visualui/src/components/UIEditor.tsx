@@ -151,7 +151,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     // config={{masks: UIMasks}}
                     flowId={UIFLOWID}
                     showActionsBar={!preview}
-                    themeMode={preview ? 'preview' : 'dark'}
+                    themeMode={'dark'}
                     bgColor={'#252526'}
                     theme={theme}
                     nodePreview={preview}
