@@ -12,7 +12,8 @@
         "System": [
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
-            { "name": "Events", "icon": "events", "type": "events", "path": "/" },
+            { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
+            { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
             { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },
             { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" }
