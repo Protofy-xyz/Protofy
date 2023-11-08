@@ -122,7 +122,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
             </div>
             <PanelGroup direction="horizontal" style={{ height: '100%', display: 'flex' }}>
                 <Panel>
-                    <div style={{ flex: 1, height: '100vh', overflowY: 'auto' }}>
+                    <div style={{ flex: 1, height: '100vh', overflowY: 'auto', backgroundColor:'black' }}>
                         {centerPanelContent}
                     </div>
                 </Panel>
@@ -149,7 +149,15 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
                         </div>
                     </div>
                 </PanelResizeHandle>
-                <Panel ref={rightRef} minSize={getRightWidth()} maxSize={80} defaultSize={rightPanelResizable ? 50 : getRightWidth()} style={{ display: rightPanelVisible ? 'flex' : 'none' }}>
+                <Panel 
+                ref={rightRef} minSize={getRightWidth()} 
+                maxSize={80} defaultSize={rightPanelResizable ? 50 : getRightWidth()} 
+                style={{ 
+                    // fix first render problem with zoomToNode, can't do it with display: "flex"<->"none"
+                    position: rightPanelVisible ? "relative":"absolute", 
+                    zIndex: rightPanelVisible ? 100000:-10, 
+                    display: 'flex' 
+                }}>
                     <div style={{ height: '100%', display: 'flex', flex: 1 }}>
                         {rightPanelContent}
                     </div>
