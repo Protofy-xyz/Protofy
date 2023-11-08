@@ -20,6 +20,8 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="user"
+                    disableViewSelector={true}
+                    defaultView={'list'}
                     onAdd={data => {
                         if(data.password != data.repassword) {
                             throw "Passwords do not match"

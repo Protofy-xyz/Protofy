@@ -18,6 +18,8 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="event"
+                    disableViewSelector={true}
+                    defaultView={'list'}
                     columns={DataTable2.columns(
                         DataTable2.column("path", "path", true, undefined, true, '250px'),
                         DataTable2.column("user", "user", true, undefined, true, '200px'),

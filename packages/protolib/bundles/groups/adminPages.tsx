@@ -13,13 +13,14 @@ export default {
             return (<AdminPage title="Groups" workspace={workspace} pageSession={pageSession}>
                 <DataView
                     disableViewSelector
+                    defaultView={'list'}
                     rowIcon={Group}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="group"
-                    columns={DataTable2.columns(
-                    )}
+                    // columns={DataTable2.columns(
+                    // )}
                     model={GroupModel} 
                     pageState={pageState}
                     icons={GroupIcons}
@@ -27,8 +28,6 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/groups', ['admin'],{
-            view: 'grid'
-        })
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/groups', ['admin'])
     }
 }
