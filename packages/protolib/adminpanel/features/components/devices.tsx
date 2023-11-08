@@ -4,18 +4,25 @@ import DeviceScreen from 'protodevice';
 import {Connector} from 'mqtt-react-hooks'
 
 type DevicesAdminProps = {
-
+    deviceDefinition: any
 }
 
-export default function DevicesAdmin({}:DevicesAdminProps) {
+function CenterContent({deviceDefinition}){
+    return (<Center>
+        <p>{JSON.stringify(deviceDefinition)}</p>
+        <DeviceScreen deviceDefinition={deviceDefinition}></DeviceScreen>
+    </Center>)
+}
+
+
+export default function DevicesAdmin({deviceDefinition}:DevicesAdminProps) {
+    const mqttConfig = deviceDefinition.config.mqttServer?deviceDefinition.config.mqttServer:null;
+    const brokerUrl = mqttConfig? mqttConfig.websocketProtocol+"://"+mqttConfig.broker+mqttConfig.websocketEndpoint: null;
+    console.log("Broker Url -> ",brokerUrl)
     return (
-        <Connector brokerUrl="ws://bo-firmware.protofy.xyz/ws">
-        <Center>
-            {/* <BigTitle>
-                Hello <RainbowText>devices</RainbowText>
-            </BigTitle> */}
-            <DeviceScreen></DeviceScreen>
-        </Center>
-        </Connector>
+        brokerUrl?<Connector brokerUrl={brokerUrl}>
+            <CenterContent deviceDefinition={deviceDefinition}/>
+        </Connector>:
+            <CenterContent deviceDefinition={deviceDefinition}/>
     )
 }
