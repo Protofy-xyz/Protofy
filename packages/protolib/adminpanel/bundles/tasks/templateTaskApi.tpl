@@ -4,7 +4,7 @@ import {handler} from 'protolib/api'
 import {runTask} from 'protolib/adminpanel/bundles/tasks/api/taskApi'
 
 export const {{capitalizedName}}TaskApi = (app) => {
-    app.get(Protofy("apiRoute", "/api/v1/{{name}}Action"), handler(async (req:any, res:any, session) => {
+    app.get(Protofy("apiRoute", "{{apiRoute}}"), handler(async (req:any, res:any, session) => {
         const {token, ...parameters} = req.query
         runTask('{{name}}', parameters, session, 
             (result) => res.send(result),
