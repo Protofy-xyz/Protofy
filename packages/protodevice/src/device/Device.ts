@@ -1,15 +1,4 @@
 const jsYaml = require("js-yaml");
-// const pinTable = [
-//     '34', '35', '32', '33', '25', '26', '27', '14', '12', '13', 'D2', 'D3',
-//     '23', '22', 'TX', 'RX', '21', '19', '18', '5', '17', '16', '4', '0', '2', '15', 'D1', 'D0'
-// ]
-
-export const pinTable = [
-    '34', '35', '32', '33', '25', '26', '27', '14', '12', 'GND', '13',
-    'D2', 'D3', 'CMD', '5V', 'GND', '23', '22', 'TX', 'RX', '21', 'GND',
-    '19', '18', '5', '17', '16', '4', '0', '2', '15', 'D1', 'D0'
-]
-
 class Device {
     name;
     type;
@@ -29,6 +18,7 @@ class Device {
     deepSleepRunDuration;
     deepSleepSleepDuration;
     wakeupPin;
+    pinTable;
 
     constructor(deviceInfo) {
         this.name = deviceInfo[0]
@@ -41,6 +31,7 @@ class Device {
         this.deepSleepRunDuration = deviceInfo[7]
         this.deepSleepSleepDuration =deviceInfo[8]
         this.wakeupPin = deviceInfo[9]
+        this.pinTable = []
         this.mqttPrefix = ""
         this.components = deviceInfo.slice(10)
         this.dsComponents = []
@@ -181,7 +172,11 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
                 } catch (e) {
 
                 }
-                const componentObjects = component.attach(parseInt(pinTable[i]))
+                const componentObjects = component.attach(
+                    !isNaN(parseInt(this.pinTable[i])) 
+                      ? parseInt(this.pinTable[i])
+                      : this.pinTable[i]
+                  );
                 exctractComponents(componentObjects)
             }
         })
@@ -250,29 +245,20 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
 
 
     create(deviceDefinition?) {
-        //var components = this.getComponentsJSON()
+        console.log("🚀 ~ file: Device.ts:253 ~ Device ~ create ~ deviceDefinition:", deviceDefinition)
+        const ports = deviceDefinition.board.ports
+        this.pinTable = []
+        ports.forEach(port => {
+            if(!['3V3', 'EN', '36', '39', 'CLK'].includes(port.name)) this.pinTable.push(port.name)
+        });
+
         var components = this.getComponents()
-        // var outJson = {}
         components = this.extractOnJSONMessage(components)
         components = this.extractOnMessage(components)
         components = this.extractOnBoot(components)
         components= this.extractOnShutdown(components)
-        // Object.keys(components).map((k) => {
-        //     if (components[k].length > 1) {
-        //         if (outJson[k] === undefined) {
-        //             outJson[k] = [];
-        //         }
-        //         components[k].forEach((component) => {
-        //             outJson[k].push(component[k]);
-        //         });
-        //     } else {
-        //             outJson[k] = components[k][0][k];
-        //     }
-        // })
 
-        console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ this.dump() + jsYaml.dump(components):", this.dump() + jsYaml.dump(components, {lineWidth: -1}))
-        
-        // console.log("🚀 ~ file: Device.ts:290 ~ Device ~ create ~ outJson:", outJson)
+        //console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ this.dump() + jsYaml.dump(components):", this.dump() + jsYaml.dump(components, {lineWidth: -1}))
         return this.dump() + jsYaml.dump(components, {lineWidth: -1});
     }
 
@@ -314,37 +300,6 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
         return dumpStr;
         
     }
-
-//     dump() {
-//         var dumpStr = `esphome:
-//     name: ${this.name}
-//     ${this.onBoot == '' ? '' : "on_boot:"}
-//     ${this.onBoot}
-//     ${this.onShutdown == '' ? '' : "on_shutdown:"}
-//     ${this.onShutdown}
-
-// esp32:
-//     board: ${this.type}
-//     framework:
-//         type: arduino
-
-// logger:
-
-// wifi:
-//     ssid: "${this.ssid}"
-//     password: "${this.password}"
-//     power_save_mode: ${this.wifiPowerMode} 
-
-// mqtt:
-//     broker: ${this.mqtt}
-//     topic_prefix: ${this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name}
-//     ${this.onJsonMessage == '' ? '' : "on_json_message:"}
-//     ${this.onJsonMessage}
-//     ${this.onMessage == '' ? '' : "on_message:"}
-//     ${this.onMessage}
-// `;
-//     return dumpStr
-//     }
 }
 
 export default function device(deviceInfo) {
