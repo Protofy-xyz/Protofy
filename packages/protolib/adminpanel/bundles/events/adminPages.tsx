@@ -32,6 +32,9 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/events')
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/events', [], {
+            orderBy: "created",
+            orderDirection: "desc"
+        })
     }
 }
