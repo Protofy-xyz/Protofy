@@ -1,5 +1,5 @@
+import customTasks from './custom/tasks'
+
 export const Tasks = {
-    test: () => {
-        console.log('TASK RUNNED')
-    }
+    ...customTasks
 }
