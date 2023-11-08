@@ -114,10 +114,6 @@ const getTask = async (taskPath) => {
   }
 } 
 
-const setTask = () => {
-
-}
-
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
@@ -131,6 +127,16 @@ const getDB = (path, req, session) => {
 
     async put(key, value) {
         value = JSON.parse(value)
+        console.log('value: ', value)
+        const capitalizedName = value.name.charAt(0).toUpperCase() + value.name.slice(1)
+        const params = "{" + Object.keys(value.params).reduce((total, current, i) => {
+            const v = value.params[current]
+            return total + "\n\t" + current + ": " + "z." + v.type + "()" + (!value.required?".optional()":"") +","
+          }, '').slice(0, -1) + "\n}"
+    
+        
+        console.log('result: ', params)
+
         let exists
         const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/tasks/' + fspath.basename(value.name) + '.ts'
         try {
@@ -146,7 +152,7 @@ const getDB = (path, req, session) => {
             await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
                 name: value.name + '.ts',
                 data: {
-                options: { template: '/packages/protolib/adminpanel/bundles/tasks/templateTask.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },
+                options: { template: '/packages/protolib/adminpanel/bundles/tasks/templateTask.tpl', variables: { params: params} },
                 path: '/packages/app/bundles/custom/tasks'
                 }
             })
@@ -182,7 +188,7 @@ const getDB = (path, req, session) => {
                 await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
                 name: value.name + '.ts',
                 data: {
-                    options: { template: '/packages/protolib/adminpanel/bundles/tasks/templateTaskApi.tpl', variables: { name: value.name, capitalizedName: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
+                    options: { template: '/packages/protolib/adminpanel/bundles/tasks/templateTaskApi.tpl', variables: { apiRoute: value.apiRoute, name: value.name, capitalizedName: capitalizedName } },
                     path: '/packages/app/bundles/custom/apis'
                 }
                 })
@@ -190,24 +196,26 @@ const getDB = (path, req, session) => {
 
             //link in index.ts
             const sourceFile = getSourceFile(apiIndex)
-            addImportToSourceFile(sourceFile, value.name+'taskApi', ImportType.DEFAULT, './' + value.name)
+            addImportToSourceFile(sourceFile, capitalizedName+'TaskApi', ImportType.NAMED, './' + value.name)
 
             const arg = getDefinition(sourceFile, '"apis"')
             if (!arg) {
                 throw "No link definition schema marker found for file: " + path
             }
-            addObjectLiteralProperty(arg, value.name, value.name+'taskApi')
+            addObjectLiteralProperty(arg, value.name, capitalizedName+'TaskApi')
             sourceFile.saveSync();
         }
 
-        // const result = "{" + Object.keys(value.params).reduce((total, current, i) => {
-        //     const v = value.keys[current]
-        //     const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ? current.params.join(',') : '') + ")", '') : ''
-        //     return total + "\n\t" + current + ": " + "z." + v.type + "(" + (v.params && v.params.length ? v.params.join(',') : '') + ")" + modifiers + ","
-        //   }, '').slice(0, -1) + "\n}"
-    
-    
-        //await setTask()
+        //link in index.ts
+        const sourceFile = getSourceFile(indexFile)
+        addImportToSourceFile(sourceFile, capitalizedName+'Task', ImportType.DEFAULT, './' + value.name)
+
+        const arg = getDefinition(sourceFile, '"tasks"')
+        if (!arg) {
+            throw "No link definition schema marker found for file: " + path
+        }
+        addObjectLiteralProperty(arg, value.name, capitalizedName+'Task')
+        sourceFile.saveSync();
     },
 
     async get(key) {

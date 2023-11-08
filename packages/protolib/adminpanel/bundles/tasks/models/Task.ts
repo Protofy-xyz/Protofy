@@ -10,7 +10,7 @@ export const TaskSchema = z.object(Protofy("schema", {
     api: z.boolean().display().generate(() => false),
     apiRoute: z.string().optional().display(),
     params: z.record(z.string(), z.object({
-        required: z.boolean(),
+        required: z.boolean().optional(),
         type: z.union([
             z.literal("string"),
             z.literal("number"),
