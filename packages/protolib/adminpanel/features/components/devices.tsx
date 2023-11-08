@@ -9,7 +9,7 @@ type DevicesAdminProps = {
 
 function CenterContent({deviceDefinition}){
     return (<Center>
-        <p>{JSON.stringify(deviceDefinition)}</p>
+        {/* <p>{JSON.stringify(deviceDefinition)}</p> */}
         <DeviceScreen deviceDefinition={deviceDefinition}></DeviceScreen>
     </Center>)
 }
