@@ -228,7 +228,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     if (elementType == 'ZodUnion' && mode != 'preview') {
         let options = []
         let _rawOptions = []
-        if (typeof ele._def.generateOptions === 'function') {
+        if (ele._def.dependsOn && data[ele._def.dependsOn] && (typeof ele._def.generateOptions === 'function')) {
           options = ele._def.generateOptions(data)
           _rawOptions = options
         } else {

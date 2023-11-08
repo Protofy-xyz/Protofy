@@ -3,7 +3,7 @@
         "id": "1",
         "name": "Empty device",
         "board": "1",
-        "sdk": 0,
+        "sdk": "",
         "subsystems": {},
         "config": {
             "board": "esp32dev",

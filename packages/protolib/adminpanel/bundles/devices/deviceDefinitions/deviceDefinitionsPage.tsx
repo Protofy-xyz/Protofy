@@ -29,8 +29,18 @@ export default {
           DataTable2.column("sdk", "sdk", true, (row) => <Chip text={row.sdk} color={'$gray5'} />),
         )}
         extraFieldsForms={{
-          board: z.union(extraData.boards.map(o => z.literal(o))).after('name').display(),
-          sdk: z.union(extraData.cores.map(o => z.literal(JSON.stringify(o)))).dependsOn("board").after("name").display(),
+          board: z.union(extraData.boards.map(o => z.literal(o.name))).after('name').display(),
+          sdk: z.union([
+            z.literal(""),
+            z.literal("")
+          ]).dependsOn("board").generateOptions((formData) => {
+            const { boards, cores, sdks } = extraData
+            if (formData.board) {
+              const board = boards.find(brd => brd.name === formData.board)
+              return cores.find(core => core.name === board.core).sdks
+            }
+            return []
+          }).after("name").display(),
         }}
         model={DeviceDefinitionModel}
         pageState={pageState}
@@ -42,10 +52,12 @@ export default {
   getServerSideProps: PaginatedDataSSR('/adminapi/v1/devicedefinitions', ['admin'], {}, async () => {
     const boards = await API.get('/adminapi/v1/deviceboards?itemsPerPage=1000')
     const cores = await API.get('/adminapi/v1/devicecores?itemsPerPage=1000')
+    const sdks = await API.get('/adminapi/v1/devicesdks?itemsPerPage=1000')
 
     return {
-      boards: boards.isLoaded ? boards.data.items.map(i => DeviceBoardModel.load(i).getId()) : [],
-      cores: cores.isLoaded ? cores.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
+      boards: boards.isLoaded ? boards.data.items.map(i => DeviceBoardModel.load(i).getData()) : [],
+      cores: cores.isLoaded ? cores.data.items.map(i => DeviceCoreModel.load(i).getData()) : [],
+      sdks: sdks.isLoaded ? sdks.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
     }
   })
 }
