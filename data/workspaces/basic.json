@@ -22,7 +22,8 @@
             { "name": "Devices", "icon": "serverConf", "type":"devices", "path": "/"},
             { "name": "Definitions", "icon": "bookOpen", "type":"deviceDefinitions", "path": "/"},
             { "name": "Boards", "icon": "board", "type":"deviceBoards", "path": "/"},
-            { "name": "Cores", "icon": "cpu", "type":"deviceCores", "path": "/"}
+            { "name": "Cores", "icon": "cpu", "type":"deviceCores", "path": "/"}, 
+            { "name": "Sdks", "icon": "code", "type":"deviceSdks", "path": "/"}
         ],
         "Databases": [
             { "name": "*", "icon": "database", "type": "database", "path": "/" },
