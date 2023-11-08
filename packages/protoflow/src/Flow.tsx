@@ -154,7 +154,7 @@ const FlowComponent = ({
         }
     }
 
-    const layout = mode == 'json' ? 'elk' : mode== 'device'?'device':'code';
+    const layout = mode == 'json' ? 'elk' : mode == 'device' ? 'device' : 'code';
 
     const getEnabledNodesForMode = () => {
         if (mode == 'json') {
@@ -654,7 +654,7 @@ const FlowComponent = ({
     useEffect(() => {
         const edgesDiffs = getDiffs(removeSizes(initialEdges), removeSizes(edges))
         const nodesDiffs = getDiffs(removeSizes(initialNodes), removeSizes(nodes))
-        
+
         //look for non connected nodes and make them draggable
         const unconnected = nodes.filter(n => n.id != getFirstNode(nodes)?.id && !edges.find(e => e.source == n.id) && !n.draggable)
         if (unconnected.length) {
@@ -685,7 +685,7 @@ const FlowComponent = ({
         if (nodesDiffs || edgesDiffs) {
             console.log('diffx: ', nodesDiffs, edgesDiffs)
             if (edgesDiffs && !nodesDiffs) {
-                reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData,nodeData)
+                reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
                 setInitialEdges(edges)
             }
             if (!showActionsBar) {
@@ -820,7 +820,7 @@ const FlowComponent = ({
         }, [data[flowId + '/ui']])
 
         useEffect(() => { // Send response
-            if (data["savenodes"]?.value ) {
+            if (data["savenodes"]?.value) {
                 onSaveNodes()
             }
         }, [data["savenodes"]])
@@ -832,7 +832,11 @@ const FlowComponent = ({
         }
     }, [_customComponents.length])
 
-    useEffect(() => { reload() }, [sourceCode])
+    useEffect(() => {
+        if (sourceCode) { 
+            reload() 
+        }
+    }, [sourceCode])
 
     useEffect(() => {
         const diffableNodeData = deleteAdditionalKeys(nodeData)
@@ -850,7 +854,7 @@ const FlowComponent = ({
 
     useEffect(() => {
         if (nodes && nodes.length && nodes.filter(n => n.width && n.height).length == nodes.length) {
-            reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData,nodeData)
+            reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
         }
     }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
 
