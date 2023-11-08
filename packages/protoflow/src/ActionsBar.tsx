@@ -85,6 +85,7 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
         >
           <RefreshCcw color={'white'} size={size} />
         </div> : null}
+        {/*
         <div
           onClick={() => handleTransform()}
           style={{
@@ -94,7 +95,7 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
           }}
         >
           <CircleDot color={'white'} size={size} />
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -74,7 +74,7 @@ const FlowComponent = ({
     dataNotify = () => { },
     disableDots = false,
     bgColor = "white",
-    onShowCode = () => { },
+    onShowCode = null,
     sourceCode,
     onSave,
     onPlay,
