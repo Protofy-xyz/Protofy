@@ -2,7 +2,7 @@
     {
         "id": "1",
         "name": "Protofy ESP32 devBoard",
-        "core":  "1",
+        "core":  "esp32",
         "ports": [
             {"number": 1, "side": "left" , "name": "3V3", "type": "P", "analog": false, "description":"3V3 Power supply", "maxVoltage": 3.3 },
             {"number": 2, "side": "left", "name": "EN", "type": "I", "analog": false, "description":"CHIP_PU, RESET", "maxVoltage": 3.3 },
