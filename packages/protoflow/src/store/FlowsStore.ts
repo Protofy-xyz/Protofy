@@ -27,7 +27,7 @@ type FlowsStoreData = {
     errorData: any,
     setError: Function,
     clearError: Function,
-    themeMode: "light" | "dark",
+    themeMode: "light" | "dark" | "preview",
     setTemeMode: Function,
     themeOverride: any,
     flowInstance: number,

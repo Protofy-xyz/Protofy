@@ -1,12 +1,12 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { FlowStoreContext } from "../store/FlowsStore"
 
-type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "textColor" | "interactiveColor" | 'interactiveHoverColor' | 'inputBorder' | 'borderColor' 
-| 'borderWidth' | 'borderWidthSelected' | 'colorError' | 'handleBorderColor' | 'flowOutputColor' | 'dataOutputColor' | 'highlightInputBackgroundColor' | 'blockPort' | 'flowPort'
-| 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor' | 'disableTextColor' | 'nodeEdgeWidth' | 'nodeEdgeStyle'
-| 'plusColor'
+type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "textColor" | "interactiveColor" | 'interactiveHoverColor' | 'inputBorder' | 'borderColor'
+    | 'borderWidth' | 'borderWidthSelected' | 'colorError' | 'handleBorderColor' | 'flowOutputColor' | 'dataOutputColor' | 'highlightInputBackgroundColor' | 'blockPort' | 'flowPort'
+    | 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor' | 'disableTextColor' | 'nodeEdgeWidth' | 'nodeEdgeStyle'
+    | 'plusColor'
 
-const commonVars:any = {
+const commonVars: any = {
     nodeBorderWidth: '1px',
     nodeFontSize: 20,
     nodeEdgeWidth: 3,
@@ -66,14 +66,38 @@ const Theme = {
         nodeBorderColor: outlineColorDark,
         titleColor: 'black',
         containerColor: '#FFFFFF05'
+    },
+    preview: {
+        ...commonVars,
+        plusColor: 'white',
+        handleBorderColor: 'black',
+        edgeColor: outlineColorDark,
+        nodeBackgroundColor: "#303030", //bg of nodes
+        inputBackgroundColor: "#404040",
+        inputBorder: '0',
+        textColor: "#e5e5e5",
+        disableTextColor: "grey",
+        interactiveColor: "#4772b3",
+        interactiveHoverColor: '#252525',
+        borderColor: outlineColorDark,
+        colorError: '#EF4444',
+        flowOutputColor: 'grey',
+        dataOutputColor: 'black',
+        highlightInputBackgroundColor: "#222222",
+        blockPort: 'black',
+        flowPort: 'grey',
+        dataPort: 'grey',
+        nodeBorderColor: outlineColorDark,
+        titleColor: 'black',
+        containerColor: '#FFFFFF05'
     }
 }
 
-const useTheme = (key:themeKey, defaultValue=null) => {
+const useTheme = (key: themeKey, defaultValue = null) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const themeMode = useFlowsStore(state => state.themeMode)
     const themeOverride = useFlowsStore(state => state.themeOverride)
-    const _theme = {...Theme[themeMode], ...themeOverride}
+    const _theme = { ...Theme[themeMode], ...themeOverride }
     try {
         const value = _theme[key]
         return value

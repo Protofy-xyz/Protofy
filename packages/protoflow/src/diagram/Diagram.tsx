@@ -2,7 +2,6 @@ import React, { useCallback, useRef, useState, useContext, useEffect, cloneEleme
 import ReactFlow, {
     MiniMap,
     Background,
-    Panel,
     ReactFlowProvider,
     OnNodesDelete,
     NodeDragHandler,
@@ -40,7 +39,8 @@ type DiagramParams = {
     themeMode?: "light" | "dark",
     theme?: any,
     defaultViewPort?: { x: number, y: number, zoom: number },
-    onViewPortChange?: any
+    onViewPortChange?: any,
+    nodePreview?: boolean
 }
 
 const Diagram = React.forwardRef(({
@@ -64,7 +64,8 @@ const Diagram = React.forwardRef(({
     themeMode = "light",
     theme = {},
     defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
-    onViewPortChange = () => { }
+    onViewPortChange = () => { },
+    nodePreview = false
 }: DiagramParams, ref) => {
     const reactFlowWrapper = useRef<HTMLElement | null>(null);
     const isDiagramVisible = reactFlowWrapper.current?.getBoundingClientRect()?.height > 0
@@ -72,7 +73,7 @@ const Diagram = React.forwardRef(({
     const nodeData = useFlowsStore(state => state.nodeData)
     const setThemeMode = useFlowsStore(state => state.setTemeMode)
     const [internalData, setInternalData] = useState([])
-    const { project, setViewport, getNodes, getViewport, setCenter } = useReactFlow();
+    const { project, setViewport, getNodes, getViewport, setCenter, setNodes, setEdges, getEdges } = useReactFlow();
     const { undo, redo, takeSnapshot, clearNodes } = useUndoRedo();
     const connectingNode = useRef<{
         handleType?: string;
@@ -153,15 +154,26 @@ const Diagram = React.forwardRef(({
         [project]
     );
 
+    const showAll = () => {
+        setEdges(getEdges().map(e => ({ ...e, hidden: false })))
+        setNodes(getNodes().map(n => ({ ...n, hidden: false })))
+    }
+    const hideUnselected = (selectedNodeId) => {
+        if (selectedNodeId) {
+            setEdges(getEdges().map(e => ({ ...e, hidden: true })))
+            setNodes(getNodes().map(n => ({ ...n, hidden: n.id != selectedNodeId })))
+        }
+    }
     const zoomToNode = useCallback((selectedNodeId) => {
         const selectedNode = getNodes().find(n => n.id == selectedNodeId)
         if (!selectedNode) return
         const flowsWidth = reactFlowWrapper.current.offsetWidth
         if (!flowsWidth) return // skip if diagram is not visible
+        const flowsHeight = reactFlowWrapper.current.offsetHeight
         const posX = selectedNode.position.x + selectedNode.width / 2
-        const posY = selectedNode.position.y + selectedNode.height / 2
-        setTimeout(() => setCenter(posX, posY, { zoom: 0.6, duration: 800 }), 50);
-    }, [setCenter]);
+        const posY = selectedNode.position.y + (flowsHeight / 2) - 50
+        setCenter(posX, posY, { zoom: 1, duration: nodePreview ? 1 : 500})
+    }, [setCenter, nodePreview]);
 
     useKeypress(['z', 'Z'], async (event) => {
         if (!isDiagramVisible) return
@@ -203,10 +215,17 @@ const Diagram = React.forwardRef(({
         if (data['zoomToNode'] && nodeToZoomId) {
             if (pastZoomNodes[0] == data['zoomToNode'].id) return
             pastZoomNodes[0] = nodeToZoomId
-            setPastZoomNodes(pastZoomNodes)
-            zoomToNode(nodeToZoomId)
+            setPastZoomNodes([...pastZoomNodes])
+            setTimeout(() => zoomToNode(nodeToZoomId), 50);
+            if (nodePreview) hideUnselected(nodeToZoomId)
         }
     }, [data['zoomToNode']])
+
+    useEffect(() => {
+        if (!nodePreview) showAll()
+        else hideUnselected(pastZoomNodes[0])
+        setTimeout(() => zoomToNode(pastZoomNodes[0]), 80);
+    }, [nodePreview])
 
     const proOptions = { hideAttribution: true };
     return (<div style={{ width: '100%', height: "100%" }}>
@@ -232,6 +251,8 @@ const Diagram = React.forwardRef(({
                 style={{ cursor: "pointer", backgroundColor: 'white', ...style }}
                 onDragOver={onDragOver}
                 edgeTypes={edgeTypes}
+                zoomOnScroll={!nodePreview}
+                panOnDrag={!nodePreview}
                 minZoom={0.3}
                 maxZoom={2}
                 onInit={(reactFlowInstance: any) => {

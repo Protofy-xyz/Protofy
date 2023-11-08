@@ -66,9 +66,9 @@ interface FlowProps {
     onViewPortChange?: Function,
     defaultViewPort?: { x: number, y: number, zoom: number },
     path?: string,
-    mode?: string
+    mode?: string,
+    nodePreview?: boolean
 }
-
 
 const FlowComponent = ({
     dataNotify = () => { },
@@ -100,7 +100,8 @@ const FlowComponent = ({
     onViewPortChange = () => { },
     defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
     path = "Start",
-    mode = 'js'
+    mode = 'js',
+    nodePreview = false
 }: FlowProps) => {
     const { data, publish } = topics;
     const useFlowsStore = useContext(FlowStoreContext)
@@ -870,6 +871,7 @@ const FlowComponent = ({
                 edgeTypes={edgeTypes}
                 onInit={() => { }}
                 style={{ backgroundColor: bgColor }}
+                nodePreview={nodePreview}
                 componentsMenu={
                     menuState != 'closed' ?
                         <Menu

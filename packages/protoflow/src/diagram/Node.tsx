@@ -17,6 +17,8 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
     const errorData = useFlowsStore(state => state.errorData)
     const flexRef = React.useRef()
     const boxRef = React.useRef()
+    const themeMode = useFlowsStore(state => state.themeMode)
+    const isThemePreview = themeMode == 'preview'
 
     // const scale = chroma.scale([(chroma.scale([color, 'white']))(0.5).hex(), 'white']).mode('lab');
 
@@ -53,12 +55,13 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
                 borderRadius: 13,
                 textAlign: "center",
                 fontSize: useTheme('nodeFontSize'),
-                boxShadow: generateBoxShadow(container? 0:isHover? 10: !isPreview && node?.selected ? 10 : 3),    
-                ...style
+                boxShadow: isThemePreview ? "none" : generateBoxShadow(container? 0:isHover? 10: !isPreview && node?.selected ? 10 : 3),    
+                cursor: isThemePreview ? 'default' : undefined,
+                ...style,
             }}
             className={draggable?'':'nodrag'}
         >
-            {title || headerContent ? <div ref={boxRef} style={{ display: 'flex', backgroundColor: color, borderRadius: isPreview ? '8px' : innerBorderRadius, borderBottom: mode == 'column' && !isPreview ? borderWidth + ' solid ' + borderColor : '0px', paddingBottom: '10px', justifyContent: 'center' }}>
+            {(title || headerContent) && !isThemePreview ? <div ref={boxRef} style={{ display: 'flex', backgroundColor: color, borderRadius: isPreview ? '8px' : innerBorderRadius, borderBottom: mode == 'column' && !isPreview ? borderWidth + ' solid ' + borderColor : '0px', paddingBottom: '10px', justifyContent: 'center' }}>
                 {icon && flowDirection == "LEFT" ? <div style={{ display: 'flex', right: '15px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id?titleSize:'18px', color: hColor })}</div> : null}
                 {title ? <Text style={{ fontSize: id?titleSize:'18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '15ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{title}</Text> : null}
                 {icon && flowDirection == "RIGHT" ? <div style={{ display: 'flex', left: '10px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id?titleSize:'18px', color: hColor })}</div> : null}
@@ -104,7 +107,8 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
     const borderColor = useTheme('nodeBorderColor')
     const borderWidth = useTheme('nodeBorderWidth')
     const nodeFontSize = useTheme('nodeFontSize')
-    
+    const themeMode = useFlowsStore(state => state.themeMode)
+    const isThemePreview = themeMode == 'preview'
     const onOpenMenu = () => {
         setMenu("open", [handleRef?.current.getBoundingClientRect().right + 200, handleRef?.current.getBoundingClientRect().top - 30], {
             targetHandle: id,
@@ -131,7 +135,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                 position={position}
                 style={{
                     backgroundColor: backgroundColor, 
-                    display: 'flex', flexDirection: 'row',
+                    display: isThemePreview ? 'none':'flex', flexDirection: 'row',
                     alignItems: 'center',
                     border: borderWidth + " solid " + borderColor, width: portSize+"px", height: portSize+"px", marginLeft: '',
                     marginRight: marginRight+'px', cursor: 'pointer', ...style
