@@ -31,7 +31,8 @@ import {
     Unplug,
     PersonStanding, 
     BookOpen, 
-    ServerCog
+    ServerCog,
+    ClipboardList
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
@@ -57,6 +58,7 @@ const iconTable = {
     create: <Plus color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     users: <Users color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     events: <Zap color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    zap: <Zap color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     automation: <Repeat color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     groups: <Tag color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     library: <Library color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
@@ -80,7 +82,8 @@ const iconTable = {
     unplug: <Unplug color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     human: <PersonStanding color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />, 
     bookOpen: <BookOpen color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />, 
-    serverConf: <ServerCog color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
+    serverConf: <ServerCog color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    activity: <ClipboardList color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
 }
 
 const getIcon = (icon) => {
