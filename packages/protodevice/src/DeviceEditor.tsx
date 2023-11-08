@@ -354,14 +354,14 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
 
 
   // const { error, data } = useFetch(`/api/v1/device/${currentDevice}/config`)
-  const readDevices = async () => {
-    try {
-      // const listOfDevicesStr = await fetch('/api/v1/device/list')
-      // const listOfDevices = await listOfDevicesStr.json()
-      const listOfDevices ={"mydevice":{"light":{"type":"switch","mqttMessages":{"options":["ON","OFF"]}}}} 
-      setDevicesList(listOfDevices)
-    } catch (e) { console.log(e) }
-  }
+  // const readDevices = async () => {
+  //   try {
+  //     // const listOfDevicesStr = await fetch('/api/v1/device/list')
+  //     // const listOfDevices = await listOfDevicesStr.json()
+  //     const listOfDevices ={"mydevice":{"light":{"type":"switch","mqttMessages":{"options":["ON","OFF"]}}}} 
+  //     setDevicesList(listOfDevices)
+  //   } catch (e) { console.log(e) }
+  // }
 
   const flashCb = (msgObj) => {
     console.log(msgObj);
@@ -395,7 +395,7 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
 
       await apiCaller.call(`/v1/device/${currentDevice}/config`, 'POST', { code: modifiedCode, positions: positions })
       await apiCaller.call(`/v1/device/${currentDevice}/yaml`, 'POST', { code: yaml, positions: positions })
-      readDevices()
+      // readDevices()
     } catch (e) { console.error(e) }
   }
   const onPlay = (code) => {
@@ -426,7 +426,7 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
       try {
         const apiCaller = new ApiCaller()
         await apiCaller.call(`/v1/device/${newDeviceName}/add`, 'GET') // adds new device
-        await readDevices()
+        // await readDevices()
       } catch (e) { console.error(`Error creating device page. Error: ${e}`) }
     }
   }
