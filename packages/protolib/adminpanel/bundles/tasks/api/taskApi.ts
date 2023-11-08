@@ -129,7 +129,7 @@ const getDB = (path, req, session) => {
     },
 
     async get(key) {
-
+        return JSON.stringify(await getTask(fspath.join(tasksDir, fspath.basename(key)+'.ts')))
     }
   };
 
