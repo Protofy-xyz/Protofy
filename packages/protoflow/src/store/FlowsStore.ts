@@ -27,12 +27,14 @@ type FlowsStoreData = {
     errorData: any,
     setError: Function,
     clearError: Function,
-    themeMode: "light" | "dark" | "preview",
+    themeMode: "light" | "dark",
     setTemeMode: Function,
     themeOverride: any,
     flowInstance: number,
-    currentPath: string
-    setCurrentPath: Function
+    currentPath: string,
+    setCurrentPath: Function,
+    editingLayout: "default" | "node",
+    setEdittingLayout: Function,
 }
 export const useFlowsStore = () => {
     return create<FlowsStoreData>((set, get) => ({
@@ -49,6 +51,7 @@ export const useFlowsStore = () => {
         themeOverride: {},
         flowInstance: Math.random(),
         currentPath: 'Start',
+        editingLayout: "default",
         dataNotify: () => { },
 
         setDataNotify: (dataNotify: any) => set(produce((draft: FlowsStoreData) => {
@@ -140,6 +143,9 @@ export const useFlowsStore = () => {
         setTemeMode: (theme: 'light'|'dark', themeOverride) => set(produce((draft: FlowsStoreData) => {
             draft.themeMode = theme;
             draft.themeOverride = themeOverride;
+        })),
+        setEdittingLayout: (layout) => set(produce((draft: FlowsStoreData) => {
+            draft.editingLayout = layout;
         }))
     }));
 }

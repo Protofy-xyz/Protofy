@@ -72,6 +72,7 @@ const Diagram = React.forwardRef(({
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData)
     const setThemeMode = useFlowsStore(state => state.setTemeMode)
+    const setEdittingLayout = useFlowsStore(state => state.setEdittingLayout)
     const [internalData, setInternalData] = useState([])
     const { project, setViewport, getNodes, getViewport, setCenter, setNodes, setEdges, getEdges } = useReactFlow();
     const { undo, redo, takeSnapshot, clearNodes } = useUndoRedo();
@@ -224,6 +225,7 @@ const Diagram = React.forwardRef(({
     useEffect(() => {
         if (!nodePreview) showAll()
         else hideUnselected(pastZoomNodes[0])
+        setEdittingLayout(nodePreview ? 'node' : 'default')
         setTimeout(() => zoomToNode(pastZoomNodes[0]), 80);
     }, [nodePreview])
 

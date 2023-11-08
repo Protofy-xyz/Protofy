@@ -66,30 +66,6 @@ const Theme = {
         nodeBorderColor: outlineColorDark,
         titleColor: 'black',
         containerColor: '#FFFFFF05'
-    },
-    preview: {
-        ...commonVars,
-        plusColor: 'white',
-        handleBorderColor: 'black',
-        edgeColor: outlineColorDark,
-        nodeBackgroundColor: "#303030", //bg of nodes
-        inputBackgroundColor: "#404040",
-        inputBorder: '0',
-        textColor: "#e5e5e5",
-        disableTextColor: "grey",
-        interactiveColor: "#4772b3",
-        interactiveHoverColor: '#252525',
-        borderColor: outlineColorDark,
-        colorError: '#EF4444',
-        flowOutputColor: 'grey',
-        dataOutputColor: 'black',
-        highlightInputBackgroundColor: "#222222",
-        blockPort: 'black',
-        flowPort: 'grey',
-        dataPort: 'grey',
-        nodeBorderColor: outlineColorDark,
-        titleColor: 'black',
-        containerColor: '#FFFFFF05'
     }
 }
 

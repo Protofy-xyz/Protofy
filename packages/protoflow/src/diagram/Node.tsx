@@ -17,8 +17,8 @@ const Node = ({ adaptiveTitleSize=true, mode='column', draggable = true, icon = 
     const errorData = useFlowsStore(state => state.errorData)
     const flexRef = React.useRef()
     const boxRef = React.useRef()
-    const themeMode = useFlowsStore(state => state.themeMode)
-    const isThemePreview = themeMode == 'preview'
+    const editingLayout = useFlowsStore(state => state.editingLayout)
+    const isThemePreview = editingLayout == 'node'
 
     // const scale = chroma.scale([(chroma.scale([color, 'white']))(0.5).hex(), 'white']).mode('lab');
 
@@ -107,8 +107,8 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
     const borderColor = useTheme('nodeBorderColor')
     const borderWidth = useTheme('nodeBorderWidth')
     const nodeFontSize = useTheme('nodeFontSize')
-    const themeMode = useFlowsStore(state => state.themeMode)
-    const isThemePreview = themeMode == 'preview'
+    const editingLayout = useFlowsStore(state => state.editingLayout)
+    const isThemePreview = editingLayout == 'node'
     const onOpenMenu = () => {
         setMenu("open", [handleRef?.current.getBoundingClientRect().right + 200, handleRef?.current.getBoundingClientRect().top - 30], {
             targetHandle: id,
