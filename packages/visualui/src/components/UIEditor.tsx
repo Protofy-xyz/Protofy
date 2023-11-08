@@ -7,22 +7,28 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import MainPanel from "./MainPanel";
 import Monaco from "./Monaco";
-import { X, Save } from "lucide-react";
+import { X, Save, Workflow, SlidersHorizontal } from "lucide-react";
 import { FlowFactory, useFlowsStore } from 'protoflow';
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
+import { withTopics } from "react-topics";
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
 // const uiStore = useFlowsStore()
 
-function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "" }) {
+function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics }) {
 
     const editorRef = useRef<any>()
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const currentPageContent = useEditorStore(state => state.currentPageContent)
     const setCurrentPageContent = useEditorStore(state => state.setCurrentPageContent)
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
+    const [preview, setPreview] = useState(true)
+    const [isSideBarVisible, setIsSideBarVisible] = useState(false)
+    const [pastZoomNodes, setPastZoomNodes] = useState([])
+
+    const { data } = topics;
 
     const allPalettes = { ...paletteComponents, ...userPalettes }
 
@@ -83,7 +89,16 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     useEffect(() => {
         loadPage()
     }, [sourceCode]);
-
+    useEffect(() => {
+        if (data['zoomToNode']?.id) {
+            if (!isSideBarVisible) {
+                setIsSideBarVisible(true)
+            }
+            if (pastZoomNodes[0] == data['zoomToNode'].id) return
+            pastZoomNodes[0] = data['zoomToNode'].id
+            setPastZoomNodes([...pastZoomNodes])
+        }
+    }, [data['zoomToNode']])
     const FlowPanel = (
         <div
             key="auxiliarySidebar"
@@ -109,9 +124,23 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     </>
                     : <></>
             }
-            <div style={{ display: !codeEditorVisible ? 'flex' : 'none', width: '100%' }}>
+            <div style={{ display: !codeEditorVisible ? 'flex' : 'none', flexDirection: 'column', width: '100%', height: '100vh' }}>
+                <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526' }}>
+                    <div style={{ color: 'white' }}>Component: {pastZoomNodes[0]}</div>
+                    <div>
+                        <button onClick={() => setPreview(!preview)} style={{ cursor: 'pointer' }}>
+                            {preview
+                                ? <Workflow color="white" fillOpacity={0} />
+                                : <SlidersHorizontal color="white" fillOpacity={0} />
+                            }
+                        </button>
+                        <button onClick={(e) => { setIsSideBarVisible(false); e.stopPropagation() }} style={{ marginLeft: '10px', cursor: 'pointer' }}>
+                            <X color="white" fillOpacity={0} />
+                        </button>
+                    </div>
+                </div>
                 <Flow
-                    disableDots={!isActive}
+                    disableDots={!isActive || preview}
                     sourceCode={currentPageContent}
                     setSourceCode={setCurrentPageContent}
                     customComponents={[]}
@@ -121,10 +150,11 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     // store={uiStore}
                     // config={{masks: UIMasks}}
                     flowId={UIFLOWID}
-                    showActionsBar
-                    themeMode={'dark'}
+                    showActionsBar={!preview}
+                    themeMode={preview ? 'preview' : 'dark'}
                     bgColor={'#252526'}
                     theme={theme}
+                    nodePreview={preview}
                 />
             </div>
         </div>
@@ -168,6 +198,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     leftPanelContent={SidebarPanel}
                     centerPanelContent={EditorPanel}
                     rightPanelContent={FlowPanel}
+                    rightPanelResizable={!preview}
+                    rightPanelVisible={isSideBarVisible}
                 />
             </div>
         </Editor>
@@ -175,4 +207,4 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
 
 }
 
-export default memo(UIEditor);
+export default memo(withTopics(UIEditor, { topics: ['zoomToNode'] }));
