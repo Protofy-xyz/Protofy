@@ -103,7 +103,7 @@ const getDB = (path, req, session) => {
     async put(key, value) {
       value = JSON.parse(value)
       let exists
-      const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/objects/' + value.name.replace(/[^a-zA-Z0-9_.-]/g, '') + '.ts'
+      const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts'
       try {
         await fs.access(filePath, fs.constants.F_OK)
         exists = true

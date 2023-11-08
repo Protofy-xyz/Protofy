@@ -63,6 +63,7 @@ const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const tasksDir = fspath.join(PROJECT_WORKSPACE_DIR,"/packages/app/bundles/custom/tasks/")
 const apiDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/apis/")
 const indexFile = tasksDir + "index.ts"
+const apiIndex = fspath.join(apiDir, 'index.ts')
 
 const getTask = async (taskPath) => {
   const sourceFile = getSourceFile(taskPath)
@@ -113,6 +114,10 @@ const getTask = async (taskPath) => {
   }
 } 
 
+const setTask = () => {
+
+}
+
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
@@ -125,7 +130,84 @@ const getDB = (path, req, session) => {
     },
 
     async put(key, value) {
-        
+        value = JSON.parse(value)
+        let exists
+        const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/tasks/' + fspath.basename(value.name) + '.ts'
+        try {
+          await fs.access(filePath, fs.constants.F_OK)
+          exists = true
+        } catch (error) {
+          exists = false
+        }
+
+        if (exists) {
+            console.log('File: ' + filePath + ' already exists, not executing template')
+        } else {
+            await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+                name: value.name + '.ts',
+                data: {
+                options: { template: '/packages/protolib/adminpanel/bundles/tasks/templateTask.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },
+                path: '/packages/app/bundles/custom/tasks'
+                }
+            })
+        }
+
+        //sync api
+        let apiExists
+        const apiPath = fspath.join(apiDir, fspath.basename(value.name) + 'taskApi.ts')
+        try {
+            await fs.access(apiPath, fs.constants.F_OK)
+            apiExists = true
+        } catch (error) {
+            apiExists = false
+        }
+
+        if (apiExists) {
+            if (!value.api) {
+              //unlink in index.ts
+              const sourceFile = getSourceFile(apiIndex)
+              const arg = getDefinition(sourceFile, '"apis"')
+              if (!arg) {
+                throw "No link definition schema marker found for file: " + path
+              }
+    
+              removeObjectLiteralProperty(arg, value.name+'taskApi')
+              removeImportFromSourceFile(sourceFile, './' + value.name+'taskApi')
+              sourceFile.saveSync();
+    
+              await fs.unlink(apiPath)
+            }
+        } else {
+            if (value.api) {
+                await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+                name: value.name + '.ts',
+                data: {
+                    options: { template: '/packages/protolib/adminpanel/bundles/tasks/templateTaskApi.tpl', variables: { name: value.name, capitalizedName: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
+                    path: '/packages/app/bundles/custom/apis'
+                }
+                })
+            }
+
+            //link in index.ts
+            const sourceFile = getSourceFile(apiIndex)
+            addImportToSourceFile(sourceFile, value.name+'taskApi', ImportType.DEFAULT, './' + value.name)
+
+            const arg = getDefinition(sourceFile, '"apis"')
+            if (!arg) {
+                throw "No link definition schema marker found for file: " + path
+            }
+            addObjectLiteralProperty(arg, value.name, value.name+'taskApi')
+            sourceFile.saveSync();
+        }
+
+        // const result = "{" + Object.keys(value.params).reduce((total, current, i) => {
+        //     const v = value.keys[current]
+        //     const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ? current.params.join(',') : '') + ")", '') : ''
+        //     return total + "\n\t" + current + ": " + "z." + v.type + "(" + (v.params && v.params.length ? v.params.join(',') : '') + ")" + modifiers + ","
+        //   }, '').slice(0, -1) + "\n}"
+    
+    
+        //await setTask()
     },
 
     async get(key) {
