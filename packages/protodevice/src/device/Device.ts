@@ -249,7 +249,7 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
     }
 
 
-    create() {
+    create(deviceDefinition?) {
         //var components = this.getComponentsJSON()
         var components = this.getComponents()
         // var outJson = {}
