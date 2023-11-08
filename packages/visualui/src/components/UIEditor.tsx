@@ -106,9 +106,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             style={{ width: '100%', display: 'flex', flex: 1, height: '100%' }}
         >
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
-                <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526' }}>
+                <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526', borderBottom: '1px solid #cccccc20' }}>
                     <div style={{ color: preview ? 'white' : 'transparent' }}>{pastZoomNodes[0]}</div>
-                    <div style={{ display:'flex'}}>
+                    <div style={{ display: 'flex' }}>
                         <ToggleGroup type="single" defaultValue="preview" disableDeactivation>
                             <ToggleGroup.Item value="code" onPress={() => setCodeEditorVisible(true)} >
                                 <Code />
@@ -201,7 +201,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     leftPanelContent={SidebarPanel}
                     centerPanelContent={EditorPanel}
                     rightPanelContent={FlowPanel}
-                    rightPanelResizable={!preview || codeEditorVisible}
+                    rightPanelResizable={!preview}
                     rightPanelVisible={isSideBarVisible}
                 />
             </div>
