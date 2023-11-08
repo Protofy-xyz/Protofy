@@ -2,8 +2,8 @@
     {
         "id": "1",
         "name": "Empty device",
-        "board": "1",
-        "sdk": "",
+        "board": "Protofy ESP32 devBoard",
+        "sdk": "esphome",
         "subsystems": {},
         "config": {
             "board": "esp32dev",
