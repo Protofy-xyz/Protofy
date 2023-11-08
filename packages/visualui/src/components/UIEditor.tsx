@@ -125,8 +125,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     : <></>
             }
             <div style={{ display: !codeEditorVisible ? 'flex' : 'none', flexDirection: 'column', width: '100%', height: '100vh' }}>
-                <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526' }}>
-                    <div style={{ color: 'white' }}>Component: {pastZoomNodes[0]}</div>
+                <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526' }}>
+                    <div style={{ color: preview ? 'white' : 'transparent' }}>Component: {pastZoomNodes[0]}</div>
                     <div>
                         <button onClick={() => setPreview(!preview)} style={{ cursor: 'pointer' }}>
                             {preview
