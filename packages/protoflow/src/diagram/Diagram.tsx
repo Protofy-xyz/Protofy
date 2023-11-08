@@ -173,7 +173,7 @@ const Diagram = React.forwardRef(({
         const flowsHeight = reactFlowWrapper.current.offsetHeight
         const posX = selectedNode.position.x + selectedNode.width / 2
         const posY = selectedNode.position.y + (flowsHeight / 2) - 50
-        setCenter(posX, posY, { zoom: 1, duration: nodePreview ? 1 : 500})
+        setCenter(posX, posY, { zoom: 1, duration: nodePreview ? 1 : 500 })
     }, [setCenter, nodePreview]);
 
     useKeypress(['z', 'Z'], async (event) => {
@@ -213,8 +213,8 @@ const Diagram = React.forwardRef(({
 
     useEffect(() => {
         const nodeToZoomId = data['zoomToNode']?.id
-        if (data['zoomToNode'] && nodeToZoomId) {
-            if (pastZoomNodes[0] == data['zoomToNode'].id) return
+        if (nodeToZoomId) {
+            if (pastZoomNodes[0] == nodeToZoomId) return
             pastZoomNodes[0] = nodeToZoomId
             setPastZoomNodes([...pastZoomNodes])
             setTimeout(() => zoomToNode(nodeToZoomId), 50);
