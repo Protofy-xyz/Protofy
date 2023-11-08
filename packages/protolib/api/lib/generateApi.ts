@@ -1,4 +1,4 @@
-import { generateEvent } from "../../adminpanel/bundles/events/eventsLibrary";
+import { generateEvent } from "../../bundles/events/eventsLibrary";
 import { connectDB, getDB } from "./db";
 import {handler} from './handler'
 import fs from 'fs';
@@ -11,7 +11,7 @@ import path from 'path';
     dir: the directory where your api is located. Used to load initialData.json if it exists
     prefix: exaplined in modelName
     dbName: name of the database, used by the storage engine
-    transformers: a key->value object with transformations, invocable from the schema. See protolib/adminpanel/bundles/users
+    transformers: a key->value object with transformations, invocable from the schema. See protolib/bundles/users
     _connectDB: function used by the api to preconnect the database. Its optional, used to provide your own database implementation
     _getDB: function used by the api to retrieve the database object to interact with the database. Its optional, used to provide your own database implementation (json...)
     operations: list of provided operations, by default ['create', 'read', 'update', 'delete', 'list']
