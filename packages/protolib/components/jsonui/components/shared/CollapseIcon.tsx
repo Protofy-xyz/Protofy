@@ -7,16 +7,14 @@ const CollapseIcon = (props) => {
     const styles = props.styles === undefined ? style : props.styles;
     if (!collapsible) return null;
     return  (
-        <Stack top={6.45} hoverStyle={{opacity: 0.8}} opacity={0.1} display="inline">
-            <span onClick={toggleNodeCollapsed} style={styles.collapseIcon}>
-                {isNodeCollapsed() ? (
-                    <Stack top={3} display="inline">
-                        <MoreHorizontal size={"$1"} color={"var(--color)"} />
-                    </Stack>
-                ):(
-                    <ChevronRight size={"$1"} color={"var(--color)"} />
-                )}
-            </span>
+        <Stack cursor="pointer" onPress={toggleNodeCollapsed} top={6.45} hoverStyle={{opacity: 0.8}} opacity={0.1} display="inline">
+            {isNodeCollapsed() ? (
+                <Stack top={3} display="inline">
+                    <MoreHorizontal size={"$1"} color={"var(--color)"} />
+                </Stack>
+            ):(
+                <ChevronRight size={"$1"} color={"var(--color)"} />
+            )}
         </Stack>
     )
 };
