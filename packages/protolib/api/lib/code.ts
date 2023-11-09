@@ -34,7 +34,7 @@ export const getDefinition = (sourceFile, def, numParam = 1) => {
         const expression = callExpr.getExpression();
         return expression.getKind() === SyntaxKind.Identifier && expression.getText() === 'Protofy' && args.length && args[0].getText() == def;
     });
-    return callToDef.getArguments()[numParam];
+    return callToDef?callToDef.getArguments()[numParam]:undefined;
 }
 
 export const getSourceFile = (path) => {

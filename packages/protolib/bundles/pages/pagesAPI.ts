@@ -15,13 +15,15 @@ const getPage = (pagePath) => {
   const prot = getDefinition(sourceFile, '"protected"')
   let permissions = getDefinition(sourceFile, '"permissions"')
 
-  if(ArrayLiteralExpression.is(permissions) && permissions.getElements) {
+  if(!route || !permissions || !prot) return undefined
+
+  if(permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
     permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
   } else {
     permissions = permissions.getText()
   }
 
-  if(!route || !permissions || !prot) return undefined
+
 
   return {
     name: fspath.basename(pagePath, fspath.extname(pagePath)),
