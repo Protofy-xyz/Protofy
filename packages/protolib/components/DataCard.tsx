@@ -56,9 +56,7 @@ export const DataCard = React.forwardRef(({ compact=false, innerContainerProps =
                 borderWidth={minimal ? 0 : 1}
                 pointerEvents='none'
                 pointerEventsControls="none"
-                topBar={<Theme name={tint as any}
-
-                >
+                topBar={<Theme name={tint as any}>
                     <XStack justifyContent="flex-start" alignItems={'center'} paddingHorizontal="$3" width="100%">
                         <Paragraph flex={1} marginRight={"-$5"} opacity={0.8}>{!minimal ? name : ''}</Paragraph>
                         <Theme reset>

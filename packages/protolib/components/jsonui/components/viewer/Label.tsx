@@ -162,15 +162,14 @@ const Label = (props) => {
       case "number":
       case "builtin":
       default:
-        return <XStack
-          marginLeft={props.single && isTextNode ? 0 : marginLeft * 10}
-        >
+        return <XStack marginLeft={props.single && isTextNode ? 0 : marginLeft * 10}>
           {(type == 'property' || (type == 'builtin' && insideArray && (value == '[' || value == '{'))) && editable ? <Stack display="inline"><DeleteButton onPress={() => {
             if (props.childType == 'builtin' || (type == 'builtin' && insideArray && (value == '[' || value == '{')))
               props.onChange('delete', [...props.parents], null, insideArray ? 'array' : type)
             else
               props.onChange('delete', [...props.parents, props.currentKey])
           }} />&nbsp;</Stack> : null}
+
           <Text
             fontStyle={value || editing ? "normal": "italic"}
             opacity={value || editing?1:0.5}
@@ -179,17 +178,16 @@ const Label = (props) => {
             paddingHorizontal={"$2"}
             onPress={() => isTextNode ? setEditing(!editing) : null}
             cursor="pointer"
-            textOverflow="ellipsis"
             marginLeft={insideArray && !editable && type != 'builtin' ? marginLeft * 10 : (editable && type == 'builtin' && insideArray && (value == '{' || value == '[') ? -5 : 0)}
             hoverStyle={{
               ...(isTextNode ? {
                 backgroundColor: "$backgroundHover"
               } : {})
             }}
-            {...style}>
-            {value || editing ? value : (type == 'property' ? 'property' : 'value')}
+            {...style}
+          >
+              {value || editing ? value : (type == 'property' ? 'property' : 'value')}
           </Text>
-
         </XStack>
     }
   }
@@ -209,4 +207,4 @@ const Label = (props) => {
   );
 };
 
-export default Label;
+export default React.memo(Label);

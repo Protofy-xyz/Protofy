@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Label from "./Label";
 import { XStack } from "tamagui";
+import React from "react";
 
 const LabelAndValue = (props) => {
   let { currentKey, marginLeft, type, value, isLastSibling, styles } = props;
@@ -44,4 +45,4 @@ const LabelAndValue = (props) => {
   :null)
 };
 
-export default LabelAndValue;
+export default React.memo(LabelAndValue);

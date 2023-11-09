@@ -44,10 +44,6 @@ function isNodeCollapsed(marginLeft, key, marginLeftStep) {
     return collapsedNodes[level][key];
 }
 
-const style = {
-    collapseIcon: {
-        cursor: "pointer",
-    },
-};
+const MemorizedCollapseIcon = React.memo(CollapseIcon)
 
-export { CollapseIcon, toggleNodeCollapsed, isNodeCollapsed };
+export { MemorizedCollapseIcon as CollapseIcon, toggleNodeCollapsed, isNodeCollapsed };

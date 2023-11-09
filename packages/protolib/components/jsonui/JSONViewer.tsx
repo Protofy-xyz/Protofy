@@ -298,4 +298,4 @@ class JSONViewer extends React.Component {
   }
 }
 
-export default JSONViewer
+export default React.memo(JSONViewer)

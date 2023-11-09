@@ -104,7 +104,8 @@ export default {
                                         maxWidth: 700,
                                         $md: { maxWidth: 450 },
                                         $sm: { minWidth: 'calc(100vw - 65px)', maxWidth: 'calc(100vw - 65px)' },
-                                        minWidth: 300
+                                        minWidth: 300,
+                                        p:'$3'
                                     }}
                                     onDelete={onDelete}
                                     key={renew}
@@ -120,7 +121,7 @@ export default {
             </AdminPage>)
         },
         getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.name[2], [], {
-            itemsPerPage: 100000000
+            itemsPerPage: 1000000
         }, (context) => {
             return { name: context.query.name[2] }
         })
