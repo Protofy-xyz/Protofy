@@ -115,28 +115,12 @@ class JSONViewer extends React.Component {
     const childs: any = []
     if (marginLeft > 0) {
       childs.push(
-
-        this.getLabelAndValue(
-          currentKey,
-          parentKeyPath,
-          "[",
-          parent,
-          "builtin",
-          marginLeft,
-          true
-        ),
+        this.getLabelAndValue(currentKey, parentKeyPath, "[", parent, "builtin", marginLeft, true),
         this.getCollapseIcon(marginLeft, currentKey, parentKeyPath)
       );
     } else {
       childs.push(
-        this.getLabel(
-          "[",
-          "builtin",
-          marginLeft,
-          true,
-          currentKey,
-          parentKeyPath
-        ), //opening array tag
+        this.getLabel("[", "builtin", marginLeft, true, currentKey, parentKeyPath), //opening array tag
         this.getCollapseIcon(marginLeft, currentKey, parentKeyPath)
       );
     }
@@ -168,32 +152,16 @@ class JSONViewer extends React.Component {
     const arrChilds: any = []
     for (let key = 0; key < data.length; key++) {
       isLastSibling = key === data.length - 1;
-      this.recursiveParseData(
-        key,
-        parentKeyPath,
-        data,
-        arrChilds,
-        marginLeft + marginLeftStep,
-        isLastSibling
-      );
+      this.recursiveParseData(key, parentKeyPath, data, arrChilds, marginLeft + marginLeftStep, isLastSibling);
     }
-    if (this.props.editable)
+    if (this.props.editable) {
       arrChilds.push(<XStack flex={1} marginBottom={"$3"} marginLeft={24 + (marginLeft * 10)}><AddArrayButton onAdd={() => {
         this.onChange('add', [...parentKeyPath.split('_')], '', 'array')
       }} /></XStack>)
+    }
+
     elems.push(React.createElement(YStack, {}, [arrChilds]))
-
-    elems.push(
-      this.getLabel(
-        "]",
-        "builtin",
-        marginLeft,
-        prevIsLastSibling,
-        currentKey,
-        parentKeyPath
-      )
-    ); //closing array tag
-
+    elems.push(this.getLabel("]", "builtin", marginLeft, prevIsLastSibling, currentKey, parentKeyPath)); //closing array tag
   }
 
   parseObject(currentKey, parentKeyPath, data, parent, elems, marginLeft, isLastSibling) {
@@ -214,21 +182,10 @@ class JSONViewer extends React.Component {
     }
 
     if (isNodeCollapsed.call(this, marginLeft, currentKey, marginLeftStep)) {
-      childs.push(
-        this.getLabel(
-          "}",
-          "builtin",
-          0,
-          isLastSibling,
-          currentKey,
-          parentKeyPath,
-          true
-        )
-      ); //closing object tag
+      childs.push(this.getLabel("}", "builtin", 0, isLastSibling, currentKey, parentKeyPath, true)); //closing object tag
     }
-    elems.push(<XStack width={'min-content'}>
-      {childs}
-    </XStack>)
+
+    elems.push(<XStack width={'min-content'}>{childs}</XStack>)
 
     if (isNodeCollapsed.call(this, marginLeft, currentKey, marginLeftStep)) {
       return; //this node is collapsed
@@ -241,34 +198,18 @@ class JSONViewer extends React.Component {
     const arrChilds: any = []
     keys.forEach((key) => {
       isLastSibling = ++count === keys.length;
-      this.recursiveParseData(
-        key,
-        parentKeyPath,
-        data,
-        arrChilds,
-        marginLeft + marginLeftStep,
-        isLastSibling
-      );
+      this.recursiveParseData(key, parentKeyPath, data, arrChilds, marginLeft + marginLeftStep, isLastSibling);
     });
 
-    if (this.props.editable)
+    if (this.props.editable) {
       arrChilds.push(<XStack flex={1} marginBottom={"$3"} marginLeft={24 + (marginLeft * 9.6)}><AddArrayButton onAdd={() => {
         this.onChange('add', [...parentKeyPath.split('_')], '', 'property')
       }} /></XStack>)
-    elems.push(React.createElement(YStack, {}, [arrChilds]))
-
-
-      elems.push(
-        this.getLabel(
-          "}",
-          "builtin",
-          marginLeft,
-          prevIsLastSibling,
-          currentKey,
-          parentKeyPath
-        )
-      ); //closing object tag
     }
+
+    elems.push(React.createElement(YStack, {}, [arrChilds]))
+    elems.push(this.getLabel("}", "builtin", marginLeft, prevIsLastSibling, currentKey, parentKeyPath)); //closing object tag
+  }
 
   getDataType(data) {
     if (isArray(data)) return "array";
@@ -306,31 +247,10 @@ class JSONViewer extends React.Component {
     let { collapsedNodes } = this.state;
     let { collapsible, marginLeftStep } = this.props;
     return (
-      <XStack top={-6} key={getKey(
-        "collapse_and_remove",
-        currentKey,
-        parentKeyPath,
-        marginLeft
-      )}>
-        <CollapseIcon
-          collapsedNodes={collapsedNodes}
-          marginLeft={marginLeft}
-          collapsible={collapsible}
-          currentKey={currentKey}
-
-          isNodeCollapsed={isNodeCollapsed.bind(
-            this,
-            marginLeft,
-            currentKey,
-            marginLeftStep
-          )}
-
-          toggleNodeCollapsed={toggleNodeCollapsed.bind(
-            this,
-            marginLeft,
-            currentKey,
-            marginLeftStep
-          )}
+      <XStack top={-6} key={getKey("collapse_and_remove", currentKey, parentKeyPath, marginLeft)}>
+        <CollapseIcon collapsedNodes={collapsedNodes} marginLeft={marginLeft} collapsible={collapsible} currentKey={currentKey}
+          isNodeCollapsed={isNodeCollapsed.bind(this, marginLeft, currentKey, marginLeftStep)}
+          toggleNodeCollapsed={toggleNodeCollapsed.bind(this, marginLeft, currentKey, marginLeftStep)}
         />
       </XStack>
     );
@@ -340,14 +260,7 @@ class JSONViewer extends React.Component {
     const { styles } = this.props;
     if (isArray(parent)) {
       //for arrays we dont show keys
-      return this.getLabel(
-        value,
-        type,
-        marginLeft,
-        isLastSibling,
-        currentKey,
-        parentKeyPath
-      );
+      return this.getLabel(value, type, marginLeft, isLastSibling, currentKey, parentKeyPath);
     } else {
       return (
         <LabelAndValue
