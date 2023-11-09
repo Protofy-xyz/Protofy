@@ -126,17 +126,7 @@ class JSONViewer extends React.Component {
     }
 
     if (isNodeCollapsed.call(this, marginLeft, currentKey, marginLeftStep)) {
-      childs.push(
-        this.getLabel(
-          "]",
-          "builtin",
-          0,
-          isLastSibling,
-          currentKey,
-          parentKeyPath,
-          true
-        )
-      );
+      childs.push(this.getLabel("]", "builtin", 0, isLastSibling, currentKey, parentKeyPath, true));
     }
 
     elems.push(<XStack width={'min-content'}>
