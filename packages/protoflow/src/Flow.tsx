@@ -857,7 +857,6 @@ const FlowComponent = ({
             reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
         }
     }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
-
     return (
         <div ref={diagramRef} style={{ height: '100%', width: '100%' }}>
             {display ? <Diagram
@@ -911,7 +910,7 @@ const FlowComponent = ({
                             <ActionsBar
                                 getFirstNode={_getFirstNode}
                                 layout={layout}
-                                onSave={null}  // removes save nodes
+                                onSave={onSaveNodes}
                                 onReload={onReload ? onReloadNodes : null}
                                 onShowCode={onShowCode ? onShowCode : null}
                                 hasChanges={hasChanges}
