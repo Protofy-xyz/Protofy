@@ -10,6 +10,7 @@ import { DeviceCoresAPI } from 'protolib/bundles/devices/devicecores/devicecores
 import { DeviceBoardsAPI } from 'protolib/bundles/devices/deviceBoards/deviceBoardsAPI'
 import { DeviceDefinitionsAPI } from 'protolib/bundles/devices/deviceDefinitions/deviceDefinitionsAPI'
 import { TaskApi } from 'protolib/bundles/tasks/api/taskApi'
+import { DatabasesAPI } from 'protolib/bundles/databases/databasesAPI'
 
 export default (app) => {
   UsersAPI(app)
@@ -24,4 +25,5 @@ export default (app) => {
   DeviceBoardsAPI(app)
   DeviceDefinitionsAPI(app)
   TaskApi(app)
+  DatabasesAPI(app)
 }

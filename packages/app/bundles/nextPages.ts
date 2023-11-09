@@ -9,6 +9,7 @@ import objectsPages from 'protolib/bundles/objects/adminPages'
 import tasksPages from 'protolib/bundles/tasks/adminPages'
 import pagesPages from 'protolib/bundles/pages/adminPages'
 import apisPages from 'protolib/bundles/apis/adminPages'
+import databasesPages from 'protolib/bundles/databases/adminPages'
 import customPages from './custom/pages'
 
 export default {
@@ -19,6 +20,7 @@ export default {
     ...usersPages,
     ...groupsPages,
     ...eventsPages,
+    ...databasesPages,
     ...objectsPages,
     ...pagesPages,
     ...apisPages,
