@@ -83,11 +83,8 @@ const Label = (props) => {
           backgroundColor={"$background"}
           borderRadius={isTextNode ? "$3" : 0}
           padding={"$1"}
-          top={-6}
-        >
-          <XStack
-
-          >
+          top={-6}>
+          <XStack>
             <Input
               focusStyle={{ borderColor: 'transparent' }}
               padding={isTextNode ? "$1" : 0}

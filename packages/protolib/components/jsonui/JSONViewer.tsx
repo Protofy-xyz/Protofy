@@ -108,15 +108,7 @@ class JSONViewer extends React.Component {
     }
   }
 
-  parseArray(
-    currentKey,
-    parentKeyPath,
-    data,
-    parent,
-    elems,
-    marginLeft,
-    isLastSibling
-  ) {
+  parseArray(currentKey, parentKeyPath, data, parent, elems, marginLeft, isLastSibling) {
     parentKeyPath = parentKeyPath + "_" + currentKey;
     let { marginLeftStep } = this.props;
 
@@ -204,48 +196,23 @@ class JSONViewer extends React.Component {
 
   }
 
-  parseObject(
-    currentKey,
-    parentKeyPath,
-    data,
-    parent,
-    elems,
-    marginLeft,
-    isLastSibling
-  ) {
+  parseObject(currentKey, parentKeyPath, data, parent, elems, marginLeft, isLastSibling) {
     parentKeyPath = parentKeyPath + "_" + currentKey;
     let { marginLeftStep } = this.props;
     const childs: any = []
     if (marginLeft > 0) {
       //special case to avoid showing root
       childs.push(
-        this.getLabelAndValue(
-          currentKey,
-          parentKeyPath,
-          "{",
-          parent,
-          "builtin",
-          marginLeft,
-          true
-        ), //opening object tag
+        this.getLabelAndValue(currentKey, parentKeyPath, "{", parent, "builtin", marginLeft, true), //opening object tag
         this.getCollapseIcon(marginLeft, currentKey, parentKeyPath)
       );
     } else {
-
         childs.push(
-          this.getLabel(
-            "{",
-            "builtin",
-            marginLeft,
-            true,
-            currentKey,
-            parentKeyPath
-          ), //opening object tag
+          this.getLabel("{", "builtin", marginLeft, true, currentKey, parentKeyPath), //opening object tag
           this.getCollapseIcon(marginLeft, currentKey, parentKeyPath)
         );
-
-
     }
+
     if (isNodeCollapsed.call(this, marginLeft, currentKey, marginLeftStep)) {
       childs.push(
         this.getLabel(
@@ -303,8 +270,6 @@ class JSONViewer extends React.Component {
       ); //closing object tag
     }
 
-
-
   getDataType(data) {
     if (isArray(data)) return "array";
     else if (isObject(data)) return "object";
@@ -314,95 +279,32 @@ class JSONViewer extends React.Component {
     else return "builtin";
   }
 
-  recursiveParseData(
-    currentKey,
-    parentKeyPath,
-    parent,
-    elems,
-    marginLeft,
-    isLastSibling
-  ) {
+  recursiveParseData(currentKey, parentKeyPath, parent, elems, marginLeft, isLastSibling) {
     let data = parent[currentKey];
     switch (this.getDataType(data)) {
       case "array":
-        this.parseArray(
-          currentKey,
-          parentKeyPath,
-          data,
-          parent,
-          elems,
-          marginLeft,
-          isLastSibling
-        );
+        this.parseArray(currentKey, parentKeyPath, data, parent, elems, marginLeft, isLastSibling);
         break;
       case "object":
-        this.parseObject(
-          currentKey,
-          parentKeyPath,
-          data,
-          parent,
-          elems,
-          marginLeft,
-          isLastSibling
-        );
+        this.parseObject(currentKey, parentKeyPath, data, parent, elems, marginLeft, isLastSibling);
         break;
       case "number":
-        elems.push(
-          this.getLabelAndValue(
-            currentKey,
-            parentKeyPath,
-            data,
-            parent,
-            "number",
-            marginLeft,
-            isLastSibling
-          )
-        );
+        elems.push(this.getLabelAndValue(currentKey, parentKeyPath, data, parent, "number", marginLeft, isLastSibling));
         break;
       case "string":
-        elems.push(
-          this.getLabelAndValue(
-            currentKey,
-            parentKeyPath,
-            data,
-            parent,
-            "text",
-            marginLeft,
-            isLastSibling
-          )
-        );
+        elems.push(this.getLabelAndValue(currentKey, parentKeyPath, data, parent, "text", marginLeft, isLastSibling));
         break;
       case "boolean":
-        elems.push(
-          this.getLabelAndValue(
-            currentKey,
-            parentKeyPath,
-            data,
-            parent,
-            "boolean",
-            marginLeft,
-            isLastSibling
-          )
-        );
+        elems.push(this.getLabelAndValue(currentKey, parentKeyPath, data, parent, "boolean", marginLeft, isLastSibling));
         break;
       default:
-        elems.push(
-          this.getLabelAndValue(
-            currentKey,
-            parentKeyPath,
-            data,
-            parent,
-            "builtin",
-            marginLeft,
-            isLastSibling
-          )
-        );
+        elems.push(this.getLabelAndValue(currentKey, parentKeyPath, data, parent, "builtin", marginLeft, isLastSibling));
     }
   }
 
   getCollapseIcon(marginLeft, currentKey, parentKeyPath) {
     let { collapsedNodes } = this.state;
-    let { collapsible, marginLeftStep, styles } = this.props;
+    let { collapsible, marginLeftStep } = this.props;
     return (
       <XStack top={-6} key={getKey(
         "collapse_and_remove",
@@ -415,13 +317,14 @@ class JSONViewer extends React.Component {
           marginLeft={marginLeft}
           collapsible={collapsible}
           currentKey={currentKey}
-          styles={styles}
+
           isNodeCollapsed={isNodeCollapsed.bind(
             this,
             marginLeft,
             currentKey,
             marginLeftStep
           )}
+
           toggleNodeCollapsed={toggleNodeCollapsed.bind(
             this,
             marginLeft,
@@ -433,15 +336,7 @@ class JSONViewer extends React.Component {
     );
   }
 
-  getLabelAndValue(
-    currentKey,
-    parentKeyPath,
-    value,
-    parent,
-    type,
-    marginLeft,
-    isLastSibling
-  ) {
+  getLabelAndValue(currentKey, parentKeyPath, value, parent, type, marginLeft, isLastSibling) {
     const { styles } = this.props;
     if (isArray(parent)) {
       //for arrays we dont show keys

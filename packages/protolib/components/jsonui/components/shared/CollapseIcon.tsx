@@ -4,7 +4,6 @@ import { Stack, Text } from "tamagui";
 
 const CollapseIcon = (props) => {
     let { collapsible, toggleNodeCollapsed, isNodeCollapsed } = props;
-    const styles = props.styles === undefined ? style : props.styles;
     if (!collapsible) return null;
     return  (
         <Stack cursor="pointer" onPress={toggleNodeCollapsed} top={6.45} hoverStyle={{opacity: 0.8}} opacity={0.1} display="inline">
