@@ -7,7 +7,6 @@ import { NextPageContext } from 'next'
 import { withSession } from 'protolib'
 
 export default function Custom404(props:any) {
-  useSession(props.pageSession)
   return (
     <Page>
       <DefaultLayout>
@@ -20,4 +19,4 @@ export default function Custom404(props:any) {
   )
 }
 
-export const getServerSideProps = SSR(async (context:NextPageContext) => withSession(context))
+// export const getServerSideProps = SSR(async (context:NextPageContext) => withSession(context))
