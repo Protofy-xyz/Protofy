@@ -6,7 +6,7 @@ import { Theme } from "tamagui"
 
 function TintTheme({ children }) {
     const { tint, name } = useTint()
-    console.log('tint: ', tint)
+    //console.log('tint: ', tint)
     // const element = useAlwaysConcurrent()
 
     return (
