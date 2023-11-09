@@ -1,6 +1,6 @@
 export const getInitialData = (dbPath:string):any[] => {
   //you can return custom initial data depending on the database being created
-  console.log('************************ dbPath: ', dbPath)
+  //console.log('************************ dbPath: ', dbPath)
   if(dbPath == '../../data/databases/db') return [{
     key: 'notes', value: JSON.stringify([
       { id: 1, title: "note 1", description: "UGEARS Maqueta de Coche para Montar - Puzzle 3D y Maqueta para Montar Coche Retro - Maquetas de Coches para Construir con Techo Plegable y Motor de 4 Cilindros - Maquetas para Construir para Adultos" },
