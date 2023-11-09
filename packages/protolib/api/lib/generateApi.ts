@@ -49,7 +49,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     const dbPath = '../../data/databases/'+(dbName?dbName:entityName)
     connectDB(dbPath, initialData) //preconnect database
     const _list = (req, allResults) => {
-        const itemsPerPage = Math.min(Number(req.query.itemsPerPage) || 10, 100);
+        const itemsPerPage = Math.max(Number(req.query.itemsPerPage) || 10, 1);
         const page = Number(req.query.page) || 0;
         
         const orderBy:string = req.query.orderBy as string;
@@ -122,9 +122,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         
                 const search = req.query.search;
                 for await (const [key, value] of db.get(req.params.key)) {
-                    console.log("***************************")
                     if (key != 'initialized') {
-
                         const model = options.paginatedRead.model.unserialize(value, session);
                         const listItem = await model.listTransformed(search, transformers);
             
@@ -133,7 +131,6 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                         }
                     }
                 }
-                console.log("allRESULTSSSSSSSSSSSSSSSSSSS", allResults)
                 res.send(_list(req, allResults))
             } else {
                 const item = modelClass.unserialize(await db.get(req.params.key), session)
@@ -142,7 +139,6 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 }
                 res.send(await item.readTransformed(transformers))
             }
-
         // } catch(e) {
         //     console.error("Error reading from database: ", e)
         //     res.status(404).send({result: "not found"})
