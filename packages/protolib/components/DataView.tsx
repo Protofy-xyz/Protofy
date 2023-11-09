@@ -78,8 +78,9 @@ export function DataView({
     defaultView = 'list',
     disableViews = [],
     toolBarContent = null,
+    onAddButton = undefined,
     objectProps = {}
-}: {objectProps?: EditableObjectProps, openMode: 'edit' | 'view'} & any) {
+}: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
@@ -102,7 +103,7 @@ export function DataView({
         }
     }, [items])
 
-    useUpdateEffect(() => {fetch()}, [state])
+    useUpdateEffect(() => { fetch() }, [state])
 
     const onSearch = async (text) => push("search", text, false)
     const onCancelSearch = async () => setCurrentItems(items)
@@ -113,23 +114,25 @@ export function DataView({
             name: 'list',
             icon: List,
             component: DataTableList,
-            props: {sourceUrl, 
-                onDelete:fetch, 
-                ...dataTableListProps}
+            props: {
+                sourceUrl,
+                onDelete: fetch,
+                ...dataTableListProps
+            }
         },
         {
             name: 'grid',
             icon: LayoutGrid,
             component: ObjectGrid,
             props: {
-                model, 
-                items: items?.data?.items, 
-                sourceUrl, 
-                customFields, 
-                extraFields, 
-                icons, 
-                ml:"$5",
-                onDelete:fetch,
+                model,
+                items: items?.data?.items,
+                sourceUrl,
+                customFields,
+                extraFields,
+                icons,
+                ml: "$5",
+                onDelete: fetch,
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 ...dataTableGridProps
             }
@@ -138,7 +141,7 @@ export function DataView({
             name: 'raw',
             icon: Layers,
             component: DataTableCard,
-            props: {...dataTableRawProps}
+            props: { ...dataTableRawProps }
         }
     ]
     const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))
@@ -147,153 +150,153 @@ export function DataView({
     const { resolvedTheme } = useThemeSetting()
 
     return (<YStack height="100%" f={1}>
-            <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns:columns, rowIcon}}>
-                <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
-                    <AlertDialog
-                        p={"$2"}
-                        pt="$5"
-                        pl="$5"
-                        setOpen={setCreateOpen}
-                        open={createOpen}
-                        hideAccept={true}
-                        description={""}
-                    >
-                        <YStack f={1} jc="center" ai="center">
-                            <ScrollView maxHeight={"90vh"}>
-                                <XStack mr="$5">
-                                    <EditableObject
-                                        name={name}
-                                        numColumns={numColumnsForm}
-                                        mode={'add'}
-                                        onSave={async (originalData, data) => {
-                                            try {
-                                                const obj = model.load(data)
-                                                const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
-                                                if (result.isError) {
-                                                    throw result.error
-                                                }
-                                                fetch()
-                                                setCreateOpen(false);
-                                                toast.show(name + ' created', {
-                                                    message: obj.getId()
-                                                })
-                                            } catch (e) {
-                                                console.log('original error: ', e, e.flatten())
-                                                throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
+        <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>
+            <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
+                <AlertDialog
+                    p={"$2"}
+                    pt="$5"
+                    pl="$5"
+                    setOpen={setCreateOpen}
+                    open={createOpen}
+                    hideAccept={true}
+                    description={""}
+                >
+                    <YStack f={1} jc="center" ai="center">
+                        <ScrollView maxHeight={"90vh"}>
+                            <XStack mr="$5">
+                                <EditableObject
+                                    name={name}
+                                    numColumns={numColumnsForm}
+                                    mode={'add'}
+                                    onSave={async (originalData, data) => {
+                                        try {
+                                            const obj = model.load(data)
+                                            const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
+                                            if (result.isError) {
+                                                throw result.error
                                             }
-                                        }}
-                                        model={model}
-                                        extraFields={{...extraFields, ...extraFieldsForms, ...extraFieldsFormsAdd}}
-                                        icons={icons}
-                                        customFields={{...customFields, ...customFieldsForms}}
-                                        {...objectProps}
-                                    />
-                                </XStack>
-                            </ScrollView>
-                        </YStack>
-                    </AlertDialog>
-                    <AlertDialog
-                        p={"$1"}
-                        pt="$5"
-                        pl="$5"
-                        hideAccept={true}
-                        acceptCaption="Save"
-                        setOpen={(s) => {
-                            setCurrentItemData(undefined);
-                            removePush('item')
-                        }}
-                        open={state.item}
-                        description={""}
-                        //bc={resolvedTheme == 'dark' ? "$background": "$color1"}
-                    >
-                        <YStack f={1} jc="center" ai="center">
-                            <ScrollView maxHeight={"90vh"}>
-                                <Stack mr="$5">
-                                    <EditableObject
-                                        disableToggleMode={disableToggleMode}
-                                        initialData={currentItemData}
-                                        name={name}
-                                        spinnerSize={75}
-                                        loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
-                                        objectId={state.item}
-                                        sourceUrl={sourceUrl + '/' + state.item}
-                                        numColumns={numColumnsForm}
-                                        mode={openMode}
-                                        onSave={async (original, data) => {
-                                            try {
-                                                setCurrentItemData(undefined)
-                                                const id = model.load(data).getId()
-                                                const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(original).update(model.load(data)).getData()))
-                                                if (result.isError) {
-                                                    throw result.error
-                                                }
-                                                fetch()
-                                                const { item, ...rest } = state;
-                                                setState(rest)
-                                                toast.show(name + ' updated', {
-                                                    message: "Saved new settings for: " + id
-                                                })
-                                            } catch (e) {
-                                                throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
+                                            fetch()
+                                            setCreateOpen(false);
+                                            toast.show(name + ' created', {
+                                                message: obj.getId()
+                                            })
+                                        } catch (e) {
+                                            console.log('original error: ', e, e.flatten())
+                                            throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
+                                        }
+                                    }}
+                                    model={model}
+                                    extraFields={{ ...extraFields, ...extraFieldsForms, ...extraFieldsFormsAdd }}
+                                    icons={icons}
+                                    customFields={{ ...customFields, ...customFieldsForms }}
+                                    {...objectProps}
+                                />
+                            </XStack>
+                        </ScrollView>
+                    </YStack>
+                </AlertDialog>
+                <AlertDialog
+                    p={"$1"}
+                    pt="$5"
+                    pl="$5"
+                    hideAccept={true}
+                    acceptCaption="Save"
+                    setOpen={(s) => {
+                        setCurrentItemData(undefined);
+                        removePush('item')
+                    }}
+                    open={state.item}
+                    description={""}
+                //bc={resolvedTheme == 'dark' ? "$background": "$color1"}
+                >
+                    <YStack f={1} jc="center" ai="center">
+                        <ScrollView maxHeight={"90vh"}>
+                            <Stack mr="$5">
+                                <EditableObject
+                                    disableToggleMode={disableToggleMode}
+                                    initialData={currentItemData}
+                                    name={name}
+                                    spinnerSize={75}
+                                    loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
+                                    objectId={state.item}
+                                    sourceUrl={sourceUrl + '/' + state.item}
+                                    numColumns={numColumnsForm}
+                                    mode={openMode}
+                                    onSave={async (original, data) => {
+                                        try {
+                                            setCurrentItemData(undefined)
+                                            const id = model.load(data).getId()
+                                            const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(original).update(model.load(data)).getData()))
+                                            if (result.isError) {
+                                                throw result.error
                                             }
-                                        }}
-                                        model={model}
-                                        extraFields={{...extraFields, ...extraFieldsForms, ...extraFieldsFormsEdit}}
-                                        icons={icons}
-                                        customFields={{...customFields, ...customFieldsForms}}
-                                        {...objectProps}
-                                    />
-                                </Stack>
-                            </ScrollView>
-                        </YStack>
-                    </AlertDialog>
+                                            fetch()
+                                            const { item, ...rest } = state;
+                                            setState(rest)
+                                            toast.show(name + ' updated', {
+                                                message: "Saved new settings for: " + id
+                                            })
+                                        } catch (e) {
+                                            throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
+                                        }
+                                    }}
+                                    model={model}
+                                    extraFields={{ ...extraFields, ...extraFieldsForms, ...extraFieldsFormsEdit }}
+                                    icons={icons}
+                                    customFields={{ ...customFields, ...customFieldsForms }}
+                                    {...objectProps}
+                                />
+                            </Stack>
+                        </ScrollView>
+                    </YStack>
+                </AlertDialog>
 
-                    <XStack pt="$3" px="$7" mb="$5">
-                        <XStack left={-12} top={9} f={1} ai="center">
-                            <Paragraph>
-                                <Text fontSize="$5" color="$color11">{pluralName? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'} [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.total}</Text></Tinted>]</Text>
-                            </Paragraph>
-                            {toolBarContent}
-                        </XStack>
-
-                        <XStack position={"absolute"} right={20}>
-                            <Search top={1} initialState={state?.search} onCancel={onCancelSearch} onSearch={onSearch} />
-                            {!hideAdd && <XStack marginLeft="$3" top={-3}>
-                                {!disableViewSelector && <ButtonGroup marginRight="$3">
-                                    {
-                                        tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
-                                            {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
-                                        </ActiveGroupButton>)
-                                    }
-                                </ButtonGroup>}
-                                <Tinted>
-                                    <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
-                                        setCreateOpen(true)
-                                    }} chromeless={true}>
-                                        <Plus />
-                                    </Button>
-                                </Tinted>
-                            </XStack>}
-
-                        </XStack>
+                <XStack pt="$3" px="$7" mb="$5">
+                    <XStack left={-12} top={9} f={1} ai="center">
+                        <Paragraph>
+                            <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'} [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.total}</Text></Tinted>]</Text>
+                        </Paragraph>
+                        {toolBarContent}
                     </XStack>
 
-                    {items && items.isError && (
-                        <Notice>
-                            <Paragraph>{getErrorMessage(items.error)}</Paragraph>
-                        </Notice>
-                    )}
-                    <Stack f={1}>
-                        <AsyncView atom={currentItems}>
-                            {
-                                tableViews.map((v, index) => <ActiveRender height="100%" key={index} activeId={index}>
-                                    {React.createElement(v.component, {...v.props} ?? {})}
-                                </ActiveRender>
+                    <XStack position={"absolute"} right={20}>
+                        <Search top={1} initialState={state?.search} onCancel={onCancelSearch} onSearch={onSearch} />
+                        {!hideAdd && <XStack marginLeft="$3" top={-3}>
+                            {!disableViewSelector && <ButtonGroup marginRight="$3">
+                                {
+                                    tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
+                                        {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
+                                    </ActiveGroupButton>)
+                                }
+                            </ButtonGroup>}
+                            <Tinted>
+                                <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
+                                    onAddButton ? onAddButton() : setCreateOpen(true)
+                                }} chromeless={true}>
+                                    <Plus />
+                                </Button>
+                            </Tinted>
+                        </XStack>}
+
+                    </XStack>
+                </XStack>
+
+                {items && items.isError && (
+                    <Notice>
+                        <Paragraph>{getErrorMessage(items.error)}</Paragraph>
+                    </Notice>
+                )}
+                <Stack f={1}>
+                    <AsyncView atom={currentItems}>
+                        {
+                            tableViews.map((v, index) => <ActiveRender height="100%" key={index} activeId={index}>
+                                {React.createElement(v.component, { ...v.props } ?? {})}
+                            </ActiveRender>
                             )}
-                        </AsyncView>
-                    </Stack>
-                </ActiveGroup>
-            </DataViewContext.Provider>
-        </YStack>
+                    </AsyncView>
+                </Stack>
+            </ActiveGroup>
+        </DataViewContext.Provider>
+    </YStack>
     )
 }

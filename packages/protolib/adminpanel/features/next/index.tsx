@@ -26,7 +26,7 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       orderDirection: context.query.orderDirection ?? '',
       view: context.query.view?? '',
       item: context.query.item?? '',
-      ...(typeof dataProps === "function"? await dataProps() : dataProps),
+      ...(typeof dataProps === "function"? await dataProps(context) : dataProps),
     }
     const _sourceUrl = typeof sourceUrl === 'function' ? sourceUrl(context) : sourceUrl
     return withSession(context, allowdUserTypes, {
@@ -35,7 +35,7 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       initialItems: await API.get({url: _sourceUrl, ..._dataProps}),
       itemData: context.query.item ? await API.get(_sourceUrl+'/'+context.query.item) : '',
       route: context.query.name,
-      extraData: {...(typeof extraData === "function"? await extraData() : extraData)},
+      extraData: {...(typeof extraData === "function"? await extraData(context) : extraData)},
       pageState: {
         ..._dataProps,
       }

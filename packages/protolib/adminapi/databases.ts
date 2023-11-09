@@ -18,17 +18,17 @@ export const getDatabases = async () => {
 //     res.send(await getDatabases())
 // }));
 
-app.get('/adminapi/v1/databases/:dbname', handler(async (req, res) => {
-    const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    await connectDB(dbname, getInitialData(dbname))
-    const db = getDB(dbname)
-    const total = []
-    for await (const [key, value] of db.iterator()) {
-        if(key != 'initialized') total.push({key, value: JSON.parse(value)})
-    }
-    res.send(total)
-    return
-}));
+// app.get('/adminapi/v1/databases/:dbname', handler(async (req, res) => {
+//     const dbname = '../../' + path.join('data','databases', req.params.dbname)
+//     await connectDB(dbname, getInitialData(dbname))
+//     const db = getDB(dbname)
+//     const total = []
+//     for await (const [key, value] of db.iterator()) {
+//         if(key != 'initialized') total.push({key, value: JSON.parse(value)})
+//     }
+//     res.send(total)
+//     return
+// }));
 
 app.post('/adminapi/v1/databases/:dbname/:key', handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)

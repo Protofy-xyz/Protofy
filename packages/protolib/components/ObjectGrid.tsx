@@ -12,7 +12,7 @@ const GridElementCard = ({ index, data, width }) => {
     const modelItem = data.model.load(element)
     const tint = useTint()
 
-    return <ItemCard
+    return data.getCard?data.getCard(element, width) :<ItemCard
         height={data.itemHeight}
         cursor="pointer"
         topBarOutSideScrollArea={false}
@@ -52,7 +52,7 @@ const GridElementCard = ({ index, data, width }) => {
     </ItemCard>
 }
 
-export const ObjectGrid = ({ gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, spacing = 20, getPicture, getBody, model, items, sourceUrl, customFields, onDelete, extraFields, icons, children, ...props }: any & StackProps) => {
+export const ObjectGrid = ({ gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, spacing = 20, getPicture, getBody,getCard, model, items, sourceUrl, customFields, onDelete, extraFields, icons, children, ...props }: any & StackProps) => {
     const containerRef = useRef(null)
     const data = items.map((element, i) => {
         return {
@@ -66,6 +66,7 @@ export const ObjectGrid = ({ gridElementCard = undefined, itemMinWidth = 400, it
             itemMinWidth,
             getPicture,
             getBody,
+            getCard,
             spacing,
             contentMargin,
             onSelectItem,

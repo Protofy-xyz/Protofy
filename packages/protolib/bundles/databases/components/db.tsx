@@ -7,8 +7,7 @@ import { Plus } from '@tamagui/lucide-icons'
 
 export default function DBAdmin({ contentState }) {
     const router = useRouter()
-
-    const [content, setContent] = useState(contentState)
+    const [content, setContent] = useState(contentState.data.entries)
     const currentDB = router.query.name[2]
     const [renew, setRenew] = useState(1)
     const [originalContent, setOriginalContent] = useState<any>()

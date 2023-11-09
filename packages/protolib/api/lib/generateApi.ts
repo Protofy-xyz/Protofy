@@ -48,18 +48,36 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
 export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName, transformers, connectDB, getDB, operations=['create', 'read', 'update', 'delete', 'list'], single?, options?) => {
     const dbPath = '../../data/databases/'+(dbName?dbName:entityName)
     connectDB(dbPath, initialData) //preconnect database
+    const _list = (req, allResults) => {
+        const itemsPerPage = Math.min(Number(req.query.itemsPerPage) || 10, 100);
+        const page = Number(req.query.page) || 0;
+        
+        const orderBy:string = req.query.orderBy as string;
+        const orderDirection = req.query.orderDirection || 'asc';
+        if (orderBy) {
+            allResults.sort((a, b) => {
+                if (a[orderBy] > b[orderBy]) return orderDirection === 'asc' ? 1 : -1;
+                if (a[orderBy] < b[orderBy]) return orderDirection === 'asc' ? -1 : 1;
+                return 0;
+            });
+        }
 
+        const paginatedResults = allResults.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
+        const result = {
+            items: paginatedResults,
+            total: allResults.length,
+            page: page,
+            pages: Math.ceil(allResults.length / itemsPerPage)
+        }
+        return result
+    }
     //list
     !single && operations.includes('list') && app.get(prefix + entityName, handler(async (req, res, session) => {
         //console.log('session: ', session)
         const db = getDB(dbPath, req, session);
         const allResults: any[] = [];
-        const itemsPerPage = Math.min(Number(req.query.itemsPerPage) || 10, 100);
-        const page = Number(req.query.page) || 0;
+
         const search = req.query.search;
-        const orderBy:string = req.query.orderBy as string;
-        const orderDirection = req.query.orderDirection || 'asc';
-    
         for await (const [key, value] of db.iterator()) {
             if (key != 'initialized') {
                 const model = modelClass.unserialize(value, session);
@@ -71,23 +89,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
             }
         }
     
-
-        if (orderBy) {
-            allResults.sort((a, b) => {
-                if (a[orderBy] > b[orderBy]) return orderDirection === 'asc' ? 1 : -1;
-                if (a[orderBy] < b[orderBy]) return orderDirection === 'asc' ? -1 : 1;
-                return 0;
-            });
-        }
-
-        const paginatedResults = allResults.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
-    
-        res.send({
-            items: paginatedResults,
-            total: allResults.length,
-            page: page,
-            pages: Math.ceil(allResults.length / itemsPerPage)
-        });
+        res.send(_list(req, allResults));
     }));
 
     //create
@@ -112,18 +114,39 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //read
     operations.includes('read') && app.get(prefix+entityName+'/:key', handler(async (req, res, session) => {
-
         const db = getDB(dbPath, req, session)
-        try {
-            const note = modelClass.unserialize(await db.get(req.params.key), session)
-            if(!note.isVisible()) {
-                throw "not found"
+
+        //try {
+            if(options.paginatedRead) {
+                const allResults: any[] = [];
+        
+                const search = req.query.search;
+                for await (const [key, value] of db.get(req.params.key)) {
+                    console.log("***************************")
+                    if (key != 'initialized') {
+
+                        const model = options.paginatedRead.model.unserialize(value, session);
+                        const listItem = await model.listTransformed(search, transformers);
+            
+                        if (listItem && model.isVisible()) {
+                            allResults.push({...listItem, _key: key});
+                        }
+                    }
+                }
+                console.log("allRESULTSSSSSSSSSSSSSSSSSSS", allResults)
+                res.send(_list(req, allResults))
+            } else {
+                const item = modelClass.unserialize(await db.get(req.params.key), session)
+                if(!item.isVisible()) {
+                    throw "not found"
+                }
+                res.send(await item.readTransformed(transformers))
             }
-            res.send(await note.readTransformed(transformers))
-        } catch(e) {
-            console.error("Error reading from database: ", e)
-            res.status(404).send({result: "not found"})
-        }
+
+        // } catch(e) {
+        //     console.error("Error reading from database: ", e)
+        //     res.status(404).send({result: "not found"})
+        // }
     }));
 
     //update
