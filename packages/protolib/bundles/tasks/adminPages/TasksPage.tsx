@@ -3,6 +3,7 @@ import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { TaskModel } from '../models/Task'
 import {DataView, DataTable2, Chip, API} from 'protolib'
 import { useRouter } from "next/router"
+import { Mail, Tag, Key, User, Zap } from '@tamagui/lucide-icons';
 
 export const TasksPage = {
     component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
@@ -19,6 +20,7 @@ export const TasksPage = {
                 initialItems={initialItems}
                 numColumnsForm={1}
                 name="task"
+                rowIcon={Zap}
                 columns={DataTable2.columns(
                     DataTable2.column("name", "name", true, undefined, true, '350px'),
                     DataTable2.column("api", "api", true, row => <Chip text={row.api?'yes':'no'} color={row.api ? '$color5':'$gray5'} />, true),

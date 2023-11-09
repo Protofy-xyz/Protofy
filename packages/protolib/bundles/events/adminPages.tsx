@@ -4,7 +4,7 @@ import { EventModel } from '.'
 import {z} from 'zod'
 import {DataTable2, Chip, DataView, Tooltip} from 'protolib'
 import moment  from 'moment'
-import { Mail, Tag, Key } from '@tamagui/lucide-icons';
+import { Mail, Tag, Key, ClipboardList } from '@tamagui/lucide-icons';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const EventIcons =  {}
@@ -20,6 +20,7 @@ export default {
                     name="event"
                     disableViewSelector={true}
                     defaultView={'list'}
+                    rowIcon={ClipboardList}
                     columns={DataTable2.columns(
                         DataTable2.column("path", "path", true, undefined, true, '250px'),
                         DataTable2.column("user", "user", true, undefined, true, '200px'),

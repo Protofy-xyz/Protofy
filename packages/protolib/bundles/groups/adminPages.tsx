@@ -4,7 +4,7 @@ import { GroupModel } from '.'
 import {z} from 'zod'
 import {DataTable2, Chip, DataView} from 'protolib'
 import moment  from 'moment'
-import { Mail, Tag, Key, User, Group } from '@tamagui/lucide-icons';
+import { Mail, Tag, Key, User, Users } from '@tamagui/lucide-icons';
 const GroupIcons =  {}
 
 export default {
@@ -14,7 +14,7 @@ export default {
                 <DataView
                     disableViewSelector
                     defaultView={'list'}
-                    rowIcon={Group}
+                    rowIcon={Users}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
