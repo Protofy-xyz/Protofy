@@ -125,7 +125,7 @@ export const Grid = React.forwardRef(({masonry=true, containerRef, rightGap=0, s
             isScrolling,
             height:height,
             items: data,
-            overscanBy: 5,
+            overscanBy: 3,
             resizeObserver,
             render: card
           }
