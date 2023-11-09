@@ -10,7 +10,7 @@ const Flow = FlowFactory(UIFLOWID)
 
 const FlowsWidget = (props: any) => {
     const [content, setContent] = useState(props.content)
-    console.log("PROPS.MODE: ",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
+    // console.log("PROPS.MODE: ",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
 
     return <TopicsProvider>
         {props.isModified ?props.icons:null}
@@ -42,8 +42,8 @@ const FlowsWidget = (props: any) => {
             hideBaseComponents={props.hideBaseComponents??false}
             disableSideBar={true}
             disableStart={props.disableStart??false}
-            onShowCode={() => { }}
-            onReload={() => { }}
+            onShowCode={props.onShowCode}
+            onReload={props.onReload}
             // store={uiStore}
             display={true}
             flowId={"flows-editor"}
