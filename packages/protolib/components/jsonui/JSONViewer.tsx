@@ -404,18 +404,12 @@ class JSONViewer extends React.Component {
     let { collapsedNodes } = this.state;
     let { collapsible, marginLeftStep, styles } = this.props;
     return (
-      <span
-        key={getKey(
-          "collapse_and_remove",
-          currentKey,
-          parentKeyPath,
-          marginLeft
-        )}
-        style={{
-          position: "relative",
-          top: '-7px'
-        }}
-      >
+      <XStack top={-6} key={getKey(
+        "collapse_and_remove",
+        currentKey,
+        parentKeyPath,
+        marginLeft
+      )}>
         <CollapseIcon
           collapsedNodes={collapsedNodes}
           marginLeft={marginLeft}
@@ -435,7 +429,7 @@ class JSONViewer extends React.Component {
             marginLeftStep
           )}
         />
-      </span>
+      </XStack>
     );
   }
 

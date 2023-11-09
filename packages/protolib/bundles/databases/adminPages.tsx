@@ -87,6 +87,7 @@ export default {
                     initialItems={content}
                     numColumnsForm={1}
                     name={extraData.name}
+                    pluralName={extraData.name}
                     // hideAdd={true}
                     model={DatabaseEntryModel}
                     pageState={pageState}
