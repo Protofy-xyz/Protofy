@@ -53,7 +53,7 @@ export default class Document extends NextDocument {
       <Html lang="en">
         <Head>
           <link rel="icon" href="/favicon.png" />
-          <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+          {/* <link rel="icon" href="/favicon.svg" type="image/svg+xml" /> */}
 
           <meta name="docsearch:language" content="en" />
           <meta name="docsearch:version" content="1.0.0,latest" />

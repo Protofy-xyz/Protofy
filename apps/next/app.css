@@ -771,18 +771,6 @@ textarea {
   }
 }
 
-.clip-slice {
-  mask-image: url(./public/heart.svg);
-  mask-size: 20% 20%;
-  animation: clip-fade2 90s infinite alternate;
-}
-
-.clip-wave {
-  mask-image: url(./public/takeout/geometric.svg);
-  mask-size: 150% 150%;
-  animation: clip-fade 80s infinite alternate;
-}
-
 .slice-alt {
   mask-size: 30% 30%;
   animation: clip-fade2 30s infinite alternate;
