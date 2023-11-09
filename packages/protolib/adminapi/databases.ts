@@ -14,9 +14,9 @@ export const getDatabases = async () => {
     })
 }
 
-app.get('/adminapi/v1/databases', handler(async (req, res) => {
-    res.send(await getDatabases())
-}));
+// app.get('/adminapi/v1/databases', handler(async (req, res) => {
+//     res.send(await getDatabases())
+// }));
 
 app.get('/adminapi/v1/databases/:dbname', handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
