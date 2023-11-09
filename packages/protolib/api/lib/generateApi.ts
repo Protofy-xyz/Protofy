@@ -23,7 +23,7 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
         if(fs.existsSync(path.join(dir, 'initialData.json'))) {
             initialData = JSON.parse(fs.readFileSync(path.join(dir, 'initialData.json')).toString()).map(x => {
                 try {
-                    console.log('loading: ', x)
+                    //console.log('loading: ', x)
                     const element = modelType.load(x).create()
                     return {
                         key: element.getId(),
@@ -51,7 +51,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //list
     !single && operations.includes('list') && app.get(prefix + entityName, handler(async (req, res, session) => {
-        console.log('session: ', session)
+        //console.log('session: ', session)
         const db = getDB(dbPath, req, session);
         const allResults: any[] = [];
         const itemsPerPage = Math.min(Number(req.query.itemsPerPage) || 10, 100);

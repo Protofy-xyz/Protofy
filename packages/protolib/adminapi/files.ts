@@ -71,7 +71,7 @@ const handleFilesRequest = async (req, res) => {
             // if (contentType) {
             //     res.setHeader('Content-Type', contentType);
             // }
-            console.log('send file: ', filepath, path.resolve(filepath))
+            //console.log('send file: ', filepath, path.resolve(filepath))
             if (isDownload) {
                 // Establece el encabezado para forzar la descarga
                 res.setHeader('Content-Disposition', 'attachment; filename='+name);
