@@ -14,11 +14,10 @@ export type EditableObjectProps = {
     sourceUrl: string,
     onSave: Function,
     model: any,
-    mode: 'add' | 'edit' | 'view' | 'preview',
+    mode?: 'add' | 'edit' | 'view' | 'preview',
     icons?: any,
     extraFields?: any,
     numColumns?: number,
-    initialContent: any,
     objectId?: string,
     title?: any,
     loadingText?: any,
@@ -29,7 +28,9 @@ export type EditableObjectProps = {
     columnWidth?: number,
     disableToggleMode?: boolean,
     columnMargin?: number,
-    onDelete?: Function
+    onDelete?: Function,
+    autoWidth?: Boolean,
+    EditIconNearTitle?: Boolean
 }
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
@@ -285,7 +286,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <Tinted>
                 <Stack f={1} mt="$4">
-                    <Switch checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$2">
+                    <Switch disabled={mode != 'add' && mode != 'edit'} checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$2">
                         <Switch.Thumb animation="quick" />
                     </Switch>
                     {/* <SimpleSlider onValueChange={v => setFormData(ele.name, v)} value={[getFormData(ele.name) ?? min.value]} width={190} min={min.value} max={max.value} /> */}
@@ -332,7 +333,7 @@ const GridElement = ({ index, data, width }) => {
     </XStack>
 }
 
-export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields, numColumns = 1, objectId, onDelete = () => { }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ EditIconNearTitle=false, autoWidth=false, columnMargin = 30, columnWidth = 350, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields={}, numColumns = 1, objectId, onDelete = () => { }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [prevCurrentMode, setPrevCurrentMode] = useState('')
@@ -366,9 +367,8 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
 
     const getGroups = () => {
         const elementObj = model.load(data)
-
         const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
-        const formFields = elementObj.getObjectSchema().is('display').merge(extraFieldsObject).getLayout(1)
+        const formFields = elementObj.getObjectSchema().isDisplay(currentMode).merge(extraFieldsObject).getLayout(1)
         const groups = {}
         formFields.forEach((row, x) => row.forEach((ele, i) => {
             const icon = icons[ele.name] ? icons[ele.name] : (currentMode == 'edit' || currentMode == 'add' ? Pencil : Tag)
@@ -393,9 +393,10 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
         }))
         return groups
     }
-    const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode])
 
-    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} mt={i ? "$0" : "$0"} width={columnWidth * (numColumns) + columnMargin} f={1}>
+    const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode, mode])
+
+    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} mt={i ? "$0" : "$0"} width={autoWidth?'100%':columnWidth * (numColumns) + columnMargin} f={1}>
         <YStack f={1}>
             <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
         </YStack>
@@ -406,7 +407,7 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
 
     const { tint } = useTint()
 
-    return <Stack {...props}>
+    return <Stack width="100%" {...props}>
         <AlertDialog
             showCancel={true}
             acceptCaption="Discard"
@@ -427,8 +428,8 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
         </AlertDialog>
         <AsyncView forceLoad={currentMode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={originalData}>
             <YStack width="100%">
-                <XStack>
-                    <XStack f={1}>
+                <XStack ai="center">
+                    <XStack f={EditIconNearTitle?0:1} mr={"$5"}>
                         {title ?? <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>}
                     </XStack>
                     {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
@@ -440,7 +441,7 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
                         }
                     }} cursor="pointer">
                         <Tinted>
-                            {currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" /> : null)}
+                            <Stack>{currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" /> : null)}</Stack>
                         </Tinted>
                     </XStack>}
                 </XStack>
@@ -460,6 +461,9 @@ export const EditableObject = ({ columnMargin = 30, columnWidth = 350, disableTo
                                 setLoading(true)
                                 try {
                                     await onSave(originalData.data, data)
+                                    if(prevCurrentMode != currentMode) {
+                                        setCurrentMode(prevCurrentMode as any)
+                                    }
                                 } catch (e) {
                                     setError(e)
                                     console.log('e: ', e)

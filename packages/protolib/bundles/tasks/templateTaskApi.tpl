@@ -1,7 +1,7 @@
 import {Protofy} from 'protolib/base'
 import {ZodObject, z} from 'zod'
 import {handler} from 'protolib/api'
-import {runTask} from 'protolib/bundles/tasks/api/taskApi'
+import {runTask} from 'protolib/bundles/tasks/api/taskRunApi'
 
 export const {{capitalizedName}}TaskApi = (app) => {
     app.get(Protofy("apiRoute", "{{apiRoute}}"), handler(async (req:any, res:any, session) => {

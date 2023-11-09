@@ -19,7 +19,7 @@ export const TaskSchema = z.object(Protofy("schema", {
             z.literal("object"),
             z.literal("any")
         ]),
-    })).display().generate(()=>{return{}}),
+    })).display(["edit"]).generate(()=>{return{}}),
     numExecutions: z.number().generate(() => 0)
 }))
 

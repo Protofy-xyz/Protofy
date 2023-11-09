@@ -10,8 +10,9 @@ const AsyncView = React.forwardRef(({ forceLoad, waitForLoading=0, spinnerSize, 
     useTimeout(() => setLoadingVisible(true), waitForLoading)
     
     if(forceLoad) return children
+    
     if (atom?.isError) {
-        return error ? error : <ErrorMessage details={atom.error} />
+        return error ? error : <ErrorMessage details={atom.error?.result??atom.error} />
     }
 
     if (!atom?.isLoaded) {
