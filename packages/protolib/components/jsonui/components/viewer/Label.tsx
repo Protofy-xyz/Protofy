@@ -172,6 +172,8 @@ const Label = (props) => {
               props.onChange('delete', [...props.parents, props.currentKey])
           }} />&nbsp;</Stack> : null}
           <Text
+            fontStyle={value || editing ? "normal": "italic"}
+            opacity={value || editing?1:0.5}
             borderRadius={isTextNode ? "$3" : 0}
             padding={isTextNode ? "$1" : 0}
             paddingHorizontal={"$2"}
@@ -185,7 +187,7 @@ const Label = (props) => {
               } : {})
             }}
             {...style}>
-            {value || editing ? value : <i style={{ opacity: 0.5 }}>{type == 'property' ? 'property' : 'value'}</i>}
+            {value || editing ? value : (type == 'property' ? 'property' : 'value')}
           </Text>
 
         </XStack>
