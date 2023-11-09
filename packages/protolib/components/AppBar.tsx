@@ -24,6 +24,8 @@ export type AppBarProps = {
 
 export const AppBar = React.forwardRef(({ backgroundColor = "$background", containerProps = {}, height = undefined, fullscreen = false, translucid = true, dettached = true, position = 'top', ...props }: AppBarProps, ref: any) => {
   const [isScrolled, setIsScrolled] = React.useState(false)
+  const headerContainerRef = React.useRef(null)
+
   if (isClient) {
     React.useEffect(() => {
       const onScroll = () => {
@@ -35,6 +37,25 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
       }
     }, [])
   }
+  const [_, forceUpdate] = React.useState<any>(false) //TODO: create generic function for fixed
+  React.useEffect(() => {
+    const pageElem = document.getElementById('protolib-page-container')
+    const resizeHandler = () => {
+      headerContainerRef.current = pageElem.offsetWidth
+      forceUpdate(s => !s)
+    };
+    if (pageElem) {
+      const resizeObserver = new ResizeObserver(resizeHandler);
+      resizeObserver.observe(pageElem);
+
+      return () => {
+        resizeObserver.unobserve(pageElem);
+        resizeObserver.disconnect();
+      };
+    }
+  }, []);
+ 
+
 
   const getContent = () => (<ThemeTint>
     <XStack
@@ -56,6 +77,7 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
     <>
       <XStack
         // @ts-ignore
+        ref={headerContainerRef}
         pos="fixed"
         top={position == 'top' ? 0 : undefined}
         bottom={position == 'bottom' ? 0 : undefined}
@@ -64,12 +86,13 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
         alignItems="center"
         justifyContent="center"
         zi={50000}
-        // backgroundColor={dettached?'transparent':'$background'}
-        $gtSm={{
-          //@ts-ignore
-          px: dettached ? '$4' : '$0',
-        }}
-        {...containerProps}
+        width={headerContainerRef.current ?? "100%"}
+      // backgroundColor={dettached?'transparent':'$background'}
+      // $gtSm={{
+      //   //@ts-ignore
+      //   px: dettached ? '$4' : '$0',
+      // }}
+      // {...containerProps}
       >
         {/*@ts-ignore*/}
         <XStack width="100%" maw={dettached ? 1120 : undefined} pos="relative">
