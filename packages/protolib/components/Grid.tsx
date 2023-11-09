@@ -22,7 +22,8 @@ export type GridProps = {
   spacing?:number,
   masonry?:boolean,
   containerRef?: any,
-  rightGap?: number
+  rightGap?: number,
+  overScanBy?:number
 }
 
 const defaultSize = {width: 0, height: 0}
@@ -107,7 +108,7 @@ export const useScroller = <T extends HTMLElement = HTMLElement>(
 }
 
 
-export const Grid = React.forwardRef(({masonry=true, containerRef, rightGap=0, spacing, children, data, card, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {  
+export const Grid = React.forwardRef(({overScanBy=5,masonry=true, containerRef, rightGap=0, spacing, children, data, card, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {  
   if (isWeb && data && card) {
     if(masonry && containerRef) {
       const container = {current: containerRef.current?.container? containerRef?.current?.container.firstChild: containerRef.current}
@@ -125,7 +126,7 @@ export const Grid = React.forwardRef(({masonry=true, containerRef, rightGap=0, s
             isScrolling,
             height:height,
             items: data,
-            overscanBy: 3,
+            overscanBy: overScanBy,
             resizeObserver,
             render: card
           }

@@ -52,7 +52,7 @@ const GridElementCard = ({ index, data, width }) => {
     </ItemCard>
 }
 
-export const ObjectGrid = ({ gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, spacing = 20, getPicture, getBody,getCard, model, items, sourceUrl, customFields, onDelete, extraFields, icons, children, ...props }: any & StackProps) => {
+export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, spacing = 20, getPicture, getBody,getCard, model, items, sourceUrl, customFields, onDelete, extraFields, icons, children, ...props }: any & StackProps) => {
     const containerRef = useRef(null)
     const data = items.map((element, i) => {
         return {
@@ -77,7 +77,7 @@ export const ObjectGrid = ({ gridElementCard = undefined, itemMinWidth = 400, it
 
     return <Stack height={1} f={1} {...props}>
         <Scrollbars universal={true} ref={containerRef}>
-            <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth} />
+            <Grid overScanBy={overScanBy} key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth} />
         </Scrollbars>
         {children}
     </Stack>

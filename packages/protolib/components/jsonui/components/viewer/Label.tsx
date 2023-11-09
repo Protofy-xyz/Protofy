@@ -192,8 +192,7 @@ const Label = (props) => {
     }
   }
   return (
-    <>
-      <XStack height={"$2"}>
+      <XStack height={22}>
         {editable && props.single && isTextNode ? <Stack width="min-content" marginLeft={marginLeft * 11}>
           <DeleteButton onPress={() => {
             props.onChange('delete', [...props.parents, props.currentKey], '', 'array')
@@ -203,7 +202,6 @@ const Label = (props) => {
         <Stack>{getComponent()}</Stack>
         {editing && editable ? getInput() : null}
       </XStack>
-    </>
   );
 };
 

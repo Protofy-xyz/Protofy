@@ -96,6 +96,7 @@ export default {
                     defaultView="grid"
                     dataTableGridProps={{
                         itemMinWidth: 500,
+                        overScanBy: 1,
                         getCard: (data, width) => {
                             const { _key, ...element } = data
                             return <YStack px={"$3"} pb="$4" f={1}>
