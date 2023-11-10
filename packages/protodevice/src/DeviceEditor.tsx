@@ -4,17 +4,17 @@ import { sleep } from "./sleep";
 import { Build, FlashError } from "./const";
 import { manifest } from "./manifest";
 import ApiCaller from './oldThings/apiCaller';
-import Settings from './oldThings/settings';
-import useWebSocket from 'react-use-websocket';
+// import Settings from './oldThings/settings';
+// import useWebSocket from 'react-use-websocket';
 import { FlowFactory } from 'protoflow';
-import { useFetch } from 'usehooks-ts'
+// import { useFetch } from 'usehooks-ts'
 import deviceFunctions from './device'
 import DeviceModal from "./DeviceModal";
 import customComponents from "./nodes"
-import { useDeviceStore } from "./oldThings/DeviceStore";
+// import { useDeviceStore } from "./oldThings/DeviceStore";
 // import DeviceSelector from "./DeviceSelector";
 import { withTopics } from "react-topics";
-import { useFlowsStore } from 'protoflow';
+// import { useFlowsStore } from 'protoflow';
 import { Spinner, XStack } from 'tamagui'
 import dynamic from 'next/dynamic'
 import { useThemeSetting } from '@tamagui/next-theme'
@@ -29,8 +29,8 @@ import { Connector, useMqttState, useSubscription  } from 'mqtt-react-hooks';
 
 // const compilerAPIParams = new ExternalApiConfig({url})
 
-const Flow = FlowFactory('device')
-const deviceStore = useFlowsStore()
+// const Flow = FlowFactory('device')
+// const deviceStore = useFlowsStore()
 const MqttStatus = ({})=> {
   /*
    * Status list
