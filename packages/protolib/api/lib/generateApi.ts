@@ -105,7 +105,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 payload: {
                     who: '-', //TODO: wire session in dataview to api,
                     id: entityModel.getId(),
-                    data: JSON.stringify(entityModel.read())
+                    data: entityModel.read()
                 } // event payload, event-specific data
             })
         }
@@ -158,7 +158,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 payload: {
                     who: '-', //TODO: wire session in dataview to api,
                     id: entityModel.getId(),
-                    data: JSON.stringify(entityModel.read())
+                    data: entityModel.read()
                 } // event payload, event-specific data
             })
         }
@@ -178,7 +178,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 payload: {
                     who: '-', //TODO: wire session in dataview to api,
                     id: entityModel.getId(),
-                    data: JSON.stringify(entityModel.read())
+                    data: entityModel.read()
                 } // event payload, event-specific data
             })
         }
