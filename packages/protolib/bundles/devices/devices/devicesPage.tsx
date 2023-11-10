@@ -9,14 +9,14 @@ const DevicesIcons = { name: Tag, deviceDefinition: BookOpen }
 
 export default {
   component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
-    return (<AdminPage title="Device Boards" workspace={workspace} pageSession={pageSession}>
+    return (<AdminPage title="Devices" workspace={workspace} pageSession={pageSession}>
       <DataView
         itemData={itemData}
         rowIcon={Router}
         sourceUrl={sourceUrl}
         initialItems={initialItems}
         numColumnsForm={1}
-        name="board"
+        name="device"
         onAdd={data => { return data }}
         onEdit={data => { return data }}
         columns={DataTable2.columns(
