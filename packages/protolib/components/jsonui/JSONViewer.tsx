@@ -17,10 +17,11 @@ type JSONViewerProps = {
   marginLeftStep?: number,
   collapsible?: boolean,
   collapsedNodes?: any,
-  styles: any,
-  onChange: any,
-  editable: boolean,
-  compact: boolean
+  styles?: any,
+  onChange?: any,
+  editable?: boolean,
+  compact?: boolean,
+  defaultCollapsed?: boolean
 }
 
 type JSONViewerData = {
@@ -40,7 +41,8 @@ class JSONViewer extends React.Component {
     styles: jsonViewerDefaultStyles, //pass to override styles
     onChange: () => { },
     editable: false,
-    compact: false
+    compact: false,
+    defaultCollapsed: false
   };
 
   constructor(props: JSONViewerProps) {
@@ -48,7 +50,7 @@ class JSONViewer extends React.Component {
     const data = { root: props.data };
     this.state = {
       data: data,
-      collapsedNodes: props.collapsedNodes,
+      collapsedNodes: props.defaultCollapsed? {0:{root: true}} : props.collapsedNodes,
     };
   }
 

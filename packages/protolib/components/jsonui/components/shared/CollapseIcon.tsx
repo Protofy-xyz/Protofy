@@ -7,7 +7,7 @@ const CollapseIcon = (props) => {
     if (!collapsible) return null;
     return  (
         <Stack cursor="pointer" onPress={toggleNodeCollapsed} top={6.45} hoverStyle={{opacity: 0.8}} opacity={0.1} display="inline">
-            {isNodeCollapsed() ? (
+            {isNodeCollapsed(undefined, undefined, undefined) ? (
                 <Stack top={3} display="inline">
                     <MoreHorizontal size={"$1"} color={"var(--color)"} />
                 </Stack>
@@ -30,6 +30,7 @@ function toggleNodeCollapsed(marginLeft, key, marginLeftStep) {
     //keys[key] = false ?
     else keys[key] = true;
     collapsedNodes[level] = keys;
+    console.log('collapsed: ', collapsedNodes)
     //@ts-node
     //@ts-ignore
     this.setState({ collapsedNodes });
@@ -40,7 +41,7 @@ function isNodeCollapsed(marginLeft, key, marginLeftStep) {
     //@ts-ignore
     let { collapsedNodes } = this.state;
     let level = marginLeft / marginLeftStep;
-    if (!collapsedNodes[level]) return false;
+    if (!collapsedNodes[level]) false;
     return collapsedNodes[level][key];
 }
 
