@@ -1,4 +1,4 @@
-import { HomeScreen } from 'app/features/home'
+import nextPages from 'app/bundles/nextPages'
 import Head from 'next/head'
 import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
@@ -11,9 +11,9 @@ export default function Page(props:any) {
       <Head>
         <title>Protofy</title>
       </Head>
-      <HomeScreen {...props} />
+      {nextPages["/"].component()}
     </>
   )
 }
 
-export const getServerSideProps = SSR(async (context:NextPageContext) => withSession(context))
+export const getServerSideProps = nextPages["/"].getServerSideProps

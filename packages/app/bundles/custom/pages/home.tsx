@@ -2,7 +2,11 @@ import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "tamagui"
 import { TintSection, ContainerLarge, AnounceBubble, BigTitle, LinkGroup, LinkGroupItem, CopyBubble, XCenterStack, NextLink, TooltipContainer, TwitterIcon, MainButton, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, ActiveGroup, ButtonGroup, ActiveGroupButton, ActiveRender, SideBySide, TabGroup, IconStack, BackgroundGradient, ItemCard, SectionBox, ElevatedArea, BarChart, GridElement, RainbowText, OverlayCardBasic, FeatureItem, DataTable, TamaCard, Notice, PageGlow, withSession, useSession, Page, Grid, ThemeTint, useEdit, Head1, Head2, } from "protolib"
 import { ChevronRight, Code, Cpu, FastForward, Layers, Star, } from "@tamagui/lucide-icons"
 import Link from "next/link"
-import { DefaultLayout, } from "../layout/DefaultLayout"
+import { DefaultLayout, } from "../../../layout/DefaultLayout"
+import { Protofy } from 'protolib/base'
+import { SSR } from 'app/conf'
+
+const isProtected = Protofy("protected", false)
 
 const Home = () => {
 	return (
@@ -331,12 +335,17 @@ const Home = () => {
 			</DefaultLayout>
 		</Page>)
 }
-export const HomeScreen = () => useEdit(Home, {
-	DefaultLayout,
-	YStack,
-	Spacer,
-	Text,
-	XStack,
-	Paragraph,
-	Theme
-}, "/packages/app/features/home.tsx")
+
+export default {
+    route: Protofy("route", "/"),
+    component: () => useEdit(Home, {
+		DefaultLayout,
+		YStack,
+		Spacer,
+		Text,
+		XStack,
+		Paragraph,
+		Theme
+	}, "/packages/app/bundles/custom/pages/home.tsx"),
+    getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", []):undefined))
+}
