@@ -20,6 +20,14 @@ import dynamic from 'next/dynamic'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { Connector, useMqttState, useSubscription  } from 'mqtt-react-hooks';
 
+// class ExternalApiConfig {
+//   config;
+//   constructor(config) {
+//     this.config = config
+//   }
+// }
+
+// const compilerAPIParams = new ExternalApiConfig({url})
 
 const Flow = FlowFactory('device')
 const deviceStore = useFlowsStore()
@@ -116,16 +124,16 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
   const topicData = topics;
   const p = {"config":"[\n  \"mydevice\",\n  \"esp32dev\",\n  \"POROTOVICE\",\n  \"********\",\n  \"none\",\n  \"51.68.45.86\",\n  false,\n  \"10\",\n  \"10\",\n  34,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n"}
   const [sourceCode, setSourceCode] = useState(p.config)
-  const currentDevice = useDeviceStore(state => state.electronicDevice);
-  const setCurrentDevice = useDeviceStore(state => state.setElectronicDevice);
+  // const currentDevice = useDeviceStore(state => state.electronicDevice);
+  // const setCurrentDevice = useDeviceStore(state => state.setElectronicDevice);
   // console.log('currentDevice: ', currentDevice)
   // console.log('sourceCode: ', sourceCode)
   // const [positions, setPositions] = useState();
-  const devicesList = useDeviceStore(state => state.devicesList)
-  const setDevicesList = useDeviceStore(state => state.setDevicesList)
+  // const devicesList = useDeviceStore(state => state.devicesList)
+  // const setDevicesList = useDeviceStore(state => state.setDevicesList)
   const [showModal, setShowModal] = useState(false)
   const [stage, setStage] = useState('')
-  const [configError, setConfigError] = useState<string>()
+  //const [configError, setConfigError] = useState<string>()
   const [modalFeedback, setModalFeedback] = useState<any>()
   const yamlRef = useRef()
 
@@ -135,23 +143,22 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
       port = await navigator.serial.requestPort();
     } catch (err: any) {
       if ((err as DOMException).name === "NotFoundError") {
-        setConfigError(state => ('Please select a port.'))
+        //setConfigError(state => ('Please select a port.'))
         return isError;
       }
-      setConfigError(state => ('Error configuring port.'))
+      //setConfigError(state => ('Error configuring port.'))
       return isError;
     }
 
     if (!port) {
-      setConfigError(state => ('Error trying to request port. Please check your browser drivers.'))
+      //setConfigError(state => ('Error trying to request port. Please check your browser drivers.'))
       return isError;
     }
     try {
       await port.open({ baudRate: 115200 });
-      setConfigError('') // Clear error
-      // console.log("opened port");
+      //setConfigError('') 
     } catch (err: any) {
-      setConfigError(state => ('Error can not open serial port.'))
+      //setConfigError(state => ('Error can not open serial port.'))
       return isError;
     }
   }
@@ -206,7 +213,7 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
     const filePromises = build.parts.map(async (part) => {
 
       // const url = "http://bo-firmware.protofy.xyz/api/v1" + "/electronics/download.bin?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
-
+      const onlineCompilerUrl = "http://bo-firmware.protofy.xyz/api/v1";
       const url = "http://bo-firmware.protofy.xyz/api/v1" + "/device/download?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
       
       const resp = await fetch(url);
@@ -377,10 +384,10 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
     return newDeviceCode
   }
 
-  const onSave = async (code, positions) => {
+  const onSave = async (code) => {
     const apiCaller = new ApiCaller()
     try {
-      await apiCaller.call(`/v1/device/${currentDevice}/config`, 'POST', { code: code, positions: positions })
+      // await apiCaller.call(`/v1/device/${currentDevice}/config`, 'POST', { code: code })
       const deviceCode = 'device(' + code.slice(0, -2) + ')';
       // console.log('save code in device: ', deviceCode);
 
@@ -388,13 +395,13 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
       const yaml = deviceObj.setMqttPrefix(process.env.NEXT_PUBLIC_PROJECT_NAME).create(deviceDefinition)
 
       const modifiedCode = checkWifiPowerMode(code, deviceObj.wifiPowerMode)
-      console.log('modifiedCOde', modifiedCode, code)
+      console.log('modifiedCode', modifiedCode, code)
 
       yamlRef.current = yaml
       console.log('yaml generated: ', yaml)
 
-      await apiCaller.call(`/v1/device/${currentDevice}/config`, 'POST', { code: modifiedCode, positions: positions })
-      await apiCaller.call(`/v1/device/${currentDevice}/yaml`, 'POST', { code: yaml, positions: positions })
+      // await apiCaller.call(`/v1/device/${currentDevice}/config`, 'POST', { code: modifiedCode})
+      // await apiCaller.call(`/v1/device/${currentDevice}/yaml`, 'POST', { code: yaml})
       // readDevices()
     } catch (e) { console.error(e) }
   }
@@ -420,28 +427,28 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
     setStage('write')
   }
 
-  const onCreateDevice = async (newDeviceName: string) => {
-    const isValidDevice = () => !(Object.keys(devicesList).map(d => d.lastIndexOf('.') || d).includes(newDeviceName) || !newDeviceName || newDeviceName.includes(' ') || newDeviceName.includes('.'))
-    if (isValidDevice()) {
-      try {
-        const apiCaller = new ApiCaller()
-        await apiCaller.call(`/v1/device/${newDeviceName}/add`, 'GET') // adds new device
-        // await readDevices()
-      } catch (e) { console.error(`Error creating device page. Error: ${e}`) }
-    }
-  }
+  // const onCreateDevice = async (newDeviceName: string) => {
+  //   const isValidDevice = () => !(Object.keys(devicesList).map(d => d.lastIndexOf('.') || d).includes(newDeviceName) || !newDeviceName || newDeviceName.includes(' ') || newDeviceName.includes('.'))
+  //   if (isValidDevice()) {
+  //     try {
+  //       const apiCaller = new ApiCaller()
+  //       await apiCaller.call(`/v1/device/${newDeviceName}/add`, 'GET') // adds new device
+  //       // await readDevices()
+  //     } catch (e) { console.error(`Error creating device page. Error: ${e}`) }
+  //   }
+  // }
 
-  const onSelectDevice = async (device: string) => {
-    try {
-      // const apiCaller = new ApiCaller()
-      // const newContent = await apiCaller.call(`/v1/device/${device}/config`, 'GET') // gets device content
-      // if (!newContent) return
-      // setSourceCode(newContent.config)
-      setCurrentDevice(device)
-    } catch (e) {
-      console.error(`Error getting device source code. Error: ${e}`)
-    }
-  }
+  // const onSelectDevice = async (device: string) => {
+  //   try {
+  //     // const apiCaller = new ApiCaller()
+  //     // const newContent = await apiCaller.call(`/v1/device/${device}/config`, 'GET') // gets device content
+  //     // if (!newContent) return
+  //     // setSourceCode(newContent.config)
+  //     setCurrentDevice(device)
+  //   } catch (e) {
+  //     console.error(`Error getting device source code. Error: ${e}`)
+  //   }
+  // }
 
 
 
@@ -534,18 +541,19 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
                     // isModified={isModified}
                     // setIsModified={setIsModified}
                     onPlay={onPlay}
-                    onSave={(o)=>{console.log("ON SAVE: ",o)}}
+                    onSave={(o)=>{console.log("ON SAVE: ",o); console.log("sourceCode ", sourceCode)}}
                     hideBaseComponents={true}
                     disableStart={true}
                     getFirstNode={(nodes) => {
                           return nodes.find(n => n.type == 'ArrayLiteralExpression')
                     }}
-                    showActionsBar={true}
+                    showActionsBar={true}     
                     mode={"device"}
                     bridgeNode={false}
-                    setSourceCode={(sourceCode) => {
-                        console.log('set new sourcecode from flows: ', sourceCode)
-                    }} 
+                    // setSourceCode={(sourceCode) => {
+                    //     console.log('set new sourcecode from flows: ', sourceCode)
+                    //     setSourceCode(sourceCode)
+                    // }} 
                     sourceCode={sourceCode} themeMode={resolvedTheme} />:null}
         {/* <DeviceSelector devicesList={devicesList} currentDevice={currentDevice} onCreateDevice={onCreateDevice} onSelectDevice={onSelectDevice} /> */}
       </div>
