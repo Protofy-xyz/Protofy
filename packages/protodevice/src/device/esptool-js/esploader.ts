@@ -31,7 +31,7 @@ async function magic2Chip(magic: number): Promise<ROM | null> {
   }
 }
 
-export interface IEspLoaderTerminal {
+export type IEspLoaderTerminal = {
   clean: () => void;
   writeLine: (data: string) => void;
   write: (data: string) => void;
