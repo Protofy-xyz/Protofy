@@ -3,6 +3,9 @@ import { Protofy } from 'protolib/base'
 import { Schema, BaseSchema } from 'protolib/base'
 import moment from "moment";
 import { AutoModel } from 'protolib/base'
+import { SessionDataType } from "../../api";
+import { ProtoModel } from "../../base";
+import { DatabaseEntryModel, DatabaseEntrySchema } from "../databases";
 
 export const BaseEventSchema = z.object(Protofy("schema", {
     path: z.string().search().display(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
@@ -18,4 +21,22 @@ export const EventSchema = z.object({
 });
 
 export type EventType = z.infer<typeof EventSchema>;
-export const EventModel = AutoModel.createDerived<EventType>("EventModel", EventSchema);
+export class EventModel extends ProtoModel<EventModel> {
+    constructor(data: EventType, session?: SessionDataType) {
+        super(data, EventSchema, session);
+    }
+
+	list(search?): any {
+        if(search) {
+			if(JSON.stringify(this.data).toLowerCase().includes(search.toLowerCase())) {
+				return this.read()
+			}
+        } else {
+            return this.read();
+        }
+    }
+
+    protected static _newInstance(data: any, session?: SessionDataType): EventModel {
+        return new EventModel(data, session);
+    }
+}
