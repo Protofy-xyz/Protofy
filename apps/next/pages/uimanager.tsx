@@ -4,6 +4,7 @@ import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
 import { API, withSession } from 'protolib'
 import { useEffect, useState } from 'react'
+import {useEffectOnce} from 'usehooks-ts'
 
 export default function VisualUIPage(props: any) {
   // start fetch content from back
@@ -28,9 +29,9 @@ export default function VisualUIPage(props: any) {
     writeFileContent(content)
   }
   
-  useEffect(() => {
+  useEffectOnce(() => {
     getFileContent()
-  }, [])
+  })
 
   useEffect(() => {
     if (res?.status == 'loaded' && res?.data) {
