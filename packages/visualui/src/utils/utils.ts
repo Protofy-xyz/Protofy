@@ -1,5 +1,7 @@
 import { UIFLOWID } from "../components/UIEditor";
 import { Project, IndentationText, ScriptTarget, ScriptKind, LanguageVariant } from "ts-morph";
+import parserTypeScript from "prettier/parser-typescript";
+import prettier from "prettier";
 
 function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -203,3 +205,20 @@ export const getMissingJsxImports = (nodes: any, nodeData: any, resolveComponent
     return result
 }
 export { capitalizeFirstLetter }
+
+export function formatText(unformatedText: string): string {
+	let formatedText: string | undefined;
+	try {
+		formatedText = prettier.format(unformatedText, {
+			bracketSameLine: true,
+			jsxBracketSameLine: true,
+			singleAttributePerLine: false,
+			printWidth: 1000,
+			quoteProps: "consistent",
+			jsxSingleQuote: false,
+			parser: "typescript",
+			plugins: [parserTypeScript]
+		})
+	} catch (e) { console.error('Could not format text. Error: ' + e) }
+	return formatedText ?? unformatedText
+}

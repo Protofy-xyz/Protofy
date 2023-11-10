@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import UIEditor from './components/UIEditor'
 import { TopicsProvider } from "react-topics";
-import { API } from 'protolib'
+import { formatText } from "./utils/utils";
 
 export function visualuiPublisher(target, action, payload) {
 	const source = "visualui"
@@ -62,7 +62,7 @@ export default ({ userPalettes = {}, isVSCode = false, _sourceCode = "", _resolv
 				if (isVSCode) {
 					visualuiPublisher('protofypanel', 'write', { path: currentPage, content }) // Test publish to parent document
 				} else {
-					onSave(content)
+					onSave(formatText(content))
 				}
 				break;
 		}
