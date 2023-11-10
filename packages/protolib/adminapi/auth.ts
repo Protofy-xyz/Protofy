@@ -3,6 +3,7 @@ import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'app/
 import {getInitialData} from 'app/initialData'
 import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app} from 'protolib/api'
 import moment from 'moment';
+import { generateEvent } from "../bundles/events/eventsLibrary";
 
 console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 
@@ -25,11 +26,23 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
             //update lastLogin
             await getDB(dbPath).put(storedUser.username, JSON.stringify({...storedUser, lastLogin: moment().toISOString()}))
             res.send(genNewSession({id:storedUser.username, type: storedUser.type}))
+            generateEvent({
+                path: 'auth/login/success', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                from: 'api', // system entity where the event was generated (next, api, cmd...)
+                user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
+                payload: {} // event payload, event-specific data
+            })
             return
         }
     } catch(e) {
         console.log('ERROR: ',e)
     }
+    generateEvent({
+        path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+        from: 'api', // system entity where the event was generated (next, api, cmd...)
+        user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
+        payload: {} // event payload, event-specific data
+    })
     res.status(500).send('"Incorrect user or password"')
 }));
 
@@ -47,6 +60,12 @@ app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
             from: 'api',
             type: 'user'
         }))
+        generateEvent({
+            path: 'auth/register/user', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+            from: 'api', // system entity where the event was generated (next, api, cmd...)
+            user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
+            payload: {} // event payload, event-specific data
+        })
         res.send(genNewSession({id:request.username, type: "user"}))
     }
 }));
