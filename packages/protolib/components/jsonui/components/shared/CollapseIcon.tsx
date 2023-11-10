@@ -30,7 +30,6 @@ function toggleNodeCollapsed(marginLeft, key, marginLeftStep) {
     //keys[key] = false ?
     else keys[key] = true;
     collapsedNodes[level] = keys;
-    console.log('collapsed: ', collapsedNodes)
     //@ts-node
     //@ts-ignore
     this.setState({ collapsedNodes });
@@ -41,7 +40,7 @@ function isNodeCollapsed(marginLeft, key, marginLeftStep) {
     //@ts-ignore
     let { collapsedNodes } = this.state;
     let level = marginLeft / marginLeftStep;
-    if (!collapsedNodes[level]) false;
+    if (!collapsedNodes || !collapsedNodes[level]) return false;
     return collapsedNodes[level][key];
 }
 
