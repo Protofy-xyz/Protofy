@@ -30,7 +30,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
                 path: 'auth/login/success', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
-                payload: {} // event payload, event-specific data
+                payload: {clientIp: req.get('X-Client-IP') || req.headers['x-client-ip']} // event payload, event-specific data
             })
             return
         }
@@ -41,7 +41,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
         path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
         from: 'api', // system entity where the event was generated (next, api, cmd...)
         user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
-        payload: {} // event payload, event-specific data
+        payload: {clientIp: req.get('X-Client-IP') || req.headers['x-client-ip']} // event payload, event-specific data
     })
     res.status(500).send('"Incorrect user or password"')
 }));

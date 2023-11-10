@@ -27,7 +27,7 @@ export default {
                         DataTable2.column("user", "user", true, undefined, true, '200px'),
                         DataTable2.column("from", "from", true, (row) => <Chip text={row.from} color={'$gray5'} />, true),
                         DataTable2.column("created", "created", true, (row) => moment(row.created).format(format), true, '200px'),
-                        DataTable2.column("payload", "payload", false, (row) => Object.keys(row?.payload??[]).length?Object.keys(row.payload).map((k,i) => <Tooltip trigger={<Chip ml={i?'$2':'$0'} key={k} text={k} color={'$color5'} />}>{row.payload[k]}</Tooltip>):<Chip text='empty' color={'$gray5'} />, true, '200px'),
+                        DataTable2.column("payload", "payload", false, (row) => Object.keys(row?.payload??[]).length?Object.keys(row.payload).map((k,i) => <Tooltip trigger={<Chip ml={i?'$2':'$0'} key={k} text={k} color={'$color5'} />}>{JSON.stringify(row.payload[k])}</Tooltip>):<Chip text='empty' color={'$gray5'} />, true, '200px'),
                         DataTable2.column("inspect", "payload", false, (row) => <JSONViewer
                             onChange={() => {}}
                             editable={false}
