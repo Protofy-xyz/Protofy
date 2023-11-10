@@ -9,6 +9,7 @@ interface ZodExtensions {
     after(field: string): this;
     dependsOn(field: string): this;
     generateOptions(call: Function): this; 
+    choices(fields: string[]): this; 
     secret(): this;
     static(): this;
     id(): this;

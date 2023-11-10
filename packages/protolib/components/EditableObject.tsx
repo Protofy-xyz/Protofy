@@ -8,6 +8,7 @@ import { Schema } from "../base";
 import { useUpdateEffect } from "usehooks-ts";
 import { useTint } from 'protolib'
 import { ItemMenu } from "./ItemMenu";
+import { MultiSelectList } from "./MultiSelectList";
 
 export type EditableObjectProps = {
     initialData?: any,
@@ -227,29 +228,37 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     }
 
     if (elementType == 'ZodUnion' && mode != 'preview') {
-        let options = []
-        let _rawOptions = []
+        // default values
+        let options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
+        let _rawOptions = elementDef.options.map(o => o._def.value)
+        let Renderer = () => <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+        
+        // ---- MODIFIERS ---- 
+        // generateOptions
         if (ele._def.dependsOn && data[ele._def.dependsOn] && (typeof ele._def.generateOptions === 'function')) {
           options = ele._def.generateOptions(data)
           _rawOptions = options
-        } else {
-          _rawOptions = elementDef.options.map(o => o._def.value)
-          options = elementDef.displayOptions ? elementDef.displayOptions : elementDef.options.map(o => o._def.value)
-        }  
+        } 
+        // choices
+        if (ele._def.choices) { 
+          options = ele._def.choices
+          _rawOptions = options
+          Renderer = () => (<MultiSelectList choices={ele._def.choices}/>)
+        } 
 
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-            {
-              ele._def.dependsOn 
-                ? data[ele._def.dependsOn] 
-                  ? <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
-                  : <Input
-                      focusStyle={{ outlineWidth: 1 }}
-                      disabled={true}
-                      placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + ele._def.dependsOn + ' property first' }
-                      bc="$backgroundTransparent"
-                    ></Input> 
-                : <SelectList f={1} title={ele.name} elements={options} value={options[elementDef.options.findIndex(o => o._def.value == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
-            }
+          {
+            ele._def.dependsOn 
+              ? data[ele._def.dependsOn] 
+                ? <Renderer/>
+                : <Input
+                    focusStyle={{ outlineWidth: 1 }}
+                    disabled={true}
+                    placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + ele._def.dependsOn + ' property first' }
+                    bc="$backgroundTransparent"
+                  ></Input> 
+              : <Renderer/> 
+          }
         </FormElement>
     } else if (elementType == 'ZodNumber' && mode != 'preview') {
         if (elementDef.checks) {
