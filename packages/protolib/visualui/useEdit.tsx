@@ -2,23 +2,18 @@ import { useState, useEffect } from 'react'
 import { API, Tinted } from 'protolib'
 import { Pencil } from '@tamagui/lucide-icons'
 import { Button } from 'tamagui'
-import { useSearchParams } from 'next/navigation'
 import { useRouter } from "next/router"
 import dynamic from 'next/dynamic';
 import protolibPalette from './index'
 import { Session } from 'protolib'
 import { useAtom } from 'jotai'
+import {useIsEditing} from './useIsEditing'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
-export const useIsEditing = ()=> {
-  const searchParams = useSearchParams()
-  const edit = searchParams.get('_visualui_edit_')
-  return edit
-}
+
 
 export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx") => {
-
   const router = useRouter()
   const [session] = useAtom(Session)
   const edit = useIsEditing()
