@@ -1,4 +1,4 @@
-{
+export default {
     "resources": [
         {
             "type": "template",
