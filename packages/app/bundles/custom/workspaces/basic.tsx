@@ -1,4 +1,4 @@
-import { Cog } from '@tamagui/lucide-icons'
+import { Cog, Send } from '@tamagui/lucide-icons'
 
 export default {
     "resources": [
@@ -14,12 +14,13 @@ export default {
         "System": [
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
-            { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
-            { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
             { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },
             { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
+            { "name": "Messages", "icon": Send, "type": "messages", "path": "/"},
+            { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
+            { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" },
-            { "name": "Files", "icon": "folder", "type": "files", "path": "/" },
+            { "name": "Files", "icon": "folder", "type": "files", "path": "/" },    
             { "name": "Databases", "icon": "database", "type": "databases", "path": "/"}
         ],
         "Devices":[
