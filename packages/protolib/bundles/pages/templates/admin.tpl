@@ -9,8 +9,8 @@ const {name, prefix} = Objects.{{_object}}.getApiOptions()
 
 export default {
     route: Protofy("route", "{{route}}"),
-    component: ({workspace, pageState, sourceUrl, initialItems, pageSession, extraData}:any) => {
-        return (<AdminPage title="{{object}}" workspace={workspace} pageSession={pageSession}>
+    component: ({pageState, sourceUrl, initialItems, pageSession, extraData}:any) => {
+        return (<AdminPage title="{{object}}" pageSession={pageSession}>
             <DataView
                 sourceUrl={sourceUrl}
                 initialItems={initialItems}
