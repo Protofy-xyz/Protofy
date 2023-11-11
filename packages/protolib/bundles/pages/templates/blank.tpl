@@ -8,7 +8,7 @@ const isProtected = Protofy("protected", {{protected}})
 
 const PageComponent = () => {
     return (
-        <Page height={'100vh'}>
+        <Page height="99vh">
 
         </Page>)
 }

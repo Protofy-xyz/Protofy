@@ -8,17 +8,14 @@ const isProtected = Protofy("protected", {{protected}})
 
 const PageComponent = () => {
     return (
-        <Page height={'100vh'}>
-            <DefaultLayout title="Protofy" description="Made with love from Barcelona" >
-                <Center f={1}>
-                    < PageGlow />
-                    <BigTitle >
-                        {{name}}
-                    </BigTitle>
-                </Center>
-
-            </DefaultLayout>
-        </Page>)
+    <Page height="99vh">
+        <DefaultLayout title="Protofy" description="Made with love from Barcelona">
+            <YStack mt="$10">
+            <BigTitle>{{name}}</BigTitle>
+            </YStack>
+        </DefaultLayout>
+    </Page>
+    )
 }
 
 export default {
