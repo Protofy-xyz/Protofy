@@ -27,7 +27,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
     const onEdit = () => {
       router.push({
         pathname: router.pathname,
-        query: { _visualui_edit_: 'page' }
+        query: { ...router.query, _visualui_edit_: 'page' }
       })
     }
     return <div style={{ flex: 1, display: 'flex' }}>

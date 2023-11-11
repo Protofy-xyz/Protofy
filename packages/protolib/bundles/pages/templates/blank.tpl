@@ -1,17 +1,28 @@
-import {Page, Center, BigTitle, withSession} from 'protolib'
-import { DefaultLayout } from 'app/layout/DefaultLayout'
+import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "@my/ui"
+import { BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText } from "protolib"
+import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 import { SSR } from 'app/conf'
 
-Protofy("template", "default")
 const isProtected = Protofy("protected", {{protected}})
+
+const PageComponent = () => {
+    return (
+        <Page height={'100vh'}>
+
+        </Page>)
+}
 
 export default {
     route: Protofy("route", "{{route}}"),
-    component: ({}:any) => {
-        return <Page>
-
-        </Page>
-    },
+    component: () => useEdit(PageComponent, {
+        DefaultLayout,
+        YStack,
+        Spacer,
+        Text,
+        XStack,
+        Paragraph,
+        Theme
+    }, "/packages/app/bundles/custom/pages/{{name}}.tsx"),
     getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{permissions}}):undefined))
 }

@@ -7,7 +7,13 @@ const paramsSchema = z.object(Protofy("params", {{params}}
 
 export type paramsType = z.infer<typeof paramsSchema>;
 
+const do_task = async (params) => {
+    return {
+
+    }
+}
+
 export default (params:paramsType) => {
     paramsSchema.parse(params)
-    return {}
+    return await do_task(params)
 }
