@@ -4,6 +4,8 @@ import { PageModel } from '.'
 import {DataView} from 'protolib'
 import { DataTable2, Chip, API } from 'protolib'
 import {z} from 'zod'
+import { Stack, XStack } from '@my/ui'
+import { ExternalLink } from '@tamagui/lucide-icons'
 
 const PageIcons =  {}
 
@@ -17,6 +19,16 @@ export default {
                     numColumnsForm={1}
                     name="page"
                     columns={DataTable2.columns(
+                        DataTable2.column("", "lol", true,(row) => <a href={row.route} target='_blank'><XStack cursor="pointer" onPress={(e) => {e.stopPropagation()}}>
+                        <Stack 
+                            o={0.5}
+                            br={"$5"} p={"$2"}
+                            als="flex-start" cursor='pointer'
+                            pressStyle={{ o: 0.7 }}
+                            hoverStyle={{ o: 1, bc: "$color5" }}>
+                            <ExternalLink size={18} color={'var(--color9)'} strokeWidth={2}></ExternalLink>
+                        </Stack>
+                    </XStack></a>, true, '50px'),
                         DataTable2.column("name", "name", true),
                         DataTable2.column("route", "route", true),
                         DataTable2.column("visibility", "protected", true, row => !row.protected ? <Chip text={'public'} color={'$color5'} />: <Chip text={'protected'} color={'$gray5'} />),
