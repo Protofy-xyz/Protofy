@@ -2,6 +2,7 @@ import { UserModel } from 'protolib/bundles/users/usersSchemas'
 import { GroupModel } from 'protolib/bundles/groups/groupsSchemas'
 import { EventModel } from 'protolib/bundles/events/eventsSchemas'
 import { ObjectModel } from 'protolib/bundles/objects/objectsSchemas'
+import { WorkspaceModel } from 'protolib/bundles/workspaces/WorkspaceModel'
 import LocalObjects from './custom/objects'
 
 export const Objects = {
@@ -9,5 +10,6 @@ export const Objects = {
     user: UserModel,
     group: GroupModel,
     object: ObjectModel,
+    workspace: WorkspaceModel,
     ...LocalObjects,
 }
