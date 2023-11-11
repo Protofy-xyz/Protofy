@@ -147,7 +147,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         sourceCode={currentPageContent}
                         setSourceCode={setCurrentPageContent}
                         customComponents={[]}
-                        onSave={(code, _, data) => onEditorSave('flows', code, data)}
+                        //onSave={(code, _, data) => onEditorSave('flows', code, data)}
                         enableCommunicationInterface={true}
                         // store={uiStore}
                         // config={{masks: UIMasks}}
