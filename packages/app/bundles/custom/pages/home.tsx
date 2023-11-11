@@ -1,4 +1,4 @@
-import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "tamagui"
+import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "@my/ui"
 import { TintSection, ContainerLarge, AnounceBubble, BigTitle, LinkGroup, LinkGroupItem, CopyBubble, XCenterStack, NextLink, TooltipContainer, TwitterIcon, MainButton, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, ActiveGroup, ButtonGroup, ActiveGroupButton, ActiveRender, SideBySide, TabGroup, IconStack, BackgroundGradient, ItemCard, SectionBox, ElevatedArea, BarChart, GridElement, RainbowText, OverlayCardBasic, FeatureItem, DataTable, TamaCard, Notice, PageGlow, withSession, useSession, Page, Grid, ThemeTint, useEdit, Head1, Head2, } from "protolib"
 import { ChevronRight, Code, Cpu, FastForward, Layers, Star, } from "@tamagui/lucide-icons"
 import Link from "next/link"
