@@ -1,3 +1,5 @@
+import { Cog } from '@tamagui/lucide-icons'
+
 export default {
     "resources": [
         {
@@ -25,7 +27,7 @@ export default {
             { "name": "Definitions", "icon": "bookOpen", "type":"deviceDefinitions", "path": "/"},
             { "name": "Boards", "icon": "board", "type":"deviceBoards", "path": "/"},
             { "name": "Cores", "icon": "cpu", "type":"deviceCores", "path": "/"}, 
-            { "name": "Sdks", "icon": "code", "type":"deviceSdks", "path": "/"}
+            { "name": "Sdks", "icon": Cog, "type":"deviceSdks", "path": "/"}
         ]
     }
 }
