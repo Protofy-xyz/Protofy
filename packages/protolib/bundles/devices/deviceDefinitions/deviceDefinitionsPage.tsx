@@ -46,6 +46,14 @@ export default {
         pageState={pageState}
         icons={DeviceDefitionIcons}
         dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
+        customFields={{
+          'config': {
+              component: (path, data, setData, mode) => {
+                return <h1>TODO</h1>
+              },
+              hideLabel: false
+          }
+      }}
       />
     </AdminPage>)
   },
