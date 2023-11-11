@@ -149,10 +149,11 @@ const Subtabs = ({ subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                return <Link href={subtab.href} key={index}>
+                const href = ('/admin/' + subtab.type + '/' + subtab.path).replace(/\/+/g, '/')
+                return <Link href={href} key={index}>
                     <Tinted>
                         <PanelMenuItem
-                            selected={router.asPath.startsWith(subtab.href.replace(/\/$/, ''))}
+                            selected={router.asPath.startsWith(href.replace(/\/$/, ''))}
                             icon={getIcon(subtab.icon)}
                             text={subtab.name}
                         />
@@ -202,6 +203,6 @@ const Tabs = ({ tabs }: any) => {
 export const PanelMenu = () => {
     const [workspace] = useAtom(workspaceAtom)
     return (<YStack pt="$10">
-        <Tabs tabs={workspace.data?.menu} />
+        <Tabs tabs={workspace.menu} />
     </YStack>)
 }
