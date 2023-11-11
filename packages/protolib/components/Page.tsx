@@ -6,7 +6,7 @@ export const Page = React.forwardRef((props: StackProps, ref: any) => {
     const theme = useTheme()
     const isEditing = useIsEditing()
     return (
-        <YStack id={"protolib-page-container"} ref={ref} flex={1} height={"100%"} style={{overflowX:"hidden", ...(isEditing?{backgroundColor: theme.background.val}:{})}} {...props}>
+        <YStack id={"protolib-page-container"} ref={ref} flex={1} height={"100%"} style={{overflowX:"hidden", ...(isEditing?{backgroundColor: theme.color1.val}:{})}} {...props}>
             {props.children}
         </YStack>
     );
