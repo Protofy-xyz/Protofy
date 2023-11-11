@@ -30,7 +30,7 @@ export default {
         )
         }
         extraFieldsForms={{
-          sdk: z.array(z.string()).generateOptions(() => extraData.sdks.map(o => o.name)).choices().after('name').display(),
+          sdks: z.array(z.string()).generateOptions(() => extraData.sdks.map(o => o.name)).choices().after('name').display(),
         }}
         model={DeviceCoreModel}
         pageState={pageState}

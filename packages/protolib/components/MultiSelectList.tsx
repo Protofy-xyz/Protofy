@@ -3,17 +3,21 @@ import { ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Tinted } from "./Tinted";
 
-export function MultiSelectList({ choices, setChoices, onSetSelections, maxHeight = "150px" }: any & { maxHeight: String }) {
+export function MultiSelectList({ choices, defaultSelections = [], onSetSelections, maxHeight = "150px" }: any & { onSetChoices: Function, maxHeight: String }) {
   const rootRef = useRef(null)
   const [open, setOpen] = useState(false);
-  const [selections, setSelections] = useState([]);
+  const [selections, setSelections] = useState(defaultSelections);
 
   const updateSelections = (e, cName) => {
     const target = choices[choices.indexOf(cName)]
     if (selections.includes(target)) {
-      setSelections(prev => prev.filter(slc => slc !== target))
+      const newSelections = selections.filter(slc => slc !== target)
+      onSetSelections(newSelections)
+      setSelections(newSelections)
     } else {
-      setSelections(prev => prev.concat(target))
+      const newSelections = selections.concat(target)
+      onSetSelections(newSelections)
+      setSelections(newSelections)
     }
   }
 
@@ -47,6 +51,7 @@ export function MultiSelectList({ choices, setChoices, onSetSelections, maxHeigh
             selections.length > 0
               ? selections.map((selection, i) =>
                 <Paragraph
+                  key={i}
                   paddingHorizontal="7px"
                   paddingVertical="4px"
                   backgroundColor="$color7"
@@ -88,6 +93,7 @@ export function MultiSelectList({ choices, setChoices, onSetSelections, maxHeigh
                 choices.map((choice, i) => {
                   return selections.includes(choice)
                     ? <Paragraph
+                      key={i}
                       paddingHorizontal="10px"
                       paddingVertical="7px"
                       borderRadius={4}

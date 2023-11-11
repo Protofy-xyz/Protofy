@@ -178,6 +178,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
 
     let prevTarget;
     let prevKey;
+
     path.forEach((p) => {
       if (!Array.isArray(target) && !target.hasOwnProperty(p)) {
         target[p] = {};
@@ -280,17 +281,21 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     </FormGroup>
   } else if (elementType == 'ZodArray') {
     let data = getFormData(ele.name) ? getFormData(ele.name) : []
+    let choices = []
     let Renderer = () => <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
 
     // ---- MODIFIERS ---- 
     // generateOptions
     if ((typeof ele._def.generateOptions === 'function')) {
-      data = ele._def.generateOptions(data)
+      choices = ele._def.generateOptions(data)
     }
 
     // choices
     if (ele._def.choices) {
-      Renderer = () => (<MultiSelectList choices={data} />)
+      Renderer = () => (<MultiSelectList choices={choices} defaultSelections={data} onSetSelections={(selections) => {
+        console.log('this was previouse', selections)
+        setFormData(ele.name, selections)
+      }} />)
     }
 
     return <Renderer />
