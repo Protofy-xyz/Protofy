@@ -3,8 +3,7 @@ import Head from 'next/head'
 import { useSession } from 'protolib'
 import Workspaces from 'app/bundles/workspaces'
  
-export function AdminPage({workspace, pageSession, title, children}:any) {
-  console.log("WORSKPACEEEEEEEEEEEEEEEE", Workspaces.basic)
+export function AdminPage({pageSession, title, children}:any) {
     useSession(pageSession)
     return (
       <>
