@@ -63,8 +63,8 @@ function extendZodTypePrototype(type: any) {
       return this; 
     }
 
-    type.prototype.choices = function (val) {
-      this._def.choices = val
+    type.prototype.choices = function () {
+      this._def.choices = true
       return this; 
     }
 

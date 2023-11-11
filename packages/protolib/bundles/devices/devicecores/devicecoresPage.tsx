@@ -3,6 +3,7 @@ import { Cpu, Layers, Tag } from '@tamagui/lucide-icons';
 import { DeviceCoreModel } from './devicecoresSchemas';
 import { z } from 'zod';
 import { API, Chip, DataTable2, DataView } from 'protolib'
+import { DeviceSdkModel } from '../deviceSdks';
 
 const DeviceCoreIcons = { name: Tag, sdk: Layers }
 export default {
@@ -29,7 +30,7 @@ export default {
         )
         }
         extraFieldsForms={{
-          sdks: z.array(z.union(extraData.sdks.map(o => z.literal(o.name)))).max(extraData.sdks.length).after('name').display(),
+          sdk: z.array(z.string()).generateOptions(() => extraData.sdks.map(o => o.name)).choices().after('name').display(),
         }}
         model={DeviceCoreModel}
         pageState={pageState}
@@ -42,7 +43,7 @@ export default {
     const sdks = await API.get('/adminapi/v1/devicesdks?itemsPerPage=1000')
 
     return {
-      sdks: sdks.isLoaded ? sdks.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
+      sdks: sdks.isLoaded ? sdks.data.items.map(i => DeviceSdkModel.load(i).getData()) : []
     }
   })
 }
