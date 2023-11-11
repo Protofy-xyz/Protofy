@@ -3,11 +3,11 @@ import React from "react";
 import { Stack, Text } from "tamagui";
 
 const CollapseIcon = (props) => {
-    let { collapsible, toggleNodeCollapsed, isNodeCollapsed } = props;
+    let { collapsible, toggleNodeCollapsed, isNodeCollapsed, state } = props;
     if (!collapsible) return null;
     return  (
         <Stack cursor="pointer" onPress={toggleNodeCollapsed} top={6.45} hoverStyle={{opacity: 0.8}} opacity={0.1} display="inline">
-            {isNodeCollapsed(undefined, undefined, undefined) ? (
+            {isNodeCollapsed() ? (
                 <Stack top={3} display="inline">
                     <MoreHorizontal size={"$1"} color={"var(--color)"} />
                 </Stack>
@@ -19,10 +19,8 @@ const CollapseIcon = (props) => {
 };
 
 
-function toggleNodeCollapsed(marginLeft, key, marginLeftStep) {
-    //@ts-node
-    //@ts-ignore
-    let { collapsedNodes } = this.state;
+function toggleNodeCollapsed(marginLeft, key, marginLeftStep, state, setState) {
+    let { collapsedNodes } = state;
     let level = marginLeft / marginLeftStep;
     let keys = collapsedNodes[level] || {};
 
@@ -30,15 +28,11 @@ function toggleNodeCollapsed(marginLeft, key, marginLeftStep) {
     //keys[key] = false ?
     else keys[key] = true;
     collapsedNodes[level] = keys;
-    //@ts-node
-    //@ts-ignore
-    this.setState({ collapsedNodes });
+    setState({ ...state, collapsedNodes });
 }
 
-function isNodeCollapsed(marginLeft, key, marginLeftStep) {
-    //@ts-node
-    //@ts-ignore
-    let { collapsedNodes } = this.state;
+function isNodeCollapsed(marginLeft, key, marginLeftStep, state) {
+    let { collapsedNodes } = state;
     let level = marginLeft / marginLeftStep;
     if (!collapsedNodes || !collapsedNodes[level]) return false;
     return collapsedNodes[level][key];
