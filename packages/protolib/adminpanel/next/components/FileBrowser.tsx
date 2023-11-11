@@ -68,7 +68,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
     var templateActions: any = []
     if (workspace.isLoaded) {
-        WorkspaceModel.load(workspace.data)
+        WorkspaceModel.load(workspace)
             .getResources()
             .byType('template')
             .byPath(currentPath)

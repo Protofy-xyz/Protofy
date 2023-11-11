@@ -30,7 +30,6 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
     }
     const _sourceUrl = typeof sourceUrl === 'function' ? sourceUrl(context) : sourceUrl
     return withSession(context, allowdUserTypes, {
-      workspace: await API.get('/adminapi/v1/workspaces'),
       sourceUrl: _sourceUrl,
       initialItems: await API.get({url: _sourceUrl, ..._dataProps}),
       itemData: context.query.item ? await API.get(_sourceUrl+'/'+context.query.item) : '',
