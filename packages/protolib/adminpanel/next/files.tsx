@@ -1,13 +1,10 @@
-import {AdminPanel} from '../features'
-import Head from 'next/head'
 import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
 import { API, withSession, Center } from 'protolib'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router';
-import { useSession } from '../../lib/Session'
 import { Spinner } from 'tamagui'
 import { Tinted } from '../../components/Tinted'
+import { AdminPage } from '../features/next'
 
 const FileBrowser = dynamic<any>(() =>
     import('./components/FileBrowser').then(module => module.FileBrowser),
@@ -15,18 +12,11 @@ const FileBrowser = dynamic<any>(() =>
 );
 
 export default function FilesPage({workspace, data, pageSession}:any) {
-  const router = useRouter();
-  useSession(pageSession)
-  const { name } = router.query;
   return (
-    <>
-      <Head>
-        <title>Protofy - Admin Panel</title>
-      </Head>
-      <AdminPanel workspace={workspace}>
+      <AdminPage pageSession={pageSession} title={"Files"} >
         <FileBrowser path={data?.CurrentPath} file={data?.CurrentFile} filesState={data?.filesState} />
-      </AdminPanel>
-    </>
+      </AdminPage>
+
   )
 }
 
