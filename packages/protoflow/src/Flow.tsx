@@ -310,7 +310,7 @@ const FlowComponent = ({
         }, { nodes: nodes, edges: edges, nodeData: nodeData })
 
     }
-    const onSaveNodes = async () => {
+    const onSaveNodes = async (preview?) => {
         const tree = getTree(Object.assign({}, nodeData));
         var content
         clearError()
@@ -320,7 +320,7 @@ const FlowComponent = ({
             setInitialEdges(tree.edges)
             setInitialNodes(tree.nodes)
             const positions = nodes.map((node) => ({ id: node.id, position: node.position }))
-            if (onSave && nodes?.length) onSave(content, positions, { nodesData: nodeData, nodes })
+            if (!preview && onSave && nodes?.length) onSave(content, positions, { nodesData: nodeData, nodes })
         } catch (e) {
             console.log('errorlel: ', e)
             const parts = e.codeFrame.split("\n").find(l => l.startsWith('> ')).split('|')
@@ -638,7 +638,7 @@ const FlowComponent = ({
     const onGraphChanged = async () => {
         try {
             //restore components before dump
-            const content = await onSaveNodes();
+            const content = await onSaveNodes(true);
             console.log('onGraphChanged', content)
             if (content !== undefined) {
                 console.log('firing on edit: ', content)
