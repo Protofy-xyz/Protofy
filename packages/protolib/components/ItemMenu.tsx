@@ -3,6 +3,7 @@ import { AlertDialog, API } from 'protolib'
 import { useState } from "react";
 import { Tinted } from "./Tinted";
 import { MoreVertical, Trash2 } from '@tamagui/lucide-icons'
+import { InteractiveIcon } from "./InteractiveIcon";
 
 
 export const ItemMenu = ({sourceUrl='', onDelete, ...props}:{sourceUrl: string, onDelete: any} & StackProps) => {
@@ -32,16 +33,7 @@ export const ItemMenu = ({sourceUrl='', onDelete, ...props}:{sourceUrl: string, 
         </AlertDialog>
         <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom">
             <Popover.Trigger>
-                <XStack cursor="pointer" onPress={(e) => {e.stopPropagation();setMenuOpened(true)}}>
-                    <Stack ml={"$3"}
-                        o={0.5}
-                        br={"$5"} p={"$2"}
-                        als="flex-start" cursor='pointer'
-                        pressStyle={{ o: 0.7 }}
-                        hoverStyle={{ o: 1, bc: "$color5" }}>
-                        <MoreVertical size={18} color={'var(--color9)'} strokeWidth={2}></MoreVertical>
-                    </Stack>
-                </XStack>
+                <InteractiveIcon Icon={MoreVertical}  onPress={(e) => {e.stopPropagation();setMenuOpened(true)}} ml={"$3"}></InteractiveIcon>
             </Popover.Trigger>
             <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} bw={1} boc="$borderColor" bc={"$color1"} >
                 <Tinted>
