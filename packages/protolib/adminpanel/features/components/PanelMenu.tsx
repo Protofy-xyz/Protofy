@@ -88,11 +88,15 @@ const iconTable = {
     alert: <AlertTriangle color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
 }
 
-const getIcon = (icon) => {
-    if (!iconTable[icon]) {
-        return <Folder color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
+const getIcon = (Icon) => {
+    if(typeof Icon === "string") {
+        if (!iconTable[Icon]) {
+            return <Folder color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
+        } else {
+            return iconTable[Icon]
+        }
     } else {
-        return iconTable[icon]
+        return <Icon color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} /> 
     }
 }
 
