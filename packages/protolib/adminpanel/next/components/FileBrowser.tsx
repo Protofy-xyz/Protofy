@@ -10,9 +10,11 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { workspaceAtom } from '../../features/atoms'
-import { WorkspaceModel } from '../../../models';
+import { Objects } from 'app/bundles/objects';
 import { Explorer } from './Explorer';
 import { defineFileAction } from 'chonky';
+
+const WorkspaceModel = Objects.workspace
 
 export const FileBrowser = ({ file, path, filesState }: any) => {
     const [dialogOpen, setDialogOpen] = useState(file ? true : false)

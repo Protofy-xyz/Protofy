@@ -97,7 +97,6 @@ export * from './components/IconContainer'
 export * from './components/AlertDialog'
 export * from './components/Tinted'
 export * from './components/Chip'
-export * from './models'
 export * from './schema'
 export * from './api/lib/session' //this is an exception
 export * from './components/EditableObject'
