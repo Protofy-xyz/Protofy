@@ -12,8 +12,8 @@ const DeviceDefitionIcons = {
 }
 
 export default {
-  component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
-    return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
+  component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
+    return (<AdminPage title="Device Definitions" pageSession={pageSession}>
       <DataView
         itemData={itemData}
         rowIcon={BookOpen}

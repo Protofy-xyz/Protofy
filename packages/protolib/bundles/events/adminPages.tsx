@@ -12,8 +12,8 @@ const EventIcons =  {}
 const rowsPerPage = 20
 export default {
     'admin/events': {
-        component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
-            return (<AdminPage title="Events" workspace={workspace} pageSession={pageSession}>
+        component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
+            return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}

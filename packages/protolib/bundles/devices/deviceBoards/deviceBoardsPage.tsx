@@ -8,8 +8,8 @@ import { DeviceCoreModel } from '../devicecores';
 const DeviceBoardIcons = { name: Tag, core: Layers }
 
 export default {
-  component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
-    return (<AdminPage title="Device Boards" workspace={workspace} pageSession={pageSession}>
+  component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
+    return (<AdminPage title="Device Boards" pageSession={pageSession}>
       <DataView
         itemData={itemData}
         rowIcon={CircuitBoard}

@@ -9,8 +9,8 @@ const GroupIcons =  {}
 
 export default {
     'admin/groups': {
-        component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
-            return (<AdminPage title="Groups" workspace={workspace} pageSession={pageSession}>
+        component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
+            return (<AdminPage title="Groups" pageSession={pageSession}>
                 <DataView
                     disableViewSelector
                     defaultView={'list'}

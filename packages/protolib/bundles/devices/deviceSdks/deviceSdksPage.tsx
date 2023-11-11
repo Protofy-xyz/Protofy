@@ -5,8 +5,8 @@ import { Chip, DataTable2, DataView } from 'protolib'
 
 const DeviceSdkIcons = { name: Tag, sdk: Layers }
 export default {
-  component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession }: any) => {
-    return (<AdminPage title="Device Sdks" workspace={workspace} pageSession={pageSession}>
+  component: ({ pageState, sourceUrl, initialItems, itemData, pageSession }: any) => {
+    return (<AdminPage title="Device Sdks" pageSession={pageSession}>
       <DataView
         itemData={itemData}
         rowIcon={Code}

@@ -9,9 +9,9 @@ const APIIcons =  {}
 
 export default {
     'admin/apis': {
-        component: ({workspace, pageState, sourceUrl, initialItems, pageSession, extraData}:any) => {
+        component: ({pageState, sourceUrl, initialItems, pageSession, extraData}:any) => {
 
-            return (<AdminPage title="APIs" workspace={workspace} pageSession={pageSession}>
+            return (<AdminPage title="APIs" pageSession={pageSession}>
                 <DataView
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}

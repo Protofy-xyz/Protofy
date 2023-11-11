@@ -8,8 +8,8 @@ import { DeviceDefinitionModel } from '../deviceDefinitions';
 const DevicesIcons = { name: Tag, deviceDefinition: BookOpen }
 
 export default {
-  component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
-    return (<AdminPage title="Devices" workspace={workspace} pageSession={pageSession}>
+  component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
+    return (<AdminPage title="Devices" pageSession={pageSession}>
       <DataView
         itemData={itemData}
         rowIcon={Router}

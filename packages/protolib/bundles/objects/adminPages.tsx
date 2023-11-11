@@ -8,8 +8,8 @@ const ObjectIcons =  {}
 const rowsPerPage = 20
 export default {
     'admin/objects': {
-        component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
-            return (<AdminPage title="Objects" workspace={workspace} pageSession={pageSession}>
+        component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
+            return (<AdminPage title="Objects" pageSession={pageSession}>
                 <DataView
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}

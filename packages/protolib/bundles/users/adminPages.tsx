@@ -11,8 +11,8 @@ const UserIcons =  {username: Mail, type: Tag, passwod: Key, repassword: Key}
 
 export default {
     'admin/users': {
-        component: ({workspace, pageState, sourceUrl, initialItems, itemData, pageSession}:any) => {
-            return (<AdminPage title="Users" workspace={workspace} pageSession={pageSession}>
+        component: ({pageState, sourceUrl, initialItems, itemData, pageSession}:any) => {
+            return (<AdminPage title="Users" pageSession={pageSession}>
                 <DataView
                     itemData={itemData}
                     rowIcon={User}

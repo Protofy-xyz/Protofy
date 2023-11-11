@@ -6,10 +6,10 @@ import { useRouter } from "next/router"
 import { Mail, Tag, Key, User, Zap } from '@tamagui/lucide-icons';
 
 export const TasksPage = {
-    component: ({workspace, pageState, sourceUrl, initialItems, pageSession}:any) => {
+    component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
         const router = useRouter()
 
-        return (<AdminPage title="Tasks" workspace={workspace} pageSession={pageSession}>
+        return (<AdminPage title="Tasks" pageSession={pageSession}>
             <DataView
                 onSelectItem={(item) => {
                     router.push('/admin/tasks/'+item.getId())

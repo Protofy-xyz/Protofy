@@ -9,11 +9,11 @@ import { AlertTriangle } from '@tamagui/lucide-icons'
 import {z} from 'zod'
 
 export const TaskPage = {
-    component: ({workspace, pageSession, task, taskId, sourceUrl}:any) => {
+    component: ({pageSession, task, taskId, sourceUrl}:any) => {
         const router = useRouter()
         console.log('task: ', task)
         
-        return (<AdminPage title="Tasks" workspace={workspace} pageSession={pageSession}>
+        return (<AdminPage title="Tasks" pageSession={pageSession}>
             <AsyncView atom={task} error={<Center top={-100}>
                     <AlertTriangle size="$10"  />
                     <XStack>

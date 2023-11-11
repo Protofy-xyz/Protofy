@@ -10,8 +10,8 @@ const PageIcons = {}
 
 export default {
     'admin/pages': {
-        component: ({ workspace, pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
-            return (<AdminPage title="Pages" workspace={workspace} pageSession={pageSession}>
+        component: ({ pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
+            return (<AdminPage title="Pages" pageSession={pageSession}>
                 <DataView
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
