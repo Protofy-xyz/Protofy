@@ -44,7 +44,7 @@ export const AlertDialog = forwardRef(({
         <Dialog.Portal >
             <Dialog.Overlay />
             <Dialog.Content scale={1} p="$7" ai="flex-start" jc="flex-start" {...props}>
-                <YStack f={1}>
+                <YStack f={1} width={"100%"}>
                     <YStack f={1}>
                         {title && <XStack width={"100%"} f={1}>
                             <XStack f={1}>
