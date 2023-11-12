@@ -11,8 +11,8 @@ const HeadAnchor = styled(Paragraph, {
   cursor: 'pointer',
   fontFamily: "$heading",
   fontWeight: "600",
-  color: '$color8',
   opacity: 0.8,
+  color: "$color8",
   //@ts-ignore
   hoverStyle: { opacity: 1, color: '$color' }, pressStyle: { opacity: 0.25 },
   tabIndex: -1
