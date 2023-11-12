@@ -34,7 +34,7 @@ export default {
         }, 
         getServerSideProps: PaginatedDataSSR('/adminapi/v1/groups', ['admin'], {},async () => {
             const workspaces = await API.get('/adminapi/v1/workspaces')
-            const workspacesArray = workspaces.data.items.map(obj => obj.name.split('.')[0]);
+            const workspacesArray = workspaces.data.items.map(obj => obj.name);
             return {
                 workspaces: workspacesArray,
             }

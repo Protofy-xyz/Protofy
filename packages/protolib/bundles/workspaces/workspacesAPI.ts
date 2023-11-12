@@ -13,7 +13,7 @@ const customGetDB = (path, req, session) => {
     async *iterator() {
         const workspaces = (await fs.readdir(workspacesDir)).filter(f => f != 'index.tsx')     
         for (const workspace of workspaces) {
-          if(workspace) yield [workspace, JSON.stringify({name:workspace})];
+          if(workspace) yield [workspace, JSON.stringify({name:workspace.split('.')[0]})];
         }
     },
 
