@@ -42,9 +42,9 @@ mqttServer.listen(1883, () => {
   console.log('MQTT server listening on port 1883');
 });
 
-generateEvent({
-  path: 'services/start/adminapi', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-  from: 'api', // system entity where the event was generated (next, api, cmd...)
-  user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-  payload: {}, // event payload, event-specific data
-})
+// generateEvent({
+//   path: 'services/start/adminapi', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+//   from: 'api', // system entity where the event was generated (next, api, cmd...)
+//   user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+//   payload: {}, // event payload, event-specific data
+// })
