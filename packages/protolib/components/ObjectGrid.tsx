@@ -75,7 +75,7 @@ export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinW
         }
     })
 
-    return <Stack height={1} f={1} {...props}>
+    return <Stack f={1} {...props}>
         <Scrollbars universal={true} ref={containerRef}>
             <Grid overScanBy={overScanBy} key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth} />
         </Scrollbars>

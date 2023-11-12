@@ -284,4 +284,4 @@ const JSONViewer = (_props: JSONViewerProps) => {
   
 }
 
-export default React.memo(JSONViewer)
+export default JSONViewer

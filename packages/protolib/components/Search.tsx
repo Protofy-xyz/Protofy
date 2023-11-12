@@ -4,7 +4,7 @@ import { useState, forwardRef, useRef, useEffect } from "react"
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from "./Tinted"
 
-export const Search = forwardRef(({ initialState, onCancel = () => { }, onSearch = () => { }, placeholder = 'Search...', width = 400, widthmd = 300, closedWidth = 50, ...props }: any, ref: any) => {
+export const Search = forwardRef(({ automatic = false, initialState, onCancel = () => { }, onSearch = () => { }, placeholder = 'Search...', width = 400, widthmd = 300, closedWidth = 50, ...props }: any, ref: any) => {
     const [opened, setOpened] = useState(initialState ? true : false)
     const input = useRef()
     const [content, setContent] = useState(initialState)
@@ -40,7 +40,14 @@ export const Search = forwardRef(({ initialState, onCancel = () => { }, onSearch
             width={opened ? "100%" : closedWidth}
             placeholder={opened ? placeholder : ''}
             onBlur={() => !content ? setOpened(false) : false}
-            onChangeText={(text) => { setContent(text); if (!text) onSearch('') }}
+            onChangeText={(text) => { 
+                setContent(text); 
+                if(automatic) {
+                    onSearch(text)
+                } else{
+                    if (!text) onSearch('') 
+                }
+            }}
             onSubmitEditing={(e) => { onSearch(content) }}
         /> : null}
         <XStack position={"absolute"} right={0} top={-4} cursor="pointer">
