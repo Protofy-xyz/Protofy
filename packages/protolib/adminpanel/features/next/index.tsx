@@ -29,8 +29,6 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       ...(typeof dataProps === "function"? await dataProps(context) : dataProps),
     }
     const _sourceUrl = typeof sourceUrl === 'function' ? sourceUrl(context) : sourceUrl
-    const workspaces = await API.get('/adminapi/v1/workspaces')
-    const workspacesArray = workspaces.data.items.map(obj => obj.name);
 
     return withSession(context, allowdUserTypes, {
       sourceUrl: _sourceUrl,
@@ -40,8 +38,7 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       extraData: {...(typeof extraData === "function"? await extraData(context) : extraData)},
       pageState: {
         ..._dataProps,
-      },
-      workspaces: workspacesArray
+      }
     })
   })
 }

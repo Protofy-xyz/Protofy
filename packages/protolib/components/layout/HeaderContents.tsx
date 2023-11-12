@@ -20,7 +20,8 @@ export type HeaderContentsProps = {
   themeSwitcher?: boolean,
   tintSwitcher?: boolean,
   leftArea?: any,
-  rightArea?: any
+  rightArea?: any,
+  topBar?: any
 }
 const tooltipDelay = { open: 500, close: 150 }
 

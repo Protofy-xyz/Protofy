@@ -11,7 +11,7 @@ export const AdminPanel = ({ workspace, children}) => {
     const setCurrentWorkspace = useSetAtom(workspaceAtom)
     useEffect(() => setCurrentWorkspace(workspace), [workspace])
 
-    return (<PanelLayout menuContent={<PanelMenu />}>
+    return (<PanelLayout topBar={<></>} menuContent={<PanelMenu />}>
         <XStack f={1} px={"$0"} flexWrap='wrap'>
             {children}
         </XStack>
