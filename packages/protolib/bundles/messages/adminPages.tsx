@@ -16,7 +16,7 @@ const MessageList = ({ data, topic }) => {
             <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" br={4} width="fit-content" ml={"$3"}>
                 <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
                     <Radio color="var(--color7)" strokeWidth={2} size={20} />
-                    <Text ml={"$2"} fontSize={14} fontWeight={"500"}>{topic}</Text>
+                    <Text ml={"$2"} o={0.9} fontSize={14} fontWeight={"500"}>{topic}</Text>
                 </XStack>
                 {/* <Chip width="fit-content" text={m.topic} color={'$color5'} /> */}
             </XStack>
