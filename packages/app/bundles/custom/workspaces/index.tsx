@@ -1,5 +1,5 @@
-import Basic from './basic'
+import Admin from './Admin'
 
 export default {
-    basic: Basic
+    admin: Admin
 }
