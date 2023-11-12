@@ -7,7 +7,7 @@ export function AdminPage({pageSession, title, children}:any) {
     useSession(pageSession)
     return (
       <Page title={"Protofy - " + title}>
-        <AdminPanel workspace={Workspaces.basic}>
+        <AdminPanel workspace={Workspaces.admin}>
           {children}
         </AdminPanel>
       </Page>
