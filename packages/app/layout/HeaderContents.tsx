@@ -1,11 +1,11 @@
-import {HeaderContents as ProtoHeaderContents, HeaderContentsProps, HeaderLink, Session, ConnectionIndicator} from 'protolib'
+import {HeaderContents as ProtoHeaderContents, HeaderContentsProps, HeaderLink, useSession, ConnectionIndicator} from 'protolib'
 import {Text} from 'tamagui'
 import { useAtom } from 'jotai'
 import { Theme, XStack } from '@my/ui';
 import { Cloud, CloudOff } from '@tamagui/lucide-icons';
 
 export const HeaderContents = (props: HeaderContentsProps) => {
-  const [session] = useAtom(Session);
+  const [session] = useSession();
 
   return <ProtoHeaderContents 
       logo={<Text>Protofy</Text>} 
