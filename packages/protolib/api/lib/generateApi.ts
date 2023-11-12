@@ -97,8 +97,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.load(req.body, session).createTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
+        mqttClient.publish("notifications/"+entityName + '/create/' + entityModel.getId(), entityModel.serialize())
         if (!options.disableEvents) {
-            mqttClient.publish("notifications/"+entityName + '/create/' + entityModel.getId(), entityModel.serialize())
             generateEvent({
                 path: entityName + '/create/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
@@ -151,8 +151,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session), transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
+        mqttClient.publish("notifications/"+ entityName + '/update/' + entityModel.getId(), entityModel.serialize())
         if (!options.disableEvents) {
-            mqttClient.publish("notifications/"+ entityName + '/update/' + entityModel.getId(), entityModel.serialize())
             generateEvent({
                 path: entityName + '/update/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
@@ -172,8 +172,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).deleteTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
+        mqttClient.publish("notifications/"+entityName + '/delete/' + entityModel.getId(), entityModel.serialize())
         if (!options.disableEvents) {
-            mqttClient.publish("notifications/"+entityName + '/delete/' + entityModel.getId(), entityModel.serialize())
             generateEvent({
                 path: entityName + '/delete/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
