@@ -10,6 +10,7 @@ export const HeaderContents = (props: HeaderContentsProps) => {
   return <ProtoHeaderContents 
       logo={<Text>Protofy</Text>} 
       rightArea={<XStack ai="center">
+        {props.topBar }
         {session.loggedIn ? <HeaderLink href="/profile">{session.user.id}</HeaderLink>:<HeaderLink href="/auth/login">Login</HeaderLink>}
         <ConnectionIndicator />
       </XStack>}
