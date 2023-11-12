@@ -26,6 +26,8 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/objects')
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/objects', [], {
+            orderBy: 'name'
+        })
     }
 }

@@ -1,37 +1,41 @@
 import { useAtom } from 'jotai';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSubscription } from 'mqtt-react-hooks';
 import { createApiAtom, API, usePendingEffect } from 'protolib';
+import { PendingAtomResult } from './createApiAtom';
 
 export const useRemoteStateList = (items, url, topic, model) => {
-    const dataAtom = createApiAtom(null);
-    const [dataState, setDataState] = useAtom(dataAtom);
+    const [dataState, setDataState] = useState<PendingAtomResult | undefined>(items);
 
-    usePendingEffect((s) => API.get(url, s), setDataState, items)
+    usePendingEffect((s) => API.get(url, s), setDataState, dataState)
 
     const { message } = useSubscription(topic);
+    console.log('subscribed to topic: ', topic)
     useEffect(() => {
         if (message && message.message) {
             const mqttDataString = typeof message.message === 'string' ? message.message : JSON.stringify(message.message);
             const mqttData = JSON.parse(mqttDataString);
+            const [,,action] = message.topic.split('/')
+            // console.log('data: ', mqttData)
+            // console.log('action: ', action)
             setDataState((prev) => {
                 const currentData = prev.data || {};
                 const items = currentData.items || [];
         
-                switch (mqttData.type) {
-                    case 'add':
+                switch (action) {
+                    case 'create':
                         return {
                             ...prev,
-                            data: { ...currentData, items: [...items, mqttData.data] },
+                            data: { ...currentData, items: [mqttData, ...items] },
                         };
                     case 'delete':
-                        const newItemsDelete = items.filter(item => item.id !== mqttData.data.id);
+                        const newItemsDelete = items.filter(item => model.load(item).getId() !== model.load(mqttData).getId());
                         return {
                             ...prev,
                             data: { ...currentData, items: newItemsDelete },
                         };
                     case 'update':
-                        const newItemsUpdate = items.map(item => item.id === mqttData.data.id ? mqttData.data : item);
+                        const newItemsUpdate = items.map(item => model.load(item).getId() === model.load(mqttData).getId() ? mqttData : item);
                         return {
                             ...prev,
                             data: { ...currentData, items: newItemsUpdate },
@@ -41,7 +45,7 @@ export const useRemoteStateList = (items, url, topic, model) => {
                 }
             });
         }
-    }, [message, setDataState]);
+    }, [message]);
 
     return [dataState, setDataState];
 };

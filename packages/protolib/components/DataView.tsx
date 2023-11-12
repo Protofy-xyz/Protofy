@@ -1,5 +1,5 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView } from 'tamagui'
-import { ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { useRemoteStateList, ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers } from '@tamagui/lucide-icons'
 import { z } from "zod";
@@ -55,6 +55,7 @@ export function DataView({
     numColumnsForm = 1,
     name,
     pluralName,
+    entityName,
     hideAdd = false,
     pageState,
     icons = {},
@@ -81,21 +82,21 @@ export function DataView({
     onAddButton = undefined,
     objectProps = {}
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
-    const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
+    const [items, setItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/'+((entityName??pluralName)??name)+'s'+"/#", model)
+    // const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
     const [state, setState] = useState(pageState)
     const { push, mergePush, removePush, replace } = usePageParams(pageState, state, setState)
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
-    const containerRef = React.useRef(null)
 
     const fetch = async () => {
         const data = await API.get({ url: sourceUrl, ...state })
         setItems(data)
     }
 
-    usePendingEffect((s) => { API.get({ url: sourceUrl, ...pageState }, s) }, setItems, initialItems)
+    // usePendingEffect((s) => { API.get({ url: sourceUrl, ...pageState }, s) }, setItems, initialItems)
 
     useEffect(() => {
         if (items && items.isLoaded) {
@@ -116,7 +117,7 @@ export function DataView({
             component: DataTableList,
             props: {
                 sourceUrl,
-                onDelete: fetch,
+                onDelete: () => {},
                 ...dataTableListProps
             }
         },
@@ -132,7 +133,7 @@ export function DataView({
                 extraFields,
                 icons,
                 ml: "$5",
-                onDelete: fetch,
+                onDelete: () => {},
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 ...dataTableGridProps
             }
@@ -175,7 +176,7 @@ export function DataView({
                                             if (result.isError) {
                                                 throw result.error
                                             }
-                                            fetch()
+                                            // fetch()
                                             setCreateOpen(false);
                                             toast.show(name + ' created', {
                                                 message: obj.getId()
@@ -230,7 +231,7 @@ export function DataView({
                                             if (result.isError) {
                                                 throw result.error
                                             }
-                                            fetch()
+                                            //fetch()
                                             const { item, ...rest } = state;
                                             setState(rest)
                                             toast.show(name + ' updated', {
