@@ -16,7 +16,7 @@ export function DataSSR(sourceUrl, allowdUserTypes=['admin'], props={}) {
     })
 }
 
-export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin'], dataProps:any={}, extraData:any={}) {
+export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin'], dataProps:any={}, extraData:any={}, workspaces:any=[]) {
   return _SSR(async (context:NextPageContext) => {
     const _dataProps = {
       itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : 25,
@@ -29,6 +29,9 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       ...(typeof dataProps === "function"? await dataProps(context) : dataProps),
     }
     const _sourceUrl = typeof sourceUrl === 'function' ? sourceUrl(context) : sourceUrl
+    const workspaces = await API.get('/adminapi/v1/workspaces')
+    const workspacesArray = workspaces.data.items.map(obj => obj.name);
+
     return withSession(context, allowdUserTypes, {
       sourceUrl: _sourceUrl,
       initialItems: await API.get({url: _sourceUrl, ..._dataProps}),
@@ -37,7 +40,8 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       extraData: {...(typeof extraData === "function"? await extraData(context) : extraData)},
       pageState: {
         ..._dataProps,
-      }
+      },
+      workspaces: workspacesArray
     })
   })
 }
