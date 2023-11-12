@@ -11,6 +11,7 @@ import { DeviceBoardsAPI } from 'protolib/bundles/devices/deviceBoards/deviceBoa
 import { DeviceDefinitionsAPI } from 'protolib/bundles/devices/deviceDefinitions/deviceDefinitionsAPI'
 import { TaskApi } from 'protolib/bundles/tasks/api/taskApi'
 import { DatabasesAPI } from 'protolib/bundles/databases/databasesAPI'
+import { WorkspacesAPI } from 'protolib/bundles/workspaces/workspacesAPI'
 
 export default (app) => {
   UsersAPI(app)
@@ -26,4 +27,5 @@ export default (app) => {
   DeviceDefinitionsAPI(app)
   TaskApi(app)
   DatabasesAPI(app)
+  WorkspacesAPI(app)
 }
