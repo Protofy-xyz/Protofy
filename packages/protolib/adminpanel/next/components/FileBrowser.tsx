@@ -10,11 +10,10 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { workspaceAtom } from '../../features/atoms'
-import { Objects } from 'app/bundles/objects';
+import { WorkspaceParserModel } from 'app/bundles/workspaces';
 import { Explorer } from './Explorer';
 import { defineFileAction } from 'chonky';
 
-const WorkspaceModel = Objects.workspace
 
 export const FileBrowser = ({ file, path, filesState }: any) => {
     const [dialogOpen, setDialogOpen] = useState(file ? true : false)
@@ -70,7 +69,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
     var templateActions: any = []
     if (workspace.isLoaded) {
-        WorkspaceModel.load(workspace)
+        WorkspaceParserModel.load(workspace)
             .getResources()
             .byType('template')
             .byPath(currentPath)

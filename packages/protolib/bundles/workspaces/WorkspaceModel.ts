@@ -1,17 +1,26 @@
 import { z } from "zod";
+import {BaseSchema} from 'protolib/base'
+import { AutoModel, Schema } from 'protolib/base'
 
 export const WorkspaceResourceSchema = z.object({
     type: z.string(),
     options: z.any()
 })
 
-export const WorkspaceSchema = z.object({
+export const WorkspaceDataSchema = z.object({
     resources: z.array(WorkspaceResourceSchema),
     menu: z.any()
 });
 
-export type WorkspaceData = z.infer<typeof WorkspaceSchema>;
+export type WorkspaceData = z.infer<typeof WorkspaceDataSchema>;
 export type WorkspaceResourceData = z.infer<typeof WorkspaceResourceSchema>;
+
+export const WorkspaceSchema = Schema.object({
+    name: z.string().search().id().display()
+}) 
+
+export type WorkspaceType = z.infer<typeof WorkspaceSchema>;
+export const WorkspaceModel = AutoModel.createDerived<WorkspaceType>("WorkspaceModel", WorkspaceSchema);
 
 export class WorkspaceResourceModel {
     data: WorkspaceResourceData
@@ -66,12 +75,12 @@ export class WorkspaceResourceModelCollection {
     }
 }
 
-export class WorkspaceModel {
+export class WorkspaceParserModel {
     data: WorkspaceData
     resources: WorkspaceResourceModelCollection
 
     constructor(data: WorkspaceData) {
-        WorkspaceSchema.parse(data)
+        WorkspaceDataSchema.parse(data)
         this.data = data
         this.resources = new WorkspaceResourceModelCollection(data.resources.map(resource => {
             return new WorkspaceResourceModel(resource)
@@ -84,7 +93,7 @@ export class WorkspaceModel {
 
 
     static load(data: WorkspaceData) {
-        return new WorkspaceModel(data)
+        return new WorkspaceParserModel(data)
     }
 
 
@@ -133,7 +142,7 @@ export class WorkspaceModel {
             }
         })
 
-        return new WorkspaceModel({
+        return new WorkspaceParserModel({
             ...this.data,
             menu: parsedWorkspaceMenu,
             resources: this.data.resources.map(resource => {
