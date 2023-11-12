@@ -16,11 +16,11 @@ export default {
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
             { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },
             { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
-            { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
             { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
             { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" },
             { "name": "Files", "icon": "folder", "type": "files", "path": "/" },    
+            { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
             { "name": "Databases", "icon": "database", "type": "databases", "path": "/"}
         ],
         "Devices":[
