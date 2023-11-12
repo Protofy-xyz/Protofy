@@ -5,13 +5,22 @@ import {z} from 'zod'
 import {DataTable2, Chip, DataView} from 'protolib'
 import moment  from 'moment'
 import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
+import { API } from '../../lib/Api'
+import { SelectList } from '../../components/SelectList'
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const UserIcons =  {username: Mail, type: Tag, passwod: Key, repassword: Key}
 
 export default {
     'admin/users': {
-        component: ({pageState, sourceUrl, initialItems, itemData, pageSession}:any) => {
+        component: ({pageState, sourceUrl, initialItems, itemData, pageSession, extraData}:any) => {
+            const getValue = (data) => {
+                const item = extraData.groups.find(item => item == data)
+                if (!item) {
+                    return ''
+                }
+                return item
+            }
             return (<AdminPage title="Users" pageSession={pageSession}>
                 <DataView
                     itemData={itemData}
@@ -36,6 +45,17 @@ export default {
                         const {repassword, ...finalData} = data
                         return finalData
                     }}
+                    customFields={{
+                        type: {
+                            component: (path, data, setData) => <SelectList
+                                    f={1}
+                                    title={'type'}
+                                    elements={extraData.groups?.map(item => item)}
+                                    value={getValue(data)}
+                                    setValue={(v) => setData(v)}
+                                />
+                        }
+                    }}
 
                     columns={DataTable2.columns(
                         DataTable2.column("email", "username", true),
@@ -54,6 +74,12 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/accounts')
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/accounts', [], {},async () => {
+            const groups = await API.get('/adminapi/v1/groups')
+            const groupsArray = groups.data.items.map(obj => obj.name);
+            return {
+                groups: groupsArray,
+            }
+        })
     }
 }
