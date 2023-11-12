@@ -10,7 +10,7 @@ function addClientIpHeader(req) {
 var customResolver1 = function (host, url, req) {
     addClientIpHeader(req);
     if (/^\/api\//.test(url) || url === '/websocket') {
-        return process.env.API_URL ?? 'http://localhost:3001';
+        return process.env.API_URL ?? 'http://localhost:3002';
     }
 };
 
