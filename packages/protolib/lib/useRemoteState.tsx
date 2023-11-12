@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useSubscription } from 'mqtt-react-hooks';
 import { createApiAtom, API, usePendingEffect } from 'protolib';
 
-const useRemoteState = (items, url, topic) => {
+export const useRemoteStateList = (items, url, topic, model) => {
     const dataAtom = createApiAtom(null);
     const [dataState, setDataState] = useAtom(dataAtom);
 
