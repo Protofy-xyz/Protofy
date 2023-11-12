@@ -282,7 +282,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
   } else if (elementType == 'ZodArray') {
     let data = getFormData(ele.name) ? getFormData(ele.name) : []
     let choices = []
-    let Renderer = () => <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={arrData} getElement={getElement} setFormData={setFormData} />
+    let Renderer = () => <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={data} getElement={getElement} setFormData={setFormData} />
 
     // ---- MODIFIERS ---- 
     // generateOptions
