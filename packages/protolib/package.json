@@ -27,6 +27,7 @@
         "jsonwebtoken": "^9.0.2",
         "masonic": "^3.7.0",
         "moment": "2.29.4",
+        "mqtt": "^5.2.1",
         "mqtt-react-hooks": "^3.0.0-alpha.2",
         "multer": "1.4.5-lts.1",
         "react-contenteditable": "3.3.7",

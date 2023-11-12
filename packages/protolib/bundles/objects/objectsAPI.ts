@@ -157,18 +157,18 @@ const getDB = (path, req, session) => {
               path: '/packages/app/bundles/custom/apis'
             }
           })
-        }
 
-        //link in index.ts
-        const sourceFile = getSourceFile(apiIndex)
-        addImportToSourceFile(sourceFile, value.name+'Api', ImportType.DEFAULT, './' + value.name)
+            //link in index.ts
+          const sourceFile = getSourceFile(apiIndex)
+          addImportToSourceFile(sourceFile, value.name+'Api', ImportType.DEFAULT, './' + value.name)
 
-        const arg = getDefinition(sourceFile, '"apis"')
-        if (!arg) {
-          throw "No link definition schema marker found for file: " + path
+          const arg = getDefinition(sourceFile, '"apis"')
+          if (!arg) {
+            throw "No link definition schema marker found for file: " + path
+          }
+          addObjectLiteralProperty(arg, value.name, value.name+'Api')
+          sourceFile.saveSync();
         }
-        addObjectLiteralProperty(arg, value.name, value.name+'Api')
-        sourceFile.saveSync();
       }
 
       const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
