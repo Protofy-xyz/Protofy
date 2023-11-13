@@ -16,7 +16,7 @@
                         "field": "prop-title",
                         "fieldType": "prop",
                         "static": true,
-                        "type": "input"
+                        "type": "prop"
                     }
                 ],
                 "disableAdd": true
@@ -58,6 +58,47 @@
             {
                 "type": "prop",
                 "prop": []
+            }
+        ]
+    },
+    {
+        "id": "DefaultLayout",
+        "title": "DefaultLayout",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "DefaultLayout"
+        },
+        "body": [
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "title",
+                        "field": "prop-title",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "input"
+                    },
+                    {
+                        "label": "description",
+                        "field": "prop-description",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "prop"
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "Child1",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ]
             }
         ]
     }
