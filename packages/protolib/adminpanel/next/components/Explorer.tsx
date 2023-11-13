@@ -26,6 +26,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
     const [openDownloadDialog, setOpenDownloadDialog] = useState(false)
     const [selectedFiles, setSelectedFiles] = useState([])
+    const [customAction, setCustomAction] = useState(null)
 
     const onUploadFiles = async () => {
         setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] })
@@ -86,6 +87,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
         }
     }
 
+
     return (
         <Dropzone
             onDragEnter={() => setShowUploadDialog(true)}
@@ -134,6 +136,21 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         </YStack>
                     </AlertDialog>
 
+                    <AlertDialog
+                        p="$5"
+                        acceptCaption="Close"
+                        setOpen={setCustomAction}
+                        open={customAction}
+                        hideAccept={true}
+                        title={<Tinted><Text color="$color7">{customAction?.title}</Text></Tinted>}
+                        description={customAction?.description}
+                    >
+                        <YStack w={customAction?.size?.width} h={customAction?.size?.height} f={1}>
+                            {customAction && customAction.getComponent && customAction.getComponent(selectedFiles)}
+                        </YStack>
+                       
+                    </AlertDialog>
+
                     <YStack f={1}>
                         <input {...getInputProps()} />
                         <Tinted>
@@ -148,6 +165,10 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                                     } else if(data.id == 'download_files') {
                                         onDownloadFiles(data)
                                     } else {
+                                        const customAction = customActions.find(action => action.action.id == data.id)
+                                        if(customAction) {
+                                            setCustomAction(customAction)
+                                        }
                                         //console.log('Action: ', data)
                                     }
                                 }}
