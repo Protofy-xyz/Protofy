@@ -303,8 +303,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
       generatedOptions = ele._def.generateOptions(data)
     }
 
-    console.log(' before brokeness', ele._def)
-    const isUnion = ele._def.innterType && ele._def.type._def.typeName === 'ZodUnion'
+    const isUnion = !ele._def.innerType && ele._def.type._def.typeName === 'ZodUnion'
     if (isUnion) {
       // ele => union options array (zTypes[])
       return <UnionsArrayComp ele={ele} icon={icon} i={i} inArray={inArray} eleArray={ele._def.type._def.options} formData={formData} generatedOptions={generatedOptions} setFormData={setFormData} />
@@ -427,7 +426,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
     return groups
   }
 
-  const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode, mode])
+  const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode, mode, originalData])
 
   const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} mt={i ? "$0" : "$0"} width={autoWidth ? '100%' : columnWidth * (numColumns) + columnMargin} f={1}>
     <YStack f={1}>
