@@ -2,13 +2,15 @@ import * as React from 'react'
 import { Popover, YStack } from 'tamagui'
 import { HeaderLink } from 'protolib'
 import { createSession } from 'protolib'
-import { useSession } from 'protolib'
+import { useSession, clearSession, useSessionContext } from 'protolib'
 import { useRouter } from 'next/router'
 export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
-  const [session, setSession, clearSession] = useSession()
+  const [session, setSession] = useSession()
+  const [sessionContext, setSessionContext] = useSessionContext()
   const logout = () => {
-    clearSession()
+    clearSession(setSession, setSessionContext)
   }
+  
   return (
     <YStack miw={230} p="$3" ai="flex-end">
       {session.loggedIn ? <>
