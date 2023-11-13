@@ -85,8 +85,8 @@ export default {
         extraFieldsForms={{
           board: z.union(extraData.boards.map(o => z.literal(o.name))).after('name').display(),
           sdk: z.union([
-            z.literal(""),
-            z.literal("")
+            z.literal("hola"),
+            z.literal("adios")
           ]).dependsOn("board").generateOptions((formData) => {
             const { boards, cores, sdks } = extraData
             if (formData.board) {

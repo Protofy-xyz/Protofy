@@ -107,6 +107,20 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
   </FormGroup>
 }
 
+const UnionsArrayComp = ({ eleName, eleArray, formData, generatedOptions, setFormData }) => {
+  const primitives = ["ZodNumber", "ZodString", "ZodLiteral"] // add more primitives with the time
+
+  let defaultChoices = eleArray.map(zodEle => {
+    return primitives.includes(zodEle.typeName)
+      ? String(zodEle.value)
+      : JSON.stringify(zodEle.value)
+  })
+
+
+  console.log('ñ---asf-asf-asd-f', { formData, generatedOptions, defaultChoices })
+  return <MultiSelectList choices={generatedOptions.length ? generatedOptions : defaultChoices} defaultSelections={formData} onSetSelections={(selections) => setFormData(eleName, selections)} />
+}
+
 const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData, mode, customFields, path, setFormData }) => {
   const [menuOpened, setMenuOpened] = useState(false)
   const [name, setName] = useState("")
@@ -280,25 +294,25 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
       </Stack>
     </FormGroup>
   } else if (elementType == 'ZodArray') {
-    let data = getFormData(ele.name) ? getFormData(ele.name) : []
-    let choices = []
-    let Renderer = () => <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={data} getElement={getElement} setFormData={setFormData} />
+    const formData = getFormData(ele.name) ? getFormData(ele.name) : []
+    let generatedOptions = []
 
     // ---- MODIFIERS ---- 
     // generateOptions
     if ((typeof ele._def.generateOptions === 'function')) {
-      choices = ele._def.generateOptions(data)
+      generatedOptions = ele._def.generateOptions(data)
     }
 
-    // choices
-    if (ele._def.choices) {
-      Renderer = () => (<MultiSelectList choices={choices} defaultSelections={data} onSetSelections={(selections) => {
-        console.log('this was previouse', selections)
-        setFormData(ele.name, selections)
-      }} />)
+    if (ele._def.type._def.typeName === 'ZodUnion') {
+      // ele => union options array (zTypes[])
+      return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+        <UnionsArrayComp eleName={ele.name} eleArray={ele._def.type._def.options} formData={formData} generatedOptions={generatedOptions} setFormData={setFormData} />
+      </FormElement>
     }
 
-    return <Renderer />
+    return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+      <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={formData ? formData : generatedOptions} getElement={getElement} setFormData={setFormData} />
+    </FormElement>
   } else if (elementType == 'ZodRecord') {
     const recordData = getFormData(ele.name)
     return <RecordComp ele={ele} inArray={inArray} recordData={recordData} elementDef={elementDef} icon={icon} data={data} setData={setData} mode={mode} customFields={customFields} path={path} setFormData={setFormData} />
