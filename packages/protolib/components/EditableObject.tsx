@@ -117,7 +117,7 @@ const UnionsArrayComp = ({ ele, icon, i, inArray, eleArray, formData, generatedO
   })
 
   return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-    <MultiSelectList choices={generatedOptions.length ? generatedOptions : defaultChoices} defaultSelections={formData} onSetSelections={(selections) => setFormData(eleName, selections)} />
+    <MultiSelectList choices={generatedOptions.length ? generatedOptions : defaultChoices} defaultSelections={formData} onSetSelections={(selections) => setFormData(ele.name, selections)} />
   </FormElement>
 }
 
