@@ -15,6 +15,8 @@ export default {
         component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
             return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
+                    hideAdd
+                    openMode="view"
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}

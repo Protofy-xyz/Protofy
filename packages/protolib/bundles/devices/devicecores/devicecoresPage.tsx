@@ -15,6 +15,7 @@ export default {
         sourceUrl={sourceUrl}
         initialItems={initialItems}
         numColumnsForm={1}
+        entityName={"devicecores"}
         name="core"
         onAdd={data => { return data }}
         onEdit={data => { return data }}
@@ -30,7 +31,7 @@ export default {
         )
         }
         extraFieldsForms={{
-          sdks: z.array(z.string()).generateOptions(() => extraData.sdks.map(o => o.name)).choices().after('name').display(),
+          sdks: z.array(z.union([z.literal(""), z.literal("")])).generateOptions(() => extraData.sdks.map(o => o.name)).after('name').display(),
         }}
         model={DeviceCoreModel}
         pageState={pageState}

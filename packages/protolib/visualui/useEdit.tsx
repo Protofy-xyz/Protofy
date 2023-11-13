@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { API, Tinted } from 'protolib'
 import { Pencil } from '@tamagui/lucide-icons'
-import { Button } from 'tamagui'
+import { getTokens } from '@tamagui/core'
+import { Button, useMedia, useTheme, useThemeName } from 'tamagui'
 import { useRouter } from "next/router"
 import dynamic from 'next/dynamic';
 import protolibPalette from './index'
@@ -18,10 +19,14 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
   const [session] = useAtom(Session)
   const edit = useIsEditing()
 
+  const metadata = {
+    "tamagui": getTokens()
+  }
+
   const isAdmin = session.user?.type == 'admin'
   if (!isAdmin) return fn()
   else if (edit) {
-    return <VisualUILoader userComponents={userComponents} path={path} />
+    return <VisualUILoader userComponents={userComponents} path={path} metadata={metadata} />
   }
   else {
     const onEdit = () => {
@@ -50,7 +55,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
   }
 }
 
-const VisualUILoader = ({ userComponents, path }) => { // Should be in a component
+const VisualUILoader = ({ userComponents, path, metadata }) => { // Should be in a component
   const [res, setRes] = useState<any>()
   const [fileContent, setFileContent] = useState()
   const onSave = (content: string) => {
@@ -74,6 +79,6 @@ const VisualUILoader = ({ userComponents, path }) => { // Should be in a compone
       setFileContent(res.data)
     }
   }, [res])
-  return <UiManager userPalettes={{ protolib: protolibPalette, user: userComponents }} _sourceCode={fileContent} onSave={onSave} />
+  return <UiManager metadata={metadata} userPalettes={{ protolib: protolibPalette, user: userComponents }} _sourceCode={fileContent} onSave={onSave} />
 
 }
