@@ -20,10 +20,11 @@ type Props = {
 	_resolveComponentsDir?: string,
 	_currentPage?: string,
 	isVSCode?: boolean,
-	onSave?: Function
+	onSave?: Function,
+	metadata?: any
 }
 
-export default ({ userPalettes = {}, isVSCode = false, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", onSave = () => null }: Props) => {
+export default ({ userPalettes = {}, isVSCode = false, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", onSave = () => null, metadata={} }: Props) => {
 	const [currentPage, setCurrentPage] = useState(_currentPage);
 	const [resolveComponentsDir, setResolveComponentsDir] = useState(_resolveComponentsDir);
 	const [sourceCode, setSourceCode] = useState(_sourceCode);
@@ -84,6 +85,7 @@ export default ({ userPalettes = {}, isVSCode = false, _sourceCode = "", _resolv
 						userPalettes={userPalettes}
 						sendMessage={onSendMessage}
 						resolveComponentsDir={`${resolveComponentsDir}/`}
+						metadata={metadata}
 					/>
 					: null
 			}

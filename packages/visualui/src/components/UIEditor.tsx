@@ -21,8 +21,7 @@ export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
 // const uiStore = useFlowsStore()
 
-function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics }) {
-
+function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata={} }) {
     const editorRef = useRef<any>()
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const currentPageContent = useEditorStore(state => state.currentPageContent)
@@ -159,6 +158,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         bgColor={'#252526'}
                         theme={theme}
                         nodePreview={preview}
+                        metadata={metadata}
                     />
                 </div>
             </div>
