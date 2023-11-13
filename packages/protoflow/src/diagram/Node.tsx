@@ -125,7 +125,6 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
     const marginRight = Math.floor(((portSize / 3.5) * -1))
     return (
         <>
-            <div style={{ fontSize: 6 }}>{id}</div>
             <Handle
                 ref={handleRef}
                 tabIndex={connected ? -1 : 0}
