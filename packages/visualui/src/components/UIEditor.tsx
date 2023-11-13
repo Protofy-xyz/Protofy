@@ -13,6 +13,9 @@ import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
 import { ToggleGroup, Button } from "@my/ui"
+import UIMasks from '../masks/UI.mask.json';
+
+
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
@@ -150,7 +153,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         onSave={(code, _, data) => onEditorSave('flows', code, data)}
                         enableCommunicationInterface={true}
                         // store={uiStore}
-                        // config={{masks: UIMasks}}
+                        config={{masks: UIMasks}}
                         flowId={UIFLOWID}
                         themeMode={'dark'}
                         bgColor={'#252526'}

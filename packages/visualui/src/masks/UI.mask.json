@@ -1,0 +1,44 @@
+[
+    {
+        "id": "Page",
+        "title": "Page",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Page"
+        },
+        "body": [
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "title",
+                        "field": "prop-title",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "input"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "Child1",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ]
+            }
+        ],
+        "initialData": {
+            "prop-title": {
+                "key": "title",
+                "value": "\"Protofy\""
+            }
+        }
+ 
+    }
+]
