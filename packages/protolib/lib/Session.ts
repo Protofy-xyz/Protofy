@@ -6,6 +6,8 @@ import { API } from 'protolib'
 
 
 export const SessionData = atomWithStorage("session", createSession())
+export const UserSettingsAtom = atomWithStorage("userSettings", {workspace: ""} )
+
 export const Session = atom(
     (get) => get(SessionData), 
     (get, set, data: SessionDataType) => {
@@ -16,7 +18,7 @@ export const Session = atom(
         set(SessionData, data);
     }
 );
-export const SessionContext = atom({})
+export const SessionContext = atom({group: {workspaces:[]}})
 
 export const initSession = (pageSession) => {
     if (pageSession) {
@@ -69,7 +71,7 @@ export const withSession = async (context:any, validTypes?:string[]|any[]|null, 
 
     return { 
         props: { 
-            pageSession:  {session: session ?? createSession(), context:{group: session && session?.user?.type ? await API.get('/adminapi/v1/groups/'+session?.user?.type) : {} }},
+            pageSession:  {session: session ?? createSession(), context:{group: session && session?.user?.type ? (await API.get('/adminapi/v1/groups/'+session?.user?.type)).data : {} }},
             ...(typeof props === "function"? await props() : props),
 
         } 
@@ -83,5 +85,20 @@ export const useSession = (pageSession?) => {
 
 export const useSessionContext = () => {
     return useAtom(SessionContext)
+}
+
+export const useSessionGroup = () => {
+    const [ctx] = useSessionContext()
+    return ctx.group
+}
+
+export const useWorkspaces = () => {
+    const group = useSessionGroup()
+    if (group && group.workspaces) return group.workspaces
+    return []
+}
+
+export const useUserSettings = () => {
+    return useAtom(UserSettingsAtom)
 }
 

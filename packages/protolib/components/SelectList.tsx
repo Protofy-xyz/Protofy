@@ -3,7 +3,6 @@ import { ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
 import { useMemo, useState } from "react";
 
 export function SelectList({title, value, elements, setValue, ...props}: SelectProps & {title: any, elements: any[], value: any, setValue: any}) {
-  
     return (
       <Select
         id="select"
@@ -13,7 +12,7 @@ export function SelectList({title, value, elements, setValue, ...props}: SelectP
         {...props}
       >
         <Select.Trigger f={1} iconAfter={ChevronDown}>
-          <Select.Value placeholder="Choose an option" />
+          <Select.Value />
         </Select.Trigger>
   
         <Adapt when="sm" platform="touch">
