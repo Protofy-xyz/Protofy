@@ -9,6 +9,9 @@
         },
         "body": [
             {
+                "type": "protolibProps"
+            },
+            {
                 "type": "prop",
                 "prop": [
                     {
