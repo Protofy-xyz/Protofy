@@ -35,6 +35,8 @@ type FlowsStoreData = {
     setCurrentPath: Function,
     editingLayout: "default" | "node",
     setEdittingLayout: Function,
+    metadata: any,
+    setMetadata: Function
 }
 export const useFlowsStore = () => {
     return create<FlowsStoreData>((set, get) => ({
@@ -52,8 +54,8 @@ export const useFlowsStore = () => {
         flowInstance: Math.random(),
         currentPath: 'Start',
         editingLayout: "default",
+        metadata: {},
         dataNotify: () => { },
-
         setDataNotify: (dataNotify: any) => set(produce((draft: FlowsStoreData) => {
             draft.dataNotify = dataNotify;
         })),
@@ -146,6 +148,9 @@ export const useFlowsStore = () => {
         })),
         setEdittingLayout: (layout) => set(produce((draft: FlowsStoreData) => {
             draft.editingLayout = layout;
+        })),
+        setMetadata: (payload) => set(produce((draft: FlowsStoreData) => {
+            draft.metadata = payload
         }))
     }));
 }

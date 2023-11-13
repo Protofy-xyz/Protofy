@@ -67,7 +67,8 @@ interface FlowProps {
     defaultViewPort?: { x: number, y: number, zoom: number },
     path?: string,
     mode?: string,
-    nodePreview?: boolean
+    nodePreview?: boolean,
+    metadata?: any
 }
 
 const FlowComponent = ({
@@ -101,7 +102,8 @@ const FlowComponent = ({
     defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
     path = "Start",
     mode = 'js',
-    nodePreview = false
+    nodePreview = false,
+    metadata={}
 }: FlowProps) => {
     const { data, publish } = topics;
     const useFlowsStore = useContext(FlowStoreContext)
@@ -116,6 +118,8 @@ const FlowComponent = ({
     const setSaveStatus = useFlowsStore(state => state.setSaveStatus)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const setNodesData = useFlowsStore(state => state.setNodesData)
+    const setMetadata = useFlowsStore(state => state.setMetadata)
+    const _metadata = useFlowsStore(state => state.metadata)
     const setCurrentPath = useFlowsStore(state => state.setCurrentPath)
     const setNodesMetaData = useFlowsStore(state => state.setNodesMetaData)
     const clearNodesData = useFlowsStore(state => state.clearNodesData)
@@ -134,6 +138,8 @@ const FlowComponent = ({
     const [prevNodeData, setPrevNodeData] = useState(deleteAdditionalKeys(nodeData));
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge({ ...params, type: 'custom', animated: false }, eds)), [setEdges]);
+
+    useEffect(() => {setMetadata(metadata)},[metadata])
 
     const reload = async () => {
         clearNodesData()
