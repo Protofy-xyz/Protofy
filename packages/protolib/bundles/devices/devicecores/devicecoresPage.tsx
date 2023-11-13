@@ -15,6 +15,7 @@ export default {
         sourceUrl={sourceUrl}
         initialItems={initialItems}
         numColumnsForm={1}
+        entityName={"devicecores"}
         name="core"
         onAdd={data => { return data }}
         onEdit={data => { return data }}

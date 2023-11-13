@@ -11,6 +11,7 @@ export default {
   component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
     return (<AdminPage title="Device Boards" pageSession={pageSession}>
       <DataView
+        entityName={"deviceboards"}
         itemData={itemData}
         rowIcon={CircuitBoard}
         sourceUrl={sourceUrl}

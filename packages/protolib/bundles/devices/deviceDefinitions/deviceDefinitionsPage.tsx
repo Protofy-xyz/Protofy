@@ -67,6 +67,7 @@ export default {
       </AlertDialog>
 
       <DataView
+        entityName={"devicedefinitions"}
         itemData={itemData}
         rowIcon={BookOpen}
         sourceUrl={sourceUrl}
