@@ -7,12 +7,17 @@ import { Session } from 'protolib'
 
 export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
   const [session, setSession] = useAtom(Session)
+
+  const logout = () => {
+    setSession(createSession())
+    document.location.href="/"
+  }
   return (
     <YStack miw={230} p="$3" ai="flex-end">
       {session.loggedIn ? <>
         <HeaderLink href="/profile">Profile</HeaderLink>
         {session.user?.type == 'admin' ? <HeaderLink href="/admin/files">Workspace</HeaderLink> : null}
-        <HeaderLink onClick={() => setSession(createSession())} href={{pathname: '/'}}>Logout</HeaderLink>
+        <HeaderLink onClick={logout} href={"#"}>Logout</HeaderLink>
       </> : <HeaderLink href="/auth/login">Login</HeaderLink>}
       {/* <Separator my="$4" w="100%" />
 
