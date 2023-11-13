@@ -152,9 +152,15 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
 
     const getInput = (disabled?) => {
         switch (param.type) {
+            case 'select-prop':
             case 'select':
+                const isProp = param.type == "select-prop"
                 const onChangeSelect = (data) => {
-                    setNodeData(id, { ...nodeData, [param.field]: nodeData[param.field]?.value ? { key: param.label, value: data?.value } : data?.value })
+                    var tmpData = { [param.field]: nodeData[param.field]?.value ? { key: param.label, value: data?.value } : data?.value }
+                    if (isProp) {
+                        tmpData = { ["prop-" + param.field]: { key: param.field, value: data?.value } }
+                    }
+                    setNodeData(id, { ...nodeData, ...tmpData })
                     dataNotify({ id: id, paramField: param.field, newValue: data?.value })
                 }
                 const options = param.data?.map((item, index) => {
@@ -404,7 +410,7 @@ export const HandleOutput = ({ id, param, position = null, style = {}, isConnect
             </div> : null}
             <Handle
                 type={"source"}
-                style={{ marginLeft: -portSize/4, width: portSize + "px", height: portSize + "px", backgroundColor: backgroundColor, top: (portSize/2)+10, border: borderWidth + " solid " + borderColor, ...style }}
+                style={{ marginLeft: -portSize / 4, width: portSize + "px", height: portSize + "px", backgroundColor: backgroundColor, top: (portSize / 2) + 10, border: borderWidth + " solid " + borderColor, ...style }}
                 position={position ?? (flowDirection == 'LEFT' ? Position.Left : Position.Right)}
                 title={DEVMODE ? `${id}${PORT_TYPES.data}output` : undefined}
                 id={`${id}${PORT_TYPES.data}output`}
@@ -534,7 +540,7 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
         }
     }
 
-    useEffect(() => computeLayout(),[])
+    useEffect(() => computeLayout(), [])
 
     return (
         <DiagramNode

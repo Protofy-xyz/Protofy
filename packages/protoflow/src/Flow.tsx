@@ -119,7 +119,6 @@ const FlowComponent = ({
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const setNodesData = useFlowsStore(state => state.setNodesData)
     const setMetadata = useFlowsStore(state => state.setMetadata)
-    const _metadata = useFlowsStore(state => state.metadata)
     const setCurrentPath = useFlowsStore(state => state.setCurrentPath)
     const setNodesMetaData = useFlowsStore(state => state.setNodesMetaData)
     const clearNodesData = useFlowsStore(state => state.clearNodesData)
@@ -834,6 +833,7 @@ const FlowComponent = ({
         if (_customComponents.length != appendedCustomComponents.length) {
             appendCustomComponents(_customComponents)
         }
+        setMetadata(metadata)
     }, [_customComponents.length])
 
     useEffect(() => {

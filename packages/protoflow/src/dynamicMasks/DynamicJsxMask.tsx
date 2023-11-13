@@ -4,7 +4,7 @@ import FallbackPort from '../FallbackPort';
 import AddPropButton from '../AddPropButton';
 import { Code } from 'lucide-react'
 import { FlowStoreContext } from "../store/FlowsStore"
-import {useContext} from 'react';
+import { useContext } from 'react';
 
 const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const propsArray: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('prop-')).map((prop: any, i) => {
@@ -45,9 +45,9 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         case 'protolibProps': {
                             const useFlowsStore = useContext(FlowStoreContext)
                             const metadata = useFlowsStore(state => state.metadata)
-                            const colors = Object.keys(metadata?.tamagui?.color??{}).map(k => metadata?.tamagui?.color[k].key)
+                            const colors = Object.keys(metadata?.tamagui?.color ?? {}).map(k => '"' + metadata?.tamagui?.color[k].key + '"')
                             return <>
-                                {/* <NodeParams id={node.id} params={[{ field: 'bgColor', type: 'select', data: colors??[], static: true }]} /> */}
+                                {/* <NodeParams id={node.id} params={[{ field: 'bgColor', type: 'select-prop', data: colors ? ["$color", ...colors] : [], static: true }]} /> */}
                             </>
                         }
                     }
