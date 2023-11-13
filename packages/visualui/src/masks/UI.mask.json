@@ -32,13 +32,33 @@
                     }
                 ]
             }
-        ],
-        "initialData": {
-            "prop-title": {
-                "key": "title",
-                "value": "\"Protofy\""
+        ]
+    },
+    {
+        "id": "BigTitle",
+        "title": "BigTitle",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "BigTitle"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "Caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "prop",
+                "prop": []
             }
-        }
- 
+        ]
     }
 ]
