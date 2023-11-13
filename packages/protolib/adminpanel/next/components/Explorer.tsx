@@ -32,7 +32,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
     }
     const onScroll = () => { }
     const myFileActions = [
-        ...customActions,
+        ...customActions.map(f => f.action),
         ChonkyActions.UploadFiles,
         // ChonkyActions.EnableCompactView
         // ChonkyActions.CreateFolder
