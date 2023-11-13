@@ -36,7 +36,6 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
     }    
 
     return withSession(context, ['admin'], {
-      ...props,
-      workspace: await API.get('/adminapi/v1/workspaces')
+      ...props
     })
 })

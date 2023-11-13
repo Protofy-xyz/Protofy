@@ -6,7 +6,6 @@ import { API, withSession } from 'protolib'
 export function DataSSR(sourceUrl, allowdUserTypes=['admin'], props={}) {
     return _SSR(async (context:NextPageContext) => {
         return withSession(context, allowdUserTypes, {
-          workspace: await API.get('/adminapi/v1/workspaces'),
           pageState: {
             sourceUrl,
             initialItems: await API.get({url: sourceUrl, ...props}),

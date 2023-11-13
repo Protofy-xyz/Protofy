@@ -122,7 +122,6 @@ const CreateDialog = ({subtab}) => {
                 })
                 //@ts-ignore
                 if(response.isLoaded) {
-                    setWorkspace(await API.get('/adminapi/v1/workspaces'))
                     setName('')
                     setOpen(false)
                     setResult(getPendingResult("pending"))
