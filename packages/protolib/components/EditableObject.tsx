@@ -303,7 +303,9 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
       generatedOptions = ele._def.generateOptions(data)
     }
 
-    if (ele._def.type._def.typeName === 'ZodUnion') {
+    console.log(' before brokeness', ele._def)
+    const isUnion = ele._def.innterType && ele._def.type._def.typeName === 'ZodUnion'
+    if (isUnion) {
       // ele => union options array (zTypes[])
       return <UnionsArrayComp ele={ele} icon={icon} i={i} inArray={inArray} eleArray={ele._def.type._def.options} formData={formData} generatedOptions={generatedOptions} setFormData={setFormData} />
     }
