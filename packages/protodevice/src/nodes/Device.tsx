@@ -163,7 +163,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
                     />
                 }
             })}
-            {/* <AddPropButton id={id} nodeData={nodeData} type={"Component"} style={{ marginBottom: '20px' }} /> */}
+            <AddPropButton id={id} nodeData={nodeData} type={"Component"} style={{ marginBottom: '20px' }} />
         </Node>
     );
 }
