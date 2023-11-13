@@ -56,17 +56,17 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const currentDevice = useDeviceStore(state => state.electronicDevice);
-    const offsetY = 996 //This value is for setting the initial point where the available pins start to draw
+    const offsetY = 856 //This value is for setting the initial point where the available pins start to draw
     const spacing = 46
     const edges = useEdges();
 
-    const changeDeviceName = () => {
-        const isValidDevice = () => !(!(nodeData['element-0'] == '') || nodeData['element-0'].includes(' ') || nodeData['element-0'].includes('.'))
-        if (isValidDevice()) {
-            if (nodeData['element-0'] == currentDevice) return
-            publish('device/changedDeviceName', { deviceName: nodeData['element-0'], oldDeviceName: currentDevice, ts: Date.now() })
-        }
-    }
+    // const changeDeviceName = () => {
+    //     const isValidDevice = () => !(!(nodeData['element-0'] == '') || nodeData['element-0'].includes(' ') || nodeData['element-0'].includes('.'))
+    //     if (isValidDevice()) {
+    //         if (nodeData['element-0'] == currentDevice) return
+    //         publish('device/changedDeviceName', { deviceName: nodeData['element-0'], oldDeviceName: currentDevice, ts: Date.now() })
+    //     }
+    // }
 
     const params = [
         // { label: 'Name', onBlur:()=>changeDeviceName(), field: 'element-0', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"'},
@@ -87,16 +87,16 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
         }
 
     ]
-    const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME
-    const mqttTopic = `${projectName}/${currentDevice}/status`
-    const { message } = useSubscription(['newplatform/mydevice/status']);
+    // const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME
+    // const mqttTopic = `${projectName}/${currentDevice}/status`
+    // const { message } = useSubscription(['newplatform/mydevice/status']);
     // const addChannel = useAppStore(state => state.addChannel)
     // const lastMessage = useAppStore(state => state.lastMessageByTopic[mqttTopic]) ?? []
     // addChannel(mqttTopic);
     // TODO: Replace mqtt connectivity
-    const [lastMessage, setLastMessage] = React.useState({ message: "offline" })
+    // const [lastMessage, setLastMessage] = React.useState({ message: "offline" })
     // END-TODO
-    const [connected, setConnected] = React.useState("offline");
+    // const [connected, setConnected] = React.useState("offline");
 
     const onCompile = () => {
         publish('flows-editor/play', { ts: Date.now() })
@@ -109,13 +109,13 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     //     }
     // }, [lastMessage])
 
-    React.useEffect(() => {
-        if (message?.message == 'online') {
-            setConnected("online");
-        } else {
-            setConnected("offline")
-        }
-    }, [message])
+    // React.useEffect(() => {
+    //     if (message?.message == 'online') {
+    //         setConnected("online");
+    //     } else {
+    //         setConnected("offline")
+    //     }
+    // }, [message])
     const devicePositioning = Array(34).fill(1).map((x,i)=>{
         if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
             return `${i + 10}-${i>14?'l':'r'}-${i}`
@@ -128,11 +128,10 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     return (
         <Node output={false} skipCustom={true} node={node} color='#8FCAF9' isPreview={!id} title='ESP32' id={id}  >
             {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
-            <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button>
-            <div style={{ alignItems: 'center', justifyContent: 'flex-end', paddingLeft: "14px", paddingRight: "14px", paddingTop: "10px",paddingBottom: "10px" }}>
+            {/* <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button> */}
+            {/* <div style={{ alignItems: 'center', justifyContent: 'flex-end', paddingLeft: "14px", paddingRight: "14px", paddingTop: "10px",paddingBottom: "10px" }}>
                 <p style={{ marginRight: '5px' }}>{connected}<span style={{backgroundColor: connected=="online"?"green":"red",display:"inline-block", width: "12px", height: "12px", borderRadius: "40px", marginLeft: "15px"}}></span></p>
-                {/* <Icon as={MaterialCommunityIcons} color={connected == 'online' ? 'green.500' : 'error.600'} name={'circle'} /> */}
-            </div>
+            </div> */}
             {<NodeParams id={id} params={params} />}
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>
                 <img src={esp32c4.src} style={{ width: "100%" }} />
