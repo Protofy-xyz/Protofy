@@ -38,14 +38,12 @@ import {
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import {useAtom, useSetAtom} from 'jotai'
 import { getPendingResult } from '../../../lib/createApiAtom';
 import { AlertDialog } from '../../../components/AlertDialog';
 import { API } from '../../../lib/Api';
 import { Link } from '../../../components/Link';
 import { Tinted } from '../../../components/Tinted';
 import { PanelMenuItem } from '../../../components/PanelMenuItem';
-import { workspaceAtom } from '../atoms';
 
 const opacity = 1
 const strokeWidth = 2
@@ -103,7 +101,6 @@ const getIcon = (Icon) => {
 const CreateDialog = ({subtab}) => {
     const [name, setName] = useState('')
     const [result, setResult] = useState(getPendingResult("pending"))
-    const setWorkspace = useSetAtom(workspaceAtom)
     const template = subtab.options.templates[0]
 
     if(!template) {
@@ -203,8 +200,7 @@ const Tabs = ({ tabs }: any) => {
     );
 };
 
-export const PanelMenu = () => {
-    const [workspace] = useAtom(workspaceAtom)
+export const PanelMenu = ({workspace}) => {
     return (<YStack pt="$10">
         <Tabs tabs={workspace.menu} />
     </YStack>)

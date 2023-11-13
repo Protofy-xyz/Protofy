@@ -1,7 +1,7 @@
 
 import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'app/schema';
 import {getInitialData} from 'app/initialData'
-import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app} from 'protolib/api'
+import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app, getSessionContext} from 'protolib/api'
 import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";
 
@@ -25,7 +25,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
         if(await checkPassword(request.password, storedUser.password)) {
             //update lastLogin
             await getDB(dbPath).put(storedUser.username, JSON.stringify({...storedUser, lastLogin: moment().toISOString()}))
-            res.send(genNewSession({id:storedUser.username, type: storedUser.type}))
+            res.send({session: genNewSession({id:storedUser.username, type: storedUser.type}), context: await getSessionContext(storedUser.type)})
             generateEvent({
                 path: 'auth/login/success', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
@@ -66,6 +66,6 @@ app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
             user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
             payload: {} // event payload, event-specific data
         })
-        res.send(genNewSession({id:request.username, type: "user"}))
+        res.send({session: genNewSession({id:request.username, type: "user"}), context: await getSessionContext('user')})
     }
 }));
