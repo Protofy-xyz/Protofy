@@ -1,7 +1,7 @@
 import { atom, useAtom} from 'jotai';
 import { atomWithStorage, useHydrateAtoms} from 'jotai/utils';
 import * as cookie from 'cookie'
-import { createSession, validateSession, SessionDataType } from '../api/lib/session';
+import { createSession, validateSession, SessionDataType, getSessionContext } from '../api/lib/session';
 import { API } from 'protolib'
 
 
@@ -18,12 +18,15 @@ export const Session = atom(
         set(SessionData, data);
     }
 );
-export const SessionContext = atom({group: {workspaces:[]}})
+const initialContext = {group: {workspaces:[]}}
+export const SessionContext = atom(initialContext)
 
 export const initSession = (pageSession) => {
     if (pageSession) {
-        useHydrateAtoms([[Session, pageSession.session]])
-        useHydrateAtoms([[SessionContext, pageSession.context]])
+        useHydrateAtoms([
+            [Session, pageSession.session],
+            [SessionContext, pageSession.context]
+        ]);
     }
 }
 
@@ -71,16 +74,20 @@ export const withSession = async (context:any, validTypes?:string[]|any[]|null, 
 
     return { 
         props: { 
-            pageSession:  {session: session ?? createSession(), context:{group: session && session?.user?.type ? (await API.get('/adminapi/v1/groups/'+session?.user?.type)).data : {} }},
+            pageSession:  {session: session ?? createSession(), context: await getSessionContext(session?.user?.type)},
             ...(typeof props === "function"? await props() : props),
-
         } 
     }
 }
 
 export const useSession = (pageSession?) => {
     initSession(pageSession)
-    return useAtom(Session)
+    const [session, setSession]= useAtom(Session)
+    const [sessionContext, setSessionContext] = useSessionContext()
+    return [session, setSession, () => {
+        setSession(createSession())
+        setSessionContext(initialContext)
+    }]
 }
 
 export const useSessionContext = () => {

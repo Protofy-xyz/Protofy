@@ -4,13 +4,10 @@ import { AlertDialog, Button, Dialog, XStack } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from '../../features/components/FilesWidget';
 import { IconContainer } from '../../../components/IconContainer';
-import {useAtom} from '../../../lib/Atom'
 import { X } from '@tamagui/lucide-icons';
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { workspaceAtom } from '../../features/atoms'
-import { WorkspaceParserModel } from 'app/bundles/workspaces';
 import { Explorer } from './Explorer';
 import { defineFileAction } from 'chonky';
 
@@ -23,7 +20,6 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const router = useRouter()
     const [openAlert, setOpenAlert] = useState(false)
     const [isModified, setIsModified] = useState(false)
-    const [workspace] = useAtom(workspaceAtom)
 
     useUpdateEffect(() => {
         //API.get('/adminapi/v1/files/'+currentPath, setFiles)
@@ -68,24 +64,14 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
 
     var templateActions: any = []
-    if (workspace.isLoaded) {
-        WorkspaceParserModel.load(workspace)
-            .getResources()
-            .byType('template')
-            .byPath(currentPath)
-            .forEach((resource) => {
-                resource.getOption('templates').forEach((template: any) => {
-                    templateActions.push(defineFileAction({
-                        id: 'template_' + template.name,
-                        button: {
-                            name: template.title,
-                            toolbar: true,
-                            group: 'Templates'
-                        }
-                    }))
-                })
-            })
-    }
+    // templateActions.push(defineFileAction({
+    //     id: action_id,
+    //     button: {
+    //         name: "click me",
+    //         toolbar: true,
+    //         group: 'Templates'
+    //     }
+    // }))
 
     const isFull = router.query?.full
     const getWidget = () => <FileWidget
