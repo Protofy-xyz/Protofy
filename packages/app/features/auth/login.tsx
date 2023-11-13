@@ -1,10 +1,9 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
-import { hasSessionCookie, Session, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingAtomResult, getPendingResult, Page} from 'protolib'
+import { hasSessionCookie, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingAtomResult, getPendingResult, Page} from 'protolib'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG } from '@my/ui'
-import { useAtom } from 'jotai'
 import { useRouter } from 'next/router';
 
 
@@ -41,7 +40,9 @@ function SignIn() {
   const [showPasswordInput, setShowPasswordInput] = useState(false)
   const emailRef = useRef(null)
   const [authState, setAuthState] = useState<PendingAtomResult>(getPendingResult('pending'))
-  const [session, setSession] = useAtom(Session)
+  const [session, setSession] = useSession()
+  const [sessionContext, setSessionContext] = useSessionContext()
+
   const router = useRouter()
 
   useEffect(() => {
@@ -51,7 +52,8 @@ function SignIn() {
 
   useEffect(() => {
     if(authState.isLoaded && authState.data) {
-      setSession(createSession(authState.data.user, authState.data.token))
+      setSession(createSession(authState.data.session.user, authState.data.session.token))
+      setSessionContext(authState.data.context)
     }
   }, [authState])
 
