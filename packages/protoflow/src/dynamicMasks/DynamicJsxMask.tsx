@@ -54,6 +54,9 @@ DynamicJsxMask.check = (node, nodeData, data) => {
         var dataArr = Object.keys(nodeData)
         initialCheck = initialDataArr?.filter(i => !dataArr.includes(i)).length == 0 ? true : false
     }
+    else {
+        initialCheck = true
+    }
     let result = node.type == data.type && nodeData.name == data.id && initialCheck
     return result;
 }
