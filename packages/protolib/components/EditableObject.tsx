@@ -107,7 +107,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
   </FormGroup>
 }
 
-const UnionsArrayComp = ({ eleName, eleArray, formData, generatedOptions, setFormData }) => {
+const UnionsArrayComp = ({ ele, icon, i, inArray, eleArray, formData, generatedOptions, setFormData }) => {
   const primitives = ["ZodNumber", "ZodString", "ZodLiteral"] // add more primitives with the time
 
   let defaultChoices = eleArray.map(zodEle => {
@@ -116,9 +116,9 @@ const UnionsArrayComp = ({ eleName, eleArray, formData, generatedOptions, setFor
       : JSON.stringify(zodEle.value)
   })
 
-
-  console.log('ñ---asf-asf-asd-f', { formData, generatedOptions, defaultChoices })
-  return <MultiSelectList choices={generatedOptions.length ? generatedOptions : defaultChoices} defaultSelections={formData} onSetSelections={(selections) => setFormData(eleName, selections)} />
+  return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+    <MultiSelectList choices={generatedOptions.length ? generatedOptions : defaultChoices} defaultSelections={formData} onSetSelections={(selections) => setFormData(eleName, selections)} />
+  </FormElement>
 }
 
 const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData, mode, customFields, path, setFormData }) => {
@@ -305,14 +305,10 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
 
     if (ele._def.type._def.typeName === 'ZodUnion') {
       // ele => union options array (zTypes[])
-      return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-        <UnionsArrayComp eleName={ele.name} eleArray={ele._def.type._def.options} formData={formData} generatedOptions={generatedOptions} setFormData={setFormData} />
-      </FormElement>
+      return <UnionsArrayComp ele={ele} icon={icon} i={i} inArray={inArray} eleArray={ele._def.type._def.options} formData={formData} generatedOptions={generatedOptions} setFormData={setFormData} />
     }
 
-    return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-      <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={formData ? formData : generatedOptions} getElement={getElement} setFormData={setFormData} />
-    </FormElement>
+    return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={formData ? formData : generatedOptions} getElement={getElement} setFormData={setFormData} />
   } else if (elementType == 'ZodRecord') {
     const recordData = getFormData(ele.name)
     return <RecordComp ele={ele} inArray={inArray} recordData={recordData} elementDef={elementDef} icon={icon} data={data} setData={setData} mode={mode} customFields={customFields} path={path} setFormData={setFormData} />
