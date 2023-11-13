@@ -16,7 +16,6 @@ export default {
             { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
             { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
             { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
-            { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" },
             { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
         ]
     }
