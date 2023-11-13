@@ -1,4 +1,7 @@
 // import OutputPin from "./OutputPin";
+import Wifi from './Wifi'
+import Mqtt from './Mqtt'
+import DeepSleep from './DeepSleep'
 import Device from "./Device";
 import BinarySensor from "./BinarySensor";
 // import NeopixelsBus from "./NeopixelsBus";
@@ -36,6 +39,27 @@ const deviceMasks = [
     getInitialData: () => { return { to: '"esp32dev"' } },
     hidden: true,
     nonDeletable: true
+  },
+  {
+    id: 'Wifi',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('wifi'), //TODO: Change output function name
+    getComponent: Wifi,
+    getInitialData: () => { return { to: 'wifi', param1: '"SSID"', param2: '"PASSWORD"', param3: '"none"' } }
+  },
+  {
+    id: 'Mqtt',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mqtt'), //TODO: Change output function name
+    getComponent: Mqtt,
+    getInitialData: () => { return { to: 'mqtt', param1: '"BROKERADDRESS"', param2: '"project/device"' } }
+  },
+  {
+    id: 'DeepSleep',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('deepSleep'), //TODO: Change output function name
+    getComponent: DeepSleep,
+    getInitialData: () => { return { to: 'deepSleep', param1: '"10"', param2: '"10"', param3: '' } }
   },
   {
     id: 'Relay',

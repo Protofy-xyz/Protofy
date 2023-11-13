@@ -23,101 +23,22 @@ class Device {
     constructor(deviceInfo) {
         this.name = deviceInfo[0]
         this.type = deviceInfo[1]
-        this.ssid = deviceInfo[2]
-        this.password = deviceInfo[3]
-        this.wifiPowerMode = deviceInfo[4]
-        this.mqtt = deviceInfo[5]
-        this.deepSleep = deviceInfo[6]
-        this.deepSleepRunDuration = deviceInfo[7]
-        this.deepSleepSleepDuration =deviceInfo[8]
-        this.wakeupPin = deviceInfo[9]
+        // this.ssid = deviceInfo[2]
+        // this.password = deviceInfo[3]
+        // this.wifiPowerMode = deviceInfo[4]
+        // this.mqtt = deviceInfo[5]
+        // this.deepSleep = deviceInfo[6]
+        // this.deepSleepRunDuration = deviceInfo[7]
+        // this.deepSleepSleepDuration =deviceInfo[8]
+        // this.wakeupPin = deviceInfo[9]
         this.pinTable = []
         this.mqttPrefix = ""
         this.components = deviceInfo.slice(10)
-        this.dsComponents = []
         this.mqttJsonEndpoints = ''
         this.onJsonMessage = undefined
         this.onMessage = undefined
         this.onBoot = undefined
         this.onShutdown= undefined
-        this.dsComponents = [
-        {
-            name: 'deep_sleep', 
-            config:{
-                id: "ds",
-                sleep_duration: this.deepSleepSleepDuration+"s",
-                wakeup_pin: this.wakeupPin,
-                wakeup_pin_mode: "KEEP_AWAKE"
-
-        }},
-        {
-            name: 'globals', 
-            config:{
-                id: "dp_run_duration",
-                type: "int",
-                restore_value: "yes",
-                initial_value: this.deepSleepRunDuration
-        }},
-        {
-            name: 'globals',
-            config: {
-                id: "dp_sleep_duration",
-                type: "int",
-                restore_value: "yes",
-                initial_value: this.deepSleepSleepDuration
-        }},
-        {
-            name: 'on_message',
-            config:{
-                topic: `${this.mqttPrefix !== '' ? this.mqttPrefix + '/' + this.name : this.name}/deep_sleep/dp_sleep_duration/command`,
-                then:{
-                    lambda: 
-`int value = atoi(x.c_str());
-if (value == 0) {
-id(ds).prevent_deep_sleep();
-ESP_LOGD("Deep Sleep", "Deep Sleep disabled");
-} else if (value > 0) {
-id(ds).allow_deep_sleep();
-id(dp_sleep_duration) = value;
-id(ds).set_sleep_duration(value * 1000);
-ESP_LOGD("Deep Sleep", "Deep Sleep sleep duration set to: %d", value);
-ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to: %d", id(dp_run_duration));
-} else {
-ESP_LOGD("Deep Sleep", "Invalid sleep duration value");
-}`
-                }
-        }},
-        {
-            name: 'on_message',
-            config:{
-                topic: `${this.mqttPrefix !== '' ? this.mqttPrefix + '/' + this.name : this.name}/deep_sleep/dp_run_duration/command`,
-                then:{
-                    lambda: 
-`int value = atoi(x.c_str());
-if (value > 0){
-id(dp_run_duration) = value;
-id(ds).set_run_duration(value*1000);
-ESP_LOGD("Deep Sleep", "Deep Sleep run duration set to: %d",  value);
-ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to: %d",  id(dp_run_duration));       
-} 
-else {
-ESP_LOGD("Deep Sleep", "Invalid run duration value");
-}`
-                }
-        }},
-        {
-            name: 'on_boot',
-            config:{
-                priority: 600,
-                then:{
-                  lambda: 
-`ESP_LOGD("Deep Sleep", "Global Deep Sleep run duration set to at boot: %d",  id(dp_run_duration));
-id(ds).set_run_duration(id(dp_run_duration)*1000);
-ESP_LOGD("Deep Sleep", "Global Deep Sleep sleep duration set to at boot: %d",  id(dp_sleep_duration));
-id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
-              }
-      }},
-    ]
 
     }
 
@@ -245,7 +166,6 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
 
 
     create(deviceDefinition?) {
-        console.log("🚀 ~ file: Device.ts:253 ~ Device ~ create ~ deviceDefinition:", deviceDefinition)
         const ports = deviceDefinition.board.ports
         this.pinTable = []
         ports.forEach(port => {
@@ -258,7 +178,7 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
         components = this.extractOnBoot(components)
         components= this.extractOnShutdown(components)
 
-        //console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ this.dump() + jsYaml.dump(components):", this.dump() + jsYaml.dump(components, {lineWidth: -1}))
+       // console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ this.dump() + jsYaml.dump(components):", this.dump() + jsYaml.dump(components, {lineWidth: -1}))
         return this.dump() + jsYaml.dump(components, {lineWidth: -1});
     }
 
@@ -274,15 +194,15 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`
                 }
             },
             logger: {},
-            wifi: {
-                ssid: this.ssid,
-                password: this.password,
-                power_save_mode: this.wifiPowerMode
-            },
-            mqtt: {
-                broker: this.mqtt,
-                topic_prefix: this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name,
-            }
+            // wifi: {
+            //     ssid: this.ssid,
+            //     password: this.password,
+            //     power_save_mode: this.wifiPowerMode
+            // },
+            // mqtt: {
+            //     broker: this.mqtt,
+            //     topic_prefix: this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name,
+            // }
         }
         if (this.onBoot != undefined) {
             esphomeJson['esphome']['on_boot'] = this.onBoot

@@ -56,8 +56,8 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const currentDevice = useDeviceStore(state => state.electronicDevice);
-    const offsetY = 856 //This value is for setting the initial point where the available pins start to draw
-    const spacing = 46
+    const offsetY = 257 //This value is for setting the initial point where the available pins start to draw
+    const spacing = 27.8
     const edges = useEdges();
 
     // const changeDeviceName = () => {
@@ -126,13 +126,13 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
         setNodeData(node.id,{...nodeData, _devicePositioning: devicePositioning})
     }
     return (
-        <Node output={false} skipCustom={true} node={node} color='#8FCAF9' isPreview={!id} title='ESP32' id={id}  >
+        <Node output={false} skipCustom={true} node={node} color='#8FCAF9' isPreview={!id} title='ESP32' id={id} margin='200px' >
             {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
             {/* <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button> */}
             {/* <div style={{ alignItems: 'center', justifyContent: 'flex-end', paddingLeft: "14px", paddingRight: "14px", paddingTop: "10px",paddingBottom: "10px" }}>
                 <p style={{ marginRight: '5px' }}>{connected}<span style={{backgroundColor: connected=="online"?"green":"red",display:"inline-block", width: "12px", height: "12px", borderRadius: "40px", marginLeft: "15px"}}></span></p>
             </div> */}
-            {<NodeParams id={id} params={params} />}
+            {/* {<NodeParams id={id} params={params} />} */}
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>
                 <img src={esp32c4.src} style={{ width: "100%" }} />
             </div>
@@ -150,11 +150,11 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
                         style={{
                             position: 'absolute',
                             top: i > 14 ? (spacing * (i - 15)) + (offsetY - (spacing * 4)) + 'px' : (spacing * i) + offsetY + 'px',
-                            width: "26px",
-                            height: "26px",
+                            width: "17px",
+                            height: "17px",
                             backgroundColor: isHandleConnected(edges, idString) ? "#BA68C8" : "white",
-                            marginLeft: i > 14 ? '0px' : '14px',
-                            marginRight: i > 14 ? '14px' : '0px',
+                            marginLeft: i > 14 ? '0px' : '9px',
+                            marginRight: i > 14 ? '9px' : '0px',
                             border: isHandleConnected(edges, idString) ? "2px solid #BA68C8" : "2px solid white"
                         }}
                         position={i > 14 ? Position.Right : Position.Left}
