@@ -14,7 +14,13 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                 mask.data.body.map(element => {
                     switch (element.type) {
                         case 'child': {
-                            return <NodeParams id={node.id} params={element.child} />
+                            const childs: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('child-')).map((prop: any, i) => {
+                                return { label: 'Child' + (i + 1), field: prop, fieldType: 'child', deleteable: true } as Field
+                            })
+                            return <>
+                                <NodeParams id={node.id} params={childs} />
+                                {!element.disableAdd ? <AddPropButton id={node.id} type="Child" nodeData={nodeData} /> : null}
+                            </>
                         }
                         case 'prop': {
                             const redirectProp = mask.data.body.find(e => e.type == 'redirect');
@@ -22,7 +28,7 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             return <>
                                 <NodeParams id={node.id} params={element.prop} />
                                 <NodeParams id={node.id} params={propsArray.filter(item => !element.prop.find(i => i.field == item.field) && (item.field != redirectPropName))} />
-                                <AddPropButton id={node.id} type="Prop" nodeData={nodeData} />
+                                {!element.disableAdd ? <AddPropButton id={node.id} type="Prop" nodeData={nodeData} /> : null}
                             </>
                         }
                         case 'spacer': {

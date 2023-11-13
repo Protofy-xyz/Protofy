@@ -12,7 +12,7 @@ type ComponentProps = {
     label?: string | null;
 };
 
-export default ({ nodeData, id, type = 'Param', style = {}, keyId = null, label=null}: ComponentProps) => {
+export default ({ nodeData, id, type = 'Param', style = {}, keyId = null, label = null }: ComponentProps) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const typeMap = {
@@ -28,14 +28,13 @@ export default ({ nodeData, id, type = 'Param', style = {}, keyId = null, label=
     };
     const typeName = typeMap[type] || 'param';
 
-    keyId = keyId !== null ? keyId  : typeName + '-' + generateId();
+    keyId = keyId !== null ? keyId : typeName + '-' + generateId();
     const onAddParam = () => {
-        if(['child', 'case', 'element', 'union'].includes(typeName)) {
-            keyId = typeName + '-' + ((Object.keys(nodeData)?.filter(key => key.startsWith(`${typeName}-`)).length+1) ?? 1)
+        if (['child', 'case', 'element', 'union'].includes(typeName)) {
+            keyId = typeName + '-' + ((Object.keys(nodeData)?.filter(key => key.startsWith(`${typeName}-`)).length + 1) ?? 1)
         }
-        
         setNodeData(id, { ...nodeData, [keyId]: '' })
     }
 
-    return <Button onPress={onAddParam} label={label??`Add ${type}`} style={style} />
+    return <Button onPress={onAddParam} label={label ?? `Add ${type}`} style={style} />
 }
