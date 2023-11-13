@@ -26,7 +26,7 @@ export default function DevicesPage({ workspace, deviceDefinition, data, pageSes
 }
 
 //TODO REPLACE WITH REAL DATA
-const hardcodedDeviceDefinition = {
+const hardcodedDeviceDefinition = [{
   "name": "Empty device",
   "board": {
     "name": "Protofy ESP32 devBoard",
@@ -98,6 +98,7 @@ const hardcodedDeviceDefinition = {
     },
   }
 }
+]
 
 
 
