@@ -4,7 +4,6 @@ import { useInterval } from 'usehooks-ts';
 import { useState } from 'react';
 import { XStack } from 'tamagui';
 
-
 export const ConnectionIndicator = () => {
   const { connectionStatus } = useMqttState();
   const [opacity, setOpacity] = useState(0.8)

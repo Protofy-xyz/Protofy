@@ -23,6 +23,7 @@ export default {
             }
             return (<AdminPage title="Users" pageSession={pageSession}>
                 <DataView
+                    entityName={'accounts'}
                     itemData={itemData}
                     rowIcon={User}
                     sourceUrl={sourceUrl}

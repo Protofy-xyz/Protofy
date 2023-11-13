@@ -70,7 +70,6 @@ export const withSession = async (context:any, validTypes?:string[]|any[]|null, 
         if(!session) return fail(context.req.url)
         if(validTypes.length && !validTypes.includes(session?.user?.type ?? '')) return fail()
     }
-    
 
     return { 
         props: { 
@@ -80,14 +79,14 @@ export const withSession = async (context:any, validTypes?:string[]|any[]|null, 
     }
 }
 
+export const clearSession = (setSession, setSessionContext) => {
+    setSession(createSession())
+    setSessionContext(initialContext)
+}
+
 export const useSession = (pageSession?) => {
     initSession(pageSession)
-    const [session, setSession]= useAtom(Session)
-    const [sessionContext, setSessionContext] = useSessionContext()
-    return [session, setSession, () => {
-        setSession(createSession())
-        setSessionContext(initialContext)
-    }]
+    return useAtom(Session)
 }
 
 export const useSessionContext = () => {
