@@ -3,7 +3,7 @@ import {SSR as _SSR} from 'app/conf'
 import { NextPageContext } from 'next'
 import { API, withSession } from 'protolib'
 
-export function DataSSR(sourceUrl, allowdUserTypes=['admin'], props={}) {
+export function DataSSR(sourceUrl, allowdUserTypes=['admin', 'editor'], props={}) {
     return _SSR(async (context:NextPageContext) => {
         return withSession(context, allowdUserTypes, {
           pageState: {
@@ -15,7 +15,7 @@ export function DataSSR(sourceUrl, allowdUserTypes=['admin'], props={}) {
     })
 }
 
-export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin'], dataProps:any={}, extraData:any={}, workspaces:any=[]) {
+export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin', 'editor'], dataProps:any={}, extraData:any={}, workspaces:any=[]) {
   return _SSR(async (context:NextPageContext) => {
     const _dataProps = {
       itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : 25,
