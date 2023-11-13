@@ -30,7 +30,8 @@ export default {
   component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
     const [showDialog, setShowDialog] = React.useState(false)
     const { resolvedTheme } = useThemeSetting();
-    const p = { "config": "[\n  \"mydevice\",\n  \"esp32dev\",\n  \"POROTOVICE\",\n  \"********\",\n  \"none\",\n  \"51.68.45.86\",\n  false,\n  \"10\",\n  \"10\",\n  34,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n" }
+    console.log("InitialItems: ",initialItems)
+    const p = { "config": "[\n  \"mydevice\",\n  \"esp32dev\",\n  \"POROTOVICE\",\n  \"********\",\n  \"none\",\n  \"51.68.45.86\",\n  false,\n  \"10\",\n  \"10\",\n  34,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n" }
     const [sourceCode, setSourceCode] = useState(p.config)
 
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
@@ -103,6 +104,7 @@ export default {
           'config': {
             component: (path, data, setData, mode) => {
               console.log("inputs: ", { path, data, setData, mode })
+              if (mode == "preview"){return <></>}
               return <ButtonSimple onPress={(e) => { console.log("row from Edit: ", e); setShowDialog(true) }}>Edit</ButtonSimple>
             },
             hideLabel: false
