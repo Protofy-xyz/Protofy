@@ -6,7 +6,7 @@ import { API } from 'protolib'
 
 
 export const SessionData = atomWithStorage("session", createSession())
-export const UserSettingsAtom = atomWithStorage("userSettings", {workspace: ""} )
+export const UserSettingsAtom = atomWithStorage("userSettings", {} as any )
 
 export const Session = atom(
     (get) => get(SessionData), 
@@ -99,6 +99,11 @@ export const useWorkspaces = () => {
 }
 
 export const useUserSettings = () => {
-    return useAtom(UserSettingsAtom)
+    const [settings, setSettings] = useAtom(UserSettingsAtom)
+    const [session] = useSession()
+    return [
+        session && settings[session.user.id] ? settings[session.user.id]: {},
+        (val)=> setSettings({...settings, [session.user.id]:val})
+    ]
 }
 
