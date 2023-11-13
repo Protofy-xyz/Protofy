@@ -139,8 +139,6 @@ const FlowComponent = ({
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge({ ...params, type: 'custom', animated: false }, eds)), [setEdges]);
 
-    useEffect(() => {setMetadata(metadata)},[metadata])
-
     const reload = async () => {
         clearNodesData()
         const { nodes, edges, nodeDataTable } = await readSourceFile()
