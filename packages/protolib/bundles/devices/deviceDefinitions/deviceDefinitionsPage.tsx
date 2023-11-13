@@ -22,8 +22,10 @@ const FlowsWidget = dynamic(() => import('../../../adminpanel/features/component
   //     Loading
   // </Center>,
   loading: () => <>
-      <Spinner size={'large'} scale={3} top={-50} />
+      <Center>
+      <Spinner size={'small'} scale={3} top={-50} />
       Loading
+      </Center>
   </>,
   ssr: false
 })
