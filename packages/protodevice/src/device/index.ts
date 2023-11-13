@@ -1,3 +1,6 @@
+import wifi from './Wifi'
+import mqtt from './Mqtt'
+import deepSleep from './DeepSleep'
 import binarySensor from './BinarySensor'
 import device from './Device'
 import neopixelsBus from './NeopixelsBus'
@@ -28,6 +31,9 @@ import sen55 from './SEN55'
 import mhz19 from './MHZ19'
 
 export default {
+  wifi: wifi,
+  mqtt: mqtt,
+  deepSleep: deepSleep,
   device: device,
   output: output,
   binarySensor: binarySensor,
