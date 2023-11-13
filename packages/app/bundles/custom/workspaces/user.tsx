@@ -1,15 +1,8 @@
 import { User, UserCog, Send } from '@tamagui/lucide-icons'
 
 export default {
-    "resources": [
-        {
-            "type": "template",
-            "options": {
-                "templates":["basicApi"],
-                "paths": ["/apps/api/src/modules"]
-            }
-        }
-    ],
+    "default": "/admin/profile",
+    "label": "Settings",
     "menu": {
         "User": [
             { "name": "Profile", "icon": User, "type": "profile", "path": "/" },

@@ -1,15 +1,8 @@
 import { Cog, Inbox, Send } from '@tamagui/lucide-icons'
 
 export default {
-    "resources": [
-        {
-            "type": "template",
-            "options": {
-                "templates":["basicApi"],
-                "paths": ["/apps/api/src/modules"]
-            }
-        }
-    ],
+    "default": "/admin/events",
+    "label": "Workspace",
     "menu": {
         "System": [
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
