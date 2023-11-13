@@ -16,7 +16,7 @@ function CenterContent({deviceDefinition}){
 
 
 export default function DevicesAdmin({deviceDefinition}:DevicesAdminProps) {
-    const mqttConfig = deviceDefinition.config.mqttServer?deviceDefinition.config.mqttServer:null;
+    const mqttConfig = deviceDefinition[0].config.mqttServer?deviceDefinition[0].config.mqttServer:null;
     const brokerUrl = mqttConfig? mqttConfig.websocketProtocol+"://"+mqttConfig.broker+mqttConfig.websocketEndpoint: null;
     console.log("Broker Url -> ",brokerUrl)
     return (
