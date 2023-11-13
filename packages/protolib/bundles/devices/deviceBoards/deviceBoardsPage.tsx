@@ -34,7 +34,7 @@ export default {
       />
     </AdminPage>)
   },
-  getServerSideProps: PaginatedDataSSR('/adminapi/v1/deviceboards', ['admin'], {}, async () => {
+  getServerSideProps: PaginatedDataSSR('/adminapi/v1/deviceboards', ['admin', 'editor'], {}, async () => {
     const cores = await API.get('/adminapi/v1/devicecores?itemsPerPage=1000')
 
     return {

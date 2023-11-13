@@ -11,7 +11,7 @@ const FileBrowser = dynamic<any>(() =>
     { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
 );
 
-export default function FilesPage({workspace, data, pageSession}:any) {
+export default function FilesPage({data, pageSession}:any) {
   return (
       <AdminPage pageSession={pageSession} title={"Files"} >
         <FileBrowser path={data?.CurrentPath} file={data?.CurrentFile} filesState={data?.filesState} />
@@ -36,7 +36,6 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
     }    
 
     return withSession(context, ['admin'], {
-      ...props,
-      workspace: await API.get('/adminapi/v1/workspaces')
+      ...props
     })
 })

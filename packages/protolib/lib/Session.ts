@@ -1,10 +1,13 @@
 import { atom, useAtom} from 'jotai';
 import { atomWithStorage, useHydrateAtoms} from 'jotai/utils';
 import * as cookie from 'cookie'
-import { createSession, validateSession, SessionDataType } from '../api/lib/session';
+import { createSession, validateSession, SessionDataType, getSessionContext } from '../api/lib/session';
+import { API } from 'protolib'
 
 
 export const SessionData = atomWithStorage("session", createSession())
+export const UserSettingsAtom = atomWithStorage("userSettings", {} as any )
+
 export const Session = atom(
     (get) => get(SessionData), 
     (get, set, data: SessionDataType) => {
@@ -15,9 +18,16 @@ export const Session = atom(
         set(SessionData, data);
     }
 );
+const initialContext = {group: {workspaces:[]}}
+export const SessionContext = atom(initialContext)
 
 export const initSession = (pageSession) => {
-    if (pageSession) useHydrateAtoms([[Session, pageSession]])
+    if (pageSession) {
+        useHydrateAtoms([
+            [Session, pageSession.session],
+            [SessionContext, pageSession.context]
+        ]);
+    }
 }
 
 //to be used from nextJs
@@ -55,22 +65,51 @@ const fail = (returnUrl?) => {
 }
 export const withSession = async (context:any, validTypes?:string[]|any[]|null, props?:any) => {
     const session = getSessionCookie(context.req.headers.cookie)
+
     if(validTypes) {
         if(!session) return fail(context.req.url)
         if(validTypes.length && !validTypes.includes(session?.user?.type ?? '')) return fail()
     }
-    
 
     return { 
         props: { 
-            pageSession:  session ?? createSession(),
+            pageSession:  {session: session ?? createSession(), context: await getSessionContext(session?.user?.type)},
             ...(typeof props === "function"? await props() : props),
-
         } 
     }
+}
+
+export const clearSession = (setSession, setSessionContext) => {
+    setSession(createSession())
+    setSessionContext(initialContext)
 }
 
 export const useSession = (pageSession?) => {
     initSession(pageSession)
     return useAtom(Session)
 }
+
+export const useSessionContext = () => {
+    return useAtom(SessionContext)
+}
+
+export const useSessionGroup = () => {
+    const [ctx] = useSessionContext()
+    return ctx.group
+}
+
+export const useWorkspaces = () => {
+    const group = useSessionGroup()
+    if (group && group.workspaces) return group.workspaces
+    return []
+}
+
+export const useUserSettings = () => {
+    const [settings, setSettings] = useAtom(UserSettingsAtom)
+    const [session] = useSession()
+    return [
+        session && settings[session.user.id] ? settings[session.user.id]: {},
+        (val)=> setSettings({...settings, [session.user.id]:val})
+    ]
+}
+

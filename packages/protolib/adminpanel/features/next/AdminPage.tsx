@@ -1,17 +1,16 @@
-import {AdminPanel} from '../'
+import { AdminPanel } from '../'
 
-import { useSession, Page } from 'protolib'
-import Workspaces from 'app/bundles/workspaces'
- 
-export function AdminPage({pageSession, title, children}:any) {
-    useSession(pageSession)
-    return (
-      <Page title={"Protofy - " + title}>
-        <AdminPanel workspace={Workspaces.admin}>
-          {children}
-        </AdminPanel>
-      </Page>
-    )
-  }
+import { useSession, Page, useUserSettings, useWorkspaces } from 'protolib'
 
-  //<Connector brokerUrl={brokerUrl}>
+export function AdminPage({ pageSession, title, children }: any) {
+  useSession(pageSession)
+  return (
+    <Page title={"Protofy - " + title}>
+      <AdminPanel>
+        {children}
+      </AdminPanel>
+    </Page>
+  )
+}
+
+//<Connector brokerUrl={brokerUrl}>

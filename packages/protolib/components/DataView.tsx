@@ -82,7 +82,7 @@ export function DataView({
     onAddButton = undefined,
     objectProps = {}
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
-    const [items, setItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/'+((entityName??pluralName)??name)+'s'+"/#", model)
+    const [items, setItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/'+((entityName??pluralName)??name+'s')+"/#", model)
     // const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)

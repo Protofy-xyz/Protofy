@@ -23,6 +23,7 @@ export default {
             }
             return (<AdminPage title="Users" pageSession={pageSession}>
                 <DataView
+                    entityName={'accounts'}
                     itemData={itemData}
                     rowIcon={User}
                     sourceUrl={sourceUrl}
@@ -74,7 +75,7 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/accounts', [], {},async () => {
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/accounts', ['admin'], {},async () => {
             const groups = await API.get('/adminapi/v1/groups')
             const groupsArray = groups.data.items.map(obj => obj.name);
             return {

@@ -54,7 +54,6 @@ export const TaskPage = {
     getServerSideProps: SSR(async (context) => withSession(context, [], async () => {
         const task = await API.get('/adminapi/v1/tasks/'+context.query.name[2])
         return {
-            workspace: await API.get('/adminapi/v1/workspaces'),
             task: task,
             taskId: context.query.name[2],
             sourceUrl: '/adminapi/v1/tasks/'+context.query.name[2]

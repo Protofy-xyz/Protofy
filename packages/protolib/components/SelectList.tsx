@@ -2,8 +2,7 @@ import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize } from "tamagui"
 import { ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
 import { useMemo, useState } from "react";
 
-export function SelectList({title, value, elements, setValue, ...props}: SelectProps & {title: any, elements: any[], value: any, setValue: any}) {
-  
+export function SelectList({title, value, elements, setValue,triggerProps, ...props}: SelectProps & {triggerProps?: any, title: any, elements: any[], value: any, setValue: any}) {
     return (
       <Select
         id="select"
@@ -12,8 +11,8 @@ export function SelectList({title, value, elements, setValue, ...props}: SelectP
         disablePreventBodyScroll
         {...props}
       >
-        <Select.Trigger f={1} iconAfter={ChevronDown}>
-          <Select.Value placeholder="Choose an option" />
+        <Select.Trigger f={1} iconAfter={ChevronDown} {...triggerProps}>
+          <Select.Value />
         </Select.Trigger>
   
         <Adapt when="sm" platform="touch">

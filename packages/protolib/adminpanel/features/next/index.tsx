@@ -3,10 +3,9 @@ import {SSR as _SSR} from 'app/conf'
 import { NextPageContext } from 'next'
 import { API, withSession } from 'protolib'
 
-export function DataSSR(sourceUrl, allowdUserTypes=['admin'], props={}) {
+export function DataSSR(sourceUrl, allowdUserTypes=['admin', 'editor'], props={}) {
     return _SSR(async (context:NextPageContext) => {
         return withSession(context, allowdUserTypes, {
-          workspace: await API.get('/adminapi/v1/workspaces'),
           pageState: {
             sourceUrl,
             initialItems: await API.get({url: sourceUrl, ...props}),
@@ -16,7 +15,7 @@ export function DataSSR(sourceUrl, allowdUserTypes=['admin'], props={}) {
     })
 }
 
-export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin'], dataProps:any={}, extraData:any={}, workspaces:any=[]) {
+export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin', 'editor'], dataProps:any={}, extraData:any={}, workspaces:any=[]) {
   return _SSR(async (context:NextPageContext) => {
     const _dataProps = {
       itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : 25,
@@ -29,8 +28,6 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       ...(typeof dataProps === "function"? await dataProps(context) : dataProps),
     }
     const _sourceUrl = typeof sourceUrl === 'function' ? sourceUrl(context) : sourceUrl
-    const workspaces = await API.get('/adminapi/v1/workspaces')
-    const workspacesArray = workspaces.data.items.map(obj => obj.name);
 
     return withSession(context, allowdUserTypes, {
       sourceUrl: _sourceUrl,
@@ -40,8 +37,7 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
       extraData: {...(typeof extraData === "function"? await extraData(context) : extraData)},
       pageState: {
         ..._dataProps,
-      },
-      workspaces: workspacesArray
+      }
     })
   })
 }

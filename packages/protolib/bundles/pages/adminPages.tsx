@@ -36,7 +36,7 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/pages', ['admin'], {}, async () => {
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/pages', ['admin', 'editor'], {}, async () => {
             const objects = await API.get('/adminapi/v1/objects?itemsPerPage=1000')
             return {
                 objects: objects.isLoaded ? objects.data.items : []
