@@ -9,14 +9,14 @@ function addClientIpHeader(req) {
 
 var customResolver1 = function (host, url, req) {
     addClientIpHeader(req);
-    if (/^\/api\//.test(url) || url === '/websocket') {
-        return process.env.API_URL ?? 'http://localhost:3002';
+    if (/^\/api\//.test(url)) {
+        return process.env.API_URL ?? 'http://localhost:3001';
     }
 };
 
 var customResolver2 = function (host, url, req) {
     addClientIpHeader(req);
-    if (/^\/adminapi\//.test(url)) {
+    if (/^\/adminapi\//.test(url) || url === '/websocket') {
         return process.env.API_URL ?? 'http://localhost:3002';
     }
 };
