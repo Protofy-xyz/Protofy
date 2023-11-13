@@ -17,7 +17,7 @@ import { Tinted } from '../../../components/Tinted';
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const filesAtom = createApiAtom([])
 
-export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, filesState }: any) => {
+export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesState }: any) => {
     const theme = useTheme()
     const borderColor = theme.color.val.replace(/^#/, '%23')
     const [files, setFiles] = useAtom(filesAtom, filesState)
@@ -32,7 +32,7 @@ export const Explorer = ({ currentPath, templateActions, onOpen, onUpload, files
     }
     const onScroll = () => { }
     const myFileActions = [
-        ...templateActions,
+        ...customActions,
         ChonkyActions.UploadFiles,
         // ChonkyActions.EnableCompactView
         // ChonkyActions.CreateFolder
