@@ -10,7 +10,7 @@
         "body": [
             {
                 "type": "protolibProps",
-                "props": ["bgColor"]
+                "props": ["*"]
             },
             {
                 "type": "prop",
@@ -58,6 +58,10 @@
                     }
                 ],
                 "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": ["color", "textAlign", "margin", "padding"]
             },
             {
                 "type": "prop",

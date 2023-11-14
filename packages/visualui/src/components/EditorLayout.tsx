@@ -154,7 +154,11 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 				if (!modifiedKey) return
 				try {
 					actions.setOptions(options => options['skipTopic'] = true)
-					actions.setProp(nodeId, (props) => props[modifiedKey] = value)
+					let val = value;
+					try {
+						val = JSON.parse(val)
+					}catch(e){}
+					actions.setProp(nodeId, (props) => props[modifiedKey] = val)
 					actions.setCustom(nodeId, (custom) => custom[modifiedKey] = "JsxText")
 					const deleteKey = flowData?.deleteKey
 					if (deleteKey) {
