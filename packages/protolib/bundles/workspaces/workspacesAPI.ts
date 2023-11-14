@@ -6,7 +6,6 @@ import { WorkspaceModel } from './WorkspaceModel';
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const workspacesDir = fspath.join(PROJECT_WORKSPACE_DIR,"/packages/app/bundles/custom/workspaces/")
-export const WorkspacesAPI = (app) => CreateApi('workspaces', WorkspaceModel, __dirname, '/adminapi/v1/', '', {}, () => { }, customGetDB, ['list'], false)(app)
 
 const customGetDB = (path, req, session) => {
   const db = {
@@ -29,5 +28,5 @@ const customGetDB = (path, req, session) => {
   return db;
 }
 
-
+export const WorkspacesAPI = CreateApi('workspaces', WorkspaceModel, __dirname, '/adminapi/v1/', '', {}, () => { }, customGetDB, ['list'], false)
 export default WorkspacesAPI

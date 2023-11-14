@@ -192,4 +192,4 @@ const getDB = (path, req, session) => {
   return db;
 }
 
-export const ObjectsAPI = (app) => CreateApi('objects', ObjectModel, __dirname, '/adminapi/v1/', '', {}, () => { }, getDB)(app)
+export const ObjectsAPI = CreateApi('objects', ObjectModel, __dirname, '/adminapi/v1/', '', {}, () => { }, getDB)

@@ -13,11 +13,11 @@ import { runTask } from "./taskRunApi";
 
 const dbPath = '../../data/databases/tasks'
 
-export const TaskApi = (app) => {
+export const TaskApi = (app, mqtt) => {
     connectDB(dbPath) //preconnect database
 
     const AutoApi = CreateApi('tasks', TaskModel, __dirname, '/adminapi/v1/', '', {}, () => { }, getDB)
-    AutoApi(app)
+    AutoApi(app, mqtt)
 
     app.get('/adminapi/v1/tasks/:name/run', handler(async (req, res, session) => {
         const {token, ...parameters} = req.query
@@ -163,7 +163,9 @@ const getDB = (path, req, session) => {
                 }
                 })
             }
+        }
 
+        if(value.api) {
             //link in index.ts
             const sourceFile = getSourceFile(apiIndex)
             addImportToSourceFile(sourceFile, capitalizedName+'TaskApi', ImportType.NAMED, './' + value.name+'TaskApi')

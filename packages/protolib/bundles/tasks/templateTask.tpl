@@ -13,7 +13,7 @@ const do_task = async (params) => {
     }
 }
 
-export default (params:paramsType) => {
+export default async (params:paramsType) => {
     paramsSchema.parse(params)
     return await do_task(params)
 }

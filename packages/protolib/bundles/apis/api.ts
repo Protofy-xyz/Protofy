@@ -39,4 +39,4 @@ const getDB = (path, req, session) => {
   return db;
 }
 
-export const APIsAPI = (app) => CreateApi('apis', APIModel, __dirname, '/adminapi/v1/', '', {}, () => { }, getDB)(app)
+export const APIsAPI = CreateApi('apis', APIModel, __dirname, '/adminapi/v1/', '', {}, () => { }, getDB)

@@ -3,7 +3,7 @@ import { connectDB, getDB } from "./db";
 import { handler } from './handler'
 import fs from 'fs';
 import path from 'path';
-import { mqttClient } from "./mqtt";
+
 /*
     modelName: name of the model, used to generate api urls. for example, if model name is 'test' and prefix is '/api/v1/', then to read an item is: /api/v1/test
                 the separation from prefix is to allow less parameters for the default scenario (so you dont to write /api/v1/ all the time)
@@ -40,12 +40,12 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
         initialData = undefined;
     }
 
-    return (app) => BaseApi(app, modelName, modelType, initialData, prefix, dbName, {
+    return (app, context) => BaseApi(app, modelName, modelType, initialData, prefix, dbName, {
         ...transformers
-    }, _connectDB ?? connectDB, _getDB ?? getDB, operations, single, options)
+    }, _connectDB ?? connectDB, _getDB ?? getDB, operations, single, options, context)
 }
 
-export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName, transformers, connectDB, getDB, operations = ['create', 'read', 'update', 'delete', 'list'], single?, options?) => {
+export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName, transformers, connectDB, getDB, operations = ['create', 'read', 'update', 'delete', 'list'], single?, options?, context?) => {
     const dbPath = '../../data/databases/' + (dbName ? dbName : entityName)
     connectDB(dbPath, initialData) //preconnect database
     const _list = (req, allResults) => {
@@ -97,7 +97,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.load(req.body, session).createTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
-        mqttClient.publish("notifications/"+entityName + '/create/' + entityModel.getId(), entityModel.serialize())
+        context && context.mqtt && context.mqtt.publish("notifications/"+entityName + '/create/' + entityModel.getId(), entityModel.serialize())
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/create/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
@@ -151,7 +151,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session), transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
-        mqttClient.publish("notifications/"+ entityName + '/update/' + entityModel.getId(), entityModel.serialize())
+        context && context.mqtt && context.mqtt.publish("notifications/"+ entityName + '/update/' + entityModel.getId(), entityModel.serialize())
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/update/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
@@ -172,7 +172,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).deleteTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
-        mqttClient.publish("notifications/"+entityName + '/delete/' + entityModel.getId(), entityModel.serialize())
+        context && context.mqtt && context.mqtt.publish("notifications/"+entityName + '/delete/' + entityModel.getId(), entityModel.serialize())
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/delete/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
