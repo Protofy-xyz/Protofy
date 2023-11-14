@@ -20,6 +20,7 @@ export default ({ nodeData, id, type = 'Param', style = {}, keyId = null, label 
         'Method': 'meth',
         'Case': 'case',
         'Element': 'element',
+        'Component': 'element',
         'Import': 'import',
         'param': 'param',
         "Prop": "prop",
