@@ -1,8 +1,9 @@
 import { z } from "zod";
 import {Schema} from 'protolib/base'
 import moment from "moment";
-import { AutoModel } from 'protolib/base'
+import { ProtoModel } from 'protolib/base'
 import {BaseSchema} from 'protolib/base'
+import { SessionDataType } from 'protolib/api/lib/session'
 
 export const BaseResourceSchema = Schema.object({
     name: z.string().hint("catalog, tutorial, invoice...").search().display(),
@@ -24,4 +25,33 @@ export const ResourceSchema = z.object({
 });
 
 export type ResourceType = z.infer<typeof ResourceSchema>;
-export const ResourceModel = AutoModel.createDerived<ResourceType>("ResourceModel", ResourceSchema);
+export class ResourceModel extends ProtoModel<ResourceModel> {
+    constructor(data: ResourceType, session?: SessionDataType) {
+        super(data, ResourceSchema, session);
+    }
+
+    list(search?): any {
+        if(search) {
+            if(search.startsWith("tags:")){
+                const tags = search.slice("tags:".length).split(",").map(tag => tag.trim())
+                if(tags.every(element => this.data.tags.includes(element))) {
+                    return this.read();
+                }
+
+            } else {
+                const searchFields = this.objectSchema.is('search').getFields()
+                for(var i=0;i<searchFields.length;i++) {
+                    if(((this.data[searchFields[i]]+"").toLowerCase()).includes(search.toLowerCase())) {
+                        return this.read();
+                    }
+                }
+            }
+        } else {
+            return this.read();
+        }
+    }
+
+    protected static _newInstance(data: any, session?: SessionDataType): ResourceModel {
+        return new ResourceModel(data, session);
+    }
+}
