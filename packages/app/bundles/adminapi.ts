@@ -13,19 +13,19 @@ import { TaskApi } from 'protolib/bundles/tasks/api/taskApi'
 import { DatabasesAPI } from 'protolib/bundles/databases/databasesAPI'
 import { WorkspacesAPI } from 'protolib/bundles/workspaces/workspacesAPI'
 
-export default (app) => {
-  UsersAPI(app)
-  GroupsAPI(app)
-  EventsAPI(app)
-  ObjectsAPI(app)
-  PagesAPI(app)
-  APIsAPI(app)
-  DevicesAPI(app)
-  DeviceSdksAPI(app)
-  DeviceCoresAPI(app)
-  DeviceBoardsAPI(app)
-  DeviceDefinitionsAPI(app)
-  TaskApi(app)
-  DatabasesAPI(app)
-  WorkspacesAPI(app)
+export default (app, context) => {
+  UsersAPI(app, context)
+  GroupsAPI(app, context)
+  EventsAPI(app, context)
+  ObjectsAPI(app, context)
+  PagesAPI(app, context)
+  APIsAPI(app, context)
+  DevicesAPI(app, context)
+  DeviceSdksAPI(app, context)
+  DeviceCoresAPI(app, context)
+  DeviceBoardsAPI(app, context)
+  DeviceDefinitionsAPI(app, context)
+  TaskApi(app, context)
+  DatabasesAPI(app, context)
+  WorkspacesAPI(app, context)
 }

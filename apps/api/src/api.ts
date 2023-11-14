@@ -1,8 +1,7 @@
-import {app} from 'protolib/api'
+import {app, mqttClient} from 'protolib/api'
 import * as path from 'path';
 import * as fs from 'fs';
 import BundleAPI from 'app/bundles/apis'
-
 const modulesDir = path.join(__dirname, 'modules');
 
 fs.readdir(modulesDir, (error, files) => {
@@ -18,6 +17,6 @@ fs.readdir(modulesDir, (error, files) => {
     })
 })
 
-BundleAPI(app)
+BundleAPI(app, {mqtt:mqttClient})
 
 export default app
