@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Explorer } from './Explorer';
 import { defineFileAction } from 'chonky';
+import FileActions from 'app/bundles/fileActions'
 
 
 export const FileBrowser = ({ file, path, filesState }: any) => {
@@ -62,17 +63,6 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
     const { resolvedTheme } = useThemeSetting()
 
-
-    var templateActions: any = []
-    // templateActions.push(defineFileAction({
-    //     id: action_id,
-    //     button: {
-    //         name: "click me",
-    //         toolbar: true,
-    //         group: 'Templates'
-    //     }
-    // }))
-
     const isFull = router.query?.full
     const getWidget = () => <FileWidget
         isFull={isFull}
@@ -95,8 +85,8 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
     return (
         isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
-            <Explorer currentPath={currentPath} filesState={filesState} templateActions={templateActions} onOpen={onOpen} />
-            <Dialog open={dialogOpen} onOpenChange={(state) => {setDialogOpen(state); setCurrentFile('')}}>
+            <Explorer currentPath={currentPath} filesState={filesState} customActions={FileActions} onOpen={onOpen} />
+            <Dialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >

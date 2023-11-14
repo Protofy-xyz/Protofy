@@ -30,9 +30,16 @@ export default {
   component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
     const [showDialog, setShowDialog] = React.useState(false)
     const { resolvedTheme } = useThemeSetting();
-    console.log("InitialItems: ",initialItems)
     const p = { "config": "[\n  \"mydevice\",\n  \"esp32dev\",\n  \"POROTOVICE\",\n  \"********\",\n  \"none\",\n  \"51.68.45.86\",\n  false,\n  \"10\",\n  \"10\",\n  34,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n" }
     const [sourceCode, setSourceCode] = useState(p.config)
+    const [isModified,setIsModified] = React.useState(false)
+    const [editedObjectData, setEditedObjecData]= React.useState({})
+
+    const saveToFile= (code,path)=>{
+      console.log("----------------- SAVE TO FILE ------------", {code,path})
+      editedObjectData.setData({config: code})
+      setShowDialog(false)
+    }
 
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
       <AlertDialog open={showDialog} setOpen={(open) => { setShowDialog(open) }} hideAccept={true} style={{ width: "80%", height: "80%" }}>
@@ -45,11 +52,14 @@ export default {
             //         <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
             //     </IconContainer>
             // </XStack>}
-            // isModified={isModified}
-            // setIsModified={setIsModified}
+            isModified={isModified}
+            setIsModified={(e)=>{console.log("Set is Modified: ", e);}}
             //onPlay={onPlay}
             disableDots={true}
-            onSave={(o) => { console.log("ON SAVE: ", o); console.log("sourceCode ", sourceCode) }}
+            onSave={(o) => { 
+              console.log("ON SAVE: ", o); 
+              saveToFile(o,"a")
+           }}
             hideBaseComponents={true}
             disableStart={true}
             getFirstNode={(nodes) => {
@@ -58,10 +68,10 @@ export default {
             showActionsBar={true}
             mode={"device"}
             bridgeNode={false}
-            // setSourceCode={(sourceCode) => {
-            //     console.log('set new sourcecode from flows: ', sourceCode)
-            //     setSourceCode(sourceCode)
-            // }} 
+            setSourceCode={(sourceCode) => {
+                console.log('set new sourcecode from flows: ', sourceCode)
+                setSourceCode(sourceCode)
+            }} 
             sourceCode={sourceCode} themeMode={resolvedTheme} />
           {/* </Center> */}
         </XStack>
@@ -106,7 +116,7 @@ export default {
             component: (path, data, setData, mode) => {
               console.log("inputs: ", { path, data, setData, mode })
               if (mode == "preview"){return <></>}
-              return <ButtonSimple onPress={(e) => { console.log("row from Edit: ", e); setShowDialog(true) }}>Edit</ButtonSimple>
+              return <ButtonSimple onPress={(e) => { console.log("row from Add: ", e); setShowDialog(true); setEditedObjecData({path,data,setData,mode});  console.log("inputs: ", { path, data, setData, mode })}}>Edit</ButtonSimple>
             },
             hideLabel: false
           }
