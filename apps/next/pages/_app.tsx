@@ -8,8 +8,10 @@ import 'protoflow/src/styles.css'
 import 'protoflow/src/diagram/menu.module.css'
 import 'react-sliding-side-panel/lib/index.css'
 import 'protolib/styles/datatable.css';
+import '../chat.css'
 import '../chonky.css'
 import 'react-dropzone-uploader/dist/styles.css'
+import 'react-chat-widget/lib/styles.css';
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { Provider } from 'app/provider'
 import Head from 'next/head'
