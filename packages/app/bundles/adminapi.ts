@@ -9,6 +9,7 @@ import { DeviceSdksAPI } from 'protolib/bundles/devices/deviceSdks/deviceSdksAPI
 import { DeviceCoresAPI } from 'protolib/bundles/devices/devicecores/devicecoresAPI'
 import { DeviceBoardsAPI } from 'protolib/bundles/devices/deviceBoards/deviceBoardsAPI'
 import { DeviceDefinitionsAPI } from 'protolib/bundles/devices/deviceDefinitions/deviceDefinitionsAPI'
+import { DeviceMessageRouter } from 'protolib/bundles/devices/router/api'
 import { TaskApi } from 'protolib/bundles/tasks/api/taskApi'
 import { DatabasesAPI } from 'protolib/bundles/databases/databasesAPI'
 import { WorkspacesAPI } from 'protolib/bundles/workspaces/workspacesAPI'
@@ -25,6 +26,7 @@ export default (app, context) => {
   DeviceCoresAPI(app, context)
   DeviceBoardsAPI(app, context)
   DeviceDefinitionsAPI(app, context)
+  DeviceMessageRouter(app, context)
   TaskApi(app, context)
   DatabasesAPI(app, context)
   WorkspacesAPI(app, context)
