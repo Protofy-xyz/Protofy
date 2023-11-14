@@ -13,6 +13,7 @@ import { DeviceMessageRouter } from 'protolib/bundles/devices/router/api'
 import { TaskApi } from 'protolib/bundles/tasks/api/taskApi'
 import { DatabasesAPI } from 'protolib/bundles/databases/databasesAPI'
 import { WorkspacesAPI } from 'protolib/bundles/workspaces/workspacesAPI'
+import { ResourcesAPI } from 'protolib/bundles/resources/resourcesAPI'
 
 export default (app, context) => {
   UsersAPI(app, context)
@@ -30,4 +31,5 @@ export default (app, context) => {
   TaskApi(app, context)
   DatabasesAPI(app, context)
   WorkspacesAPI(app, context)
+  ResourcesAPI(app, context)
 }

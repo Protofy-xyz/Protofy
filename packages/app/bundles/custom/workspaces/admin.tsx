@@ -1,4 +1,4 @@
-import { Cog, Inbox, Send } from '@tamagui/lucide-icons'
+import { Cog, Inbox, Library } from '@tamagui/lucide-icons'
 
 export default {
     "default": "/admin/events",
@@ -14,6 +14,7 @@ export default {
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" },
             { "name": "Files", "icon": "folder", "type": "files", "path": "/" },    
             { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
+            { "name": "Resources", "icon": Library, "type": "resources", "path": "/"},
             { "name": "Databases", "icon": "database", "type": "databases", "path": "/"}
         ],
         "Devices":[
