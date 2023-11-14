@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import AddPropButton from '../AddPropButton';
 import { Code } from 'lucide-react'
-import { FlowStoreContext } from "../store/FlowsStore"
-import { useContext } from 'react';
+import { getProtolibParams, getProtolibProps } from './ProtolibProps';
 
 const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const propsArray: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('prop-')).map((prop: any, i) => {
@@ -27,9 +26,16 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         case 'prop': {
                             const redirectProp = mask.data.body.find(e => e.type == 'redirect');
                             const redirectPropName = redirectProp?.params?.port;
+                            const hasProtolibProps = mask.data.body.find(i => i.type == 'protolibProps')
+                            const protolibProps = getProtolibProps()
                             return <>
                                 <NodeParams id={node.id} params={element.prop} />
-                                <NodeParams id={node.id} params={propsArray.filter(item => !element.prop.find(i => i.field == item.field) && (item.field != redirectPropName))} />
+                                <NodeParams
+                                    id={node.id}
+                                    params={propsArray.filter(p => !protolibProps.includes(p.field) && hasProtolibProps)
+                                        .filter(item => !element.prop.find(i => i.field == item.field) && (item.field != redirectPropName))
+                                    }
+                                />
                                 {!element.disableAdd ? <AddPropButton id={node.id} type="Prop" nodeData={nodeData} /> : null}
                             </>
                         }
@@ -43,11 +49,8 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
                         }
                         case 'protolibProps': {
-                            const useFlowsStore = useContext(FlowStoreContext)
-                            const metadata = useFlowsStore(state => state.metadata)
-                            const colors = Object.keys(metadata?.tamagui?.color ?? {}).map(k => '"' + metadata?.tamagui?.color[k].key + '"')
                             return <>
-                                {/* <NodeParams id={node.id} params={[{ field: 'bgColor', type: 'select-prop', data: colors ? ["$color", ...colors] : [], static: true }]} /> */}
+                                <NodeParams id={node.id} params={getProtolibParams()} />
                             </>
                         }
                     }

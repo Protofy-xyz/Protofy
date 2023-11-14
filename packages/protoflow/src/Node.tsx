@@ -152,25 +152,24 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
 
     const getInput = (disabled?) => {
         switch (param.type) {
-            case 'select-prop':
             case 'select':
-                const isProp = param.type == "select-prop"
                 const onChangeSelect = (data) => {
-                    var tmpData = { [param.field]: nodeData[param.field]?.value ? { key: param.label, value: data?.value } : data?.value }
-                    if (isProp) {
-                        tmpData = { ["prop-" + param.field]: { key: param.field, value: data?.value } }
-                    }
+                    var tmpData = { [param.field]: (isProp || nodeData[param.field]?.value) ? { key: param.label, value: data?.value } : data?.value }
                     setNodeData(id, { ...nodeData, ...tmpData })
                     dataNotify({ id: id, paramField: param.field, newValue: data?.value })
                 }
                 const options = param.data?.map((item, index) => {
-                    var extraProps = item.color ? { color: item.color } : {}
-                    return { label: item, value: item, ...extraProps }
+                    var extraProps = item?.color ? { color: item.color } : {}
+                    return { label: item ?? "undefined", value: item, ...extraProps }
                 })
+
                 return <div style={{ flex: 1, zIndex: 1000 }}>
                     <NodeSelect
                         onChange={onChangeSelect}
-                        defaultValue={{ value: nodeData[param.field]?.value ?? nodeData[param.field], label: nodeData[param.field]?.value ?? nodeData[param.field] }}
+                        defaultValue={{
+                            value: (isProp || nodeData[param.field]?.value) ? nodeData[param.field]?.value : nodeData[param.field],
+                            label: nodeData[param.field]?.value ?? nodeData[param.field]
+                        }}
                         options={options} />
                 </div>
             case 'select-multi':
