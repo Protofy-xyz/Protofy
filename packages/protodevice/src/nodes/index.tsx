@@ -52,15 +52,15 @@ const deviceMasks = [
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mqtt'), //TODO: Change output function name
     getComponent: Mqtt,
-    getInitialData: () => { return { to: 'mqtt', param1: '"BROKERADDRESS"', param2: '"project/device"' } }
+    getInitialData: () => { return { to: 'mqtt', param1: '"BROKERADDRESS"', param2: '""' } }
   },
-  {
-    id: 'DeepSleep',
-    type: 'CallExpression',
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('deepSleep'), //TODO: Change output function name
-    getComponent: DeepSleep,
-    getInitialData: () => { return { to: 'deepSleep', param1: '"10"', param2: '"10"', param3: '' } }
-  },
+  // {
+  //   id: 'DeepSleep',
+  //   type: 'CallExpression',
+  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('deepSleep'), //TODO: Change output function name
+  //   getComponent: DeepSleep,
+  //   getInitialData: () => { return { to: 'deepSleep', param1: '"10"', param2: '"10"', param3: '' } }
+  // },
   {
     id: 'Relay',
     type: 'CallExpression',
@@ -129,13 +129,13 @@ const deviceMasks = [
   //   getComponent: HX711,
   //   getInitialData: () => { return { to: 'hx711', param1: '""', param2: '', param3: '"128"', param4: '"60s"' } }
   // },
-  {
-    id: 'Dfplayer',
-    type: 'CallExpression',
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('dfplayer'),
-    getComponent: Dfplayer,
-    getInitialData: () => { return { to: 'dfplayer', param1: '""', param2: '', param3: '' } }
-  },
+  // {
+  //   id: 'Dfplayer',
+  //   type: 'CallExpression',
+  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('dfplayer'),
+  //   getComponent: Dfplayer,
+  //   getInitialData: () => { return { to: 'dfplayer', param1: '""', param2: '', param3: '' } }
+  // },
   // {
   //   id: 'UltrasonicDistanceSensor',
   //   type: 'CallExpression',
@@ -199,13 +199,13 @@ const deviceMasks = [
   //   getComponent: TempHumidity,
   //   getInitialData: () => { return { to: 'tempHumidity', param1: '""', param2: '"DHT11"', param3: '"60s"' } }
   // },
-  {
-    id: 'ModbusLoadCell',
-    type: 'CallExpression',
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('modbusLoadCell'),
-    getComponent: ModbusLoadCell,
-    getInitialData: () => { return { to: 'modbusLoadCell', param1: '""', param2: '""', param3: '""', param4: '"2s"', param5: '3', param6: '2', param7: '5'} }
-  }
+  // {
+  //   id: 'ModbusLoadCell',
+  //   type: 'CallExpression',
+  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('modbusLoadCell'),
+  //   getComponent: ModbusLoadCell,
+  //   getInitialData: () => { return { to: 'modbusLoadCell', param1: '""', param2: '""', param3: '""', param4: '"2s"', param5: '3', param6: '2', param7: '5'} }
+  // }
   // {
   //   id: 'BH1750',
   //   type: 'CallExpression',

@@ -19,8 +19,8 @@ class BinarySensor {
         this.platform = platform
     }
 
-    attach(pin) {
-        return [
+    attach(pin, deviceComponents) {
+        const componentObjects = [
             {
                 name: "binary_sensor",
                 config: {
@@ -29,7 +29,6 @@ class BinarySensor {
                     name: this.name,
                     id: this.name,
                     filters: [
-                        { invert: null },
                         { delayed_off: "100ms" },
                         { delayed_on: "100ms" }
                     ]
@@ -37,6 +36,18 @@ class BinarySensor {
                 subsystem: getSubsystem()
             },
         ]
+
+        componentObjects.forEach((element, j) => {
+            if (!deviceComponents[element.name]) {
+                deviceComponents[element.name] = element.config
+            } else {
+                if (!Array.isArray(deviceComponents[element.name])) {
+                    deviceComponents[element.name] = [deviceComponents[element.name]]
+                }
+                deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
+            }
+        })
+        return deviceComponents
     }
 }
 

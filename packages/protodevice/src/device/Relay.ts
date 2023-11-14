@@ -1,5 +1,3 @@
-
-
 // class DeviceComponent {
 //   name
 //   config
@@ -13,49 +11,49 @@
 // }
 
 export function getSubsystem() {
-    return {
-      actions: [
-        {
-          name: 'Turn on',
-          description: 'turns on the gpio',
-          endpoint: '/command',
-          connectionType: 'mqtt',
-          payload: {
-            type: 'str',
-            value: 'ON',
-          },
+  return {
+    actions: [
+      {
+        name: 'Turn on',
+        description: 'turns on the gpio',
+        endpoint: '/command',
+        connectionType: 'mqtt',
+        payload: {
+          type: 'str',
+          value: 'ON',
         },
-        {
-          name: 'Turn off',
-          description: 'turns off the gpio',
-          endpoint: '/command',
-          connectionType: 'mqtt',
-          payload: {
-            type: 'str',
-            value: 'OFF',
-          },
+      },
+      {
+        name: 'Turn off',
+        description: 'turns off the gpio',
+        endpoint: '/command',
+        connectionType: 'mqtt',
+        payload: {
+          type: 'str',
+          value: 'OFF',
         },
-        {
-          name: 'Toggle',
-          description: 'Toggles the gpio',
-          endpoint: '/command',
-          connectionType: 'mqtt',
-          payload: {
-            type: 'str',
-            value: 'TOGGLE',
-          },
+      },
+      {
+        name: 'Toggle',
+        description: 'Toggles the gpio',
+        endpoint: '/command',
+        connectionType: 'mqtt',
+        payload: {
+          type: 'str',
+          value: 'TOGGLE',
         },
-      ],
-      monitors: [
-        {
-          name: 'Relay status',
-          description: 'Gets the status of the relay',
-          endpoint: '/state',
-          connectionType: 'mqtt',
-        },
-      ],
-    }
+      },
+    ],
+    monitors: [
+      {
+        name: 'Relay status',
+        description: 'Gets the status of the relay',
+        endpoint: '/state',
+        connectionType: 'mqtt',
+      },
+    ],
   }
+}
 
 class Relay {
   name
@@ -67,9 +65,8 @@ class Relay {
     this.restoreMode = restoreMode
   }
 
-
-  attach(pin) {
-    return [
+  attach(pin, deviceComponents) {
+    const componentObjects = [
       {
         name: 'switch',
         config: {
@@ -82,6 +79,18 @@ class Relay {
         subsystem: getSubsystem(),
       },
     ]
+
+    componentObjects.forEach((element, j) => {
+        if (!deviceComponents[element.name]) {
+            deviceComponents[element.name] = element.config
+        } else {
+            if (!Array.isArray(deviceComponents[element.name])) {
+                deviceComponents[element.name] = [deviceComponents[element.name]]
+            }
+            deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
+        }
+    })
+    return deviceComponents
   }
 }
 

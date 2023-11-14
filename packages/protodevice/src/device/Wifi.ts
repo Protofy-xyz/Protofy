@@ -8,18 +8,28 @@ class Wifi {
     this.power_save_mode = power_save_mode
   }
 
-
-  attach(pin) {
-    return [
+  attach(pin, deviceComponents) {
+    const componentObjects = [
       {
         name: 'wifi',
         config: {
           ssid: this.ssid,
           password: this.password,
-          power_save_mode: this.power_save_mode
-        }
-      }
+          power_save_mode: this.power_save_mode,
+        },
+      },
     ]
+    componentObjects.forEach((element, j) => {
+        if (!deviceComponents[element.name]) {
+            deviceComponents[element.name] = element.config
+        } else {
+            if (!Array.isArray(deviceComponents[element.name])) {
+                deviceComponents[element.name] = [deviceComponents[element.name]]
+            }
+            deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
+        }
+    })
+    return deviceComponents
   }
 }
 
