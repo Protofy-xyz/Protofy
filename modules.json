@@ -1,18 +1,18 @@
 {
     "protoflow": {
         "url": "git@github.com:Protofy-xyz/protoflow.git",
-        "revision": "b993a9588c8228a6764a665ec162d5e1a8f1c4ea"
+        "revision": "e1b1c091f9fb822b8432f44948a7b5876e3713c9"
     },
     "protolib": {
         "url": "git@github.com:Protofy-xyz/protolib.git",
-        "revision": "fef0da148e079516c54d7f7acc125ffbe0cb53c1"
+        "revision": "ff99a2029dc80b4573ce251d5dc324830ecd76f4"
     },
     "visualui": {
         "url": "git@github.com:Protofy-xyz/protofy-visualui.git",
-        "revision": "d765173ed1c623b2416f1f82a6ac7bac871bb7e2"
+        "revision": "cc2a4050ffb25653b9e1886fea2a2ebe1d3c132e"
     },
     "protodevice": {
         "url": "git@github.com:Protofy-xyz/protodevice.git",
-        "revision": "fe3e88370d7a56e9dbccdec65bfe3675492259fd"
+        "revision": "53273929b14d0b540aec604caa1ee472d3f8dd29"
     }
 }

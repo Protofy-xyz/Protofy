@@ -2128,6 +2128,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@craftjs/layers@npm:0.2.0-beta.8":
+  version: 0.2.0-beta.8
+  resolution: "@craftjs/layers@npm:0.2.0-beta.8"
+  dependencies:
+    "@craftjs/utils": ^0.2.0-beta.8
+    react-contenteditable: ^3.3.3
+  peerDependencies:
+    "@craftjs/core": ^0.2.0-alpha.19
+    react: ^16.8.0 || ^17 || ^18
+    styled-components: ">= 4"
+  checksum: 3d7a9ecdd94af782d9b5dec307981910127df943ce6376c2b6b586e1d44a361b8dac0ad2e9eaa4504a737cde46a4901953406623d3de5909caf3cb10c739d810
+  languageName: node
+  linkType: hard
+
 "@craftjs/utils@npm:^0.2.0-beta.8":
   version: 0.2.0-beta.12
   resolution: "@craftjs/utils@npm:0.2.0-beta.12"
@@ -22027,7 +22041,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-contenteditable@npm:3.3.7":
+"react-contenteditable@npm:3.3.7, react-contenteditable@npm:^3.3.3":
   version: 3.3.7
   resolution: "react-contenteditable@npm:3.3.7"
   dependencies:
@@ -26868,6 +26882,7 @@ __metadata:
   resolution: "visualui@workspace:packages/visualui"
   dependencies:
     "@craftjs/core": 0.2.0-beta.8
+    "@craftjs/layers": 0.2.0-beta.8
     "@monaco-editor/react": 4.4.6
     "@types/node": 20.6.0
     deep-diff: 1.0.2
