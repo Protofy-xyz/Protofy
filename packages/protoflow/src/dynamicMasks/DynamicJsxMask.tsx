@@ -32,7 +32,7 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                                 <NodeParams id={node.id} params={element.prop} />
                                 <NodeParams
                                     id={node.id}
-                                    params={propsArray.filter(p => !protolibProps.includes(p.field) && hasProtolibProps)
+                                    params={propsArray.filter(p => !protolibProps.includes(p.field) || !hasProtolibProps)
                                         .filter(item => !element.prop.find(i => i.field == item.field) && (item.field != redirectPropName))
                                     }
                                 />
