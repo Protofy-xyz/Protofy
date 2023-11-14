@@ -30,6 +30,7 @@
         "mqtt": "^5.2.1",
         "mqtt-react-hooks": "^3.0.0-alpha.2",
         "multer": "1.4.5-lts.1",
+        "react-chat-widget": "^3.1.4",
         "react-contenteditable": "3.3.7",
         "react-custom-scrollbars-2": "4.5.0",
         "react-data-table-component": "7.5.4",
