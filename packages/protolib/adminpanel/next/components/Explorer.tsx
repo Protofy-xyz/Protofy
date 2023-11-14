@@ -4,15 +4,16 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { FileNavbar, FileBrowser, FileToolbar, FileList, ChonkyActions } from 'chonky';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dialog, Paragraph, useTheme, Text, SizableText, Stack, XStack } from '@my/ui';
 import { Uploader } from './Uploader';
-import {Download} from '@tamagui/lucide-icons'
+import { Download } from '@tamagui/lucide-icons'
 import { createApiAtom } from '../../../lib/createApiAtom';
 import { useAtom } from '../../../lib/Atom';
 import { AlertDialog } from '../../../components/AlertDialog';
 import { API } from '../../../lib/Api';
 import { Tinted } from '../../../components/Tinted';
+
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const filesAtom = createApiAtom([])
@@ -27,13 +28,15 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
     const [openDownloadDialog, setOpenDownloadDialog] = useState(false)
     const [selectedFiles, setSelectedFiles] = useState([])
     const [customAction, setCustomAction] = useState(null)
+    const lastClickTime = useRef(0)
 
     const onUploadFiles = async () => {
         setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] })
     }
+    const normalizedCurrentPath = currentPath.startsWith("/") ? currentPath : "/" + currentPath
     const onScroll = () => { }
     const myFileActions = [
-        ...customActions.map(f => f.action),
+        ...customActions.filter(f => !f.filter || f.filter(normalizedCurrentPath, selectedFiles)).map(f => f.action),
         ChonkyActions.UploadFiles,
         // ChonkyActions.EnableCompactView
         // ChonkyActions.CreateFolder
@@ -78,9 +81,9 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
 
     const onDownloadFiles = (data: any) => {
         const filesToDownload = data.state.selectedFilesForAction.filter(f => !f.isDir).map(f => f.name)
-        if(!filesToDownload.length) return
-        if(filesToDownload.length == 1) {
-            window.open("/adminapi/v1/files/"+currentPath+'/'+filesToDownload[0]+'?download=1', '_new')
+        if (!filesToDownload.length) return
+        if (filesToDownload.length == 1) {
+            window.open("/adminapi/v1/files/" + currentPath + '/' + filesToDownload[0] + '?download=1', '_new')
         } else {
             setSelectedFiles(filesToDownload)
             setOpenDownloadDialog(true)
@@ -109,8 +112,8 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         description="Use those links to download:"
                     >
                         <YStack f={1}>
-                            {selectedFiles.map(f => <a href={"/adminapi/v1/files/"+currentPath+'/'+f+'?download=1'} target="_new">
-                                <XStack mb="$2" br="$radius.12" p="$2" px="$4" backgroundColor={"$color4"} hoverStyle={{backgroundColor:"$color6", o: 1}} o={0.7} ai="center" jc="center">
+                            {selectedFiles.map(f => <a href={"/adminapi/v1/files/" + currentPath + '/' + f + '?download=1'} target="_new">
+                                <XStack mb="$2" br="$radius.12" p="$2" px="$4" backgroundColor={"$color4"} hoverStyle={{ backgroundColor: "$color6", o: 1 }} o={0.7} ai="center" jc="center">
                                     <Download />
                                     <SizableText ml="$2">{f}</SizableText>
                                 </XStack>
@@ -118,17 +121,17 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         </YStack>
                     </AlertDialog>
                     <AlertDialog
-                        acceptButtonProps={{color:"white",backgroundColor:"$red9"}}
+                        acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
                         p="$5"
                         acceptCaption="Delete"
                         setOpen={setOpenDeleteDialog}
                         open={openDeleteDialog}
                         onAccept={async (seter) => {
-                            await API.post('/adminapi/v1/deleteFiles/'+currentPath, selectedFiles)
+                            await API.post('/adminapi/v1/deleteFiles/' + currentPath, selectedFiles)
                             setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] })
                         }}
                         acceptTint="red"
-                        title={<Text color="$red9">Delete{(selectedFiles.length > 1?' '+selectedFiles.length+' files?': '?')}</Text>}
+                        title={<Text color="$red9">Delete{(selectedFiles.length > 1 ? ' ' + selectedFiles.length + ' files?' : '?')}</Text>}
                         description={"The following files will be deleted:"}
                     >
                         <YStack f={1}>
@@ -137,6 +140,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                     </AlertDialog>
 
                     <AlertDialog
+                        onPress={(e) => { e.stopPropagation() }}
                         p="$5"
                         acceptCaption="Close"
                         setOpen={setCustomAction}
@@ -145,10 +149,10 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         title={<Tinted><Text color="$color7">{customAction?.title}</Text></Tinted>}
                         description={customAction?.description}
                     >
-                        <YStack w={customAction?.size?.width} h={customAction?.size?.height} f={1}>
-                            {customAction && customAction.getComponent && customAction.getComponent(selectedFiles)}
+                        <YStack minWidth={customAction?.size?.width} h={customAction?.size?.height} f={1}>
+                            {customAction && customAction.getComponent && customAction.getComponent(selectedFiles, normalizedCurrentPath)}
                         </YStack>
-                       
+
                     </AlertDialog>
 
                     <YStack f={1}>
@@ -157,19 +161,31 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                             <FileBrowser
                                 onFileAction={(data) => {
                                     if (data.id == 'open_files') {
-                                        onOpen(data.payload.targetFile)
+                                        //Disable because rerenders clear the timer for double click in chonky
+                                        //This produces a bug where folders can not be opened if a rerender is done while double click
+                                        //We open files whit mouse click file and our own timer for double click
+                                        //onOpen(data.payload.targetFile)
                                     } else if (data.id == 'upload_files') {
                                         setShowUploadDialog(true)
                                     } else if (data.id == 'delete_files') {
                                         onDeleteFiles(data)
-                                    } else if(data.id == 'download_files') {
+                                    } else if (data.id == 'download_files') {
                                         onDownloadFiles(data)
+                                    } else if (data.id === "change_selection") {
+                                        setSelectedFiles(data.state.selectedFiles)//.map(f => f.name))
+                                    } else if (data.id == 'mouse_click_file'){
+                                        if ((Math.abs(Date.now() - lastClickTime.current) < 300)) {
+                                            console.log("------------------------------------",data)
+                                            onOpen(data.payload.file)
+                                        } else {
+                                            lastClickTime.current = Date.now()
+                                        }
                                     } else {
                                         const customAction = customActions.find(action => action.action.id == data.id)
-                                        if(customAction) {
+                                        if (customAction) {
                                             setCustomAction(customAction)
                                         }
-                                        //console.log('Action: ', data)
+                                        console.log('Action: ', data)
                                     }
                                 }}
                                 disableDragAndDrop={true}

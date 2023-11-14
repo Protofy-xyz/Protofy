@@ -4,7 +4,7 @@ import { Button, Paragraph, Spacer, TooltipSimple, XStack } from 'tamagui'
 
 import { useClipboard } from '../lib/useClipboard'
 
-export const CopyBubble = React.forwardRef(({text, tooltipCopy='Copy to clipboard', tooltipCopied = 'Copied'}:any, ref:any) => {
+export const CopyBubble = React.forwardRef(({text, tooltipCopy='Copy to clipboard', tooltipCopied = 'Copied', ...props}:any, ref:any) => {
   const { onCopy, hasCopied } = useClipboard(text)
 
   return (
@@ -21,6 +21,7 @@ export const CopyBubble = React.forwardRef(({text, tooltipCopy='Copy to clipboar
       elevation="$3"
       bc="$background"
       br="$10"
+      {...props}
     >
       <Paragraph
         //@ts-ignore
