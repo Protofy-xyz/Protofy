@@ -147,7 +147,7 @@ export const RenderNode = ({ render }) => {
                                         />
                                     </div>
                                     : null}
-                                {nodeAndSiblings.length > 1 ?
+                                {nodeAndSiblings?.length > 1 ?
                                     <div
                                         style={{ margin: "0px 8px 0px 0px", cursor: "pointer" }}
                                         title="Go to next sibling"

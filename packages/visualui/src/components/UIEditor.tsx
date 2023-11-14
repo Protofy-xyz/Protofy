@@ -1,5 +1,6 @@
 import { memo, useEffect, useState, useRef } from "react";
 import { Editor } from "@craftjs/core";
+import { Layers } from "@craftjs/layers";
 import { useEditorStore } from '../store/EditorStore';
 import { RenderNode } from './RenderNode';
 import paletteComponents from '../palettes';
@@ -7,21 +8,20 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import MainPanel from "./MainPanel";
 import Monaco from "./Monaco";
-import { X, Workflow, SlidersHorizontal, Code } from "lucide-react";
+import { X, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil } from "lucide-react";
 import { FlowFactory } from 'protoflow';
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
 import { ToggleGroup, Button } from "@my/ui"
 import UIMasks from '../masks/UI.mask.json';
-
-
+import { SidebarItem } from "./Sidebar/SideBarItem";
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowFactory(UIFLOWID)
 // const uiStore = useFlowsStore()
 
-function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata={} }) {
+function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {} }) {
     const editorRef = useRef<any>()
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const currentPageContent = useEditorStore(state => state.currentPageContent)
@@ -30,6 +30,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [preview, setPreview] = useState(true)
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
     const [pastZoomNodes, setPastZoomNodes] = useState([])
+    const [customizeVisible, setCustomizeVisible] = useState(true);
+    const [layerVisible, setLayerVisible] = useState(false);
 
     const { data } = topics;
 
@@ -134,7 +136,6 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         </Button>
                     </div>
                 </div>
-
                 <div style={{ display: codeEditorVisible ? 'flex' : 'none', flex: 1 }}>
                     <Monaco
                         onEscape={() => setCodeEditorVisible(false)}
@@ -143,23 +144,40 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         sourceCode={monacoSourceCode}
                     />
                 </div>
-                <div style={{ display: !codeEditorVisible ? 'flex' : 'none', flex: 1 }}>
-                    <Flow
-                        disableDots={!isActive || preview}
-                        sourceCode={currentPageContent}
-                        setSourceCode={setCurrentPageContent}
-                        customComponents={[]}
-                        onSave={(code, _, data) => onEditorSave('flows', code, data)}
-                        enableCommunicationInterface={true}
-                        // store={uiStore}
-                        config={{masks: UIMasks}}
-                        flowId={UIFLOWID}
-                        themeMode={'dark'}
-                        bgColor={'#252526'}
-                        theme={theme}
-                        nodePreview={preview}
-                        metadata={metadata}
-                    />
+                <div style={{ opacity: 1, marginRight: 0, flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#252526' }}>
+                    <SidebarItem
+                        icon={Pencil}
+                        title="Customize"
+                        height={!layerVisible ? 'full' : '55%'}
+                        visible={customizeVisible}
+                        onChange={(val) => setCustomizeVisible(val)}
+                    >
+                        <Flow
+                            disableDots={!isActive || preview}
+                            sourceCode={currentPageContent}
+                            setSourceCode={setCurrentPageContent}
+                            customComponents={[]}
+                            onSave={(code, _, data) => onEditorSave('flows', code, data)}
+                            enableCommunicationInterface={true}
+                            // store={uiStore}
+                            config={{ masks: UIMasks }}
+                            flowId={UIFLOWID}
+                            themeMode={'dark'}
+                            bgColor={'#252526'}
+                            theme={theme}
+                            nodePreview={preview}
+                            metadata={metadata}
+                        />
+                    </SidebarItem>
+                    <SidebarItem
+                        icon={Layers3}
+                        title="Layers"
+                        visible={layerVisible}
+                        onChange={(val) => setLayerVisible(val)}
+                        height={!customizeVisible ? 'full' : '55%'}
+                    >
+                        <Layers />
+                    </SidebarItem>
                 </div>
             </div>
         </div >

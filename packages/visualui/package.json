@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@craftjs/core": "0.2.0-beta.8",
+    "@craftjs/layers": "0.2.0-beta.8",
     "@monaco-editor/react": "4.4.6",
     "@types/node": "20.6.0",
     "deep-diff": "1.0.2",
