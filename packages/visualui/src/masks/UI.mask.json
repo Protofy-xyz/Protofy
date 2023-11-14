@@ -9,7 +9,8 @@
         },
         "body": [
             {
-                "type": "protolibProps"
+                "type": "protolibProps",
+                "props": ["bgColor"]
             },
             {
                 "type": "prop",
@@ -22,7 +23,7 @@
                         "type": "prop"
                     }
                 ],
-                "disableAdd": true
+                "disableAdd": false
             },
             {
                 "type": "child",
