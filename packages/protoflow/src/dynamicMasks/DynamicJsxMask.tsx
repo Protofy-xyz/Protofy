@@ -50,7 +50,7 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         }
                         case 'protolibProps': {
                             return <>
-                                <NodeParams id={node.id} params={getProtolibParams()} />
+                                <NodeParams id={node.id} params={getProtolibParams(element.props)} />
                             </>
                         }
                     }
