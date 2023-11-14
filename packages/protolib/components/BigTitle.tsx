@@ -7,7 +7,7 @@ type BigTitleProps = {
     children?:any
 }
 
-export default React.forwardRef(({children}:BigTitleProps, ref) => (
+export default React.forwardRef(({children, ...props}:BigTitleProps, ref) => (
     <H1
     //@ts-ignore
     ref={ref}
@@ -39,6 +39,7 @@ export default React.forwardRef(({children}:BigTitleProps, ref) => (
       lh: '$15',
       maxWidth: 1200,
     }}
+    {...props}
   >
     {children}
   </H1>
