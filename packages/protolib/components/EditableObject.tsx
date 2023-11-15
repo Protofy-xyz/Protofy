@@ -254,7 +254,8 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
 
     // ---- MODIFIERS ---- 
     // generateOptions
-    if (ele._def.dependsOn && data[ele._def.dependsOn] && (typeof ele._def.generateOptions === 'function')) {
+
+    if (ele._def.dependsOn && data && data[ele._def.dependsOn] && (typeof ele._def.generateOptions === 'function')) {
       options = ele._def.generateOptions(data)
       _rawOptions = options
     }
@@ -365,7 +366,7 @@ const GridElement = ({ index, data, width }) => {
   // console.log('colwidth: ', colWidth, realSize, columnMargin/Math.max(1,((colWidth*2)-(realSize*2))))
 
   return <XStack f={1} width={(width * realSize) + ((realSize - 1) * (data.columnMargin / realSize))} key={data.x} mb={'$0'}>
-    {getElement(data.ele, data.icon, data.i, data.x, data.data, data.setData, data.mode, data.customFields)}
+    {getElement(data.ele, data.icon, data.i, data.x, data.data || {}, data.setData, data.mode, data.customFields)}
   </XStack>
 }
 
