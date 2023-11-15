@@ -122,8 +122,8 @@ const saveYaml = async (yaml) => {
 
 const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
   const topicData = topics;
-  const p = {"components":"[\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n"}
-  const [sourceCode, setSourceCode] = useState(p.components)
+  const p = {"config":"[\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n"}
+  const [sourceCode, setSourceCode] = useState(p.config)
   // const currentDevice = useDeviceStore(state => state.electronicDevice);
   // const setCurrentDevice = useDeviceStore(state => state.setElectronicDevice);
   // console.log('currentDevice: ', currentDevice)
@@ -406,6 +406,7 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
     } catch (e) { console.error(e) }
   }
   const onPlay = (code) => {
+    console.log("🚀 ~ file: DeviceEditor.tsx:409 ~ onPlay ~ code:", code)
     const deviceCode = 'device(' + code + ')';
 
     const deviceObj = eval(deviceCode)

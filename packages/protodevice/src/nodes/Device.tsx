@@ -128,7 +128,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     return (
         <Node output={false} skipCustom={true} node={node} color='#8FCAF9' isPreview={!id} title='ESP32' id={id} margin='200px' >
             {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
-            {/* <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button> */}
+            <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button>
             {/* <div style={{ alignItems: 'center', justifyContent: 'flex-end', paddingLeft: "14px", paddingRight: "14px", paddingTop: "10px",paddingBottom: "10px" }}>
                 <p style={{ marginRight: '5px' }}>{connected}<span style={{backgroundColor: connected=="online"?"green":"red",display:"inline-block", width: "12px", height: "12px", borderRadius: "40px", marginLeft: "15px"}}></span></p>
             </div> */}

@@ -10,7 +10,7 @@ class Device {
     constructor(components) {
         this.pinTable = []
         this.mqttPrefix = ""
-        this.components = components
+        this.components = components.slice(10)
 
     }
 
@@ -42,7 +42,7 @@ class Device {
             esphome: {
                 name: deviceName,
             },
-            [deviceDefinition.board.core]: deviceDefinition.sdkConfig,
+            [deviceDefinition.board.core]: deviceDefinition.config.sdkConfig,
             logger: {}
         }
 
@@ -59,6 +59,7 @@ class Device {
         //     })
         // }
         this.components?.forEach((component, i) => {
+            console.log("🚀 ~ file: Device.ts:62 ~ Device ~ this.components?.forEach ~ component:", component)
             if(component){
                 // try {
                 //     component.setMqttTopicPrefix(`${this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name}`);
