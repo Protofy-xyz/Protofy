@@ -126,13 +126,13 @@ class Device {
     }
 
     create(deviceDefinition?) {
-        const ports = deviceDefinition[0].board.ports
+        const ports = deviceDefinition.board.ports
         this.pinTable = []
         ports.forEach(port => {
             if(!['3V3', 'EN', '36', '39', 'CLK'].includes(port.name)) this.pinTable.push(port.name)
         });
 
-        var components = this.getComponents(deviceDefinition[0])
+        var components = this.getComponents(deviceDefinition)
         //console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ jsYaml.dump(components):", jsYaml.dump(components, {lineWidth: -1}))
         return jsYaml.dump(components, {lineWidth: -1});
     }
