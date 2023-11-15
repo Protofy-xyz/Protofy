@@ -4,14 +4,15 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 import AsyncView from '../../components/AsyncView'
 import { useFileFromAPI } from '../../lib/useFileFromAPI'
 import { IconContainer } from '../../components/IconContainer'
-import { Save } from '@tamagui/lucide-icons';
+import { Save, Workflow, Code} from '@tamagui/lucide-icons';
 import { useThemeSetting } from '@tamagui/next-theme'
 // import FlowsWidget from '../../adminpanel/features/components/FlowsWidget'
 // import GLTFViewer from '../../adminpanel/features/components/ModelViewer'
 import { Monaco } from '../../components/Monaco'
-import {IntentType} from '../../lib/Intent'
+import { IntentType } from '../../lib/Intent'
 import Center from '../../components/Center'
 import dynamic from 'next/dynamic'
+import { useState } from 'react';
 
 const FlowsWidget = dynamic(() => import('../../adminpanel/features/components/FlowsWidget'), {
     loading: () => <Center>
@@ -23,9 +24,9 @@ const FlowsWidget = dynamic(() => import('../../adminpanel/features/components/F
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
     loading: () => <Center>
-    <Spinner size={'large'} scale={3} top={-50} />
-    Loading
-  </Center>,
+        <Spinner size={'large'} scale={3} top={-50} />
+        Loading
+    </Center>,
     ssr: false
 })
 
@@ -51,28 +52,37 @@ const JSONViewer = ({ extraIcons, name, path }) => {
     </AsyncView>
 }
 
-const FlowsViewer = ({ isFull, path, isModified, setIsModified }) => {
+const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) => {
     const [fileContent, setFileContent] = useFileFromAPI(path)
     const { resolvedTheme } = useThemeSetting()
+    const [mode, setMode] = useState('code')
     console.log('data: ', fileContent)
     return <AsyncView atom={fileContent}>
-            <XStack mt={isFull ? 50 : 30} f={1} width={"100%"}>
-                {/* <Theme name={tint as any}> */}
-                <FlowsWidget
-                    icons={<XStack position="absolute" right={isFull ? 0 : 50} top={isFull ? -35 : -32}>
-                        <IconContainer onPress={() => { }}>
-                            {/* <SizableText mr={"$2"}>Save</SizableText> */}
-                            <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
-                        </IconContainer>
-                    </XStack>}
-                    isModified={isModified}
-                    setIsModified={setIsModified}
-                    setSourceCode={(sourceCode) => {
-                        console.log('set new sourcecode from flows: ', sourceCode)
-                    }} sourceCode={fileContent.data} path={path} themeMode={resolvedTheme} />
-                {/* </Theme> */}
+        <XStack mt={isFull ? 50 : 30} f={1} width={"100%"}>
+            {/* <Theme name={tint as any}> */}
+            <XStack position="absolute" right={isFull ? 0 : 20} top={isFull ? -35 : -32}>
+                {mode == 'code' ? <IconContainer onPress={() => setMode('flow')}>
+                    {/* <SizableText mr={"$2"}>Save</SizableText> */}
+                    <Workflow color="var(--color)" size={isFull ? "$2" : "$1"} />
+                </IconContainer>:
+                <IconContainer onPress={() => setMode('code')}>
+                    {/* <SizableText mr={"$2"}>Save</SizableText> */}
+                    <Code color="var(--color)" size={isFull ? "$2" : "$1"} />
+                </IconContainer>}
+                {extraIcons}
             </XStack>
-        </AsyncView>
+            {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={fileContent.data} />: <FlowsWidget
+                isModified={isModified}
+                setIsModified={setIsModified}
+                setSourceCode={(sourceCode) => {
+                    console.log('set new sourcecode from flows: ', sourceCode)
+                }} sourceCode={fileContent.data} path={path} themeMode={resolvedTheme} />}
+                <XStack opacity={0} top={-200000} position={"absolute"}>
+                    <FlowsWidget preload={true} />
+                </XStack>
+            {/* </Theme> */}
+        </XStack>
+    </AsyncView>
 }
 
 const MonacoViewer = ({ path }) => {
@@ -92,7 +102,7 @@ export const processFilesIntent = ({ action, domain, data }: IntentType) => {
     if (mime == 'application/json') {
         return { component: <JSONViewer {...data} />, supportIcons: true }
     } else if (mime == 'application/javascript' || mime == 'video/mp2t') {
-        return { component: <FlowsViewer {...data} />, supportIcons: false }
+        return { component: <FlowsViewer {...data} />, supportIcons: true }
     } else if (mime == 'model/gltf-binary') {
         return {
             component: <GLTFViewer path={url} />,
@@ -103,7 +113,7 @@ export const processFilesIntent = ({ action, domain, data }: IntentType) => {
             component: <MonacoViewer path={data.path} />,
             widget: 'text'
         }
-    } else if(type == 'image') {
-        return {component: <img src={url} />, widget: 'image'}
+    } else if (type == 'image') {
+        return { component: <img src={url} />, widget: 'image' }
     }
 }
