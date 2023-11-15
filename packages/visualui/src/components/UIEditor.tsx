@@ -144,7 +144,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         sourceCode={monacoSourceCode}
                     />
                 </div>
-                <div style={{ opacity: 1, marginRight: 0, flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#252526' }}>
+                <div style={{ opacity: 1, marginRight: 0, flex: 1, display: codeEditorVisible ? 'none' : 'flex', flexDirection: 'column', backgroundColor: '#252526' }}>
                     <SidebarItem
                         icon={Pencil}
                         title="Customize"
