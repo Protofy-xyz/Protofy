@@ -160,7 +160,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 }
                 const options = param.data?.map((item, index) => {
                     var extraProps = item?.color ? { color: item.color } : {}
-                    return { label: item ?? "undefined", value: item, ...extraProps }
+                    return { label: item ?? "default", value: item, ...extraProps }
                 })
 
                 return <div style={{ flex: 1, zIndex: 1000 }}>
