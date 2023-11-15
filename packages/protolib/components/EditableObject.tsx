@@ -459,55 +459,59 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
       <Center mt="$5">All unsaved changes will be lost</Center>
     </AlertDialog>
     <AsyncView forceLoad={currentMode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={originalData}>
-      <YStack width="100%">
-        <XStack ai="center">
-          <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
-            {title ?? <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>}
-          </XStack>
-          {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
-            if (currentMode == 'edit' && edited) {
-              setDialogOpen(true)
-            } else {
-              setPrevCurrentMode(currentMode)
-              setCurrentMode(currentMode == 'view' ? 'edit' : 'view')
-            }
-          }} cursor="pointer">
-            <Tinted>
-              <Stack>{currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" /> : null)}</Stack>
-            </Tinted>
-          </XStack>}
-        </XStack>
-        <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
-          {error && (
-            <Notice>
-              <Paragraph>{getErrorMessage(error.error)}</Paragraph>
-            </Notice>
-          )}
-
-          {gridView}
-
-          {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
-            {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
-              <Button f={1} onPress={async () => {
-                console.log('final data: ', data)
-                setLoading(true)
-                try {
-                  await onSave(originalData.data, data)
-                  if (prevCurrentMode != currentMode) {
-                    setCurrentMode(prevCurrentMode as any)
-                  }
-                } catch (e) {
-                  setError(e)
-                  console.log('e: ', e)
+      {
+        Object.keys(data).length
+          ? <YStack width="100%">
+            <XStack ai="center">
+              <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
+                {title ?? <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>}
+              </XStack>
+              {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
+                if (currentMode == 'edit' && edited) {
+                  setDialogOpen(true)
+                } else {
+                  setPrevCurrentMode(currentMode)
+                  setCurrentMode(currentMode == 'view' ? 'edit' : 'view')
                 }
-                setLoading(false)
-              }}>
-                {loading ? <Spinner /> : currentMode == 'add' ? 'Create' : 'Save'}
-              </Button>
-            </Tinted>}
-          </YStack>}
-        </YStack>
-      </YStack>
+              }} cursor="pointer">
+                <Tinted>
+                  <Stack>{currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" /> : null)}</Stack>
+                </Tinted>
+              </XStack>}
+            </XStack>
+            <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
+              {error && (
+                <Notice>
+                  <Paragraph>{getErrorMessage(error.error)}</Paragraph>
+                </Notice>
+              )}
+
+              {gridView}
+
+              {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
+                {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
+                  <Button f={1} onPress={async () => {
+                    console.log('final data: ', data)
+                    setLoading(true)
+                    try {
+                      await onSave(originalData.data, data)
+                      if (prevCurrentMode != currentMode) {
+                        setCurrentMode(prevCurrentMode as any)
+                      }
+                    } catch (e) {
+                      setError(e)
+                      console.log('e: ', e)
+                    }
+                    setLoading(false)
+                  }}>
+                    {loading ? <Spinner /> : currentMode == 'add' ? 'Create' : 'Save'}
+                  </Button>
+                </Tinted>}
+              </YStack>}
+            </YStack>
+          </YStack>
+          : null
+      }
     </AsyncView>
   </Stack>
 }

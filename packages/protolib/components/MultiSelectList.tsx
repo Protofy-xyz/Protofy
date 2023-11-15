@@ -8,10 +8,6 @@ export function MultiSelectList({ choices, defaultSelections = [], onSetSelectio
   const [open, setOpen] = useState(false);
   const [selections, setSelections] = useState(defaultSelections);
 
-  useEffect(() => {
-    setSelections(defaultSelections)
-  }, [defaultSelections])
-
   const updateSelections = (e, cName) => {
     const target = choices[choices.indexOf(cName)]
     if (selections.includes(target)) {
