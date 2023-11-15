@@ -2,6 +2,7 @@
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { ObjectModel } from '.'
 import {DataView, DataTable2, Chip, API} from 'protolib'
+import { Pencil } from '@tamagui/lucide-icons';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const ObjectIcons =  {}
@@ -23,6 +24,10 @@ export default {
                     model={ObjectModel} 
                     pageState={pageState}
                     icons={ObjectIcons}
+                    extraMenuActions = {[
+                        {text:"Edit API file", icon:Pencil, action: (e) => { alert("TODO: connect with editor") }, isVisible: (data)=>data.api?true:false},
+                        {text:"Edit Object file", icon:Pencil, action: (e) => { alert("TODO: connect with editor") }, isVisible: (data)=>true}
+                    ]}
                 />
             </AdminPage>)
         }, 
