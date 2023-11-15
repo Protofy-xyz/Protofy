@@ -30,14 +30,14 @@ export default {
   component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
     const [showDialog, setShowDialog] = React.useState(false)
     const { resolvedTheme } = useThemeSetting();
-    const p = { "components": "[\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n" }
+    const p = { "components": "[\n \"mydevice\",\n \"esp32dev\",\n \"POROTOVICE\",\n \"********\",\n \"none\",\n \"51.68.45.86\",\n false,\n \"10\",\n \"10\",\n 34,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n" }
     const [sourceCode, setSourceCode] = useState(p.components)
     const [isModified,setIsModified] = React.useState(false)
     const [editedObjectData, setEditedObjecData]= React.useState({})
 
     const saveToFile= (code,path)=>{
       console.log("----------------- SAVE TO FILE ------------", {code,path})
-      editedObjectData.setData({config: code})
+      editedObjectData.setData({components: code, sdkConfig: {board: "esp32dev", framework:{type: "arduino"}}})
       setShowDialog(false)
     }
 
