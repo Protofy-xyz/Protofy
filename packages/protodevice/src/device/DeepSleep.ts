@@ -60,7 +60,9 @@ class DeepSleep {
           wakeup_pin: this.wakeup_pin,
           wakeup_pin_mode: 'KEEP_AWAKE'
         }
-      },
+      }
+    ]
+    const mqttComponentObjects = [
       {
         name: 'globals',
         config: {
@@ -144,10 +146,16 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`,
           ]
         }
       }
+      
     ]
     componentObjects.forEach((element, j) => {
       this.exctractComponent(element, deviceComponents)
     })
+    if(deviceComponents.mqtt) {
+      mqttComponentObjects.forEach((element, j) => {
+        this.exctractComponent(element, deviceComponents)
+      })
+    }
     return deviceComponents
   }
 }
