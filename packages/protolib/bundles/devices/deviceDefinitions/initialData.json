@@ -6,9 +6,12 @@
         "sdk": "esphome",
         "subsystems": {},
         "config": {
-            "board": "esp32dev",
-            "framework": {
-                "type": "arduino"
+            "components": "[\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null\n]",
+            "sdkConfig":{
+                "board": "esp32dev",
+                "framework": {
+                    "type": "arduino"
+                }
             }
         }
     }

@@ -13,7 +13,8 @@ const FlowsWidget = (props: any) => {
     // console.log("PROPS.MODE: ",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
 
     return <TopicsProvider>
-        {props.isModified ?props.icons:null}
+        
+        {props.isModified ? props.icons:null}
         <Flow
             path={props.path}
             // onViewPortChange={(viewPort) => {

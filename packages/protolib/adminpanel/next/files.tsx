@@ -27,11 +27,12 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
     const path = nameSegments ? nameSegments.slice(2).join('/') : '';
     //@ts-ignore
     const currentFile = context.query.file ? context.query.file.split('/')[0] : ''
+
     props = {
       data: {
         filesState: await API.get('/adminapi/v1/files/'+path) ?? { data: [] },
         CurrentPath: path,
-        CurrentFile: currentFile
+        CurrentFile: currentFile? path+'/'+currentFile : null
       }
     }    
 
