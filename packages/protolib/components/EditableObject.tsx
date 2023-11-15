@@ -461,7 +461,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
     >
       <Center mt="$5">All unsaved changes will be lost</Center>
     </AlertDialog>
-    <AsyncView forceLoad={currentMode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
+    <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
       <YStack width="100%">
         <XStack ai="center">
           <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
