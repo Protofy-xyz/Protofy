@@ -108,34 +108,31 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         <div
             key="auxiliarySidebar"
             // FIX: Make disapear panel div while not visible, can't hide it from first render with display: isSidebarVisible ? 'flex':'none'
-            style={{ display: 'flex', top: isSideBarVisible? 0:-1000000000000, position:isSideBarVisible?'relative':'absolute', height: '100%'}}
+            style={{ display: 'flex', width: '100%', top: isSideBarVisible ? 0 : -1000000000000, position: isSideBarVisible ? 'relative' : 'absolute', height: '100%' }}
         >
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
                 <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526', borderBottom: '1px solid #cccccc20' }}>
-                    <div style={{ color: preview ? 'white' : 'transparent' }}>{pastZoomNodes[0]}</div>
-                    <div style={{ display: 'flex' }}>
-                        <ToggleGroup type="single" defaultValue="preview" disableDeactivation>
-                            <ToggleGroup.Item value="code" onPress={() => setCodeEditorVisible(true)} >
-                                <Code />
-                            </ToggleGroup.Item>
-                            <ToggleGroup.Item value="flow" onPress={() => { setPreview(false); setCodeEditorVisible(false) }}>
-                                <Workflow />
-                            </ToggleGroup.Item>
-                            <ToggleGroup.Item value="preview" onPress={() => { setPreview(true); setCodeEditorVisible(false) }}>
-                                <SlidersHorizontal />
-                            </ToggleGroup.Item>
-                        </ToggleGroup>
-                        <Button
-                            onPress={(e) => { setIsSideBarVisible(false); setCodeEditorVisible(false); e.stopPropagation() }}
-                            hoverStyle={{ opacity: 1 }} opacity={0.7}
-                            size="$3"
-                            chromeless
-                            circular
-                            noTextWrap
-                        >
-                            <X style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
-                        </Button>
-                    </div>
+                    <Button
+                        onPress={(e) => { setIsSideBarVisible(false); setCodeEditorVisible(false); e.stopPropagation() }}
+                        hoverStyle={{ opacity: 1 }} opacity={0.7}
+                        size="$3"
+                        chromeless
+                        circular
+                        noTextWrap
+                    >
+                        <X style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
+                    </Button>
+                    <ToggleGroup type="single" defaultValue="preview" disableDeactivation>
+                        <ToggleGroup.Item value="code" onPress={() => setCodeEditorVisible(true)} >
+                            <Code />
+                        </ToggleGroup.Item>
+                        <ToggleGroup.Item value="flow" onPress={() => { setPreview(false); setCodeEditorVisible(false) }}>
+                            <Workflow />
+                        </ToggleGroup.Item>
+                        <ToggleGroup.Item value="preview" onPress={() => { setPreview(true); setCodeEditorVisible(false) }}>
+                            <SlidersHorizontal />
+                        </ToggleGroup.Item>
+                    </ToggleGroup>
                 </div>
                 <div style={{ display: codeEditorVisible ? 'flex' : 'none', flex: 1 }}>
                     <Monaco
