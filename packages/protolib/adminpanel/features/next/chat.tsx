@@ -14,41 +14,76 @@ const Chat = ({ tags = [] }: any) => {
         }
     };
 
+    // Función que se llama cuando una imagen se carga
+    const onImageLoad = (img) => {
+        const parent = img.parentNode.parentNode.parentNode;
+
+        const floatingImage = document.createElement('img');
+        floatingImage.src = '/images/youtube-play.svg';
+
+
+        floatingImage.style.width = `${img.offsetWidth}px`;
+        floatingImage.style.height = `${img.offsetHeight}px`;
+
+
+        floatingImage.style.position = 'absolute';
+        // floatingImage.style.opacity = '0.5';
+        floatingImage.style.transformOrigin = 'center';
+        floatingImage.style.transform = 'scale(0.20)';
+        floatingImage.style.cursor = 'Pointer'
+        floatingImage.style.pointerEvents = 'none';
+
+        floatingImage.style.left = '15px';
+        floatingImage.style.top = '15px';
+
+        if (getComputedStyle(parent).position === 'static') {
+            parent.style.position = 'relative';
+        }
+        console.log('floating image: ', floatingImage)
+        parent.appendChild(floatingImage);
+    };
+
     useEffect(() => {
-        // Función que se llama cuando una imagen se carga
-        const onImageLoad = () => {
-          scrollToBottom()
-          for(let i=1;i<11;i++) {
-            setTimeout(() => scrollToBottom(), i*100);
-          }
-        };
-    
         // Configuración del MutationObserver
         const mutationObserver = new MutationObserver(mutations => {
-          mutations.forEach(mutation => {
-            if (mutation.type === 'childList' && mutation.addedNodes.length) {
-              mutation.addedNodes.forEach(node => {
-                if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('rcw-message')) {
-                    console.log('image detecteeeeeeeeeeeeeeeeeed', node)
-                    const images = node.getElementsByClassName("rcw-message-img");
-                    for (let img of images) {
-                        img.addEventListener('load', onImageLoad);
-                    }
+            console.log("mutations:", mutations);
+            mutations.forEach(mutation => {
+                if (mutation.type === 'childList' && mutation.addedNodes.length) {
+                    mutation.addedNodes.forEach(node => {
+                        if (node.nodeType === Node.ELEMENT_NODE && (node.classList.contains('rcw-message') || node.classList.contains('rcw-conversation-container'))) {
+                            const images = node.getElementsByClassName("rcw-message-img");
+                            for (let img of images) {
+                                if(img.complete) {
+                                    onImageLoad(img)
+                                    scrollToBottom()
+                                    for (let i = 1; i < 11; i++) {
+                                        setTimeout(() => scrollToBottom(), i * 100);
+                                    }                                
+                                } else {
+                                    img.addEventListener('load', () => {
+                                        scrollToBottom()
+                                        for (let i = 1; i < 11; i++) {
+                                            setTimeout(() => scrollToBottom(), i * 100);
+                                        }
+                                        onImageLoad(img)
+                                    });
+                                }
+                            }
+                        }
+                    });
                 }
-              });
-            }
-          });
+            });
         });
-    
+
         const chatContainer = document.querySelector('body');
         if (chatContainer) {
-          mutationObserver.observe(chatContainer, { childList: true, subtree: true });
+            mutationObserver.observe(chatContainer, { childList: true, subtree: true });
         }
-    
+
         return () => {
-          mutationObserver.disconnect();
+            mutationObserver.disconnect();
         };
-      }, []);
+    }, []);
 
     const getResources = async () => {
         console.log('requesting: ', '/adminapi/v1/resources?search=tags:' + tags.join(','));
@@ -89,12 +124,14 @@ const Chat = ({ tags = [] }: any) => {
                 subtitle="Get help, ideas and documentation"
                 handleNewUserMessage={() => { }}
                 handleToggle={async (state) => {
-                    if (first) {
-                        setFirst(false)
-                        toggleMsgLoader()
-                        await getInitialMessages()
-                        // setTimeout(() => scrollToBottom(), 500)
-                        toggleMsgLoader()
+                    if (state) {
+                        if(first) {
+                            setFirst(false)
+                            toggleMsgLoader()
+                            await getInitialMessages()
+                            // setTimeout(() => scrollToBottom(), 500)
+                            toggleMsgLoader()
+                        }
                     }
                 }}
             />
