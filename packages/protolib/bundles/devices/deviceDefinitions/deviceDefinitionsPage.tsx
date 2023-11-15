@@ -99,7 +99,7 @@ export default {
             z.literal("hola"),
             z.literal("adios")
           ]).dependsOn("board").generateOptions((formData) => {
-            const { boards, cores, sdks } = extraData
+            const { boards, cores } = extraData
             if (formData.board) {
               const board = boards.find(brd => brd.name === formData.board)
               return cores.find(core => core.name === board.core).sdks
