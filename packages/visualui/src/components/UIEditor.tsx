@@ -161,6 +161,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             enableCommunicationInterface={true}
                             // store={uiStore}
                             config={{ masks: UIMasks }}
+                            zoomOnDoubleClick={!preview}
                             flowId={UIFLOWID}
                             themeMode={'dark'}
                             bgColor={'#252526'}
