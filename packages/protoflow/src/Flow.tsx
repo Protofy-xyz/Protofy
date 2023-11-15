@@ -56,6 +56,7 @@ interface FlowProps {
     enableCommunicationInterface?: boolean
     dataNotify?: Function,
     children?: any,
+    zoomOnDoubleClick?: boolean,
     showActionsBar?: boolean,
     onSelectionChange?: Function,
     onEdit?: Function,
@@ -91,6 +92,7 @@ const FlowComponent = ({
     enableCommunicationInterface = false,
     children,
     showActionsBar = false,
+    zoomOnDoubleClick = true,
     onSelectionChange = () => { },
     onEdit = () => { },
     config = {},
@@ -871,6 +873,7 @@ const FlowComponent = ({
                 nodeTypes={nodeTypes}
                 nodes={nodes}
                 edges={edges}
+                zoomOnDoubleClick={zoomOnDoubleClick}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onNodesDelete={(nodesToDelete) => actionPublisher('delete-node', nodesToDelete)}

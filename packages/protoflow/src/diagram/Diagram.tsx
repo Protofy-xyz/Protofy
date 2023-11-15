@@ -20,6 +20,7 @@ type DiagramParams = {
     componentsMenu?: any,
     disableMiniMap?: boolean,
     disableDots?: boolean,
+    zoomOnDoubleClick?: boolean,
     edgeTypes?: any,
     nodeTypes?: any,
     edges?: any[],
@@ -47,6 +48,7 @@ const Diagram = React.forwardRef(({
     componentsMenu = <></>,
     disableMiniMap = false,
     disableDots = false,
+    zoomOnDoubleClick = true,
     edgeTypes = [],
     nodeTypes = [],
     edges = [],
@@ -240,6 +242,7 @@ const Diagram = React.forwardRef(({
                 nodeTypes={nodeTypes}
                 nodes={nodes}
                 edges={edges}
+                zoomOnDoubleClick={zoomOnDoubleClick}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnectStart={onConnectStart}
