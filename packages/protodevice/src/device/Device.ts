@@ -1,44 +1,16 @@
 const jsYaml = require("js-yaml");
 class Device {
-    name;
-    type;
     components;
-    dsComponents;
-    ssid;
-    password;
-    mqtt;
+
     mqttPrefix;
-    mqttJsonEndpoints;
-    onJsonMessage;
-    onMessage;
-    onBoot;
-    onShutdown;
-    wifiPowerMode;
-    deepSleep;
-    deepSleepRunDuration;
-    deepSleepSleepDuration;
-    wakeupPin;
+
+
     pinTable;
 
-    constructor(deviceInfo) {
-        this.name = deviceInfo[0]
-        this.type = deviceInfo[1]
-        // this.ssid = deviceInfo[2]
-        // this.password = deviceInfo[3]
-        // this.wifiPowerMode = deviceInfo[4]
-        // this.mqtt = deviceInfo[5]
-        // this.deepSleep = deviceInfo[6]
-        // this.deepSleepRunDuration = deviceInfo[7]
-        // this.deepSleepSleepDuration =deviceInfo[8]
-        // this.wakeupPin = deviceInfo[9]
+    constructor(components) {
         this.pinTable = []
         this.mqttPrefix = ""
-        this.components = deviceInfo.slice(10)
-        this.mqttJsonEndpoints = ''
-        this.onJsonMessage = undefined
-        this.onMessage = undefined
-        this.onBoot = undefined
-        this.onShutdown= undefined
+        this.components = components
 
     }
 
@@ -64,12 +36,13 @@ class Device {
         this.wifiPowerMode === mode // for "high" mode cases on this.wifiPowerMode
     }
     
-    getComponents(deviceDefinition){
+    getComponents(deviceName, deviceDefinition){
+        console.log("🚀 ~ file: Device.ts:69 ~ Device ~ getComponents ~ deviceDefinition:", deviceDefinition)
         var deviceComponents = {
             esphome: {
-                name: this.name,
+                name: deviceName,
             },
-            [deviceDefinition.board.core.name]: deviceDefinition.sdkConfig,
+            [deviceDefinition.board.core]: deviceDefinition.sdkConfig,
             logger: {}
         }
 
@@ -85,7 +58,7 @@ class Device {
         //         }
         //     })
         // }
-        this.components.forEach((component, i) => {
+        this.components?.forEach((component, i) => {
             if(component){
                 // try {
                 //     component.setMqttTopicPrefix(`${this.mqttPrefix != '' ? this.mqttPrefix + '/' + this.name : this.name}`);
@@ -110,30 +83,15 @@ class Device {
 
     }
 
-    extractOnJSONMessage(components) {
-        if (!components.on_json_message) return components;
-        if(Array.isArray(components.on_json_message)){
-            this.onJsonMessage = []
-            components.on_json_message.map(e => {
-                this.onJsonMessage.push(e)
-            })
-        }else{
-            this.onJsonMessage = components.on_json_message
-
-        }
-        delete components.on_json_message
-        return components
-    }
-
-    create(deviceDefinition?) {
+    create(deviceName?, deviceDefinition?) {
         const ports = deviceDefinition.board.ports
         this.pinTable = []
         ports.forEach(port => {
             if(!['3V3', 'EN', '36', '39', 'CLK'].includes(port.name)) this.pinTable.push(port.name)
         });
 
-        var components = this.getComponents(deviceDefinition)
-        //console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ jsYaml.dump(components):", jsYaml.dump(components, {lineWidth: -1}))
+        var components = this.getComponents(deviceName, deviceDefinition)
+        console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ jsYaml.dump(components):", jsYaml.dump(components, {lineWidth: -1}))
         return jsYaml.dump(components, {lineWidth: -1});
     }
 }
