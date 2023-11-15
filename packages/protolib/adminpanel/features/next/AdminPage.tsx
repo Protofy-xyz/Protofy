@@ -13,6 +13,8 @@ export function AdminPage({ pageSession, title, children }: any) {
     <Page title={"Protofy - " + title}>
       <Tinted>
         <DynamicWidget
+          title="Asistant"
+          subtitle="Get help, ideas and documentation"
           handleNewUserMessage={() => { }}
         />
       </Tinted>
