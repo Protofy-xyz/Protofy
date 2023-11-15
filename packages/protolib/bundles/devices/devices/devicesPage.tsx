@@ -10,6 +10,28 @@ import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
 import DeviceModal from 'protodevice/src/DeviceModal'
 import deviceFunctions from 'protodevice/src/device'
 
+const MqttTest = ({onSetStage,onSetModalFeedback}) => {
+  const { message } = useSubscription(['device/compile']);
+  useEffect(() => {
+    console.log("Compile Message: ", message);
+    try {
+      if (message?.message) {
+        const data = JSON.parse(message?.message.toString());
+        if (data.event == 'exit' && data.code == 0) {
+          console.log("Succesfully compiled");
+          onSetStage('upload')
+        } else if (data.event == 'exit' && data.code != 0) {
+          console.error('Error compiling')
+          onSetModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, [message])
+  return <></>
+}
+
 const DevicesIcons = { name: Tag, deviceDefinition: BookOpen }
 
 const callText = async (url: string, method: string, params?: string, token?: string): Promise<any> => {
@@ -47,19 +69,19 @@ export default {
   component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
 
     if (typeof window !== 'undefined') {
-      console.log("papapa")
       Object.keys(deviceFunctions).forEach(k => (window as any)[k] = deviceFunctions[k])
-    } else{
+    } else {
       console.log("Errror")
     }
     const [showModal, setShowModal] = useState(false)
     const [modalFeedback, setModalFeedback] = useState<any>()
     const [stage, setStage] = useState('')
     const yamlRef = React.useRef()
+    // const { message } = useSubscription(['device/compile']);
 
     const flashDevice = async (deviceName, deviceDefinitionId) => {
       console.log("Flash device: ", { deviceName, deviceDefinitionId });
-          
+
       const response = await API.get('/adminapi/v1/deviceDefinitions/' + deviceDefinitionId);
       if (response.isError) {
         alert(response.error)
@@ -71,13 +93,13 @@ export default {
         alert(response1.error)
         return;
       }
-      console.log("---------deviceDefinition----------",deviceDefinition)
+      console.log("---------deviceDefinition----------", deviceDefinition)
       deviceDefinition.board = response1.data
       const jsCode = deviceDefinition.config.components;
       const deviceCode = 'device(' + jsCode + ')';
-      console.log("-------DEVICE CODE------------",deviceCode)
+      console.log("-------DEVICE CODE------------", deviceCode)
       const deviceObj = eval(deviceCode)
-      const yaml = deviceObj.setMqttPrefix("newplatform").create(deviceName,deviceDefinition)
+      const yaml = deviceObj.setMqttPrefix("newplatform").create(deviceName, deviceDefinition)
       yamlRef.current = yaml
 
       setShowModal(true)
@@ -91,7 +113,6 @@ export default {
     const sendMessage = async (notUsed) => {
       await fetch('http://bo-firmware.protofy.xyz/api/v1/device/compile')
     }
-    const { message } = useSubscription(['device/compile']);
 
     const compile = async () => {
       setModalFeedback({ message: `Compiling firmware...`, details: { error: false } })
@@ -148,27 +169,30 @@ export default {
     }, [stage])
 
 
-    useEffect(() => {
-      console.log("Compile Message: ", message);
-      try {
-        if (message?.message) {
-          const data = JSON.parse(message?.message.toString());
-          if (data.event == 'exit' && data.code == 0) {
-            console.log("Succesfully compiled");
-            setStage('upload')
+    // useEffect(() => {
+    //   console.log("Compile Message: ", message);
+    //   try {
+    //     if (message?.message) {
+    //       const data = JSON.parse(message?.message.toString());
+    //       if (data.event == 'exit' && data.code == 0) {
+    //         console.log("Succesfully compiled");
+    //         setStage('upload')
 
-          } else if (data.event == 'exit' && data.code != 0) {
-            console.error('Error compiling')
-            setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }, [message])
+    //       } else if (data.event == 'exit' && data.code != 0) {
+    //         console.error('Error compiling')
+    //         setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
+    //       }
+    //     }
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }, [message])
 
-    return (<Connector brokerUrl="ws://bo-firmware.protofy.xyz/ws"><AdminPage title="Devices" pageSession={pageSession}>
-      <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
+    return (<AdminPage title="Devices" pageSession={pageSession}>
+      <Connector brokerUrl="wss://firmware.protofy.xyz/ws">
+        <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
+        <MqttTest onSetStage={(v)=>setStage(v)} setModalFeedback={(v)=>setModalFeedback(v)}/>
+      </Connector>
       <DataView
         itemData={itemData}
         rowIcon={Router}
@@ -191,7 +215,7 @@ export default {
         icons={DevicesIcons}
         dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
       />
-    </AdminPage></Connector>)
+    </AdminPage>)
   },
   getServerSideProps: PaginatedDataSSR('/adminapi/v1/devices', ['admin', 'editor'], {}, async () => {
     const deviceDefinitions = await API.get('/adminapi/v1/deviceDefinitions?itemsPerPage=1000')

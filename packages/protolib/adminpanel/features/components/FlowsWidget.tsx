@@ -9,9 +9,11 @@ const UIFLOWID = "flows-editor"
 const Flow = FlowFactory(UIFLOWID)
 
 const FlowsWidget = (props: any) => {
+
     const [content, setContent] = useState(props.content)
     // console.log("PROPS.MODE: ",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
-
+    if(props.preload) return <></>
+    
     return <TopicsProvider>
         
         {props.isModified ? props.icons:null}

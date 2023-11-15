@@ -7,6 +7,8 @@ import multer from 'multer';
 import fsExtra from 'fs-extra';
 import syncFs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
+import {generateEvent} from 'app/bundles/library'
+
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../"; // Define where the workspace root dir is
 
 const storage = multer.diskStorage({
@@ -97,6 +99,12 @@ const handleFilesDeleteRequest = (req, res) => {
     const fullPathFilesToDelete = filesToDelete.map(f => path.join(filepath,f))
     console.log('** DELETING FILES: ', fullPathFilesToDelete)
     fullPathFilesToDelete.forEach(f => syncFs.unlinkSync(f))
+    generateEvent({
+        path: 'files/delete/file', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+        from: 'api', // system entity where the event was generated (next, api, cmd...)
+        user: '-', // the original user that generates the action, 'system' if the event originated in the system itself
+        payload: {'path': name} // event payload, event-specific data
+    })
     res.send({result: 'deleted'})
 }
 
@@ -110,6 +118,13 @@ const handleFilesWriteRequest = async (req, res) => {
     if (req.body.content) {
         await fs.writeFile(filepath, req.body.content)
     }
+
+    generateEvent({
+        path: 'files/write/file', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+        from: 'api', // system entity where the event was generated (next, api, cmd...)
+        user: '-', // the original user that generates the action, 'system' if the event originated in the system itself
+        payload: {'path': name} // event payload, event-specific data
+    })
     res.status(200).send({result: "uploaded"});
 };
 
