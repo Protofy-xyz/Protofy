@@ -77,7 +77,7 @@ export default {
       const deviceCode = 'device(' + jsCode + ')';
       console.log("-------DEVICE CODE------------",deviceCode)
       const deviceObj = eval(deviceCode)
-      const yaml = deviceObj.setMqttPrefix("newplatform").create(deviceDefinition)
+      const yaml = deviceObj.setMqttPrefix("newplatform").create(deviceName,deviceDefinition)
       yamlRef.current = yaml
 
       setShowModal(true)
@@ -167,8 +167,8 @@ export default {
       }
     }, [message])
 
-    return (<AdminPage title="Devices" pageSession={pageSession}>
-      <Connector brokerUrl="ws://bo-firmware.protofy.xyz/ws"><DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} /></Connector>
+    return (<Connector brokerUrl="ws://bo-firmware.protofy.xyz/ws"><AdminPage title="Devices" pageSession={pageSession}>
+      <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
       <DataView
         itemData={itemData}
         rowIcon={Router}
@@ -191,7 +191,7 @@ export default {
         icons={DevicesIcons}
         dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
       />
-    </AdminPage>)
+    </AdminPage></Connector>)
   },
   getServerSideProps: PaginatedDataSSR('/adminapi/v1/devices', ['admin', 'editor'], {}, async () => {
     const deviceDefinitions = await API.get('/adminapi/v1/deviceDefinitions?itemsPerPage=1000')
