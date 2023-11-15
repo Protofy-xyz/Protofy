@@ -100,7 +100,7 @@ class Device {
                 deviceComponents = component.attach(
                     !isNaN(parseInt(this.pinTable[i])) 
                       ? parseInt(this.pinTable[i])
-                      : this.pinTable[i], deviceComponents
+                      : this.pinTable[i], deviceComponents, this.components
                   );
             }
         })

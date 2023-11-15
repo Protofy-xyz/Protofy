@@ -1,3 +1,5 @@
+const _ = require("lodash");
+
 class Mqtt {
   broker
   topic_prefix
@@ -12,18 +14,15 @@ class Mqtt {
         config: {
           broker: this.broker,
           topic_prefix: deviceComponents.esphome.name,
-        },
-      },
+        }
+      }
     ]
 
     componentObjects.forEach((element, j) => {
         if (!deviceComponents[element.name]) {
             deviceComponents[element.name] = element.config
         } else {
-            if (!Array.isArray(deviceComponents[element.name])) {
-                deviceComponents[element.name] = [deviceComponents[element.name]]
-            }
-            deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
+          deviceComponents[element.name] = {...deviceComponents[element.name], ...element.config}
         }
     })
     return deviceComponents

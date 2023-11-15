@@ -50,7 +50,7 @@ class DeepSleep {
     }
   }
 
-  attach(pin, deviceComponents) {
+  attach(pin, deviceComponents, componentsArray) {
     const componentObjects = [
       {
         name: 'deep_sleep',
@@ -151,7 +151,7 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`,
     componentObjects.forEach((element, j) => {
       this.exctractComponent(element, deviceComponents)
     })
-    if(deviceComponents.mqtt) {
+    if(componentsArray.filter(item => item !== null).map(item => item.constructor.name).includes('Mqtt')) {
       mqttComponentObjects.forEach((element, j) => {
         this.exctractComponent(element, deviceComponents)
       })
