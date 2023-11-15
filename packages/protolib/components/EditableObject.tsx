@@ -187,7 +187,8 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     console.log('set form data: ', key, value, path);
     console.log('before: ', data);
 
-    const formData = { ...data };
+    const formData = data;
+    console.log('setformData', data)
     let target = formData;
 
     let prevTarget;
@@ -205,7 +206,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     console.log('prev target: ', prevTarget)
     target[key] = value;
     console.log('after: ', formData);
-    setData(formData);
+    setData({ data: formData });
   }
 
   const getFormData = (key, customPath?) => {
@@ -220,6 +221,9 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     if (typeof target === 'string') {
       return target
     }
+
+    console.log('getformDat', data)
+
     // Retorna el valor de ele.name o un valor predeterminado.
     return target && target.hasOwnProperty(key) ? target[key] : '';
   }
@@ -369,7 +373,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
   const [currentMode, setCurrentMode] = useState(mode)
   const [prevCurrentMode, setPrevCurrentMode] = useState('')
-  const [data, setData] = useState({})
+  const [data, setData] = useState(originalData)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>()
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -377,19 +381,18 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   const [ready, setReady] = useState(false)
   const containerRef = useRef()
 
-  console.log('data: ', data)
-
   usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialData)
 
   useEffect(() => {
     if (originalData.data) {
-      setData(originalData.data)
+      setData(originalData)
     }
   }, [originalData])
 
   useUpdateEffect(() => setCurrentMode(mode), [mode])
 
   useUpdateEffect(() => {
+    console.log('data updated', data)
     if (ready) {
       setEdited(true)
     } else {
@@ -398,7 +401,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   }, [data])
 
   const getGroups = () => {
-    const elementObj = model.load(data)
+    const elementObj = model.load(data.data)
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
     const formFields = elementObj.getObjectSchema().isDisplay(currentMode).merge(extraFieldsObject).getLayout(1)
     const groups = {}
@@ -414,7 +417,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
         i: i,
         x: x,
         ele: ele,
-        data,
+        data: data.data,
         setData,
         mode: currentMode,
         size: ele._def.size ?? 1,
@@ -458,7 +461,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
     >
       <Center mt="$5">All unsaved changes will be lost</Center>
     </AlertDialog>
-    <AsyncView forceLoad={currentMode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={originalData}>
+    <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
       <YStack width="100%">
         <XStack ai="center">
           <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
@@ -489,10 +492,9 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
           {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
             {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
               <Button f={1} onPress={async () => {
-                console.log('final data: ', data)
                 setLoading(true)
                 try {
-                  await onSave(originalData.data, data)
+                  await onSave(originalData.data, data.data)
                   if (prevCurrentMode != currentMode) {
                     setCurrentMode(prevCurrentMode as any)
                   }
