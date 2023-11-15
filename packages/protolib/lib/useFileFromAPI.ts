@@ -4,7 +4,7 @@ import { useUpdateEffect } from "usehooks-ts"
 import { API } from "./Api"
 import { usePendingEffect } from "./usePendingEffect"
 
-export const useFileFromAPI = (path, json?) => {
+export const useFileFromAPI = (path, json?):[any, any] => {
     const [fileContent, setFileContent] = useState(getPendingResult('pending'))
 
     useUpdateEffect(() => {

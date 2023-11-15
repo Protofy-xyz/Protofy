@@ -12,7 +12,7 @@ import { Monaco } from '../../components/Monaco'
 import { IntentType } from '../../lib/Intent'
 import Center from '../../components/Center'
 import dynamic from 'next/dynamic'
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const FlowsWidget = dynamic(() => import('../../adminpanel/features/components/FlowsWidget'), {
     loading: () => <Center>
@@ -54,6 +54,16 @@ const JSONViewer = ({ extraIcons, name, path }) => {
 
 const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) => {
     const [fileContent, setFileContent] = useFileFromAPI(path)
+    const [loaded, setLoaded] = useState(false)
+    const sourceCode = useRef('')
+
+    useEffect(() => {
+        if(fileContent.isLoaded) {
+            sourceCode.current = fileContent.data
+            setLoaded(true)
+        }
+    }, [fileContent]);
+
     const { resolvedTheme } = useThemeSetting()
     const [mode, setMode] = useState('code')
     console.log('data: ', fileContent)
@@ -71,12 +81,13 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
                 </IconContainer>}
                 {extraIcons}
             </XStack>
-            {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={fileContent.data} />: <FlowsWidget
+            {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={sourceCode.current} onChange={(code) => {sourceCode.current = code}} />: <FlowsWidget
                 isModified={isModified}
+                onEdit={(code) => {sourceCode.current = code}}
                 setIsModified={setIsModified}
                 setSourceCode={(sourceCode) => {
-                    console.log('set new sourcecode from flows: ', sourceCode)
-                }} sourceCode={fileContent.data} path={path} themeMode={resolvedTheme} />}
+                    sourceCode.current = sourceCode
+                }} sourceCode={sourceCode.current} path={path} themeMode={resolvedTheme} />}
                 <XStack opacity={0} top={-200000} position={"absolute"}>
                     <FlowsWidget preload={true} />
                 </XStack>
