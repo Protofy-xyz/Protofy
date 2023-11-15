@@ -30,10 +30,10 @@ export default {
   component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
     const [showDialog, setShowDialog] = React.useState(false)
     const { resolvedTheme } = useThemeSetting();
-    const blank = { "components": "[\n \"mydevice\",\n \"esp32dev\",\n \"POROTOVICE\",\n \"********\",\n \"none\",\n \"51.68.45.86\",\n false,\n \"10\",\n \"10\",\n 34,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n" }
-    const [sourceCode, setSourceCode] = useState(blank.components)
+    const defaultJsCode = { "components": "[\n \"mydevice\",\n \"esp32dev\",\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n" }
+    const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
     const [isModified,setIsModified] = React.useState(false)
-    const [editedObjectData, setEditedObjecData]= React.useState({})
+    const [editedObjectData, setEditedObjectData]= React.useState({})
 
     const saveToFile= (code,path)=>{
       console.log("----------------- SAVE TO FILE ------------", {code,path})
@@ -91,7 +91,7 @@ export default {
           DataTable2.column("name", "name", true),
           DataTable2.column("board", "board", true, (row) => <Chip text={row.board} color={'$gray5'} />),
           DataTable2.column("sdk", "sdk", true, (row) => <Chip text={row.sdk} color={'$gray5'} />),
-          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={async (e) => { console.log("row from Edit: ", row); setShowDialog(true); setSourceCode(row.config.components);}}>Edit</ButtonSimple>)
+          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={async (e) => { console.log("row from Edit: ", row); setShowDialog(true); setSourceCode(row.config.components); }}>View</ButtonSimple>)
         )}
         extraFieldsForms={{
           board: z.union(extraData.boards.map(o => z.literal(o.name))).after('name').display(),
@@ -116,7 +116,7 @@ export default {
             component: (path, data, setData, mode) => {
               console.log("inputs: ", { path, data, setData, mode })
               if (mode == "preview"){return <></>}
-              return <ButtonSimple onPress={(e) => { console.log("row from Add: ", e); setShowDialog(true); setSourceCode(blank.components); setEditedObjecData({path,data,setData,mode});  console.log("inputs: ", { path, data, setData, mode })}}>Edit</ButtonSimple>
+              return <ButtonSimple onPress={(e) => {setShowDialog(true); mode=="add"?setSourceCode(defaultJsCode.components):setSourceCode(data.components); setEditedObjectData({path,data,setData,mode});  console.log("inputs: ", { path, data, setData, mode })}}>Edit</ButtonSimple>
             },
             hideLabel: false
           }
