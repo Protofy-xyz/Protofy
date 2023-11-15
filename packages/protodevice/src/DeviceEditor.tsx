@@ -122,7 +122,7 @@ const saveYaml = async (yaml) => {
 
 const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
   const topicData = topics;
-  const p = {"config":"[\n \"mydevice\",\n \"esp32dev\",\n \"POROTOVICE\",\n \"********\",\n \"none\",\n \"51.68.45.86\",\n false,\n \"10\",\n \"10\",\n 34,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n"}
+  const p = {"config":"[\n \"mydevice\",\n \"esp32dev\",\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n"}
   const [sourceCode, setSourceCode] = useState(p.config)
   // const currentDevice = useDeviceStore(state => state.electronicDevice);
   // const setCurrentDevice = useDeviceStore(state => state.setElectronicDevice);

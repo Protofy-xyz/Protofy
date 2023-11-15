@@ -71,20 +71,20 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     const params = [
         // { label: 'Name', onBlur:()=>changeDeviceName(), field: 'element-0', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"'},
         { label: 'Name', isDisabled: true, field: 'element-0', type: 'input', static: true },
-        { label: 'WiFi SSID', field: 'element-2', type: 'input', static: true },
-        { label: 'WiFi Password', field: 'element-3', type: 'input', static: true },
-        {
-            label: 'WiFi Power mode', field: 'element-4', type: 'select', static: true,
-            data: ['"none"', '"light"', '"high"'],
-        },
-        { label: 'MQTT Address', field: 'element-5', type: 'input', static: true },
-        { label: 'Enable Deep-Sleep', static: true, field: 'element-6', type: 'boolean' },
-        { label: 'Deep-Sleep run duration', field: 'element-7', type: 'input', static: true},
-        { label: 'Deep-Sleep sleep duration', field: 'element-8', type: 'input', static: true },
-        {
-            label: 'Wakeup Pin', static: true, field: 'element-9', type: 'select',
-            data: ports.filter(port => port.type.includes('I') && !['EN', '36', '39', 'CLK'].includes(port.name) && port.rtc == true).map(port => port.name)
-        }
+        // { label: 'WiFi SSID', field: 'element-2', type: 'input', static: true },
+        // { label: 'WiFi Password', field: 'element-3', type: 'input', static: true },
+        // {
+        //     label: 'WiFi Power mode', field: 'element-4', type: 'select', static: true,
+        //     data: ['"none"', '"light"', '"high"'],
+        // },
+        // { label: 'MQTT Address', field: 'element-5', type: 'input', static: true },
+        // { label: 'Enable Deep-Sleep', static: true, field: 'element-6', type: 'boolean' },
+        // { label: 'Deep-Sleep run duration', field: 'element-7', type: 'input', static: true},
+        // { label: 'Deep-Sleep sleep duration', field: 'element-8', type: 'input', static: true },
+        // {
+        //     label: 'Wakeup Pin', static: true, field: 'element-9', type: 'select',
+        //     data: ports.filter(port => port.type.includes('I') && !['EN', '36', '39', 'CLK'].includes(port.name) && port.rtc == true).map(port => port.name)
+        // }
 
     ]
     // const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME
@@ -118,7 +118,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     // }, [message])
     const devicePositioning = Array(34).fill(1).map((x,i)=>{
         if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
-            return `${i + 10}-${i>14?'l':'r'}-${i}`
+            return `${i + 2}-${i>14?'l':'r'}-${i}`
         }
     })
     console.log("DevicePositioning: ", devicePositioning)
@@ -128,7 +128,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     return (
         <Node output={false} skipCustom={true} node={node} color='#8FCAF9' isPreview={!id} title='ESP32' id={id} margin='200px' >
             {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
-            <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button>
+            {/* <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button> */}
             {/* <div style={{ alignItems: 'center', justifyContent: 'flex-end', paddingLeft: "14px", paddingRight: "14px", paddingTop: "10px",paddingBottom: "10px" }}>
                 <p style={{ marginRight: '5px' }}>{connected}<span style={{backgroundColor: connected=="online"?"green":"red",display:"inline-block", width: "12px", height: "12px", borderRadius: "40px", marginLeft: "15px"}}></span></p>
             </div> */}
@@ -138,7 +138,7 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
             </div>
             {Array(34).fill(1).map((x, i) => {
                 if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
-                    const idString = `${id}${PORT_TYPES.data}element-${i + 10}`;//${i>14?'l':'r'}
+                    const idString = `${id}${PORT_TYPES.data}element-${i+2}`;//${i>14?'l':'r'}
                     return <Handle
                         key={i}
                         isConnectable={!isHandleConnected(edges, idString)}
