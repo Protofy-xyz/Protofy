@@ -80,6 +80,7 @@ export function DataView({
     disableViews = [],
     toolBarContent = null,
     onAddButton = undefined,
+    extraMenuActions = [],
     objectProps = {}
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const [items, setItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/'+((entityName??pluralName)??name+'s')+"/#", model)
@@ -118,6 +119,7 @@ export function DataView({
             props: {
                 sourceUrl,
                 onDelete: () => {},
+                extraMenuActions: extraMenuActions,
                 ...dataTableListProps
             }
         },

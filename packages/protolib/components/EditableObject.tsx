@@ -437,7 +437,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
       <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>
     {currentMode == 'preview' && <Stack t={"$-5"}>
-      <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} />
+      <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} element={groups[k]}/>
     </Stack>}
   </XStack>), [columnMargin, groups, columnWidth, numColumns])
 

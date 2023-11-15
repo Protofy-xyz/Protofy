@@ -6,9 +6,20 @@ import { MoreVertical, Trash2 } from '@tamagui/lucide-icons'
 import { InteractiveIcon } from "./InteractiveIcon";
 
 
-export const ItemMenu = ({sourceUrl='', onDelete, ...props}:{sourceUrl: string, onDelete: any} & StackProps) => {
+export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions = [], ...props }: { sourceUrl: string, onDelete: any, element: any, extraMenuActions?: any } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
+
+    const MenuButton = ({ text, Icon, onPress }) => {
+        return <XStack ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start"
+            cursor='pointer'
+            pressStyle={{ o: 0.7 }}
+            hoverStyle={{ bc: "$color5" }}
+            onPress={onPress}>
+            <Icon size={"$1"} color="var(--color9)" strokeWidth={2} />
+            <Text ml={"$3"}>{text}</Text>
+        </XStack>
+    }
 
     return <Stack {...props}>
         <AlertDialog
@@ -16,7 +27,7 @@ export const ItemMenu = ({sourceUrl='', onDelete, ...props}:{sourceUrl: string, 
             setOpen={setOpen}
             open={open}
             onAccept={async (setOpen) => {
-                if(sourceUrl) {
+                if (sourceUrl) {
                     await API.get(sourceUrl + '/delete')
                 }
 
@@ -28,23 +39,22 @@ export const ItemMenu = ({sourceUrl='', onDelete, ...props}:{sourceUrl: string, 
             w={280}
         >
             <YStack f={1} jc="center" ai="center">
-                
+
             </YStack>
         </AlertDialog>
         <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom">
             <Popover.Trigger>
-                <InteractiveIcon Icon={MoreVertical}  onPress={(e) => {e.stopPropagation();setMenuOpened(true)}} ml={"$3"}></InteractiveIcon>
+                <InteractiveIcon Icon={MoreVertical} onPress={(e) => { e.stopPropagation(); setMenuOpened(true) }} ml={"$3"}></InteractiveIcon>
             </Popover.Trigger>
             <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} bw={1} boc="$borderColor" bc={"$color1"} >
                 <Tinted>
                     <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"}>
-                        <XStack>
-                            <XStack ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start" cursor='pointer' pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$color5" }}
-                                onPress={(e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}>
-                                <Text mr={"$3"} >Delete</Text>
-                                <Trash2 size={"$1"} color="var(--color9)" strokeWidth={2} />
-                            </XStack>
-                        </XStack>
+                        <YStack>
+                            {extraMenuActions.map((action) => {
+                                return action.isVisible && action.isVisible(element) && <MenuButton text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
+                            })}
+                            <MenuButton text={"Delete"} Icon={Trash2} onPress={(e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
+                        </YStack>
                     </YStack>
                 </Tinted>
             </Popover.Content>

@@ -10,7 +10,7 @@ import Scrollbars from "react-custom-scrollbars-2";
 import { ItemMenu } from "./ItemMenu";
 
 
-export const DataTableList = ({sourceUrl, onDelete=()=>{}}) => {
+export const DataTableList = ({sourceUrl, onDelete=()=>{}, extraMenuActions=[]}) => {
     const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
@@ -69,7 +69,7 @@ export const DataTableList = ({sourceUrl, onDelete=()=>{}}) => {
                                     </Checkbox.Indicator>
                                 </Checkbox>
                             </Stack>
-                            <ItemMenu sourceUrl={sourceUrl+"/"+model.load(row).getId()} onDelete={onDelete}/>
+                            <ItemMenu element={row} sourceUrl={sourceUrl+"/"+model.load(row).getId()} onDelete={onDelete} extraMenuActions={extraMenuActions}/>
                         </XStack></Theme>, true, '85px'), ...finalColumns]}
                     rows={items?.data?.items}
                     onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}
