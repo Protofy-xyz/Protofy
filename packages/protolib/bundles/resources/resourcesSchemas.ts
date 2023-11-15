@@ -9,6 +9,7 @@ export const BaseResourceSchema = Schema.object({
     name: z.string().hint("catalog, tutorial, invoice...").search().display(),
     url: z.string().label('url').hint('http://...').static().search().display(),
     type:  z.union([
+        z.literal("text"),
         z.literal("video"),
         z.literal("image"),
         z.literal("code"),
@@ -33,8 +34,8 @@ export class ResourceModel extends ProtoModel<ResourceModel> {
     list(search?): any {
         if(search) {
             if(search.startsWith("tags:")){
-                const tags = search.slice("tags:".length).split(",").map(tag => tag.trim())
-                if(tags.every(element => this.data.tags.includes(element))) {
+                const tags = search.slice("tags:".length).split(",").map(tag => tag.trim().toLowerCase())
+                if(tags.every(element => this.data.tags.includes(element.toLowerCase()))) {
                     return this.read();
                 }
 
