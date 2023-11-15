@@ -50,7 +50,7 @@ export const DeleteButton = ({ id, left = false, field }) => {
         deletePropNodeData(id, field);
     }
 
-    return <div id={'deleteButton-' + id + field} style={{ alignSelf: 'center', cursor: 'pointer' }} onClick={onDeleteParam}>
+    return <div id={'deleteButton-' + id + field} style={{ display:'flex', alignSelf: 'center', cursor: 'pointer' }} onClick={onDeleteParam}>
         <X size={useTheme('nodeFontSize')} color={useTheme("colorError")} style={{ marginRight: left ? '7px' : '2px' }} />
     </div>
 }
@@ -312,7 +312,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
         return (
             <Text adaptiveSize={true} onClick={() => {
                 if (isParameter || isProp) onRequestEdit(param)
-            }} style={{ marginRight: '12px', marginTop: '8px', textAlign: 'left', whiteSpace: 'nowrap', cursor: 'pointer' }}>{label ?? ' '}</Text>
+            }} style={{ marginRight: '12px', textAlign: 'left', whiteSpace: 'nowrap', cursor: 'pointer' }}>{label ?? ' '}</Text>
         )
     }
     const isDefaultCase = (param.field == 'default')
@@ -330,8 +330,8 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
         <div ref={parentRef} style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', zIndex: param.type == 'select' || param.type == 'colorPicker' ? 1100 : 0, flexDirection: "column" }}>
             {
                 !isDefaultCase ?
-                    <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-                        <div className={"handleKey"} ref={textBoxRef} style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch'}}>
+                        <div className={"handleKey"} ref={textBoxRef} style={{ display: 'flex', flexDirection: 'row', alignItems:'center' }}>
                             {(param?.deleteable && isDeletedLeft) ? <DeleteButton id={id} left={true} field={param.field} /> : null}
                             {getValue()}
                         </div>
