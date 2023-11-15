@@ -78,12 +78,16 @@ export const RenderNode = ({ render }) => {
         };
     }, [scroll]);
 
-    // Prevents click events to interact inside editor-layout
-    const handleEvent = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-    document.getElementById("editor-layout")?.addEventListener('click', handleEvent, true)
+    useEffect(() => {
+        // Prevents click events to interact inside editor-layout
+        const handleEvent = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        document.getElementById("editor-layout")?.addEventListener('click', handleEvent)
+        return () => document.getElementById("editor-layout")?.removeEventListener('click', handleEvent)
+    }, [])
+
 
     return (
         <>
