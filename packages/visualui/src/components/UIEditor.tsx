@@ -107,9 +107,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const FlowPanel = (
         <div
             key="auxiliarySidebar"
-            style={{ width: '100%', display: 'flex', flex: 1, height: '100%' }}
+            style={{ display: 'flex', flex: 1, height: '100%'}}
         >
-            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
+            <div style={{ display: isSideBarVisible ? 'flex':'none', flexDirection: 'column', width: '100%', height: '100vh' }}>
                 <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526', borderBottom: '1px solid #cccccc20' }}>
                     <div style={{ color: preview ? 'white' : 'transparent' }}>{pastZoomNodes[0]}</div>
                     <div style={{ display: 'flex' }}>
