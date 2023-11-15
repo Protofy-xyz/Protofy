@@ -73,7 +73,7 @@ export default {
       }
       console.log("---------deviceDefinition----------",deviceDefinition)
       deviceDefinition.board = response1.data
-      const jsCode = deviceDefinition.config.config;
+      const jsCode = deviceDefinition.config.components;
       const deviceCode = 'device(' + jsCode + ')';
       console.log("-------DEVICE CODE------------",deviceCode)
       const deviceObj = eval(deviceCode)
