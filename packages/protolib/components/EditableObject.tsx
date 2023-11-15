@@ -187,7 +187,8 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     console.log('set form data: ', key, value, path);
     console.log('before: ', data);
 
-    const formData = { ...data };
+    const formData = data;
+    console.log('setformData', data)
     let target = formData;
 
     let prevTarget;
@@ -205,7 +206,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     console.log('prev target: ', prevTarget)
     target[key] = value;
     console.log('after: ', formData);
-    setData(formData);
+    setData({ data: formData });
   }
 
   const getFormData = (key, customPath?) => {
@@ -220,6 +221,9 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     if (typeof target === 'string') {
       return target
     }
+
+    console.log('getformDat', data)
+
     // Retorna el valor de ele.name o un valor predeterminado.
     return target && target.hasOwnProperty(key) ? target[key] : '';
   }
@@ -377,7 +381,6 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   const [ready, setReady] = useState(false)
   const containerRef = useRef()
 
-  console.log('data: ', data)
   usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialData)
 
   useEffect(() => {
@@ -389,6 +392,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   useUpdateEffect(() => setCurrentMode(mode), [mode])
 
   useUpdateEffect(() => {
+    console.log('data updated', data)
     if (ready) {
       setEdited(true)
     } else {
@@ -488,7 +492,6 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
           {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
             {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
               <Button f={1} onPress={async () => {
-                console.log('final data: ', data)
                 setLoading(true)
                 try {
                   await onSave(originalData.data, data.data)
