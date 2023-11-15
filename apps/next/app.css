@@ -813,3 +813,11 @@ textarea {
   text-wrap: pretty;
   -webkit-text-wrap: pretty;
 }
+
+.craft-layer-node>div {
+  background-color: transparent;
+}
+.layer-name>h2 {
+  color: #fff;
+  font-weight: 400;
+}
