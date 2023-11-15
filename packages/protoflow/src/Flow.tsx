@@ -685,7 +685,7 @@ const FlowComponent = ({
             }))
         }
 
-        if (nodesDiffs || edgesDiffs) {
+        if (nodesDiffs && nodesDiffs.length || edgesDiffs && edgesDiffs.length) {
             console.log('diffx: ', nodesDiffs, edgesDiffs)
             if (edgesDiffs && !nodesDiffs) {
                 reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
