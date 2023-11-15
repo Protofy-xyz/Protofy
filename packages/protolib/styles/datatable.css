@@ -225,14 +225,14 @@
 .rdt_TableBody{
   color: var(--color) !important;
   margin-top: 49px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 }
 
 .rdt_Pagination {
   background-color: transparent !important;
   color: var(--color) !important;
   border-top-width: 0px !important;
-  justify-content: flex-end !important;
+  justify-content: flex-start !important;
   text-align: right !important;
 }
 
