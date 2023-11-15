@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getPendingResult } from "./createApiAtom"
 import { useUpdateEffect } from "usehooks-ts"
 import { API } from "./Api"

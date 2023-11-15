@@ -13,6 +13,7 @@ import { IntentType } from '../../lib/Intent'
 import Center from '../../components/Center'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react';
+import { API } from '../../lib/Api';
 
 const FlowsWidget = dynamic(() => import('../../adminpanel/features/components/FlowsWidget'), {
     loading: () => <Center>
@@ -53,7 +54,7 @@ const JSONViewer = ({ extraIcons, name, path }) => {
 }
 
 const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) => {
-    const [fileContent, setFileContent] = useFileFromAPI(path)
+    const [fileContent] = useFileFromAPI(path)
     const [loaded, setLoaded] = useState(false)
     const sourceCode = useRef('')
 
@@ -66,7 +67,10 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
 
     const { resolvedTheme } = useThemeSetting()
     const [mode, setMode] = useState('code')
-    console.log('data: ', fileContent)
+
+    const onSave = async () => {
+        await API.post('/adminapi/v1/files/'+path.replace(/\/+/g, '/'), {content:sourceCode.current})
+    }
     return <AsyncView atom={fileContent}>
         <XStack mt={isFull ? 50 : 30} f={1} width={"100%"}>
             {/* <Theme name={tint as any}> */}
@@ -79,6 +83,10 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
                     {/* <SizableText mr={"$2"}>Save</SizableText> */}
                     <Code color="var(--color)" size={isFull ? "$2" : "$1"} />
                 </IconContainer>}
+                <IconContainer onPress={onSave}>
+                    {/* <SizableText mr={"$2"}>Save</SizableText> */}
+                    <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
+                </IconContainer>
                 {extraIcons}
             </XStack>
             {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={sourceCode.current} onChange={(code) => {sourceCode.current = code}} />: <FlowsWidget
