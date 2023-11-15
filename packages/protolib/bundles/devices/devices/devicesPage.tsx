@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
@@ -6,33 +6,93 @@ import { API, DataTable2, DataView, ButtonSimple } from 'protolib'
 import { z } from 'zod';
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
-import { Connector, useMqttState, useSubscription  } from 'mqtt-react-hooks';
+import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
+import DeviceModal from 'protodevice/src/DeviceModal'
+import deviceFunctions from 'protodevice/src/device'
 
 const DevicesIcons = { name: Tag, deviceDefinition: BookOpen }
 
+const callText = async (url: string, method: string, params?: string, token?: string): Promise<any> => {
+  var fetchParams: any = {
+    method: method,
+    headers: {
+      'Content-Type': 'text/plain;charset=UTF-8'
+    }
+  }
+
+
+  if (params) {
+    fetchParams.body = params;
+  }
+
+  let separator = '?';
+  if (url.indexOf('?') != -1) {
+    separator = '&';
+  }
+
+  var defUrl = url + (token ? separator + "token=" + token : "");
+  console.log("Deff URL: ", defUrl)
+  return fetch(defUrl, fetchParams)
+    .then(function (response) {
+      if (response.status == 200) {
+        return "ok";
+      } console.log(response.status);
+      if (!response.ok) {
+      }
+      return response;
+    })
+}
+
 export default {
   component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
+
+    if (typeof window !== 'undefined') {
+      console.log("papapa")
+      Object.keys(deviceFunctions).forEach(k => (window as any)[k] = deviceFunctions[k])
+    } else{
+      console.log("Errror")
+    }
+    const [showModal, setShowModal] = useState(false)
     const [modalFeedback, setModalFeedback] = useState<any>()
     const [stage, setStage] = useState('')
+    const yamlRef = React.useRef()
 
-    const flashDevice = async (deviceName, deviceDefintionId) => {
-      console.log("Flash device: ", { deviceName, deviceDefintionId });
-      const response = await API.get('/adminapi/v1/deviceDefinitions/' + deviceDefintionId);
+    const flashDevice = async (deviceName, deviceDefinitionId) => {
+      console.log("Flash device: ", { deviceName, deviceDefinitionId });
+          
+      const response = await API.get('/adminapi/v1/deviceDefinitions/' + deviceDefinitionId);
       if (response.isError) {
         alert(response.error)
         return;
       }
-
-      const jsCode = response.data.config;
+      const deviceDefinition = response.data
+      const response1 = await API.get('/adminapi/v1/deviceBoards/' + deviceDefinition.board);
+      if (response1.isError) {
+        alert(response1.error)
+        return;
+      }
+      console.log("---------deviceDefinition----------",deviceDefinition)
+      deviceDefinition.board = response1.data
+      const jsCode = deviceDefinition.config.config;
       const deviceCode = 'device(' + jsCode + ')';
+      console.log("-------DEVICE CODE------------",deviceCode)
+      const deviceObj = eval(deviceCode)
+      const yaml = deviceObj.setMqttPrefix("newplatform").create(deviceDefinition)
+      yamlRef.current = yaml
 
+      setShowModal(true)
+      try {
+        setStage('yaml')
+      } catch (e) {
+        console.error('error writting firmware: ', e)
+      }
       //const deviceObj = eval(deviceCode)
     }
-    const sendMessage = async (notUsed)=>{
+    const sendMessage = async (notUsed) => {
       await fetch('http://bo-firmware.protofy.xyz/api/v1/device/compile')
     }
     const { message } = useSubscription(['device/compile']);
-  
+
     const compile = async () => {
       setModalFeedback({ message: `Compiling firmware...`, details: { error: false } })
       const compileMsg = { type: "spawn", configuration: "test.yaml" };
@@ -96,7 +156,7 @@ export default {
           if (data.event == 'exit' && data.code == 0) {
             console.log("Succesfully compiled");
             setStage('upload')
-  
+
           } else if (data.event == 'exit' && data.code != 0) {
             console.error('Error compiling')
             setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
@@ -108,6 +168,7 @@ export default {
     }, [message])
 
     return (<AdminPage title="Devices" pageSession={pageSession}>
+      <Connector brokerUrl="ws://bo-firmware.protofy.xyz/ws"><DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} /></Connector>
       <DataView
         itemData={itemData}
         rowIcon={Router}
@@ -120,7 +181,7 @@ export default {
         columns={DataTable2.columns(
           DataTable2.column("name", "name", true),
           DataTable2.column("device definition", "deviceDefinition", true),
-          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={(e) => { console.log("row from Edit: ", row); flashDevice(row.name, row.deviceDefinition); onSelectPort() }}>Upload</ButtonSimple>)
+          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={(e) => { flashDevice(row.name, row.deviceDefinition); }}>Upload</ButtonSimple>)
         )}
         extraFieldsForms={{
           deviceDefinition: z.union(extraData.deviceDefinitions.map(o => z.literal(o))).after('name').display(),
