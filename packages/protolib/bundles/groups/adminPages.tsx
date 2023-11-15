@@ -26,8 +26,10 @@ export default {
               z.literal("")
             ])).generateOptions(() => extraData.workspaces.map(o => o)).after('name').display(),
           }}
-          // columns={DataTable2.columns(
-          // )}
+          columns={DataTable2.columns(
+            DataTable2.column("name", "name", true, undefined, true, '250px'),
+            DataTable2.column("workspaces", "workspaces", false, (row) => Object.keys(row?.workspaces??[]).length?Object.keys(row.workspaces).map((k,i) => <Chip ml={i?'$2':'$0'} key={k} text={row.workspaces[k]} color={'$color5'} />):<Chip text='empty' color={'$gray5'} />, true, '200px')
+        )}
           model={GroupModel}
           pageState={pageState}
           icons={GroupIcons}
