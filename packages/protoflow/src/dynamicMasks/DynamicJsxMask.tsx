@@ -16,7 +16,8 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                     switch (element.type) {
                         case 'child': {
                             const childs: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('child-')).map((prop: any, i) => {
-                                return { label: 'Child' + (i + 1), field: prop, fieldType: 'child', deleteable: true } as Field
+                                const dynamicMask = element.child?.find(c => c.field === prop)
+                                return { label: dynamicMask ? dynamicMask.label : ('Child' + (i + 1)), field: prop, fieldType: 'child', deleteable: dynamicMask ? false : true } as Field
                             })
                             return <>
                                 <NodeParams id={node.id} params={childs} />
