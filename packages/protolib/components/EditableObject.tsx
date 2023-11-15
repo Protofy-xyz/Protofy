@@ -369,7 +369,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
   const [currentMode, setCurrentMode] = useState(mode)
   const [prevCurrentMode, setPrevCurrentMode] = useState('')
-  const [data, setData] = useState({})
+  const [data, setData] = useState(originalData)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>()
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -378,12 +378,11 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   const containerRef = useRef()
 
   console.log('data: ', data)
-
   usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialData)
 
   useEffect(() => {
     if (originalData.data) {
-      setData(originalData.data)
+      setData(originalData)
     }
   }, [originalData])
 
@@ -398,7 +397,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   }, [data])
 
   const getGroups = () => {
-    const elementObj = model.load(data)
+    const elementObj = model.load(data.data)
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
     const formFields = elementObj.getObjectSchema().isDisplay(currentMode).merge(extraFieldsObject).getLayout(1)
     const groups = {}
@@ -414,7 +413,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
         i: i,
         x: x,
         ele: ele,
-        data,
+        data: data.data,
         setData,
         mode: currentMode,
         size: ele._def.size ?? 1,
@@ -458,60 +457,56 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
     >
       <Center mt="$5">All unsaved changes will be lost</Center>
     </AlertDialog>
-    <AsyncView forceLoad={currentMode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={originalData}>
-      {
-        Object.keys(data).length
-          ? <YStack width="100%">
-            <XStack ai="center">
-              <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
-                {title ?? <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>}
-              </XStack>
-              {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
-                if (currentMode == 'edit' && edited) {
-                  setDialogOpen(true)
-                } else {
-                  setPrevCurrentMode(currentMode)
-                  setCurrentMode(currentMode == 'view' ? 'edit' : 'view')
+    <AsyncView forceLoad={currentMode == 'add'} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
+      <YStack width="100%">
+        <XStack ai="center">
+          <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
+            {title ?? <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>}
+          </XStack>
+          {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
+            if (currentMode == 'edit' && edited) {
+              setDialogOpen(true)
+            } else {
+              setPrevCurrentMode(currentMode)
+              setCurrentMode(currentMode == 'view' ? 'edit' : 'view')
+            }
+          }} cursor="pointer">
+            <Tinted>
+              <Stack>{currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" /> : null)}</Stack>
+            </Tinted>
+          </XStack>}
+        </XStack>
+        <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
+          {error && (
+            <Notice>
+              <Paragraph>{getErrorMessage(error.error)}</Paragraph>
+            </Notice>
+          )}
+
+          {gridView}
+
+          {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
+            {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
+              <Button f={1} onPress={async () => {
+                console.log('final data: ', data)
+                setLoading(true)
+                try {
+                  await onSave(originalData.data, data.data)
+                  if (prevCurrentMode != currentMode) {
+                    setCurrentMode(prevCurrentMode as any)
+                  }
+                } catch (e) {
+                  setError(e)
+                  console.log('e: ', e)
                 }
-              }} cursor="pointer">
-                <Tinted>
-                  <Stack>{currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" /> : null)}</Stack>
-                </Tinted>
-              </XStack>}
-            </XStack>
-            <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
-              {error && (
-                <Notice>
-                  <Paragraph>{getErrorMessage(error.error)}</Paragraph>
-                </Notice>
-              )}
-
-              {gridView}
-
-              {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
-                {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
-                  <Button f={1} onPress={async () => {
-                    console.log('final data: ', data)
-                    setLoading(true)
-                    try {
-                      await onSave(originalData.data, data)
-                      if (prevCurrentMode != currentMode) {
-                        setCurrentMode(prevCurrentMode as any)
-                      }
-                    } catch (e) {
-                      setError(e)
-                      console.log('e: ', e)
-                    }
-                    setLoading(false)
-                  }}>
-                    {loading ? <Spinner /> : currentMode == 'add' ? 'Create' : 'Save'}
-                  </Button>
-                </Tinted>}
-              </YStack>}
-            </YStack>
-          </YStack>
-          : null
-      }
+                setLoading(false)
+              }}>
+                {loading ? <Spinner /> : currentMode == 'add' ? 'Create' : 'Save'}
+              </Button>
+            </Tinted>}
+          </YStack>}
+        </YStack>
+      </YStack>
     </AsyncView>
   </Stack>
 }
