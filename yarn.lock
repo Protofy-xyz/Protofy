@@ -2128,17 +2128,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@craftjs/layers@npm:0.2.0-beta.8":
-  version: 0.2.0-beta.8
-  resolution: "@craftjs/layers@npm:0.2.0-beta.8"
+"@craftjs/layers@npm:0.2.1":
+  version: 0.2.1
+  resolution: "@craftjs/layers@npm:0.2.1"
   dependencies:
-    "@craftjs/utils": ^0.2.0-beta.8
+    "@craftjs/utils": ^0.2.1
     react-contenteditable: ^3.3.3
   peerDependencies:
-    "@craftjs/core": ^0.2.0-alpha.19
+    "@craftjs/core": ">=0.2.0"
     react: ^16.8.0 || ^17 || ^18
     styled-components: ">= 4"
-  checksum: 3d7a9ecdd94af782d9b5dec307981910127df943ce6376c2b6b586e1d44a361b8dac0ad2e9eaa4504a737cde46a4901953406623d3de5909caf3cb10c739d810
+  checksum: 637297d528c12da7a25420dddf76f3510eefd528910348548d043adfc00b42568417f554674f8be1777b7fee446fb08369b1074c7b1d031a36185677882fe5d5
   languageName: node
   linkType: hard
 
@@ -2154,6 +2154,21 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
   checksum: e7e3e67cf0d8d8e1c99360e3297917142d7ce858acffc099dafae85e234ac9dd4e10ffd45189dfcbc1af2fba06095f5eeb4968c93150a1577d298d56ac75051f
+  languageName: node
+  linkType: hard
+
+"@craftjs/utils@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@craftjs/utils@npm:0.2.1"
+  dependencies:
+    immer: ^9.0.6
+    lodash: ^4.17.21
+    nanoid: ^3.1.23
+    shallowequal: ^1.1.0
+    tiny-invariant: ^1.0.6
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 01f3eb09fa32e8436851d1fce264c09c65d162efd4cb95b2976ae5811cee9ef152ce534d7ccd73406028cbf0b2df249170e968ab98cef92c23a06b994e60eff3
   languageName: node
   linkType: hard
 
@@ -26983,12 +26998,13 @@ __metadata:
   resolution: "visualui@workspace:packages/visualui"
   dependencies:
     "@craftjs/core": 0.2.0-beta.8
-    "@craftjs/layers": 0.2.0-beta.8
+    "@craftjs/layers": 0.2.1
     "@monaco-editor/react": 4.4.6
     "@types/node": 20.6.0
     deep-diff: 1.0.2
     lucide-react: 0.279.0
     nodemon: 3.0.1
+    react-custom-scrollbars-2: 4.5.0
     react-error-boundary: 4.0.10
     react-resizable-panels: 0.0.45
     react-rnd: 8.0.1
