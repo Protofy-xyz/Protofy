@@ -10,7 +10,9 @@
         "body": [
             {
                 "type": "protolibProps",
-                "props": ["*"]
+                "props": [
+                    "*"
+                ]
             },
             {
                 "type": "prop",
@@ -61,7 +63,12 @@
             },
             {
                 "type": "protolibProps",
-                "props": ["color", "textAlign", "margin", "padding"]
+                "props": [
+                    "color",
+                    "textAlign",
+                    "margin",
+                    "padding"
+                ]
             },
             {
                 "type": "prop",
@@ -92,7 +99,11 @@
             },
             {
                 "type": "protolibProps",
-                "props": [ "textAlign", "margin", "padding"]
+                "props": [
+                    "textAlign",
+                    "margin",
+                    "padding"
+                ]
             },
             {
                 "type": "prop",
@@ -137,6 +148,78 @@
                         "fieldType": "child",
                         "type": "child"
                     }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "MainButton",
+        "title": "MainButton",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "MainButton"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "margin",
+                    "padding"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "BlockTitle",
+        "title": "BlockTitle",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "BlockTitle"
+        },
+        "body": [
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "title",
+                        "field": "prop-title",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "prop"
+                    },
+                    {
+                        "label": "subtitle",
+                        "field": "prop-subtitle",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "prop"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "margin",
+                    "padding"
                 ]
             }
         ]
