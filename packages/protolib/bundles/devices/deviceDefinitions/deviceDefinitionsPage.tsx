@@ -36,7 +36,6 @@ export default {
     const [editedObjectData, setEditedObjectData]= React.useState({})
 
     const saveToFile= (code,path)=>{
-      console.log("----------------- SAVE TO FILE ------------", {code,path})
       editedObjectData.setData({components: code, sdkConfig: {board: "esp32dev", framework:{type: "arduino"}}})
       setShowDialog(false)
     }
