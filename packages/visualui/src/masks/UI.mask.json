@@ -51,7 +51,7 @@
                 "type": "child",
                 "child": [
                     {
-                        "label": "Caption",
+                        "label": "caption",
                         "field": "child-1",
                         "fieldType": "child",
                         "type": "child"
@@ -62,6 +62,37 @@
             {
                 "type": "protolibProps",
                 "props": ["color", "textAlign", "margin", "padding"]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "RainbowText",
+        "title": "RainbowText",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "RainbowText"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [ "textAlign", "margin", "padding"]
             },
             {
                 "type": "prop",
