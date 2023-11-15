@@ -40,7 +40,6 @@ export const RenderNode = ({ render }) => {
     });
 
     const currentRef = useRef<HTMLDivElement>();
-
     useEffect(() => {
         if (dom) {
             if ((isActive || isHover) && enableEdit) dom.style.border = "1px dashed #2680EB"
@@ -78,6 +77,13 @@ export const RenderNode = ({ render }) => {
                 ?.removeEventListener('scroll', scroll);
         };
     }, [scroll]);
+
+    // Prevents click events to interact inside editor-layout
+    const handleEvent = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    document.getElementById("editor-layout")?.addEventListener('click', handleEvent, true)
 
     return (
         <>
