@@ -5,6 +5,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Component, Save, X } from 'lucide-react';
 import { useRouter } from "next/router"
 import SPanel from 'react-sliding-side-panel';
+import CustomScrollbar from "../CustomScrollbar";
 
 type Props = {
     rightPanelContent: React.Component | any,
@@ -25,7 +26,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
     const resizerRef = useRef()
     const resizerBarRef = useRef()
     const hoverTimer = useRef(null);
-    
+
     const { publish } = topics;
     const [openPanel, setOpenPanel] = React.useState(false);
     const router = useRouter();
@@ -122,9 +123,9 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
             </div>
             <PanelGroup direction="horizontal" style={{ height: '100%', display: 'flex' }}>
                 <Panel>
-                    <div style={{ flex: 1, height: '100vh', overflowY: 'auto', backgroundColor:'black' }}>
+                    <CustomScrollbar>
                         {centerPanelContent}
-                    </div>
+                    </CustomScrollbar>
                 </Panel>
                 <PanelResizeHandle
                     onDragging={(isDragging) => {
@@ -149,15 +150,15 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
                         </div>
                     </div>
                 </PanelResizeHandle>
-                <Panel 
-                ref={rightRef} minSize={getRightWidth()} 
-                maxSize={80} defaultSize={rightPanelResizable ? 50 : getRightWidth()} 
-                style={{ 
-                    // fix first render problem with zoomToNode, can't do it with display: "flex"<->"none"
-                    position: rightPanelVisible ? "relative":"absolute", 
-                    zIndex: rightPanelVisible ? 100000:-10, 
-                    display: 'flex' 
-                }}>
+                <Panel
+                    ref={rightRef} minSize={getRightWidth()}
+                    maxSize={80} defaultSize={rightPanelResizable ? 50 : getRightWidth()}
+                    style={{
+                        // fix first render problem with zoomToNode, can't do it with display: "flex"<->"none"
+                        position: rightPanelVisible ? "relative" : "absolute",
+                        zIndex: rightPanelVisible ? 100000 : -10,
+                        display: 'flex'
+                    }}>
                     <div style={{ height: '100%', display: 'flex', flex: 1 }}>
                         {rightPanelContent}
                     </div>
