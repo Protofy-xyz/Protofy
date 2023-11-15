@@ -137,6 +137,7 @@ export function DataView({
                 ml: "$5",
                 onDelete: () => {},
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
+                extraMenuActions: extraMenuActions,
                 ...dataTableGridProps
             }
         },

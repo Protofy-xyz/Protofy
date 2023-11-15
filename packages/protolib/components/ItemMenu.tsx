@@ -9,7 +9,6 @@ import { InteractiveIcon } from "./InteractiveIcon";
 export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions = [], ...props }: { sourceUrl: string, onDelete: any, element: any, extraMenuActions?: any } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
-
     const MenuButton = ({ text, Icon, onPress }) => {
         return <XStack ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start"
             cursor='pointer'
@@ -48,7 +47,7 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
             </Popover.Trigger>
             <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} bw={1} boc="$borderColor" bc={"$color1"} >
                 <Tinted>
-                    <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"}>
+                    <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e)=>e.stopPropagation()}>
                         <YStack>
                             {extraMenuActions.map((action) => {
                                 return action.isVisible && action.isVisible(element) && <MenuButton text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
