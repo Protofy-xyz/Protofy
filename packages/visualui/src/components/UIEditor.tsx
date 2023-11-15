@@ -13,7 +13,7 @@ import { FlowFactory } from 'protoflow';
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
-import { ToggleGroup, Button } from "@my/ui"
+import { ToggleGroup, Button, XStack } from "@my/ui"
 import UIMasks from '../masks/UI.mask.json';
 import { SidebarItem } from "./Sidebar/SideBarItem";
 
@@ -112,17 +112,19 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         >
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
                 <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526', borderBottom: '1px solid #cccccc20' }}>
-                    <Button
-                        onPress={(e) => { setIsSideBarVisible(false); setCodeEditorVisible(false); e.stopPropagation() }}
-                        hoverStyle={{ opacity: 1 }} opacity={0.7}
-                        size="$3"
-                        chromeless
-                        circular
-                        noTextWrap
-                    >
-                        <X style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
-                    </Button>
-                    <ToggleGroup type="single" defaultValue="preview" disableDeactivation>
+                    <XStack theme="dark">
+                        <Button
+                            onPress={(e) => { setIsSideBarVisible(false); setCodeEditorVisible(false); e.stopPropagation() }}
+                            hoverStyle={{ opacity: 1 }} opacity={0.7}
+                            size="$3"
+                            chromeless
+                            circular
+                            noTextWrap
+                        >
+                            <X style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
+                        </Button>
+                    </XStack>
+                    <ToggleGroup theme={"dark"} type="single" defaultValue="preview" disableDeactivation>
                         <ToggleGroup.Item value="code" onPress={() => setCodeEditorVisible(true)} >
                             <Code />
                         </ToggleGroup.Item>
