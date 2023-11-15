@@ -7,6 +7,7 @@ import { SessionDataType } from 'protolib/api/lib/session'
 
 export const BaseResourceSchema = Schema.object({
     name: z.string().hint("catalog, tutorial, invoice...").search().display(),
+    description: z.string().display().search(),
     url: z.string().label('url').hint('http://...').static().search().display(),
     type:  z.union([
         z.literal("text"),
