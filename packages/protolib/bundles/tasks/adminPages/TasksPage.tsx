@@ -37,5 +37,5 @@ export const TasksPage = {
             />
         </AdminPage>)
     }, 
-    getServerSideProps: PaginatedDataSSR('/adminapi/v1/tasks')
+    getServerSideProps: PaginatedDataSSR('/adminapi/v1/tasks', ['admin', 'editor'])
 }

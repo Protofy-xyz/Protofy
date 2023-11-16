@@ -99,6 +99,6 @@ export default {
             </AdminPage>)
         },
 
-        getServerSideProps: SSR(async (context) => withSession(context, []))
+        getServerSideProps: SSR(async (context) => withSession(context, ['admin', 'editor']))
     }
 }

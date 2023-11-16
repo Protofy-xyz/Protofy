@@ -121,7 +121,7 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.name[2], [], {
+        getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.name[2], ['admin', 'editor'], {
             itemsPerPage: 1000000
         }, (context) => {
             return { name: context.query.name[2] }

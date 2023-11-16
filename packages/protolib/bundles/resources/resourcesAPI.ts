@@ -1,4 +1,11 @@
 import { ResourceModel } from "./";
-import {CreateApi, hash} from '../../api'
+import {AutoAPI, CreateApi, hash} from '../../api'
 
-export const ResourcesAPI = CreateApi('resources', ResourceModel, __dirname, '/adminapi/v1/', 'resources', {})
+export const ResourcesAPI = AutoAPI({
+    modelName: 'resources',
+    modelType: ResourceModel,
+    initialDataDir: __dirname,
+    prefix: '/adminapi/v1/',
+    dbName: 'resources',
+    requiresAdmin: ['*']
+})

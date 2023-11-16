@@ -51,7 +51,7 @@ export const TaskPage = {
         </AdminPage>)
     }, 
 
-    getServerSideProps: SSR(async (context) => withSession(context, [], async () => {
+    getServerSideProps: SSR(async (context) => withSession(context, ['admin', 'editor'], async () => {
         const task = await API.get('/adminapi/v1/tasks/'+context.query.name[2])
         return {
             task: task,
