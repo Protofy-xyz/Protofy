@@ -36,6 +36,7 @@ import HorizontalBox from '../components/HorizontalBox'
 import HoveredGroup from '../components/HoveredGroup'
 import { HR } from '../components/HR'
 import { IconStack } from '../components/IconStack'
+import Image  from '../components/Image'
 import { ItemCard } from '../components/ItemCard'
 import { ButtonLink, Link, ParagraphLink } from '../components/Link'
 import { LinkGroup, LinkGroupItem } from '../components/LinkGroup'
@@ -128,6 +129,7 @@ export default {
   ...cw(HR, 'MinusSquare', 'HR'),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }, {}, {}, true),
+  ...cw(Image, 'MinusSquare', 'Image', { }, {}, {}, true),
   ...cw(Link, 'Link', 'Link', { href: "/hello", children: "hello" }),
   ...cw(LinkGroup, 'Group', 'LinkGroup', { href: "/hello", children: "hello" }),
   ...cw(LinkGroupItem, 'Puzzle', 'LinkGroupItem', { href: "/hello", children: "hello" }),
