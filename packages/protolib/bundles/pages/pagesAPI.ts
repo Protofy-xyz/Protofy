@@ -4,6 +4,7 @@ import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
 import axios from 'axios';
+import {getServiceToken} from 'protolib/api/lib/serviceToken'
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const pagesDir = fspath.join(PROJECT_WORKSPACE_DIR,"/packages/app/bundles/custom/pages/")
@@ -54,7 +55,7 @@ const getDB = (path, req, session) => {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } catch (error) {
         console.log('executing template: ', `/packages/protolib/bundles/pages/templates/${template}.tpl`)
-        await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
           name: value.name + '.tsx',
           data: {
             options: { 

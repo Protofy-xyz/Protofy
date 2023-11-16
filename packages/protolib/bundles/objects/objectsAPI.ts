@@ -4,6 +4,7 @@ import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import axios from 'axios';
+import {getServiceToken} from 'protolib/api/lib/serviceToken'
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
@@ -114,7 +115,7 @@ const getDB = (path, req, session) => {
       if (exists) {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
-        await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
           name: value.name + '.ts',
           data: {
             options: { template: '/packages/protolib/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },
@@ -150,7 +151,7 @@ const getDB = (path, req, session) => {
         }
       } else {
         if (value.api) {
-          await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+          await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
             name: value.name + '.ts',
             data: {
               options: { template: '/packages/protolib/bundles/objects/templateApi.tpl', variables: { name: value.name, capitalizedName: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
