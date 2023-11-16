@@ -2,7 +2,7 @@ import { TaskRunModel } from "../models/TaskRun";
 import {Tasks} from 'app/bundles/tasks'
 import { connectDB, handler } from "protolib/api";
 import { v4 as uuidv4 } from 'uuid';
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty } from '../../../api'
+import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI } from '../../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
@@ -16,10 +16,22 @@ const dbPath = '../../data/databases/tasks'
 export const TaskApi = (app, mqtt) => {
     connectDB(dbPath) //preconnect database
 
-    const AutoApi = CreateApi('tasks', TaskModel, __dirname, '/adminapi/v1/', '', {}, () => { }, getDB)
-    AutoApi(app, mqtt)
+    const CrudAPI = AutoAPI({
+      modelName: 'tasks',
+      modelType: TaskModel, 
+      initialDataDir: __dirname,
+      prefix: '/adminapi/v1/',
+      getDB: getDB,
+      requiresAdmin: ['*']
+    })
+    CrudAPI(app, mqtt)
 
     app.get('/adminapi/v1/tasks/:name/run', handler(async (req, res, session) => {
+        if(!session || !session.user.admin) {
+          res.status(401).send({error: "Unauthorized"})
+          return
+        }
+        
         const {token, ...parameters} = req.query
         runTask(req.params.name, parameters, session, 
             (result)=>res.send({result: result}), 
