@@ -191,7 +191,7 @@ export default {
     return (<AdminPage title="Devices" pageSession={pageSession}>
       <Connector brokerUrl="wss://firmware.protofy.xyz/ws">
         <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
-        <MqttTest onSetStage={(v)=>setStage(v)} setModalFeedback={(v)=>setModalFeedback(v)}/>
+        <MqttTest onSetStage={(v)=>setStage(v)} onSetModalFeedback={(v)=>setModalFeedback(v)}/>
       </Connector>
       <DataView
         itemData={itemData}
