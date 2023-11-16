@@ -48,8 +48,8 @@ const fileActions = [
         }
     },
     {
-        getComponent: (selected, path) => {
-            return <CreateComponent onCreate={(name)=>{API.post('/adminapi/v1/directories/'+path.replace(/\/+/g, '/')+'/'+name, {content:""})}} />
+        getComponent: (selected, path, setCustomAction, setFiles) => {
+            return <CreateComponent onCreate={(name)=>{API.post('/adminapi/v1/directories/'+path.replace(/\/+/g, '/')+'/'+name, {content:""}); setCustomAction(false); setFiles()}} />
         },
         title: "Create folder",
         size: {
@@ -67,8 +67,8 @@ const fileActions = [
         }
     },
     {
-        getComponent: (selected, path) => {
-            return <CreateComponent onCreate={(name)=>{API.post('/adminapi/v1/files/'+path.replace(/\/+/g, '/')+'/'+name, {content:""})}} />
+        getComponent: (selected, path, setCustomAction, setFiles) => {
+            return <CreateComponent onCreate={(name)=>{API.post('/adminapi/v1/files/'+path.replace(/\/+/g, '/')+'/'+name, {content:""}); setCustomAction(false); setFiles()}} />
         },
         title: "Create file",
         size: {

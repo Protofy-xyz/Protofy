@@ -153,7 +153,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         description={customAction?.description}
                     >
                         <YStack minWidth={customAction?.size?.width} h={customAction?.size?.height} f={1}>
-                            {customAction && customAction.getComponent && customAction.getComponent(selectedFiles, normalizedCurrentPath)}
+                            {customAction && customAction.getComponent && customAction.getComponent(selectedFiles, normalizedCurrentPath, setCustomAction ,async()=>setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] }))}
                         </YStack>
 
                     </AlertDialog>
