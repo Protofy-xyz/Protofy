@@ -37,7 +37,7 @@ const getPage = (pagePath) => {
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const files = (await fs.readdir(pagesDir)).filter(f => f != 'index.tsx')
+      const files = (await fs.readdir(pagesDir)).filter(f => f != 'index.tsx' && f.endsWith('.tsx'))
       const pages = await Promise.all(files.map(async f => getPage(fspath.join(pagesDir, f))));
 
       for (const page of pages) {
@@ -81,7 +81,7 @@ const getDB = (path, req, session) => {
       if (!arg) {
         throw "No link definition schema marker found for file: " + path
       }
-      addObjectLiteralProperty(arg, value.route, value.name)
+      addObjectLiteralProperty(arg, (value.route.startsWith('/') ? value.route.slice(1) : value.route), value.name)
       sourceFile.saveSync();
 
     },
