@@ -26,6 +26,7 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
         { field: 'prop-br', label: 'br', type: 'select', fieldType: 'prop', data: radiuses ? [defaultValue, ...radiuses] : [], static: true },
         { field: 'prop-bw', label: 'bw', type: 'select', fieldType: 'prop', data: sizes ? [defaultValue, ...sizes] : [], static: true },
         { field: 'prop-size', label: 'size', type: 'select', fieldType: 'prop', data: sizes ? [defaultValue, ...sizes] : [], static: true },
+        { field: 'prop-alignSelf', label: 'alignSelf', type: 'select', fieldType: 'prop', data: [defaultValue, ...alignItemsAlignments], static: true },
         { field: 'prop-textAlign', label: 'textAlign', type: 'select', fieldType: 'prop', data: [defaultValue, ...textAlingments], static: true },
         { field: 'prop-flexDirection', label: 'flexDirection', type: 'select', fieldType: 'prop', data: [defaultValue, ...flexDirection], static: true },
         { field: 'prop-justifyContent', label: 'justifyContent', type: 'select', fieldType: 'prop', data: [defaultValue, ...justifyContentAlignments], static: true },
