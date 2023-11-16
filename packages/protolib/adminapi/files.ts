@@ -130,6 +130,24 @@ const handleFilesWriteRequest = async (req, res) => {
     res.status(200).send({result: "uploaded"});
 };
 
+const handleDirectoryCreateRequest = async (req, res) => {
+    const name = req.params.path || '';
+    const dirPath = path.join(PROJECT_WORKSPACE_DIR, name);
+    try {
+        await fs.mkdir(dirPath, { recursive: true }); // recursive: true permite crear directorios anidados si no existen
+        generateEvent({
+            path: 'files/create/dir',
+            from: 'api',
+            user: '-', // Actualiza según corresponda
+            payload: { 'path': name }
+        }, getServiceToken());
+        res.status(200).send({ result: "directory created" });
+    } catch (error) {
+        console.error("Error creating directory:", error);
+        res.status(500).send({ error: "Error creating directory" });
+    }
+};
+
 const requireAdmin = () => handler(async (req, res, session, next) => {
     if(!session || !session.user.admin) {
         res.status(401).send({error: "Unauthorized"})
@@ -142,6 +160,8 @@ const requireAdmin = () => handler(async (req, res, session, next) => {
 app.post('/adminapi/v1/files', requireAdmin(), upload.single('file'), handleFilesWriteRequest);
 // Route to write files or create directories in /adminapi/v1/files/*
 app.post('/adminapi/v1/files/:path(*)', requireAdmin(), upload.single('file'), handleFilesWriteRequest);
+// Route to create directories in /adminapi/v1/directories/*
+app.post('/adminapi/v1/directories/:path(*)', requireAdmin(), handleDirectoryCreateRequest);
 // Route for /adminapi/v1/files
 app.get('/adminapi/v1/files', requireAdmin(), handleFilesRequest);
 // Route for /adminapi/v1/files/*
