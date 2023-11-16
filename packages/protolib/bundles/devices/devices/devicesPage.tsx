@@ -99,9 +99,13 @@ export default {
       const deviceCode = 'device(' + jsCode + ')';
       console.log("-------DEVICE CODE------------", deviceCode)
       const deviceObj = eval(deviceCode)
-      const yaml = deviceObj.create(deviceName, deviceDefinition)
+      const componentsTree = deviceObj.getComponentsTree(deviceName, deviceDefinition)
+      const yaml = deviceObj.dump("yaml")
+      const subsystems = deviceObj.getSubsystemsTree(deviceName,deviceDefinition)
+      API.post("/adminapi/v1/devices/"+deviceName,{subsystem: subsystems, deviceDefinition: deviceDefinitionId})
+      console.log("ComponentsTree: ", componentsTree)
+      console.log("Subsystems: ", subsystems)
       yamlRef.current = yaml
-
       setShowModal(true)
       try {
         setStage('yaml')
