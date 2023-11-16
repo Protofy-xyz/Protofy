@@ -118,6 +118,7 @@ export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlu
                     ...style
                 }}
                 value={tmpInputValue}
+                placeholder="default"
                 onChange={t => setTmpInputValue(t.target.value)}
             />
             {children}
