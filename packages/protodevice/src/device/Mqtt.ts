@@ -1,5 +1,3 @@
-const _ = require("lodash");
-
 class Mqtt {
   broker
   topic_prefix

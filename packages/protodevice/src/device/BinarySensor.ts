@@ -1,16 +1,3 @@
-export function getSubsystem() {
-    return {
-        monitors:[
-            {
-                name: "Button status",
-                description: "Get binary sensor status",
-                endpoint: "/state",
-                connectionType: "mqtt",
-            }
-        ]
-    }
-}
-
 class BinarySensor {
     name;
     platform
@@ -33,7 +20,7 @@ class BinarySensor {
                         { delayed_on: "100ms" }
                     ]
                 },
-                subsystem: getSubsystem()
+                subsystem: this.getSubsystem()
             },
         ]
 
@@ -48,6 +35,19 @@ class BinarySensor {
             }
         })
         return deviceComponents
+    }
+
+    getSubsystem() {
+        return {
+            monitors:[
+                {
+                    name: "Button status",
+                    description: "Get binary sensor status",
+                    endpoint: "/state",
+                    connectionType: "mqtt",
+                }
+            ]
+        }
     }
 }
 
