@@ -131,6 +131,117 @@
         ]
     },
     {
+        "id": "Head1",
+        "title": "Head1",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Head1"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "color",
+                    "textAlign",
+                    "margin",
+                    "padding",
+                    "alignSelf"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "Head2",
+        "title": "Head2",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Head2"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "color",
+                    "textAlign",
+                    "margin",
+                    "padding",
+                    "alignSelf"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "Head3",
+        "title": "Head3",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Head3"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "color",
+                    "textAlign",
+                    "margin",
+                    "padding",
+                    "alignSelf"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
         "id": "RainbowText",
         "title": "RainbowText",
         "path": "*",
