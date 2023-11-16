@@ -18,11 +18,12 @@ type AutoAPIOptions = {
     single?: boolean,
     disableEvents?: boolean,
     paginatedRead?:boolean,
-    requiresAdmin?:string[]
+    requiresAdmin?:string[],
+    extraData?:any
 }
 //CreateAPI contract has evolved into a complex thing, this is a better/alternative wrapper
 //that reduces complexity by using a options object 
-export const AutoAPI = ({modelName, modelType,initialDataDir,prefix="/api/v1/", dbName, transformers={}, connectDB, getDB, operations, single, disableEvents, paginatedRead, requiresAdmin}:AutoAPIOptions) => {
+export const AutoAPI = ({modelName, modelType,initialDataDir,prefix="/api/v1/", dbName, transformers={}, connectDB, getDB, operations, single, disableEvents, paginatedRead, requiresAdmin, extraData = {}}:AutoAPIOptions) => {
     return CreateApi(
         modelName, 
         modelType, 
@@ -34,7 +35,7 @@ export const AutoAPI = ({modelName, modelType,initialDataDir,prefix="/api/v1/", 
         getDB,
         operations,
         single,
-        {disableEvents, paginatedRead, requiresAdmin}
+        {disableEvents, paginatedRead, requiresAdmin, extraData}
     )
 }
 /*
@@ -111,10 +112,12 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const allResults: any[] = [];
 
         const search = req.query.search;
+        const preListData = typeof options.extraData?.prelist == 'function' ? await options.extraData.prelist(session) : (options.extraData?.prelist ?? {})
         for await (const [key, value] of db.iterator()) {
             if (key != 'initialized') {
                 const model = modelClass.unserialize(value, session);
-                const listItem = await model.listTransformed(search, transformers, session);
+                const extraListData = typeof options.extraData?.list == 'function' ? await options.extraData.list(session, model) : (options.extraData?.list ?? {})
+                const listItem = await model.listTransformed(search, transformers, session, {...preListData, ...extraListData} );
 
                 if (listItem && model.isVisible()) {
                     allResults.push(listItem);
