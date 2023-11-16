@@ -1,4 +1,3 @@
-import notesPages from './notes/nextPages'
 import devicePages from 'protolib/bundles/devices/adminPages'
 import filesPages from 'protolib/bundles/files/adminPages'
 import usersPages from 'protolib/bundles/users/adminPages'
@@ -14,7 +13,6 @@ import resourcesPages from 'protolib/bundles/resources/adminPages'
 import customPages from './custom/pages'
 
 export default {
-    ...notesPages,
     ...devicePages,
     ...filesPages,
     ...usersPages,
