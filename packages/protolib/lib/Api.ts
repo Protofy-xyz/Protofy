@@ -26,7 +26,7 @@ const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingAtomResu
         }
       }
   
-      realUrl = `${baseUrl}?${params.toString()}`;
+      realUrl = baseUrl+(baseUrl.includes('?') ? '&' : '?')+params.toString();
     } else {
       throw new Error("Invalid params for API");
     }

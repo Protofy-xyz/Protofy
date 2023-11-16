@@ -2,8 +2,8 @@ import { atom, useAtom} from 'jotai';
 import { atomWithStorage, useHydrateAtoms} from 'jotai/utils';
 import * as cookie from 'cookie'
 import { createSession, validateSession, SessionDataType, getSessionContext } from '../api/lib/session';
-import { API } from 'protolib'
-
+import { NextPageContext } from 'next'
+import { parse } from 'cookie';
 
 export const SessionData = atomWithStorage("session", createSession())
 export const UserSettingsAtom = atomWithStorage("userSettings", {} as any )
@@ -13,7 +13,7 @@ export const Session = atom(
     (get, set, data: SessionDataType) => {
         if(typeof window !== 'undefined') {
             //store a cookie
-            document.cookie = "session=" + encodeURIComponent(JSON.stringify(data) ?? '') + ";path=/";
+            document.cookie = "session=" + encodeURIComponent(JSON.stringify(data) ?? '')+";path=/";
         }
         set(SessionData, data);
     }
@@ -113,3 +113,20 @@ export const useUserSettings = () => {
     ]
 }
 
+export const getURLWithToken = (url, context:NextPageContext) => {
+    const { req } = context;
+    const cookies = req.headers.cookie;
+  
+    let session;
+    if (cookies) {
+      try {
+        const parsedCookies = parse(cookies);
+        session = JSON.parse(parsedCookies.session);
+      } catch(e) {
+        session = null
+      }
+    }
+  
+    const finalUrl = url + (session && session.token ? (url.includes('?') ? '&':'?')+'token='+session.token : '')
+    return finalUrl
+  }

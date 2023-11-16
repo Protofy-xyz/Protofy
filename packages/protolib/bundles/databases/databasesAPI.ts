@@ -41,7 +41,8 @@ export const getDatabases = async () => {
 }
 
 export const DatabasesAPI = CreateApi('databases', DatabaseModel, __dirname, '/adminapi/v1/', '', {}, () => { }, customGetDB, ['list', 'create', 'read'], false, {
-  paginatedRead: {model: DatabaseEntryModel}
+  paginatedRead: {model: DatabaseEntryModel},
+  requiresAdmin: ['*']
 })
 
 export default DatabasesAPI

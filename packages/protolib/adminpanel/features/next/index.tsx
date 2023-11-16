@@ -1,7 +1,8 @@
 export * from './AdminPage'
 import {SSR as _SSR} from 'app/conf' 
 import { NextPageContext } from 'next'
-import { API, withSession } from 'protolib'
+import { API, withSession, getURLWithToken } from 'protolib'
+import { parse } from 'cookie';
 
 export function DataSSR(sourceUrl, allowdUserTypes=['admin', 'editor'], props={}) {
     return _SSR(async (context:NextPageContext) => {
@@ -31,8 +32,8 @@ export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['ad
 
     return withSession(context, allowdUserTypes, {
       sourceUrl: _sourceUrl,
-      initialItems: await API.get({url: _sourceUrl, ..._dataProps}),
-      itemData: context.query.item ? await API.get(_sourceUrl+'/'+context.query.item) : '',
+      initialItems: await API.get({url: getURLWithToken(_sourceUrl, context), ..._dataProps}),
+      itemData: context.query.item ? await API.get(getURLWithToken(_sourceUrl+'/'+context.query.item, context)) : '',
       route: context.query.name,
       extraData: {...(typeof extraData === "function"? await extraData(context) : extraData)},
       pageState: {

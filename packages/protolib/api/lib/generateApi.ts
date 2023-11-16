@@ -4,6 +4,38 @@ import { handler } from './handler'
 import fs from 'fs';
 import path from 'path';
 
+type AutoAPIOptions = {
+    modelName: string,
+    modelType: any, 
+    initialDataDir?: string,
+    prefix?:string,
+    dbName?:string,
+    transformers?: any,
+    connectDB?: any,
+    getDB?:any,
+    operations?: string[],
+    single?: boolean,
+    disableEvents?: boolean,
+    paginatedRead?:boolean,
+    requiresAdmin?:string[]
+}
+//CreateAPI contract has evolved into a complex thing, this is a better/alternative wrapper
+//that reduces complexity by using a options object 
+export const AutoAPI = ({modelName, modelType,initialDataDir,prefix="/api/v1/", dbName, transformers={}, connectDB, getDB, operations, single, disableEvents, paginatedRead, requiresAdmin}:AutoAPIOptions) => {
+    return CreateApi(
+        modelName, 
+        modelType, 
+        initialDataDir,
+        prefix,
+        dbName,
+        transformers,
+        connectDB,
+        getDB,
+        operations,
+        single,
+        {disableEvents, paginatedRead, requiresAdmin}
+    )
+}
 /*
     modelName: name of the model, used to generate api urls. for example, if model name is 'test' and prefix is '/api/v1/', then to read an item is: /api/v1/test
                 the separation from prefix is to allow less parameters for the default scenario (so you dont to write /api/v1/ all the time)
@@ -69,7 +101,11 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     }
     //list
     !single && operations.includes('list') && app.get(prefix + entityName, handler(async (req, res, session) => {
-        //console.log('session: ', session)
+        if(options.requiresAdmin && (options.requiresAdmin.includes('list') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+            res.status(401).send({error: "Unauthorized"})
+            return
+        }
+
         const db = getDB(dbPath, req, session);
         const allResults: any[] = [];
 
@@ -90,6 +126,11 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //create
     operations.includes('create') && app.post(prefix + entityName, handler(async (req, res, session) => {
+        if(options.requiresAdmin && (options.requiresAdmin.includes('create') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+            res.status(401).send({error: "Unauthorized"})
+            return
+        }
+
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.load(req.body, session).createTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
@@ -111,6 +152,11 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //read
     operations.includes('read') && app.get(prefix + entityName + '/:key', handler(async (req, res, session) => {
+        if(options.requiresAdmin && (options.requiresAdmin.includes('read') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+            res.status(401).send({error: "Unauthorized"})
+            return
+        }
+
         const db = getDB(dbPath, req, session)
 
         try {
@@ -144,6 +190,11 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //update
     operations.includes('update') && app.post(prefix + entityName + '/:key', handler(async (req, res, session) => {
+        if(options.requiresAdmin && (options.requiresAdmin.includes('update') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+            res.status(401).send({error: "Unauthorized"})
+            return
+        }
+
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session), transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
@@ -165,6 +216,11 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //delete
     operations.includes('delete') && app.get(prefix + entityName + '/:key/delete', handler(async (req, res, session) => {
+        if(options.requiresAdmin && (options.requiresAdmin.includes('delete') || options.requiresAdmin.includes('*'))&& (!session || !session.user.admin)) {
+            res.status(401).send({error: "Unauthorized"})
+            return
+        }
+
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).deleteTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())

@@ -11,15 +11,21 @@ type Handler = (
 export const handler: Handler = fn => async (req:any, res:any) => {
     //try to recover identify from token
     let decoded;
-    if(req.query.token || req.get('Auth-token')) {
-        const token = req.query.token ? req.query.token : req.get('Auth-token')
+    let session;
+    try {
+        session = JSON.parse(req.cookies.session)
+    } catch(e) {
+        session = null
+    }
+
+    if(req.query.token || (session && session.token)) {
+        const token = req.query.token ? req.query.token : session.token
         try {
             decoded = createSession(verifyToken(token))
         } catch(e) {
             console.error('Error reading token: ', e)
             decoded = createSession()
         }
-        // console.log('decoded: ', decoded)
     } else {
         createSession()
     }
