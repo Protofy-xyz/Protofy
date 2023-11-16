@@ -8,7 +8,10 @@ import { generateEvent } from "../bundles/events/eventsLibrary";
 console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 
 const dbPath = '../../data/databases/auth'
+const groupDBPath = '../../data/databases/auth_groups'
+
 connectDB(dbPath, getInitialData(dbPath)) //preconnect database
+connectDB(groupDBPath, getInitialData(groupDBPath)) //preco
 
 const genNewSession = (data:any) => {
     return {
@@ -25,7 +28,8 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
         if(await checkPassword(request.password, storedUser.password)) {
             //update lastLogin
             await getDB(dbPath).put(storedUser.username, JSON.stringify({...storedUser, lastLogin: moment().toISOString()}))
-            res.send({session: genNewSession({id:storedUser.username, type: storedUser.type}), context: await getSessionContext(storedUser.type)})
+            const group = JSON.parse(await getDB(groupDBPath).get(storedUser.type))
+            res.send({session: genNewSession({id:storedUser.username, type: storedUser.type, admin: group.admin?true:false}), context: await getSessionContext(storedUser.type)})
             generateEvent({
                 path: 'auth/login/success', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
@@ -60,12 +64,14 @@ app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
             from: 'api',
             type: 'user'
         }))
+        const group = JSON.parse(await getDB(groupDBPath).get('user'))
+
         generateEvent({
             path: 'auth/register/user', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
             from: 'api', // system entity where the event was generated (next, api, cmd...)
             user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
             payload: {} // event payload, event-specific data
         })
-        res.send({session: genNewSession({id:request.username, type: "user"}), context: await getSessionContext('user')})
+        res.send({session: genNewSession({id:request.username, type: "user", admin: group.admin?true:false}), context: await getSessionContext('user')})
     }
 }));

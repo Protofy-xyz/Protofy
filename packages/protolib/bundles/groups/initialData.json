@@ -1,5 +1,5 @@
 [
-    {"name": "admin", "workspaces": ["admin", "editor", "user"]},
-    {"name": "user", "workspaces": ["user"]},
-    {"name": "editor", "workspaces": ["editor"]}
+    {"name": "admin", "workspaces": ["admin", "editor"], "admin": true},
+    {"name": "editor", "workspaces": ["editor"], "admin": true},
+    {"name": "user", "workspaces": []}
 ]

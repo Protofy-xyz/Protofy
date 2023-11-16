@@ -8,6 +8,7 @@ export const getSessionContext = async (type) => {
 export const createSession = (data?:userData, token?:string):SessionDataType => {
     return {
         user: {
+            admin: data?.admin ? data?.admin : false,
             id: data?.id ? data.id : 'guest',
             type: data?.id ? (data?.type ? data.type : 'user') : 'guest'
         },
@@ -21,6 +22,7 @@ export const validateSession = (session:SessionDataType):validatedUserData => jw
 export type userData = {
     id?: string,
     type?: string
+    admin?: boolean
 }
 
 export type validatedUserData = userData & {
