@@ -1,4 +1,4 @@
-import { Theme, YStack, Text, Spacer, XStack, Paragraph } from "@my/ui";
+import { Theme, YStack, Text, Spacer, XStack, Paragraph, SizableText } from "@my/ui";
 import { TintSection, ContainerLarge, AnounceBubble, BigTitle, LinkGroup, LinkGroupItem, CopyBubble, XCenterStack, NextLink, TooltipContainer, TwitterIcon, MainButton, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, ActiveGroup, ButtonGroup, ActiveGroupButton, ActiveRender, SideBySide, TabGroup, IconStack, BackgroundGradient, ItemCard, SectionBox, ElevatedArea, BarChart, GridElement, RainbowText, OverlayCardBasic, FeatureItem, DataTable, TamaCard, Notice, PageGlow, withSession, useSession, Page, Grid, ThemeTint, useEdit, Head1, Head2 } from "protolib";
 import { ChevronRight, Code, Cpu, FastForward, Layers, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
@@ -18,17 +18,26 @@ const Home = () => {
           <ContainerLarge contain="layout" pos="relative">
             <BackgroundGradient />
             <YStack f={1} ov="hidden" space="$3" position="relative" pt="$14" mb="$4">
-              <AnounceBubble y={-70} href="/takeout">
+              {/* <AnounceBubble y={-70} href="/takeout">
                 <Text fontFamily="$silkscreen">Introducing Takeout 🥡</Text>
                 <Text ff="$body" fontSize="$3" color="$color10" $sm={{ dsp: "none" }}>
                   our new pro starter kit
                 </Text>
-              </AnounceBubble>
-              <YStack animation="bouncy" opacity={1} scaleX={1} ai="center" space="$2">
-                <BigTitle>
-                  <RainbowText>Write less,</RainbowText>
+              </AnounceBubble> */}
+              <YStack opacity={1} scaleX={1} ai="center" space="$2">
+                <BigTitle scale={1.4} $gtLg={{scale:1.4}}>
+                  <RainbowText lineHeight={150}>Protofy</RainbowText>
                 </BigTitle>
-                <BigTitle>runs faster</BigTitle>
+                <XStack alignItems="center" justifyContent="center">
+                  <SizableText 
+                    $xs={{fontSize: 10, lineHeight: 10, my: '$3'}}
+                    $sm={{fontSize: 20, lineHeight: 10, my: '$3'}}
+                    $md={{fontSize: 40, lineHeight: 40, my: "$5"}} 
+                    $gtMd={{fontSize: 70, lineHeight: 70}} o={0.9} 
+                    textAlign="center" 
+                    fontWeight={"800"} 
+                    my="$10"><Text fontWeight={800}>LowCode</Text> Development Platform and <Text fontWeight={800}>CMS</Text></SizableText>
+                </XStack>
                 <YStack
                   px={0}
                   maw={420}
@@ -45,29 +54,29 @@ const Home = () => {
                     maw: 900,
                   }}>
                   <LinkGroup>
-                    <LinkGroupItem id={0} href="/docs/core/configuration" themeColor="green_alt2">
-                      styles
+                    <LinkGroupItem id={1} href="/docs/core/configuration" themeColor="green_alt2">
+                      Web
                     </LinkGroupItem>
-                    <Text>' '</Text>
-                    <LinkGroupItem id={1} href="/docs/intro/why-a-compiler" themeColor="blue_alt2">
-                      optimizing compiler
+                    <Text> </Text>
+                    <LinkGroupItem id={2} href="/docs/intro/why-a-compiler" themeColor="blue_alt2">
+                      Mobile
                     </LinkGroupItem>
-                    <Text>' & '</Text>
-                    <LinkGroupItem id={2} href="/docs/components/stacks" themeColor="purple_alt2">
-                      UI kit
+                    <Text> & </Text>
+                    <LinkGroupItem id={3} href="/docs/components/stacks" themeColor="purple_alt2">
+                      IoT
                     </LinkGroupItem>
                     <Spacer size={"$0"}></Spacer>
-                    <Text>that unify React Native + Web</Text>
+                    <Text>in a single framework!</Text>
                   </LinkGroup>
                 </YStack>
               </YStack>
               <Spacer size="$4" />
-              <CopyBubble text="npm create tamagui" />
-              <Spacer size="$1" />
+              {/*<CopyBubble text="npm create tamagui" />
+              <Spacer size="$1" /> */}
               <XCenterStack>
-                <NextLink target="_blank" href="https://twitter.com/tamagui_js">
-                  <TooltipContainer tooltipText="Twitter">
-                    <TwitterIcon />
+                <NextLink target="_blank" href="https://github.com/Protofy-xyz/Protofy">
+                  <TooltipContainer tooltipText="Github">
+                    <GithubIcon />
                   </TooltipContainer>
                 </NextLink>
                 <XStack
@@ -80,14 +89,14 @@ const Home = () => {
                     order: "-1",
                     mx: "50%",
                   }}>
-                  <NextLink href="/docs/intro/why-a-compiler">
+                  <NextLink href="#">
                     <MainButton buttonProps={{ w: 120, h: 52 }}>How?</MainButton>
                   </NextLink>
-                  <NextLink href="/docs/intro/introduction">
+                  <NextLink href="#">
                     <MainButton buttonProps={{ w: 118, h: 52 }}>Docs</MainButton>
                   </NextLink>
                 </XStack>
-                <NextLink target="_blank" href="https://discord.gg/4qh6tdcVDa">
+                <NextLink target="_blank" href="https://discord.gg/VpeZxMFfYW">
                   <TooltipContainer tooltipText="Discord">
                     <DiscordIcon plain={true} width={23} />
                   </TooltipContainer>
@@ -99,7 +108,7 @@ const Home = () => {
         </Section>
         <ElevatedArea>
           <XStack pos="absolute" als="center" y={-45}>
-            <Link target="_blank" href="https://github.com/Protofy-xyz">
+            <Link target="_blank" href="https://github.com/Protofy-xyz/Protofy">
               <Theme reset={true}>
                 <ButtonSimple>Star plz</ButtonSimple>
               </Theme>
@@ -107,14 +116,14 @@ const Home = () => {
           </XStack>
           <HorizontalBox>
             <HoveredGroup>
-              <SectionBlock id={0} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title={"Core"} href="/docs/core/configuration">
-                Light design-system and style library for React Native + Web with themes, animations and much, much more
+              <SectionBlock id={1} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title={"Open Source"} href="#">
+                Published under the permissive MIT license. The things you build on top of Protofy are for yours to keep. We don't force any license on your creations. 
               </SectionBlock>
-              <SectionBlock id={1} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title={"Static"} href="/docs/intro/why-a-compiler">
-                Flatten your component tree with partial evaluation, outputs minimal CSS. Easy install with Next, Webpack, Vite, Babel and Metro.
+              <SectionBlock id={2} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title={"Developer friendly"} href="#">
+                Extend the system using React and Javascript / TypeScript, on top of NextJS, Expo and Express. Build beautiful interfaces with Tamagui.
               </SectionBlock>
-              <SectionBlock id={2} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title={"Tamagui"} href="/docs/components/stacks">
-                A total UI kit for Native and Web. Composable components, themeable, sizable, adapts to each platform properly.
+              <SectionBlock id={3} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title={"LowCode"} href="#">
+                Protofy provides a beautiful admin panel to manage your project. You can create and manage the system entities visually.
               </SectionBlock>
             </HoveredGroup>
           </HorizontalBox>
@@ -123,7 +132,7 @@ const Home = () => {
           <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-down" />
           <ContainerLarge position="relative">
             <YStack zi={1} space="$6" mb="$4">
-              <BlockTitle title="A better style system" subtitle="A multi-faceted optimizing compiler enables Lorem ipsum dolor"></BlockTitle>
+              <BlockTitle title="Visual interface editor with drag and drop" subtitle="Edit React pages using a visual editor that reads and writes to standard react code."></BlockTitle>
               <Spacer />
               <ThemeTint>
                 <ActiveGroup>
