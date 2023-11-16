@@ -1,5 +1,59 @@
 [
     {
+        "id": "Container",
+        "title": "Container",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Container"
+        },
+        "body": [
+            {
+                "type": "protolibProps",
+                "props": [
+                    "flexDirection",
+                    "justifyContent",
+                    "alignContent",
+                    "alignItems"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "Image",
+        "title": "Image",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Image"
+        },
+        "body": [
+            {
+                "type": "protolibProps",
+                "props": [
+                    "width",
+                    "height"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "url",
+                        "field": "prop-url",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "prop"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "id": "Page",
         "title": "Page",
         "path": "*",
