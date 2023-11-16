@@ -1,15 +1,18 @@
 class Mqtt {
   broker
   topic_prefix
+  name
+  type
   constructor(broker, topic_prefix) {
     this.broker = broker
     this.topic_prefix = topic_prefix
+    this.name = this.type = 'mqtt'
   }
   attach(pin, deviceComponents) {
     this.topic_prefix = deviceComponents.esphome.name
     const componentObjects = [
       {
-        name: 'mqtt',
+        name: this.type,
         config: {
           broker: this.broker,
           topic_prefix: this.topic_prefix,
@@ -29,6 +32,8 @@ class Mqtt {
   }
   getSubsystem() {
     return {
+      name: this.name,
+      type: this.type,
       config:{
         prefix: this.topic_prefix,
         frontendEndpoint: "/ws", //TODO que vingui de la mask

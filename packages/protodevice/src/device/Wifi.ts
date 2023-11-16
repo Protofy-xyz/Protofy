@@ -2,16 +2,18 @@ class Wifi {
   ssid
   password
   power_save_mode
+  type
   constructor(ssid, password, power_save_mode) {
     this.ssid = ssid
     this.password = password
     this.power_save_mode = power_save_mode
+    this.type = "wifi"
   }
 
   attach(pin, deviceComponents) {
     const componentObjects = [
       {
-        name: 'wifi',
+        name: this.type,
         config: {
           ssid: this.ssid,
           password: this.password,

@@ -16,16 +16,18 @@ class Relay {
   name
   platform
   restoreMode
+  type
   constructor(name, platform, restoreMode) {
     this.name = name
     this.platform = platform
     this.restoreMode = restoreMode
+    this.type = 'switch'
   }
 
   attach(pin, deviceComponents) {
     const componentObjects = [
       {
-        name: 'switch',
+        name: this.type,
         config: {
           //aqui estan todos los elementos del yaml anidado
           platform: this.platform,
@@ -52,6 +54,8 @@ class Relay {
 
   getSubsystem() {
     return {
+      name: this.name,
+      type: this.type,
       config:{
         restoreMode: "ON"
       },

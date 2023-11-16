@@ -1,15 +1,17 @@
 class BinarySensor {
     name;
-    platform
+    platform;
+    type;
     constructor(name, platform) {
         this.name = name
         this.platform = platform
+        this.type = "binary_sensor"
     }
 
     attach(pin, deviceComponents) {
         const componentObjects = [
             {
-                name: "binary_sensor",
+                name: this.type,
                 config: {
                     platform: this.platform,
                     pin: pin,
@@ -39,11 +41,13 @@ class BinarySensor {
 
     getSubsystem() {
         return {
+            name: this.name,
+            type: this.type,
             monitors:[
                 {
                     name: "Button status",
                     description: "Get binary sensor status",
-                    endpoint: "/state",
+                    endpoint: "/binary_sensor/"+this.name+"/state",
                     connectionType: "mqtt",
                 }
             ]

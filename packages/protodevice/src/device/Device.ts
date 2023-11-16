@@ -9,7 +9,7 @@ class Device {
         this.pinTable = []
         this.components = components.slice(2)
         this.componentsTree = {}
-        this.subsystemsTree = {}
+        this.subsystemsTree = []
     }
     
     createComponentsTree(deviceName, deviceDefinition){
@@ -37,7 +37,16 @@ class Device {
     }
 
     createSubsystemsTree(deviceName, deviceDefinition){
-        this.subsystemsTree = {}
+        this.subsystemsTree = []
+        this.components?.forEach((component) => {
+            if(component) {
+                try {
+                    this.subsystemsTree.push(component.getSubsystem())
+                } catch {
+
+                }
+            }
+        })
     }
 
     getComponentsTree(deviceName?, deviceDefinition?) {
