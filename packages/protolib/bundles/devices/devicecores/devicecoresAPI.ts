@@ -5,6 +5,5 @@ export const DeviceCoresAPI = AutoAPI({
     modelName: 'devicecores',
     modelType: DeviceCoreModel,
     initialDataDir: __dirname,
-    prefix: '/adminapi/v1/',
-    requiresAdmin: ['*']
+    prefix: '/adminapi/v1/'
 })

@@ -5,6 +5,5 @@ export const DeviceBoardsAPI = AutoAPI({
     modelName: 'deviceboards',
     modelType: DeviceBoardModel,
     initialDataDir: __dirname,
-    prefix: '/adminapi/v1/',
-    requiresAdmin: ['*']
+    prefix: '/adminapi/v1/'
 })
