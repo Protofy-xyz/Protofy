@@ -54,13 +54,13 @@ const deviceMasks = [
     getComponent: Mqtt,
     getInitialData: () => { return { to: 'mqtt', param1: '"BROKERADDRESS"', param2: '""' } }
   },
-  {
-    id: 'DeepSleep',
-    type: 'CallExpression',
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('deepSleep'), //TODO: Change output function name
-    getComponent: DeepSleep,
-    getInitialData: () => { return { to: 'deepSleep', param1: '"10"', param2: '"10"', param3: '' } }
-  },
+  // {
+  //   id: 'DeepSleep',
+  //   type: 'CallExpression',
+  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('deepSleep'), //TODO: Change output function name
+  //   getComponent: DeepSleep,
+  //   getInitialData: () => { return { to: 'deepSleep', param1: '"10"', param2: '"10"', param3: '' } }
+  // },
   {
     id: 'Relay',
     type: 'CallExpression',
