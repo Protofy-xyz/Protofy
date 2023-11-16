@@ -12,9 +12,9 @@ export const HeaderContents = (props: HeaderContentsProps) => {
       rightArea={<XStack ai="center">
         {props.topBar }
         {session.loggedIn ? <HeaderLink href="/profile">{session.user.id}</HeaderLink>:<HeaderLink href="/auth/login">Login</HeaderLink>}
-        <XStack>
+        {/* <XStack>
           <ConnectionIndicator />
-        </XStack>
+        </XStack> */}
       </XStack>}
       {...props} 
   />
