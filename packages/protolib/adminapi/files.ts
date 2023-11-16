@@ -97,7 +97,7 @@ const handleFilesRequest = async (req, res) => {
 //the content of the file is readed from req.body
 //the path to the file to write/directory to create, is extracted from req.params[0]
 //if path is /a/b/c, a and b should exist to create c
-const handleFilesWriteRequest = async (req, res) => {
+const handleFilesWriteRequest = async (req, res, session) => {
     const name = req.params.path || '';
     const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
     if (req.body && req.body.hasOwnProperty("content")) {
@@ -107,13 +107,13 @@ const handleFilesWriteRequest = async (req, res) => {
     generateEvent({
         path: 'files/write/file', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
         from: 'api', // system entity where the event was generated (next, api, cmd...)
-        user: '-', // the original user that generates the action, 'system' if the event originated in the system itself
+        user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
         payload: {'path': name} // event payload, event-specific data
     }, getServiceToken())
     res.status(200).send({result: "uploaded"});
 };
 
-const handleDirectoryCreateRequest = async (req, res) => {
+const handleDirectoryCreateRequest = async (req, res, session) => {
     const name = req.params.path || '';
     const dirPath = path.join(PROJECT_WORKSPACE_DIR, name);
     try {
@@ -121,7 +121,7 @@ const handleDirectoryCreateRequest = async (req, res) => {
         generateEvent({
             path: 'files/create/dir',
             from: 'api',
-            user: '-', // Actualiza según corresponda
+            user: session.user.id, // Actualiza según corresponda
             payload: { 'path': name }
         }, getServiceToken());
         res.status(200).send({ result: "directory created" });
@@ -131,7 +131,7 @@ const handleDirectoryCreateRequest = async (req, res) => {
     }
 };
 
-const handleDeleteRequest = async (req, res) => {
+const handleDeleteRequest = async (req, res, session) => {
     const basePath = req.params.path || '';
     const itemsToDelete = req.body;
 
@@ -143,8 +143,20 @@ const handleDeleteRequest = async (req, res) => {
             const itemPath = path.join(PROJECT_WORKSPACE_DIR, basePath, item.name);
             if (item.isDirectory) {
                 await fs.rm(itemPath, { recursive: true, force: true }); // Delete directories
+                generateEvent({
+                    path: 'files/delete/dir',
+                    from: 'api',
+                    user: session.user.id,
+                    payload: { 'path': path.join(basePath, item.name) }
+                }, getServiceToken());
             } else {
                 await fs.unlink(itemPath); // Delete files
+                generateEvent({
+                    path: 'files/delete/file',
+                    from: 'api',
+                    user: session.user.id,
+                    payload: { 'path': path.join(basePath, item.name) }
+                }, getServiceToken());
             }
         }
         res.status(200).send({ result: "Items deleted" });
@@ -163,14 +175,14 @@ const requireAdmin = () => handler(async (req, res, session, next) => {
 })
 
 //Route to delete files and directories
-app.post('/adminapi/v1/deleteItems/:path(*)', requireAdmin(), handleDeleteRequest);
+app.post('/adminapi/v1/deleteItems/:path(*)', requireAdmin(), handler(handleDeleteRequest));
 
 // Route to write files or create directories directly in /adminapi/v1/files
-app.post('/adminapi/v1/files', requireAdmin(), upload.single('file'), handleFilesWriteRequest);
+app.post('/adminapi/v1/files', requireAdmin(), upload.single('file'), handler(handleFilesWriteRequest));
 // Route to write files or create directories in /adminapi/v1/files/*
-app.post('/adminapi/v1/files/:path(*)', requireAdmin(), upload.single('file'), handleFilesWriteRequest);
+app.post('/adminapi/v1/files/:path(*)', requireAdmin(), upload.single('file'), handler(handleFilesWriteRequest));
 // Route to create directories in /adminapi/v1/directories/*
-app.post('/adminapi/v1/directories/:path(*)', requireAdmin(), handleDirectoryCreateRequest);
+app.post('/adminapi/v1/directories/:path(*)', requireAdmin(), handler(handleDirectoryCreateRequest));
 
-app.get('/adminapi/v1/files/:path(*)', requireAdmin(), handleFilesRequest);
+app.get('/adminapi/v1/files/:path(*)', requireAdmin(), handler(handleFilesRequest));
 
