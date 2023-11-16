@@ -114,7 +114,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         for await (const [key, value] of db.iterator()) {
             if (key != 'initialized') {
                 const model = modelClass.unserialize(value, session);
-                const listItem = await model.listTransformed(search, transformers);
+                const listItem = await model.listTransformed(search, transformers, session);
 
                 if (listItem && model.isVisible()) {
                     allResults.push(listItem);

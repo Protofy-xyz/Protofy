@@ -43,7 +43,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.data._deleted ? true : false;
     }
 
-    list(search?): any {
+    list(search?, session?): any {
 
         if(search) {
             const searchFields = this.objectSchema.is('search').getFields()
@@ -57,8 +57,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }
     }
 
-    async listTransformed(search?, transformers={}): Promise<any> {
-        const result = this.list(search)
+    async listTransformed(search?, transformers={}, session?): Promise<any> {
+        const result = this.list(search, session)
         if(result) {
             return await (this.getObjectSchema().apply('list', result, transformers));
         }
