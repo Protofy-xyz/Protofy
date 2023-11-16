@@ -7,8 +7,8 @@ import { useState } from 'react';
 const CreateComponent = ({onCreate}) => {
     const [inputValue, setInputValue] = useState('');
     return <>
-        <YStack jc='center' ai='center'>
-            <Input maxWidth={"300px"} mt={"$10"} value={inputValue} onChange={e => setInputValue(e.target.value)}></Input>
+        <YStack f={1} jc='center' ai='center'>
+            <Input width={"300px"} mt={"$7"} value={inputValue} onChange={e => setInputValue(e.target.value)}></Input>
             <Button onPress={() => onCreate(inputValue)} mt={"$6"} width={"150px"}>Create</Button>
         </YStack>
     </>
@@ -47,25 +47,25 @@ const fileActions = [
             }
         }
     },
-    // {
-    //     getComponent: (selected, path) => {
-    //         return <CreateComponent onCreate={(name)=>{API.post('/adminapi/v1/files/'+path.replace(/\/+/g, '/')+'/'+name, {content:""})}} />
-    //     },
-    //     title: "Create folder",
-    //     size: {
-    //         width: 500,
-    //         height: 200
-    //     },
-    //     action: {
-    //         id: "makedir",
-    //         button: {
-    //             name: "Create folder",
-    //             toolbar: true,
-    //             icon: ChonkyIconName.folder,
-    //             group: 'Actions'
-    //         }
-    //     }
-    // },
+    {
+        getComponent: (selected, path) => {
+            return <CreateComponent onCreate={(name)=>{API.post('/adminapi/v1/directories/'+path.replace(/\/+/g, '/')+'/'+name, {content:""})}} />
+        },
+        title: "Create folder",
+        size: {
+            width: 500,
+            height: 200
+        },
+        action: {
+            id: "makedir",
+            button: {
+                name: "Create folder",
+                toolbar: true,
+                icon: ChonkyIconName.folder,
+                group: 'Actions'
+            }
+        }
+    },
     {
         getComponent: (selected, path) => {
             return <CreateComponent onCreate={(name)=>{API.post('/adminapi/v1/files/'+path.replace(/\/+/g, '/')+'/'+name, {content:""})}} />
