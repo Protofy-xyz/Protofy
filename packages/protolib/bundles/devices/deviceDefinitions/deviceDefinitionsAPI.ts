@@ -1,4 +1,10 @@
 import { DeviceDefinitionModel } from ".";
-import { CreateApi } from '../../../api'
+import { AutoAPI, CreateApi } from '../../../api'
 
-export const DeviceDefinitionsAPI = CreateApi('devicedefinitions', DeviceDefinitionModel, __dirname, '/adminapi/v1/')
+export const DeviceDefinitionsAPI = AutoAPI({
+    modelName: 'devicedefinitions',
+    modelType: DeviceDefinitionModel,
+    initialDataDir: __dirname,
+    prefix: '/adminapi/v1/',
+    requiresAdmin: ['*']
+})

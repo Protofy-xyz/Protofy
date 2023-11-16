@@ -1,5 +1,5 @@
 import {generateEvent} from 'app/bundles/library'
-import {serviceToken} from 'protolib/api/lib/serviceToken'
+import {getServiceToken} from 'protolib/api/lib/serviceToken'
 
 export const DeviceMessageRouter = (app, context) => {
     console.log('context: ', context)
@@ -19,6 +19,6 @@ export const DeviceMessageRouter = (app, context) => {
             from: 'device', // system entity where the event was generated (next, api, cmd...)
             user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
             payload: {test: parsedMessage} // event payload, event-specific data
-        }, serviceToken)
+        }, getServiceToken())
     })
 }
