@@ -1,4 +1,11 @@
 import { GroupModel } from "./";
-import {CreateApi, hash} from '../../api'
+import {AutoAPI, CreateApi, hash} from '../../api'
 
-export const GroupsAPI = CreateApi('groups', GroupModel, __dirname, '/adminapi/v1/', 'auth_groups', {})
+export const GroupsAPI = AutoAPI({
+    modelName: 'groups',
+    modelType: GroupModel, 
+    initialDataDir: __dirname,
+    prefix: '/adminapi/v1/',
+    dbName: 'auth_groups',
+    requiresAdmin: ['create', 'update']
+})
