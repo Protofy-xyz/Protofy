@@ -1,5 +1,5 @@
 import { ObjectModel } from ".";
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty } from '../../api'
+import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
@@ -192,4 +192,11 @@ const getDB = (path, req, session) => {
   return db;
 }
 
-export const ObjectsAPI = CreateApi('objects', ObjectModel, __dirname, '/adminapi/v1/', '', {}, () => { }, getDB)
+export const ObjectsAPI = AutoAPI({
+  modelName: 'objects',
+  modelType: ObjectModel,
+  initialDataDir: __dirname,
+  prefix: '/adminapi/v1/',
+  getDB: getDB,
+  requiresAdmin: ['*']
+})
