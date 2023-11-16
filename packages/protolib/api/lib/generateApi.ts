@@ -1,4 +1,5 @@
 import { generateEvent } from "../../bundles/events/eventsLibrary";
+import {serviceToken} from 'protolib/api/lib/serviceToken'
 import { connectDB, getDB } from "./db";
 import { handler } from './handler'
 import fs from 'fs';
@@ -145,7 +146,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                     id: entityModel.getId(),
                     data: entityModel.read()
                 } // event payload, event-specific data
-            })
+            }, serviceToken)
         }
         res.send(await entityModel.readTransformed(transformers))
     }));
@@ -209,7 +210,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                     id: entityModel.getId(),
                     data: entityModel.read()
                 } // event payload, event-specific data
-            })
+            }, serviceToken)
         }
         res.send(await entityModel.readTransformed(transformers))
     }));
@@ -235,7 +236,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                     id: entityModel.getId(),
                     data: entityModel.read()
                 } // event payload, event-specific data
-            })
+            }, serviceToken)
         }
         res.send({ "result": "deleted" })
     }));

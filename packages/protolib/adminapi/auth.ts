@@ -2,6 +2,7 @@
 import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'app/schema';
 import {getInitialData} from 'app/initialData'
 import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app, getSessionContext} from 'protolib/api'
+import {serviceToken} from 'protolib/api/lib/serviceToken'
 import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";
 
@@ -35,7 +36,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {clientIp: req.get('X-Client-IP') || req.headers['x-client-ip']} // event payload, event-specific data
-            })
+            }, serviceToken)
             return
         }
     } catch(e) {
@@ -46,7 +47,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
         from: 'api', // system entity where the event was generated (next, api, cmd...)
         user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
         payload: {clientIp: req.get('X-Client-IP') || req.headers['x-client-ip']} // event payload, event-specific data
-    })
+    }, serviceToken)
     res.status(500).send('"Incorrect user or password"')
 }));
 
@@ -71,7 +72,7 @@ app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
             from: 'api', // system entity where the event was generated (next, api, cmd...)
             user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
             payload: {} // event payload, event-specific data
-        })
+        }, serviceToken)
         res.send({session: genNewSession({id:request.username, type: "user", admin: group.admin?true:false}), context: await getSessionContext('user')})
     }
 }));

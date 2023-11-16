@@ -1,4 +1,12 @@
 import { EventModel } from ".";
-import {CreateApi} from '../../api'
+import {AutoAPI, CreateApi} from '../../api'
 
-export const EventsAPI = CreateApi('events', EventModel, __dirname, '/adminapi/v1/', 'events', {}, undefined, undefined, undefined, false, {disableEvents: true})
+export const EventsAPI = AutoAPI({
+    modelName: 'events',
+    modelType: EventModel,
+    initialDataDir: __dirname,
+    prefix: '/adminapi/v1/',
+    dbName: 'events',
+    disableEvents: true,
+    requiresAdmin: ['*']
+})

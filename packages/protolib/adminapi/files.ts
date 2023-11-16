@@ -3,6 +3,7 @@ import { promises as fs } from 'fs';
 import { constants } from 'fs';
 import path from 'path';
 import { app } from 'protolib/api';
+import {serviceToken} from 'protolib/api/lib/serviceToken'
 import multer from 'multer';
 import fsExtra from 'fs-extra';
 import syncFs from 'fs'
@@ -104,7 +105,7 @@ const handleFilesDeleteRequest = (req, res) => {
         from: 'api', // system entity where the event was generated (next, api, cmd...)
         user: '-', // the original user that generates the action, 'system' if the event originated in the system itself
         payload: {'path': name} // event payload, event-specific data
-    })
+    }, serviceToken)
     res.send({result: 'deleted'})
 }
 
@@ -124,7 +125,7 @@ const handleFilesWriteRequest = async (req, res) => {
         from: 'api', // system entity where the event was generated (next, api, cmd...)
         user: '-', // the original user that generates the action, 'system' if the event originated in the system itself
         payload: {'path': name} // event payload, event-specific data
-    })
+    }, serviceToken)
     res.status(200).send({result: "uploaded"});
 };
 
