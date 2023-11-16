@@ -33,7 +33,7 @@ export const Footer = () => <ProtoFooter>
     { href: '/community', caption: 'Community' },
     { href: '/blog', caption: 'Blog' },
     { href: 'https://github.com/Protofy-xyz', caption: 'GitHub' },
-    { href: 'https://twitter.com/tamagui_js', caption: 'Twitter' },
-    { href: 'https://discord.gg/4qh6tdcVDa', caption: 'Discord' }
+    { href: 'https://twitter.com/protofy_xyz', caption: 'Twitter' },
+    { href: 'https://discord.gg/VY7fHHns', caption: 'Discord' }
   ]} />
 </ProtoFooter>
