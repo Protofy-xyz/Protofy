@@ -14,23 +14,15 @@ export const getDatabases = async () => {
     })
 }
 
-// app.get('/adminapi/v1/databases', handler(async (req, res) => {
-//     res.send(await getDatabases())
-// }));
+const requireAdmin = () => handler(async (req, res, session, next) => {
+    if(!session || !session.user.admin) {
+        res.status(401).send({error: "Unauthorized"})
+        return
+    }
+    next()
+})
 
-// app.get('/adminapi/v1/databases/:dbname', handler(async (req, res) => {
-//     const dbname = '../../' + path.join('data','databases', req.params.dbname)
-//     await connectDB(dbname, getInitialData(dbname))
-//     const db = getDB(dbname)
-//     const total = []
-//     for await (const [key, value] of db.iterator()) {
-//         if(key != 'initialized') total.push({key, value: JSON.parse(value)})
-//     }
-//     res.send(total)
-//     return
-// }));
-
-app.post('/adminapi/v1/databases/:dbname/:key', handler(async (req, res) => {
+app.post('/adminapi/v1/databases/:dbname/:key', requireAdmin(), handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
     await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)
@@ -39,7 +31,7 @@ app.post('/adminapi/v1/databases/:dbname/:key', handler(async (req, res) => {
     return
 }));
 
-app.get('/adminapi/v1/databases/:dbname/:key/delete', handler(async (req, res) => {
+app.get('/adminapi/v1/databases/:dbname/:key/delete', requireAdmin(), handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
     await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)
@@ -48,7 +40,7 @@ app.get('/adminapi/v1/databases/:dbname/:key/delete', handler(async (req, res) =
     return
 }));
 
-app.post('/adminapi/v1/dbsearch/:dbname', handler(async (req, res) => {
+app.post('/adminapi/v1/dbsearch/:dbname', requireAdmin(), handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
     await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)

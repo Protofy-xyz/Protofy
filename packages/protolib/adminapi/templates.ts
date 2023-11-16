@@ -4,7 +4,15 @@ import {connectDB, handler, app} from 'protolib/api'
 
 console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 
-app.post('/adminapi/v1/templates/:tplname', handler(async (req, res) => {
+const requireAdmin = () => handler(async (req, res, session, next) => {
+    if(!session || !session.user.admin) {
+        res.status(401).send({error: "Unauthorized"})
+        return
+    }
+    next()
+})
+
+app.post('/adminapi/v1/templates/:tplname', requireAdmin(), handler(async (req, res) => {
     const tplname = req.params.tplname;
     const params = req.body
 
