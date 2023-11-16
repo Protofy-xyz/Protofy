@@ -81,7 +81,7 @@ const getDB = (path, req, session) => {
       if (!arg) {
         throw "No link definition schema marker found for file: " + path
       }
-      addObjectLiteralProperty(arg, value.route, value.name)
+      addObjectLiteralProperty(arg, (value.route.startsWith('/') ? value.route.slice(1) : value.route), value.name)
       sourceFile.saveSync();
 
     },
