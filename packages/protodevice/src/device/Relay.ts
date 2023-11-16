@@ -10,50 +10,7 @@
 //   }
 // }
 
-export function getSubsystem() {
-  return {
-    actions: [
-      {
-        name: 'Turn on',
-        description: 'turns on the gpio',
-        endpoint: '/command',
-        connectionType: 'mqtt',
-        payload: {
-          type: 'str',
-          value: 'ON',
-        },
-      },
-      {
-        name: 'Turn off',
-        description: 'turns off the gpio',
-        endpoint: '/command',
-        connectionType: 'mqtt',
-        payload: {
-          type: 'str',
-          value: 'OFF',
-        },
-      },
-      {
-        name: 'Toggle',
-        description: 'Toggles the gpio',
-        endpoint: '/command',
-        connectionType: 'mqtt',
-        payload: {
-          type: 'str',
-          value: 'TOGGLE',
-        },
-      },
-    ],
-    monitors: [
-      {
-        name: 'Relay status',
-        description: 'Gets the status of the relay',
-        endpoint: '/state',
-        connectionType: 'mqtt',
-      },
-    ],
-  }
-}
+
 
 class Relay {
   name
@@ -76,7 +33,7 @@ class Relay {
           id: this.name,
           restore_mode: this.restoreMode,
         },
-        subsystem: getSubsystem(),
+        subsystem: this.getSubsystem()
       },
     ]
 
@@ -91,6 +48,54 @@ class Relay {
         }
     })
     return deviceComponents
+  }
+
+  getSubsystem() {
+    return {
+      config:{
+        restoreMode: "ON"
+      },
+      actions: [
+        {
+          name: 'Turn on',
+          description: 'turns on the gpio',
+          endpoint: '/switch/command',
+          connectionType: 'mqtt',
+          payload: {
+            type: 'str',
+            value: 'ON',
+          },
+        },
+        {
+          name: 'Turn off',
+          description: 'turns off the gpio',
+          endpoint: '/switch/command',
+          connectionType: 'mqtt',
+          payload: {
+            type: 'str',
+            value: 'OFF',
+          },
+        },
+        {
+          name: 'Toggle',
+          description: 'Toggles the gpio',
+          endpoint: '/switch/command',
+          connectionType: 'mqtt',
+          payload: {
+            type: 'str',
+            value: 'TOGGLE',
+          },
+        },
+      ],
+      monitors: [
+        {
+          name: 'Relay status',
+          description: 'Gets the status of the relay',
+          endpoint: '/switch/state',
+          connectionType: 'mqtt',
+        },
+      ],
+    }
   }
 }
 
