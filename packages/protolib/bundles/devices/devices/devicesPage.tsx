@@ -99,7 +99,7 @@ export default {
       const deviceCode = 'device(' + jsCode + ')';
       console.log("-------DEVICE CODE------------", deviceCode)
       const deviceObj = eval(deviceCode)
-      const yaml = deviceObj.setMqttPrefix("newplatform").create(deviceName, deviceDefinition)
+      const yaml = deviceObj.create(deviceName, deviceDefinition)
       yamlRef.current = yaml
 
       setShowModal(true)
