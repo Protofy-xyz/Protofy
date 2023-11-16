@@ -1,6 +1,6 @@
 import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
-import { API, withSession, Center } from 'protolib'
+import { API, withSession, Center, getURLWithToken } from 'protolib'
 import dynamic from 'next/dynamic'
 import { Spinner } from 'tamagui'
 import { Tinted } from '../../components/Tinted'
@@ -30,7 +30,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
 
     props = {
       data: {
-        filesState: await API.get('/adminapi/v1/files/'+path) ?? { data: [] },
+        filesState: await API.get(getURLWithToken('/adminapi/v1/files/'+path, context)) ?? { data: [] },
         CurrentPath: path,
         CurrentFile: currentFile? path+'/'+currentFile : null
       }

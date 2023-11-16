@@ -5,10 +5,10 @@ import {createSession, SessionDataType} from './session';
 import {verifyToken} from './crypt';
 
 type Handler = (
-    fn: (req: Request, res: Response, session: SessionDataType) => Promise<void> | void
+    fn: (req: Request, res: Response, session: SessionDataType, next: any) => Promise<void> | void
 ) => RequestHandler;
 
-export const handler: Handler = fn => async (req:any, res:any) => {
+export const handler: Handler = fn => async (req:any, res:any, next:any) => {
     //try to recover identify from token
     let decoded;
     let session;
@@ -30,7 +30,7 @@ export const handler: Handler = fn => async (req:any, res:any) => {
         createSession()
     }
     try {
-        await fn(req, res, decoded);
+        await fn(req, res, decoded, next);
     } catch (e:any) {
         if (e instanceof z.ZodError) {
             const err = (e as z.ZodError).flatten()

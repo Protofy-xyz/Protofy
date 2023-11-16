@@ -9,6 +9,7 @@ import fsExtra from 'fs-extra';
 import syncFs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
 import {generateEvent} from 'app/bundles/library'
+import { handler } from '../api';
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../"; // Define where the workspace root dir is
 
@@ -129,13 +130,22 @@ const handleFilesWriteRequest = async (req, res) => {
     res.status(200).send({result: "uploaded"});
 };
 
-// Route to write files or create directories directly in /adminapi/v1/files
-app.post('/adminapi/v1/files', upload.single('file'), handleFilesWriteRequest);
-// Route to write files or create directories in /adminapi/v1/files/*
-app.post('/adminapi/v1/files/:path(*)', upload.single('file'), handleFilesWriteRequest);
-// Route for /adminapi/v1/files
-app.get('/adminapi/v1/files', handleFilesRequest);
-// Route for /adminapi/v1/files/*
-app.get('/adminapi/v1/files/:path(*)', handleFilesRequest);
+const requireAdmin = () => handler(async (req, res, session, next) => {
+    if(!session || !session.user.admin) {
+        res.status(401).send({error: "Unauthorized"})
+        return
+    }
+    next()
+})
 
-app.post('/adminapi/v1/deleteFiles/:path(*)', handleFilesDeleteRequest);
+// Route to write files or create directories directly in /adminapi/v1/files
+app.post('/adminapi/v1/files', requireAdmin(), upload.single('file'), handleFilesWriteRequest);
+// Route to write files or create directories in /adminapi/v1/files/*
+app.post('/adminapi/v1/files/:path(*)', requireAdmin(), upload.single('file'), handleFilesWriteRequest);
+// Route for /adminapi/v1/files
+app.get('/adminapi/v1/files', requireAdmin(), handleFilesRequest);
+// Route for /adminapi/v1/files/*
+app.get('/adminapi/v1/files/:path(*)', requireAdmin(), handleFilesRequest);
+
+app.post('/adminapi/v1/deleteFiles/:path(*)', requireAdmin(), handleFilesDeleteRequest);
+
