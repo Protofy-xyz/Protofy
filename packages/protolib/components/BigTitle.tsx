@@ -1,13 +1,13 @@
 import React from 'react'
 import {
-  H1,
+  H1, ParagraphProps,
 } from 'tamagui'
 
 type BigTitleProps = {
     children?:any
 }
 
-export default React.forwardRef(({children, ...props}:BigTitleProps, ref) => (
+export default React.forwardRef(({children, ...props}:BigTitleProps & ParagraphProps, ref) => (
     <H1
     //@ts-ignore
     ref={ref}
