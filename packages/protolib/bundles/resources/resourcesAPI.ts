@@ -7,5 +7,5 @@ export const ResourcesAPI = AutoAPI({
     initialDataDir: __dirname,
     prefix: '/adminapi/v1/',
     dbName: 'resources',
-    requiresAdmin: ['*']
+    requiresAdmin: ['create', 'update']
 })
