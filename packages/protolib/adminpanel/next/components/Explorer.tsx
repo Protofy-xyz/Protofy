@@ -74,7 +74,10 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
     }
 
     const onDeleteFiles = (data: any) => {
-        const filesToDelete = data.state.selectedFilesForAction.map(f => f.name)
+        const filesToDelete = data.state.selectedFilesForAction.map(file => ({
+            name: file.name,
+            isDirectory: file.isDir
+        }));
         setSelectedFiles(filesToDelete)
         setOpenDeleteDialog(true)
     }
@@ -89,7 +92,6 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
             setOpenDownloadDialog(true)
         }
     }
-
 
     return (
         <Dropzone
@@ -127,7 +129,8 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         setOpen={setOpenDeleteDialog}
                         open={openDeleteDialog}
                         onAccept={async (seter) => {
-                            await API.post('/adminapi/v1/deleteFiles/' + currentPath, selectedFiles)
+                            const itemsToDelete = selectedFiles
+                            await API.post('/adminapi/v1/deleteItems/' + currentPath, itemsToDelete);
                             setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] })
                         }}
                         acceptTint="red"
@@ -135,7 +138,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         description={"The following files will be deleted:"}
                     >
                         <YStack f={1}>
-                            {selectedFiles.map(f => <Paragraph>{f}</Paragraph>)}
+                            {selectedFiles.map(f => <Paragraph>{f.name}</Paragraph>)}
                         </YStack>
                     </AlertDialog>
 

@@ -93,23 +93,6 @@ const handleFilesRequest = async (req, res) => {
     }
 };
 
-const handleFilesDeleteRequest = (req, res) => {
-    const name = req.params.path || '';
-    const filesToDelete = req.body;
-    const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
-    if(!filesToDelete || !filesToDelete.length) return res.status(500).send('error')
-    const fullPathFilesToDelete = filesToDelete.map(f => path.join(filepath,f))
-    console.log('** DELETING FILES: ', fullPathFilesToDelete)
-    fullPathFilesToDelete.forEach(f => syncFs.unlinkSync(f))
-    generateEvent({
-        path: 'files/delete/file', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-        from: 'api', // system entity where the event was generated (next, api, cmd...)
-        user: '-', // the original user that generates the action, 'system' if the event originated in the system itself
-        payload: {'path': name} // event payload, event-specific data
-    }, getServiceToken())
-    res.send({result: 'deleted'})
-}
-
 //received post requests and creates directories or write files, dependeing on query string param
 //the content of the file is readed from req.body
 //the path to the file to write/directory to create, is extracted from req.params[0]
@@ -148,6 +131,29 @@ const handleDirectoryCreateRequest = async (req, res) => {
     }
 };
 
+const handleDeleteRequest = async (req, res) => {
+    const basePath = req.params.path || '';
+    const itemsToDelete = req.body;
+
+    if (!itemsToDelete || !itemsToDelete.length) {
+        return res.status(400).send({ error: "No items provided for deletion" });
+    }
+    try {
+        for (const item of itemsToDelete) {
+            const itemPath = path.join(PROJECT_WORKSPACE_DIR, basePath, item.name);
+            if (item.isDirectory) {
+                await fs.rm(itemPath, { recursive: true, force: true }); // Delete directories
+            } else {
+                await fs.unlink(itemPath); // Delete files
+            }
+        }
+        res.status(200).send({ result: "Items deleted" });
+    } catch (error) {
+        console.error("Error deleting items:", error);
+        res.status(500).send({ error: "Error deleting items" });
+    }
+};
+
 const requireAdmin = () => handler(async (req, res, session, next) => {
     if(!session || !session.user.admin) {
         res.status(401).send({error: "Unauthorized"})
@@ -156,16 +162,15 @@ const requireAdmin = () => handler(async (req, res, session, next) => {
     next()
 })
 
+//Route to delete files and directories
+app.post('/adminapi/v1/deleteItems/:path(*)', requireAdmin(), handleDeleteRequest);
+
 // Route to write files or create directories directly in /adminapi/v1/files
 app.post('/adminapi/v1/files', requireAdmin(), upload.single('file'), handleFilesWriteRequest);
 // Route to write files or create directories in /adminapi/v1/files/*
 app.post('/adminapi/v1/files/:path(*)', requireAdmin(), upload.single('file'), handleFilesWriteRequest);
 // Route to create directories in /adminapi/v1/directories/*
 app.post('/adminapi/v1/directories/:path(*)', requireAdmin(), handleDirectoryCreateRequest);
-// Route for /adminapi/v1/files
-app.get('/adminapi/v1/files', requireAdmin(), handleFilesRequest);
-// Route for /adminapi/v1/files/*
-app.get('/adminapi/v1/files/:path(*)', requireAdmin(), handleFilesRequest);
 
-app.post('/adminapi/v1/deleteFiles/:path(*)', requireAdmin(), handleFilesDeleteRequest);
+app.get('/adminapi/v1/files/:path(*)', requireAdmin(), handleFilesRequest);
 
