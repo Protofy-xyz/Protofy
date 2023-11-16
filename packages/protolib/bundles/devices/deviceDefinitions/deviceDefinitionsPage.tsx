@@ -32,7 +32,7 @@ export default {
     const { resolvedTheme } = useThemeSetting();
     const defaultJsCode = { "components": "[\n \"mydevice\",\n \"esp32dev\",\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n" }
     const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
-    const [isModified,setIsModified] = React.useState(false)
+    // const [isModified,setIsModified] = React.useState(false)
     const [editedObjectData, setEditedObjectData]= React.useState({})
 
     const saveToFile= (code,path)=>{
@@ -51,8 +51,8 @@ export default {
             //         <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
             //     </IconContainer>
             // </XStack>}
-            isModified={isModified}
-            setIsModified={(e)=>{console.log("Set is Modified: ", e);}}
+            // isModified={isModified}
+            // setIsModified={(e)=>{console.log("Set is Modified: ", e);}}
             //onPlay={onPlay}
             disableDots={true}
             onSave={(o) => { 
