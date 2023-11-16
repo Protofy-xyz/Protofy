@@ -2,13 +2,17 @@ const jsYaml = require("js-yaml");
 class Device {
     components;
     pinTable;
+    componentsTree;
+    subsystemsTree;
 
     constructor(components) {
         this.pinTable = []
         this.components = components.slice(2)
+        this.componentsTree = {}
+        this.subsystemsTree = {}
     }
     
-    getComponents(deviceName, deviceDefinition){
+    createComponentsTree(deviceName, deviceDefinition){
         var deviceComponents = {
             esphome: {
                 name: deviceName,
@@ -28,20 +32,38 @@ class Device {
             }
         })
         //console.log("🚀 ~ file: Device.ts:120 ~ Device ~ getComponents ~ deviceComponents:", deviceComponents)
-        return deviceComponents
+        this.componentsTree = deviceComponents
 
     }
 
-    create(deviceName?, deviceDefinition?) {
+    createSubsystemsTree(deviceName, deviceDefinition){
+        this.subsystemsTree = {}
+    }
+
+    getComponentsTree(deviceName?, deviceDefinition?) {
         const ports = deviceDefinition.board.ports
         this.pinTable = []
         ports.forEach(port => {
             if(!['3V3', 'EN', '36', '39', 'CLK'].includes(port.name)) this.pinTable.push(port.name)
         });
 
-        var components = this.getComponents(deviceName, deviceDefinition)
+        this.createComponentsTree(deviceName, deviceDefinition)
         //console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ jsYaml.dump(components):", jsYaml.dump(components, {lineWidth: -1}))
-        return jsYaml.dump(components, {lineWidth: -1});
+        return this.componentsTree
+    }
+
+    
+    getSubsystemsTree(deviceName?, deviceDefinition?) {
+        this.createSubsystemsTree(deviceName, deviceDefinition)
+        return this.subsystemsTree;
+    }
+
+    dump(format="yaml"){
+        if(format=="yaml"){
+            return jsYaml.dump(this.componentsTree,{lineWidth: -1})
+        }else{
+            return undefined;
+        }
     }
 }
 
