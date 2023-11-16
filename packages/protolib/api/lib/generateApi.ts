@@ -143,9 +143,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
             generateEvent({
                 path: entityName + '/create/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
-                user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+                user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
-                    who: '-', //TODO: wire session in dataview to api,
                     id: entityModel.getId(),
                     data: entityModel.read()
                 } // event payload, event-specific data
@@ -207,9 +206,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
             generateEvent({
                 path: entityName + '/update/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
-                user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+                user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
-                    who: '-', //TODO: wire session in dataview to api,
                     id: entityModel.getId(),
                     data: entityModel.read()
                 } // event payload, event-specific data
@@ -233,7 +231,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
             generateEvent({
                 path: entityName + '/delete/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
-                user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+                user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
                     who: '-', //TODO: wire session in dataview to api,
                     id: entityModel.getId(),
