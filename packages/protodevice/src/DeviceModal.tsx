@@ -1,16 +1,21 @@
 import React from "react";
 // import { Modal } from "native-base";
 import compiling from './assets/protofitoCompiling.gif';
+import compilingW from './assets/protofitoCompilingW.gif';
 import loading from './assets/protofitoLoading.gif';
+import loadingW from './assets/protofitoLoadingW.gif';
 import dancing from './assets/protofitoDancing.gif';
+import dancingW from './assets/protofitoDancingW.gif';
 import { AlertDialog } from 'protolib'
-import { Button } from 'tamagui'
+import { Button, useThemeName} from 'tamagui'
+
 
 const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
     const isError = modalFeedback?.details?.error
     const isLoading = ['write'].includes(stage) && !isError && !modalFeedback?.message?.includes('Please hold "Boot"')
     const visibleImage = (isLoading || ['idle', 'compile'].includes(stage)) && !isError
-
+    const themeName = useThemeName();
+    console.log("THEEEEME: ",themeName)
     const stages = {
         'yaml': 'Uploading yaml to the project...',
         'compile': 'Compiling firmware...',
@@ -67,21 +72,21 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                 ? <img
                     alt="protofito loading"
                     style={{ height: "160px", width: "300px", alignSelf: "center", marginTop: "30px", marginBottom: "10px", objectFit: 'cover' }}
-                    src={loading.src}
+                    src={themeName=='light'?loading.src:loadingW.src}
                 />
                 : null}
             {stage == 'idle' && !isError
                 ? <img
                     alt="protofito dancing"
                     style={{ height: "160px", width: "190px", alignSelf: "center", marginTop: "30px", marginBottom: "10px", objectFit: 'cover' }}
-                    src={dancing.src}
+                    src={themeName=='light'?dancing.src:dancingW.src}
                 />
                 : null}
             {stage == 'compile' && !isError
                 ? <img
                     alt="protofito compiling"
                     style={{ height: "160px", width: "180px", alignSelf: "center", marginTop: "30px", marginBottom: "10px", objectFit: 'cover' }}
-                    src={compiling.src}
+                    src={themeName=='light'?compiling.src:compilingW.src}
                 />
                 : null}
             <div style={{ justifyContent: 'center', alignSelf: 'center', display: 'flex', gap: "20px" }}>
