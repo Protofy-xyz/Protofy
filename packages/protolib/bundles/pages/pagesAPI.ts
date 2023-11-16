@@ -1,5 +1,5 @@
 import { PageModel } from ".";
-import { CreateApi, getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition } from '../../api'
+import { CreateApi, getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
@@ -94,4 +94,11 @@ const getDB = (path, req, session) => {
   return db;
 }
 
-export const PagesAPI = CreateApi('pages', PageModel, __dirname, '/adminapi/v1/', '', {}, () => { }, getDB)
+export const PagesAPI = AutoAPI({
+  modelName: 'pages',
+  modelType: PageModel,
+  initialDataDir: __dirname,
+  prefix: '/adminapi/v1/',
+  getDB: getDB,
+  requiresAdmin: ['*']
+})
