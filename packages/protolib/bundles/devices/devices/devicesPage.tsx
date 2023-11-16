@@ -111,7 +111,7 @@ export default {
       //const deviceObj = eval(deviceCode)
     }
     const sendMessage = async (notUsed) => {
-      await fetch('http://bo-firmware.protofy.xyz/api/v1/device/compile')
+      await fetch('https://firmware.protofy.xyz/api/v1/device/compile')
     }
 
     const compile = async () => {
@@ -133,7 +133,7 @@ export default {
 
     const saveYaml = async (yaml) => {
       console.log("Save Yaml")
-      console.log(await callText("http://bo-firmware.protofy.xyz/api/v1/device/edit?configuration=test.yaml", 'POST', yaml));
+      console.log(await callText("https://firmware.protofy.xyz/api/v1/device/edit?configuration=test.yaml", 'POST', yaml));
     }
 
     useEffect(() => {

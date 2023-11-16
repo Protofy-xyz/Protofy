@@ -3,7 +3,7 @@ import { sleep } from "protodevice/src/sleep";
 import { Build, FlashError } from "protodevice/src/const";
 import { manifest } from "protodevice/src/manifest";
 
-const onlineCompilerUrl = "http://bo-firmware.protofy.xyz/api/v1";
+const onlineCompilerUrl = "https://firmware.protofy.xyz/api/v1";
 let port;
 
 const resetTransport = async (transport: Transport) => {
