@@ -1,6 +1,8 @@
 import { z } from "zod";
 import {BaseSchema} from 'protolib/base'
 import { AutoModel } from 'protolib/base'
+import { ProtoModel } from "../../base";
+import { SessionDataType } from "../../api";
 
 export const BaseObjectSchema = z.object({
     id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Model'),
@@ -52,4 +54,20 @@ export const ObjectSchema = z.object({
 });
 
 export type ObjectType = z.infer<typeof ObjectSchema>;
-export const ObjectModel = AutoModel.createDerived<ObjectType>("ObjectModel", ObjectSchema);
+export class ObjectModel extends ProtoModel<ObjectModel> {
+    constructor(data: ObjectType, session?: SessionDataType) {
+        super(data, ObjectSchema, session);
+    }
+
+    getDefaultAPIFilePath() {
+        return '/packages/app/bundles/custom/apis/'+this.data.name+'.ts'
+    }
+    
+    getDefaultSchemaFilePath() {
+        return '/packages/app/bundles/custom/objects/'+this.data.name+'.ts'
+    }
+
+    protected static _newInstance(data: any, session?: SessionDataType): ObjectModel {
+        return new ObjectModel(data, session);
+    }
+}

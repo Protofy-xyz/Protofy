@@ -1,11 +1,11 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView } from 'tamagui'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Dialog } from 'tamagui'
 import { useRemoteStateList, ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List, Layers } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Layers, X } from '@tamagui/lucide-icons'
 import { z } from "zod";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
-import { usePageParams } from 'protolib/next'
+import { usePageParams, useQueryState } from 'protolib/next'
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { getPendingResult } from '../lib/createApiAtom'
@@ -13,6 +13,9 @@ import { DataTableList } from './DataTableList'
 import ActiveRender from "./ActiveRender"
 import { useThemeSetting } from '@tamagui/next-theme'
 import { EditableObjectProps } from './EditableObject';
+
+import { FileWidget } from '../adminpanel/features/components/FilesWidget';
+import { IconContainer } from './IconContainer';
 
 type DataViewState = {
     items: PendingAtomResult,
@@ -83,14 +86,16 @@ export function DataView({
     extraMenuActions = [],
     objectProps = {}
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
-    const [items, setItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/'+((entityName??pluralName)??name+'s')+"/#", model)
+    const [items, setItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/' + ((entityName ?? pluralName) ?? name + 's') + "/#", model)
     // const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
     const [state, setState] = useState(pageState)
-    const { push, mergePush, removePush, replace } = usePageParams(pageState, state, setState)
+    const { push, mergePush, removePush, replace } = usePageParams(state)
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
+
+    useQueryState(setState)
 
     const fetch = async () => {
         const data = await API.get({ url: sourceUrl, ...state })
@@ -118,7 +123,7 @@ export function DataView({
             component: DataTableList,
             props: {
                 sourceUrl,
-                onDelete: () => {},
+                onDelete: () => { },
                 extraMenuActions: extraMenuActions,
                 ...dataTableListProps
             }
@@ -135,7 +140,7 @@ export function DataView({
                 extraFields,
                 icons,
                 ml: "$5",
-                onDelete: () => {},
+                onDelete: () => { },
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 extraMenuActions: extraMenuActions,
                 ...dataTableGridProps
@@ -153,9 +158,43 @@ export function DataView({
     const activeViewIndex = tableViews.findIndex(v => v.name == state.view) != -1 ? tableViews.findIndex(v => v.name == state.view) : tableViews.findIndex(v => v.name == defaultView)
     const { resolvedTheme } = useThemeSetting()
 
+    console.log('editFile: ', state.editFile)
+
+    const getFilenameFromPath = (path) => {
+        const parts = path.split('/');
+        return parts.pop();
+    }
     return (<YStack height="100%" f={1}>
         <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>
             <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
+                <AlertDialog
+                    p={"$0"}
+                    hideAccept
+                    setOpen={(s) => {
+                        removePush('editFile')
+                    }}
+                    open={state.editFile}
+                >
+                    <XStack pt="$4" height={'90vh'} width={"90vw"}>
+                        <FileWidget
+                            isFull={false}
+                            hideCloseIcon={false}
+                            isModified={false}
+                            setIsModified={() => {}}
+                            icons={[
+                                <IconContainer onPress={() => {
+                                    removePush('editFile')
+                                }}>
+                                    <X color="var(--color)" size={"$1"} />
+                                </IconContainer>
+                            ]}
+                            currentFileName={getFilenameFromPath(state.editFile??'')}
+                            currentFile={state.editFile}
+                        />
+                    </XStack>
+
+                </AlertDialog>
+
                 <AlertDialog
                     p={"$2"}
                     pt="$5"

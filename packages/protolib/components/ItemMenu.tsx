@@ -14,7 +14,7 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
             cursor='pointer'
             pressStyle={{ o: 0.7 }}
             hoverStyle={{ bc: "$color5" }}
-            onPress={onPress}>
+            onPress={(e) => onPress(element, e)}>
             <Icon size={"$1"} color="var(--color9)" strokeWidth={2} />
             <Text ml={"$3"}>{text}</Text>
         </XStack>

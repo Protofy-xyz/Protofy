@@ -39,14 +39,14 @@ const Chat = ({ tags = [] }: any) => {
         if (getComputedStyle(parent).position === 'static') {
             parent.style.position = 'relative';
         }
-        console.log('floating image: ', floatingImage)
+
         parent.appendChild(floatingImage);
     };
 
     useEffect(() => {
         // Configuración del MutationObserver
         const mutationObserver = new MutationObserver(mutations => {
-            console.log("mutations:", mutations);
+
             mutations.forEach(mutation => {
                 if (mutation.type === 'childList' && mutation.addedNodes.length) {
                     mutation.addedNodes.forEach(node => {

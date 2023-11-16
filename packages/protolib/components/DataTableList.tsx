@@ -69,7 +69,7 @@ export const DataTableList = ({sourceUrl, onDelete=()=>{}, extraMenuActions=[]})
                                     </Checkbox.Indicator>
                                 </Checkbox>
                             </Stack>
-                            <ItemMenu element={row} sourceUrl={sourceUrl+"/"+model.load(row).getId()} onDelete={onDelete} extraMenuActions={extraMenuActions}/>
+                            <ItemMenu element={model.load(row)} sourceUrl={sourceUrl+"/"+model.load(row).getId()} onDelete={onDelete} extraMenuActions={extraMenuActions}/>
                         </XStack></Theme>, true, '85px'), ...finalColumns]}
                     rows={items?.data?.items}
                     onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}

@@ -1,12 +1,10 @@
-import { getIntent, Center, getPendingResult, PendingAtomResult, useTint} from 'protolib'
-import { H4, Spinner, Stack, XStack, YStack, YStackProps } from '@my/ui'
-import React, { useState } from 'react'
-import { useThemeSetting } from '@tamagui/next-theme'
+import { getIntent, Center} from 'protolib'
+import { H4, Stack, XStack, YStack, YStackProps } from '@my/ui'
+import React from 'react'
 import { lookup } from 'mrmime';
 import { ChonkyActions } from 'chonky';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
-import dynamic from 'next/dynamic'
 import {processIntent} from 'app/bundles/intents'
  
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
@@ -14,11 +12,7 @@ setChonkyDefaults({ iconComponent: ChonkyIconFA });
 ChonkyActions.ToggleHiddenFiles.option.defaultValue = false;
 
 export const FileWidget = ({isFull, hideCloseIcon, isModified=false, setIsModified=() => {}, icons=[], currentFile, currentFileName, ...props }: { isFull: boolean, hideCloseIcon: boolean, headerStart: number, isModified: boolean, setIsModified: any, icons?: React.ReactElement | [], extraIcons?: React.ReactElement[],title: string, currentFile: string, currentFileName: string} & YStackProps) => {
-    const url = ('/adminapi/v1/files/' + currentFile).replace(/\/+/g, '/')
-    const [currentFileContent, setCurrentFileContent] = useState<PendingAtomResult>(getPendingResult('pending'))
-    const { resolvedTheme } = useThemeSetting()
     const mime = lookup(currentFile)
-    const {tint} = useTint()
 
     const resolved = processIntent(getIntent('open', 'files', {isModified, isFull, extraIcons: icons, name: currentFileName, path: currentFile, mime}))
 

@@ -178,7 +178,6 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                                         setSelectedFiles(data.state.selectedFiles)//.map(f => f.name))
                                     } else if (data.id == 'mouse_click_file'){
                                         if ((Math.abs(Date.now() - lastClickTime.current) < 300)) {
-                                            console.log("------------------------------------",data)
                                             onOpen(data.payload.file)
                                         } else {
                                             lastClickTime.current = Date.now()

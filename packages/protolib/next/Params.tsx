@@ -6,12 +6,16 @@ const omitProp = (obj, prop) => {
     const { [prop]: _, ...rest } = obj; 
     return rest;
 };
-  
-export const usePageParams = (initialState, state, setState) => {
-    const { replace, push, query } = useRouter();
+
+export const useQueryState = (setState) => {
+    const { query } = useRouter();
     useUpdateEffect(() => {
         setState(query)
     }, [query])
+}
+  
+export const usePageParams = (state) => {
+    const { replace, push, query } = useRouter();
 
     return {
         push:(key, value, shallow=true) => {
