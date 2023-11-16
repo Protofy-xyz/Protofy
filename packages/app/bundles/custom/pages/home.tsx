@@ -18,12 +18,6 @@ const Home = () => {
           <ContainerLarge contain="layout" pos="relative">
             <BackgroundGradient />
             <YStack f={1} ov="hidden" space="$3" position="relative" pt="$14" mb="$4">
-              {/* <AnounceBubble y={-70} href="/takeout">
-                <Text fontFamily="$silkscreen">Introducing Takeout 🥡</Text>
-                <Text ff="$body" fontSize="$3" color="$color10" $sm={{ dsp: "none" }}>
-                  our new pro starter kit
-                </Text>
-              </AnounceBubble> */}
               <YStack opacity={1} scaleX={1} ai="center" space="$2">
                 <BigTitle scale={1.4} $gtLg={{scale:1.4}}>
                   <RainbowText rainbowType="rainbowSoft" lineHeight={150}>Protofy</RainbowText>
@@ -71,8 +65,6 @@ const Home = () => {
                 </YStack>
               </YStack>
               <Spacer size="$4" />
-              {/*<CopyBubble text="npm create tamagui" />
-              <Spacer size="$1" /> */}
               <XCenterStack>
                 <NextLink target="_blank" href="https://github.com/Protofy-xyz/Protofy">
                   <TooltipContainer tooltipText="Github">
@@ -109,9 +101,6 @@ const Home = () => {
         <ElevatedArea>
           <XStack pos="absolute" als="center" y={-45}>
             <Link target="_blank" href="https://github.com/Protofy-xyz/Protofy">
-              {/* <Theme reset={true}>
-                <ButtonSimple>Star plz</ButtonSimple>
-              </Theme> */}
             </Link>
           </XStack>
           <HorizontalBox>
@@ -288,6 +277,7 @@ export default {
         XStack,
         Paragraph,
         Theme,
+        SizableText
       },
       "/packages/app/bundles/custom/pages/home.tsx"
     ),
