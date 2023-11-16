@@ -19,13 +19,14 @@ export function DataSSR(sourceUrl, allowdUserTypes=['admin', 'editor'], props={}
 export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin', 'editor'], dataProps:any={}, extraData:any={}, workspaces:any=[]) {
   return _SSR(async (context:NextPageContext) => {
     const _dataProps = {
-      itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : 25,
-      page: parseInt(context.query.page as string, 10) ? parseInt(context.query.page as string, 10) : 0,
+      itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : '',
+      page: parseInt(context.query.page as string, 10) ? parseInt(context.query.page as string, 10) : '',
       search: context.query.search ?? '',
       orderBy: context.query.orderBy ?? '',
       orderDirection: context.query.orderDirection ?? '',
       view: context.query.view?? '',
       item: context.query.item?? '',
+      editFile: context.query.editFile??'',
       ...(typeof dataProps === "function"? await dataProps(context) : dataProps),
     }
     const _sourceUrl = typeof sourceUrl === 'function' ? sourceUrl(context) : sourceUrl

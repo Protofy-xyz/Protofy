@@ -83,7 +83,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     const dbPath = '../../data/databases/' + (dbName ? dbName : entityName)
     connectDB(dbPath, initialData) //preconnect database
     const _list = (req, allResults) => {
-        const itemsPerPage = Math.max(Number(req.query.itemsPerPage) || 10, 1);
+        const itemsPerPage = Math.max(Number(req.query.itemsPerPage) || 25, 1);
         const page = Number(req.query.page) || 0;
 
         const orderBy: string = req.query.orderBy as string;

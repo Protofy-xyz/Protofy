@@ -37,7 +37,7 @@ export const DataTableList = ({sourceUrl, onDelete=()=>{}, extraMenuActions=[]})
                 <DataTable2.component
                     pagination={true}
                     conditionalRowStyles={conditionalRowStyles}
-                    rowsPerPage={state.itemsPerPage}
+                    rowsPerPage={state.itemsPerPage ? state.itemsPerPage : 25}
                     handleSort={(column, orderDirection) => mergePush({ orderBy: column.selector, orderDirection })}
                     handlePerRowsChange={(itemsPerPage) => push('itemsPerPage', itemsPerPage)}
                     handlePageChange={(page) => push('page', parseInt(page, 10) - 1)}

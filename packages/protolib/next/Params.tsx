@@ -17,12 +17,22 @@ export const useQueryState = (setState) => {
 export const usePageParams = (state) => {
     const { replace, push, query } = useRouter();
 
+    const cleanState = () => Object.keys(state).reduce((total, current) => {
+        if(state[current] !== '') {
+            return {
+                ...total,
+                [current]: state[current]
+            }
+        }
+        return total
+    }, {}) 
+
     return {
         push:(key, value, shallow=true) => {
             push({
                 query: {
                     ...query,
-                    ...state,
+                    ...cleanState(),
                     [key]: value
                 }
             }, undefined, { shallow: shallow })
@@ -32,7 +42,7 @@ export const usePageParams = (state) => {
             push({
                 query: {
                     ...query,
-                    ...state,
+                    ...cleanState(),
                     ...obj
                 }
             }, undefined, { shallow: true })
@@ -50,7 +60,7 @@ export const usePageParams = (state) => {
             replace({
                 query: {
                     ...query,
-                    ...state,
+                    ...cleanState(),
                     [key]: value
                 }
             }, undefined, { shallow: true })
@@ -59,7 +69,7 @@ export const usePageParams = (state) => {
         mergeReplace: (obj) => {
             replace({
                 query: {
-                    ...query,
+                    ...cleanState(),
                     ...state,
                     ...obj
                 }
