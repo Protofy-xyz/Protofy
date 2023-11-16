@@ -411,7 +411,7 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
 
     const deviceObj = eval(deviceCode)
     // const yaml = deviceObj.setMqttPrefix(process.env.NEXT_PUBLIC_PROJECT_NAME).create()
-    const yaml = deviceObj.setMqttPrefix("newplatform").create(deviceDefinition[0])
+    const yaml = deviceObj.create(deviceDefinition[0])
     yamlRef.current = yaml
 
     setShowModal(true)
