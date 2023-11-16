@@ -10,6 +10,7 @@ import axios from 'axios';
 import { TaskModel } from "../models/Task";
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { runTask } from "./taskRunApi";
+import {getServiceToken} from 'protolib/api/lib/serviceToken'
 
 const dbPath = '../../data/databases/tasks'
 
@@ -131,7 +132,7 @@ const getDB = (path, req, session) => {
         if (exists) {
             console.log('File: ' + filePath + ' already exists, not executing template')
         } else {
-            await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+            await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
                 name: value.name + '.ts',
                 data: {
                 options: { template: '/packages/protolib/bundles/tasks/templateTask.tpl', variables: { params: params} },
@@ -167,7 +168,7 @@ const getDB = (path, req, session) => {
             }
         } else {
             if (value.api) {
-                await axios.post('http://localhost:8080/adminapi/v1/templates/file', {
+                await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
                 name: value.name + 'TaskApi.ts',
                 data: {
                     options: { template: '/packages/protolib/bundles/tasks/templateTaskApi.tpl', variables: { apiRoute: value.apiRoute, name: value.name, capitalizedName: capitalizedName} },
