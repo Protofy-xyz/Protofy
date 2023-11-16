@@ -26,14 +26,14 @@ const Home = () => {
               </AnounceBubble> */}
               <YStack opacity={1} scaleX={1} ai="center" space="$2">
                 <BigTitle scale={1.4} $gtLg={{scale:1.4}}>
-                  <RainbowText lineHeight={150}>Protofy</RainbowText>
+                  <RainbowText rainbowType="rainbowSoft" lineHeight={150}>Protofy</RainbowText>
                 </BigTitle>
                 <XStack alignItems="center" justifyContent="center">
                   <SizableText 
                     $xs={{fontSize: 10, lineHeight: 10, my: '$3'}}
                     $sm={{fontSize: 20, lineHeight: 10, my: '$3'}}
                     $md={{fontSize: 40, lineHeight: 40, my: "$5"}} 
-                    $gtMd={{fontSize: 70, lineHeight: 70}} o={0.9} 
+                    $gtMd={{fontSize: 70, lineHeight: 70}} o={0.8} 
                     textAlign="center" 
                     fontWeight={"800"} 
                     my="$10"><Text fontWeight={800}>LowCode</Text> Development Platform and <Text fontWeight={800}>CMS</Text></SizableText>
@@ -109,20 +109,20 @@ const Home = () => {
         <ElevatedArea>
           <XStack pos="absolute" als="center" y={-45}>
             <Link target="_blank" href="https://github.com/Protofy-xyz/Protofy">
-              <Theme reset={true}>
+              {/* <Theme reset={true}>
                 <ButtonSimple>Star plz</ButtonSimple>
-              </Theme>
+              </Theme> */}
             </Link>
           </XStack>
           <HorizontalBox>
             <HoveredGroup>
-              <SectionBlock id={1} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title={"Open Source"} href="#">
+              <SectionBlock $sm={{width:'100%'}} id={1} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title={"Open Source"} href="#">
                 Published under the permissive MIT license. The things you build on top of Protofy are for yours to keep. We don't force any license on your creations. 
               </SectionBlock>
-              <SectionBlock id={2} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title={"Developer friendly"} href="#">
+              <SectionBlock $sm={{width:'100%', mt: "$5"}} id={2} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title={"Developer friendly"} href="#">
                 Extend the system using React and Javascript / TypeScript, on top of NextJS, Expo and Express. Build beautiful interfaces with Tamagui.
               </SectionBlock>
-              <SectionBlock id={3} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title={"LowCode"} href="#">
+              <SectionBlock $sm={{width:'100%', mt: "$5"}} id={3} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title={"LowCode"} href="#">
                 Protofy provides a beautiful admin panel to manage your project. You can create and manage the system entities visually.
               </SectionBlock>
             </HoveredGroup>
