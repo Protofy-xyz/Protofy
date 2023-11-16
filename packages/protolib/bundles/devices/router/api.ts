@@ -2,14 +2,11 @@ import {generateEvent} from 'app/bundles/library'
 import {getServiceToken} from 'protolib/api/lib/serviceToken'
 
 export const DeviceMessageRouter = (app, context) => {
-    console.log('context: ', context)
     context.mqtt.subscribe("test", (err) => {
         if(err) {
             console.error("Error subscring to topic", err)
         }
-        console.log("Subscribed to test")
     });
-
 
     context.mqtt.on("message", (topic, message) => {
         const parsedMessage = message.toString() //or JSON.parse(message.toString())

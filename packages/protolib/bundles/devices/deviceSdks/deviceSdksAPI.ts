@@ -1,4 +1,10 @@
 import { DeviceSdkModel } from ".";
-import { CreateApi } from '../../../api'
+import { AutoAPI, CreateApi } from '../../../api'
 
-export const DeviceSdksAPI = CreateApi('devicesdks', DeviceSdkModel, __dirname, '/adminapi/v1/')
+export const DeviceSdksAPI = AutoAPI({
+    modelName: 'devicesdks',
+    modelType: DeviceSdkModel,
+    initialDataDir: __dirname,
+    prefix: '/adminapi/v1/',
+    requiresAdmin: ['*']
+})
