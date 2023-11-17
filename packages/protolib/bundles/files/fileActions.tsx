@@ -4,12 +4,12 @@ import { CopyBubble, NextLink, Center } from 'protolib';
 import { API } from '../../lib/Api';
 import { useState } from 'react';
 
-const CreateComponent = ({onCreate}) => {
-    const [inputValue, setInputValue] = useState('');
+const CreateComponent = ({ onCreate, buttonText, defaultInput="" }) => {
+    const [inputValue, setInputValue] = useState(defaultInput);
     return <>
         <YStack f={1} jc='center' ai='center'>
             <Input width={"300px"} mt={"$7"} value={inputValue} onChange={e => setInputValue(e.target.value)}></Input>
-            <Button onPress={() => onCreate(inputValue)} mt={"$6"} width={"150px"}>Create</Button>
+            <Button onPress={() => onCreate(inputValue)} mt={"$6"} width={"150px"}>{buttonText}</Button>
         </YStack>
     </>
 }
@@ -49,7 +49,9 @@ const fileActions = [
     },
     {
         getComponent: (selected, path, setCustomAction, setFiles) => {
-            return <CreateComponent onCreate={(name)=>{API.post('/adminapi/v1/directories/'+path.replace(/\/+/g, '/')+'/'+name, {content:""}); setCustomAction(false); setFiles()}} />
+            return <CreateComponent 
+            buttonText={"Create directory"}
+            onCreate={(name) => { API.post('/adminapi/v1/directories/' + path.replace(/\/+/g, '/') + '/' + name, { content: "" }); setCustomAction(false); setFiles() }} />
         },
         title: "Create folder",
         size: {
@@ -61,14 +63,16 @@ const fileActions = [
             button: {
                 name: "Create folder",
                 toolbar: true,
-                icon: ChonkyIconName.folder,
+                icon: ChonkyIconName.folderCreate,
                 group: 'Actions'
             }
         }
     },
     {
         getComponent: (selected, path, setCustomAction, setFiles) => {
-            return <CreateComponent onCreate={(name)=>{API.post('/adminapi/v1/files/'+path.replace(/\/+/g, '/')+'/'+name, {content:""}); setCustomAction(false); setFiles()}} />
+            return <CreateComponent 
+            buttonText={"Create file"}
+            onCreate={(name) => { API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/') + '/' + name, { content: "" }); setCustomAction(false); setFiles() }} />
         },
         title: "Create file",
         size: {
@@ -84,7 +88,33 @@ const fileActions = [
                 group: 'Actions'
             }
         }
-    }
+    }, 
+    {
+        getComponent: (selected, path, setCustomAction, setFiles) => {
+            console.log("PSEEEEEEEEEL", selected)
+            return <CreateComponent 
+            buttonText={"Rename"}
+            defaultInput={selected[0].name}
+            onCreate={(name) => { API.post('/adminapi/v1/renameItem', { currentPath: path.replace(/\/+/g, '/')  + '/' + selected[0].name, newName: name }); setCustomAction(false); setFiles() }} />
+        },
+        title: "Rename",
+        filter: (path, selected) => {
+            return selected.length == 1
+        },
+        size: {
+            width: 500,
+            height: 200
+        },
+        action: {
+            id: "rename",
+            button: {
+                name: "Rename",
+                toolbar: true,
+                icon: ChonkyIconName.folderChainSeparator,
+                group: 'Actions'
+            }
+        }
+    },
 
 ];
 
