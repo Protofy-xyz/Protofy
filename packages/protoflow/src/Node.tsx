@@ -245,17 +245,20 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
             case 'range':
                 const min = param.data?.min ? param.data.min : 0
                 const max = param.data?.max ? param.data.max : 100
-                const initialRangeValue = nodeData[param.field] ? nodeData[param.field] : min
+                const step = param.data?.step
+                const defaultValue = param.data?.defaultValue
+                const initialRangeValue = nodeData[param.field] ? nodeData[param.field] : (defaultValue ?? min)
                 const [tmpRangeValue, setTmpRangeValue] = React.useState(initialRangeValue);
                 return <>
-                    <input type="range" style={{ maxWidth: '225px', marginTop: '6px' }}
+                    <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: useTheme('interactiveColor'), height: '5px', borderWidth: '4px solid blue', backgroundColor: useTheme("inputBackgroundColor"), borderRadius: '10px' }}
+                        step={step}
                         onChange={(event: any) => setTmpRangeValue(event.target.value)}
                         onMouseUp={() => {
                             dataNotify({ id: id, paramField: param.field, newValue: tmpRangeValue });
                             setNodeData(id, { ...nodeData, [param.field]: tmpRangeValue })
                         }}
-                        value={tmpRangeValue} min={min} max={max} className="nodrag" />
-                    {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '5px', left: '7px' }}>{nodeData[param.field] ? nodeData[param.field] : min}</div> : null}
+                        value={tmpRangeValue} min={min} max={max}/>
+                    {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '5px', left: '7px', marginRight: '-8px', width: '10px' }}>{nodeData[param.field] ? nodeData[param.field] : initialRangeValue}</div> : null}
                 </>
             case 'boolean':
                 const stringToBolean = (myVar) => {
