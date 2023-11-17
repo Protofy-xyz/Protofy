@@ -32,6 +32,7 @@ class Relay {
           //aqui estan todos los elementos del yaml anidado
           platform: this.platform,
           pin: pin,
+          name: this.name,
           id: this.name,
           restore_mode: this.restoreMode,
         },
@@ -63,7 +64,7 @@ class Relay {
         {
           name: 'Turn on',
           description: 'turns on the gpio',
-          endpoint: '/switch/command',
+          endpoint: "/"+this.type+"/"+this.name+"/command",
           connectionType: 'mqtt',
           payload: {
             type: 'str',
@@ -73,7 +74,7 @@ class Relay {
         {
           name: 'Turn off',
           description: 'turns off the gpio',
-          endpoint: '/switch/command',
+          endpoint: "/"+this.type+"/"+this.name+"/command",
           connectionType: 'mqtt',
           payload: {
             type: 'str',
@@ -83,22 +84,14 @@ class Relay {
         {
           name: 'Toggle',
           description: 'Toggles the gpio',
-          endpoint: '/switch/command',
+          endpoint: "/"+this.type+"/"+this.name+"/command",
           connectionType: 'mqtt',
           payload: {
             type: 'str',
             value: 'TOGGLE',
           },
         },
-      ],
-      monitors: [
-        {
-          name: 'Relay status',
-          description: 'Gets the status of the relay',
-          endpoint: '/switch/state',
-          connectionType: 'mqtt',
-        },
-      ],
+      ]
     }
   }
 }

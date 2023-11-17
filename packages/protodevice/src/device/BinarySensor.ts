@@ -47,7 +47,7 @@ class BinarySensor {
                 {
                     name: "Button status",
                     description: "Get binary sensor status",
-                    endpoint: "/binary_sensor/"+this.name+"/state",
+                    endpoint: "/"+this.type+"/"+this.name+"/state",
                     connectionType: "mqtt",
                 }
             ]
