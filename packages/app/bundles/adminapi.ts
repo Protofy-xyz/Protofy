@@ -11,6 +11,7 @@ import { DeviceBoardsAPI } from 'protolib/bundles/devices/deviceBoards/deviceBoa
 import { DeviceDefinitionsAPI } from 'protolib/bundles/devices/deviceDefinitions/deviceDefinitionsAPI'
 import { DeviceMessageRouter } from 'protolib/bundles/devices/router/api'
 import { TaskApi } from 'protolib/bundles/tasks/api/taskApi'
+import { TaskRunApi } from 'protolib/bundles/tasks/api/taskRunApi'
 import { DatabasesAPI } from 'protolib/bundles/databases/databasesAPI'
 import { WorkspacesAPI } from 'protolib/bundles/workspaces/workspacesAPI'
 import { ResourcesAPI } from 'protolib/bundles/resources/resourcesAPI'
@@ -29,6 +30,7 @@ export default (app, context) => {
   DeviceDefinitionsAPI(app, context)
   DeviceMessageRouter(app, context)
   TaskApi(app, context)
+  TaskRunApi(app, context)
   DatabasesAPI(app, context)
   WorkspacesAPI(app, context)
   ResourcesAPI(app, context)
