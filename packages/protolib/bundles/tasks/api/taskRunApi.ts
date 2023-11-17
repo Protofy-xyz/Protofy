@@ -1,6 +1,6 @@
 import { TaskRunModel } from "../models/TaskRun";
 import {Tasks} from 'app/bundles/tasks'
-import { getDB } from '../../../api'
+import { AutoAPI, getDB } from '../../../api'
 import { generateEvent } from 'app/bundles/library'
 import {getServiceToken} from 'protolib/api/lib/serviceToken'
 
@@ -58,3 +58,23 @@ export const runTask = async (name, parameters, session, onDone?, onError?, onNo
         if(onError) onError(err)
     }
 }
+
+export const TaskRunApi = AutoAPI({
+    modelName: 'taskruns',
+    modelType: TaskRunModel,
+    initialDataDir: __dirname,
+    prefix: '/adminapi/v1/',
+    getDB: getDB,
+    requiresAdmin: ['*'],
+    // extraData: {
+    //   prelist: async (session) => {
+    //     const companies = await axios.get('http://localhost:8080/adminapi/v1/companies?itemsPerPage=1000')
+    //     const company = await companies?.data?.items.find(i => i.email == session.user.id)
+    //     return {
+    //       company
+    //     }
+    //   }
+    // }
+  })
+
+
