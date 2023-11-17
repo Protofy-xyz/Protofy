@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple } from 'protolib'
+import { API, DataTable2, DataView, ButtonSimple, Tinted } from 'protolib'
 import { z } from 'zod';
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
 import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
 import DeviceModal from 'protodevice/src/DeviceModal'
 import deviceFunctions from 'protodevice/src/device'
+import subsystem from 'protodevice/src/nodes/utils/subsystem'
+import { Paragraph, XStack, YStack } from '@my/ui';
 
-const MqttTest = ({onSetStage,onSetModalFeedback}) => {
+const MqttTest = ({ onSetStage, onSetModalFeedback }) => {
   const { message } = useSubscription(['device/compile']);
   useEffect(() => {
     console.log("Compile Message: ", message);
@@ -67,7 +69,6 @@ const callText = async (url: string, method: string, params?: string, token?: st
 
 export default {
   component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
-
     if (typeof window !== 'undefined') {
       Object.keys(deviceFunctions).forEach(k => (window as any)[k] = deviceFunctions[k])
     } else {
@@ -101,8 +102,8 @@ export default {
       const deviceObj = eval(deviceCode)
       const componentsTree = deviceObj.getComponentsTree(deviceName, deviceDefinition)
       const yaml = deviceObj.dump("yaml")
-      const subsystems = deviceObj.getSubsystemsTree(deviceName,deviceDefinition)
-      API.post("/adminapi/v1/devices/"+deviceName,{subsystem: subsystems, deviceDefinition: deviceDefinitionId})
+      const subsystems = deviceObj.getSubsystemsTree(deviceName, deviceDefinition)
+      API.post("/adminapi/v1/devices/" + deviceName, { subsystem: subsystems, deviceDefinition: deviceDefinitionId })
       console.log("ComponentsTree: ", componentsTree)
       console.log("Subsystems: ", subsystems)
       yamlRef.current = yaml
@@ -195,7 +196,7 @@ export default {
     return (<AdminPage title="Devices" pageSession={pageSession}>
       <Connector brokerUrl="wss://firmware.protofy.xyz/ws">
         <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
-        <MqttTest onSetStage={(v)=>setStage(v)} onSetModalFeedback={(v)=>setModalFeedback(v)}/>
+        <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} />
       </Connector>
       <DataView
         itemData={itemData}
@@ -217,7 +218,25 @@ export default {
         model={DevicesModel}
         pageState={pageState}
         icons={DevicesIcons}
-        dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
+        //dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
+        dataTableGridProps={{
+          itemMinHeight: 320,
+          itemMinWidth: 320,
+          spacing: 20,
+          onSelectItem: () => { },
+          getBody: (data, width) => {
+            var subsystemData = []
+            data.subsystem.forEach(element => {
+              subsystemData.push(subsystem(element, data.name))
+            });
+            return <YStack px={"$2"} pb="$5" f={1}>
+              <Tinted>
+                <Paragraph mt="20px" ml="20px" fontWeight="700" size="$7">{data.name}</Paragraph>
+                {subsystemData}
+              </Tinted>
+            </YStack>
+          }
+        }}
       />
     </AdminPage>)
   },
