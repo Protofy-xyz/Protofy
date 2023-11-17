@@ -92,12 +92,11 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
             allResults = modelClass.sort(allResults, orderBy, orderDirection)
         }
 
-        const paginatedResults = allResults.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
         const result = {
-            items: paginatedResults,
+            items: req.query.all ? allResults : allResults.slice(page * itemsPerPage, (page + 1) * itemsPerPage),
             total: allResults.length,
-            page: page,
-            pages: Math.ceil(allResults.length / itemsPerPage)
+            page: req.query.all? 0 : page,
+            pages: req.query.all ? 1 : Math.ceil(allResults.length / itemsPerPage)
         }
         return result
     }
