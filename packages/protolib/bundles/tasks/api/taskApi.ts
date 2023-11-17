@@ -50,16 +50,10 @@ const indexFile = tasksDir + "index.ts"
 const apiIndex = fspath.join(apiDir, 'index.ts')
 
 const getTask = async (taskPath) => {
-  const sourceFile = getSourceFile(taskPath)
-  const node = getDefinition(sourceFile, '"params"')
-
   const name = fspath.basename(taskPath, fspath.extname(taskPath))
   const apiPath = fspath.join(apiDir, name+'TaskApi.ts')
-
-  
   let hasApi
   let apiRoute = ''
-
   try {
     await fs.access(apiPath, fs.constants.F_OK)
     const sourceFile = getSourceFile(apiPath)
@@ -70,32 +64,11 @@ const getTask = async (taskPath) => {
     hasApi = false
   }
 
-  let keys = {}
-  if (node) {    
-    if (node instanceof ObjectLiteralExpression) {
-      node.getProperties().forEach(prop => {
-        if (prop instanceof PropertyAssignment) {
-          // obj[prop.getName()] = prop.getInitializer().getText();
-          const chain = extractChainCalls(prop.getInitializer())
-          console.log('chain: ', chain)
-          if (chain.length) {
-            const typ = chain.shift()
-            keys[prop.getName()] = {
-              type: typ.name,
-              required: chain.find((c => c.name == 'optional')) ? false : true
-            }
-          }
-        }
-      });
-    }
-  }
-
   return {
     name: name,
     path: 'packages/app/bundles/custom/tasks/',
     api: hasApi,
-    apiRoute: apiRoute,
-    params: keys
+    apiRoute: apiRoute
   }
 } 
 
@@ -113,13 +86,7 @@ const getDB = (path, req, session) => {
     async put(key, value) {
         value = JSON.parse(value)
         const capitalizedName = value.name.charAt(0).toUpperCase() + value.name.slice(1)
-        const params = "{" + Object.keys(value.params).reduce((total, current, i) => {
-            const v = value.params[current]
-            return total + "\n\t" + current + ": " + "z." + v.type + "()" + (!value.required?".optional()":"") +","
-          }, '').slice(0, -1) + "\n}"
     
-        
-
         let exists
         const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/tasks/' + fspath.basename(value.name) + '.ts'
         try {
@@ -135,7 +102,7 @@ const getDB = (path, req, session) => {
             await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
                 name: value.name + '.ts',
                 data: {
-                options: { template: '/packages/protolib/bundles/tasks/templateTask.tpl', variables: { params: params} },
+                options: { template: '/packages/protolib/bundles/tasks/templateTask.tpl', variables: {} },
                 path: '/packages/app/bundles/custom/tasks'
                 }
             })

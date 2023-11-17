@@ -1,7 +1,7 @@
 
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { TaskModel } from '../models/Task'
-import {DataView, DataTable2, Chip, API, withSession, Center, Tinted, AsyncView, EditableObject, getPendingResult} from 'protolib'
+import {getURLWithToken, DataTable2, Chip, API, withSession, Center, Tinted, AsyncView, EditableObject, getPendingResult} from 'protolib'
 import { useRouter } from "next/router"
 import { SSR } from 'app/conf'
 import { H2, Paragraph, XStack, YStack } from '@my/ui'
@@ -52,7 +52,7 @@ export const TaskPage = {
     }, 
 
     getServerSideProps: SSR(async (context) => withSession(context, ['admin', 'editor'], async () => {
-        const task = await API.get('/adminapi/v1/tasks/'+context.query.name[2])
+        const task = await API.get(getURLWithToken('/adminapi/v1/tasks/'+context.query.name[2], context))
         return {
             task: task,
             taskId: context.query.name[2],
