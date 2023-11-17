@@ -115,6 +115,7 @@ const handleFilesWriteRequest = async (req, res, session) => {
 
 const handleDirectoryCreateRequest = async (req, res, session) => {
     const name = req.params.path || '';
+
     const dirPath = path.join(PROJECT_WORKSPACE_DIR, name);
     try {
         await fs.mkdir(dirPath, { recursive: true }); // recursive: true permite crear directorios anidados si no existen
@@ -166,6 +167,33 @@ const handleDeleteRequest = async (req, res, session) => {
     }
 };
 
+const handleRenameRequest = async (req, res, session) => {
+    const { currentPath, newName } = req.body;
+
+    if (!currentPath || !newName) {
+        return res.status(400).send({ error: "Missing parameters" });
+    }
+
+    const oldPath = path.join(PROJECT_WORKSPACE_DIR, currentPath);
+    const newPath = path.join(PROJECT_WORKSPACE_DIR, path.dirname(currentPath), newName);
+
+    try {
+        await fs.rename(oldPath, newPath);
+        generateEvent({
+            path: 'files/rename',
+            from: 'api',
+            user: session.user.id,
+            payload: { 'oldPath': currentPath, 'newPath': newName }
+        }, getServiceToken());
+
+        res.status(200).send({ result: "Item renamed successfully" });
+    } catch (error) {
+        console.error("Error renaming item:", error);
+        res.status(500).send({ error: "Error renaming item" });
+    }
+};
+
+
 const requireAdmin = () => handler(async (req, res, session, next) => {
     if(!session || !session.user.admin) {
         res.status(401).send({error: "Unauthorized"})
@@ -173,6 +201,7 @@ const requireAdmin = () => handler(async (req, res, session, next) => {
     }
     next()
 })
+
 
 //Route to delete files and directories
 app.post('/adminapi/v1/deleteItems/:path(*)', requireAdmin(), handler(handleDeleteRequest));
@@ -185,4 +214,6 @@ app.post('/adminapi/v1/files/:path(*)', requireAdmin(), upload.single('file'), h
 app.post('/adminapi/v1/directories/:path(*)', requireAdmin(), handler(handleDirectoryCreateRequest));
 
 app.get('/adminapi/v1/files/:path(*)', requireAdmin(), handler(handleFilesRequest));
+
+app.post('/adminapi/v1/renameItem', requireAdmin(), handler(handleRenameRequest));
 
