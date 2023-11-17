@@ -41,7 +41,7 @@ export const DataTableList = ({sourceUrl, onDelete=()=>{}, extraMenuActions=[]})
                     handleSort={(column, orderDirection) => mergePush({ orderBy: column.selector, orderDirection })}
                     handlePerRowsChange={(itemsPerPage) => push('itemsPerPage', itemsPerPage)}
                     handlePageChange={(page) => push('page', parseInt(page, 10) - 1)}
-                    currentPage={parseInt(state.page, 10) + 1}
+                    currentPage={(isNaN(parseInt(state.page, 10))?0:parseInt(state.page, 10)) + 1}
                     totalRows={items?.data?.total}
                     columns={[DataTable2.column(
                         <Theme reset><Stack ml="$3" o={0.8}>

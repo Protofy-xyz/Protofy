@@ -23,9 +23,10 @@ export class TaskModel extends ProtoModel<TaskModel> {
 
     private getExtraData(extraData) {
         if(!extraData) return {}
-        console.log('Extra data: ', extraData)
+
         return {
             numExecutions: extraData?.history?.total ?? 0,
+            numRunning: extraData?.running?.total,
             status: extraData?.running?.total > 0 ? 'running' : 'idle'
         }
     }
