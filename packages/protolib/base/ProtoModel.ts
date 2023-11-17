@@ -73,12 +73,12 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.create(newData);
     }
 
-    read(): any {
+    read(extraData?): any {
         return {...this.data}
     }
 
-    async readTransformed(transformers={}): Promise<any> {
-        const result = await (this.getObjectSchema().apply('read', this.read(), transformers))
+    async readTransformed(transformers={}, extraData?): Promise<any> {
+        const result = await (this.getObjectSchema().apply('read', this.read(extraData), transformers))
         return result;
     }
 

@@ -110,7 +110,8 @@ export function DataView({
         }
     }, [items])
 
-    useUpdateEffect(() => { fetch() }, [state])
+
+    useUpdateEffect(() => { fetch() }, [state.orderBy+'_'+state.itemsPerPage+'_'+state.page+'_'+state.search+'_'+state.orderDirection])
 
     const onSearch = async (text) => push("search", text, false)
     const onCancelSearch = async () => setCurrentItems(items)

@@ -21,6 +21,20 @@ export class TaskModel extends ProtoModel<TaskModel> {
         return '/packages/app/bundles/custom/tasks/'+this.data.name+'.ts'
     }
 
+    list(search?, session?, extraData?): any {
+        if (search) {
+            if (!super.list(search)) {
+                return undefined
+            }
+        }
+
+        return {...this.read(), numExecutions: extraData.history.total ?? 0}
+    }
+
+    read(extraData?): any {
+        return {...super.read(), ...(extraData?{numExecutions: extraData.history.total ?? 0}:{})}
+    }
+
     protected static _newInstance(data: any, session?: SessionDataType): TaskModel {
         return new TaskModel(data, session);
     }
