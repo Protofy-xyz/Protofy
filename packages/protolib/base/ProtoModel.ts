@@ -69,7 +69,6 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
             const { parsed, searchWithoutTags } = parseSearch(search);
 
             for (const [key, value] of Object.entries(parsed)) {
-                console.log('comparing: ', "|"+this.data[key]+"|", 'with: ', "|"+value+"|")
                 if (!this.data.hasOwnProperty(key) || this.data[key] != value) {
                     console.log('discarded: ', this.data[key])
                     return
