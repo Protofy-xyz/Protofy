@@ -3,12 +3,13 @@ import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { TaskModel } from '../models/Task'
 import {DataView, DataTable2, Chip, API} from 'protolib'
 import { useRouter } from "next/router"
-import { Mail, Tag, Key, User, Zap } from '@tamagui/lucide-icons';
+import { Pencil, Zap } from '@tamagui/lucide-icons';
+import { usePageParams } from '../../../next';
 
 export const TasksPage = {
     component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
         const router = useRouter()
-
+        const {replace} = usePageParams(pageState)
         return (<AdminPage title="Tasks" pageSession={pageSession}>
             <DataView
                 defaultView={'list'}
@@ -28,6 +29,13 @@ export const TasksPage = {
                     // DataTable2.column("last login", "lastLogin",true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'NEVER'} color={'$yellow6'} /> )
                 )}
                 // hideAdd={true}
+                extraMenuActions = {[
+                    {
+                        text:"Edit Task file", 
+                        icon:Pencil, 
+                        action: (element) => { replace('editFile', element.getDefaultFilePath()) },
+                        isVisible: (data)=>true}
+                ]}
                 model={TaskModel} 
                 pageState={pageState}
                 icons={{}}

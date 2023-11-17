@@ -35,7 +35,7 @@ export default {
                     }}
                     extraMenuActions = {[
                         {
-                            text:"Edit Object file", 
+                            text:"Edit Page file", 
                             icon:Pencil, 
                             action: (element) => { replace('editFile', element.getDefaultFilePath()) },
                             isVisible: (data)=>true}
