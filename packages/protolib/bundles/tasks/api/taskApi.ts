@@ -17,6 +17,13 @@ const dbPath = '../../data/databases/tasks'
 export const TaskApi = (app, mqtt) => {
   connectDB(dbPath) //preconnect database
 
+  const addExtraData = async (session, element) => {
+    return {
+      history: (await axios.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&search=task:'+element.getId())).data,
+      running: (await axios.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&all=1&search=task:'+element.getId()+' status:running')).data
+    }
+  }
+
   const CrudAPI = AutoAPI({
     modelName: 'tasks',
     modelType: TaskModel,
@@ -25,16 +32,8 @@ export const TaskApi = (app, mqtt) => {
     getDB: getDB,
     requiresAdmin: ['*'],
     extraData: {
-      read: async (session, element) => {
-        return {
-          history: (await axios.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&search=task:'+element.getId())).data
-        }
-      },
-      list: async (session, element) => {
-        return {
-          history: (await axios.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&search=task:'+element.getId())).data
-        }
-      }
+      read: addExtraData,
+      list: addExtraData
     }
   })
   CrudAPI(app, mqtt)

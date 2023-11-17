@@ -21,6 +21,15 @@ export class TaskModel extends ProtoModel<TaskModel> {
         return '/packages/app/bundles/custom/tasks/'+this.data.name+'.ts'
     }
 
+    private getExtraData(extraData) {
+        if(!extraData) return {}
+        console.log('Extra data: ', extraData)
+        return {
+            numExecutions: extraData?.history?.total ?? 0,
+            status: extraData?.running?.total > 0 ? 'running' : 'idle'
+        }
+    }
+
     list(search?, session?, extraData?): any {
         if (search) {
             if (!super.list(search)) {
@@ -28,11 +37,11 @@ export class TaskModel extends ProtoModel<TaskModel> {
             }
         }
 
-        return {...this.read(), numExecutions: extraData.history.total ?? 0}
+        return {...this.read(), ...this.getExtraData(extraData)}
     }
 
     read(extraData?): any {
-        return {...super.read(), ...(extraData?{numExecutions: extraData.history.total ?? 0}:{})}
+        return {...super.read(), ...this.getExtraData(extraData)}
     }
 
     protected static _newInstance(data: any, session?: SessionDataType): TaskModel {

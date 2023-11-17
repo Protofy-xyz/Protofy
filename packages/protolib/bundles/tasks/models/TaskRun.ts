@@ -50,26 +50,6 @@ export class TaskRunModel extends ProtoModel<TaskRunModel> {
         }, this.session)
     }
 
-    list(search?): any {
-        if(search) {
-            if(search.startsWith("task:")){
-                const task = search.slice("task:".length).toLowerCase().split(" ")[0]
-                if(this.data.task && this.data.task.toLowerCase() == task) {
-                    return this.read();
-                }
-            } else {
-                const searchFields = this.objectSchema.is('search').getFields()
-                for(var i=0;i<searchFields.length;i++) {
-                    if(((this.data[searchFields[i]]+"").toLowerCase()).includes(search.toLowerCase())) {
-                        return this.read();
-                    }
-                }
-            }
-        } else {
-            return this.read();
-        }
-    }
-
     protected static _newInstance(data: any, session?: SessionDataType): TaskRunModel {
         return new TaskRunModel(data, session);
     }

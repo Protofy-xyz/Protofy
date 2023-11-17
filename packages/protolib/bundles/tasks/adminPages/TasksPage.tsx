@@ -5,10 +5,12 @@ import {DataView, DataTable2, Chip, API} from 'protolib'
 import { useRouter } from "next/router"
 import { Pencil, Zap } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
+import { Spinner } from 'tamagui';
 
 export const TasksPage = {
     component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
         const router = useRouter()
+        
         const {replace} = usePageParams(pageState)
         return (<AdminPage title="Tasks" pageSession={pageSession}>
             <DataView
@@ -23,7 +25,8 @@ export const TasksPage = {
                     DataTable2.column("name", "name", true, undefined, true, '350px'),
                     DataTable2.column("api", "api", true, row => <Chip text={row.api?'yes':'no'} color={row.api ? '$color5':'$gray5'} />, true),
                     DataTable2.column("api route", "apiRoute", true, undefined, true, '350px'),
-                    DataTable2.column("num. executions", "numExecutions", true)
+                    DataTable2.column("num. executions", "numExecutions", true, undefined, true, '150px'),
+                    DataTable2.column("status", "status", true, row => <Chip loading={row.status == 'running'} text={row.status} color={row.status == 'running'? '$color5':'$gray5'} />)
                     // DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'admin' ? '$color5':'$gray5'} />),
                     // DataTable2.column("from", "from", true, row => <Chip text={row.from?.toUpperCase()} color={row.from == 'cmd' ? '$blue5':'$gray5'} />),
                     // DataTable2.column("created", "createdAt", true, row => moment(row.createdAt).format(format)),
@@ -43,5 +46,8 @@ export const TasksPage = {
             />
         </AdminPage>)
     }, 
-    getServerSideProps: PaginatedDataSSR('/adminapi/v1/tasks', ['admin', 'editor'])
+    getServerSideProps: PaginatedDataSSR('/adminapi/v1/tasks', ['admin', 'editor'], {
+        orderBy: 'status',
+        orderDirection: 'desc'
+    })
 }
