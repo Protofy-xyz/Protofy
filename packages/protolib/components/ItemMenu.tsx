@@ -14,7 +14,7 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
             cursor='pointer'
             pressStyle={{ o: 0.7 }}
             hoverStyle={{ bc: "$color5" }}
-            onPress={(e) => onPress(element, e)}>
+            onPress={(e) => {onPress(element, e), setMenuOpened(false)}}>
             <Icon size={"$1"} color="var(--color9)" strokeWidth={2} />
             <Text ml={"$3"}>{text}</Text>
         </XStack>
@@ -52,7 +52,7 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
                             {extraMenuActions.map((action) => {
                                 return action.isVisible && action.isVisible(element) && <MenuButton text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
                             })}
-                            <MenuButton text={"Delete"} Icon={Trash2} onPress={(e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
+                            <MenuButton text={"Delete"} Icon={Trash2} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
                         </YStack>
                     </YStack>
                 </Tinted>
