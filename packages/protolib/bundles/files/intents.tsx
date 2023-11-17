@@ -53,6 +53,21 @@ const JSONViewer = ({ extraIcons, name, path }) => {
     </AsyncView>
 }
 
+const SaveButton = ({ path, getContent, positionStyle }) => {
+    const onSave = async () => {
+        const content = getContent();
+        await API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/'), { content });
+    };
+
+    return (
+        <XStack position="absolute" {...positionStyle}>
+            <IconContainer onPress={onSave}>
+                <Save color="var(--color)" size={"$1"} />
+            </IconContainer>
+        </XStack>
+    );
+};
+
 const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) => {
     const [fileContent] = useFileFromAPI(path)
     const [loaded, setLoaded] = useState(false)
@@ -68,9 +83,6 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
     const { resolvedTheme } = useThemeSetting()
     const [mode, setMode] = useState('code')
 
-    const onSave = async () => {
-        await API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/'), { content: sourceCode.current })
-    }
     return <AsyncView atom={fileContent}>
         <XStack mt={isFull ? 50 : 30} f={1} width={"100%"}>
             {/* <Theme name={tint as any}> */}
@@ -83,10 +95,11 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
                         {/* <SizableText mr={"$2"}>Save</SizableText> */}
                         <Code color="var(--color)" size={isFull ? "$2" : "$1"} />
                     </IconContainer>}
-                <IconContainer onPress={onSave}>
-                    {/* <SizableText mr={"$2"}>Save</SizableText> */}
-                    <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
-                </IconContainer>
+                <SaveButton
+                    path={path}
+                    getContent={() => sourceCode.current}
+                    positionStyle={{ position: "relative" }}
+                />
                 {extraIcons}
             </XStack>
             {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={sourceCode.current} onChange={(code) => { sourceCode.current = code }} /> : <FlowsWidget
@@ -105,13 +118,34 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
 }
 
 const MonacoViewer = ({ path }) => {
-    const [fileContent, setFileContent] = useFileFromAPI(path)
+    const [fileContent] = useFileFromAPI(path)
+    const sourceCode = useRef(''); 
     const { resolvedTheme } = useThemeSetting()
-    return <AsyncView waitForLoading={1000} key={path} atom={fileContent}>
-        <XStack mt={30} f={1} width={"100%"}>
-            <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={fileContent.data} />
-        </XStack>
-    </AsyncView>
+
+    useEffect(() => {
+        if (fileContent.isLoaded) {
+            sourceCode.current = fileContent.data;
+        }
+    }, [fileContent]);
+
+    return (
+        <AsyncView waitForLoading={1000} key={path} atom={fileContent}>
+            <XStack mt={30} f={1} width={"100%"}>
+
+                <SaveButton
+                    path={path}
+                    getContent={() => sourceCode.current}
+                    positionStyle={{ right: 55, top: -33 }}
+                />
+                <Monaco
+                    path={path}
+                    darkMode={resolvedTheme == 'dark'}
+                    sourceCode={fileContent.data}
+                    onChange={(code) => { sourceCode.current = code; }}
+                />
+            </XStack>
+        </AsyncView>
+    );
 }
 
 export const processFilesIntent = ({ action, domain, data }: IntentType) => {
