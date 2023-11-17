@@ -50,7 +50,7 @@ export const DeleteButton = ({ id, left = false, field }) => {
         deletePropNodeData(id, field);
     }
 
-    return <div id={'deleteButton-' + id + field} style={{ display:'flex', alignSelf: 'center', cursor: 'pointer' }} onClick={onDeleteParam}>
+    return <div id={'deleteButton-' + id + field} style={{ display: 'flex', alignSelf: 'center', cursor: 'pointer' }} onClick={onDeleteParam}>
         <X size={useTheme('nodeFontSize')} color={useTheme("colorError")} style={{ marginRight: left ? '7px' : '2px' }} />
     </div>
 }
@@ -224,12 +224,22 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 </div>
 
             case 'colorPicker':
-                const initColor = nodeData[param.field] ? pre(nodeData[param.field]) : { r: 242, g: 177, b: 52, a: 1 }
+                const initColor = nodeData[param.field] ? pre(nodeData[param.field]) : "#404040"
                 const [colorPickerVisible, setColorPickerVisible] = React.useState(false);
                 return (<div style={{ cursor: "pointer" }}>
-                    <div style={{ width: "36px", height: "36px", backgroundColor: `rgba(${initColor.r},${initColor.g},${initColor.b},${initColor.a})`, border: colorPickerVisible ? borderWidth + " solid " + borderColor : "1px #cccccc solid", borderRadius: 5 }} onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></div>
+                    <div style={{ width: "36px", height: "36px", backgroundColor: initColor, border: colorPickerVisible ? borderWidth + " solid " + borderColor : "1px #cccccc solid", borderRadius: 5 }} onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></div>
                     <div style={{ cursor: "pointer", position: "absolute", zIndex: 1100 }}>
-                        {colorPickerVisible ? <SketchPicker className="nodrag" color={initColor} onChangeComplete={(newColor) => { dataNotify({ id: id, paramField: param.field, newValue: { r: newColor.rgb.r, g: newColor.rgb.g, b: newColor.rgb.b, a: newColor.rgb.a } }); setNodeData(id, { ...nodeData, [param.field]: post({ r: newColor.rgb.r, g: newColor.rgb.g, b: newColor.rgb.b, a: newColor.rgb.a }) }) }} /> : null}
+                        {colorPickerVisible
+                            ? <SketchPicker
+                                className="nodrag"
+                                color={initColor}
+                                onChangeComplete={(newColor) => {
+                                    dataNotify({ id: id, paramField: param.field, newValue: { r: newColor.rgb.r, g: newColor.rgb.g, b: newColor.rgb.b, a: newColor.rgb.a } })
+                                    setNodeData(id, { ...nodeData, [param.field]: newColor.hex })
+                                }}
+                            />
+                            : null
+                        }
                     </div>
                 </div>)
             case 'range':
@@ -331,8 +341,8 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
         <div ref={parentRef} style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', zIndex: param.type == 'select' || param.type == 'colorPicker' ? 1100 : 0, flexDirection: "column" }}>
             {
                 !isDefaultCase ?
-                    <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch'}}>
-                        <div className={"handleKey"} ref={textBoxRef} style={{ display: 'flex', flexDirection: 'row', alignItems:'center' }}>
+                    <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+                        <div className={"handleKey"} ref={textBoxRef} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             {(param?.deleteable && isDeletedLeft) ? <DeleteButton id={id} left={true} field={param.field} /> : null}
                             {getValue()}
                         </div>
