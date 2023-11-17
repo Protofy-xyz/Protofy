@@ -14,6 +14,7 @@ export const TasksPage = {
         const { replace } = usePageParams(pageState)
         return (<AdminPage title="Tasks" pageSession={pageSession}>
             <DataView
+                disableViews={['grid']}
                 defaultView={'list'}
                 sourceUrl={sourceUrl}
                 initialItems={initialItems}
@@ -26,7 +27,7 @@ export const TasksPage = {
                     DataTable2.column("api", "api", true, row => <Chip text={row.api ? 'yes' : 'no'} color={row.api ? '$color5' : '$gray5'} />, true),
                     DataTable2.column("api route", "apiRoute", true, undefined, true, '350px'),
                     DataTable2.column("num. executions", "numExecutions", true, undefined, true, '150px'),
-                    DataTable2.column("status", "status", true, row => <Chip loading={row.status == 'running'} text={row.status} color={row.status == 'running' ? '$color5' : '$gray5'} />)
+                    DataTable2.column("status", "status", true, row => <Chip loading={row.status == 'running'} text={row.status + ((row.numRunning > 1 ? ' (' + row.numRunning + ')' : ''))} color={row.status == 'running' ? '$color5' : '$gray5'} />)
                     // DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'admin' ? '$color5':'$gray5'} />),
                     // DataTable2.column("from", "from", true, row => <Chip text={row.from?.toUpperCase()} color={row.from == 'cmd' ? '$blue5':'$gray5'} />),
                     // DataTable2.column("created", "createdAt", true, row => moment(row.createdAt).format(format)),
