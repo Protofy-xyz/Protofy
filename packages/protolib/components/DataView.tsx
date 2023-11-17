@@ -313,13 +313,14 @@ export function DataView({
                                     </ActiveGroupButton>)
                                 }
                             </ButtonGroup>}
-                            <Tinted>
+                            {!hideAdd &&<Tinted>
                                 <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
                                     onAddButton ? onAddButton() : setCreateOpen(true)
                                 }} chromeless={true}>
-                                    {!hideAdd && <Plus />}
+                                     <Plus />
                                 </Button>
                             </Tinted>
+                            }
                         </XStack>
 
                     </XStack>
