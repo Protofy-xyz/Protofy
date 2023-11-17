@@ -18,8 +18,9 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
         session = null
     }
 
+    var token = '';
     if(req.query.token || (session && session.token)) {
-        const token = req.query.token ? req.query.token : session.token
+        token = req.query.token ? req.query.token : session.token
         try {
             decoded = createSession(verifyToken(token))
         } catch(e) {
@@ -30,7 +31,7 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
         createSession()
     }
     try {
-        await fn(req, res, decoded, next);
+        await fn(req, res, {...decoded, token: token}, next);
     } catch (e:any) {
         if (e instanceof z.ZodError) {
             const err = (e as z.ZodError).flatten()

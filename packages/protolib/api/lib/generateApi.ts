@@ -112,11 +112,11 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const allResults: any[] = [];
 
         const search = req.query.search;
-        const preListData = typeof options.extraData?.prelist == 'function' ? await options.extraData.prelist(session) : (options.extraData?.prelist ?? {})
+        const preListData = typeof options.extraData?.prelist == 'function' ? await options.extraData.prelist(session, req) : (options.extraData?.prelist ?? {})
         for await (const [key, value] of db.iterator()) {
             if (key != 'initialized') {
                 const model = modelClass.unserialize(value, session);
-                const extraListData = typeof options.extraData?.list == 'function' ? await options.extraData.list(session, model) : (options.extraData?.list ?? {})
+                const extraListData = typeof options.extraData?.list == 'function' ? await options.extraData.list(session, model, req) : (options.extraData?.list ?? {})
                 const listItem = await model.listTransformed(search, transformers, session, {...preListData, ...extraListData} );
 
                 if (listItem && model.isVisible()) {
@@ -183,7 +183,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 if (!item.isVisible()) {
                     throw "not found"
                 }
-                res.send(await item.readTransformed(transformers))
+                const readData = typeof options.extraData?.read == 'function' ? await options.extraData.read(session, item, req) : (options.extraData?.read ?? {})
+                res.send(await item.readTransformed(transformers, readData))
             }
         } catch(e) {
             console.error("Error reading from database: ", e)

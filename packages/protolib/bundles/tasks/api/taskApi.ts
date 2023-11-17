@@ -24,15 +24,18 @@ export const TaskApi = (app, mqtt) => {
     prefix: '/adminapi/v1/',
     getDB: getDB,
     requiresAdmin: ['*'],
-    // extraData: {
-    //   prelist: async (session) => {
-    //     const companies = await axios.get('http://localhost:8080/adminapi/v1/companies?itemsPerPage=1000')
-    //     const company = await companies?.data?.items.find(i => i.email == session.user.id)
-    //     return {
-    //       company
-    //     }
-    //   }
-    // }
+    extraData: {
+      read: async (session, element) => {
+        return {
+          history: (await axios.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&search=task:'+element.getId())).data
+        }
+      },
+      list: async (session, element) => {
+        return {
+          history: (await axios.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&search=task:'+element.getId())).data
+        }
+      }
+    }
   })
   CrudAPI(app, mqtt)
 
