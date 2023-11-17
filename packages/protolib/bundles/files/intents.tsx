@@ -4,7 +4,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 import AsyncView from '../../components/AsyncView'
 import { useFileFromAPI } from '../../lib/useFileFromAPI'
 import { IconContainer } from '../../components/IconContainer'
-import { Save, Workflow, Code} from '@tamagui/lucide-icons';
+import { Save, Workflow, Code } from '@tamagui/lucide-icons';
 import { useThemeSetting } from '@tamagui/next-theme'
 // import FlowsWidget from '../../adminpanel/features/components/FlowsWidget'
 // import GLTFViewer from '../../adminpanel/features/components/ModelViewer'
@@ -59,7 +59,7 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
     const sourceCode = useRef('')
 
     useEffect(() => {
-        if(fileContent.isLoaded) {
+        if (fileContent.isLoaded) {
             sourceCode.current = fileContent.data
             setLoaded(true)
         }
@@ -69,7 +69,7 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
     const [mode, setMode] = useState('code')
 
     const onSave = async () => {
-        await API.post('/adminapi/v1/files/'+path.replace(/\/+/g, '/'), {content:sourceCode.current})
+        await API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/'), { content: sourceCode.current })
     }
     return <AsyncView atom={fileContent}>
         <XStack mt={isFull ? 50 : 30} f={1} width={"100%"}>
@@ -78,27 +78,27 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
                 {mode == 'code' ? <IconContainer onPress={() => setMode('flow')}>
                     {/* <SizableText mr={"$2"}>Save</SizableText> */}
                     <Workflow color="var(--color)" size={isFull ? "$2" : "$1"} />
-                </IconContainer>:
-                <IconContainer onPress={() => setMode('code')}>
-                    {/* <SizableText mr={"$2"}>Save</SizableText> */}
-                    <Code color="var(--color)" size={isFull ? "$2" : "$1"} />
-                </IconContainer>}
+                </IconContainer> :
+                    <IconContainer onPress={() => setMode('code')}>
+                        {/* <SizableText mr={"$2"}>Save</SizableText> */}
+                        <Code color="var(--color)" size={isFull ? "$2" : "$1"} />
+                    </IconContainer>}
                 <IconContainer onPress={onSave}>
                     {/* <SizableText mr={"$2"}>Save</SizableText> */}
                     <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
                 </IconContainer>
                 {extraIcons}
             </XStack>
-            {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={sourceCode.current} onChange={(code) => {sourceCode.current = code}} />: <FlowsWidget
+            {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={sourceCode.current} onChange={(code) => { sourceCode.current = code }} /> : <FlowsWidget
                 isModified={isModified}
-                onEdit={(code) => {sourceCode.current = code}}
+                onEdit={(code) => { sourceCode.current = code }}
                 setIsModified={setIsModified}
                 setSourceCode={(sourceCode) => {
                     sourceCode.current = sourceCode
                 }} sourceCode={sourceCode.current} path={path} themeMode={resolvedTheme} />}
-                <XStack opacity={0} top={-200000} position={"absolute"}>
-                    <FlowsWidget preload={true} />
-                </XStack>
+            <XStack opacity={0} top={-200000} position={"absolute"}>
+                <FlowsWidget preload={true} />
+            </XStack>
             {/* </Theme> */}
         </XStack>
     </AsyncView>
@@ -121,6 +121,8 @@ export const processFilesIntent = ({ action, domain, data }: IntentType) => {
     if (mime == 'application/json') {
         return { component: <JSONViewer {...data} />, supportIcons: true }
     } else if (mime == 'application/javascript' || mime == 'video/mp2t') {
+        return { component: <FlowsViewer {...data} />, supportIcons: true }
+    } else if ((data.path).endsWith(".tsx")) {
         return { component: <FlowsViewer {...data} />, supportIcons: true }
     } else if (mime == 'model/gltf-binary') {
         return {
