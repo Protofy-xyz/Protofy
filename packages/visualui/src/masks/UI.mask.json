@@ -14,12 +14,27 @@
                     "flexDirection",
                     "justifyContent",
                     "alignContent",
-                    "alignItems"
+                    "alignItems",
+                    "width",
+                    "height"
                 ]
             },
             {
                 "type": "prop",
-                "prop": []
+                "prop": [
+                    
+                ]
+            },
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "Child1",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ]
             }
         ]
     },
