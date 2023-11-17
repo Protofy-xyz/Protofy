@@ -2,6 +2,27 @@ import { createSession, SessionDataType } from 'protolib/api/lib/session'
 import {z} from 'zod'
 import { ProtoSchema } from './ProtoSchema';
 
+function parseSearch(search) {
+    const regex = /(\w+):("[^"]+"|\S+)/g;
+    const parsed = {};
+    let match;
+    let searchWithoutTags = search;
+
+    while ((match = regex.exec(search)) !== null) {
+        const key = match[1].toLowerCase();
+        const value = match[2].replace(/"/g, '').toLowerCase();
+
+        parsed[key] = value;
+
+        searchWithoutTags = searchWithoutTags.replace(match[0], '');
+    }
+
+
+    searchWithoutTags = searchWithoutTags.trim();
+
+    return { parsed, searchWithoutTags };
+}
+
 export abstract class ProtoModel<T extends ProtoModel<T>> {
     data: any;
     session: SessionDataType;
@@ -45,9 +66,19 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     list(search?, session?, extraData?): any {
         if(search) {
+            const { parsed, searchWithoutTags } = parseSearch(search);
+
+            for (const [key, value] of Object.entries(parsed)) {
+                console.log('comparing: ', "|"+this.data[key]+"|", 'with: ', "|"+value+"|")
+                if (!this.data.hasOwnProperty(key) || this.data[key] != value) {
+                    console.log('discarded: ', this.data[key])
+                    return
+                }
+            }
+
             const searchFields = this.objectSchema.is('search').getFields()
             for(var i=0;i<searchFields.length;i++) {
-                if(((this.data[searchFields[i]]+"").toLowerCase()).includes(search.toLowerCase())) {
+                if(((this.data[searchFields[i]]+"").toLowerCase()).includes(searchWithoutTags.toLowerCase())) {
                     return this.read();
                 }
             }
