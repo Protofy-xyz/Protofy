@@ -11,14 +11,11 @@ export const TasksPage = {
 
         return (<AdminPage title="Tasks" pageSession={pageSession}>
             <DataView
-                onSelectItem={(item) => {
-                    router.push('/admin/tasks/'+item.getId())
-                }}
-                disableViewSelector={true}
                 defaultView={'list'}
                 sourceUrl={sourceUrl}
                 initialItems={initialItems}
                 numColumnsForm={1}
+                openMode={"view"}
                 name="task"
                 rowIcon={Zap}
                 columns={DataTable2.columns(
