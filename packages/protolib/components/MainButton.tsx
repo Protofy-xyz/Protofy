@@ -4,10 +4,12 @@ import { Button, ButtonProps, ButtonText, TextProps } from "tamagui"
 type MainButtonProps = {
   buttonProps?: ButtonProps
   buttonTextProps?: TextProps,
+  color?: string,
+  textColor?: string,
   children: any
 }
 
-const MainButton = React.forwardRef(({ buttonProps = {}, buttonTextProps = {}, children }: MainButtonProps, ref: any) => (
+const MainButton = React.forwardRef(({ buttonProps = {}, buttonTextProps = {}, color = undefined, textColor = undefined,  children }: MainButtonProps, ref: any) => (
   <Button
     ref={ref}
     // layout shifts...
@@ -25,9 +27,11 @@ const MainButton = React.forwardRef(({ buttonProps = {}, buttonTextProps = {}, c
     pressStyle={{
       elevation: '$0',
     }}
+    backgroundColor={color}
+    
     {...buttonProps}
   >
-    <ButtonText fontFamily="$silkscreen" size="$7" letterSpacing={1} {...buttonTextProps}>
+    <ButtonText color={textColor} fontFamily="$silkscreen" size="$7" letterSpacing={1} {...buttonTextProps}>
       {children}
     </ButtonText>
   </Button>
