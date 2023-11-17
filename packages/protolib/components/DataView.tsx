@@ -305,7 +305,7 @@ export function DataView({
 
                     <XStack position={"absolute"} right={20}>
                         <Search top={1} initialState={state?.search} onCancel={onCancelSearch} onSearch={onSearch} />
-                        {!hideAdd && <XStack marginLeft="$3" top={-3}>
+                        <XStack marginLeft="$3" top={-3}>
                             {!disableViewSelector && <ButtonGroup marginRight="$3">
                                 {
                                     tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
@@ -317,10 +317,10 @@ export function DataView({
                                 <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
                                     onAddButton ? onAddButton() : setCreateOpen(true)
                                 }} chromeless={true}>
-                                    <Plus />
+                                    {!hideAdd && <Plus />}
                                 </Button>
                             </Tinted>
-                        </XStack>}
+                        </XStack>
 
                     </XStack>
                 </XStack>
