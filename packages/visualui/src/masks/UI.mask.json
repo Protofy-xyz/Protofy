@@ -20,9 +20,49 @@
                 ]
             },
             {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "Child1",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "Center",
+        "title": "Center",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Center"
+        },
+        "body": [
+            {
                 "type": "prop",
                 "prop": [
-                    
+                    {
+                        "label": "backgroundColor",
+                        "field": "prop-backgroundColor",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "colorPicker"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "flexDirection",
+                    "justifyContent",
+                    "alignContent",
+                    "alignItems",
+                    "width",
+                    "height"
                 ]
             },
             {
@@ -51,7 +91,8 @@
                 "type": "protolibProps",
                 "props": [
                     "width",
-                    "height"
+                    "height",
+                    "opacity"
                 ]
             },
             {
@@ -362,7 +403,22 @@
             },
             {
                 "type": "prop",
-                "prop": []
+                "prop": [
+                    {
+                        "label": "color",
+                        "field": "prop-color",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "colorPicker"
+                    },
+                    {
+                        "label": "textColor",
+                        "field": "prop-textColor",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "colorPicker"
+                    }
+                ]
             }
         ]
     },
