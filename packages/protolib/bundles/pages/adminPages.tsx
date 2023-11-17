@@ -5,12 +5,15 @@ import { DataView } from 'protolib'
 import { DataTable2, Chip, API, InteractiveIcon } from 'protolib'
 import { z } from 'zod'
 import { Stack, XStack } from '@my/ui'
-import { ExternalLink } from '@tamagui/lucide-icons'
+import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
+import { usePageParams } from '../../next';
 const PageIcons = {}
 
 export default {
     'admin/pages': {
         component: ({ pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
+            const {replace} = usePageParams(pageState)
+
             return (<AdminPage title="Pages" pageSession={pageSession}>
                 <DataView
                     sourceUrl={sourceUrl}
@@ -30,6 +33,13 @@ export default {
                         template: z.union([z.literal("blank"), z.literal("default"), z.literal("admin")]).display().after("route"),
                         object: z.union([z.literal("without object"), ...extraData.objects.filter(o => o.api).map(o => z.literal(o.name))] as any).after('route').display(),
                     }}
+                    extraMenuActions = {[
+                        {
+                            text:"Edit Object file", 
+                            icon:Pencil, 
+                            action: (element) => { replace('editFile', element.getDefaultFilePath()) },
+                            isVisible: (data)=>true}
+                    ]}
                     model={PageModel}
                     pageState={pageState}
                     icons={PageIcons}
