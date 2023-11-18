@@ -34,7 +34,7 @@ export const Search = forwardRef(({ alwaysOpen=true, automatic = false, defaultO
             o={1}
             br={20}
             focusStyle={{bw:1,outlineWidth: 0}}
-            backgroundColor={'$color1'}
+            backgroundColor={'$bgContent'}
             value={content}
             disabled={!opened}
             //@ts-ignore

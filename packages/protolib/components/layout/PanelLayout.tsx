@@ -1,15 +1,10 @@
-import { YStack, ScrollView, Theme, XStack } from 'tamagui'
-import {AppBar, useTint} from 'protolib'
-import { useThemeSetting } from '@tamagui/next-theme'
-import { getTokens } from '@tamagui/core'
+import { YStack, ScrollView, XStack, getTokens } from 'tamagui'
+import {AppBar} from 'protolib'
 
 export const PanelLayout = ({panelBgColor=undefined, menuContent, children, SideMenu, Layout, headerContents, HeaderMenu}) => {
     const appBarHeight = 55
-    const { tint, setNextTint } = useTint()
-    const { resolvedTheme } = useThemeSetting()
-    const isDark = resolvedTheme == 'dark'
-    const bgPanels = isDark ? '$color1': '$color2'
-    const _panelBgColor = isDark ? '$color2' : '$color1'
+    const bgPanels = '$bgPanel'
+    const _panelBgColor = '$bgContent'
 
     return (
       <Layout
