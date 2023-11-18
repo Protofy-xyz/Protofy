@@ -28,8 +28,9 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
             open={open}
             onAccept={async (setOpen) => {
                 if (Array.isArray(element) && sourceUrl) {
-                    element.map(async (ele) => await API.get(sourceUrl + "/" + ele + '/delete'))
-                    setSelected([])
+                    const deletePromises = element.map(ele => API.get(sourceUrl + "/" + ele + '/delete'));
+                    await Promise.all(deletePromises);
+                    setSelected([]);
                 } else if (sourceUrl) {
                     await API.get(sourceUrl + '/delete')
                 }
