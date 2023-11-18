@@ -10,7 +10,7 @@ import Scrollbars from "react-custom-scrollbars-2";
 import { ItemMenu } from "./ItemMenu";
 
 
-export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuActions = [] }) => {
+export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuActions = [], enableAddToInitialData }) => {
     const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
@@ -30,11 +30,13 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuAction
     const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean']
     const cols = tableColumns ?? DataTable2.columns(...(Object.keys(fields.shape).filter(key => validTypes.includes(fields.shape[key]._def?.typeName)).map(key => DataTable2.column(fields.shape[key]._def?.label ?? key, key, true))))
     const finalColumns = cols
+    console.log("enableADDDD", enableAddToInitialData)
 
     return <Scrollbars universal={true}>
         <XStack pt="$1" flexWrap='wrap'>
             <Tinted>
                 <DataTable2.component
+                
                     pagination={false}
                     conditionalRowStyles={conditionalRowStyles}
                     rowsPerPage={state.itemsPerPage ? state.itemsPerPage : 25}
@@ -60,7 +62,7 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuAction
                                         </Checkbox.Indicator>
                                     </Checkbox>
                                 </Stack>
-                                {selected.length > 1 && <ItemMenu mt={"1px"} ml={"-5px"} element={selected} sourceUrl={sourceUrl} onDelete={onDelete} />}
+                                {selected.length > 1 && <ItemMenu enableAddToInitialData={enableAddToInitialData} mt={"1px"} ml={"-5px"} element={selected} sourceUrl={sourceUrl} onDelete={onDelete} />}
                             </XStack>
                         </Theme>, "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
                             <Stack mt={"$2"}>
@@ -73,7 +75,7 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuAction
                                     </Checkbox.Indicator>
                                 </Checkbox>
                             </Stack>
-                            <ItemMenu ml={"-5px"} mt={"1px"} element={model.load(row)} sourceUrl={sourceUrl + "/" + model.load(row).getId()} onDelete={onDelete} extraMenuActions={extraMenuActions} />
+                            <ItemMenu enableAddToInitialData={enableAddToInitialData} ml={"-5px"} mt={"1px"} element={model.load(row)} sourceUrl={sourceUrl + "/" + model.load(row).getId()} onDelete={onDelete} extraMenuActions={extraMenuActions} />
                             {rowIcon && <Stack o={0.8} ml={"$2"} t={"6px"}>{React.createElement(rowIcon, { size: "$1" })}</Stack>}
                         </XStack></Theme>, true, '115px'), ...cols]}
                     rows={items?.data?.items}

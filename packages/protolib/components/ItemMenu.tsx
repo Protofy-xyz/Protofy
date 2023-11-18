@@ -2,11 +2,11 @@ import { Popover, Stack, XStack, YStack, Text, StackProps } from "tamagui"
 import { AlertDialog, API } from 'protolib'
 import { useContext, useState } from "react";
 import { Tinted } from "./Tinted";
-import { MoreVertical, Trash2 } from '@tamagui/lucide-icons'
+import { MoreVertical, Trash2, FilePlus } from '@tamagui/lucide-icons'
 import { InteractiveIcon } from "./InteractiveIcon";
 import { DataViewContext } from "./DataView";
 
-export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions = [], ...props }: { sourceUrl: string, onDelete: any, element: any, extraMenuActions?: any } & StackProps) => {
+export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelete, element, extraMenuActions = [], ...props }: { sourceUrl: string, enableAddToInitialData?:boolean, onDelete: any, element: any, extraMenuActions?: any } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
     const { setSelected} = useContext(DataViewContext);
@@ -56,6 +56,7 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
                             {extraMenuActions.map((action) => {
                                 return action.isVisible && action.isVisible(element) && <MenuButton text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
                             })}
+                            {enableAddToInitialData &&  <MenuButton text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); setMenuOpened(false) }}></MenuButton>}
                             <MenuButton text={"Delete"} Icon={Trash2} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
                         </YStack>
                     </YStack>
