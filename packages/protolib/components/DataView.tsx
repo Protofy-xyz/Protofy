@@ -310,22 +310,25 @@ export function DataView({
                     </YStack>
                 </AlertDialog>
 
-                <XStack pt="$3" px="$7" mb="$5">
-                    <XStack left={-12} top={9} f={1} ai="center">
+                <XStack pt="$3" px="$7" mb="$1">
+                    <XStack left={-12} f={1} ai="center">
                         {/* {rowIcon && React.createElement(rowIcon, {size: 20})} */}
                         <Paragraph>
                             <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
                         </Paragraph>
                         {toolBarContent}
+                    </XStack>
+
+                    <XStack ai="center">
                         <XStack ai="center" ml="$3">
                             {currentItems.isLoaded && <XStack ml={"$2"}>
                                 <Paragraph>
-                                    <Text fontSize="$5" color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page)+1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page+1)))} of {currentItems.data.total}</Text>
+                                    <Text fontSize="$4" color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page)+1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page+1)))} of {currentItems.data.total}</Text>
                                 </Paragraph>
-                                <XStack left="$5" ai="center">
-                                    <ChevronLeft size={20} strokeWidth={3} color="$color10" />
+                                <XStack ml={"$5"} ai="center">
+                                    <ChevronLeft size={20} strokeWidth={2} color="$color10" />
                                     <Spacer size="$5" />
-                                    <ChevronRight size={20} strokeWidth={3} color="$color10" />
+                                    <ChevronRight size={20} strokeWidth={2} color="$color10" />
                                 </XStack>
                                 {/* <SelectList 
                                     top={-10}
@@ -339,11 +342,7 @@ export function DataView({
                                 /> */}
                             </XStack>}
                         </XStack>
-
-                    </XStack>
-
-                    <XStack position={"absolute"} right={20}>
-                        <XStack marginLeft="$3" top={-3}>
+                        <XStack ai="center" marginLeft="$3">
                             {!disableViewSelector && <ButtonGroup marginRight="$3">
                                 {
                                     tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
@@ -355,7 +354,7 @@ export function DataView({
                                 <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
                                     onAddButton ? onAddButton() : setCreateOpen(true)
                                 }} chromeless={true}>
-                                    <Plus />
+                                    <Plus color={"$color10"} />
                                 </Button>
                             </Tinted>
                             }
