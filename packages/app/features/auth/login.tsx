@@ -5,7 +5,7 @@ import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG } from '@my/ui'
 import { useRouter } from 'next/router';
-
+import { getErrorMessage } from "@my/ui";
 
 export function SignInPage(props) {
   return (
@@ -84,7 +84,7 @@ function SignIn() {
 
         {Boolean(authState.isError) && (
           <Notice>
-            <Paragraph>{authState.error}</Paragraph>
+            <Paragraph>{getErrorMessage(authState.error)}</Paragraph>
           </Notice>
         )}
 
