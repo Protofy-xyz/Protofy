@@ -39,7 +39,7 @@ export const Search = forwardRef(({ alwaysOpen=true, automatic = false, defaultO
         $sm={{ width: opened ? 200 : closedWidth }}
         onPress={() => setOpened(true)}
         ref={ref}
-        elevation={1}
+        elevation={media.xs?0:1}
         br={20}
         {...props}
     >
