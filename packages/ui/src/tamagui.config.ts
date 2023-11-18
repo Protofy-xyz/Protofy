@@ -1,7 +1,6 @@
 import { createTamagui } from 'tamagui'
 import { createInterFont } from '@tamagui/font-inter'
 import { shorthands } from '@tamagui/shorthands'
-import { themes, tokens } from '@tamagui/themes'
 import { createMedia } from '@tamagui/react-native-media-driver'
 import { createCherryBombFont } from '@tamagui/font-cherry-bomb'
 import { createDmSansFont } from '@tamagui/font-dm-sans'
@@ -10,6 +9,8 @@ import { createMunroFont } from '@tamagui/font-munro'
 import { createSilkscreenFont } from '@tamagui/font-silkscreen'
 import { createGenericFont } from './createGenericFont'
 import { animations } from './animations'
+import {themes} from './themes'
+import {tokens} from './tokens'
 
 export const cherryBombFont = createCherryBombFont()
 export const munroFont = createMunroFont()
