@@ -10,7 +10,7 @@ import Scrollbars from "react-custom-scrollbars-2";
 import { ItemMenu } from "./ItemMenu";
 
 
-export const DataTableList = ({sourceUrl, onDelete=()=>{}, extraMenuActions=[]}) => {
+export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuActions = [] }) => {
     const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
@@ -29,7 +29,7 @@ export const DataTableList = ({sourceUrl, onDelete=()=>{}, extraMenuActions=[]})
 
     const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean']
     const cols = tableColumns ?? DataTable2.columns(...(Object.keys(fields.shape).filter(key => validTypes.includes(fields.shape[key]._def?.typeName)).map(key => DataTable2.column(fields.shape[key]._def?.label ?? key, key, true))))
-    const finalColumns = rowIcon ? [DataTable2.column("", "", false, row => <Stack o={0.6}>{React.createElement(rowIcon, { size: "$1" })}</Stack>, true, '50px'), ...cols] : cols
+    const finalColumns = cols
 
     return <Scrollbars universal={true}>
         <XStack pt="$1" flexWrap='wrap'>
@@ -41,24 +41,28 @@ export const DataTableList = ({sourceUrl, onDelete=()=>{}, extraMenuActions=[]})
                     handleSort={(column, orderDirection) => mergePush({ orderBy: column.selector, orderDirection })}
                     handlePerRowsChange={(itemsPerPage) => push('itemsPerPage', itemsPerPage)}
                     handlePageChange={(page) => push('page', parseInt(page, 10) - 1)}
-                    currentPage={(isNaN(parseInt(state.page, 10))?0:parseInt(state.page, 10)) + 1}
+                    currentPage={(isNaN(parseInt(state.page, 10)) ? 0 : parseInt(state.page, 10)) + 1}
                     totalRows={items?.data?.total}
                     columns={[DataTable2.column(
-                        <Theme reset><Stack ml="$3" o={0.8}>
-                            <Checkbox focusStyle={{ outlineWidth: 0 }} checked={selected.length > 1} onPress={(e) => {
-
-                                if (selected.length) {
-                                    setSelected([])
-                                } else {
-                                    console.log('selection all: ', items?.data?.items.map(x => model.load(x).getId()))
-                                    setSelected(items?.data?.items.map(x => model.load(x).getId()))
-                                }
-                            }}>
-                                <Checkbox.Indicator>
-                                    <CheckCheck />
-                                </Checkbox.Indicator>
-                            </Checkbox>
-                        </Stack></Theme>, "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
+                        <Theme reset>
+                            <XStack>
+                                <Stack mt={"$2"} ml="$3" o={0.8}>
+                                    <Checkbox focusStyle={{ outlineWidth: 0 }} checked={selected.length > 1} onPress={(e) => {
+                                        if (selected.length) {
+                                            setSelected([])
+                                        } else {
+                                            console.log('selection all: ', items?.data?.items.map(x => model.load(x).getId()))
+                                            setSelected(items?.data?.items.map(x => model.load(x).getId()))
+                                        }
+                                    }}>
+                                        <Checkbox.Indicator>
+                                            <CheckCheck />
+                                        </Checkbox.Indicator>
+                                    </Checkbox>
+                                </Stack>
+                                {selected.length > 1 && <ItemMenu mt={"1px"} ml={"-5px"} element={selected} sourceUrl={sourceUrl} onDelete={onDelete} />}
+                            </XStack>
+                        </Theme>, "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
                             <Stack mt={"$2"}>
                                 <Checkbox focusStyle={{ outlineWidth: 0 }} onPress={() => {
                                     const id = model.load(row).getId()
@@ -69,8 +73,9 @@ export const DataTableList = ({sourceUrl, onDelete=()=>{}, extraMenuActions=[]})
                                     </Checkbox.Indicator>
                                 </Checkbox>
                             </Stack>
-                            <ItemMenu element={model.load(row)} sourceUrl={sourceUrl+"/"+model.load(row).getId()} onDelete={onDelete} extraMenuActions={extraMenuActions}/>
-                        </XStack></Theme>, true, '85px'), ...finalColumns]}
+                            <ItemMenu ml={"-5px"} mt={"1px"} element={model.load(row)} sourceUrl={sourceUrl + "/" + model.load(row).getId()} onDelete={onDelete} extraMenuActions={extraMenuActions} />
+                            {rowIcon && <Stack o={0.8} ml={"$2"} t={"6px"}>{React.createElement(rowIcon, { size: "$1" })}</Stack>}
+                        </XStack></Theme>, true, '115px'), ...cols]}
                     rows={items?.data?.items}
                     onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}
                 />

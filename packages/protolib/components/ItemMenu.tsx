@@ -14,7 +14,7 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
             cursor='pointer'
             pressStyle={{ o: 0.7 }}
             hoverStyle={{ bc: "$color5" }}
-            onPress={(e) => {onPress(element, e), setMenuOpened(false)}}>
+            onPress={(e) => { onPress(element, e), setMenuOpened(false) }}>
             <Icon size={"$1"} color="var(--color9)" strokeWidth={2} />
             <Text ml={"$3"}>{text}</Text>
         </XStack>
@@ -26,7 +26,9 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
             setOpen={setOpen}
             open={open}
             onAccept={async (setOpen) => {
-                if (sourceUrl) {
+                if (Array.isArray(element) && sourceUrl) {
+                    element.map(async (ele) => await API.get(sourceUrl + "/" + ele + '/delete'))
+                } else if (sourceUrl) {
                     await API.get(sourceUrl + '/delete')
                 }
 
@@ -47,7 +49,7 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
             </Popover.Trigger>
             <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} bw={1} boc="$borderColor" bc={"$color1"} >
                 <Tinted>
-                    <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e)=>e.stopPropagation()}>
+                    <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e) => e.stopPropagation()}>
                         <YStack>
                             {extraMenuActions.map((action) => {
                                 return action.isVisible && action.isVisible(element) && <MenuButton text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
