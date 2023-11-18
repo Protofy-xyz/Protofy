@@ -35,7 +35,7 @@ export const DataTableList = ({sourceUrl, onDelete=()=>{}, extraMenuActions=[]})
         <XStack pt="$1" flexWrap='wrap'>
             <Tinted>
                 <DataTable2.component
-                    pagination={true}
+                    pagination={false}
                     conditionalRowStyles={conditionalRowStyles}
                     rowsPerPage={state.itemsPerPage ? state.itemsPerPage : 25}
                     handleSort={(column, orderDirection) => mergePush({ orderBy: column.selector, orderDirection })}

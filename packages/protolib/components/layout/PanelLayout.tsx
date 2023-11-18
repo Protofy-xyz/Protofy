@@ -1,6 +1,7 @@
 import { YStack, ScrollView, Theme, XStack } from 'tamagui'
 import {AppBar, useTint} from 'protolib'
 import { useThemeSetting } from '@tamagui/next-theme'
+import { getTokens } from '@tamagui/core'
 
 export const PanelLayout = ({panelBgColor=undefined, menuContent, children, SideMenu, Layout, headerContents, HeaderMenu}) => {
     const appBarHeight = 55
@@ -20,8 +21,9 @@ export const PanelLayout = ({panelBgColor=undefined, menuContent, children, Side
             translucid={false} 
             position="top"
             backgroundColor={bgPanels}
+            
           >
-            {headerContents}
+            <XStack ml={"$5"} justifyContent="space-between" f={1}>{headerContents}</XStack>
           </AppBar>
         } 
         sideMenu={<SideMenu mt={appBarHeight} sideBarColor={bgPanels}>{menuContent}</SideMenu>}

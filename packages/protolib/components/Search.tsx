@@ -1,11 +1,11 @@
-import { Button, Input, XStack } from "tamagui"
+import { Button, Input, Theme, XStack } from "tamagui"
 import { Search as IconSearch } from '@tamagui/lucide-icons'
 import { useState, forwardRef, useRef, useEffect } from "react"
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from "./Tinted"
 
-export const Search = forwardRef(({ automatic = false, initialState, onCancel = () => { }, onSearch = () => { }, placeholder = 'Search...', width = 400, widthmd = 300, closedWidth = 50, ...props }: any, ref: any) => {
-    const [opened, setOpened] = useState(initialState ? true : false)
+export const Search = forwardRef(({ alwaysOpen=true, automatic = false, defaultOpened, initialState, onCancel = () => { }, onSearch = () => { }, placeholder = 'Search...', width = 600, widthmd = 400, closedWidth = 50, ...props }: any, ref: any) => {
+    const [opened, setOpened] = useState(defaultOpened ? true : false)
     const input = useRef()
     const [content, setContent] = useState(initialState)
 
@@ -26,20 +26,22 @@ export const Search = forwardRef(({ automatic = false, initialState, onCancel = 
         $sm={{ width: opened ? '100%' : closedWidth }}
         onPress={() => setOpened(true)}
         ref={ref}
+        elevation={1}
+        br={15}
         {...props}
     >
         {opened ? <Input
             o={1}
+            br={15}
+            focusStyle={{bw:1,outlineWidth: 0}}
             backgroundColor={'$color1'}
             value={content}
             disabled={!opened}
-            focusStyle={{ outlineWidth: 0 }}
-            height={'$3'}
             //@ts-ignore
             ref={input}
             width={opened ? "100%" : closedWidth}
             placeholder={opened ? placeholder : ''}
-            onBlur={() => !content ? setOpened(false) : false}
+            onBlur={() => (!alwaysOpen && !content) ? setOpened(false) : false}
             onChangeText={(text) => { 
                 setContent(text); 
                 if(automatic) {
@@ -48,11 +50,12 @@ export const Search = forwardRef(({ automatic = false, initialState, onCancel = 
                     if (!text) onSearch('') 
                 }
             }}
+            bw={0}
             onSubmitEditing={(e) => { onSearch(content) }}
         /> : null}
-        <XStack position={"absolute"} right={0} top={-4} cursor="pointer">
+        <XStack position={"absolute"} right={0} top={0} cursor="pointer">
             <Tinted>
-                <Button disabled={opened} hoverStyle={{ o: 1 }} o={0.7} circular chromeless={true}>
+                <Button disabled={opened} o={0.5} circular chromeless={true}>
                     <IconSearch fillOpacity={0} color="var(--color)" />
                 </Button>
             </Tinted>
