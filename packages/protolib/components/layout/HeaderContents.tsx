@@ -29,26 +29,28 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
   return (
     <>
       <XStack ai="center" space="$4">
-          <NextLink href={logoHref}>
-            <XStack py={logoSize/4} ai="center" px="$3" cur="pointer" my={-20}>
-              {logo}
-            </XStack>
-          </NextLink>
-        
+          <XStack f={1} minWidth={210}>
+              <NextLink href={logoHref}>
+                <XStack py={logoSize/4} ai="center" px="$3" cur="pointer" my={-20}>
+                  {logo}
+                </XStack>
+              </NextLink>
+            
 
-        <TooltipGroup delay={tooltipDelay}>
-          <XGroup boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
-            {themeSwitcher && <XGroup.Item>
-              <ThemeToggle borderWidth={0} chromeless />
-            </XGroup.Item>}
-            {tintSwitcher && <XGroup.Item>
-              <ColorToggleButton borderWidth={0} chromeless />
-            </XGroup.Item> }
-          </XGroup>
-        </TooltipGroup>
-
-        {leftArea}
+            <TooltipGroup delay={tooltipDelay}>
+              <XGroup boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
+                {themeSwitcher && <XGroup.Item>
+                  <ThemeToggle borderWidth={0} chromeless />
+                </XGroup.Item>}
+                {tintSwitcher && <XGroup.Item>
+                  <ColorToggleButton borderWidth={0} chromeless />
+                </XGroup.Item> }
+              </XGroup>
+            </TooltipGroup>
+          </XStack>
+          {leftArea}
       </XStack>
+
 
       {centerArea && <XStack
         position="absolute"

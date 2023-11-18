@@ -93,6 +93,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         }
 
         const result = {
+            itemsPerPage: itemsPerPage,
             items: req.query.all ? allResults : allResults.slice(page * itemsPerPage, (page + 1) * itemsPerPage),
             total: allResults.length,
             page: req.query.all? 0 : page,

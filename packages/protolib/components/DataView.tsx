@@ -1,7 +1,7 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Dialog } from 'tamagui'
-import { useRemoteStateList, ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, DataTable2, API, Search, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
-import { createContext, useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List, Layers, X } from '@tamagui/lucide-icons'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Dialog, Spacer } from 'tamagui'
+import { useRemoteStateList, ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, DataTable2, API, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
 import { z } from "zod";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
@@ -16,6 +16,8 @@ import { EditableObjectProps } from './EditableObject';
 
 import { FileWidget } from '../adminpanel/features/components/FilesWidget';
 import { IconContainer } from './IconContainer';
+import { SelectList } from './SelectList';
+import { SearchContext } from '../context/SearchContext';
 
 type DataViewState = {
     items: PendingAtomResult,
@@ -86,7 +88,8 @@ export function DataView({
     extraMenuActions = [],
     objectProps = {}
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
-    const [items, setItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/' + ((entityName ?? pluralName) ?? name + 's') + "/#", model)
+    const _plural = (entityName ?? pluralName) ?? name + 's'
+    const [items, setItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/' + (_plural) + "/#", model)
     // const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
@@ -94,6 +97,7 @@ export function DataView({
     const { push, mergePush, removePush, replace } = usePageParams(state)
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
+    const {search, setSearch, setSearchName} = useContext(SearchContext)
 
     useQueryState(setState)
 
@@ -110,11 +114,18 @@ export function DataView({
         }
     }, [items])
 
+    useEffect(() => {
+        push("search", search, false)
+    }, [search])
 
-    useUpdateEffect(() => { fetch() }, [state.orderBy+'_'+state.itemsPerPage+'_'+state.page+'_'+state.search+'_'+state.orderDirection])
+    useEffect(() => {
+        setSearchName(_plural)
+    })
 
-    const onSearch = async (text) => push("search", text, false)
-    const onCancelSearch = async () => setCurrentItems(items)
+
+    useUpdateEffect(() => { fetch() }, [state.orderBy + '_' + state.itemsPerPage + '_' + state.page + '_' + state.search + '_' + state.orderDirection])
+
+    const onSearch = async (text) => setSearch(text)
     const toast = useToastController()
 
     const defaultViews = [
@@ -154,6 +165,8 @@ export function DataView({
             props: { ...dataTableRawProps }
         }
     ]
+
+    console.log('current page: ', currentItems)
     const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))
 
     const activeViewIndex = tableViews.findIndex(v => v.name == state.view) != -1 ? tableViews.findIndex(v => v.name == state.view) : tableViews.findIndex(v => v.name == defaultView)
@@ -181,7 +194,7 @@ export function DataView({
                             isFull={false}
                             hideCloseIcon={false}
                             isModified={false}
-                            setIsModified={() => {}}
+                            setIsModified={() => { }}
                             icons={[
                                 <IconContainer onPress={() => {
                                     removePush('editFile')
@@ -189,7 +202,7 @@ export function DataView({
                                     <X color="var(--color)" size={"$1"} />
                                 </IconContainer>
                             ]}
-                            currentFileName={getFilenameFromPath(state.editFile??'')}
+                            currentFileName={getFilenameFromPath(state.editFile ?? '')}
                             currentFile={state.editFile}
                         />
                     </XStack>
@@ -297,14 +310,37 @@ export function DataView({
 
                 <XStack pt="$3" px="$7" mb="$5">
                     <XStack left={-12} top={9} f={1} ai="center">
+                        {/* {rowIcon && React.createElement(rowIcon, {size: 20})} */}
                         <Paragraph>
-                            <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'} [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{currentItems?.data?.total}</Text></Tinted>]</Text>
+                            <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
                         </Paragraph>
                         {toolBarContent}
+                        <XStack ai="center" ml="$3">
+                            {currentItems.isLoaded && <XStack ml={"$2"}>
+                                <Paragraph>
+                                    <Text fontSize="$5" color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page)+1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page+1)))} of {currentItems.data.total}</Text>
+                                </Paragraph>
+                                <XStack left="$5" ai="center">
+                                    <ChevronLeft size={20} strokeWidth={3} color="$color10" />
+                                    <Spacer size="$5" />
+                                    <ChevronRight size={20} strokeWidth={3} color="$color10" />
+                                </XStack>
+                                {/* <SelectList 
+                                    top={-10}
+                                    triggerProps={{fontWeight: '600', bc:"transparent", bw: 0}}
+                                    valueProps={{fontWeight: '600', o: 0.7}}
+                                    f={1} 
+                                    title={"Page size"} 
+                                    elements={['10', '25', '50', '100', '500', '1000']} 
+                                    value={(pageState.all?'All': (pageState.itemsPerPage?pageState.itemsPerPage:25))+''} 
+                                    setValue={(v) => v=='All'?replace('all', 1):replace('itemsPerPage', v)} 
+                                /> */}
+                            </XStack>}
+                        </XStack>
+
                     </XStack>
 
                     <XStack position={"absolute"} right={20}>
-                        <Search top={1} initialState={state?.search} onCancel={onCancelSearch} onSearch={onSearch} />
                         <XStack marginLeft="$3" top={-3}>
                             {!disableViewSelector && <ButtonGroup marginRight="$3">
                                 {
@@ -313,16 +349,15 @@ export function DataView({
                                     </ActiveGroupButton>)
                                 }
                             </ButtonGroup>}
-                            {!hideAdd &&<Tinted>
+                            {!hideAdd && <Tinted>
                                 <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
                                     onAddButton ? onAddButton() : setCreateOpen(true)
                                 }} chromeless={true}>
-                                     <Plus />
+                                    <Plus />
                                 </Button>
                             </Tinted>
                             }
                         </XStack>
-
                     </XStack>
                 </XStack>
 
