@@ -184,7 +184,7 @@
 }
 
 .rdt_TableHead {
-    background-color: var(--colorTransparent) !important;
+    background-color: var(--bgContent) !important;
     /* border-radius: 13px 13px 0px 0px !important; */
     position: fixed;
     z-index: 1000;
