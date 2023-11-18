@@ -21,7 +21,7 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="event"
-                    // disableViewSelector={true}
+                    disableViewSelector={true}
                     defaultView={'list'}
                     rowIcon={ClipboardList}
                     columns={DataTable2.columns(
