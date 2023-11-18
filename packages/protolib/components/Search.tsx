@@ -27,18 +27,19 @@ export const Search = forwardRef(({ alwaysOpen=true, automatic = false, defaultO
         onPress={() => setOpened(true)}
         ref={ref}
         elevation={1}
-        br={15}
+        br={20}
         {...props}
     >
         {opened ? <Input
             o={1}
-            br={15}
+            br={20}
             focusStyle={{bw:1,outlineWidth: 0}}
             backgroundColor={'$color1'}
             value={content}
             disabled={!opened}
             //@ts-ignore
             ref={input}
+            paddingLeft={50}
             width={opened ? "100%" : closedWidth}
             placeholder={opened ? placeholder : ''}
             onBlur={() => (!alwaysOpen && !content) ? setOpened(false) : false}
@@ -53,7 +54,7 @@ export const Search = forwardRef(({ alwaysOpen=true, automatic = false, defaultO
             bw={0}
             onSubmitEditing={(e) => { onSearch(content) }}
         /> : null}
-        <XStack position={"absolute"} right={0} top={0} cursor="pointer">
+        <XStack position={"absolute"} left={0} top={0} cursor="pointer">
             <Tinted>
                 <Button disabled={opened} o={0.5} circular chromeless={true}>
                     <IconSearch fillOpacity={0} color="var(--color)" />
