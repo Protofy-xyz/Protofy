@@ -128,6 +128,8 @@ import {
   }
   
   export const darkColors = {
+    bgPanel: 'red',
+    bgContent: 'green',
     ...colorTokens.dark.blue,
     ...colorTokens.dark.gray,
     ...colorTokens.dark.green,
@@ -139,6 +141,8 @@ import {
   }
   
   export const lightColors = {
+    bgPanel: 'purple',
+    bgContent: 'blue',
     ...colorTokens.light.blue,
     ...colorTokens.light.gray,
     ...colorTokens.light.green,
