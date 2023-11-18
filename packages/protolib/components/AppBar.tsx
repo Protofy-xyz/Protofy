@@ -67,7 +67,10 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
       paddingHorizontal={props.floating ? 0 : '$2'}
       zIndex={50000}
     >
-      {props.children}
+      {React.useMemo(
+        () => props.children,
+        [props, translucid, position]
+      )}
     </XStack>
 )
   return (

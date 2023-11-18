@@ -116,7 +116,7 @@ export const ThemeTint = (props: { children: any; disable?: boolean }) => {
 
   return (
     <Theme name={props.disable ? null : curTint}>
-      {props.children}
+      {useMemo(() => props.children, [props.children])}
     </Theme>
   )
 }
@@ -135,7 +135,7 @@ export const ThemeTintAlt = ({
 
   return (
     <Theme name={disable ? null : curTint}>
-      {children}
+      {useMemo(() => children, [children])}
     </Theme>
   )
 }

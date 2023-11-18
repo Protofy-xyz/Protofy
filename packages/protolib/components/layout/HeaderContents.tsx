@@ -25,7 +25,7 @@ export type HeaderContentsProps = {
 }
 const tooltipDelay = { open: 500, close: 150 }
 
-export const HeaderContents = ({leftArea, centerArea,rightArea, logo, logoHref="/", themeSwitcher=true, tintSwitcher=true, logoSize=30, menu}: HeaderContentsProps) => {
+export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo, logoHref="/", themeSwitcher=true, tintSwitcher=true, logoSize=30, menu}: HeaderContentsProps) => {
   return (
     <>
       <XStack ai="center" space="$4">
@@ -83,4 +83,4 @@ export const HeaderContents = ({leftArea, centerArea,rightArea, logo, logoHref="
       </XStack>
     </>
   )
-}
+})
