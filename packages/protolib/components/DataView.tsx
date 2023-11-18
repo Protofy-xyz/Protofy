@@ -62,6 +62,7 @@ export function DataView({
     pluralName,
     entityName,
     hideAdd = false,
+    enableAddToInitialData = false,
     pageState,
     icons = {},
     model,
@@ -136,6 +137,7 @@ export function DataView({
             props: {
                 sourceUrl,
                 onDelete: () => { },
+                enableAddToInitialData,
                 extraMenuActions: extraMenuActions,
                 ...dataTableListProps
             }
