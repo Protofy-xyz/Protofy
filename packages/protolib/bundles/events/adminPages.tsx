@@ -16,6 +16,7 @@ export default {
             return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
                     hideAdd
+                    enableAddToInitialData
                     openMode="view"
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
