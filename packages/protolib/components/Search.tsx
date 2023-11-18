@@ -9,14 +9,14 @@ export const Search = forwardRef(({ alwaysOpen=true, automatic = false, defaultO
     const input = useRef()
     const [content, setContent] = useState(initialState)
 
-    useUpdateEffect(() => {
-        if (opened) {
-            //@ts-ignore
-            input.current?.focus()
-        } else {
-            onCancel()
-        }
-    }, [opened])
+    // useUpdateEffect(() => {
+    //     if (opened) {
+    //         //@ts-ignore
+    //         input.current?.focus()
+    //     } else {
+    //         onCancel()
+    //     }
+    // }, [opened])
 
 
     //@ts-ignore

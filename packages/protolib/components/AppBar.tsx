@@ -37,6 +37,7 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
       }
     }, [])
   }
+
   const [_, forceUpdate] = React.useState<any>(false) //TODO: create generic function for fixed
   React.useEffect(() => {
     const pageElem = document.getElementById('protolib-page-container')
@@ -57,8 +58,7 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
  
 
 
-  const getContent = () => (<ThemeTint>
-    <XStack
+  const getContent = () => (<XStack
       ref={ref}
       alignItems="center"
       tag="header"
@@ -67,12 +67,9 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
       paddingHorizontal={props.floating ? 0 : '$2'}
       zIndex={50000}
     >
-      {React.useMemo(
-        () => props.children,
-        [props, translucid, position]
-      )}
+      {props.children}
     </XStack>
-  </ThemeTint>)
+)
   return (
     <>
       <XStack
@@ -97,8 +94,7 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
         {/*@ts-ignore*/}
         <XStack width="100%" maw={dettached ? 1120 : undefined} pos="relative">
           <XStack
-            className={`ease-out all ms200 ${isScrolled && dettached ? 'blur-medium hover-highlights ' : ''
-              }`}
+            className={`ease-out all ms200 ${isScrolled && dettached ? 'blur-medium hover-highlights ' : ''}`}
             height={dettached ? undefined : height}
             bbc="$borderColor"
             py={dettached ? "$1" : "$2"}
