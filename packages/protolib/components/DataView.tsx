@@ -312,7 +312,7 @@ export function DataView({
 
                 <XStack pt="$3" px="$7" mb="$1">
                     <XStack left={-12} f={1} ai="center">
-                        {/* {rowIcon && React.createElement(rowIcon, {size: 20})} */}
+         
                         <Paragraph>
                             <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
                         </Paragraph>
@@ -330,16 +330,6 @@ export function DataView({
                                     <Spacer size="$5" />
                                     <ChevronRight size={20} strokeWidth={2} color="$color10" />
                                 </XStack>
-                                {/* <SelectList 
-                                    top={-10}
-                                    triggerProps={{fontWeight: '600', bc:"transparent", bw: 0}}
-                                    valueProps={{fontWeight: '600', o: 0.7}}
-                                    f={1} 
-                                    title={"Page size"} 
-                                    elements={['10', '25', '50', '100', '500', '1000']} 
-                                    value={(pageState.all?'All': (pageState.itemsPerPage?pageState.itemsPerPage:25))+''} 
-                                    setValue={(v) => v=='All'?replace('all', 1):replace('itemsPerPage', v)} 
-                                /> */}
                             </XStack>}
                         </XStack>
                         <XStack ai="center" marginLeft="$3">

@@ -101,15 +101,17 @@ export const AlertDialog = forwardRef(({
         </Dialog.Portal>
 
         <Dialog.Adapt when="sm" >
-            <Dialog.Sheet disableDrag={disableDrag}>
-                {/* ml -18 because there is an bug centering the dialog on sm screen */}
-                <Dialog.Sheet.Frame ml="-18px">
-                    <YStack p={"$5"} pb="$12"  f={1}>
-                        <Dialog.Adapt.Contents />
-                    </YStack>
-                </Dialog.Sheet.Frame>
-                <Dialog.Sheet.Overlay />
-            </Dialog.Sheet>
+            <XStack position='absolute'>
+                <Dialog.Sheet disableDrag={disableDrag}>
+                    {/* ml -18 because there is an bug centering the dialog on sm screen */}
+                    <Dialog.Sheet.Frame ml="-18px">
+                        <YStack p={"$5"} pb="$12"  f={1}>
+                            <Dialog.Adapt.Contents />
+                        </YStack>
+                    </Dialog.Sheet.Frame>
+                    <Dialog.Sheet.Overlay />
+                </Dialog.Sheet>
+            </XStack>
         </Dialog.Adapt>
     </Dialog>)
 })
