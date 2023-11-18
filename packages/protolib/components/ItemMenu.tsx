@@ -1,14 +1,15 @@
 import { Popover, Stack, XStack, YStack, Text, StackProps } from "tamagui"
 import { AlertDialog, API } from 'protolib'
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Tinted } from "./Tinted";
 import { MoreVertical, Trash2 } from '@tamagui/lucide-icons'
 import { InteractiveIcon } from "./InteractiveIcon";
-
+import { DataViewContext } from "./DataView";
 
 export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions = [], ...props }: { sourceUrl: string, onDelete: any, element: any, extraMenuActions?: any } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
+    const { setSelected} = useContext(DataViewContext);
     const MenuButton = ({ text, Icon, onPress }) => {
         return <XStack ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start"
             cursor='pointer'
@@ -28,10 +29,10 @@ export const ItemMenu = ({ sourceUrl = '', onDelete, element, extraMenuActions =
             onAccept={async (setOpen) => {
                 if (Array.isArray(element) && sourceUrl) {
                     element.map(async (ele) => await API.get(sourceUrl + "/" + ele + '/delete'))
+                    setSelected([])
                 } else if (sourceUrl) {
                     await API.get(sourceUrl + '/delete')
                 }
-
                 await onDelete(sourceUrl)
                 setOpen(false)
             }}
