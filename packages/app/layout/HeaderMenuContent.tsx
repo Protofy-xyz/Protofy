@@ -6,7 +6,7 @@ import { useSession, clearSession, useUserSettings, useSessionContext, useWorksp
 import { useRouter } from 'next/router'
 import workspaces from '../bundles/workspaces'
 
-export const HeaderMenuContent = function HeaderMenuContent() {
+export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
   const [session, setSession] = useSession()
   const [sessionContext, setSessionContext] = useSessionContext()
   const userSpaces = useWorkspaces()
@@ -34,4 +34,4 @@ export const HeaderMenuContent = function HeaderMenuContent() {
 
     </YStack>
   )
-}
+})
