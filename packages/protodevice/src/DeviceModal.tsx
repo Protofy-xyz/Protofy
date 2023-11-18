@@ -15,7 +15,6 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
     const isLoading = ['write'].includes(stage) && !isError && !modalFeedback?.message?.includes('Please hold "Boot"')
     const visibleImage = (isLoading || ['idle', 'compile'].includes(stage)) && !isError
     const themeName = useThemeName();
-    console.log("THEEEEME: ",themeName)
     const stages = {
         'yaml': 'Uploading yaml to the project...',
         'compile': 'Compiling firmware...',
