@@ -10,14 +10,15 @@ const WorkspaceSelector = () => {
     const workspaces = useWorkspaces()
     const [settings, setSettings] = useUserSettings()
 
-    return settings.workspace?<Theme reset><SelectList 
-        triggerProps={{bc:"transparent", bw: 0}}
+    return settings.workspace?<SelectList 
+        triggerProps={{o:0.8, bc:"transparent", bw: 0}}
+        valueProps={{o:0.8}}
         f={1} 
         title={"workspaces"}
         value={settings.workspace}
         elements={workspaces}
         setValue={(v) => {setSettings({...settings, workspace:v})}}
-    /></Theme>:null
+    />:null
 }
 
 export const AdminPanel = ({children }) => {
