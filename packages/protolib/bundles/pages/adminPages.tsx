@@ -5,7 +5,7 @@ import { DataView } from 'protolib'
 import { DataTable2, Chip, API, InteractiveIcon } from 'protolib'
 import { z } from 'zod'
 import { Stack, XStack } from '@my/ui'
-import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
+import { ExternalLink, Pencil, Layout } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
 const PageIcons = {}
 
@@ -16,6 +16,7 @@ export default {
 
             return (<AdminPage title="Pages" pageSession={pageSession}>
                 <DataView
+                    rowIcon={Layout}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
