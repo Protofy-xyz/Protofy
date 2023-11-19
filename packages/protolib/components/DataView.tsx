@@ -147,6 +147,7 @@ export function DataView({
             icon: LayoutGrid,
             component: ObjectGrid,
             props: {
+                mt: "$8",
                 model,
                 items: items?.data?.items,
                 sourceUrl,
@@ -164,7 +165,7 @@ export function DataView({
             name: 'raw',
             icon: Layers,
             component: DataTableCard,
-            props: { ...dataTableRawProps }
+            props: { mt: "$8", ...dataTableRawProps }
         }
     ]
 
