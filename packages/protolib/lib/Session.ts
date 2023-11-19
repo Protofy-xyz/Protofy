@@ -68,7 +68,7 @@ export const withSession = async (context:any, validTypes?:string[]|any[]|null, 
 
     if(validTypes) {
         if(!session) return fail(context.req.url)
-        if(validTypes.length && !validTypes.includes(session?.user?.type ?? '')) return fail()
+        if(validTypes.length && !session?.user?.admin && !validTypes.includes(session?.user?.type ?? '')) return fail()
     }
 
     return { 

@@ -4,7 +4,7 @@ import { NextPageContext } from 'next'
 import { API, withSession, getURLWithToken } from 'protolib'
 import { parse } from 'cookie';
 
-export function DataSSR(sourceUrl, allowdUserTypes=['admin', 'editor'], props={}) {
+export function DataSSR(sourceUrl, allowdUserTypes?:string[]|any[]|null, props={}) {
     return _SSR(async (context:NextPageContext) => {
         return withSession(context, allowdUserTypes, {
           pageState: {
@@ -16,7 +16,7 @@ export function DataSSR(sourceUrl, allowdUserTypes=['admin', 'editor'], props={}
     })
 }
 
-export function PaginatedDataSSR(sourceUrl: string|Function,allowdUserTypes=['admin', 'editor'], dataProps:any={}, extraData:any={}, workspaces:any=[]) {
+export function PaginatedDataSSR(sourceUrl: string|Function, allowdUserTypes?:string[]|any[]|null, dataProps:any={}, extraData:any={}) {
   return _SSR(async (context:NextPageContext) => {
     const _dataProps = {
       itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : '',

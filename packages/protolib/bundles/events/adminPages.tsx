@@ -21,7 +21,7 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="event"
-                    disableViewSelector={true}
+                    disableViewSelector={false}
                     defaultView={'list'}
                     rowIcon={ClipboardList}
                     columns={DataTable2.columns(
@@ -47,7 +47,7 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/events', ['admin', 'editor'], {
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/events', ['admin'], {
             orderBy: "created",
             orderDirection: "desc"
         })

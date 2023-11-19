@@ -103,7 +103,7 @@ const hardcodedDeviceDefinition = [{
 
 
 export const getServerSideProps = SSR(async (context: NextPageContext) => {
-  return withSession(context, ['admin', 'editor'], {
+  return withSession(context, ['admin'], {
     //...props,
     deviceDefinition: hardcodedDeviceDefinition
   })

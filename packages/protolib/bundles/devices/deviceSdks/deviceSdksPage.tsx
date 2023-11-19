@@ -28,5 +28,5 @@ export default {
       />
     </AdminPage >)
   },
-  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devicesdks', ['admin', 'editor'])
+  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devicesdks', ['admin'])
 }

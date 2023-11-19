@@ -37,7 +37,7 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/resources', ['admin', 'editor'], {
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/resources', ['admin'], {
 
         })
     }

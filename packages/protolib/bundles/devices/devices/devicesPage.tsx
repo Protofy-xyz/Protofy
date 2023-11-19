@@ -240,7 +240,7 @@ export default {
       />
     </AdminPage>)
   },
-  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devices', ['admin', 'editor'], {}, async () => {
+  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devices', ['admin'], {}, async () => {
     const deviceDefinitions = await API.get('/adminapi/v1/deviceDefinitions?itemsPerPage=1000')
     return {
       deviceDefinitions: deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => DeviceDefinitionModel.load(i).getId()) : []

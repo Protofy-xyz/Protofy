@@ -43,7 +43,7 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/objects', ['admin', 'editor'], {
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/objects', ['admin'], {
             orderBy: 'name'
         })
     }
