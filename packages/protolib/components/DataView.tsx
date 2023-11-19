@@ -235,7 +235,7 @@ export function DataView({
                                             if (result.isError) {
                                                 throw result.error
                                             }
-                                            // fetch()
+                                            fetch()
                                             setCreateOpen(false);
                                             toast.show(name + ' created', {
                                                 message: obj.getId()
@@ -290,7 +290,7 @@ export function DataView({
                                             if (result.isError) {
                                                 throw result.error
                                             }
-                                            //fetch()
+                                            fetch()
                                             const { item, ...rest } = state;
                                             setState(rest)
                                             toast.show(name + ' updated', {
