@@ -164,10 +164,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                             <FileBrowser
                                 onFileAction={(data) => {
                                     if (data.id == 'open_files') {
-                                        //Disable because rerenders clear the timer for double click in chonky
-                                        //This produces a bug where folders can not be opened if a rerender is done while double click
-                                        //We open files whit mouse click file and our own timer for double click
-                                        //onOpen(data.payload.targetFile)
+                                        onOpen(data.payload.targetFile)
                                     } else if (data.id == 'upload_files') {
                                         setShowUploadDialog(true)
                                     } else if (data.id == 'delete_files') {
@@ -177,6 +174,9 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                                     } else if (data.id === "change_selection") {
                                         setSelectedFiles(data.state.selectedFiles)//.map(f => f.name))
                                     } else if (data.id == 'mouse_click_file'){
+                                        //this is a hack because rerenders clear the timer for double click in chonky
+                                        //This produces a bug where folders can not be opened if a rerender is done while double click
+                                        //We open files whit mouse click file and our own timer for double click
                                         if ((Math.abs(Date.now() - lastClickTime.current) < 300)) {
                                             onOpen(data.payload.file)
                                         } else {
