@@ -54,6 +54,7 @@ const getDB = (path, req, session) => {
         await fs.access(filePath, fs.constants.F_OK)
         console.log('File: ' + filePath + ' already exists, not executing template')
       } catch (error) {
+        console.log('permissions: ', value.permissions ? JSON.stringify(value.permissions) : '[]', value.permissions)
         console.log('executing template: ', `/packages/protolib/bundles/pages/templates/${template}.tpl`)
         await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
           name: value.name + '.tsx',
@@ -73,11 +74,23 @@ const getDB = (path, req, session) => {
           }
         })
       }
-      const sourceFile = getSourceFile(indexFile)
+      let sourceFile = getSourceFile(filePath)
+      let arg = getDefinition(sourceFile, '"protected"')
+      if(value.protected) {
+        arg.replaceWithText('true');
+      } else {
+        arg.replaceWithText('false');
+      }
+
+      arg = getDefinition(sourceFile, '"permissions"')
+      arg.replaceWithText(value.permissions ? JSON.stringify(value.permissions) : '[]')
+      sourceFile.save()
+
+      sourceFile = getSourceFile(indexFile)
        //link in index.ts
       addImportToSourceFile(sourceFile, value.name, ImportType.DEFAULT, './' + value.name)
 
-      const arg = getDefinition(sourceFile, '"pages"')
+      arg = getDefinition(sourceFile, '"pages"')
       if (!arg) {
         throw "No link definition schema marker found for file: " + path
       }

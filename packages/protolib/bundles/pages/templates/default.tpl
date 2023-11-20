@@ -29,5 +29,5 @@ export default {
         Paragraph,
         Theme
     }, "/packages/app/bundles/custom/pages/{{name}}.tsx"),
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{permissions}}):undefined))
+    getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{{permissions}}}):undefined))
 }
