@@ -58,8 +58,8 @@ function extendZodTypePrototype(type: any) {
       return this; 
     }
 
-    type.prototype.description = function (val) {
-        this._def.description = val
+    type.prototype.help = function (val) {
+        this._def.help = val
         return this; 
       }
 
