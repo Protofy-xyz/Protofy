@@ -125,6 +125,10 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
     if(!nodeData._devicePositioning){
         setNodeData(node.id,{...nodeData, _devicePositioning: devicePositioning})
     }
+    console.log("NodeData: ",nodeData)
+    console.log("node: ", node)
+    console.log("Calculanting: ",Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")))
+    console.log("Boolean value: ",Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")).length >35)
     return (
         <Node output={false} skipCustom={true} node={node} color='#8FCAF9' isPreview={!id} title='ESP32' id={id} margin='200px' >
             {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
@@ -162,6 +166,30 @@ const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
                     />
                 }
             })}
+            {/* {Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")).length >35?
+            <Handle
+                key={36}
+                isConnectable={!isHandleConnected(edges, `${id}${PORT_TYPES.data}element-${36}`)}
+                isValidConnection={(c) => {
+                    const sourceConnected = isHandleConnected(edges, c.sourceHandle)
+                    return !sourceConnected
+                }}
+                type={"target"}
+                style={{
+                    position: 'absolute',
+                    top:'718px',
+                    width: "17px",
+                    height: "17px",
+                    backgroundColor: isHandleConnected(edges, `${id}${PORT_TYPES.data}element-${36}`) ? "#BA68C8" : "white",
+                    marginLeft: '0px',
+                    marginRight: '9px',
+                    border: isHandleConnected(edges, `${id}${PORT_TYPES.data}element-${36}`) ? "2px solid #BA68C8" : "2px solid white"
+                }}
+                position={Position.Right}
+                id={`${id}${PORT_TYPES.data}element-${36}`}
+            ></Handle>
+            :<></>} */}
+            {/* {Object.keys(nodeData).filter(e => e.includes("element-"))} */}
             <AddPropButton id={id} nodeData={nodeData} type={"Component"} style={{ marginBottom: '20px' }} />
         </Node>
     );
