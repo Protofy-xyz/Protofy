@@ -1,4 +1,4 @@
-import { Cog, Inbox, Library } from '@tamagui/lucide-icons'
+import { Cog, Inbox, Library, ToyBrick } from '@tamagui/lucide-icons'
 
 export default {
     "default": "/admin/events",
@@ -9,6 +9,7 @@ export default {
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
             { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },
             { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
+            { "name": "APIs", "icon": ToyBrick, "type": "apis", "path": "/" },
             { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
             { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" },
