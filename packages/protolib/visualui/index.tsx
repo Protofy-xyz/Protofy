@@ -68,6 +68,7 @@ import TooltipContainer from '../components/TooltipContainer'
 import { TwitterIcon } from '../components/icons/TwitterIcon'
 
 import { UL } from '../components/UL'
+import Video  from '../components/Video'
 //import { unwrapText } from '../components/unwrapText'
 import XCenterStack from '../components/XCenterStack'
 
@@ -174,6 +175,7 @@ export default {
   ...cw(TooltipContainer, 'BoxSelect', 'TooltipContainer', { tooltipText: "Hello" }),
   ...cw(TwitterIcon, 'LogoIcon', 'TwitterIcon', { width: 23 }),
   ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }, {}, {}, true),
+  ...cw(Video, 'Video', 'Video', { }, {}, {}, true),
   ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
   ...cw(AlertDialog, 'Group', 'AlertDialog')
 }

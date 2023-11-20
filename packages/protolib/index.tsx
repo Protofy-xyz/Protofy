@@ -22,6 +22,7 @@ export * from "./components/Code";
 export { default as XCenterStack } from "./components/XCenterStack";
 export { default as BigTitle } from "./components/BigTitle";
 export { default as Image } from "./components/Image";
+export { default as Video } from "./components/Video";
 export { default as ButtonGroup } from "./components/ButtonGroup";
 export { default as BackgroundGradient } from "./components/BackgroundGradient";
 export * from "./components/Grid";
