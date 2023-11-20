@@ -6,14 +6,18 @@ import { DataTable2, Chip, API } from 'protolib'
 import { ToyBrick } from '@tamagui/lucide-icons'
 
 import {z} from 'zod'
+import { usePageParams } from '../../next'
 
 const APIIcons =  {}
 
 export default {
     'admin/apis': {
         component: ({pageState, sourceUrl, initialItems, pageSession, extraData}:any) => {
+            const {replace} = usePageParams(pageState)
+            //replace('editFile', '/packages/app/bundles/custom/apis/')
             return (<AdminPage title="APIs" pageSession={pageSession}>
                 <DataView
+                    onSelectItem={(item) => replace('editFile', '/packages/app/bundles/custom/apis/'+item.data.name+'.ts')}
                     rowIcon={ToyBrick}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}

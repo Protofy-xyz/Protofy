@@ -1,5 +1,5 @@
 import React from 'react';
-import Editor, { EditorProps, useMonaco } from '@monaco-editor/react';
+import Editor, { EditorProps, useMonaco, loader } from '@monaco-editor/react';
 import useKeypress from 'react-use-keypress';
 import { useThemeSetting } from '@tamagui/next-theme';
 import { useTheme } from '@my/ui';
@@ -81,6 +81,18 @@ export const Monaco = ({
         });
     }
 
+    const handleEditorDidMount = (editor, monaco) => {
+
+        monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+            noSemanticValidation: true,
+            noSyntaxValidation: true
+        });
+    
+        monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+            noSemanticValidation: true,
+            noSyntaxValidation: true
+        });
+    };
     if (onSave) {
         useKeypress(['s', 'S'], (event) => {
             if ((event.key === "s" || event.key === "S") && (event.ctrlKey || event.metaKey)) {
@@ -101,6 +113,7 @@ export const Monaco = ({
 
     return (
         <Tinted><Editor
+            onMount={handleEditorDidMount}
             path={path}
             theme={monaco ? customThemeName : undefined}
             value={sourceCode}
