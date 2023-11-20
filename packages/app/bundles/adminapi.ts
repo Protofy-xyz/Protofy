@@ -15,6 +15,7 @@ import { TaskRunApi } from 'protolib/bundles/tasks/api/taskRunApi'
 import { DatabasesAPI } from 'protolib/bundles/databases/databasesAPI'
 import { WorkspacesAPI } from 'protolib/bundles/workspaces/workspacesAPI'
 import { ResourcesAPI } from 'protolib/bundles/resources/resourcesAPI'
+import { AiAssistantsAPI } from 'protolib/bundles/aiAssistants/aiAssistantsAPI';
 
 export default (app, context) => {
   UsersAPI(app, context)
@@ -34,4 +35,5 @@ export default (app, context) => {
   DatabasesAPI(app, context)
   WorkspacesAPI(app, context)
   ResourcesAPI(app, context)
+  AiAssistantsAPI(app,context)
 }
