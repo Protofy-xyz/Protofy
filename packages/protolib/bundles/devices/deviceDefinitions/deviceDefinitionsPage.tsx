@@ -29,6 +29,7 @@ const FlowsWidget = dynamic(() => import('../../../adminpanel/features/component
 export default {
   component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
     const [showDialog, setShowDialog] = React.useState(false)
+    const [isSaveActive, setIsSaveActive] = React.useState(false);
     const { resolvedTheme } = useThemeSetting();
     const defaultJsCode = { "components": "[\n \"mydevice\",\n \"esp32dev\",\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n" }
     const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
@@ -55,16 +56,16 @@ export default {
             // setIsModified={(e)=>{console.log("Set is Modified: ", e);}}
             //onPlay={onPlay}
             disableDots={true}
-            onSave={(o) => { 
+            onSave={isSaveActive?(o) => { 
               console.log("ON SAVE: ", o); 
               saveToFile(o,"a")
-           }}
+           }:null}
             hideBaseComponents={true}
             disableStart={true}
             getFirstNode={(nodes) => {
               return nodes.find(n => n.type == 'ArrayLiteralExpression')
             }}
-            showActionsBar={true}
+            showActionsBar={isSaveActive}
             mode={"device"}
             bridgeNode={false}
             setSourceCode={(sourceCode) => {
@@ -90,7 +91,7 @@ export default {
           DataTable2.column("name", "name", true),
           DataTable2.column("board", "board", true, (row) => <Chip text={row.board} color={'$gray5'} />),
           DataTable2.column("sdk", "sdk", true, (row) => <Chip text={row.sdk} color={'$gray5'} />),
-          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={async (e) => { console.log("row from Edit: ", row); setShowDialog(true); setSourceCode(row.config.components); }}>View</ButtonSimple>)
+          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={async (e) => { console.log("row from Edit: ", row); setIsSaveActive(false); setShowDialog(true); setSourceCode(row.config.components); }}>View</ButtonSimple>)
         )}
         extraFieldsForms={{
           board: z.union(extraData.boards.map(o => z.literal(o.name))).after('name').display(),
@@ -115,7 +116,7 @@ export default {
             component: (path, data, setData, mode) => {
               console.log("inputs: ", { path, data, setData, mode })
               if (mode == "preview"){return <></>}
-              return <ButtonSimple onPress={(e) => {setShowDialog(true); mode=="add"?setSourceCode(defaultJsCode.components):setSourceCode(data.components); setEditedObjectData({path,data,setData,mode});  console.log("inputs: ", { path, data, setData, mode })}}>Edit</ButtonSimple>
+              return <ButtonSimple onPress={(e) => {setShowDialog(true); setIsSaveActive(true); mode=="add"?setSourceCode(defaultJsCode.components):setSourceCode(data.components); setEditedObjectData({path,data,setData,mode});  console.log("inputs: ", { path, data, setData, mode })}}>Edit</ButtonSimple>
             },
             hideLabel: false
           }
