@@ -1,5 +1,5 @@
 import {Objects} from "app/bundles/objects";
-import {CreateApi} from 'protolib/api'
+import {AutoAPI} from 'protolib/api'
 
 const {name, prefix} = Objects.{{name}}.getApiOptions()
 
