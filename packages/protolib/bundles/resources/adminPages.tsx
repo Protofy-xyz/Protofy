@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { DataTable2, Chip, DataView, Tooltip } from 'protolib'
 import moment from 'moment'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
-import { ExternalLink } from '@tamagui/lucide-icons'
+import { ExternalLink, Link } from '@tamagui/lucide-icons'
 
 
 const format = 'YYYY-MM-DD HH:mm:ss'
@@ -17,6 +17,7 @@ export default {
         component: ({ pageState, sourceUrl, initialItems, pageSession }: any) => {
             return (<AdminPage title="Resources" pageSession={pageSession}>
                 <DataView
+                    rowIcon={Link}
                     enableAddToInitialData
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}

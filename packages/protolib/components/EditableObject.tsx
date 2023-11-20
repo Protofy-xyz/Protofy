@@ -237,7 +237,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     newele.name = ele.name
     ele = newele
   }
-
+  
   // console.log('custom fields: ', customFields, 'ele: ', ele.name, elementType)
 
   // TODO Check if custom element
@@ -258,7 +258,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
       _rawOptions = [...options]
     }
 
-    console.log({options, _rawOptions})
+    // console.log({options, _rawOptions})
     return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
       {
         ele._def.dependsOn

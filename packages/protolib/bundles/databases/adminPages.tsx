@@ -8,6 +8,7 @@ import { Paragraph, XStack, YStack } from '@my/ui'
 import { Tinted } from '../../components/Tinted'
 import { DataCard } from '../../components/DataCard'
 import { useState } from 'react'
+import { Server } from '@tamagui/lucide-icons'
 const format = 'YYYY-MM-DD HH:mm:ss'
 const DatabaseIcons = {}
 const rowsPerPage = 20
@@ -18,6 +19,7 @@ export default {
             const router = useRouter()
             return (<AdminPage title="Databases" workspace={workspace} pageSession={pageSession}>
                 <DataView
+                    rowIcon={Server}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}

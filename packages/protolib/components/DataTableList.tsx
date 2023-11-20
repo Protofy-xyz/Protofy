@@ -76,8 +76,8 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuAction
                                 </Checkbox>
                             </Stack>
                             <ItemMenu enableAddToInitialData={enableAddToInitialData} ml={"-5px"} mt={"1px"} element={model.load(row)} sourceUrl={sourceUrl + "/" + model.load(row).getId()} onDelete={onDelete} extraMenuActions={extraMenuActions} />
-                            {rowIcon && <Stack o={0.8} ml={"$2"} t={"6px"}>{React.createElement(rowIcon, { size: "$1" })}</Stack>}
-                        </XStack></Theme>, true, '115px'), ...cols]}
+                            {rowIcon && <Tinted><Stack o={0.8} ml={"$2"} t={"6px"}>{React.createElement(rowIcon, { size: "$1", color: '$color7' })}</Stack></Tinted>}
+                        </XStack></Theme>, true, rowIcon?'115px':'75px'), ...cols]}
                     rows={items?.data?.items}
                     onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}
                 />

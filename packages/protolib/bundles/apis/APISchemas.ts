@@ -1,9 +1,8 @@
 import { z } from "zod";
-import {BaseSchema} from 'protolib/base'
 import { AutoModel, Schema } from 'protolib/base'
 
 export const APISchema = Schema.object({
-
+    name: Schema.string().id().static().display()
 }) 
 
 export type APIType = z.infer<typeof APISchema>;

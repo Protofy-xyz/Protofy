@@ -31,7 +31,6 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="user"
-                    disableViewSelector={true}
                     defaultView={'list'}
                     onAdd={data => {
                         if (data.password != data.repassword) {
@@ -49,13 +48,13 @@ export default {
                     }}
                     customFields={{
                         type: {
-                            component: (path, data, setData) => <SelectList
+                            component: (path, data, setData, mode) => mode == 'add' || mode == 'edit' ? <SelectList
                                 f={1}
                                 title={'type'}
                                 elements={extraData.groups?.map(item => item)}
                                 value={getValue(data)}
                                 setValue={(v) => setData(v)}
-                            />
+                            /> : false
                         }
                     }}
 
@@ -64,7 +63,7 @@ export default {
                         DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'admin' ? '$color5' : '$gray5'} />),
                         DataTable2.column("from", "from", true, row => <Chip text={row.from?.toUpperCase()} color={row.from == 'cmd' ? '$blue5' : '$gray5'} />),
                         DataTable2.column("created", "createdAt", true, row => moment(row.createdAt).format(format)),
-                        DataTable2.column("last login", "lastLogin", true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'NEVER'} color={'$yellow6'} />)
+                        DataTable2.column("last login", "lastLogin", true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'never'} color={'$gray5'} />)
                     )}
                     extraFieldsForms={{
                         repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret().display()

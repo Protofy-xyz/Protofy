@@ -2,7 +2,7 @@
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { ObjectModel } from '.'
 import {DataView, DataTable2, Chip, API} from 'protolib'
-import { Pencil } from '@tamagui/lucide-icons';
+import { Pencil, Box } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
@@ -15,6 +15,7 @@ export default {
 
             return (<AdminPage title="Objects" pageSession={pageSession}>
                 <DataView
+                    rowIcon={Box}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
