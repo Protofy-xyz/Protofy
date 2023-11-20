@@ -58,6 +58,11 @@ function extendZodTypePrototype(type: any) {
       return this; 
     }
 
+    type.prototype.description = function (val) {
+        this._def.description = val
+        return this; 
+      }
+
     type.prototype.generateOptions = function (call) {
       this._def.generateOptions = call
       return this; 
