@@ -237,7 +237,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     newele.name = ele.name
     ele = newele
   }
-  
+
   // console.log('custom fields: ', customFields, 'ele: ', ele.name, elementType)
 
   // TODO Check if custom element
@@ -258,19 +258,18 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
       _rawOptions = [...options]
     }
 
-    // console.log({options, _rawOptions})
     return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
       {
         ele._def.dependsOn
           ? data[ele._def.dependsOn]
-            ? <SelectList f={1} title={ele.name} elements={options} value={options[_rawOptions.findIndex(o =>  o == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[_rawOptions.indexOf(v)])} />
+            ? <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
             : <Input
               focusStyle={{ outlineWidth: 1 }}
               disabled={true}
               placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + ele._def.dependsOn + ' property first'}
               bc="$backgroundTransparent"
             ></Input>
-          : <SelectList f={1} title={ele.name} elements={options} value={options[_rawOptions.findIndex(o => o == getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[_rawOptions.indexOf(v)])} />
+          : <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
       }
     </FormElement>
   } else if (elementType == 'ZodNumber' && mode != 'preview') {
@@ -369,7 +368,7 @@ const GridElement = ({ index, data, width }) => {
   </XStack>
 }
 
-export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions ,disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
   const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
   const [currentMode, setCurrentMode] = useState(mode)
   const [prevCurrentMode, setPrevCurrentMode] = useState('')
@@ -431,12 +430,12 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
 
   const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode, mode, originalData])
 
-  const gridView = useMemo(() => Object.keys(groups).map((k, i) =><XStack ref={containerRef} mt={i ? "$0" : "$0"} width={autoWidth ? '100%' : columnWidth * (numColumns) + columnMargin} f={1}>
+  const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} mt={i ? "$0" : "$0"} width={autoWidth ? '100%' : columnWidth * (numColumns) + columnMargin} f={1}>
     <YStack f={1}>
       <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>
     {currentMode == 'preview' && <Stack t={"$-5"}>
-      <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} element={model.load(data.data)} extraMenuActions={extraMenuActions}/>
+      <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} element={model.load(data.data)} extraMenuActions={extraMenuActions} />
     </Stack>}
   </XStack>), [columnMargin, groups, columnWidth, numColumns])
 
