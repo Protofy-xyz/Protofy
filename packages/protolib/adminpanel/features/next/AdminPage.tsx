@@ -15,15 +15,14 @@ export function AdminPage({ pageSession, title, children }: any) {
 
   return (
     <Page title={"Protofy - " + title}>
-      <Tinted>
-        <Chat tags={['doc', title]} />
-      </Tinted>
-      
       <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName}}>
         <AdminPanel>
           {children}
         </AdminPanel>
       </SearchContext.Provider>
+      <Tinted>
+        <Chat tags={['doc', title]} />
+      </Tinted>
     </Page>
   )
 }

@@ -1,12 +1,12 @@
 
 import { addResponseMessage, Widget, toggleMsgLoader } from 'react-chat-widget'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Tinted, API } from 'protolib';
-import { useEffectOnce } from 'usehooks-ts';
+import { useTimeout, useWindowSize } from 'usehooks-ts';
 
-const Chat = ({ tags = [] }: any) => {
+const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
     const [first, setFirst] = useState(true)
-
+    const chatContainer = useRef()
     const scrollToBottom = () => {
         const chatContainer = document.querySelector('.rcw-messages-container');
         if (chatContainer) {
@@ -117,24 +117,69 @@ const Chat = ({ tags = [] }: any) => {
         resources.forEach(resource => addResponseMessage(resource))
     }
 
+    const { width, height } = useWindowSize()
+
+    // useEffect(()=> {
+    //     //@ts-ignore
+    //     if(chatContainer.current && chatContainer.current.firstChild  && position.bottom == position.top && position.bottom) {
+    //         console.log('position:', position, positioned)
+    //         setPositioned(position)
+    //     }
+    // }, [position])
+
+    useEffect(()=> {
+        if(chatContainer.current) {
+            const position = chatContainer.current.getBoundingClientRect()
+            //@ts-ignore
+            if(chatContainer.current && chatContainer.current.firstChild  && position.bottom == position.top && position.bottom) {
+                //@ts-ignore
+                chatContainer.current.firstChild.style.bottom = -(height - position.top)+'px'
+                //@ts-ignore
+                chatContainer.current.firstChild.style.right =  -(width - position.right)+'px'
+            }
+        }
+    }, [width, height])
+
+    for(var i=0;i<20;i++) {
+        useTimeout(() => {
+            if(chatContainer.current) {
+                const position = chatContainer.current.getBoundingClientRect()
+                //@ts-ignore
+                if(chatContainer.current && chatContainer.current.firstChild  && position.bottom == position.top && position.bottom) {
+                    //@ts-ignore
+                    chatContainer.current.firstChild.style.bottom = -(height - position.top)+'px'
+                    //@ts-ignore
+                    chatContainer.current.firstChild.style.right =  -(width - position.right)+'px'
+                }
+            }
+        }, i*50)
+    }
+
     return (
         <Tinted>
-            <Widget
-                title="Asistant"
-                subtitle="Get help, ideas and documentation"
-                handleNewUserMessage={() => { }}
-                handleToggle={async (state) => {
-                    if (state) {
-                        if(first) {
-                            setFirst(false)
-                            toggleMsgLoader()
-                            await getInitialMessages()
-                            // setTimeout(() => scrollToBottom(), 500)
-                            toggleMsgLoader()
-                        }
-                    }
-                }}
-            />
+            <div ref={chatContainer} onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()} style={{transform: 'none', zIndex: zIndex, bottom: 0, right: 0,position: "fixed" }}>
+                <div style={{position:'absolute'}}>
+                    <Widget
+                        title="Asistant"
+                        subtitle="Get help, ideas and documentation"
+                        handleNewUserMessage={(message) => {
+
+                            console.log('Message: ', message)
+                        }}
+                        handleToggle={async (state) => {
+                            if (state) {
+                                if(first) {
+                                    setFirst(false)
+                                    toggleMsgLoader()
+                                    await getInitialMessages()
+                                    // setTimeout(() => scrollToBottom(), 500)
+                                    toggleMsgLoader()
+                                }
+                            }
+                        }}
+                    />
+                </div>
+            </div>
         </Tinted>
     )
 }

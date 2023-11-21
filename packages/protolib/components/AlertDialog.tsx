@@ -4,6 +4,8 @@ import { forwardRef, useEffect, useState } from 'react'
 import { Tinted } from './Tinted'
 import { Notice } from './Notice'
 import Center from './Center'
+import dynamic from 'next/dynamic';
+const Chat = dynamic(() => import('../adminpanel/features/next/chat'), { ssr: false })
 
 export const AlertDialog = forwardRef(({
     showCancel,
@@ -25,10 +27,11 @@ export const AlertDialog = forwardRef(({
     disableDrag = false,
     ...props
 }: any, ref: any) => {
-    
+
     const [_open, _setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
+    
     const seter = setOpen !== undefined ? setOpen : _setOpen
     const status = setOpen !== undefined ? open : _open
 
@@ -37,13 +40,17 @@ export const AlertDialog = forwardRef(({
             setError(undefined)
         }
     }, [status])
-    return (<Dialog ref={ref} open={open !== undefined ? open : _open} onOpenChange={setOpen !== undefined ? setOpen : _setOpen}>
+    const openState = open !== undefined ? open : _open
+    return (<Dialog ref={ref} open={openState} onOpenChange={setOpen !== undefined ? setOpen : _setOpen}>
         <Dialog.Trigger>
             {trigger}
         </Dialog.Trigger>
         <Dialog.Portal >
             <Dialog.Overlay />
             <Dialog.Content scale={1} p="$7" ai="flex-start" jc="flex-start" {...props}>
+                <Tinted>
+                    <Chat tags={['doc', title]} zIndex={999999999} onScreen={openState} />
+                </Tinted>
                 <YStack f={1} width={"100%"}>
                     <YStack f={1}>
                         {title && <XStack width={"100%"} f={1}>
@@ -91,13 +98,13 @@ export const AlertDialog = forwardRef(({
                                         {loading ? <Spinner /> : acceptCaption}
                                     </Button>
                                 </Tinted>
-
                             </XStack>
                         </YStack>}
                     </YStack>
                 </YStack>
                 <Dialog.Close />
             </Dialog.Content>
+
         </Dialog.Portal>
 
         <Dialog.Adapt when="sm" >
@@ -105,7 +112,7 @@ export const AlertDialog = forwardRef(({
                 <Dialog.Sheet disableDrag={disableDrag}>
                     {/* ml -18 because there is an bug centering the dialog on sm screen */}
                     <Dialog.Sheet.Frame ml="-18px">
-                        <YStack p={"$5"} pb="$12"  f={1}>
+                        <YStack p={"$5"} pb="$12" f={1}>
                             <Dialog.Adapt.Contents />
                         </YStack>
                     </Dialog.Sheet.Frame>
