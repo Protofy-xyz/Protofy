@@ -25,6 +25,7 @@ export const AlertDialog = forwardRef(({
     open,
     setOpen,
     disableDrag = false,
+    integratedChat = false,
     ...props
 }: any, ref: any) => {
 
@@ -48,9 +49,9 @@ export const AlertDialog = forwardRef(({
         <Dialog.Portal >
             <Dialog.Overlay />
             <Dialog.Content scale={1} p="$7" ai="flex-start" jc="flex-start" {...props}>
-                <Tinted>
+                {integratedChat && openState && <Tinted>
                     <Chat tags={['doc', title]} zIndex={999999999} onScreen={openState} />
-                </Tinted>
+                </Tinted> }
                 <YStack f={1} width={"100%"}>
                     <YStack f={1}>
                         {title && <XStack width={"100%"} f={1}>

@@ -16,6 +16,7 @@ export default {
 
             return (<AdminPage title="Pages" pageSession={pageSession}>
                 <DataView
+                    integratedChat
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}

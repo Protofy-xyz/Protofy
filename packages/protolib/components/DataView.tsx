@@ -87,6 +87,7 @@ export function DataView({
     toolBarContent = null,
     onAddButton = undefined,
     extraMenuActions = [],
+    integratedChat = false,
     objectProps = {}
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
@@ -185,6 +186,7 @@ export function DataView({
         <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>
             <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
                 <AlertDialog
+                    integratedChat
                     p={"$0"}
                     hideAccept
                     setOpen={(s) => {
@@ -213,6 +215,7 @@ export function DataView({
                 </AlertDialog>
 
                 <AlertDialog
+                    integratedChat
                     p={"$2"}
                     pt="$5"
                     pl="$5"
@@ -256,6 +259,7 @@ export function DataView({
                     </YStack>
                 </AlertDialog>
                 <AlertDialog
+                    integratedChat
                     p={"$1"}
                     pt="$5"
                     pl="$5"
