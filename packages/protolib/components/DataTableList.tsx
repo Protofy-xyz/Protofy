@@ -30,7 +30,6 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuAction
     const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean']
     const cols = tableColumns ?? DataTable2.columns(...(Object.keys(fields.shape).filter(key => validTypes.includes(fields.shape[key]._def?.typeName)).map(key => DataTable2.column(fields.shape[key]._def?.label ?? key, key, true))))
     const finalColumns = cols
-    console.log("enableADDDD", enableAddToInitialData)
 
     return <Scrollbars universal={true}>
         <XStack pt="$1" flexWrap='wrap'>

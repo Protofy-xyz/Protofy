@@ -91,8 +91,8 @@ export function DataView({
     objectProps = {}
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
-    const [items, setItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/' + (_plural) + "/#", model)
-    // const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
+    const [realTimeItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/' + (_plural) + "/#", model)
+    const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
     const [state, setState] = useState(pageState)
@@ -115,6 +115,11 @@ export function DataView({
             setCurrentItems(items)
         }
     }, [items])
+
+    useUpdateEffect(() => {
+        console.log('remote changes received from mqtt, refetch')
+        fetch()
+    }, [realTimeItems])
 
     useEffect(() => {
         push("search", search, false)
