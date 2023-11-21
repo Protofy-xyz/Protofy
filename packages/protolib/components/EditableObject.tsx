@@ -223,8 +223,6 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
       return target
     }
 
-    console.log('getformDat', data)
-
     // Retorna el valor de ele.name o un valor predeterminado.
     return target && target.hasOwnProperty(key) ? target[key] : '';
   }
@@ -253,24 +251,56 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
     let _rawOptions = elementDef.options.map(o => o._def.value)
 
     // depends on
-    if (ele._def.dependsOn && data && data[ele._def.dependsOn] && (typeof ele._def.generateOptions === 'function')) {
+    if (ele._def.dependsOn && data
+      && data[ele._def.dependsOn]
+      && (typeof ele._def.generateOptions === 'function')) {
       options = ele._def.generateOptions(data)
       _rawOptions = [...options]
     }
 
-    return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-      {
-        ele._def.dependsOn
-          ? data[ele._def.dependsOn]
-            ? <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
-            : <Input
+    const dependsOn = ele._def.dependsOn
+    const dependsOnValue = ele._def.dependsOnValue;
+
+    const getDependsField = () => { // TODO: refactor
+      if (dependsOn) {
+        if (data[dependsOn]) {
+          if (dependsOnValue) {
+            if (dependsOnValue == data[dependsOn]) {
+              return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+            }
+            else {
+              return <Input
+                focusStyle={{ outlineWidth: 1 }}
+                disabled={true}
+                placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + dependsOn + ' property first'}
+                bc="$backgroundTransparent"
+              ></Input>
+            }
+          }
+          else {
+            return <Input
               focusStyle={{ outlineWidth: 1 }}
               disabled={true}
-              placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + ele._def.dependsOn + ' property first'}
+              placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + dependsOn + ' property first'}
               bc="$backgroundTransparent"
             ></Input>
-          : <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+          }
+        } else {
+          return <Input
+            focusStyle={{ outlineWidth: 1 }}
+            disabled={true}
+            placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + dependsOn + ' property first'}
+            bc="$backgroundTransparent"
+          ></Input>
+        }
       }
+      else {
+        return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+      }
+    }
+
+    return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+      {getDependsField()}
     </FormElement>
   } else if (elementType == 'ZodNumber' && mode != 'preview') {
     if (elementDef.checks) {

@@ -11,8 +11,8 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
       disablePreventBodyScroll
       {...props}
     >
-      <Select.Trigger f={1} iconAfter={ChevronDown} {...triggerProps}>
-        <Select.Value placeholder="definition">{value}</Select.Value>
+      <Select.Trigger f={21} iconAfter={ChevronDown} {...triggerProps}>
+        <Select.Value placeholder="choose an option">{value}</Select.Value> {/* this could change in the future */}
       </Select.Trigger>
 
       <Adapt when="sm" platform="touch">

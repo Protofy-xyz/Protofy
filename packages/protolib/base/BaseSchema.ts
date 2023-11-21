@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 initSchemaSystem()
 export const Schema = z
 
-const onEvent = (that, eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) => {
-    if(!that._def.events) {
+const onEvent = (that, eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any) => {
+    if (!that._def.events) {
         that._def.events = []
     }
     that._def.events.push({
@@ -34,12 +34,12 @@ function extendZodTypePrototype(type: any) {
     };
 
     type.prototype.display = function (views: string[] | undefined) {
-        this._def.display = !views ?['*'] : views;
+        this._def.display = !views ? ['*'] : views;
         return this;
     };
 
     type.prototype.generate = function (val, force?) {
-        this._def.generate = {generator: val, force};
+        this._def.generate = { generator: val, force };
         return this;
     };
 
@@ -53,24 +53,25 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.dependsOn = function (val) {
-      this._def.dependsOn = val
-      return this; 
+    type.prototype.dependsOn = function (field, value) {
+        this._def.dependsOn = field
+        this._def.dependsOnValue = value;
+        return this;
     }
 
     type.prototype.help = function (val) {
         this._def.help = val
-        return this; 
-      }
+        return this;
+    }
 
     type.prototype.generateOptions = function (call) {
-      this._def.generateOptions = call
-      return this; 
+        this._def.generateOptions = call
+        return this;
     }
 
     type.prototype.choices = function () {
-      this._def.choices = true
-      return this; 
+        this._def.choices = true
+        return this;
     }
 
     type.prototype.displayOptions = function (options) {
@@ -103,32 +104,32 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.group = function (group:number) {
+    type.prototype.group = function (group: number) {
         this._def.group = group;
         return this;
     };
 
-    type.prototype.on = function(eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+    type.prototype.on = function (eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any) {
         return onEvent(this, eventName, eventHandler, eventContext, eventParams)
     }
 
-    type.prototype.onList = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+    type.prototype.onList = function (eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any) {
         return onEvent(this, 'list', eventHandler, eventContext, eventParams)
     }
 
-    type.prototype.onCreate = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+    type.prototype.onCreate = function (eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any) {
         return onEvent(this, 'create', eventHandler, eventContext, eventParams)
     };
 
-    type.prototype.onRead = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+    type.prototype.onRead = function (eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any) {
         return onEvent(this, 'read', eventHandler, eventContext, eventParams)
     }
 
-    type.prototype.onUpdate = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+    type.prototype.onUpdate = function (eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any) {
         return onEvent(this, 'update', eventHandler, eventContext, eventParams)
     }
 
-    type.prototype.onDelete = function(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any) {
+    type.prototype.onDelete = function (eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any) {
         return onEvent(this, 'delete', eventHandler, eventContext, eventParams)
     }
 }
