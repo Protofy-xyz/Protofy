@@ -7,6 +7,8 @@ import { useAtom } from 'jotai';
 
 const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
     const [first, setFirst] = useState(true)
+    const [lastMessage, setLastMessage] = useAtom(PromptResponseAtom)
+
     const chatContainer = useRef()
     const scrollToBottom = () => {
         const chatContainer = document.querySelector('.rcw-messages-container');
@@ -114,9 +116,12 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
 
     const getInitialMessages = async () => {
         const resources = await getResources()
-        console.log('res: ', resources)
         resources.forEach(resource => addResponseMessage(resource))
-        addResponseMessage("I'm here to help you. Feel free to ask questions about the system.")
+        if(!lastMessage){
+            const message = "I'm here to help you. Feel free to ask questions about the system."
+            addResponseMessage(message)
+            setLastMessage(message)
+        } 
     }
 
     const { width, height } = useWindowSize()
@@ -164,6 +169,8 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
     }
 
     const [promptChain] = useAtom(PromptAtom)
+
+
     const [promptResponse, setPromptResponse] = useAtom(PromptResponseAtom)
 
     return (
