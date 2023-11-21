@@ -79,10 +79,6 @@ export default {
                                 <Text fontSize="$5" color="$color11">Messages [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{filteredMessages.length}</Text></Tinted>]</Text>
                             </Paragraph>
                         </XStack>
-
-                        <XStack position={"absolute"} right={20}>
-                            <Search automatic={true} top={1} onCancel={() => setFilter("")} onSearch={(text) => setFilter(text)} />
-                        </XStack>
                     </XStack>
                     {!filteredMessages.length && <Center top={-100}>
                         <EmptyMessage />
