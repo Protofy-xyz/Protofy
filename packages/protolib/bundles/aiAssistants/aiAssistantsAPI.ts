@@ -6,7 +6,7 @@ export function AiAssistantsAPI(app, context) {
     app.post('/adminapi/v1/assistants', handler(async (req: any, res: any) => {
         let { messages } = req.body;
         const body: GPT4VCompletionRequest = {
-            model: "gpt-4-vision-preview",
+            model: "gpt-4-1106-preview",
             max_tokens: MAX_TOKENS,
             messages: messages,
         };
@@ -30,7 +30,7 @@ export function AiAssistantsAPI(app, context) {
 }
 
 export type GPT4VCompletionRequest = {
-    model: "gpt-4-vision-preview"; // https://platform.openai.com/docs/models/overview
+    model: "gpt-4-vision-preview" | "gpt-4-1106-preview" | "gpt-4" | "gpt-4-32k" | "gpt-4-0613" | "gpt-4-32k-0613" | "gpt-4-0314" | "gpt-4-32k-0314"; // https://platform.openai.com/docs/models/overview
     messages: Message[];
     functions?: any[] | undefined;
     function_call?: any | undefined;
