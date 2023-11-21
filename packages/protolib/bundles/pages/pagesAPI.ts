@@ -4,10 +4,11 @@ import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
 import axios from 'axios';
-import {getServiceToken} from 'protolib/api/lib/serviceToken'
+import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import { API } from "../../lib/Api";
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
-const pagesDir = fspath.join(PROJECT_WORKSPACE_DIR,"/packages/app/bundles/custom/pages/")
+const pagesDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/pages/")
 const indexFile = pagesDir + "index.tsx"
 
 const getPage = (pagePath) => {
@@ -16,9 +17,9 @@ const getPage = (pagePath) => {
   const prot = getDefinition(sourceFile, '"protected"')
   let permissions = getDefinition(sourceFile, '"permissions"')
 
-  if(!route || !permissions || !prot) return undefined
+  if (!route || !permissions || !prot) return undefined
 
-  if(permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
+  if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
     permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
   } else {
     permissions = permissions.getText()
@@ -32,7 +33,7 @@ const getPage = (pagePath) => {
     protected: prot.getText() == 'false' ? false : true,
     permissions: permissions
   }
-} 
+}
 
 const getDB = (path, req, session) => {
   const db = {
@@ -41,13 +42,13 @@ const getDB = (path, req, session) => {
       const pages = await Promise.all(files.map(async f => getPage(fspath.join(pagesDir, f))));
 
       for (const page of pages) {
-        if(page) yield [page.name, JSON.stringify(page)];
+        if (page) yield [page.name, JSON.stringify(page)];
       }
     },
 
     async put(key, value) {
       value = JSON.parse(value)
-      const filePath = fspath.join(pagesDir, fspath.basename(value.name)+'.tsx')
+      const filePath = fspath.join(pagesDir, fspath.basename(value.name) + '.tsx')
       const template = fspath.basename(value.template ?? 'default')
       const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
       try {
@@ -56,27 +57,55 @@ const getDB = (path, req, session) => {
       } catch (error) {
         console.log('permissions: ', value.permissions ? JSON.stringify(value.permissions) : '[]', value.permissions)
         console.log('executing template: ', `/packages/protolib/bundles/pages/templates/${template}.tpl`)
-        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
+        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: value.name + '.tsx',
           data: {
-            options: { 
-              template: `/packages/protolib/bundles/pages/templates/${template}.tpl`, 
+            options: {
+              template: `/packages/protolib/bundles/pages/templates/${template}.tpl`,
               variables: {
                 ...value,
                 route: value.route.startsWith('/') ? value.route : '/' + value.route,
                 permissions: value.permissions ? JSON.stringify(value.permissions) : '[]',
                 object: object,
                 _object: object.toLowerCase(),
-                apiUrl: '/api/v1/'+value.object+'s'
-              } 
+                apiUrl: '/api/v1/' + value.object + 's'
+              }
             },
             path: pagesDir
           }
         })
       }
       let sourceFile = getSourceFile(filePath)
+      if (value.template == 'generative') { // Check that template is generative and do call to chatgpt
+        const systemPrompt = `You are an expert react developer. A user will provide you with a
+ low-fidelity wireframe of an application and you will return 
+ a single react file that uses tamagui to create the website. Use creative license to make the application more fleshed out.
+if you need to insert an image, use placehold.co to create a placeholder image. Respond only with the react code.`;
+        const defaultMessages = [
+          {
+            role: "system",
+            content: systemPrompt,
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "image_url",
+                image_url: value.asset,
+              },
+              "Turn this into a react component using Tamagui components library",
+            ],
+          },
+        ]
+        // Call chatgpt
+        const result = await API.post('/adminapi/v1/assistants', {
+          messages: defaultMessages
+        })
+        // console.log('DEV: result from CHATGPT', result)
+        // console.log('DEV: valueAsset', value.asset)
+      }
       let arg = getDefinition(sourceFile, '"protected"')
-      if(value.protected) {
+      if (value.protected) {
         arg.replaceWithText('true');
       } else {
         arg.replaceWithText('false');
@@ -87,7 +116,7 @@ const getDB = (path, req, session) => {
       sourceFile.save()
 
       sourceFile = getSourceFile(indexFile)
-       //link in index.ts
+      //link in index.ts
       addImportToSourceFile(sourceFile, value.name, ImportType.DEFAULT, './' + value.name)
 
       arg = getDefinition(sourceFile, '"pages"')
@@ -100,7 +129,7 @@ const getDB = (path, req, session) => {
     },
 
     async get(key) {
-      const page = getPage(fspath.join(pagesDir, fspath.basename(key+'.tsx')))
+      const page = getPage(fspath.join(pagesDir, fspath.basename(key + '.tsx')))
       return JSON.stringify(page)
     }
   };
