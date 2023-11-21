@@ -116,6 +116,7 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
         const resources = await getResources()
         console.log('res: ', resources)
         resources.forEach(resource => addResponseMessage(resource))
+        addResponseMessage("I'm here to help you. Feel free to ask questions about the system.")
     }
 
     const { width, height } = useWindowSize()
@@ -165,13 +166,25 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
                     <Widget
                         title="Asistant"
                         subtitle="Get help, ideas and documentation"
-                        handleNewUserMessage={(message) => {
+                        handleNewUserMessage={async (message) => {
                             //generate prompts
                             console.log('Prompt chain: ', promptChain)
                             const prompt = promptChain.reduce((total, current) => total + current.generate(total), '') + `The question of the user for the assistant is:
 "${message}".
 reply directly to the user, acting as the assistant.`
                             console.log('prompt: ', prompt)
+
+                            const result = await API.post('/adminapi/v1/assistants', {
+                                messages: [{role: 'user', content: prompt}],
+                                best_of: 4
+                            })
+                            console.log('result: ', result)
+                            if(result.isError) {
+                                addResponseMessage("Error generating response: ", result.error)
+                            } else {
+                                addResponseMessage(result.data.choices[0].message.content)
+                            }
+
                         }}
                         handleToggle={async (state) => {
                             if (state) {
