@@ -1,7 +1,7 @@
 
 import { addResponseMessage, Widget, toggleMsgLoader } from 'react-chat-widget'
 import { useEffect, useRef, useState } from 'react';
-import { Tinted, API, PromptAtom } from 'protolib';
+import { Tinted, API, PromptAtom, PromptResponseAtom } from 'protolib';
 import { useTimeout, useWindowSize } from 'usehooks-ts';
 import { useAtom } from 'jotai';
 
@@ -129,6 +129,12 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
     //     }
     // }, [position])
 
+    function removeCommandFromString(originalString) {
+        // This regular expression matches a command at the beginning of the string
+        let regex = /^\/\S+/;
+        return originalString.replace(regex, "").trim();
+    }
+
     useEffect(()=> {
         if(chatContainer.current) {
             const position = chatContainer.current.getBoundingClientRect()
@@ -158,6 +164,7 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
     }
 
     const [promptChain] = useAtom(PromptAtom)
+    const [promptResponse, setPromptResponse] = useAtom(PromptResponseAtom)
 
     return (
         <Tinted>
@@ -179,7 +186,10 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
 End of command list.
 
 The user wants to know the list of available commands. Include all the commands in the reply, and include a small description of the command. use the field action for the description of what the command does, but summarize it. 
-`: `
+`: isCommand?`
+
+------
+request: ${removeCommandFromString(message)}`:`
 reply directly to the user, acting as the assistant.
 
 The question of the user for the assistant is:
@@ -191,7 +201,7 @@ The question of the user for the assistant is:
                             const result = await API.post('/adminapi/v1/assistants', {
                                 messages: [{role: 'user', content: prompt}],
                                 best_of: 4,
-                                temperature: isCommand?0:1
+                                temperature: isHelp?0:1
                             })
                             toggleMsgLoader();
                             console.log('result: ', result)
@@ -205,6 +215,7 @@ The question of the user for the assistant is:
                                 addResponseMessage(errorMsg)
                             } else {
                                 addResponseMessage(result.data.choices[0].message.content)
+                                setPromptResponse(result.data.choices[0].message.content)
                             }
 
                         }}

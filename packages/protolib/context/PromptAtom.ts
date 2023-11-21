@@ -6,7 +6,6 @@ type PromptContext = {
     id: string,
     generate: (prompt?: string, total?:string) => string,
     generateCommand: (prompt?: string, total?:string) => string,
-    executeCommand: (prompt?: string, total?: string) => string
 }
 
 export const promptCmd = (data:{cmd: string, format: "human"|"json"|"sourceCode", action: string}) => {
@@ -16,10 +15,12 @@ ${JSON.stringify(data)},
 
 }
 
+export const PromptResponseAtom = atom("")
+
 export const PromptAtom = atom<PromptContext[]>([{
     id: "root",
     generate: (prompt) => {
-        return `You are integrated into another website as a virtual assistant to help the user understanding the system. 
+        return (!prompt.startsWith('/')?`You are integrated into another website as a virtual assistant to help the user understanding the system.`:'')+`
         The system is a typescript based yarn workspce with some apps and some packages. The system is called Protofy. 
         Protofy is open source, and the repo is located at: https://github.com/Protofy-xyz/Protofy.
         There is an api, in apps/api, based on expressjs, a frontend with backend of a website based on nextjs 13 (without app router), an expo application under apps/expo, and packages/app where you can create pages and componentes to be used in mobile or in web. Its an universal react application.
@@ -54,9 +55,6 @@ export const PromptAtom = atom<PromptContext[]>([{
         Stick to the list of commands when acting as the command-driven terminal. Do not use any command not available in the following list:`+ isHelp?`
 ${promptCmd({cmd: "/help", format: "human", action: "report list of available commands"})}
 `:''
-    },
-    executeCommand: (prompt) => {
-        return 'commands '
     }
 }])
 
@@ -69,10 +67,11 @@ export const usePrompt = (generate, generateCommand?, executeCommand?) => {
         setPrompts([...prompts.filter(p => p.id != id.current), {
             id: id.current,
             generate: generate ? generate : () => '',
-            generateCommand: generateCommand ? generateCommand : () => '',
-            executeCommand: executeCommand ? executeCommand : () => '',
+            generateCommand: generateCommand ? generateCommand : () => ''
         }])
 
         return () => setPrompts(prompts.filter(p => p.id != id.current))
     }, [])
+
+    return useAtom(PromptResponseAtom)
 }

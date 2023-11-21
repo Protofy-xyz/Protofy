@@ -1,5 +1,5 @@
 
-import { handler, app } from 'protolib/api'
+import { handler } from 'protolib/api'
 const MAX_TOKENS = 4096
 
 export function AiAssistantsAPI(app, context) {

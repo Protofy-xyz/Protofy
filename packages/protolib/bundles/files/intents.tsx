@@ -15,6 +15,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react';
 import { API } from '../../lib/Api';
 import { usePrompt, promptCmd } from '../../context/PromptAtom';
+import { useUpdateEffect } from 'usehooks-ts';
 
 const FlowsWidget = dynamic(() => import('../../adminpanel/features/components/FlowsWidget'), {
     loading: () => <Center>
@@ -70,15 +71,37 @@ const SaveButton = ({ path, getContent, positionStyle }) => {
 };
 
 const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) => {
-    const [fileContent] = useFileFromAPI(path)
+    const [fileContent, setFileContent] = useFileFromAPI(path)
+    const [newFileContent, setNewFileContent] = useState('')
     const [loaded, setLoaded] = useState(false)
     const sourceCode = useRef('')
 
-    usePrompt(
-        () => `The user is viewing a sourceCode file named: ${path}. The content of the sourceFile is: ${sourceCode.current}.
-`,
-        () => promptCmd({cmd: '/generate', format: "sourceCode", action: "generates a source code solution in source code format of the current file."})
+    const [promptResponse, setPromptResponse] = usePrompt(
+        (prompt) => {
+            const isGenerate = prompt.startsWith('/code')
+            const prefix = `The user is viewing a sourceCode file named: ${path}. The content of the sourceFile is: ${sourceCode.current}`
+            const suffix = isGenerate? `
+The user has generated a request to change the sourceCode content. You need to fulfill the request. Reply only with source code with prefix: [code] and nothing else. Your response will be used directly to replace the content of the sourceFile, but adaptaed to what the user requested.
+For example, if the final code you decide to generate is "console.log('test');" then your anser should be [code]console.log('test');
+If you are unable to generate the source code (too ambiguous/unespecific/whaterver reason), explain why in natural language, but do not include [code] at the beginning.
+Remember to generate a response for the request that is only sourceCode and prefixed with [code]. Your response will be used to feed another program, that expects just [code] and sourceCode.
+If you include anything else in your message (like reasonings or natural language) it will be considered that you are rejecting the request, and the reasons will be shown to the user.
+            `:''
+            return suffix+prefix
+        },
+
+        () => promptCmd({cmd: '/code', format: "sourceCode", action: "generates a source code solution in source code format of the current file."}),
     ) 
+
+    useUpdateEffect(() => {
+        console.log('Response prompt: ', promptResponse)
+        if(promptResponse.startsWith("[code]")) {
+            console.log('Replacing code with updated code')
+            const response = promptResponse.substring("[code]".length)
+            setNewFileContent(response)
+            sourceCode.current = response;
+        }
+    }, [promptResponse])
     
     useEffect(() => {
         if (fileContent.isLoaded) {
@@ -109,13 +132,13 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
                 />
                 {extraIcons}
             </XStack>
-            {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={sourceCode.current} onChange={(code) => { sourceCode.current = code }} /> : <FlowsWidget
+            {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={newFileContent ? newFileContent : sourceCode.current} onChange={(code) => { sourceCode.current = code }} /> : <FlowsWidget
                 isModified={isModified}
                 onEdit={(code) => { sourceCode.current = code }}
                 setIsModified={setIsModified}
                 setSourceCode={(sourceCode) => {
                     sourceCode.current = sourceCode
-                }} sourceCode={sourceCode.current} path={path} themeMode={resolvedTheme} />}
+                }} sourceCode={newFileContent ? newFileContent : sourceCode.current} path={path} themeMode={resolvedTheme} />}
             <XStack opacity={0} top={-200000} position={"absolute"}>
                 <FlowsWidget preload={true} />
             </XStack>
