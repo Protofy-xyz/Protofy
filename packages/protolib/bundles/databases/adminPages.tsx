@@ -9,6 +9,7 @@ import { Tinted } from '../../components/Tinted'
 import { DataCard } from '../../components/DataCard'
 import { useState } from 'react'
 import { Server } from '@tamagui/lucide-icons'
+import { usePrompt } from '../../context/PromptAtom'
 const format = 'YYYY-MM-DD HH:mm:ss'
 const DatabaseIcons = {}
 const rowsPerPage = 20
@@ -17,6 +18,17 @@ export default {
     'admin/databases': {
         component: ({ workspace, pageState, sourceUrl, initialItems, pageSession }: any) => {
             const router = useRouter()
+
+            usePrompt(() => `At this moment the user is browsing the databases list page. The databases list page allows to list the system databases. Databases are based on leveldb, and stored under /data/databases.
+            The user can use the database management page to view system databases, or can select a specific database from the list, and view the entries for the selected database.
+            The system databases store the information in key->value system, storing JSONs as the value. 
+            The databases are used to store users, groups, and as a storage for any CRUD API created for a object.
+            To backup databases, just backup /data/databases folder. To reset a database, simply delete /data/databases/*databasename*.
+            Using a special file called initialData.json at the same directory of your API, automatic crud apis will load initialData.json contents into the database when creating the database the first time. 
+            Be careful editing the databases manually, the application may break. 
+            `+ (
+                initialItems.isLoaded?'Currently the system returned the following information: '+JSON.stringify(initialItems.data) : ''
+            )) 
             return (<AdminPage title="Databases" workspace={workspace} pageSession={pageSession}>
                 <DataView
                     integratedChat

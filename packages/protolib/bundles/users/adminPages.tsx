@@ -26,15 +26,18 @@ export default {
             The zod schema for the user object is:
             export const UserSchema = Schema.object({
                 username: z.string().email().label('email').hint('user@example.com').static().id().search().display(),
-                type: z.string().min(1).hint('user, admin, ...').search().display(),
-                password: z.string().min(6).hint('**********').secret().onCreate('cypher').onUpdate('update').onRead('clearPassword').onList('clearPassword').display(),
+                type: z.string().min(1).hint('user, admin, ...').search().display().help("The type refers to a group name. Groups contains privileges (admin true/false) and workspaces."),
+                password: z.string().min(6).hint('**********').secret().onCreate('cypher').onUpdate('update').onRead('clearPassword').onList('clearPassword').display().help("Salted hashed password using bcrypt."),
                 createdAt: z.string().min(1).generate((obj) => moment().toISOString()).search(),
                 lastLogin: z.string().optional().search(),
-                from: z.string().min(1).search().generate((obj) => 'admin').help("
+                from: z.string().min(1).search().generate((obj) => 'admin').help("Interface used to create the user. Users can be created from command line or from the admin panel")
             })
             the user management system is located at /packages/protolib/bundles/users. The api for managing users is for admins only, and its located at /adminapi/v1/accounts. To read a specify account, /adminapi/v1/accounts/:email.
-            The UI of the users page is located at /packages/protolib/bundles/users/adminPages.tsx and the schema and protomodel declaration at /packages/protolib/bundles/users/usersSchema.ts. The API file is located at /packages/protolib/bundles/users/usersAPI.ts
-            `)
+            The UI of the users page is located at /packages/protolib/bundles/users/adminPages.tsx and the schema and protomodel declaration at /packages/protolib/bundles/users/usersSchema.ts. The API file is located at /packages/protolib/bundles/users/usersAPI.ts.
+            The user management page allows to manage the users of the system. Users are able to login with their email and password.
+            `+ (
+                initialItems.isLoaded?'Currently the system returned the following information: '+JSON.stringify(initialItems.data) : ''
+            )) 
 
             return (<AdminPage title="Users" pageSession={pageSession}>
                 <DataView
