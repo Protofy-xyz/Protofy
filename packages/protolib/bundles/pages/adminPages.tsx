@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { Stack, XStack } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
+import { getURLWithToken } from '../../lib/Session'
 const PageIcons = {}
 
 export default {
@@ -47,8 +48,8 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/pages', ['admin'], {}, async () => {
-            const objects = await API.get('/adminapi/v1/objects?itemsPerPage=1000')
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/pages', ['admin'], {}, async (context) => {
+            const objects = await API.get(getURLWithToken('/adminapi/v1/objects?all=1', context))
             return {
                 objects: objects.isLoaded ? objects.data.items : []
             }

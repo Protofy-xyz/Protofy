@@ -3,10 +3,11 @@ import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { APIModel } from '.'
 import {DataView} from 'protolib'
 import { DataTable2, Chip, API } from 'protolib'
-import { ToyBrick } from '@tamagui/lucide-icons'
+import { ToyBrick, Pencil } from '@tamagui/lucide-icons'
 
 import {z} from 'zod'
 import { usePageParams } from '../../next'
+import { getURLWithToken } from '../../lib/Session'
 
 const APIIcons =  {}
 
@@ -28,8 +29,8 @@ export default {
                         DataTable2.column("name", "name", true),
                     )}
                     extraFieldsFormsAdd={{
-                        template: z.union([z.literal("blank"), z.literal("admin")]).display().after("name"),
-                        object: z.union([z.literal("without object"), ...extraData.objects.map(o => z.literal(o.name))] as any).after('route').display(),
+                        template: z.union([z.literal("Automatic CRUD"), z.literal("empty")]).display().after("name"),
+                        object: z.union([z.literal("without object"), ...extraData.objects.map(o => z.literal(o.name))] as any).after('name').display(),
                     }}
                     model={APIModel} 
                     pageState={pageState}
@@ -37,8 +38,8 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/apis', ['admin'], {}, async () => {
-            const objects = await API.get('/adminapi/v1/objects?all=1')
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/apis', ['admin'], {}, async (context) => {
+            const objects = await API.get(getURLWithToken('/adminapi/v1/objects?all=1', context))
             return {
                 objects: objects.isLoaded ? objects.data.items : []
             }

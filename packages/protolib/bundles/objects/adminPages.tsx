@@ -31,16 +31,11 @@ export default {
                     icons={ObjectIcons}
                     extraMenuActions = {[
                         {
-                            text:"Edit API file", 
-                            icon:Pencil, 
-                            action: (element) => { replace('editFile', element.getDefaultAPIFilePath()) }, 
-                            isVisible: (element)=>element.data.api?true:false
-                        },
-                        {
                             text:"Edit Object file", 
                             icon:Pencil, 
                             action: (element) => { replace('editFile', element.getDefaultSchemaFilePath()) },
-                            isVisible: (data)=>true}
+                            isVisible: (data)=>true
+                        }
                     ]}
                 />
             </AdminPage>)

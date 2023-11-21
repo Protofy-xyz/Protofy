@@ -9,7 +9,6 @@ import {getServiceToken} from 'protolib/api/lib/serviceToken'
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
 const apiDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/apis/")
-const apiIndex = fspath.join(apiDir, 'index.ts')
 
 const getSchemas = async (sourceFile?) => {
   const node = getDefinition(
@@ -122,54 +121,6 @@ const getDB = (path, req, session) => {
             path: '/packages/app/bundles/custom/objects'
           }
         })
-      }
-
-      //sync api
-      let apiExists
-      const apiPath = fspath.join(apiDir, fspath.basename(value.name) + '.ts')
-      try {
-        await fs.access(apiPath, fs.constants.F_OK)
-        apiExists = true
-      } catch (error) {
-        apiExists = false
-      }
-
-      if (apiExists) {
-        if (!value.api) {
-          //unlink in index.ts
-          const sourceFile = getSourceFile(apiIndex)
-          const arg = getDefinition(sourceFile, '"apis"')
-          if (!arg) {
-            throw "No link definition schema marker found for file: " + path
-          }
-
-          removeObjectLiteralProperty(arg, value.name)
-          removeImportFromSourceFile(sourceFile, './' + value.name)
-          sourceFile.saveSync();
-
-          await fs.unlink(apiPath)
-        }
-      } else {
-        if (value.api) {
-          await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
-            name: value.name + '.ts',
-            data: {
-              options: { template: '/packages/protolib/bundles/objects/templateApi.tpl', variables: { name: value.name, capitalizedName: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
-              path: '/packages/app/bundles/custom/apis'
-            }
-          })
-
-            //link in index.ts
-          const sourceFile = getSourceFile(apiIndex)
-          addImportToSourceFile(sourceFile, value.name+'Api', ImportType.DEFAULT, './' + value.name)
-
-          const arg = getDefinition(sourceFile, '"apis"')
-          if (!arg) {
-            throw "No link definition schema marker found for file: " + path
-          }
-          addObjectLiteralProperty(arg, value.name, value.name+'Api')
-          sourceFile.saveSync();
-        }
       }
 
       const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
