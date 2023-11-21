@@ -96,9 +96,7 @@ Answer only with code.`;
               },
               `Using the provided image and the following code as template: ${sourceFile.getText()}.
               Turn this into component using Tamagui components library.
-              Try to write code into the markers identified by: __CHATGPT__("here is some advise"). 
               Do not delete react components from the provided template. 
-              Delete the (__CHATGPT__) markers. 
               Preserve default imports. 
               Add missing imports for the components you have added.
               All imports from "tamagui" should be replaced by the alias "@my/ui".
@@ -111,8 +109,8 @@ Answer only with code.`;
           gptModel: "gpt-4-vision-preview",
           messages: defaultMessages
         })
-        console.log('DEV: result from CHATGPT', result.data.choices[0]?.message.content)
-        // console.log('DEV: valueAsset', value.asset)
+        const content = result.data.choices[0]?.message.content; // FIX: currently assuming happy path and no errors
+        console.log('DEV: content GPT::::', content)
       }
       let arg = getDefinition(sourceFile, '"protected"')
       if (value.protected) {
