@@ -75,3 +75,8 @@
     z-index: 999999999 !important;
     position: absolute !important;
   }
+
+.loader-container  {
+    background-color: var(--color4) !important;
+    max-width: 400px !important;
+}
