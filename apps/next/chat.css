@@ -2,6 +2,7 @@
     background-color: var(--color7) !important;
     box-shadow: 0 0 3px 1px var(--color5) !important;
     margin-right: 20px;
+    min-width: 500px !important;
 }
 
 .rcw-header {
@@ -10,7 +11,7 @@
 
 .rcw-message-text {
     background-color: var(--color4) !important;
-    max-width: 300px !important;
+    max-width: 400px !important;
 }
 
 .rcw-picker-btn {
@@ -36,6 +37,7 @@
 .rcw-messages-container {
     overflow-y: auto !important;
     background-color: var(--color1) !important;
+    max-height: none !important;
 }
 
 
