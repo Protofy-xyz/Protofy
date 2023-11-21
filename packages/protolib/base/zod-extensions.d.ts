@@ -7,7 +7,7 @@ interface ZodExtensions {
     generate(val: any): this;
     before(field: string): this;
     after(field: string): this;
-    dependsOn(field: string): this;
+    dependsOn(field: string, value?: any): this;
     generateOptions(call: Function): this; 
     choices(): this; 
     secret(): this;
