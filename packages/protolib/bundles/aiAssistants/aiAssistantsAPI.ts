@@ -4,9 +4,9 @@ const MAX_TOKENS = 4096
 
 export function AiAssistantsAPI(app, context) {
     app.post('/adminapi/v1/assistants', handler(async (req: any, res: any) => {
-        let { messages } = req.body;
+        let { messages, gptModel } = req.body;
         const body: GPT4VCompletionRequest = {
-            model: "gpt-4-1106-preview",
+            model: gptModel ?? "gpt-4-1106-preview",
             max_tokens: MAX_TOKENS,
             messages: messages,
         };
