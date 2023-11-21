@@ -199,6 +199,7 @@ export default {
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} />
       </Connector>
       <DataView
+        integratedChat
         itemData={itemData}
         rowIcon={Router}
         sourceUrl={sourceUrl}

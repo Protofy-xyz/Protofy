@@ -17,6 +17,7 @@ export default {
         component: ({ pageState, sourceUrl, initialItems, pageSession }: any) => {
             return (<AdminPage title="Resources" pageSession={pageSession}>
                 <DataView
+                    integratedChat
                     rowIcon={Link}
                     enableAddToInitialData
                     sourceUrl={sourceUrl}

@@ -19,6 +19,7 @@ export default {
             const router = useRouter()
             return (<AdminPage title="Databases" workspace={workspace} pageSession={pageSession}>
                 <DataView
+                    integratedChat
                     rowIcon={Server}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
@@ -84,6 +85,7 @@ export default {
             }
             return (<AdminPage title={extraData.name} workspace={workspace} pageSession={pageSession}>
                 <DataView
+                    integratedChat
                     key={renew}
                     sourceUrl={sourceUrl}
                     initialItems={content}

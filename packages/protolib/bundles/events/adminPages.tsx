@@ -15,6 +15,7 @@ export default {
         component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
             return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
+                    integratedChat
                     hideAdd
                     openMode="view"
                     sourceUrl={sourceUrl}

@@ -78,6 +78,7 @@ export default {
       </AlertDialog>
 
       <DataView
+        integratedChat
         entityName={"devicedefinitions"}
         itemData={itemData}
         rowIcon={BookOpen}

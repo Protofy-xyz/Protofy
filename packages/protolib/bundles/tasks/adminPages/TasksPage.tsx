@@ -14,6 +14,7 @@ export const TasksPage = {
         const { replace } = usePageParams(pageState)
         return (<AdminPage title="Tasks" pageSession={pageSession}>
             <DataView
+                integratedChat
                 disableViews={['grid']}
                 defaultView={'list'}
                 sourceUrl={sourceUrl}

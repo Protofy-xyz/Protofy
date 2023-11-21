@@ -13,6 +13,7 @@ export default {
     component: ({ pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
       return (<AdminPage title="Groups" pageSession={pageSession}>
         <DataView
+          integratedChat
           enableAddToInitialData
           disableViewSelector
           defaultView={'list'}

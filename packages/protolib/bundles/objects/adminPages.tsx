@@ -15,6 +15,7 @@ export default {
 
             return (<AdminPage title="Objects" pageSession={pageSession}>
                 <DataView
+                    integratedChat
                     rowIcon={Box}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}

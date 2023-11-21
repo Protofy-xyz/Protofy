@@ -17,6 +17,7 @@ export default {
             //replace('editFile', '/packages/app/bundles/custom/apis/')
             return (<AdminPage title="APIs" pageSession={pageSession}>
                 <DataView
+                    integratedChat
                     onSelectItem={(item) => replace('editFile', '/packages/app/bundles/custom/apis/'+item.data.name+'.ts')}
                     rowIcon={ToyBrick}
                     sourceUrl={sourceUrl}

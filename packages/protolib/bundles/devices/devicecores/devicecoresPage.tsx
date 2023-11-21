@@ -10,6 +10,7 @@ export default {
   component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
     return (<AdminPage title="Device Cores" pageSession={pageSession}>
       <DataView
+        integratedChat
         itemData={itemData}
         rowIcon={Cpu}
         sourceUrl={sourceUrl}

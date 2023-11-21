@@ -23,6 +23,7 @@ export default {
             }
             return (<AdminPage title="Users" pageSession={pageSession}>
                 <DataView
+                    integratedChat
                     enableAddToInitialData
                     entityName={'accounts'}
                     itemData={itemData}
