@@ -169,15 +169,29 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
                         handleNewUserMessage={async (message) => {
                             //generate prompts
                             console.log('Prompt chain: ', promptChain)
-                            const prompt = promptChain.reduce((total, current) => total + current.generate(total), '') + `The question of the user for the assistant is:
-"${message}".
-reply directly to the user, acting as the assistant.`
+                            const isCommand = message.startsWith('/')
+                            const isHelp = message.startsWith('/help')
+                            
+                            const prompt = promptChain.reduce((total, current) => total + (isHelp?current.generateCommand(message, total):current.generate(message, total)), '') + (
+                                isHelp? `
+]
+
+End of command list.
+
+The user wants to know the list of available commands. Include all the commands in the reply, and include a small description of the command. use the field action for the description of what the command does, but summarize it. 
+`: `
+reply directly to the user, acting as the assistant.
+
+The question of the user for the assistant is:
+"${message}".`
+)
                             console.log('prompt: ', prompt)
 
                             toggleMsgLoader();
                             const result = await API.post('/adminapi/v1/assistants', {
                                 messages: [{role: 'user', content: prompt}],
-                                best_of: 4
+                                best_of: 4,
+                                temperature: isCommand?0:1
                             })
                             toggleMsgLoader();
                             console.log('result: ', result)

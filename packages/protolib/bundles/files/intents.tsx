@@ -14,6 +14,7 @@ import Center from '../../components/Center'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react';
 import { API } from '../../lib/Api';
+import { usePrompt, promptCmd } from '../../context/PromptAtom';
 
 const FlowsWidget = dynamic(() => import('../../adminpanel/features/components/FlowsWidget'), {
     loading: () => <Center>
@@ -73,6 +74,12 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
     const [loaded, setLoaded] = useState(false)
     const sourceCode = useRef('')
 
+    usePrompt(
+        () => `The user is viewing a sourceCode file named: ${path}. The content of the sourceFile is: ${sourceCode.current}.
+`,
+        () => promptCmd({cmd: '/generate', format: "sourceCode", action: "generates a source code solution in source code format of the current file."})
+    ) 
+    
     useEffect(() => {
         if (fileContent.isLoaded) {
             sourceCode.current = fileContent.data

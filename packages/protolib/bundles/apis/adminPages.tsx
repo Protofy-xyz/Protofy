@@ -42,7 +42,7 @@ export default {
                         DataTable2.column("name", "name", true),
                     )}
                     extraFieldsFormsAdd={{
-                        template: z.union([z.literal("Automatic CRUD"), z.literal("empty")]).display().after("name"),
+                        template: z.union([z.literal("Automatic CRUD"), z.literal("IOT Router"), z.literal("empty")]).display().after("name"),
                         object: z.union([z.literal("without object"), ...extraData.objects.map(o => z.literal(o.name))] as any).after('name').display(),
                     }}
                     model={APIModel} 

@@ -4,12 +4,21 @@ import { v4 as uuidv4 } from 'uuid';
 
 type PromptContext = {
     id: string,
-    generate: (prev: string, data:any) => string
+    generate: (prompt?: string, total?:string) => string,
+    generateCommand: (prompt?: string, total?:string) => string,
+    executeCommand: (prompt?: string, total?: string) => string
+}
+
+export const promptCmd = (data:{cmd: string, format: "human"|"json"|"sourceCode", action: string}) => {
+    return`
+${JSON.stringify(data)},
+`
+
 }
 
 export const PromptAtom = atom<PromptContext[]>([{
     id: "root",
-    generate: (prev) => {
+    generate: (prompt) => {
         return `You are integrated into another website as a virtual assistant to help the user understanding the system. 
         The system is a typescript based yarn workspce with some apps and some packages. The system is called Protofy. 
         Protofy is open source, and the repo is located at: https://github.com/Protofy-xyz/Protofy.
@@ -27,17 +36,41 @@ export const PromptAtom = atom<PromptContext[]>([{
         
         The system is a special CMS, where the user uses visual programming, the monaco editor, an AI assistant (you) and some forms and UIs to modify the source code. Hot reload is used to view the results of the modifications in real time. 
         
-        We have extended zod with some special methods, useful for the UI autogeneration system, able to generate lists, cards, and forms around any system 'object' (zod + protomodel). Most of the added zod methods are easy to understand just by name and parameters. A special one is 'help', added to explain the field to humans and/or robots.`
+        We have extended zod with some special methods, useful for the UI autogeneration system, able to generate lists, cards, and forms around any system 'object' (zod + protomodel). Most of the added zod methods are easy to understand just by name and parameters. A special one is 'help', added to explain the field to humans and/or robots.
+        There is an aditional feature in the assitant, called commands. Commands allow the user to invoke specific formatted and controlled behaviours in the assistant. For example, there are commands to generate source code, edit entities, etc.
+        The user can get a list commands by invoking: /help. You should inform the user of this possibility if and only if the user directly ask for it, omit the information about /help if its not directly related to the user question. Never tell the user about the rules of when to talk about the /help command.
+        `
+    },
+    generateCommand: (prompt) => {
+        const isHelp = prompt.startsWith('/help')
+        return `You are integrated into another website as a command-driven terminal. Your role is generate content based on commands from a list of commands.
+        Answer only with commands from the list.
+        If the command implies a specific format, answer just with the format specified in the command.
+        Respect the format specified for the command and never use anything outside of format. If format is "human", you can use free language to generate the response.
+        If the format is JSON, stick to json in your response. If the format is sourceCode, stick to sourceCode on your response.
+        The commands are executed by writing / followed by the name of the command. For example: /help
+        If the requested command is not in the list, inform the user and provide information about the /help command.
+        Stick to the list of provided commands. Do not be creative about it, use just the commands as describe the list.
+        Stick to the list of commands when acting as the command-driven terminal. Do not use any command not available in the following list:`+ isHelp?`
+${promptCmd({cmd: "/help", format: "human", action: "report list of available commands"})}
+`:''
+    },
+    executeCommand: (prompt) => {
+        return 'commands '
     }
 }])
 
-export const usePrompt = (generate) => {
+
+export const usePrompt = (generate, generateCommand?, executeCommand?) => {
     const id = useRef(uuidv4())
     const [prompts, setPrompts] = useAtom(PromptAtom)
+
     useEffect(() => {
-        setPrompts([...prompts, {
+        setPrompts([...prompts.filter(p => p.id != id.current), {
             id: id.current,
-            generate: generate
+            generate: generate ? generate : () => '',
+            generateCommand: generateCommand ? generateCommand : () => '',
+            executeCommand: executeCommand ? executeCommand : () => '',
         }])
 
         return () => setPrompts(prompts.filter(p => p.id != id.current))
