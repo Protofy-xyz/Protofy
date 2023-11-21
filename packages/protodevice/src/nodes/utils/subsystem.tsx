@@ -1,7 +1,7 @@
 import { useMqttState, useSubscription } from 'mqtt-react-hooks';
 import React, { useState } from "react";
-import { XStack, YStack, Text, Paragraph, Button } from '@my/ui';
-import { ElevatedArea, ContainerLarge, Tinted } from 'protolib';
+import { XStack, YStack, Text, Paragraph, Button,  } from '@my/ui';
+import { ElevatedArea, ContainerLarge, Tinted,Chip } from 'protolib';
 
 
 const subsystem = (subsystem, deviceName) => {
@@ -38,7 +38,7 @@ const subsystem = (subsystem, deviceName) => {
         }, [message])
         return (
             <XStack>
-                <Text marginLeft={4} textAlign={"left"}>{`${monitor.name}: ${value}`}</Text>
+                <Text marginLeft={4} textAlign={"left"}><Chip text={value}></Chip></Text>
             </XStack>
         );
     });
