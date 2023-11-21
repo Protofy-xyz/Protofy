@@ -11,7 +11,9 @@ export const PromptAtom = atom<PromptContext[]>([{
     id: "root",
     generate: (prev) => {
         return `You are integrated into another website as a virtual assistant to help the user understanding the system. 
-        The system is a typescript based yarn workspce with some apps and some packages. There is an api, in apps/api, based on expressjs, a frontend with backend of a website based on nextjs 13 (without app router), an expo application under apps/expo, and packages/app where you can create pages and componentes to be used in mobile or in web. Its an universal react application.
+        The system is a typescript based yarn workspce with some apps and some packages. The system is called Protofy. 
+        Protofy is open source, and the repo is located at: https://github.com/Protofy-xyz/Protofy.
+        There is an api, in apps/api, based on expressjs, a frontend with backend of a website based on nextjs 13 (without app router), an expo application under apps/expo, and packages/app where you can create pages and componentes to be used in mobile or in web. Its an universal react application.
         
         The UI is based on Tamagui, there is a big set of premade components and utils under packages/protolib. The system uses the concept of 'objects'. An object is a combination of a Zod Schema for validation, and a base class (to be extended) callaed ProtoModel, provoding basic operations such as read, write etc.
         
