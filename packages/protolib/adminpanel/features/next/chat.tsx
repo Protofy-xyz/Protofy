@@ -174,10 +174,12 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
 reply directly to the user, acting as the assistant.`
                             console.log('prompt: ', prompt)
 
+                            toggleMsgLoader();
                             const result = await API.post('/adminapi/v1/assistants', {
                                 messages: [{role: 'user', content: prompt}],
                                 best_of: 4
                             })
+                            toggleMsgLoader();
                             console.log('result: ', result)
                             if(result.isError) {
                                 addResponseMessage("Error generating response: ", result.error)
