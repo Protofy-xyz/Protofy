@@ -1,8 +1,9 @@
 
 import { addResponseMessage, Widget, toggleMsgLoader } from 'react-chat-widget'
 import { useEffect, useRef, useState } from 'react';
-import { Tinted, API } from 'protolib';
+import { Tinted, API, PromptAtom } from 'protolib';
 import { useTimeout, useWindowSize } from 'usehooks-ts';
+import { useAtom } from 'jotai';
 
 const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
     const [first, setFirst] = useState(true)
@@ -155,6 +156,8 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
         }, i*50)
     }
 
+    const [promptChain] = useAtom(PromptAtom)
+
     return (
         <Tinted>
             <div ref={chatContainer} onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()} style={{transform: 'none', zIndex: zIndex, bottom: 0, right: 0,position: "fixed" }}>
@@ -163,8 +166,12 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
                         title="Asistant"
                         subtitle="Get help, ideas and documentation"
                         handleNewUserMessage={(message) => {
-
-                            console.log('Message: ', message)
+                            //generate prompts
+                            console.log('Prompt chain: ', promptChain)
+                            const prompt = promptChain.reduce((total, current) => total + current.generate(total), '') + `The question of the user for the assistant is:
+"${message}".
+reply directly to the user, acting as the assistant.`
+                            console.log('prompt: ', prompt)
                         }}
                         handleToggle={async (state) => {
                             if (state) {
