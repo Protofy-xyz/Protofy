@@ -181,6 +181,12 @@ reply directly to the user, acting as the assistant.`
                             console.log('result: ', result)
                             if(result.isError) {
                                 addResponseMessage("Error generating response: ", result.error)
+                            } else if (result.data.error) {
+                                var errorMsg = result.data.error.message
+                                if (result.data.error.code == "invalid_api_key") {
+                                    errorMsg = errorMsg + '\nPlease add your key on "apps/admin-api/.env": \nOPENAI_API_KEY={YOUR KEY HERE}'
+                                }
+                                addResponseMessage(errorMsg)
                             } else {
                                 addResponseMessage(result.data.choices[0].message.content)
                             }
