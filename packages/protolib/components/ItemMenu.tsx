@@ -10,6 +10,11 @@ export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelet
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
     const { setSelected} = useContext(DataViewContext);
+
+    const addToInitialData = ({data}) =>{
+        
+    }
+
     const MenuButton = ({ text, Icon, onPress }) => {
         return <XStack ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start"
             cursor='pointer'
@@ -56,7 +61,7 @@ export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelet
                             {extraMenuActions.map((action) => {
                                 return action.isVisible && action.isVisible(element) && <MenuButton text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
                             })}
-                            {enableAddToInitialData &&  <MenuButton text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); setMenuOpened(false) }}></MenuButton>}
+                            {false && enableAddToInitialData &&  <MenuButton text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); addToInitialData(data),setMenuOpened(false) }}></MenuButton>}
                             <MenuButton text={"Delete"} Icon={Trash2} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
                         </YStack>
                     </YStack>
