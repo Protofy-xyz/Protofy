@@ -1,8 +1,4 @@
 {
-    "visualui": {
-        "url": "https://github.com/Protofy-xyz/protofy-visualui.git",
-        "revision": "b733ded2fa76de1f13c5c09eea718c810cd473ba"
-    },
     "protodevice": {
         "url": "https://github.com/Protofy-xyz/protodevice.git",
         "revision": "64ec0ab37da50d51dc4a8809a837887318012081"
