@@ -4,16 +4,16 @@
 
 <h4 align="center">
   <a href="https://github.com/protofy-xyz/protofy/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors-anon/protofy-xyz/protofy?color=yellow&style=flat-square" alt="contributors" style="height: 20px;">
+    <img src="https://img.shields.io/github/contributors-anon/protofy-xyz/protofy?color=yellow&style=flat" alt="contributors" style="height: 20px;">
   </a>
   <a href="https://opensource.org/licenses/mit">
-    <img src="https://img.shields.io/badge/mit-blue.svg?style=flat-square&label=license" alt="license" style="height: 20px;">
+    <img src="https://img.shields.io/badge/mit-blue.svg?style=flat&label=license" alt="license" style="height: 20px;">
   </a>
   <a href="https://discord.gg/VpeZxMFfYW">
-    <img src="https://img.shields.io/badge/discord-7289da.svg?style=flat-square&logo=discord" alt="discord" style="height: 20px;">
+    <img src="https://img.shields.io/badge/discord-7289da.svg?style=flat&logo=discord" alt="discord" style="height: 20px;">
   </a>
   <a href="https://www.youtube.com/channel/UCmA8ZqKbySDRSVFPBrAAQ-g">
-    <img src="https://img.shields.io/badge/youtube-d95652.svg?style=flat-square&logo=youtube" alt="youtube" style="height: 20px;">
+    <img src="https://img.shields.io/badge/youtube-d95652.svg?style=flat&logo=youtube" alt="youtube" style="height: 20px;">
   </a>
 </h4>
 
@@ -46,14 +46,14 @@ Many thanks [@natew] for creating the original starter and to [@FernandoTheRojo]
 - `Many more things!`
 
 ## 🗂️ Folder layout
+The project has two main folders: 
 
-The main apps are:
-
-- `expo` (native)
-- `next` (web)
-- `api` (express API to create the web or app)
-- `admin-api` (express API with the admin API)
-- `proxy` (redbird reverse proxy)
+- `apps` 
+  - `expo` (native)
+  - `next` (web)
+  - `api` (express API to create the web or app)
+  - `admin-api` (express API with the admin API)
+  - `proxy` (redbird reverse proxy)
 
 - `packages` shared packages across apps
   - `ui` includes your custom UI kit that will be optimized by Tamagui
