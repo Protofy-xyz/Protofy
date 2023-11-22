@@ -67,16 +67,6 @@ yarn && yarn dev-latest
 - Install dependencies: `yarn`
 - local dev: `yarn dev`
 
-
-
-To run with optimizer on in dev mode (just for testing, it's faster to leave it off): `yarn web:extract`. To build for production `yarn start-prod`.
-
-## UI Kit
-
-Note we're following the [design systems guide](https://tamagui.dev/docs/guides/design-systems) and creating our own package for components.
-
-See `packages/ui` named `@my/ui` for how this works.
-
 ## 🆕 Add new dependencies
 
 ### Pure JS dependencies
