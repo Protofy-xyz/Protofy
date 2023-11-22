@@ -180,17 +180,18 @@ const Home = () => {
         </ElevatedArea>
 
         <TintSection index={2} contain="paint layout" zi={1000}>
-          <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-down" />
+          {/* <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-down" /> */}
+          <YStack pe="none" o={0.1} zi={0} fullscreen={true} className="bg-grid mask-gradient-up" />
           <ContainerLarge position="relative">
-            <YStack $theme-dark={{ display: 'none' }} zi={1} space="$6" mb="$4">
+            <YStack ai="center"  zi={1} space="$6" mb="$4">
               <BlockTitle title="ESPHome Yaml Visual Editor" subtitle="Configure ESP32 devices using ESPHome and the Protofy ESPHome Yaml Visual Editor. Configure, upload and manage devices from a web admin panel"></BlockTitle>
               <Spacer />
-              <img src="/images/iot_light.png" />
-            </YStack>
-            <YStack $theme-light={{ display: 'none' }} zi={1} space="$6" mb="$4">
-              <BlockTitle title="IoT made easy" subtitle="Configure ESP32 devices using ESPHome and the Protofy ESPHome Yaml Visual Editor. Configure, upload and manage devices from a web admin panel"></BlockTitle>
-              <Spacer />
-              <img src="/images/iot.png" />
+              <XStack $theme-dark={{ display: 'none' }}>
+                <img style={{maxHeight: "100%", maxWidth: "100%", height: "auto"}} src="/images/iot_light.png" />
+              </XStack>
+              <XStack $theme-light={{ display: 'none' }}>
+                <img style={{maxHeight: "100%", maxWidth: "100%", height: "auto"}} src="/images/iot.png" />
+              </XStack>
             </YStack>
           </ContainerLarge>
         </TintSection>
@@ -198,7 +199,7 @@ const Home = () => {
 
 
         {/* <img src="/images/iot.png" /> */}
-        <Section>
+        <Section pt={"$15"} borderTopWidth={1} borderColor={"$color5"}>
         <SpotLight />
           <Theme reset={true}>
             <ContainerLarge position="relative">
