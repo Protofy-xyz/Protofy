@@ -1,0 +1,5 @@
+[
+    {"name": "admin", "workspaces": ["admin", "editor"], "admin": true},
+    {"name": "editor", "workspaces": ["editor"], "admin": true},
+    {"name": "user", "workspaces": []}
+]

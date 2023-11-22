@@ -1,0 +1,18 @@
+[
+    {
+        "id": "1",
+        "name": "Empty device",
+        "board": "Protofy ESP32 devBoard",
+        "sdk": "esphome",
+        "subsystems": {},
+        "config": {
+            "components": "[\n \"mydevice\",\n \"esp32dev\", \n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null\n]",
+            "sdkConfig":{
+                "board": "esp32dev",
+                "framework": {
+                    "type": "arduino"
+                }
+            }
+        }
+    }
+]

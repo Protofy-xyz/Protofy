@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "paths": {
+      "@components/*": ["./components/*"],
+      "@lib/*": ["./lib/*"],
+      "@data/*": ["./data/*"],
+      "react-native": ["react-native-web"],
+      "@/*": ["./*"],
+      "@my/ui": ["../ui"]
+    }
+  }
+}
