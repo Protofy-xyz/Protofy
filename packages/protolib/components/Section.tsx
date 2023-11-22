@@ -3,30 +3,12 @@ import { useTint } from "protolib"
 import React from "react"
 import { StackProps, YStack } from "tamagui"
 import { Theme } from "tamagui"
+import {Tinted} from './Tinted'
 
-function TintTheme({ children }) {
-    const { tint, name } = useTint()
-    //console.log('tint: ', tint)
-    // const element = useAlwaysConcurrent()
-
-    return (
-        <Theme name={tint as any}>
-            {children}
-        </Theme>
-    )
-}
-
-type SectionProps = {
-    children?: any,
-    sectionProps?: any,
-    containerProps?: StackProps
-}
-
-const Section = React.forwardRef(({ containerProps = {}, children, sectionProps = { index: 0 } }: SectionProps, ref: any) => (
-    <YStack ref={ref} flex={1}>
-        <TintTheme>{children}</TintTheme>
+const Section = React.forwardRef((props: StackProps, ref: any) => (
+    <YStack ref={ref} flex={1} {...props}>
+        <Tinted>{props.children}</Tinted>
     </YStack>
-
 ))
 
 export default Section
