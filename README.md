@@ -1,5 +1,7 @@
 # Protofy
 
+![protofy-banner](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofy-banner.png)
+
 AI Supercharged LowCode Platform CMS and Framework.
 https://protofy.xyz/
 
