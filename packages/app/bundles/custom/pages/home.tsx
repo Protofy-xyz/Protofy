@@ -5,32 +5,34 @@ import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { SSR } from "app/conf";
+import YouTube from 'react-youtube';
 
 const isProtected = Protofy("protected", false);
 
 const Home = () => {
+
   return (
     <Page>
       <DefaultLayout title="Protofy" description="Made with love from Barcelona">
         <PageGlow />
-        <Section sectionProps={{ index: 0, p: 0 }}>
+        <Section>
           <SpotLight />
-          <ContainerLarge contain="layout" pos="relative">
-            <BackgroundGradient />
-            <YStack f={1} ov="hidden" space="$3" position="relative" pt="$14" mb="$4">
+          <ContainerLarge $gtLg={{minHeight: 900}} contain="layout" pos="relative">
+            <BackgroundGradient dot={true} height={'100vh'} direction="up" o={0.1} />
+            <YStack f={1} ov="hidden" space="$3" position="relative" pt="$10" mb="$4">
               <YStack opacity={1} scaleX={1} ai="center" space="$2">
-                <BigTitle scale={1.4} $gtLg={{scale:1.4}}>
+                <BigTitle scale={1.4} my={"$1"} $gtLg={{ scale: 1.4 }}>
                   <RainbowText rainbowType="rainbowSoft" lineHeight={150}>Protofy</RainbowText>
                 </BigTitle>
                 <XStack alignItems="center" justifyContent="center">
-                  <SizableText 
-                    $xs={{fontSize: 10, lineHeight: 10, my: '$3'}}
-                    $sm={{fontSize: 20, lineHeight: 10, my: '$3'}}
-                    $md={{fontSize: 40, lineHeight: 40, my: "$5"}} 
-                    $gtMd={{fontSize: 70, lineHeight: 70}} o={0.8} 
-                    textAlign="center" 
-                    fontWeight={"800"} 
-                    my="$10"><Text fontWeight={800}>LowCode</Text> Development Platform and <Text fontWeight={800}>CMS</Text></SizableText>
+                  <SizableText
+                    $xs={{ fontSize: 10, lineHeight: 10, my: '$3' }}
+                    $sm={{ fontSize: 20, lineHeight: 10, my: '$3' }}
+                    $md={{ fontSize: 30, lineHeight: 40, my: "$5" }}
+                    $gtMd={{ fontSize: 60, lineHeight: 70 }} o={0.8}
+                    textAlign="center"
+                    fontWeight={"800"}
+                    my="$10"><Text fontWeight={"800"}>AI <Text fontWeight={"400"}>Supercharged</Text> LowCode <Text fontWeight={"400"}>Platform</Text><br /> CMS <Text fontWeight={"400"}>and</Text> Framework</Text></SizableText>
                 </XStack>
                 <YStack
                   px={0}
@@ -68,7 +70,7 @@ const Home = () => {
               <XCenterStack>
                 <NextLink target="_blank" href="https://github.com/Protofy-xyz/Protofy">
                   <TooltipContainer tooltipText="Github">
-                    <GithubIcon />
+                    <GithubIcon width={60} height={60} />
                   </TooltipContainer>
                 </NextLink>
                 <XStack
@@ -81,38 +83,44 @@ const Home = () => {
                     order: "-1",
                     mx: "50%",
                   }}>
-                  <NextLink href="#">
+                  {/* <NextLink href="#">
                     <MainButton buttonProps={{ w: 120, h: 52 }}>How?</MainButton>
                   </NextLink>
                   <NextLink href="#">
                     <MainButton buttonProps={{ w: 118, h: 52 }}>Docs</MainButton>
-                  </NextLink>
+                  </NextLink> */}
                 </XStack>
                 <NextLink target="_blank" href="https://discord.gg/VpeZxMFfYW">
                   <TooltipContainer tooltipText="Discord">
-                    <DiscordIcon plain={true} width={23} />
+                    <DiscordIcon plain={true} height={60} width={60} />
                   </TooltipContainer>
                 </NextLink>
               </XCenterStack>
+              <Theme reset><CopyBubble text="git clone https://github.com/Protofy-xyz/Protofy.git" /></Theme>
             </YStack>
-            <Spacer size="$7" />
+
           </ContainerLarge>
         </Section>
         <ElevatedArea>
           <XStack pos="absolute" als="center" y={-45}>
             <Link target="_blank" href="https://github.com/Protofy-xyz/Protofy">
+              <Theme reset>
+                <ButtonSimple icon={<GithubIcon width={16} />} iconAfter={Star}>
+                  Star plz
+                </ButtonSimple>
+              </Theme>
             </Link>
           </XStack>
           <HorizontalBox>
             <HoveredGroup>
-              <SectionBlock $sm={{width:'100%'}} id={1} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title={"Open Source"} href="#">
-                Published under the permissive MIT license. The things you build on top of Protofy are for yours to keep. We don't force any license on your creations. 
+              <SectionBlock $sm={{ width: '100%' }} id={1} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title={"Open Source"} href="#">
+                Published under the permissive <strong>MIT</strong> license. The things you build on top of <strong>Protofy</strong> are for yours to keep. We don't force any license on <strong>your creations</strong>.
               </SectionBlock>
-              <SectionBlock $sm={{width:'100%', mt: "$5"}} id={2} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title={"Developer friendly"} href="#">
-                Extend the system using React and Javascript / TypeScript, on top of NextJS, Expo and Express. Build beautiful interfaces with Tamagui.
+              <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={2} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title={"Developer friendly"} href="#">
+                Extend the system using <strong>React</strong> and Javascript / TypeScript, on top of <strong>NextJS</strong>, <strong>Expo</strong> and <strong>Express</strong>. Build beautiful interfaces with <strong>Tamagui</strong>.
               </SectionBlock>
-              <SectionBlock $sm={{width:'100%', mt: "$5"}} id={3} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title={"LowCode"} href="#">
-                Protofy provides a beautiful admin panel to manage your project. You can create and manage the system entities visually.
+              <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={3} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title={"LowCode"} href="#">
+                You can create and manage the system entities using visual <strong>forms and diagrams</strong>, <strong>programming</strong>, or through <strong>ChatGPT</strong>.
               </SectionBlock>
             </HoveredGroup>
           </HorizontalBox>
@@ -121,144 +129,104 @@ const Home = () => {
           <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-down" />
           <ContainerLarge position="relative">
             <YStack zi={1} space="$6" mb="$4">
-              <BlockTitle title="Visual interface editor with drag and drop" subtitle="Edit React pages using a visual editor that reads and writes to standard react code."></BlockTitle>
+              <BlockTitle title="Drag and Drop React UI editor" subtitle="Edit React pages using a visual editor that reads and writes to standard react code."></BlockTitle>
               <Spacer />
-              <ThemeTint>
-                <ActiveGroup>
-                  <ButtonGroup>
-                    <ActiveGroupButton activeId={0}>lorem</ActiveGroupButton>
-                    <ActiveGroupButton activeId={1}>ipsum</ActiveGroupButton>
-                    <ActiveGroupButton activeId={2}>dolor</ActiveGroupButton>
-                  </ButtonGroup>
-                  <ActiveRender activeId={0}>
-                    <XCenterStack mt="$5">lorem</XCenterStack>
-                  </ActiveRender>
-                  <ActiveRender activeId={1}>
-                    <XCenterStack mt="$5">ipsum</XCenterStack>
-                  </ActiveRender>
-                  <ActiveRender activeId={2}>
-                    <XCenterStack mt="$5">dolor</XCenterStack>
-                  </ActiveRender>
-                </ActiveGroup>
-              </ThemeTint>
-              <SideBySide>
-                <TabGroup containerProps={{ p: "$5" }} title="Before" tabs={["hello", "world"]}>
-                  <Head1>hello</Head1>
-                  <Head2>world</Head2>
-                </TabGroup>
-                <IconStack als="center" p="$2.5" mb={0} elevation="$2"></IconStack>
-                <TabGroup containerProps={{ p: "$5" }} title="After" tabs={["hello", "world"]}>
-                  <Head1>Hello</Head1>
-                  <Head2>World</Head2>
-                </TabGroup>
-              </SideBySide>
+              <img src="/images/visualui.png" />
+            </YStack>
+            <Theme reset={true}>
+              <ContainerLarge mt={"$15"} position="relative">
+                <XStack ai="center" jc="center">
+                  <TamaCard title="Developers, Humans and Robots" description="description">
+                    Protofy is a Full Stack development platform designed to satisfy the needs of hardened developers, humans, and robots. 
+                    <br/>
+                    Most Lowcode platforms are closed source or sacrifice the development experience by using visual editors that generate
+                    ugly auto generated code.
+                    <br/>
+                    Protofy is designed to allow non-developers, developers and AI robots to cooperate in a single place. 
+                  </TamaCard>
+                </XStack>
+              </ContainerLarge>
+            </Theme>
+          </ContainerLarge>
+        </TintSection>
+
+
+        <TintSection index={2} contain="paint layout" zi={1000}>
+          <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-down" />
+          <ContainerLarge position="relative">
+            <YStack $theme-dark={{display: 'none'}} zi={1} space="$6" mb="$4">
+              <BlockTitle title="ESPHome Yaml Visual Editor" subtitle="Configure ESP32 devices using ESPHome and the Protofy ESPHome Yaml Visual Editor. Configure, upload and manage devices from a web admin panel"></BlockTitle>
+              <Spacer />
+              <img src="/images/iot_light.png" />
+            </YStack>
+            <YStack $theme-light={{display: 'none'}} zi={1} space="$6" mb="$4">
+              <BlockTitle title="IoT made easy" subtitle="Configure ESP32 devices using ESPHome and the Protofy ESPHome Yaml Visual Editor. Configure, upload and manage devices from a web admin panel"></BlockTitle>
+              <Spacer />
+              <img src="/images/iot.png" />
             </YStack>
           </ContainerLarge>
         </TintSection>
-        <Section sectionProps={{ index: 3, p: 0 }}>
-          <ContainerLarge position="relative">
-            <XStack ai="center" jc="center">
-              <ItemCard elevation="$3" pointerEvents="none" pointerEventsControls="none">
-                <YStack als="center" y={-3} miw={165} jc="center">
-                  <Paragraph fontWeight="700">Billie Jean</Paragraph>
-                  <Paragraph color="$color11" size="$3">
-                    Michael Jackson
-                  </Paragraph>
-                  <Paragraph color="$color11" o={0.65} size="$3">
-                    Thriller
-                  </Paragraph>
-                </YStack>
-              </ItemCard>
-            </XStack>
-          </ContainerLarge>
-          <YStack pe="none" zi={0} fullscreen={true} className="bg-grid mask-gradient-up" />
-        </Section>
-        <Section sectionProps={{ index: 4, p: 0 }}>
-          <ElevatedArea>
-            <ContainerLarge position="relative">
-              <SectionBox zi={1} bubble={true} gradient={true}>
-                <BlockTitle title="Protofito is the king" subtitle={"Some cool charts"}></BlockTitle>
-              </SectionBox>
-            </ContainerLarge>
-          </ElevatedArea>
-        </Section>
-        <Section sectionProps={{ index: 5, p: 0 }}>
-          <Theme reset={true}>
-            <ContainerLarge py="$20" space="$8">
-              <YStack maw={950} als="center">
-                <Grid gap={25} itemMinWidth={280}>
-                  <GridElement title="Fully typed">Typed inline styles, themes, tokens, shorthands, media queries, animations, and hooks that optimize.</GridElement>
-                  <GridElement title="SSR">Server-side rendering works by default, including responsive styles, themes and variants.</GridElement>
-                  <GridElement title="Server Components">Beta support for React Server Components for bundle size reduction.</GridElement>
-                  <GridElement title="Introspection">Multi-level debug pragma and props, compile-time JSX props for quick file:line:component jump.</GridElement>
-                  <GridElement title="Compatibility">Runs entirely without plugins, with optional optimizing plugins for Metro, Vite, and Webpack.</GridElement>
-                  <GridElement title="Full Featdured">A styled factory, variants, tokens, fonts, themes, media queries, shorthands and more.</GridElement>
-                </Grid>
-              </YStack>
-            </ContainerLarge>
-          </Theme>
-        </Section>
-        <Section sectionProps={{ index: 6, p: 0 }}>
-          <ContainerLarge my={-5} position="relative" space="$8">
-            <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}>
-              <XStack ai="center" jc="center">
-                <BlockTitle title={"Hello world"} subtitle="badum ts!"></BlockTitle>
-              </XStack>
-              <Theme reset={true}>
-                <XStack p="$10" space="$5">
-                  <OverlayCardBasic title="test" subtitle="lorem ipsum dolor sit amet wgj ewgjewj weqg wejfjewfj wefj wejfwjefjwqe f wqefj" caption="go" href="http://google.com" />
-                </XStack>
-              </Theme>
-            </SectionBox>
-          </ContainerLarge>
-        </Section>
-        <Section sectionProps={{ index: 7, p: 0 }}>
+
+
+
+        {/* <img src="/images/iot.png" /> */}
+        <Section>
           <Theme reset={true}>
             <ContainerLarge position="relative">
               <XStack px="$6" pt="$8" space="$4" $sm={{ flexDirection: "column", px: 0 }}>
                 <YStack w="50%" $sm={{ w: "100%" }}>
                   <YStack space="$4">
-                    <FeatureItem label="Press & hover events">onHoverIn, onHoverOut, onPressIn, and onPressOut.</FeatureItem>
-                    <FeatureItem label="Pseudo styles">Style hover, press, and focus, in combination with media queries.</FeatureItem>
-                    <FeatureItem label="Media queries">For every style/variant.</FeatureItem>
+                    <FeatureItem label="Solid Foundation">Protofy is build on top of open and battle tested technologies like <strong>NextJS</strong>, <strong>Expo</strong>, <strong>Express</strong> and <strong>React</strong></FeatureItem>
+                    <FeatureItem label="Procedural UI">High Level and procedural React widgets to generate forms and complex UI like EditableObject or DataView</FeatureItem>
+                    <FeatureItem label="Automatic CRUD">Generate CRUD APIs from Zod Schemas. Customize the API using a lightweight object system</FeatureItem>
                   </YStack>
                 </YStack>
                 <YStack w="50%" $sm={{ w: `100%` }}>
                   <YStack space="$4">
-                    <FeatureItem label="Themes">Change theme on any component.</FeatureItem>
-                    <FeatureItem label="Animations">Animate every component, enter and exit styling, works with pseudo states.</FeatureItem>
-                    <FeatureItem label="DOM escape hatches">Support for className and other HTML attributes.</FeatureItem>
+                    <FeatureItem label="AI Supercharged">All the Protofy dependencies are Open Source and were present in the ChatGPT training set. The ChatGPT integration allows to generate user interfaces, apis or IoT devices.</FeatureItem>
+                    <FeatureItem label="Web and native">The UI system is based on Tamagui, a React universal UI system. You can use Tamagui to create native user interfaces for mobile and web.</FeatureItem>
+                    <FeatureItem label="ESP32 IoT">Protofy provides a LowCode system to define and enroll ESPHome devices.</FeatureItem>
                   </YStack>
                 </YStack>
               </XStack>
             </ContainerLarge>
           </Theme>
         </Section>
-        <Section sectionProps={{ index: 8, p: 0 }}>
-          <ContainerLarge position="relative">
-            <XStack ai="center" jc="center"></XStack>
+
+        <Section>
+          <ContainerLarge my={-5} position="relative" space="$8">
+            <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}>
+              <XStack ai="center" jc="center">
+                <BlockTitle title={"AI Supercharged"} subtitle="With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
+              </XStack>
+              <Theme reset={true}>
+                <XStack p="$10" space="$5">
+                  
+                </XStack>
+              </Theme>
+            </SectionBox>
           </ContainerLarge>
         </Section>
-        <Section sectionProps={{ index: 8, p: 0 }}>
+
+
+        <Section>
           <Theme reset={true}>
-            <ContainerLarge position="relative">
-              <XStack ai="center" jc="center">
-                <TamaCard title="hello title" description="description">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut tincidunt massa. Nam vitae justo gravida, fermentum mauris eu, ultricies turpis. Aenean auctor, metus vitae tempor pharetra, arcu turpis egestas lorem, non fringilla nisl nisl non enim. Orci varius natoque penatibus et magnis dis parturient montes
-                </TamaCard>
-              </XStack>
+          <BackgroundGradient />
+            <ContainerLarge py="$20" space="$8">
+              <YStack maw={950} als="center">
+                <Grid gap={25} itemMinWidth={280}>
+                  <GridElement title="Real time"><strong>MQTT</strong> and <strong>websockets</strong> provides real time messaging, server side events and <strong>IoT</strong></GridElement>
+                  <GridElement title="SSR and CSR">Toggle between Server-side rendering and Client side rendering without changing the code</GridElement>
+                  <GridElement title="Object system">Object system based on Zod and OOP to define system entities. Objects allows for Automatic forms, validation, apis and much more.</GridElement>
+                  <GridElement title="Full stack">Includes frontend (web and mobile), backend, API system, database system, reverse proxy and realtime messaging</GridElement>
+                  <GridElement title="Yarn workspace">Protofy is yarn workspace with some apps and some packages, integrated together into a batteries-included, full-featured full-stack system</GridElement>
+                  <GridElement title="Easy to deploy">Run locally using npm for local devleopment, as a service with PM2 or use docker for cloud deploy.</GridElement>
+                </Grid>
+              </YStack>
             </ContainerLarge>
           </Theme>
         </Section>
-        <Section sectionProps={{ index: 9, p: 0 }}>
-          <Theme reset={true}>
-            <ContainerLarge position="relative">
-              <XStack ai="center" jc="center">
-                <Notice>hello world!</Notice>
-              </XStack>
-            </ContainerLarge>
-          </Theme>
-        </Section>
+
       </DefaultLayout>
     </Page>
   );
