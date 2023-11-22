@@ -228,7 +228,7 @@ const Home = () => {
             <ContainerLarge position="relative">
                 {/* <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}> */}
                 <XStack ai="center" jc="center">
-                  <BlockTitle title={"AI Supercharged"} subtitle="With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
+                  <BlockTitle title={"AI Supercharged Control Panel"} subtitle="Control panel to manage the CMS, website and content. With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
                 </XStack>
 
                 <XStack $theme-dark={{display: 'none'}} mt={"$5"} p={"$5"}>
