@@ -9,10 +9,10 @@
   <a href="https://opensource.org/licenses/mit">
     <img src="https://img.shields.io/badge/mit-blue.svg?style=flat-square&label=license" alt="license" style="height: 20px;">
   </a>
-  <a href="https://amplication.com/discord">
+  <a href="https://discord.gg/VpeZxMFfYW">
     <img src="https://img.shields.io/badge/discord-7289da.svg?style=flat-square&logo=discord" alt="discord" style="height: 20px;">
   </a>
-  <a href="https://www.youtube.com/c/Amplicationcom">
+  <a href="https://www.youtube.com/channel/UCmA8ZqKbySDRSVFPBrAAQ-g">
     <img src="https://img.shields.io/badge/youtube-d95652.svg?style=flat-square&logo=youtube" alt="youtube" style="height: 20px;">
   </a>
 </h4>
@@ -45,7 +45,7 @@ Many thanks [@natew] for creating the original starter and to [@FernandoTheRojo]
 - `Expo Router`
 - `Many more things!`
 
-## 🗂 Folder layout
+## 🗂️ Folder layout
 
 The main apps are:
 
@@ -67,7 +67,7 @@ The main apps are:
 
 You can add other folders inside of `packages/` if you know what you're doing and have a good reason to.
 
-## 🏁 Start the app
+## 🚀 Start the app
 
 Using a freezed version: 
 
@@ -89,7 +89,7 @@ yarn && yarn dev-latest
 
 ## 🆕 Add new dependencies
 
-### Pure JS dependencies
+### · Pure JS dependencies
 
 If you're installing a JavaScript-only dependency that will be used across platforms, install it in `packages/app`:
 
@@ -100,7 +100,7 @@ cd ../..
 yarn
 ```
 
-### Native dependencies
+### ·  Native dependencies
 
 If you're installing a library with any native code, you must install it in `expo`:
 
@@ -111,9 +111,9 @@ cd ..
 yarn
 ```
 
-## Update new dependencies
+## ☝️ Update new dependencies
 
-### Pure JS dependencies
+### · Pure JS dependencies
 
 ```sh
 yarn upgrade-interactive
