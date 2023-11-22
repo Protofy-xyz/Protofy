@@ -77,10 +77,11 @@ const getDB = (path, req, session) => {
       }
       let sourceFile = getSourceFile(filePath)
       if (value.template == 'generative') { // Check that template is generative and do call to chatgpt
-        const systemPrompt = `You are an expert react developer. A user will provide you with a
+        const systemPrompt = `You are an expert react frontend developer. A user will provide you with a
  low-fidelity wireframe of an application and you will return 
  a single react file that uses tamagui to create the website. Use creative license to make the application more fleshed out.
-if you need to insert an image, use placehold.co to create a placeholder image. Respond only with the react code.`;
+if you need to insert an image, use placehold.co to create a placeholder image. 
+Answer only with code.`;
         const defaultMessages = [
           {
             role: "system",
@@ -93,16 +94,23 @@ if you need to insert an image, use placehold.co to create a placeholder image. 
                 type: "image_url",
                 image_url: value.asset,
               },
-              "Turn this into a react component using Tamagui components library",
+              `Using the provided image and the following code as template: ${sourceFile.getText()}.
+              Turn this into component using Tamagui components library.
+              Do not delete react components from the provided template. 
+              Preserve default imports. 
+              Add missing imports for the components you have added.
+              All imports from "tamagui" should be replaced by the alias "@my/ui".
+              Answer only with code`,
             ],
           },
         ]
         // Call chatgpt
         const result = await API.post('/adminapi/v1/assistants', {
+          gptModel: "gpt-4-vision-preview",
           messages: defaultMessages
         })
-        // console.log('DEV: result from CHATGPT', result)
-        // console.log('DEV: valueAsset', value.asset)
+        const content = result.data.choices[0]?.message.content; // FIX: currently assuming happy path and no errors
+        console.log('DEV: content GPT::::', content)
       }
       let arg = getDefinition(sourceFile, '"protected"')
       if (value.protected) {
