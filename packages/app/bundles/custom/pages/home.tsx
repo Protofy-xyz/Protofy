@@ -1,6 +1,6 @@
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, SizableText } from "@my/ui";
 import { TintSection, ContainerLarge, AnounceBubble, BigTitle, LinkGroup, LinkGroupItem, CopyBubble, XCenterStack, NextLink, TooltipContainer, TwitterIcon, MainButton, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, ActiveGroup, ButtonGroup, ActiveGroupButton, ActiveRender, SideBySide, TabGroup, IconStack, BackgroundGradient, ItemCard, SectionBox, ElevatedArea, BarChart, GridElement, RainbowText, OverlayCardBasic, FeatureItem, DataTable, TamaCard, Notice, PageGlow, withSession, useSession, Page, Grid, ThemeTint, useEdit, Head1, Head2 } from "protolib";
-import { ChevronRight, Code, Cpu, FastForward, Layers, Star } from "@tamagui/lucide-icons";
+import { ChevronRight, Code, Cpu, FastForward, Layers, Star, Bot } from "@tamagui/lucide-icons";
 import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
@@ -136,19 +136,29 @@ const Home = () => {
             <Theme reset={true}>
               <ContainerLarge mt={"$15"} position="relative">
                 <XStack ai="center" jc="center">
-                  <TamaCard title="Developers, Humans and Robots" description="description">
-                    Protofy is a Full Stack development platform designed to satisfy the needs of hardened developers, humans, and robots. 
-                    <br/>
-                    Most Lowcode platforms are closed source or sacrifice the development experience by using visual editors that generate
-                    ugly auto generated code.
-                    <br/>
-                    Protofy is designed to allow non-developers, developers and AI robots to cooperate in a single place. 
-                  </TamaCard>
+
                 </XStack>
               </ContainerLarge>
             </Theme>
           </ContainerLarge>
         </TintSection>
+
+
+        <ElevatedArea>
+          <HorizontalBox>
+            <HoveredGroup>
+                <SectionBlock $sm={{ width: '100%' }} id={1} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title={"Inclusive"} href="#">
+                  Protofy is a Full Stack development platform designed to satisfy the needs of hardened developers, humans, and robots. 
+                </SectionBlock>
+                <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={2} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title={"Developer friendly"} href="#">
+                  Protofy uses ts-morph to parse javscript/typescript and react files and generate UI editors, diagrams and visual editors on top of real code.
+                </SectionBlock>
+                <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={3} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title={"LowCode"} href="#">
+                  Protofy is designed to allow non-developers, developers and AI robots to cooperate in a single place. Providing a great experience for all type of users.
+                </SectionBlock>
+              </HoveredGroup>       
+          </HorizontalBox>
+        </ElevatedArea>
 
 
         <TintSection index={2} contain="paint layout" zi={1000}>
@@ -208,10 +218,8 @@ const Home = () => {
           </ContainerLarge>
         </Section>
 
-
         <Section>
           <Theme reset={true}>
-          <BackgroundGradient />
             <ContainerLarge py="$20" space="$8">
               <YStack maw={950} als="center">
                 <Grid gap={25} itemMinWidth={280}>
