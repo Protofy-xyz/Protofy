@@ -69,13 +69,15 @@ You can add other folders inside of `packages/` if you know what you're doing an
 There are many features and artisanal technologies included in this starter. Let's explain some of them and where to find them.
 
 ### Cascading prompt system for LLM context management
-TODO
+Code Debugging and Assistance: Get context-aware help in debugging and understanding complex code.
+Project-Specific Guidance: Receive advice and suggestions tailored to your current project's context.
+Learning and Development: Utilize the LLM’s context-aware responses for learning new programming concepts relevant to your work.
 
 ### VisualUI
 [WSIWYG](https://es.wikipedia.org/wiki/WYSIWYG) editor for react. You can find it on `packages/visualui`. It's a technology that you can use to edit your react components. It's used by the admin panel to edit custom pages.
 
 ### Protoflow
-TODO
+Lowcode system for Javascript/Typescript code manipulation, editing and visualization. You can find it on `packages/protoflow`. It's used to edit behaviours. 
 
 ## 🚀 Getting started
 Using a freezed version: 
