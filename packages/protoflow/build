@@ -1,0 +1,10 @@
+#!/bin/bash
+docker run --rm -ti --entrypoint /jsflow/docker_build -v $(pwd):/jsflow --user $(id -u):$(id -g) node:16-bullseye-slim
+if test -d ../../../protofy-platform; then 
+    cp -f ./dist/index.js ../../../protofy-platform/packages/frontend/app/src/plugins/visualui/components/flowslib
+    rm ../../../protofy-platform/packages/frontend/app/src/plugins/visualui/components/flowslib/AIModal-*.js
+    cp -f ./dist/AIModal-*.js ../../../protofy-platform/packages/frontend/app/src/plugins/visualui/components/flowslib
+    echo 'files copied to protofy-platform'
+else
+    echo 'no protofy-plarform to copy on ../protofy-platform'
+fi

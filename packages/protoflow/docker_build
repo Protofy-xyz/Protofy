@@ -1,0 +1,7 @@
+#!/bin/bash
+cd /jsflow
+npm install --force
+rm -rf dist
+mkdir dist
+npm run build
+cp package.json dist/package.json

@@ -1,0 +1,45 @@
+{
+  "name": "protoflow",
+  "version": "1.0.0",
+  "displayName": "Protofy JS/TS Low-code react component",
+  "description": "React component to generate automatic interactive Low-code diagrams from Javascript and Typescript code, with react support",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "pull": "git pull",
+    "build": "NODE_ENV=production tsup ./index.tsx --dts --minify terser --format esm && shx cp package.json dist/package.json",
+    "build:dev": "NODE_ENV=development tsup ./index.tsx --dts"
+  },
+  "keywords": [],
+  "publisher": "protofy.xyz",
+  "author": "protofy.xyz",
+  "license": "MIT",
+  "dependencies": {
+    "chroma-js": "2.4.2",
+    "deep-diff": "1.0.2",
+    "elkjs": "0.8.2",
+    "immer": "9.0.5",
+    "lucide-react": "0.279.0",
+    "react": "^18.2.0",
+    "react-color": "2.19.3",
+    "react-select": "5.7.0",
+    "react-topics": "0.1.7",
+    "react-use-keypress": "1.3.1",
+    "reactflow": "11.5.3",
+    "shx": "^0.3.4",
+    "ts-morph": "17.0.1",
+    "uuid": "9.0.0",
+    "zustand": "3.6.9"
+  },
+  "devDependencies": {
+    "@swc/core": "1.3.51",
+    "@types/react-color": "3.0.6",
+    "terser": "5.16.9",
+    "tsup": "6.7.0",
+    "typescript": "^5.2.2"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "type": "module"
+}

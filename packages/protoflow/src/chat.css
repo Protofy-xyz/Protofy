@@ -1,0 +1,21 @@
+.rcw-conversation-container > .rcw-header {
+  background-color: #34CCE6;
+}
+.rcw-conversation-container > .rcw-messages-container {
+  background-color: #EEEEEE;
+}
+
+.rcw-response > .rcw-message-text {
+  background-color: white;
+  color: black;
+}
+.rcw-client > .rcw-message-text {
+  background-color: #434654;
+  color: white;
+}
+.rcw-new-message > .rcw-input {
+  color: #434654;
+}
+.rcw-widget-container > .rcw-launcher {
+  background-color: #34CCE6;
+}
