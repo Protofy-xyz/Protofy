@@ -3,10 +3,6 @@
         "url": "https://github.com/Protofy-xyz/Protoflow.git",
         "revision": "525e9d35f9ef9311a5d7a321d26bd58f49459b66"
     },
-    "protolib": {
-        "url": "https://github.com/Protofy-xyz/protolib.git",
-        "revision": "7be7429f87460fcb2f037a782e4cd0fd93aa211b"
-    },
     "visualui": {
         "url": "https://github.com/Protofy-xyz/protofy-visualui.git",
         "revision": "b733ded2fa76de1f13c5c09eea718c810cd473ba"
