@@ -267,8 +267,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
           if (dependsOnValue) {
             if (dependsOnValue == data[dependsOn]) {
               return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
-            }
-            else {
+            } else {
               return <Input
                 focusStyle={{ outlineWidth: 1 }}
                 disabled={true}
@@ -276,14 +275,8 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
                 bc="$backgroundTransparent"
               ></Input>
             }
-          }
-          else {
-            return <Input
-              focusStyle={{ outlineWidth: 1 }}
-              disabled={true}
-              placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + dependsOn + ' property first'}
-              bc="$backgroundTransparent"
-            ></Input>
+          } else {
+            return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
           }
         } else {
           return <Input
