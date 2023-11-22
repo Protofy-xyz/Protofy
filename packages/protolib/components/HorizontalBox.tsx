@@ -1,12 +1,8 @@
 import React from "react"
 import { ContainerLarge } from "./Container"
-import { XStack, XStackProps } from "tamagui"
+import { StackProps, XStack, XStackProps } from "tamagui"
 
-type HorizontalBoxProps = {
-    children?: any,
-    XStackProps?: XStackProps
-}
-const HorizontalBox = React.forwardRef(({children, XStackProps={}}:HorizontalBoxProps, ref:any) => (
+const HorizontalBox = React.forwardRef((props:StackProps, ref:any) => (
     <ContainerLarge ref={ref}>
         <XStack
         flex={1}
@@ -16,15 +12,15 @@ const HorizontalBox = React.forwardRef(({children, XStackProps={}}:HorizontalBox
         flexWrap="nowrap"
         px="$2"
         mb={-8}
-        py="$4"
+
         $sm={{ flexDirection: 'column' }}
         $gtSm={{
             //@ts-ignore
             px: '$6',
         }}
-        {...XStackProps}
+        {...props}
         >
-            {children}
+            {props.children}
         </XStack>
     </ContainerLarge>
 ))
