@@ -26,8 +26,6 @@ Protofy starter is a monorepo is a Full-Stack, batteries included Low-Code enabl
 You can use this as a base to fast prototype Apps, webs, IoT systems, automations or APIs.
 Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Redbird + Many other amazing packages
 
-Many thanks [@natew] for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original [@natew] starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
-
 ## 📦 Included packages
 
 ![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device-1.gif?raw=true)
@@ -67,6 +65,18 @@ The project has two main folders:
 
 You can add other folders inside of `packages/` if you know what you're doing and have a good reason to.
 
+## 🔑 Key features
+There are many features and artisanal technologies included in this starter. Let's explain some of them and where to find them.
+
+### Cascading prompt system for LLM context management
+TODO
+
+### VisualUI
+[WSIWYG](https://es.wikipedia.org/wiki/WYSIWYG) editor for react. You can find it on `packages/visualui`. It's a technology that you can use to edit your react components. It's used by the admin panel to edit custom pages.
+
+### Protoflow
+TODO
+
 ## 🚀 Getting started
 Using a freezed version: 
 
@@ -99,6 +109,11 @@ yarn add-user user@email.com password admin
 We just created a user with `admin` type, but this is only a plain text user type identifier. You can create as many user types as you want while creating the users. 
 
 The admin panel requires to have a user with `admin` type to be able to access it.
+
+## 🔨 Workspace
+
+
+Once you've logged in you will be able to access the workspace. The workspace is the place where you can create your apps, webs, apis, devices, etc (Also known as adminpanel).
 
 ## 🆕 Add new dependencies
 
@@ -135,3 +150,9 @@ yarn upgrade-interactive
 You can also install the native library inside of `packages/app` if you want to get autoimport for that package inside of the `app` folder. However, you need to be careful and install the _exact_ same version in both packages. If the versions mismatch at all, you'll potentially get terrible bugs. This is a classic monorepo issue. I use `lerna-update-wizard` to help with this (you don't need to use Lerna to use that lib).
 
 You may potentially want to have the native module transpiled for the next app. If you get error messages with `Cannot use import statement outside a module`, you may need to use `transpilePackages` in your `next.config.js` and add the module to the array there.
+
+## Roadmap
+Comming soon...
+
+## Credits and references
+Many thanks [@natew] for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original [@natew] starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
