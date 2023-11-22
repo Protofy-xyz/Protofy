@@ -67,8 +67,7 @@ The project has two main folders:
 
 You can add other folders inside of `packages/` if you know what you're doing and have a good reason to.
 
-## 🚀 Start the app
-
+## 🚀 Getting started
 Using a freezed version: 
 
 ```sh
@@ -86,6 +85,20 @@ yarn && yarn dev-latest
 - `node prepare.js` to initialize submodules (protoflow, protolib and visualui). Only needed the first time.
 - Install dependencies: `yarn`
 - local dev: `yarn dev`
+
+By default there is a proxy running on port 8080 that redirects to the next.js app on port 3000 and the api on port 3001 and the adminApi on port 3002. You can go to `apps/proxy/index.js` to change defaults or add more services like the expo app.
+
+Once the nextjs app is running you can go to `http://localhost:8080` to see the web app. 
+
+## 🙋‍♂️ Adding a user
+The first time you run the starter you won't have users. You can easily create one on `http://localhost:8080/auth/login` but this one will be a normal user. If you want to create an admin user you can do it by running the following command:
+
+```sh
+yarn add-user user@email.com password admin
+```
+We just created a user with `admin` type, but this is only a plain text user type identifier. You can create as many user types as you want while creating the users. 
+
+The admin panel requires to have a user with `admin` type to be able to access it.
 
 ## 🆕 Add new dependencies
 
