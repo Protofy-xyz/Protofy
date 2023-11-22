@@ -228,9 +228,9 @@ const Home = () => {
             <BackgroundGradient dot={true} height={'100vh'} direction="up" o={0.1} />
             <ContainerLarge position="relative">
                 {/* <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}> */}
-                <XStack ai="center" jc="center">
+                <YStack ai="center" jc="center">
                   <BlockTitle title={"AI Control Panel"} subtitle="Control panel to manage the CMS, website and content. With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
-                </XStack>
+                </YStack>
 
                 <XStack $theme-dark={{display: 'none'}} mt={"$5"} p={"$5"}>
                   <img style={{maxHeight: "100%", maxWidth: "100%", height: "auto"}} src="/images/ai_light.png" />
