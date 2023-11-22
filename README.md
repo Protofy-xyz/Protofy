@@ -26,6 +26,9 @@ Protofy is a Full-Stack, batteries included Low-Code enabled web/app and IoT sys
 You can use this as a base to fast prototype Apps, webs, IoT systems, automations or APIs.
 Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Redbird + Many other amazing packages
 
+You can think of protofy as a Wordpress but based in react and javascript and some features from supabase, plus visual widget editors to edit source code inside the admin panel itself.
+A ultra-extensible CMS with supercharged capabilities, mobile support and IoT support (esp32 thanks to esphome)
+
 ## 📦 Included packages
 
 ![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device-1.gif?raw=true)
