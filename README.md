@@ -33,7 +33,7 @@ A ultra-extensible CMS with supercharged capabilities, mobile support and IoT su
 
 ![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device-1.gif?raw=true)
 
-- `Protoflow` LowCode interactive diagram system for Javscript and typescript)
+- `Protoflow` LowCode interactive diagram system for Javacript and typescript)
 - `VisualUI` What you see is what you get for react,like FlutterFlow but for react
 - `Protolib` Protofy Framework on top of react, express and tamagui
 - `Express` API system (With automatic CRUD creation)
