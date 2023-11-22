@@ -1,32 +1,49 @@
-# Protofy
+<h3 align="center">
+<image height="50" src="https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/logo-protofy.png">
+</h3>
 
-![protofy-banner](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofy-banner.png)
+<h4 align="center">
+  <a href="https://github.com/protofy-xyz/protofy/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors-anon/amplication/amplication?color=yellow&style=flat-square" alt="contributors" style="height: 20px;">
+  </a>
+  <a href="https://opensource.org/licenses/mit">
+    <img src="https://img.shields.io/badge/mit-blue.svg?style=flat-square&label=license" alt="license" style="height: 20px;">
+  </a>
+  <a href="https://amplication.com/discord">
+    <img src="https://img.shields.io/badge/discord-7289da.svg?style=flat-square&logo=discord" alt="discord" style="height: 20px;">
+  </a>
+  <a href="https://www.youtube.com/c/Amplicationcom">
+    <img src="https://img.shields.io/badge/youtube-d95652.svg?style=flat-square&logo=youtube" alt="youtube" style="height: 20px;">
+  </a>
+</h4>
 
-AI Supercharged LowCode Platform CMS and Framework.
-https://protofy.xyz/
+<p align="center">AI Supercharged LowCode Platform CMS and Framework</p>
 
-## 🔦 About
+![visual-ui-gif](https://github.com/Protofy-xyz/Protofy/blob/assets/visualui-2.gif?raw=true)
 
-This monorepo is a Full-Stack, batteries included Low-Code enabled web/app and IoT system with an API system and real time message.
+Protofy starter is a monorepo is a Full-Stack, batteries included Low-Code enabled web/app and IoT system with an API system and real time message.
+
 You can use this as a base to fast prototype Apps, webs, IoT systems, automations or APIs.
-
 Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Redbird + Many other amazing packages
 
 Many thanks [@natew] for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original [@natew] starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
 
 ## 📦 Included packages
-- Protoflow (LowCode interactive diagram system for Javscript and typescript)
-- VisualUI (What you see is what you get for react)
-- Protofy Admin Panel (Admin panel and object system)
-- Express API system (With automatic CRUD creation)
-- Aedes mqtt server
-- Redbird http reverse proxy
+
+![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device-1.gif?raw=true)
+
+- `Protoflow` LowCode interactive diagram system for Javscript and typescript)
+- `VisualUI` (What you see is what you get for react)
+- `Protofy` Admin Panel (Admin panel and object system)
+- `Express` API system (With automatic CRUD creation)
+- `Aedes` mqtt server
+- `Redbird` http reverse proxy
 - [Tamagui](https://tamagui.dev) 🪄
-- [solito](https://solito.dev) for cross-platform navigation
-- Expo SDK
-- Next.js
-- Expo Router
-- Many more things!
+- [Solito](https://solito.dev) for cross-platform navigation
+- `Expo SDK`
+- `Next.js`
+- `Expo Router`
+- `Many more things!`
 
 ## 🗂 Folder layout
 
