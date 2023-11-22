@@ -96,7 +96,7 @@ const Home = () => {
                   </TooltipContainer>
                 </NextLink>
               </XCenterStack>
-              <Theme reset><CopyBubble text="git clone https://github.com/Protofy-xyz/Protofy.git" /></Theme>
+             
             </YStack>
 
           </ContainerLarge>
