@@ -244,12 +244,12 @@ const Home = () => {
           </Theme>
         </Section>
         
-        <Section py={"$20"} borderTopWidth={1} borderColor={"$color6"}>
-          {/* <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-down" /> */}
-          <BackgroundGradient dot={true} direction="up" o={0.1} />
+        <Section py={"$20"} borderBottomWidth={1} borderTopWidth={1} borderColor={"$color6"}>
+          <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-up" />
+          {/* <BackgroundGradient dot={true} direction="down" o={0.1} /> */}
           <Theme reset={true}>
                 <YStack ai="center" jc="center">
-                  <BlockTitle title={"We build it for you"} subtitle="At Protofy, we are experts at building mobile apps, webs and IoT devices.We have a team of very talented, pasionate and innovative thinkers, ready to build your next project."></BlockTitle>
+                  <BlockTitle title={"We build it for you"} subtitle="At Protofy, we are experts at building mobile apps, webs and IoT devices. We have a team of very talented, agile, pasionate and innovative thinkers, ready to build your next project"></BlockTitle>
                   <XStack mt={"$8"}>
                     <Link target="_blank" href="https://projects.protofy.xyz">
                       <XStack mt={"$4"} ai="center" jc="center">
@@ -257,6 +257,29 @@ const Home = () => {
                       <ChevronRight color="$orange8" />
                       </XStack>
                     </Link>
+                  </XStack>
+                  <XStack jc="center" space="$5" flexWrap="wrap">
+                    <YStack scale={0.7}>
+                      <YStack  borderWidth={1}>
+                        <img src="/images/fillinggood.png" />
+                      </YStack>
+                      <Paragraph o={0.8} fontSize={30} mt={"$5"} fontWeight={"500"}>DAMM - Filling good</Paragraph>
+                    </YStack>
+
+                    <YStack scale={0.7}>
+                      <YStack  borderWidth={1}>
+                        <img src="/images/bluebox.png" />
+                      </YStack>
+                      <Paragraph o={0.8} fontSize={30} mt={"$5"} fontWeight={"500"}>The Smart Lollipop</Paragraph>
+                    </YStack>
+   
+                    <YStack scale={0.7}>
+                      <YStack  borderWidth={1}>
+                        <img src="/images/taiga.png" />
+                      </YStack>
+                      <Paragraph o={0.8} fontSize={30} mt={"$5"} fontWeight={"500"}>Taiga - Fountain</Paragraph>
+                    </YStack>
+
                   </XStack>
                 </YStack>
           </Theme>
