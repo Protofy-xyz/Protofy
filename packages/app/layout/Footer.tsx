@@ -18,22 +18,22 @@ export const Footer = () => <ProtoFooter>
   </FooterElement>
 
   <FooterElement title="Overview" links={[
-    { href: '/docs/intro/introduction', caption: 'Introduction' },
-    { href: '/docs/core/configuration', caption: 'Configuration' },
-    { href: '/docs/guides/design-systems', caption: 'Guides' }
+    { href: '#', caption: 'Introduction' },
+    { href: '#', caption: 'Design Principles' },
+    { href: '#', caption: 'Architecture' }
   ]} />
 
-  <FooterElement title="Docs" links={[
-    { href: '/docs/intro/installation', caption: 'Installation' },
-    { href: '/docs/intro/themes', caption: 'Themes' },
-    { href: '/docs/core/styled', caption: 'Variants' }
+  <FooterElement title="Links" links={[
+    { href: 'https://github.com/Protofy-xyz/Protofy/blob/main/README.md', caption: 'Installation' },
+    { href: 'https://github.com/Protofy-xyz/Protofy/issues', caption: 'Issues' },
+    { href: 'https://github.com/Protofy-xyz/Protofy/pulls', caption: 'Pull requests' }
   ]} />
 
   <FooterElement title="Community" links={[
     { href: '/community', caption: 'Community' },
-    { href: '/blog', caption: 'Blog' },
-    { href: 'https://github.com/Protofy-xyz', caption: 'GitHub' },
+    { href: '/', caption: 'Site' },
+    { href: 'https://github.com/Protofy-xyz/Protofy', caption: 'GitHub' },
     { href: 'https://twitter.com/protofy_xyz', caption: 'Twitter' },
-    { href: 'https://discord.gg/VY7fHHns', caption: 'Discord' }
+    { href: 'https://discord.gg/VpeZxMFfYW', caption: 'Discord' }
   ]} />
 </ProtoFooter>

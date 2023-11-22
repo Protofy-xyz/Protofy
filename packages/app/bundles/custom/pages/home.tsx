@@ -17,7 +17,7 @@ const Home = () => {
         <PageGlow />
         <Section>
           <SpotLight />
-          <ContainerLarge $gtLg={{minHeight: 900}} contain="layout" pos="relative">
+          <ContainerLarge $gtLg={{ minHeight: 900 }} contain="layout" pos="relative">
             <BackgroundGradient dot={true} height={'100vh'} direction="up" o={0.1} />
             <YStack f={1} ov="hidden" space="$3" position="relative" pt="$10" mb="$4">
               <YStack opacity={1} scaleX={1} ai="center" space="$2">
@@ -144,32 +144,50 @@ const Home = () => {
         </TintSection>
 
 
+        <Section>
+          <SpotLight />
+          <BackgroundGradient dot={true} height={'100vh'} direction="up" o={0.1} />
+          <Theme reset={true}>
+            <ContainerLarge pb="$20" space="$8">
+              <YStack maw={950} als="center">
+                <Grid gap={25} itemMinWidth={280}>
+                  <GridElement title="Real time"><strong>MQTT</strong> and <strong>websockets</strong> provides real time messaging, server side events and <strong>IoT</strong></GridElement>
+                  <GridElement title="SSR and CSR">Toggle between Server-side rendering and Client side rendering without changing the code</GridElement>
+                  <GridElement title="Object system">Object system based on Zod and OOP to define system entities. Objects allows for Automatic forms, validation, apis and much more.</GridElement>
+                  <GridElement title="Full stack">Includes frontend (web and mobile), backend, API system, database system, reverse proxy and realtime messaging</GridElement>
+                  <GridElement title="Yarn workspace">Protofy is yarn workspace with some apps and some packages, integrated together into a batteries-included, full-featured full-stack system</GridElement>
+                  <GridElement title="Easy to deploy">Run locally using npm for local devleopment, as a service with PM2 or use docker for cloud deploy.</GridElement>
+                </Grid>
+              </YStack>
+            </ContainerLarge>
+          </Theme>
+        </Section>
+
         <ElevatedArea>
           <HorizontalBox>
             <HoveredGroup>
-                <SectionBlock $sm={{ width: '100%' }} id={1} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title={"Inclusive"} href="#">
-                  Protofy is a Full Stack development platform designed to satisfy the needs of hardened developers, humans, and robots. 
-                </SectionBlock>
-                <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={2} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title={"Developer friendly"} href="#">
-                  Protofy uses ts-morph to parse javscript/typescript and react files and generate UI editors, diagrams and visual editors on top of real code.
-                </SectionBlock>
-                <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={3} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title={"LowCode"} href="#">
-                  Protofy is designed to allow non-developers, developers and AI robots to cooperate in a single place. Providing a great experience for all type of users.
-                </SectionBlock>
-              </HoveredGroup>       
+              <SectionBlock $sm={{ width: '100%' }} id={1} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title={"Inclusive"} href="#">
+                Protofy is a Full Stack development platform designed to satisfy the needs of hardened developers, humans, and robots.
+              </SectionBlock>
+              <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={2} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title={"Developer friendly"} href="#">
+                Protofy uses ts-morph to parse javscript/typescript and react files and generate UI editors, diagrams and visual editors on top of real code.
+              </SectionBlock>
+              <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={3} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title={"LowCode"} href="#">
+                Protofy is designed to allow non-developers, developers and AI robots to cooperate in a single place. Providing a great experience for all type of users.
+              </SectionBlock>
+            </HoveredGroup>
           </HorizontalBox>
         </ElevatedArea>
-
 
         <TintSection index={2} contain="paint layout" zi={1000}>
           <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-down" />
           <ContainerLarge position="relative">
-            <YStack $theme-dark={{display: 'none'}} zi={1} space="$6" mb="$4">
+            <YStack $theme-dark={{ display: 'none' }} zi={1} space="$6" mb="$4">
               <BlockTitle title="ESPHome Yaml Visual Editor" subtitle="Configure ESP32 devices using ESPHome and the Protofy ESPHome Yaml Visual Editor. Configure, upload and manage devices from a web admin panel"></BlockTitle>
               <Spacer />
               <img src="/images/iot_light.png" />
             </YStack>
-            <YStack $theme-light={{display: 'none'}} zi={1} space="$6" mb="$4">
+            <YStack $theme-light={{ display: 'none' }} zi={1} space="$6" mb="$4">
               <BlockTitle title="IoT made easy" subtitle="Configure ESP32 devices using ESPHome and the Protofy ESPHome Yaml Visual Editor. Configure, upload and manage devices from a web admin panel"></BlockTitle>
               <Spacer />
               <img src="/images/iot.png" />
@@ -181,6 +199,7 @@ const Home = () => {
 
         {/* <img src="/images/iot.png" /> */}
         <Section>
+        <SpotLight />
           <Theme reset={true}>
             <ContainerLarge position="relative">
               <XStack px="$6" pt="$8" space="$4" $sm={{ flexDirection: "column", px: 0 }}>
@@ -202,38 +221,28 @@ const Home = () => {
             </ContainerLarge>
           </Theme>
         </Section>
-
-        <Section>
-          <ContainerLarge my={-5} position="relative" space="$8">
-            <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}>
-              <XStack ai="center" jc="center">
-                <BlockTitle title={"AI Supercharged"} subtitle="With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
-              </XStack>
-              <Theme reset={true}>
-                <XStack p="$10" space="$5">
-                  
-                </XStack>
-              </Theme>
-            </SectionBox>
-          </ContainerLarge>
-        </Section>
-
-        <Section>
+        <Section pt={"$20"} pb={"$20"}>
           <Theme reset={true}>
-            <ContainerLarge py="$20" space="$8">
-              <YStack maw={950} als="center">
-                <Grid gap={25} itemMinWidth={280}>
-                  <GridElement title="Real time"><strong>MQTT</strong> and <strong>websockets</strong> provides real time messaging, server side events and <strong>IoT</strong></GridElement>
-                  <GridElement title="SSR and CSR">Toggle between Server-side rendering and Client side rendering without changing the code</GridElement>
-                  <GridElement title="Object system">Object system based on Zod and OOP to define system entities. Objects allows for Automatic forms, validation, apis and much more.</GridElement>
-                  <GridElement title="Full stack">Includes frontend (web and mobile), backend, API system, database system, reverse proxy and realtime messaging</GridElement>
-                  <GridElement title="Yarn workspace">Protofy is yarn workspace with some apps and some packages, integrated together into a batteries-included, full-featured full-stack system</GridElement>
-                  <GridElement title="Easy to deploy">Run locally using npm for local devleopment, as a service with PM2 or use docker for cloud deploy.</GridElement>
-                </Grid>
-              </YStack>
+            <BackgroundGradient dot={true} height={'100vh'} direction="up" o={0.1} />
+            <ContainerLarge position="relative">
+                {/* <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}> */}
+                <XStack ai="center" jc="center">
+                  <BlockTitle title={"AI Supercharged"} subtitle="With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
+                </XStack>
+
+                <XStack $theme-dark={{display: 'none'}} mt={"$5"} p={"$5"}>
+                  <img style={{maxHeight: "100%", maxWidth: "100%", height: "auto"}} src="/images/ai_light.png" />
+                </XStack>
+
+                <XStack $theme-light={{display: 'none'}} mt={"$5"} p={"$5"}>
+                  <img style={{maxHeight: "100%", maxWidth: "100%", height: "auto"}} src="/images/ai_dark.png" />
+                </XStack>
+              {/* </SectionBox> */}
             </ContainerLarge>
           </Theme>
         </Section>
+
+
 
       </DefaultLayout>
     </Page>
