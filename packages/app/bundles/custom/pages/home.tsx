@@ -17,7 +17,7 @@ const Home = () => {
         <PageGlow />
         <Section>
           <SpotLight />
-          <ContainerLarge $gtLg={{ minHeight: 900 }} contain="layout" pos="relative">
+          <ContainerLarge pb={"$15"} $gtLg={{ minHeight: 900 }} contain="layout" pos="relative">
             <BackgroundGradient dot={true} height={'100vh'} direction="up" o={0.1} />
             <YStack f={1} ov="hidden" space="$3" position="relative" pt="$10" mb="$4">
               <YStack opacity={1} scaleX={1} ai="center" space="$2">
@@ -101,6 +101,7 @@ const Home = () => {
 
           </ContainerLarge>
         </Section>
+ 
         <ElevatedArea>
           <XStack pos="absolute" als="center" y={-45}>
             <Link target="_blank" href="https://github.com/Protofy-xyz/Protofy">
@@ -199,7 +200,7 @@ const Home = () => {
 
 
         {/* <img src="/images/iot.png" /> */}
-        <Section pt={"$15"} borderTopWidth={1} borderColor={"$color5"}>
+        <Section pt={"$15"} borderTopWidth={1} borderColor={"$color3"}>
         <SpotLight />
           <Theme reset={true}>
             <ContainerLarge position="relative">
@@ -228,7 +229,7 @@ const Home = () => {
             <ContainerLarge position="relative">
                 {/* <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}> */}
                 <XStack ai="center" jc="center">
-                  <BlockTitle title={"AI Supercharged Control Panel"} subtitle="Control panel to manage the CMS, website and content. With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
+                  <BlockTitle title={"AI Control Panel"} subtitle="Control panel to manage the CMS, website and content. With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
                 </XStack>
 
                 <XStack $theme-dark={{display: 'none'}} mt={"$5"} p={"$5"}>
@@ -242,9 +243,25 @@ const Home = () => {
             </ContainerLarge>
           </Theme>
         </Section>
-
-
-
+        
+        <Section py={"$20"} borderTopWidth={1} borderColor={"$color6"}>
+          {/* <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-down" /> */}
+          <BackgroundGradient dot={true} direction="up" o={0.1} />
+          <Theme reset={true}>
+                <YStack ai="center" jc="center">
+                  <BlockTitle title={"We build it for you"} subtitle="At Protofy, we are experts at building mobile apps, webs and IoT devices.We have a team of very talented, pasionate and innovative thinkers, ready to build your next project."></BlockTitle>
+                  <XStack mt={"$8"}>
+                    <Link target="_blank" href="https://projects.protofy.xyz">
+                      <XStack mt={"$4"} ai="center" jc="center">
+                      <Paragraph mr={"$2"} color="$orange8" fontSize={20}>Go to Projects</Paragraph>
+                      <ChevronRight color="$orange8" />
+                      </XStack>
+                    </Link>
+                  </XStack>
+                </YStack>
+          </Theme>
+        </Section>
+        
       </DefaultLayout>
     </Page>
   );
