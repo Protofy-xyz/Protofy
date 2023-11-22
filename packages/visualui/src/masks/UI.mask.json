@@ -1,0 +1,463 @@
+[
+    {
+        "id": "Container",
+        "title": "Container",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Container"
+        },
+        "body": [
+            {
+                "type": "protolibProps",
+                "props": [
+                    "flexDirection",
+                    "justifyContent",
+                    "alignContent",
+                    "alignItems",
+                    "width",
+                    "height"
+                ]
+            },
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "Child1",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "Center",
+        "title": "Center",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Center"
+        },
+        "body": [
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "backgroundColor",
+                        "field": "prop-backgroundColor",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "colorPicker"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "flexDirection",
+                    "justifyContent",
+                    "alignContent",
+                    "alignItems",
+                    "width",
+                    "height"
+                ]
+            },
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "Child1",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "Image",
+        "title": "Image",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Image"
+        },
+        "body": [
+            {
+                "type": "protolibProps",
+                "props": [
+                    "width",
+                    "height",
+                    "opacity"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "url",
+                        "field": "prop-url",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "prop"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "Page",
+        "title": "Page",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Page"
+        },
+        "body": [
+            {
+                "type": "protolibProps",
+                "props": [
+                    "*"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "title",
+                        "field": "prop-title",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "prop"
+                    }
+                ],
+                "disableAdd": false
+            },
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "Child1",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "BigTitle",
+        "title": "BigTitle",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "BigTitle"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "color",
+                    "textAlign",
+                    "margin",
+                    "padding"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "Head1",
+        "title": "Head1",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Head1"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "color",
+                    "textAlign",
+                    "margin",
+                    "padding",
+                    "alignSelf"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "Head2",
+        "title": "Head2",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Head2"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "color",
+                    "textAlign",
+                    "margin",
+                    "padding",
+                    "alignSelf"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "Head3",
+        "title": "Head3",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Head3"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "color",
+                    "textAlign",
+                    "margin",
+                    "padding",
+                    "alignSelf"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "RainbowText",
+        "title": "RainbowText",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "RainbowText"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "textAlign",
+                    "margin",
+                    "padding"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": []
+            }
+        ]
+    },
+    {
+        "id": "DefaultLayout",
+        "title": "DefaultLayout",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "DefaultLayout"
+        },
+        "body": [
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "title",
+                        "field": "prop-title",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "input"
+                    },
+                    {
+                        "label": "description",
+                        "field": "prop-description",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "prop"
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "Child1",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "MainButton",
+        "title": "MainButton",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "MainButton"
+        },
+        "body": [
+            {
+                "type": "child",
+                "child": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "margin",
+                    "padding"
+                ]
+            },
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "color",
+                        "field": "prop-color",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "colorPicker"
+                    },
+                    {
+                        "label": "textColor",
+                        "field": "prop-textColor",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "colorPicker"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "BlockTitle",
+        "title": "BlockTitle",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "BlockTitle"
+        },
+        "body": [
+            {
+                "type": "prop",
+                "prop": [
+                    {
+                        "label": "title",
+                        "field": "prop-title",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "prop"
+                    },
+                    {
+                        "label": "subtitle",
+                        "field": "prop-subtitle",
+                        "fieldType": "prop",
+                        "static": true,
+                        "type": "prop"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "protolibProps",
+                "props": [
+                    "margin",
+                    "padding"
+                ]
+            }
+        ]
+    }
+]
