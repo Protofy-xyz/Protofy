@@ -21,7 +21,7 @@
 
 ![visual-ui-gif](https://github.com/Protofy-xyz/Protofy/blob/assets/visualui-2.gif?raw=true)
 
-Protofy starter is a monorepo is a Full-Stack, batteries included Low-Code enabled web/app and IoT system with an API system and real time message.
+Protofy is a Full-Stack, batteries included Low-Code enabled web/app and IoT system with an API system and real time messaging.
 
 You can use this as a base to fast prototype Apps, webs, IoT systems, automations or APIs.
 Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Redbird + Many other amazing packages
@@ -31,8 +31,8 @@ Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next
 ![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device-1.gif?raw=true)
 
 - `Protoflow` LowCode interactive diagram system for Javscript and typescript)
-- `VisualUI` (What you see is what you get for react)
-- `Protofy` Admin Panel (Admin panel and object system)
+- `VisualUI` What you see is what you get for react,like FlutterFlow but for react
+- `Protolib` Protofy Framework on top of react, express and tamagui
 - `Express` API system (With automatic CRUD creation)
 - `Aedes` mqtt server
 - `Redbird` http reverse proxy
