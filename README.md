@@ -1,20 +1,21 @@
-# Protofy Starter
+# Protofy
 
-An Open Source Low Code starter for creative minds.
+AI Supercharged LowCode Platform CMS and Framework
 
 ## 🔦 About
 
-This monorepo is a starter for a Low-Code enabled web/app with an API system and real time message.
+This monorepo is a Full-Stack, batteries included Low-Code enabled web/app and IoT system with an API system and real time message.
+You can use this as a base to fast prototype Apps, webs, IoT systems, automations or APIs.
 
-Based on: Protofy (protoflow + visualui) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Redbird
+Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Redbird + Many other amazing packages
 
-Many thanks [@natew] for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original natew starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
+Many thanks [@natew] for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original [@natew] starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
 
 ## 📦 Included packages
-- Protoflow
-- VisualUI
-- Protofy Admin Panel
-- Express API system
+- Protoflow (LowCode interactive diagram system for Javscript and typescript)
+- VisualUI (What you see is what you get for react)
+- Protofy Admin Panel (Admin panel and object system)
+- Express API system (With automatic CRUD creation)
 - Aedes mqtt server
 - Redbird http reverse proxy
 - [Tamagui](https://tamagui.dev) 🪄
@@ -22,6 +23,7 @@ Many thanks [@natew] for creating the original starter and to [@FernandoTheRojo]
 - Expo SDK
 - Next.js
 - Expo Router
+- Many more things!
 
 ## 🗂 Folder layout
 
@@ -36,19 +38,29 @@ The main apps are:
 - `packages` shared packages across apps
   - `ui` includes your custom UI kit that will be optimized by Tamagui
   - `app` you'll be importing most files from `app/`
-    - `features` (don't use a `screens` folder. organize by feature.)
-    - `provider` (all the providers that wrap the app, and some no-ops for Web.)
+    - `bundles`
+      - `custom` the custom bundle, put here your custom pages, components, apis etc. The admin panel reads and writes on this bundle.
   - `protolib` Protofy react library with high level widgets and functions to bootstrap the web/app creation
   - `protoflow` Protofy react library to draw js/ts/jsx/tsx as diagrams
   - `visualui` Protofy react library to do WYSIWYG in react
+  - `protodevice` Protofy integration with ESPHome for IoT and device management
 
 You can add other folders inside of `packages/` if you know what you're doing and have a good reason to.
 
 ## 🏁 Start the app
-  
+
+Using a freezed version: 
+
 ```sh
 node prepare.js
 yarn && yarn dev
+```
+
+Using the latest version (recommended until stabilization):
+
+```sh
+node prepare.js --latest
+yarn && yarn dev-latest
 ```
 
 - `node prepare.js` to initialize submodules (protoflow, protolib and visualui). Only needed the first time.
