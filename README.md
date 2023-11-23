@@ -169,5 +169,11 @@ You may potentially want to have the native module transpiled for the next app. 
 ## Roadmap
 Comming soon...
 
-## Credits and references
+## 🙌 Contributing and Community
+We would love to develop Protofy together with our community! Best way to get started is to select any issue. If you would like to contribute, please review our [Contributing Guide]() for all relevant details.
+
+## 🆘 Getting Help
+The first point of call should be our [Discord]("https://discord.gg/VpeZxMFfYW"). Ask your questions about bugs or specific use cases, and someone from the core team will respond. Or, if you prefer, open an issue on our GitHub repo.
+
+## 🙏 Credits and References
 Many thanks [@natew](https://twitter.com/natebirdman) for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original [@natew](https://twitter.com/natebirdman) starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
