@@ -14,7 +14,7 @@ const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
 
 
-export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx") => {
+export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"]) => {
   const router = useRouter()
   const [session] = useAtom(Session)
   const edit = useIsEditing()
@@ -23,7 +23,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
     "tamagui": getTokens()
   }
 
-  const isAdmin = session.user?.type == 'admin'
+  const isAdmin = editorUsers.includes(session.user?.type)
   if (!isAdmin) return fn()
   else if (edit) {
     return <VisualUILoader userComponents={userComponents} path={path} metadata={metadata} />
