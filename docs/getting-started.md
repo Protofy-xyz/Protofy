@@ -51,9 +51,9 @@ We just created a user with `admin` type, but this is only a plain text user typ
 The admin panel requires to have a user with `admin` type to be able to access it.
 
 ## 🔨 Workspace
-Once you've logged in you will be able to access the workspace. The workspace (or admin panel) is the place where you can create and manage your apps, webs, apis, devices, etc. It's the CMS of the starter.
+Once you've logged in you will be able to access the workspace. The workspace (or admin panel) is the place where you can create and manage your pages, apis, devices, etc. 
 
-Want to know more about the workspace? Check the [workspace](docs/workspace.md) documentation.
+Want to know more about the workspace? Check the [workspace](workspace.md) documentation.
 
 ## 🆕 Add new dependencies
 

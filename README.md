@@ -19,7 +19,7 @@
 
 <p align="center">AI Supercharged LowCode Platform CMS and Framework</p>
 
-![visual-ui-gif](https://github.com/Protofy-xyz/Protofy/blob/assets/visualui-2.gif?raw=true)
+![visual-ui-gif](https://github.com/Protofy-xyz/Protofy/blob/assets/visualui/visualui-2.gif?raw=true)
 
 Protofy is a Full-Stack, batteries included Low-Code enabled web/app and IoT system with an API system and real time messaging.
 
@@ -32,7 +32,7 @@ A ultra-extensible CMS with supercharged capabilities, mobile support and IoT su
 
 ## 📦 Included packages
 
-![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device-1.gif?raw=true)
+![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device/device-1.gif?raw=true)
 
 - `Protoflow` LowCode interactive diagram system for Javascript and Typescript
 - `VisualUI` What you see is what you get (wysiwyg) for react, like FlutterFlow but for react
