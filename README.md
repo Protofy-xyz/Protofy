@@ -69,6 +69,9 @@ The project has two main folders:
 
 You can add other folders inside of `packages/` if you know what you're doing and have a good reason to.
 
+## 🚀 Getting Started
+First steps? Check the [getting started](docs/getting-started.md) guide.
+
 ## Roadmap
 Comming soon...
 
