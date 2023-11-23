@@ -48,8 +48,3 @@ thumbs.db
 
 # turbo build log
 **/.turbo/*
-
-packages/visualui
-packages/protoflow
-packages/protolib
-packages/protodevice
