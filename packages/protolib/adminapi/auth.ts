@@ -59,13 +59,20 @@ app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
     } else {
         const {rePassword, ...newUserData} = request
         await getDB(dbPath).put(request.username, JSON.stringify({
-            ...newUserData, 
+            ...newUserData,
             password: await hash(newUserData.password),
             createdAt: moment().toISOString(),
             from: 'api',
             type: 'user'
         }))
-        const group = JSON.parse(await getDB(groupDBPath).get('user'))
+        let group = {
+            admin: false
+        };
+        try {
+            group = JSON.parse(await getDB(groupDBPath).get('user'))
+        } catch (e) {
+            console.error('Error finding group for registered user. Assuming is not admin.')
+        }
 
         generateEvent({
             path: 'auth/register/user', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
