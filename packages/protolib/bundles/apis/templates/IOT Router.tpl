@@ -45,8 +45,8 @@ export default (app, context) => {
     });
 
 
-    const deviceSub = (deviceName, componentName, callback) => {
-        const topic = deviceName + '/binary_sensor/' + componentName + "/state";
+    const deviceSub = (deviceName, componentType, componentName, callback) => {
+        const topic = deviceName + '/' + componentType + '/' + componentName + "/state";
         mqtt.subscribe(topic, (err) => {
             if (err) {
                 console.error("Error subscribing to topic", err);
