@@ -26,17 +26,18 @@ Protofy is a Full-Stack, batteries included Low-Code enabled web/app and IoT sys
 You can use this as a base to fast prototype Apps, webs, IoT systems, automations or APIs.
 Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Redbird + Many other amazing packages
 
-You can think of protofy as a Wordpress but based in react and javascript and some features from supabase, plus visual widget editors to edit source code inside the admin panel itself and a a visual editor for react pages (wysiwyg).
+You can think of **Protofy** as a Wordpress but based in **react** and **javascript** and some features from supabase, plus visual widget editors to edit source code inside the admin panel itself and a a visual editor for react pages (wysiwyg).
+
 A ultra-extensible CMS with supercharged capabilities, mobile support and IoT support (esp32 thanks to esphome).
 
 ## 📦 Included packages
 
 ![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device-1.gif?raw=true)
 
-- `Protoflow` LowCode interactive diagram system for Javascript and typescript)
-- `VisualUI` What you see is what you get for react,like FlutterFlow but for react
+- `Protoflow` LowCode interactive diagram system for Javascript and Typescript
+- `VisualUI` What you see is what you get (wysiwyg) for react, like FlutterFlow but for react
 - `Protolib` Protofy Framework on top of react, express and tamagui
-- `Express` API system (With automatic CRUD creation)
+- `Express` API system based on NodeJS (With automatic CRUD creation)
 - `Aedes` mqtt server
 - `Redbird` http reverse proxy
 - [Tamagui](https://tamagui.dev) 🪄
@@ -60,7 +61,7 @@ The project has two main folders:
   - `ui` includes your custom UI kit that will be optimized by Tamagui
   - `app` you'll be importing most files from `app/`
     - `bundles`
-      - `custom` the custom bundle, put here your custom pages, components, apis etc. The admin panel reads and writes on this bundle.
+      - `custom` the custom bundle, put here your custom pages, components, apis, etc. The admin panel reads and writes on this bundle.
   - `protolib` Protofy react library with high level widgets and functions to bootstrap the web/app creation
   - `protoflow` Protofy react library to draw js/ts/jsx/tsx as diagrams
   - `visualui` Protofy react library to do WYSIWYG in react
@@ -72,17 +73,25 @@ You can add other folders inside of `packages/` if you know what you're doing an
 There are many features and artisanal technologies included in this starter. Let's explain some of them and where to find them.
 
 ### Cascading prompt system for LLM context management
-Code Debugging and Assistance: Get context-aware help in debugging and understanding complex code.
-Project-Specific Guidance: Receive advice and suggestions tailored to your current project's context.
-Learning and Development: Utilize the LLM’s context-aware responses for learning new programming concepts relevant to your work.
+Our tool is supercharged with AI offering the following advantages.
+**Code Debugging and Assistance:** Get context-aware help in debugging and understanding complex code.
+**Project-Specific Guidance:** Receive advice and suggestions tailored to your current project's context.
+**Learning and Development:** Utilize the LLM’s context-aware responses for learning new programming concepts relevant to your work.
 
 ### VisualUI
 [WSIWYG](https://es.wikipedia.org/wiki/WYSIWYG) editor for react. You can find it on `packages/visualui`. It's a technology that you can use to edit your react components. It's used by the admin panel to edit custom pages.
 
 ### Protoflow
-Lowcode system for Javascript/Typescript code manipulation, editing and visualization. You can find it on `packages/protoflow`. It's used to edit behaviours. 
+Lowcode system for Javascript/Typescript code manipulation, editing and visualization. You can find it on `packages/protoflow`. It's used to edit the logic and behaviours of your program. 
 
 ## 🚀 Getting started
+Requirements before starting
+- NodeJS (Preferable a LTS version)
+- Yarn (Installed globally) 
+```bash 
+npm i -g yarn
+```
+##
 Using a freezed version: 
 
 ```sh
@@ -101,9 +110,9 @@ yarn && yarn dev-latest
 - Install dependencies: `yarn`
 - local dev: `yarn dev`
 
-By default there is a proxy running on port 8080 that redirects to the next.js app on port 3000 and the api on port 3001 and the adminApi on port 3002. You can go to `apps/proxy/index.js` to change defaults or add more services like the expo app.
+By default there is a proxy running on port `8080` that redirects to the **next.js** app on port `3000` and the **api** on port `3001` and the **admin-api** on port `3002`. You can go to `apps/proxy/index.js` to change defaults or add more services like the expo app.
 
-Once the nextjs app is running you can go to `http://localhost:8080` to see the web app. 
+Once the Next.js app is running you can go to `http://localhost:8080` to see the web app. 
 
 ## 🙋‍♂️ Adding a user
 The first time you run the starter you won't have users. You can easily create one on `http://localhost:8080/auth/login` but this one will be a normal user. If you want to create an admin user you can do it by running the following command:
@@ -118,7 +127,7 @@ The admin panel requires to have a user with `admin` type to be able to access i
 ## 🔨 Workspace
 
 
-Once you've logged in you will be able to access the workspace. The workspace is the place where you can create your apps, webs, apis, devices, etc (Also known as adminpanel).
+Once you've logged in you will be able to access the workspace. The workspace (or admin panel) is the place where you can create and manage your apps, webs, apis, devices, etc. It's the CMS of the starter.
 
 ## 🆕 Add new dependencies
 
@@ -156,8 +165,9 @@ You can also install the native library inside of `packages/app` if you want to 
 
 You may potentially want to have the native module transpiled for the next app. If you get error messages with `Cannot use import statement outside a module`, you may need to use `transpilePackages` in your `next.config.js` and add the module to the array there.
 
+🚨 Remember to run the ```yarn```  at the root of your project after installing any package. This is necessary because we need to update the dependencies of the entire monorepo when installing them.
 ## Roadmap
 Comming soon...
 
 ## Credits and references
-Many thanks [@natew] for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original [@natew] starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
+Many thanks [@natew](https://twitter.com/natebirdman) for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original [@natew](https://twitter.com/natebirdman) starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
