@@ -22,13 +22,11 @@ npm i -g yarn
 
 Using the latest version (recommended until stabilization):
 ```sh
-node prepare.js --latest
 yarn && yarn dev-latest
 ```
 
 Using a freezed version: 
 ```sh
-node prepare.js
 yarn && yarn dev
 ```
 
