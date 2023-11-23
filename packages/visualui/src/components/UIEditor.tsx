@@ -8,7 +8,7 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import MainPanel from "./MainPanel";
 import Monaco from "./Monaco";
-import { X, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil } from "lucide-react";
+import { X, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, ChevronRight } from "lucide-react";
 import { FlowFactory } from 'protoflow';
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
@@ -27,6 +27,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const currentPageContent = useEditorStore(state => state.currentPageContent)
     const setCurrentPageContent = useEditorStore(state => state.setCurrentPageContent)
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
+    const [monacoHasChanges, setMonacoHasChanges] = useState(false)
     const [preview, setPreview] = useState(true)
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
     const [pastZoomNodes, setPastZoomNodes] = useState([])
@@ -55,6 +56,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         switch (triggerer) {
             case "monaco":
                 content = monacoSourceCode
+                sendMessage({ type: 'save', data: { content } })
                 break;
             case "flows":
                 if (!data) break
@@ -82,9 +84,16 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 }
                 sendMessage({ type: 'save', data: { content } })
                 break;
-            case "editor":
-                break;
         }
+    }
+    const onMonacoChange = (code) => {
+        setMonacoSourceCode(code)
+        if (currentPageContent != code) setMonacoHasChanges(true)
+        else setMonacoHasChanges(false)
+    }
+    const onCancelMonaco = () => {
+        setMonacoSourceCode(currentPageContent)
+        setMonacoHasChanges(false)
     }
 
     useEffect(() => {
@@ -121,10 +130,18 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             circular
                             noTextWrap
                         >
-                            <X style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
+                            <ChevronRight fillOpacity={0} style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
                         </Button>
                     </XStack>
-                    <ToggleGroup theme={"dark"} type="single" defaultValue="preview" disableDeactivation>
+                    <XStack display={monacoHasChanges ? 'flex' : 'none'} theme={"dark"} marginVertical="$1">
+                        <Button size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
+                            <X />
+                        </Button>
+                        <Button size="$3" chromeless circular onPress={() => onEditorSave("monaco", monacoSourceCode)}>
+                            <Save fillOpacity={0} />
+                        </Button>
+                    </XStack>
+                    <ToggleGroup display={monacoHasChanges ? 'none' : 'flex'} theme={"dark"} type="single" defaultValue="preview" disableDeactivation>
                         <ToggleGroup.Item value="code" onPress={() => setCodeEditorVisible(true)} >
                             <Code />
                         </ToggleGroup.Item>
@@ -138,9 +155,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 </div>
                 <div style={{ display: codeEditorVisible ? 'flex' : 'none', flex: 1 }}>
                     <Monaco
-                        onEscape={() => setCodeEditorVisible(false)}
-                        onSave={() => onEditorSave("monaco", monacoSourceCode)}
-                        onChange={setMonacoSourceCode}
+                        onChange={onMonacoChange}
                         sourceCode={monacoSourceCode}
                     />
                 </div>
