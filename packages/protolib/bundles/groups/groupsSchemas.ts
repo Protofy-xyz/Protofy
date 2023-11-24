@@ -6,7 +6,7 @@ import { AutoModel } from 'protolib/base'
 export const GroupSchema = Schema.object({
     name: z.string().label('name').hint('user, admin, ...').static().id().search().display(),
     workspaces: z.array(z.string()),
-    admin: z.boolean().display()
+    admin: z.boolean().optional().display()
 })
 
 export type GroupType = z.infer<typeof GroupSchema>;
