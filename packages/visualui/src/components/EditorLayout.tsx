@@ -332,11 +332,11 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 					{
 						loading ?
 							<Stack style={{ height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-								{missingElements ? <YStack>
+								{missingElements ? <YStack width={"80%"} maxWidth={'600px'} alignItems="center">
 									<Text color='red'>
 										Can not load the following elements:
 									</Text>
-									<Text textAlign='center' marginTop='10px'>
+									<Text marginTop='10px'>
 										{missingElements}
 									</Text>
 								</YStack> : <div>
