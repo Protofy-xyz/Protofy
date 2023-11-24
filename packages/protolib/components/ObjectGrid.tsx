@@ -5,7 +5,6 @@ import { getPendingResult } from '../lib/createApiAtom'
 import { ItemCard } from "./ItemCard";
 import { useTint } from "protolib";
 import { useRef } from "react";
-import Scrollbars from "react-custom-scrollbars-2";
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element.data
@@ -56,6 +55,7 @@ const GridElementCard = ({ index, data, width }) => {
 
 export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, extraMenuActions, spacing = 20, getPicture, getBody,getCard, model, items, sourceUrl, customFields, onDelete, extraFields, icons, children, ...props }: any & StackProps) => {
     const containerRef = useRef(null)
+
     const data = items.map((element, i) => {
         return {
             id: 'item_' + i,
@@ -79,10 +79,8 @@ export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinW
         }
     })
 
-    return <Stack f={1} {...props}>
-        <Scrollbars universal={true} ref={containerRef}>
+    return <Stack f={1} ref={containerRef} {...props}>
             <Grid overScanBy={overScanBy} key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth} />
-        </Scrollbars>
         {children}
     </Stack>
 }
