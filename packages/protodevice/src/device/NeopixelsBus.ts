@@ -250,7 +250,7 @@ class NeopixelsBus {
                     {
                         addressable_flicker:
                         {
-                            name: "Flicker Effect With Custom Values",
+                            name: "Adressable flicker Effect With Custom Values",
                             update_interval: "16ms",
                             intensity: "5%"
                         }
