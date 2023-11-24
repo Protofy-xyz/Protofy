@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { YStack } from 'tamagui';
+import { YStack } from '@my/ui';
 
 const SidebarItemDiv = styled.div<{ visible?: boolean; height?: string }>`
   height: ${(props) =>

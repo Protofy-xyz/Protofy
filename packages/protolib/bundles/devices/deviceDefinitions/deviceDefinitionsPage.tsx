@@ -38,7 +38,6 @@ export default {
 
     const saveToFile= (code,path)=>{
       editedObjectData.setData({components: code, sdkConfig: {board: "esp32dev", framework:{type: "arduino"}}})
-      setShowDialog(false)
     }
 
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>

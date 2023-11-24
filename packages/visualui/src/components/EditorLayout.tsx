@@ -9,6 +9,7 @@ import { withTopics } from "react-topics";
 import { ErrorBoundary } from 'react-error-boundary'
 import { JSCodeToOBJ } from "../utils/utils";
 import { notify, computePreviousPositions } from "../utils/utils";
+import { Stack, Spinner, Text, YStack } from "@my/ui"
 
 export type EditorProps = {
 	children?: any;
@@ -24,6 +25,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 	const currentPageInitialJson = useEditorStore(state => state.currentPageInitialJson)
 	const setCurrentPageInitialJson = useEditorStore(state => state.setCurrentPageInitialJson)
 	const [loading, setLoading] = useState(false);
+	const [missingElements, setMissingElements] = useState("");
 	const [previousNodes, setPreviousNodes] = useState({});
 	const [selectedNodeId, setSelectedNodeId] = useState();
 
@@ -122,7 +124,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 	}
 	useEffect(() => {
 		if (selectedNodeId) publish("zoomToNode", { id: selectedNodeId })
-	},[selectedNodeId])
+	}, [selectedNodeId])
 
 	useEffect(() => {
 		const flowData = data['flow/editor']
@@ -157,7 +159,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 					let val = value;
 					try {
 						val = JSON.parse(val)
-					}catch(e){}
+					} catch (e) { }
 					actions.setProp(nodeId, (props) => props[modifiedKey] = val)
 					actions.setCustom(nodeId, (custom) => custom[modifiedKey] = "JsxText")
 					const deleteKey = flowData?.deleteKey
@@ -240,6 +242,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 		const source: Source = Source.parse(currentPageContent)
 		let editorNodes = source.data()
 		setCurrentPageInitialJson(editorNodes)
+		setMissingElements("")
 		try {
 			Object.keys(editorNodes).forEach((nk: any) => Object.keys(editorNodes[nk].props).forEach((pk: any) => {
 				const props = editorNodes[nk].props
@@ -257,6 +260,11 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 			}))
 			actions.deserialize(editorNodes)
 		} catch (e) {
+			const availableComponents = query?.getOptions()?.resolver ?? {} 
+			const availableCompArr = Object.keys(availableComponents)
+			const missingElements = Object.keys(editorNodes)?.filter(i => !availableCompArr.includes(editorNodes[i].displayName))
+			const missingComponents = missingElements.map(i => editorNodes[i]?.displayName)?.join(', ')
+			setMissingElements(missingComponents)
 			throw "Error loading editor nodes"
 		}
 	}
@@ -323,7 +331,21 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 				>
 					{
 						loading ?
-							<div>Loading content...</div>
+							<Stack style={{ height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+								{missingElements ? <YStack>
+									<Text color='red'>
+										Can not load the following elements:
+									</Text>
+									<Text textAlign='center' marginTop='10px'>
+										{missingElements}
+									</Text>
+								</YStack> : <div>
+									<Spinner size="large" marginBottom="20px"></Spinner>
+									<div>
+										Loading Content...
+									</div>
+								</div>}
+							</Stack>
 							:
 							<ErrorBoundary FallbackComponent={<div style={{ margin: '20px' }}>There seems to be an error in your page preventing the editor from loading it. Please check the code and fix the errors. </div> as any}>
 								<Frame />
