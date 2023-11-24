@@ -5,7 +5,7 @@ const NeopixelsBus = (node: any = {}, nodeData = {}, children) => {
     const transitionErrorMsg = 'Add units s/ms'
 
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input', pre: (str) => str?.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"' },
+        { label: 'Name', static: true, field: 'param1', type: 'input'},
         { label: '#LEDS', static: true, field: 'param2', type: 'input' },
         {
             label: 'RGB Order', static: true, field: 'param3', type: 'select',
@@ -20,7 +20,7 @@ const NeopixelsBus = (node: any = {}, nodeData = {}, children) => {
             data: ['"RESTORE_DEFAULT_OFF"', '"RESTORE_DEFAULT_ON"', '"RESTORE_INVERTED_DEFAULT_OFF"', '"RESTORE_INVERTED_DEFAULT_ON"', '"RESTORE_AND_OFF"', '"RESTORE_AND_ON"', '"ALWAYS_OFF"', '"ALWAYS_ON"']
         },
         {
-            label: 'Default transition', static: true, field: 'param6', type: 'input', pre: (str) => str?.replace(/['"]+/g, ''), post: (str) => '"' + str + '"',
+            label: 'Default transition', static: true, field: 'param6', type: 'input',
             error: !['s', 'ms'].includes(nodeData['param6']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         },
         { 
