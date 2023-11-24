@@ -20,19 +20,12 @@ We need node 18 or higher and yarn to run the project.
 npm i -g yarn
 ```
 
-Using the latest version (recommended until stabilization):
-```sh
-node prepare.js --latest
-yarn && yarn dev-latest
-```
+Start
 
-Using a freezed version: 
 ```sh
-node prepare.js
 yarn && yarn dev
 ```
 
-- `node prepare.js` to initialize submodules (protoflow, protolib and visualui). Only needed the first time.
 - Install dependencies: `yarn`
 - local dev: `yarn dev`
 
