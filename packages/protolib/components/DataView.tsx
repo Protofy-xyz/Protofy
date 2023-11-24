@@ -1,5 +1,5 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Dialog, Spacer } from 'tamagui'
-import { useRemoteStateList, ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, DataTable2, API, Tinted, EditableObject, usePendingEffect, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
+import { useRemoteStateList, ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
 import { z } from "zod";
@@ -7,16 +7,12 @@ import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from 'protolib/next'
 import React from 'react';
-import { Scrollbars } from 'react-custom-scrollbars-2';
 import { getPendingResult } from '../lib/createApiAtom'
 import { DataTableList } from './DataTableList'
 import ActiveRender from "./ActiveRender"
-import { useThemeSetting } from '@tamagui/next-theme'
 import { EditableObjectProps } from './EditableObject';
-
 import { FileWidget } from '../adminpanel/features/components/FilesWidget';
 import { IconContainer } from './IconContainer';
-import { SelectList } from './SelectList';
 import { SearchContext } from '../context/SearchContext';
 
 type DataViewState = {
