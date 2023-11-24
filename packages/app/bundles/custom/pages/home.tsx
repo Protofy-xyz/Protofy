@@ -18,7 +18,7 @@ const Home = () => {
         <Section>
           <SpotLight />
           <ContainerLarge pb={"$15"} $gtLg={{ minHeight: 900 }} contain="layout" pos="relative">
-            <BackgroundGradient dot={true} height={'100vh'} direction="up" o={0.1} />
+            <BackgroundGradient height={'100vh'} direction="up" o={0.1} />
             <YStack f={1} ov="hidden" space="$3" position="relative" pt="$10" mb="$4">
               <YStack opacity={1} scaleX={1} ai="center" space="$2">
                 <BigTitle scale={1.4} my={"$1"} $gtLg={{ scale: 1.4 }}>
@@ -147,7 +147,7 @@ const Home = () => {
 
         <Section>
           <SpotLight />
-          <BackgroundGradient dot={true} height={'100vh'} direction="up" o={0.1} />
+          <BackgroundGradient height={'100vh'} direction="up" o={0.1} />
           <Theme reset={true}>
             <ContainerLarge pb="$20" space="$8">
               <YStack maw={950} als="center">
@@ -225,7 +225,7 @@ const Home = () => {
         </Section>
         <Section pt={"$20"} pb={"$20"}>
           <Theme reset={true}>
-            <BackgroundGradient dot={true} height={'100vh'} direction="up" o={0.1} />
+            <BackgroundGradient height={'100vh'} direction="up" o={0.1} />
             <ContainerLarge position="relative">
                 {/* <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}> */}
                 <YStack ai="center" jc="center">
@@ -246,7 +246,7 @@ const Home = () => {
         
         <Section py={"$20"} borderBottomWidth={1} borderTopWidth={1} borderColor={"$color6"}>
           <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-up" />
-          {/* <BackgroundGradient dot={true} direction="down" o={0.1} /> */}
+          {/* <BackgroundGradient direction="down" o={0.1} /> */}
           <Theme reset={true}>
                 <YStack ai="center" jc="center">
                   <BlockTitle title={"We build it for you"} subtitle="At Protofy, we are experts at building mobile apps, webs and IoT devices. We have a team of very talented, agile, pasionate and innovative thinkers, ready to build your next project"></BlockTitle>
