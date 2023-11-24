@@ -5,7 +5,7 @@ import { Tinted, API, PromptAtom, PromptResponseAtom } from 'protolib';
 import { useTimeout, useWindowSize } from 'usehooks-ts';
 import { useAtom } from 'jotai';
 
-const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
+const Chat = ({ tags = [], zIndex = 1, onScreen = true }: any) => {
     const [first, setFirst] = useState(true)
     const [lastMessage, setLastMessage] = useAtom(PromptResponseAtom)
 
@@ -46,22 +46,39 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
         parent.appendChild(floatingImage);
     };
 
+    const { width, height } = useWindowSize()
+
+    const updateChatContainerPosition = (width, height) => {
+        if (chatContainer.current) {
+
+            const position = chatContainer.current.getBoundingClientRect();
+            // console.log("height", height, "top", position.top,"width",  width, "rigth", position.right)
+            const x = (height - position.top)*-1
+            const y = (width - position.right)*-1
+            // console.log("x:", x+ 'px', "    y: ", y + 'px')
+
+            if (chatContainer.current.firstChild && position.bottom === position.top && position.bottom) {
+                chatContainer.current.firstChild.style.bottom = x + 'px';
+                chatContainer.current.firstChild.style.right = y + 'px';
+            }
+        }
+    };
+
     useEffect(() => {
         // Configuración del MutationObserver
         const mutationObserver = new MutationObserver(mutations => {
-
             mutations.forEach(mutation => {
                 if (mutation.type === 'childList' && mutation.addedNodes.length) {
                     mutation.addedNodes.forEach(node => {
                         if (node.nodeType === Node.ELEMENT_NODE && (node.classList.contains('rcw-message') || node.classList.contains('rcw-conversation-container'))) {
                             const images = node.getElementsByClassName("rcw-message-img");
                             for (let img of images) {
-                                if(img.complete) {
+                                if (img.complete) {
                                     onImageLoad(img)
                                     scrollToBottom()
                                     for (let i = 1; i < 11; i++) {
                                         setTimeout(() => scrollToBottom(), i * 100);
-                                    }                                
+                                    }
                                 } else {
                                     img.addEventListener('load', () => {
                                         scrollToBottom()
@@ -74,6 +91,11 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
                             }
                         }
                     });
+                }
+                if ((mutation.target.classList.contains('is_DialogContent') || mutation.target.closest('.is_DialogContent'))
+                    && !mutation.target.closest('.rcw-widget-container')) {
+                    console.log("¡Cambio detectado en un hijo de is_DialogContent!");
+                    updateChatContainerPosition(window.innerWidth, window.innerHeight);
                 }
             });
         });
@@ -117,22 +139,12 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
     const getInitialMessages = async () => {
         const resources = await getResources()
         resources.forEach(resource => addResponseMessage(resource))
-        if(!lastMessage){
+        if (!lastMessage) {
             const message = "I'm here to help you. Feel free to ask questions about the system."
             addResponseMessage(message)
             setLastMessage(message)
-        } 
+        }
     }
-
-    const { width, height } = useWindowSize()
-
-    // useEffect(()=> {
-    //     //@ts-ignore
-    //     if(chatContainer.current && chatContainer.current.firstChild  && position.bottom == position.top && position.bottom) {
-    //         console.log('position:', position, positioned)
-    //         setPositioned(position)
-    //     }
-    // }, [position])
 
     function removeCommandFromString(originalString) {
         // This regular expression matches a command at the beginning of the string
@@ -140,43 +152,24 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
         return originalString.replace(regex, "").trim();
     }
 
-    useEffect(()=> {
-        if(chatContainer.current) {
-            const position = chatContainer.current.getBoundingClientRect()
-            //@ts-ignore
-            if(chatContainer.current && chatContainer.current.firstChild  && position.bottom == position.top && position.bottom) {
-                //@ts-ignore
-                chatContainer.current.firstChild.style.bottom = -(height - position.top)+'px'
-                //@ts-ignore
-                chatContainer.current.firstChild.style.right =  -(width - position.right)+'px'
-            }
-        }
+    useEffect(() => {
+        updateChatContainerPosition(window.innerWidth, window.innerHeight);
     }, [width, height])
 
-    for(var i=0;i<20;i++) {
+    for (var i = 0; i < 20; i++) {
         useTimeout(() => {
-            if(chatContainer.current) {
-                const position = chatContainer.current.getBoundingClientRect()
-                //@ts-ignore
-                if(chatContainer.current && chatContainer.current.firstChild  && position.bottom == position.top && position.bottom) {
-                    //@ts-ignore
-                    chatContainer.current.firstChild.style.bottom = -(height - position.top)+'px'
-                    //@ts-ignore
-                    chatContainer.current.firstChild.style.right =  -(width - position.right)+'px'
-                }
-            }
-        }, i*50)
+            updateChatContainerPosition(window.innerWidth, window.innerHeight);
+        }, i * 50)
     }
 
     const [promptChain] = useAtom(PromptAtom)
-
 
     const [promptResponse, setPromptResponse] = useAtom(PromptResponseAtom)
 
     return (
         <Tinted>
-            <div ref={chatContainer} onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()} style={{transform: 'none', zIndex: zIndex, bottom: 0, right: 0,position: "fixed" }}>
-                <div style={{position:'absolute'}}>
+            <div ref={chatContainer} onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()} style={{ transform: 'none', zIndex: zIndex, bottom: 0, right: 0, position: "fixed" }}>
+                <div style={{ position: 'absolute' }}>
                     <Widget
                         title="Asistant"
                         subtitle="Get help, ideas and documentation"
@@ -185,38 +178,38 @@ const Chat = ({ tags = [],  zIndex=1, onScreen=true}: any) => {
                             console.log('Prompt chain: ', promptChain)
                             const isCommand = message.startsWith('/')
                             const isHelp = message.startsWith('/help')
-                            
-                            const prompt = promptChain.reduce((total, current) => total + (isHelp?current.generateCommand(message, total):current.generate(message, total)), '') + (
-                                isHelp? `
+
+                            const prompt = promptChain.reduce((total, current) => total + (isHelp ? current.generateCommand(message, total) : current.generate(message, total)), '') + (
+                                isHelp ? `
 ]
 
 End of command list.
 
 The user wants to know the list of available commands. Include all the commands in the reply, and include a small description of the command. use the field action for the description of what the command does, but summarize it. 
-`: isCommand?`
+`: isCommand ? `
 
 ------
-request: ${removeCommandFromString(message)}`:`
+request: ${removeCommandFromString(message)}` : `
 reply directly to the user, acting as the assistant.
 
 The question of the user for the assistant is:
 "${message}".`
-)
+                            )
                             console.log('prompt: ', prompt)
 
                             toggleMsgLoader();
                             const result = await API.post('/adminapi/v1/assistants', {
-                                messages: [{role: 'user', content: prompt}],
+                                messages: [{ role: 'user', content: prompt }],
                                 best_of: 4,
-                                temperature: isHelp?0:1
+                                temperature: isHelp ? 0 : 1
                             })
                             toggleMsgLoader();
                             console.log('result: ', result)
-                            if(result.isError) {
+                            if (result.isError) {
                                 addResponseMessage("Error generating response: ", result.error)
                             } else if (result.data.error) {
                                 var errorMsg = result.data.error.message
-                                if (result.data.error.code == "invalid_api_key") {
+                                if (result.data.error.code == "invalid_api_key") {
                                     errorMsg = errorMsg + '\nPlease add your key on "apps/admin-api/.env": \nOPENAI_API_KEY={YOUR KEY HERE}'
                                 }
                                 addResponseMessage(errorMsg)
@@ -228,7 +221,7 @@ The question of the user for the assistant is:
                         }}
                         handleToggle={async (state) => {
                             if (state) {
-                                if(first) {
+                                if (first) {
                                     setFirst(false)
                                     toggleMsgLoader()
                                     await getInitialMessages()
