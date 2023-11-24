@@ -9,6 +9,7 @@ import { withTopics } from "react-topics";
 import { ErrorBoundary } from 'react-error-boundary'
 import { JSCodeToOBJ } from "../utils/utils";
 import { notify, computePreviousPositions } from "../utils/utils";
+import { Stack, Spinner } from "@my/ui"
 
 export type EditorProps = {
 	children?: any;
@@ -122,7 +123,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 	}
 	useEffect(() => {
 		if (selectedNodeId) publish("zoomToNode", { id: selectedNodeId })
-	},[selectedNodeId])
+	}, [selectedNodeId])
 
 	useEffect(() => {
 		const flowData = data['flow/editor']
@@ -157,7 +158,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 					let val = value;
 					try {
 						val = JSON.parse(val)
-					}catch(e){}
+					} catch (e) { }
 					actions.setProp(nodeId, (props) => props[modifiedKey] = val)
 					actions.setCustom(nodeId, (custom) => custom[modifiedKey] = "JsxText")
 					const deleteKey = flowData?.deleteKey
@@ -323,7 +324,12 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 				>
 					{
 						loading ?
-							<div>Loading content...</div>
+							<Stack style={{ height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+								<Spinner size="large" marginBottom="20px"></Spinner>
+								<div>
+									Loading Content...
+								</div>
+							</Stack>
 							:
 							<ErrorBoundary FallbackComponent={<div style={{ margin: '20px' }}>There seems to be an error in your page preventing the editor from loading it. Please check the code and fix the errors. </div> as any}>
 								<Frame />
