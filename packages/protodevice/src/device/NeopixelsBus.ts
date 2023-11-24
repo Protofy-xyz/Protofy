@@ -132,14 +132,15 @@ class NeopixelsBus {
                                 blue: "0%",
                                 duration: "500ms"
                             },
-                            {state: false},
+                            { state: false, duration: "250ms" },
                             {
                                 state: true,
                                 brightness: "100%",
                                 red: "0%",
                                 green: "100%",
                                 blue: "0%",
-                                duration: "500ms"}
+                                duration: "500ms"
+                            }
                             ]
                         }
                     }
@@ -158,157 +159,107 @@ class NeopixelsBus {
                     }
                 ])
             }
+            if (this.effects[4]) {
+                effects = effects.concat([
+                    { addressable_rainbow: null },
+                    {
+                        addressable_rainbow:
+                        {
+                            name: "Rainbow Effect With Custom Values",
+                            speed: 10,
+                            width: 50
+                        }
+                    }
+                ])
+            }
+            if (this.effects[5]) {
+                effects = effects.concat([
+                    { addressable_color_wipe: null },
+                    {
+                        addressable_color_wipe:
+                        {
+                            name: "Color Wipe Effect With Custom Values",
+                            add_led_interval: "100ms",
+                            reverse: false,
+                            colors: [
+                                {red: "100%", green: "100%", blue: "100%", num_leds: 1},
+                                {red: "0%", green: "0%", blue: "0%", num_leds: 1},
+                            ]
+                        }
+                    }
+                ])
+            }
+            if (this.effects[6]) {
+                effects = effects.concat([
+                    { addressable_scan: null },
+                    {
+                        addressable_scan:
+                        {
+                            name: "Scan Effect With Custom Values",
+                            move_interval: "100ms",
+                            scan_width: 1
+                        }
+                    }
+                ])
+            }
+            if (this.effects[7]) {
+                effects = effects.concat([
+                    { addressable_twinkle: null },
+                    {
+                        addressable_twinkle:
+                        {
+                            name: "Twinkle Effect With Custom Values",
+                            twinkle_probability: "5%",
+                            progress_interval: "4ms"
+                        }
+                    }
+                ])
+            }
+            if (this.effects[8]) {
+                effects = effects.concat([
+                    { addressable_random_twinkle: null },
+                    {
+                        addressable_random_twinkle:
+                        {
+                            name: "Random Twinkle Effect With Custom Values",
+                            twinkle_probability: "5%",
+                            progress_interval: "32ms"
+                        }
+                    }
+                ])
+            }
+            if (this.effects[9]) {
+                effects = effects.concat([
+                    { addressable_fireworks: null },
+                    {
+                        addressable_fireworks:
+                        {
+                            name: "Fireworks Effect With Custom Values",
+                            update_interval: "32ms",
+                            spark_probability: "10%",
+                            use_random_color: false,
+                            fade_out_rate: 120
+                        }
+                    }
+                ])
+            }
+
+            if (this.effects[10]) {
+                effects = effects.concat([
+                    { addressable_flicker: null },
+                    {
+                        addressable_flicker:
+                        {
+                            name: "Flicker Effect With Custom Values",
+                            update_interval: "16ms",
+                            intensity: "5%"
+                        }
+                    }
+                ])
+            }   
             componentObjects[0].config["effects"] = effects
             return deviceComponents;
         }
-        //         let jsonValue = {
-        //             componentName: this.type,
-        //             payload:
-        //                 `  - platform: ${this.platform}
-        //     variant: ${this.chipset}
-        //     num_leds: ${this.numLeds}
-        //     type: ${this.rgb_order}
-        //     name: ${this.name}
-        //     method:
-        //       type: esp32_rmt
-        //       channel: ${this.channel}
-
-        //     restore_mode: ${this.restoreMode}
-        //     default_transition_length: ${this.defaultTransitionLength}
-        // `
-        //         }
-        //         var hasEffects = false
-        //         this.effects.forEach(element => {
-        //             if (element === true) hasEffects = true;
-        //         });
-        //         if (!hasEffects) return jsonValue
-        //         else {
-        //             jsonValue.payload = jsonValue.payload + `
-        //     effects:
-        // `
-        //             if (this.effects[0]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - pulse:
-        //       - pulse:
-        //           name: "Fast Pulse"
-        //           transition_length: 0.5s
-        //           update_interval: 0.5s
-        //       - pulse:
-        //           name: "Slow Pulse"
-        //           update_interval: 2s
-        // `
-        //             } if (this.effects[1]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - random:
-        //       - random:
-        //           name: "My Slow Random Effect"
-        //           transition_length: 30s
-        //           update_interval: 30s
-        //       - random:
-        //           name: "My Fast Random Effect"
-        //           transition_length: 4s
-        //           update_interval: 5s
-        // `
-        //             } if (this.effects[2]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - strobe:
-        //       - strobe:
-        //           name: Strobe Effect With Custom Values
-        //           colors:
-        //           - state: true
-        //             brightness: 100%
-        //             red: 100%
-        //             green: 90%
-        //             blue: 0%
-        //             duration: 500ms
-        //           - state: false
-        //             duration: 250ms
-        //           - state: true
-        //             brightness: 100%
-        //             red: 0%
-        //             green: 100%
-        //             blue: 0%
-        //             duration: 500ms
-        // `
-        //             } if (this.effects[3]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - flicker:
-        //       - flicker:
-        //           name: Flicker Effect With Custom Values
-        //           alpha: 95%
-        //           intensity: 1.5%
-        // `
-        //             } if (this.effects[4]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - addressable_rainbow:
-        //       - addressable_rainbow:
-        //           name: Rainbow Effect With Custom Values
-        //           speed: 10
-        //           width: 50
-        // `
-        //             } if (this.effects[5]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - addressable_color_wipe:
-        //       - addressable_color_wipe:
-        //           name: Color Wipe Effect With Custom Values
-        //           colors:
-        //             - red: 100%
-        //               green: 100%
-        //               blue: 100%
-        //               num_leds: 1
-        //             - red: 0%
-        //               green: 0%
-        //               blue: 0%
-        //               num_leds: 1
-        //           add_led_interval: 100ms
-        //           reverse: false
-        // `
-        //             } if (this.effects[6]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - addressable_scan:
-        //       - addressable_scan:
-        //           name: Scan Effect With Custom Values
-        //           move_interval: 100ms
-        //           scan_width: 1
-        // `
-        //             } if (this.effects[7]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - addressable_twinkle:
-        //       - addressable_twinkle:
-        //           name: Twinkle Effect With Custom Values
-        //           twinkle_probability: 5%
-        //           progress_interval: 4ms
-        // `
-        //             } if (this.effects[8]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - addressable_random_twinkle:
-        //       - addressable_random_twinkle:
-        //           name: Random Twinkle Effect With Custom Values
-        //           twinkle_probability: 5%
-        //           progress_interval: 32ms
-        // `
-        //             } if (this.effects[9]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - addressable_fireworks:
-        //       - addressable_fireworks:
-        //           name: Fireworks Effect With Custom Values
-        //           update_interval: 32ms
-        //           spark_probability: 10%
-        //           use_random_color: false
-        //           fade_out_rate: 120
-        // `
-        //             } if (this.effects[10]) {
-        //                 jsonValue.payload = jsonValue.payload +
-        //                     `      - addressable_flicker:
-        //       - addressable_flicker:
-        //           name: Flicker Effect With Custom Values
-        //           update_interval: 16ms
-        //           intensity: 5%
-        // `
-        //             }
-        //             return jsonValue
-        //         }
-
     }
     getSubsystem() {
         return {
