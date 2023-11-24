@@ -72,8 +72,11 @@ You can add other folders inside of `packages/` if you know what you're doing an
 ## 🚀 Getting Started
 First steps? Check the [getting started](docs/getting-started.md) guide.
 
-## Roadmap
+## 🧭 Roadmap
 Comming soon...
+
+## 📜 License
+Check out the [LICENSE](LICENSE.md) file for details.
 
 ## 🙌 Contributing and Community
 We would love to develop Protofy together with our community! Best way to get started is to select any issue. If you would like to contribute, please review our [Contributing Guide]() for all relevant details.
