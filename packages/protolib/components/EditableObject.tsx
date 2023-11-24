@@ -185,13 +185,8 @@ const FormGroup = ({ ele, title, children, icon, simple = false }) => {
 const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray?, arrayName?) => {
   let elementDef = ele._def?.innerType?._def ?? ele._def
   const setFormData = (key, value) => {
-    console.log('set form data: ', key, value, path);
-    console.log('before: ', data);
-
     const formData = data;
-    console.log('setformData', data)
     let target = formData;
-
     let prevTarget;
     let prevKey;
 
@@ -204,9 +199,7 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
       target = target[p];
     });
 
-    console.log('prev target: ', prevTarget)
     target[key] = value;
-    console.log('after: ', formData);
     setData({ data: formData });
   }
 
@@ -414,7 +407,6 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   useUpdateEffect(() => setCurrentMode(mode), [mode])
 
   useUpdateEffect(() => {
-    console.log('data updated', data)
     if (ready) {
       setEdited(true)
     } else {
