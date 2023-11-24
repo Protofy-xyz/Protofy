@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import CustomScrollbar from '../CustomScrollbar';
+import { YStack } from 'tamagui';
 
 const SidebarItemDiv = styled.div<{ visible?: boolean; height?: string }>`
   height: ${(props) =>
@@ -44,11 +44,11 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
                 </div>
                 {visible ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </div>
-            <CustomScrollbar
-                style={{ display: visible ? 'flex' : 'none', flex: 1, flexDirection: 'column' }}
+            <YStack
+                style={{ display: visible ? 'flex' : 'none', flex: 1, flexDirection: 'column', overflow: 'scroll' }}
             >
                 {children}
-            </CustomScrollbar>
+            </YStack>
         </SidebarItemDiv>
     );
 };

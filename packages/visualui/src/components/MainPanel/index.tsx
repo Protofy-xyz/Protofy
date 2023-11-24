@@ -5,7 +5,6 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Component, Save, X } from 'lucide-react';
 import { useRouter } from "next/router"
 import SPanel from 'react-sliding-side-panel';
-import CustomScrollbar from "../CustomScrollbar";
 
 type Props = {
     rightPanelContent: React.Component | any,
@@ -123,9 +122,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
             </div>
             <PanelGroup direction="horizontal" style={{ height: '100%', display: 'flex' }}>
                 <Panel>
-                    <CustomScrollbar>
-                        {centerPanelContent}
-                    </CustomScrollbar>
+                    {centerPanelContent}
                 </Panel>
                 <PanelResizeHandle
                     onDragging={(isDragging) => {

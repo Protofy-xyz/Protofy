@@ -8569,13 +8569,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"add-px-to-style@npm:1.0.0":
-  version: 1.0.0
-  resolution: "add-px-to-style@npm:1.0.0"
-  checksum: 673831d81d86d717e3a9f4f644059476ca74990dd28310d9bffe6cb35fac8007865351d37a885af168a8613f5cdb054db728a3df19e9ee1457b75a668003c729
-  languageName: node
-  linkType: hard
-
 "admin-api@workspace:apps/admin-api":
   version: 0.0.0-use.local
   resolution: "admin-api@workspace:apps/admin-api"
@@ -11935,17 +11928,6 @@ __metadata:
   dependencies:
     utila: ~0.4
   checksum: ea52fe303f5392e48dea563abef0e6fb3a478b8dbe3c599e99bb5d53981c6c38fc4944e56bb92a8ead6bb989d10b7914722ae11febbd2fd0910e33b9fc4aaa77
-  languageName: node
-  linkType: hard
-
-"dom-css@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "dom-css@npm:2.1.0"
-  dependencies:
-    add-px-to-style: 1.0.0
-    prefix-style: 2.0.1
-    to-camel-case: 1.0.0
-  checksum: f61cc63e88771e1800ff4b7d98b17be2b311de984d94c3d3e0be692794502eb021d28c5c40ba08d4370a6d8bd96caf7a56d15c635451c2db1a2233c94ca0fcc0
   languageName: node
   linkType: hard
 
@@ -21534,13 +21516,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prefix-style@npm:2.0.1":
-  version: 2.0.1
-  resolution: "prefix-style@npm:2.0.1"
-  checksum: 79c3559b74417a1552a91d2008d64cc7f326ff4fe8ed2053519663677238f28455bfda0dd935cb1d6690ac7281aff14361e15cfcf83ec263a8183827df7b2a90
-  languageName: node
-  linkType: hard
-
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -21805,7 +21780,6 @@ __metadata:
     multer: 1.4.5-lts.1
     react-chat-widget: ^3.1.4
     react-contenteditable: 3.3.7
-    react-custom-scrollbars-2: 4.5.0
     react-data-table-component: 7.5.4
     react-data-table-component-extensions: 1.6.0
     react-use-keypress: 1.3.1
@@ -22051,7 +22025,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"raf@npm:^3.1.0, raf@npm:^3.4.1":
+"raf@npm:^3.4.1":
   version: 3.4.1
   resolution: "raf@npm:3.4.1"
   dependencies:
@@ -22185,20 +22159,6 @@ __metadata:
   peerDependencies:
     react: ">=16.3"
   checksum: 5157ccd3221063fcb12c556b71bb7135727f6e8f515abe3ad9741a361628ccce92aa654fc92a44494fb2c56d3c349cc683605d69439af3f8748f57ad854f42cf
-  languageName: node
-  linkType: hard
-
-"react-custom-scrollbars-2@npm:4.5.0":
-  version: 4.5.0
-  resolution: "react-custom-scrollbars-2@npm:4.5.0"
-  dependencies:
-    dom-css: ^2.0.0
-    prop-types: ^15.5.10
-    raf: ^3.1.0
-  peerDependencies:
-    react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: b264629c0bfcc292106540f802e4d4281fb4acfab93ab259dcde096b72f135a1be6f2fcf636478f9e9bce6e15a9c6eb624c799184bb478073bb7ace86588a1de
   languageName: node
   linkType: hard
 
@@ -25704,26 +25664,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"to-camel-case@npm:1.0.0":
-  version: 1.0.0
-  resolution: "to-camel-case@npm:1.0.0"
-  dependencies:
-    to-space-case: ^1.0.0
-  checksum: 2f74cfcffa58e8ddede7e01a03eda2cc3f0ab50efdad1d0f1092d55b4e499be43846d1f9087c458fa9efde4958e407738197d65858272c56c915b649b9ca1e62
-  languageName: node
-  linkType: hard
-
 "to-fast-properties@npm:^2.0.0":
   version: 2.0.0
   resolution: "to-fast-properties@npm:2.0.0"
   checksum: be2de62fe58ead94e3e592680052683b1ec986c72d589e7b21e5697f8744cdbf48c266fa72f6c15932894c10187b5f54573a3bcf7da0bfd964d5caf23d436168
-  languageName: node
-  linkType: hard
-
-"to-no-case@npm:^1.0.0":
-  version: 1.0.2
-  resolution: "to-no-case@npm:1.0.2"
-  checksum: 1d85326eeb89f9f3a805bf5b395bcabb8556e882350164c1faa10846076732f4cec02ac95b016e7d6bb2f55e448ce5dd227c7699ec43e387c705a5b2b1ee2963
   languageName: node
   linkType: hard
 
@@ -25771,15 +25715,6 @@ __metadata:
     regex-not: ^1.0.2
     safe-regex: ^1.1.0
   checksum: 4ed4a619059b64e204aad84e4e5f3ea82d97410988bcece7cf6cbfdbf193d11bff48cf53842d88b8bb00b1bfc0d048f61f20f0709e6f393fd8fe0122662d9db4
-  languageName: node
-  linkType: hard
-
-"to-space-case@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "to-space-case@npm:1.0.0"
-  dependencies:
-    to-no-case: ^1.0.0
-  checksum: 157cebe3e98e7cb465fe1978cf26450cc8ea8e637a01039854fac7ed60ad074e5e18b32333cc5f30df81b81ca374d63df768cd4c1fa0fe672605f965376227f4
   languageName: node
   linkType: hard
 
@@ -27030,7 +26965,6 @@ __metadata:
     deep-diff: 1.0.2
     lucide-react: 0.279.0
     nodemon: 3.0.1
-    react-custom-scrollbars-2: 4.5.0
     react-error-boundary: 4.0.10
     react-resizable-panels: 0.0.45
     react-rnd: 8.0.1
