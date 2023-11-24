@@ -182,8 +182,8 @@ class NeopixelsBus {
                             add_led_interval: "100ms",
                             reverse: false,
                             colors: [
-                                {red: "100%", green: "100%", blue: "100%", num_leds: 1},
-                                {red: "0%", green: "0%", blue: "0%", num_leds: 1},
+                                { red: "100%", green: "100%", blue: "100%", num_leds: 1 },
+                                { red: "0%", green: "0%", blue: "0%", num_leds: 1 },
                             ]
                         }
                     }
@@ -256,7 +256,7 @@ class NeopixelsBus {
                         }
                     }
                 ])
-            }   
+            }
             componentObjects[0].config["effects"] = effects
             return deviceComponents;
         }
@@ -265,13 +265,64 @@ class NeopixelsBus {
         return {
             name: this.name,
             type: this.type,
-            monitors: [
+            actions: [
                 {
-                    name: "Get status",
-                    description: "Get sensor status",
-                    endpoint: "/state",
-                    connectionType: "mqtt",
-                }
+                    name: 'Turn on',
+                    description: 'Turns on the neopixels',
+                    endpoint: "/" + this.type + "/" + this.name + "/command",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json',
+                        value: {
+                            state: "ON",
+                            color: {
+                                r: 255,
+                                g: 0,
+                                b: 0
+                            },
+                            effect: "none",
+                            brightness: 255
+                        },
+                    },
+                },
+                {
+                    name: 'Turn off',
+                    description: 'Turns off the neopixels',
+                    endpoint: "/" + this.type + "/" + this.name + "/command",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json',
+                        value: {
+                            state: "OFF",
+                            color: {
+                                r: 0,
+                                g: 0,
+                                b: 0
+                            },
+                            effect: "none",
+                            brightness: 255
+                        },
+                    },
+                },
+                {
+                    name: 'Toggle',
+                    description: 'Turn on an effect on the gpio',
+                    endpoint: "/" + this.type + "/" + this.name + "/command",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json',
+                        value: {
+                            state: "ON",
+                            color: {
+                                r: 255,
+                                g: 255,
+                                b: 255
+                            },
+                            effect: "pulse",
+                            brightness: 255
+                        },
+                    },
+                },
             ]
         }
     }
