@@ -830,3 +830,20 @@ textarea {
   color: #fff;
   font-weight: 400;
 }
+
+*::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: var(--color10);
+  box-sizing: border-box
+}
+

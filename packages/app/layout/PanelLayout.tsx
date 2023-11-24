@@ -16,6 +16,6 @@ export const PanelLayout = (props) => {
         leftArea={<Search placeholder={"Search in "+searchName} initialState={search} defaultOpened={true} onSearch={setSearch} />}
         topBar={props.topBar}
         menu={<HeaderMenu menuPlacement={'bottom'}><HeaderMenuContent /></HeaderMenu>} />} 
-    SideMenu={SideMenu} 
+        SideMenu={SideMenu} 
     {...props}></ProtoPanelLayout>
 }
