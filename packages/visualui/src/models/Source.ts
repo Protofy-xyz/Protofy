@@ -185,7 +185,9 @@ export default class Source {
     }
 
     static flatten(node: any, tree, parent: any): any {
-        if (!node || (!this.isKind(node, 'JsxElement') && !this.isKind(node, 'JsxSelfClosingElement'))) throw "Can't provide flatten to node that has not JsxElement or JsxSelfClosingElement kind"
+        if (!node || (!this.isKind(node, 'JsxElement') && !this.isKind(node, 'JsxSelfClosingElement'))) {
+            return // throw "Can't provide flatten to node that has not JsxElement or JsxSelfClosingElement kind"
+        }
         const uuid = Source.getIdentifier(node) ?? this.getIdFromSourceCode(node)
         const nodeData = this.getNodeData(node)
         let nodes: any[] = []
