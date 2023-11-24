@@ -38,9 +38,7 @@ export const DataTableCard = ({itemMinWidth = 400, rightGap = 30, contentMargin 
         }
     })
 
-    return <Stack ml={"$5"} f={1}{...props}>
-        <Scrollbars universal={true} ref={containerRef}>
-            <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
-        </Scrollbars>
+    return <Stack ml={"$5"} ref={containerRef} f={1}{...props}>
+        <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
     </Stack>
 }
