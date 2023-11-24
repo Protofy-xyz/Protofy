@@ -8,6 +8,7 @@ import dancing from './assets/protofitoDancing.gif';
 import dancingW from './assets/protofitoDancingW.gif';
 import { AlertDialog } from 'protolib'
 import { Button, useThemeName} from 'tamagui'
+import { Stack } from "@my/ui";
 
 
 const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
@@ -26,23 +27,21 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
     const [msg, setMsg] = React.useState(stages[stage])
 
     const ModalText = () => {
-        return (
+        return stage === 'upload'
+        && !isError
+        && (
             <div style={{ textAlign: 'center', color: isError ? 'red' : '', marginTop: isError ? '80px' : '', marginBottom: '0px' }}>
-                {
-                    stage === 'upload'
-                    && !isError
-                    && <>If you don't see your device on the menu, download device drivers on
-                        <a href="https://www.silabs.com/documents/public/software/CP210x_Windows_Drivers.zip" target="_blank" style={{ paddingLeft: '5px' }}>
-                            Windows
-                        </a>,
-                        <a href="https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip" target="_blank" style={{ paddingInline: '5px' }}>
-                            Mac
-                        </a>
-                        or <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads" target="_blank">
-                            other OS
-                        </a>
-                    </>
-                }
+                <>If you don't see your device on the menu, download device drivers on
+                    <a href="https://www.silabs.com/documents/public/software/CP210x_Windows_Drivers.zip" target="_blank" style={{ paddingLeft: '5px' }}>
+                        Windows
+                    </a>,
+                    <a href="https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip" target="_blank" style={{ paddingInline: '5px' }}>
+                        Mac
+                    </a>
+                    or <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads" target="_blank">
+                        other OS
+                    </a>
+                </>
             </div>
         )
     }
@@ -57,9 +56,9 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
     // return (<Modal isOpen={showModal} onClose={() => onCancel()} style={{ position: 'relative',backgroundColor: "yellow"}}>
     return (<AlertDialog open={showModal} hideAccept={true}>
         <div style={{ height: "350px", width: '400px', position: 'relative', overflow: 'visible', justifyContent: "space-between", display: 'flex', flexDirection: 'column' }}>
-            <div>
-                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 'xs' }}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</div>
-                <div style={{ textAlign: 'center', color: isError ? 'red' : '', marginBottom: "0px", marginTop: stepsTranslator[stage] === '2' ? '100px' : '0px' }}>
+            <div style={{ display: "flex", flexDirection: "column", height: "100%"}}>
+                <div style={{textAlign: 'center', fontWeight: 'bold', fontSize: 'xs' }}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</div>
+                <div style={{flexGrow: 1, textAlign: 'center', color: isError ? 'red' : '', marginBottom: "0px", marginTop: stepsTranslator[stage] === '2' ? '100px' : '0px' }}>
                     {
                         modalFeedback && ['write', 'compile', 'upload'].includes(stage)
                             ? modalFeedback.message : msg

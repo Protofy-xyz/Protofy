@@ -10,22 +10,34 @@ import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
 import DeviceModal from 'protodevice/src/DeviceModal'
 import deviceFunctions from 'protodevice/src/device'
 import subsystem from 'protodevice/src/nodes/utils/subsystem'
-import { Paragraph, XStack, YStack } from '@my/ui';
+import { Paragraph, TextArea, XStack, YStack } from '@my/ui';
 
 const MqttTest = ({ onSetStage, onSetModalFeedback }) => {
   const { message } = useSubscription(['device/compile']);
+  //keep a log of messages until success/failure
+  //so we can inform the user of the problems if anything fails.
+
+  const [messages, setMessages] = useState([])
   useEffect(() => {
     console.log("Compile Message: ", message);
     try {
       if (message?.message) {
         const data = JSON.parse(message?.message.toString());
         if (data.event == 'exit' && data.code == 0) {
+          setMessages([])
           console.log("Succesfully compiled");
           onSetStage('upload')
         } else if (data.event == 'exit' && data.code != 0) {
-          console.error('Error compiling')
-          onSetModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
+          console.error('Error compiling', messages)
+          onSetModalFeedback({ message: <YStack f={1} height="100%">
+            <Paragraph color="$red8" mt="$3">Error compiling code.</Paragraph>
+            <Paragraph color="$red8">Please check your flow configuration.</Paragraph>
+            <TextArea textAlign="left" f={1} mt="$2" mb={"$5"}>
+              {messages.map((ele) => ele.data).join('')}
+            </TextArea>
+          </YStack>, details: { error: true } })
         }
+        setMessages([...messages, data])
       }
     } catch (err) {
       console.log(err);
