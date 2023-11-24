@@ -1,6 +1,5 @@
 import { Spinner, XStack } from 'tamagui'
 import { DataCard } from '../../components/DataCard'
-import { Scrollbars } from 'react-custom-scrollbars-2';
 import AsyncView from '../../components/AsyncView'
 import { useFileFromAPI } from '../../lib/useFileFromAPI'
 import { IconContainer } from '../../components/IconContainer'
@@ -42,7 +41,7 @@ const JSONViewer = ({ extraIcons, name, path }) => {
             <DataCard
                 extraIcons={extraIcons}
                 hideDeleteIcon={true}
-                itemCardProps={{ containerElement: Scrollbars, topBarProps: { top: -10, backgroundColor: 'transparent' } }}
+                itemCardProps={{topBarProps: { top: -10, backgroundColor: 'transparent' } }}
                 minimal={true}
                 f={1}
                 backgroundColor={'transprent'}
