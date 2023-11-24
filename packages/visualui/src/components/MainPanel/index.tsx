@@ -122,7 +122,9 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
             </div>
             <PanelGroup direction="horizontal" style={{ height: '100%', display: 'flex' }}>
                 <Panel>
-                    {centerPanelContent}
+                    <div style={{display: 'flex', flex: 1, height: '100vh'}}>
+                        {centerPanelContent}
+                    </div>
                 </Panel>
                 <PanelResizeHandle
                     onDragging={(isDragging) => {
