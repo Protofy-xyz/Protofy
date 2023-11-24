@@ -75,9 +75,12 @@ import XCenterStack from '../components/XCenterStack'
 import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
 import { AlertDialog } from '../components/AlertDialog'
 
+import htmlBasicElements from './htmlBasics'
+
 const cw = getComponentWrapper('protolib')
 
 export default {
+  ...htmlBasicElements,
   ...cw(ActiveGroup, 'EyeOff', 'ActiveGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ActiveGroupButton, 'EyeOff', 'ActiveGroupButton'),
   ...cw(ActiveRender, 'EyeOff', 'ActiveRender'),

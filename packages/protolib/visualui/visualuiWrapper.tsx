@@ -1,3 +1,4 @@
+import React from "react";
 import { useNode } from "@craftjs/core";
 import { CopyPlus } from '@tamagui/lucide-icons'
 import { H4 } from 'tamagui'
@@ -55,6 +56,27 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
         },
     }
     return { [name]: UiComponent }
+}
+
+export const getBasicHtmlWrapper = (componentName) => {
+    const UiComponent = (props) => {
+        let {
+            connectors: { connect },
+            setProp
+        } = useNode((node) => ({
+            selected: node.events.selected,
+            custom: node.data.custom,
+        }));
+        return React.createElement(componentName, {...props, ref: connect})
+    }
+
+    UiComponent.craft = {
+        custom: {
+            hidden: true
+        },
+        displayName: componentName,
+    }
+    return { [componentName]: UiComponent }
 }
 
 export const BasicPlaceHolder = ({ text = 'Drag your content here' }) => <Center>

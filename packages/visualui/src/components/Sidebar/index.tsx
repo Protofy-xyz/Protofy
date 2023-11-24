@@ -26,9 +26,8 @@ export const Sidebar = ({
         return s;
     };
 
-
     const allDropableCraftComponents = Object.keys(palettes).reduce((total, paletteName) => {
-        const paletteElements = palettes[paletteName] ? Object.keys(palettes[paletteName]).reduce((totalComp, componentName) => (
+        const paletteElements = palettes[paletteName] ? Object.keys(palettes[paletteName]).filter(e => !palettes[paletteName][e].craft?.custom?.hidden).reduce((totalComp, componentName) => (
             { ...totalComp, [componentName]: { dropable: true, element: palettes[paletteName][componentName], icon: getIcon(palettes[paletteName][componentName]) } }
         ), {}) : { ...total }
         return { ...total, [paletteName]: paletteElements }
