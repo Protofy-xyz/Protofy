@@ -179,9 +179,6 @@ export function DataView({
     const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))
 
     const activeViewIndex = tableViews.findIndex(v => v.name == state.view) != -1 ? tableViews.findIndex(v => v.name == state.view) : tableViews.findIndex(v => v.name == defaultView)
-    const { resolvedTheme } = useThemeSetting()
-
-    console.log('editFile: ', state.editFile)
 
     const getFilenameFromPath = (path) => {
         const parts = path.split('/');
