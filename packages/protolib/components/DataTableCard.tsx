@@ -1,9 +1,8 @@
-import { Stack, StackProps, XStack } from "tamagui"
+import { Stack, StackProps } from "tamagui"
 import { DataCard } from "./DataCard"
 import { useContext, useRef } from "react";
 import { DataViewContext } from "./DataView";
 import {Grid} from './Grid';
-import Scrollbars from "react-custom-scrollbars-2";
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element
