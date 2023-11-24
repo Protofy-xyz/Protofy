@@ -70,7 +70,7 @@ The project has two main folders:
 You can add other folders inside of `packages/` if you know what you're doing and have a good reason to.
 
 ## 🚀 Getting Started
-https://github.com/Protofy-xyz/Protofy/assets/99766455/239581cc-ef83-46ce-b18c-7a5d2eab5f33
+https://github.com/Protofy-xyz/Protofy/assets/99766455/930e5eb5-abab-4956-8ae2-31f0c284aa31
 
 First steps? Check the [getting started](docs/getting-started.md) guide.
 
