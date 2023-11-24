@@ -4,7 +4,7 @@ import Mqtt from './Mqtt'
 import DeepSleep from './DeepSleep'
 import Device from "./Device";
 import BinarySensor from "./BinarySensor";
-// import NeopixelsBus from "./NeopixelsBus";
+import NeopixelsBus from "./NeopixelsBus";
 import Relay from "./Relay";
 import ADCSensor from "./ADCSensor";
 // import PulseCounter from "./PulseCounter";
@@ -66,7 +66,7 @@ const deviceMasks = [
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('relay'), //TODO: Change output function name
     getComponent: Relay,
-    getInitialData: () => { return { to: 'relay', param1: '""' } }
+    getInitialData: () => { return { to: 'relay', param1: '""',param2: '"ALWAYS_OFF"' } }
   },
 
   
@@ -85,15 +85,15 @@ const deviceMasks = [
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('binarySensor'), //TODO: Change output function name
     getComponent: BinarySensor,
-    getInitialData: () => { return { to: 'binarySensor', param1: '"ALWAYS_OFF"' } }
+    getInitialData: () => { return { to: 'binarySensor', param1: '""' } }
   },
-  // {
-  //   id: 'NeopixelsBus',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('neopixelsBus'), //TODO: Change output function name
-  //   getComponent: NeopixelsBus,
-  //   getInitialData: () => { return { to: 'neopixelsBus', param1: '', param2: '', param3: '"GRB"', param4: '"WS2811"', param5: '"ALWAYS_ON"', param6: '"1s"', param7: '0', param8: false, param9: false, param10: false, param11: false, param12: false, param13: false, param14: false, param15: false, param16: false, param17: false, param18: false } }
-  // },
+  {
+    id: 'NeopixelsBus',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('neopixelsBus'), //TODO: Change output function name
+    getComponent: NeopixelsBus,
+    getInitialData: () => { return { to: 'neopixelsBus', param1: '""', param2: '16', param3: '"GRB"', param4: '"WS2811"', param5: '"ALWAYS_ON"', param6: '"1s"', param7: '0', param8: false, param9: false, param10: false, param11: false, param12: false, param13: false, param14: false, param15: false, param16: false, param17: false, param18: false } }
+  },
   {
     id: 'ADCSensor',
     type: 'CallExpression',
