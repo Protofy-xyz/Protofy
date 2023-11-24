@@ -45,7 +45,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
                 {visible ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </div>
             <YStack
-                style={{ display: visible ? 'flex' : 'none', flex: 1, flexDirection: 'column', overflow: 'scroll' }}
+                style={{ display: visible ? 'flex' : 'none', flex: 1, flexDirection: 'column', overflowY: "scroll" }}
             >
                 {children}
             </YStack>
