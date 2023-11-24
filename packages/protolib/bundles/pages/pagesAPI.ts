@@ -67,8 +67,7 @@ const getDB = (path, req, session) => {
                 permissions: value.permissions ? JSON.stringify(value.permissions) : '[]',
                 object: object,
                 _object: object.toLowerCase(),
-                apiUrl: '/api/v1/' + value.object + 's',
-                isGenerative: template === 'generative' // Uses generative flag to fill with chatgpt the template
+                apiUrl: '/api/v1/' + value.object + 's'
               }
             },
             path: pagesDir

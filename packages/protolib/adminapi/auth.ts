@@ -71,7 +71,7 @@ app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
         try {
             group = JSON.parse(await getDB(groupDBPath).get('user'))
         } catch (e) {
-            console.error('Error finding group for registered user. Assuming is not admin.')
+            console.error('Error finding group for registered user. Assuming is not admin. Error: ', e)
         }
 
         generateEvent({
