@@ -2,10 +2,10 @@
 import { addResponseMessage, Widget, toggleMsgLoader } from 'react-chat-widget'
 import { useEffect, useRef, useState } from 'react';
 import { Tinted, API, PromptAtom, PromptResponseAtom } from 'protolib';
-import { useTimeout, useWindowSize } from 'usehooks-ts';
+import { useTimeout, useWindowSize, useClickAnyWhere } from 'usehooks-ts';
 import { useAtom } from 'jotai';
 
-const Chat = ({ tags = [], zIndex = 1, onScreen = true }: any) => {
+const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any) => {
     const [first, setFirst] = useState(true)
     const [lastMessage, setLastMessage] = useAtom(PromptResponseAtom)
 
@@ -16,6 +16,12 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true }: any) => {
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
     };
+
+    useClickAnyWhere((e) => {
+        if(e.target.classList.contains('rcw-input') ) {
+            e.target.focus()
+        }   
+    });
 
     // Función que se llama cuando una imagen se carga
     const onImageLoad = (img) => {
@@ -53,8 +59,8 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true }: any) => {
 
             const position = chatContainer.current.getBoundingClientRect();
             // console.log("height", height, "top", position.top,"width",  width, "rigth", position.right)
-            const x = (height - position.top)*-1
-            const y = (width - position.right)*-1
+            const x = (height - position.top) * -1
+            const y = (width - position.right) * -1
             // console.log("x:", x+ 'px', "    y: ", y + 'px')
 
             if (chatContainer.current.firstChild && position.bottom === position.top && position.bottom) {
