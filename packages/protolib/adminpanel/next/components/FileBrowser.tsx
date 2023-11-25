@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react';
 import { Explorer } from './Explorer';
 import { defineFileAction } from 'chonky';
 import FileActions from 'app/bundles/fileActions'
+import {Tinted} from '../../../components/Tinted'
+import Chat from '../../features/next/chat'
 
 
 export const FileBrowser = ({ file, path, filesState }: any) => {
@@ -87,11 +89,14 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     return (
         isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
             <Explorer currentPath={currentPath} filesState={filesState} customActions={FileActions} onOpen={onOpen} />
-           <Dialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}>
-                 <Dialog.Portal>
+            <Dialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}>
+                <Dialog.Portal>
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
                         {getWidget()}
+                        <Tinted>
+                            <Chat tags={['doc', "files"]} zIndex={999999999} onScreen={dialogOpen} mode="popup" />
+                        </Tinted>
                         <Dialog.Close />
                     </Dialog.Content>
                 </Dialog.Portal>
@@ -105,16 +110,6 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
                     </Dialog.Sheet>
                 </Dialog.Adapt>
             </Dialog>
-
-            {/* <ProtoAlertDialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}
-                backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'}
-                height={'90%'} width={"90%"} p={0} pt={"$6"}
-                
-                hideAccept
-                integratedChat
-                >
-                {getWidget()}
-            </ProtoAlertDialog> */}
 
             <AlertDialog open={openAlert} onOpenChange={setOpenAlert} native>
                 <AlertDialog.Portal>
