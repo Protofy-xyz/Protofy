@@ -17,6 +17,10 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
         }
     };
 
+    useEffect(() => {
+        console.log(mode, 'LastMessage: "'+lastMessage+'"')
+    }, [lastMessage])
+
     useClickAnyWhere((e) => {
         if(e.target.classList.contains('rcw-input') ) {
             e.target.focus()
@@ -170,8 +174,6 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
 
     const [promptChain] = useAtom(PromptAtom)
 
-    const [promptResponse, setPromptResponse] = useAtom(PromptResponseAtom)
-
     return (
         <Tinted>
             <div ref={chatContainer} onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()} style={{ transform: 'none', zIndex: zIndex, bottom: 0, right: 0, position: "fixed" }}>
@@ -221,7 +223,7 @@ The question of the user for the assistant is:
                                 addResponseMessage(errorMsg)
                             } else {
                                 addResponseMessage(result.data.choices[0].message.content)
-                                setPromptResponse(result.data.choices[0].message.content)
+                                setLastMessage(result.data.choices[0].message.content)
                             }
 
                         }}
