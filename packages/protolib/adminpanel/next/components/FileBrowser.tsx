@@ -1,6 +1,7 @@
 
 import { YStack } from '@tamagui/stacks';
 import { AlertDialog, Button, Dialog, XStack } from '@my/ui';
+import { AlertDialog as ProtoAlertDialog } from '../../../components/AlertDialog';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from '../../features/components/FilesWidget';
 import { IconContainer } from '../../../components/IconContainer';
@@ -86,8 +87,8 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     return (
         isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
             <Explorer currentPath={currentPath} filesState={filesState} customActions={FileActions} onOpen={onOpen} />
-            <Dialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}>
-                <Dialog.Portal>
+           <Dialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}>
+                 <Dialog.Portal>
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
                         {getWidget()}
@@ -95,7 +96,6 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
                     </Dialog.Content>
                 </Dialog.Portal>
 
-                {/* optionally change to sheet when small screen */}
                 <Dialog.Adapt when="sm">
                     <Dialog.Sheet>
                         <Dialog.Sheet.Frame>
@@ -105,6 +105,17 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
                     </Dialog.Sheet>
                 </Dialog.Adapt>
             </Dialog>
+
+            {/* <ProtoAlertDialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}
+                backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'}
+                height={'90%'} width={"90%"} p={0} pt={"$6"}
+                
+                hideAccept
+                integratedChat
+                >
+                {getWidget()}
+            </ProtoAlertDialog> */}
+
             <AlertDialog open={openAlert} onOpenChange={setOpenAlert} native>
                 <AlertDialog.Portal>
                     <AlertDialog.Overlay
