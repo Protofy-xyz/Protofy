@@ -18,16 +18,16 @@ import Head from 'next/head'
 import React, { createContext } from 'react'
 import type { SolitoAppProps } from 'solito'
 import { SiteConfig } from 'app/conf'
-import {AppConfContext} from 'app/provider/AppConf'
+import { AppConfContext } from 'app/provider/AppConf'
 import { Provider as JotaiProvider } from 'jotai'
-import {Connector} from 'mqtt-react-hooks'
+import { Connector } from 'mqtt-react-hooks'
 
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css')
 }
 
 function MyApp({ Component, pageProps }: SolitoAppProps) {
-  const brokerUrl = typeof document !== "undefined"?document.location.origin + '/websocket':'';
+  const brokerUrl = typeof document !== "undefined" ? document.location.origin + '/websocket' : '';
 
   return (
     <>
@@ -36,15 +36,15 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         <meta name="description" content="Protofy Starter" />
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
-      <Connector brokerUrl={brokerUrl}>
-        <ThemeProvider>
-          <JotaiProvider>
+      <JotaiProvider>
+        <Connector brokerUrl={brokerUrl}>
+          <ThemeProvider>
             <AppConfContext.Provider value={SiteConfig}>
               <Component {...pageProps} />
             </AppConfContext.Provider>
-          </JotaiProvider>
-        </ThemeProvider>
-      </Connector>
+          </ThemeProvider>
+        </Connector>
+      </JotaiProvider>
     </>
   )
 }
