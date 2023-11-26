@@ -51,7 +51,7 @@ class ADCSensor {
                 {
                     name: "Get status",
                     description: "Get sensor status",
-                    endpoint: "/state",
+                    endpoint: "/"+this.type+"/"+this.name+"/state",
                     connectionType: "mqtt",
                 }
             ]
