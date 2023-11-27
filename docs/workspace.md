@@ -38,9 +38,33 @@ This sections are the default ones, but you can add new ones or remove them if y
 ## 📱 Section Preview
 The section preview will show you the content of the section to manage it.
 
+### 🧑‍💻 Users
+Users section is the place where you can manage users, see their information, change their password, etc.
+
+![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/users/create-user.png)
+
+### 👥 Groups
+Every user is part of a group. The groups are used to manage permissions in the system. For example, you can create a group called `manager` and give it permissions to manage the whole system. Let's see how to create a group. 
+
+![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/groups/create-group.gif)
+
+### 🧩 Objects
+The objects section is the way to create domain related objects. For example, if you want to create a `Note` object you can do it using the workspace.
+
+![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/objects/create-object.gif)
+
 ### 📄 Pages
 As we said before, the pages are the way to manage pages in Protofy. Above you will see the steps to create a new page using the workspace. 
 
 ![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/pages/create-page.gif)
 
+We have some fields to fill in order to create a new page. 
+  - **Name**: The name of the page. This will be used to create the file in the project.
+  - **Route**: The route of the page on the client.  
+  - **Template**: The template that will be used to create the page.
+  - **Object**: Comming soon.
+  - **Require user**: If the page requires admin user to be accessed. 
+  - **Permissions**: Comming soon. 
+
 The pages are created in the path `packages/app/bundles/custom/pages/pageName.tsx` of the project. This means that you can manually create a page without using the workspace. 
+
