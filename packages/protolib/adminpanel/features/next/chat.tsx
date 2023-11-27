@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Tinted, API, PromptAtom, PromptResponseAtom } from 'protolib';
 import { useTimeout, useWindowSize, useClickAnyWhere } from 'usehooks-ts';
 import { useAtom } from 'jotai';
+import { Button } from '@my/ui';
 
 const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any) => {
     const [first, setFirst] = useState(true)
     const [lastMessage, setLastMessage] = useAtom(PromptResponseAtom)
+    const [isOpen, setIsOpen] = useState()
 
     const chatContainer = useRef()
     const scrollToBottom = () => {
@@ -18,13 +20,13 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
     };
 
     useEffect(() => {
-        console.log(mode, 'LastMessage: "'+lastMessage+'"')
+        console.log(mode, 'LastMessage: "' + lastMessage + '"')
     }, [lastMessage])
 
     useClickAnyWhere((e) => {
-        if(e.target.classList.contains('rcw-input') ) {
+        if (e.target.classList.contains('rcw-input')) {
             e.target.focus()
-        }   
+        }
     });
 
     // Función que se llama cuando una imagen se carga
@@ -166,6 +168,43 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
         updateChatContainerPosition(window.innerWidth, window.innerHeight);
     }, [width, height])
 
+    const [fileInputData, setFileInputData] = useState<{content:string, filename: string}>();
+
+    const DEV_TOGGLE = false;
+    useEffect(() => {
+        if(!DEV_TOGGLE) return
+        var fileInput = document.createElement('input'); // Crear el input de tipo file
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*'
+        fileInput.style.display = 'none'; // Ocultar el input
+        // TODO: replace with react element
+        const clipImage = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBhcGVyY2xpcCI+PHBhdGggZD0ibTIxLjQ0IDExLjA1LTkuMTkgOS4xOWE2IDYgMCAwIDEtOC40OS04LjQ5bDguNTctOC41N0E0IDQgMCAxIDEgMTggOC44NGwtOC41OSA4LjU3YTIgMiAwIDAgMS0yLjgzLTIuODNsOC40OS04LjQ4Ii8+PC9zdmc+"
+        var icon = document.createElement('img');
+        icon.className = "rcw-picker-icon"
+        icon.src = clipImage
+        icon.addEventListener('click', function () {
+            fileInput.click()
+        });
+        fileInput.addEventListener('change', (event: any) => {
+            var file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                let content;
+                const filename = file.name
+                reader.onload = (e) => {
+                    content = e.target.result;
+                    setFileInputData({content, filename})
+                };
+                reader.readAsDataURL(file);
+                icon.title = filename;//
+            }
+        });
+        var oldElement = document.getElementsByClassName('rcw-picker-btn')[0];
+        if (oldElement) {
+            oldElement.parentNode.replaceChild(icon, oldElement); // Replace old element with new element
+        }
+    }, [isOpen])
+
     for (var i = 0; i < 20; i++) {
         useTimeout(() => {
             updateChatContainerPosition(window.innerWidth, window.innerHeight);
@@ -237,7 +276,9 @@ The question of the user for the assistant is:
                                     toggleMsgLoader()
                                 }
                             }
+                            setIsOpen(state)
                         }}
+                        handleLauncher
                     />
                 </div>
             </div>
