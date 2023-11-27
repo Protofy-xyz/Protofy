@@ -1,9 +1,12 @@
 # 💼 Workspace
+![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/events/events-1.png)
 The workspace (or admin panel) is the place where you can create and manage your pages, apis, devices, etc. This panel is a Next.js app that runs on port `3000` by default, but with our Redbird proxy runs in `8080` port.
 
 > Remeber that you need to have a user with `admin` type to be able to access the workspace.
 
 The workspace has two main sections: **Sidebar** and **Section Preview**.
+
+![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/workspace/sections.png)
 
 ## 📚 Sidebar
 Here you will have all the available sections to manage your project. You can add new pages, apis, devices, etc. If you feel with the sufficient knowledge you can also edit the code of the project to add new features to this sidebar. 
