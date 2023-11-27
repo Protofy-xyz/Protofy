@@ -160,8 +160,12 @@ export default class Source {
             const attrKey = this.getAttributeKey(jsxAtr)
             const attrValue = this.getAttributeValue(jsxAtr)
             const { value, nodeKind } = this.nodeValueFactory(attrValue)
-            props = { ...props, [attrKey]: value }
-            custom = { ...custom, [attrKey]: nodeKind }
+            if (value && attrKey) {
+                props = { ...props, [attrKey]: value }
+            }
+            if (nodeKind && attrKey) {
+                custom = { ...custom, [attrKey]: nodeKind }
+            }
         })
         // GET JsxText Children
         const jsxText = this.getJsxTextOfJsxElement(node)
