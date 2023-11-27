@@ -168,11 +168,11 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
         updateChatContainerPosition(window.innerWidth, window.innerHeight);
     }, [width, height])
 
-    const [fileInputData, setFileInputData] = useState<{content:string, filename: string}>();
+    const [fileInputData, setFileInputData] = useState<{ content: string, filename: string }>();
 
     const DEV_TOGGLE = false;
     useEffect(() => {
-        if(!DEV_TOGGLE) return
+        if (!DEV_TOGGLE) return
         var fileInput = document.createElement('input'); // Crear el input de tipo file
         fileInput.type = 'file';
         fileInput.accept = 'image/*'
@@ -193,7 +193,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                 const filename = file.name
                 reader.onload = (e) => {
                     content = e.target.result;
-                    setFileInputData({content, filename})
+                    setFileInputData({ content, filename })
                 };
                 reader.readAsDataURL(file);
                 icon.title = filename;//
@@ -225,30 +225,38 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                             console.log('Prompt chain: ', promptChain)
                             const isCommand = message.startsWith('/')
                             const isHelp = message.startsWith('/help')
+                            const isVision = !!(isCommand && fileInputData?.content); // If image is selected and isCommand enable gpt-vision
 
-                            const prompt = promptChain.reduce((total, current) => total + (isHelp ? current.generateCommand(message, total) : current.generate(message, total)), '') + (
+                            let prompt: any = promptChain.reduce((total, current) => total + (isHelp ? current.generateCommand(message, total) : current.generate(message, total)), '') + (
                                 isHelp ? `
-]
+                                    ]
 
-End of command list.
+                                    End of command list.
 
-The user wants to know the list of available commands. Include all the commands in the reply, and include a small description of the command. use the field action for the description of what the command does, but summarize it. 
-`: isCommand ? `
+                                    The user wants to know the list of available commands. Include all the commands in the reply, and include a small description of the command. use the field action for the description of what the command does, but summarize it. 
+                                    `: isCommand ? `
 
-------
-request: ${removeCommandFromString(message)}` : `
-reply directly to the user, acting as the assistant.
+                                    ------
+                                    request: ${removeCommandFromString(message)}`
+                                    : `
+                                    reply directly to the user, acting as the assistant.
 
-The question of the user for the assistant is:
-"${message}".`
+                                    The question of the user for the assistant is:
+                                    "${message}".`
                             )
+                            if (isVision) { // Has image
+                                prompt = [{
+                                    type: "image_url",
+                                    image_url: fileInputData.content,
+                                }, prompt]
+                            }
                             console.log('prompt: ', prompt)
-
                             toggleMsgLoader();
                             const result = await API.post('/adminapi/v1/assistants', {
                                 messages: [{ role: 'user', content: prompt }],
                                 best_of: 4,
-                                temperature: isHelp ? 0 : 1
+                                temperature: isHelp ? 0 : 1,
+                                gptModel: isVision ? "gpt-4-vision-preview" : undefined // undefined sets default gpt model
                             })
                             toggleMsgLoader();
                             console.log('result: ', result)
@@ -263,6 +271,7 @@ The question of the user for the assistant is:
                             } else {
                                 addResponseMessage(result.data.choices[0].message.content)
                                 setLastMessage(result.data.choices[0].message.content)
+                                setFileInputData(undefined); // clear selected image
                             }
 
                         }}
