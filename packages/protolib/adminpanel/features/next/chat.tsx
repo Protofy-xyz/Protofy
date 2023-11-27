@@ -9,7 +9,6 @@ import { Button } from '@my/ui';
 const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any) => {
     const [first, setFirst] = useState(true)
     const [lastMessage, setLastMessage] = useAtom(PromptResponseAtom)
-    const [isOpen, setIsOpen] = useState()
 
     const chatContainer = useRef()
     const scrollToBottom = () => {
@@ -199,11 +198,11 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                 icon.title = filename;//
             }
         });
-        var oldElement = document.getElementsByClassName('rcw-picker-btn')[0];
+        var oldElement = chatContainer.current.getElementsByClassName('rcw-picker-btn')[0];
         if (oldElement) {
             oldElement.parentNode.replaceChild(icon, oldElement); // Replace old element with new element
         }
-    }, [isOpen])
+    }, [chatContainer?.current?.isOpen])
 
     for (var i = 0; i < 20; i++) {
         useTimeout(() => {
@@ -226,8 +225,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                             const isCommand = message.startsWith('/')
                             const isHelp = message.startsWith('/help')
                             const isVision = !!(isCommand && fileInputData?.content); // If image is selected and isCommand enable gpt-vision
-
-                            let prompt: any = promptChain.reduce((total, current) => total + (isHelp ? current.generateCommand(message, total) : current.generate(message, total)), '') + (
+                            let prompt: any = promptChain.reduce((total, current) => total + (isHelp ? current.generateCommand(message, total) : current.generate(message, total, fileInputData?.content)), '') + (
                                 isHelp ? `
                                     ]
 
@@ -285,7 +283,8 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                                     toggleMsgLoader()
                                 }
                             }
-                            setIsOpen(state)
+                            //@ts-ignore
+                            chatContainer["current"]["isOpen"] = state
                         }}
                         handleLauncher
                     />
