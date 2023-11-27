@@ -33,6 +33,14 @@ On this sidebar you will find the following sections:
   - Cores: Create cores that your boards will use (Arduino, ESP32, etc)
   - Sdks: Create availables sdks for your project devices (ESPHome, Platformio). 
 
+This sections are the default ones, but you can add new ones or remove them if you want. See [extending protofy](/docs/extending-protofy.md) for more information.
 
 ## 📱 Section Preview
 The section preview will show you the content of the section to manage it.
+
+### 📄 Pages
+As we said before, the pages are the way to manage pages in Protofy. Above you will see the steps to create a new page using the workspace. 
+
+![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/pages/create-page.gif)
+
+The pages are created in the path `packages/app/bundles/custom/pages/pageName.tsx` of the project. This means that you can manually create a page without using the workspace. 
