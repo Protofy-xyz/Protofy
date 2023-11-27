@@ -76,12 +76,13 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
     const sourceCode = useRef('')
 
     const [promptResponse, setPromptResponse] = usePrompt(
-        (prompt) => {
+        (prompt, total, image) => {
             const isGenerate = prompt.startsWith('/code')
             const prefix = `The user is viewing a sourceCode file named: ${path}. The content of the sourceFile is: ${sourceCode.current}`
             const suffix = isGenerate? `
 The user has generated a request to change the sourceCode content. You need to fulfill the request. Reply only with source code with prefix: [code] and nothing else. Your response will be used directly to replace the content of the sourceFile, but adaptaed to what the user requested.
 For example, if the final code you decide to generate is "console.log('test');" then your anser should be [code]console.log('test');
+Keep the original sourcecode comments when generating new code;
 If you are unable to generate the source code (too ambiguous/unespecific/whaterver reason), explain why in natural language, but do not include [code] at the beginning.
 Remember to generate a response for the request that is only sourceCode and prefixed with [code]. Your response will be used to feed another program, that expects just [code] and sourceCode.
 If you include anything else in your message (like reasonings or natural language) it will be considered that you are rejecting the request, and the reasons will be shown to the user.

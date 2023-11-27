@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 type PromptContext = {
     id: string,
-    generate: (prompt?: string, total?:string) => string,
+    generate: (prompt?: string, total?:string, image?: string) => string,
     generateCommand: (prompt?: string, total?:string) => string,
 }
 
