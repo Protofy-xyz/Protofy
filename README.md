@@ -74,6 +74,13 @@ https://github.com/Protofy-xyz/Protofy/assets/99766455/930e5eb5-abab-4956-8ae2-3
 
 First steps? Check the [getting started](docs/getting-started.md) guide.
 
+## 📚 Documentation
+You already know the basics? Check these amazing docs to learn more:
+
+- [Getting Started](docs/getting-started.md)
+- [Workspace, What is?](docs/workspace.md)
+- [Extending Protofy](docs/extending-protofy.md)
+
 ## 🧭 Roadmap
 Comming soon...
 
