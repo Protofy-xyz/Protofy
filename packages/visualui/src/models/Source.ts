@@ -459,8 +459,9 @@ export default class Source {
         let allJsxElements = Source.getAllJsxElements(content)
         for (let i = 0; i < allJsxElements.length; i++) {
             if (Source.isKind(allJsxElements[i], 'JsxExpression')) {
-                const reactCode = `<ReactCode codeBlock="${allJsxElements[i].getText()}"/>`
-                this.ast.replaceText([allJsxElements[i].getPos(), allJsxElements[i].getEnd()], reactCode);
+                // NOTE: ReactCode is disabled until we figure out how to show them to users (to enable change '' for reactCode const).
+                // const reactCode = `<ReactCode codeBlock="${allJsxElements[i].getText()}"/>`
+                this.ast.replaceText([allJsxElements[i].getPos(), allJsxElements[i].getEnd()], '');
                 allJsxElements = Source.getAllJsxElements(content)
             }
         }
