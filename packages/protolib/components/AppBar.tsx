@@ -38,26 +38,6 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
     }, [])
   }
 
-  const [_, forceUpdate] = React.useState<any>(false) //TODO: create generic function for fixed
-  React.useEffect(() => {
-    const pageElem = document.getElementById('protolib-page-container')
-    const resizeHandler = () => {
-      headerContainerRef.current = pageElem.offsetWidth
-      forceUpdate(s => !s)
-    };
-    if (pageElem) {
-      const resizeObserver = new ResizeObserver(resizeHandler);
-      resizeObserver.observe(pageElem);
-
-      return () => {
-        resizeObserver.unobserve(pageElem);
-        resizeObserver.disconnect();
-      };
-    }
-  }, []);
- 
-
-
   const getContent = () => (<XStack
       ref={ref}
       alignItems="center"
@@ -86,13 +66,6 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
         alignItems="center"
         justifyContent="center"
         zi={50000}
-        width={headerContainerRef.current ?? "100%"}
-      // backgroundColor={dettached?'transparent':'$background'}
-      // $gtSm={{
-      //   //@ts-ignore
-      //   px: dettached ? '$4' : '$0',
-      // }}
-      // {...containerProps}
       >
         {/*@ts-ignore*/}
         <XStack width="100%" maw={dettached ? 1120 : undefined} pos="relative">
