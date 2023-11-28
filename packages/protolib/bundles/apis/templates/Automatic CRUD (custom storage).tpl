@@ -3,7 +3,9 @@
 //The storage layer used by generateApi/AutoAPI to interact with the storage
 import {Objects} from "app/bundles/objects";
 import {AutoAPI} from 'protolib/api'
+import {Protofy} from 'protolib/base'
 
+Protofy("type", "AutoAPI")
 const {name, prefix} = Objects.{{object}}.getApiOptions()
 
 const {{capitalizedName}}API = AutoAPI({

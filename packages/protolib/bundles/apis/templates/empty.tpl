@@ -18,7 +18,11 @@ the session argument is a session object, with the following shape:
 use the chat if in doubt
 */
 
+
 import { handler } from 'protolib/api'
+import {Protofy} from 'protolib/base'
+
+Protofy("type", "CustomAPI")
 
 export default (app, context) => {
     //put your apis here
