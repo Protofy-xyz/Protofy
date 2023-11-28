@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 function MyApp({ Component, pageProps }: SolitoAppProps) {
-  const brokerUrl = typeof document !== "undefined" ? document.location.origin + '/websocket' : '';
+  const brokerUrl = typeof document !== "undefined" ? (document.location.protocol==="https:"?"wss":"ws")+ "://" + document.location.host + '/websocket' : '';
 
   return (
     <>
