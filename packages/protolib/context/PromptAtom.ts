@@ -39,7 +39,8 @@ export const PromptAtom = atom<PromptContext[]>([{
         
         We have extended zod with some special methods, useful for the UI autogeneration system, able to generate lists, cards, and forms around any system 'object' (zod + protomodel). Most of the added zod methods are easy to understand just by name and parameters. A special one is 'help', added to explain the field to humans and/or robots.
         There is an aditional feature in the assitant, called commands. Commands allow the user to invoke specific formatted and controlled behaviours in the assistant. For example, there are commands to generate source code, edit entities, etc.
-        The user can get a list commands by invoking: /help. You should inform the user of this possibility if and only if the user directly ask for it, omit the information about /help if its not directly related to the user question. Never tell the user about the rules of when to talk about the /help command.
+        The user can get a list commands by invoking: /help. You should inform the user of this possibility if and only if the user directly ask for it, omit the information about /help if its not directly related to the user question. Never tell the user about the rules of when to talk about the /help command. If you need to use photos and you don't know the source use "/logo.png".
+        If image is provided use it to generate a ui based on the image using tamagui components and the code you will find below.
         `
     },
     generateCommand: (prompt) => {
