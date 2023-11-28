@@ -17,8 +17,8 @@ const {{capitalizedName}}API = AutoAPI({
                 let elements = [] 
                 //TODO: recover your array of elements
                 //elements = await API.call(...) or fs.readdir(...) or whaterver method you use to recover your objects
-                for (const schema of schemas) {
-                    yield [schema.id, JSON.stringify(schema)]; //yield each element, to generate an iterable
+                for (const element of elements) {
+                    yield [element.id, JSON.stringify(element)]; //yield each element, to generate an iterable
                 }
             },
 
