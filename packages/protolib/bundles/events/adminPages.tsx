@@ -1,16 +1,14 @@
 
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { EventModel } from '.'
-import {z} from 'zod'
 import {DataTable2, Chip, DataView, Tooltip} from 'protolib'
 import moment  from 'moment'
-import { Mail, Tag, Key, ClipboardList } from '@tamagui/lucide-icons';
+import { ClipboardList } from '@tamagui/lucide-icons';
 import { JSONViewer } from '../../components/jsonui'
 import { usePrompt } from '../../context/PromptAtom'
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const EventIcons =  {}
-const rowsPerPage = 20
 export default {
     'admin/events': {
         component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {

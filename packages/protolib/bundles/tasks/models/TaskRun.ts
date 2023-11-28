@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "protolib/base";
 import { Protofy } from 'protolib/base'
 import { Schema, BaseSchema, ProtoModel } from 'protolib/base'
 import moment from "moment";

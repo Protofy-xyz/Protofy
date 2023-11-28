@@ -1,7 +1,7 @@
 
 import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { UserModel } from '.'
-import { z } from 'zod'
+import { z } from 'protolib/base'
 import { DataTable2, Chip, DataView, usePrompt } from 'protolib'
 import moment from 'moment'
 import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';

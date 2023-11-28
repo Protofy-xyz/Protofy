@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "protolib/base";
 import {BaseSchema} from 'protolib/base'
 import { AutoModel } from 'protolib/base'
 import { ProtoModel } from "../../base";

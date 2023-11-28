@@ -1,7 +1,7 @@
 import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { Cpu, Layers, Tag } from '@tamagui/lucide-icons';
 import { DeviceCoreModel } from './devicecoresSchemas';
-import { z } from 'zod';
+import { z } from 'protolib/base'
 import { API, Chip, DataTable2, DataView } from 'protolib'
 import { DeviceSdkModel } from '../deviceSdks';
 

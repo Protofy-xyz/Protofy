@@ -2,7 +2,7 @@ import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } fr
 import { useRemoteStateList, ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
-import { z } from "zod";
+import { z } from "protolib/base";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from 'protolib/next'

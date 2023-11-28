@@ -1,7 +1,7 @@
 import { API } from "./Api"
 import { RegisterSchema } from 'app/schema';
 import {getPendingResult} from 'protolib';
-import { z } from "zod";
+import { z } from "protolib/base";
 
 export const Auth = {
     login: async (username, password, setState) => {

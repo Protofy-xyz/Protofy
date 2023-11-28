@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "noErrorTruncation": true,
     "baseUrl": ".",
     "rootDir": ".",
     "importHelpers": true,

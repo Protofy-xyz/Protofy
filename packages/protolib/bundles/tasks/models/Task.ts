@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "protolib/base";
 import { Protofy } from 'protolib/base'
 import { Schema, ProtoModel } from 'protolib/base'
 import { SessionDataType } from "../../../api";

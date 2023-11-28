@@ -1,11 +1,9 @@
 
 import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { APIModel } from '.'
-import {DataView} from 'protolib'
-import { DataTable2, Chip, API } from 'protolib'
-import { ToyBrick, Pencil } from '@tamagui/lucide-icons'
-
-import {z} from 'zod'
+import { DataTable2, API, DataView } from 'protolib'
+import { ToyBrick } from '@tamagui/lucide-icons'
+import {z} from 'protolib/base'
 import { usePageParams } from '../../next'
 import { getURLWithToken } from '../../lib/Session'
 import { usePrompt } from '../../context/PromptAtom'

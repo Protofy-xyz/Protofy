@@ -1,8 +1,55 @@
-import { z } from 'zod'
+import * as Zod from 'zod'
 import { v4 as uuidv4 } from 'uuid';
 
 initSchemaSystem()
-export const Schema = z
+
+interface ZodExtensions {
+    label(caption: string): this;
+    hint(hintText: string): this;
+    display(views?: string[] | undefined): this;
+    generate(val: any): this;
+    before(field: string): this;
+    after(field: string): this;
+    dependsOn(field: string, value?: any): this;
+    generateOptions(call: Function): this; 
+    choices(): this; 
+    secret(): this;
+    static(): this;
+    id(): this;
+    search(): this;
+    displayOptions(options:any): this;
+    size(size:number): this; //1, 2, 3, 4...
+    group(group:number): this;
+    name(key:string): this;
+    help(description:string): this;
+    onList(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    onCreate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    onRead(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    onUpdate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    onDelete(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    on(eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+}
+
+declare module 'zod' {
+    interface ZodString extends ZodExtensions {}
+    interface ZodNumber extends ZodExtensions {}
+    interface ZodBoolean extends ZodExtensions {}
+    interface ZodAny extends ZodExtensions {}
+    //@ts-ignore
+    interface ZodOptional extends ZodExtensions {}
+    //@ts-ignore
+    interface ZodArray extends ZodExtensions {}
+    //@ts-ignore
+    interface ZodUnion extends ZodExtensions {}
+    //@ts-ignore
+    interface ZodObject extends ZodExtensions {}
+    interface ZodRecord extends ZodExtensions {}
+}
+
+export const Schema = Zod.z
+// export const z = Zod.z
+// export const ZodError = Zod.ZodError;
+export * from 'zod'
 
 const onEvent = (that, eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any) => {
     if (!that._def.events) {
@@ -136,13 +183,11 @@ function extendZodTypePrototype(type: any) {
 
 // Extiende el prototipo general de todos los tipos de Zod
 export function initSchemaSystem() {
-    const zodTypes = [z.ZodString, z.ZodNumber, z.ZodBoolean, z.ZodArray, z.ZodAny, z.ZodOptional, z.ZodArray, z.ZodUnion, z.ZodObject, z.ZodRecord];
-
+    const zodTypes = [Zod.ZodString, Zod.ZodNumber, Zod.ZodBoolean, Zod.ZodArray, Zod.ZodAny, Zod.ZodOptional, Zod.ZodUnion, Zod.ZodObject, Zod.ZodRecord];
     zodTypes.forEach(type => extendZodTypePrototype(type));
 }
 
 export const BaseSchema = Schema.object({
-    id: z.string().generate(() => uuidv4()).id(),
-    _deleted: z.boolean().optional(),
+    id: Schema.string().generate(() => uuidv4()).id(),
+    _deleted: Schema.boolean().optional(),
 })
-

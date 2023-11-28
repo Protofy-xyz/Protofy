@@ -1,5 +1,5 @@
 import { createSession, SessionDataType } from 'protolib/api/lib/session'
-import {z} from 'zod'
+import {ZodObject} from 'protolib/base'
 import { ProtoSchema } from './ProtoSchema';
 
 function parseSearch(search) {
@@ -26,10 +26,10 @@ function parseSearch(search) {
 export abstract class ProtoModel<T extends ProtoModel<T>> {
     data: any;
     session: SessionDataType;
-    schema: z.ZodObject<any>
+    schema: ZodObject<any>
     idField: string
     objectSchema: ProtoSchema
-    constructor(data: any, schema: z.ZodObject<any>, session?: SessionDataType) {
+    constructor(data: any, schema: ZodObject<any>, session?: SessionDataType) {
         this.data = data;
         this.session = session ?? createSession();
         this.schema = schema
@@ -172,9 +172,9 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 }
 
 export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
-    protected static schemaInstance?: z.ZodObject<any>;
+    protected static schemaInstance?: ZodObject<any>;
 
-    constructor(data: D, schema: z.ZodObject<any>, session?: SessionDataType) {
+    constructor(data: D, schema: ZodObject<any>, session?: SessionDataType) {
         super(data, schema, session);
     }
 
@@ -182,7 +182,7 @@ export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
         throw new Error("Derived class must implement _newInstance.");
     }
 
-    static createDerived<D>(name: string, schema: z.ZodObject<any>, apiName?, apiPrefix?) {
+    static createDerived<D>(name: string, schema: ZodObject<any>, apiName?, apiPrefix?) {
         class DerivedModel extends AutoModel<D> {
             constructor(data: D, session?: SessionDataType) {
                 super(data, schema, session);

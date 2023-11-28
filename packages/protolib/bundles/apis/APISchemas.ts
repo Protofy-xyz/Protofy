@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "protolib/base";
 import { AutoModel, Schema } from 'protolib/base'
 
 export const APISchema = Schema.object({

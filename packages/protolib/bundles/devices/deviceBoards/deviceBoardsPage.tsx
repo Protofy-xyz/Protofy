@@ -2,7 +2,7 @@ import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { CircuitBoard, Tag, Layers } from '@tamagui/lucide-icons';
 import { DeviceBoardModel } from './deviceBoardsSchemas';
 import { API, Chip, DataTable2, DataView } from 'protolib'
-import { z } from 'zod';
+import { z } from 'protolib/base'
 import { DeviceCoreModel } from '../devicecores';
 
 const DeviceBoardIcons = { name: Tag, core: Layers }

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "protolib/base";
 import { Schema } from 'protolib/base'
 import { AutoModel } from 'protolib/base'
 import { v4 as uuidv4 } from 'uuid'

@@ -1,5 +1,5 @@
 import {Protofy} from 'protolib/base'
-import {ZodObject, z} from 'zod'
+import {z} from 'protolib/base'
 import {handler} from 'protolib/api'
 import {runTask} from 'protolib/bundles/tasks/api/taskRunApi'
 

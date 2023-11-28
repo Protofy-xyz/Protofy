@@ -3,7 +3,7 @@ import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { CircuitBoard, Tag, Settings, BookOpen } from '@tamagui/lucide-icons';
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas';
 import { API, Chip, DataTable2, DataView, ButtonSimple, AlertDialog, Center } from 'protolib'
-import { z } from 'zod';
+import { z } from 'protolib/base'
 import { DeviceBoardModel } from '../deviceBoards';
 import { DeviceCoreModel } from '../devicecores';
 import { Paragraph, Spinner, XStack } from "tamagui";

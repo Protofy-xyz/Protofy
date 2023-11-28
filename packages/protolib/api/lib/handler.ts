@@ -1,6 +1,6 @@
 
 import type {Request, RequestHandler, Response} from 'express';
-import { z } from "zod";
+import {ZodError} from "protolib/base";
 import {createSession, SessionDataType} from './session';
 import {verifyToken} from './crypt';
 
@@ -33,8 +33,8 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
     try {
         await fn(req, res, {...decoded, token: token}, next);
     } catch (e:any) {
-        if (e instanceof z.ZodError) {
-            const err = (e as z.ZodError).flatten()
+        if (e instanceof ZodError) {
+            const err = e.flatten()
             res.status(500).send(err)
             return;
         }
