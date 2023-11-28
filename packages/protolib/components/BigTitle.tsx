@@ -32,6 +32,13 @@ export default React.forwardRef(({children, ...props}:BigTitleProps & ParagraphP
       maxWidth: 900,
       size: '$14',
     }}
+    $gtLg={{
+      //@ts-ignore
+      size: '$16',
+      //@ts-ignore
+      lh: '$15',
+      maxWidth: 1200,
+    }}
     {...props}
   >
     {children}

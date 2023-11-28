@@ -17,7 +17,7 @@ const Home = () => {
         <PageGlow />
         <Section>
           <SpotLight />
-          <ContainerLarge pb={"$15"} contain="layout" pos="relative">
+          <ContainerLarge pb={"$15"} $gtLg={{ minHeight: 900 }} contain="layout" pos="relative">
             <BackgroundGradient height={'100vh'} direction="up" o={0.1} />
             <YStack f={1} ov="hidden" space="$3" position="relative" pt="$10" mb="$4">
               <YStack opacity={1} scaleX={1} ai="center" space="$2">
