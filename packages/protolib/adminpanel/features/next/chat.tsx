@@ -168,10 +168,8 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
     }, [width, height])
 
     const [fileInputData, setFileInputData] = useState<{ content: string, filename: string }>();
-
-    const DEV_TOGGLE = false;
+    const [isChatOpen, setIsChatOpen] = useState();
     useEffect(() => {
-        if (!DEV_TOGGLE) return
         var fileInput = document.createElement('input'); // Crear el input de tipo file
         fileInput.type = 'file';
         fileInput.accept = 'image/*'
@@ -202,7 +200,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
         if (oldElement) {
             oldElement.parentNode.replaceChild(icon, oldElement); // Replace old element with new element
         }
-    }, [chatContainer?.current?.isOpen])
+    }, [chatContainer?.current?.isOpen, isChatOpen])
 
     for (var i = 0; i < 20; i++) {
         useTimeout(() => {
@@ -283,8 +281,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                                     toggleMsgLoader()
                                 }
                             }
-                            //@ts-ignore
-                            chatContainer["current"]["isOpen"] = state
+                            setIsChatOpen(state)
                         }}
                         handleLauncher
                     />
