@@ -1,7 +1,9 @@
+const isProduction = process.env.NODE_ENV === 'production';
+
 const APIUrl = process.env.API_URL ?? 'http://localhost:3001'
-const ServerUrl = process.env.SITE_URL ?? 'http://localhost:3000'
+const ServerUrl = process.env.SITE_URL ?? 'http://localhost:'+(isProduction?'4000':'3000')
 const AdminAPIUrl = process.env.ADMIN_API_URL ?? 'http://localhost:3002'
-const Port = process.env.PORT ?? 8080
+const Port = process.env.PORT ?? (isProduction?8000:8080)
 
 console.log('API URL: ', APIUrl)
 console.log('ADMIN API URL: ', AdminAPIUrl)
