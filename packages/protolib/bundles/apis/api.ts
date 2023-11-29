@@ -13,10 +13,11 @@ const indexFile = APIDir + "index.ts"
 const getAPI = (apiPath) => {
   const sourceFile = getSourceFile(APIDir + apiPath)
   const arg = getDefinition(sourceFile, '"type"')
-
+  const obj = getDefinition(sourceFile, '"object"')
   return {
     name: apiPath.replace(/\.[^/.]+$/, ""), //remove extension
-    type: arg ? arg.getText().replace(/^['"]+|['"]+$/g, '') : "Unknown"
+    type: arg ? arg.getText().replace(/^['"]+|['"]+$/g, '') : "Unknown",
+    object: obj? obj.getText().replace(/^['"]+|['"]+$/g, '') : "None"
   }
 }
 
