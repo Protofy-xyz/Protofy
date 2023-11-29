@@ -6,7 +6,7 @@ export default function Custom404(props:any) {
   return (
     <>
       <Head>
-        <title>Protofy</title>
+        <title>Protofy - Not Found</title>
       </Head>
       {nextPages["notFound"].component()}
     </>
