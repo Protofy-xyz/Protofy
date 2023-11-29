@@ -5,7 +5,7 @@ const currentDir = path.dirname(__filename);
 module.exports = {
     apps: [
         {
-            name: 'api',
+            name: isProduction? 'api': 'api-dev',
             script: path.join(currentDir, '../../node_modules/ts-node/dist/bin.js'),
             args: '--files --project tsconfig.json src/index.ts',
             watch: isProduction ? false : ["src/**", "../../packages/protolib/**", "../../packages/app/bundles/**"],

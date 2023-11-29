@@ -8,9 +8,6 @@ export default function Page(props:any) {
   useSession(props.pageSession)
   return (
     <>
-      <Head>
-        <title>Protofy</title>
-      </Head>
       {nextPages["/"].component()}
     </>
   )

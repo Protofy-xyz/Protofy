@@ -8,8 +8,9 @@ import WebSocket, { Server } from 'ws';
 import net from 'net';
 import app from './api'
 import {generateEvent} from 'app/bundles/library'
-const aedesInstance = new aedes();
 
+const isProduction = process.env.NODE_ENV === 'production';
+const aedesInstance = new aedes();
 const server = http.createServer(app);
 
 // Crea un WebSocket server
@@ -30,16 +31,19 @@ server.on('upgrade', (request, socket, head) => {
   }
 });
 
-server.listen(3002, () => {
-  console.log(`Express server listening at http://localhost:${3002}`);
+const PORT = isProduction?4002:3002
+
+server.listen(PORT, () => {
+  console.log(`Express server listening at http://localhost:${PORT}`);
 });
 
 const mqttServer = net.createServer((socket) => {
   aedesInstance.handle(socket);
 });
 
-mqttServer.listen(1883, () => {
-  console.log('MQTT server listening on port 1883');
+const mqttPort = isProduction? 8883 : 1883
+mqttServer.listen(mqttPort, () => {
+  console.log('MQTT server listening on port '+mqttPort);
 });
 
 // generateEvent({

@@ -13,7 +13,7 @@
     "kill": "pm2 kill",
     "status": "pm2 status api",
     "build": "cd ../.. && yarn build && cd apps/next && next build",
-    "serve": "NODE_ENV=production next start --port 3000",
+    "serve": "NODE_ENV=production next start --port 4000",
     "lint": "next lint"
   },
   "dependencies": {
