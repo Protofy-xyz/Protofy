@@ -8,11 +8,13 @@ import WebSocket, { Server } from 'ws';
 import net from 'net';
 import app from './api'
 import {generateEvent} from 'app/bundles/library'
+const isProduction = process.env.NODE_ENV === 'production';
 
 const server = http.createServer(app);
+const PORT = isProduction?4001:3001
 
-server.listen(3001, () => {
-  console.log(`Express server listening at http://localhost:${3001}`);
+server.listen(PORT, () => {
+  console.log(`Express server listening at http://localhost:${PORT}`);
 });
 
 // generateEvent({
