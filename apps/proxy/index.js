@@ -1,6 +1,12 @@
-console.log('API URL: ', process.env.API_URL ?? 'http://localhost:3001')
-console.log('SERVER URL: ', process.env.SITE_URL ?? 'http://localhost:3000')
-console.log('PORT: ', process.env.PORT ?? 8080)
+const APIUrl = process.env.API_URL ?? 'http://localhost:3001'
+const ServerUrl = process.env.SITE_URL ?? 'http://localhost:3000'
+const AdminAPIUrl = process.env.ADMIN_API_URL ?? 'http://localhost:3002'
+const Port = process.env.PORT ?? 8080
+
+console.log('API URL: ', APIUrl)
+console.log('ADMIN API URL: ', AdminAPIUrl)
+console.log('SERVER URL: ', ServerUrl)
+console.log('PORT: ', Port)
 
 function addClientIpHeader(req) {
     var clientIp = req.connection.remoteAddress;
@@ -10,14 +16,14 @@ function addClientIpHeader(req) {
 var customResolver1 = function (host, url, req) {
     addClientIpHeader(req);
     if (/^\/api\//.test(url)) {
-        return process.env.API_URL ?? 'http://localhost:3001';
+        return APIUrl;
     }
 };
 
 var customResolver2 = function (host, url, req) {
     addClientIpHeader(req);
     if (/^\/adminapi\//.test(url) || url === '/websocket') {
-        return process.env.API_URL ?? 'http://localhost:3002';
+        return AdminAPIUrl;
     }
 };
 
@@ -27,7 +33,7 @@ customResolver1.priority = 100;
 customResolver2.priority = 101;
 
 var proxy = new require('redbird')({
-    port: process.env.PORT ?? 8080,
+    port: Port,
     bunyan: {
         name: 'redbird',
         level: 'error'
@@ -36,6 +42,6 @@ var proxy = new require('redbird')({
         customResolver1,
         customResolver2,
         function (host, url, req) {
-            return process.env.SITE_URL ?? 'http://localhost:3000'
+            return ServerUrl
     }]
 })

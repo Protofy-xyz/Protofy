@@ -4,8 +4,8 @@
     "private": true,
     "source": "src",
     "scripts": {
-        "start": "node index.js",
-        "start-dev": "NODE_ENV=production node index.js",
+        "start": "NODE_ENV=production node index.js",
+        "start-dev": " node index.js",
         "service-start": "NODE_ENV=production pm2 start pm2.config.js",
         "service-start-dev": "pm2 start pm2.config.js",
         "logs": "pm2 logs",
