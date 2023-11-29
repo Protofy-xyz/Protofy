@@ -79,6 +79,8 @@ You already know the basics? Check these amazing docs to learn more:
 
 - [Getting Started](docs/getting-started.md)
 - [Workspace, What is?](docs/workspace.md)
+- [Protofy packages](docs/packages.md)
+  - [Protolib](docs/protolib.md)
 - [Extending Protofy](docs/extending-protofy.md)
 
 ## 🧭 Roadmap
