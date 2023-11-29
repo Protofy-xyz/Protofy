@@ -455,16 +455,21 @@ export default class Source {
     }
 
     convertJsxExpressionToJsxElement(): Source {
-        const content = this.getContent()
-        let allJsxElements = Source.getAllJsxElements(content)
-        for (let i = 0; i < allJsxElements.length; i++) {
-            if (Source.isKind(allJsxElements[i], 'JsxExpression')) {
+        const getCurrentJsxExpressions = () => {
+            const content = this.getContent()
+            let allJsxElements = Source.getAllJsxElements(content)
+            let currentJsxExpressions = allJsxElements.filter(ele => ele.getKindName() == "JsxExpression")
+            return currentJsxExpressions
+        }
+        const convertText = (initExpress) => {
+            if (initExpress.length) {
                 // NOTE: ReactCode is disabled until we figure out how to show them to users (to enable change '' for reactCode const).
                 // const reactCode = `<ReactCode codeBlock="${allJsxElements[i].getText()}"/>`
-                this.ast.replaceText([allJsxElements[i].getPos(), allJsxElements[i].getEnd()], '');
-                allJsxElements = Source.getAllJsxElements(content)
+                this.ast.replaceText([initExpress[0].getPos(), initExpress[0].getEnd()], '');
+                convertText(getCurrentJsxExpressions())
             }
         }
+        convertText(getCurrentJsxExpressions())
         return this
     }
 
