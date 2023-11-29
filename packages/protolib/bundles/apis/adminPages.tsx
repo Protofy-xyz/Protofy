@@ -7,6 +7,7 @@ import {z} from 'protolib/base'
 import { usePageParams } from '../../next'
 import { getURLWithToken } from '../../lib/Session'
 import { usePrompt } from '../../context/PromptAtom'
+import { Chip } from '../../components/Chip'
 
 const APIIcons =  {}
 
@@ -38,6 +39,7 @@ export default {
                     name="api"
                     columns={DataTable2.columns(
                         DataTable2.column("name", "name", true),
+                        DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),
                     )}
                     extraFieldsFormsAdd={{
                         template: z.union([z.literal("Automatic CRUD"), z.literal("Automatic CRUD (custom storage)"),  z.literal("IOT Router"), z.literal("empty")]).display().after("name"),
