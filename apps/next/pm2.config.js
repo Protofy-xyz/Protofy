@@ -5,7 +5,7 @@ const currentDir = path.dirname(__filename);
 module.exports = {
     apps: [
       {
-        name: "next-app",
+        name: isProduction? "next-app" : "next-app-dev",
         script: path.join(currentDir, './entrypoint.js'),
         windowsHide: true,
         watch: false,
