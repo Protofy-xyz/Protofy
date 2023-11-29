@@ -7,14 +7,18 @@ import axios from 'axios';
 import { getServiceToken } from "../../api/lib/serviceToken";
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
-const APIDir = fspath.join(PROJECT_WORKSPACE_DIR,"/packages/app/bundles/custom/apis/")
+const APIDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/apis/")
 const indexFile = APIDir + "index.ts"
 
 const getAPI = (apiPath) => {
+  const sourceFile = getSourceFile(APIDir + apiPath)
+  const arg = getDefinition(sourceFile, '"type"')
+
   return {
-    name: apiPath.replace(/\.[^/.]+$/, "") //remove extension
+    name: apiPath.replace(/\.[^/.]+$/, ""), //remove extension
+    type: arg ? arg.getText().replace(/^['"]+|['"]+$/g, '') : "Unknown"
   }
-} 
+}
 
 const getDB = (path, req, session) => {
   const db = {
@@ -23,7 +27,7 @@ const getDB = (path, req, session) => {
       const apis = await Promise.all(files.map(async f => getAPI(f)));
 
       for (const api of apis) {
-        if(api) yield [api.name, JSON.stringify(api)];
+        if (api) yield [api.name, JSON.stringify(api)];
       }
     },
 
@@ -43,10 +47,10 @@ const getDB = (path, req, session) => {
       if (exists) {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
-        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
+        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: value.name + '.ts',
           data: {
-            options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object} },
+            options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object } },
             path: '/packages/app/bundles/custom/apis'
           }
         })
@@ -54,13 +58,13 @@ const getDB = (path, req, session) => {
 
       //link in index.ts
       const sourceFile = getSourceFile(indexFile)
-      addImportToSourceFile(sourceFile, value.name+'Api', ImportType.DEFAULT, './' + value.name)
+      addImportToSourceFile(sourceFile, value.name + 'Api', ImportType.DEFAULT, './' + value.name)
 
       const arg = getDefinition(sourceFile, '"apis"')
       if (!arg) {
         throw "No link definition schema marker found for file: " + path
       }
-      addObjectLiteralProperty(arg, value.name, value.name+'Api')
+      addObjectLiteralProperty(arg, value.name, value.name + 'Api')
       sourceFile.saveSync();
     },
 

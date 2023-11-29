@@ -1,3 +1,7 @@
+import {Protofy} from 'protolib/base'
+
+Protofy("type", "IOTRouter")
+
 export default (app, context) => {
 
     const { devicePub, deviceSub } = context

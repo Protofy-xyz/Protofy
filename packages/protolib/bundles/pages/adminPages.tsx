@@ -26,7 +26,7 @@ export default {
                     numColumnsForm={1}
                     name="page"
                     columns={DataTable2.columns(
-                        DataTable2.column("", "lol", true, (row) => <a href={row.route.startsWith('/') ? row.route : '/' + row.route} target='_blank'>
+                        DataTable2.column("", "", true, (row) => <a href={row.route.startsWith('/') ? row.route : '/' + row.route} target='_blank'>
                             <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
                         </a>, true, '50px'),
                         DataTable2.column("name", "name", true),
