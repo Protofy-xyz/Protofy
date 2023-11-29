@@ -21,6 +21,7 @@ var customResolver1 = function (host, url, req) {
         return APIUrl;
     }
 };
+customResolver1.priority = 100;
 
 var customResolver2 = function (host, url, req) {
     addClientIpHeader(req);
@@ -28,11 +29,15 @@ var customResolver2 = function (host, url, req) {
         return AdminAPIUrl;
     }
 };
-
-
-// assign high priority
-customResolver1.priority = 100;
 customResolver2.priority = 101;
+
+
+var devResolver = function (host, url, req) {
+    if (isProduction && host.startsWith('dev.')) {
+        return 'http://localhost:8080';
+    }
+};
+devResolver.priority = 200;
 
 var proxy = new require('redbird')({
     port: Port,
@@ -41,6 +46,7 @@ var proxy = new require('redbird')({
         level: 'error'
     },
     resolvers: [
+        devResolver,
         customResolver1,
         customResolver2,
         function (host, url, req) {
