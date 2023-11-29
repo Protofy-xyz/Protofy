@@ -138,7 +138,7 @@ export default {
                     }}
                     extraMenuActions={[
                         {
-                            text: "Show API",
+                            text: "View API details",
                             icon: Eye,
                             action: (element) => { setDialogOpen(true); setCurrentElement(element); console.log("DATA", element) },
                             isVisible: (data) => data.data.type === "AutoAPI" ? true : false
