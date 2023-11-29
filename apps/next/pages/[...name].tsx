@@ -3,10 +3,10 @@ import { NextPageContext } from 'next'
 import { useSession, withSession } from 'protolib'
 import Custom404 from './404'
 import { useRouter } from 'next/router'
-import loadBundlePages from 'app/bundles/nextPages'
+import nextPages from 'app/bundles/nextPages'
 import React from 'react'
 
-const getRoute = (routePath: string | string[] | undefined, nextPages:any) => Object.keys(nextPages).find(key => {
+const getRoute = (routePath: string | string[] | undefined) => Object.keys(nextPages).find(key => {
   if(!routePath) return false
   const path = Array.isArray(routePath) ? (routePath as string[]) : [routePath as string]
   const route = key.split('/')
@@ -22,20 +22,18 @@ const getRoute = (routePath: string | string[] | undefined, nextPages:any) => Ob
   return valid
 })
 
-// export default function BundlePage(props: any) {
-  
-//   useSession(props.pageSession)
-//   const router = useRouter();
-//   const route = getRoute(router.query.name)
-//   if(!route) return <Custom404 />
+export default function BundlePage(props: any) {
+  useSession(props.pageSession)
+  const router = useRouter();
+  const route = getRoute(router.query.name)
+  if(!route) return <Custom404 />
 
-//   const page = nextPages[route]
-//   return React.createElement(page.component, {...props})
-// }
+  const page = nextPages[route]
+  return React.createElement(page.component, {...props})
+}
 
 export const getServerSideProps = SSR(async (context: NextPageContext) => {
-  const nextPages = await loadBundlePages()
-  const route = getRoute(context.query.name, nextPages)
+  const route = getRoute(context.query.name)
 
   if(!route) { //has no exposed pages
     return withSession(context)
