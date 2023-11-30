@@ -117,7 +117,7 @@ export function DataView({
         fetch()
     }, [realTimeItems])
 
-    useEffect(() => {
+    useUpdateEffect(() => {
         push("search", search, false)
     }, [search])
 
