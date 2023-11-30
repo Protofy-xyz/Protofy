@@ -2,7 +2,7 @@ import { TaskRunModel } from "../models/TaskRun";
 import { Tasks } from 'app/bundles/tasks'
 import { connectDB, handler } from "protolib/api";
 import { v4 as uuidv4 } from 'uuid';
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI } from '../../../api'
+import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI, getRoot } from '../../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
@@ -54,15 +54,14 @@ export const TaskApi = (app, mqtt) => {
 }
 
 //data layer
-const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
-const tasksDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/tasks/")
-const apiDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/apis/")
-const indexFile = tasksDir + "index.ts"
-const apiIndex = fspath.join(apiDir, 'index.ts')
+const tasksDir = (root) => fspath.join(root, "/packages/app/bundles/custom/tasks/")
+const apiDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
+const indexFile = (root) => tasksDir(root) + "index.ts"
+const apiIndex = (root) => fspath.join(apiDir(root), 'index.ts')
 
-const getTask = async (taskPath) => {
+const getTask = async (taskPath, req) => {
   const name = fspath.basename(taskPath, fspath.extname(taskPath))
-  const apiPath = fspath.join(apiDir, name + 'TaskApi.ts')
+  const apiPath = fspath.join(apiDir(getRoot(req)), name + 'TaskApi.ts')
   let hasApi
   let apiRoute = ''
   try {
@@ -86,8 +85,8 @@ const getTask = async (taskPath) => {
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const files = (await fs.readdir(tasksDir)).filter(f => f != 'index.ts')
-      const tasks = await Promise.all(files.map(async f => await getTask(fspath.join(tasksDir, f))));
+      const files = (await fs.readdir(tasksDir(getRoot(req)))).filter(f => f != 'index.ts')
+      const tasks = await Promise.all(files.map(async f => await getTask(fspath.join(tasksDir(getRoot(req)), f), req)));
 
       for (const task of tasks) {
         if (task) yield [task.name, JSON.stringify(task)];
@@ -121,7 +120,7 @@ const getDB = (path, req, session) => {
 
       //sync api
       let apiExists
-      const apiPath = fspath.join(apiDir, fspath.basename(value.name) + 'TaskApi.ts')
+      const apiPath = fspath.join(apiDir(getRoot(req)), fspath.basename(value.name) + 'TaskApi.ts')
       try {
         await fs.access(apiPath, fs.constants.F_OK)
         apiExists = true
@@ -132,7 +131,7 @@ const getDB = (path, req, session) => {
       if (apiExists) {
         if (!value.api) {
           //unlink in index.ts
-          const sourceFile = getSourceFile(apiIndex)
+          const sourceFile = getSourceFile(apiIndex(getRoot(req)))
           const arg = getDefinition(sourceFile, '"apis"')
           if (!arg) {
             throw "No link definition schema marker found for file: " + path
@@ -158,7 +157,7 @@ const getDB = (path, req, session) => {
 
       if (value.api) {
         //link in index.ts
-        const sourceFile = getSourceFile(apiIndex)
+        const sourceFile = getSourceFile(apiIndex(getRoot(req)))
         addImportToSourceFile(sourceFile, capitalizedName + 'TaskApi', ImportType.NAMED, './' + value.name + 'TaskApi')
 
         const arg = getDefinition(sourceFile, '"apis"')
@@ -170,7 +169,7 @@ const getDB = (path, req, session) => {
       }
 
       //link in index.ts
-      const sourceFile = getSourceFile(indexFile)
+      const sourceFile = getSourceFile(indexFile(getRoot(req)))
       addImportToSourceFile(sourceFile, capitalizedName + 'Task', ImportType.DEFAULT, './' + value.name)
 
       const arg = getDefinition(sourceFile, '"tasks"')
@@ -182,7 +181,7 @@ const getDB = (path, req, session) => {
     },
 
     async get(key) {
-      return JSON.stringify(await getTask(fspath.join(tasksDir, fspath.basename(key) + '.ts')))
+      return JSON.stringify(await getTask(fspath.join(tasksDir(getRoot(req)), fspath.basename(key) + '.ts'), req))
     }
   };
 
