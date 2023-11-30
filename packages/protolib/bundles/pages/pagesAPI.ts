@@ -1,14 +1,13 @@
 import { PageModel } from ".";
-import { CreateApi, getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI } from '../../api'
+import { CreateApi, getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
 import axios from 'axios';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 
-const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
-const pagesDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/pages/")
-const nextPagesDir = fspath.join(PROJECT_WORKSPACE_DIR, "/apps/next/pages/")
+const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
+const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
 
 const getPage = (pagePath) => {
   try {
@@ -41,8 +40,8 @@ const getPage = (pagePath) => {
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const files = (await fs.readdir(pagesDir)).filter(f => f != 'index.tsx' && f.endsWith('.tsx'))
-      const pages = await Promise.all(files.map(async f => getPage(fspath.join(pagesDir, f))));
+      const files = (await fs.readdir(pagesDir(getRoot(req)))).filter(f => f != 'index.tsx' && f.endsWith('.tsx'))
+      const pages = await Promise.all(files.map(async f => getPage(fspath.join(pagesDir(getRoot(req)), f))));
 
       for (const page of pages) {
         if (page) yield [page.name, JSON.stringify(page)];
@@ -51,7 +50,7 @@ const getDB = (path, req, session) => {
 
     async put(key, value) {
       value = JSON.parse(value)
-      const filePath = fspath.join(pagesDir, fspath.basename(value.name) + '.tsx')
+      const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
       const prevPage = getPage(filePath)
       const template = fspath.basename(value.template ?? 'default')
       const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
@@ -75,7 +74,7 @@ const getDB = (path, req, session) => {
                 apiUrl: '/api/v1/' + value.object + 's'
               }
             },
-            path: pagesDir
+            path: pagesDir(getRoot(req))
           }
         })
       }
@@ -99,7 +98,7 @@ const getDB = (path, req, session) => {
       console.log('prevPage: --------------------------', prevPage)
       if(prevPage && prevPage.route != value.route) {
         //delete previous route if changed
-        const prevFile = fspath.join(nextPagesDir, prevPage.route + '.tsx')
+        const prevFile = fspath.join(nextPagesDir(getRoot(req)), prevPage.route + '.tsx')
         console.log('Deleting prev page', prevFile)
         await fs.unlink(prevFile)
         console.log('Deleted')
@@ -108,7 +107,7 @@ const getDB = (path, req, session) => {
       //link in nextPages
       try {
         //TODO: routes with subdirectories
-        const nextFilePath = fspath.join(nextPagesDir, fspath.basename(value.route)+'.tsx')
+        const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), fspath.basename(value.route)+'.tsx')
         await fs.access(nextFilePath, fs.constants.F_OK)
         // console.log('File: ' + filePath + ' already exists, not executing template')
       } catch (error) {
@@ -123,14 +122,14 @@ const getDB = (path, req, session) => {
                 upperName: value.name ? value.name.charAt(0).toUpperCase() + value.name.slice(1) : ''
               }
             },
-            path: nextPagesDir
+            path: nextPagesDir(getRoot(req))
           }
         })
       }
     },
 
     async get(key) {
-      const page = getPage(fspath.join(pagesDir, fspath.basename(key + '.tsx')))
+      const page = getPage(fspath.join(pagesDir(getRoot(req)), fspath.basename(key + '.tsx')))
       return JSON.stringify(page)
     }
   };
