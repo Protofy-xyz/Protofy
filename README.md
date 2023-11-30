@@ -30,6 +30,13 @@ You can think of **Protofy** as a Wordpress but based in **react** and **javascr
 
 A ultra-extensible CMS with supercharged capabilities, mobile support and IoT support (esp32 thanks to esphome).
 
+## 🤖 Ai Assisted
+
+https://github.com/Protofy-xyz/Protofy/assets/5052882/4b7da628-a55e-4904-81c3-6aca23eb776d
+
+Get help and code from integrated ChatGPT with autmatic context transfer
+
+
 ## 📦 Included packages
 
 ![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device/device-1.gif?raw=true)
