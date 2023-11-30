@@ -6,7 +6,7 @@ import useKeypress from 'react-use-keypress';
 import Diff from 'deep-diff'
 import Source from "../models/Source";
 import { withTopics } from "react-topics";
-import { ErrorBoundary } from 'react-error-boundary'
+import ErrorBoundary from './ErrorBoundary'
 import { JSCodeToOBJ } from "../utils/utils";
 import { notify, computePreviousPositions } from "../utils/utils";
 import { Stack, Spinner, Text, YStack } from "@my/ui"
@@ -244,23 +244,24 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 		setCurrentPageInitialJson(editorNodes)
 		setMissingElements("")
 		try {
-			Object.keys(editorNodes).forEach((nk: any) => Object.keys(editorNodes[nk].props).forEach((pk: any) => {
-				const props = editorNodes[nk].props
-				const propContent = props[pk]
-				if (propContent.startsWith('{') && propContent.endsWith('}')) {
-					const code = propContent.substring(1, propContent.length - 1)
-					try {
-						JSCodeToOBJ(code)
-					} catch (e) {
-						if (e.name == 'SyntaxError') {
-							props[pk] = ''
-						}
-					}
-				}
-			}))
+			// TODO: FIX CASE SYNTAX ERROR, COMMENTS BECAUSE MAKES INIFITY LOADING
+			// Object.keys(editorNodes).forEach((nk: any) => Object.keys(editorNodes[nk].props).forEach((pk: any) => {
+			// 	const props = editorNodes[nk].props
+			// 	const propContent = props[pk]
+			// 	if (propContent.startsWith('{') && propContent.endsWith('}')) {
+			// 		const code = propContent.substring(1, propContent.length - 1)
+			// 		try {
+			// 			JSCodeToOBJ(code)
+			// 		} catch (e) {
+			// 			if (e.name == 'SyntaxError') {
+			// 				props[pk] = ''
+			// 			}
+			// 		}
+			// 	}
+			// }))
 			actions.deserialize(editorNodes)
 		} catch (e) {
-			const availableComponents = query?.getOptions()?.resolver ?? {} 
+			const availableComponents = query?.getOptions()?.resolver ?? {}
 			const availableCompArr = Object.keys(availableComponents)
 			const missingElements = Object.keys(editorNodes)?.filter(i => !availableCompArr.includes(editorNodes[i].displayName))
 			const missingComponents = missingElements.map(i => editorNodes[i]?.displayName)?.join(', ')
@@ -333,11 +334,14 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 						loading ?
 							<Stack style={{ height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
 								{missingElements ? <YStack width={"80%"} maxWidth={'600px'} alignItems="center">
-									<Text color='red'>
+									<Text >
 										Can not load the following elements:
 									</Text>
-									<Text marginTop='10px'>
+									<Text color='red' marginVertical='20px'>
 										{missingElements}
+									</Text>
+									<Text >
+										Try adding the elments to the useEdit function.
 									</Text>
 								</YStack> : <div>
 									<Spinner size="large" marginBottom="20px"></Spinner>
@@ -347,7 +351,7 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 								</div>}
 							</Stack>
 							:
-							<ErrorBoundary FallbackComponent={<div style={{ margin: '20px' }}>There seems to be an error in your page preventing the editor from loading it. Please check the code and fix the errors. </div> as any}>
+							<ErrorBoundary>
 								<Frame />
 							</ErrorBoundary>
 					}
