@@ -4,10 +4,11 @@ import * as path from 'path';
 import * as fspath from 'path';
 import { DatabaseEntryModel, DatabaseModel } from './databasesSchemas';
 import { connectDB, getDB } from 'protolib/api'
+import { getRoot } from '../../api';
 
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
-const dbDir = fspath.join(PROJECT_WORKSPACE_DIR, "/data/databases/")
+const dbDir = (root) => fspath.join(root, "/data/databases/")
 
 const customGetDB = (path, req, session) => {
   const db = {
@@ -19,11 +20,11 @@ const customGetDB = (path, req, session) => {
     },
 
     async put(key, value) {
-      await connectDB(fspath.join(dbDir, fspath.basename(key)))
+      await connectDB(fspath.join(dbDir(getRoot(req)), fspath.basename(key)))
     },
 
     async *get(key) {
-      const dbPath = fspath.join(dbDir, fspath.basename(key))
+      const dbPath = fspath.join(dbDir(getRoot(req)), fspath.basename(key))
       const db = getDB(dbPath)
       yield* db.iterator()
     }
