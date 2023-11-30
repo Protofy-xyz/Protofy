@@ -1,18 +1,17 @@
 import { ObjectModel } from ".";
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI } from '../../api'
+import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI, getRoot } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import axios from 'axios';
 import {getServiceToken} from 'protolib/api/lib/serviceToken'
 
-const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
-const apiDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/apis/")
+const apiDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
 
-const getSchemas = async (sourceFile?) => {
+const getSchemas = async (req, sourceFile?) => {
   const node = getDefinition(
-    sourceFile ?? getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile)),
+    sourceFile ?? getSourceFile(fspath.join(getRoot(req), indexFile)),
     '"objects"'
   );
 
@@ -22,7 +21,7 @@ const getSchemas = async (sourceFile?) => {
       for (const prop of node.getProperties()) {
         if (prop instanceof PropertyAssignment) {
           const schemaId = prop.getInitializer().getText();
-          const apiPath = fspath.join(apiDir, prop.getName() + '.ts')
+          const apiPath = fspath.join(apiDir(getRoot(req)), prop.getName() + '.ts')
           let hasApi;
           try {
             await fs.access(apiPath, fs.constants.F_OK)
@@ -39,8 +38,8 @@ const getSchemas = async (sourceFile?) => {
   return [];
 }
 
-const getSchema = async (idSchema, schemas) => {
-  let SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, indexFile)
+const getSchema = async (idSchema, schemas, req) => {
+  let SchemaFile = fspath.join(getRoot(req), indexFile)
   let sourceFile = getSourceFile(SchemaFile)
 
   const currentSchema = schemas.find(s => s.id == idSchema)
@@ -69,7 +68,7 @@ const getSchema = async (idSchema, schemas) => {
   return { name: currentSchema.name, api: currentSchema.api, id: idSchema, keys: keys }
 }
 
-const setSchema = (path, content, value) => {
+const setSchema = (path, content, value, req) => {
   let sourceFile = getSourceFile(path)
   const secondArgument = getDefinition(sourceFile, '"schema"')
   if (!secondArgument) {
@@ -80,7 +79,7 @@ const setSchema = (path, content, value) => {
   sourceFile.saveSync();
 
   //link in index.ts
-  sourceFile = getSourceFile(fspath.join(PROJECT_WORKSPACE_DIR, indexFile))
+  sourceFile = getSourceFile(fspath.join(getRoot(req), indexFile))
   addImportToSourceFile(sourceFile, value.id, ImportType.NAMED, './' + value.name)
 
   const arg = getDefinition(sourceFile, '"objects"')
@@ -94,7 +93,7 @@ const setSchema = (path, content, value) => {
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const schemas = await getSchemas();
+      const schemas = await getSchemas(req);
       for (const schema of schemas) {
         yield [schema.name, JSON.stringify(schema)];
       }
@@ -103,7 +102,7 @@ const getDB = (path, req, session) => {
     async put(key, value) {
       value = JSON.parse(value)
       let exists
-      const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts'
+      const filePath = getRoot(req) + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts'
       try {
         await fs.access(filePath, fs.constants.F_OK)
         exists = true
@@ -130,14 +129,14 @@ const getDB = (path, req, session) => {
       }, '').slice(0, -1) + "\n}"
 
 
-      await setSchema(filePath, result, value)
+      await setSchema(filePath, result, value, req)
     },
 
     async get(key) {
-      let SchemaFile = fspath.join(PROJECT_WORKSPACE_DIR, indexFile)
+      let SchemaFile = fspath.join(getRoot(req), indexFile)
       let sourceFile = getSourceFile(SchemaFile)
-      const schemas = await getSchemas(sourceFile)
-      return JSON.stringify(await getSchema(key, schemas))
+      const schemas = await getSchemas(req, sourceFile)
+      return JSON.stringify(await getSchema(key, schemas, req))
     }
   };
 
