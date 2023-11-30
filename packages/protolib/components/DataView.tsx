@@ -118,13 +118,16 @@ export function DataView({
     }, [realTimeItems])
 
     useUpdateEffect(() => {
-        push("search", search, false)
+        if(search) {
+            push("search", search, false)
+        } else {
+            removePush("search")
+        }
     }, [search])
 
     useEffect(() => {
         setSearchName(_plural)
     })
-
 
     useUpdateEffect(() => { fetch() }, [state.orderBy + '_' + state.itemsPerPage + '_' + state.page + '_' + state.search + '_' + state.orderDirection])
 
