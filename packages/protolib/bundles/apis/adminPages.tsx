@@ -2,7 +2,7 @@
 import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { APIModel } from '.'
 import { DataTable2, API, DataView, AlertDialog } from 'protolib'
-import { YStack, Text, Stack, XStack, Accordion, Spacer, Square } from "@my/ui";
+import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView } from "@my/ui";
 import { ToyBrick, Eye, ChevronDown } from '@tamagui/lucide-icons'
 import { z } from 'protolib/base'
 import { usePageParams } from '../../next'
@@ -17,10 +17,10 @@ import { Tinted } from '../../components/Tinted';
 
 const APIIcons = {}
 
-const AccordionMethod = ({ method, path, description }) => {
+const AccordionMethod = ({ method, path, description, children }) => {
     const [opened, setOpened] = useState([''])
 
-    return (<Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1} mb={"$5"}>
+    return (<Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1} mb={"$5"} width={"640px"}>
         <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={"item"}>
             <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes("item") ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
                 {({ open }) => (
@@ -32,18 +32,27 @@ const AccordionMethod = ({ method, path, description }) => {
                                 description={description}
                             />
                         </Stack>
-                        <Spacer flex={1} />
+
                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                             <ChevronDown size="$1" />
                         </Square>
                     </>
                 )}
             </Accordion.Trigger>
-            <Accordion.Content br="$5">
-
+            <Accordion.Content f={1} br="$5">
+                {children}
             </Accordion.Content>
         </Accordion.Item>
     </Accordion>)
+}
+
+const QueryParams = ({ query, desc }) => {
+    return (<Tinted>
+        <XStack mb="$3" mt="$3">
+            <Chip text={query} color={'$color5'} mr="$3" h={25} w={"100px"} />
+            <Text> {desc}</Text>
+        </XStack>
+    </Tinted>)
 }
 
 const MethodBadge = ({ method, path, description }) => {
@@ -52,7 +61,7 @@ const MethodBadge = ({ method, path, description }) => {
             <XStack
                 padding={10}
                 marginVertical={5}
-                minWidth={"500px"}
+                width={"600px"}
                 ai="center"
                 mb={"$3"}
                 pr={"$10"}
@@ -105,6 +114,7 @@ export default {
             }
             //replace('editFile', '/packages/app/bundles/custom/apis/')
             return (<AdminPage title="APIs" pageSession={pageSession}>
+
                 <AlertDialog
                     acceptCaption="Close"
                     cancelCaption="Keep editing"
@@ -116,35 +126,66 @@ export default {
                     title={"API Endpoints"}
                     description=""
                 >
-                    <Center mt="$5">
-                        <YStack>
-                            <AccordionMethod
-                                method="GET"
-                                path={options ? options.prefix + options.name : ""}
-                                description={"List all " + currentElement?.data?.name + " entries"}
-                            />
-                            <AccordionMethod
-                                method="GET"
-                                path={options ? options.prefix + options.name + "/:id" : ""}
-                                description={"Reads a " + currentElement?.data?.name + " entry by id"}
-                            />
-                            <AccordionMethod
-                                method="POST"
-                                path={options ? options.prefix + options.name : ""}
-                                description={"Creates a new " + currentElement?.data?.name + " entry"}
-                            />
-                            <AccordionMethod
-                                method="POST"
-                                path={options ? options.prefix + options.name + "/:id" : ""}
-                                description={"Updates a " + currentElement?.data?.name + " entry by id"}
-                            />
-                            <AccordionMethod
-                                method="POST"
-                                path={options ? options.prefix + options.name + "/:id/delete" : ""}
-                                description={"Deletes a " + currentElement?.data?.name + " entry by id"}
-                            />
-                        </YStack>
-                    </Center>
+                    <ScrollView maxHeight={"80vh"}>
+                        <Center mt="$5">
+                            <YStack>
+                                <AccordionMethod
+                                    method="GET"
+                                    path={options ? options.prefix + options.name : ""}
+                                    description={"List all " + currentElement?.data?.name + " entries"}>
+                                    <Text mb={"$3"} mt={"$"}>
+                                        The list API endpoint is designed to provide a paginated, ordered list of items from a dataset. It accepts several query parameters that allow you to customize the response.
+                                    </Text>
+                                    <QueryParams query={"itemsPerPage"} desc={"Defines max items returned per page; defaults to 25."}></QueryParams>
+                                    <QueryParams query={"page"} desc={"Selects which page of results to retrieve, starting at 0."}></QueryParams>
+                                    <QueryParams query={"orderBy"} desc={"Specifies field name to sort the results by."}></QueryParams>
+                                    <QueryParams query={"orderDirection"} desc={"Sets sort direction, ascending ('asc') by default, use 'desc' for descending."}></QueryParams>
+                                    <QueryParams query={"all"} desc={"If set, returns all results, bypassing pagination."}></QueryParams>
+                                </AccordionMethod>
+
+                                <AccordionMethod
+                                    method="GET"
+                                    path={options ? options.prefix + options.name + "/:id" : ""}
+                                    description={"Reads a " + currentElement?.data?.name + " entry by id"}>
+                                    <Text mb={"$3"} mt={"$"}>
+                                        This 'read' endpoint is used to fetch a specific item based on its unique id. It implements security checks and custom data transformations.
+                                    </Text>
+                                    <QueryParams query={":id"} desc={"The unique id of the item to be retrieved from the dataset."}></QueryParams>
+
+                                </AccordionMethod>
+
+                                <AccordionMethod
+                                    method="POST"
+                                    path={options ? options.prefix + options.name : ""}
+                                    description={"Creates a new " + currentElement?.data?.name + " entry"}>
+                                    <Text mb={"$3"} mt={"$"}>
+                                        The 'create' endpoint is utilized for adding new items to the dataset. It includes data transformations, and event notifications for successful creations.
+                                    </Text>
+                                </AccordionMethod>
+
+                                <AccordionMethod
+                                    method="POST"
+                                    path={options ? options.prefix + options.name + "/:id" : ""}
+                                    description={"Updates a " + currentElement?.data?.name + " entry by id"}>
+                                    <Text mb={"$3"} mt={"$"}>
+                                        The 'update' endpoint is used for modifying existing items based on their unique id. It includes data transformation processes, and notifications for each update action.
+                                    </Text>
+                                    <QueryParams query={":id"} desc={"The unique id of the item to be updated in the dataset."}></QueryParams>
+                                </AccordionMethod>
+
+                                <AccordionMethod
+                                    method="POST"
+                                    path={options ? options.prefix + options.name + "/:id/delete" : ""}
+                                    description={"Deletes a " + currentElement?.data?.name + " entry by id"}>
+                                    <Text mb={"$3"} mt={"$"}>
+                                        The 'delete' endpoint facilitates the removal of items based on their unique id. It encompasses transformations of the data for deletion, and event notifications for the action performed.
+                                    </Text>
+                                    <QueryParams query={":id"} desc={"The unique id of the item to be deleted from the dataset."}></QueryParams>
+                                </AccordionMethod>
+
+                            </YStack>
+                        </Center>
+                    </ScrollView>
                 </AlertDialog>
                 <DataView
                     integratedChat
