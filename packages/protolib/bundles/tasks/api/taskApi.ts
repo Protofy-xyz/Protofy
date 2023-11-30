@@ -98,7 +98,7 @@ const getDB = (path, req, session) => {
       const capitalizedName = value.name.charAt(0).toUpperCase() + value.name.slice(1)
 
       let exists
-      const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/tasks/' + fspath.basename(value.name) + '.ts'
+      const filePath = fspath.join(tasksDir(getRoot(req)), fspath.basename(value.name) + '.ts')
       try {
         await fs.access(filePath, fs.constants.F_OK)
         exists = true
