@@ -8,29 +8,33 @@ import { getServiceToken } from 'protolib/api/lib/serviceToken'
 
 const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const pagesDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/pages/")
-const indexFile = pagesDir + "index.tsx"
+const nextPagesDir = fspath.join(PROJECT_WORKSPACE_DIR, "/apps/next/pages/")
 
 const getPage = (pagePath) => {
-  const sourceFile = getSourceFile(pagePath)
-  const route = getDefinition(sourceFile, '"route"')
-  const prot = getDefinition(sourceFile, '"protected"')
-  let permissions = getDefinition(sourceFile, '"permissions"')
-
-  if (!route || !permissions || !prot) return undefined
-
-  if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
-    permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
-  } else {
-    permissions = permissions.getText()
-  }
-
-
-
-  return {
-    name: fspath.basename(pagePath, fspath.extname(pagePath)),
-    route: route.getText().replace(/^["']|["']$/g, ''),
-    protected: prot.getText() == 'false' ? false : true,
-    permissions: permissions
+  try {
+    const sourceFile = getSourceFile(pagePath)
+    const route = getDefinition(sourceFile, '"route"')
+    const prot = getDefinition(sourceFile, '"protected"')
+    let permissions = getDefinition(sourceFile, '"permissions"')
+  
+    if (!route || !permissions || !prot) return undefined
+  
+    if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
+      permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
+    } else {
+      permissions = permissions.getText()
+    }
+  
+  
+  
+    return {
+      name: fspath.basename(pagePath, fspath.extname(pagePath)),
+      route: route.getText().replace(/^["']|["']$/g, ''),
+      protected: prot.getText() == 'false' ? false : true,
+      permissions: permissions
+    }
+  } catch(e) {
+    return null
   }
 }
 
@@ -48,6 +52,7 @@ const getDB = (path, req, session) => {
     async put(key, value) {
       value = JSON.parse(value)
       const filePath = fspath.join(pagesDir, fspath.basename(value.name) + '.tsx')
+      const prevPage = getPage(filePath)
       const template = fspath.basename(value.template ?? 'default')
       const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
       try {
@@ -57,7 +62,7 @@ const getDB = (path, req, session) => {
         // console.log('permissions: ', value.permissions ? JSON.stringify(value.permissions) : '[]', value.permissions)
         // console.log('executing template: ', `/packages/protolib/bundles/pages/templates/${template}.tpl`)
         await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
-          name: value.name + '.tsx',
+          name: fspath.basename(value.name + '.tsx'),
           data: {
             options: {
               template: `/packages/protolib/bundles/pages/templates/${template}.tpl`,
@@ -86,16 +91,42 @@ const getDB = (path, req, session) => {
 
       arg = getDefinition(sourceFile, '"permissions"')
       arg.replaceWithText(value.permissions ? JSON.stringify(value.permissions) : '[]')
+
+      arg = getDefinition(sourceFile, '"route"')
+      arg.replaceWithText(value.route ? JSON.stringify(value.route) : '""')
       sourceFile.save()
-      sourceFile = getSourceFile(indexFile)
-      //link in index.ts
-      addImportToSourceFile(sourceFile, value.name, ImportType.DEFAULT, './' + value.name)
-      arg = getDefinition(sourceFile, '"pages"')
-      if (!arg) {
-        throw "No link definition schema marker found for file: " + path
+
+      console.log('prevPage: --------------------------', prevPage)
+      if(prevPage && prevPage.route != value.route) {
+        //delete previous route if changed
+        const prevFile = fspath.join(nextPagesDir, prevPage.route + '.tsx')
+        console.log('Deleting prev page', prevFile)
+        await fs.unlink(prevFile)
+        console.log('Deleted')
       }
-      addObjectLiteralProperty(arg, (value.route.startsWith('/') ? value.route.slice(1) : value.route), value.name)
-      sourceFile.saveSync();
+
+      //link in nextPages
+      try {
+        //TODO: routes with subdirectories
+        const nextFilePath = fspath.join(nextPagesDir, fspath.basename(value.route)+'.tsx')
+        await fs.access(nextFilePath, fs.constants.F_OK)
+        // console.log('File: ' + filePath + ' already exists, not executing template')
+      } catch (error) {
+        //page does not exist, create it
+        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+          name: fspath.basename(value.route + '.tsx'),
+          data: {
+            options: {
+              template: `/packages/protolib/bundles/pages/templates/nextPage.tpl`,
+              variables: {
+                ...value,
+                upperName: value.name ? value.name.charAt(0).toUpperCase() + value.name.slice(1) : ''
+              }
+            },
+            path: nextPagesDir
+          }
+        })
+      }
     },
 
     async get(key) {
