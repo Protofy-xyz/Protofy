@@ -96,18 +96,20 @@ const Home = () => {
                   </TooltipContainer>
                 </NextLink>
               </XCenterStack>
-             
+
             </YStack>
 
           </ContainerLarge>
         </Section>
- 
+
         <ElevatedArea>
           <XStack pos="absolute" als="center" y={-45}>
             <Link target="_blank" href="https://github.com/Protofy-xyz/Protofy">
               <Theme reset>
-                <ButtonSimple icon={<GithubIcon width={16} />} iconAfter={Star}>
-                  Star plz
+                <ButtonSimple>
+                  <GithubIcon width={16} />
+                  <Text fontFamily="$silkscreen" fontSize={"$4"}> Star plz </Text>
+                  <Star width={13} />
                 </ButtonSimple>
               </Theme>
             </Link>
@@ -183,14 +185,14 @@ const Home = () => {
           {/* <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-down" /> */}
           <YStack pe="none" o={0.1} zi={0} fullscreen={true} className="bg-grid mask-gradient-up" />
           <ContainerLarge position="relative">
-            <YStack ai="center"  zi={1} space="$6" mb="$4">
+            <YStack ai="center" zi={1} space="$6" mb="$4">
               <BlockTitle title="ESPHome Yaml Visual Editor" subtitle="Configure ESP32 devices using ESPHome and the Protofy ESPHome Yaml Visual Editor. Configure, upload and manage devices from a web admin panel"></BlockTitle>
               <Spacer />
               <XStack $theme-dark={{ display: 'none' }}>
-                <img style={{maxHeight: "100%", maxWidth: "100%", height: "auto"}} src="/images/iot_light.png" />
+                <img height="100%" width="100%" src="/images/iot_light.png" />
               </XStack>
               <XStack $theme-light={{ display: 'none' }}>
-                <img style={{maxHeight: "100%", maxWidth: "100%", height: "auto"}} src="/images/iot.png" />
+                <img height="100%" width="100%" src="/images/iot.png" />
               </XStack>
             </YStack>
           </ContainerLarge>
@@ -198,7 +200,7 @@ const Home = () => {
 
         {/* <img src="/images/iot.png" /> */}
         <Section pt={"$15"} borderTopWidth={1} borderColor={"$color3"}>
-        <SpotLight />
+          <SpotLight />
           <Theme reset={true}>
             <ContainerLarge position="relative">
               <XStack px="$6" pt="$8" space="$4" $sm={{ flexDirection: "column", px: 0 }}>
@@ -224,64 +226,64 @@ const Home = () => {
           <Theme reset={true}>
             <BackgroundGradient height={'100vh'} direction="up" o={0.1} />
             <ContainerLarge position="relative">
-                {/* <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}> */}
-                <YStack ai="center" jc="center">
-                  <BlockTitle title={"AI Control Panel"} subtitle="Control panel to manage the CMS, website and content. With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
-                </YStack>
+              {/* <SectionBox mt="$20" zi={1000} bubble={true} gradient={true}> */}
+              <YStack ai="center" jc="center">
+                <BlockTitle title={"AI Control Panel"} subtitle="Control panel to manage the CMS, website and content. With ChatGPT for code generation, AI assistant and UI generation from sketches."></BlockTitle>
+              </YStack>
 
-                <XStack $theme-dark={{display: 'none'}} mt={"$5"} p={"$5"}>
-                  <img style={{maxHeight: "100%", maxWidth: "100%", height: "auto"}} src="/images/ai_light.png" />
-                </XStack>
+              <XStack $theme-dark={{ display: 'none' }} mt={"$5"} p={"$5"}>
+                <img height="100%" width="100%" src="/images/ai_light.png" />
+              </XStack>
 
-                <XStack $theme-light={{display: 'none'}} mt={"$5"} p={"$5"}>
-                  <img style={{maxHeight: "100%", maxWidth: "100%", height: "auto"}} src="/images/ai_dark.png" />
-                </XStack>
+              <XStack $theme-light={{ display: 'none' }} mt={"$5"} p={"$5"}>
+                <img height="100%" width="100%" src="/images/ai_dark.png" />
+              </XStack>
               {/* </SectionBox> */}
             </ContainerLarge>
           </Theme>
         </Section>
-        
+
         <Section py={"$20"} borderBottomWidth={1} borderTopWidth={1} borderColor={"$color6"}>
           <YStack pe="none" zi={0} fullscreen={true} className="bg-dot-grid mask-gradient-up" />
           {/* <BackgroundGradient direction="down" o={0.1} /> */}
           <Theme reset={true}>
-                <YStack ai="center" jc="center">
-                  <BlockTitle title={"We build it for you"} subtitle="At Protofy, we are experts at building mobile apps, webs and IoT devices. We have a team of very talented, agile, pasionate and innovative thinkers, ready to build your next project"></BlockTitle>
-                  <XStack mt={"$8"}>
-                    <Link target="_blank" href="https://projects.protofy.xyz">
-                      <XStack mt={"$4"} ai="center" jc="center">
-                      <Paragraph mr={"$2"} color="$orange8" fontSize={20}>Go to Projects</Paragraph>
-                      <ChevronRight color="$orange8" />
-                      </XStack>
-                    </Link>
+            <YStack ai="center" jc="center">
+              <BlockTitle title={"We build it for you"} subtitle="At Protofy, we are experts at building mobile apps, webs and IoT devices. We have a team of very talented, agile, pasionate and innovative thinkers, ready to build your next project"></BlockTitle>
+              <XStack mt={"$8"}>
+                <Link target="_blank" href="https://projects.protofy.xyz">
+                  <XStack mt={"$4"} ai="center" jc="center">
+                    <Paragraph mr={"$2"} color="$orange8" fontSize={20}>Go to Projects</Paragraph>
+                    <ChevronRight color="$orange8" />
                   </XStack>
-                  <XStack jc="center" space="$5" flexWrap="wrap">
-                    <YStack scale={0.7}>
-                      <YStack  borderWidth={1}>
-                        <img src="/images/fillinggood.png" />
-                      </YStack>
-                      <Paragraph o={0.8} fontSize={30} mt={"$5"} fontWeight={"500"}>DAMM - Filling good</Paragraph>
-                    </YStack>
-
-                    <YStack scale={0.7}>
-                      <YStack  borderWidth={1}>
-                        <img src="/images/bluebox.png" />
-                      </YStack>
-                      <Paragraph o={0.8} fontSize={30} mt={"$5"} fontWeight={"500"}>The Smart Lollipop</Paragraph>
-                    </YStack>
-   
-                    <YStack scale={0.7}>
-                      <YStack  borderWidth={1}>
-                        <img src="/images/taiga.png" />
-                      </YStack>
-                      <Paragraph o={0.8} fontSize={30} mt={"$5"} fontWeight={"500"}>Taiga - Fountain</Paragraph>
-                    </YStack>
-
-                  </XStack>
+                </Link>
+              </XStack>
+              <XStack jc="center" space="$5" flexWrap="wrap">
+                <YStack scale={0.7}>
+                  <YStack borderWidth={1}>
+                    <img src="/images/fillinggood.png" />
+                  </YStack>
+                  <Paragraph o={0.8} fontSize={30} mt={"$5"} fontWeight={"500"}>DAMM - Filling good</Paragraph>
                 </YStack>
+
+                <YStack scale={0.7}>
+                  <YStack borderWidth={1}>
+                    <img src="/images/bluebox.png" />
+                  </YStack>
+                  <Paragraph o={0.8} fontSize={30} mt={"$5"} fontWeight={"500"}>The Smart Lollipop</Paragraph>
+                </YStack>
+
+                <YStack scale={0.7}>
+                  <YStack borderWidth={1}>
+                    <img src="/images/taiga.png" />
+                  </YStack>
+                  <Paragraph o={0.8} fontSize={30} mt={"$5"} fontWeight={"500"}>Taiga - Fountain</Paragraph>
+                </YStack>
+
+              </XStack>
+            </YStack>
           </Theme>
         </Section>
-        
+
       </DefaultLayout>
     </Page>
   );
@@ -300,7 +302,9 @@ export default {
         XStack,
         Paragraph,
         Theme,
-        SizableText
+        SizableText,
+        ChevronRight,
+        Star
       },
       "/packages/app/bundles/custom/pages/home.tsx"
     ),
