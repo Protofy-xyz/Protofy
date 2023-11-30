@@ -6,8 +6,6 @@ import { DatabaseEntryModel, DatabaseModel } from './databasesSchemas';
 import { connectDB, getDB } from 'protolib/api'
 import { getRoot } from '../../api';
 
-
-const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
 const dbDir = (root) => fspath.join(root, "/data/databases/")
 
 const customGetDB = (path, req, session) => {
