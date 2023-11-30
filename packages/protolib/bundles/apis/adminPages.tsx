@@ -2,8 +2,8 @@
 import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { APIModel } from '.'
 import { DataTable2, API, DataView, AlertDialog } from 'protolib'
-import { YStack, Text, Stack, XStack } from "@my/ui";
-import { ToyBrick, Eye } from '@tamagui/lucide-icons'
+import { YStack, Text, Stack, XStack, Accordion, Spacer, Square } from "@my/ui";
+import { ToyBrick, Eye, ChevronDown } from '@tamagui/lucide-icons'
 import { z } from 'protolib/base'
 import { usePageParams } from '../../next'
 import { getURLWithToken } from '../../lib/Session'
@@ -14,25 +14,52 @@ import Center from '../../components/Center'
 import { Objects } from "app/bundles/objects";
 import { Tinted } from '../../components/Tinted';
 
+
 const APIIcons = {}
+
+const AccordionMethod = ({ method, path, description }) => {
+    const [opened, setOpened] = useState([''])
+
+    return (<Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1} mb={"$5"}>
+        <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={"item"}>
+            <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes("item") ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
+                {({ open }) => (
+                    <>
+                        <Stack mt={"$2"}>
+                            <MethodBadge
+                                method={method}
+                                path={path}
+                                description={description}
+                            />
+                        </Stack>
+                        <Spacer flex={1} />
+                        <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+                            <ChevronDown size="$1" />
+                        </Square>
+                    </>
+                )}
+            </Accordion.Trigger>
+            <Accordion.Content br="$5">
+
+            </Accordion.Content>
+        </Accordion.Item>
+    </Accordion>)
+}
 
 const MethodBadge = ({ method, path, description }) => {
     return (
         <Tinted>
             <XStack
-                borderColor={"$color3"}
-                borderWidth={1}
-                borderRadius={10}
                 padding={10}
                 marginVertical={5}
                 minWidth={"500px"}
                 ai="center"
                 mb={"$3"}
                 pr={"$10"}
-                hoverStyle={{ backgroundColor: '$color2' }}
             >
                 <XStack alignItems="center" space>
-                    <Stack p={"$1"} backgroundColor={method === 'GET' ? '$color7' : '$color4'} br={"$2"}>
+
+                    <Stack p={"$1"} backgroundColor={method === 'GET' ? '$color8' : '$color7'} br={"$2"}>
                         <Text fontSize={14} fontWeight="bold" color="white" padding={5} borderRadius={5} >
                             {method}
                         </Text>
@@ -91,27 +118,27 @@ export default {
                 >
                     <Center mt="$5">
                         <YStack>
-                            <MethodBadge
+                            <AccordionMethod
                                 method="GET"
                                 path={options ? options.prefix + options.name : ""}
                                 description={"List all " + currentElement?.data?.name + " entries"}
                             />
-                            <MethodBadge
-                                method="POST"
-                                path={options ? options.prefix + options.name : ""}
-                                description={"Creates a new " + currentElement?.data?.name + " entry"}
-                            />
-                            <MethodBadge
+                            <AccordionMethod
                                 method="GET"
                                 path={options ? options.prefix + options.name + "/:id" : ""}
                                 description={"Reads a " + currentElement?.data?.name + " entry by id"}
                             />
-                            <MethodBadge
+                            <AccordionMethod
+                                method="POST"
+                                path={options ? options.prefix + options.name : ""}
+                                description={"Creates a new " + currentElement?.data?.name + " entry"}
+                            />
+                            <AccordionMethod
                                 method="POST"
                                 path={options ? options.prefix + options.name + "/:id" : ""}
                                 description={"Updates a " + currentElement?.data?.name + " entry by id"}
                             />
-                            <MethodBadge
+                            <AccordionMethod
                                 method="POST"
                                 path={options ? options.prefix + options.name + "/:id/delete" : ""}
                                 description={"Deletes a " + currentElement?.data?.name + " entry by id"}
@@ -129,7 +156,7 @@ export default {
                     name="api"
                     columns={DataTable2.columns(
                         DataTable2.column("name", "name", true),
-                        DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$'} />),
+                        DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),
                         DataTable2.column("object", "object", true, row => <Chip text={row.object} color={row.object == 'None' ? '$gray5' : '$color5'} />),
                     )}
                     extraFieldsFormsAdd={{
