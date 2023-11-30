@@ -1,17 +1,16 @@
 import { APIModel } from ".";
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI } from '../../api'
+import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment, ArrayLiteralExpression } from 'ts-morph';
 import axios from 'axios';
 import { getServiceToken } from "../../api/lib/serviceToken";
 
-const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../";
-const APIDir = fspath.join(PROJECT_WORKSPACE_DIR, "/packages/app/bundles/custom/apis/")
-const indexFile = APIDir + "index.ts"
+const APIDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
+const indexFile = (root) => APIDir(root) + "index.ts"
 
-const getAPI = (apiPath) => {
-  const sourceFile = getSourceFile(APIDir + apiPath)
+const getAPI = (apiPath, req) => {
+  const sourceFile = getSourceFile(APIDir(getRoot(req)) + apiPath)
   const arg = getDefinition(sourceFile, '"type"')
   const obj = getDefinition(sourceFile, '"object"')
   return {
@@ -24,8 +23,8 @@ const getAPI = (apiPath) => {
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const files = (await fs.readdir(APIDir)).filter(f => f != 'index.ts')
-      const apis = await Promise.all(files.map(async f => getAPI(f)));
+      const files = (await fs.readdir(APIDir(getRoot(req)))).filter(f => f != 'index.ts')
+      const apis = await Promise.all(files.map(async f => getAPI(f, req)));
 
       for (const api of apis) {
         if (api) yield [api.name, JSON.stringify(api)];
@@ -36,7 +35,7 @@ const getDB = (path, req, session) => {
     async put(key, value) {
       value = JSON.parse(value)
       let exists
-      const filePath = PROJECT_WORKSPACE_DIR + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts'
+      const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts'
       const template = fspath.basename(value.template ?? 'empty')
       try {
         await fs.access(filePath, fs.constants.F_OK)
@@ -58,7 +57,7 @@ const getDB = (path, req, session) => {
       }
 
       //link in index.ts
-      const sourceFile = getSourceFile(indexFile)
+      const sourceFile = getSourceFile(indexFile(getRoot(req)))
       addImportToSourceFile(sourceFile, value.name + 'Api', ImportType.DEFAULT, './' + value.name)
 
       const arg = getDefinition(sourceFile, '"apis"')

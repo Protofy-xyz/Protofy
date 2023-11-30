@@ -9,13 +9,11 @@ import fsExtra from 'fs-extra';
 import syncFs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
 import {generateEvent} from 'app/bundles/library'
-import { handler } from '../api';
-
-const PROJECT_WORKSPACE_DIR = process.env.FILES_ROOT ?? "../../"; // Define where the workspace root dir is
+import { getRoot, handler } from '../api';
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
-        const destPath = path.join(process.cwd()+ '/' +PROJECT_WORKSPACE_DIR, req.params.path);
+        const destPath = path.join(process.cwd()+ '/' +getRoot(req), req.params.path);
         await fsExtra.ensureDir(destPath);
         cb(null, destPath);
     },
@@ -40,7 +38,7 @@ const handleFilesRequest = async (req, res) => {
     const name = req.params.path || '';
     const isDownload = req.query.download
 
-    const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
+    const filepath = path.join(getRoot(req), name);
 
     if (! await fileExists(filepath)) {
         res.status(404).send('No such file or directory: ' + filepath)
@@ -99,7 +97,7 @@ const handleFilesRequest = async (req, res) => {
 //if path is /a/b/c, a and b should exist to create c
 const handleFilesWriteRequest = async (req, res, session) => {
     const name = req.params.path || '';
-    const filepath = path.join(PROJECT_WORKSPACE_DIR, name);
+    const filepath = path.join(getRoot(req), name);
     if (req.body && req.body.hasOwnProperty("content")) {
         await fs.writeFile(filepath, req.body.content)
     }
@@ -116,7 +114,7 @@ const handleFilesWriteRequest = async (req, res, session) => {
 const handleDirectoryCreateRequest = async (req, res, session) => {
     const name = req.params.path || '';
 
-    const dirPath = path.join(PROJECT_WORKSPACE_DIR, name);
+    const dirPath = path.join(getRoot(req), name);
     try {
         await fs.mkdir(dirPath, { recursive: true }); // recursive: true permite crear directorios anidados si no existen
         generateEvent({
@@ -141,7 +139,7 @@ const handleDeleteRequest = async (req, res, session) => {
     }
     try {
         for (const item of itemsToDelete) {
-            const itemPath = path.join(PROJECT_WORKSPACE_DIR, basePath, item.name);
+            const itemPath = path.join(getRoot(req), basePath, item.name);
             if (item.isDirectory) {
                 await fs.rm(itemPath, { recursive: true, force: true }); // Delete directories
                 generateEvent({
@@ -174,8 +172,8 @@ const handleRenameRequest = async (req, res, session) => {
         return res.status(400).send({ error: "Missing parameters" });
     }
 
-    const oldPath = path.join(PROJECT_WORKSPACE_DIR, currentPath);
-    const newPath = path.join(PROJECT_WORKSPACE_DIR, path.dirname(currentPath), newName);
+    const oldPath = path.join(getRoot(req), currentPath);
+    const newPath = path.join(getRoot(req), path.dirname(currentPath), newName);
 
     try {
         await fs.rename(oldPath, newPath);
