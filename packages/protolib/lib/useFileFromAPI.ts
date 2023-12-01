@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getPendingResult } from "./createApiAtom"
+import { getPendingResult } from "../base/PendingResult"
 import { useUpdateEffect } from "usehooks-ts"
 import { API } from "./Api"
 import { usePendingEffect } from "./usePendingEffect"

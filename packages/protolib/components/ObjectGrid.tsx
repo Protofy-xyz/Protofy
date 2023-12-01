@@ -1,7 +1,7 @@
 import { Paragraph, Stack, StackProps, XStack, YStack } from "tamagui"
 import { Grid } from './Grid';
 import { EditableObject } from "./EditableObject";
-import { getPendingResult } from '../lib/createApiAtom'
+import { getPendingResult } from '../base/PendingResult'
 import { ItemCard } from "./ItemCard";
 import { useTint } from "protolib";
 import { useRef } from "react";

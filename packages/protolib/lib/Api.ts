@@ -1,4 +1,4 @@
-import { PendingResult, getPendingResult } from "./createApiAtom";
+import { PendingResult, getPendingResult } from "../base/PendingResult";
 import {devMode} from './env'
 class ApiError extends Error {
     apiError: any;
