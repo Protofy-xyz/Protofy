@@ -1,12 +1,3 @@
-
-window.matchMedia = window.matchMedia || function () {
-    return {
-        matches: false,
-        addListener: function () { },
-        removeListener: function () { }
-    };
-};
-
 const { after } = require('node:test');
 let Zombie = require('zombie')
 
