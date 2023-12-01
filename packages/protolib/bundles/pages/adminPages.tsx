@@ -34,7 +34,7 @@ export default {
                         DataTable2.column("visibility", "protected", true, row => !row.protected ? <Chip text={'public'} color={'$color5'} /> : <Chip text={'protected'} color={'$gray5'} />),
                         DataTable2.column("permissions", "permissions", true, row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
                     )}
-extraFieldsFormsAdd={{
+                    extraFieldsFormsAdd={{
                         template: z.union([z.literal("blank"), z.literal("default"), z.literal("admin")]).after("route"),
                         object: z.union([z.literal("without object"), ...extraData.objects.filter(o => o.api).map(o => z.literal(o.name))] as any).after('route'),
                     }}
