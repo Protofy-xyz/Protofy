@@ -3,6 +3,8 @@ import { addResponseMessage, Widget, toggleMsgLoader } from 'react-chat-widget'
 import { useEffect, useRef, useState } from 'react';
 import { Tinted, API, PromptAtom, PromptResponseAtom } from 'protolib';
 import { useTimeout, useWindowSize, useClickAnyWhere } from 'usehooks-ts';
+import { Paperclip } from 'lucide-react';
+import ReactDOM from 'react-dom';
 import { useAtom } from 'jotai';
 import { Button } from '@my/ui';
 
@@ -169,38 +171,41 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
 
     const [fileInputData, setFileInputData] = useState<{ content: string, filename: string }>();
     const [isChatOpen, setIsChatOpen] = useState();
+
     useEffect(() => {
-        var fileInput = document.createElement('input'); // Crear el input de tipo file
+        var fileInput = document.createElement('input');
         fileInput.type = 'file';
-        fileInput.accept = 'image/*'
-        fileInput.style.display = 'none'; // Ocultar el input
-        // TODO: replace with react element
-        const clipImage = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBhcGVyY2xpcCI+PHBhdGggZD0ibTIxLjQ0IDExLjA1LTkuMTkgOS4xOWE2IDYgMCAwIDEtOC40OS04LjQ5bDguNTctOC41N0E0IDQgMCAxIDEgMTggOC44NGwtOC41OSA4LjU3YTIgMiAwIDAgMS0yLjgzLTIuODNsOC40OS04LjQ4Ii8+PC9zdmc+"
-        var icon = document.createElement('img');
-        icon.className = "rcw-picker-icon"
-        icon.src = clipImage
-        icon.addEventListener('click', function () {
-            fileInput.click()
-        });
-        fileInput.addEventListener('change', (event: any) => {
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+
+        fileInput.addEventListener('change', (event) => {
             var file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                let content;
-                const filename = file.name
                 reader.onload = (e) => {
-                    content = e.target.result;
-                    setFileInputData({ content, filename })
+                    setFileInputData({ content: e.target.result, filename: file.name });
                 };
                 reader.readAsDataURL(file);
-                icon.title = filename;//
             }
         });
+
+        var iconContainer = document.createElement('div');
+        iconContainer.className = "rcw-picker-icon-container";
+        iconContainer.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        ReactDOM.render(<Paperclip size={24} className="rcw-picker-icon"/>, iconContainer);
+
         var oldElement = chatContainer.current.getElementsByClassName('rcw-picker-btn')[0];
         if (oldElement) {
-            oldElement.parentNode.replaceChild(icon, oldElement); // Replace old element with new element
+            oldElement.parentNode.replaceChild(iconContainer, oldElement);
         }
-    }, [chatContainer?.current?.isOpen, isChatOpen])
+
+        return () => {
+            ReactDOM.unmountComponentAtNode(iconContainer);
+        };
+    }, [chatContainer?.current?.isOpen, isChatOpen]);
 
     for (var i = 0; i < 20; i++) {
         useTimeout(() => {
