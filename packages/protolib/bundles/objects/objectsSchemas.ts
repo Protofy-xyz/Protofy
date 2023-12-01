@@ -5,7 +5,7 @@ import { ProtoModel } from "../../base";
 import { SessionDataType } from "../../api";
 
 export const BaseObjectSchema = z.object({
-  id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Model'),
+  id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Model').hidden(),
   name: z.string().search().static(),
   api: z.boolean().optional(),
   keys: z.record(
