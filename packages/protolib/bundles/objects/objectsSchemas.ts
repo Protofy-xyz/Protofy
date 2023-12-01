@@ -7,7 +7,7 @@ import { SessionDataType } from "../../api";
 export const BaseObjectSchema = z.object({
   id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Model').hidden(),
   name: z.string().search().static(),
-  api: z.boolean().optional(),
+  api: z.boolean().optional().hidden(),
   keys: z.record(
     z.string().optional(),
     z.object({
