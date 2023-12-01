@@ -18,6 +18,7 @@
     display: none;
 }
 
+
 .rcw-new-message {
     width: 100% !important;
     background-color: var(--color1) !important;
@@ -82,8 +83,9 @@
 }
 
 .rcw-picker-icon {
-    height: 26px;
-    width: 26px;
-    margin-right: 8px;
-    cursor: pointer;
+    height: 26px !important;
+    width: 26px !important;
+    cursor: pointer !important;
+    color: var(--color8) !important;
+    margin-right: 8px !important;
 }
