@@ -70,6 +70,25 @@ export class ObjectModel extends ProtoModel<ObjectModel> {
     return '/packages/app/bundles/custom/objects/' + this.data.name + '.ts'
   }
 
+  create(data?) {
+    const _data = data ?? this.getData()
+
+    //if no type is specified, use string
+    const obj = {
+      ..._data,
+      keys: Object.keys(_data.keys ? _data.keys : {}).reduce((total, k) => {
+        return {
+          ...total,
+          [k]: {
+            type: "string",
+            ..._data.keys[k],
+          }
+        }
+      }, {})
+    }
+    return super.create(obj)
+  }
+
   protected static _newInstance(data: any, session?: SessionDataType): ObjectModel {
     return new ObjectModel(data, session);
   }
