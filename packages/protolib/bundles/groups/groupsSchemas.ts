@@ -4,9 +4,9 @@ import moment from "moment";
 import { AutoModel } from 'protolib/base'
 
 export const GroupSchema = Schema.object({
-    name: z.string().label('name').hint('user, admin, ...').static().id().search().display(),
+    name: z.string().label('name').hint('user, admin, ...').static().id().search(),
     workspaces: z.array(z.string()),
-    admin: z.boolean().optional().display()
+    admin: z.boolean().optional()
 })
 
 export type GroupType = z.infer<typeof GroupSchema>;

@@ -226,7 +226,7 @@ export default {
           DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={(e) => { flashDevice(row.name, row.deviceDefinition); }}>Upload</ButtonSimple>)
         )}
         extraFieldsForms={{
-          deviceDefinition: z.union(extraData.deviceDefinitions.map(o => z.literal(o))).after('name').display(),
+          deviceDefinition: z.union(extraData.deviceDefinitions.map(o => z.literal(o))).after('name'),
         }}
         model={DevicesModel}
         pageState={pageState}

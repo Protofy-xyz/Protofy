@@ -31,7 +31,7 @@ export default {
             workspaces: z.array(z.union([
               z.literal(""),
               z.literal("")
-            ])).generateOptions(() => extraData.workspaces.map(o => o)).after('name').display(),
+            ])).generateOptions(() => extraData.workspaces.map(o => o)).after('name'),
           }}
           columns={DataTable2.columns(
             DataTable2.column("name", "name", true, undefined, true, '250px'),

@@ -4,7 +4,7 @@ import { Schema, ProtoModel } from 'protolib/base'
 import { SessionDataType } from "../../../api";
 
 export const TaskSchema = z.object(Protofy("schema", {
-    name: z.string().search().id().display().static(),
+    name: z.string().search().id().static(),
     path: z.string().generate(() => 'packages/app/bundles/custom/tasks/'),
     api: z.boolean().display(['add', 'edit']).generate(() => false),
     apiRoute: z.string().optional().display(['add', 'edit'])

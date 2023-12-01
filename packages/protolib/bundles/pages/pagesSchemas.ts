@@ -3,10 +3,10 @@ import { Schema, ProtoModel } from 'protolib/base'
 import { SessionDataType } from "../../api";
 
 export const PageSchema = Schema.object({
-    name: z.string().search().id().display(),
-    route: z.string().search().display(),
-    protected: z.boolean().display().generate(() => false).label("Require user"),
-    permissions: z.array(z.string()).label("Permissions").display().generate(() => []),
+    name: z.string().search().id(),
+    route: z.string().search(),
+    protected: z.boolean().generate(() => false).label("Require user"),
+    permissions: z.array(z.string()).label("Permissions").generate(() => []),
 }) 
 
 export type PageType = z.infer<typeof PageSchema>;

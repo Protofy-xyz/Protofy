@@ -10,7 +10,7 @@ export const DatabaseEntrySchema = Schema.object({
 })
 
 export const DatabaseSchema = Schema.object(Protofy("schema", {
-	name: z.string().id().search().display().static(),
+	name: z.string().id().search().static(),
 	entries: z.array(DatabaseEntrySchema).generate(()=>[])
 }))
 

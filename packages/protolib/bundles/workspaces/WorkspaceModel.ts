@@ -16,7 +16,7 @@ export type WorkspaceData = z.infer<typeof WorkspaceDataSchema>;
 export type WorkspaceResourceData = z.infer<typeof WorkspaceResourceSchema>;
 
 export const WorkspaceSchema = Schema.object({
-    name: z.string().search().id().display()
+    name: z.string().search().id()
 }) 
 
 export type WorkspaceType = z.infer<typeof WorkspaceSchema>;

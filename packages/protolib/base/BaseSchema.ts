@@ -7,6 +7,7 @@ interface ZodExtensions {
     label(caption: string): this;
     hint(hintText: string): this;
     display(views?: string[] | undefined): this;
+    hidden(): this;
     generate(val: any, force?:boolean): this;
     before(field: string): this;
     after(field: string): this;
@@ -84,6 +85,11 @@ function extendZodTypePrototype(type: any) {
         this._def.display = !views ? ['*'] : views;
         return this;
     };
+
+    type.prototype.hidden = function() {
+        this._def.display = ['none']
+        return this;
+    }
 
     type.prototype.generate = function (val, force?) {
         this._def.generate = { generator: val, force };
@@ -188,6 +194,6 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: Schema.string().generate(() => uuidv4()).id(),
-    _deleted: Schema.boolean().optional(),
+    id: Schema.string().generate(() => uuidv4()).id().hidden(),
+    _deleted: Schema.boolean().optional().hidden(),
 })

@@ -6,9 +6,9 @@ import {BaseSchema} from 'protolib/base'
 import { SessionDataType } from 'protolib/api/lib/session'
 
 export const BaseResourceSchema = Schema.object({
-    name: z.string().hint("catalog, tutorial, invoice...").search().display(),
-    description: z.string().display().search(),
-    url: z.string().label('url').hint('http://...').static().search().display(),
+    name: z.string().hint("catalog, tutorial, invoice...").search(),
+    description: z.string().search(),
+    url: z.string().label('url').hint('http://...').static().search(),
     type:  z.union([
         z.literal("text"),
         z.literal("video"),
@@ -16,8 +16,8 @@ export const BaseResourceSchema = Schema.object({
         z.literal("code"),
         z.literal("youtube"),
         z.literal("pdf"),
-    ]).search().display(),
-    tags: z.array(z.string()).search().display()
+    ]).search(),
+    tags: z.array(z.string()).search()
 
 })
 

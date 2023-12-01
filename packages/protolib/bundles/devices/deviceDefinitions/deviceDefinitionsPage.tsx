@@ -94,7 +94,7 @@ export default {
           DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={async (e) => { console.log("row from Edit: ", row); setIsSaveActive(false); setShowDialog(true); setSourceCode(row.config.components); }}>View</ButtonSimple>)
         )}
         extraFieldsForms={{
-          board: z.union(extraData.boards.map(o => z.literal(o.name))).after('name').display(),
+          board: z.union(extraData.boards.map(o => z.literal(o.name))).after('name'),
           sdk: z.union([
             z.literal("hola"),
             z.literal("adios")
@@ -105,7 +105,7 @@ export default {
               return cores.find(core => core.name === board.core).sdks
             }
             return []
-          }).after("name").display(),
+          }).after("name"),
         }}
         model={DeviceDefinitionModel}
         pageState={pageState}

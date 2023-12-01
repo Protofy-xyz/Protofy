@@ -68,10 +68,9 @@ export class ProtoSchema {
     }
 
     isDisplay(displayType) {
-        const displayFields = this.is('display')
         const validFields = {}
-        Object.keys(displayFields.shape).forEach(k => {
-            if(displayFields.shape[k]._def.display.includes('*') || displayFields.shape[k]._def.display.includes(displayType)) {
+        Object.keys(this.shape).forEach(k => {
+            if(!this.shape[k]._def.display || (this.shape[k]._def.display.includes('*')) || this.shape[k]._def.display.includes(displayType)) {
                 validFields[k] = this.shape[k]
             }
         })

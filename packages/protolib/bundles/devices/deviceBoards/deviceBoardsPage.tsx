@@ -27,7 +27,7 @@ export default {
           DataTable2.column("ports", "ports", true, (row) => <Chip text={Object.keys(row.ports).length} color={'$gray5'} />),
         )}
         extraFieldsForms={{
-          core: z.union(extraData.cores.map(o => z.literal(o))).after('name').display(),
+          core: z.union(extraData.cores.map(o => z.literal(o))).after('name'),
         }}
         model={DeviceBoardModel}
         pageState={pageState}

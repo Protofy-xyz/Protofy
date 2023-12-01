@@ -6,7 +6,7 @@ import { SessionDataType } from "../../api";
 
 export const BaseObjectSchema = z.object({
   id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Model'),
-  name: z.string().search().display().static(),
+  name: z.string().search().static(),
   api: z.boolean().optional(),
   keys: z.record(
     z.string().optional(),
@@ -45,9 +45,9 @@ export const BaseObjectSchema = z.object({
         params: z.array(z.string()).optional()
       }).name('name')).optional()
     }).name('name'))
-    .generate({}).display()
-  // data: z.string().search().display(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-  //from: z.string().search().display(), // system entity where the event was generated (next, api, cmd...)
+    .generate({})
+  // data: z.string().search(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+  //from: z.string().search(), // system entity where the event was generated (next, api, cmd...)
   //user: z.string().generate((obj) => 'me').search(), // the original user that generates the action, 'system' if the event originated in the system itself
 })
 

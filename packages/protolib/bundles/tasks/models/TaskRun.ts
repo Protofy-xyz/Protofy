@@ -6,8 +6,8 @@ import { SessionDataType } from 'protolib/api/lib/session'
 
 
 export const BaseTaskRunSchema = Schema.object(Protofy("schema", {
-    task: z.string().search().display(),
-    parameters: z.record(z.string()).display(), 
+    task: z.string().search(),
+    parameters: z.record(z.string()), 
     who: z.string().search(), 
     startDate: z.string().generate((obj) => moment().toISOString()).search(), 
     endDate: z.string().optional().search(), 
@@ -15,7 +15,7 @@ export const BaseTaskRunSchema = Schema.object(Protofy("schema", {
         z.literal("running"),
         z.literal("error"),
         z.literal("done"),
-    ]).display(),
+    ]),
     error: z.string().optional()
 }))
 

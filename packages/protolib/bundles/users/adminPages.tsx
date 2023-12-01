@@ -25,9 +25,9 @@ export default {
             usePrompt(() => `At this moment the user is browsing the user management page. The user management page allows to list, create, read, update and delete users and allows to reset the user passwords, chahing the user privileges (admin true/false) and chaing the user types.
             The zod schema for the user object is:
             export const UserSchema = Schema.object({
-                username: z.string().email().label('email').hint('user@example.com').static().id().search().display(),
-                type: z.string().min(1).hint('user, admin, ...').search().display().help("The type refers to a group name. Groups contains privileges (admin true/false) and workspaces."),
-                password: z.string().min(6).hint('**********').secret().onCreate('cypher').onUpdate('update').onRead('clearPassword').onList('clearPassword').display().help("Salted hashed password using bcrypt."),
+                username: z.string().email().label('email').hint('user@example.com').static().id().search(),
+                type: z.string().min(1).hint('user, admin, ...').search().help("The type refers to a group name. Groups contains privileges (admin true/false) and workspaces."),
+                password: z.string().min(6).hint('**********').secret().onCreate('cypher').onUpdate('update').onRead('clearPassword').onList('clearPassword').help("Salted hashed password using bcrypt."),
                 createdAt: z.string().min(1).generate((obj) => moment().toISOString()).search(),
                 lastLogin: z.string().optional().search(),
                 from: z.string().min(1).search().generate((obj) => 'admin').help("Interface used to create the user. Users can be created from command line or from the admin panel")
@@ -85,7 +85,7 @@ export default {
                         DataTable2.column("last login", "lastLogin", true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'never'} color={'$gray5'} />)
                     )}
                     extraFieldsForms={{
-                        repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret().display()
+                        repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()
                     }}
                     model={UserModel}
                     pageState={pageState}
