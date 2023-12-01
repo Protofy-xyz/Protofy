@@ -185,7 +185,7 @@ export function DataView({
         return parts.pop();
     }
 
-    const totalPages = Math.ceil(currentItems.data.total / currentItems.data.itemsPerPage);
+    const totalPages = Math.ceil(currentItems.data?.total / currentItems.data?.itemsPerPage);
 
     return (<YStack height="100%" f={1}>
         <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>

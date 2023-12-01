@@ -7,6 +7,7 @@ import { SiteConfig } from 'app/conf'
 import {devMode} from '../../base/env'
 import {getApiUrl} from 'protolib/base'
 import { useSession } from '../../lib/Session'
+import { useUpdateEffect } from 'usehooks-ts'
 
 const menuData = {}
 
@@ -29,6 +30,10 @@ const EnvironmentSelector = ({environments}) => {
     const [settings, setSettings] = useUserSettings()
     const [session, setSession] = useSession()
     
+    useUpdateEffect(() => {
+        document.location.reload()
+        //@ts-ignore
+    }, [session.environment])
     return settings.workspace?<SelectList 
         triggerProps={{o:0.8, bc:"transparent", bw: 0}}
         valueProps={{o:0.8}}

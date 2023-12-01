@@ -1,4 +1,4 @@
-export const SiteConfig = {
+const SiteConfig = {
     trackingID: 'G-XXXXXXXXXXXX',
     SSR: true, //Server-side rendering,
     environments: [
@@ -7,10 +7,11 @@ export const SiteConfig = {
             api: 'http://localhost:3001',
             adminApi: 'http://localhost:3002'
         },
-        {
-            name: 'production',
-            api: 'http://localhost:4001',
-            adminApi: 'http://localhost:4002'
-        }
+        // {
+        //     name: 'production',
+        //     api: 'http://localhost:4001',
+        //     adminApi: 'http://localhost:4002'
+        // }
     ]
 }
+export {SiteConfig}
