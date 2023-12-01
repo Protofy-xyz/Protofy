@@ -1,7 +1,7 @@
 import { Stack, Text, Input, Button, YStack } from '@my/ui';
 import { ChonkyIconName } from 'chonky';
 import { CopyBubble, NextLink, Center } from 'protolib';
-import { API } from '../../lib/Api';
+import { API } from '../../base/Api';
 import { useState } from 'react';
 
 const CreateComponent = ({ onCreate, buttonText, defaultInput="" }) => {

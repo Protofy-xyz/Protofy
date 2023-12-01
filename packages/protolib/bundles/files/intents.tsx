@@ -12,7 +12,7 @@ import { IntentType } from '../../lib/Intent'
 import Center from '../../components/Center'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react';
-import { API } from '../../lib/Api';
+import { API } from '../../base/Api';
 import { usePrompt, promptCmd } from '../../context/PromptAtom';
 import { useUpdateEffect } from 'usehooks-ts';
 

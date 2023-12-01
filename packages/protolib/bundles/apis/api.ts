@@ -1,8 +1,7 @@
 import { APIModel } from ".";
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot } from '../../api'
+import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
-import { ObjectLiteralExpression, PropertyAssignment, ArrayLiteralExpression } from 'ts-morph';
 import axios from 'axios';
 import { getServiceToken } from "../../api/lib/serviceToken";
 
@@ -47,6 +46,7 @@ const getDB = (path, req, session) => {
       if (exists) {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
+
         await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: value.name + '.ts',
           data: {

@@ -1,4 +1,4 @@
-import { API } from "./Api"
+import { API } from "../base/Api"
 import { RegisterSchema } from 'app/schema';
 import {getPendingResult} from 'protolib';
 import { z } from "protolib/base";

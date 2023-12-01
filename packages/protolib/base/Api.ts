@@ -1,13 +1,5 @@
 import { PendingResult, getPendingResult } from "../base/PendingResult";
 import {devMode} from './env'
-class ApiError extends Error {
-    apiError: any;
-
-    constructor(message: string, { data }: { data: any }) {
-        super(message);
-        this.apiError = data
-    }
-}
 
 const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult | undefined> => {
     const SERVER = process?.env?.API_URL ?? (devMode?'http://localhost:8080':'http://localhost:8000')

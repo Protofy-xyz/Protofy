@@ -38,9 +38,9 @@ import {
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getPendingResult } from '../../../lib/createApiAtom';
+import { getPendingResult } from '../../../base/PendingResult';
 import { AlertDialog } from '../../../components/AlertDialog';
-import { API } from '../../../lib/Api';
+import { API } from '../../../base/Api';
 import { Link } from '../../../components/Link';
 import { Tinted } from '../../../components/Tinted';
 import { PanelMenuItem } from '../../../components/PanelMenuItem';
