@@ -43,7 +43,8 @@
     "dashboard": "pm2 plus",
     "kill": "pm2 kill",
     "stop": "pm2 stop all",
-    "logs": "pm2 logs"
+    "logs": "pm2 logs",
+    "test:all": "yarn workspaces foreach run test"
   },
   "resolutions": {
     "react": "^18.2.0",
