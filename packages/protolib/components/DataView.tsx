@@ -344,7 +344,8 @@ export function DataView({
                                                 if (currentItems.data.page > 0) {
                                                     push("page", currentItems.data.page - 1);
                                                 }
-                                            }} ml={"$3"}></InteractiveIcon>
+                                            }} ml={"$3"}
+                                            disabled={!(currentItems.data.page > 0)}/>
                                         <Spacer size="$3" />
                                         <InteractiveIcon
                                             Icon={ChevronRight}
@@ -355,7 +356,7 @@ export function DataView({
                                                 }
                                             }}
                                             ml={"$3"}
-                                        ></InteractiveIcon>
+                                            disabled={!(currentItems.data.page < totalPages-1)}/>
                                     </Tinted>
                                 </XStack>
                             </XStack>}
