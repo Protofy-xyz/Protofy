@@ -7,7 +7,7 @@ import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from 'protolib/next'
 import React from 'react';
-import { getPendingResult } from '../lib/createApiAtom'
+import { getPendingResult } from '../base/PendingResult'
 import { DataTableList } from './DataTableList'
 import ActiveRender from "./ActiveRender"
 import { EditableObjectProps } from './EditableObject';
