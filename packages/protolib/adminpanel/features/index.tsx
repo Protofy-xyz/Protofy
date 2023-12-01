@@ -3,6 +3,9 @@ import { PanelLayout } from 'app/layout/PanelLayout'
 import { PanelMenu } from './components/PanelMenu'
 import { SelectList, useWorkspaces, useUserSettings } from 'protolib'
 import Workspaces from 'app/bundles/workspaces'
+import { SiteConfig } from 'app/conf'
+import {devMode} from '../../base/env'
+import {getApiUrl} from 'protolib/base'
 
 const menuData = {}
 
@@ -21,32 +24,39 @@ const WorkspaceSelector = () => {
     />:null
 }
 
-const EnvironmentSelector = () => {
-    const envs = ['local', 'remote']
+const EnvironmentSelector = ({environments}) => {
     const [settings, setSettings] = useUserSettings()
 
-    return <SelectList 
+    return settings.workspace?<SelectList 
         triggerProps={{o:0.8, bc:"transparent", bw: 0}}
         valueProps={{o:0.8}}
         f={1} 
         title={"Environments"}
-        value={settings.env ?? 'local'}
-        elements={envs}
+        value={settings.environment ?? environments[0].name}
+        elements={environments.map(e=>e.name)}
         setValue={(v) => {setSettings({...settings, environment:v})}}
-    />
+    />:null
 }
 
 
 
 export const AdminPanel = ({children }) => {
-    const [settings, setSettings] = useUserSettings()
+    const [settings] = useUserSettings()
     const userSpaces = useWorkspaces()
     const currentWorkspace = settings && settings.workspace? settings.workspace : userSpaces[0]
+    const environments = [{
+        name: devMode?'development':'production',
+        address: getApiUrl()
+    }, ...(SiteConfig.environments ?? [])].filter((obj, index, self) => {
+        return index === self.findIndex((t) => (
+            t.name === obj.name
+        ));
+    });
     
     // console.log('userSpaces: ', userSpaces, 'current Workspace: ', currentWorkspace)
     return (Workspaces[currentWorkspace] ? <PanelLayout topBar={<>
         <XStack $lg={{display:"none"}}>
-            {/* <XStack><EnvironmentSelector /></XStack> */}
+            {/* <XStack>{environments.length > 1 && <EnvironmentSelector environments={environments} />}</XStack> */}
             <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
         </XStack>
     </>} menuContent={<PanelMenu workspace={Workspaces[currentWorkspace]} />}>

@@ -14,7 +14,7 @@ export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
     clearSession(setSession, setSessionContext)
   }
 
-  const [settings, setSettings] = useUserSettings()
+  const [settings] = useUserSettings()
   const currentWorkspace = settings && settings.workspace? settings.workspace : userSpaces[0]
   //@ts-ignore
   const workspace = workspaces[currentWorkspace]
