@@ -14,6 +14,7 @@ import { EditableObjectProps } from './EditableObject';
 import { FileWidget } from '../adminpanel/features/components/FilesWidget';
 import { IconContainer } from './IconContainer';
 import { SearchContext } from '../context/SearchContext';
+import { InteractiveIcon } from './InteractiveIcon';
 
 type DataViewState = {
     items: PendingResult,
@@ -95,7 +96,7 @@ export function DataView({
     const { push, mergePush, removePush, replace } = usePageParams(state)
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
-    const {search, setSearch, setSearchName} = useContext(SearchContext)
+    const { search, setSearch, setSearchName } = useContext(SearchContext)
 
     useQueryState(setState)
 
@@ -118,7 +119,7 @@ export function DataView({
     }, [realTimeItems])
 
     useUpdateEffect(() => {
-        if(search) {
+        if (search) {
             push("search", search, false)
         } else {
             removePush("search")
@@ -318,7 +319,7 @@ export function DataView({
 
                 <XStack pt="$3" px="$7" mb="$1">
                     <XStack left={-12} f={1} ai="center">
-         
+
                         <Paragraph>
                             <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
                         </Paragraph>
@@ -328,13 +329,15 @@ export function DataView({
                     <XStack ai="center">
                         <XStack ai="center" ml="$3">
                             {currentItems.isLoaded && <XStack ml={"$2"}>
-                                <Paragraph>
-                                    <Text fontSize="$4" color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page)+1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page+1)))} of {currentItems.data.total}</Text>
-                                </Paragraph>
                                 <XStack ml={"$5"} ai="center">
-                                    <ChevronLeft size={20} strokeWidth={2} color="$color10" />
-                                    <Spacer size="$5" />
-                                    <ChevronRight size={20} strokeWidth={2} color="$color10" />
+                                    <XStack ml={"$5"} ai="center">
+                                        <Text fontSize={14} color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page) + 1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page + 1)))} of {currentItems.data.total}</Text>
+                                    </XStack>
+                                    <Tinted>
+                                        <InteractiveIcon Icon={ChevronLeft} onPress={(e) => { e.stopPropagation(); console.log("lol") }} ml={"$3"}></InteractiveIcon>
+                                        <Spacer size="$3" />
+                                        <InteractiveIcon Icon={ChevronRight} onPress={(e) => { e.stopPropagation(); console.log("lol") }} ml={"$3"}></InteractiveIcon>
+                                    </Tinted>
                                 </XStack>
                             </XStack>}
                         </XStack>
