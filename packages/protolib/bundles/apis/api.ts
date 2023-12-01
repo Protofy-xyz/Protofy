@@ -2,7 +2,6 @@ import { APIModel } from ".";
 import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
-import axios from 'axios';
 import {API} from 'protolib/base'
 import { getServiceToken } from "../../api/lib/serviceToken";
 
