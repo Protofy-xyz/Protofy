@@ -184,6 +184,9 @@ export function DataView({
         const parts = path.split('/');
         return parts.pop();
     }
+
+    const totalPages = Math.ceil(currentItems.data.total / currentItems.data.itemsPerPage);
+
     return (<YStack height="100%" f={1}>
         <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>
             <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
@@ -334,9 +337,25 @@ export function DataView({
                                         <Text fontSize={14} color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page) + 1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page + 1)))} of {currentItems.data.total}</Text>
                                     </XStack>
                                     <Tinted>
-                                        <InteractiveIcon Icon={ChevronLeft} onPress={(e) => { e.stopPropagation(); console.log("lol") }} ml={"$3"}></InteractiveIcon>
+                                        <InteractiveIcon
+                                            Icon={ChevronLeft}
+                                            onPress={(e) => {
+                                                e.stopPropagation();
+                                                if (currentItems.data.page > 0) {
+                                                    push("page", currentItems.data.page - 1);
+                                                }
+                                            }} ml={"$3"}></InteractiveIcon>
                                         <Spacer size="$3" />
-                                        <InteractiveIcon Icon={ChevronRight} onPress={(e) => { e.stopPropagation(); console.log("lol") }} ml={"$3"}></InteractiveIcon>
+                                        <InteractiveIcon
+                                            Icon={ChevronRight}
+                                            onPress={(e) => {
+                                                e.stopPropagation();
+                                                if (currentItems.data.page < totalPages-1) {
+                                                    push("page", currentItems.data.page + 1);
+                                                }
+                                            }}
+                                            ml={"$3"}
+                                        ></InteractiveIcon>
                                     </Tinted>
                                 </XStack>
                             </XStack>}
