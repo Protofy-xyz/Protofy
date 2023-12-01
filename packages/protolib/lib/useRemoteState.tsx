@@ -1,11 +1,10 @@
-import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { useSubscription } from 'mqtt-react-hooks';
-import { createApiAtom, API, usePendingEffect } from 'protolib';
-import { PendingAtomResult } from './createApiAtom';
+import { API, usePendingEffect } from 'protolib';
+import { PendingResult } from './createApiAtom';
 
 export const useRemoteStateList = (items, url, topic, model) => {
-    const [dataState, setDataState] = useState<PendingAtomResult | undefined>(items);
+    const [dataState, setDataState] = useState<PendingResult | undefined>(items);
 
     usePendingEffect((s) => API.get(url, s), setDataState, dataState)
 

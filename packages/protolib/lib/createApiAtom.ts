@@ -1,8 +1,8 @@
 import { atom } from "jotai";
 
-type PendingAtomStatus = "pending" | "loading" | "loaded" | "error"
-export type PendingAtomResult = {
-    status: PendingAtomStatus
+type PendingStatus = "pending" | "loading" | "loaded" | "error"
+export type PendingResult = {
+    status: PendingStatus
     error?: any,
     data: any
     isLoading: boolean,
@@ -11,7 +11,7 @@ export type PendingAtomResult = {
     isError: boolean
 }
 
-export const getPendingResult = (status:PendingAtomStatus, data?, error?):PendingAtomResult => {
+export const getPendingResult = (status:PendingStatus, data?, error?):PendingResult => {
     return {
         status: status,
         data: data,
@@ -23,4 +23,4 @@ export const getPendingResult = (status:PendingAtomStatus, data?, error?):Pendin
     }
 }
   
-export const createApiAtom = (initialState) => atom<PendingAtomResult>(getPendingResult("pending", initialState))
+export const createApiAtom = (initialState) => atom<PendingResult>(getPendingResult("pending", initialState))

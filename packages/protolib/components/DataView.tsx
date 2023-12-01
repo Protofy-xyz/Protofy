@@ -1,5 +1,5 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
-import { useRemoteStateList, ObjectGrid, DataTableCard, PendingAtomResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { useRemoteStateList, ObjectGrid, DataTableCard, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
@@ -16,7 +16,7 @@ import { IconContainer } from './IconContainer';
 import { SearchContext } from '../context/SearchContext';
 
 type DataViewState = {
-    items: PendingAtomResult,
+    items: PendingResult,
     model: any,
     selected: any[],
     setSelected: Function,
@@ -88,8 +88,8 @@ export function DataView({
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const [realTimeItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/' + (_plural) + "/#", model)
-    const [items, setItems] = useState<PendingAtomResult | undefined>(initialItems);
-    const [currentItems, setCurrentItems] = useState<PendingAtomResult | undefined>(initialItems)
+    const [items, setItems] = useState<PendingResult | undefined>(initialItems);
+    const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems)
     const [createOpen, setCreateOpen] = useState(false)
     const [state, setState] = useState(pageState)
     const { push, mergePush, removePush, replace } = usePageParams(state)
