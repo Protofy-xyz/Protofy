@@ -94,7 +94,9 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     create(data?): T {
-        return (new(this.constructor as new (data: any, session?: SessionDataType) => T)({...(this.getObjectSchema().applyGenerators(data?data:this.data))}, this.session)).validate();
+        const transformed = this.getData(data)
+        // console.log('Creating object: ', transformed)
+        return (new(this.constructor as new (data: any, session?: SessionDataType) => T)(transformed, this.session)).validate();
     }
 
     async createTransformed(transformers={}): Promise<T> {
@@ -166,8 +168,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         });
     }
 
-    getData(): any {
-        return this.data;
+    getData(data?): any {
+        return {...(this.getObjectSchema().applyGenerators(data??this.data))}
     }
 }
 
