@@ -110,7 +110,7 @@ export default {
             let options = {}
             const ObjectModel = currentElement?.data?.object ? Objects[currentElement?.data?.object] : null
             if (ObjectModel) {
-                options = Objects.patata.getApiOptions()
+                options = ObjectModel.getApiOptions()
             }
             //replace('editFile', '/packages/app/bundles/custom/apis/')
             return (<AdminPage title="APIs" pageSession={pageSession}>
