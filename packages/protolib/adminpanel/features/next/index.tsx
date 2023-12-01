@@ -34,7 +34,6 @@ export function PaginatedDataSSR(sourceUrl: string|Function, allowdUserTypes?:st
       sourceUrl: _sourceUrl,
       initialItems: await API.get({url: getURLWithToken(_sourceUrl, context), ..._dataProps}),
       itemData: context.query.item ? await API.get(getURLWithToken(_sourceUrl+'/'+context.query.item, context)) : '',
-      route: context.query.name,
       extraData: {...(typeof extraData === "function"? await extraData(context) : extraData)},
       pageState: {
         ..._dataProps,
