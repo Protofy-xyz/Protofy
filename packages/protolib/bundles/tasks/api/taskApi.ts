@@ -1,16 +1,11 @@
-import { TaskRunModel } from "../models/TaskRun";
-import { Tasks } from 'app/bundles/tasks'
 import { connectDB, handler } from "protolib/api";
-import { v4 as uuidv4 } from 'uuid';
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI, getRoot } from '../../../api'
+import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI, getRoot } from '../../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
-import { ArrayLiteralExpression } from 'ts-morph';
-import axios from 'axios';
 import { TaskModel } from "../models/Task";
-import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { runTask } from "./taskRunApi";
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import {API} from 'protolib/base'
 
 const dbPath = '../../data/databases/tasks'
 
@@ -19,8 +14,8 @@ export const TaskApi = (app, mqtt) => {
 
   const addExtraData = async (session, element) => {
     return {
-      history: (await axios.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&search=task:'+element.getId())).data,
-      running: (await axios.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&all=1&search=task:'+element.getId()+' status:running')).data
+      history: (await API.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&search=task:'+element.getId())).data,
+      running: (await API.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&all=1&search=task:'+element.getId()+' status:running')).data
     }
   }
 
@@ -109,13 +104,17 @@ const getDB = (path, req, session) => {
       if (exists) {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
-        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: value.name + '.ts',
           data: {
             options: { template: '/packages/protolib/bundles/tasks/templateTask.tpl', variables: {} },
             path: '/packages/app/bundles/custom/tasks'
           }
         })
+
+        if(result.isError) {
+          throw result.error
+        }
       }
 
       //sync api
@@ -145,13 +144,16 @@ const getDB = (path, req, session) => {
         }
       } else {
         if (value.api) {
-          await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+          const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
             name: value.name + 'TaskApi.ts',
             data: {
               options: { template: '/packages/protolib/bundles/tasks/templateTaskApi.tpl', variables: { apiRoute: value.apiRoute, name: value.name, capitalizedName: capitalizedName } },
               path: '/packages/app/bundles/custom/apis'
             }
           })
+          if(result.isError) {
+            throw result.error
+          }
         }
       }
 

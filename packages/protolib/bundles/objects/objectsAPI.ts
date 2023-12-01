@@ -3,8 +3,8 @@ import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSour
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
-import axios from 'axios';
 import {getServiceToken} from 'protolib/api/lib/serviceToken'
+import {API} from 'protolib/base'
 
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
 const apiDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
@@ -113,13 +113,17 @@ const getDB = (path, req, session) => {
       if (exists) {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
-        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
+        const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
           name: value.name + '.ts',
           data: {
             options: { template: '/packages/protolib/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },
             path: '/packages/app/bundles/custom/objects'
           }
         })
+        
+        if(result.isError) {
+          throw result.error
+        }
       }
 
       const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {

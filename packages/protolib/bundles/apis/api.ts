@@ -2,7 +2,7 @@ import { APIModel } from ".";
 import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
-import axios from 'axios';
+import {API} from 'protolib/base'
 import { getServiceToken } from "../../api/lib/serviceToken";
 
 const APIDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
@@ -46,14 +46,17 @@ const getDB = (path, req, session) => {
       if (exists) {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
-
-        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: value.name + '.ts',
           data: {
             options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object } },
             path: '/packages/app/bundles/custom/apis'
           }
         })
+
+        if(result.isError) {
+          throw result.error
+        }
       }
 
       //link in index.ts

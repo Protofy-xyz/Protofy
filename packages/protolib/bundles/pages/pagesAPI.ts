@@ -3,8 +3,8 @@ import { CreateApi, getSourceFile, addImportToSourceFile, ImportType, addObjectL
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
-import axios from 'axios';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import {API} from 'protolib/base'
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
@@ -60,7 +60,7 @@ const getDB = (path, req, session) => {
       } catch (error) {
         // console.log('permissions: ', value.permissions ? JSON.stringify(value.permissions) : '[]', value.permissions)
         // console.log('executing template: ', `/packages/protolib/bundles/pages/templates/${template}.tpl`)
-        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: fspath.basename(value.name + '.tsx'),
           data: {
             options: {
@@ -77,6 +77,9 @@ const getDB = (path, req, session) => {
             path: pagesDir(getRoot(req))
           }
         })
+        if(result.isError) {
+          throw result.error
+        }
       }
       
       let sourceFile = getSourceFile(filePath)
@@ -112,7 +115,7 @@ const getDB = (path, req, session) => {
         // console.log('File: ' + filePath + ' already exists, not executing template')
       } catch (error) {
         //page does not exist, create it
-        await axios.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: fspath.basename(value.route + '.tsx'),
           data: {
             options: {
@@ -125,6 +128,9 @@ const getDB = (path, req, session) => {
             path: nextPagesDir(getRoot(req))
           }
         })
+        if(result.isError) {
+          throw result.error
+        }
       }
     },
 
