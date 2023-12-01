@@ -8576,7 +8576,6 @@ __metadata:
     "@types/bcrypt": ^5.0.0
     "@types/express": ^4.17.17
     "@types/node": 20.6.0
-    axios: 1.6.0
     cookie-parser: ^1.4.6
     dotenv: ^16.3.1
     express: ^4.18.2
@@ -8885,7 +8884,6 @@ __metadata:
     "@types/express": ^4.17.17
     "@types/node": 20.6.0
     aedes: ^0.50.0
-    axios: 1.6.0
     bcrypt: ^5.1.1
     cookie-parser: ^1.4.6
     dotenv: ^16.3.1
@@ -9361,17 +9359,6 @@ __metadata:
   version: 4.7.0
   resolution: "axe-core@npm:4.7.0"
   checksum: f086bcab42be1761ba2b0b127dec350087f4c3a853bba8dd58f69d898cefaac31a1561da23146f6f3c07954c76171d1f2ce460e555e052d2b02cd79af628fa4a
-  languageName: node
-  linkType: hard
-
-"axios@npm:1.6.0":
-  version: 1.6.0
-  resolution: "axios@npm:1.6.0"
-  dependencies:
-    follow-redirects: ^1.15.0
-    form-data: ^4.0.0
-    proxy-from-env: ^1.1.0
-  checksum: c7c9f2ae9e0b9bad7d6f9a4dff030930b12ee667dedf54c3c776714f91681feb743c509ac0796ae5c01e12c4ab4a2bee74905068dd200fbc1ab86f9814578fb0
   languageName: node
   linkType: hard
 
@@ -14506,7 +14493,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.15.0":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0":
   version: 1.15.3
   resolution: "follow-redirects@npm:1.15.3"
   peerDependenciesMeta:
@@ -14564,17 +14551,6 @@ __metadata:
     combined-stream: ^1.0.8
     mime-types: ^2.1.12
   checksum: b019e8d35c8afc14a2bd8a7a92fa4f525a4726b6d5a9740e8d2623c30e308fbb58dc8469f90415a856698933c8479b01646a9dff33c87cc4e76d72aedbbf860d
-  languageName: node
-  linkType: hard
-
-"form-data@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "form-data@npm:4.0.0"
-  dependencies:
-    asynckit: ^0.4.0
-    combined-stream: ^1.0.8
-    mime-types: ^2.1.12
-  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
   languageName: node
   linkType: hard
 
@@ -21770,7 +21746,6 @@ __metadata:
     "@tamagui/font-silkscreen": latest
     "@types/react": ^18.0.27
     "@types/react-native": ^0.71.3
-    axios: 1.6.0
     cookie: ^0.6.0
     jotai: ^2.4.2
     jsonwebtoken: ^9.0.2
