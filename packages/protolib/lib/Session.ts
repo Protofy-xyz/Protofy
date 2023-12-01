@@ -133,6 +133,6 @@ export const getURLWithToken = (url, context:NextPageContext) => {
     }
   
     const finalUrl = url + (session && session.token ? (url.includes('?') ? '&':'?')+'token='+session.token+__env : '')
-    console.log('final URL: ', finalUrl)
+    // console.log('final URL: ', finalUrl)
     return finalUrl
   }
