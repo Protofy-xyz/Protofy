@@ -20,14 +20,3 @@ export const useAnalytics = (trackingID) => {
     return () => Router.events.off('routeChangeComplete', handleRouteChange)
   }, [])
 }
-
-export function renderSnippet(trackingID) {
-  if (process.env.NODE_ENV === 'production') {
-    return `
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '${trackingID}');
-    `
-  }
-}
