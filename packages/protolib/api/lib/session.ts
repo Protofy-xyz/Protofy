@@ -31,6 +31,7 @@ export type validatedUserData = userData & {
 }
 
 export type SessionDataType = {
+    environment?: any;
     user: userData,
     loggedIn: boolean,
     token?: string    

@@ -1,7 +1,6 @@
 
 import { AdminPage } from 'protolib/adminpanel/features/next'
-import { SSR } from 'app/conf'
-import { withSession, ObjectGrid, Tinted, useTint, Chip, JSONViewer, Center } from 'protolib'
+import { withSession, ObjectGrid, Tinted, useTint, Chip, JSONViewer, Center, SSR } from 'protolib'
 import { useSubscription } from 'mqtt-react-hooks';
 import { H2, Spacer, XStack, YStack, Text, Paragraph, Spinner } from '@my/ui';
 import { useState } from 'react';

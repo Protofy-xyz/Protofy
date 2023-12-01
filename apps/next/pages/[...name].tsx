@@ -1,6 +1,5 @@
-import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
-import { useSession, withSession } from 'protolib'
+import { useSession, withSession, SSR } from 'protolib'
 import Custom404 from './404'
 import { useRouter } from 'next/router'
 import nextPages from 'app/bundles/nextPages'

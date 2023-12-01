@@ -1,8 +1,7 @@
 import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { DatabaseEntryModel, DatabaseModel } from '.'
-import { DataView, DataTable2, Chip, API, withSession, getPendingResult } from 'protolib'
+import { DataView, DataTable2, Chip, API, withSession, getPendingResult, SSR } from 'protolib'
 import { useRouter } from "next/router"
-import { SSR } from 'app/conf'
 import DBAdmin from './components/db'
 import { Paragraph, XStack, YStack } from '@my/ui'
 import { Tinted } from '../../components/Tinted'

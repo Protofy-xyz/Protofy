@@ -1,6 +1,5 @@
-import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
-import { API, withSession, Center, getURLWithToken } from 'protolib'
+import { API, withSession, Center, getURLWithToken, SSR } from 'protolib'
 import dynamic from 'next/dynamic'
 import { Spinner } from 'tamagui'
 import { Tinted } from '../../components/Tinted'

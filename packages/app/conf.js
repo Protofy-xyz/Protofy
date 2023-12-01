@@ -4,14 +4,13 @@ export const SiteConfig = {
     environments: [
         {
             name: 'development',
-            address: 'http://localhost:8080'
+            api: 'http://localhost:3001',
+            adminApi: 'http://localhost:3002'
         },
         {
             name: 'production',
-            address: 'http://localhost:8000'
+            api: 'http://localhost:4001',
+            adminApi: 'http://localhost:4002'
         }
     ]
 }
-
-//helper function for pages
-export const SSR = (fn:any) => SiteConfig.SSR ? fn : () => {return {props:{}}}

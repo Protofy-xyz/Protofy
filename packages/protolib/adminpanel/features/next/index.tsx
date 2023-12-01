@@ -1,7 +1,6 @@
 export * from './AdminPage'
-import {SSR as _SSR} from 'app/conf' 
 import { NextPageContext } from 'next'
-import { API, withSession, getURLWithToken } from 'protolib'
+import { API, withSession, getURLWithToken, SSR as _SSR } from 'protolib'
 import { parse } from 'cookie';
 
 export function DataSSR(sourceUrl, allowdUserTypes?:string[]|any[]|null, props={}) {

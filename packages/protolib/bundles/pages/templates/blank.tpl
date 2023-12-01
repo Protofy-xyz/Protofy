@@ -6,10 +6,9 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 */
 
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "@my/ui"
-import { BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API} from "protolib"
+import { BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API, SSR} from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
-import { SSR } from 'app/conf'
 
 const isProtected = Protofy("protected", {{protected}})
 

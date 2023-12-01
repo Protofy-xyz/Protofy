@@ -18,6 +18,7 @@ export const Session = atom(
         set(SessionData, data);
     }
 );
+
 const initialContext = {group: {workspaces:[]}}
 export const SessionContext = atom(initialContext)
 

@@ -9,10 +9,9 @@ Don't modify export default object
 */
 
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "@my/ui"
-import { BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API, Tinted } from "protolib"
+import { BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API, Tinted, SSR } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
-import { SSR } from 'app/conf'
 
 const isProtected = Protofy("protected", {{protected}})
 

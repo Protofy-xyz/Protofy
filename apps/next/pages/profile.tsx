@@ -1,8 +1,7 @@
 import { Profile } from 'app/features/profile'
 import Head from 'next/head'
-import { SSR } from 'app/conf'
 import { NextPageContext } from 'next'
-import { useSession, withSession } from 'protolib'
+import { useSession, withSession, SSR} from 'protolib'
 
 export default function ProfilePage(props:any) {
   useSession(props.pageSession)
