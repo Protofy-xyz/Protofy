@@ -36,7 +36,7 @@ export default {
                     )}
                     extraFieldsFormsAdd={{
                         template: z.union([z.literal("blank"), z.literal("default"), z.literal("admin")]).after("route"),
-                        object: z.union([z.literal("without object"), ...extraData.objects.filter(o => o.api).map(o => z.literal(o.name))] as any).after('route'),
+                        object: z.union([z.literal("without object"), ...extraData.objects.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name))] as any).after('route'),
                     }}
                     extraMenuActions={[
                         {

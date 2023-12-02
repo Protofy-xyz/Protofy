@@ -64,14 +64,13 @@ const getSchema = async (idSchema, schemas, req, name?) => {
   const featuresNode = getDefinition(sourceFile, '"features"')
   let features = {}
   if (featuresNode instanceof ObjectLiteralExpression) {
-    console.log('features', )
+    console.log('features', featuresNode.getText())
     try {
       features = JSON.parse(featuresNode.getText())
     } catch(e) {
       console.error("Ignoring features in object: ", idSchema, "because of an error: ", e)
       console.error("Features text producing the error: ", featuresNode.getText())
     }
-    //features = featuresNode.getProperties().map(f => f)
   }
   return { name: schemaName, features: features, id: idSchema, keys: keys }
 }

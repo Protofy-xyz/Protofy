@@ -61,19 +61,21 @@ const getDB = (path, req, session) => {
       }
 
       //add autoapi feature in object if needed
-      if(value.object && template.startsWith("Automatic CRUD") && Objects[value.object]) {
+      if(value.object && template.startsWith("Automatic CRUD")) {
+        console.log('Adding feature AutoAPI to object: ', value.object)
         const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
         let sourceFile = getSourceFile(objectPath)
         let arg = getDefinition(sourceFile, '"features"')
         if(arg) {
+          console.log('Marker found, writing object')
           arg.addPropertyAssignment({
-            name: "AutoAPI",
+            name: '"AutoAPI"',
             initializer: "true" // Puede ser un string, número, otro objeto, etc.
           });
 
           await sourceFile.save()
         } else {
-          console.error("Not adding api feature to object: ", value.name, "because of missing features marker")
+          console.error("Not adding api feature to object: ", value.object, "because of missing features marker")
         }
       }
       //link in index.ts
