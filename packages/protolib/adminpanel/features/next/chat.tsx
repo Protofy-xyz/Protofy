@@ -195,7 +195,8 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
             fileInput.click();
         });
 
-        ReactDOM.render(<Paperclip size={24} className="rcw-picker-icon"/>, iconContainer);
+        const root = ReactDOM.createRoot(iconContainer);
+        root.render(<Paperclip size={24} className="rcw-picker-icon" />);
 
         var oldElement = chatContainer.current.getElementsByClassName('rcw-picker-btn')[0];
         if (oldElement) {
