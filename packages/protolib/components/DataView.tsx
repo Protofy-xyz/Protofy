@@ -191,7 +191,6 @@ export function DataView({
         }
     ]
 
-    console.log('current page: ', currentItems)
     const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))
 
     const activeViewIndex = tableViews.findIndex(v => v.name == state.view) != -1 ? tableViews.findIndex(v => v.name == state.view) : tableViews.findIndex(v => v.name == defaultView)
