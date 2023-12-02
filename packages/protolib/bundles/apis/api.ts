@@ -4,6 +4,7 @@ import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import {API} from 'protolib/base'
 import { getServiceToken } from "../../api/lib/serviceToken";
+import {Objects} from "app/bundles/objects";
 
 const APIDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
 const indexFile = (root) => APIDir(root) + "index.ts"
@@ -59,6 +60,22 @@ const getDB = (path, req, session) => {
         }
       }
 
+      //add autoapi feature in object if needed
+      if(value.object && template.startsWith("Automatic CRUD") && Objects[value.object]) {
+        const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
+        let sourceFile = getSourceFile(objectPath)
+        let arg = getDefinition(sourceFile, '"features"')
+        if(arg) {
+          arg.addPropertyAssignment({
+            name: "AutoAPI",
+            initializer: "true" // Puede ser un string, número, otro objeto, etc.
+          });
+
+          await sourceFile.save()
+        } else {
+          console.error("Not adding api feature to object: ", value.name, "because of missing features marker")
+        }
+      }
       //link in index.ts
       const sourceFile = getSourceFile(indexFile(getRoot(req)))
       addImportToSourceFile(sourceFile, value.name + 'Api', ImportType.DEFAULT, './' + value.name)
