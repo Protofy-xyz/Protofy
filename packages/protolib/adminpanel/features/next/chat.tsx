@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Tinted, API, PromptAtom, PromptResponseAtom } from 'protolib';
 import { useTimeout, useWindowSize, useClickAnyWhere } from 'usehooks-ts';
 import { Paperclip } from 'lucide-react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { useAtom } from 'jotai';
 import { Button } from '@my/ui';
 
@@ -204,7 +204,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
         }
 
         return () => {
-            ReactDOM.unmountComponentAtNode(iconContainer);
+            root.unmount();
         };
     }, [chatContainer?.current?.isOpen, isChatOpen]);
 
