@@ -86,7 +86,8 @@ export function DataView({
     extraMenuActions = [],
     integratedChat = false,
     objectProps = {},
-    disableRealTimeUpdates = false
+    disableRealTimeUpdates = false,
+    refreshOnHotReload = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     
@@ -106,6 +107,18 @@ export function DataView({
         const data = await API.get({ url: sourceUrl, ...state })
         setItems(data)
     }
+
+    useEffect(() => {
+        if (refreshOnHotReload && process.env.NODE_ENV === 'development' && module['hot']) {
+          module['hot'].addStatusHandler(status => {
+            if (status === 'ready') {
+                document.location.reload()
+            }
+          });
+        }
+      }, []);
+
+
 
     // usePendingEffect((s) => { API.get({ url: sourceUrl, ...pageState }, s) }, setItems, initialItems)
 

@@ -188,6 +188,7 @@ export default {
                     </ScrollView>
                 </AlertDialog>
                 <DataView
+                    refreshOnHotReload
                     integratedChat
                     onSelectItem={(item) => replace('editFile', '/packages/app/bundles/custom/apis/' + item.data.name + '.ts')}
                     rowIcon={ToyBrick}
