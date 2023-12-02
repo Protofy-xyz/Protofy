@@ -7,7 +7,6 @@ import {getServiceToken} from 'protolib/api/lib/serviceToken'
 import {API} from 'protolib/base'
 
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
-const apiDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
 
 const getSchemas = async (req, sourceFile?) => {
   const node = getDefinition(
@@ -16,33 +15,30 @@ const getSchemas = async (req, sourceFile?) => {
   );
 
   if (node) {
-    const schemas = [];
     if (node instanceof ObjectLiteralExpression) {
-      for (const prop of node.getProperties()) {
+      const schemaPromises = node.getProperties().map(prop => {
         if (prop instanceof PropertyAssignment) {
           const schemaId = prop.getInitializer().getText();
-          const apiPath = fspath.join(apiDir(getRoot(req)), prop.getName() + '.ts')
-          let hasApi;
-          try {
-            await fs.access(apiPath, fs.constants.F_OK)
-            hasApi = true
-          } catch (error) {
-            hasApi = false
-          }
-          schemas.push({ name: prop.getName(), api: hasApi, id: schemaId });
+          return getSchema(schemaId, [], req, prop.getName()).then(schema => ({
+            name: prop.getName(), 
+            features: schema.features, 
+            id: schemaId 
+          }));
         }
-      }
+      }).filter(p => p);
+
+      const schemas = await Promise.all(schemaPromises);
+      return schemas;
     }
-    return schemas;
   }
   return [];
 }
 
-const getSchema = async (idSchema, schemas, req) => {
+const getSchema = async (idSchema, schemas, req, name?) => {
   let SchemaFile = fspath.join(getRoot(req), indexFile)
   let sourceFile = getSourceFile(SchemaFile)
 
-  const currentSchema = schemas.find(s => s.id == idSchema)
+  const schemaName = name ?? schemas.find(s => s.id == idSchema)?.name
 
   sourceFile = getSourceFile(fspath.join("../../packages/app/bundles/custom/objects/", getImport(sourceFile, idSchema)) + ".ts")
   const node = getDefinition(sourceFile, '"schema"')
@@ -65,7 +61,19 @@ const getSchema = async (idSchema, schemas, req) => {
       });
     }
   }
-  return { name: currentSchema.name, api: currentSchema.api, id: idSchema, keys: keys }
+  const featuresNode = getDefinition(sourceFile, '"features"')
+  let features = {}
+  if (featuresNode instanceof ObjectLiteralExpression) {
+    console.log('features', )
+    try {
+      features = JSON.parse(featuresNode.getText())
+    } catch(e) {
+      console.error("Ignoring features in object: ", idSchema, "because of an error: ", e)
+      console.error("Features text producing the error: ", featuresNode.getText())
+    }
+    //features = featuresNode.getProperties().map(f => f)
+  }
+  return { name: schemaName, features: features, id: idSchema, keys: keys }
 }
 
 const setSchema = (path, content, value, req) => {

@@ -7,7 +7,7 @@ import { SessionDataType } from "../../api";
 export const BaseObjectSchema = z.object({
   id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Model').hidden(),
   name: z.string().search().static(),
-  api: z.boolean().optional().hidden(),
+  features: z.any().generate({}, true).hidden(),
   keys: z.record(
     z.string().optional(),
     z.object({
@@ -60,10 +60,6 @@ export type ObjectType = z.infer<typeof ObjectSchema>;
 export class ObjectModel extends ProtoModel<ObjectModel> {
   constructor(data: ObjectType, session?: SessionDataType) {
     super(data, ObjectSchema, session);
-  }
-
-  getDefaultAPIFilePath() {
-    return '/packages/app/bundles/custom/apis/' + this.data.name + '.ts'
   }
 
   getDefaultSchemaFilePath() {

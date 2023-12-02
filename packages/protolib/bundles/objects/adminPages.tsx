@@ -23,7 +23,7 @@ export default {
                     name="object"
                     columns={DataTable2.columns(
                         DataTable2.column("name", "name", true),
-                        DataTable2.column("api", "api", true, row => !row.api ? <Chip text={'no'} color={'$gray5'} />: <Chip text={'yes'} color={'$color5'} />),
+                        DataTable2.column("features", "features", true, row => Object.keys(row.features).map(f => <Chip text={f} color={'$gray5'} />)),
                     )}
                     // hideAdd={true}
                     model={ObjectModel} 
