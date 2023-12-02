@@ -12,9 +12,6 @@
   <a href="https://discord.gg/VpeZxMFfYW">
     <img src="https://img.shields.io/badge/discord-7289da.svg?style=flat&logo=discord" alt="discord" style="height: 20px;">
   </a>
-  <a href="https://www.youtube.com/channel/UCmA8ZqKbySDRSVFPBrAAQ-g">
-    <img src="https://img.shields.io/badge/youtube-d95652.svg?style=flat&logo=youtube" alt="youtube" style="height: 20px;">
-  </a>
 </h4>
 
 <p align="center">AI Supercharged LowCode Platform CMS and Framework</p>
