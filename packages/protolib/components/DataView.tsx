@@ -85,7 +85,8 @@ export function DataView({
     onAddButton = undefined,
     extraMenuActions = [],
     integratedChat = false,
-    objectProps = {}
+    objectProps = {},
+    disableRealTimeUpdates = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const [realTimeItems] = useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/' + (_plural) + "/#", model)
@@ -114,6 +115,11 @@ export function DataView({
     }, [items])
 
     useUpdateEffect(() => {
+        if(disableRealTimeUpdates) {
+            console.log('Ignoring remotes changes, realtime updates are disabled')
+            return
+        }
+
         console.log('remote changes received from mqtt, refetch')
         fetch()
     }, [realTimeItems])
