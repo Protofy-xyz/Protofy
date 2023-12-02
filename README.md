@@ -36,6 +36,9 @@ https://github.com/Protofy-xyz/Protofy/assets/5052882/4b7da628-a55e-4904-81c3-6a
 
 Get help and code from integrated ChatGPT with autmatic context transfer
 
+## 👨‍💻 Extentable and developer friendly CMS
+
+https://github.com/Protofy-xyz/Protofy/assets/5052882/e5c3f0fa-5b76-4c8e-bb4f-6a2c588ec53c
 
 ## 📦 Included packages
 
