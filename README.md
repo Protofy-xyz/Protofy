@@ -46,9 +46,13 @@ Get help and code from integrated ChatGPT with autmatic context transfer
 
 Edit any Javascript or typescript code using visual programming or traditional code
 
-## 📦 Included packages
+## 🧰 Connected devices (IoT) support for ESP32 based on ESPHome 
 
 ![devices-package](https://github.com/Protofy-xyz/Protofy/blob/assets/device/device-1.gif?raw=true)
+
+Program, deploy and manage connected devices and IoT networks visually, in minutes. 
+
+## 📦 Included packages
 
 - `Protoflow` LowCode interactive diagram system for Javascript and Typescript
 - `VisualUI` What you see is what you get (wysiwyg) for react, like FlutterFlow but for react
