@@ -14,8 +14,8 @@ export const TaskApi = (app, mqtt) => {
 
   const addExtraData = async (session, element) => {
     return {
-      history: (await API.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&search=task:'+element.getId())).data,
-      running: (await API.get('http://localhost:8080/adminapi/v1/taskruns?token='+session.token+'&all=1&search=task:'+element.getId()+' status:running')).data
+      history: (await API.get('/adminapi/v1/taskruns?token='+session.token+'&search=task:'+element.getId())).data,
+      running: (await API.get('/adminapi/v1/taskruns?token='+session.token+'&all=1&search=task:'+element.getId()+' status:running')).data
     }
   }
 
@@ -104,7 +104,7 @@ const getDB = (path, req, session) => {
       if (exists) {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
-        const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: value.name + '.ts',
           data: {
             options: { template: '/packages/protolib/bundles/tasks/templateTask.tpl', variables: {} },
@@ -144,7 +144,7 @@ const getDB = (path, req, session) => {
         }
       } else {
         if (value.api) {
-          const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+          const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
             name: value.name + 'TaskApi.ts',
             data: {
               options: { template: '/packages/protolib/bundles/tasks/templateTaskApi.tpl', variables: { apiRoute: value.apiRoute, name: value.name, capitalizedName: capitalizedName } },

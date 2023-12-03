@@ -120,7 +120,7 @@ const getDB = (path, req, session) => {
       if (exists) {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
-        const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token='+getServiceToken(), {
+        const result = await API.post('/adminapi/v1/templates/file?token='+getServiceToken(), {
           name: value.name + '.ts',
           data: {
             options: { template: '/packages/protolib/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },

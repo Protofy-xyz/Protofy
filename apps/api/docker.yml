@@ -3,5 +3,7 @@ services:
     container_name: 'api'
     image: "protofy/workspace"
     entrypoint: "yarn api-prod"
+    environment:
+      - MQTT_URL=mqtt://admin-api:8883
     volumes:
-      - ./data:/workspace/data
+      - ../../data:/workspace/data

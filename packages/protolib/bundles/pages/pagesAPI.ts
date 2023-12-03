@@ -60,7 +60,7 @@ const getDB = (path, req, session) => {
       } catch (error) {
         // console.log('permissions: ', value.permissions ? JSON.stringify(value.permissions) : '[]', value.permissions)
         // console.log('executing template: ', `/packages/protolib/bundles/pages/templates/${template}.tpl`)
-        const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: fspath.basename(value.name + '.tsx'),
           data: {
             options: {
@@ -115,7 +115,7 @@ const getDB = (path, req, session) => {
         // console.log('File: ' + filePath + ' already exists, not executing template')
       } catch (error) {
         //page does not exist, create it
-        const result = await API.post('http://localhost:8080/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: fspath.basename(value.route + '.tsx'),
           data: {
             options: {

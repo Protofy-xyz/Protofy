@@ -2,9 +2,12 @@ services:
   proxy:
     container_name: 'proxy'
     image: "protofy/workspace"
-    entrypoint: "yarn proxy"
+    entrypoint: "yarn proxy-prod"
     ports:
-      - 8888:8080
+      - 8080:8080
     environment:
+      - ADMIN_API_URL=http://admin-api:3002
       - API_URL=http://api:3001
       - SITE_URL=http://site:3000
+    volumes:
+      - ../../data:/workspace/data

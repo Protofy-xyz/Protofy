@@ -1,0 +1,12 @@
+version: '3'
+services:
+  builder:
+    image: "protofy/workspace"
+    container_name: builder
+    entrypoint: "sh -c 'yarn && yarn build'"
+    volumes:
+      - ./:/workspace
+      - node_modules:/workspace/node_modules
+
+volumes:
+  node_modules:

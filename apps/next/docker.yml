@@ -1,0 +1,9 @@
+services:
+  site:
+    container_name: 'site'
+    image: "protofy/workspace"
+    entrypoint: "yarn web"
+    ports:
+      - 3000:3000
+    volumes:
+      - ../../data:/workspace/data

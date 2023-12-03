@@ -1,4 +1,8 @@
 services:
   proxy:
+    entrypoint: "yarn proxy-dev"
     volumes:
-      - ./:/workspace
+      - ../../:/workspace
+      - node_modules:/workspace/node_modules
+volumes:
+  node_modules:

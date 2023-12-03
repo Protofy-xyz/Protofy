@@ -3,5 +3,11 @@ services:
     ports:
       - 3001:3001
     entrypoint: "yarn api-dev"
+    environment:
+      - MQTT_URL=mqtt://admin-api:1883
+      - API_URL=http://proxy:8080
     volumes:
-      - ./:/workspace
+      - ../../:/workspace
+      - node_modules:/workspace/node_modules
+volumes:
+  node_modules:
