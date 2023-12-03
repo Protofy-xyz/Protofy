@@ -1,5 +1,7 @@
 services:
   api:
+    depends_on: 
+      - admin-api
     container_name: 'api'
     image: "protofy/workspace"
     entrypoint: "yarn api-prod"
