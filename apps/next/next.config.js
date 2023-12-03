@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const { withTamagui } = require('@tamagui/next-plugin')
 const { join } = require('path')
+const webpack = require('webpack');
 
 const boolVals = {
   true: true,
@@ -51,6 +52,23 @@ module.exports = function () {
     experimental: {
       scrollRestoration: true,
     },
+    webpack: (config, options) => {
+      config.plugins.push(
+        new webpack.IgnorePlugin({
+          resourceRegExp: /^perf_hooks$/,
+        })
+      );
+  
+      if (!options.isServer) {
+        config.ignoreWarnings = [
+          /critical dependency:/i,
+          /perf_hooks/i,
+          /can't resolve 'perf_hooks'/i
+        ];
+      }
+  
+      return config;
+    }
   }
 
   for (const plugin of plugins) {
