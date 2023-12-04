@@ -137,7 +137,7 @@ function SignIn() {
           <Paragraph theme="alt2" ta="center" size="$2">
             Don't have an account?
             {` `}
-            <Link id="sign-up-btn" href={"/auth/register"+(router.query.return?"?return="+router.query.return:'')} style={{ fontWeight: '800' }}>
+            <Link id="sign-up-link" href={"/auth/register"+(router.query.return?"?return="+router.query.return:'')} style={{ fontWeight: '800' }}>
               Sign up.
             </Link>
           </Paragraph>

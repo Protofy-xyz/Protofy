@@ -40,7 +40,7 @@ describe("Basic tests", () => {
 
     const navigateToRegister = async () => {
         await navigateToLogin();
-        await protoBrowser.visitLink(browser, '#sign-up-btn')
+        await protoBrowser.visitLink(browser, '#sign-up-link')
     }
 
     afterEach(() => {
@@ -63,7 +63,8 @@ describe("Basic tests", () => {
         expect(browser.location.href.split(browser.site)[1]).toBe("auth/login")
         expect(browser.query('#sign-in-email-input'), "Missing input at login form: email").not.toBeNull()
         expect(browser.query('#sign-in-password-input'), "Missing input at login form: password").not.toBeNull()
-        expect(browser.query('#sign-up-btn'), "Missing sign up button at login").not.toBeNull()
+        expect(browser.query('#sign-in-btn'), "Missing sign in button at login").not.toBeNull()
+        expect(browser.query('#sign-up-link'), "Missing sign up link at login").not.toBeNull()
     })
 
     it("should have a public sign up interface", async () => {
