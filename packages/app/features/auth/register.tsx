@@ -1,9 +1,9 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Text, Paragraph, Separator, Spinner, Stack, XStack, YStack, Spacer } from 'tamagui'
-import { Page, hasSessionCookie, Session,useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult} from 'protolib'
+import { Page, hasSessionCookie, Session, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult } from 'protolib'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
-import { ProtofyLogoSVG, getErrorMessage, getValidation} from '@my/ui'
+import { ProtofyLogoSVG, getErrorMessage, getValidation } from '@my/ui'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router';
 
@@ -53,7 +53,7 @@ function SignUp() {
   }, [])
 
   useEffect(() => {
-    if(authState.isLoaded && authState.data) {
+    if (authState.isLoaded && authState.data) {
       const newSession = createSession(authState.data.session.user, authState.data.session.token)
       setSession(newSession)
       setSessionContext(authState.data.context)
@@ -61,7 +61,7 @@ function SignUp() {
   }, [authState])
 
   useEffect(() => {
-    if(session.loggedIn) {
+    if (session.loggedIn) {
       router.push(router.query?.return ?? '/')
     }
   }, [session])
@@ -78,8 +78,8 @@ function SignUp() {
           <LogoIcon o={0.9}>
             <ProtofyLogoSVG
               className="tamagui-icon"
-              width={600/5}
-              height={652/5}
+              width={600 / 5}
+              height={652 / 5}
             />
           </LogoIcon>
         </YStack>
@@ -100,6 +100,7 @@ function SignUp() {
             <form onSubmit={handleSignUp}>
               <YStack space="$2" mt={'$5'}>
                 <Input
+                  id="sign-up-email-input"
                   {...getValidation('username', authState)}
                   ref={emailRef}
                   autoComplete="email"
@@ -110,6 +111,7 @@ function SignUp() {
                   required
                 />
                 <Input
+                  id="sign-up-password-input"
                   {...getValidation('password', authState)}
                   autoComplete="password-new"
                   secureTextEntry
@@ -120,6 +122,7 @@ function SignUp() {
                   required
                 />
                 <Input
+                  id="sign-up-repassword-input"
                   autoComplete="password-new"
                   secureTextEntry
                   placeholder="Repeat Password"
@@ -129,15 +132,16 @@ function SignUp() {
                   required
                 />
                 <Button
+                  id="sign-up-btn"
                   // @ts-ignore
                   type="submit"
                   loading={authState.isLoading}
                   disabled={
-                     authState.isLoading || !password.length || !rePassword.length || !email.length
+                    authState.isLoading || !password.length || !rePassword.length || !email.length
                   }
                   mt={"$5"}
                 >
-                  {session.loggedIn || authState.isLoading?<Spinner /> : "Sign up"}
+                  {session.loggedIn || authState.isLoading ? <Spinner /> : "Sign up"}
                 </Button>
               </YStack>
             </form>
@@ -147,7 +151,7 @@ function SignUp() {
           <Paragraph theme="alt2" ta="center" size="$2">
             Already registered?
             {` `}
-            <Link href="/auth/login" style={{ fontWeight: '800' }}>
+            <Link id="sign-in-link" href="/auth/login" style={{ fontWeight: '800' }}>
               Sign in.
             </Link>
           </Paragraph>
