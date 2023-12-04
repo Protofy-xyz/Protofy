@@ -43,6 +43,8 @@ describe("Basic tests", () => {
         await protoBrowser.visitLink(browser, '#sign-up-link')
     }
 
+    const hasElement = async (selector) => browser.query(selector)
+
     afterEach(() => {
         browser.destroy()
     })
@@ -54,27 +56,26 @@ describe("Basic tests", () => {
     })
 
     it("should be able to interact with the web", async () => {
-        const content = browser.query('#__next')
-        expect(content).not.toBeNull()
+        expect(hasElement('#__next')).not.toBeNull()
     })
 
     it("should have a public authentication interface", async () => {
         await navigateToLogin();
         expect(browser.location.href.split(browser.site)[1]).toBe("auth/login")
-        expect(browser.query('#sign-in-email-input'), "Missing input at login form: email").not.toBeNull()
-        expect(browser.query('#sign-in-password-input'), "Missing input at login form: password").not.toBeNull()
-        expect(browser.query('#sign-in-btn'), "Missing sign in button at login").not.toBeNull()
-        expect(browser.query('#sign-up-link'), "Missing sign up link at login").not.toBeNull()
+        expect(hasElement('#sign-in-email-input'), "Missing input at login form: email").not.toBeNull()
+        expect(hasElement('#sign-in-password-input'), "Missing input at login form: password").not.toBeNull()
+        expect(hasElement('#sign-in-btn'), "Missing sign in button at login").not.toBeNull()
+        expect(hasElement('#sign-up-link'), "Missing sign up link at login").not.toBeNull()
     })
 
     it("should have a public sign up interface", async () => {
         await navigateToRegister()
         expect(browser.location.href.split(browser.site)[1]).toBe("auth/register")
-        expect(browser.query('#sign-up-email-input'), "Missing input at register form: email").not.toBeNull()
-        expect(browser.query('#sign-up-password-input'), "Missing input at register form: password").not.toBeNull()
-        expect(browser.query('#sign-up-repassword-input'), "Missing input at register form: repassword").not.toBeNull()
-        expect(browser.query('#sign-up-btn'), "Missing sign up button at register").not.toBeNull()
-        expect(browser.query('#sign-in-link'), "Missing sign in link at register").not.toBeNull()
+        expect(hasElement('#sign-up-email-input'), "Missing input at register form: email").not.toBeNull()
+        expect(hasElement('#sign-up-password-input'), "Missing input at register form: password").not.toBeNull()
+        expect(hasElement('#sign-up-repassword-input'), "Missing input at register form: repassword").not.toBeNull()
+        expect(hasElement('#sign-up-btn'), "Missing sign up button at register").not.toBeNull()
+        expect(hasElement('#sign-in-link'), "Missing sign in link at register").not.toBeNull()
     })
 
     it.skip("should create a user using sign up interface", () => { })
