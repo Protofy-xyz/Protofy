@@ -1,0 +1,4 @@
+#!/bin/bash
+./init
+./build
+docker-compose -f web-build.yml up

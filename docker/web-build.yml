@@ -1,15 +1,13 @@
+version: '3'
 services:
-  site:
-    container_name: 'site'
+  builder:
     image: "protofy/workspace"
-    entrypoint: "yarn web:serve"
-    environment:
-      - API_URL=http://proxy:8000
-      - NODE_ENV=production
+    entrypoint: "sh -c 'yarn && yarn build && yarn web:build'"
     volumes:
-      - ../../:/workspace
+      - ../:/workspace
       - protofy_modules:/workspace/node_modules
       - protofy_next:/apps/next/.next
+
 volumes:
   protofy_modules:
     external: true

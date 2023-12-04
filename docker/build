@@ -1,0 +1,2 @@
+#!/bin/bash
+docker build -t protofy/workspace . && docker-compose -f build.yml up

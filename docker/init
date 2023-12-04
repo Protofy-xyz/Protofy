@@ -1,0 +1,13 @@
+#!/bin/bash
+MODULES_VOLUME_NAME="protofy_modules"
+NEXT_VOLUME_NAME="protofy_next"
+
+if ! docker volume ls -q | grep -w $MODULES_VOLUME_NAME > /dev/null; then
+    echo "Docker volume: $MODULES_VOLUME_NAME not found, creating it..."
+    docker volume create $MODULES_VOLUME_NAME
+fi
+
+if ! docker volume ls -q | grep -w $NEXT_VOLUME_NAME > /dev/null; then
+    echo "Docker volume: $NEXT_VOLUME_NAME not found, creating it..."
+    docker volume create $NEXT_VOLUME_NAME
+fi

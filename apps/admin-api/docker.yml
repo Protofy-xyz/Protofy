@@ -9,6 +9,7 @@ services:
       - NODE_ENV=production
     volumes:
       - ../../:/workspace
-      - node_modules:/workspace/node_modules
+      - protofy_modules:/workspace/node_modules
 volumes:
-  node_modules:
+  protofy_modules:
+    external: true

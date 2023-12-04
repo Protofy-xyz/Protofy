@@ -1,0 +1,1 @@
+docker-compose -p protofy -f ..\apps\admin-api\docker.yml -f ..\apps\api\docker.yml -f ..\apps\next\docker.yml -f ..\apps\proxy\docker.yml up
