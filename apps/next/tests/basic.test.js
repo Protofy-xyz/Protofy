@@ -45,12 +45,16 @@ describe("Basic tests", () => {
         expect(content).not.toBeNull()
     })
 
-    it("should have public authentication requirements", async () => {
+    it("should have a public authentication interface", async () => {
         const loginElementId = "header-login-link"
         const loginElement = browser.query(`#${loginElementId}`)
         if (!loginElement) fail(`Login element with id "${loginElementId}" not found`)
         await protoBrowser.visitLink(browser, `#${loginElementId}`)
         expect(browser.location.href.split(browser.site)[1]).toBe("auth/login")
+        expect(browser.query('#sign-in-email-input'), "Missing input at login form: email").not.toBeNull()
+        expect(browser.query('#sign-in-password-input'), "Missing input at login form: password").not.toBeNull()
+        expect(browser.query('#sign-up-btn'), "Missing sign up button at login").not.toBeNull()
+
     })
     // sign-up-btn
 })
