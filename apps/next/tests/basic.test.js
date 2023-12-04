@@ -38,6 +38,11 @@ describe("Basic tests", () => {
         await protoBrowser.visitLink(browser, `#${loginElementId}`)
     }
 
+    const navigateToRegister = async () => {
+        await navigateToLogin();
+        await protoBrowser.visitLink(browser, '#sign-up-btn')
+    }
+
     afterEach(() => {
         browser.destroy()
     })
@@ -62,8 +67,7 @@ describe("Basic tests", () => {
     })
 
     it("should have a public sign up interface", async () => {
-        await navigateToLogin();
-        await protoBrowser.visitLink(browser, '#sign-up-btn')
+        await navigateToRegister()
         expect(browser.location.href.split(browser.site)[1]).toBe("auth/register")
         expect(browser.query('#sign-up-email-input'), "Missing input at register form: email").not.toBeNull()
         expect(browser.query('#sign-up-password-input'), "Missing input at register form: password").not.toBeNull()
@@ -71,4 +75,6 @@ describe("Basic tests", () => {
         expect(browser.query('#sign-up-btn'), "Missing sign up button at register").not.toBeNull()
         expect(browser.query('#sign-in-link'), "Missing sign in link at register").not.toBeNull()
     })
+
+    it.skip("should create a user using sign up interface", () => { })
 })
