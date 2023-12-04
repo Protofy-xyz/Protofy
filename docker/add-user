@@ -1,0 +1,10 @@
+#!/bin/bash
+
+read -p "Enter email: " email
+read -p "Enter password: " password
+read -p "Enter level: " level
+
+currentDir=$(pwd)
+parentDir=$(dirname "$currentDir")
+
+docker run -ti -v "$parentDir":/workspace -v protofy_modules:/workspace/node_modules --rm protofy/workspace -c "yarn add-user $email $password $level"
