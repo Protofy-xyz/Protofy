@@ -61,7 +61,7 @@ describe("Basic tests", () => {
 
     it("should have a public authentication interface", async () => {
         await navigateToLogin();
-        expect(browser.location.href.split(browser.site)[1]).toBe("auth/login").toBe(true)
+        expect(browser.location.href.split(browser.site)[1]).toBe("auth/login")
         expect(hasElement('#sign-in-email-input'), "Missing input at login form: email").toBeTruthy()
         expect(hasElement('#sign-in-password-input'), "Missing input at login form: password").toBeTruthy()
         expect(hasElement('#sign-in-btn'), "Missing sign in button at login").toBeTruthy()
