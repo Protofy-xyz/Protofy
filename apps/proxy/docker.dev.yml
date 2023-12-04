@@ -1,8 +1,10 @@
 services:
   proxy:
+    ports:
+      - 8080:8080
     entrypoint: "yarn proxy-dev"
-    volumes:
-      - ../../:/workspace
-      - node_modules:/workspace/node_modules
-volumes:
-  node_modules:
+    environment:
+      - ADMIN_API_URL=http://admin-api:3002
+      - API_URL=http://api:3001
+      - SITE_URL=http://site:3000
+      - NODE_ENV=development

@@ -5,5 +5,10 @@ services:
     entrypoint: "yarn admin-api-prod"
     environment:
       - MQTT_URL=mqtt://localhost:8883
+      - API_URL=http://proxy:8000
+      - NODE_ENV=production
     volumes:
-      - ../../data:/workspace/data
+      - ../../:/workspace
+      - node_modules:/workspace/node_modules
+volumes:
+  node_modules:

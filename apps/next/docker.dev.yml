@@ -1,12 +1,9 @@
 services:
   site:
-    volumes:
-      - ../../:/workspace
-      - node_modules:/workspace/node_modules
+    ports:
+      - 3000:3000
     environment:
-        - API_URL=http://proxy:8080
-        - NODE_ENV=development
-        - CHOKIDAR_USEPOLLING=true
-        - WATCHPACK_POLLING=true
-volumes:
-  node_modules:
+      - API_URL=http://proxy:8080
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true

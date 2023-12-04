@@ -4,10 +4,14 @@ services:
     image: "protofy/workspace"
     entrypoint: "yarn proxy-prod"
     ports:
-      - 8080:8080
+      - 80:8000
     environment:
-      - ADMIN_API_URL=http://admin-api:3002
-      - API_URL=http://api:3001
-      - SITE_URL=http://site:3000
+      - ADMIN_API_URL=http://admin-api:4002
+      - API_URL=http://api:4001
+      - SITE_URL=http://site:4000
+      - NODE_ENV=production
     volumes:
-      - ../../data:/workspace/data
+      - ../../:/workspace
+      - node_modules:/workspace/node_modules
+volumes:
+  node_modules:

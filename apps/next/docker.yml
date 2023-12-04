@@ -3,7 +3,13 @@ services:
     container_name: 'site'
     image: "protofy/workspace"
     entrypoint: "yarn web"
-    ports:
-      - 3000:3000
+    environment:
+      - API_URL=http://proxy:8000
+      - NODE_ENV=production
     volumes:
-      - ../../data:/workspace/data
+      - ../../:/workspace
+      - node_modules:/workspace/node_modules
+      - next_build:/apps/next/.next
+volumes:
+  node_modules:
+  next_build:

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  builder:
+    image: "protofy/workspace"
+    container_name: builder
+    entrypoint: "sh -c 'npm run prepare-dev && yarn && yarn build && yarn web:build'"
+    volumes:
+      - ./:/workspace
+      - node_modules:/workspace/node_modules
+      - next_build:/apps/next/.next
+
+volumes:
+  node_modules:
+  next_build:

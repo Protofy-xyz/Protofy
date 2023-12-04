@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ..
+docker build -t protofy/workspace
+cd docker-scripts
+docker-compose -f web-build.yml up
