@@ -27,7 +27,7 @@ You can think of **Protofy** as a Wordpress but based in **react** and **javascr
 
 A ultra-extensible CMS with supercharged capabilities, mobile support and IoT support (esp32 thanks to esphome).
 
-If you want to run Protofy on your computer or in the cloud, check the [getting started](docs/getting-started.md) guide. You can run it locally or using docker.
+Check the [getting started](docs/getting-started.md) guide to run Protofy on your computer, directly with npm or using docker.
 
 ## 👨‍💻 Extentable and developer friendly CMS
 
