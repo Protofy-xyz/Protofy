@@ -4,8 +4,8 @@ import { AutoModel } from 'protolib/base'
 
 export const DeviceDefinitionSchema = Schema.object({
   name: z.string().hint("Protofy screen controller...").static().id(),
-  board: z.string(),
-  sdk: z.string(),
+  board: z.string().hidden(),
+  sdk: z.string().hidden(),
   subsystems: z.record(z.string(), z.any()).optional(),
   config: z.record(z.string(), z.any()),
 })
