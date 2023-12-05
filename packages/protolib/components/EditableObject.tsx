@@ -137,6 +137,13 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
     }
   }, [menuOpened]);
 
+  const handleAccept = async () => {
+    setMenuOpened(false);
+    setName("");
+    const val = getDefaultValue(ele._def.valueType._def.typeName);
+    setFormData(ele.name, { ...recordData, [name]: val });
+  };
+
   return <FormGroup ele={ele} title={inArray ? ' #' + (ele.name + 1) : '...'} icon={List}>
     <Stack>
       {recordData ? Object.keys(recordData).map((key, i) => {
@@ -150,12 +157,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
       acceptCaption="Add field"
       setOpen={setMenuOpened}
       open={menuOpened}
-      onAccept={async (setMenuOpened) => {
-        setMenuOpened(false)
-        setName("")
-        const val = getDefaultValue(ele._def.valueType._def.typeName)
-        setFormData(ele.name, { ...recordData, [name]: val })
-      }}
+      onAccept={handleAccept}
       title={'Add new field'}
       description={""}
     >
@@ -168,6 +170,11 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
           id="name"
           placeholder='Field name...'
           ref={inputRef}
+          onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+              handleAccept();
+            }
+          }}
         />
       </YStack>
     </AlertDialog>
