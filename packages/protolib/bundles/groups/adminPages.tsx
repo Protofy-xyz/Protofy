@@ -1,8 +1,6 @@
-
-import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { GroupModel } from '.'
 import { z } from 'protolib/base'
-import { DataTable2, Chip, DataView } from 'protolib'
+import { DataTable2, Chip, DataView, AdminPage, PaginatedDataSSR} from 'protolib'
 import { Users } from '@tamagui/lucide-icons';
 import { API } from '../../base/Api'
 import { usePrompt } from '../../context/PromptAtom'

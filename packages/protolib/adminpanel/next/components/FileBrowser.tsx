@@ -13,7 +13,7 @@ import { Explorer } from './Explorer';
 import { defineFileAction } from 'chonky';
 import FileActions from 'app/bundles/fileActions'
 import {Tinted} from '../../../components/Tinted'
-import Chat from '../../features/next/chat'
+import Chat from '../../../components/Chat'
 
 
 export const FileBrowser = ({ file, path, filesState }: any) => {

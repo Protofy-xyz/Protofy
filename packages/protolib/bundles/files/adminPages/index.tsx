@@ -1,6 +1,5 @@
 import { NextPageContext } from 'next'
-import { API, withSession, Tinted, Center, getURLWithToken, SSR, usePrompt } from 'protolib'
-import { AdminPage } from 'protolib/adminpanel/features/next'
+import { API, withSession, Tinted, Center, getURLWithToken, SSR, usePrompt, AdminPage } from 'protolib'
 import dynamic from 'next/dynamic'
 import { Spinner } from 'tamagui'
 

@@ -38,12 +38,8 @@ import {
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getPendingResult } from '../../../base/PendingResult';
-import { AlertDialog } from '../../../components/AlertDialog';
-import { API } from '../../../base/Api';
-import { Link } from '../../../components/Link';
-import { Tinted } from '../../../components/Tinted';
-import { PanelMenuItem } from '../../../components/PanelMenuItem';
+import { getPendingResult, API } from 'protolib/base';
+import { AlertDialog, Link, Tinted, PanelMenuItem} from 'protolib';
 
 const opacity = 1
 const strokeWidth = 2

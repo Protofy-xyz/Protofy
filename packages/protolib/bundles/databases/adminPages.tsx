@@ -1,10 +1,7 @@
-import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { DatabaseEntryModel, DatabaseModel } from '.'
-import { DataView, DataTable2, Chip, API, withSession, getPendingResult, SSR } from 'protolib'
+import { DataView, API, AdminPage, PaginatedDataSSR  } from 'protolib'
 import { useRouter } from "next/router"
-import DBAdmin from './components/db'
-import { Paragraph, XStack, YStack } from '@my/ui'
-import { Tinted } from '../../components/Tinted'
+import { YStack } from '@my/ui'
 import { DataCard } from '../../components/DataCard'
 import { useState } from 'react'
 import { Server } from '@tamagui/lucide-icons'

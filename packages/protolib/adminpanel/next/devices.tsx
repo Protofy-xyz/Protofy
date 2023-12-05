@@ -1,7 +1,6 @@
-import { AdminPanel } from '../features'
 import Head from 'next/head'
 import { NextPageContext } from 'next'
-import { API, withSession, useSession, SSR } from 'protolib'
+import { API, withSession, useSession, SSR, AdminPanel } from 'protolib'
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { TopicsProvider } from 'react-topics';

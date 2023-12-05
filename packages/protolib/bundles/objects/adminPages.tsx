@@ -1,7 +1,6 @@
 
-import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { ObjectModel } from '.'
-import {DataView, DataTable2, Chip, API} from 'protolib'
+import {DataView, DataTable2, Chip, API, AdminPage, PaginatedDataSSR } from 'protolib'
 import { Pencil, Box } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 

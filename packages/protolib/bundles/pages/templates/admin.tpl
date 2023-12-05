@@ -6,9 +6,8 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 */
 
 import {Protofy} from 'protolib/base'
-import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import {Objects} from 'app/bundles/objects'
-import {DataView, API} from 'protolib'
+import {DataView, API, AdminPage, PaginatedDataSSR } from 'protolib'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})

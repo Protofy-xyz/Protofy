@@ -1,7 +1,5 @@
-
-import {AdminPage, PaginatedDataSSR} from 'protolib/adminpanel/features/next'
 import { EventModel } from '.'
-import {DataTable2, Chip, DataView, Tooltip} from 'protolib'
+import {DataTable2, Chip, DataView, Tooltip, AdminPage, PaginatedDataSSR } from 'protolib'
 import moment  from 'moment'
 import { ClipboardList } from '@tamagui/lucide-icons';
 import { JSONViewer } from '../../components/jsonui'

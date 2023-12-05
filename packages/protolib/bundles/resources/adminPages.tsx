@@ -1,7 +1,6 @@
 
-import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { ResourceModel } from '.'
-import { DataTable2, Chip, DataView } from 'protolib'
+import { DataTable2, Chip, DataView, AdminPage, PaginatedDataSSR  } from 'protolib'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
 import { ExternalLink, Link } from '@tamagui/lucide-icons'
 

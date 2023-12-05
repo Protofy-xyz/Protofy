@@ -1,11 +1,9 @@
-import { AdminPanel } from '../'
-import { useSession, Page, useUserSettings, useWorkspaces, Tinted, Search, usePrompt } from 'protolib'
+import { useSession, Page, useUserSettings, useWorkspaces, Tinted, Search, usePrompt, SearchContext, AdminPanel } from 'protolib'
 import dynamic from 'next/dynamic';
 import {addResponseMessage} from 'react-chat-widget'
 import { useEffect, useState } from 'react';
-import {SearchContext} from '../../../context/SearchContext'
 
-const Chat = dynamic(() => import('./chat'), { ssr: false })
+const Chat = dynamic(() => import('protolib/components/Chat'), { ssr: false })
 
 // console.log('widget: ', Widget)
 export function AdminPage({ pageSession, title, children }: any) {

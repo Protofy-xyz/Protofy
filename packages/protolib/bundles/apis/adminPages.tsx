@@ -1,7 +1,5 @@
-
-import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { APIModel } from '.'
-import { DataTable2, API, DataView, AlertDialog } from 'protolib'
+import { DataTable2, API, DataView, AlertDialog, AdminPage, PaginatedDataSSR  } from 'protolib'
 import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView } from "@my/ui";
 import { ToyBrick, Eye, ChevronDown } from '@tamagui/lucide-icons'
 import { z } from 'protolib/base'

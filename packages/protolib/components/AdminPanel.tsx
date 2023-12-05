@@ -1,12 +1,10 @@
 import { Theme, XStack } from 'tamagui'
 import { PanelLayout } from 'app/layout/PanelLayout'
-import { PanelMenu } from './components/PanelMenu'
-import { SelectList, useWorkspaces, useUserSettings } from 'protolib'
+import { SelectList, useWorkspaces, useUserSettings, useSession, PanelMenu} from 'protolib'
 import Workspaces from 'app/bundles/workspaces'
 import { SiteConfig } from 'app/conf'
-import {devMode} from '../../base/env'
+import {devMode} from 'protolib/base/env'
 import {getApiUrl} from 'protolib/base'
-import { useSession } from '../../lib/Session'
 import { useUpdateEffect } from 'usehooks-ts'
 
 const menuData = {}

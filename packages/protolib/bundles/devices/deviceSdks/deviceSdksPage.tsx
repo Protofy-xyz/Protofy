@@ -1,7 +1,6 @@
-import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { Cpu, Layers, Tag, Code } from '@tamagui/lucide-icons';
 import { DeviceSdkModel } from './deviceSdksSchema';
-import { Chip, DataTable2, DataView } from 'protolib'
+import { Chip, DataTable2, DataView, AdminPage, PaginatedDataSSR } from 'protolib'
 
 const DeviceSdkIcons = { name: Tag, sdk: Layers }
 export default {

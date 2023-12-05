@@ -5,7 +5,7 @@ import { Tinted } from './Tinted'
 import { Notice } from './Notice'
 import Center from './Center'
 import dynamic from 'next/dynamic';
-const Chat = dynamic(() => import('../adminpanel/features/next/chat'), { ssr: false })
+const Chat = dynamic(() => import('protolib/components/Chat'), { ssr: false })
 
 export const AlertDialog = forwardRef(({
     showCancel,

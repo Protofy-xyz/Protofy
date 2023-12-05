@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
-import { CircuitBoard, Tag, Settings, BookOpen } from '@tamagui/lucide-icons';
+import React, { useState } from "react";
+import { CircuitBoard, Tag, BookOpen } from '@tamagui/lucide-icons';
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas';
-import { API, Chip, DataTable2, DataView, ButtonSimple, AlertDialog, Center } from 'protolib'
+import { API, Chip, DataTable2, DataView, ButtonSimple, AlertDialog, Center, AdminPage, PaginatedDataSSR } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceBoardModel } from '../deviceBoards';
 import { DeviceCoreModel } from '../devicecores';
-import { Paragraph, Spinner, XStack } from "tamagui";
+import { Spinner, XStack } from "tamagui";
 import dynamic from 'next/dynamic'
 import { useThemeSetting } from '@tamagui/next-theme'
 

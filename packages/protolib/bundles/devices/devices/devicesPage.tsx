@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { AdminPage, PaginatedDataSSR } from 'protolib/adminpanel/features/next'
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple, Tinted } from 'protolib'
+import { API, DataTable2, DataView, ButtonSimple, Tinted, AdminPage, PaginatedDataSSR } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
