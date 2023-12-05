@@ -125,6 +125,17 @@ const UnionsArrayComp = ({ ele, icon, i, inArray, eleArray, formData, generatedO
 const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData, mode, customFields, path, setFormData }) => {
   const [menuOpened, setMenuOpened] = useState(false)
   const [name, setName] = useState("")
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (menuOpened) {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [menuOpened]);
 
   return <FormGroup ele={ele} title={inArray ? ' #' + (ele.name + 1) : '...'} icon={List}>
     <Stack>
@@ -149,7 +160,15 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
       description={""}
     >
       <YStack f={1} alignItems="center" mt="$6" justifyContent="center">
-        <Input f={1} value={name} onChangeText={(text) => setName(text)} textAlign='center' id="name" placeholder='Field name...' />
+        <Input
+          f={1}
+          value={name}
+          onChangeText={(text) => setName(text)}
+          textAlign='center'
+          id="name"
+          placeholder='Field name...'
+          ref={inputRef}
+        />
       </YStack>
     </AlertDialog>
     {(mode == 'edit' || mode == 'add') && <Button mt="$5" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
