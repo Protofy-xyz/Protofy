@@ -8,7 +8,6 @@ const protoBrowser = {
             browser.on("loaded", () => {
                 resolve();
             });
-            // Opcional: Rechazar la promesa si hay errores
             browser.on("error", (error) => {
                 reject(error);
             });
@@ -20,12 +19,43 @@ const protoBrowser = {
             browser.on("loaded", () => {
                 resolve();
             });
-            // Opcional: Rechazar la promesa si hay errores
             browser.on("error", (error) => {
                 reject(error);
             });
         });
     },
+    clickButton: (browser, selector) => {
+        try {
+            browser.pressButton(selector);
+        } catch (e) {
+            throw ("Error: Button element with selector " + selector + " not found.")
+        }
+    },
+    submit: (browser, selector) => {
+        try {
+            browser.query(selector)?.submit();
+        } catch(e){
+            throw("Error: Form element with selector "+selector+" not found.")
+        }
+    },
+    waitForElement: (browser, selector) => {
+        return new Promise((resolve, reject) => {
+            function verifyCondition() {
+                if (browser && !browser.query(selector)) {
+                    resolve()
+                    // console.log('ELEMENT FOUND!')
+                    clearInterval(intervalo);
+                }
+            }
+            let intervalo = setInterval(verifyCondition, 100);
+            /* Commented due that timeout is caused by 
+            testing framework, enable it */
+            // setTimeout(() => {
+            //     reject("The element you were waiting for was not found, timeout")
+            //     clearInterval(intervalo);
+            // }, 10000);
+        })
+    }
 }
 
 describe("Basic tests", () => {
@@ -44,6 +74,9 @@ describe("Basic tests", () => {
     }
 
     const hasElement = async (selector) => Boolean(browser.query(selector))
+    const fillInput = async (selector, value) => {
+        browser.query(selector).value = value;
+    }
 
     afterEach(() => {
         browser.destroy()
@@ -79,5 +112,14 @@ describe("Basic tests", () => {
         expect(hasElement('#sign-in-link'), "Missing sign in link at register").toBeTruthy()
     })
 
-    it("should create a user using sign up interface", () => { })
+    it.skip("should create a user using sign up interface", async () => {
+        const email = "example1@mail.com"
+        await navigateToRegister()
+        fillInput("#sign-up-email-input", email)
+        fillInput("#sign-up-password-input", "changeme1234")
+        fillInput("#sign-up-repassword-input", "changeme1234")
+        // protoBrowser.clickButton(browser, "#sign-up-btn")
+        // expect(browser.location.href.split(browser.site)[1]).toBe("/")
+        // expect(browser.query("#header-session-user-id>p").textContent).toBe(email)
+    })
 })
