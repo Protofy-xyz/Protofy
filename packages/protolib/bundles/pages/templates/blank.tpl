@@ -12,18 +12,16 @@ import { Protofy } from 'protolib/base'
 
 const isProtected = Protofy("protected", {{protected}})
 
-const PageComponent = (props) => {
-  return (
-    <Page height="99vh">
+const PageComponent = () => {
+    return (
+        <Page height="99vh">
 
-    </Page>
-  )
+        </Page>)
 }
 
 export default {
     route: Protofy("route", "{{route}}"),
-    component: (props) => useEdit(
-        () => PageComponent(props), {
+    component: () => useEdit(PageComponent, {
         DefaultLayout,
         YStack,
         Spacer,
