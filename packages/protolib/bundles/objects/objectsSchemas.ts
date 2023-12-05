@@ -57,6 +57,22 @@ export const ObjectSchema = z.object({
 });
 
 export type ObjectType = z.infer<typeof ObjectSchema>;
+
+const transformData = (data) => {
+  return {
+    ...data,
+    keys: Object.keys(data.keys ? data.keys : {}).reduce((total, k) => {
+      return {
+        ...total,
+        [k]: {
+          type: "string",
+          ...data.keys[k],
+        }
+      };
+    }, {})
+  };
+}
+
 export class ObjectModel extends ProtoModel<ObjectModel> {
   constructor(data: ObjectType, session?: SessionDataType) {
     super(data, ObjectSchema, session);
@@ -71,22 +87,15 @@ export class ObjectModel extends ProtoModel<ObjectModel> {
   }
 
   create(data?) {
-    const _data = data ?? this.getData()
-
-    //if no type is specified, use string
-    const obj = {
-      ..._data,
-      keys: Object.keys(_data.keys ? _data.keys : {}).reduce((total, k) => {
-        return {
-          ...total,
-          [k]: {
-            type: "string",
-            ..._data.keys[k],
-          }
-        }
-      }, {})
-    }
-    return super.create(obj)
+    const _data = data ?? this.getData();
+    const obj = transformData(_data);
+    return super.create(obj);
+  }
+  
+  update(updatedModel, data?) {
+    const _data = data ?? updatedModel.data;
+    const obj = transformData(_data);
+    return super.update(updatedModel, obj);
   }
 
   protected static _newInstance(data: any, session?: SessionDataType): ObjectModel {
