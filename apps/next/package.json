@@ -15,7 +15,7 @@
     "build": "cd ../.. && yarn build && cd apps/next && next build",
     "serve": "NODE_ENV=production next start --port 4000",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest --colors"
   },
   "dependencies": {
     "@react-three/drei": "^9.88.2",
