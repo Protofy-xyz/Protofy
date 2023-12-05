@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const { withTamagui } = require('@tamagui/next-plugin')
-const { join } = require('path')
+const { join, resolve } = require('path')
 const webpack = require('webpack');
+
+const dotenv = require('dotenv');
+dotenv.config({ path: resolve(__dirname, '../../.env') });
 
 const boolVals = {
   true: true,

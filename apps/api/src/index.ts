@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 // get config vars
-dotenv.config();
+dotenv.config({ path: '../../.env' });
 
 import aedes from 'aedes';
 import http from 'http';
