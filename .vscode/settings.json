@@ -4,5 +4,6 @@
   "search.useIgnoreFiles": false,
   "search.exclude": {
     "**/node_modules": true,
+    "**/.next": true,
   }
 }
