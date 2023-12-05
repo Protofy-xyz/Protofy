@@ -11,7 +11,7 @@ export const HeaderContents = (props: HeaderContentsProps) => {
       logo={<Paragraph mr={"$2"}><Text fontSize={20} fontWeight={"400"}>Protofy</Text></Paragraph>} 
       rightArea={<XStack ai="center">
         {props.topBar }
-        <XStack $xs={{display:'none'}}><Tinted>{session.loggedIn ? <HeaderLink href="/profile">{session.user.id}</HeaderLink>:<HeaderLink href="/auth/login" id="header-login-link" >Login</HeaderLink>}</Tinted></XStack>
+        <XStack $xs={{display:'none'}}><Tinted>{session.loggedIn ? <HeaderLink id="header-session-user-id" href="/profile">{session.user.id}</HeaderLink>:<HeaderLink href="/auth/login" id="header-login-link" >Login</HeaderLink>}</Tinted></XStack>
         {/* <XStack>
           <ConnectionIndicator />
         </XStack> */}
