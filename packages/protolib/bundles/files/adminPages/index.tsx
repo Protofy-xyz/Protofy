@@ -1,17 +1,15 @@
 import { NextPageContext } from 'next'
-import { API, withSession, Center, getURLWithToken, SSR } from 'protolib'
+import { API, withSession, Tinted, Center, getURLWithToken, SSR, usePrompt } from 'protolib'
+import { AdminPage } from 'protolib/adminpanel/features/next'
 import dynamic from 'next/dynamic'
 import { Spinner } from 'tamagui'
-import { Tinted } from '../../components/Tinted'
-import { AdminPage } from '../features/next'
-import { usePrompt } from '../../context/PromptAtom'
 
 const FileBrowser = dynamic<any>(() =>
-    import('./components/FileBrowser').then(module => module.FileBrowser),
+    import('protolib/adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),
     { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
 );
 
-export default function FilesPage({filesState, CurrentPath, CurrentFile, pageSession}:any) {
+function FilesPage({filesState, CurrentPath, CurrentFile, pageSession}:any) {
   usePrompt(() => CurrentFile ? ``:`At this moment the user is using a web file manager. The file manager allows to view and manage the files and directories of the project.
   The web file managers allow to create, view and edit files, has an integrated source code editor, an integrated visual programming editor and allows to upload and download files from the system.
   Using the file manager you have full control of the system because you can directly edit any system file. Be careful when editing sensible files, like source code or system directories, you may break the system.
@@ -26,6 +24,7 @@ export default function FilesPage({filesState, CurrentPath, CurrentFile, pageSes
   ${CurrentFile?'The user is viewing the file'+CurrentFile:`The directory contents are: ${JSON.stringify(filesState)}`}
   `) 
 
+  
   return (
       <AdminPage pageSession={pageSession} title={"Files"} >
         <FileBrowser path={CurrentPath} file={CurrentFile} filesState={filesState} />
@@ -33,7 +32,7 @@ export default function FilesPage({filesState, CurrentPath, CurrentFile, pageSes
   )
 }
 
-export const getServerSideProps = SSR(async (context:NextPageContext) => {
+const getServerSideProps = SSR(async (context:NextPageContext) => {
     const nameSegments = context.query.name as string[];
     const path = nameSegments ? nameSegments.slice(2).join('/') : '';
 
@@ -43,3 +42,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
       CurrentFile: context.query.file ? path + '/' + context.query.file.split('/')[0] : null
     })
 })
+
+export default {
+    'admin/files/**': {component: FilesPage, getServerSideProps: getServerSideProps},
+}
