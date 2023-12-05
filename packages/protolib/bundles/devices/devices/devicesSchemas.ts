@@ -4,7 +4,7 @@ import { AutoModel } from 'protolib/base'
 
 export const DevicesSchema = Schema.object({
   name: z.string().hint("Device name").static().regex(/^[a-z]+$/, "Only lower case chars").id(),
-  deviceDefinition: z.string(),
+  deviceDefinition: z.string().hidden(),
   subsystem: z.record(z.string(), z.any()).optional(),
   data: z.array(z.record(z.string(), z.any())).optional()
 })

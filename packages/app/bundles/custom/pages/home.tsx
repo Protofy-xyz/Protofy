@@ -4,11 +4,11 @@ import { ChevronRight, Code, Cpu, FastForward, Layers, Star, Bot } from "@tamagu
 import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
+import { useEffect } from "react";
 
 const isProtected = Protofy("protected", false);
 
-const Home = () => {
-
+const Home = (props) => {
   return (
     <Page>
       <DefaultLayout title="Protofy" description="Made with love from Barcelona">
@@ -289,9 +289,9 @@ const Home = () => {
 
 export default {
   route: Protofy("route", "/"),
-  component: () =>
+  component: (props) =>
     useEdit(
-      Home,
+      () => Home(props),
       {
         DefaultLayout,
         YStack,

@@ -32,7 +32,7 @@ export default {
         )
         }
         extraFieldsForms={{
-          sdks: z.array(z.union([z.literal(""), z.literal("")])).generateOptions(() => extraData.sdks.map(o => o.name)).after('name'),
+          sdks: z.array(z.union([z.literal(""), z.literal("")])).generateOptions(() => extraData.sdks.map(o => o.name)).after('name').display(),
         }}
         model={DeviceCoreModel}
         pageState={pageState}

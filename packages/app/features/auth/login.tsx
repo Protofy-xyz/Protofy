@@ -98,6 +98,7 @@ function SignIn() {
             <form onSubmit={handleSignin}>
               <YStack space="$2" mt={'$5'}>
                 <Input
+                  id="sign-in-email-input"
                   ref={emailRef}
                   autoComplete="email"
                   placeholder="Email"
@@ -107,6 +108,7 @@ function SignIn() {
                   required
                 />
                 <Input
+                  id="sign-in-password-input"
                   autoComplete="password"
                   secureTextEntry
                   placeholder="Password"
@@ -116,6 +118,7 @@ function SignIn() {
                   required
                 />
                 <Button
+                  id="sign-in-btn"
                   // @ts-ignore
                   type="submit"
                   loading={authState.isLoading}
@@ -134,7 +137,7 @@ function SignIn() {
           <Paragraph theme="alt2" ta="center" size="$2">
             Don't have an account?
             {` `}
-            <Link href={"/auth/register"+(router.query.return?"?return="+router.query.return:'')} style={{ fontWeight: '800' }}>
+            <Link id="sign-up-link" href={"/auth/register"+(router.query.return?"?return="+router.query.return:'')} style={{ fontWeight: '800' }}>
               Sign up.
             </Link>
           </Paragraph>

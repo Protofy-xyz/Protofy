@@ -1,8 +1,8 @@
 #!/bin/bash
 
 read -p "Enter email: " email
-read -p "Enter password: " password
-read -p "Enter level: " level
+read -p "Enter password (min 6 char.): " password
+read -p "Enter level (admin/user): " level
 
 currentDir=$(pwd)
 parentDir=$(dirname "$currentDir")
