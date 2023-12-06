@@ -1,13 +1,21 @@
 import { CircuitBoard, Tag, Layers } from '@tamagui/lucide-icons';
 import { DeviceBoardModel } from './deviceBoardsSchemas';
-import { API, Chip, DataTable2, DataView, AdminPage, PaginatedDataSSR } from 'protolib'
+import { API, Chip, DataTable2, DataView, AdminPage, PaginatedDataSSR, usePendingEffect } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceCoreModel } from '../devicecores';
+import { useState } from 'react';
+import { getPendingResult } from 'protolib/base';
 
 const DeviceBoardIcons = { name: Tag, core: Layers }
 
+const sourceUrl = '/adminapi/v1/deviceboards'
+const coresSourceUrl = '/adminapi/v1/devicecores?all=1'
+
 export default {
-  component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
+  component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
+    const [cores, setCores] = useState(extraData?.cores ?? getPendingResult('pending'))
+    usePendingEffect((s) => { API.get({ url: coresSourceUrl }, s) }, setCores, extraData?.cores)
+
     return (<AdminPage title="Device Boards" pageSession={pageSession}>
       <DataView
         integratedChat
@@ -26,7 +34,7 @@ export default {
           DataTable2.column("ports", "ports", true, (row) => <Chip text={Object.keys(row.ports).length} color={'$gray5'} />),
         )}
         extraFieldsForms={{
-          core: z.union(extraData.cores.map(o => z.literal(o))).after('name'),
+          core: z.union(cores.isLoaded ? cores.data.items.map(i => z.literal(DeviceCoreModel.load(i).getId())) : []).after('name'),
         }}
         model={DeviceBoardModel}
         pageState={pageState}
@@ -35,11 +43,10 @@ export default {
       />
     </AdminPage>)
   },
-  getServerSideProps: PaginatedDataSSR('/adminapi/v1/deviceboards', ['admin'], {}, async () => {
-    const cores = await API.get('/adminapi/v1/devicecores?itemsPerPage=1000')
 
+  getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async () => {
     return {
-      cores: cores.isLoaded ? cores.data.items.map(i => DeviceCoreModel.load(i).getId()) : []
+      cores: await API.get(coresSourceUrl)
     }
   })
 }

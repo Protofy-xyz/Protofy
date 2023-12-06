@@ -5,9 +5,10 @@ import { InteractiveIcon } from '../../components/InteractiveIcon'
 import { ExternalLink, Link } from '@tamagui/lucide-icons'
 
 const ResourceIcons = {}
+const sourceUrl = '/adminapi/v1/resources'
 export default {
     'admin/resources': {
-        component: ({ pageState, sourceUrl, initialItems, pageSession }: any) => {
+        component: ({ pageState, initialItems, pageSession }: any) => {
             return (<AdminPage title="Resources" pageSession={pageSession}>
                 <DataView
                     integratedChat
@@ -32,8 +33,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/resources', ['admin'], {
-
-        })
+        getServerSideProps: PaginatedDataSSR('/adminapi/v1/resources', ['admin'], {})
     }
 }

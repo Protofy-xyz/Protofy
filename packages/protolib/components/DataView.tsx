@@ -15,6 +15,7 @@ import { FileWidget } from '../adminpanel/features/components/FilesWidget';
 import { IconContainer } from './IconContainer';
 import { SearchContext } from '../context/SearchContext';
 import { InteractiveIcon } from './InteractiveIcon';
+import { useRouter } from 'next/router';
 
 type DataViewState = {
     items: PendingResult,
@@ -91,7 +92,8 @@ export function DataView({
     refreshOnHotReload = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
-    const [state, setState] = useState(pageState ?? {})
+    const { query } = useRouter();
+    const [state, setState] = useState(pageState ?? query)
     const [realTimeItems] = disableRealTimeUpdates ? [false] : useRemoteStateList(initialItems, { url: sourceUrl, ...(pageState ?? {}) }, 'notifications/' + (_plural) + "/#", model)
     const [items, setItems] = useState<PendingResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))

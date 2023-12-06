@@ -5,15 +5,25 @@ import moment from 'moment'
 import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
 import { API } from '../../base/Api'
 import { SelectList } from '../../components/SelectList'
+import { useState } from 'react';
+import { getPendingResult } from '../../base';
+import { usePendingEffect } from '../../lib/usePendingEffect';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const UserIcons = { username: Mail, type: Tag, passwod: Key, repassword: Key }
 
+const sourceUrl = '/adminapi/v1/accounts'
+const groupsSourceUrl = '/adminapi/v1/groups'
+
 export default {
     'admin/users': {
-        component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
+        component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
+            const [groups, setGroups] = useState(extraData?.groups ?? getPendingResult("pending"))
+
+            usePendingEffect((s) => {API.get(groupsSourceUrl, s)}, setGroups, extraData?.objects)
+
             const getValue = (data) => {
-                const item = extraData.groups.find(item => item == data)
+                const item = groups.data.items.map(obj => obj.name).find(item => item == data)
                 if (!item) {
                     return ''
                 }
@@ -68,7 +78,7 @@ export default {
                             component: (path, data, setData, mode) => mode == 'add' || mode == 'edit' ? <SelectList
                                 f={1}
                                 title={'type'}
-                                elements={extraData.groups?.map(item => item)}
+                                elements={groups?.data?.items.map(obj => obj.name).map(item => item)}
                                 value={getValue(data)}
                                 setValue={(v) => setData(v)}
                             /> : false
@@ -92,11 +102,9 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/accounts', ['admin'], {}, async () => {
-            const groups = await API.get('/adminapi/v1/groups')
-            const groupsArray = groups.data.items.map(obj => obj.name);
+        getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async () => {
             return {
-                groups: groupsArray,
+                groups: await API.get(groupsSourceUrl),
             }
         })
     }

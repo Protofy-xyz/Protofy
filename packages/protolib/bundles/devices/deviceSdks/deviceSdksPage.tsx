@@ -3,8 +3,9 @@ import { DeviceSdkModel } from './deviceSdksSchema';
 import { Chip, DataTable2, DataView, AdminPage, PaginatedDataSSR } from 'protolib'
 
 const DeviceSdkIcons = { name: Tag, sdk: Layers }
+const sourceUrl = '/adminapi/v1/devicesdks'
 export default {
-  component: ({ pageState, sourceUrl, initialItems, itemData, pageSession }: any) => {
+  component: ({ pageState, initialItems, itemData, pageSession }: any) => {
     return (<AdminPage title="Device Sdks" pageSession={pageSession}>
       <DataView
         integratedChat
@@ -28,5 +29,5 @@ export default {
       />
     </AdminPage >)
   },
-  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devicesdks', ['admin'])
+  getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'])
 }

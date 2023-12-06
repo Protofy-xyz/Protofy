@@ -7,9 +7,12 @@ import { usePageParams } from '../../next';
 const format = 'YYYY-MM-DD HH:mm:ss'
 const ObjectIcons =  {}
 const rowsPerPage = 20
+
+const sourceUrl = '/adminapi/v1/objects'
+
 export default {
     'admin/objects': {
-        component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
+        component: ({pageState, initialItems, pageSession}:any) => {
             const {replace} = usePageParams(pageState)
 
             return (<AdminPage title="Objects" pageSession={pageSession}>

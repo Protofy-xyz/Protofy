@@ -9,13 +9,19 @@ import { usePageParams } from '../../next';
 import { getURLWithToken } from '../../lib/Session'
 import { useRef, useState } from 'react'
 import { useTint } from '../../lib/Tints'
+import { getPendingResult } from '../../base'
+import { usePendingEffect } from '../../lib/usePendingEffect'
 
 const PageIcons = {}
+const sourceUrl = '/adminapi/v1/pages'
+const objectsSourceUrl = '/adminapi/v1/objects?all=1'
 
 export default {
     'admin/pages': {
-        component: ({ pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
+        component: ({ pageState, initialItems, pageSession, extraData }: any) => {
             const { replace } = usePageParams(pageState)
+            const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
+            usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
 
             return (<AdminPage title="Pages" pageSession={pageSession}>
                 <DataView
@@ -35,7 +41,7 @@ export default {
                     )}
                     extraFieldsFormsAdd={{
                         template: z.union([z.literal("blank"), z.literal("default"), z.literal("admin")]).after("route"),
-                        object: z.union([z.literal("without object"), ...extraData.objects.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name))] as any).after('route'),
+                        object: z.union([z.literal("without object"), ...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)): [])] as any).after('route'),
                     }}
                     extraMenuActions={[
                         {
@@ -51,10 +57,9 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/pages', ['admin'], {}, async (context) => {
-            const objects = await API.get(getURLWithToken('/adminapi/v1/objects?all=1', context))
+        getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async (context) => {
             return {
-                objects: objects.isLoaded ? objects.data.items : []
+                objects: await API.get(getURLWithToken(objectsSourceUrl, context))
             }
         })
     }
