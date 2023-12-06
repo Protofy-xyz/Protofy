@@ -11,6 +11,8 @@ import { useState } from 'react'
 import Center from '../../components/Center'
 import { Objects } from "app/bundles/objects";
 import { Tinted } from '../../components/Tinted';
+import { usePendingEffect } from '../../lib/usePendingEffect';
+import { getPendingResult } from '../../base';
 
 
 const APIIcons = {}
@@ -87,11 +89,13 @@ const MethodBadge = ({ method, path, description }) => {
     );
 };
 
+const sourceUrl = '/adminapi/v1/apis'
+const objectsSourceUrl = '/adminapi/v1/objects?all=1'
+
 export default {
     'admin/apis': {
-        component: ({ pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
-            const { replace } = usePageParams(pageState)
-            console.log('initialItems: ', initialItems)
+        component: ({ pageState, initialItems, pageSession, extraData }: any) => {
+            const { replace } = usePageParams(pageState??{})
             usePrompt(() => `At this moment the user is browsing the Rest API management page. The Rest API management page allows to list, create, read, update and delete API definitions. API definitions are typescript files using express.
             The system allows to create APIs either from an empty template, or from an AutoCRUD template. The automatic crud template creates an automatic CRUD API for a given object. 
             To Automatic CRUD API generates the following endpoints: get /api/v1/:objectName (list), post /api/v1/:objectName (create), post /api/v1/:objectName/:objectId (update), get /api/v1/:objectName/:objectId/delete (delete) and get /api/v1/:objectName/:objectId (read)
@@ -104,15 +108,17 @@ export default {
                 ))
 
             const [dialogOpen, setDialogOpen] = useState(false)
+            const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
             const [currentElement, setCurrentElement] = useState({})
-            let options = {}
+            let options:any = {}
             const ObjectModel = currentElement?.data?.object ? Objects[currentElement?.data?.object] : null
             if (ObjectModel) {
                 options = ObjectModel.getApiOptions()
             }
+            //TODO: estaba implementando esto
+            usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
             //replace('editFile', '/packages/app/bundles/custom/apis/')
             return (<AdminPage title="APIs" pageSession={pageSession}>
-
                 <AlertDialog
                     acceptCaption="Close"
                     cancelCaption="Keep editing"
@@ -199,10 +205,10 @@ export default {
                         DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),
                         DataTable2.column("object", "object", true, row => <Chip text={row.object} color={row.object == 'None' ? '$gray5' : '$color5'} />),
                     )}
-                    extraFieldsFormsAdd={{
+                    extraFieldsFormsAdd={objects.isLoaded ? {
                         template: z.union([z.literal("Automatic CRUD"), z.literal("Automatic CRUD (custom storage)"), z.literal("IOT Router"), z.literal("empty")]).after("name"),
-                        object: z.union([z.literal("without object"), ...extraData.objects.map(o => z.literal(o.name))] as any).after('name'),
-                    }}
+                        object: z.union([z.literal("without object"), ...(objects.data.items.map(o => z.literal(o.name)))] as any).after('name'),
+                    }:{}}
                     extraMenuActions={[
                         {
                             text: "View API details",
@@ -217,10 +223,9 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/apis', ['admin'], {}, async (context) => {
-            const objects = await API.get(getURLWithToken('/adminapi/v1/objects?all=1', context))
+        getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async (context) => {
             return {
-                objects: objects.isLoaded ? objects.data.items : []
+                objects: await API.get(getURLWithToken(objectsSourceUrl, context))
             }
         })
     }
