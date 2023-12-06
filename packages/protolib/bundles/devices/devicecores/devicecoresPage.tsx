@@ -1,12 +1,19 @@
 import { Cpu, Layers, Tag } from '@tamagui/lucide-icons';
 import { DeviceCoreModel } from './devicecoresSchemas';
 import { z } from 'protolib/base'
-import { API, Chip, DataTable2, DataView, AdminPage, PaginatedDataSSR } from 'protolib'
+import { API, Chip, DataTable2, DataView, AdminPage, PaginatedDataSSR, getPendingResult, usePendingEffect } from 'protolib'
 import { DeviceSdkModel } from '../deviceSdks';
+import { useState } from 'react';
 
 const DeviceCoreIcons = { name: Tag, sdk: Layers }
+const sourceUrl = '/adminapi/v1/devicecores'
+const sdksSourceUrl = '/adminapi/v1/devicesdks?all=1'
+
 export default {
-  component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
+  component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
+    const [sdks, setSdks] = useState(extraData?.sdks ?? getPendingResult('pending'))
+    usePendingEffect((s) => { API.get({ url: sdksSourceUrl }, s) }, setSdks, extraData?.cores)
+    
     return (<AdminPage title="Device Cores" pageSession={pageSession}>
       <DataView
         integratedChat
@@ -31,7 +38,7 @@ export default {
         )
         }
         extraFieldsForms={{
-          sdks: z.array(z.union([z.literal(""), z.literal("")])).generateOptions(() => extraData.sdks.map(o => o.name)).after('name').display(),
+          sdks: z.array(z.union([z.literal(""), z.literal("")])).generateOptions(() => sdks.isLoaded ? sdks.data.items.map(i => DeviceSdkModel.load(i).getData()).map(o => o.name) : []).after('name').display(),
         }}
         model={DeviceCoreModel}
         pageState={pageState}
@@ -40,11 +47,9 @@ export default {
       />
     </AdminPage >)
   },
-  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devicecores', ['admin'], {}, async () => {
-    const sdks = await API.get('/adminapi/v1/devicesdks?itemsPerPage=1000')
-
+  getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async () => {
     return {
-      sdks: sdks.isLoaded ? sdks.data.items.map(i => DeviceSdkModel.load(i).getData()) : []
+      sdks: await API.get(sdksSourceUrl)
     }
   })
 }
