@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple, Tinted, AdminPage, PaginatedDataSSR } from 'protolib'
+import { API, DataTable2, DataView, ButtonSimple, Tinted, AdminPage, PaginatedDataSSR, usePendingEffect } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
@@ -10,6 +10,7 @@ import DeviceModal from 'protodevice/src/DeviceModal'
 import deviceFunctions from 'protodevice/src/device'
 import subsystem from 'protodevice/src/nodes/utils/subsystem'
 import { Paragraph, TextArea, XStack, YStack } from '@my/ui';
+import { getPendingResult } from "protolib/base";
 
 const MqttTest = ({ onSetStage, onSetModalFeedback }) => {
   const { message } = useSubscription(['device/compile']);
@@ -78,8 +79,11 @@ const callText = async (url: string, method: string, params?: string, token?: st
     })
 }
 
+const sourceUrl = '/adminapi/v1/devices'
+const definitionsSourceUrl = '/adminapi/v1/deviceDefinitions?all=1'
+
 export default {
-  component: ({ pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
+  component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
     if (typeof window !== 'undefined') {
       Object.keys(deviceFunctions).forEach(k => (window as any)[k] = deviceFunctions[k])
     } else {
@@ -204,6 +208,9 @@ export default {
     //   }
     // }, [message])
 
+    const [deviceDefinitions, setDeviceDefinitions] = useState(extraData?.deviceDefinitions ?? getPendingResult('pending'))
+    usePendingEffect((s) => { API.get({ url: definitionsSourceUrl }, s) }, setDeviceDefinitions, extraData?.deviceDefinitions)
+
     return (<AdminPage title="Devices" pageSession={pageSession}>
       <Connector brokerUrl="wss://firmware.protofy.xyz/ws">
         <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
@@ -225,7 +232,7 @@ export default {
           DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={(e) => { flashDevice(row.name, row.deviceDefinition); }}>Upload</ButtonSimple>)
         )}
         extraFieldsForms={{
-          deviceDefinition: z.union(extraData.deviceDefinitions.map(o => z.literal(o))).after('name'),
+          deviceDefinition: z.union(deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => z.literal(DeviceDefinitionModel.load(i).getId())): []).after('name'),
         }}
         model={DevicesModel}
         pageState={pageState}
@@ -252,10 +259,9 @@ export default {
       />
     </AdminPage>)
   },
-  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devices', ['admin'], {}, async () => {
-    const deviceDefinitions = await API.get('/adminapi/v1/deviceDefinitions?itemsPerPage=1000')
+  getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async () => {
     return {
-      deviceDefinitions: deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => DeviceDefinitionModel.load(i).getId()) : []
+      initialDeviceDefinitions: await API.get(definitionsSourceUrl)
     }
   })
 }
