@@ -1,5 +1,5 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
-import { useRemoteStateList, ObjectGrid, DataTableCard, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { usePendingEffect, useRemoteStateList, ObjectGrid, DataTableCard, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
@@ -90,12 +90,11 @@ export function DataView({
     refreshOnHotReload = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
-    
-    const [realTimeItems] = disableRealTimeUpdates ? [false] : useRemoteStateList(initialItems, { url: sourceUrl, ...pageState }, 'notifications/' + (_plural) + "/#", model)
+    const [state, setState] = useState(pageState ?? {})
+    const [realTimeItems] = disableRealTimeUpdates ? [false] : useRemoteStateList(initialItems, { url: sourceUrl, ...(pageState ?? {}) }, 'notifications/' + (_plural) + "/#", model)
     const [items, setItems] = useState<PendingResult | undefined>(initialItems);
-    const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems)
+    const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
     const [createOpen, setCreateOpen] = useState(false)
-    const [state, setState] = useState(pageState)
     const { push, mergePush, removePush, replace } = usePageParams(state)
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
@@ -110,17 +109,15 @@ export function DataView({
 
     useEffect(() => {
         if (refreshOnHotReload && process.env.NODE_ENV === 'development' && module['hot']) {
-          module['hot'].addStatusHandler(status => {
-            if (status === 'ready') {
-                document.location.reload()
-            }
-          });
+            module['hot'].addStatusHandler(status => {
+                if (status === 'ready') {
+                    document.location.reload()
+                }
+            });
         }
-      }, []);
+    }, []);
 
-
-
-    // usePendingEffect((s) => { API.get({ url: sourceUrl, ...pageState }, s) }, setItems, initialItems)
+    usePendingEffect((s) => { API.get({ url: sourceUrl, ...state }, s) }, setItems, initialItems)
 
     useEffect(() => {
         if (items && items.isLoaded) {
@@ -200,218 +197,220 @@ export function DataView({
         return parts.pop();
     }
 
-    const totalPages = Math.ceil(currentItems.data?.total / currentItems.data?.itemsPerPage);
+    const totalPages = currentItems && currentItems.isLoaded ? Math.ceil(currentItems.data?.total / currentItems.data?.itemsPerPage) : 0
 
-    return (<YStack height="100%" f={1}>
-        <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>
-            <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
-                <AlertDialog
-                    integratedChat
-                    p={"$0"}
-                    hideAccept
-                    setOpen={(s) => {
-                        removePush('editFile')
-                    }}
-                    open={state.editFile}
-                >
-                    <XStack pt="$4" height={'90vh'} width={"90vw"}>
-                        <FileWidget
-                            isFull={false}
-                            hideCloseIcon={false}
-                            isModified={false}
-                            setIsModified={() => { }}
-                            icons={[
-                                <IconContainer onPress={() => {
-                                    removePush('editFile')
-                                }}>
-                                    <X color="var(--color)" size={"$1"} />
-                                </IconContainer>
-                            ]}
-                            currentFileName={getFilenameFromPath(state.editFile ?? '')}
-                            currentFile={state.editFile}
-                        />
-                    </XStack>
+    return (<AsyncView atom={currentItems}>
+        <YStack height="100%" f={1}>
+            <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>
+                <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
+                    <AlertDialog
+                        integratedChat
+                        p={"$0"}
+                        hideAccept
+                        setOpen={(s) => {
+                            removePush('editFile')
+                        }}
+                        open={state.editFile}
+                    >
+                        <XStack pt="$4" height={'90vh'} width={"90vw"}>
+                            <FileWidget
+                                isFull={false}
+                                hideCloseIcon={false}
+                                isModified={false}
+                                setIsModified={() => { }}
+                                icons={[
+                                    <IconContainer onPress={() => {
+                                        removePush('editFile')
+                                    }}>
+                                        <X color="var(--color)" size={"$1"} />
+                                    </IconContainer>
+                                ]}
+                                currentFileName={getFilenameFromPath(state.editFile ?? '')}
+                                currentFile={state.editFile}
+                            />
+                        </XStack>
 
-                </AlertDialog>
+                    </AlertDialog>
 
-                <AlertDialog
-                    integratedChat
-                    p={"$2"}
-                    pt="$5"
-                    pl="$5"
-                    setOpen={setCreateOpen}
-                    open={createOpen}
-                    hideAccept={true}
-                    description={""}
-                >
-                    <YStack f={1} jc="center" ai="center">
-                        <ScrollView maxHeight={"90vh"}>
-                            <XStack mr="$5">
-                                <EditableObject
-                                    name={name}
-                                    numColumns={numColumnsForm}
-                                    mode={'add'}
-                                    onSave={async (originalData, data) => {
-                                        try {
-                                            const obj = model.load(data)
-                                            const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
-                                            if (result.isError) {
-                                                throw result.error
-                                            }
-                                            fetch()
-                                            setCreateOpen(false);
-                                            toast.show(name + ' created', {
-                                                message: obj.getId()
-                                            })
-                                        } catch (e) {
-                                            console.log('original error: ', e, e.flatten())
-                                            throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
-                                        }
-                                    }}
-                                    model={model}
-                                    extraFields={{ ...extraFields, ...extraFieldsForms, ...extraFieldsFormsAdd }}
-                                    icons={icons}
-                                    customFields={{ ...customFields, ...customFieldsForms }}
-                                    {...objectProps}
-                                />
-                            </XStack>
-                        </ScrollView>
-                    </YStack>
-                </AlertDialog>
-                <AlertDialog
-                    integratedChat
-                    p={"$1"}
-                    pt="$5"
-                    pl="$5"
-                    hideAccept={true}
-                    acceptCaption="Save"
-                    setOpen={(s) => {
-                        setCurrentItemData(undefined);
-                        removePush('item')
-                    }}
-                    open={state.item}
-                    description={""}
-                //bc={resolvedTheme == 'dark' ? "$background": "$color1"}
-                >
-                    <YStack f={1} jc="center" ai="center">
-                        <ScrollView maxHeight={"90vh"}>
-                            <Stack mr="$5">
-                                <EditableObject
-                                    disableToggleMode={disableToggleMode}
-                                    initialData={currentItemData}
-                                    name={name}
-                                    spinnerSize={75}
-                                    loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
-                                    objectId={state.item}
-                                    sourceUrl={sourceUrl + '/' + state.item}
-                                    numColumns={numColumnsForm}
-                                    mode={openMode}
-                                    onSave={async (original, data) => {
-                                        try {
-                                            setCurrentItemData(undefined)
-                                            const id = model.load(data).getId()
-                                            const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(original).update(model.load(data)).getData()))
-                                            if (result.isError) {
-                                                throw result.error
-                                            }
-                                            fetch()
-                                            const { item, ...rest } = state;
-                                            setState(rest)
-                                            toast.show(name + ' updated', {
-                                                message: "Saved new settings for: " + id
-                                            })
-                                        } catch (e) {
-                                            throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
-                                        }
-                                    }}
-                                    model={model}
-                                    extraFields={{ ...extraFields, ...extraFieldsForms, ...extraFieldsFormsEdit }}
-                                    icons={icons}
-                                    customFields={{ ...customFields, ...customFieldsForms }}
-                                    {...objectProps}
-                                />
-                            </Stack>
-                        </ScrollView>
-                    </YStack>
-                </AlertDialog>
-
-                <XStack pt="$3" px="$7" mb="$1">
-                    <XStack left={-12} f={1} ai="center">
-
-                        <Paragraph>
-                            <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
-                        </Paragraph>
-                        {toolBarContent}
-                    </XStack>
-
-                    <XStack ai="center">
-                        <XStack ai="center" ml="$3">
-                            {currentItems.isLoaded && <XStack ml={"$2"}>
-                                <XStack ml={"$5"} ai="center">
-                                    <XStack ml={"$5"} ai="center">
-                                        <Text fontSize={14} color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page) + 1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page + 1)))} of {currentItems.data.total}</Text>
-                                    </XStack>
-                                    <Tinted>
-                                        <InteractiveIcon
-                                            Icon={ChevronLeft}
-                                            onPress={(e) => {
-                                                e.stopPropagation();
-                                                if (currentItems.data.page > 0) {
-                                                    push("page", currentItems.data.page - 1);
+                    <AlertDialog
+                        integratedChat
+                        p={"$2"}
+                        pt="$5"
+                        pl="$5"
+                        setOpen={setCreateOpen}
+                        open={createOpen}
+                        hideAccept={true}
+                        description={""}
+                    >
+                        <YStack f={1} jc="center" ai="center">
+                            <ScrollView maxHeight={"90vh"}>
+                                <XStack mr="$5">
+                                    <EditableObject
+                                        name={name}
+                                        numColumns={numColumnsForm}
+                                        mode={'add'}
+                                        onSave={async (originalData, data) => {
+                                            try {
+                                                const obj = model.load(data)
+                                                const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
+                                                if (result.isError) {
+                                                    throw result.error
                                                 }
-                                            }} ml={"$3"}
-                                            disabled={!(currentItems.data.page > 0)}/>
-                                        <Spacer size="$3" />
-                                        <InteractiveIcon
-                                            Icon={ChevronRight}
-                                            onPress={(e) => {
-                                                e.stopPropagation();
-                                                if (currentItems.data.page < totalPages-1) {
-                                                    push("page", currentItems.data.page + 1);
-                                                }
-                                            }}
-                                            ml={"$3"}
-                                            disabled={!(currentItems.data.page < totalPages-1)}/>
-                                    </Tinted>
+                                                fetch()
+                                                setCreateOpen(false);
+                                                toast.show(name + ' created', {
+                                                    message: obj.getId()
+                                                })
+                                            } catch (e) {
+                                                console.log('original error: ', e, e.flatten())
+                                                throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
+                                            }
+                                        }}
+                                        model={model}
+                                        extraFields={{ ...extraFields, ...extraFieldsForms, ...extraFieldsFormsAdd }}
+                                        icons={icons}
+                                        customFields={{ ...customFields, ...customFieldsForms }}
+                                        {...objectProps}
+                                    />
                                 </XStack>
-                            </XStack>}
+                            </ScrollView>
+                        </YStack>
+                    </AlertDialog>
+                    <AlertDialog
+                        integratedChat
+                        p={"$1"}
+                        pt="$5"
+                        pl="$5"
+                        hideAccept={true}
+                        acceptCaption="Save"
+                        setOpen={(s) => {
+                            setCurrentItemData(undefined);
+                            removePush('item')
+                        }}
+                        open={state.item}
+                        description={""}
+                    //bc={resolvedTheme == 'dark' ? "$background": "$color1"}
+                    >
+                        <YStack f={1} jc="center" ai="center">
+                            <ScrollView maxHeight={"90vh"}>
+                                <Stack mr="$5">
+                                    <EditableObject
+                                        disableToggleMode={disableToggleMode}
+                                        initialData={currentItemData}
+                                        name={name}
+                                        spinnerSize={75}
+                                        loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
+                                        objectId={state.item}
+                                        sourceUrl={sourceUrl + '/' + state.item}
+                                        numColumns={numColumnsForm}
+                                        mode={openMode}
+                                        onSave={async (original, data) => {
+                                            try {
+                                                setCurrentItemData(undefined)
+                                                const id = model.load(data).getId()
+                                                const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(original).update(model.load(data)).getData()))
+                                                if (result.isError) {
+                                                    throw result.error
+                                                }
+                                                fetch()
+                                                const { item, ...rest } = state;
+                                                setState(rest)
+                                                toast.show(name + ' updated', {
+                                                    message: "Saved new settings for: " + id
+                                                })
+                                            } catch (e) {
+                                                throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
+                                            }
+                                        }}
+                                        model={model}
+                                        extraFields={{ ...extraFields, ...extraFieldsForms, ...extraFieldsFormsEdit }}
+                                        icons={icons}
+                                        customFields={{ ...customFields, ...customFieldsForms }}
+                                        {...objectProps}
+                                    />
+                                </Stack>
+                            </ScrollView>
+                        </YStack>
+                    </AlertDialog>
+
+                    <XStack pt="$3" px="$7" mb="$1">
+                        <XStack left={-12} f={1} ai="center">
+
+                            <Paragraph>
+                                <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
+                            </Paragraph>
+                            {toolBarContent}
                         </XStack>
-                        <XStack ai="center" marginLeft="$3">
-                            {!disableViewSelector && <ButtonGroup marginRight="$3">
-                                {
-                                    tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
-                                        {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
-                                    </ActiveGroupButton>)
+
+                        <XStack ai="center">
+                            <XStack ai="center" ml="$3">
+                                {currentItems.isLoaded && <XStack ml={"$2"}>
+                                    <XStack ml={"$5"} ai="center">
+                                        <XStack ml={"$5"} ai="center">
+                                            <Text fontSize={14} color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page) + 1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page + 1)))} of {currentItems.data.total}</Text>
+                                        </XStack>
+                                        <Tinted>
+                                            <InteractiveIcon
+                                                Icon={ChevronLeft}
+                                                onPress={(e) => {
+                                                    e.stopPropagation();
+                                                    if (currentItems.data.page > 0) {
+                                                        push("page", currentItems.data.page - 1);
+                                                    }
+                                                }} ml={"$3"}
+                                                disabled={!(currentItems.data.page > 0)} />
+                                            <Spacer size="$3" />
+                                            <InteractiveIcon
+                                                Icon={ChevronRight}
+                                                onPress={(e) => {
+                                                    e.stopPropagation();
+                                                    if (currentItems.data.page < totalPages - 1) {
+                                                        push("page", currentItems.data.page + 1);
+                                                    }
+                                                }}
+                                                ml={"$3"}
+                                                disabled={!(currentItems.data.page < totalPages - 1)} />
+                                        </Tinted>
+                                    </XStack>
+                                </XStack>}
+                            </XStack>
+                            <XStack ai="center" marginLeft="$3">
+                                {!disableViewSelector && <ButtonGroup marginRight="$3">
+                                    {
+                                        tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
+                                            {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
+                                        </ActiveGroupButton>)
+                                    }
+                                </ButtonGroup>}
+                                {!hideAdd && <Tinted>
+                                    <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
+                                        onAddButton ? onAddButton() : setCreateOpen(true)
+                                    }} chromeless={true}>
+                                        <Plus color={"$color10"} />
+                                    </Button>
+                                </Tinted>
                                 }
-                            </ButtonGroup>}
-                            {!hideAdd && <Tinted>
-                                <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
-                                    onAddButton ? onAddButton() : setCreateOpen(true)
-                                }} chromeless={true}>
-                                    <Plus color={"$color10"} />
-                                </Button>
-                            </Tinted>
-                            }
+                            </XStack>
                         </XStack>
                     </XStack>
-                </XStack>
 
-                {items && items.isError && (
-                    <Notice>
-                        <Paragraph>{getErrorMessage(items.error)}</Paragraph>
-                    </Notice>
-                )}
-                <Stack f={1}>
-                    <AsyncView atom={currentItems}>
-                        {
-                            tableViews.map((v, index) => <ActiveRender height="100%" key={index} activeId={index}>
-                                {React.createElement(v.component, { ...v.props } ?? {})}
-                            </ActiveRender>
-                            )}
-                    </AsyncView>
-                </Stack>
-            </ActiveGroup>
-        </DataViewContext.Provider>
-    </YStack>
+                    {items && items.isError && (
+                        <Notice>
+                            <Paragraph>{getErrorMessage(items.error)}</Paragraph>
+                        </Notice>
+                    )}
+                    <Stack f={1}>
+                        <AsyncView atom={currentItems}>
+                            {
+                                tableViews.map((v, index) => <ActiveRender height="100%" key={index} activeId={index}>
+                                    {React.createElement(v.component, { ...v.props } ?? {})}
+                                </ActiveRender>
+                                )}
+                        </AsyncView>
+                    </Stack>
+                </ActiveGroup>
+            </DataViewContext.Provider>
+        </YStack>
+    </AsyncView>
     )
 }

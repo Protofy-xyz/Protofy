@@ -5,7 +5,7 @@ import React, { useState } from "react"
 import {Tinted} from './Tinted'
 import { useTimeout } from 'usehooks-ts'
 
-const AsyncView = React.forwardRef(({ forceLoad, waitForLoading=0, spinnerSize, atom, error=null, loading=null, children, loadingText, ...props}:any, ref:any) => {
+const AsyncView = React.forwardRef(({ forceLoad, waitForLoading=250, spinnerSize, atom, error=null, loading=null, children, loadingText, ...props}:any, ref:any) => {
     const [loadingVisible, setLoadingVisible] = useState(waitForLoading?false:true)
     useTimeout(() => setLoadingVisible(true), waitForLoading)
     

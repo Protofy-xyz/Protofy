@@ -7,9 +7,11 @@ import { usePrompt } from '../../context/PromptAtom'
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const EventIcons =  {}
+const sourceUrl = '/adminapi/v1/events'
+
 export default {
     'admin/events': {
-        component: ({pageState, sourceUrl, initialItems, pageSession}:any) => {
+        component: ({pageState, initialItems, pageSession}:any) => {
             usePrompt(() => `At this moment the user is browsing the events list page. The events list page allows to monitor system events. The list is updated automatically if any events occurs.
             An event can be a user created, invalid login attempt, successful login, file edit, file create, file update, and also system object modification events, like "product created", or "product updated".
             Events can be used to monitor the system, auditing pruposes, or to trigger API actions when a specific event happens.
@@ -20,6 +22,7 @@ export default {
             `+ (
                 initialItems.isLoaded?'Currently the system returned the following information: '+JSON.stringify(initialItems.data) : ''
             )) 
+
             return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
                     integratedChat
@@ -55,7 +58,7 @@ export default {
                 />
             </AdminPage>)
         }, 
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/events', ['admin'], {
+        getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {
             orderBy: "created",
             orderDirection: "desc"
         })
