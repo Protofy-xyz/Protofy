@@ -8,12 +8,13 @@ import { DeviceCoreModel } from '../devicecores';
 import { Spinner, XStack } from "tamagui";
 import dynamic from 'next/dynamic'
 import { useThemeSetting } from '@tamagui/next-theme'
+import { getPendingResult } from "protolib/base";
+import { usePendingEffect } from "protolib";
 
 const DeviceDefitionIcons = {
   name: Tag,
   board: CircuitBoard
 }
-
 
 const FlowsWidget = dynamic(() => import('../../../adminpanel/features/components/FlowsWidget'), {
   loading: () => <>
@@ -25,8 +26,12 @@ const FlowsWidget = dynamic(() => import('../../../adminpanel/features/component
   ssr: false
 })
 
+const sourceUrl = '/adminapi/v1/devicedefinitions'
+const boardsSourceUrl = '/adminapi/v1/deviceboards?all=1'
+const coresSourceUrl = '/adminapi/v1/devicecores?all=1'
+
 export default {
-  component: ({ workspace, pageState, sourceUrl, initialItems, itemData, pageSession, extraData }: any) => {
+  component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData }: any) => {
     const [showDialog, setShowDialog] = React.useState(false)
     const [isSaveActive, setIsSaveActive] = React.useState(false);
     const { resolvedTheme } = useThemeSetting();
@@ -38,6 +43,14 @@ export default {
     const saveToFile= (code,path)=>{
       editedObjectData.setData({components: code, sdkConfig: {board: "esp32dev", framework:{type: "arduino"}}})
     }
+
+    const [boardList, setBoardList] = useState(extraData?.boards ?? getPendingResult('pending'))
+    usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardList, extraData?.deviceDefinitions)
+    const boards = boardList.isLoaded ? boardList.data.items.map(i => DeviceBoardModel.load(i).getData()) : []
+
+    const [coresList, setCoresList] = useState(extraData?.cores ?? getPendingResult('pending'))
+    usePendingEffect((s) => { API.get({ url: coresSourceUrl }, s) }, setCoresList, extraData?.cores)
+    const cores = coresList.isLoaded ? coresList.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
 
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
       <AlertDialog open={showDialog} setOpen={(open) => { setShowDialog(open) }} hideAccept={true} style={{ width: "80%", height: "80%" }}>
@@ -93,12 +106,8 @@ export default {
           DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={async (e) => { console.log("row from Edit: ", row); setIsSaveActive(false); setShowDialog(true); setSourceCode(row.config.components); }}>View</ButtonSimple>)
         )}
         extraFieldsForms={{
-          board: z.union(extraData.boards.map(o => z.literal(o.name))).after('name'),
-          sdk: z.union([
-            z.literal("hola"),
-            z.literal("adios")
-          ]).dependsOn("board").generateOptions((formData) => {
-            const { boards, cores } = extraData
+          board: z.union(boards.map(o => z.literal(o.name))).after('name'),
+          sdk: z.union([z.any(), z.any()]).dependsOn("board").generateOptions((formData) => {
             if (formData.board) {
               const board = boards.find(brd => brd.name === formData.board)
               return cores.find(core => core.name === board.core).sdks
@@ -123,15 +132,10 @@ export default {
       />
     </AdminPage>)
   },
-  getServerSideProps: PaginatedDataSSR('/adminapi/v1/devicedefinitions', ['admin'], {}, async () => {
-    const boards = await API.get('/adminapi/v1/deviceboards?itemsPerPage=1000')
-    const cores = await API.get('/adminapi/v1/devicecores?itemsPerPage=1000')
-    const sdks = await API.get('/adminapi/v1/devicesdks?itemsPerPage=1000')
-
+  getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async () => {
     return {
-      boards: boards.isLoaded ? boards.data.items.map(i => DeviceBoardModel.load(i).getData()) : [],
-      cores: cores.isLoaded ? cores.data.items.map(i => DeviceCoreModel.load(i).getData()) : [],
-      sdks: sdks.isLoaded ? sdks.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
+      boards: await API.get(boardsSourceUrl),
+      cores: await API.get(coresSourceUrl)
     }
   })
 }
