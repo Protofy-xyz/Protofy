@@ -12,10 +12,11 @@ import {DataView, API, AdminPage, PaginatedDataSSR } from 'protolib'
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
 const {name, prefix} = Objects.{{_object}}.getApiOptions()
+const sourceUrl = prefix + name
 
 export default {
     route: Protofy("route", "{{route}}"),
-    component: ({pageState, sourceUrl, initialItems, pageSession, extraData}:any) => {
+    component: ({pageState, initialItems, pageSession, extraData}:any) => {
         return (<AdminPage title="{{object}}" pageSession={pageSession}>
             <DataView
                 integratedChat
@@ -29,5 +30,5 @@ export default {
             />
         </AdminPage>)
     }, 
-    getServerSideProps: PaginatedDataSSR(prefix + name, isProtected?Protofy("permissions", {{permissions}}):undefined)
+    getServerSideProps: PaginatedDataSSR(sourceUrl, isProtected?Protofy("permissions", {{permissions}}):undefined)
 }
