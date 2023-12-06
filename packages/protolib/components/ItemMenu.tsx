@@ -6,7 +6,7 @@ import { MoreVertical, Trash2, FilePlus } from '@tamagui/lucide-icons'
 import { InteractiveIcon } from "./InteractiveIcon";
 import { DataViewContext } from "./DataView";
 
-export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelete, element, extraMenuActions = [], ...props }: { sourceUrl: string, enableAddToInitialData?:boolean, onDelete: any, element: any, extraMenuActions?: any } & StackProps) => {
+export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelete, element, deleteable,extraMenuActions = [], ...props }: { sourceUrl: string, enableAddToInitialData?:boolean, onDelete: any, deleteable?:boolean, element: any, extraMenuActions?: any } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
     const { setSelected} = useContext(DataViewContext);
@@ -15,16 +15,22 @@ export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelet
         
     }
 
-    const MenuButton = ({ text, Icon, onPress }) => {
+    const MenuButton = ({ text, Icon, onPress, disabled }:{text: string, Icon:any, onPress:any, disabled?:boolean}) => {
         return <XStack ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start"
-            cursor='pointer'
-            pressStyle={{ o: 0.7 }}
-            hoverStyle={{ bc: "$color5" }}
-            onPress={(e) => { onPress(element, e), setMenuOpened(false) }}>
-            <Icon size={"$1"} color="var(--color9)" strokeWidth={2} />
+            cursor={!disabled?'pointer':'default'}
+            pressStyle={!disabled?{ o: 0.7 }:{}}
+            hoverStyle={!disabled?{ bc: "$color5" }:{}}
+            onPress={(e) => { 
+                if(!disabled){
+                    onPress(element, e), setMenuOpened(false) 
+                }
+                
+                }}>
+            <Icon size={"$1"} color={disabled?"var(--gray9)":"var(--color9)"} strokeWidth={2} />
             <Text ml={"$3"}>{text}</Text>
         </XStack>
     }
+
 
     return <Stack {...props}>
         <AlertDialog
@@ -62,7 +68,7 @@ export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelet
                                 return action.isVisible && action.isVisible(element) && <MenuButton key={i} text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
                             })}
                             {false && enableAddToInitialData &&  <MenuButton text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); addToInitialData(data),setMenuOpened(false) }}></MenuButton>}
-                            <MenuButton text={"Delete"} Icon={Trash2} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
+                            <MenuButton text={"Delete"} Icon={Trash2} disabled={!deleteable} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
                         </YStack>
                     </YStack>
                 </Tinted>

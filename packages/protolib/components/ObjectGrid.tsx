@@ -45,6 +45,7 @@ const GridElementCard = ({ index, data, width }) => {
                     columnWidth={width - data.contentMargin}
                     columnMargin={0}
                     onDelete={data.onDelete}
+                    deleteable={data.deleteable}
                     extraMenuActions={data.extraMenuActions}
                     
                 />
@@ -53,7 +54,7 @@ const GridElementCard = ({ index, data, width }) => {
     </ItemCard>
 }
 
-export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, extraMenuActions, spacing = 20, getPicture, getBody,getCard, model, items, sourceUrl, customFields, onDelete, extraFields, icons, children, ...props }: any & StackProps) => {
+export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, extraMenuActions, spacing = 20, getPicture, getBody,getCard, model, items, sourceUrl, customFields, onDelete, deleteable, extraFields, icons, children, ...props }: any & StackProps) => {
     const containerRef = useRef(null)
 
     const data = items.map((element, i) => {
@@ -73,6 +74,7 @@ export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinW
             contentMargin,
             onSelectItem,
             onDelete,
+            deleteable,
             itemHeight,
             extraMenuActions,
 

@@ -30,6 +30,7 @@ export type EditableObjectProps = {
   disableToggleMode?: boolean,
   columnMargin?: number,
   onDelete?: Function,
+  deleteable?: Boolean,
   autoWidth?: Boolean,
   EditIconNearTitle?: Boolean,
   extraMenuActions: any[]
@@ -410,7 +411,7 @@ const GridElement = ({ index, data, width }) => {
   </XStack>
 }
 
-export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = true, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
   const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
   const [currentMode, setCurrentMode] = useState(mode)
   const [prevCurrentMode, setPrevCurrentMode] = useState('')
@@ -476,7 +477,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
       <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>
     {currentMode == 'preview' && <Stack t={"$-5"}>
-      <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} element={model.load(data.data)} extraMenuActions={extraMenuActions} />
+      <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} deleteable={deleteable} element={model.load(data.data)} extraMenuActions={extraMenuActions} />
     </Stack>}
   </XStack>), [columnMargin, groups, columnWidth, numColumns])
 

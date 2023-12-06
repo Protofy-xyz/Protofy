@@ -9,7 +9,7 @@ import React from "react";
 import { ItemMenu } from "./ItemMenu";
 
 
-export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuActions = [], enableAddToInitialData }) => {
+export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable, extraMenuActions = [], enableAddToInitialData }) => {
     const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
@@ -33,7 +33,7 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuAction
     return <XStack pt="$1" flexWrap='wrap'>
         <Tinted>
             <DataTable2.component
-        
+
                 pagination={false}
                 conditionalRowStyles={conditionalRowStyles}
                 rowsPerPage={state.itemsPerPage ? state.itemsPerPage : 25}
@@ -59,7 +59,14 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuAction
                                     </Checkbox.Indicator>
                                 </Checkbox>
                             </Stack>
-                            {selected.length > 1 && <ItemMenu enableAddToInitialData={enableAddToInitialData} mt={"1px"} ml={"-5px"} element={selected} sourceUrl={sourceUrl} onDelete={onDelete} />}
+                            {selected.length > 1 &&
+                                <ItemMenu enableAddToInitialData={enableAddToInitialData}
+                                    mt={"1px"}
+                                    ml={"-5px"}
+                                    element={selected}
+                                    sourceUrl={sourceUrl}
+                                    deleteable={deleteable}
+                                    onDelete={onDelete} />}
                         </XStack>
                     </Theme>, "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
                         <Stack mt={"$2"}>
@@ -72,9 +79,16 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, extraMenuAction
                                 </Checkbox.Indicator>
                             </Checkbox>
                         </Stack>
-                        <ItemMenu enableAddToInitialData={enableAddToInitialData} ml={"-5px"} mt={"1px"} element={model.load(row)} sourceUrl={sourceUrl + "/" + model.load(row).getId()} onDelete={onDelete} extraMenuActions={extraMenuActions} />
+                        <ItemMenu enableAddToInitialData={enableAddToInitialData}
+                            ml={"-5px"}
+                            mt={"1px"}
+                            element={model.load(row)}
+                            sourceUrl={sourceUrl + "/" + model.load(row).getId()}
+                            deleteable={deleteable} 
+                            onDelete={onDelete}
+                            extraMenuActions={extraMenuActions} />
                         {rowIcon && <Tinted><Stack o={0.8} ml={"$2"} t={"6px"}>{React.createElement(rowIcon, { size: "$1", color: '$color7' })}</Stack></Tinted>}
-                    </XStack></Theme>, true, rowIcon?'115px':'75px'), ...cols]}
+                    </XStack></Theme>, true, rowIcon ? '115px' : '75px'), ...cols]}
                 rows={items?.data?.items}
                 onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}
             />

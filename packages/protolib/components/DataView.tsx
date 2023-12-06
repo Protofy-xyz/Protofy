@@ -84,6 +84,7 @@ export function DataView({
     toolBarContent = null,
     onAddButton = undefined,
     extraMenuActions = [],
+    deleteable = true,
     integratedChat = false,
     objectProps = {},
     disableRealTimeUpdates = false,
@@ -155,6 +156,7 @@ export function DataView({
             component: DataTableList,
             props: {
                 sourceUrl,
+                deleteable: deleteable,
                 onDelete: () => { },
                 enableAddToInitialData,
                 extraMenuActions: extraMenuActions,
@@ -174,6 +176,7 @@ export function DataView({
                 extraFields,
                 icons,
                 ml: "$5",
+                deleteable: deleteable,
                 onDelete: () => { },
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 extraMenuActions: extraMenuActions,
