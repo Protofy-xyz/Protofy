@@ -6,13 +6,16 @@ import { DataCard } from '../../components/DataCard'
 import { useState } from 'react'
 import { Server } from '@tamagui/lucide-icons'
 import { usePrompt } from '../../context/PromptAtom'
+
 const format = 'YYYY-MM-DD HH:mm:ss'
 const DatabaseIcons = {}
 const rowsPerPage = 20
 
+const databasesSourceUrl = '/adminapi/v1/databases'
+
 export default {
     'admin/databases': {
-        component: ({ workspace, pageState, sourceUrl, initialItems, pageSession }: any) => {
+        component: ({ workspace, pageState, initialItems, pageSession }: any) => {
             const router = useRouter()
 
             usePrompt(() => `At this moment the user is browsing the databases list page. The databases list page allows to list the system databases. Databases are based on leveldb, and stored under /data/databases.
@@ -29,7 +32,7 @@ export default {
                 <DataView
                     integratedChat
                     rowIcon={Server}
-                    sourceUrl={sourceUrl}
+                    sourceUrl={databasesSourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="database"
@@ -44,7 +47,7 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/databases')
+        getServerSideProps: PaginatedDataSSR(databasesSourceUrl)
     },
     'admin/databases/*': {
         component: ({ workspace, pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
@@ -56,9 +59,9 @@ export default {
             const [error, setError] = useState(false)
             const emptyItemValue = { exapmle: "exampleValue" }
             const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-            const currentDB = extraData.name
+            const currentDB = router.query.name[2]
             const fetch = async () => {
-                setContent(await API.fetch(sourceUrl))
+                setContent(await API.fetch('/adminapi/v1/databases/' + router.query.name[2]))
             }
             const onDelete = async (key, isTemplate) => {
                 if (isTemplate) {
@@ -91,15 +94,15 @@ export default {
                 setTmpItem(null)
                 return result
             }
-            return (<AdminPage title={extraData.name} workspace={workspace} pageSession={pageSession}>
+            return (<AdminPage title={currentDB} workspace={workspace} pageSession={pageSession}>
                 <DataView
                     integratedChat
                     key={renew}
-                    sourceUrl={sourceUrl}
+                    sourceUrl={'/adminapi/v1/databases/' + router.query.name[2]}
                     initialItems={content}
                     numColumnsForm={1}
-                    name={extraData.name}
-                    pluralName={extraData.name}
+                    name={currentDB}
+                    pluralName={currentDB}
                     // hideAdd={true}
                     model={DatabaseEntryModel}
                     pageState={pageState}
@@ -133,10 +136,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.name[2], ['admin'], {
-            itemsPerPage: 1000000
-        }, (context) => {
-            return { name: context.query.name[2] }
-        })
+        getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.name[2], ['admin'])
     }
 }
