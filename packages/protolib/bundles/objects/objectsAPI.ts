@@ -1,5 +1,5 @@
 import { ObjectModel } from ".";
-import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI, getRoot } from '../../api'
+import { getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
@@ -110,20 +110,7 @@ const getDB = (path, req, session) => {
       value = JSON.parse(value)
       const filePath = getRoot(req) + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts'
       if (value._deleted) {
-        const localPath = './'+fspath.basename(value.name).toLowerCase();
-        const sourceFile = getSourceFile(fspath.join(getRoot(req), indexFile))
-        const arg = getDefinition(sourceFile, '"objects"')
-        if (!arg) {
-          throw "No link definition schema marker found for file: " + path
-        }
-        removeObjectLiteralProperty(arg, value.name)
-        removeImportFromSourceFile(sourceFile, localPath)
-        sourceFile.saveSync();
-        try {
-          await fs.unlink(filePath);
-      } catch (err) {
-          console.error('Error deleting object file', err);
-      }
+        removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req);
       } else {
         let exists
         try {

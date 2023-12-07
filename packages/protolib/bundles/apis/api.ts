@@ -1,5 +1,5 @@
 import { APIModel } from ".";
-import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI, getRoot } from '../../api'
+import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { API } from 'protolib/base'
@@ -31,25 +31,11 @@ const getDB = (path, req, session) => {
       }
     },
 
-
     async put(key, value) {
       value = JSON.parse(value)
       const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts'
       if (value._deleted) {
-        const localPath = './' + fspath.basename(value.name).toLowerCase();
-        const sourceFile = getSourceFile(indexFile(getRoot(req)));
-        const arg = getDefinition(sourceFile, '"apis"')
-        if (!arg) {
-          throw "No link definition schema marker found for file: " + path
-        }
-        removeObjectLiteralProperty(arg, value.name)
-        removeImportFromSourceFile(sourceFile, localPath)
-        sourceFile.saveSync();
-        try {
-          await fs.unlink(filePath);
-        } catch (err) {
-          console.error('Error deleting api file', err);
-        }
+        removeFileWithImports(getRoot(req), value, '"apis"', indexFile(getRoot(req)), req);
       } else {
         let exists
         const template = fspath.basename(value.template ?? 'empty')

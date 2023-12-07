@@ -1,4 +1,7 @@
 import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
+import { promises as fs } from 'fs';
+import * as fspath from 'path';
+import { getRoot } from './getRoot';
 
 export const getImport = (sourceFile, identifier) => {
     const importDeclarations = sourceFile.getImportDeclarations();
@@ -34,7 +37,7 @@ export const getDefinition = (sourceFile, def, numParam = 1) => {
         const expression = callExpr.getExpression();
         return expression.getKind() === SyntaxKind.Identifier && expression.getText() === 'Protofy' && args.length && args[0].getText() == def;
     });
-    return callToDef?callToDef.getArguments()[numParam]:undefined;
+    return callToDef ? callToDef.getArguments()[numParam] : undefined;
 }
 
 export const getSourceFile = (path) => {
@@ -126,17 +129,43 @@ export const addObjectLiteralProperty = (
 export const removeObjectLiteralProperty = (
     objectLiteral: ObjectLiteralExpression,
     key: string
-  ): void => {
+): void => {
     const existingProperty = objectLiteral.getProperty(p =>
-      p instanceof PropertyAssignment &&
-      ((p.getNameNode().getKind() === SyntaxKind.Identifier && p.getName() === key) ||
-       (p.getNameNode().getKind() === SyntaxKind.ComputedPropertyName &&
-        p.getNameNode().getText() === `["${key}"]`))
+        p instanceof PropertyAssignment &&
+        ((p.getNameNode().getKind() === SyntaxKind.Identifier && p.getName() === key) ||
+            (p.getNameNode().getKind() === SyntaxKind.ComputedPropertyName &&
+                p.getNameNode().getText() === `["${key}"]`))
     );
-  
+
     if (existingProperty) {
-      existingProperty.remove();
+        existingProperty.remove();
     } else {
-      console.warn(`Key "${key}" does not exist on the object.`);
+        console.warn(`Key "${key}" does not exist on the object.`);
     }
-  };
+};
+
+export const removeFileWithImports = async (
+    root, value, type, indexFilePath, req
+) => {
+
+    const localPath = './' + fspath.basename(value.name).toLowerCase();
+    const sourceFile = getSourceFile(fspath.join(root, indexFilePath));
+    const arg = getDefinition(sourceFile, type);
+
+    if (!arg) {
+        throw "No link definition schema marker found for file: " + localPath;
+    }
+
+    removeObjectLiteralProperty(arg, value.name);
+    removeImportFromSourceFile(sourceFile, localPath);
+    sourceFile.saveSync();
+
+    const filePath = getRoot(req) + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts';
+
+    try {
+        await fs.unlink(filePath);
+    } catch (err) {
+        console.error(`Error deleting file: ${filePath}`, err);
+    }
+
+};
