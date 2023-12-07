@@ -3,8 +3,8 @@ import { CreateApi, getImport, getSourceFile, extractChainCalls, addImportToSour
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
-import {getServiceToken} from 'protolib/api/lib/serviceToken'
-import {API} from 'protolib/base'
+import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import { API } from 'protolib/base'
 
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
 
@@ -20,9 +20,9 @@ const getSchemas = async (req, sourceFile?) => {
         if (prop instanceof PropertyAssignment) {
           const schemaId = prop.getInitializer().getText();
           return getSchema(schemaId, [], req, prop.getName()).then(schema => ({
-            name: prop.getName(), 
-            features: schema.features, 
-            id: schemaId 
+            name: prop.getName(),
+            features: schema.features,
+            id: schemaId
           }));
         }
       }).filter(p => p);
@@ -67,7 +67,7 @@ const getSchema = async (idSchema, schemas, req, name?) => {
     console.log('features', featuresNode.getText())
     try {
       features = JSON.parse(featuresNode.getText())
-    } catch(e) {
+    } catch (e) {
       console.error("Ignoring features in object: ", idSchema, "because of an error: ", e)
       console.error("Features text producing the error: ", featuresNode.getText())
     }
@@ -108,39 +108,56 @@ const getDB = (path, req, session) => {
 
     async put(key, value) {
       value = JSON.parse(value)
-      let exists
       const filePath = getRoot(req) + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts'
-      try {
-        await fs.access(filePath, fs.constants.F_OK)
-        exists = true
-      } catch (error) {
-        exists = false
-      }
-
-      if (exists) {
-        console.log('File: ' + filePath + ' already exists, not executing template')
-      } else {
-        const result = await API.post('/adminapi/v1/templates/file?token='+getServiceToken(), {
-          name: value.name + '.ts',
-          data: {
-            options: { template: '/packages/protolib/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },
-            path: '/packages/app/bundles/custom/objects'
-          }
-        })
-        
-        if(result.isError) {
-          throw result.error
+      if (value._deleted) {
+        const localPath = './'+fspath.basename(value.name).toLowerCase();
+        const sourceFile = getSourceFile(fspath.join(getRoot(req), indexFile))
+        const arg = getDefinition(sourceFile, '"objects"')
+        if (!arg) {
+          throw "No link definition schema marker found for file: " + path
         }
+        removeObjectLiteralProperty(arg, value.name)
+        removeImportFromSourceFile(sourceFile, localPath)
+        sourceFile.saveSync();
+        try {
+          await fs.unlink(filePath);
+      } catch (err) {
+          console.error('Error deleting object file', err);
       }
+      } else {
+        let exists
+        try {
+          await fs.access(filePath, fs.constants.F_OK)
+          exists = true
+        } catch (error) {
+          exists = false
+        }
 
-      const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
-        const v = value.keys[current]
-        const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ? current.params.join(',') : '') + ")", '') : ''
-        return total + "\n\t" + current + ": " + "z." + v.type + "(" + (v.params && v.params.length ? v.params.join(',') : '') + ")" + modifiers + ","
-      }, '').slice(0, -1) + "\n}"
+        if (exists) {
+          console.log('File: ' + filePath + ' already exists, not executing template')
+        } else {
+          const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+            name: value.name + '.ts',
+            data: {
+              options: { template: '/packages/protolib/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },
+              path: '/packages/app/bundles/custom/objects'
+            }
+          })
+
+          if (result.isError) {
+            throw result.error
+          }
+        }
+
+        const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
+          const v = value.keys[current]
+          const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ? current.params.join(',') : '') + ")", '') : ''
+          return total + "\n\t" + current + ": " + "z." + v.type + "(" + (v.params && v.params.length ? v.params.join(',') : '') + ")" + modifiers + ","
+        }, '').slice(0, -1) + "\n}"
 
 
-      await setSchema(filePath, result, value, req)
+        await setSchema(filePath, result, value, req)
+      }
     },
 
     async get(key) {
