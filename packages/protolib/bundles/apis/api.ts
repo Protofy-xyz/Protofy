@@ -8,6 +8,7 @@ import { Objects } from "app/bundles/objects";
 
 const APIDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
 const indexFile = (root) => APIDir(root) + "index.ts"
+const indexFilePath = "/packages/app/bundles/custom/apis/index.ts"
 
 const getAPI = (apiPath, req) => {
   const sourceFile = getSourceFile(APIDir(getRoot(req)) + apiPath)
@@ -35,7 +36,28 @@ const getDB = (path, req, session) => {
       value = JSON.parse(value)
       const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts'
       if (value._deleted) {
-        removeFileWithImports(getRoot(req), value, '"apis"', indexFile(getRoot(req)), req);
+        const api = getAPI(fspath.basename(value.name) + '.ts', req)
+        removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req);
+        if (api.type === "AutoAPI") {
+          const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(api.object))
+          let sourceFile = getSourceFile(objectPath)
+          let arg = getDefinition(sourceFile, '"features"')
+          if (arg) {
+            console.log('Marker found, removing object property');
+            const propertyToRemove = arg.getProperty('"AutoAPI"');
+            if (propertyToRemove) {
+              propertyToRemove.remove();
+              await sourceFile.save();
+            } else {
+              console.error("Property 'AutoAPI' not found, cannot remove.");
+            }
+          } else {
+            console.error("Not removing api feature from object: ", value.object, "due to missing features marker");
+          }
+        }
+
+        
+
       } else {
         let exists
         const template = fspath.basename(value.template ?? 'empty')
