@@ -85,7 +85,7 @@ export function DataView({
     toolBarContent = null,
     onAddButton = undefined,
     extraMenuActions = [],
-    deleteable = true,
+    deleteable = ()=>{return true},
     integratedChat = false,
     objectProps = {},
     disableRealTimeUpdates = false,

@@ -9,11 +9,11 @@ import React from "react";
 import { ItemMenu } from "./ItemMenu";
 
 
-export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable, extraMenuActions = [], enableAddToInitialData }) => {
+export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = () => { }, extraMenuActions = [], enableAddToInitialData }) => {
     const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
-            when: row => selected.includes(model.load(row).getId()),
+            when: row => selected.some(item => item.id === model.load(row).getId()),
             style: {
                 backgroundColor: 'var(--color4)'
             },
@@ -50,8 +50,8 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable, ext
                                     if (selected.length) {
                                         setSelected([])
                                     } else {
-                                        console.log('selection all: ', items?.data?.items.map(x => model.load(x).getId()))
-                                        setSelected(items?.data?.items.map(x => model.load(x).getId()))
+                                        console.log('selection all: ', items?.data?.items)//.map(x => model.load(x).getId()))
+                                        setSelected(items?.data?.items)//.map(x => model.load(x).getId()))
                                     }
                                 }}>
                                     <Checkbox.Indicator>
@@ -59,6 +59,8 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable, ext
                                     </Checkbox.Indicator>
                                 </Checkbox>
                             </Stack>
+
+
                             {selected.length > 1 &&
                                 <ItemMenu enableAddToInitialData={enableAddToInitialData}
                                     mt={"1px"}
@@ -67,13 +69,24 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable, ext
                                     sourceUrl={sourceUrl}
                                     deleteable={deleteable}
                                     onDelete={onDelete} />}
+
+
                         </XStack>
                     </Theme>, "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
                         <Stack mt={"$2"}>
-                            <Checkbox focusStyle={{ outlineWidth: 0 }} onPress={() => {
-                                const id = model.load(row).getId()
-                                setSelected(selected.indexOf(id) != -1 ? selected.filter((ele) => ele !== id) : [...selected, id])
-                            }} checked={selected.includes(model.load(row).getId())}>
+                            <Checkbox
+                                focusStyle={{ outlineWidth: 0 }}
+                                onPress={() => {
+                                    const currentId = model.load(row).getId();
+                                    const isAlreadySelected = selected.some(item => item.id === currentId);
+                                    if (isAlreadySelected) {
+                                        setSelected(selected.filter(item => item.id !== currentId));
+                                    } else {
+                                        setSelected([...selected, row]);
+                                    }
+                                }}
+                                checked={selected.some(item => item.id === model.load(row).getId())}
+                            >
                                 <Checkbox.Indicator>
                                     <Check />
                                 </Checkbox.Indicator>
@@ -84,7 +97,7 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable, ext
                             mt={"1px"}
                             element={model.load(row)}
                             sourceUrl={sourceUrl + "/" + model.load(row).getId()}
-                            deleteable={deleteable} 
+                            deleteable={deleteable}
                             onDelete={onDelete}
                             extraMenuActions={extraMenuActions} />
                         {rowIcon && <Tinted><Stack o={0.8} ml={"$2"} t={"6px"}>{React.createElement(rowIcon, { size: "$1", color: '$color7' })}</Stack></Tinted>}

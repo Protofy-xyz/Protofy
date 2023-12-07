@@ -6,10 +6,11 @@ import { MoreVertical, Trash2, FilePlus } from '@tamagui/lucide-icons'
 import { InteractiveIcon } from "./InteractiveIcon";
 import { DataViewContext } from "./DataView";
 
-export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelete, element, deleteable,extraMenuActions = [], ...props }: { sourceUrl: string, enableAddToInitialData?:boolean, onDelete: any, deleteable?:boolean, element: any, extraMenuActions?: any } & StackProps) => {
+export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelete, element, deleteable,extraMenuActions = [], ...props }: { sourceUrl: string, enableAddToInitialData?:boolean, onDelete: any, deleteable?:Function, element: any, extraMenuActions?: any } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
-    const { setSelected} = useContext(DataViewContext);
+    const { selected, setSelected} = useContext(DataViewContext);
+
 
     const addToInitialData = ({data}) =>{
         
@@ -39,14 +40,14 @@ export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelet
             open={open}
             onAccept={async (setOpen) => {
                 if (Array.isArray(element) && sourceUrl) {
-                    const deletePromises = element.map(ele => API.get(sourceUrl + "/" + ele + '/delete'));
+                    const deletePromises = element.map(ele => API.get(`${sourceUrl}/${ele.id}/delete`));
                     await Promise.all(deletePromises);
                     setSelected([]);
                 } else if (sourceUrl) {
-                    await API.get(sourceUrl + '/delete')
+                    await API.get(`${sourceUrl}/delete`);
                 }
-                await onDelete(sourceUrl)
-                setOpen(false)
+                await onDelete(sourceUrl);
+                setOpen(false);
             }}
             title={'Delete '}
             description={"Are you sure want to delete this item?"}
@@ -68,7 +69,7 @@ export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelet
                                 return action.isVisible && action.isVisible(element) && <MenuButton key={i} text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
                             })}
                             {false && enableAddToInitialData &&  <MenuButton text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); addToInitialData(data),setMenuOpened(false) }}></MenuButton>}
-                            <MenuButton text={"Delete"} Icon={Trash2} disabled={!deleteable} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
+                            <MenuButton text={"Delete"} Icon={Trash2} disabled={!deleteable(element)} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
                         </YStack>
                     </YStack>
                 </Tinted>

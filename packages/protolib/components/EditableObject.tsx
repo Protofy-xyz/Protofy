@@ -30,7 +30,7 @@ export type EditableObjectProps = {
   disableToggleMode?: boolean,
   columnMargin?: number,
   onDelete?: Function,
-  deleteable?: Boolean,
+  deleteable?: Function,
   autoWidth?: Boolean,
   EditIconNearTitle?: Boolean,
   extraMenuActions: any[]
@@ -411,7 +411,7 @@ const GridElement = ({ index, data, width }) => {
   </XStack>
 }
 
-export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = true, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = ()=>{return true}, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
   const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
   const [currentMode, setCurrentMode] = useState(mode)
   const [prevCurrentMode, setPrevCurrentMode] = useState('')
