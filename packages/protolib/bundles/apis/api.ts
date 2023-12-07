@@ -1,10 +1,10 @@
 import { APIModel } from ".";
-import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot } from '../../api'
+import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, removeImportFromSourceFile, removeObjectLiteralProperty, AutoAPI, getRoot } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
-import {API} from 'protolib/base'
+import { API } from 'protolib/base'
 import { getServiceToken } from "../../api/lib/serviceToken";
-import {Objects} from "app/bundles/objects";
+import { Objects } from "app/bundles/objects";
 
 const APIDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
 const indexFile = (root) => APIDir(root) + "index.ts"
@@ -16,7 +16,7 @@ const getAPI = (apiPath, req) => {
   return {
     name: apiPath.replace(/\.[^/.]+$/, ""), //remove extension
     type: arg ? arg.getText().replace(/^['"]+|['"]+$/g, '') : "Unknown",
-    object: obj? obj.getText().replace(/^['"]+|['"]+$/g, '') : "None"
+    object: obj ? obj.getText().replace(/^['"]+|['"]+$/g, '') : "None"
   }
 }
 
@@ -34,64 +34,81 @@ const getDB = (path, req, session) => {
 
     async put(key, value) {
       value = JSON.parse(value)
-      let exists
       const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts'
-      const template = fspath.basename(value.template ?? 'empty')
-      try {
-        await fs.access(filePath, fs.constants.F_OK)
-        exists = true
-      } catch (error) {
-        exists = false
-      }
-
-      if (exists) {
-        console.log('File: ' + filePath + ' already exists, not executing template')
+      if (value._deleted) {
+        const localPath = './' + fspath.basename(value.name).toLowerCase();
+        const sourceFile = getSourceFile(indexFile(getRoot(req)));
+        const arg = getDefinition(sourceFile, '"apis"')
+        if (!arg) {
+          throw "No link definition schema marker found for file: " + path
+        }
+        removeObjectLiteralProperty(arg, value.name)
+        removeImportFromSourceFile(sourceFile, localPath)
+        sourceFile.saveSync();
+        try {
+          await fs.unlink(filePath);
+        } catch (err) {
+          console.error('Error deleting api file', err);
+        }
       } else {
-        const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-          name: value.name + '.ts',
-          data: {
-            options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object } },
-            path: '/packages/app/bundles/custom/apis'
-          }
-        })
-
-        if(result.isError) {
-          throw result.error
+        let exists
+        const template = fspath.basename(value.template ?? 'empty')
+        try {
+          await fs.access(filePath, fs.constants.F_OK)
+          exists = true
+        } catch (error) {
+          exists = false
         }
-      }
 
-      //add autoapi feature in object if needed
-      if(value.object && template.startsWith("Automatic CRUD")) {
-        console.log('Adding feature AutoAPI to object: ', value.object)
-        const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
-        let sourceFile = getSourceFile(objectPath)
-        let arg = getDefinition(sourceFile, '"features"')
-        if(arg) {
-          console.log('Marker found, writing object')
-          arg.addPropertyAssignment({
-            name: '"AutoAPI"',
-            initializer: "true" // Puede ser un string, número, otro objeto, etc.
-          });
-
-          await sourceFile.save()
+        if (exists) {
+          console.log('File: ' + filePath + ' already exists, not executing template')
         } else {
-          console.error("Not adding api feature to object: ", value.object, "because of missing features marker")
-        }
-      }
-      //link in index.ts
-      const sourceFile = getSourceFile(indexFile(getRoot(req)))
-      addImportToSourceFile(sourceFile, value.name + 'Api', ImportType.DEFAULT, './' + value.name)
+          const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+            name: value.name + '.ts',
+            data: {
+              options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object } },
+              path: '/packages/app/bundles/custom/apis'
+            }
+          })
 
-      const arg = getDefinition(sourceFile, '"apis"')
-      if (!arg) {
-        throw "No link definition schema marker found for file: " + path
+          if (result.isError) {
+            throw result.error
+          }
+        }
+
+        //add autoapi feature in object if needed
+        if (value.object && template.startsWith("Automatic CRUD")) {
+          console.log('Adding feature AutoAPI to object: ', value.object)
+          const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
+          let sourceFile = getSourceFile(objectPath)
+          let arg = getDefinition(sourceFile, '"features"')
+          if (arg) {
+            console.log('Marker found, writing object')
+            arg.addPropertyAssignment({
+              name: '"AutoAPI"',
+              initializer: "true" // Puede ser un string, número, otro objeto, etc.
+            });
+
+            await sourceFile.save()
+          } else {
+            console.error("Not adding api feature to object: ", value.object, "because of missing features marker")
+          }
+        }
+        //link in index.ts
+        const sourceFile = getSourceFile(indexFile(getRoot(req)))
+        addImportToSourceFile(sourceFile, value.name + 'Api', ImportType.DEFAULT, './' + value.name)
+
+        const arg = getDefinition(sourceFile, '"apis"')
+        if (!arg) {
+          throw "No link definition schema marker found for file: " + path
+        }
+        addObjectLiteralProperty(arg, value.name, value.name + 'Api')
+        sourceFile.saveSync();
       }
-      addObjectLiteralProperty(arg, value.name, value.name + 'Api')
-      sourceFile.saveSync();
     },
 
     async get(key) {
-
+      return JSON.stringify({ name: key })
     }
   };
 
