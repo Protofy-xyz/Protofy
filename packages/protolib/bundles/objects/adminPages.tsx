@@ -1,19 +1,19 @@
 
 import { ObjectModel } from '.'
-import {DataView, DataTable2, Chip, API, AdminPage, PaginatedDataSSR } from 'protolib'
+import { DataView, DataTable2, Chip, API, AdminPage, PaginatedDataSSR } from 'protolib'
 import { Pencil, Box } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
-const ObjectIcons =  {}
+const ObjectIcons = {}
 const rowsPerPage = 20
 
 const sourceUrl = '/adminapi/v1/objects'
 
 export default {
     'admin/objects': {
-        component: ({pageState, initialItems, pageSession}:any) => {
-            const {replace} = usePageParams(pageState)
+        component: ({ pageState, initialItems, pageSession }: any) => {
+            const { replace } = usePageParams(pageState)
 
             return (<AdminPage title="Objects" pageSession={pageSession}>
                 <DataView
@@ -28,20 +28,34 @@ export default {
                         DataTable2.column("features", "features", true, row => Object.keys(row.features).map(f => <Chip text={f} color={'$gray5'} />)),
                     )}
                     // hideAdd={true}
-                    model={ObjectModel} 
+                    model={ObjectModel}
                     pageState={pageState}
                     icons={ObjectIcons}
-                    extraMenuActions = {[
+                    deleteable={(element) => {
+                        if (Array.isArray(element)) {
+                            for (const ele of element) {
+                                if (Object.keys(ele.features).length !== 0) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        } else {
+                            return Object.keys(element.data.features).length === 0
+                        }
+                    }
+                    }
+
+                    extraMenuActions={[
                         {
-                            text:"Edit Object file", 
-                            icon:Pencil, 
+                            text: "Edit Object file",
+                            icon: Pencil,
                             action: (element) => { replace('editFile', element.getDefaultSchemaFilePath()) },
-                            isVisible: (data)=>true
+                            isVisible: (data) => true
                         }
                     ]}
                 />
             </AdminPage>)
-        }, 
+        },
         getServerSideProps: PaginatedDataSSR('/adminapi/v1/objects', ['admin'], {
             orderBy: 'name'
         })
