@@ -77,15 +77,17 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
                             <Checkbox
                                 focusStyle={{ outlineWidth: 0 }}
                                 onPress={() => {
-                                    const currentId = model.load(row).getId();
-                                    const isAlreadySelected = selected.some(item => item.id === currentId);
+                                    const getCurrentId = (item) => model.load(item).getId();
+                                    const currentId = getCurrentId(row);
+                                    const isAlreadySelected = selected.some(item => getCurrentId(item) === currentId);
+                                    
                                     if (isAlreadySelected) {
-                                        setSelected(selected.filter(item => item.id !== currentId));
+                                        setSelected(selected.filter(item => getCurrentId(item) !== currentId));
                                     } else {
                                         setSelected([...selected, row]);
                                     }
                                 }}
-                                checked={selected.some(item => item.id === model.load(row).getId())}
+                                checked={selected.some(item => model.load(item).getId() === model.load(row).getId())}
                             >
                                 <Checkbox.Indicator>
                                     <Check />
