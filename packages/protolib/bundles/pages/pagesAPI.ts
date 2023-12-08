@@ -1,10 +1,10 @@
 import { PageModel } from ".";
-import { CreateApi, getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot } from '../../api'
+import { getSourceFile, getDefinition, AutoAPI, getRoot } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
-import {API} from 'protolib/base'
+import { API } from 'protolib/base'
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
@@ -15,25 +15,29 @@ const getPage = (pagePath) => {
     const route = getDefinition(sourceFile, '"route"')
     const prot = getDefinition(sourceFile, '"protected"')
     let permissions = getDefinition(sourceFile, '"permissions"')
-  
     if (!route || !permissions || !prot) return undefined
-  
     if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
       permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
     } else {
       permissions = permissions.getText()
     }
-  
-  
-  
+
     return {
       name: fspath.basename(pagePath, fspath.extname(pagePath)),
       route: route.getText().replace(/^["']|["']$/g, ''),
       protected: prot.getText() == 'false' ? false : true,
       permissions: permissions
     }
-  } catch(e) {
+  } catch (e) {
     return null
+  }
+}
+
+const deleteFile = async (filePath) => {
+  try {
+    await fs.unlink(filePath);
+  } catch (err) {
+    console.error(`Error deleting file: ${filePath}`, err);
   }
 }
 
@@ -51,6 +55,13 @@ const getDB = (path, req, session) => {
     async put(key, value) {
       value = JSON.parse(value)
       const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
+
+      if (value._deleted) {
+        await deleteFile(fspath.join(getRoot(req), "apps/next/pages", value.name + '.tsx'))
+        deleteFile(filePath)
+        return
+      }
+
       const prevPage = getPage(filePath)
       const template = fspath.basename(value.template ?? 'default')
       const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
@@ -77,11 +88,11 @@ const getDB = (path, req, session) => {
             path: pagesDir(getRoot(req))
           }
         })
-        if(result.isError) {
+        if (result.isError) {
           throw result.error
         }
       }
-      
+
       let sourceFile = getSourceFile(filePath)
       let arg = getDefinition(sourceFile, '"protected"')
 
@@ -99,7 +110,7 @@ const getDB = (path, req, session) => {
       sourceFile.save()
 
       console.log('prevPage: --------------------------', prevPage)
-      if(prevPage && prevPage.route != value.route) {
+      if (prevPage && prevPage.route != value.route) {
         //delete previous route if changed
         const prevFile = fspath.join(nextPagesDir(getRoot(req)), prevPage.route + '.tsx')
         console.log('Deleting prev page', prevFile)
@@ -110,7 +121,7 @@ const getDB = (path, req, session) => {
       //link in nextPages
       try {
         //TODO: routes with subdirectories
-        const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), fspath.basename(value.route)+'.tsx')
+        const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), fspath.basename(value.route) + '.tsx')
         await fs.access(nextFilePath, fs.constants.F_OK)
         // console.log('File: ' + filePath + ' already exists, not executing template')
       } catch (error) {
@@ -128,7 +139,7 @@ const getDB = (path, req, session) => {
             path: nextPagesDir(getRoot(req))
           }
         })
-        if(result.isError) {
+        if (result.isError) {
           throw result.error
         }
       }
