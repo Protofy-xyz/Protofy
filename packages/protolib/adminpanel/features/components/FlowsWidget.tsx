@@ -8,11 +8,23 @@ console.log("CUUUUUUSTOMMMM MASKS: ", customMasks)
 const UIFLOWID = "flows-editor"
 const Flow = FlowFactory(UIFLOWID)
 
-const FlowsWidget = (props: any) => {
+const FlowsWidget = ({ mode="js", ...props}: any) => {
 
     const [content, setContent] = useState(props.content)
     // console.log("PROPS.MODE: ",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
     if(props.preload) return <></>
+    
+    const getMode = () => {
+        if (props.path) {
+            if ( props.path.endsWith('.json')) {
+                return 'json'
+            } else if (props.path.endsWith('yml') || props.path.endsWith('yaml')){
+                return 'yaml'
+            } 
+            return mode
+        }
+        return mode
+    }
     
     return <TopicsProvider>
         
@@ -25,7 +37,7 @@ const FlowsWidget = (props: any) => {
             // }}
             // defaultViewPort={viewPortRef.current}
             key={'flow'}
-            mode={props.mode?props.mode:props.path.endsWith('.json') ? 'json' : (props.path.endsWith('yml') || props.path.endsWith('yaml') ? 'yaml' : 'js')}
+            mode={getMode()}
             config={{ masks: [], layers: [] }}
             bgColor={props.bgColor??'transparent'}
             dataNotify={(data: any) => {
