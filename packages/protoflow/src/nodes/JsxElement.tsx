@@ -53,7 +53,7 @@ JsxElement.getData = (node, data, nodesData, edges) => {
             sourceKey = '';
             sourceValue = attribute.getText()
         } else {
-            sourceKey = attribute.getName()
+            sourceKey = attribute.getNameNode().getText()
             propName = 'prop-' + sourceKey
             sourceValue = connectItem(attribute?.getInitializer(), 'output', node, propName, data, nodesData, edges, propName)
         }
