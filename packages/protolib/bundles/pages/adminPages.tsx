@@ -30,6 +30,7 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="page"
+                    rowIcon={()=><></>}
                     columns={DataTable2.columns(
                         DataTable2.column("", "", true, (row) => <a href={row.route.startsWith('/') ? row.route : '/' + row.route} target='_blank'>
                             <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
