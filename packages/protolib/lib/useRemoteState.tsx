@@ -9,7 +9,7 @@ export const useRemoteStateList = (items, url, topic, model) => {
     usePendingEffect((s) => API.get(url, s), setDataState, dataState)
 
     const { message } = useSubscription(topic);
-    console.log('subscribed to topic: ', topic)
+    // console.log('subscribed to topic: ', topic)
     useEffect(() => {
         if (message && message.message) {
             const mqttDataString = typeof message.message === 'string' ? message.message : JSON.stringify(message.message);

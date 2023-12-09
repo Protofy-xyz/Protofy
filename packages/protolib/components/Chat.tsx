@@ -20,9 +20,9 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
         }
     };
 
-    useEffect(() => {
-        console.log(mode, 'LastMessage: "' + lastMessage + '"')
-    }, [lastMessage])
+    // useEffect(() => {
+    //     console.log(mode, 'LastMessage: "' + lastMessage + '"')
+    // }, [lastMessage])
 
     useClickAnyWhere((e) => {
         if (e.target.classList.contains('rcw-input')) {
@@ -107,7 +107,6 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                 }
                 if ((mutation.target.classList.contains('is_DialogContent') || mutation.target.closest('.is_DialogContent'))
                     && !mutation.target.closest('.rcw-widget-container')) {
-                    console.log("¡Cambio detectado en un hijo de is_DialogContent!");
                     updateChatContainerPosition(window.innerWidth, window.innerHeight);
                 }
             });
