@@ -10,6 +10,11 @@ console.log('Proxy default environment:', defaultEnvironment)
 console.log('Proxy mode:', isProduction?'producton':'development')
 console.log('Proxy port:', Port)
 
+function getEnvironment(host) {
+    const prefix = host.split('.')[0]
+    return environments[prefix] ?? defaultEnvironment
+}
+
 function addClientIpHeader(req) {
     var clientIp = req.connection.remoteAddress;
     req.headers['X-Client-IP'] = clientIp;
@@ -19,7 +24,7 @@ var customResolver1 = function (host, url, req) {
     addClientIpHeader(req);
 
     if (/^\/api\//.test(url)) {
-        return defaultEnvironment.api;
+        return getEnvironment(host).api;
     }
 };
 
@@ -29,7 +34,7 @@ var customResolver2 = function (host, url, req) {
     addClientIpHeader(req);
 
     if (/^\/adminapi\//.test(url) || url === '/websocket') {
-        return defaultEnvironment.adminApi;
+        return getEnvironment(host).adminApi;
     }
 };
 
@@ -54,7 +59,7 @@ var proxy = new Redbird({
         customResolver1,
         customResolver2,
         function (host, url, req) {
-            return defaultEnvironment.frontend;
+            return getEnvironment(host).frontend;
         }
     ]
 });
