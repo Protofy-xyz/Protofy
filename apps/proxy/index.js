@@ -10,9 +10,19 @@ console.log('Proxy default environment:', defaultEnvironment)
 console.log('Proxy mode:', isProduction?'producton':'development')
 console.log('Proxy port:', Port)
 
-function getEnvironment(host) {
-    const prefix = host.split('.')[0]
-    return environments[prefix] ?? defaultEnvironment
+function getEnvironment(key, host, req) {
+    const prefix = host.split('.')[0];
+    const environ = environments[prefix] ?? defaultEnvironment;
+    const result = environ[key];
+
+    // Only rewrite host for external domains
+    if (environ.rewriteHost && !result.startsWith('http://localhost')) {
+        // Additional check to prevent redirection when already on the correct domain
+        if (!host.endsWith(environ.rewriteHost)) {
+            req.headers['host'] = environ.rewriteHost;
+        }
+    }
+    return result;
 }
 
 function addClientIpHeader(req) {
@@ -24,7 +34,7 @@ var customResolver1 = function (host, url, req) {
     addClientIpHeader(req);
 
     if (/^\/api\//.test(url)) {
-        return getEnvironment(host).api;
+        return getEnvironment('api', host, req);
     }
 };
 
@@ -33,8 +43,10 @@ customResolver1.priority = 100;
 var customResolver2 = function (host, url, req) {
     addClientIpHeader(req);
 
-    if (/^\/adminapi\//.test(url) || url === '/websocket') {
-        return getEnvironment(host).adminApi;
+    if (/^\/adminapi\//.test(url)) {
+        return getEnvironment('adminApi', host, req);
+    } else if(url === '/websocket') {
+        return getEnvironment('websocket', host, req);
     }
 };
 
@@ -59,7 +71,13 @@ var proxy = new Redbird({
         customResolver1,
         customResolver2,
         function (host, url, req) {
-            return getEnvironment(host).frontend;
+            const referer = req.headers['referer'];
+            
+            if (/^\/admin\//.test(url) || /^\/auth\//.test(url) || (referer && (referer.includes('/admin') || referer.includes('/auth')))) {
+                return getEnvironment('adminFrontend', host, req);
+            }
+
+            return getEnvironment('frontend', host, req);
         }
     ]
 });
