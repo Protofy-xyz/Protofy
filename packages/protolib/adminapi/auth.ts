@@ -51,6 +51,10 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
     res.status(500).send('"Incorrect user or password"')
 }));
 
+app.get('/adminapi/v1/auth/validate', handler(async (req:any, res:any, session) => {
+    res.send(session)
+}));
+
 app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
     const request:RegisterRequest = req.body
     RegisterSchema.parse(request)

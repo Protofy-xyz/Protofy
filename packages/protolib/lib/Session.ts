@@ -42,7 +42,7 @@ export const getSessionCookie = async (cookieStr) => {
     if(parsedCookies.session) {
         try {
             const data = JSON.parse(parsedCookies.session)
-            const {iat, exp, ...validatedData} = validateSession(data)
+            const {iat, exp, ...validatedData} = await validateSession(data)
             return {
                 ...data,
                 user: {

@@ -17,7 +17,15 @@ export const createSession = (data?:userData, token?:string):SessionDataType => 
     }
 }
 
-export const validateSession = (session:SessionDataType):validatedUserData => jwt.verify(session.token ?? '', process.env.TOKEN_SECRET ?? '') as validatedUserData 
+export const validateSession = async (session:SessionDataType):Promise<validatedUserData> => {
+    // console.log('VALIDATE SESSION: ', session)
+    const result = await API.get('/adminapi/v1/auth/validate?token='+session.token)
+    // console.log('VALIDTE: ', result)
+    if(!result.data.token) {
+        throw "Invalid session"
+    }  
+    return result.data as validatedUserData 
+}
 
 export type userData = {
     id?: string,

@@ -4,7 +4,7 @@ import {devMode} from './env'
 export const getApiUrl = () => process?.env?.API_URL ?? (devMode?'http://localhost:8080':'http://localhost:8000')
 
 const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult | undefined> => {
-    const SERVER = typeof window === undefined ? getApiUrl() : ''
+    const SERVER = getApiUrl()
     // console.log('SERVER: ', SERVER)
     let realUrl;
 
