@@ -37,7 +37,7 @@ export const hasSessionCookie = (cookieStr) => {
     return parsedCookies.session && JSON.parse(parsedCookies.session).loggedIn
 }
 
-export const getSessionCookie = (cookieStr):SessionDataType | undefined => {
+export const getSessionCookie = async (cookieStr) => {
     const parsedCookies = cookie.parse(cookieStr ?? '');
     if(parsedCookies.session) {
         try {
@@ -65,7 +65,7 @@ const fail = (returnUrl?) => {
     }
 }
 export const withSession = async (context:any, validTypes?:string[]|any[]|null, props?:any) => {
-    const session = getSessionCookie(context.req.headers.cookie)
+    const session = await getSessionCookie(context.req.headers.cookie)
 
     if(validTypes) {
         if(!session) return fail(context.req.url)
