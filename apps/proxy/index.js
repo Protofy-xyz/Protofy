@@ -71,12 +71,6 @@ var proxy = new Redbird({
         customResolver1,
         customResolver2,
         function (host, url, req) {
-            const referer = req.headers['referer'];
-            
-            if (/^\/admin\//.test(url) || /^\/auth\//.test(url) || (referer && (referer.includes('/admin') || referer.includes('/auth')))) {
-                return getEnvironment('adminFrontend', host, req);
-            }
-
             return getEnvironment('frontend', host, req);
         }
     ]
