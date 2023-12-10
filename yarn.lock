@@ -23359,6 +23359,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "proxy@workspace:apps/proxy"
   dependencies:
+    nodemon: 3.0.1
     pm2: ^5.3.0
     redbird: 0.10.0
   languageName: unknown

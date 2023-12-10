@@ -1,32 +1,25 @@
 const Redbird = require('redbird');
 const cookie = require('cookie');
-
+const environments = require('../../packages/app/bundles/environments')
 const isProduction = process.env.NODE_ENV === 'production';
-
-const APIUrl = process.env.API_URL ?? 'http://localhost:' + (isProduction ? '4001' : '3001');
-const ServerUrl = process.env.SITE_URL ?? 'http://localhost:' + (isProduction ? '4000' : '3000');
-const AdminAPIUrl = process.env.ADMIN_API_URL ?? 'http://localhost:' + (isProduction ? '4002' : '3002');
 const Port = process.env.PORT ?? (isProduction ? 8000 : 8080);
+const defaultEnvironment = environments[isProduction?'prod':'dev']
 
-console.log('API URL: ', APIUrl);
-console.log('ADMIN API URL: ', AdminAPIUrl);
-console.log('SERVER URL: ', ServerUrl);
-console.log('PORT: ', Port);
+console.log('Proxy environments:', environments)
+console.log('Proxy default environment:', defaultEnvironment)
+console.log('Proxy mode:', isProduction?'producton':'development')
+console.log('Proxy port:', Port)
 
 function addClientIpHeader(req) {
     var clientIp = req.connection.remoteAddress;
     req.headers['X-Client-IP'] = clientIp;
 }
 
-function parseCookies(req) {
-    return cookie.parse(req.headers.cookie || '');
-}
-
 var customResolver1 = function (host, url, req) {
     addClientIpHeader(req);
 
     if (/^\/api\//.test(url)) {
-        return APIUrl;
+        return defaultEnvironment.api;
     }
 };
 
@@ -36,7 +29,7 @@ var customResolver2 = function (host, url, req) {
     addClientIpHeader(req);
 
     if (/^\/adminapi\//.test(url) || url === '/websocket') {
-        return AdminAPIUrl;
+        return defaultEnvironment.adminApi;
     }
 };
 
@@ -61,7 +54,7 @@ var proxy = new Redbird({
         customResolver1,
         customResolver2,
         function (host, url, req) {
-            return ServerUrl;
+            return defaultEnvironment.frontend;
         }
     ]
 });
