@@ -249,7 +249,10 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 				if (!availableCompArr.includes(editorNodes[n].displayName)) {
 					let replacedNode = {
 						...editorNodes[n],
-						displayName: "Unknown",
+						custom: {
+							...editorNodes[n].custom,
+							unknown: true
+						},
 						type: {
 							...editorNodes[n].type,
 							resolvedName: "Unknown"

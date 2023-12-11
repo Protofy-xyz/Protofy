@@ -1,9 +1,17 @@
+import { useNode } from '@craftjs/core';
+
 const Unknown = (props) => {
+    let {
+        connectors: { connect },
+        setProp
+    } = useNode((node) => ({
+        selected: node.events.selected,
+        custom: node.data.custom,
+    }));
     return (
-        <>
-            Unknown
-            {props.children}
-        </>
+        <div ref={connect} style={{minHeight: '30px'}}>
+            {props.children ?? 'Unknown'}
+        </div>
     )
 }
 

@@ -21,10 +21,12 @@ export const RenderNode = ({ render }) => {
         parent,
         childs,
         nodeAndSiblings,
-        nodeId
+        nodeId,
+        unknown
     } = useNode((node) => {
         return (
             {
+                unknown: node.data.custom.unknown ?? false,
                 nodeId: node.id,
                 isHover: node.events.hovered,
                 dom: node.dom,
@@ -39,10 +41,14 @@ export const RenderNode = ({ render }) => {
         )
     });
 
+    const componentColor = unknown ?  "#EF9364" : "#2680EB"
+
     const currentRef = useRef<HTMLDivElement>();
     useEffect(() => {
         if (dom) {
-            if ((isActive || isHover) && enableEdit) dom.style.border = "1px dashed #2680EB"
+            if ((isActive || isHover) && enableEdit) {
+                dom.style.border = "1px dashed "+ componentColor
+            }
             else dom.style.border = ""
         }
     }, [dom, isActive, isHover, enableEdit]);
@@ -52,7 +58,7 @@ export const RenderNode = ({ render }) => {
             ? dom.getBoundingClientRect()
             : { top: 0, left: 0, bottom: 0 };
         return {
-            top: `${top > 0 ? top : bottom}px`,
+            top: `${top > 2 ? top : bottom}px`,
             left: `${left}px`,
         };
     }, []);
@@ -102,7 +108,7 @@ export const RenderNode = ({ render }) => {
                                 top: getPos(dom).top,
                                 zIndex: 9999999999999999999999999999999,
                                 position: "fixed",
-                                backgroundColor: "#2680EB",
+                                backgroundColor: componentColor,
                                 padding: "10px",
                                 color: "white",
                                 display: "flex",
@@ -113,7 +119,7 @@ export const RenderNode = ({ render }) => {
                                 pointerEvents: 'auto'
                             }}
                         >
-                            <div style={{ fontSize: 10, color: 'white', marginRight: 10 }}>{name}</div>
+                            <div style={{ fontSize: 10, color: 'white', marginRight: 10 }}>{name}{unknown ? ' (Unknown)' : ''}</div>
                             <div style={{ display: 'flex', flexDirection: "row", flex: 1 }}>
                                 {moveable ? (
                                     <div
