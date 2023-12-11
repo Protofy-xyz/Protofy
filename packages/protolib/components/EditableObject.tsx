@@ -82,7 +82,19 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
               {mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}
             </XStack>
           </Tinted>}
-          {getElement({ ...elementDef.type._def, _def: elementDef.type._def, name: i }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name], true, ele.name)}
+          {getElement({
+            ele: { ...elementDef.type._def, _def: elementDef.type._def, name: i },
+            icon: icon,
+            i: 0,
+            x: 0,
+            data: data,
+            setData: setData,
+            mode: mode,
+            customFields: customFields,
+            path: [...path, ele.name],
+            inArray: true,
+            arrayName: ele.name
+          })}
           {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
             top={13} br={"$5"} p={"$2"}
             als="flex-start" cursor='pointer'
@@ -126,7 +138,14 @@ const UnionsArrayComp = ({ ele, icon, i, inArray, eleArray, formData, generatedO
 const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData, mode, customFields, path, setFormData }) => {
   const [menuOpened, setMenuOpened] = useState(false)
   const [name, setName] = useState("")
+  const [openFormGroups, setOpenFormGroups] = useState([]);
   const inputRef = useRef(null);
+
+  const toggleFormGroup = (name) => {
+    setOpenFormGroups(openFormGroups.includes(name)
+      ? openFormGroups.filter(n => n !== name)
+      : [...openFormGroups, name]);
+  };
 
   useEffect(() => {
     if (menuOpened) {
@@ -141,6 +160,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
   const handleAccept = async () => {
     setMenuOpened(false);
     setName("");
+
     const val = getDefaultValue(ele._def.valueType._def.typeName);
     setFormData(ele.name, { ...recordData, [name]: val });
   };
@@ -150,7 +170,20 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
       {recordData ? Object.keys(recordData).map((key, i) => {
         return <XStack key={i} mt={i ? "$2" : "$0"} ml="$1">
           {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
-          {getElement({ ...elementDef.valueType, name: key }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}
+          {getElement({
+            ele: { ...elementDef.valueType, name: key },
+            icon: icon,
+            i: 0,
+            x: 0,
+            data: data,
+            setData: setData,
+            mode: mode,
+            customFields: customFields,
+            path: [...path, ele.name],
+            isAccordionOpen: openFormGroups.includes(ele.name),
+            onAccordionToggle: { toggleFormGroup }
+          }
+          )}
         </XStack>
       }) : null}
     </Stack>
@@ -183,7 +216,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
   </FormGroup>
 }
 
-const FormGroup = ({ ele, title, children, icon, simple = false }) => {
+const FormGroup = ({ ele, title, children, icon, simple = false, isAccordionOpen=false, onAccordionToggle=null }) => {
   const [opened, setOpened] = useState([''])
   const content = <XStack br="$5" f={1} elevation={opened.includes('item') ? 10 : 0} hoverStyle={{ elevation: 10 }}><Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
     <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={"item"}>
@@ -209,7 +242,7 @@ const FormGroup = ({ ele, title, children, icon, simple = false }) => {
   </FormElement>
 }
 
-const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray?, arrayName?) => {
+const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray = false, arrayName = "", isAccordionOpen = null, onAccordionToggle = null }) => {
   let elementDef = ele._def?.innerType?._def ?? ele._def
   const setFormData = (key, value) => {
     const formData = data;
@@ -335,7 +368,17 @@ const getElement = (ele, icon, i, x, data, setData, mode, customFields = {}, pat
         {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
         {Object.keys(elementDef.shape()).map((s, i) => {
           const shape = elementDef.shape();
-          return <Stack key={i} mt={i ? "$5" : "$0"}>{getElement({ ...shape[s], name: s }, icon, 0, 0, data, setData, mode, customFields, [...path, ele.name])}</Stack>
+          return <Stack key={i} mt={i ? "$5" : "$0"}>{getElement({
+            ele: { ...shape[s], name: s },
+            icon: icon,
+            i: 0,
+            x: 0,
+            data: data,
+            setData: setData,
+            mode: mode,
+            customFields: customFields,
+            path: [...path, ele.name]
+          })}</Stack>
         })}
       </Stack>
     </FormGroup>
@@ -407,11 +450,20 @@ const GridElement = ({ index, data, width }) => {
   // console.log('colwidth: ', colWidth, realSize, columnMargin/Math.max(1,((colWidth*2)-(realSize*2))))
 
   return <XStack f={1} width={(width * realSize) + ((realSize - 1) * (data.columnMargin / realSize))} key={data.x} mb={'$0'}>
-    {getElement(data.ele, data.icon, data.i, data.x, data.data || {}, data.setData, data.mode, data.customFields)}
+    {getElement({
+      ele: data.ele,
+      icon: data.icon,
+      i: data.i,
+      x: data.x,
+      data: data.data || {},
+      setData: data.setData,
+      mode: data.mode,
+      customFields: data.customFields
+    })}
   </XStack>
 }
 
-export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = ()=>{return true}, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
   const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
   const [currentMode, setCurrentMode] = useState(mode)
   const [prevCurrentMode, setPrevCurrentMode] = useState('')
