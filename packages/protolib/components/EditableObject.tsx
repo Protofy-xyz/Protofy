@@ -73,7 +73,7 @@ const getDefaultValue = (type) => {
 }
 
 const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
-  return <FormGroup ele={ele} title={' (' + arrData.length + ')'} icon={Layers}>
+  return <FormGroup ele={ele} title={' (' + arrData.length + ')'} icon={Layers} path={path}>
     <Stack>
       {arrData.map((d, i) => {
         return <XStack key={i} mt={i ? "$2" : "$0"} ml="$1">
@@ -122,7 +122,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
 }
 
 const ObjectComp = ({ ele, elementDef, icon, path, data, setData, mode, customFields, inArray, arrayName, getFormData }) => {
-  return <FormGroup simple={true} ele={ele} title={inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name} icon={List}>
+  return <FormGroup simple={true} ele={ele} title={inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name} icon={List} path={path}>
     <Stack>
       {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
       {Object.keys(elementDef.shape()).map((s, i) => {
@@ -180,7 +180,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
     setFormData(ele.name, { ...recordData, [name]: val });
   };
 
-  return <FormGroup ele={ele} title={inArray ? ' #' + (ele.name + 1) : '...'} icon={List}>
+  return <FormGroup ele={ele} title={inArray ? ' #' + (ele.name + 1) : '...'} icon={List} path={path}>
     <Stack>
       {recordData ? Object.keys(recordData).map((key, i) => {
         return <XStack key={i} mt={i ? "$2" : "$0"} ml="$1">
@@ -229,9 +229,10 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
   </FormGroup>
 }
 
-const FormGroup = ({ ele, title, children, icon, simple = false }) => {
+const FormGroup = ({ ele, title, children, icon, simple = false, path }) => {
   const [opened, setOpened] = useState([''])
-  const name = ele.name
+  const name = [...path, ele.name].join("/")
+  // console.log("PATH: ", [...path, ele.name].join("/"))
   const content = <XStack br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}><Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
     <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={name}>
       <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes(name) ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
