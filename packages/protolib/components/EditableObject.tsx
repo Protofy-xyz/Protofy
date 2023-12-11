@@ -121,6 +121,28 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
   </FormGroup>
 }
 
+const ObjectComp = ({ ele, elementDef, icon, path, data, setData, mode, customFields, inArray, arrayName, getFormData }) => {
+  return <FormGroup simple={true} ele={ele} title={inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name} icon={List}>
+    <Stack>
+      {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
+      {Object.keys(elementDef.shape()).map((s, i) => {
+        const shape = elementDef.shape();
+        return <Stack key={i} mt={i ? "$5" : "$0"}>{getElement({
+          ele: { ...shape[s], name: s },
+          icon: icon,
+          i: 0,
+          x: 0,
+          data: data,
+          setData: setData,
+          mode: mode,
+          customFields: customFields,
+          path: [...path, ele.name]
+        })}</Stack>
+      })}
+    </Stack>
+  </FormGroup>
+}
+
 const UnionsArrayComp = ({ ele, icon, i, inArray, eleArray, formData, generatedOptions, setFormData }) => {
   const primitives = ["ZodNumber", "ZodString", "ZodLiteral"] // add more primitives with the time
 
@@ -216,7 +238,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
   </FormGroup>
 }
 
-const FormGroup = ({ ele, title, children, icon, simple = false, isAccordionOpen=false, onAccordionToggle=null }) => {
+const FormGroup = ({ ele, title, children, icon, simple = false, isAccordionOpen = false, onAccordionToggle = null }) => {
   const [opened, setOpened] = useState([''])
   const name = ele.name
   const content = <XStack br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}><Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
@@ -364,25 +386,19 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
       }
     }
   } else if (elementType == 'ZodObject') {
-    return <FormGroup simple={true} ele={ele} title={inArray ? (ele._def.keyName ? getFormData(ele._def.keyName, [...path, ele.name]) : arrayName + ' #' + (ele.name + 1)) : ele.name} icon={List}>
-      <Stack>
-        {/* <Stack alignSelf="flex-start" backgroundColor={"$background"} px="$2" left={10} pos="absolute" top={-13}><SizableText >{typeof ele.name === "number"? '': ele.name}</SizableText></Stack> */}
-        {Object.keys(elementDef.shape()).map((s, i) => {
-          const shape = elementDef.shape();
-          return <Stack key={i} mt={i ? "$5" : "$0"}>{getElement({
-            ele: { ...shape[s], name: s },
-            icon: icon,
-            i: 0,
-            x: 0,
-            data: data,
-            setData: setData,
-            mode: mode,
-            customFields: customFields,
-            path: [...path, ele.name]
-          })}</Stack>
-        })}
-      </Stack>
-    </FormGroup>
+    return <ObjectComp
+      ele={ele}
+      elementDef={elementDef}
+      icon={icon}
+      path={path}
+      data={data}
+      setData={setData}
+      mode={mode}
+      customFields={customFields}
+      inArray={inArray}
+      arrayName={arrayName}
+      getFormData={getFormData}></ObjectComp>
+
   } else if (elementType == 'ZodArray') {
     const formData = getFormData(ele.name) ? getFormData(ele.name) : []
     let generatedOptions = []
