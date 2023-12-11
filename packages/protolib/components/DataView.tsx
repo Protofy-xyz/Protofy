@@ -203,7 +203,7 @@ export function DataView({
     }
 
     const totalPages = currentItems && currentItems.isLoaded ? Math.ceil(currentItems.data?.total / currentItems.data?.itemsPerPage) : 0
-    if(items.isError) {
+    if(items && items.isError) {
         return <Center>
             Error: {items.error && items.error.error ? items.error.error : items.error}
         </Center>
