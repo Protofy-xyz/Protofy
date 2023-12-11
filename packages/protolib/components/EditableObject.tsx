@@ -161,6 +161,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
   const [menuOpened, setMenuOpened] = useState(false)
   const [name, setName] = useState("")
   const inputRef = useRef(null);
+  const [opened, setOpened] = useContext(OpenedSectionsContext);
 
   useEffect(() => {
     if (menuOpened) {
@@ -172,11 +173,20 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
     }
   }, [menuOpened]);
 
+  function updatePathArray(paths, newPath) {
+    const basePath = newPath.substring(0, newPath.lastIndexOf('/') + 1);
+    const filteredPaths = paths.filter(path => !path.startsWith(basePath) || path === basePath);
+    filteredPaths.push(newPath);
+    return filteredPaths;
+  }
+
   const handleAccept = async () => {
+    const val = getDefaultValue(ele._def.valueType._def.typeName);
+    const id = [...path, ele.name, name].join("/")
+    console.log("ID", id)
     setMenuOpened(false);
     setName("");
-
-    const val = getDefaultValue(ele._def.valueType._def.typeName);
+    setOpened(updatePathArray(opened, id))
     setFormData(ele.name, { ...recordData, [name]: val });
   };
 
