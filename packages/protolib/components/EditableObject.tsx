@@ -1,7 +1,7 @@
 import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, StackProps, Accordion, Square, Spacer, Switch } from "tamagui";
 import { Pencil, Tag, ChevronDown, X, Tags, List, Layers } from '@tamagui/lucide-icons';
 import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog } from 'protolib'
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getErrorMessage } from "@my/ui";
 import { ProtoSchema } from "protolib/base";
 import { Schema } from "../base";
@@ -230,28 +230,29 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
 }
 
 const FormGroup = ({ ele, title, children, icon, simple = false, path }) => {
-  const [opened, setOpened] = useState([''])
+  const [opened, setOpened] = useContext(OpenedSectionsContext);
   const name = [...path, ele.name].join("/")
   // console.log("PATH: ", [...path, ele.name].join("/"))
-  const content = <XStack br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}><Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
-    <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={name}>
-      <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes(name) ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
-        {({ open }) => (
-          <>
-            <Tinted>{simple ? React.createElement(icon, iconStyle) : <></>}</Tinted>
-            <Paragraph ml={"$2"}>{title}</Paragraph>
-            <Spacer flex={1} />
-            <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
-              <ChevronDown size="$1" />
-            </Square>
-          </>
-        )}
-      </Accordion.Trigger>
-      <Accordion.Content br="$5">
-        {children}
-      </Accordion.Content>
-    </Accordion.Item>
-  </Accordion></XStack>
+  const content = <XStack br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}>
+    <Accordion value={opened} onValueChange={(localOpened) => setOpened(localOpened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
+      <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={name}>
+        <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes(name) ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
+          {({ open }) => (
+            <>
+              <Tinted>{simple ? React.createElement(icon, iconStyle) : <></>}</Tinted>
+              <Paragraph ml={"$2"}>{title}</Paragraph>
+              <Spacer flex={1} />
+              <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+                <ChevronDown size="$1" />
+              </Square>
+            </>
+          )}
+        </Accordion.Trigger>
+        <Accordion.Content br="$5">
+          {children}
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion></XStack>
   return simple ? content : <FormElement ele={ele} icon={icon} i={0}>
     {content}
   </FormElement>
@@ -472,6 +473,8 @@ const GridElement = ({ index, data, width }) => {
   </XStack>
 }
 
+const OpenedSectionsContext = createContext<[string[], Function]>([[], (openedSections) => { }]);
+
 export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
   const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
   const [currentMode, setCurrentMode] = useState(mode)
@@ -483,6 +486,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
   const [edited, setEdited] = useState(false)
   const [ready, setReady] = useState(false)
   const containerRef = useRef()
+  const [openedSections, setOpenedSections] = useState([])
 
   usePendingEffect((s) => { mode != 'add' && API.get(sourceUrl, s) }, setOriginalData, initialData)
 
@@ -544,74 +548,77 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
 
   const { tint } = useTint()
 
-  return <Stack width="100%" {...props}>
-    <AlertDialog
-      showCancel={true}
-      acceptCaption="Discard"
-      cancelCaption="Keep editing"
-      onAccept={async () => {
-        const data = await API.get(sourceUrl)
-        setOriginalData(data)
-        setCurrentMode('view')
-      }}
-      cancelTint={tint}
-      acceptTint="red"
-      open={dialogOpen}
-      setOpen={setDialogOpen}
-      title="Are you sure you want to leave?"
-      description=""
-    >
-      <Center mt="$5">All unsaved changes will be lost</Center>
-    </AlertDialog>
-    <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
-      <YStack width="100%">
-        <XStack ai="center">
-          <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
-            {title ?? <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>}
+
+  return <OpenedSectionsContext.Provider value={[openedSections, setOpenedSections]}>
+    <Stack width="100%" {...props}>
+      <AlertDialog
+        showCancel={true}
+        acceptCaption="Discard"
+        cancelCaption="Keep editing"
+        onAccept={async () => {
+          const data = await API.get(sourceUrl)
+          setOriginalData(data)
+          setCurrentMode('view')
+        }}
+        cancelTint={tint}
+        acceptTint="red"
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+        title="Are you sure you want to leave?"
+        description=""
+      >
+        <Center mt="$5">All unsaved changes will be lost</Center>
+      </AlertDialog>
+      <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
+        <YStack width="100%">
+          <XStack ai="center">
+            <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
+              {title ?? <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>}
+            </XStack>
+            {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
+              if (currentMode == 'edit' && edited) {
+                setDialogOpen(true)
+              } else {
+                setPrevCurrentMode(currentMode)
+                setCurrentMode(currentMode == 'view' ? 'edit' : 'view')
+              }
+            }} cursor="pointer">
+              <Tinted>
+                <Stack>{currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" /> : null)}</Stack>
+              </Tinted>
+            </XStack>}
           </XStack>
-          {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
-            if (currentMode == 'edit' && edited) {
-              setDialogOpen(true)
-            } else {
-              setPrevCurrentMode(currentMode)
-              setCurrentMode(currentMode == 'view' ? 'edit' : 'view')
-            }
-          }} cursor="pointer">
-            <Tinted>
-              <Stack>{currentMode == 'view' ? <Pencil color="var(--color8)" /> : (prevCurrentMode == 'view' ? <X color="var(--color8)" /> : null)}</Stack>
-            </Tinted>
-          </XStack>}
-        </XStack>
-        <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
-          {error && (
-            <Notice>
-              <Paragraph>{getErrorMessage(error.error)}</Paragraph>
-            </Notice>
-          )}
+          <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
+            {error && (
+              <Notice>
+                <Paragraph>{getErrorMessage(error.error)}</Paragraph>
+              </Notice>
+            )}
 
-          {gridView}
+            {gridView}
 
-          {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
-            {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
-              <Button f={1} onPress={async () => {
-                setLoading(true)
-                try {
-                  await onSave(originalData.data, data.data)
-                  if (prevCurrentMode != currentMode) {
-                    setCurrentMode(prevCurrentMode as any)
+            {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
+              {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
+                <Button f={1} onPress={async () => {
+                  setLoading(true)
+                  try {
+                    await onSave(originalData.data, data.data)
+                    if (prevCurrentMode != currentMode) {
+                      setCurrentMode(prevCurrentMode as any)
+                    }
+                  } catch (e) {
+                    setError(e)
+                    console.log('e: ', e)
                   }
-                } catch (e) {
-                  setError(e)
-                  console.log('e: ', e)
-                }
-                setLoading(false)
-              }}>
-                {loading ? <Spinner /> : currentMode == 'add' ? 'Create' : 'Save'}
-              </Button>
-            </Tinted>}
-          </YStack>}
+                  setLoading(false)
+                }}>
+                  {loading ? <Spinner /> : currentMode == 'add' ? 'Create' : 'Save'}
+                </Button>
+              </Tinted>}
+            </YStack>}
+          </YStack>
         </YStack>
-      </YStack>
-    </AsyncView>
-  </Stack>
+      </AsyncView>
+    </Stack>
+  </OpenedSectionsContext.Provider>
 }
