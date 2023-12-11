@@ -218,9 +218,10 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
 
 const FormGroup = ({ ele, title, children, icon, simple = false, isAccordionOpen=false, onAccordionToggle=null }) => {
   const [opened, setOpened] = useState([''])
-  const content = <XStack br="$5" f={1} elevation={opened.includes('item') ? 10 : 0} hoverStyle={{ elevation: 10 }}><Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
-    <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={"item"}>
-      <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes("item") ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
+  const name = "item"
+  const content = <XStack br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}><Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
+    <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={name}>
+      <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes(name) ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
         {({ open }) => (
           <>
             <Tinted>{simple ? React.createElement(icon, iconStyle) : <></>}</Tinted>
