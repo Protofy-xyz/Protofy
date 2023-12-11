@@ -1,5 +1,5 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
-import { usePendingEffect, useRemoteStateList, ObjectGrid, DataTableCard, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { Center, usePendingEffect, useRemoteStateList, ObjectGrid, DataTableCard, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
@@ -203,7 +203,11 @@ export function DataView({
     }
 
     const totalPages = currentItems && currentItems.isLoaded ? Math.ceil(currentItems.data?.total / currentItems.data?.itemsPerPage) : 0
-
+    if(items && items.isError) {
+        return <Center>
+            Error: {items.error && items.error.error ? items.error.error : items.error}
+        </Center>
+    }
     return (<AsyncView atom={currentItems}>
         <YStack height="100%" f={1}>
             <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>

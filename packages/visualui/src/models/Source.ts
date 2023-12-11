@@ -64,14 +64,14 @@ export default class Source {
 
     static getJsxAttribute(node: any, attributeKey: string): any { // Returns JsxAttribute
         if (!node || (!this.isKind(node, 'JsxElement') && !this.isKind(node, 'JsxSelfClosingElement'))) throw "Error node provided is not a JsxElement or JsxSelfClosingElement, can't get the specified attribute"
-        const matchedJsxAttribute: any = this.getAttributes(node).find((jsxAtr: any) => jsxAtr.getName() == attributeKey)
+        const matchedJsxAttribute: any = this.getAttributes(node).find((jsxAtr: any) => jsxAtr.getNameNode().getText() == attributeKey)
         if (!matchedJsxAttribute) throw `Can't get attribute ${attributeKey}`
         return matchedJsxAttribute;
     }
 
     static getAttributeKey(node: any): string {
         if (!node || !this.isKind(node, 'JsxAttribute')) throw "Can't get attribute key, the node provided isn't a JsxAttribute"
-        return node.getName()
+        return node.getNameNode().getText()
     }
 
     static getAttributeValue(node: any): any { // returns a Node

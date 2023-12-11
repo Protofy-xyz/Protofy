@@ -66,7 +66,7 @@ export const Monaco = ({
     const { tint } = useTint()
     let tokenColor = theme[tint+'10'].val
     tokenColor = tokenColor.startsWith('hsl') ? hslStringToHex(tokenColor) : tokenColor
-    console.log('token color: ', theme[tint+'10'].val, tokenColor)
+    // console.log('token color: ', theme[tint+'10'].val, tokenColor)
     if (monaco) {
         monaco.editor.defineTheme(customThemeName, {
             base: resolvedTheme === 'dark' ? 'vs-dark' : 'vs',

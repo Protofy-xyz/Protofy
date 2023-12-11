@@ -5,6 +5,7 @@ export const getApiUrl = () => process?.env?.API_URL ?? (devMode?'http://localho
 
 const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult | undefined> => {
     const SERVER = getApiUrl()
+    // console.log('SERVER: ', SERVER)
     let realUrl;
 
     if (typeof urlOrData === 'string') {

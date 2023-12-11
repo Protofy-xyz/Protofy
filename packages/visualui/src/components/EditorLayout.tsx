@@ -25,7 +25,6 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 	const currentPageInitialJson = useEditorStore(state => state.currentPageInitialJson)
 	const setCurrentPageInitialJson = useEditorStore(state => state.setCurrentPageInitialJson)
 	const [loading, setLoading] = useState(false);
-	const [missingElements, setMissingElements] = useState("");
 	const [previousNodes, setPreviousNodes] = useState({});
 	const [selectedNodeId, setSelectedNodeId] = useState();
 
@@ -242,30 +241,25 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 		const source: Source = Source.parse(currentPageContent)
 		let editorNodes = source.data()
 		setCurrentPageInitialJson(editorNodes)
-		setMissingElements("")
+		const availableComponents = query?.getOptions()?.resolver ?? {}
+		const availableCompArr = Object.keys(availableComponents)
 		try {
-			// TODO: FIX CASE SYNTAX ERROR, COMMENTS BECAUSE MAKES INIFITY LOADING
-			// Object.keys(editorNodes).forEach((nk: any) => Object.keys(editorNodes[nk].props).forEach((pk: any) => {
-			// 	const props = editorNodes[nk].props
-			// 	const propContent = props[pk]
-			// 	if (propContent.startsWith('{') && propContent.endsWith('}')) {
-			// 		const code = propContent.substring(1, propContent.length - 1)
-			// 		try {
-			// 			JSCodeToOBJ(code)
-			// 		} catch (e) {
-			// 			if (e.name == 'SyntaxError') {
-			// 				props[pk] = ''
-			// 			}
-			// 		}
-			// 	}
-			// }))
-			actions.deserialize(editorNodes)
+			var unknownNodes = {}
+			Object.keys(editorNodes).forEach(n => {
+				if (!availableCompArr.includes(editorNodes[n].displayName)) {
+					let replacedNode = {
+						...editorNodes[n],
+						displayName: "Unknown",
+						type: {
+							...editorNodes[n].type,
+							resolvedName: "Unknown"
+						}
+					}
+					unknownNodes[n] = replacedNode
+				}
+			})
+			actions.deserialize({ ...editorNodes, ...unknownNodes })
 		} catch (e) {
-			const availableComponents = query?.getOptions()?.resolver ?? {}
-			const availableCompArr = Object.keys(availableComponents)
-			const missingElements = Object.keys(editorNodes)?.filter(i => !availableCompArr.includes(editorNodes[i].displayName))
-			const missingComponents = missingElements.map(i => editorNodes[i]?.displayName)?.join(', ')
-			setMissingElements(missingComponents)
 			throw "Error loading editor nodes"
 		}
 	}
@@ -333,22 +327,12 @@ const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps)
 					{
 						loading ?
 							<Stack style={{ height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-								{missingElements ? <YStack width={"80%"} maxWidth={'600px'} alignItems="center">
-									<Text >
-										Can not load the following elements:
-									</Text>
-									<Text color='red' marginVertical='20px'>
-										{missingElements}
-									</Text>
-									<Text >
-										Try adding the elments to the useEdit function.
-									</Text>
-								</YStack> : <div>
+								<div>
 									<Spinner size="large" marginBottom="20px"></Spinner>
 									<div>
 										Loading Content...
 									</div>
-								</div>}
+								</div>
 							</Stack>
 							:
 							<ErrorBoundary>

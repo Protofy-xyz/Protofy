@@ -9,7 +9,8 @@ import { DataViewContext } from "./DataView";
 export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelete, element, deleteable,extraMenuActions = [], ...props }: { sourceUrl: string, enableAddToInitialData?:boolean, onDelete: any, deleteable?:Function, element: any, extraMenuActions?: any } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
-    const { selected, setSelected} = useContext(DataViewContext);
+    const { selected, setSelected, model} = useContext(DataViewContext);
+
 
 
     const addToInitialData = ({data}) =>{
@@ -40,7 +41,7 @@ export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelet
             open={open}
             onAccept={async (setOpen) => {
                 if (Array.isArray(element) && sourceUrl) {
-                    const deletePromises = element.map(ele => API.get(`${sourceUrl}/${ele.id}/delete`));
+                    const deletePromises = element.map(ele => API.get(`${sourceUrl}/${model.load(ele).getId()}/delete`));
                     await Promise.all(deletePromises);
                     setSelected([]);
                 } else if (sourceUrl) {
