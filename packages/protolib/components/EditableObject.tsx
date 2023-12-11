@@ -160,14 +160,7 @@ const UnionsArrayComp = ({ ele, icon, i, inArray, eleArray, formData, generatedO
 const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData, mode, customFields, path, setFormData }) => {
   const [menuOpened, setMenuOpened] = useState(false)
   const [name, setName] = useState("")
-  const [openFormGroups, setOpenFormGroups] = useState([]);
   const inputRef = useRef(null);
-
-  const toggleFormGroup = (name) => {
-    setOpenFormGroups(openFormGroups.includes(name)
-      ? openFormGroups.filter(n => n !== name)
-      : [...openFormGroups, name]);
-  };
 
   useEffect(() => {
     if (menuOpened) {
@@ -201,9 +194,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
             setData: setData,
             mode: mode,
             customFields: customFields,
-            path: [...path, ele.name],
-            isAccordionOpen: openFormGroups.includes(ele.name),
-            onAccordionToggle: { toggleFormGroup }
+            path: [...path, ele.name]
           }
           )}
         </XStack>
@@ -238,7 +229,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
   </FormGroup>
 }
 
-const FormGroup = ({ ele, title, children, icon, simple = false, isAccordionOpen = false, onAccordionToggle = null }) => {
+const FormGroup = ({ ele, title, children, icon, simple = false }) => {
   const [opened, setOpened] = useState([''])
   const name = ele.name
   const content = <XStack br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}><Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
@@ -265,7 +256,7 @@ const FormGroup = ({ ele, title, children, icon, simple = false, isAccordionOpen
   </FormElement>
 }
 
-const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray = false, arrayName = "", isAccordionOpen = null, onAccordionToggle = null }) => {
+const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray = false, arrayName = "" }) => {
   let elementDef = ele._def?.innerType?._def ?? ele._def
   const setFormData = (key, value) => {
     const formData = data;
