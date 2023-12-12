@@ -1,16 +1,19 @@
 
 import { PageModel } from '.'
 import { DataView } from 'protolib'
-import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR, Image } from 'protolib'
+import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR, NextLink } from 'protolib'
 import { z } from 'protolib/base'
-import { XStack, YStack, useThemeName } from '@my/ui'
-import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
+import { Paragraph, XStack, YStack, useThemeName } from '@my/ui'
+import { ExternalLink, Pencil, Eye } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
 import { getURLWithToken } from '../../lib/Session'
 import { useState } from 'react'
 import { getPendingResult } from '../../base'
 import { usePendingEffect } from '../../lib/usePendingEffect'
 import { Tinted } from '../../components/Tinted'
+import { Button, Image } from 'tamagui'
+import { useRouter } from 'next/router'
+
 const environments = require('../../../app/bundles/environments')
 
 const PageIcons = {}
@@ -21,6 +24,7 @@ const templates = ["blank", "default", "admin"]
 export default {
     'admin/pages': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
+            const router = useRouter();
             const { replace } = usePageParams(pageState)
             const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
@@ -30,9 +34,35 @@ export default {
                 return environment && environment.baseUrl ? environment.baseUrl + route : route
             }
             const TemplatePreview = ({ template, isSelected, onPress, theme }) => {
+                const [previewVisible, setPreviewVisible] = useState(false);
+                const templateUrl = `https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/templates/${template}-${theme}.png`
                 return (
-                    <YStack onPress={onPress} overflow='hidden' borderWidth={isSelected ? "$1": "$0.5"} borderColor={isSelected ? "$color7":"$gray8"} m="$2" h={130} f={1} cursor='pointer' borderRadius={"$4"}>
-                        <Image width={"100%"} height={130} url={`https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/templates/${template}-${theme}.png`} />
+                    <YStack onPress={onPress} onHoverIn={() => setPreviewVisible(true)} onHoverOut={() => setPreviewVisible(false)} overflow='hidden' borderWidth={isSelected ? "$1" : "$0.5"} borderColor={isSelected ? "$color7" : "$gray8"} m="$2" f={1} cursor='pointer' borderRadius={"$3"}>
+                        <Image
+                            source={{ height: 120, width: 154, uri: templateUrl }}
+                        />
+                        <YStack
+                            display={previewVisible ? 'block' : 'none'}
+                            zi={10000}
+                            position='absolute'
+                            right={"$2"}
+                            top={"$2"}
+                        >
+                            <NextLink target="_blank" href={templateUrl}>
+                                <Button
+                                    backgroundColor={"$color7"}
+                                    size="$1.5" borderRadius={"$1"}
+                                    px="$2" textProps={{ size: "$1" }}
+                                    onPress={(e) => {
+                                        e.stopPropagation()
+                                    }}
+                                // iconAfter={<Eye size="$1" color="$color7" />}
+                                >preview</Button>
+                            </NextLink>
+                        </YStack>
+                        <XStack jc='space-between' borderTopWidth={"$0.5"} borderColor={"$gray8"} backgroundColor={"$gray3"} py="$1" px="$2">
+                            <Paragraph>{template}</Paragraph>
+                        </XStack>
                     </YStack>
                 )
             }
@@ -44,7 +74,7 @@ export default {
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="page"
-                    rowIcon={()=><></>}
+                    rowIcon={() => <></>}
                     columns={DataTable2.columns(
                         DataTable2.column("", "", true, (row) => <a href={getUrl(row.route.startsWith('/') ? row.route : '/' + row.route)} target='_blank'>
                             <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
