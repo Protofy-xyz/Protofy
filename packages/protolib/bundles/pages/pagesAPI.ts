@@ -55,10 +55,9 @@ const getDB = (path, req, session) => {
     async put(key, value) {
       value = JSON.parse(value)
       const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
-
       if (value._deleted) {
         await deleteFile(fspath.join(getRoot(req), "apps/next/pages", value.name + '.tsx'))
-        deleteFile(filePath)
+        await deleteFile(filePath)
         return
       }
 
