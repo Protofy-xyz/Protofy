@@ -261,6 +261,10 @@ export function DataView({
                                         onSave={async (originalData, data) => {
                                             try {
                                                 const obj = model.load(data)
+                                                const repeatedId = items.data.items.find(i => i.id === obj.getId())
+                                                if (repeatedId) {
+                                                    throw { error: "This id already exists" }
+                                                }
                                                 const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
                                                 if (result.isError) {
                                                     throw result.error
