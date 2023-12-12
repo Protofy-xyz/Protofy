@@ -11,13 +11,14 @@ const environments = {
         frontend: 'http://localhost:4000',
         websocket: 'http://localhost:4002'
     }
-    //,
+    // ,
     // protofy: {
     //     api: 'https://dev.protofy.xyz',
     //     adminApi: 'https://dev.protofy.xyz',
     //     frontend: 'https://dev.protofy.xyz',
     //     websocket: 'https://dev.protofy.xyz',
-    //     rewriteHost: 'dev.protofy.xyz'
+    //     rewriteHost: 'dev.protofy.xyz',
+    //     baseUrl: 'http://dev.protofy.xyz'
     // }
 }
 
