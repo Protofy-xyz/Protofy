@@ -8,6 +8,16 @@ import { getRoot } from '../../api';
 
 const dbDir = (root) => fspath.join(root, "/data/databases/")
 
+async function moveFolder(src, dest) {
+  try {
+      const parentDest = path.dirname(dest);
+      await fs.promises.mkdir(parentDest, { recursive: true });
+      await fs.promises.rename(src, dest);
+  } catch (error) {
+      console.error('Error moving folder:', error);
+  }
+}
+
 const customGetDB = (path, req, session) => {
   const db = {
     async *iterator() {
@@ -18,6 +28,13 @@ const customGetDB = (path, req, session) => {
     },
 
     async put(key, value) {
+      value = JSON.parse(value)
+      if (value._deleted) {
+        const origin = fspath.join(dbDir(getRoot(req)), key)   
+        const dest = fspath.join(getRoot(req), 'data', 'deleted_databases', key)  
+        moveFolder(origin, dest)
+        return
+      }
       await connectDB(fspath.join(dbDir(getRoot(req)), fspath.basename(key)))
     },
 
@@ -39,7 +56,7 @@ export const getDatabases = async () => {
   })
 }
 
-export const DatabasesAPI = CreateApi('databases', DatabaseModel, __dirname, '/adminapi/v1/', '', {}, () => { }, customGetDB, ['list', 'create', 'read'], false, {
+export const DatabasesAPI = CreateApi('databases', DatabaseModel, __dirname, '/adminapi/v1/', '', {}, () => { }, customGetDB, ['list', 'create', 'read', 'delete'], false, {
   paginatedRead: {model: DatabaseEntryModel},
   requiresAdmin: ['*']
 })
