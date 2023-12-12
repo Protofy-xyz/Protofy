@@ -436,6 +436,17 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
     </FormElement>
   }
 
+  let generatedOptions = ''
+
+  // ---- MODIFIERS ---- 
+  // generateOptions
+  if (typeof ele._def.generateOptions === 'function') {
+    generatedOptions = ele._def.generateOptions()
+    if (!getFormData(ele.name)) {
+      setFormData(ele.name, generatedOptions)
+    }
+  }
+
   return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
     <Stack f={1}>
       <Input
@@ -443,7 +454,7 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
         focusStyle={{ outlineWidth: 1 }}
         disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static) || (ele._def.dependsOn && !data[ele._def.dependsOn]))}
         secureTextEntry={ele._def.secret}
-        value={getFormData(ele.name)}
+        value={generatedOptions && !getFormData(ele.name) ? generatedOptions : getFormData(ele.name)}
         onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
         placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? (typeof ele.name == "number" ? "..." : ele.name)}
         autoFocus={x == 0 && i == 0}
