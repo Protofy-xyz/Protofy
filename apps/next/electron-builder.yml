@@ -1,0 +1,9 @@
+appId: com.example.protofy
+productName: Protofy App
+mac:
+  category: your.app.category
+win:
+  target: portable
+linux:
+  target: AppImage
+asar: false

@@ -2,17 +2,18 @@ const { app, BrowserWindow } = require('electron')
 const next = require('next')
 const express = require('express');
 
-const dev = process.env.NODE_ENV !== 'production'
-const nextApp = next({ dev })
+//const dev = process.env.NODE_ENV !== 'production'
+const nextApp = next({ dev:true })
 const handle = nextApp.getRequestHandler()
+const PORT = 3000;
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
   })
-  win.loadURL(`http://localhost:3000`)
-  win.webContents.openDevTools()
+  win.loadURL(`http://localhost:${PORT}`)
+  //win.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
@@ -23,7 +24,7 @@ app.whenReady().then(() => {
       return handle(req, res);
     });
   
-    const PORT = dev?3000:4000;
+
     server.listen(PORT, (err) => {
       if (err) throw err;
       console.log(`> Ready on http://localhost:${PORT}`);
