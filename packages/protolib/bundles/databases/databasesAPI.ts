@@ -8,11 +8,24 @@ import { getRoot } from '../../api';
 
 const dbDir = (root) => fspath.join(root, "/data/databases/")
 
+function getTimestamp() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  return `${year}${month}${day}_${hours}${minutes}${seconds}`;
+}
+
 async function moveFolder(src, dest) {
   try {
+      const timestamp = getTimestamp();
+      const destTime = `${dest}_${timestamp}`;
       const parentDest = path.dirname(dest);
       await fs.promises.mkdir(parentDest, { recursive: true });
-      await fs.promises.rename(src, dest);
+      await fs.promises.rename(src, destTime);
   } catch (error) {
       console.error('Error moving folder:', error);
   }
