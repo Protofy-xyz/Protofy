@@ -21,7 +21,7 @@ import { SiteConfig } from 'app/conf'
 import { AppConfContext } from 'app/provider/AppConf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
-import {initSchemaSystem} from 'protolib/base'
+import { initSchemaSystem } from 'protolib/base'
 
 initSchemaSystem()
 
@@ -30,8 +30,26 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 function MyApp({ Component, pageProps }: SolitoAppProps) {
-  const brokerUrl = typeof document !== "undefined" ? (document.location.protocol==="https:"?"wss":"ws")+ "://" + document.location.host + '/websocket' : '';
-  if(typeof document !== "undefined" && document.location.port == "3000") {
+  const isElectron = () => {
+    // Renderer process
+    if (typeof window !== 'undefined' && typeof window.process === 'object' && window.process.type === 'renderer') {
+      return true;
+    }
+
+    // Main process
+    if (typeof process !== 'undefined' && typeof process.versions === 'object' && !!process.versions.electron) {
+      return true;
+    }
+
+    // Detect the user agent when the `nodeIntegration` option is set to true
+    if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
+      return true;
+    }
+
+    return false;
+  }
+  const brokerUrl = typeof document !== "undefined" ? (document.location.protocol === "https:" ? "wss" : "ws") + "://" + document.location.host + '/websocket' : '';
+  if (typeof document !== "undefined" && !isElectron && document.location.port == "3000") {
     //TODO: improve this hack. This is to prevent people from incorrenctly entering the 3000 port directly into next, and getting errors. 
     document.location.href = document.location.protocol + '//' + document.location.hostname + ':8080'
     return <>This is an internal port for diagnostic purposes. Redirecting to default development port...</>
