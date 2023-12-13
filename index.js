@@ -1,9 +1,14 @@
 const { app, BrowserWindow } = require('electron')
 const next = require('next')
 const express = require('express');
+const path = require('path');
 
+process.chdir(path.join(__dirname, 'apps/next'));
 //const dev = process.env.NODE_ENV !== 'production'
-const nextApp = next({ dev:true })
+const nextApp = next({ 
+  dev:true
+})
+
 const handle = nextApp.getRequestHandler()
 const PORT = 3000;
 

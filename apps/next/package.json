@@ -15,14 +15,13 @@
     "build": "cd ../.. && yarn build && cd apps/next && next build",
     "serve": "NODE_ENV=production next start --port 4000",
     "lint": "next lint",
-    "test": "jest --colors",
-    "electron": "electron ./index.js",
-    "package": "electron-builder"
+    "test": "jest --colors"
   },
   "dependencies": {
     "@react-three/drei": "^9.88.2",
     "@react-three/fiber": "^8.14.5",
     "@tamagui/config": "latest",
+    "@tamagui/next-plugin": "latest",
     "@tamagui/next-theme": "latest",
     "app": "0.0.0",
     "next": "^13.5.2",
@@ -36,15 +35,12 @@
     "react-native-web": "^0.18.12",
     "react-native-web-lite": "latest",
     "three": "^0.157.0",
-    "vercel": "latest",
-    "@tamagui/next-plugin": "latest"
+    "vercel": "latest"
   },
   "devDependencies": {
     "@jest/globals": "~29.7.0",
     "@types/jest": "~29.5.5",
     "@types/node": "20.6.0",
-    "electron": "28.0.0",
-    "electron-builder": "^24.9.1",
     "eslint-config-next": "^13.0.4",
     "jest": "~29.7.0",
     "jest-expect-message": "1.1.3",
