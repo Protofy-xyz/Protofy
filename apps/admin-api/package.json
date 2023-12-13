@@ -10,7 +10,7 @@
   "scripts": {
     "prepare-dev": "node prepare.js",
     "start": "NODE_ENV=production ts-node --files --project tsconfig.json src/index.ts",
-    "start-dev": "NODE_ENV=development nodemon --exitcrash -L",
+    "start-dev": "NODE_ENV=development nodemon --signal SIGKILL -V --exitcrash -L",
     "service-start": "NODE_ENV=production pm2 start pm2.config.js",
     "service-start-dev": "NODE_ENV=development pm2 start pm2.config.js",
     "logs": "pm2 logs",

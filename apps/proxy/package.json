@@ -5,7 +5,7 @@
     "source": "src",
     "scripts": {
         "start": "NODE_ENV=production node index.js",
-        "start-dev": "NODE_ENV=development nodemon --exitcrash -L",
+        "start-dev": "NODE_ENV=development nodemon --signal SIGKILL -V --exitcrash -L",
         "service-start": "NODE_ENV=production pm2 start pm2.config.js",
         "service-start-dev": "pm2 start pm2.config.js",
         "logs": "pm2 logs",
