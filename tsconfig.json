@@ -1,18 +1,7 @@
 {
   "compilerOptions": {
     "strictNullChecks": false,
-    "noUncheckedIndexedAccess": true,
-    "paths": {
-      "app/*": [
-        "./packages/app/*"
-      ],
-      "protolib/*": [
-        "./packages/protolib/*"
-      ],
-      "@my/ui/*": [
-        "./packages/ui/*"
-      ]
-    }
+    "noUncheckedIndexedAccess": true
   },
   "typeRoots": [ // Specifies a list of directories for type definitions
     "./node_modules/@types",
