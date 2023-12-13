@@ -24,6 +24,8 @@
     "prepare-dev": "yarn workspace api prepare-dev && yarn workspaces foreach run prepare-dev",
     "native": "cd apps/expo && yarn start",
     "watch": "yarn workspaces foreach -pi run watch",
+    "electron": "cd apps/next && yarn electron",
+    "package": "cd apps/next && yarn package",
     "web": "cd apps/next && yarn next",
     "web:extract": "DISABLE_EXTRACTION=false yarn workspace next-app dev",
     "web:build": "yarn workspace next-app build",
@@ -45,9 +47,7 @@
     "kill": "pm2 kill",
     "stop": "pm2 stop all",
     "logs": "pm2 logs",
-    "test:all": "yarn workspaces foreach run test",
-    "electron": "electron ./index.js",
-    "package": "electron-builder"
+    "test:all": "yarn workspaces foreach run test"
   },
   "resolutions": {
     "react": "^18.2.0",
@@ -71,8 +71,6 @@
   },
   "packageManager": "yarn@3.5.0",
   "devDependencies": {
-    "electron": "28.0.0",
-    "electron-builder": "^24.9.1",
     "npm-run-all": "^4.1.5"
   }
 }
