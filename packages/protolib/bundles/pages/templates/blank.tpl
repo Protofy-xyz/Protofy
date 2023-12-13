@@ -6,7 +6,7 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 */
 
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "@my/ui"
-import { BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API, SSR} from "protolib"
+import { UIWrapLib, UIWrap, BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API, SSR} from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 
@@ -19,17 +19,19 @@ const PageComponent = (props) => {
         </Page>)
 }
 
+const cw = UIWrapLib('@my/ui')
+
 export default {
     route: Protofy("route", "{{route}}"),
     component: (props) => useEdit(
         () => PageComponent(props), {
-        DefaultLayout,
-        YStack,
-        Spacer,
-        Text,
-        XStack,
-        Paragraph,
-        Theme
+        ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
+        ...cw("YStack", YStack),
+        ...cw("Spacer", Spacer),
+        ...cw("Text", Text),
+        ...cw("XStack", XStack),
+        ...cw("Paragraph", Paragraph),
+        ...cw("Theme", Theme)
     }, "/packages/app/bundles/custom/pages/{{name}}.tsx"),
     getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{permissions}}):undefined))
 }

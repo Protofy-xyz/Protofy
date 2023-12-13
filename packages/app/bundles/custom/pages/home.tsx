@@ -1,5 +1,5 @@
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, SizableText } from "@my/ui";
-import { SSR, TintSection, ContainerLarge, AnounceBubble, BigTitle, LinkGroup, LinkGroupItem, CopyBubble, XCenterStack, NextLink, TooltipContainer, TwitterIcon, MainButton, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, ActiveGroup, ButtonGroup, ActiveGroupButton, ActiveRender, SideBySide, TabGroup, IconStack, BackgroundGradient, ItemCard, SectionBox, ElevatedArea, BarChart, GridElement, RainbowText, OverlayCardBasic, FeatureItem, DataTable, TamaCard, Notice, PageGlow, withSession, useSession, Page, Grid, ThemeTint, useEdit, Head1, Head2 } from "protolib";
+import { UIWrapLib, UIWrap, SSR, TintSection, ContainerLarge, AnounceBubble, BigTitle, LinkGroup, LinkGroupItem, CopyBubble, XCenterStack, NextLink, TooltipContainer, TwitterIcon, MainButton, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, ActiveGroup, ButtonGroup, ActiveGroupButton, ActiveRender, SideBySide, TabGroup, IconStack, BackgroundGradient, ItemCard, SectionBox, ElevatedArea, BarChart, GridElement, RainbowText, OverlayCardBasic, FeatureItem, DataTable, TamaCard, Notice, PageGlow, withSession, useSession, Page, Grid, ThemeTint, useEdit, Head1, Head2 } from "protolib";
 import { ChevronRight, Code, Cpu, FastForward, Layers, Star, Bot } from "@tamagui/lucide-icons";
 import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
@@ -287,22 +287,24 @@ const Home = (props) => {
   );
 };
 
+const cw = UIWrapLib('@my/ui')
+
 export default {
   route: Protofy("route", "/"),
   component: (props) =>
     useEdit(
       () => Home(props),
       {
-        DefaultLayout,
-        YStack,
-        Spacer,
-        Text,
-        XStack,
-        Paragraph,
-        Theme,
-        SizableText,
-        ChevronRight,
-        Star
+        ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
+        ...cw("YStack", YStack),
+        ...cw("Spacer", Spacer),
+        ...cw("Text", Text),
+        ...cw("XStack", XStack),
+        ...cw("Paragraph", Paragraph),
+        ...cw("Theme", Theme),
+        ...cw("SizableText", SizableText),
+        ...UIWrap("ChevronRight", ChevronRight, "@tamagui/lucide-icons", "ChevronRight"),
+        ...UIWrap("Star", Star, "@tamagui/lucide-icons", "Star")
       },
       "/packages/app/bundles/custom/pages/home.tsx"
     ),
