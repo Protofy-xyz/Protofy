@@ -2,11 +2,7 @@
   "name": "site",
   "private": true,
   "workspaces": [
-    "apps/next",
-    "apps/expo",
-    "apps/admin-api",
-    "apps/api",
-    "apps/proxy",
+    "apps/*",
     "packages/*"
   ],
   "scripts": {
