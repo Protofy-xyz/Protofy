@@ -31,7 +31,7 @@
     "level-party": "^5.1.1",
     "mime-types": "^2.1.35",
     "moment": "2.29.4",
-    "nodemon": "2.0.7",
+    "nodemon": "3.0.1",
     "pm2": "^5.3.0",
     "ts-morph": "20.0.0",
     "ts-node": "10.9.1",
