@@ -4,7 +4,7 @@ const level = require('level-party')
 const dbHandlers:any = {}
 export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
     return new Promise((resolve, reject) => {
-        console.log('connecting to database: ', dbPath)
+        // console.log('connecting to database: ', dbPath)
         let timer:any;
         if (!(dbPath in dbHandlers)) {
             timer = setTimeout(async () => {
@@ -18,7 +18,7 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
 
         const onDone = async () => {
             clearTimeout(timer)
-            console.log('connected to database on: ', dbPath)
+            // console.log('connected to database on: ', dbPath)
             try {
                 await db.get('initialized')
                 resolve(db)

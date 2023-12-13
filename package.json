@@ -19,7 +19,7 @@
     "start-prod": "NODE_ENV=production npm-run-all --parallel api-prod admin-api-prod web:serve proxy-prod",
     "start-dev": "yarn prepare-dev && node prepare.js && yarn pre-build && yarn start-dev-fast",
     "start-dev-latest": "yarn prepare-dev && node prepare.js --latest && yarn pre-build && yarn start-dev-fast",
-    "start-dev-fast": "npm-run-all --parallel admin-api-dev api-dev web proxy-dev",
+    "start-dev-fast": "pm2 start ecosystem.config.js --no-daemon",
     "pre-build": "yarn && yarn build",
     "prepare-dev": "yarn workspace api prepare-dev && yarn workspaces foreach run prepare-dev",
     "native": "cd apps/expo && yarn start",
