@@ -160,7 +160,7 @@ export const removeFileWithImports = async (
     removeImportFromSourceFile(sourceFile, localPath);
     sourceFile.saveSync();
 
-    const filePath = getRoot(req) + 'packages/app/bundles/custom/'+type.replace(/"/g, '')+'/' + fspath.basename(value.name) + '.ts';
+    const filePath = getRoot(req) + 'packages/app/bundles/custom/' + type.replace(/"/g, '') + '/' + fspath.basename(value.name) + '.ts';
 
     try {
         await fs.unlink(filePath);
@@ -169,3 +169,36 @@ export const removeFileWithImports = async (
     }
 
 };
+
+//features functions
+
+export const addFeature = async (sourceFile, key, value) => {
+    let arg = getDefinition(sourceFile, '"features"')
+    if (arg) {
+        console.log('Marker found, writing object')
+        arg.addPropertyAssignment({
+            name: key,
+            initializer: value // Puede ser un string, número, otro objeto, etc.
+        });
+
+        await sourceFile.save()
+    } else {
+        console.error("Not adding api feature to object because of missing features marker")
+    }
+}
+
+export const removeFeature = async (sourceFile, key) => {
+    let arg = getDefinition(sourceFile, '"features"')
+    if (arg) {
+        console.log('Marker found, removing object property');
+        const propertyToRemove = arg.getProperty(key);
+        if (propertyToRemove) {
+            propertyToRemove.remove();
+            await sourceFile.save();
+        } else {
+            console.error("Property 'AutoAPI' not found, cannot remove.");
+        }
+    } else {
+        console.error("Not removing api feature from object due to missing features marker");
+    }
+}

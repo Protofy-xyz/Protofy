@@ -1,5 +1,5 @@
 import { APIModel } from ".";
-import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports } from '../../api'
+import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports, addFeature, removeFeature } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { API } from 'protolib/base'
@@ -41,22 +41,10 @@ const getDB = (path, req, session) => {
         if (api.type === "AutoAPI") {
           const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(api.object))
           let sourceFile = getSourceFile(objectPath)
-          let arg = getDefinition(sourceFile, '"features"')
-          if (arg) {
-            console.log('Marker found, removing object property');
-            const propertyToRemove = arg.getProperty('"AutoAPI"');
-            if (propertyToRemove) {
-              propertyToRemove.remove();
-              await sourceFile.save();
-            } else {
-              console.error("Property 'AutoAPI' not found, cannot remove.");
-            }
-          } else {
-            console.error("Not removing api feature from object: ", value.object, "due to missing features marker");
-          }
+          removeFeature(sourceFile, '"AutoAPI"')
         }
 
-        
+
 
       } else {
         let exists
@@ -89,18 +77,7 @@ const getDB = (path, req, session) => {
           console.log('Adding feature AutoAPI to object: ', value.object)
           const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
           let sourceFile = getSourceFile(objectPath)
-          let arg = getDefinition(sourceFile, '"features"')
-          if (arg) {
-            console.log('Marker found, writing object')
-            arg.addPropertyAssignment({
-              name: '"AutoAPI"',
-              initializer: "true" // Puede ser un string, número, otro objeto, etc.
-            });
-
-            await sourceFile.save()
-          } else {
-            console.error("Not adding api feature to object: ", value.object, "because of missing features marker")
-          }
+          await addFeature(sourceFile, '"AutoAPI"', "true")
         }
         //link in index.ts
         const sourceFile = getSourceFile(indexFile(getRoot(req)))
