@@ -16,7 +16,7 @@ import {
   LoadInter500,
   LoadInter600,
   LoadInter800
-} from '../components/LoadFont'
+} from 'app/components/next/LoadFont'
 import Tamagui from '../tamagui.config'
 
 export default class Document extends NextDocument {
