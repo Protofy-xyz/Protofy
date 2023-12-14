@@ -486,7 +486,7 @@ const GridElement = ({ index, data, width }) => {
       icon: data.icon,
       i: data.i,
       x: data.x,
-      data: data.data || {},
+      data: data.data || data.defaultData,
       setData: data.setData,
       mode: data.mode,
       customFields: data.customFields
@@ -532,12 +532,17 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
     const formFields = elementObj.getObjectSchema().isDisplay(currentMode).merge(extraFieldsObject).getLayout(1)
     const groups = {}
+    const defaultData = {}
     formFields.forEach((row, x) => row.forEach((ele, i) => {
       const icon = icons[ele.name] ? icons[ele.name] : (currentMode == 'edit' || currentMode == 'add' ? Pencil : Tag)
       const groupId = ele._def.group ?? 0
       if (!groups.hasOwnProperty(groupId)) {
         groups[groupId] = []
       }
+      if(ele._def.hasOwnProperty('defaultValue')) {
+        defaultData[ele.name] = ele._def.defaultValue
+      }
+
       groups[groupId].push({
         id: x + '_' + i,
         icon: icon,
@@ -550,7 +555,8 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
         size: ele._def.size ?? 1,
         numColumns: numColumns,
         customFields,
-        columnMargin: columnMargin
+        columnMargin: columnMargin,
+        defaultData
       })
     }))
     return groups
