@@ -1,21 +1,10 @@
 {
-  "name": "next-app",
+  "name": "electron-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prepare-dev": "node prepare.js",
-    "start": "next start",
-    "dev": "next dev",
-    "service-start": "NODE_ENV=production pm2 start pm2.config.js",
-    "service-start-dev": "pm2 start pm2.config.js",
-    "logs": "pm2 logs",
-    "stop": "pm2 stop api",
-    "kill": "pm2 kill",
-    "status": "pm2 status api",
-    "build": "cd ../.. && yarn build && cd apps/next && next build",
-    "serve": "NODE_ENV=production next start --port 4000",
-    "lint": "next lint",
-    "test": "jest --colors"
+    "electron": "electron ./index.js",
+    "package": "electron-builder"
   },
   "dependencies": {
     "@craftjs/core": "0.2.0-beta.8",
