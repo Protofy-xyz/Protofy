@@ -4,7 +4,7 @@ import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView } fr
 import { ToyBrick, Eye, ChevronDown } from '@tamagui/lucide-icons'
 import { z } from 'protolib/base'
 import { usePageParams } from '../../next'
-import { getURLWithToken } from '../../lib/Session'
+import { getURLWithToken, withSession } from '../../lib/Session'
 import { usePrompt } from '../../context/PromptAtom'
 import { Chip } from '../../components/Chip'
 import { useState } from 'react'
@@ -13,6 +13,7 @@ import { Objects } from "app/bundles/objects";
 import { Tinted } from '../../components/Tinted';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { getPendingResult } from '../../base';
+import { SSR } from '../../lib/SSR';
 
 
 const APIIcons = {}
@@ -192,7 +193,6 @@ export default {
                     </ScrollView>
                 </AlertDialog>
                 <DataView
-                    refreshOnHotReload
                     integratedChat
                     onSelectItem={(item) => replace('editFile', '/packages/app/bundles/custom/apis/' + item.data.name + '.ts')}
                     rowIcon={ToyBrick}
@@ -223,10 +223,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async (context) => {
-            return {
-                objects: await API.get(getURLWithToken(objectsSourceUrl, context))
-            }
-        })
+        getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
     }
 }
