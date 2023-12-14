@@ -2,10 +2,13 @@ const { app, BrowserWindow } = require('electron')
 const next = require('next')
 const express = require('express');
 
-//const dev = process.env.NODE_ENV !== 'production'
-const nextApp = next({ dev:true })
+//TODO: copy @types/react y @types/node with a postbuild hook in electron-bulder
+process.chdir(__dirname);
+
+const dev = process.env.NODE_ENV !== 'production'
+const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler()
-const PORT = 3000;
+const PORT = 7777;
 
 function createWindow() {
   const win = new BrowserWindow({
