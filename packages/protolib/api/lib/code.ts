@@ -172,33 +172,41 @@ export const removeFileWithImports = async (
 
 //features functions
 
-export const addFeature = async (sourceFile, key, value) => {
+export const hasFeature = (sourceFile, key) => {
     let arg = getDefinition(sourceFile, '"features"')
     if (arg) {
-        console.log('Marker found, writing object')
-        arg.addPropertyAssignment({
-            name: key,
-            initializer: value // Puede ser un string, número, otro objeto, etc.
-        });
-
-        await sourceFile.save()
+        const property = arg.getProperty(key);
+        return property !== undefined;
     } else {
-        console.error("Not adding api feature to object because of missing features marker")
+        console.error("Cannot check for feature due to missing features marker")
+        return false;
     }
 }
 
-export const removeFeature = async (sourceFile, key) => {
-    let arg = getDefinition(sourceFile, '"features"')
-    if (arg) {
-        console.log('Marker found, removing object property');
-        const propertyToRemove = arg.getProperty(key);
-        if (propertyToRemove) {
-            propertyToRemove.remove();
-            await sourceFile.save();
-        } else {
-            console.error("Property 'AutoAPI' not found, cannot remove.");
-        }
-    } else {
-        console.error("Not removing api feature from object due to missing features marker");
+export const addFeature = async (sourceFile, key, value) => {
+    if (hasFeature(sourceFile, key)) {
+        console.error(`Feature '${key}' already exists, not adding.`)
+        return;
     }
+
+    console.log('Marker found, writing object');
+    let arg = getDefinition(sourceFile, '"features"')
+    arg.addPropertyAssignment({
+        name: key,
+        initializer: value // Puede ser un string, número, otro objeto, etc.
+    });
+    await sourceFile.save()
+}
+
+export const removeFeature = async (sourceFile, key) => {
+    if (!hasFeature(sourceFile, key)) {
+        console.error(`Feature '${key}' not found, cannot remove.`)
+        return;
+    }
+
+    console.log('Marker found, removing object property')
+    let arg = getDefinition(sourceFile, '"features"')
+    const propertyToRemove = arg.getProperty(key)
+    propertyToRemove.remove()
+    await sourceFile.save()
 }
