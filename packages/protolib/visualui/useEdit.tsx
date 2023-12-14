@@ -23,7 +23,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
     "tamagui": getTokens()
   }
 
-  const isAdmin = editorUsers.includes(session.user?.type)
+  const isAdmin = editorUsers.includes(session?.user?.type)
   if (!isAdmin) return fn()
   else if (edit) {
     return <VisualUILoader userComponents={userComponents} path={path} metadata={metadata} />

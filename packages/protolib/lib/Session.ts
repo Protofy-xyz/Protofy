@@ -52,7 +52,13 @@ export const getSessionCookie = async (cookieStr) => {
                     ...validatedData
                 }
              } as SessionDataType
-        } catch(e) {}
+        } catch(e) {
+            console.log("ERROR validating session: ", e)
+            if(e == "Server Error") {
+                throw "Server Error"
+            }
+
+        }
     }
     return undefined
 }
@@ -67,7 +73,15 @@ const fail = (returnUrl?) => {
     }
 }
 export const withSession = async (context:any, validTypes?:string[]|any[]|null, props?:any) => {
-    const session = await getSessionCookie(context.req.headers.cookie)
+    let session;
+    let sessionError;
+    try {
+        //try to get session. This can fail because of unavailable api
+        //in case of error, let the client handle the session itself in CSR mode
+        session = await getSessionCookie(context.req.headers.cookie)
+    } catch(e) {
+        sessionError = true
+    }
 
     if(validTypes) {
         if(!session) return fail(context.req.url)
@@ -76,7 +90,7 @@ export const withSession = async (context:any, validTypes?:string[]|any[]|null, 
 
     return { 
         props: { 
-            pageSession:  {session: session ?? createSession(), context: await getSessionContext(session?.user?.type)},
+            pageSession:  {session: sessionError? null : (session ?? createSession()), context: await getSessionContext(session?.user?.type)},
             ...(typeof props === "function"? await props() : props),
         } 
     }

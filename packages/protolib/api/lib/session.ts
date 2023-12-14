@@ -20,6 +20,9 @@ export const createSession = (data?:userData, token?:string):SessionDataType => 
 export const validateSession = async (session:SessionDataType):Promise<validatedUserData> => {
     // console.log('VALIDATE SESSION: ', session)
     const result = await API.get('/adminapi/v1/auth/validate?token='+session.token)
+    if(result.isError) {
+        throw "Server Error"
+    }
     // console.log('VALIDTE: ', result)
     if(!result.data.token) {
         throw "Invalid session"
