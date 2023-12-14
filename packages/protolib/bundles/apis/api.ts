@@ -1,5 +1,5 @@
 import { APIModel } from ".";
-import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports, addFeature, removeFeature } from '../../api'
+import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports, addFeature, removeFeature, hasFeature } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { API } from 'protolib/base'
@@ -34,7 +34,7 @@ const getDB = (path, req, session) => {
 
     async put(key, value) {
       value = JSON.parse(value)
-      const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts'
+
       if (value._deleted) {
         const api = getAPI(fspath.basename(value.name) + '.ts', req)
         removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req);
@@ -43,53 +43,56 @@ const getDB = (path, req, session) => {
           let sourceFile = getSourceFile(objectPath)
           removeFeature(sourceFile, '"AutoAPI"')
         }
-
-
-
-      } else {
-        let exists
-        const template = fspath.basename(value.template ?? 'empty')
-        try {
-          await fs.access(filePath, fs.constants.F_OK)
-          exists = true
-        } catch (error) {
-          exists = false
-        }
-
-        if (exists) {
-          console.log('File: ' + filePath + ' already exists, not executing template')
-        } else {
-          const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-            name: value.name + '.ts',
-            data: {
-              options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object } },
-              path: '/packages/app/bundles/custom/apis'
-            }
-          })
-
-          if (result.isError) {
-            throw result.error
-          }
-        }
-
-        //add autoapi feature in object if needed
-        if (value.object && template.startsWith("Automatic CRUD")) {
-          console.log('Adding feature AutoAPI to object: ', value.object)
-          const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
-          let sourceFile = getSourceFile(objectPath)
-          await addFeature(sourceFile, '"AutoAPI"', "true")
-        }
-        //link in index.ts
-        const sourceFile = getSourceFile(indexFile(getRoot(req)))
-        addImportToSourceFile(sourceFile, value.name + 'Api', ImportType.DEFAULT, './' + value.name)
-
-        const arg = getDefinition(sourceFile, '"apis"')
-        if (!arg) {
-          throw "No link definition schema marker found for file: " + path
-        }
-        addObjectLiteralProperty(arg, value.name, value.name + 'Api')
-        sourceFile.saveSync();
+        return
       }
+
+      const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
+      let ObjectSourceFile = getSourceFile(objectPath)
+      let exists
+      const template = fspath.basename(value.template ?? 'empty')
+      const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts'
+
+      try {
+        await fs.access(filePath, fs.constants.F_OK)
+        console.log('File: ' + filePath + ' already exists, not executing template')
+        exists = true
+      } catch (error) {
+        exists = false
+      }
+      exists = hasFeature(ObjectSourceFile, '"AutoAPI"')
+      
+      if (exists) {
+        console.log("AutoAPI already exists")
+        return
+      }
+      
+      const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        name: value.name + '.ts',
+        data: {
+          options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object } },
+          path: '/packages/app/bundles/custom/apis'
+        }
+      })
+
+      if (result.isError) {
+        throw result.error
+      }
+
+      //add autoapi feature in object if needed
+      if (value.object && template.startsWith("Automatic CRUD")) {
+        console.log('Adding feature AutoAPI to object: ', value.object)
+        await addFeature(ObjectSourceFile, '"AutoAPI"', "true")
+      }
+      //link in index.ts
+      const sourceFile = getSourceFile(indexFile(getRoot(req)))
+      addImportToSourceFile(sourceFile, value.name + 'Api', ImportType.DEFAULT, './' + value.name)
+
+      const arg = getDefinition(sourceFile, '"apis"')
+      if (!arg) {
+        throw "No link definition schema marker found for file: " + path
+      }
+      addObjectLiteralProperty(arg, value.name, value.name + 'Api')
+      sourceFile.saveSync();
     },
 
     async get(key) {
