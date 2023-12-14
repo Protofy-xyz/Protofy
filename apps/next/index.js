@@ -5,7 +5,7 @@ const express = require('express');
 //TODO: copy @types/react y @types/node with a postbuild hook in electron-bulder
 process.chdir(__dirname);
 
-const dev = process.env.NODE_ENV !== 'production'
+const dev = process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath)
 const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler()
 const PORT = 7777;
