@@ -1,8 +1,8 @@
 import {Protofy} from 'protolib/base'
-import home from './home';
-import notFound from './notFound';
+import screen from './pages/screen';
+import notFound from './pages/notFound';
 
 export default Protofy("pages", {
-    ["/"]: home,
+    ["/"]: screen,
     "notFound": notFound
 })

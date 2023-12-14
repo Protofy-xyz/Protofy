@@ -1,11 +1,13 @@
-import { H1 } from '@my/ui'
+import electronPages from 'app/bundles/electronPages'
 import { useSession } from 'protolib'
 
 export default function Page(props: any) {
   useSession(props.pageSession)
   return (
-      <H1>Lorem ipsum</H1>
+    <>
+      {electronPages["/"].component(props)}
+    </>
   )
 }
 
-//export const getServerSideProps = nextPages["/"].getServerSideProps
+export const getServerSideProps = electronPages["/"].getServerSideProps

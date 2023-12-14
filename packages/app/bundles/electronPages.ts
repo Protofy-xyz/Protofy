@@ -10,7 +10,7 @@ import pagesPages from 'protolib/bundles/pages/adminPages'
 import apisPages from 'protolib/bundles/apis/adminPages'
 import databasesPages from 'protolib/bundles/databases/adminPages'
 import resourcesPages from 'protolib/bundles/resources/adminPages'
-import customPages from './custom/nextPages'
+import customPages from './custom/electronPages'
 
 export default {
     ...devicePages,

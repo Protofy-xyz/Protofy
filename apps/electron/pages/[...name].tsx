@@ -2,7 +2,7 @@ import { NextPageContext } from 'next'
 import { useSession, withSession, SSR } from 'protolib'
 import Custom404 from './404'
 import { useRouter } from 'next/router'
-import nextPages from 'app/bundles/nextPages'
+import nextPages from 'app/bundles/electronPages'
 import React from 'react'
 
 const getRoute = (routePath: string | string[] | undefined) => Object.keys(nextPages).find(key => {
