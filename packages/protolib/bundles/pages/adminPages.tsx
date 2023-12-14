@@ -72,7 +72,7 @@ export default {
                     integratedChat
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
-                    numColumnsForm={1}
+                    numColumnsForm={2}
                     name="page"
                     rowIcon={() => <></>}
                     columns={DataTable2.columns(
@@ -86,7 +86,7 @@ export default {
                     )}
                     extraFieldsFormsAdd={{
                         //@ts-ignore
-                        template: z.union(templates?.map((t: string) => z.literal(t))).after("route"),
+                        template: z.union(templates?.map((t: string) => z.literal(t))).after("route").size(2),
                         object: z.union([z.literal("without object"), ...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route'),
                     }}
                     extraMenuActions={[

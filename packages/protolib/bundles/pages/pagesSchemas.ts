@@ -5,8 +5,8 @@ import { SessionDataType } from "../../api";
 export const PageSchema = Schema.object({
     name: z.string().search().id(),
     route: z.string().search(),
-    protected: z.boolean().generate(() => false).label("Require user"),
     permissions: z.array(z.string()).label("Permissions").generate(() => []),
+    protected: z.boolean().generate(() => false).label("Require user"),
 }) 
 
 export type PageType = z.infer<typeof PageSchema>;
