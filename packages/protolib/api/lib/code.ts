@@ -160,7 +160,7 @@ export const removeFileWithImports = async (
     removeImportFromSourceFile(sourceFile, localPath);
     sourceFile.saveSync();
 
-    const filePath = getRoot(req) + 'packages/app/bundles/custom/'+type.replace(/"/g, '')+'/' + fspath.basename(value.name) + '.ts';
+    const filePath = getRoot(req) + 'packages/app/bundles/custom/' + type.replace(/"/g, '') + '/' + fspath.basename(value.name) + '.ts';
 
     try {
         await fs.unlink(filePath);
@@ -169,3 +169,44 @@ export const removeFileWithImports = async (
     }
 
 };
+
+//features functions
+
+export const hasFeature = (sourceFile, key) => {
+    let arg = getDefinition(sourceFile, '"features"')
+    if (arg) {
+        const property = arg.getProperty(key);
+        return property !== undefined;
+    } else {
+        console.error("Cannot check for feature due to missing features marker")
+        return false;
+    }
+}
+
+export const addFeature = async (sourceFile, key, value) => {
+    if (hasFeature(sourceFile, key)) {
+        console.error(`Feature '${key}' already exists, not adding.`)
+        return;
+    }
+
+    console.log('Marker found, writing object');
+    let arg = getDefinition(sourceFile, '"features"')
+    arg.addPropertyAssignment({
+        name: key,
+        initializer: value // Puede ser un string, número, otro objeto, etc.
+    });
+    await sourceFile.save()
+}
+
+export const removeFeature = async (sourceFile, key) => {
+    if (!hasFeature(sourceFile, key)) {
+        console.error(`Feature '${key}' not found, cannot remove.`)
+        return;
+    }
+
+    console.log('Marker found, removing object property')
+    let arg = getDefinition(sourceFile, '"features"')
+    const propertyToRemove = arg.getProperty(key)
+    propertyToRemove.remove()
+    await sourceFile.save()
+}
