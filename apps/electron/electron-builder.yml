@@ -9,5 +9,7 @@ linux:
   target: AppImage
 asar: false
 extraResources:
-  - from: "./node_modules/@types"
-    to: "node_modules/@types"
+  - from: "../../node_modules/@types"
+    to: "app/node_modules/@types"
+files:
+  - "**/*"
