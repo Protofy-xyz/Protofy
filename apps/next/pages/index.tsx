@@ -1,13 +1,9 @@
-import nextPages from 'app/bundles/nextPages'
+import Feature from 'app/bundles/custom/pages/home'
 import { useSession } from 'protolib'
 
-export default function Page(props: any) {
+export default function IndexPage(props:any) {
   useSession(props.pageSession)
-  return (
-    <>
-      {nextPages["/"].component(props)}
-    </>
-  )
+  return <Feature.component {...props} />
 }
 
-export const getServerSideProps = nextPages["/"].getServerSideProps
+export const getServerSideProps = Feature.getServerSideProps

@@ -1,13 +1,9 @@
-import electronPages from 'app/bundles/electronPages'
+import Feature from 'app/bundles/custom/pages/screen'
 import { useSession } from 'protolib'
 
-export default function Page(props: any) {
+export default function IndexPage(props:any) {
   useSession(props.pageSession)
-  return (
-    <>
-      {electronPages["/"].component(props)}
-    </>
-  )
+  return <Feature.component {...props} />
 }
 
-export const getServerSideProps = electronPages["/"].getServerSideProps
+export const getServerSideProps = Feature.getServerSideProps

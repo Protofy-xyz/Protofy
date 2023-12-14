@@ -1,14 +1,5 @@
+import Feature from 'app/bundles/custom/pages/notFound'
 
-import nextPages from 'app/bundles/nextPages'
-import Head from 'next/head'
-
-export default function Custom404(props:any) {
-  return (
-    <>
-      <Head>
-        <title>Protofy - Not Found</title>
-      </Head>
-      {nextPages["notFound"].component()}
-    </>
-  )
+export default function TestPage(props:any) {
+  return <Feature.component {...props} />
 }
