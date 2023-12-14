@@ -37,9 +37,9 @@ export default {
                 const [previewVisible, setPreviewVisible] = useState(false);
                 const templateUrl = `https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/templates/${template}-${theme}.png`
                 return (
-                    <YStack onPress={onPress} onHoverIn={() => setPreviewVisible(true)} onHoverOut={() => setPreviewVisible(false)} overflow='hidden' borderWidth={isSelected ? "$1" : "$0.5"} borderColor={isSelected ? "$color7" : "$gray8"} m="$2" f={1} cursor='pointer' borderRadius={"$3"}>
+                    <YStack onPress={onPress} onHoverIn={() => setPreviewVisible(true)} onHoverOut={() => setPreviewVisible(false)} overflow='hidden' borderWidth={isSelected ? "$1" : "$0.5"} borderColor={isSelected ? "$color7" : "$gray8"} f={1} cursor='pointer' borderRadius={"$3"}>
                         <Image
-                            source={{ height: 120, width: 154, uri: templateUrl }}
+                            source={{ height: 120, width: 238, uri: templateUrl }}
                         />
                         <YStack
                             display={previewVisible ? 'block' : 'none'}
@@ -75,6 +75,7 @@ export default {
                     numColumnsForm={2}
                     name="page"
                     rowIcon={() => <></>}
+                    objectProps={{ columnWidth: 500 }}
                     columns={DataTable2.columns(
                         DataTable2.column("", "", true, (row) => <a href={getUrl(row.route.startsWith('/') ? row.route : '/' + row.route)} target='_blank'>
                             <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
@@ -105,9 +106,9 @@ export default {
                                     <Tinted>
                                         <div
                                             style={{
-                                                gap: 10,
+                                                gap: 20,
                                                 display: 'grid',
-                                                gridTemplateColumns: `repeat( auto-fill, minmax(150px, 1fr) )`,
+                                                gridTemplateColumns: `repeat( auto-fill, minmax(230px, 1fr) )`,
                                             }}
                                         >
                                             {
