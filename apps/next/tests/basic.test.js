@@ -1,140 +1,95 @@
-const execSync = require('child_process').execSync
-let Zombie = require('zombie');
-
-const protoBrowser = {
-    visit: (browser, url) => {
-        return new Promise((resolve, reject) => {
-            browser.visit(url, () => { })
-            browser.on("loaded", () => {
-                resolve();
-            });
-            browser.on("error", (error) => {
-                reject(error);
-            });
-        });
-    },
-    visitLink: (browser, selector) => {
-        return new Promise((resolve, reject) => {
-            browser.clickLink(selector, () => { });
-            browser.on("loaded", () => {
-                resolve();
-            });
-            browser.on("error", (error) => {
-                reject(error);
-            });
-        });
-    },
-    clickButton: (browser, selector) => {
-        try {
-            browser.pressButton(selector);
-        } catch (e) {
-            throw ("Error: Button element with selector " + selector + " not found.")
-        }
-    },
-    submit: (browser, selector) => {
-        try {
-            browser.query(selector)?.submit();
-        } catch (e) {
-            throw ("Error: Form element with selector " + selector + " not found.")
-        }
-    },
-    waitForElement: (browser, selector) => {
-        return new Promise((resolve, reject) => {
-            function verifyCondition() {
-                if (browser && browser.query(selector)) {
-                    resolve()
-                    clearInterval(interval);
-                }
-            }
-            let interval = setInterval(verifyCondition, 100);
-        })
-    },
-    wait2BReady: (path, element_id) => {
-        return new Promise((resolve, reject) => {
-            function isReady() {
-                let isEnabled = execSync(`curl -s http://127.0.0.1:8080${path} | grep -q 'id="${element_id}"' && echo true || echo false`, { encoding: 'utf-8' }).trim()
-                if (isEnabled === "true") {
-                    clearInterval(interval);
-                    resolve(true)
-                }
-            }
-            let interval = setInterval(isReady, 100)
-        })
-    }
-}
-
-describe("Check routes", () => {
-    it("should have a public authentication interface", async () => {
-        expect(await protoBrowser.wait2BReady("/auth/login", "sign-in-btn")).toBe(true)
-    })
-
-    it("should have a public sign up interface", async () => {
-        expect(await protoBrowser.wait2BReady("/auth/register", "sign-up-btn")).toBe(true)
-    })
-})
-
+const { Builder, By, until } = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
+const { v4: uuidv4 } = require('uuid');
+const HOST_URL = 'http://host.docker.internal:8080/'
 
 describe("Basic tests", () => {
-    let browser;
-    const navigateToLogin = async () => {
-        await protoBrowser.visitLink(browser, `#header-login-link`)
-    }
-
-    const navigateToRegister = async () => {
-        await navigateToLogin();
-        await protoBrowser.visitLink(browser, '#sign-up-link')
-    }
-
-    const hasElement = async (selector) => Boolean(browser.query(selector))
-    const fillInput = async (selector, value) => {
-        browser.query(selector).value = value;
-    }
-
-    afterEach(() => {
-        browser.destroy()
-    })
-
+    let driver;
     beforeEach(async () => {
-        browser = new Zombie()
-        browser.site = 'http://127.0.0.1:8080/';
-        await protoBrowser.visit(browser, '/')
-    })
+        driver = await new Builder()
+            .forBrowser('chrome')
+            .usingServer('http://localhost:4444/wd/hub') // URL to Selenium Hub
+            .setChromeOptions(new chrome.Options().headless().addArguments("--no-sandbox", "--disable-dev-shm-usage"))
+            .build();
+        await driver.get(HOST_URL);
 
-    it("should be able to interact with the web", async () => {
-        expect(hasElement('#__next')).toBeTruthy()
-    })
+    }, 20000)
 
-    it("should have a public authentication interface", async () => {
-        await navigateToLogin();
-        expect(browser.location.href.split(browser.site)[1]).toBe("auth/login")
-        expect(hasElement('#sign-in-email-input'), "Missing input at login form: email").toBeTruthy()
-        expect(hasElement('#sign-in-password-input'), "Missing input at login form: password").toBeTruthy()
-        expect(hasElement('#sign-in-btn'), "Missing sign in button at login").toBeTruthy()
-        expect(hasElement('#sign-up-link'), "Missing sign up link at login").toBeTruthy()
+    afterEach(async () => {
+        if (driver) {
+            await driver.quit()
+        }
     })
+    it("should have a public sign in authentication interface", async () => {
+        await navigateToLogin(driver)
+        const path = new URL(await driver.getCurrentUrl()).pathname;
+        expect(path).toBe('/auth/login');
+        const inputFieldEmail = await driver.findElement(By.id('sign-in-email-input'));
+        expect(inputFieldEmail).toBeTruthy();
+        const inputFieldPassword = await driver.findElement(By.id('sign-in-password-input'));
+        expect(inputFieldPassword).toBeTruthy();
+        const signInButton = await driver.findElement(By.id('sign-in-btn'));
+        expect(signInButton).toBeTruthy();
+        const signUpLink = await driver.findElement(By.id('sign-up-link'));
+        expect(signUpLink).toBeTruthy();
+    }, 20000)
 
-    it("should have a public sign up interface", async () => {
-        await navigateToRegister()
-        expect(browser.location.href.split(browser.site)[1]).toBe("auth/register")
-        expect(hasElement('#sign-up-email-input'), "Missing input at register form: email").toBeTruthy()
-        expect(hasElement('#sign-up-password-input'), "Missing input at register form: password").toBeTruthy()
-        expect(hasElement('#sign-up-repassword-input'), "Missing input at register form: repassword").toBeTruthy()
-        expect(hasElement('#sign-up-btn'), "Missing sign up button at register").toBeTruthy()
-        expect(hasElement('#sign-in-link'), "Missing sign in link at register").toBeTruthy()
-    })
+    it("should have a public sign up authentication interface", async () => {
+        await navigateToRegister(driver)
+        const path = new URL(await driver.getCurrentUrl()).pathname;
+        expect(path).toBe('/auth/register');
+        const inputFieldEmail = await driver.findElement(By.id('sign-up-email-input'));
+        expect(inputFieldEmail).toBeTruthy();
+        const inputFieldPassword = await driver.findElement(By.id('sign-up-password-input'));
+        expect(inputFieldPassword).toBeTruthy();
+        const inputFieldRePassword = await driver.findElement(By.id('sign-up-repassword-input'));
+        expect(inputFieldRePassword).toBeTruthy();
+        const signInButton = await driver.findElement(By.id('sign-up-btn'));
+        expect(signInButton).toBeTruthy();
+        const signUpLink = await driver.findElement(By.id('sign-in-link'));
+        expect(signUpLink).toBeTruthy();
+    }, 20000)
 
-    it.skip("should create a user using sign up interface", async () => {
-        console.log('Test start!')
-        const email = "example5@mail.com"
-        await navigateToRegister()
-        console.log('At REGISTER!')
-        fillInput("#sign-up-email-input", email)
-        fillInput("#sign-up-password-input", "changeme1234")
-        fillInput("#sign-up-repassword-input", "changeme1234")
-        console.log('CLICK!')
-        await browser.pressButton("#sign-up-btn")  
-        console.log('BROWSER: ', browser.query("#header-session-user-id"))
-        // expect(browser.location.href.split(browser.site)[1]).toBe("/")
-        // expect(browser.query("#header-session-user-id>p").textContent).toBe(email)
-    }, 10000)
+    it("should be able to register and retrieve a session using sign up interface", async () => {
+        await navigateToRegister(driver)
+        const email = `randomuser-${uuidv4()}@noreply.com`
+        console.log('Registering user (email): ', email)
+        const password = 'changeme4321'
+        await signUpFlow(driver, email, password);
+        expect(new URL(await driver.getCurrentUrl()).pathname).toBe('/')
+        // expect(until.elementLocated(By.id('header-session-user-id'))).toBe()
+        async function signUpFlow(driver, email, password) {
+            // Fill sign-up form
+            const inputFieldEmail = await driver.findElement(By.id('sign-up-email-input'));
+            await inputFieldEmail.sendKeys(email);
+            const inputFieldPassword = await driver.findElement(By.id('sign-up-password-input'));
+            await inputFieldPassword.sendKeys(password);
+            const inputFieldRePassword = await driver.findElement(By.id('sign-up-repassword-input'));
+            await inputFieldRePassword.sendKeys(password);
+            const signUpButton = await driver.findElement(By.id('sign-up-btn'));
+            await signUpButton.click()
+            await driver.wait(async () => { // Wait to load session and be redirected to '/'
+                return (
+                    (new URL(await driver.getCurrentUrl()).pathname === '/')
+                    && until.elementLocated(By.id('header-session-user-id'))
+                    && until.elementIsVisible(By.id('home-page'))
+                )
+            });
+        }
+    }, 20000)
 })
+
+
+const navigateToLogin = async (driver) => {
+    await driver.wait(until.elementLocated(By.id('header-login-link')));
+    await driver.executeScript("document.querySelector('#header-login-link > p').click();");
+    await driver.wait(until.elementLocated(By.id('sign-in-btn')));
+}
+
+const navigateToRegister = async (driver) => {
+    await navigateToLogin(driver)
+    await driver.wait(until.elementLocated(By.id('sign-up-link')));
+    const signUpLinkElem = await driver.findElement(By.id('sign-up-link'))
+    await signUpLinkElem.click()
+    await driver.wait(until.elementLocated(By.id('sign-up-btn')));
+}

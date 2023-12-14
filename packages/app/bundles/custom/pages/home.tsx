@@ -10,7 +10,7 @@ const isProtected = Protofy("protected", false);
 
 const Home = (props) => {
   return (
-    <Page>
+    <Page id="home-page">
       <DefaultLayout title="Protofy" description="Made with love from Barcelona">
         <PageGlow />
         <Section>
