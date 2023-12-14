@@ -1,5 +1,5 @@
 import { APIModel } from ".";
-import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports, addFeature, removeFeature } from '../../api'
+import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports, addFeature, removeFeature, hasFeature } from '../../api'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { API } from 'protolib/base'
@@ -54,13 +54,15 @@ const getDB = (path, req, session) => {
 
       try {
         await fs.access(filePath, fs.constants.F_OK)
+        console.log('File: ' + filePath + ' already exists, not executing template')
         exists = true
       } catch (error) {
         exists = false
       }
-
+      exists = hasFeature(ObjectSourceFile, '"AutoAPI"')
+      
       if (exists) {
-        console.log('File: ' + filePath + ' already exists, not executing template')
+        console.log("AutoAPI already exists")
         return
       }
       
