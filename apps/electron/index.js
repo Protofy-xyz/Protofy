@@ -15,7 +15,7 @@ function createWindow() {
     width: 800,
     height: 600,
   })
-  win.loadURL(`http://localhost:${PORT}`)
+  win.loadURL(`http://localhost:${PORT}/screen`)
   //win.webContents.openDevTools()
 }
 
