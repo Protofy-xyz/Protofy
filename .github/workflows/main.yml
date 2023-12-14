@@ -32,7 +32,7 @@ jobs:
       run: yarn
 
     - name: Run Selenium
-      run: docker-compose -f apps/selenium/docker.yml up -d
+      run: docker-compose -f .github/runners/selenium/docker.yml up -d
 
     - name: Start "Protofy"
       run: node .github/scripts/start.js
