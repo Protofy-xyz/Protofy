@@ -26,6 +26,7 @@ export const HeaderMenu = React.memo(function HeaderMenu({children, menuPlacemen
           noTextWrap
           onPress={() => setOpen(!open)}
           theme={open ? 'alt1' : undefined}
+          id="layout-menu-btn"
         >
           <Menu size={16} color="var(--color)" />
         </Button>
