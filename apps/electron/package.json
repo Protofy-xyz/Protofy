@@ -30,8 +30,7 @@
     "react-native-web": "^0.18.12",
     "react-native-web-lite": "latest",
     "react-topics": "0.1.7",
-    "three": "^0.157.0",
-    "vercel": "latest"
+    "three": "^0.157.0"
   },
   "devDependencies": {
     "@jest/globals": "~29.7.0",
