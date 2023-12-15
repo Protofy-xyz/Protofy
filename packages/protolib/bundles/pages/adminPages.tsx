@@ -75,7 +75,7 @@ const FirstSlide = ({ selected, setSelected }) => {
     </SelectGrid>
 }
 
-const SecondSlide = ({ data, setData, error, setError }) => {
+const SecondSlide = ({ data, setData, error, setError, objects }) => {
     return <EditableObject
         externalErrorHandling={true}
         error={error}
@@ -87,25 +87,28 @@ const SecondSlide = ({ data, setData, error, setError }) => {
         mode={'add'}
         title={""}
         model={PageModel}
+        extraFields={{
+            object: z.union([z.literal("without object"), ...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)): [])] as any).after('route')
+        }}
     />
 }
 
 export default {
     'admin/pages': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
+            const defaultData = { data: { web: true, electron: false, protected: false, template: '' } }
             const router = useRouter();
             const { replace } = usePageParams(pageState)
             const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
             const [addOpen, setAddOpen] = useState(false)
             const themeName = useThemeName();
-            const [templateSelected, setTemplateSelected] = useState('')
-            const [data, setData] = useState({ })
+            const [data, setData] = useState(defaultData)
             const toast = useToastController()
             const [error, setError] = useState<any>('')
 
             useUpdateEffect(() => {
                 setError('')
-                setData({template: ''})
+                setData(defaultData)
             }, [addOpen])
 
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
@@ -137,9 +140,8 @@ export default {
                                             //TODO: when using custom data and setData in editablectObject
                                             //it seems that defaultValue is no longer working
                                             //we are going to emulate it here until its fixed
-                                            const obj = PageModel.load({web: true, electron: false, protected: false, template: templateSelected , ...data['data']})
+                                            const obj = PageModel.load(data['data'])
                                             const result = await API.post(sourceUrl, obj.create().getData())
-
                                             if (result.isError) {
                                                 throw result.error
                                             }
@@ -156,12 +158,12 @@ export default {
                                         {
                                             name: "Create new page",
                                             title: "Select your Template",
-                                            component: <FirstSlide selected={templateSelected} setSelected={setTemplateSelected} />
+                                            component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
                                         },
                                         {
                                             name: "Configure your page",
                                             title: "Configure your page",
-                                            component: <SecondSlide error={error} setError={setError} data={data} setData={setData} />
+                                            component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
                                         }
                                     ]
                                     }></Slides>
