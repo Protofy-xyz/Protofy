@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Tinted } from './Tinted'
 
 
-export const Slides = ({ slides }) => {
+export const Slides = ({ slides, lastButtonCaption, onFinish }) => {
     const [step, setStep] = useState(0)
     const totalSlides = slides.length
     const prev_step = step > 1 ? step - 1 : 0
@@ -36,21 +36,25 @@ export const Slides = ({ slides }) => {
                 {slides[step].component}
             </Stack>
 
-            <XStack gap={40} jc='center' mb={"$5"}  flex={1} alignItems="flex-end">
-            {step !== 0?<Button w={250} onPress={(e) => {
+            <XStack gap={40} jc='center' mb={"$5"} flex={1} alignItems="flex-end">
+                {step !== 0 ? <Button w={250} onPress={(e) => {
                     e.stopPropagation();
                     if (step > 0) {
                         setStep(prev_step)
                     }
                 }} >Back
-                </Button>:<></>}
+                </Button> : <></>}
                 <Tinted>
-                    <Button w={250} onPress={(e) => {
+                    <Button w={250} onPress={async (e) => {
                         e.stopPropagation();
                         if (post_step) {
                             setStep(post_step)
+                        } else {
+                            if (onFinish) {
+                                await onFinish()
+                            }
                         }
-                    }} >{totalSlides=== step+1?"Create":"Next"}
+                    }} >{totalSlides === step + 1 ? lastButtonCaption : "Next"}
                     </Button>
                 </Tinted>
             </XStack>
