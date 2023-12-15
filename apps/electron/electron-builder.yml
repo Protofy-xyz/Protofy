@@ -13,3 +13,4 @@ extraResources:
     to: "app/node_modules/@types"
 files:
   - "**/*"
+  - "!**/{.next/cache/**/*,.next/cache}"

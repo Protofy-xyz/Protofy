@@ -1,5 +1,7 @@
 {
   "name": "electron-app",
+  "description": "protofy",
+  "author": "protofy.xyz",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,6 +21,7 @@
     "app": "0.0.0",
     "compare-versions": "^3.4.0",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "next": "^13.5.2",
     "protolib": "0.0.1",
     "raf": "^3.4.1",
