@@ -9,7 +9,7 @@ console.time("runtime")
 const sourceDir = '.';
 const targetDir = path.join('./data/environments', process.argv[2] || 'prod');
 
-// Función para leer y dividir las reglas de un archivo .gitignore
+
 function readAndSplitGitIgnore(filePath) {
   const gitIgnoreContent = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf-8') : '';
   return gitIgnoreContent.split(/\r?\n/).filter((rule) => rule.trim() !== '');
@@ -34,7 +34,6 @@ function copyFiles(source, target, ignoreList) {
         copyFiles(sourcePath, targetPath, [...ignoreList, ...dirGitIgnoreRules]);
       } else {
         fs.copyFileSync(sourcePath, targetPath);
-        //console.log(`File copied successfully: ${sourcePath}`);
       }
     }
   });
@@ -49,7 +48,6 @@ async function copyFile(source) {
   }
 }
 
-// Utiliza la función para leer y dividir las reglas del archivo .gitignore
 const gitIgnorePath = path.join(sourceDir, '.gitignore');
 const gitIgnoreRules = readAndSplitGitIgnore(gitIgnorePath);
 
