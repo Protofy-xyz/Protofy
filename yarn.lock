@@ -23858,7 +23858,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ncp@npm:^2.0.0, ncp@npm:~2.0.0":
+"ncp@npm:~2.0.0":
   version: 2.0.0
   resolution: "ncp@npm:2.0.0"
   bin:
@@ -28537,7 +28537,6 @@ __metadata:
     glob: ^10.3.10
     ignore: 5.3.0
     mkdirp: ^3.0.1
-    ncp: ^2.0.0
     node-gyp: ^9.3.1
     npm-run-all: ^4.1.5
     pm2: ^5.3.0
