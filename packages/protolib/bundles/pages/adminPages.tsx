@@ -1,65 +1,43 @@
 import { PageModel } from '.'
 import { DataView } from 'protolib'
-import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR, NextLink } from 'protolib'
+import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR } from 'protolib'
 import { z } from 'protolib/base'
-import { Paragraph, XStack, YStack, useThemeName, useToastController } from '@my/ui'
+import { XStack, YStack, useThemeName, useToastController } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
 import { getURLWithToken } from '../../lib/Session'
 import { useState } from 'react'
 import { getPendingResult } from '../../base'
 import { usePendingEffect } from '../../lib/usePendingEffect'
-import { Tinted } from '../../components/Tinted'
-import { Button, Image, ScrollView } from 'tamagui'
+import { ScrollView } from 'tamagui'
 import { useRouter } from 'next/router'
 import { AlertDialog } from '../../components/AlertDialog'
 import { Slides } from '../../components/Slides'
 import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
+import TemplatePreview from './TemplatePreview'
 
 const environments = require('../../../app/bundles/environments')
 
 const PageIcons = {}
 const sourceUrl = '/adminapi/v1/pages'
 const objectsSourceUrl = '/adminapi/v1/objects?all=1'
-const templates = ["blank", "default", "admin", "landing"]
 
-const TemplatePreview = ({ template, isSelected, onPress, theme }) => {
-    const [previewVisible, setPreviewVisible] = useState(false);
-    const templateUrl = `https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/templates/${template == 'landing' ? 'admin' : template}-${theme}.png`
-    let height = 120 * 1.5
-    let width = 238 * 1.5
-    return (
-        <Tinted>
-            <YStack onPress={onPress} onHoverIn={() => setPreviewVisible(true)} onHoverOut={() => setPreviewVisible(false)} overflow='hidden' borderWidth={isSelected ? "$1" : "$0.5"} borderColor={isSelected ? "$color7" : "$gray8"} cursor='pointer' borderRadius={"$3"}>
-                <Image
-                    source={{ height: height, width: width, uri: templateUrl }}
-                />
-                <YStack
-                    display={previewVisible ? 'block' : 'none'}
-                    zi={10000}
-                    position='absolute'
-                    right={"$2"}
-                    top={"$2"}
-                >
-                    <NextLink target="_blank" href={templateUrl}>
-                        <Button
-                            backgroundColor={"$color7"}
-                            size="$1.5" borderRadius={"$1"}
-                            px="$2" textProps={{ size: "$1" }}
-                            onPress={(e) => {
-                                e.stopPropagation()
-                            }}
-                        // iconAfter={<Eye size="$1" color="$color7" />}
-                        >preview</Button>
-                    </NextLink>
-                </YStack>
-                <XStack jc='space-between' borderTopWidth={"$0.5"} borderColor={"$gray8"} backgroundColor={"$gray3"} py="$1" px="$2">
-                    <Paragraph>{template}</Paragraph>
-                </XStack>
-            </YStack>
-        </Tinted>
-    )
+const templates = {
+    "blank": {},
+    "default": {},
+    "admin": {
+        extraFields: (objects) => ({
+            object: z.union([z.literal("without object"), ...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route')
+        }),
+        extraValidation: (data) => {
+            if (!Object.keys(data).includes('object')) {
+                return {error: "object cant be empty"}
+            }
+            return
+        }
+    },
+    "landing": {},
 }
 
 const SelectGrid = ({ children }) => {
@@ -71,7 +49,7 @@ const SelectGrid = ({ children }) => {
 const FirstSlide = ({ selected, setSelected }) => {
     const themeName = useThemeName();
     return <SelectGrid>
-        {templates.map((template) => <TemplatePreview theme={themeName} template={template} isSelected={selected == template} onPress={() => setSelected(template)} />)}
+        {Object.keys(templates).map((template) => <TemplatePreview theme={themeName} template={template} isSelected={selected == template} onPress={() => setSelected(template)} />)}
     </SelectGrid>
 }
 
@@ -87,9 +65,7 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
         mode={'add'}
         title={""}
         model={PageModel}
-        extraFields={{
-            object: z.union([z.literal("without object"), ...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)): [])] as any).after('route')
-        }}
+        extraFields={templates[data['data'].template].extraFields ? templates[data['data'].template].extraFields(objects) : {}}
     />
 }
 
@@ -141,6 +117,12 @@ export default {
                                             //it seems that defaultValue is no longer working
                                             //we are going to emulate it here until its fixed
                                             const obj = PageModel.load(data['data'])
+                                            if (templates[data['data'].template].extraValidation) {
+                                                const check = templates[data['data'].template].extraValidation(data['data'])
+                                                if (check?.error) {
+                                                    throw check.error
+                                                }
+                                            }
                                             const result = await API.post(sourceUrl, obj.create().getData())
                                             if (result.isError) {
                                                 throw result.error
@@ -189,11 +171,6 @@ export default {
                         DataTable2.column("visibility", "protected", true, row => !row.protected ? <Chip text={'public'} color={'$color5'} /> : <Chip text={'protected'} color={'$gray5'} />),
                         DataTable2.column("permissions", "permissions", true, row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
                     )}
-                    extraFieldsFormsAdd={{
-                        //@ts-ignore
-                        template: z.union(templates?.map((t: string) => z.literal(t))).after("route").size(2),
-                        object: z.union([z.literal("without object"), ...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route'),
-                    }}
                     onAddButton={() => { setAddOpen(true) }}
                     extraMenuActions={[
                         {
@@ -203,19 +180,6 @@ export default {
                             isVisible: (data) => true
                         }
                     ]}
-                    customFields={{
-                        template: {
-                            component: (path, data, setData) => {
-                                return (
-                                    <SelectGrid>
-                                        {
-                                            templates.map((template) => <TemplatePreview theme={themeName} template={template} isSelected={data == template} onPress={() => setData(template)} />)
-                                        }
-                                    </SelectGrid>
-                                )
-                            }
-                        }
-                    }}
                     model={PageModel}
                     pageState={pageState}
                     icons={PageIcons}
