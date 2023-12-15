@@ -2,7 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const { mkdirpSync } = require('mkdirp');
 const ignore = require('ignore');
+const { fdir } = require("fdir");
+const async = require('async');
 
+console.time("runtime")
 const sourceDir = '.';
 const targetDir = path.join('./data/environments', process.argv[2] || 'prod');
 
@@ -31,10 +34,19 @@ function copyFiles(source, target, ignoreList) {
         copyFiles(sourcePath, targetPath, [...ignoreList, ...dirGitIgnoreRules]);
       } else {
         fs.copyFileSync(sourcePath, targetPath);
-        console.log(`File copied successfully: ${sourcePath}`);
+        //console.log(`File copied successfully: ${sourcePath}`);
       }
     }
   });
+}
+
+async function copyFile(source) {
+  const stat = await fs.promises.lstat(source)
+  if(stat.isDirectory()) {
+    await fs.promises.mkdir(path.join(targetDir, source))
+  } else {
+    await fs.copyFile(source, path.join(targetDir, source));
+  }
 }
 
 // Utiliza la función para leer y dividir las reglas del archivo .gitignore
@@ -42,3 +54,18 @@ const gitIgnorePath = path.join(sourceDir, '.gitignore');
 const gitIgnoreRules = readAndSplitGitIgnore(gitIgnorePath);
 
 copyFiles(sourceDir, targetDir, gitIgnoreRules);
+console.log('Base files copied, copying node_modules....')
+const api = new fdir().withDirs().withBasePath().crawl("node_modules");
+const files = api.sync();
+
+const maxParallelCopies = 16;
+const queue = async.queue(async function (task, completed) {
+  await copyFile(task);
+  completed();
+}, maxParallelCopies);
+files.forEach(file => queue.push(file));
+
+queue.drain(function() {
+  console.log('Done!');
+  console.timeEnd("runtime")
+});
