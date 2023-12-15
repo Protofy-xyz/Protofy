@@ -24,7 +24,7 @@ export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
       <Tinted>
         {session.loggedIn ? <>
           <HeaderLink href="/profile">Profile</HeaderLink>
-          {workspace && workspace.default ?<HeaderLink href={workspace.default}>{workspace.label}</HeaderLink>:null}
+          {workspace && workspace.default ?<HeaderLink href={workspace.default} id="pop-over-workspace-link" >{workspace.label}</HeaderLink>:null}
           <HeaderLink onClick={logout} href={"/"}>Logout</HeaderLink>
         </> : <HeaderLink href="/auth/login">Login</HeaderLink>}
         {/* <Separator my="$4" w="100%" />
