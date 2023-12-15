@@ -78,8 +78,7 @@ describe.skip("Test entities autocreation", () => {
             .setChromeOptions(new chrome.Options().headless().addArguments("--no-sandbox", "--disable-dev-shm-usage"))
             .build();
         await driver.get(HOST_URL);
-
-    }, 20000)
+    }, 30000)
 
     afterEach(async () => {
         if (driver) {
@@ -91,20 +90,16 @@ describe.skip("Test entities autocreation", () => {
         // expect(output.includes('Done')).toBeTruthy();
         await navigateToLogin(driver);
         await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
-        await driver.wait(until.elementLocated(By.id('header-session-user-id')));
-        const menuButtonLocator = By.id('layout-menu-btn');
-        await driver.wait(until.elementLocated(menuButtonLocator));
-        const menuButton = driver.findElement(menuButtonLocator).click();
-        console.log('MENU BUTON: ', menuButton)
-        // await driver.wait(until.elementLocated(By.id('pop-over-workspace-link')));
+        await navigateToWorkspace(driver);
         const img = await driver.takeScreenshot();
         fs.writeFileSync(__dirname + '/screenshot.png', img, 'base64')
-    }, 20000)
+    }, 30000)
 })
 
 const navigateToLogin = async (driver) => {
     await driver.wait(until.elementLocated(By.id('header-login-link')));
     await driver.executeScript("document.querySelector('#header-login-link > p').click();");
+
     await driver.wait(until.elementLocated(By.id('sign-in-btn')));
 }
 
@@ -114,6 +109,17 @@ const navigateToRegister = async (driver) => {
     const signUpLinkElem = await driver.findElement(By.id('sign-up-link'))
     await signUpLinkElem.click()
     await driver.wait(until.elementLocated(By.id('sign-up-btn')));
+}
+
+const navigateToWorkspace = async (driver) => {
+    await driver.wait(until.elementLocated(By.id('header-session-user-id')));
+    await driver.executeScript("document.querySelector('#layout-menu-btn').click();");
+    await driver.wait(until.elementLocated(By.id("pop-over-workspace-link")));
+    await driver.executeScript("document.querySelector('#pop-over-workspace-link').click();");
+    await driver.wait(async () => {
+        const currentUrl = await driver.getCurrentUrl();
+        return currentUrl.includes('/admin');
+    });
 }
 
 async function signInSubmit(driver, email, password) {
