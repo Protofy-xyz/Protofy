@@ -17464,6 +17464,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fdir@npm:6.1.1":
+  version: 6.1.1
+  resolution: "fdir@npm:6.1.1"
+  peerDependencies:
+    picomatch: 3.x
+  peerDependenciesMeta:
+    picomatch:
+      optional: true
+  checksum: 2db7e261c95246ea572eaaf1c86bb32c620c3579638a4ae12f427662c4dfbb28891b36a2102c3dd691a4ff98f6ae982a9d26b3af042268238ef7fb77360d8116
+  languageName: node
+  linkType: hard
+
 "fetch-retry@npm:^4.1.1":
   version: 4.1.1
   resolution: "fetch-retry@npm:4.1.1"
@@ -28534,6 +28546,7 @@ __metadata:
     "@manypkg/cli": ^0.19.1
     check-dependency-version-consistency: ^3.0.3
     eslint: ^8.21.0
+    fdir: 6.1.1
     glob: ^10.3.10
     ignore: 5.3.0
     mkdirp: ^3.0.1
