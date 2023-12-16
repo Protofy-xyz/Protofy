@@ -26,11 +26,15 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const [isModified, setIsModified] = useState(false)
 
     useUpdateEffect(() => {
-        //API.get('/adminapi/v1/files/'+currentPath, setFiles)
-        router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath)
+        console.log('query:', router.query.path, 'newpath:', currentPath)
+        const path = (!currentPath.startsWith('/') ? '/' : '') + currentPath
+        if(router.query.path != currentPath) router.push({
+            pathname: router.pathname,
+            query: {...router.query, path: path}
+        }, undefined, { shallow: true })
     }, [currentPath])
 
-    useEffect(() => {
+    useUpdateEffect(() => {
         if (currentFile) {
             setDialogOpen(true)
         } else {
@@ -45,23 +49,24 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
 
     useUpdateEffect(() => {
-        const r = router.asPath.split('?')[0].substring('/admin/files'.length)
+        const path = router.query.path && router.query.path['split'] ? router.query.path['split']('\\').join('/') : ''
+        console.log('current path: ', path)
         if (router.query.file) {
-            const file = (r + '/' + router.query.file).replace(/\/+/g, '/')
+            const file = (path + '/' + router.query.file).replace(/\/+/g, '/')
             setCurrentFile(file)
         } else {
             setCurrentFile('')
             setDialogOpen(false)
-            console.log('useEffect fired!', r);
-            setCurrentPath(r)
+            console.log('useEffect fired!', path);
+            setCurrentPath(path)
         }
 
-    }, [router.asPath]);
+    }, [router.query.path, router.query.file]);
 
     const onOpen = (file: any) => {
         console.log('on open client: ', file)
         if (file.isDir) return setCurrentPath(file.path ?? file.id)
-        router.push('/admin/files' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '?file=' + file.name)
+        router.push('/admin/files?path=' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '&file=' + file.name)
     }
 
     const { resolvedTheme } = useThemeSetting()

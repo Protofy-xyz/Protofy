@@ -12,8 +12,8 @@ export default {
             { "name": "APIs", "icon": ToyBrick, "type": "apis", "path": "/" },
             { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
             // { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
-            { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/apps/next/public" },
-            { "name": "Files", "icon": "folder", "type": "files", "path": "/packages/app/bundles/custom" },    
+            { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/?path=/apps/next/public" },
+            { "name": "Files", "icon": "folder", "type": "files", "path": "/?path=packages/app/bundles/custom" },    
             { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
             { "name": "Resources", "icon": Library, "type": "resources", "path": "/"},
             { "name": "Databases", "icon": "database", "type": "databases", "path": "/"}

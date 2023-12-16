@@ -27,7 +27,7 @@ function FilesPage({initialFilesState, pageSession}:any) {
   ${CurrentFile?'The user is viewing the file'+CurrentFile:`The directory contents are: ${JSON.stringify(filesState)}`}
   `) 
   const router = useRouter();
-  const CurrentPath = Array.isArray(router.query.name) ? router.query.name.slice(2).join('/') : router.query.name
+  const CurrentPath = router.query.path ?? '/'
   const CurrentFile = router.query.file ? CurrentPath + '/' + router.query.file.split('/')[0] : null
   const [filesState, setFilesState] = useState(initialFilesState ?? getPendingResult('pending'))
 
@@ -41,15 +41,6 @@ function FilesPage({initialFilesState, pageSession}:any) {
   )
 }
 
-const getServerSideProps = SSR(async (context:NextPageContext) => {
-    const nameSegments = context.query.name as string[];
-    const path = nameSegments ? nameSegments.slice(2).join('/') : '';
-
-    return withSession(context, ['admin'], {
-      initialFilesState: await API.get(getURLWithToken('/adminapi/v1/files/'+path, context)) ?? { data: [] }
-    })
-})
-
 export default {
-    'admin/files/**': {component: FilesPage, getServerSideProps: getServerSideProps},
+    'admin/files/**': {component: FilesPage }
 }

@@ -98,7 +98,7 @@ const handleFilesRequest = async (req, res) => {
 const handleFilesWriteRequest = async (req, res, session) => {
     const name = req.params.path || '';
     const filepath = path.join(getRoot(req), name);
-    if (req.body && req.body.hasOwnProperty("content")) {
+    if (req.body && req.body.hasOwnProperty && req.body.hasOwnProperty("content")) {
         await fs.writeFile(filepath, req.body.content)
     }
 

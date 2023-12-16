@@ -29,11 +29,11 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
     const [selectedFiles, setSelectedFiles] = useState([])
     const [customAction, setCustomAction] = useState(null)
     const lastClickTime = useRef(0)
+    const normalizedCurrentPath = currentPath && currentPath.startsWith("/") ? currentPath : (currentPath ? "/" + currentPath: '/')
 
     const onUploadFiles = async () => {
-        setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] })
+        setFiles(await API.get('/adminapi/v1/files/' + normalizedCurrentPath) ?? { data: [] })
     }
-    const normalizedCurrentPath = currentPath.startsWith("/") ? currentPath : "/" + currentPath
     const onScroll = () => { }
     const myFileActions = [
         ...customActions.filter(f => !f.filter || f.filter(normalizedCurrentPath, selectedFiles)).map(f => f.action),
@@ -58,7 +58,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
         }
     }) : []
     const folderChain = [{ id: '/', name: "Files", isDir: true }].concat(
-        ...currentPath.split('/').map((x: any, i: any, arr: any) => {
+        ...normalizedCurrentPath.split('/').map((x: any, i: any, arr: any) => {
             return {
                 name: x,
                 id: arr.slice(0, i + 1).join('/'),
