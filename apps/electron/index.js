@@ -32,6 +32,8 @@ function createWindow() {
     width: 800,
     height: 600,
   })
+  win.setMenuBarVisibility(false);
+  
   if(dev) {
     win.loadURL(`http://localhost:${PORT}/screen`)
   } else {
