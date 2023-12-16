@@ -172,7 +172,7 @@ const getDB = (path, req, session) => {
             name: fspath.basename(value.route + '.tsx'),
             data: {
               options: {
-                template: `/packages/protolib/bundles/pages/templates/nextPage.tpl`,
+                template: `/packages/protolib/bundles/pages/templates/electronPage.tpl`,
                 variables: {
                   ...value,
                   upperName: value.name ? value.name.charAt(0).toUpperCase() + value.name.slice(1) : ''
