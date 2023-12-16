@@ -7,6 +7,7 @@ win:
   icon: "public/favicon.ico"
 linux:
   target: AppImage
+#asar: false
 files:
   - "**/*"
   - "!**/{.next/cache/**/*,.next/cache}"
