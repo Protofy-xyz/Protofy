@@ -1,9 +1,12 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, protocol } = require('electron')
 const express = require('express');
-
-process.chdir(__dirname);
+const path = require('path')
 
 const dev = process.env.NODE_ENV === 'development';
+if(dev) {
+  process.chdir(__dirname); //next needs to be in the correct directory
+}
+
 let handle;
 let prepare;
 let server;
@@ -29,21 +32,52 @@ function createWindow() {
     width: 800,
     height: 600,
   })
-  win.loadURL(`http://localhost:${PORT}/screen`+(dev?'':'.html'))
+  if(dev) {
+    win.loadURL(`http://localhost:${PORT}/screen`)
+  } else {
+    win.loadFile(path.join(__dirname, '.next/server/pages/screen.html'))
+  }
+ 
   //win.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
-  prepare().then(() => {
-    server.listen(PORT, (err) => {
-      if (err) throw err;
-      console.log(`> Ready on http://localhost:${PORT}`);
-
-      createWindow()
-      app.on('activate', function () {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow()
-      })
+  if(!dev) {
+    protocol.interceptFileProtocol('file', (request, callback) => {
+      let url = request.url.substr(7); // Eliminar 'file://'
+      if (url.endsWith('.html')) {
+        // html files don't need any path fix
+        const pth = path.normalize(url)
+        console.log('html path: ', pth )
+        callback({ path: pth });
+      } else {
+        if (process.platform === 'win32') {
+          url = url.replace(/^\/[a-zA-Z]:\/+/, '');
+        }
+  
+        url = url.replace(/^_next/,'.next')
+        console.log('clean url: ', url)
+        url = url.startsWith('/') ? url.substr(1) : url;
+        const resourcePath = path.join(__dirname, url.startsWith('.next')? '.' : '.next/server/pages', url);
+        console.log('resource path: ', resourcePath);
+        callback({ path: resourcePath });
+      }
     });
+  }
+
+  prepare().then(() => {
+    if(dev) {
+      //start dev server
+      server.listen(PORT, (err) => {
+        if (err) throw err;
+        console.log(`> Ready on http://localhost:${PORT}`);
+  
+        createWindow()
+        app.on('activate', function () {
+          if (BrowserWindow.getAllWindows().length === 0) createWindow()
+        })
+      });
+    }
   })
 })
 
