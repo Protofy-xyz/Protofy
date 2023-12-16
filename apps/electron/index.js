@@ -33,11 +33,11 @@ function createWindow() {
     height: 600,
   })
   win.setMenuBarVisibility(false);
-  
+
   if(dev) {
-    win.loadURL(`http://localhost:${PORT}/screen`)
+    win.loadURL(`http://localhost:${PORT}/auth/login`)
   } else {
-    win.loadFile(path.join(__dirname, '.next/server/pages/screen.html'))
+    win.loadFile(path.join(__dirname, '.next/server/pages/auth/login.html'))
   }
  
   //win.webContents.openDevTools()
