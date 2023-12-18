@@ -7,10 +7,8 @@ import { useState } from 'react'
 import { Server } from '@tamagui/lucide-icons'
 import { usePrompt } from '../../context/PromptAtom'
 
-const format = 'YYYY-MM-DD HH:mm:ss'
-const DatabaseIcons = {}
-const rowsPerPage = 20
 
+const DatabaseIcons = {}
 const databasesSourceUrl = '/adminapi/v1/databases'
 
 export default {
