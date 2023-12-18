@@ -1,0 +1,17 @@
+services:
+  site:
+    container_name: 'admin'
+    image: "protofy/workspace"
+    entrypoint: "yarn web:serve"
+    environment:
+      - API_URL=http://proxy:8000
+      - NODE_ENV=production
+    volumes:
+      - ../../:/workspace
+      - protofy_modules:/workspace/node_modules
+      - protofy_next:/workspace/apps/next/.next
+volumes:
+  protofy_modules:
+    external: true
+  protofy_next:
+    external: true
