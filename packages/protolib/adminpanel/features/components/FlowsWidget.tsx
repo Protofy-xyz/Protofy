@@ -3,12 +3,9 @@ import { TopicsProvider } from "react-topics";
 import { useState } from 'react';
 import customMasks from '../../../../app/bundles/masks';
 
-// console.log("Custom masks: ", customMasks)
-
-const UIFLOWID = "flows-editor"
-const Flow = FlowFactory(UIFLOWID)
-
 const FlowsWidget = ({ mode="js", ...props}: any) => {
+    const UIFLOWID = props.uiFlowId || "flows-editor"
+    const Flow = FlowFactory(UIFLOWID)
 
     const [content, setContent] = useState(props.content)
     // console.log("PROPS.MODE: ",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
