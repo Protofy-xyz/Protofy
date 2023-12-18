@@ -15,6 +15,7 @@ import { FileWidget } from '../adminpanel/features/components/FilesWidget';
 import { IconContainer } from './IconContainer';
 import { SearchContext } from '../context/SearchContext';
 import { InteractiveIcon } from './InteractiveIcon';
+import { ItemMenu } from './ItemMenu';
 import { useRouter } from 'next/router';
 
 type DataViewState = {
@@ -89,7 +90,8 @@ export function DataView({
     integratedChat = false,
     objectProps = {},
     disableRealTimeUpdates = false,
-    refreshOnHotReload = false
+    refreshOnHotReload = false,
+    extraGlobalMenuActions
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const { query } = useRouter();
@@ -353,6 +355,7 @@ export function DataView({
                             <Paragraph>
                                 <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
                             </Paragraph>
+                             {extraGlobalMenuActions?<Tinted><ItemMenu sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraGlobalMenuActions}></ItemMenu></Tinted>:<></>}
                             {toolBarContent}
                         </XStack>
 
