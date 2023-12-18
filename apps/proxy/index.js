@@ -52,11 +52,24 @@ var customResolver2 = function (host, url, req) {
 
 customResolver2.priority = 101;
 
+var customResolver3 = function (host, url, req) {
+    addClientIpHeader(req);
+    var referer = req.headers['referer'] || '';
+
+    if (host.startsWith('admin.')) {
+        return getEnvironment('admin', host, req);
+    }
+};
+
+customResolver3.priority = 99;
+
 var devResolver = function (host, url, req) {
     if (isProduction && host.startsWith('dev.')) {
         return 'http://localhost:8080';
     }
 };
+
+
 
 devResolver.priority = 200;
 
@@ -70,6 +83,7 @@ var proxy = new Redbird({
         devResolver,
         customResolver1,
         customResolver2,
+        //customResolver3,
         function (host, url, req) {
             return getEnvironment('frontend', host, req);
         }
