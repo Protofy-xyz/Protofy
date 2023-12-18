@@ -54,13 +54,14 @@ customResolver2.priority = 101;
 
 var customResolver3 = function (host, url, req) {
     addClientIpHeader(req);
+    var referer = req.headers['referer'] || '';
 
-    if (/^\/admin\//.test(url)) {
+    if (host.startsWith('admin.')) {
         return getEnvironment('admin', host, req);
     }
 };
 
-customResolver3.priority = 103;
+customResolver3.priority = 99;
 
 var devResolver = function (host, url, req) {
     if (isProduction && host.startsWith('dev.')) {
@@ -82,7 +83,7 @@ var proxy = new Redbird({
         devResolver,
         customResolver1,
         customResolver2,
-        customResolver3,
+        //customResolver3,
         function (host, url, req) {
             return getEnvironment('frontend', host, req);
         }
