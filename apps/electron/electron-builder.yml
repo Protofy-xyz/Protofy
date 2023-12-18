@@ -1,0 +1,13 @@
+appId: com.example.protofy
+productName: Protofy
+mac:
+  category: your.app.category
+win:
+  target: portable
+  icon: "public/favicon.ico"
+linux:
+  target: AppImage
+#asar: false
+files:
+  - "**/*"
+  - "!**/{.next/cache/**/*,.next/cache}"

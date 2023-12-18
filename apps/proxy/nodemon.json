@@ -1,6 +1,0 @@
-{
-    "watch": ["./**", "../../packages/apps/bundles/environments.js"],
-    "ext": "ts,js,json",
-    "ignore": ["./**/*.spec.ts"],
-    "exec": "node index.js"
-  }

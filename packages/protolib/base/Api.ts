@@ -1,7 +1,10 @@
 import { PendingResult, getPendingResult } from "../base/PendingResult";
 import {devMode} from './env'
+import { isElectron } from "./lib/isElectron";
 
-export const getApiUrl = () => process?.env?.API_URL ?? (devMode?'http://localhost:8080':'http://localhost:8000')
+let APIURL = devMode?'http://localhost:8080':'http://localhost:8000'
+export const setApiUrl = (apiurl) => APIURL = apiurl 
+export const getApiUrl = () => process?.env?.API_URL ?? APIURL
 
 const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult | undefined> => {
     const SERVER = getApiUrl()
@@ -9,9 +12,9 @@ const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult |
     let realUrl;
 
     if (typeof urlOrData === 'string') {
-      realUrl = typeof window === 'undefined' ? (!urlOrData.startsWith('https://') && !urlOrData.startsWith('http://') ? SERVER : '') + urlOrData : urlOrData;
+      realUrl = typeof window === 'undefined' || isElectron() ? (!urlOrData.startsWith('https://') && !urlOrData.startsWith('http://') ? SERVER : '') + urlOrData : urlOrData;
     } else if (typeof urlOrData === 'object' && urlOrData.url) {
-      const baseUrl = typeof window === 'undefined' ? (!urlOrData.url.startsWith('https://') && !urlOrData.url.startsWith('http://') ? SERVER : '') + urlOrData.url : urlOrData.url;
+      const baseUrl = typeof window === 'undefined' || isElectron() ? (!urlOrData.url.startsWith('https://') && !urlOrData.url.startsWith('http://') ? SERVER : '') + urlOrData.url : urlOrData.url;
       const params = new URLSearchParams();
   
       for (let key in urlOrData) {

@@ -10,31 +10,7 @@ import { useTint } from 'protolib'
 import { ItemMenu } from "./ItemMenu";
 import { MultiSelectList } from "./MultiSelectList";
 
-export type EditableObjectProps = {
-  initialData?: any,
-  sourceUrl: string,
-  onSave: Function,
-  model: any,
-  mode?: 'add' | 'edit' | 'view' | 'preview',
-  icons?: any,
-  extraFields?: any,
-  numColumns?: number,
-  objectId?: string,
-  title?: any,
-  loadingText?: any,
-  loadingTop?: number,
-  spinnerSize?: number,
-  name?: string,
-  customFields?: any,
-  columnWidth?: number,
-  disableToggleMode?: boolean,
-  columnMargin?: number,
-  onDelete?: Function,
-  deleteable?: Function,
-  autoWidth?: Boolean,
-  EditIconNearTitle?: Boolean,
-  extraMenuActions: any[]
-}
+
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 const iconStyle = { color: "var(--color9)", size: "$1", strokeWidth: 1 }
@@ -446,10 +422,10 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
       setFormData(ele.name, generatedOptions)
     }
   }
-
   return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
     <Stack f={1}>
       <Input
+        id={"editable-object-input-" + ele?.name}
         {...(mode != 'edit' && mode != 'add' ? { bw: 0, forceStyle: "hover" } : {})}
         focusStyle={{ outlineWidth: 1 }}
         disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static) || (ele._def.dependsOn && !data[ele._def.dependsOn]))}
@@ -486,7 +462,7 @@ const GridElement = ({ index, data, width }) => {
       icon: data.icon,
       i: data.i,
       x: data.x,
-      data: data.data || {},
+      data: data.data || data.defaultData,
       setData: data.setData,
       mode: data.mode,
       customFields: data.customFields
@@ -496,13 +472,55 @@ const GridElement = ({ index, data, width }) => {
 
 const OpenedSectionsContext = createContext<[string[], Function]>([[], (openedSections) => { }]);
 
-export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export type EditableObjectProps = {
+  initialData?: any,
+  sourceUrl: string,
+  onSave: Function,
+  model: any,
+  mode?: 'add' | 'edit' | 'view' | 'preview',
+  icons?: any,
+  extraFields?: any,
+  numColumns?: number,
+  objectId?: string,
+  title?: any,
+  loadingText?: any,
+  loadingTop?: number,
+  spinnerSize?: number,
+  name?: string,
+  customFields?: any,
+  columnWidth?: number,
+  disableToggleMode?: boolean,
+  columnMargin?: number,
+  onDelete?: Function,
+  deleteable?: Function,
+  autoWidth?: Boolean,
+  EditIconNearTitle?: Boolean,
+  extraMenuActions: any[],
+  data?: any,
+  setData?: Function,
+  error?: any,
+  setError?: Function,
+  externalErrorHandling?: Boolean
+}
+
+export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
   const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
   const [currentMode, setCurrentMode] = useState(mode)
   const [prevCurrentMode, setPrevCurrentMode] = useState('')
-  const [data, setData] = useState(originalData)
+  const [_data, _setData] = useState(originalData)
+  let hideButton = data && setData
+  if (!data || !setData) {
+    data = _data
+    setData = _setData
+  }
+  console.log('using data: ', data)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<any>()
+  const [_error, _setError] = useState<any>()
+  if ((!error || !setError) && !externalErrorHandling) {
+    error = _error
+    setError = _setError
+  }
+
   const [dialogOpen, setDialogOpen] = useState(false)
   const [edited, setEdited] = useState(false)
   const [ready, setReady] = useState(false)
@@ -532,12 +550,17 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
     const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
     const formFields = elementObj.getObjectSchema().isDisplay(currentMode).merge(extraFieldsObject).getLayout(1)
     const groups = {}
+    const defaultData = {}
     formFields.forEach((row, x) => row.forEach((ele, i) => {
       const icon = icons[ele.name] ? icons[ele.name] : (currentMode == 'edit' || currentMode == 'add' ? Pencil : Tag)
       const groupId = ele._def.group ?? 0
       if (!groups.hasOwnProperty(groupId)) {
         groups[groupId] = []
       }
+      if (ele._def.hasOwnProperty('defaultValue')) {
+        defaultData[ele.name] = ele._def.defaultValue
+      }
+
       groups[groupId].push({
         id: x + '_' + i,
         icon: icon,
@@ -550,7 +573,8 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
         size: ele._def.size ?? 1,
         numColumns: numColumns,
         customFields,
-        columnMargin: columnMargin
+        columnMargin: columnMargin,
+        defaultData
       })
     }))
     return groups
@@ -593,9 +617,9 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
       <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
         <YStack width="100%">
           <XStack ai="center">
-            <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
-              {title ?? <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>}
-            </XStack>
+            {title && <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
+              <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>
+            </XStack>}
             {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
               if (currentMode == 'edit' && edited) {
                 setDialogOpen(true)
@@ -609,7 +633,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
               </Tinted>
             </XStack>}
           </XStack>
-          <YStack width="100%" f={1} mt={"$7"} ai="center" jc="center">
+          <YStack width="100%" f={1} mt={title ? "$7" : "$0"} ai="center" jc="center">
             {error && (
               <Notice>
                 <Paragraph>{getErrorMessage(error.error)}</Paragraph>
@@ -619,7 +643,7 @@ export const EditableObject = ({ EditIconNearTitle = false, autoWidth = false, c
             {gridView}
 
             {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
-              {(currentMode == 'add' || currentMode == 'edit') && <Tinted>
+              {(currentMode == 'add' || currentMode == 'edit') && !hideButton && <Tinted>
                 <Button f={1} onPress={async () => {
                   setLoading(true)
                   try {

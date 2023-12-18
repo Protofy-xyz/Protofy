@@ -23,6 +23,7 @@ interface ZodExtensions {
     group(group:number): this;
     name(key:string): this;
     help(description:string): this;
+    defaultValue(value:any): this;
     onList(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
     onCreate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
     onRead(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
@@ -159,6 +160,11 @@ function extendZodTypePrototype(type: any) {
 
     type.prototype.group = function (group: number) {
         this._def.group = group;
+        return this;
+    };
+
+    type.prototype.defaultValue = function (value) {
+        this._def.defaultValue = value;
         return this;
     };
 

@@ -5,7 +5,7 @@ import { NextPageContext } from 'next'
 import { API, withSession, getURLWithToken, AdminPage } from 'protolib'
 import { parse } from 'cookie';
 
-export const SSR = (fn) => SiteConfig.SSR ? fn : () => {return {props:{}}}
+export const SSR = (fn) => SiteConfig.SSR ? fn : undefined
 
 export function DataSSR(sourceUrl, allowdUserTypes?:string[]|any[]|null, props={}) {
     return SSR(async (context:NextPageContext) => {

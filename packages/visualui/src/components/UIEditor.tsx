@@ -30,7 +30,6 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [monacoHasChanges, setMonacoHasChanges] = useState(false)
     const [preview, setPreview] = useState(true)
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
-    const [pastZoomNodes, setPastZoomNodes] = useState([])
     const [customizeVisible, setCustomizeVisible] = useState(true);
     const [layerVisible, setLayerVisible] = useState(false);
 
@@ -103,14 +102,10 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     useEffect(() => {
         loadPage()
     }, [sourceCode]);
+
     useEffect(() => {
-        if (data['zoomToNode']?.id) {
-            if (!isSideBarVisible) {
-                setIsSideBarVisible(true)
-            }
-            if (pastZoomNodes[0] == data['zoomToNode'].id) return
-            pastZoomNodes[0] = data['zoomToNode'].id
-            setPastZoomNodes([...pastZoomNodes])
+        if (data['zoomToNode']?.id && !isSideBarVisible) {
+            setIsSideBarVisible(true)
         }
     }, [data['zoomToNode']])
     const FlowPanel = (

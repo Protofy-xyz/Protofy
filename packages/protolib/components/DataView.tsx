@@ -85,7 +85,7 @@ export function DataView({
     toolBarContent = null,
     onAddButton = undefined,
     extraMenuActions = [],
-    deleteable = ()=>{return true},
+    deleteable = () => { return true },
     integratedChat = false,
     objectProps = {},
     disableRealTimeUpdates = false,
@@ -203,7 +203,7 @@ export function DataView({
     }
 
     const totalPages = currentItems && currentItems.isLoaded ? Math.ceil(currentItems.data?.total / currentItems.data?.itemsPerPage) : 0
-    if(items && items.isError) {
+    if (items && items.isError) {
         return <Center>
             Error: {items.error && items.error.error ? items.error.error : items.error}
         </Center>
@@ -251,10 +251,11 @@ export function DataView({
                         hideAccept={true}
                         description={""}
                     >
-                        <YStack f={1} jc="center" ai="center">
+                        <YStack f={1} jc="center" ai="center" id={"admin-dataview-create-dlg"}>
                             <ScrollView maxHeight={"90vh"}>
                                 <XStack mr="$5">
                                     <EditableObject
+                                        id={"admin-editable-object"}
                                         name={name}
                                         numColumns={numColumnsForm}
                                         mode={'add'}
@@ -396,7 +397,7 @@ export function DataView({
                                     }
                                 </ButtonGroup>}
                                 {!hideAdd && <Tinted>
-                                    <Button hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
+                                    <Button id={"admin-dataview-add-btn"} hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
                                         onAddButton ? onAddButton() : setCreateOpen(true)
                                     }} chromeless={true}>
                                         <Plus color={"$color10"} />

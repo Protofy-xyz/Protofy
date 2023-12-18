@@ -1,12 +1,9 @@
 {
   "name": "site",
   "private": true,
+  "version": "0.0.1",
   "workspaces": [
-    "apps/next",
-    "apps/expo",
-    "apps/admin-api",
-    "apps/api",
-    "apps/proxy",
+    "apps/*",
     "packages/*"
   ],
   "scripts": {
@@ -22,11 +19,14 @@
     "start-prod": "NODE_ENV=production npm-run-all --parallel api-prod admin-api-prod web:serve proxy-prod",
     "start-dev": "yarn prepare-dev && node prepare.js && yarn pre-build && yarn start-dev-fast",
     "start-dev-latest": "yarn prepare-dev && node prepare.js --latest && yarn pre-build && yarn start-dev-fast",
-    "start-dev-fast": "npm-run-all --parallel admin-api-dev api-dev web proxy-dev",
+    "start-dev-fast": "pm2 start ecosystem.config.js --no-daemon",
     "pre-build": "yarn && yarn build",
     "prepare-dev": "yarn workspace api prepare-dev && yarn workspaces foreach run prepare-dev",
     "native": "cd apps/expo && yarn start",
     "watch": "yarn workspaces foreach -pi run watch",
+    "electron": "cd apps/electron && yarn electron",
+    "package": "cd apps/electron && yarn package",
+    "package-fast": "cd apps/electron && yarn package-fast",
     "web": "cd apps/next && yarn next",
     "web:extract": "DISABLE_EXTRACTION=false yarn workspace next-app dev",
     "web:build": "yarn workspace next-app build",
@@ -40,7 +40,7 @@
     "add-user": "yarn workspace api add-user",
     "pull": "git pull && yarn workspaces foreach run pull",
     "fix": "manypkg fix",
-    "build": "yarn workspaces foreach --exclude next-app run build",
+    "build": "yarn workspaces foreach --exclude next-app --exclude electron-app run build",
     "check-deps": "check-dependency-version-consistency .",
     "status": "pm2 status",
     "monit": "pm2 monit",
@@ -48,6 +48,7 @@
     "kill": "pm2 kill",
     "stop": "pm2 stop all",
     "logs": "pm2 logs",
+    "create-environment": "node copy.js",
     "test:all": "yarn workspaces foreach run test"
   },
   "resolutions": {
@@ -60,8 +61,13 @@
   "dependencies": {
     "@babel/runtime": "^7.18.9",
     "@manypkg/cli": "^0.19.1",
+    "async": "3.2.5",
     "check-dependency-version-consistency": "^3.0.3",
     "eslint": "^8.21.0",
+    "fdir": "6.1.1",
+    "glob": "^10.3.10",
+    "ignore": "5.3.0",
+    "mkdirp": "^3.0.1",
     "node-gyp": "^9.3.1",
     "pm2": "^5.3.0",
     "prettier": "^2.8.1",

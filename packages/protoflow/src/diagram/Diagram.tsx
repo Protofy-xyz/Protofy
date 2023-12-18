@@ -168,15 +168,29 @@ const Diagram = React.forwardRef(({
         }
     }
     const zoomToNode = useCallback((selectedNodeId) => {
-        const selectedNode = getNodes().find(n => n.id == selectedNodeId)
+        var selectedNodeIndex
+        const selectedNode = getNodes().find((n, i) => {
+            selectedNodeIndex = i
+            return n.id == selectedNodeId
+        })
         if (!selectedNode) return
         const flowsWidth = reactFlowWrapper.current.offsetWidth
         if (!flowsWidth) return // skip if diagram is not visible
         const flowsHeight = reactFlowWrapper.current.offsetHeight
         const posX = selectedNode.position.x + selectedNode.width / 2
         const posY = selectedNode.position.y + (flowsHeight / 2) - 50
+        setNodes(nds => {
+            nds[selectedNodeIndex] = {
+                ...nds[selectedNodeIndex],
+                data: {
+                    ...nds[selectedNodeIndex]['data'],
+                    flowsHeight: flowsHeight
+                }
+            }
+            return nds
+        })
         setCenter(posX, posY, { zoom: 1, duration: nodePreview ? 1 : 500 })
-    }, [setCenter, nodePreview]);
+    }, [setCenter, nodePreview, nodes]);
 
     useKeypress(['z', 'Z'], async (event) => {
         if (!isDiagramVisible) return

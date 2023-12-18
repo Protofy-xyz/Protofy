@@ -1,4 +1,4 @@
-/* @my/ui is wrapper for tamagui. Any component in tamagui con me imported through @my/ui
+/* @my/ui is wrapper for tamagui. Any component in tamagui can be imported through @my/ui
 use result = await API.get(url) or result = await API.post(url, data) to send requests
 API.get/API.post will return a PendingResult, with properties like isLoaded, isError and a .data property with the result
 if you call paginated apis, you will need to wait for result.isLoaded and look into result.data.items, since result.data is an object with the pagination.
@@ -9,7 +9,7 @@ Don't modify export default object
 */
 
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "@my/ui"
-import { BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API, Tinted, SSR } from "protolib"
+import { UIWrapLib, UIWrap, BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API, Tinted, SSR } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 
@@ -30,17 +30,19 @@ return (
 )
 }
 
+const cw = UIWrapLib('@my/ui')
+
 export default {
     route: Protofy("route", "{{route}}"),
     component: (props) => useEdit(
         () => PageComponent(props), {
-        DefaultLayout,
-        YStack,
-        Spacer,
-        Text,
-        XStack,
-        Paragraph,
-        Theme
+        ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
+        ...cw("YStack", YStack),
+        ...cw("Spacer", Spacer),
+        ...cw("Text", Text),
+        ...cw("XStack", XStack),
+        ...cw("Paragraph", Paragraph),
+        ...cw("Theme", Theme)
     },
     "/packages/app/bundles/custom/pages/{{name}}.tsx"),
     getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{{permissions}}}):undefined))

@@ -225,9 +225,18 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         }
 
         const db = getDB(dbPath, req, session)
-        const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).deleteTransformed(transformers))
-        await db.put(entityModel.getId(), entityModel.serialize())
-        context && context.mqtt && context.mqtt.publish("notifications/"+entityName + '/delete/' + entityModel.getId(), entityModel.serialize())
+        let entityModel
+        if( !options.paginatedRead ){
+            entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).deleteTransformed(transformers))
+            await db.put(entityModel.getId(), entityModel.serialize())
+        } else {
+            entityModel = modelClass.unserialize("{}").delete()
+            await db.put(req.params.key, entityModel.serialize())
+        }
+
+        
+        
+        context && context.mqtt && context.mqtt.publish("notifications/"+entityName + '/delete/' + req.params.key, entityModel.serialize())
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/delete/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online

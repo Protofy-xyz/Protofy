@@ -1,0 +1,18 @@
+appId: com.example.protofy
+productName: Protofy
+mac:
+  category: your.app.category
+win:
+  target: portable
+  icon: "public/favicon.ico"
+linux:
+  target: AppImage
+asar: false
+extraResources:
+  - from: "../../node_modules/@types/react"
+    to: "app/node_modules/@types/react"
+  - from: "../../node_modules/@types/node"
+    to: "app/node_modules/@types/node"
+files:
+  - "**/*"
+  - "!**/{.next/cache/**/*,.next/cache}"

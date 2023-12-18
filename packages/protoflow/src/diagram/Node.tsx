@@ -15,11 +15,12 @@ import { useHover } from 'usehooks-ts'
 const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, icon = null, container = false, title = '', children, isPreview = false, id, color = 'white', node, headerContent = null, style = {}, contentStyle = {} }) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const errorData = useFlowsStore(state => state.errorData)
-    const flexRef = React.useRef()
-    const boxRef = React.useRef()
+    const flexRef = useRef()
+    const boxRef = useRef()
     const editingLayout = useFlowsStore(state => state.editingLayout)
-    const isThemePreview = editingLayout == 'node'
+    const isNodePreviewMode = editingLayout == 'node'
 
+    const nodeStyle = contentStyle
     // const scale = chroma.scale([(chroma.scale([color, 'white']))(0.5).hex(), 'white']).mode('lab');
 
     const isError = id && id == errorData.id
@@ -40,6 +41,13 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     const innerRadius = '12px '
     const innerBorderRadius = (mode == 'column' ? innerRadius + innerRadius + ' 0px 0px' : innerRadius + '0px 0px ' + innerRadius)
 
+    if (node && node.data && node.data.flowsHeight && isNodePreviewMode) {
+        const maxHeight = node.data.flowsHeight - 80
+        nodeStyle['height'] = maxHeight + 'px'
+        nodeStyle['maxHeight'] = maxHeight + 'px'
+        nodeStyle['overflow'] = 'scroll'
+        nodeStyle['overflowX'] = 'hidden'
+    }
     return (
         <div
             id={id}
@@ -55,20 +63,20 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
                 borderRadius: 13,
                 textAlign: "center",
                 fontSize: useTheme('nodeFontSize'),
-                boxShadow: isThemePreview ? "none" : generateBoxShadow(container ? 0 : isHover ? 10 : !isPreview && node?.selected ? 10 : 3),
-                cursor: isThemePreview ? 'default' : undefined,
+                boxShadow: isNodePreviewMode ? "none" : generateBoxShadow(container ? 0 : isHover ? 10 : !isPreview && node?.selected ? 10 : 3),
+                cursor: isNodePreviewMode ? 'default' : undefined,
                 ...style,
             }}
             className={draggable ? '' : 'nodrag'}
         >
-            {(title || headerContent) && !isThemePreview ? <div ref={boxRef} style={{ display: 'flex', backgroundColor: color, borderRadius: isPreview ? '8px' : innerBorderRadius, borderBottom: mode == 'column' && !isPreview ? borderWidth + ' solid ' + borderColor : '0px', paddingBottom: '10px', justifyContent: 'center' }}>
+            {(title || headerContent) && !isNodePreviewMode ? <div ref={boxRef} style={{ display: 'flex', backgroundColor: color, borderRadius: isPreview ? '8px' : innerBorderRadius, borderBottom: mode == 'column' && !isPreview ? borderWidth + ' solid ' + borderColor : '0px', paddingBottom: '10px', justifyContent: 'center' }}>
                 {icon && flowDirection == "LEFT" ? <div style={{ display: 'flex', right: '15px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id ? titleSize : '18px', color: hColor })}</div> : null}
                 {title ? <Text style={{ fontSize: id ? titleSize : '18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '15ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{title}</Text> : null}
                 {icon && flowDirection == "RIGHT" ? <div style={{ display: 'flex', left: '10px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id ? titleSize : '18px', color: hColor })}</div> : null}
                 {headerContent}
             </div> : null}
             {!isPreview
-                ? <div style={{ borderRadius: '0px 0px ' + innerRadius + innerRadius, backgroundColor: container ? "transparent" : themeBackgroundColor, flex: 1, paddingTop: '0.5ch', paddingBottom: '0.5ch', ...contentStyle }}>
+                ? <div className={isNodePreviewMode ? 'nowheel' : ''} style={{ borderRadius: '0px 0px ' + innerRadius + innerRadius, backgroundColor: container ? "transparent" : themeBackgroundColor, flex: 1, paddingTop: '0.5ch', paddingBottom: '0.5ch', ...nodeStyle }}>
                     {children}
                 </div>
                 : <></>
@@ -91,8 +99,8 @@ export interface NodePortProps {
 
 //{`${id}${PORT_TYPES.flow}${handleId ?? type}`}
 export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, position = Position.Right, allowedTypes }: NodePortProps) => {
-    const textRef: any = React.useRef()
-    const handleRef: any = React.useRef()
+    const textRef: any = useRef()
+    const handleRef: any = useRef()
     const useFlowsStore = useContext(FlowStoreContext)
     const setMenu = useFlowsStore(state => state.setMenu)
     const instanceId = useFlowsStore(state => state.flowInstance)
@@ -108,7 +116,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
     const borderWidth = useTheme('nodeBorderWidth')
     const nodeFontSize = useTheme('nodeFontSize')
     const editingLayout = useFlowsStore(state => state.editingLayout)
-    const isThemePreview = editingLayout == 'node'
+    const isNodePreviewMode = editingLayout == 'node'
     const onOpenMenu = () => {
         setMenu("open", [handleRef?.current.getBoundingClientRect().right + 200, handleRef?.current.getBoundingClientRect().top - 30], {
             targetHandle: id,
@@ -135,7 +143,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                 position={position}
                 style={{
                     backgroundColor: backgroundColor,
-                    display: isThemePreview ? 'none' : 'flex', flexDirection: 'row',
+                    display: isNodePreviewMode ? 'none' : 'flex', flexDirection: 'row',
                     alignItems: 'center',
                     border: borderWidth + " solid " + borderColor, width: portSize + "px", height: portSize + "px", marginLeft: '',
                     marginRight: marginRight + 'px', cursor: 'pointer', ...style

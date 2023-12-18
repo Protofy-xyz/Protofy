@@ -5,6 +5,16 @@ import { H4 } from 'tamagui'
 import Center from '../components/Center'
 import ContentEditable from 'react-contenteditable';
 
+export const UIWrap = (name, component, importName, icon?, defaultProps?, componentRules?, visualUIOnlyFallbackProps?, editableText?) => {
+    const cw = getComponentWrapper(importName)
+    return cw(component, icon ?? "EyeOff", name, defaultProps, componentRules, visualUIOnlyFallbackProps, editableText)
+}
+export const UIWrapLib = (importName) => {
+    const cw = getComponentWrapper(importName)
+    return (name, Component, icon = "EyeOff", defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps: any = {}, editableText = false) => {
+        return cw(Component, icon, name, defaultProps, componentRules, visualUIOnlyFallbackProps, editableText)
+    }
+}
 export const getComponentWrapper = (importName) => (Component, icon, name, defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps: any = {}, editableText = false) => {
     const importInfo = {
         moduleSpecifier: importName,
@@ -67,7 +77,7 @@ export const getBasicHtmlWrapper = (componentName) => {
             selected: node.events.selected,
             custom: node.data.custom,
         }));
-        return React.createElement(componentName, {...props, ref: connect})
+        return React.createElement(componentName, { ...props, ref: connect })
     }
 
     UiComponent.craft = {

@@ -16,16 +16,23 @@ export const createSession = (data?:userData, token?:string):SessionDataType => 
         loggedIn: data?.id ? true : false
     }
 }
-
-export const validateSession = async (session:SessionDataType):Promise<validatedUserData> => {
-    // console.log('VALIDATE SESSION: ', session)
-    const result = await API.get('/adminapi/v1/auth/validate?token='+session.token)
-    // console.log('VALIDTE: ', result)
-    if(!result.data.token) {
-        throw "Invalid session"
-    }  
-    return result.data as validatedUserData 
-}
+export const validateSession = async (session:SessionDataType):Promise<validatedUserData> => jwt.verify(session.token ?? '', process.env.TOKEN_SECRET ?? '') as validatedUserData
+//DO NOT DELETE
+//This is the code to validate sessions in api instead of nextjs
+//This is needed to use a protofy from another protofy
+//Its disabled because of unstability
+// export const validateSession = async (session:SessionDataType):Promise<validatedUserData> => {
+//     // console.log('VALIDATE SESSION: ', session)
+//     const result = await API.get('/adminapi/v1/auth/validate?token='+session.token)
+//     if(result.isError) {
+//         throw "Server Error"
+//     }
+//     // console.log('VALIDTE: ', result)
+//     if(!result.data.token) {
+//         throw "Invalid session"
+//     }  
+//     return result.data as validatedUserData 
+// }
 
 export type userData = {
     id?: string,

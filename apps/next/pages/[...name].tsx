@@ -25,9 +25,14 @@ export default function BundlePage(props: any) {
   useSession(props.pageSession)
   const router = useRouter();
   const route = getRoute(router.query.name)
-  if(!route) return <Custom404 />
+  console.log('route: ', route,router.query.name)
 
-  const page = nextPages[route]
+  //if no route, but router is already available, it means the route truly doesnt exist
+  if(!route && router.query.name) return <Custom404 />
+  //if no route and no router, it means we are still loading, just wait
+  if(!route) return <></>
+
+  const page = (nextPages as any)[route]
   return React.createElement(page.component, {...props})
 }
 
@@ -38,7 +43,7 @@ export const getServerSideProps = SSR(async (context: NextPageContext) => {
     return withSession(context)
   }
 
-  const page = nextPages[route]
+  const page = (nextPages as any)[route]
 
   if(page.getServerSideProps) {
     const ret = await page.getServerSideProps(context)

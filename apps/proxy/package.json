@@ -5,7 +5,7 @@
     "source": "src",
     "scripts": {
         "start": "NODE_ENV=production node index.js",
-        "start-dev": "NODE_ENV=development nodemon --exitcrash -L",
+        "start-dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
         "service-start": "NODE_ENV=production pm2 start pm2.config.js",
         "service-start-dev": "pm2 start pm2.config.js",
         "logs": "pm2 logs",
@@ -14,7 +14,6 @@
         "status": "pm2 status api"
     },
     "dependencies": {
-        "nodemon": "3.0.1",
         "pm2": "^5.3.0",
         "redbird": "0.10.0"
     }

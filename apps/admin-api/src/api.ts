@@ -20,6 +20,4 @@ fs.readdir(modulesDir, (error, files) => {
 })
 
 BundleAPI(app, {mqtt:getMQTTClient()})
-
-
 export default app
