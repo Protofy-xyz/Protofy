@@ -6,7 +6,7 @@ import { MoreVertical, Trash2, FilePlus } from '@tamagui/lucide-icons'
 import { InteractiveIcon } from "./InteractiveIcon";
 import { DataViewContext } from "./DataView";
 
-export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelete, element, deleteable,extraMenuActions = [], ...props }: { sourceUrl: string, enableAddToInitialData?:boolean, onDelete: any, deleteable?:Function, element: any, extraMenuActions?: any } & StackProps) => {
+export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelete, element, deleteable,extraMenuActions = [], hideDeleteButton, ...props }: { sourceUrl: string, enableAddToInitialData?:boolean, onDelete?: any, deleteable?:Function, element: any, extraMenuActions?: any, hideDeleteButton?:boolean } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
     const { selected, setSelected, model} = useContext(DataViewContext);
@@ -70,7 +70,7 @@ export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelet
                                 return action.isVisible && action.isVisible(element) && <MenuButton key={i} text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
                             })}
                             {false && enableAddToInitialData &&  <MenuButton text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); addToInitialData(data),setMenuOpened(false) }}></MenuButton>}
-                            <MenuButton text={"Delete"} Icon={Trash2} disabled={!deleteable(element)} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>
+                            {hideDeleteButton?<></>:<MenuButton text={"Delete"} Icon={Trash2} disabled={!deleteable(element)} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>}
                         </YStack>
                     </YStack>
                 </Tinted>
