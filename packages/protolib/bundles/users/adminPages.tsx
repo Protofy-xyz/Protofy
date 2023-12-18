@@ -16,7 +16,7 @@ const sourceUrl = '/adminapi/v1/accounts'
 const groupsSourceUrl = '/adminapi/v1/groups'
 
 export default {
-    'admin/users': {
+    'users': {
         component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
             const [groups, setGroups] = useState(extraData?.groups ?? getPendingResult("pending"))
 

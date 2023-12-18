@@ -6,10 +6,10 @@ import devicesPage from '../devices/devicesPage';
 import deviceSdksPage from '../deviceSdks/deviceSdksPage';
 
 export default {
-  'admin/device-test/**': { component: DevicePage, getServerSideProps: getServerSideProps },
-  'admin/devices/**': devicesPage,
-  'admin/deviceSdks/**': deviceSdksPage,
-  'admin/deviceCores/**': deviceCorePage,
-  'admin/deviceBoards/**': deviceBoardPage,
-  'admin/deviceDefinitions/**': deviceDefinitionsPage
+  'device-test/**': { component: DevicePage, getServerSideProps: getServerSideProps },
+  'devices/**': devicesPage,
+  'deviceSdks/**': deviceSdksPage,
+  'deviceCores/**': deviceCorePage,
+  'deviceBoards/**': deviceBoardPage,
+  'deviceDefinitions/**': deviceDefinitionsPage
 }

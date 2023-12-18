@@ -42,5 +42,5 @@ function FilesPage({initialFilesState, pageSession}:any) {
 }
 
 export default {
-    'admin/files': {component: FilesPage }
+    'files': {component: FilesPage }
 }

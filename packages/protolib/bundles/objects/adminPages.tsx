@@ -11,7 +11,7 @@ const rowsPerPage = 20
 const sourceUrl = '/adminapi/v1/objects'
 
 export default {
-    'admin/objects': {
+    'objects': {
         component: ({ pageState, initialItems, pageSession }: any) => {
             const { replace } = usePageParams(pageState)
 

@@ -7,6 +7,7 @@ import React from 'react'
 
 const getRoute = (routePath: string | string[] | undefined) => Object.keys(nextPages).find(key => {
   if(!routePath) return false
+
   const path = Array.isArray(routePath) ? (routePath as string[]) : [routePath as string]
   const route = key.split('/')
   let valid = true

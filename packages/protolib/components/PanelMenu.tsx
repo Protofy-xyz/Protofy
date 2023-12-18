@@ -145,7 +145,7 @@ const Subtabs = ({ subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                const href = ('/admin/' + subtab.type + '/' + subtab.path).replace(/\/+/g, '/')
+                const href = (subtab.type + '/' + subtab.path).replace(/\/+/g, '/')
                 return <Link href={href} key={index}>
                     <Tinted>
                         <PanelMenuItem

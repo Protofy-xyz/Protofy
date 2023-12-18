@@ -36,6 +36,7 @@ const plugins = [
 module.exports = function () {
   /** @type {import('next').NextConfig} */
   let config = {
+    basePath: '/admin',
     typescript: {
       ignoreBuildErrors: true,
     },

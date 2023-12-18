@@ -10,7 +10,7 @@ const EventIcons =  {}
 const sourceUrl = '/adminapi/v1/events'
 
 export default {
-    'admin/events': {
+    'events': {
         component: ({pageState, initialItems, pageSession}:any) => {
             usePrompt(() => `At this moment the user is browsing the events list page. The events list page allows to monitor system events. The list is updated automatically if any events occurs.
             An event can be a user created, invalid login attempt, successful login, file edit, file create, file update, and also system object modification events, like "product created", or "product updated".

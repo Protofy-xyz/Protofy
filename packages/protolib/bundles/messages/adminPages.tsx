@@ -47,7 +47,7 @@ const EmptyMessage = () => {
     </Tinted>
 }
 export default {
-    'admin/messages': {
+    'messages': {
         component: ({ pageSession }: any) => {
             const [messages, setMessages] = useState([])
             const [filter, setFilter] = useState("")

@@ -7,7 +7,7 @@ import { ExternalLink, Link } from '@tamagui/lucide-icons'
 const ResourceIcons = {}
 const sourceUrl = '/adminapi/v1/resources'
 export default {
-    'admin/resources': {
+    'resources': {
         component: ({ pageState, initialItems, pageSession }: any) => {
             return (<AdminPage title="Resources" pageSession={pageSession}>
                 <DataView

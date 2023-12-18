@@ -13,7 +13,7 @@ const sourceUrl = '/adminapi/v1/groups'
 const workspacesSourceUrl = '/adminapi/v1/workspaces'
 
 export default {
-  'admin/groups': {
+  'groups': {
     component: ({ pageState, initialItems, pageSession, extraData }: any) => {
       usePrompt(() => `At this moment the user is browsing the group management page. The group management page allows to list, create, read, update and delete groups, groups contain privileges (admin true/false) and are associated to users when creating users, in the field 'type'.
       A group has a name, the privilege level (admin true/false), and a 0 or more workspaces associated. A workspace is a menu for the admin panel. If the user has more than one workspace, the admin panel will show a select list in the topbar to switch between workspaces.

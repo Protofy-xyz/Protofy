@@ -94,7 +94,7 @@ const sourceUrl = '/adminapi/v1/apis'
 const objectsSourceUrl = '/adminapi/v1/objects?all=1'
 
 export default {
-    'admin/apis': {
+    'apis': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
             const { replace } = usePageParams(pageState??{})
             usePrompt(() => `At this moment the user is browsing the Rest API management page. The Rest API management page allows to list, create, read, update and delete API definitions. API definitions are typescript files using express.

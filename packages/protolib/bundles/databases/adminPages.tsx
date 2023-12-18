@@ -14,7 +14,7 @@ const rowsPerPage = 20
 const databasesSourceUrl = '/adminapi/v1/databases'
 
 export default {
-    'admin/databases': {
+    'databases': {
         component: ({ workspace, pageState, initialItems, pageSession }: any) => {
             const router = useRouter()
 
@@ -38,7 +38,7 @@ export default {
                     name="database"
                     onSelectItem={(item) => {
                         //console.log("ITEMMM", item, item.getId())
-                        router.push('/admin/databases/' + item.getId())
+                        router.push('/databases/' + item.getId())
                     }}
                     // hideAdd={true}
                     model={DatabaseModel}
@@ -49,7 +49,7 @@ export default {
         },
         getServerSideProps: PaginatedDataSSR(databasesSourceUrl)
     },
-    'admin/databases/*': {
+    'databases/*': {
         component: ({ workspace, pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
             const router = useRouter()
             const [tmpItem, setTmpItem] = useState<string | null>(null)
@@ -59,7 +59,7 @@ export default {
             const [error, setError] = useState(false)
             const emptyItemValue = { exapmle: "exampleValue" }
             const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-            const currentDB = router.query.name[2]
+            const currentDB = router.query.name[1]
             const fetch = async () => {
                 setContent(await API.fetch('/adminapi/v1/databases/' + router.query.name[2]))
             }
@@ -136,6 +136,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.name[2], ['admin'])
+        getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.name[1], ['admin'])
     }
 }

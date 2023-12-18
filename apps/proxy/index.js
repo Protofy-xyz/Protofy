@@ -54,22 +54,21 @@ customResolver2.priority = 101;
 
 var customResolver3 = function (host, url, req) {
     addClientIpHeader(req);
-    var referer = req.headers['referer'] || '';
 
-    if (host.startsWith('admin.')) {
+    // Verifica si la URL comienza con /admin/
+    if (/^\/admin\//.test(url)) {
         return getEnvironment('admin', host, req);
     }
+
 };
 
-customResolver3.priority = 99;
+customResolver3.priority = 103;
 
 var devResolver = function (host, url, req) {
     if (isProduction && host.startsWith('dev.')) {
         return 'http://localhost:8080';
     }
 };
-
-
 
 devResolver.priority = 200;
 
@@ -83,7 +82,7 @@ var proxy = new Redbird({
         devResolver,
         customResolver1,
         customResolver2,
-        //customResolver3,
+        customResolver3,
         function (host, url, req) {
             return getEnvironment('frontend', host, req);
         }
