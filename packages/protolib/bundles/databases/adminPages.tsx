@@ -38,7 +38,7 @@ export default {
                     name="database"
                     onSelectItem={(item) => {
                         //console.log("ITEMMM", item, item.getId())
-                        router.push('/databases/' + item.getId())
+                        router.push('/databases/view?database=' + item.getId())
                     }}
                     // hideAdd={true}
                     model={DatabaseModel}
@@ -49,7 +49,7 @@ export default {
         },
         getServerSideProps: PaginatedDataSSR(databasesSourceUrl)
     },
-    'databases/*': {
+    'databases/view': {
         component: ({ workspace, pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
             const router = useRouter()
             const [tmpItem, setTmpItem] = useState<string | null>(null)
@@ -59,9 +59,9 @@ export default {
             const [error, setError] = useState(false)
             const emptyItemValue = { exapmle: "exampleValue" }
             const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-            const currentDB = router.query.name[1]
+            const currentDB = router.query.database ?? ''
             const fetch = async () => {
-                setContent(await API.fetch('/adminapi/v1/databases/' + router.query.name[2]))
+                setContent(await API.fetch('/adminapi/v1/databases/' + currentDB))
             }
             const onDelete = async (key, isTemplate) => {
                 if (isTemplate) {
@@ -98,7 +98,7 @@ export default {
                 <DataView
                     integratedChat
                     key={renew}
-                    sourceUrl={'/adminapi/v1/databases/' + router.query.name[2]}
+                    sourceUrl={'/adminapi/v1/databases/' + currentDB}
                     initialItems={content}
                     numColumnsForm={1}
                     name={currentDB}
@@ -136,6 +136,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.name[1], ['admin'])
+        getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.database, ['admin'])
     }
 }
