@@ -422,10 +422,10 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
       setFormData(ele.name, generatedOptions)
     }
   }
-
   return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
     <Stack f={1}>
       <Input
+        id={"editable-object-input-" + ele?.name}
         {...(mode != 'edit' && mode != 'add' ? { bw: 0, forceStyle: "hover" } : {})}
         focusStyle={{ outlineWidth: 1 }}
         disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static) || (ele._def.dependsOn && !data[ele._def.dependsOn]))}
@@ -496,11 +496,11 @@ export type EditableObjectProps = {
   autoWidth?: Boolean,
   EditIconNearTitle?: Boolean,
   extraMenuActions: any[],
-  data?:any,
-  setData?:Function,
+  data?: any,
+  setData?: Function,
   error?: any,
-  setError?:Function,
-  externalErrorHandling?:Boolean
+  setError?: Function,
+  externalErrorHandling?: Boolean
 }
 
 export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, EditIconNearTitle = false, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
@@ -509,14 +509,14 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
   const [prevCurrentMode, setPrevCurrentMode] = useState('')
   const [_data, _setData] = useState(originalData)
   let hideButton = data && setData
-  if(!data || !setData) {
+  if (!data || !setData) {
     data = _data
     setData = _setData
   }
   console.log('using data: ', data)
   const [loading, setLoading] = useState(false)
   const [_error, _setError] = useState<any>()
-  if((!error || !setError) && !externalErrorHandling) {
+  if ((!error || !setError) && !externalErrorHandling) {
     error = _error
     setError = _setError
   }
@@ -557,7 +557,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
       if (!groups.hasOwnProperty(groupId)) {
         groups[groupId] = []
       }
-      if(ele._def.hasOwnProperty('defaultValue')) {
+      if (ele._def.hasOwnProperty('defaultValue')) {
         defaultData[ele.name] = ele._def.defaultValue
       }
 
@@ -633,7 +633,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
               </Tinted>
             </XStack>}
           </XStack>
-          <YStack width="100%" f={1} mt={title?"$7":"$0"} ai="center" jc="center">
+          <YStack width="100%" f={1} mt={title ? "$7" : "$0"} ai="center" jc="center">
             {error && (
               <Notice>
                 <Paragraph>{getErrorMessage(error.error)}</Paragraph>

@@ -91,6 +91,13 @@ describe.skip("Test entities autocreation", () => {
         await navigateToLogin(driver);
         await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
         await navigateToWorkspace(driver);
+        /*Create autoapi*/
+        await driver.get(HOST_URL + 'admin/apis');
+        await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
+        // await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
+        // await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
+        // await driver.wait(until.elementLocated(By.id('admin-editable-object')))
+        // await driver.wait(until.elementLocated(By.id('editable-object-input-name')))
         const img = await driver.takeScreenshot();
         fs.writeFileSync(__dirname + '/screenshot.png', img, 'base64')
     }, 30000)
@@ -99,7 +106,6 @@ describe.skip("Test entities autocreation", () => {
 const navigateToLogin = async (driver) => {
     await driver.wait(until.elementLocated(By.id('header-login-link')));
     await driver.executeScript("document.querySelector('#header-login-link > p').click();");
-
     await driver.wait(until.elementLocated(By.id('sign-in-btn')));
 }
 
