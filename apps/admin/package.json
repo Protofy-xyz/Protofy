@@ -14,8 +14,7 @@
     "status": "pm2 status api",
     "build": "cd ../.. && yarn build && cd apps/next && next build",
     "serve": "NODE_ENV=production next start --port 4000",
-    "lint": "next lint",
-    "test": "jest --colors"
+    "lint": "next lint"
   },
   "dependencies": {
     "@craftjs/core": "0.2.0-beta.8",
