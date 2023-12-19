@@ -11,6 +11,7 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
       disablePreventBodyScroll
       {...props}
     >
+      <YStack id={"eo-select-list-" + title} />
       <Select.Trigger f={21} iconAfter={ChevronDown} {...triggerProps}>
         <Select.Value placeholder="choose an option">{value}</Select.Value> {/* this could change in the future */}
       </Select.Trigger>

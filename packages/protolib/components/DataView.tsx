@@ -257,7 +257,7 @@ export function DataView({
                             <ScrollView maxHeight={"90vh"}>
                                 <XStack mr="$5">
                                     <EditableObject
-                                        id={"admin-editable-object"}
+                                        id={"admin-eo"}
                                         name={name}
                                         numColumns={numColumnsForm}
                                         mode={'add'}
