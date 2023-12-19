@@ -1,10 +1,10 @@
 import { DatabaseEntryModel, DatabaseModel } from '.'
-import { DataView, API, AdminPage, PaginatedDataSSR  } from 'protolib'
+import { DataView, API, AdminPage, PaginatedDataSSR } from 'protolib'
 import { useRouter } from "next/router"
 import { YStack } from '@my/ui'
 import { DataCard } from '../../components/DataCard'
 import { useState } from 'react'
-import { Server } from '@tamagui/lucide-icons'
+import { Server, DatabaseBackup } from '@tamagui/lucide-icons'
 import { usePrompt } from '../../context/PromptAtom'
 
 
@@ -24,8 +24,8 @@ export default {
             Using a special file called initialData.json at the same directory of your API, automatic crud apis will load initialData.json contents into the database when creating the database the first time. 
             Be careful editing the databases manually, the application may break. 
             `+ (
-                initialItems.isLoaded?'Currently the system returned the following information: '+JSON.stringify(initialItems.data) : ''
-            )) 
+                    initialItems.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
+                ))
             return (<AdminPage title="Databases" workspace={workspace} pageSession={pageSession}>
                 <DataView
                     integratedChat
@@ -42,6 +42,26 @@ export default {
                     model={DatabaseModel}
                     pageState={pageState}
                     icons={DatabaseIcons}
+                    extraMenuActions={[
+                        {
+                            text: "Backup",
+                            icon: DatabaseBackup,
+                            action: (element) => { 
+                                if (Array.isArray(element)) {
+                                    console.log("IS ARRAY", element)
+                                } else {
+                                    if(element === "*"){
+                                        console.log("IS GLOBAL")
+                                    } else {
+                                        console.log("IS element", element)
+                                    }
+                                    
+                                }
+                             },
+                            isVisible: (data) => true,
+                            menus : ["item", "global", "bulk"]
+                        }
+                    ]}
                 />
             </AdminPage>)
         },
@@ -119,7 +139,7 @@ export default {
                                         $md: { maxWidth: 450 },
                                         $sm: { minWidth: 'calc(100vw - 65px)', maxWidth: 'calc(100vw - 65px)' },
                                         minWidth: 300,
-                                        p:'$3'
+                                        p: '$3'
                                     }}
                                     onDelete={onDelete}
                                     key={renew}

@@ -17,14 +17,15 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
 
     }
 
-    const MenuButton = ({ text, Icon, onPress, disabled }: { text: string, Icon: any, onPress: any, disabled?: boolean }) => {
+    const MenuButton = ({ type, text, Icon, onPress, disabled }: { type:string, text: string, Icon: any, onPress: any, disabled?: boolean }) => {
         return <XStack ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start"
             cursor={!disabled ? 'pointer' : 'default'}
             pressStyle={!disabled ? { o: 0.7 } : {}}
             hoverStyle={!disabled ? { bc: "$color5" } : {}}
             onPress={(e) => {
                 if (!disabled) {
-                    onPress(element, e), setMenuOpened(false)
+                    onPress(type==="global"?'*':element, e) 
+                    setMenuOpened(false)
                 }
 
             }}>
@@ -67,10 +68,10 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
                     <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e) => e.stopPropagation()}>
                         <YStack>
                             {extraMenuActions.map((action, i) => {
-                                return (!action.menus && type === "item" || action.menus && action.menus?.includes(type)) && action.isVisible && action.isVisible(element) && <MenuButton key={i} text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
+                                return (!action.menus && type === "item" || action.menus && action.menus?.includes(type)) && action.isVisible && action.isVisible(element) && <MenuButton type={type} key={i} text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
                             })}
-                            {false && enableAddToInitialData && <MenuButton text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); addToInitialData(data), setMenuOpened(false) }}></MenuButton>}
-                            {hideDeleteButton ? <></> : <MenuButton text={"Delete"} Icon={Trash2} disabled={!deleteable(element)} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>}
+                            {false && enableAddToInitialData && <MenuButton type={type} text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); addToInitialData(data), setMenuOpened(false) }}></MenuButton>}
+                            {hideDeleteButton ? <></> : <MenuButton type={type} text={"Delete"} Icon={Trash2} disabled={!deleteable(element)} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>}
                         </YStack>
                     </YStack>
                 </Tinted>
