@@ -66,7 +66,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const onOpen = (file: any) => {
         console.log('on open client: ', file)
         if (file.isDir) return setCurrentPath(file.path ?? file.id)
-        router.push('/admin/files?path=' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '&file=' + file.name)
+        router.push('/files?path=' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '&file=' + file.name)
     }
 
     const { resolvedTheme } = useThemeSetting()

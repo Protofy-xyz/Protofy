@@ -36,21 +36,3 @@ export default function BundlePage(props: any) {
   const page = (nextPages as any)[route]
   return React.createElement(page.component, {...props})
 }
-
-export const getServerSideProps = SSR(async (context: NextPageContext) => {
-  const route = getRoute(context.query.name)
-
-  if(!route) { //has no exposed pages
-    return withSession(context)
-  }
-
-  const page = (nextPages as any)[route]
-
-  if(page.getServerSideProps) {
-    const ret = await page.getServerSideProps(context)
-    //console.log('going to route: ', route, page, ret)
-    return ret
-  }
-
-  return withSession(context)
-})
