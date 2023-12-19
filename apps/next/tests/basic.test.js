@@ -68,8 +68,8 @@ describe("Basic tests", () => {
 })
 
 describe.skip("Test entities autocreation", () => {
-    const USER_IDENTIFIER = 'gerard@protofy.xyz'
-    const USER_PASSWORD = 'gerard100'
+    const USER_IDENTIFIER = 'user@user.user'
+    const USER_PASSWORD = 'user1234'
     let driver;
     beforeEach(async () => {
         driver = await new Builder()
@@ -94,10 +94,10 @@ describe.skip("Test entities autocreation", () => {
         /*Create autoapi*/
         await driver.get(HOST_URL + 'admin/apis');
         await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
-        // await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
-        // await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
-        // await driver.wait(until.elementLocated(By.id('admin-editable-object')))
-        // await driver.wait(until.elementLocated(By.id('editable-object-input-name')))
+        await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
+        await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
+        await driver.wait(until.elementLocated(By.id('admin-editable-object')))
+        // const nameInput = await driver.wait(until.elementLocated(By.id('editable-object-input-name')))
         const img = await driver.takeScreenshot();
         fs.writeFileSync(__dirname + '/screenshot.png', img, 'base64')
     }, 30000)

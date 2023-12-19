@@ -13,17 +13,3 @@ export default function Page(props:any) {
     </>
   )
 }
-
-export const getServerSideProps = SSR(async (context:NextPageContext) => {
-  if(hasSessionCookie(context.req?.headers.cookie)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/"
-      }
-    }
-  }
-  
-  return { props: {}}
-})
-
