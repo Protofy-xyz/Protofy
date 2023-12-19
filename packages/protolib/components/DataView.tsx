@@ -91,7 +91,6 @@ export function DataView({
     objectProps = {},
     disableRealTimeUpdates = false,
     refreshOnHotReload = false,
-    extraGlobalMenuActions
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const { query } = useRouter();
@@ -104,6 +103,7 @@ export function DataView({
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
     const { search, setSearch, setSearchName } = useContext(SearchContext)
+    const hasGlobalMenu = extraMenuActions && extraMenuActions.some(action => action.menus && action.menus.includes("global"));
 
     useQueryState(setState)
 
@@ -355,7 +355,7 @@ export function DataView({
                             <Paragraph>
                                 <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
                             </Paragraph>
-                             {extraGlobalMenuActions?<Tinted><ItemMenu sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraGlobalMenuActions}></ItemMenu></Tinted>:<></>}
+                             {hasGlobalMenu?<Tinted><ItemMenu type={"global"} sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraMenuActions}></ItemMenu></Tinted>:<></>}
                             {toolBarContent}
                         </XStack>
 
