@@ -92,14 +92,19 @@ describe.skip("Test entities autocreation", () => {
         await navigateToLogin(driver);
         await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
         await navigateToWorkspace(driver);
-        /*Create autoapi*/
+        /*CREATE AUTOAPI*/
+        /*open create dialog */
         await driver.get(HOST_URL + 'admin/apis');
         await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
         await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
         await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
         await driver.wait(until.elementLocated(By.id('admin-eo')))
+        /*fill input: name */
         const nameInput = await driver.findElement(By.id('editable-object-input-name'))
         await nameInput.sendKeys("testapi");
+        /*fill select input: template */
+        await driver.executeScript('document.querySelector("#eo-select-list-template").parentElement.querySelector("span>li").click()');
+
         const img = await driver.takeScreenshot();
         fs.writeFileSync(__dirname + '/screenshot.png', img, 'base64')
     }, 30000)
