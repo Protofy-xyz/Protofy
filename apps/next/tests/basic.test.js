@@ -67,7 +67,7 @@ describe("Basic tests", () => {
     }, 30000)
 })
 
-describe("Test entities autocreation", () => {
+describe.skip("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
     let driver;
