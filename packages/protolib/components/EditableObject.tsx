@@ -587,7 +587,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
       <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>
     {currentMode == 'preview' && <Stack t={"$-5"}>
-      <ItemMenu sourceUrl={sourceUrl} onDelete={onDelete} deleteable={deleteable} element={model.load(data.data)} extraMenuActions={extraMenuActions} />
+      <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={onDelete} deleteable={deleteable} element={model.load(data.data)} extraMenuActions={extraMenuActions} />
     </Stack>}
   </XStack>), [columnMargin, groups, columnWidth, numColumns])
 

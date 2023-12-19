@@ -6,29 +6,29 @@ import { MoreVertical, Trash2, FilePlus } from '@tamagui/lucide-icons'
 import { InteractiveIcon } from "./InteractiveIcon";
 import { DataViewContext } from "./DataView";
 
-export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelete, element, deleteable,extraMenuActions = [], hideDeleteButton, ...props }: { sourceUrl: string, enableAddToInitialData?:boolean, onDelete?: any, deleteable?:Function, element: any, extraMenuActions?: any, hideDeleteButton?:boolean } & StackProps) => {
+export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false, onDelete, element, deleteable, extraMenuActions = [], hideDeleteButton, ...props }: { type: string, sourceUrl: string, enableAddToInitialData?: boolean, onDelete?: any, deleteable?: Function, element: any, extraMenuActions?: any, hideDeleteButton?: boolean } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
-    const { selected, setSelected, model} = useContext(DataViewContext);
+    const { selected, setSelected, model } = useContext(DataViewContext);
 
 
 
-    const addToInitialData = ({data}) =>{
-        
+    const addToInitialData = ({ data }) => {
+
     }
 
-    const MenuButton = ({ text, Icon, onPress, disabled }:{text: string, Icon:any, onPress:any, disabled?:boolean}) => {
+    const MenuButton = ({ text, Icon, onPress, disabled }: { text: string, Icon: any, onPress: any, disabled?: boolean }) => {
         return <XStack ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start"
-            cursor={!disabled?'pointer':'default'}
-            pressStyle={!disabled?{ o: 0.7 }:{}}
-            hoverStyle={!disabled?{ bc: "$color5" }:{}}
-            onPress={(e) => { 
-                if(!disabled){
-                    onPress(element, e), setMenuOpened(false) 
+            cursor={!disabled ? 'pointer' : 'default'}
+            pressStyle={!disabled ? { o: 0.7 } : {}}
+            hoverStyle={!disabled ? { bc: "$color5" } : {}}
+            onPress={(e) => {
+                if (!disabled) {
+                    onPress(element, e), setMenuOpened(false)
                 }
-                
-                }}>
-            <Icon size={"$1"} color={disabled?"var(--gray9)":"var(--color9)"} strokeWidth={2} />
+
+            }}>
+            <Icon size={"$1"} color={disabled ? "var(--gray9)" : "var(--color9)"} strokeWidth={2} />
             <Text ml={"$3"}>{text}</Text>
         </XStack>
     }
@@ -67,10 +67,10 @@ export const ItemMenu = ({ sourceUrl = '', enableAddToInitialData=false ,onDelet
                     <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e) => e.stopPropagation()}>
                         <YStack>
                             {extraMenuActions.map((action, i) => {
-                                return action.isVisible && action.isVisible(element) && <MenuButton key={i} text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
+                                return (!action.menus && type === "item" || action.menus && action.menus?.includes(type)) && action.isVisible && action.isVisible(element) && <MenuButton key={i} text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
                             })}
-                            {false && enableAddToInitialData &&  <MenuButton text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); addToInitialData(data),setMenuOpened(false) }}></MenuButton>}
-                            {hideDeleteButton?<></>:<MenuButton text={"Delete"} Icon={Trash2} disabled={!deleteable(element)} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>}
+                            {false && enableAddToInitialData && <MenuButton text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); addToInitialData(data), setMenuOpened(false) }}></MenuButton>}
+                            {hideDeleteButton ? <></> : <MenuButton text={"Delete"} Icon={Trash2} disabled={!deleteable(element)} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>}
                         </YStack>
                     </YStack>
                 </Tinted>

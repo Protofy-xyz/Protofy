@@ -63,14 +63,14 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
 
                             {selected.length > 1 &&
                                 <ItemMenu enableAddToInitialData={enableAddToInitialData}
+                                    type={"bulk"}
                                     mt={"1px"}
                                     ml={"-5px"}
                                     element={selected}
                                     sourceUrl={sourceUrl}
                                     deleteable={deleteable}
-                                    onDelete={onDelete} />}
-
-
+                                    onDelete={onDelete}
+                                    extraMenuActions={extraMenuActions} />}
                         </XStack>
                     </Theme>, "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
                         <Stack mt={"$2"}>
@@ -80,7 +80,7 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
                                     const getCurrentId = (item) => model.load(item).getId();
                                     const currentId = getCurrentId(row);
                                     const isAlreadySelected = selected.some(item => getCurrentId(item) === currentId);
-                                    
+
                                     if (isAlreadySelected) {
                                         setSelected(selected.filter(item => getCurrentId(item) !== currentId));
                                     } else {
@@ -95,6 +95,7 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
                             </Checkbox>
                         </Stack>
                         <ItemMenu enableAddToInitialData={enableAddToInitialData}
+                            type={"item"}
                             ml={"-5px"}
                             mt={"1px"}
                             element={model.load(row)}
