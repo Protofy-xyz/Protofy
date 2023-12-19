@@ -5,6 +5,25 @@ import { useRouter } from 'next/router'
 import nextPages from 'app/bundles/nextPages'
 import React from 'react'
 
+export async function getStaticPaths() {
+  const config = {
+    paths: Object.keys(nextPages).filter(x => !x.includes('*')).map((x) => {
+      return {
+        params: {name: x.split('/')}
+      }
+    }),
+    fallback: false
+  }
+  console.log('precompile config: ', config)
+  return config
+}
+
+export async function getStaticProps(context:any) {
+  return {
+      props: {}
+  };
+}
+
 const getRoute = (routePath: string | string[] | undefined) => Object.keys(nextPages).find(key => {
   if(!routePath) return false
 
