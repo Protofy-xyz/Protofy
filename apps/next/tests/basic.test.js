@@ -67,7 +67,7 @@ describe("Basic tests", () => {
     }, 30000)
 })
 
-describe.skip("Test entities autocreation", () => {
+describe("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
     let driver;
@@ -86,24 +86,32 @@ describe.skip("Test entities autocreation", () => {
             await driver.quit()
         }
     })
-    it.only("should create autogeneration entities (pages, apis, objects, etc.)", async () => {
+    it.only("should be able to create an empty api", async () => {
         // const output = execSync(`cd ${path.join(__dirname, '..', '..','..')} && yarn add-user ${USER_IDENTIFIER} ${USER_PASSWORD} admin`, {encoding: 'utf-8'})
         // expect(output.includes('Done')).toBeTruthy();
+        const TEMPLATES = {
+            Automatic_CRUD: 0,
+            Automatic_CRUD_Custom_Storage: 1,
+            IOT_Router: 2,
+            Empty: 3
+        }
+
+        const OBJECTS = {
+            Without_Object: 0
+        }
         await navigateToLogin(driver);
         await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
         await navigateToWorkspace(driver);
-        /*CREATE AUTOAPI*/
         await getEditableObjectCreate(driver)
-        await takeScreenshot(driver, '1')
-        await fillEditableObjectInput(driver, 'name', 'testapi')
-        await takeScreenshot(driver, '2')
-        await fillEditableObjectSelect(driver, 'template', 0)
-        await getEditableObjectSelection(driver, 'template');
-        await takeScreenshot(driver, '3')
-        await fillEditableObjectSelect(driver, 'object', 0)
-        await takeScreenshot(driver, '4')
+        const apiName = 'testapi'
+        await fillEditableObjectInput(driver, 'name', apiName)
+        await fillEditableObjectSelect(driver, 'template', TEMPLATES.Empty)
+        await fillEditableObjectSelect(driver, 'object', OBJECTS.Without_Object)
         await submitEditableObject(driver)
-        await takeScreenshot(driver, '5')
+        await driver.wait(until.elementLocated(By.id(`api-datatable-${apiName}`)))
+        // const text = 
+        const dt_api_name = await driver.findElement(By.id(`api-datatable-${apiName}`)).getText()
+        expect(dt_api_name).toBe(apiName);
     }, 30000)
 })
 
@@ -177,13 +185,13 @@ const fillEditableObjectInput = async (driver, field, value) => {
 
 const fillEditableObjectSelect = async (driver, field, option) => {
     /*open selectable */
-    await driver.executeScript(`document.querySelector("#eo-select-list-${field}").parentElement.querySelector("span>li").click()`);
+    // await driver.executeScript(`document.querySelector("#eo-select-list-${field}").parentElement.querySelector("span>li").click()`);
+    const selectListElem = await driver.findElement(By.xpath(`//*[@id='eo-select-list-${field}']/../span/li`))
+    await selectListElem.click()
     /*click selectable option */
-    await driver.executeScript(`document.querySelector("#eo-select-list-${field}-item-${option}").parentElement.click()`)
-}
-
-const getEditableObjectSelection = async (driver, field) => {
-    return  await driver.executeScript(`return document.querySelector("#eo-select-list-${field}").parentElement.querySelector("span>li>span").innerText;`)
+    const selectListOptionElem = await driver.findElement(By.xpath(`//*[@id='eo-select-list-${field}-item-${option}']/..`))
+    await selectListOptionElem.click();
+    // await driver.executeScript(`document.querySelector("#eo-select-list-${field}-item-${option}").parentElement.click()`)
 }
 
 const submitEditableObject = async (driver) => {
