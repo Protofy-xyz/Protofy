@@ -103,8 +103,17 @@ describe.skip("Test entities autocreation", () => {
         const nameInput = await driver.findElement(By.id('editable-object-input-name'))
         await nameInput.sendKeys("testapi");
         /*fill select input: template */
+        /*open selectable */
         await driver.executeScript('document.querySelector("#eo-select-list-template").parentElement.querySelector("span>li").click()');
-
+        /*click selectable option */
+        await driver.executeScript(`document.querySelector("#eo-select-list-template-item-0").parentElement.click()`)
+        /*check selected option */
+        const selectedOption =  await driver.executeScript(`return document.querySelector("#eo-select-list-template").parentElement.querySelector("span>li>span").innerText;`)
+        /*fill select input: object */
+        /*open selectable */
+        await driver.executeScript('document.querySelector("#eo-select-list-object").parentElement.querySelector("span>li").click()');
+        /*click selectable option */
+        await driver.executeScript(`document.querySelector("#eo-select-list-object-item-0").parentElement.click()`)
         const img = await driver.takeScreenshot();
         fs.writeFileSync(__dirname + '/screenshot.png', img, 'base64')
     }, 30000)

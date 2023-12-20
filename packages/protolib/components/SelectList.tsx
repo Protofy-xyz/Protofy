@@ -76,6 +76,7 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
                       key={item}
                       value={item}
                     >
+                      <YStack id={"eo-select-list-"+title+"-item-" + i}></YStack>
                       <Select.ItemText>{item}</Select.ItemText>
                       <Select.ItemIndicator marginLeft="auto">
                         <Check size={16} />
