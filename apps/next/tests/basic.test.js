@@ -93,29 +93,17 @@ describe.skip("Test entities autocreation", () => {
         await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
         await navigateToWorkspace(driver);
         /*CREATE AUTOAPI*/
-        /*open create dialog */
-        await driver.get(HOST_URL + 'admin/apis');
-        await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
-        await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
-        await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
-        await driver.wait(until.elementLocated(By.id('admin-eo')))
-        /*fill input: name */
-        const nameInput = await driver.findElement(By.id('editable-object-input-name'))
-        await nameInput.sendKeys("testapi");
-        /*fill select input: template */
-        /*open selectable */
-        await driver.executeScript('document.querySelector("#eo-select-list-template").parentElement.querySelector("span>li").click()');
-        /*click selectable option */
-        await driver.executeScript(`document.querySelector("#eo-select-list-template-item-0").parentElement.click()`)
-        /*check selected option */
-        const selectedOption =  await driver.executeScript(`return document.querySelector("#eo-select-list-template").parentElement.querySelector("span>li>span").innerText;`)
-        /*fill select input: object */
-        /*open selectable */
-        await driver.executeScript('document.querySelector("#eo-select-list-object").parentElement.querySelector("span>li").click()');
-        /*click selectable option */
-        await driver.executeScript(`document.querySelector("#eo-select-list-object-item-0").parentElement.click()`)
-        const img = await driver.takeScreenshot();
-        fs.writeFileSync(__dirname + '/screenshot.png', img, 'base64')
+        await getEditableObjectCreate(driver)
+        await takeScreenshot(driver, '1')
+        await fillEditableObjectInput(driver, 'name', 'testapi')
+        await takeScreenshot(driver, '2')
+        await fillEditableObjectSelect(driver, 'template', 0)
+        await getEditableObjectSelection(driver, 'template');
+        await takeScreenshot(driver, '3')
+        await fillEditableObjectSelect(driver, 'object', 0)
+        await takeScreenshot(driver, '4')
+        await submitEditableObject(driver)
+        await takeScreenshot(driver, '5')
     }, 30000)
 })
 
@@ -171,4 +159,38 @@ async function signUpFlow(driver, email, password) {
             && until.elementIsVisible(By.id('home-page'))
         )
     });
+}
+
+const getEditableObjectCreate = async (driver) => {
+    /*open create dialog */
+    await driver.get(HOST_URL + 'admin/apis');
+    await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
+    await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
+    await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
+    await driver.wait(until.elementLocated(By.id('admin-eo')))
+}
+const fillEditableObjectInput = async (driver, field, value) => {
+    /*fill input: name */
+    const nameInput = await driver.findElement(By.id(`editable-object-input-${field}`))
+    await nameInput.sendKeys(value);
+}
+
+const fillEditableObjectSelect = async (driver, field, option) => {
+    /*open selectable */
+    await driver.executeScript(`document.querySelector("#eo-select-list-${field}").parentElement.querySelector("span>li").click()`);
+    /*click selectable option */
+    await driver.executeScript(`document.querySelector("#eo-select-list-${field}-item-${option}").parentElement.click()`)
+}
+
+const getEditableObjectSelection = async (driver, field) => {
+    return  await driver.executeScript(`return document.querySelector("#eo-select-list-${field}").parentElement.querySelector("span>li>span").innerText;`)
+}
+
+const submitEditableObject = async (driver) => {
+    await driver.executeScript(`document.querySelector("#admin-eo>div>div>div>span>span>span>button").click()`)
+}
+
+const takeScreenshot = async (driver, name) => {
+    const img = await driver.takeScreenshot(driver);
+    fs.writeFileSync(__dirname + `/${name}.png`, img, 'base64')
 }
