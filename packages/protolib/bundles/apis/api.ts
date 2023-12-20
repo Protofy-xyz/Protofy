@@ -21,6 +21,26 @@ const getAPI = (apiPath, req) => {
   }
 }
 
+const deleteAPI = (req, value) => {
+  const api = getAPI(fspath.basename(value.name) + '.ts', req)
+  removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req);
+  if (api.type === "AutoAPI") {
+    const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(api.object))
+    let sourceFile = getSourceFile(objectPath)
+    removeFeature(sourceFile, '"AutoAPI"')
+  }
+}
+
+async function checkFileExists(filePath) {
+  try {
+    await fs.access(filePath, fs.constants.F_OK);
+    console.log('File: ' + filePath + ' already exists');
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
@@ -36,28 +56,17 @@ const getDB = (path, req, session) => {
       value = JSON.parse(value)
 
       if (value._deleted) {
-        const api = getAPI(fspath.basename(value.name) + '.ts', req)
-        removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req);
-        if (api.type === "AutoAPI") {
-          const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(api.object))
-          let sourceFile = getSourceFile(objectPath)
-          removeFeature(sourceFile, '"AutoAPI"')
-        }
+        deleteAPI(req, value)
         return
       }
 
       let exists
       let ObjectSourceFile
-      const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts'
+
       const template = fspath.basename(value.template ?? 'empty')
 
-      try {
-        await fs.access(filePath, fs.constants.F_OK)
-        console.log('File: ' + filePath + ' already exists, not executing template')
-        exists = true
-      } catch (error) {
-        exists = false
-      }
+      const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts';
+      exists = await checkFileExists(filePath);
 
       if (template.startsWith("Automatic CRUD")) {
         const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
