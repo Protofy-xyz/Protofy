@@ -46,11 +46,10 @@ const getDB = (path, req, session) => {
         return
       }
 
-      const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
-      let ObjectSourceFile = getSourceFile(objectPath)
       let exists
-      const template = fspath.basename(value.template ?? 'empty')
+      let ObjectSourceFile
       const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts'
+      const template = fspath.basename(value.template ?? 'empty')
 
       try {
         await fs.access(filePath, fs.constants.F_OK)
@@ -59,13 +58,18 @@ const getDB = (path, req, session) => {
       } catch (error) {
         exists = false
       }
-      exists = hasFeature(ObjectSourceFile, '"AutoAPI"')
-      
-      if (exists) {
-        console.log("AutoAPI already exists")
-        return
+
+      if (template.startsWith("Automatic CRUD")) {
+        const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
+        ObjectSourceFile = getSourceFile(objectPath)
+        exists = hasFeature(ObjectSourceFile, '"AutoAPI"')
+
+        if (exists) {
+          console.log("AutoAPI already exists")
+          return
+        }
       }
-      
+
       const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
         name: value.name + '.ts',
         data: {
