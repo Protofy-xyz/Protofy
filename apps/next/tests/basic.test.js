@@ -141,7 +141,7 @@ describe("Test entities autocreation", () => {
         }, 30000)
     })
 
-    describe.skip("test page creation", () => {
+    describe("test page creation", () => {
         const PAGE_TEMPLATES = {
             BLANK: "blank",
             DEFAULT: "default",
@@ -154,7 +154,7 @@ describe("Test entities autocreation", () => {
         }, 30000)
 
         it("should be able to create a blank page", async () => {
-            const pageName = 'testPage'
+            const pageName = 'testpage'
             const pageRoute = 'testpage'
             // Select template
             const pageTemplateElem = await driver.findElement(By.id(`pages-template-${PAGE_TEMPLATES.BLANK}`))
@@ -162,8 +162,8 @@ describe("Test entities autocreation", () => {
             const addPageButtonElem1 = await driver.findElement(By.id(`admin-pages-add-btn`))
             await addPageButtonElem1.click()
             // Configure page
-            await fillEditableObjectInput(driver, 'name', pageName)
-            await fillEditableObjectInput(driver, 'route', pageRoute)
+            await fillEditableObjectInput(driver, 'name', pageName, 10)
+            await fillEditableObjectInput(driver, 'route', pageRoute, 10)
             const addPageButtonElem2 = await driver.findElement(By.id(`admin-pages-add-btn`))
             await addPageButtonElem2.click()
             await driver.wait(until.elementLocated(By.id(`pages-datatable-${pageName}`)))
@@ -237,10 +237,19 @@ const getEditableObjectCreate = async (driver, entity) => {
     await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
     await driver.wait(until.elementLocated(By.id('admin-eo')))
 }
-const fillEditableObjectInput = async (driver, field, value) => {
-    /*fill input: name */
+const fillEditableObjectInput = async (driver, field, value, debounce = undefined) => {
+    /*fill input */
     const nameInput = await driver.findElement(By.id(`editable-object-input-${field}`))
-    await nameInput.sendKeys(value);
+    await nameInput.clear() // Clear previous values
+    const sendSlowly = debounce ?? false
+    if (sendSlowly) {
+        for (let character of value) { // Send keys slowly 
+            await nameInput.sendKeys(character);
+            await driver.sleep(debounce??10); // Adjust the sleep time as necessary
+        }
+    } else {
+        await nameInput.sendKeys(value);
+    }
 }
 
 const fillEditableObjectSelect = async (driver, field, option) => {
