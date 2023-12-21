@@ -71,6 +71,14 @@ describe("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
     let driver;
+
+    beforeAll(() => {
+        try {
+            const output = execSync(`cd ${path.join(__dirname, '..', '..', '..')} && yarn add-user ${USER_IDENTIFIER} ${USER_PASSWORD} admin`, { encoding: 'utf-8', stdio: 'inherit' })
+            expect(output.includes('Done')).toBeTruthy();
+        } catch (e) { } // Prevent crash when user already exist
+    }, 10000)
+
     beforeEach(async () => {
         driver = await new Builder()
             .forBrowser('chrome')
@@ -79,6 +87,9 @@ describe("Test entities autocreation", () => {
             .build();
         await driver.get(HOST_URL);
         await driver.manage().window().setRect({ width: 1920, height: 1080 });
+        await navigateToLogin(driver);
+        await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
+        await navigateToWorkspace(driver);
     }, 30000)
 
     afterEach(async () => {
@@ -99,17 +110,8 @@ describe("Test entities autocreation", () => {
             Without_Object: 0
         }
 
-        beforeAll(() => {
-            try {
-                const output = execSync(`cd ${path.join(__dirname, '..', '..', '..')} && yarn add-user ${USER_IDENTIFIER} ${USER_PASSWORD} admin`, { encoding: 'utf-8', stdio: 'inherit' })
-                expect(output.includes('Done')).toBeTruthy();
-            } catch (e) { } // Prevent crash when user already exist
-        }, 10000)
         beforeEach(async () => {
-            await navigateToLogin(driver);
-            await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
-            await navigateToWorkspace(driver);
-            await getEditableObjectCreate(driver)
+            await getEditableObjectCreate(driver, 'apis')
         }, 30000)
         it("should be able to create an empty api", async () => {
             const apiName = 'testapi'
@@ -123,6 +125,26 @@ describe("Test entities autocreation", () => {
         }, 30000)
     })
 
+    describe.skip("test object creations", () => {
+        const OBJECTS = {
+            Without_Object: 0
+        }
+
+        beforeEach(async () => {
+            await getEditableObjectCreate(driver, 'objects')
+        }, 30000)
+        
+        it("should be able to create an empty api", async () => {
+            const apiName = 'testapi'
+            await fillEditableObjectInput(driver, 'name', apiName)
+            await fillEditableObjectSelect(driver, 'template', TEMPLATES.Empty)
+            await fillEditableObjectSelect(driver, 'object', OBJECTS.Without_Object)
+            await submitEditableObject(driver)
+            await driver.wait(until.elementLocated(By.id(`api-datatable-${apiName}`)))
+            const dt_api_name = await driver.findElement(By.id(`api-datatable-${apiName}`)).getText()
+            expect(dt_api_name).toBe(apiName);
+        }, 30000)
+    })
 })
 
 const navigateToLogin = async (driver) => {
@@ -179,9 +201,9 @@ async function signUpFlow(driver, email, password) {
     });
 }
 
-const getEditableObjectCreate = async (driver) => {
+const getEditableObjectCreate = async (driver, entity) => {
     /*open create dialog */
-    await driver.get(HOST_URL + 'admin/apis');
+    await driver.get(HOST_URL + `admin/${entity}`);
     await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
     await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
     await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
