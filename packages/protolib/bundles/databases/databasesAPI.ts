@@ -82,8 +82,7 @@ export const getDatabases = async () => {
 
 export const DatabasesAPI = (app, context) => {
   app.post('/adminapi/v1/backup/databases', handler(async (req, res, session) => {
-    console.log("DATABASES:", await getDatabases())
-    const ids = req.body
+    let ids = req.body
     if (!session || !session.user.admin) {
       res.status(401).send({ error: "Unauthorized" })
       return
@@ -100,11 +99,11 @@ export const DatabasesAPI = (app, context) => {
 
     //global case
     if (ids.length === 1 && ids[0] === "*") {
-      res.send({ "result": "global backup initiated" })
-      return
+      const allDbs =  await getDatabases()
+      const transformedArray = allDbs.map(element => element.name)
+      ids = transformedArray
     }
 
-    //bulk case
     for (const id of ids) {
       try {
         const originalPath = path.join(dbDir(getRoot(req)), id)
