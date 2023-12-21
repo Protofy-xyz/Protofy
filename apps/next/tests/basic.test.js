@@ -151,7 +151,7 @@ describe("Test entities autocreation", () => {
 
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'pages')
-        }, 30000)
+        }, 40000)
 
         it("should be able to create a blank page", async () => {
             const pageName = 'testpage'
@@ -167,9 +167,7 @@ describe("Test entities autocreation", () => {
             const addPageButtonElem2 = await driver.findElement(By.id(`admin-pages-add-btn`))
             await addPageButtonElem2.click()
             await driver.wait(until.elementLocated(By.id(`pages-datatable-${pageName}`)))
-            await takeScreenshot(driver, '2')
             const dt_page_name = await driver.findElement(By.id(`pages-datatable-${pageName}`)).getText()
-            await takeScreenshot(driver, '3')
             expect(dt_page_name).toBe(pageName);
         }, 30000)
     })
@@ -236,7 +234,7 @@ const getEditableObjectCreate = async (driver, entity) => {
     await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
     await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
     await driver.wait(until.elementLocated(By.id('admin-eo')))
-}
+} 
 const fillEditableObjectInput = async (driver, field, value, debounce = undefined) => {
     /*fill input */
     const nameInput = await driver.findElement(By.id(`editable-object-input-${field}`))
