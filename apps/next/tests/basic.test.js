@@ -86,12 +86,8 @@ describe("Test entities autocreation", () => {
             await driver.quit()
         }
     })
-    it("should be able to create an empty api", async () => {
-        try {
-            const output = execSync(`cd ${path.join(__dirname, '..', '..', '..')} && yarn add-user ${USER_IDENTIFIER} ${USER_PASSWORD} admin`, { encoding: 'utf-8', stdio: 'inherit' })
-            expect(output.includes('Done')).toBeTruthy();
-        }catch(e){} // Prevent crash when user already exist
 
+    describe("test api creations", () => {
         const TEMPLATES = {
             Automatic_CRUD: 0,
             Automatic_CRUD_Custom_Storage: 1,
@@ -102,20 +98,31 @@ describe("Test entities autocreation", () => {
         const OBJECTS = {
             Without_Object: 0
         }
-        await navigateToLogin(driver);
-        await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
-        await navigateToWorkspace(driver);
-        await getEditableObjectCreate(driver)
-        const apiName = 'testapi'
-        await fillEditableObjectInput(driver, 'name', apiName)
-        await fillEditableObjectSelect(driver, 'template', TEMPLATES.Empty)
-        await fillEditableObjectSelect(driver, 'object', OBJECTS.Without_Object)
-        await submitEditableObject(driver)
-        await driver.wait(until.elementLocated(By.id(`api-datatable-${apiName}`)))
-        // const text = 
-        const dt_api_name = await driver.findElement(By.id(`api-datatable-${apiName}`)).getText()
-        expect(dt_api_name).toBe(apiName);
-    }, 30000)
+
+        beforeAll(() => {
+            try {
+                const output = execSync(`cd ${path.join(__dirname, '..', '..', '..')} && yarn add-user ${USER_IDENTIFIER} ${USER_PASSWORD} admin`, { encoding: 'utf-8', stdio: 'inherit' })
+                expect(output.includes('Done')).toBeTruthy();
+            } catch (e) { } // Prevent crash when user already exist
+        }, 10000)
+        beforeEach(async () => {
+            await navigateToLogin(driver);
+            await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
+            await navigateToWorkspace(driver);
+            await getEditableObjectCreate(driver)
+        }, 30000)
+        it("should be able to create an empty api", async () => {
+            const apiName = 'testapi'
+            await fillEditableObjectInput(driver, 'name', apiName)
+            await fillEditableObjectSelect(driver, 'template', TEMPLATES.Empty)
+            await fillEditableObjectSelect(driver, 'object', OBJECTS.Without_Object)
+            await submitEditableObject(driver)
+            await driver.wait(until.elementLocated(By.id(`api-datatable-${apiName}`)))
+            const dt_api_name = await driver.findElement(By.id(`api-datatable-${apiName}`)).getText()
+            expect(dt_api_name).toBe(apiName);
+        }, 30000)
+    })
+
 })
 
 const navigateToLogin = async (driver) => {
