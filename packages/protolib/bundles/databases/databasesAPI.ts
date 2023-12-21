@@ -1,4 +1,4 @@
-import { CreateApi } from 'protolib/api'
+import { CreateApi, handler } from 'protolib/api'
 import * as fs from 'fs';
 import * as path from 'path';
 import * as fspath from 'path';
@@ -21,13 +21,13 @@ function getTimestamp() {
 
 async function moveFolder(src, dest) {
   try {
-      const timestamp = getTimestamp();
-      const destTime = `${dest}_${timestamp}`;
-      const parentDest = path.dirname(dest);
-      await fs.promises.mkdir(parentDest, { recursive: true });
-      await fs.promises.rename(src, destTime);
+    const timestamp = getTimestamp();
+    const destTime = `${dest}_${timestamp}`;
+    const parentDest = path.dirname(dest);
+    await fs.promises.mkdir(parentDest, { recursive: true });
+    await fs.promises.rename(src, destTime);
   } catch (error) {
-      console.error('Error moving folder:', error);
+    console.error('Error moving folder:', error);
   }
 }
 
@@ -43,8 +43,8 @@ const customGetDB = (path, req, session) => {
     async put(key, value) {
       value = JSON.parse(value)
       if (value._deleted) {
-        const origin = fspath.join(dbDir(getRoot(req)), key)   
-        const dest = fspath.join(getRoot(req), 'data', 'deleted_databases', key)  
+        const origin = fspath.join(dbDir(getRoot(req)), key)
+        const dest = fspath.join(getRoot(req), 'data', 'deleted_databases', key)
         moveFolder(origin, dest)
         return
       }
@@ -69,9 +69,28 @@ export const getDatabases = async () => {
   })
 }
 
-export const DatabasesAPI = CreateApi('databases', DatabaseModel, __dirname, '/adminapi/v1/', '', {}, () => { }, customGetDB, ['list', 'create', 'read', 'delete'], false, {
-  paginatedRead: {model: DatabaseEntryModel},
-  requiresAdmin: ['*']
-})
+export const DatabasesAPI = (app, context) => {
+  app.post('/adminapi/v1/backup/databases', handler(async (req, res, session) => {
+    console.log("************************", req.body)
+    const ids = req.body;
+    if (!session || !session.user.admin) {
+      res.status(401).send({ error: "Unauthorized" })
+      return
+    }
+    if (ids.length === 1 && ids[0] === "*") { 
+      res.send({ "result": "global backup initiated" });
+      return;
+    }
+    ids.forEach(id => {
+      const path = fspath.join(dbDir(getRoot(req)), id)
+    });
+    res.send({ "result": "created" })
+  }))
+  
+  CreateApi('databases', DatabaseModel, __dirname, '/adminapi/v1/', '', {}, () => { }, customGetDB, ['list', 'create', 'read', 'delete'], false, {
+    paginatedRead: { model: DatabaseEntryModel },
+    requiresAdmin: ['*']
+  })(app, context)
+}
 
 export default DatabasesAPI

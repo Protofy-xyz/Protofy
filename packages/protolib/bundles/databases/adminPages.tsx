@@ -1,5 +1,5 @@
 import { DatabaseEntryModel, DatabaseModel } from '.'
-import { DataView, API, AdminPage, PaginatedDataSSR } from 'protolib'
+import { DataView, API, AdminPage, PaginatedDataSSR, AlertDialog } from 'protolib'
 import { useRouter } from "next/router"
 import { YStack } from '@my/ui'
 import { DataCard } from '../../components/DataCard'
@@ -7,14 +7,29 @@ import { useState } from 'react'
 import { Server, DatabaseBackup } from '@tamagui/lucide-icons'
 import { usePrompt } from '../../context/PromptAtom'
 
-
 const DatabaseIcons = {}
 const databasesSourceUrl = '/adminapi/v1/databases'
+
+const generateBackup = async (element) => {
+    let ids = []
+    if (Array.isArray(element)) {
+        ids = element.map(el => el.name);
+    } else if (typeof element === 'string' && element === "*") {
+        ids = ["*"];
+    } else if (typeof element === 'object' && element !== null && element.data) {
+        ids =  [element.data.name];
+    } else {
+        throw new Error("Invalid input for extractIds");
+    }
+    await API.post('/adminapi/v1/backup/databases', ids)
+}
 
 export default {
     'databases': {
         component: ({ workspace, pageState, initialItems, pageSession }: any) => {
             const router = useRouter()
+            const [open, setOpen] = useState(false)
+            const [backupId, setBackupId] = useState("")
 
             usePrompt(() => `At this moment the user is browsing the databases list page. The databases list page allows to list the system databases. Databases are based on leveldb, and stored under /data/databases.
             The user can use the database management page to view system databases, or can select a specific database from the list, and view the entries for the selected database.
@@ -27,6 +42,22 @@ export default {
                     initialItems.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
             return (<AdminPage title="Databases" workspace={workspace} pageSession={pageSession}>
+                <AlertDialog
+                    acceptCaption="Create Backup"
+                    setOpen={setOpen}
+                    open={open}
+                    onAccept={async (setOpen) => {
+                        await generateBackup(backupId)
+                        setOpen(false);
+                    }}
+                    title={'Create Backup'}
+                    description={"Are you sure want to backup this item?"}
+                    w={280}
+                >
+                    <YStack f={1} jc="center" ai="center">
+
+                    </YStack>
+                </AlertDialog>
                 <DataView
                     integratedChat
                     rowIcon={Server}
@@ -46,20 +77,12 @@ export default {
                         {
                             text: "Backup",
                             icon: DatabaseBackup,
-                            action: (element) => { 
-                                if (Array.isArray(element)) {
-                                    console.log("IS ARRAY", element)
-                                } else {
-                                    if(element === "*"){
-                                        console.log("IS GLOBAL")
-                                    } else {
-                                        console.log("IS element", element)
-                                    }
-                                    
-                                }
-                             },
+                            action: (element) => {
+                                setBackupId(element)
+                                setOpen(true)
+                            },
                             isVisible: (data) => true,
-                            menus : ["item", "global", "bulk"]
+                            menus: ["item", "global", "bulk"]
                         }
                     ]}
                 />
