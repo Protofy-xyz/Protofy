@@ -84,3 +84,10 @@ export const getDB = (dbPath:string, req?, session?):Level => {
 
     return dbHandlers[dbPath]
 }
+
+export const closeDBS = async () => {
+    const keys = Object.keys(dbHandlers)
+    for(const key of keys) {
+        await dbHandlers[key].close()
+    }
+}

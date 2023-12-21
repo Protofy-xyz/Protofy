@@ -2,8 +2,9 @@ import { CreateApi, handler } from 'protolib/api'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as fspath from 'path'
+import fse from 'fs-extra'
 import { DatabaseEntryModel, DatabaseModel } from './databasesSchemas'
-import { connectDB, getDB } from 'protolib/api'
+import { connectDB, getDB, closeDBS } from 'protolib/api'
 import { getRoot } from '../../api'
 
 const dbDir = (root) => fspath.join(root, "/data/databases/")
@@ -32,18 +33,12 @@ async function moveFolder(src, dest) {
 }
 
 async function createBackupFolderIfNeeded(backupPath) {
-  if (fs.existsSync(backupPath)) {
-    console.log("Backup folder already exists:", backupPath);
-    return true;
-  }
-
   try {
-    await fs.promises.mkdir(backupPath, { recursive: true });
-    console.log("Backup folder created:", backupPath);
-    return true;
+    await fse.ensureDir(backupPath)
+    return true
   } catch (error) {
-    console.error("Failed to create backup folder:", error);
-    return false;
+    console.error("Failed to create backup folder:", error)
+    return false
   }
 }
 
@@ -93,12 +88,14 @@ export const DatabasesAPI = (app, context) => {
       res.status(401).send({ error: "Unauthorized" })
       return
     }
+    //TODO: Lock requests until backup complete to prevent a request flrom locking the database while the backup is in progress??
+    await closeDBS()
 
     //create folder backup
     const backupFolderPath = fspath.join(getRoot(req), 'data', 'backups')
     if (!await createBackupFolderIfNeeded(backupFolderPath)) {
-      res.status(500).send({ error: "Failed to create backup folder" });
-      return;
+      res.status(500).send({ error: "Failed to create backup folder" })
+      return
     }
 
     //global case
@@ -108,17 +105,22 @@ export const DatabasesAPI = (app, context) => {
     }
 
     //bulk case
-    // for (const id of ids) {
-    //   const originalPath = path.join(dbDir(getRoot(req)), id)
-    //   const backupPath = path.join(dbDir(getRoot(req)), id, getTimestamp())
-    //   try {
-    //     await createBackupFolderIfNeeded(backupPath)
-    //     await fs.promises.copyFile(originalPath, backupPath)
-    //     console.log(`Backup created for ${id}`)
-    //   } catch (error) {
-    //     console.error(`Failed to create backup for ${id}: ${error}`)
-    //   }
-    // }
+    for (const id of ids) {
+      try {
+        const originalPath = path.join(dbDir(getRoot(req)), id)
+        const backupPath = path.join(getRoot(req), "data","backups", id + "_" + getTimestamp())
+
+        if (!await createBackupFolderIfNeeded(backupPath)) {
+          throw new Error("Failed to create backup folder")
+        }
+
+        await fse.copy(originalPath, backupPath, { recursive: true })
+        console.log("Backup created for ", id)
+      } catch (error) {
+        console.error(`Failed to create backup for ${id}: ${error}`)
+        res.status(500).send({ error: `Failed to create backup for ${id}` })
+      }
+    }
     res.send({ "result": "created" })
   }))
 
