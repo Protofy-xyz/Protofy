@@ -3,6 +3,7 @@ import { ObjectModel } from '.'
 import { DataView, DataTable2, Chip, API, AdminPage, PaginatedDataSSR } from 'protolib'
 import { Pencil, Box } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
+import { XStack } from "@my/ui";
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const ObjectIcons = {}
@@ -24,7 +25,7 @@ export default {
                     numColumnsForm={1}
                     name="object"
                     columns={DataTable2.columns(
-                        DataTable2.column("name", "name", true),
+                        DataTable2.column("name", "name", true, row => <XStack id={"objects-datatable-" + row.name}>{row.name}</XStack>),
                         DataTable2.column("features", "features", true, row => Object.keys(row.features).map(f => <Chip text={f} color={'$gray5'} />)),
                     )}
                     // hideAdd={true}

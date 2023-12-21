@@ -112,25 +112,25 @@ describe("Test entities autocreation", () => {
 
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'apis')
-        }, 40000)
+        }, 30000)
         it("should be able to create an empty api", async () => {
             const apiName = 'testapi'
             await fillEditableObjectInput(driver, 'name', apiName)
             await fillEditableObjectSelect(driver, 'template', TEMPLATES.Empty)
             await fillEditableObjectSelect(driver, 'object', OBJECTS.Without_Object)
             await submitEditableObject(driver)
-            await driver.wait(until.elementLocated(By.id(`api-datatable-${apiName}`)))
-            const dt_api_name = await driver.findElement(By.id(`api-datatable-${apiName}`)).getText()
+            await driver.wait(until.elementLocated(By.id(`apis-datatable-${apiName}`)))
+            const dt_api_name = await driver.findElement(By.id(`apis-datatable-${apiName}`)).getText()
             expect(dt_api_name).toBe(apiName);
         }, 30000)
     })
 
-    describe.skip("test object creation", () => {
+    describe("test object creation", () => {
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'objects')
-        }, 40000)
+        }, 30000)
 
-        it.only("should be able to create a simple object", async () => {
+        it("should be able to create a simple object", async () => {
             const objectName = 'testObject'
             await fillEditableObjectInput(driver, 'name', objectName)
             // Open editable form
@@ -147,11 +147,10 @@ describe("Test entities autocreation", () => {
                 await driver.sleep(10); // Adjust the sleep time as necessary
             }
             await driver.executeScript('document.querySelector("#alert-dlg-accept").click()')
-            await takeScreenshot(driver, '1')
-            // await submitEditableObject(driver)
-            // await driver.wait(until.elementLocated(By.id(`api-datatable-${apiName}`)))
-            // const dt_api_name = await driver.findElement(By.id(`api-datatable-${apiName}`)).getText()
-            // expect(dt_api_name).toBe(apiName);
+            await submitEditableObject(driver)
+            await driver.wait(until.elementLocated(By.id(`objects-datatable-${objectName}`)))
+            const dt_object_name = await driver.findElement(By.id(`objects-datatable-${objectName}`)).getText()
+            expect(dt_object_name).toBe(objectName);
         }, 30000)
     })
 
@@ -165,7 +164,7 @@ describe("Test entities autocreation", () => {
 
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'pages')
-        }, 40000)
+        }, 30000)
 
         it("should be able to create a blank page", async () => {
             const pageName = 'testpage'

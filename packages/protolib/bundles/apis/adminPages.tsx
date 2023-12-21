@@ -201,7 +201,7 @@ export default {
                     numColumnsForm={1}
                     name="api"
                     columns={DataTable2.columns(
-                        DataTable2.column("name", "name", true, row => <XStack id={"api-datatable-" + row.name}>{row.name}</XStack>),
+                        DataTable2.column("name", "name", true, row => <XStack id={"apis-datatable-" + row.name}>{row.name}</XStack>),
                         DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),
                         DataTable2.column("object", "object", true, row => <Chip text={row.object} color={row.object == 'None' ? '$gray5' : '$color5'} />),
                     )}
