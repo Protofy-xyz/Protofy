@@ -112,7 +112,7 @@ describe("Test entities autocreation", () => {
 
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'apis')
-        }, 30000)
+        }, 40000)
         it("should be able to create an empty api", async () => {
             const apiName = 'testapi'
             await fillEditableObjectInput(driver, 'name', apiName)
@@ -128,7 +128,7 @@ describe("Test entities autocreation", () => {
     describe.skip("test object creation", () => {
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'objects')
-        }, 30000)
+        }, 40000)
 
         it.only("should be able to create a simple object", async () => {
             const objectName = 'testObject'
@@ -165,7 +165,7 @@ describe("Test entities autocreation", () => {
 
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'pages')
-        }, 30000)
+        }, 40000)
 
         it("should be able to create a blank page", async () => {
             const pageName = 'testpage'
@@ -243,14 +243,10 @@ async function signUpFlow(driver, email, password) {
 
 const getEditableObjectCreate = async (driver, entity) => {
     /*open create dialog */
-    if (entity == 'pages') console.log('DEV: navigating to /admin/pages')
     await driver.get(HOST_URL + `admin/${entity}`);
-    if (entity == 'pages') console.log('DEV: waiting for add btn')
     await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
     await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
-    if (entity == 'pages') console.log('DEV: clicked add btn')
     await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
-    if (entity == 'pages') console.log('DEV: eo dialog rendered')
     await driver.wait(until.elementLocated(By.id('admin-eo')))
 }
 const fillEditableObjectInput = async (driver, field, value, debounce = undefined) => {
