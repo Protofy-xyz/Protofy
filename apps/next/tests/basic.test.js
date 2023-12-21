@@ -86,9 +86,12 @@ describe("Test entities autocreation", () => {
             await driver.quit()
         }
     })
-    it.only("should be able to create an empty api", async () => {
-        // const output = execSync(`cd ${path.join(__dirname, '..', '..','..')} && yarn add-user ${USER_IDENTIFIER} ${USER_PASSWORD} admin`, {encoding: 'utf-8'})
-        // expect(output.includes('Done')).toBeTruthy();
+    it("should be able to create an empty api", async () => {
+        try {
+            const output = execSync(`cd ${path.join(__dirname, '..', '..', '..')} && yarn add-user ${USER_IDENTIFIER} ${USER_PASSWORD} admin`, { encoding: 'utf-8', stdio: 'inherit' })
+            expect(output.includes('Done')).toBeTruthy();
+        }catch(e){} // Prevent crash when user already exist
+
         const TEMPLATES = {
             Automatic_CRUD: 0,
             Automatic_CRUD_Custom_Storage: 1,
