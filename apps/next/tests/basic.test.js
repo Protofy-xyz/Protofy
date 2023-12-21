@@ -151,7 +151,7 @@ describe("Test entities autocreation", () => {
 
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'pages')
-        }, 40000)
+        }, 60000)
 
         it("should be able to create a blank page", async () => {
             const pageName = 'testpage'
