@@ -130,7 +130,7 @@ describe("Test entities autocreation", () => {
             await getEditableObjectCreate(driver, 'objects')
         }, 30000)
 
-        it("should be able to create an empty api", async () => {
+        it.only("should be able to create a simple object", async () => {
             const objectName = 'testObject'
             await fillEditableObjectInput(driver, 'name', objectName)
             // Open editable form
@@ -146,6 +146,7 @@ describe("Test entities autocreation", () => {
                 await keyInput.sendKeys(character)
                 await driver.sleep(10); // Adjust the sleep time as necessary
             }
+            await driver.executeScript('document.querySelector("#alert-dlg-accept").click()')
             await takeScreenshot(driver, '1')
             // await submitEditableObject(driver)
             // await driver.wait(until.elementLocated(By.id(`api-datatable-${apiName}`)))

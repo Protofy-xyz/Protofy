@@ -85,7 +85,7 @@ export const AlertDialog = forwardRef(({
                                         </Button>
                                     </Tinted>}
                                 <Tinted tint={acceptTint}>
-                                    <Button f={1} onPress={async () => {
+                                    <Button id="alert-dlg-accept" f={1} onPress={async () => {
                                         setLoading(true)
                                         try {
                                             await onAccept(setOpen !== undefined ? setOpen : _setOpen)
