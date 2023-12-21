@@ -13,6 +13,7 @@
     "kill": "pm2 kill",
     "status": "pm2 status api",
     "build": "cd ../.. && yarn build && cd apps/admin && next build",
+    "export": "next export",
     "serve": "NODE_ENV=production next start --port 4000",
     "lint": "next lint"
   },
@@ -27,6 +28,7 @@
     "app": "0.0.0",
     "compare-versions": "^3.4.0",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "leva": "^0.9.35",
     "next": "^13.5.2",
     "protolib": "0.0.1",

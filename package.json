@@ -17,6 +17,7 @@
     "service-start-dev-fast": "pm2 start ecosystem.config.js && yarn monit",
     "start": "yarn start-dev",
     "start-prod": "NODE_ENV=production npm-run-all --parallel api-prod admin-api-prod web:serve proxy-prod",
+    "start-dev-full": "FULLDEV=1 yarn start-dev",
     "start-dev": "yarn prepare-dev && node prepare.js && yarn pre-build && yarn start-dev-fast",
     "start-dev-latest": "yarn prepare-dev && node prepare.js --latest && yarn pre-build && yarn start-dev-fast",
     "start-dev-fast": "pm2 start ecosystem.config.js --no-daemon",
