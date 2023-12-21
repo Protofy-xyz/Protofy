@@ -125,7 +125,7 @@ describe("Test entities autocreation", () => {
         }, 30000)
     })
 
-    describe.skip("test object creations", () => {
+    describe.skip("test object creation", () => {
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'objects')
         }, 30000)
@@ -138,6 +138,39 @@ describe("Test entities autocreation", () => {
             // await driver.wait(until.elementLocated(By.id(`api-datatable-${apiName}`)))
             // const dt_api_name = await driver.findElement(By.id(`api-datatable-${apiName}`)).getText()
             // expect(dt_api_name).toBe(apiName);
+        }, 30000)
+    })
+
+    describe.skip("test page creation", () => {
+        const PAGE_TEMPLATES = {
+            BLANK: "blank",
+            DEFAULT: "default",
+            ADMIN: "admin",
+            LANDING: "landing"
+        }
+
+        beforeEach(async () => {
+            await getEditableObjectCreate(driver, 'pages')
+        }, 30000)
+
+        it("should be able to create a blank page", async () => {
+            const pageName = 'testPage'
+            const pageRoute = 'testpage'
+            // Select template
+            const pageTemplateElem = await driver.findElement(By.id(`pages-template-${PAGE_TEMPLATES.BLANK}`))
+            await pageTemplateElem.click()
+            const addPageButtonElem1 = await driver.findElement(By.id(`admin-pages-add-btn`))
+            await addPageButtonElem1.click()
+            // Configure page
+            await fillEditableObjectInput(driver, 'name', pageName)
+            await fillEditableObjectInput(driver, 'route', pageRoute)
+            const addPageButtonElem2 = await driver.findElement(By.id(`admin-pages-add-btn`))
+            await addPageButtonElem2.click()
+            await driver.wait(until.elementLocated(By.id(`pages-datatable-${pageName}`)))
+            await takeScreenshot(driver, '2')
+            const dt_page_name = await driver.findElement(By.id(`pages-datatable-${pageName}`)).getText()
+            await takeScreenshot(driver, '3')
+            expect(dt_page_name).toBe(pageName);
         }, 30000)
     })
 })

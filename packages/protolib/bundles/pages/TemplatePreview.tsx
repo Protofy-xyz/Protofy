@@ -11,7 +11,7 @@ export default ({ template, isSelected, onPress, theme }) => {
     let width = 238 * 1.5
     return (
         <Tinted>
-            <YStack onPress={onPress} onHoverIn={() => setPreviewVisible(true)} onHoverOut={() => setPreviewVisible(false)} overflow='hidden' borderWidth={isSelected ? "$1" : "$0.5"} borderColor={isSelected ? "$color7" : "$gray8"} cursor='pointer' borderRadius={"$3"}>
+            <YStack id={"pages-template-" + template} onPress={onPress} onHoverIn={() => setPreviewVisible(true)} onHoverOut={() => setPreviewVisible(false)} overflow='hidden' borderWidth={isSelected ? "$1" : "$0.5"} borderColor={isSelected ? "$color7" : "$gray8"} cursor='pointer' borderRadius={"$3"}>
                 <Image
                     source={{ height: height, width: width, uri: templateUrl }}
                 />

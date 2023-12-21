@@ -15,9 +15,8 @@ export const Slides = ({ slides, lastButtonCaption, onFinish }) => {
         .join(" / ");
 
     return (
-        <YStack w={800} h={700} p="$3" f={1}>
-
-            <XStack mt="$4" justifyContent="space-between" width="100%">
+        <YStack id="admin-dataview-create-dlg" w={800} h={700} p="$3" f={1}>
+            <XStack id="admin-eo" mt="$4" justifyContent="space-between" width="100%">
                 <Stack flex={1}>
                     <Text fontWeight={"600"} fontSize={16} color="$gray9">{titlesUpToCurrentStep}</Text>
                 </Stack>
@@ -45,7 +44,7 @@ export const Slides = ({ slides, lastButtonCaption, onFinish }) => {
                 }} >Back
                 </Button> : <></>}
                 <Tinted>
-                    <Button w={250} onPress={async (e) => {
+                    <Button id="admin-pages-add-btn" w={250} onPress={async (e) => {
                         e.stopPropagation();
                         if (post_step) {
                             setStep(post_step)
