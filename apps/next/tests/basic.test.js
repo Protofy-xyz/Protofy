@@ -133,6 +133,19 @@ describe("Test entities autocreation", () => {
         it("should be able to create an empty api", async () => {
             const objectName = 'testObject'
             await fillEditableObjectInput(driver, 'name', objectName)
+            // Open editable form
+            await driver.executeScript('document.querySelector("#eo-formgroup>span>div>div>span>button").click()')
+            await driver.executeScript('document.querySelector("#eo-obj-comp-btn").click()')
+            // Fill object key
+            const keyName = "myKey"
+            const locator = By.xpath("//*[@id='eo-add-field-input']/span/input")
+            await driver.wait(until.elementLocated(locator))
+            const keyInput = await driver.findElement(locator)
+            await keyInput.clear() // Clear previous values
+            for (let character of keyName) { // Send keys slowly 
+                await keyInput.sendKeys(character)
+                await driver.sleep(10); // Adjust the sleep time as necessary
+            }
             await takeScreenshot(driver, '1')
             // await submitEditableObject(driver)
             // await driver.wait(until.elementLocated(By.id(`api-datatable-${apiName}`)))
@@ -229,16 +242,16 @@ async function signUpFlow(driver, email, password) {
 
 const getEditableObjectCreate = async (driver, entity) => {
     /*open create dialog */
-    if(entity == 'pages') console.log('DEV: navigating to /admin/pages')
+    if (entity == 'pages') console.log('DEV: navigating to /admin/pages')
     await driver.get(HOST_URL + `admin/${entity}`);
-    if(entity == 'pages') console.log('DEV: waiting for add btn')
+    if (entity == 'pages') console.log('DEV: waiting for add btn')
     await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
     await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
-    if(entity == 'pages') console.log('DEV: clicked add btn')
+    if (entity == 'pages') console.log('DEV: clicked add btn')
     await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
-    if(entity == 'pages') console.log('DEV: eo dialog rendered')
+    if (entity == 'pages') console.log('DEV: eo dialog rendered')
     await driver.wait(until.elementLocated(By.id('admin-eo')))
-} 
+}
 const fillEditableObjectInput = async (driver, field, value, debounce = undefined) => {
     /*fill input */
     const nameInput = await driver.findElement(By.id(`editable-object-input-${field}`))
@@ -247,7 +260,7 @@ const fillEditableObjectInput = async (driver, field, value, debounce = undefine
     if (sendSlowly) {
         for (let character of value) { // Send keys slowly 
             await nameInput.sendKeys(character);
-            await driver.sleep(debounce??10); // Adjust the sleep time as necessary
+            await driver.sleep(debounce ?? 10); // Adjust the sleep time as necessary
         }
     } else {
         await nameInput.sendKeys(value);

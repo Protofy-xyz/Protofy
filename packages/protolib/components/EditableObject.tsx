@@ -194,7 +194,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
       title={'Add new field'}
       description={""}
     >
-      <YStack f={1} alignItems="center" mt="$6" justifyContent="center">
+      <YStack f={1} id="eo-add-field-input" alignItems="center" mt="$6" justifyContent="center">
         <Input
           f={1}
           value={name}
@@ -211,7 +211,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
         />
       </YStack>
     </AlertDialog>
-    {(mode == 'edit' || mode == 'add') && <Button mt="$5" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
+    {(mode == 'edit' || mode == 'add') && <Button id={"eo-obj-comp-btn"} mt="$5" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
   </FormGroup>
 }
 
@@ -219,7 +219,7 @@ const FormGroup = ({ ele, title, children, icon, simple = false, path }) => {
   const [opened, setOpened] = useContext(OpenedSectionsContext);
   const name = [...path, ele.name].join("/")
   // console.log("PATH: ", [...path, ele.name].join("/"))
-  const content = <XStack br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}>
+  const content = <XStack id="eo-formgroup" br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}>
     <Accordion value={opened} onValueChange={(localOpened) => setOpened(localOpened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
       <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={name}>
         <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes(name) ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
