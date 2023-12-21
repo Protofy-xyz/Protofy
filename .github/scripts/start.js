@@ -9,7 +9,7 @@ const RETRY_TIME = 1000 // 1 sec
 // Run project
 const start = () => {
     console.log('Starting project...')
-    exec(`cd ${PROJECT_DIR} && yarn dev > /dev/null &`, { encoding: 'utf-8' });
+    exec(`cd ${PROJECT_DIR} && yarn dev-full > /dev/null &`, { encoding: 'utf-8' });
 }
 
 const healthCheck = () => { // Check system is up and ready to use
