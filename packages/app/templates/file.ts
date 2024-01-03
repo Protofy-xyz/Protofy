@@ -13,6 +13,10 @@ export const file = async (lib, path, vars) => {
     }
 
     const template = (await lib.fs.promises.readFile(templatePath)).toString()
+    Handlebars.registerHelper('curlyBraces', function (options) {
+        var content = options.fn(this)
+        return "{{" + content + "}}";
+    });
     const templateFunction = Handlebars.compile(template);
     const result = templateFunction({ name: vars.name, ...vars.data?.options?.variables });
     await lib.fs.promises.writeFile(apiPath, result)
