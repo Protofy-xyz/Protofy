@@ -9,7 +9,7 @@ import { Sidebar } from "./Sidebar";
 import MainPanel from "./MainPanel";
 import Monaco from "./Monaco";
 import { X, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, ChevronRight } from "lucide-react";
-import { FlowFactory } from 'protoflow';
+import { Flows } from 'protolib';
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
@@ -18,7 +18,8 @@ import UIMasks from '../masks/UI.mask.json';
 import { SidebarItem } from "./Sidebar/SideBarItem";
 
 export const UIFLOWID = "flows-ui"
-const Flow = FlowFactory(UIFLOWID)
+/* 
+const Flow = FlowFactory(UIFLOWID) */
 // const uiStore = useFlowsStore()
 
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {} }) {
@@ -162,7 +163,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         visible={customizeVisible}
                         onChange={(val) => setCustomizeVisible(val)}
                     >
-                        <Flow
+                        <Flows
                             disableDots={!isActive || preview}
                             sourceCode={currentPageContent}
                             setSourceCode={setCurrentPageContent}
@@ -172,7 +173,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             // store={uiStore}
                             config={{ masks: UIMasks }}
                             zoomOnDoubleClick={!preview}
-                            flowId={UIFLOWID}
+                            uiFlowId={UIFLOWID}
                             themeMode={'dark'}
                             bgColor={'#252526'}
                             theme={theme}

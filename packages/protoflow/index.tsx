@@ -1,7 +1,7 @@
 export {default as Node, FlowPort, NodeParams, HandleOutput} from './src/Node'
 import {Field as IField} from './src/Node'
 export type Field = IField
-export {default as FlowFactory} from './src/Flow'
+export {default as FlowFactory} from './src/FlowBase'
 export {default as AddPropButton} from './src/AddPropButton'
 export { NodeTypes } from './src/nodes';
 export { default as CustomEdge } from './src/Edge'
