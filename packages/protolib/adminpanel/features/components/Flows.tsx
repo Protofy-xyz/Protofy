@@ -1,13 +1,12 @@
-import dynamic from 'next/dynamic'
-import { XStack } from 'tamagui'
+import dinamyc from 'next/dynamic'
+import React from 'react'
+import { YStack } from 'tamagui'
 
-const FlowsWidget = dynamic(() => import('protolib/adminpanel/features/components/FlowsWidget'), {
-  loading: () => <XStack jc='center' ai='center' height="100%" width="100%">
-    Loading
-  </XStack>,
-  ssr: false
+const FlowsFactory = dinamyc(() => import('protoflow').then((mod) => mod.FlowFactory), {
+    loading: () => <div>Loading...</div>,
+    ssr: false
 })
 
-export default function Flows(props) {
-  return <FlowsWidget {...props} />
+export default (props) => {
+    return <FlowsFactory {...props} />
 }
