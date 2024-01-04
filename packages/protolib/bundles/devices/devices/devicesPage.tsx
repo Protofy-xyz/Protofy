@@ -245,7 +245,7 @@ export default {
           onSelectItem: () => { },
           getBody: (data, width) => {
             var subsystemData = []
-            data.subsystem.forEach(element => {
+            data.subsystem?.forEach(element => {
               subsystemData.push(subsystem(element, data.name))
             });
             return <YStack px={"$2"} pb="$5" f={1}>
