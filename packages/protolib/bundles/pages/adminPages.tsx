@@ -72,7 +72,7 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
 export default {
     'pages': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
-            const defaultData = { data: { web: true, electron: false, protected: false, template: '' } }
+            const defaultData = { data: { web: true, electron: false, protected: false, template: 'blank' } }
             const router = useRouter();
             const { replace } = usePageParams(pageState)
             const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
