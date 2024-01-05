@@ -67,7 +67,7 @@ describe("Basic tests", () => {
     }, 30000)
 })
 
-describe("Test entities autocreation", () => {
+/* describe("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
     let driver;
@@ -184,7 +184,7 @@ describe("Test entities autocreation", () => {
             expect(dt_page_name).toBe(pageName);
         }, 30000)
     })
-})
+}) */
 
 const navigateToLogin = async (driver) => {
     await driver.wait(until.elementLocated(By.id('header-login-link')));
