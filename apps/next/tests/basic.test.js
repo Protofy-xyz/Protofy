@@ -99,7 +99,11 @@ describe("Test entities autocreation", () => {
 
     afterEach(async () => {
         if (driver) {
-            await driver.quit()
+            try {
+               await driver.quit()
+            }catch(e){
+                console.error(e)
+            }
         }
     })
 
@@ -122,19 +126,16 @@ describe("Test entities autocreation", () => {
         }
  
         beforeEach(async () => {
-            console.log('0. PREPARE')
             await getEditableObjectCreate(driver, 'apis')
         }, 30000)
+        
         it("should be able to create an empty api", async () => {
             const apiName = 'testapi'
-            console.log('1. FILL')
             await fillEditableObjectInput(driver, 'name', apiName)
             await fillEditableObjectSelect(driver, 'template', TEMPLATES.Empty)
             await fillEditableObjectSelect(driver, 'object', OBJECTS.Without_Object)
-            console.log('2. SUBMIT')
             await submitEditableObject(driver)
             await driver.wait(until.elementLocated(By.id(`apis-datatable-${apiName}`)))
-            console.log('3. CHECK')
             const dt_api_name = await driver.findElement(By.id(`apis-datatable-${apiName}`)).getText()
             expect(dt_api_name).toBe(apiName);
         }, 30000)
