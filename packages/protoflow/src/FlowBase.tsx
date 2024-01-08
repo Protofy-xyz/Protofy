@@ -28,7 +28,7 @@ import Diff from 'deep-diff';
 import DynamicCustomComponent from './DynamicCustomComponent';
 import GetDynamicCustomComponent from './DynamicCustomComponent';
 import { generateId } from './lib/IdGenerator';
-import DeviceCustomMasks from '../../app/bundles/masks.ts'
+import DeviceCustomMasks from '../../app/bundles/masks'
 
 interface customComponentInterface {
     check: Function,
@@ -148,11 +148,6 @@ const FlowsBase = ({
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [hasChanges, setHasChanges] = useState(false);
     const [prevNodeData, setPrevNodeData] = useState(deleteAdditionalKeys(nodeData));
-
-    console.log('aaaaa testestsetsertst')
-    useEffect(() => {
-        console.log('base props', sourceCode)
-    }, [])
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge({ ...params, type: 'custom', animated: false }, eds)), [setEdges]);
 
