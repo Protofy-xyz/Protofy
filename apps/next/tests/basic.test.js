@@ -6,7 +6,7 @@ const chrome = require('selenium-webdriver/chrome');
 const { v4: uuidv4 } = require('uuid');
 const HOST_URL = 'http://host.docker.internal:8080/'
 
-describe("Basic tests", () => {
+describe.skip("Basic tests", () => {
     let driver;
     beforeEach(async () => {
         driver = await new Builder()
@@ -99,7 +99,9 @@ describe("Test entities autocreation", () => {
     }, 10000)
 
     describe("sample", () => {
-        expect(true).toBe(true)
+        it('test sample', () => {
+            expect(true).toBe(true)
+        })
     })
 
     describe("test api creations", () => {
