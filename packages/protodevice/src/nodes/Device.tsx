@@ -50,7 +50,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const Device = (node: any = {}, nodeData: any = {}, topics: any = {}) => {
+const Device = ({node= {}, nodeData= {}, topics = {}}: any) => {
     const { publish, data } = topics;
     const { id, type } = node
     const useFlowsStore = useContext(FlowStoreContext)

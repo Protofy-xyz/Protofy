@@ -11,6 +11,8 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { getPendingResult } from "protolib/base";
 import { usePendingEffect } from "protolib";
 import { Flows } from "protolib";
+import { getFlowMasks } from "app/bundles/masks";
+import { useRouter } from 'next/router'
 
 const DeviceDefitionIcons = {
   name: Tag,
@@ -30,6 +32,7 @@ export default {
     const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
     // const [isModified,setIsModified] = React.useState(false)
     const [editedObjectData, setEditedObjectData] = React.useState({})
+    const router = useRouter()
 
     const saveToFile = (code, path) => {
       editedObjectData.setData({ components: code, sdkConfig: { board: "esp32dev", framework: { type: "arduino" } } })
@@ -62,7 +65,7 @@ export default {
             }}
             showActionsBar={isSaveActive}
             mode={"device"}
-            customComponents={"device"}
+            customComponents={router.pathname && typeof window !== undefined ? getFlowMasks(router.pathname) : []}
             bridgeNode={false}
             setSourceCode={(sourceCode) => {
               console.log('set new sourcecode from flows: ', sourceCode)

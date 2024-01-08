@@ -1,12 +1,16 @@
-// import OutputPin from "./OutputPin";
-import Wifi from './Wifi'
-import Mqtt from './Mqtt'
-import DeepSleep from './DeepSleep'
-import Device from "./Device";
-import BinarySensor from "./BinarySensor";
-import NeopixelsBus from "./NeopixelsBus";
-import Relay from "./Relay";
-import ADCSensor from "./ADCSensor";
+import dynamic from 'next/dynamic'
+
+const Wifi = dynamic(() => import('./Wifi'))
+const Device = dynamic(() => import('./Device'))
+const Mqtt = dynamic(() => import('./Mqtt'))
+const DeepSleep = dynamic(() => import('./DeepSleep'))
+const BinarySensor = dynamic(() => import('./BinarySensor'))
+const NeopixelsBus = dynamic(() => import('./NeopixelsBus'))
+const Relay = dynamic(() => import('./Relay'))
+const ADCSensor = dynamic(() => import('./ADCSensor'))
+const Dfplayer = dynamic(() => import('./Dfplayer'))
+const ModbusLoadCell = dynamic(() => import('./ModbusLoadCell'))
+
 // import PulseCounter from "./PulseCounter";
 // import LEDCOutput from "./LEDCOutput";
 // import PIRSensor from "./PIRSensor"
@@ -15,13 +19,11 @@ import ADCSensor from "./ADCSensor";
 // import NFCReader from "./NFCReader";
 // import UltrasonicDistanceSensor from "./UltrasonicDistanceSensor";
 // import ISOutput from "./ISOutput";
-import Dfplayer from "./Dfplayer";
 // import XiaomiMiFlora from "./XiaomiMiFlora";
 // import ClimateIR from "./ClimateIR";
 // import Servo from "./Servo";
 // import Mpr121 from "./Mpr121";
 // import TempHumidity from "./TempHumidity";
-import ModbusLoadCell from "./ModbusLoadCell";
 // import BH1750 from "./BH1750";
 // import HM3301 from "./HM3301";
 // import SEN0377 from "./SEN0377";
@@ -29,6 +31,7 @@ import ModbusLoadCell from "./ModbusLoadCell";
 // import I2cSensorMatrix from "./I2cSensorMatrix";
 // import SEN55 from "./SEN55";
 // import MHZ19 from "./MHZ19";
+
 
 const deviceMasks = [
   {
@@ -256,10 +259,10 @@ const deviceMasks = [
   //   getInitialData: () => { return { to: 'mhz19', param1: '""', param2: '', param3: '"30s"'} }
   // }
 ]
-
+  
 export default deviceMasks.map((e) => {
   return {
-      ...e,
-      capabilities: ["esphome"]
+    ...e,
+    capabilities: ["esphome"]
   };
 });

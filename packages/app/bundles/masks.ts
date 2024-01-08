@@ -1,12 +1,20 @@
 import devicesMasks from 'protodevice/src/nodes'
-// import getDevicesCapabilities from 'protodevice/src/getCapabilities'
 
-// export const getCapabilities = (args:any)=>{
+const paths = {
+    devices: [
+        'devices', 
+        'deviceDefinitions',
+        'deviceBoards',
+        'deviceCores',
+        'deviceSdks'
+    ]
+}
 
-// }
+export const getFlowMasks = (path: string) => {
+    const pathParts = path.split('/')
+    const segment = pathParts[pathParts.length - 1]
 
-const masks = [
-    ...devicesMasks
-];
-
-export default masks;
+    console.log('segment', segment, devicesMasks)
+    if (paths.devices.includes(segment)) return devicesMasks 
+    return []
+}
