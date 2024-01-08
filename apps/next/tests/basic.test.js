@@ -96,7 +96,7 @@ describe("Test entities autocreation", () => {
         if (driver) {
             await driver.quit()
         }
-    })
+    }, 10000)
 
     describe("sample", () => {
         expect(true).toBe(true)
