@@ -67,7 +67,7 @@ describe("Basic tests", () => {
     }, 30000)
 })
 
-/* describe("Test entities autocreation", () => {
+describe("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
     let driver;
@@ -98,7 +98,7 @@ describe("Basic tests", () => {
         }
     })
 
-    describe("test api creations", () => {
+    describe.it("test api creations", () => {
         const TEMPLATES = {
             Automatic_CRUD: 0,
             Automatic_CRUD_Custom_Storage: 1,
@@ -109,7 +109,7 @@ describe("Basic tests", () => {
         const OBJECTS = {
             Without_Object: 0
         }
-
+ 
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'apis')
         }, 30000)
@@ -184,7 +184,7 @@ describe("Basic tests", () => {
             expect(dt_page_name).toBe(pageName);
         }, 30000)
     })
-}) */
+})
 
 const navigateToLogin = async (driver) => {
     await driver.wait(until.elementLocated(By.id('header-login-link')));
