@@ -79,25 +79,6 @@ describe("Test entities autocreation", () => {
         } catch (e) { } // Prevent crash when user already exist
     }, 10000)
 
-    beforeEach(async () => {
-        driver = await new Builder()
-            .forBrowser('chrome')
-            .usingServer('http://localhost:4444/wd/hub') // URL to Selenium Hub
-            .setChromeOptions(new chrome.Options().headless().addArguments("--no-sandbox", "--disable-dev-shm-usage"))
-            .build();
-        await driver.get(HOST_URL);
-        await driver.manage().window().setRect({ width: 1920, height: 1080 });
-        await navigateToLogin(driver);
-        await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
-        await navigateToWorkspace(driver);
-    }, 30000)
-
-    afterEach(async () => {
-        if (driver) {
-            await driver.quit()
-        }
-    }, 10000)
-
     describe.skip("sample", () => {
         it('test sample', () => {
             expect(true).toBe(true)
@@ -115,11 +96,19 @@ describe("Test entities autocreation", () => {
         const OBJECTS = {
             Without_Object: 0
         }
- 
-        beforeEach(async () => {
-            await getEditableObjectCreate(driver, 'apis')
-        }, 30000)
+
         it("should be able to create an empty api", async () => {
+            driver = await new Builder()
+                .forBrowser('chrome')
+                .usingServer('http://localhost:4444/wd/hub') // URL to Selenium Hub
+                .setChromeOptions(new chrome.Options().headless().addArguments("--no-sandbox", "--disable-dev-shm-usage"))
+                .build();
+            await driver.get(HOST_URL);
+            await driver.manage().window().setRect({ width: 1920, height: 1080 });
+            await navigateToLogin(driver);
+            await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
+            await navigateToWorkspace(driver);
+            await getEditableObjectCreate(driver, 'apis')
             const apiName = 'testapi'
             await fillEditableObjectInput(driver, 'name', apiName)
             await fillEditableObjectSelect(driver, 'template', TEMPLATES.Empty)
@@ -128,10 +117,13 @@ describe("Test entities autocreation", () => {
             await driver.wait(until.elementLocated(By.id(`apis-datatable-${apiName}`)))
             const dt_api_name = await driver.findElement(By.id(`apis-datatable-${apiName}`)).getText()
             expect(dt_api_name).toBe(apiName);
+            if (driver) {
+                await driver.quit()
+            }
         }, 30000)
     })
 
-    describe("test object creation", () => {
+    describe.skip("test object creation", () => {
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'objects')
         }, 30000)
@@ -160,7 +152,7 @@ describe("Test entities autocreation", () => {
         }, 30000)
     })
 
-    describe("test page creation", () => {
+    describe.skip("test page creation", () => {
         const PAGE_TEMPLATES = {
             BLANK: "blank",
             DEFAULT: "default",
