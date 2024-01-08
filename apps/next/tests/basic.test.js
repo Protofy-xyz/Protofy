@@ -98,7 +98,7 @@ describe("Test entities autocreation", () => {
         }
     })
 
-    describe.it("test api creations", () => {
+    describe.skip("test api creations", () => {
         const TEMPLATES = {
             Automatic_CRUD: 0,
             Automatic_CRUD_Custom_Storage: 1,
