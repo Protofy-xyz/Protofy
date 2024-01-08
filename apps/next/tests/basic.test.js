@@ -80,34 +80,25 @@ describe("Test entities autocreation", () => {
     }, 10000)
 
     beforeEach(async () => {
-        // try {
-        //     driver = await new Builder()
-        //     .forBrowser('chrome')
-        //     .usingServer('http://localhost:4444/wd/hub') // URL to Selenium Hub
-        //     .setChromeOptions(new chrome.Options().headless().addArguments("--no-sandbox", "--disable-dev-shm-usage"))
-        //     .build();
-        //     await driver.get(HOST_URL);
-        //     await driver.manage().window().setRect({ width: 1920, height: 1080 });
-        //     await navigateToLogin(driver);
-        //     await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
-        //     await navigateToWorkspace(driver);
-        // }catch(e) {
-        //     console.error(e)
-        // }
+        driver = await new Builder()
+            .forBrowser('chrome')
+            .usingServer('http://localhost:4444/wd/hub') // URL to Selenium Hub
+            .setChromeOptions(new chrome.Options().headless().addArguments("--no-sandbox", "--disable-dev-shm-usage"))
+            .build();
+        await driver.get(HOST_URL);
+        await driver.manage().window().setRect({ width: 1920, height: 1080 });
+        await navigateToLogin(driver);
+        await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
+        await navigateToWorkspace(driver);
     }, 30000)
-    
 
     afterEach(async () => {
-        // if (driver) {
-        //     try {
-        //        await driver.quit()
-        //     }catch(e){
-        //         console.error(e)
-        //     }
-        // }
-    })
+        if (driver) {
+            await driver.quit()
+        }
+    }, 10000)
 
-    describe("sample", () => {
+    describe.skip("sample", () => {
         it('test sample', () => {
             expect(true).toBe(true)
         })
@@ -128,7 +119,6 @@ describe("Test entities autocreation", () => {
         beforeEach(async () => {
             await getEditableObjectCreate(driver, 'apis')
         }, 30000)
-        
         it("should be able to create an empty api", async () => {
             const apiName = 'testapi'
             await fillEditableObjectInput(driver, 'name', apiName)
