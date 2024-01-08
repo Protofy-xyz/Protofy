@@ -28,10 +28,19 @@ import Diff from 'deep-diff';
 import DynamicCustomComponent from './DynamicCustomComponent';
 import GetDynamicCustomComponent from './DynamicCustomComponent';
 import { generateId } from './lib/IdGenerator';
+import DeviceCustomMasks from '../../app/bundles/masks.ts'
 
 interface customComponentInterface {
     check: Function,
     getComponent: Function
+}
+
+function getCustomMasks(type) {
+    if (type == 'device') {
+        return DeviceCustomMasks
+    }
+
+    return []
 }
 
 interface FlowProps {
@@ -48,7 +57,8 @@ interface FlowProps {
     onReload?: Function,
     disableStart?: boolean,
     getFirstNode?: any,
-    customComponents?: customComponentInterface[],
+    //customComponents?: customComponentInterface[],
+    customComponents?: any,
     hideBaseComponents?: boolean,
     topics?: any,
     flowId?: string,
@@ -83,7 +93,8 @@ const FlowsBase = ({
     onReload,
     disableStart = false,
     getFirstNode = (nodes) => nodes.find(n => n.id && n.id.startsWith('SourceFile')),
-    customComponents = [],
+    //customComponents = [],
+    customComponents = "",
     hideBaseComponents = false,
     positions,
     topics,
@@ -128,7 +139,7 @@ const FlowsBase = ({
     const appendedCustomComponents = useFlowsStore(state => state.customComponents)
     const nodeData = useFlowsStore(state => state.nodeData)
     const menuState = useFlowsStore(state => state.menuState)
-    const _customComponents = [...customComponents, ...(config?.masks?.map(m => GetDynamicCustomComponent(m)) ?? [])].filter(x => x)
+    const _customComponents = [...getCustomMasks(customComponents), ...(config?.masks?.map(m => GetDynamicCustomComponent(m)) ?? [])].filter(x => x)
     const nodeTypes = useMemo(() => (NodeTypes), []);
     const edgeTypes = useMemo(() => {
         return { custom: (props) => CustomEdge(props, bridgeNode) }
