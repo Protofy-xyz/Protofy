@@ -255,6 +255,7 @@ export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customCom
                                     style={{ display: !customNodeList.map(n => n.id.toLowerCase().replace(/\s+/g, '')).includes(customNode.id.toLowerCase().replace(/\s+/g, '')) ? 'none' : 'flex', marginBottom: '10px' }}>
                                     <SelectedBorder isSelected={isSelected}>
                                         {customNode.getComponent({ type: customNode.type }, {}, null, customNode)}
+                                        {/*React.createElement(mask?.getComponent, { { type: customNode.type }, {}, null, customNode}) */}
                                     </SelectedBorder>
                                 </div>) : null
                         })}

@@ -5,7 +5,7 @@ import {Node, Field, NodeParams } from 'protoflow';
 // import { useDeviceStore } from "../oldThings/DeviceStore";
 // import { useSubscription } from "mqtt-react-hooks";
 
-const ADCSensor = (node: any = {}, nodeData = {}, children) => {
+const ADCSensor = ({node= {}, nodeData= {}, children}: any) => {
     const [name,setName] = React.useState(nodeData['param1'])
     const nameErrorMsg = 'Reserved name'
     const intervalErrorMsg = 'Add units h/m/s/ms'

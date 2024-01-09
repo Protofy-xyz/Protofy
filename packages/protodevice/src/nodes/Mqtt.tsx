@@ -1,6 +1,6 @@
 import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 
-const Mqtt = (node:any={}, nodeData={}, children) => {
+const Mqtt = ({node= {}, nodeData= {}, children}: any) => {
 
     const nodeParams: Field[] = [
         { label: 'Broker', field: 'param1', type: 'input', static: true },

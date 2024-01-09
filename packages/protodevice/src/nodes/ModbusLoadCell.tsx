@@ -43,7 +43,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const ModbusLoadCell = (node: any = {}, nodeData = {}, children) => {
+const ModbusLoadCell = ({node= {}, nodeData= {}, children}: any) => {
     const transitionErrorMsg = 'Add units s/ms'
 
     const nodeParams: Field[] = [

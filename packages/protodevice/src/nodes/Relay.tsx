@@ -3,7 +3,7 @@ import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 import { getSubsystem } from "../device/Relay";
 // import subsystem from "./utils/subsystem";
 
-const Relay = (node:any={}, nodeData={}, children) => {
+const Relay = ({node= {}, nodeData= {}, children}: any) => {
 
     const nodeParams: Field[] = [
         { label: 'Name', static:true, field: 'param1', type: 'input'},

@@ -38,7 +38,7 @@ const deviceMasks = [
     id: 'esp32dev',
     type: 'ArrayLiteralExpression',
     check: (node, nodeData) => node.type == "ArrayLiteralExpression" && nodeData['element-1'] == '"esp32dev"',
-    getComponent: Device,
+    getComponent: (node, nodeData, children) => <Device node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: '"esp32dev"' } },
     hidden: true,
     nonDeletable: true
@@ -47,14 +47,14 @@ const deviceMasks = [
     id: 'Wifi',
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('wifi'), //TODO: Change output function name
-    getComponent: Wifi,
+    getComponent: (node, nodeData, children) => <Wifi node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'wifi', param1: '"SSID"', param2: '"PASSWORD"', param3: '"none"' } }
   },
   {
     id: 'Mqtt',
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mqtt'), //TODO: Change output function name
-    getComponent: Mqtt,
+    getComponent: (node, nodeData, children) => <Mqtt node={node} nodeData={nodeData} children={children}/>,
     getInitialData: () => { return { to: 'mqtt', param1: '"BROKERADDRESS"', param2: '""' } }
   },
   // {
@@ -68,7 +68,7 @@ const deviceMasks = [
     id: 'Relay',
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('relay'), //TODO: Change output function name
-    getComponent: Relay,
+    getComponent: (node, nodeData, children) => <Relay node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'relay', param1: '""',param2: '"ALWAYS_OFF"' } }
   },
 
@@ -87,21 +87,21 @@ const deviceMasks = [
     id: 'BinarySensor',
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('binarySensor'), //TODO: Change output function name
-    getComponent: BinarySensor,
+    getComponent: (node, nodeData, children) => <BinarySensor node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'binarySensor', param1: '""' } }
   },
   {
     id: 'NeopixelsBus',
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('neopixelsBus'), //TODO: Change output function name
-    getComponent: NeopixelsBus,
+    getComponent: (node, nodeData, children) => <NeopixelsBus node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'neopixelsBus', param1: '""', param2: '16', param3: '"GRB"', param4: '"WS2811"', param5: '"ALWAYS_ON"', param6: '"1s"', param7: '0', param8: false, param9: false, param10: false, param11: false, param12: false, param13: false, param14: false, param15: false, param16: false, param17: false, param18: false } }
   },
   {
     id: 'ADCSensor',
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('adcSensor'),
-    getComponent: ADCSensor,
+    getComponent: (node, nodeData, children) => <ADCSensor node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'adcSensor', param1: '"analogic"', param2: '"30s"', param3: '"auto"' } }
   },
   // {

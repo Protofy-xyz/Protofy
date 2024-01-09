@@ -1,7 +1,7 @@
 import React from "react";
 import {Node, Field, NodeParams } from 'protoflow';
 
-const NeopixelsBus = (node: any = {}, nodeData = {}, children) => {
+const NeopixelsBus = ({node= {}, nodeData= {}, children}: any) => {
     const transitionErrorMsg = 'Add units s/ms'
 
     const nodeParams: Field[] = [

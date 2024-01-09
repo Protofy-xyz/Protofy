@@ -508,7 +508,8 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
 
     if (!skipCustom) {
         const mask = getCustomComponent(node, nodeData, customComponents)
-        const customComponent = React.createElement(mask?.getComponent, { node, nodeData, topics, mask })
+        const customComponent = mask?.getComponent(node, nodeData, topics, mask)
+        //const customComponent = React.createElement(mask?.getComponent, { node, nodeData, topics, mask })
         if (customComponent) {
             return customComponent
         }

@@ -41,7 +41,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const DeepSleep = (node:any={}, nodeData={}, children) => {
+const DeepSleep = ({node= {}, nodeData= {}, children}: any) => {
 
     const nodeParams: Field[] = [
         { label: 'Run duration', field: 'param1', type: 'input', static: true},

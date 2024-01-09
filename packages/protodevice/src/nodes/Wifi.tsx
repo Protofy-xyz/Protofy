@@ -1,6 +1,6 @@
 import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 
-const Wifi = (node:any={}, nodeData={}, children) => {
+const Wifi = ({node= {}, nodeData= {}, children}: any) => {
 
     const nodeParams: Field[] = [
         { label: 'SSID', field: 'param1', type: 'input', static: true },

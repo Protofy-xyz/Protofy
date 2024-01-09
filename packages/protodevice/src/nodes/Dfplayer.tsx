@@ -43,7 +43,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const Dfplayer = (node: any = {}, nodeData = {}, children) => {
+const Dfplayer = ({node= {}, nodeData= {}, children}: any) => {
 
     const nodeParams: Field[] = [
         { label: 'Name', static: true, field: 'param1', type: 'input'},

@@ -2,7 +2,7 @@ import React from "react";
 import { Field, Node, NodeParams } from 'protoflow';
 import NodeBus, { cleanName, generateTopic } from "../NodeBus";
 
-const BinarySensor = (node:any={}, nodeData={}, children) => {
+const BinarySensor = ({node= {}, nodeData= {}, children}: any) => {
     const [name,setName] = React.useState(cleanName(nodeData['param1']))
     const nodeParams: Field[] = [
         { label: 'Name', static: true, field: 'param1', type: 'input', onBlur:()=>{setName(cleanName(nodeData['param1']))}}
