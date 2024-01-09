@@ -1,4 +1,5 @@
 import devicesMasks from 'protodevice/src/nodes'
+import visualuiTemplateMasks from 'visualui/src/masks/UI.mask.json';
 
 const paths = {
     devices: [
@@ -7,13 +8,29 @@ const paths = {
         'deviceBoards',
         'deviceCores',
         'deviceSdks'
+    ], 
+    visualui: [
+        'visualui',
     ]
 }
 
-export const getFlowMasks = (path: string) => {
+export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     const pathParts = path.split('/')
     const segment = pathParts[pathParts.length - 1]
+    const query = JSON.stringify(queryParams)
 
-    if (paths.devices.includes(segment)) return devicesMasks 
+    if (paths.devices.includes(segment)) return devicesMasks
+    if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return []
+
+    return [] 
+}
+
+export const getFlowMasks = (path: string, queryParams: {}) => {
+    const pathParts = path.split('/')
+    const segment = pathParts[pathParts.length - 1]
+    const query = JSON.stringify(queryParams)
+
+    if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return visualuiTemplateMasks
+
     return []
 }

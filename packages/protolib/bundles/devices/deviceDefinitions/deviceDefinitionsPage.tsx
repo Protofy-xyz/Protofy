@@ -47,7 +47,7 @@ export default {
     const cores = coresList.isLoaded ? coresList.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
 
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
-      <AlertDialog open={showDialog} setOpen={(open) => { setShowDialog(open) }} hideAccept={true} style={{ width: "80%", height: "80%", padding: '0px' }}>
+      <AlertDialog open={showDialog} setOpen={(open) => { setShowDialog(open) }} hideAccept={true} style={{ width: "80%", height: "80%", padding: '0px', overflow: 'hidden' }}>
         {/* <Center style={{minWidth: "80%" }}> */}
         <XStack f={1} minWidth={"100%"}>
           <Flows
