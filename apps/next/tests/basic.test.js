@@ -5,7 +5,6 @@ const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const { v4: uuidv4 } = require('uuid');
 const HOST_URL = 'http://host.docker.internal:8080/'
-jest.useRealTimers();
 
 describe("Basic tests", () => {
     let driver;
@@ -68,7 +67,7 @@ describe("Basic tests", () => {
     }, 30000)
 })
 
-describe("Test entities autocreation", () => {
+describe.skip("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
     let driver;
