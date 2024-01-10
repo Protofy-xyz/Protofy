@@ -6,7 +6,6 @@ import { manifest } from "./manifest";
 import ApiCaller from './oldThings/apiCaller';
 // import Settings from './oldThings/settings';
 // import useWebSocket from 'react-use-websocket';
-import { FlowFactory } from 'protoflow';
 // import { useFetch } from 'usehooks-ts'
 import deviceFunctions from './device'
 import DeviceModal from "./DeviceModal";
@@ -18,7 +17,8 @@ import { withTopics } from "react-topics";
 import { Spinner, XStack } from 'tamagui'
 import dynamic from 'next/dynamic'
 import { useThemeSetting } from '@tamagui/next-theme'
-import { Connector, useMqttState, useSubscription  } from 'mqtt-react-hooks';
+import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
+import { Flows } from "protolib";
 
 // class ExternalApiConfig {
 //   config;
@@ -29,9 +29,8 @@ import { Connector, useMqttState, useSubscription  } from 'mqtt-react-hooks';
 
 // const compilerAPIParams = new ExternalApiConfig({url})
 
-// const Flow = FlowFactory('device')
 // const deviceStore = useFlowsStore()
-const MqttStatus = ({})=> {
+const MqttStatus = ({ }) => {
   /*
    * Status list
    * - Offline
@@ -41,26 +40,12 @@ const MqttStatus = ({})=> {
    * - Error: printed in console too
    */
   const { connectionStatus } = useMqttState();
-  useEffect(()=>{
+  useEffect(() => {
     console.log("STATUS -----> ", connectionStatus)
-  },[connectionStatus])
+  }, [connectionStatus])
 
-  return(<></>)
+  return (<></>)
 }
-
-
-
-const FlowsWidget = dynamic(() => import('../../protolib/adminpanel/features/components/FlowsWidget'), {
-    // loading: () => <Center>
-    //     <Spinner size={'large'} scale={3} top={-50} />
-    //     Loading
-    // </Center>,
-    loading: () => <>
-        <Spinner size={'large'} scale={3} top={-50} />
-        Loading
-    </>,
-    ssr: false
-})
 
 if (typeof window !== 'undefined') {
   Object.keys(deviceFunctions).forEach(k => (window as any)[k] = deviceFunctions[k])
@@ -120,9 +105,9 @@ const saveYaml = async (yaml) => {
 
 
 
-const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
+const DeviceScreen = ({ deviceDefinition, isActive, topics }) => {
   const topicData = topics;
-  const p = {"config":"[\n \"mydevice\",\n \"esp32dev\",\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n"}
+  const p = { "config": "[\n \"mydevice\",\n \"esp32dev\",\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  relay(\"light\", \"ALWAYS_OFF\"),\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n];\n\n" }
   const [sourceCode, setSourceCode] = useState(p.config)
   // const currentDevice = useDeviceStore(state => state.electronicDevice);
   // const setCurrentDevice = useDeviceStore(state => state.setElectronicDevice);
@@ -215,7 +200,7 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
       // const url = "http://bo-firmware.protofy.xyz/api/v1" + "/electronics/download.bin?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
       const onlineCompilerUrl = "http://bo-firmware.protofy.xyz/api/v1";
       const url = "http://bo-firmware.protofy.xyz/api/v1" + "/device/download?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
-      
+
       const resp = await fetch(url);
       if (!resp.ok) {
         throw new Error(
@@ -310,7 +295,7 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
   //   shouldReconnect: (closeEvent) => true
   // });
 
-  const sendMessage = async (notUsed)=>{
+  const sendMessage = async (notUsed) => {
     await fetch('http://bo-firmware.protofy.xyz/api/v1/device/compile')
   }
   const { message } = useSubscription(['device/compile']);
@@ -341,23 +326,23 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
   // }, [lastMessage])
 
   React.useEffect(() => {
-      console.log("Compile Message: ", message);
-      try {
-        if (message?.message) {
-          const data = JSON.parse(message?.message.toString());
-          if (data.event == 'exit' && data.code == 0) {
-            console.log("Succesfully compiled");
-            setStage('upload')
-  
-          } else if (data.event == 'exit' && data.code != 0) {
-            console.error('Error compiling')
-            setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
-          }
+    console.log("Compile Message: ", message);
+    try {
+      if (message?.message) {
+        const data = JSON.parse(message?.message.toString());
+        if (data.event == 'exit' && data.code == 0) {
+          console.log("Succesfully compiled");
+          setStage('upload')
+
+        } else if (data.event == 'exit' && data.code != 0) {
+          console.error('Error compiling')
+          setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
         }
-      } catch (err) {
-        console.log(err);
       }
-    }, [message])
+    } catch (err) {
+      console.log(err);
+    }
+  }, [message])
 
 
   // const { error, data } = useFetch(`/api/v1/device/${currentDevice}/config`)
@@ -511,53 +496,53 @@ const DeviceScreen = ({ deviceDefinition, isActive,topics}) => {
   const { resolvedTheme } = useThemeSetting()
 
   return (
-      <div style={{ width: '100%', display: 'flex', flex: 1 }}>
-      <MqttStatus/>
-        <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
-        {sourceCode ?
-          // <Flow
-          //   flowId={'device'}
-          //   disableDots={!isActive}
-          //   hideBaseComponents={true}
-          //   // positions={positions}
-          //   customComponents={customComponents}
-          //   getFirstNode={(nodes) => {
-          //     return nodes.find(n => n.type == 'ArrayLiteralExpression')
-          //   }}
-          //   disableStart={true}
-          //   onSave={onSave}
-          //   onPlay={onPlay}
-          //   sourceCode={sourceCode}
-          //   store={deviceStore}
-          //   showActionsBar={true}
-          //   mode="device"
-          // /> : null}
-          <FlowsWidget
-                    // icons={<XStack position="absolute" right={isFull ? 0 : 50} top={isFull ? -35 : -32}>
-                    //     <IconContainer onPress={() => { }}>
-                    //         {/* <SizableText mr={"$2"}>Save</SizableText> */}
-                    //         <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
-                    //     </IconContainer>
-                    // </XStack>}
-                    // isModified={isModified}
-                    // setIsModified={setIsModified}
-                    onPlay={onPlay}
-                    onSave={(o)=>{console.log("ON SAVE: ",o); console.log("sourceCode ", sourceCode)}}
-                    hideBaseComponents={true}
-                    disableStart={true}
-                    getFirstNode={(nodes) => {
-                          return nodes.find(n => n.type == 'ArrayLiteralExpression')
-                    }}
-                    showActionsBar={true}     
-                    mode={"device"}
-                    bridgeNode={false}
-                    // setSourceCode={(sourceCode) => {
-                    //     console.log('set new sourcecode from flows: ', sourceCode)
-                    //     setSourceCode(sourceCode)
-                    // }} 
-                    sourceCode={sourceCode} themeMode={resolvedTheme} />:null}
-        {/* <DeviceSelector devicesList={devicesList} currentDevice={currentDevice} onCreateDevice={onCreateDevice} onSelectDevice={onSelectDevice} /> */}
-      </div>
+    <div style={{ width: '100%', display: 'flex', flex: 1 }}>
+      <MqttStatus />
+      <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
+      {sourceCode ?
+        // <Flow
+        //   flowId={'device'}
+        //   disableDots={!isActive}
+        //   hideBaseComponents={true}
+        //   // positions={positions}
+        //   customComponents={customComponents}
+        //   getFirstNode={(nodes) => {
+        //     return nodes.find(n => n.type == 'ArrayLiteralExpression')
+        //   }}
+        //   disableStart={true}
+        //   onSave={onSave}
+        //   onPlay={onPlay}
+        //   sourceCode={sourceCode}
+        //   store={deviceStore}
+        //   showActionsBar={true}
+        //   mode="device"
+        // /> : null}
+        <Flows
+          // icons={<XStack position="absolute" right={isFull ? 0 : 50} top={isFull ? -35 : -32}>
+          //     <IconContainer onPress={() => { }}>
+          //         {/* <SizableText mr={"$2"}>Save</SizableText> */}
+          //         <Save color="var(--color)" size={isFull ? "$2" : "$1"} />
+          //     </IconContainer>
+          // </XStack>}
+          // isModified={isModified}
+          // setIsModified={setIsModified}
+          onPlay={onPlay}
+          onSave={(o) => { console.log("ON SAVE: ", o); console.log("sourceCode ", sourceCode) }}
+          hideBaseComponents={true}
+          disableStart={true}
+          getFirstNode={(nodes) => {
+            return nodes.find(n => n.type == 'ArrayLiteralExpression')
+          }}
+          showActionsBar={true}
+          mode={"device"}
+          bridgeNode={false}
+          // setSourceCode={(sourceCode) => {
+          //     console.log('set new sourcecode from flows: ', sourceCode)
+          //     setSourceCode(sourceCode)
+          // }} 
+          sourceCode={sourceCode} themeMode={resolvedTheme} /> : null}
+      {/* <DeviceSelector devicesList={devicesList} currentDevice={currentDevice} onCreateDevice={onCreateDevice} onSelectDevice={onSelectDevice} /> */}
+    </div>
   )
 };
 
