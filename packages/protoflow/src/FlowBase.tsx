@@ -956,3 +956,5 @@ export default (props) => {
         <FlowsWithTopics {...props} />
     </TopicsProvider>
 }
+
+export const FlowConstructor = (flowId) => withTopics(FlowsStoreWrapper, { topics: [flowId + '/play', flowId + '/ui', 'savenodes'] })

@@ -17,12 +17,13 @@ import { withTopics } from "react-topics";
 import { ToggleGroup, Button, XStack } from "@my/ui"
 import { SidebarItem } from "./Sidebar/SideBarItem";
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
+import { FlowConstructor } from "protoflow";
 
 export const UIFLOWID = "flows-ui"
+const Flow = FlowConstructor(UIFLOWID)
 /* 
-const Flow = FlowFactory(UIFLOWID) */
 // const uiStore = useFlowsStore()
-
+*/
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {} }) {
     const editorRef = useRef<any>()
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
@@ -165,7 +166,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         visible={customizeVisible}
                         onChange={(val) => setCustomizeVisible(val)}
                     >
-                        <Flows
+                        <Flow
                             disableDots={!isActive || preview}
                             sourceCode={currentPageContent}
                             setSourceCode={setCurrentPageContent}
