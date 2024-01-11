@@ -39,7 +39,7 @@ export default {
             Using a special file called initialData.json at the same directory of your API, automatic crud apis will load initialData.json contents into the database when creating the database the first time. 
             Be careful editing the databases manually, the application may break. 
             `+ (
-                    initialItems.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
+                    initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
             return (<AdminPage title="Databases" workspace={workspace} pageSession={pageSession}>
                 <AlertDialog

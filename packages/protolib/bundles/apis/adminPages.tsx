@@ -105,7 +105,7 @@ export default {
             The user can edit the API files by clicking on any API, and can choose visual programming using interactive diagrams generated from the source code, or text based tradicional programming to edit the .ts api file.
             Those APIs allow the user to create pages based on object data. The automatic crud is an "storage" to manage data for a specific object.
             ` + (
-                    initialItems.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
+                    initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
 
             const [dialogOpen, setDialogOpen] = useState(false)

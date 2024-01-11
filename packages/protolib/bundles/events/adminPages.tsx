@@ -20,7 +20,7 @@ export default {
             Auth events can be auth/login/success and auth/login/error.
             Events contain data, specific for the event type.
             `+ (
-                initialItems.isLoaded?'Currently the system returned the following information: '+JSON.stringify(initialItems.data) : ''
+                initialItems?.isLoaded?'Currently the system returned the following information: '+JSON.stringify(initialItems.data) : ''
             )) 
 
             return (<AdminPage title="Events" pageSession={pageSession}>

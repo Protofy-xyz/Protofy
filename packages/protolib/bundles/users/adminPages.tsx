@@ -44,7 +44,7 @@ export default {
             The UI of the users page is located at /packages/protolib/bundles/users/adminPages.tsx and the schema and protomodel declaration at /packages/protolib/bundles/users/usersSchema.ts. The API file is located at /packages/protolib/bundles/users/usersAPI.ts.
             The user management page allows to manage the users of the system. Users are able to login with their email and password.
             `+ (
-                initialItems.isLoaded?'Currently the system returned the following information: '+JSON.stringify(initialItems.data) : ''
+                initialItems?.isLoaded?'Currently the system returned the following information: '+JSON.stringify(initialItems.data) : ''
             )) 
 
             return (<AdminPage title="Users" pageSession={pageSession}>
