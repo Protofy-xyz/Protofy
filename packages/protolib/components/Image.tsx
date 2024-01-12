@@ -1,15 +1,16 @@
 import React from 'react'
 import {
+  AvatarImageProps,
   Image
 } from 'tamagui'
 
 type ImageProps = {
   width?: number | string
   height?: number | string
-  url?: string
+  url?: string,
 }
 
-export default React.forwardRef(({ width = 200, height = 200, url = "https://picsum.photos/200", ...props }: ImageProps, ref) => (
+export default React.forwardRef(({ width = 200, height = 200, url = "https://picsum.photos/200", ...props }: ImageProps & AvatarImageProps, ref) => (
   <Image
     //@ts-ignore
     ref={ref}
