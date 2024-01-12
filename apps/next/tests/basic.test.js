@@ -165,7 +165,8 @@ describe.skip("Test entities autocreation", () => {
             BLANK: "blank",
             DEFAULT: "default",
             ADMIN: "admin",
-            LANDING: "landing"
+            LANDING: "landing",
+            ECOMERCE: "ecomerce",
         }
 
         beforeEach(async () => {
