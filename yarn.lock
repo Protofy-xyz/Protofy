@@ -23217,7 +23217,7 @@ __metadata:
   resolution: "proxy@workspace:apps/proxy"
   dependencies:
     pm2: ^5.3.0
-    redbird: "Protofy-xyz/redbird#master"
+    redbird: "github:Protofy-xyz/redbird#5d9a933b25dc8b87b4abbde6accb17702ce881ff"
   languageName: unknown
   linkType: soft
 
@@ -24371,7 +24371,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redbird@Protofy-xyz/redbird#master":
+"redbird@github:Protofy-xyz/redbird#5d9a933b25dc8b87b4abbde6accb17702ce881ff":
   version: 0.10.0
   resolution: "redbird@https://github.com/Protofy-xyz/redbird.git#commit=5d9a933b25dc8b87b4abbde6accb17702ce881ff"
   dependencies:

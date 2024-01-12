@@ -1,20 +1,20 @@
 {
-    "name": "proxy",
-    "version": "1.0.0",
-    "private": true,
-    "source": "src",
-    "scripts": {
-        "start": "NODE_ENV=production node index.js",
-        "start-dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
-        "service-start": "NODE_ENV=production pm2 start pm2.config.js",
-        "service-start-dev": "pm2 start pm2.config.js",
-        "logs": "pm2 logs",
-        "stop": "pm2 stop api",
-        "kill": "pm2 kill",
-        "status": "pm2 status api"
-    },
-    "dependencies": {
-        "pm2": "^5.3.0",
-        "redbird": "Protofy-xyz/redbird#master"
-    }
+  "name": "proxy",
+  "version": "1.0.0",
+  "private": true,
+  "source": "src",
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "start-dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
+    "service-start": "NODE_ENV=production pm2 start pm2.config.js",
+    "service-start-dev": "pm2 start pm2.config.js",
+    "logs": "pm2 logs",
+    "stop": "pm2 stop api",
+    "kill": "pm2 kill",
+    "status": "pm2 status api"
+  },
+  "dependencies": {
+    "pm2": "^5.3.0",
+    "redbird": "github:Protofy-xyz/redbird#5d9a933b25dc8b87b4abbde6accb17702ce881ff"
+  }
 }
