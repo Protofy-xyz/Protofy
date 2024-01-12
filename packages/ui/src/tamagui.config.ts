@@ -208,29 +208,30 @@ const defaultDataConfig = {
   }),
 }
 
-function spreadRecursive(config, configExtension) {
+function spreadRecursive(config, extraConfig) {
   const tmpConfig = { ...config };
-  for (const key in configExtension) {
-    if (configExtension.hasOwnProperty(key)) {
+  for (const key in extraConfig) {
+    if (extraConfig.hasOwnProperty(key)) {
       if (
-        typeof configExtension[key] === 'object' &&
+        typeof extraConfig[key] === 'object' &&
         config.hasOwnProperty(key) &&
         typeof config[key] === 'object'
-        ) {
-          tmpConfig[key] = spreadRecursive(config[key], configExtension[key]);
-        } else {
-          tmpConfig[key] = configExtension[key];
-        }
+      ) {
+        tmpConfig[key] = spreadRecursive(config[key], extraConfig[key]);
+      } else {
+        tmpConfig[key] = extraConfig[key];
       }
     }
-    return tmpConfig;
   }
-  
-  export const createConfig = (aditionalConfig: any = {}) => {
-    const newConfig = spreadRecursive(defaultDataConfig, aditionalConfig)
-    return createTamagui(newConfig)
+  return tmpConfig;
+}
+
+export const createConfig = (aditionalConfig: any = {}) => {
+  var newConfig = defaultDataConfig
+  if (Object.keys.length > 0) {
+    newConfig = spreadRecursive(defaultDataConfig, aditionalConfig)
   }
+  return createTamagui(newConfig)
+}
 
-
-  export const config = createTamagui(defaultDataConfig)
-  export const _config = createConfig()
+export const config = createConfig({})
