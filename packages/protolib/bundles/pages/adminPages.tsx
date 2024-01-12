@@ -38,6 +38,7 @@ const templates = {
         }
     },
     "landing": {},
+    "ecomerce": {},
 }
 
 const SelectGrid = ({ children }) => {
