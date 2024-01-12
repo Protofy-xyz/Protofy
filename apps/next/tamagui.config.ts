@@ -10,6 +10,9 @@ declare module 'tamagui' {
 }
 export default createConfig({
   // example
+  // settings: {
+  //   defaultTint: 'orange'
+  // },
   // themes: {
   //   dark_green: {
   //     color:'#00FF00'

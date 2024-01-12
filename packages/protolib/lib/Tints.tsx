@@ -1,5 +1,5 @@
 import { useEffect, useState, startTransition, useMemo, useSyncExternalStore } from 'react'
-import { Theme, ThemeName } from 'tamagui'
+import { Theme, ThemeName, getConfig } from 'tamagui'
 
 const familiesValues = {
   tamagui: ['gray', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'red']
@@ -16,6 +16,9 @@ const families = familiesValues as {
 type TintFamily = keyof typeof families
 
 let fam: TintFamily = 'tamagui'
+
+const defaultTint = getConfig()?.settings['defaultTint']
+const defaultTintIndex = familiesValues[fam].indexOf(defaultTint)
 
 export function getTints() {
   return {
@@ -65,7 +68,7 @@ export const onTintFamilyChange = (cb: ChangeHandler) => {
 // no localstorage because its not important to remember and causes a flicker
 // const tintVal = typeof localStorage !== 'undefined' ? localStorage.getItem('tint') : 0
 // const tint = tintVal ? +tintVal 0
-export const initialTint = 3
+export const initialTint = defaultTintIndex == -1 ? 3 : defaultTintIndex
 
 let current = initialTint
 
