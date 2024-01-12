@@ -13,6 +13,7 @@ export const DefaultLayout = React.forwardRef((props: {
   children: React.ReactNode;
   footer?: React.ReactNode;
   header?: React.ReactNode;
+  headerTitle?: string;
   seoProps?: any;
   title?: string;
   description?: string;
@@ -22,7 +23,7 @@ export const DefaultLayout = React.forwardRef((props: {
     sideMenu={null}
     footer={<Footer />}
     header={<AppBar>
-      <HeaderContents menu={<HeaderMenu menuPlacement={'bottom'}>
+      <HeaderContents headerTitle={props.headerTitle} menu={<HeaderMenu menuPlacement={'bottom'}>
         <HeaderMenuContent />
       </HeaderMenu>} />
     </AppBar>}
