@@ -231,4 +231,6 @@ function spreadRecursive(config, configExtension) {
     return createTamagui(newConfig)
   }
 
-  export const config = createConfig()
+
+  export const config = createTamagui(defaultDataConfig)
+  export const _config = createConfig()
