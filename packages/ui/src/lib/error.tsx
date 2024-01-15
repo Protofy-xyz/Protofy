@@ -6,6 +6,7 @@ export const getErrorMessage = (err) => {
     <YStack>
       {typeof err == 'string' ? <Text color="$red9" fontWeight={"bold"}>Error: {err}</Text> : <>
         <Text>Error:</Text>
+        {/* @ts-ignore */}
         <Spacer />
         {err && err.fieldErrors ? Object.keys(err.fieldErrors).map((field) => {
           return <Text>
