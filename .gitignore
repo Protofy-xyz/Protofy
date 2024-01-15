@@ -3,5 +3,4 @@
 data/*
 apps/*
 packages/*
-!packages/app
 .env
