@@ -1,1 +1,7 @@
 **/node_modules
+.yarn
+data/*
+apps/*
+packages/*
+!packages/app
+.env
