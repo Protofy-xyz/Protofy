@@ -234,4 +234,14 @@ export const createConfig = (aditionalConfig: any = {}) => {
   return createTamagui(newConfig)
 }
 
-export const config = createConfig({})
+export const config = createConfig({
+  // example
+  // settings: {
+  //   defaultTint: 'orange'
+  // },
+  // themes: {
+  //   dark_green: {
+  //     // color:'#00FF00'
+  //   }
+  // }
+})
