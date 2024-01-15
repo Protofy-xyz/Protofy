@@ -11,7 +11,7 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { getPendingResult } from "protolib/base";
 import { usePendingEffect } from "protolib";
 import { Flows } from "protolib";
-import { getFlowMasks } from "app/bundles/masks";
+import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
 import { useRouter } from 'next/router'
 
 const DeviceDefitionIcons = {
@@ -65,7 +65,7 @@ export default {
             }}
             showActionsBar={isSaveActive}
             mode={"device"}
-            customComponents={router.pathname && typeof window !== undefined ? getFlowMasks(router.pathname) : []}
+            customComponents={router.pathname && typeof window !== undefined ? getFlowsCustomComponents(router.pathname, router.query) : []}
             bridgeNode={false}
             setSourceCode={(sourceCode) => {
               console.log('set new sourcecode from flows: ', sourceCode)
@@ -74,7 +74,7 @@ export default {
             sourceCode={sourceCode}
             themeMode={resolvedTheme}
             key={'flow'}
-            config={{ masks: [], layers: [] }}
+            config={{ masks: getFlowMasks(router.pathname, router.query), layers: [] }}
             bgColor={'transparent'}
             dataNotify={(data: any) => {
               if (data.notifyId) {
