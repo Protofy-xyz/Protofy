@@ -225,6 +225,7 @@ export function DataView({
                     >
                         <XStack pt="$4" height={'90vh'} width={"90vw"}>
                             <FileWidget
+                                id={"file-widget-"+getFilenameFromPath(state.editFile ?? '').split('.')[0]}
                                 isFull={false}
                                 hideCloseIcon={false}
                                 isModified={false}
