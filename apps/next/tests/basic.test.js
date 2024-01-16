@@ -160,7 +160,7 @@ describe.skip("Test entities autocreation", () => {
         }, 30000)
     })
 
-    describe("test page creation", () => {
+    describe("test page entity", () => {
         const PAGE_TEMPLATES = {
             BLANK: "blank",
             DEFAULT: "default",
@@ -170,27 +170,43 @@ describe.skip("Test entities autocreation", () => {
             NEWSFEED: "newsfeed",
         }
 
-        beforeEach(async () => {
-            await getEditableObjectCreate(driver, 'pages')
-        }, 30000)
+        describe("test page creation", () => {
+            beforeEach(async () => {
+                await getEditableObjectCreate(driver, 'pages')
+            }, 30000)
+            it("should be able to create a blank page", async () => {
+                const pageName = 'testpage'
+                const pageRoute = 'testpage'
+                // Select template
+                const pageTemplateElem = await driver.findElement(By.id(`pages-template-${PAGE_TEMPLATES.BLANK}`))
+                await pageTemplateElem.click()
+                const addPageButtonElem1 = await driver.findElement(By.id(`admin-pages-add-btn`))
+                await addPageButtonElem1.click()
+                // Configure page
+                await fillEditableObjectInput(driver, 'name', pageName, 10)
+                await fillEditableObjectInput(driver, 'route', pageRoute, 10)
+                const addPageButtonElem2 = await driver.findElement(By.id(`admin-pages-add-btn`))
+                await addPageButtonElem2.click()
+                await driver.wait(until.elementLocated(By.id(`pages-datatable-${pageName}`)))
+                const dt_page_name = await driver.findElement(By.id(`pages-datatable-${pageName}`)).getText()
+                expect(dt_page_name).toBe(pageName);
+            }, 30000)
+        })
 
-        it("should be able to create a blank page", async () => {
-            const pageName = 'testpage'
-            const pageRoute = 'testpage'
-            // Select template
-            const pageTemplateElem = await driver.findElement(By.id(`pages-template-${PAGE_TEMPLATES.BLANK}`))
-            await pageTemplateElem.click()
-            const addPageButtonElem1 = await driver.findElement(By.id(`admin-pages-add-btn`))
-            await addPageButtonElem1.click()
-            // Configure page
-            await fillEditableObjectInput(driver, 'name', pageName, 10)
-            await fillEditableObjectInput(driver, 'route', pageRoute, 10)
-            const addPageButtonElem2 = await driver.findElement(By.id(`admin-pages-add-btn`))
-            await addPageButtonElem2.click()
-            await driver.wait(until.elementLocated(By.id(`pages-datatable-${pageName}`)))
-            const dt_page_name = await driver.findElement(By.id(`pages-datatable-${pageName}`)).getText()
-            expect(dt_page_name).toBe(pageName);
-        }, 30000)
+        describe("test edit page", () => {
+            it("should be able to edit the page", async () => {
+                await driver.get(HOST_URL + `admin/pages`);
+                await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
+                const pageOptionsBtn = await driver.findElement(By.id(`more-btn-home`))
+                await pageOptionsBtn.click()
+                await driver.wait(until.elementLocated(By.id("more-btn-home-option-1")));
+                const pageOptionsBtnEdit = await driver.findElement(By.id(`more-btn-home-option-1`))
+                await pageOptionsBtnEdit.click()
+                await driver.wait(until.elementLocated(By.id('file-widget-home')));
+                takeScreenshot(driver, 'screenshot')
+            }, 10000)
+        })
+
     })
 })
 
