@@ -14,7 +14,7 @@ export default function ProfilePage(props: any) {
         <title>Protofy - Profile</title>
       </Head>
       <XStack height="100vh" width="100vw">
-        <Flows sourceCode={"// Test of sourcecode"} uiFlowId={"test"} />
+        <Flows sourceCode={"// Test of sourcecode"} flowId={"test"} />
       </XStack>
     </>
   )

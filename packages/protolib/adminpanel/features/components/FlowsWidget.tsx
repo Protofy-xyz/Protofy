@@ -4,7 +4,7 @@ import { useState } from 'react';
 import customMasks from '../../../../app/bundles/masks';
 
 const FlowsWidget = ({ mode="js", ...props}: any) => {
-    const UIFLOWID = props.uiFlowId || "flows-editor"
+    const UIFLOWID = props.flowId || "flows-editor"
     const Flow = FlowFactory(UIFLOWID)
 
     const [content, setContent] = useState(props.content)
