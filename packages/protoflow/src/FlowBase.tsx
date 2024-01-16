@@ -942,7 +942,7 @@ const FlowsStoreWrapper = (props) => {
 }
 
 export default (props) => {
-    const FlowsWithTopics = withTopics(FlowsStoreWrapper, { topics: [props.uiFlowId + '/play', props.uiFlowId + '/ui', 'savenodes'] })
+    const FlowsWithTopics = withTopics(FlowsStoreWrapper, { topics: [props.flowId + '/play', props.flowId + '/ui', 'savenodes'] })
 
     if (props.path) {
         if ( props.path.endsWith('.json')) {

@@ -176,7 +176,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             // store={uiStore}
                             config={{ masks: getFlowMasks(router.pathname, router.query) }}
                             zoomOnDoubleClick={!preview}
-                            uiFlowId={UIFLOWID}
+                            flowId={UIFLOWID}
                             themeMode={'dark'}
                             bgColor={'#252526'}
                             theme={theme}
