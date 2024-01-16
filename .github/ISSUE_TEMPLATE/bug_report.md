@@ -23,7 +23,8 @@ Steps to reproduce the behavior:
 ## Context (Environment)
 - Default setup
 - OS: MacOS, Windows 11
-- Browser: Chrome 
+- Browser: Chrome
+- Environment: dev
 
 ## Issue demo
 Add videos images or any other relevant info
