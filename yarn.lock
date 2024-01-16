@@ -11233,15 +11233,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bindings@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "bindings@npm:1.5.0"
-  dependencies:
-    file-uri-to-path: 1.0.0
-  checksum: 65b6b48095717c2e6105a021a7da4ea435aa8d3d3cd085cb9e85bcb6e5773cf318c4745c3f7c504412855940b585bdf9b918236612a1c7a7942491de176f1ae7
-  languageName: node
-  linkType: hard
-
 "bl@npm:^4.0.2, bl@npm:^4.1.0":
   version: 4.1.0
   resolution: "bl@npm:4.1.0"
@@ -11293,17 +11284,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bluebird@npm:^2.11.0 || ^3.7.2, bluebird@npm:^3.5.1, bluebird@npm:^3.5.5":
+  version: 3.7.2
+  resolution: "bluebird@npm:3.7.2"
+  checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
+  languageName: node
+  linkType: hard
+
 "bluebird@npm:^2.9.24":
   version: 2.11.0
   resolution: "bluebird@npm:2.11.0"
   checksum: f1c6cbec64100bca65c88e5de0d9ee9bbb435f7c74c68a16a9466a8b40daf64346805c2fe04af821564ce6d4199085e7855d2e272282a065eb723344815cc354
-  languageName: node
-  linkType: hard
-
-"bluebird@npm:^3.5.1, bluebird@npm:^3.5.5, bluebird@npm:^3.7.2":
-  version: 3.7.2
-  resolution: "bluebird@npm:3.7.2"
-  checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
   languageName: node
   linkType: hard
 
@@ -13186,16 +13177,6 @@ __metadata:
   version: 1.8.36
   resolution: "dayjs@npm:1.8.36"
   checksum: 27079e08fd2c25178a2027cd5c10d7585e7b4e90f927b7387f9bb3458756205307dc0a980159ac1b1cd3ddba5528329d285ef8cf4ee1a8691bb511bd0e479981
-  languageName: node
-  linkType: hard
-
-"deasync@npm:^0.1.13":
-  version: 0.1.28
-  resolution: "deasync@npm:0.1.28"
-  dependencies:
-    bindings: ^1.5.0
-    node-addon-api: ^1.7.1
-  checksum: e0c1ef427875c897e0d903a08410df1d0a3dfd0d2a0a1e43fb6c2824dfbc504b810bd08a0d30653117259316e1aa65409c96dbed40101c934f75bac7499e1265
   languageName: node
   linkType: hard
 
@@ -15901,13 +15882,6 @@ __metadata:
   dependencies:
     tslib: ^2.4.0
   checksum: 7d051b6e5d793f3c6e2ab287ba5e7c2c6a0971bccc9d56e044c8047ba483e18f60fc0b5771c951dc707c0d15f4f36ccb4f1f1aaf385d21ec8f7700dadf8325ba
-  languageName: node
-  linkType: hard
-
-"file-uri-to-path@npm:1.0.0":
-  version: 1.0.0
-  resolution: "file-uri-to-path@npm:1.0.0"
-  checksum: b648580bdd893a008c92c7ecc96c3ee57a5e7b6c4c18a9a09b44fb5d36d79146f8e442578bc0e173dc027adf3987e254ba1dfd6e3ec998b7c282873010502144
   languageName: node
   linkType: hard
 
@@ -21582,7 +21556,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-addon-api@npm:^1.6.3, node-addon-api@npm:^1.7.1":
+"node-addon-api@npm:^1.6.3":
   version: 1.7.2
   resolution: "node-addon-api@npm:1.7.2"
   dependencies:
@@ -21606,18 +21580,6 @@ __metadata:
   dependencies:
     minimatch: ^3.0.2
   checksum: 29de9560e52cdac8d3f794d38d782f6799e13d4d11aaf96d3da8c28458e1c5e33bb5f8edfb42dc34172ec5516c50c5b8850c9e1526542616757a969267263328
-  languageName: node
-  linkType: hard
-
-"node-etcd@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "node-etcd@npm:7.0.0"
-  dependencies:
-    deasync: ^0.1.13
-    lodash: ^4.17.10
-    request: ^2.87.0
-    url-parse: ^1.4.3
-  checksum: 2b6feca869384b5f4116d6b7ded1d29d7ec3d9e1627e16e049ecaf3eee7c36c4065c28d2ca36fefac6366b151c1bda66a4315f6c4fb9f04ca9d4ff4528ed13e2
   languageName: node
   linkType: hard
 
@@ -23255,7 +23217,7 @@ __metadata:
   resolution: "proxy@workspace:apps/proxy"
   dependencies:
     pm2: ^5.3.0
-    redbird: 0.10.0
+    redbird-no-etcd: 0.10.0-0
   languageName: unknown
   linkType: soft
 
@@ -24409,11 +24371,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redbird@npm:0.10.0":
-  version: 0.10.0
-  resolution: "redbird@npm:0.10.0"
+"redbird-no-etcd@npm:0.10.0-0":
+  version: 0.10.0-0
+  resolution: "redbird-no-etcd@npm:0.10.0-0"
   dependencies:
-    bluebird: ^3.7.2
+    bluebird: ^2.11.0 || ^3.7.2
     dolphin: "*"
     greenlock: ^2.8.8
     http-proxy: ^1.18.0
@@ -24421,13 +24383,12 @@ __metadata:
     le-store-certbot: ^2.2.3
     lodash: ^4.17.15
     lru-cache: ^5.1.1
-    node-etcd: ^7.0.0
     object-hash: ^1.3.1
     pino: ^5.15.0
     safetimeout: ^0.1.2
     spdy: ^4.0.1
     valid-url: ^1.0.9
-  checksum: 9bb24bf68da2a898e829a2af5c17fdd6b6bdde75680494d47bf2a25a8c082ccf09b04b74132cb385219dc08fba813dc2473b4d8aa08e9ee644ab1afcebaaec26
+  checksum: 756b0dcdec8810d3bf89c683a8b4a4f124c948ded8178947b1d767c899f1ec23d18646c7f9f04b26fc326d401355113efcc2e191c221ea5df292ddbfb74979b2
   languageName: node
   linkType: hard
 
@@ -27988,7 +27949,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-parse@npm:^1.4.3, url-parse@npm:^1.5.9":
+"url-parse@npm:^1.5.9":
   version: 1.5.10
   resolution: "url-parse@npm:1.5.10"
   dependencies:

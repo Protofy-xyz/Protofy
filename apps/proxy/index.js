@@ -1,4 +1,4 @@
-const Redbird = require('redbird');
+const Redbird = require('redbird-no-etcd');
 const cookie = require('cookie');
 const environments = require('../../packages/app/bundles/environments')
 const isProduction = process.env.NODE_ENV === 'production';
