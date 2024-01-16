@@ -39,6 +39,7 @@ const templates = {
     },
     "landing": {},
     "ecomerce": {},
+    "newsfeed": {},
 }
 
 const SelectGrid = ({ children }) => {
