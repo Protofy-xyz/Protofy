@@ -21,9 +21,9 @@ Steps to reproduce the behavior:
 4. See error
 
 ## Context (Environment)
-Default setup
-OS: MacOS, Windows 11
-Browser: Chrome 
+- Default setup
+- OS: MacOS, Windows 11
+- Browser: Chrome 
 
 ## Issue demo
 Add videos images or any other relevant info
