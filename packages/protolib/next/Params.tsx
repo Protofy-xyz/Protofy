@@ -17,7 +17,7 @@ export const useQueryState = (setState) => {
 export const usePageParams = (state) => {
     const { replace, push, query } = useRouter();
 
-    const cleanState = () => Object.keys(state).reduce((total, current) => {
+    const cleanState = () => Object.keys(state??{}).reduce((total, current) => {
         if(state[current] !== '') {
             return {
                 ...total,
