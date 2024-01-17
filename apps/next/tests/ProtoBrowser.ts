@@ -32,11 +32,12 @@ export class ProtoBrowser {
         return this.driver;
     }
 
-    async clickElement(id: string) {
-        // wait element to exist --> find it --> click it
-        await this.driver.wait(until.elementLocated(By.id(id)));
-        const elementFound = await this.driver.findElement(By.id(id))
-        await elementFound.click()
+    async clickElement(selector: any): Promise<any> {
+        // wait element to exist --> find it using selector --> click it
+        await this.driver.wait(until.elementLocated(selector));
+        const elementFound = await this.driver.findElement(selector);
+        await elementFound.click();
+        return elementFound; // Returns clicked element
     }
 
 
@@ -48,7 +49,7 @@ export class ProtoBrowser {
 
     async navigateToRegister() {
         await this.navigateToLogin()
-        await this.clickElement('sign-up-link')
+        await this.clickElement(By.id('sign-up-link'))
         await this.driver.wait(until.elementLocated(By.id('sign-up-btn')));
     }
 
@@ -81,7 +82,7 @@ export class ProtoBrowser {
         await inputFieldPassword.sendKeys(password);
         const inputFieldRePassword = await this.driver.findElement(By.id('sign-up-repassword-input'));
         await inputFieldRePassword.sendKeys(password);
-        await this.clickElement('sign-up-btn')
+        await this.clickElement(By.id('sign-up-btn'))
         await this.driver.wait(async () => { // Wait to load session and be redirected to '/'
             return (
                 (new URL(await this.driver.getCurrentUrl()).pathname === '/')

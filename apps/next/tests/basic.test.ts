@@ -158,12 +158,12 @@ describe("Test entities autocreation", () => {
                 const pageRoute = 'testpage'
                 // Select template
                 let driver = protoBrowser.getDriver()
-                await protoBrowser.clickElement(`pages-template-${PAGE_TEMPLATES.BLANK}`)
-                await protoBrowser.clickElement(`admin-pages-add-btn`)
+                await protoBrowser.clickElement(By.id(`pages-template-${PAGE_TEMPLATES.BLANK}`))
+                await protoBrowser.clickElement(By.id(`admin-pages-add-btn`))
                 // Configure page
                 await protoBrowser.fillEditableObjectInput('name', pageName, 10)
                 await protoBrowser.fillEditableObjectInput('route', pageRoute, 10)
-                await protoBrowser.clickElement(`admin-pages-add-btn`)
+                await protoBrowser.clickElement(By.id(`admin-pages-add-btn`))
                 await driver.wait(until.elementLocated(By.id(`pages-datatable-${pageName}`)))
                 const dt_page_name = await driver.findElement(By.id(`pages-datatable-${pageName}`)).getText()
                 expect(dt_page_name).toBe(pageName);
@@ -177,8 +177,8 @@ describe("Test entities autocreation", () => {
             it("should be able to edit the page", async () => {
                 let driver = protoBrowser.getDriver()
                 await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
-                await protoBrowser.clickElement("more-btn-home")
-                await protoBrowser.clickElement("more-btn-home-option-1")
+                await protoBrowser.clickElement(By.id("more-btn-home"))
+                await protoBrowser.clickElement(By.id("more-btn-home-option-1"))
                 await driver.wait(until.elementLocated(By.id('file-widget-home')));
             }, 10000)
         })
