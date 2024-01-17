@@ -35,42 +35,27 @@ describe("Basic tests", () => {
     })
     it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
-        const path = await protoBrowser.getUrlPath();
-        expect(path).toBe('/auth/login');
-        await protoBrowser.waitForElement(By.id('sign-in-email-input'));
-        const inputFieldEmail = await protoBrowser.waitForElement(By.id('sign-in-email-input'));
-        expect(inputFieldEmail).toBeTruthy();
-        const inputFieldPassword = await protoBrowser.waitForElement(By.id('sign-in-password-input'));
-        expect(inputFieldPassword).toBeTruthy();
-        const signInButton = await protoBrowser.waitForElement(By.id('sign-in-btn'));
-        expect(signInButton).toBeTruthy();
-        const signUpLink = await protoBrowser.waitForElement(By.id('sign-up-link'));
-        expect(signUpLink).toBeTruthy();
+        expect(await protoBrowser.getUrlPath()).toBe('/auth/login');
+        expect(await protoBrowser.waitForElement(By.id('sign-in-email-input'))).toBeTruthy();
+        expect(await protoBrowser.waitForElement(By.id('sign-in-password-input'))).toBeTruthy();
+        expect(await protoBrowser.waitForElement(By.id('sign-in-btn'))).toBeTruthy();
+        expect(await protoBrowser.waitForElement(By.id('sign-up-link'))).toBeTruthy();
     }, 30000)
 
     it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister()
-        const path = await protoBrowser.getUrlPath();
-        expect(path).toBe('/auth/register');
-        await protoBrowser.waitForElement(By.id('sign-up-email-input'));
-        const inputFieldEmail = await protoBrowser.waitForElement(By.id('sign-up-email-input'));
-        expect(inputFieldEmail).toBeTruthy();
-        const inputFieldPassword = await protoBrowser.waitForElement(By.id('sign-up-password-input'));
-        expect(inputFieldPassword).toBeTruthy();
-        const inputFieldRePassword = await protoBrowser.waitForElement(By.id('sign-up-repassword-input'));
-        expect(inputFieldRePassword).toBeTruthy();
-        const signInButton = await protoBrowser.waitForElement(By.id('sign-up-btn'));
-        expect(signInButton).toBeTruthy();
-        const signUpLink = await protoBrowser.waitForElement(By.id('sign-in-link'));
-        expect(signUpLink).toBeTruthy();
+        expect(await protoBrowser.getUrlPath()).toBe('/auth/register');
+        expect(await protoBrowser.waitForElement(By.id('sign-up-email-input'))).toBeTruthy();
+        expect(await protoBrowser.waitForElement(By.id('sign-up-password-input'))).toBeTruthy();
+        expect(await protoBrowser.waitForElement(By.id('sign-up-repassword-input'))).toBeTruthy();
+        expect(await protoBrowser.waitForElement(By.id('sign-up-btn'))).toBeTruthy();
+        expect(await protoBrowser.waitForElement(By.id('sign-in-link'))).toBeTruthy();
     }, 30000)
 
     it("should be able to register and retrieve a session using sign up interface", async () => {
         await protoBrowser.navigateToRegister()
-        const email = `randomuser-${uuidv4()}@noreply.com`
-        const password = 'changeme4321'
         await protoBrowser.waitForElement(By.id('sign-up-email-input'));
-        await protoBrowser.signUpFlow(email, password);
+        await protoBrowser.signUpFlow(`randomuser-${uuidv4()}@noreply.com`, 'changeme4321');
         expect(await protoBrowser.getUrlPath()).toBe('/')
     }, 30000)
 })
