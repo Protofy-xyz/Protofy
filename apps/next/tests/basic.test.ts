@@ -75,11 +75,11 @@ describe("Test entities autocreation", () => {
         await protoBrowser.navigateToLogin();
         await protoBrowser.signInSubmit(USER_IDENTIFIER, USER_PASSWORD);
         await protoBrowser.navigateToWorkspace();
-    }, 60000)
+    }, 20000)
 
     afterAll(async () => {
         await protoBrowser.close()
-    }, 20000)
+    })
 
     describe("test api creations", () => {
         it("should be able to create an empty api", async () => {
@@ -92,14 +92,14 @@ describe("Test entities autocreation", () => {
             await protoBrowser.submitEditableObject()
             await protoBrowser.waitForElement(By.id(`apis-datatable-${apiName}`))
             expect(await protoBrowser.getElementText(By.id(`apis-datatable-${apiName}`))).toBe(apiName);
-        }, 30000)
+        }, 10000)
     })
 
     describe("test object creation", () => {
         beforeEach(async () => {
             await protoBrowser.navigateToWorkspaceSection('objects')
             await protoBrowser.getEditableObjectCreate()
-        }, 30000)
+        }, 10000)
 
         it("should be able to create a simple object", async () => {
             const objectName = 'testObject'
@@ -119,7 +119,7 @@ describe("Test entities autocreation", () => {
             await protoBrowser.submitEditableObject()
             await protoBrowser.waitForElement(By.id(`objects-datatable-${objectName}`))
             expect(await protoBrowser.getElementText(By.id(`objects-datatable-${objectName}`))).toBe(objectName);
-        }, 30000)
+        }, 10000)
     })
 
     describe("test page entity", () => {
@@ -127,7 +127,7 @@ describe("Test entities autocreation", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
                 await protoBrowser.getEditableObjectCreate()
-            }, 30000)
+            }, 10000)
             it("should be able to create a blank page", async () => {
                 const pageName = 'testpage'
                 const pageRoute = 'testpage'
@@ -139,13 +139,13 @@ describe("Test entities autocreation", () => {
                 await protoBrowser.fillEditableObjectInput('route', pageRoute, 10)
                 await protoBrowser.clickElement(By.id(`admin-pages-add-btn`))
                 expect(await protoBrowser.getElementText(By.id(`pages-datatable-${pageName}`))).toBe(pageName);
-            }, 30000)
+            }, 10000)
         })
 
         describe("test edit page", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
-            }, 30000)
+            }, 10000)
             it("should be able to edit the page", async () => {
                 await protoBrowser.waitForElement(By.id('admin-dataview-add-btn'));
                 await protoBrowser.clickElement(By.id("more-btn-home"))
