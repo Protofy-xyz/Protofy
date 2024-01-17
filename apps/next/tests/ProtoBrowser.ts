@@ -3,7 +3,6 @@ import * as fs from 'fs';
 
 const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
-const { v4: uuidv4 } = require('uuid');
 
 const HOST_URL = 'http://host.docker.internal:8080/'
 
@@ -25,7 +24,9 @@ export class ProtoBrowser {
     }
 
     async close() {
-        await this.driver.quit()
+        if (this.driver) {
+            await this.driver.quit()
+        }
     }
 
     getDriver() {
@@ -68,9 +69,8 @@ export class ProtoBrowser {
     async navigateToWorkspace() {
         await this.waitForElement(By.id('header-session-user-id'));
         await this.driver.executeScript("document.querySelector('#layout-menu-btn').click();");
-        await this.waitForElement(By.id("pop-over-workspace-link"));
         await this.driver.executeScript("document.querySelector('#pop-over-workspace-link').click();");
-        await this.driver.wait(async () => (await this.getUrlPath()).includes('/admin'));
+        await this.getDriver().wait(async () => (await this.getUrlPath()).includes('/admin'));
     }
 
     async signInSubmit(email: string, password: string) {
@@ -106,13 +106,12 @@ export class ProtoBrowser {
 
     async getEditableObjectCreate() {
         /*open create dialog */
-        await this.waitForElement(By.id('admin-dataview-add-btn'));
-        await this.driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();"); // TODO refactor
+        await this.clickElement(By.id('admin-dataview-add-btn'));
         await this.waitForElement(By.id('admin-dataview-create-dlg'));
         await this.waitForElement(By.id('admin-eo'));
     }
 
-    async fillEditableObjectInput(field: string, value: string, debounce = undefined) {
+    async fillEditableObjectInput(field: string, value: string, debounce?: number) {
         /*fill input */
         const nameInput = await this.waitForElement(By.id(`editable-object-input-${field}`))
         await nameInput.clear() // Clear previous values
@@ -133,12 +132,11 @@ export class ProtoBrowser {
     }
 
     async submitEditableObject() {
-        await this.driver.executeScript(`document.querySelector("#admin-eo>div>div>div>span>span>span>button").click()`)
+        await this.clickElement(By.xpath("//*[@id='admin-eo']/div/div/div/span/span/span/button"))
     }
 
-    async takeScreenshot(name: string) {
-        const img = await this.driver.takeScreenshot(this.driver);
-        fs.writeFileSync(path.join(__dirname, `${name}.png`), img, 'base64')
+    async takeScreenshot(filename: string) {
+        fs.writeFileSync(path.join(__dirname, `${filename}.png`), await this.getDriver().takeScreenshot(), 'base64')
     }
 
 }

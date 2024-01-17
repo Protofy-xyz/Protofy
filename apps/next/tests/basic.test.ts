@@ -1,11 +1,31 @@
+import { ProtoBrowser } from './ProtoBrowser'
 const { execSync } = require('child_process');
 const path = require('path')
 const { By } = require('selenium-webdriver');
 const { v4: uuidv4 } = require('uuid');
-import { ProtoBrowser } from './ProtoBrowser'
+// Page menu opts
+const PAGE_TEMPLATES = {
+    BLANK: "blank",
+    DEFAULT: "default",
+    ADMIN: "admin",
+    LANDING: "landing",
+    ECOMERCE: "ecomerce",
+    NEWSFEED: "newsfeed",
+}
+// Api menu opt
+const API_TEMPLATES = {
+    Automatic_CRUD: 0,
+    Automatic_CRUD_Custom_Storage: 1,
+    IOT_Router: 2,
+    Empty: 3
+}
+// Api menu opt
+const API_OBJECT_OPTIONS = {
+    Without_Object: 0
+}
 
 describe("Basic tests", () => {
-    let protoBrowser: any;
+    let protoBrowser: ProtoBrowser;
     beforeEach(async () => {
         protoBrowser = await ProtoBrowser.__newInstance__()
     }, 30000)
@@ -58,7 +78,7 @@ describe("Basic tests", () => {
 describe("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
-    let protoBrowser: any;
+    let protoBrowser: ProtoBrowser;
 
     beforeAll(async () => { // Create a user with admin role
         try {
@@ -77,23 +97,13 @@ describe("Test entities autocreation", () => {
     }, 20000)
 
     describe("test api creations", () => {
-        const TEMPLATES = {
-            Automatic_CRUD: 0,
-            Automatic_CRUD_Custom_Storage: 1,
-            IOT_Router: 2,
-            Empty: 3
-        }
-
-        const OBJECTS = {
-            Without_Object: 0
-        }
         it("should be able to create an empty api", async () => {
             await protoBrowser.navigateToWorkspaceSection('apis')
             await protoBrowser.getEditableObjectCreate()
             const apiName = 'testapi'
             await protoBrowser.fillEditableObjectInput('name', apiName)
-            await protoBrowser.fillEditableObjectSelect('template', TEMPLATES.Empty)
-            await protoBrowser.fillEditableObjectSelect('object', OBJECTS.Without_Object)
+            await protoBrowser.fillEditableObjectSelect('template', API_TEMPLATES.Empty)
+            await protoBrowser.fillEditableObjectSelect('object', API_OBJECT_OPTIONS.Without_Object)
             await protoBrowser.submitEditableObject()
             await protoBrowser.waitForElement(By.id(`apis-datatable-${apiName}`))
             const dt_api_name = await protoBrowser.getElementText(By.id(`apis-datatable-${apiName}`))
@@ -111,18 +121,17 @@ describe("Test entities autocreation", () => {
             const objectName = 'testObject'
             await protoBrowser.fillEditableObjectInput('name', objectName)
             // Open editable form
-            let driver = protoBrowser.getDriver();
-            await driver.executeScript('document.querySelector("#eo-formgroup>span>div>div>span>button").click()')
-            await driver.executeScript('document.querySelector("#eo-obj-comp-btn").click()')
+            await protoBrowser.clickElement(By.xpath("//*[@id='eo-formgroup']/span/div/div/span/button"))
+            await protoBrowser.clickElement(By.id("eo-obj-comp-btn"))
             // Fill object key
             const keyName = "myKey"
             const keyInput = await protoBrowser.waitForElement(By.xpath("//*[@id='eo-add-field-input']/span/input"))
             await keyInput.clear() // Clear previous values
             for (let character of keyName) { // Send keys slowly 
                 await keyInput.sendKeys(character)
-                await driver.sleep(10); // Adjust the sleep time as necessary
+                await protoBrowser.getDriver().sleep(10); // Adjust the sleep time as necessary
             }
-            await driver.executeScript('document.querySelector("#alert-dlg-accept").click()')
+            await protoBrowser.clickElement(By.id("alert-dlg-accept"))
             await protoBrowser.submitEditableObject()
             await protoBrowser.waitForElement(By.id(`objects-datatable-${objectName}`))
             const dt_object_name = await protoBrowser.getElementText(By.id(`objects-datatable-${objectName}`))
@@ -131,15 +140,6 @@ describe("Test entities autocreation", () => {
     })
 
     describe("test page entity", () => {
-        const PAGE_TEMPLATES = {
-            BLANK: "blank",
-            DEFAULT: "default",
-            ADMIN: "admin",
-            LANDING: "landing",
-            ECOMERCE: "ecomerce",
-            NEWSFEED: "newsfeed",
-        }
-
         describe("test page creation", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
