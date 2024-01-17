@@ -185,11 +185,11 @@ describe("Test entities autocreation", () => {
             }, 30000)
         })
 
-        describe("test edit page", () => {
+        describe.skip("test edit page", () => {
             beforeEach(async () => {
                 await navigateToWorkspaceSection(driver, 'pages')
             }, 30000)
-            it.skip("should be able to edit the page", async () => {
+            it("should be able to edit the page", async () => {
                 await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
                 const pageOptionsBtn = await driver.findElement(By.id(`more-btn-home`))
                 await pageOptionsBtn.click()
