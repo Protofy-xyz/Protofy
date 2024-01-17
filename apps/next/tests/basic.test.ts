@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
 const path = require('path')
-const { By, until } = require('selenium-webdriver');
+const { By } = require('selenium-webdriver');
 const { v4: uuidv4 } = require('uuid');
 import { ProtoBrowser } from './ProtoBrowser'
 
@@ -15,48 +15,43 @@ describe("Basic tests", () => {
     })
     it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
-        let driver = protoBrowser.getDriver()
-        const path = new URL(await driver.getCurrentUrl()).pathname; // TODO: create a method that returns current URL
+        const path = await protoBrowser.getUrlPath();
         expect(path).toBe('/auth/login');
-        await driver.wait(until.elementLocated(By.id('sign-in-email-input')));
-        const inputFieldEmail = await driver.findElement(By.id('sign-in-email-input'));
+        await protoBrowser.waitForElement(By.id('sign-in-email-input'));
+        const inputFieldEmail = await protoBrowser.waitForElement(By.id('sign-in-email-input'));
         expect(inputFieldEmail).toBeTruthy();
-        const inputFieldPassword = await driver.findElement(By.id('sign-in-password-input'));
+        const inputFieldPassword = await protoBrowser.waitForElement(By.id('sign-in-password-input'));
         expect(inputFieldPassword).toBeTruthy();
-        const signInButton = await driver.findElement(By.id('sign-in-btn'));
+        const signInButton = await protoBrowser.waitForElement(By.id('sign-in-btn'));
         expect(signInButton).toBeTruthy();
-        const signUpLink = await driver.findElement(By.id('sign-up-link'));
+        const signUpLink = await protoBrowser.waitForElement(By.id('sign-up-link'));
         expect(signUpLink).toBeTruthy();
     }, 30000)
 
     it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister()
-        let driver = protoBrowser.getDriver()
-        const path = new URL(await driver.getCurrentUrl()).pathname;
+        const path = await protoBrowser.getUrlPath();
         expect(path).toBe('/auth/register');
-        await driver.wait(until.elementLocated(By.id('sign-up-email-input')));
-        const inputFieldEmail = await driver.findElement(By.id('sign-up-email-input'));
+        await protoBrowser.waitForElement(By.id('sign-up-email-input'));
+        const inputFieldEmail = await protoBrowser.waitForElement(By.id('sign-up-email-input'));
         expect(inputFieldEmail).toBeTruthy();
-        const inputFieldPassword = await driver.findElement(By.id('sign-up-password-input'));
+        const inputFieldPassword = await protoBrowser.waitForElement(By.id('sign-up-password-input'));
         expect(inputFieldPassword).toBeTruthy();
-        const inputFieldRePassword = await driver.findElement(By.id('sign-up-repassword-input'));
+        const inputFieldRePassword = await protoBrowser.waitForElement(By.id('sign-up-repassword-input'));
         expect(inputFieldRePassword).toBeTruthy();
-        const signInButton = await driver.findElement(By.id('sign-up-btn'));
+        const signInButton = await protoBrowser.waitForElement(By.id('sign-up-btn'));
         expect(signInButton).toBeTruthy();
-        const signUpLink = await driver.findElement(By.id('sign-in-link'));
+        const signUpLink = await protoBrowser.waitForElement(By.id('sign-in-link'));
         expect(signUpLink).toBeTruthy();
     }, 30000)
 
     it("should be able to register and retrieve a session using sign up interface", async () => {
         await protoBrowser.navigateToRegister()
-        let driver = protoBrowser.getDriver()
         const email = `randomuser-${uuidv4()}@noreply.com`
         const password = 'changeme4321'
-        // console.log('Registering user (email): ', email)
-        await driver.wait(until.elementLocated(By.id('sign-up-email-input')));
+        await protoBrowser.waitForElement(By.id('sign-up-email-input'));
         await protoBrowser.signUpFlow(email, password);
-        expect(new URL(await driver.getCurrentUrl()).pathname).toBe('/')
-        // expect(until.elementLocated(By.id('header-session-user-id'))).toBe()
+        expect(await protoBrowser.getUrlPath()).toBe('/')
     }, 30000)
 })
 
@@ -100,9 +95,8 @@ describe("Test entities autocreation", () => {
             await protoBrowser.fillEditableObjectSelect('template', TEMPLATES.Empty)
             await protoBrowser.fillEditableObjectSelect('object', OBJECTS.Without_Object)
             await protoBrowser.submitEditableObject()
-            let driver = await protoBrowser.getDriver()
-            await driver.wait(until.elementLocated(By.id(`apis-datatable-${apiName}`)))
-            const dt_api_name = await driver.findElement(By.id(`apis-datatable-${apiName}`)).getText()
+            await protoBrowser.waitForElement(By.id(`apis-datatable-${apiName}`))
+            const dt_api_name = await protoBrowser.getElementText(By.id(`apis-datatable-${apiName}`))
             expect(dt_api_name).toBe(apiName);
         }, 30000)
     })
@@ -122,9 +116,7 @@ describe("Test entities autocreation", () => {
             await driver.executeScript('document.querySelector("#eo-obj-comp-btn").click()')
             // Fill object key
             const keyName = "myKey"
-            const locator = By.xpath("//*[@id='eo-add-field-input']/span/input")
-            await driver.wait(until.elementLocated(locator))
-            const keyInput = await driver.findElement(locator)
+            const keyInput = await protoBrowser.waitForElement(By.xpath("//*[@id='eo-add-field-input']/span/input"))
             await keyInput.clear() // Clear previous values
             for (let character of keyName) { // Send keys slowly 
                 await keyInput.sendKeys(character)
@@ -132,8 +124,8 @@ describe("Test entities autocreation", () => {
             }
             await driver.executeScript('document.querySelector("#alert-dlg-accept").click()')
             await protoBrowser.submitEditableObject()
-            await driver.wait(until.elementLocated(By.id(`objects-datatable-${objectName}`)))
-            const dt_object_name = await driver.findElement(By.id(`objects-datatable-${objectName}`)).getText()
+            await protoBrowser.waitForElement(By.id(`objects-datatable-${objectName}`))
+            const dt_object_name = await protoBrowser.getElementText(By.id(`objects-datatable-${objectName}`))
             expect(dt_object_name).toBe(objectName);
         }, 30000)
     })
@@ -157,15 +149,13 @@ describe("Test entities autocreation", () => {
                 const pageName = 'testpage'
                 const pageRoute = 'testpage'
                 // Select template
-                let driver = protoBrowser.getDriver()
                 await protoBrowser.clickElement(By.id(`pages-template-${PAGE_TEMPLATES.BLANK}`))
                 await protoBrowser.clickElement(By.id(`admin-pages-add-btn`))
                 // Configure page
                 await protoBrowser.fillEditableObjectInput('name', pageName, 10)
                 await protoBrowser.fillEditableObjectInput('route', pageRoute, 10)
                 await protoBrowser.clickElement(By.id(`admin-pages-add-btn`))
-                await driver.wait(until.elementLocated(By.id(`pages-datatable-${pageName}`)))
-                const dt_page_name = await driver.findElement(By.id(`pages-datatable-${pageName}`)).getText()
+                const dt_page_name = await protoBrowser.getElementText(By.id(`pages-datatable-${pageName}`))
                 expect(dt_page_name).toBe(pageName);
             }, 30000)
         })
@@ -175,11 +165,10 @@ describe("Test entities autocreation", () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
             }, 30000)
             it("should be able to edit the page", async () => {
-                let driver = protoBrowser.getDriver()
-                await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
+                await protoBrowser.waitForElement(By.id('admin-dataview-add-btn'));
                 await protoBrowser.clickElement(By.id("more-btn-home"))
                 await protoBrowser.clickElement(By.id("more-btn-home-option-1"))
-                await driver.wait(until.elementLocated(By.id('file-widget-home')));
+                await protoBrowser.waitForElement(By.id('file-widget-home'));
             }, 10000)
         })
 

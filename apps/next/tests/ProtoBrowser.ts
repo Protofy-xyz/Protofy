@@ -34,58 +34,66 @@ export class ProtoBrowser {
 
     async clickElement(selector: any): Promise<any> {
         // wait element to exist --> find it using selector --> click it
-        await this.driver.wait(until.elementLocated(selector));
-        const elementFound = await this.driver.findElement(selector);
+        const elementFound = await this.waitForElement(selector)
         await elementFound.click();
         return elementFound; // Returns clicked element
     }
 
+    async getElementText(selector: any): Promise<any> {
+        return await (await this.waitForElement(selector)).getText()
+    }
+
+    async getUrlPath(): Promise<string> {
+        return new URL(await this.getDriver().getCurrentUrl()).pathname;
+    }
+
+    async waitForElement(selector: any): Promise<any> {
+        await this.driver.wait(until.elementLocated(selector));
+        const elementFound = await this.driver.findElement(selector);
+        return elementFound
+    }
 
     async navigateToLogin() {
-        await this.driver.wait(until.elementLocated(By.id('header-login-link')));
+        await this.waitForElement(By.id('header-login-link'));
         await this.driver.executeScript("document.querySelector('#header-login-link > p').click();");
-        await this.driver.wait(until.elementLocated(By.id('sign-in-btn')));
+        await this.waitForElement(By.id('sign-in-btn'));
     }
 
     async navigateToRegister() {
         await this.navigateToLogin()
         await this.clickElement(By.id('sign-up-link'))
-        await this.driver.wait(until.elementLocated(By.id('sign-up-btn')));
+        await this.waitForElement(By.id('sign-up-btn'))
     }
 
     async navigateToWorkspace() {
-        await this.driver.wait(until.elementLocated(By.id('header-session-user-id')));
+        await this.waitForElement(By.id('header-session-user-id'));
         await this.driver.executeScript("document.querySelector('#layout-menu-btn').click();");
-        await this.driver.wait(until.elementLocated(By.id("pop-over-workspace-link")));
+        await this.waitForElement(By.id("pop-over-workspace-link"));
         await this.driver.executeScript("document.querySelector('#pop-over-workspace-link').click();");
-        await this.driver.wait(async () => {
-            const currentUrl = await this.driver.getCurrentUrl();
-            return currentUrl.includes('/admin');
-        });
+        await this.driver.wait(async () => (await this.getUrlPath()).includes('/admin'));
     }
 
     async signInSubmit(email: string, password: string) {
         // Fill sign-in form
-        const inputFieldEmail = await this.driver.findElement(By.id('sign-in-email-input'));
+        const inputFieldEmail = await this.waitForElement(By.id('sign-in-email-input'));
         await inputFieldEmail.sendKeys(email);
-        const inputFieldPassword = await this.driver.findElement(By.id('sign-in-password-input'));
+        const inputFieldPassword = await this.waitForElement(By.id('sign-in-password-input'));
         await inputFieldPassword.sendKeys(password);
-        const signInButton = await this.driver.findElement(By.id('sign-in-btn'));
-        await signInButton.click()
+        await this.clickElement(By.id('sign-in-btn'));
     }
 
     async signUpFlow(email: string, password: string) {
         // Fill sign-up form
-        const inputFieldEmail = await this.driver.findElement(By.id('sign-up-email-input'));
+        const inputFieldEmail = await this.waitForElement(By.id('sign-up-email-input'));
         await inputFieldEmail.sendKeys(email);
-        const inputFieldPassword = await this.driver.findElement(By.id('sign-up-password-input'));
+        const inputFieldPassword = await this.waitForElement(By.id('sign-up-password-input'));
         await inputFieldPassword.sendKeys(password);
-        const inputFieldRePassword = await this.driver.findElement(By.id('sign-up-repassword-input'));
+        const inputFieldRePassword = await this.waitForElement(By.id('sign-up-repassword-input'));
         await inputFieldRePassword.sendKeys(password);
         await this.clickElement(By.id('sign-up-btn'))
         await this.driver.wait(async () => { // Wait to load session and be redirected to '/'
             return (
-                (new URL(await this.driver.getCurrentUrl()).pathname === '/')
+                await this.getUrlPath() === '/'
                 && until.elementLocated(By.id('header-session-user-id'))
                 && until.elementIsVisible(By.id('home-page'))
             )
@@ -98,15 +106,15 @@ export class ProtoBrowser {
 
     async getEditableObjectCreate() {
         /*open create dialog */
-        await this.driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
-        await this.driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
-        await this.driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
-        await this.driver.wait(until.elementLocated(By.id('admin-eo')))
+        await this.waitForElement(By.id('admin-dataview-add-btn'));
+        await this.driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();"); // TODO refactor
+        await this.waitForElement(By.id('admin-dataview-create-dlg'));
+        await this.waitForElement(By.id('admin-eo'));
     }
 
     async fillEditableObjectInput(field: string, value: string, debounce = undefined) {
         /*fill input */
-        const nameInput = await this.driver.findElement(By.id(`editable-object-input-${field}`))
+        const nameInput = await this.waitForElement(By.id(`editable-object-input-${field}`))
         await nameInput.clear() // Clear previous values
         const sendSlowly = debounce ?? false
         if (sendSlowly) {
@@ -120,12 +128,8 @@ export class ProtoBrowser {
     }
 
     async fillEditableObjectSelect(field: string, option: string | number) {
-        /*open selectable */
-        const selectListElem = await this.driver.findElement(By.xpath(`//*[@id='eo-select-list-${field}']/../span/li`))
-        await selectListElem.click()
-        /*click selectable option */
-        const selectListOptionElem = await this.driver.findElement(By.xpath(`//*[@id='eo-select-list-${field}-item-${option}']/..`))
-        await selectListOptionElem.click();
+        await this.clickElement(By.xpath(`//*[@id='eo-select-list-${field}']/../span/li`)) // open selectable
+        await this.clickElement(By.xpath(`//*[@id='eo-select-list-${field}-item-${option}']/..`))// click selectable option
     }
 
     async submitEditableObject() {
