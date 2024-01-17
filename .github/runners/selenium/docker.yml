@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   chrome:
     image: selenium/node-chrome:4.16.1-20231212
@@ -11,8 +11,6 @@ services:
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
     ports:
       - "6900:5900"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
 
   selenium-hub:
     image: selenium/hub:4.16.1-20231212
@@ -20,5 +18,3 @@ services:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"

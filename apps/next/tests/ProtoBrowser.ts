@@ -4,7 +4,7 @@ import * as fs from 'fs';
 const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 
-const HOST_URL = 'http://host.docker.internal:8080/'
+const HOST_URL = 'http://172.17.0.1:8080/'
 
 export class ProtoBrowser {
     driver: any;
