@@ -103,7 +103,7 @@ describe("Test entities autocreation", () => {
             await protoBrowser.fillEditableObjectSelect('object', OBJECTS.Without_Object)
             await protoBrowser.submitEditableObject()
             let driver = await protoBrowser.getDriver()
-            driver.wait(until.elementLocated(By.id(`apis-datatable-${apiName}`)))
+            await driver.wait(until.elementLocated(By.id(`apis-datatable-${apiName}`)))
             const dt_api_name = await driver.findElement(By.id(`apis-datatable-${apiName}`)).getText()
             expect(dt_api_name).toBe(apiName);
         }, 30000)
@@ -182,6 +182,7 @@ describe("Test entities autocreation", () => {
             it("should be able to edit the page", async () => {
                 let driver = protoBrowser.getDriver()
                 await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
+                await driver.wait(until.elementLocated(By.id("more-btn-home")));
                 const pageOptionsBtn = await driver.findElement(By.id(`more-btn-home`))
                 await pageOptionsBtn.click()
                 await driver.wait(until.elementLocated(By.id("more-btn-home-option-1")));
