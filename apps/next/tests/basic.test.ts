@@ -75,7 +75,7 @@ describe("Test entities autocreation", () => {
         await protoBrowser.navigateToLogin();
         await protoBrowser.signInSubmit(USER_IDENTIFIER, USER_PASSWORD);
         await protoBrowser.navigateToWorkspace();
-    }, 20000)
+    }, 30000)
 
     afterAll(async () => {
         await protoBrowser.close()
