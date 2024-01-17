@@ -67,19 +67,17 @@ describe("Basic tests", () => {
     }, 30000)
 })
 
-describe.skip("Test entities autocreation", () => {
+describe("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
     let driver;
 
-    beforeAll(() => {
+    beforeAll(async () => { // Create a user with admin role
         try {
             const output = execSync(`cd ${path.join(__dirname, '..', '..', '..')} && yarn add-user ${USER_IDENTIFIER} ${USER_PASSWORD} admin`, { encoding: 'utf-8', stdio: 'inherit' })
             expect(output.includes('Done')).toBeTruthy();
         } catch (e) { } // Prevent crash when user already exist
-    }, 10000)
-
-    beforeEach(async () => {
+        // Login and navigate to workspace
         driver = await new Builder()
             .forBrowser('chrome')
             .usingServer('http://localhost:4444/wd/hub') // URL to Selenium Hub
@@ -92,17 +90,11 @@ describe.skip("Test entities autocreation", () => {
         await navigateToWorkspace(driver);
     }, 30000)
 
-    afterEach(async () => {
+    afterAll(async () => {
         if (driver) {
             await driver.quit()
         }
     }, 10000)
-
-    describe.skip("sample", () => {
-        it('test sample', () => {
-            expect(true).toBe(true)
-        })
-    })
 
     describe("test api creations", () => {
         const TEMPLATES = {
@@ -115,11 +107,9 @@ describe.skip("Test entities autocreation", () => {
         const OBJECTS = {
             Without_Object: 0
         }
- 
-        beforeEach(async () => {
-            await getEditableObjectCreate(driver, 'apis')
-        }, 30000)
         it("should be able to create an empty api", async () => {
+            await navigateToWorkspaceSection(driver, 'apis')
+            await getEditableObjectCreate(driver)
             const apiName = 'testapi'
             await fillEditableObjectInput(driver, 'name', apiName)
             await fillEditableObjectSelect(driver, 'template', TEMPLATES.Empty)
@@ -133,7 +123,8 @@ describe.skip("Test entities autocreation", () => {
 
     describe("test object creation", () => {
         beforeEach(async () => {
-            await getEditableObjectCreate(driver, 'objects')
+            await navigateToWorkspaceSection(driver, 'objects')
+            await getEditableObjectCreate(driver)
         }, 30000)
 
         it("should be able to create a simple object", async () => {
@@ -172,7 +163,8 @@ describe.skip("Test entities autocreation", () => {
 
         describe("test page creation", () => {
             beforeEach(async () => {
-                await getEditableObjectCreate(driver, 'pages')
+                await navigateToWorkspaceSection(driver, 'pages')
+                await getEditableObjectCreate(driver)
             }, 30000)
             it("should be able to create a blank page", async () => {
                 const pageName = 'testpage'
@@ -194,8 +186,10 @@ describe.skip("Test entities autocreation", () => {
         })
 
         describe("test edit page", () => {
-            it("should be able to edit the page", async () => {
-                await driver.get(HOST_URL + `admin/pages`);
+            beforeEach(async () => {
+                await navigateToWorkspaceSection(driver, 'pages')
+            }, 30000)
+            it.skip("should be able to edit the page", async () => {
                 await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
                 const pageOptionsBtn = await driver.findElement(By.id(`more-btn-home`))
                 await pageOptionsBtn.click()
@@ -263,10 +257,12 @@ async function signUpFlow(driver, email, password) {
         )
     });
 }
-
-const getEditableObjectCreate = async (driver, entity) => {
-    /*open create dialog */
+const navigateToWorkspaceSection = async (driver, entity) => {
     await driver.get(HOST_URL + `admin/${entity}`);
+}
+
+const getEditableObjectCreate = async (driver) => {
+    /*open create dialog */
     await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
     await driver.executeScript("document.querySelector('#admin-dataview-add-btn').click();");
     await driver.wait(until.elementLocated(By.id('admin-dataview-create-dlg')))
