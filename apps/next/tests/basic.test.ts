@@ -83,16 +83,15 @@ describe("Test entities autocreation", () => {
 
     describe("test api creations", () => {
         it("should be able to create an empty api", async () => {
+            const apiName = 'testapi'
             await protoBrowser.navigateToWorkspaceSection('apis')
             await protoBrowser.getEditableObjectCreate()
-            const apiName = 'testapi'
             await protoBrowser.fillEditableObjectInput('name', apiName)
             await protoBrowser.fillEditableObjectSelect('template', API_TEMPLATES.Empty)
             await protoBrowser.fillEditableObjectSelect('object', API_OBJECT_OPTIONS.Without_Object)
             await protoBrowser.submitEditableObject()
             await protoBrowser.waitForElement(By.id(`apis-datatable-${apiName}`))
-            const dt_api_name = await protoBrowser.getElementText(By.id(`apis-datatable-${apiName}`))
-            expect(dt_api_name).toBe(apiName);
+            expect(await protoBrowser.getElementText(By.id(`apis-datatable-${apiName}`))).toBe(apiName);
         }, 30000)
     })
 
@@ -119,8 +118,7 @@ describe("Test entities autocreation", () => {
             await protoBrowser.clickElement(By.id("alert-dlg-accept"))
             await protoBrowser.submitEditableObject()
             await protoBrowser.waitForElement(By.id(`objects-datatable-${objectName}`))
-            const dt_object_name = await protoBrowser.getElementText(By.id(`objects-datatable-${objectName}`))
-            expect(dt_object_name).toBe(objectName);
+            expect(await protoBrowser.getElementText(By.id(`objects-datatable-${objectName}`))).toBe(objectName);
         }, 30000)
     })
 
@@ -140,8 +138,7 @@ describe("Test entities autocreation", () => {
                 await protoBrowser.fillEditableObjectInput('name', pageName, 10)
                 await protoBrowser.fillEditableObjectInput('route', pageRoute, 10)
                 await protoBrowser.clickElement(By.id(`admin-pages-add-btn`))
-                const dt_page_name = await protoBrowser.getElementText(By.id(`pages-datatable-${pageName}`))
-                expect(dt_page_name).toBe(pageName);
+                expect(await protoBrowser.getElementText(By.id(`pages-datatable-${pageName}`))).toBe(pageName);
             }, 30000)
         })
 
@@ -153,7 +150,7 @@ describe("Test entities autocreation", () => {
                 await protoBrowser.waitForElement(By.id('admin-dataview-add-btn'));
                 await protoBrowser.clickElement(By.id("more-btn-home"))
                 await protoBrowser.clickElement(By.id("more-btn-home-option-1"))
-                await protoBrowser.waitForElement(By.id('file-widget-home'));
+                expect(await protoBrowser.waitForElement(By.id('file-widget-home'))).toBeTruthy();
             }, 10000)
         })
 
