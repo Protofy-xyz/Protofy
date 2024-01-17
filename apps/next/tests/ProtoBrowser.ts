@@ -32,6 +32,14 @@ export class ProtoBrowser {
         return this.driver;
     }
 
+    async clickElement(id: string) {
+        // wait element to exist --> find it --> click it
+        await this.driver.wait(until.elementLocated(By.id(id)));
+        const elementFound = await this.driver.findElement(By.id(id))
+        await elementFound.click()
+    }
+
+
     async navigateToLogin() {
         await this.driver.wait(until.elementLocated(By.id('header-login-link')));
         await this.driver.executeScript("document.querySelector('#header-login-link > p').click();");
@@ -40,9 +48,7 @@ export class ProtoBrowser {
 
     async navigateToRegister() {
         await this.navigateToLogin()
-        await this.driver.wait(until.elementLocated(By.id('sign-up-link')));
-        const signUpLinkElem = await this.driver.findElement(By.id('sign-up-link'))
-        await signUpLinkElem.click()
+        await this.clickElement('sign-up-link')
         await this.driver.wait(until.elementLocated(By.id('sign-up-btn')));
     }
 
@@ -75,8 +81,7 @@ export class ProtoBrowser {
         await inputFieldPassword.sendKeys(password);
         const inputFieldRePassword = await this.driver.findElement(By.id('sign-up-repassword-input'));
         await inputFieldRePassword.sendKeys(password);
-        const signUpButton = await this.driver.findElement(By.id('sign-up-btn'));
-        await signUpButton.click()
+        await this.clickElement('sign-up-btn')
         await this.driver.wait(async () => { // Wait to load session and be redirected to '/'
             return (
                 (new URL(await this.driver.getCurrentUrl()).pathname === '/')
@@ -85,6 +90,7 @@ export class ProtoBrowser {
             )
         });
     }
+
     async navigateToWorkspaceSection(entity: string) {
         await this.driver.get(HOST_URL + `admin/${entity}`);
     }
@@ -114,13 +120,11 @@ export class ProtoBrowser {
 
     async fillEditableObjectSelect(field: string, option: string | number) {
         /*open selectable */
-        // await driver.executeScript(`document.querySelector("#eo-select-list-${field}").parentElement.querySelector("span>li").click()`);
         const selectListElem = await this.driver.findElement(By.xpath(`//*[@id='eo-select-list-${field}']/../span/li`))
         await selectListElem.click()
         /*click selectable option */
         const selectListOptionElem = await this.driver.findElement(By.xpath(`//*[@id='eo-select-list-${field}-item-${option}']/..`))
         await selectListOptionElem.click();
-        // await driver.executeScript(`document.querySelector("#eo-select-list-${field}-item-${option}").parentElement.click()`)
     }
 
     async submitEditableObject() {

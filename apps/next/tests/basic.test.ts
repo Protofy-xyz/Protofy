@@ -1,9 +1,7 @@
 const { execSync } = require('child_process');
 const path = require('path')
-const { Builder, By, until } = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
+const { By, until } = require('selenium-webdriver');
 const { v4: uuidv4 } = require('uuid');
-const HOST_URL = 'http://host.docker.internal:8080/'
 import { ProtoBrowser } from './ProtoBrowser'
 
 describe("Basic tests", () => {
@@ -160,15 +158,12 @@ describe("Test entities autocreation", () => {
                 const pageRoute = 'testpage'
                 // Select template
                 let driver = protoBrowser.getDriver()
-                const pageTemplateElem = await driver.findElement(By.id(`pages-template-${PAGE_TEMPLATES.BLANK}`))
-                await pageTemplateElem.click()
-                const addPageButtonElem1 = await driver.findElement(By.id(`admin-pages-add-btn`))
-                await addPageButtonElem1.click()
+                await protoBrowser.clickElement(`pages-template-${PAGE_TEMPLATES.BLANK}`)
+                await protoBrowser.clickElement(`admin-pages-add-btn`)
                 // Configure page
                 await protoBrowser.fillEditableObjectInput('name', pageName, 10)
                 await protoBrowser.fillEditableObjectInput('route', pageRoute, 10)
-                const addPageButtonElem2 = await driver.findElement(By.id(`admin-pages-add-btn`))
-                await addPageButtonElem2.click()
+                await protoBrowser.clickElement(`admin-pages-add-btn`)
                 await driver.wait(until.elementLocated(By.id(`pages-datatable-${pageName}`)))
                 const dt_page_name = await driver.findElement(By.id(`pages-datatable-${pageName}`)).getText()
                 expect(dt_page_name).toBe(pageName);
@@ -182,12 +177,8 @@ describe("Test entities autocreation", () => {
             it("should be able to edit the page", async () => {
                 let driver = protoBrowser.getDriver()
                 await driver.wait(until.elementLocated(By.id('admin-dataview-add-btn')));
-                await driver.wait(until.elementLocated(By.id("more-btn-home")));
-                const pageOptionsBtn = await driver.findElement(By.id(`more-btn-home`))
-                await pageOptionsBtn.click()
-                await driver.wait(until.elementLocated(By.id("more-btn-home-option-1")));
-                const pageOptionsBtnEdit = await driver.findElement(By.id(`more-btn-home-option-1`))
-                await pageOptionsBtnEdit.click()
+                await protoBrowser.clickElement("more-btn-home")
+                await protoBrowser.clickElement("more-btn-home-option-1")
                 await driver.wait(until.elementLocated(By.id('file-widget-home')));
             }, 10000)
         })
