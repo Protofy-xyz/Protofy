@@ -15,7 +15,7 @@
     "build": "cd ../.. && yarn build && cd apps/next && next build",
     "serve": "NODE_ENV=production next start --port 4000",
     "lint": "next lint",
-    "test": "jest --colors"
+    "test": "jest --colors --detectOpenHandles"
   },
   "dependencies": {
     "@craftjs/core": "0.2.0-beta.8",

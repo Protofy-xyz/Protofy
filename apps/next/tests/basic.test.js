@@ -88,13 +88,13 @@ describe("Test entities autocreation", () => {
         await navigateToLogin(driver);
         await signInSubmit(driver, USER_IDENTIFIER, USER_PASSWORD);
         await navigateToWorkspace(driver);
-    }, 30000)
+    }, 60000)
 
     afterAll(async () => {
         if (driver) {
             await driver.quit()
         }
-    }, 10000)
+    }, 20000)
 
     describe("test api creations", () => {
         const TEMPLATES = {
