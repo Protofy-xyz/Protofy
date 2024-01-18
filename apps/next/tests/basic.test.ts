@@ -88,14 +88,14 @@ describe("Test entities autocreation", () => {
             await protoBrowser.submitEditableObject()
             await protoBrowser.waitForElement(`#apis-datatable-${apiName}`)
             expect(await protoBrowser.getElementText(`#apis-datatable-${apiName}`)).toBe(apiName);
-        })
+        }, 30000)
     })
 
     describe("test object creation", () => {
         beforeEach(async () => {
             await protoBrowser.navigateToWorkspaceSection('objects')
             await protoBrowser.getEditableObjectCreate()
-        })
+        }, 30000)
 
         it("should be able to create a simple object", async () => {
             const objectName = 'testObject'
@@ -111,7 +111,7 @@ describe("Test entities autocreation", () => {
             await protoBrowser.submitEditableObject()
             await protoBrowser.waitForElement(`#objects-datatable-${objectName}`)
             expect(await protoBrowser.getElementText(`#objects-datatable-${objectName}`)).toBe(objectName);
-        })
+        }, 30000)
     })
 
     describe("test page entity", () => {
@@ -119,7 +119,7 @@ describe("Test entities autocreation", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
                 await protoBrowser.getEditableObjectCreate()
-            })
+            }, 30000)
             it("should be able to create a blank page", async () => {
                 const pageName = 'testpage'
                 const pageRoute = 'testpage'
@@ -131,19 +131,19 @@ describe("Test entities autocreation", () => {
                 await protoBrowser.fillEditableObjectInput('route', pageRoute)
                 await protoBrowser.clickElement(`#admin-pages-add-btn`)
                 expect(await protoBrowser.getElementText(`#pages-datatable-${pageName}`)).toBe(pageName);
-            })
+            }, 30000)
         })
 
         describe("test edit page", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
-            })
+            }, 30000)
             it("should be able to edit the page", async () => {
                 await protoBrowser.waitForElement('#admin-dataview-add-btn');
                 await protoBrowser.clickElement("#more-btn-home")
                 await protoBrowser.clickElement("#more-btn-home-option-1")
                 expect(await protoBrowser.waitForElement('#file-widget-home')).toBeTruthy();
-            })
+            }, 30000)
         })
 
     })
