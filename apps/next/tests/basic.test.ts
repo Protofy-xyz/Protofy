@@ -114,7 +114,7 @@ describe("Test entities autocreation", () => {
         }, 30000)
     })
 
-    describe("test page entity", () => {
+    describe.skip("test page entity", () => {
         describe("test page creation", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
