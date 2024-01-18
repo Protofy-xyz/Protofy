@@ -31,7 +31,9 @@ describe("Basic tests", () => {
     }, 10000)
 
     afterEach(async () => {
-        await protoBrowser.close()
+        if (protoBrowser) {
+            await protoBrowser.close()
+        }
     }, 10000)
     it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
@@ -78,7 +80,9 @@ describe("Test entities autocreation", () => {
     }, 60000)
 
     afterAll(async () => {
-        await protoBrowser.close()
+        if (protoBrowser) {
+            await protoBrowser.close()
+        }
     }, 20000)
 
     describe("test api creations", () => {
