@@ -1,7 +1,6 @@
 import { ProtoBrowser } from './ProtoBrowser'
 const { execSync } = require('child_process');
 const path = require('path')
-const { By } = require('selenium-webdriver');
 const { v4: uuidv4 } = require('uuid');
 // Page menu opts
 const PAGE_TEMPLATES = {
@@ -28,38 +27,33 @@ describe("Basic tests", () => {
     let protoBrowser: ProtoBrowser;
     beforeEach(async () => {
         protoBrowser = await ProtoBrowser.__newInstance__()
-    }, 10000)
-
+    })
     afterEach(async () => {
-        if (protoBrowser) {
-            await protoBrowser.close()
-        }
-    }, 10000)
+        await protoBrowser.close()
+    })
     it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
         expect(await protoBrowser.getUrlPath()).toBe('/auth/login');
-        expect(await protoBrowser.waitForElement(By.id('sign-in-email-input'))).toBeTruthy();
-        expect(await protoBrowser.waitForElement(By.id('sign-in-password-input'))).toBeTruthy();
-        expect(await protoBrowser.waitForElement(By.id('sign-in-btn'))).toBeTruthy();
-        expect(await protoBrowser.waitForElement(By.id('sign-up-link'))).toBeTruthy();
-    }, 10000)
-
+        expect(await protoBrowser.waitForElement('#sign-in-email-input')).toBeTruthy();
+        expect(await protoBrowser.waitForElement('#sign-in-password-input')).toBeTruthy();
+        expect(await protoBrowser.waitForElement('#sign-in-btn')).toBeTruthy();
+        expect(await protoBrowser.waitForElement('#sign-up-link')).toBeTruthy();
+    })
     it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister()
         expect(await protoBrowser.getUrlPath()).toBe('/auth/register');
-        expect(await protoBrowser.waitForElement(By.id('sign-up-email-input'))).toBeTruthy();
-        expect(await protoBrowser.waitForElement(By.id('sign-up-password-input'))).toBeTruthy();
-        expect(await protoBrowser.waitForElement(By.id('sign-up-repassword-input'))).toBeTruthy();
-        expect(await protoBrowser.waitForElement(By.id('sign-up-btn'))).toBeTruthy();
-        expect(await protoBrowser.waitForElement(By.id('sign-in-link'))).toBeTruthy();
-    }, 10000)
-
+        expect(await protoBrowser.waitForElement('#sign-up-email-input')).toBeTruthy();
+        expect(await protoBrowser.waitForElement('#sign-up-password-input')).toBeTruthy();
+        expect(await protoBrowser.waitForElement('#sign-up-repassword-input')).toBeTruthy();
+        expect(await protoBrowser.waitForElement('#sign-up-btn')).toBeTruthy();
+        expect(await protoBrowser.waitForElement('#sign-in-link')).toBeTruthy();
+    })
     it("should be able to register and retrieve a session using sign up interface", async () => {
         await protoBrowser.navigateToRegister()
-        await protoBrowser.waitForElement(By.id('sign-up-email-input'));
+        await protoBrowser.waitForElement('#sign-up-email-input');
         await protoBrowser.signUpFlow(`randomuser-${uuidv4()}@noreply.com`, 'changeme4321');
         expect(await protoBrowser.getUrlPath()).toBe('/')
-    }, 10000)
+    })
 })
 
 describe("Test entities autocreation", () => {
@@ -77,13 +71,11 @@ describe("Test entities autocreation", () => {
         await protoBrowser.navigateToLogin();
         await protoBrowser.signInSubmit(USER_IDENTIFIER, USER_PASSWORD);
         await protoBrowser.navigateToWorkspace();
-    }, 60000)
+    }, 10000)
 
     afterAll(async () => {
-        if (protoBrowser) {
-            await protoBrowser.close()
-        }
-    }, 20000)
+        await protoBrowser.close()
+    })
 
     describe("test api creations", () => {
         it("should be able to create an empty api", async () => {
@@ -94,36 +86,32 @@ describe("Test entities autocreation", () => {
             await protoBrowser.fillEditableObjectSelect('template', API_TEMPLATES.Empty)
             await protoBrowser.fillEditableObjectSelect('object', API_OBJECT_OPTIONS.Without_Object)
             await protoBrowser.submitEditableObject()
-            await protoBrowser.waitForElement(By.id(`apis-datatable-${apiName}`))
-            expect(await protoBrowser.getElementText(By.id(`apis-datatable-${apiName}`))).toBe(apiName);
-        }, 30000)
+            await protoBrowser.waitForElement(`#apis-datatable-${apiName}`)
+            expect(await protoBrowser.getElementText(`#apis-datatable-${apiName}`)).toBe(apiName);
+        })
     })
 
     describe("test object creation", () => {
         beforeEach(async () => {
             await protoBrowser.navigateToWorkspaceSection('objects')
             await protoBrowser.getEditableObjectCreate()
-        }, 30000)
+        })
 
         it("should be able to create a simple object", async () => {
             const objectName = 'testObject'
             await protoBrowser.fillEditableObjectInput('name', objectName)
             // Open editable form
-            await protoBrowser.clickElement(By.xpath("//*[@id='eo-formgroup']/span/div/div/span/button"))
-            await protoBrowser.clickElement(By.id("eo-obj-comp-btn"))
+            await protoBrowser.clickElement("xpath=//*[@id='eo-formgroup']/span/div/div/span/button")
+            await protoBrowser.clickElement("#eo-obj-comp-btn")
             // Fill object key
             const keyName = "myKey"
-            const keyInput = await protoBrowser.waitForElement(By.xpath("//*[@id='eo-add-field-input']/span/input"))
-            await keyInput.clear() // Clear previous values
-            for (let character of keyName) { // Send keys slowly 
-                await keyInput.sendKeys(character)
-                await protoBrowser.getDriver().sleep(10); // Adjust the sleep time as necessary
-            }
-            await protoBrowser.clickElement(By.id("alert-dlg-accept"))
+            await protoBrowser.waitForElement("xpath=//*[@id='eo-add-field-input']/span/input");
+            await protoBrowser.getPage().fill("xpath=//*[@id='eo-add-field-input']/span/input", keyName);
+            await protoBrowser.clickElement("#alert-dlg-accept")
             await protoBrowser.submitEditableObject()
-            await protoBrowser.waitForElement(By.id(`objects-datatable-${objectName}`))
-            expect(await protoBrowser.getElementText(By.id(`objects-datatable-${objectName}`))).toBe(objectName);
-        }, 30000)
+            await protoBrowser.waitForElement(`#objects-datatable-${objectName}`)
+            expect(await protoBrowser.getElementText(`#objects-datatable-${objectName}`)).toBe(objectName);
+        })
     })
 
     describe("test page entity", () => {
@@ -131,31 +119,31 @@ describe("Test entities autocreation", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
                 await protoBrowser.getEditableObjectCreate()
-            }, 40000)
+            })
             it("should be able to create a blank page", async () => {
                 const pageName = 'testpage'
                 const pageRoute = 'testpage'
                 // Select template
-                await protoBrowser.clickElement(By.id(`pages-template-${PAGE_TEMPLATES.BLANK}`))
-                await protoBrowser.clickElement(By.id(`admin-pages-add-btn`))
+                await protoBrowser.clickElement(`#pages-template-${PAGE_TEMPLATES.BLANK}`)
+                await protoBrowser.clickElement(`#admin-pages-add-btn`)
                 // Configure page
-                await protoBrowser.fillEditableObjectInput('name', pageName, 10)
-                await protoBrowser.fillEditableObjectInput('route', pageRoute, 10)
-                await protoBrowser.clickElement(By.id(`admin-pages-add-btn`))
-                expect(await protoBrowser.getElementText(By.id(`pages-datatable-${pageName}`))).toBe(pageName);
-            }, 30000)
+                await protoBrowser.fillEditableObjectInput('name', pageName)
+                await protoBrowser.fillEditableObjectInput('route', pageRoute)
+                await protoBrowser.clickElement(`#admin-pages-add-btn`)
+                expect(await protoBrowser.getElementText(`#pages-datatable-${pageName}`)).toBe(pageName);
+            })
         })
 
         describe("test edit page", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
-            }, 30000)
+            })
             it("should be able to edit the page", async () => {
-                await protoBrowser.waitForElement(By.id('admin-dataview-add-btn'));
-                await protoBrowser.clickElement(By.id("more-btn-home"))
-                await protoBrowser.clickElement(By.id("more-btn-home-option-1"))
-                expect(await protoBrowser.waitForElement(By.id('file-widget-home'))).toBeTruthy();
-            }, 10000)
+                await protoBrowser.waitForElement('#admin-dataview-add-btn');
+                await protoBrowser.clickElement("#more-btn-home")
+                await protoBrowser.clickElement("#more-btn-home-option-1")
+                expect(await protoBrowser.waitForElement('#file-widget-home')).toBeTruthy();
+            })
         })
 
     })
