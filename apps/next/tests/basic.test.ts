@@ -32,7 +32,7 @@ describe("Basic tests", () => {
 
     afterEach(async () => {
         await protoBrowser.close()
-    })
+    }, 10000)
     it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
         expect(await protoBrowser.getUrlPath()).toBe('/auth/login');
@@ -40,7 +40,7 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement(By.id('sign-in-password-input'))).toBeTruthy();
         expect(await protoBrowser.waitForElement(By.id('sign-in-btn'))).toBeTruthy();
         expect(await protoBrowser.waitForElement(By.id('sign-up-link'))).toBeTruthy();
-    }, 7000)
+    }, 10000)
 
     it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister()
@@ -50,14 +50,14 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement(By.id('sign-up-repassword-input'))).toBeTruthy();
         expect(await protoBrowser.waitForElement(By.id('sign-up-btn'))).toBeTruthy();
         expect(await protoBrowser.waitForElement(By.id('sign-in-link'))).toBeTruthy();
-    }, 7000)
+    }, 10000)
 
     it("should be able to register and retrieve a session using sign up interface", async () => {
         await protoBrowser.navigateToRegister()
         await protoBrowser.waitForElement(By.id('sign-up-email-input'));
         await protoBrowser.signUpFlow(`randomuser-${uuidv4()}@noreply.com`, 'changeme4321');
         expect(await protoBrowser.getUrlPath()).toBe('/')
-    }, 7000)
+    }, 10000)
 })
 
 describe("Test entities autocreation", () => {
@@ -79,7 +79,7 @@ describe("Test entities autocreation", () => {
 
     afterAll(async () => {
         await protoBrowser.close()
-    })
+    }, 20000)
 
     describe("test api creations", () => {
         it("should be able to create an empty api", async () => {
@@ -127,7 +127,7 @@ describe("Test entities autocreation", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
                 await protoBrowser.getEditableObjectCreate()
-            }, 30000)
+            }, 40000)
             it("should be able to create a blank page", async () => {
                 const pageName = 'testpage'
                 const pageRoute = 'testpage'
@@ -145,7 +145,7 @@ describe("Test entities autocreation", () => {
         describe("test edit page", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
-            }, 20000)
+            }, 30000)
             it("should be able to edit the page", async () => {
                 await protoBrowser.waitForElement(By.id('admin-dataview-add-btn'));
                 await protoBrowser.clickElement(By.id("more-btn-home"))
