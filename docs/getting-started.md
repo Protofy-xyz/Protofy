@@ -11,6 +11,10 @@ Protofy is at the same time:
 
 We like to think of prototype as a CMS + Framework + Framework UI
 
+## Minimum requirements
+- Windows 11, Ubuntu 20.04 or MacOS Big Sur
+- Node.js v18
+
 ## 🏃‍♂️ Run the project 
 
 You can run the project using your local environment or using docker.
@@ -48,7 +52,7 @@ cd docker
 
 ### local environment: 
 
-To run Protofy in your local envioronment, you'll need node 18 or higher and yarn to run the project. 
+To run Protofy in your local environment. 
 
 If you don't have yarn installed globally, you may need to do (first time only):
 
