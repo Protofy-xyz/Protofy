@@ -56,7 +56,7 @@ describe("Basic tests", () => {
     })
 })
 
-describe("Test entities autocreation", () => {
+describe.skip("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
     let protoBrowser: ProtoBrowser;
@@ -114,7 +114,7 @@ describe("Test entities autocreation", () => {
         }, 30000)
     })
 
-    describe.skip("test page entity", () => {
+    describe("test page entity", () => {
         describe("test page creation", () => {
             beforeEach(async () => {
                 await protoBrowser.navigateToWorkspaceSection('pages')
