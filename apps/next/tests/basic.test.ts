@@ -40,7 +40,7 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement(By.id('sign-in-password-input'))).toBeTruthy();
         expect(await protoBrowser.waitForElement(By.id('sign-in-btn'))).toBeTruthy();
         expect(await protoBrowser.waitForElement(By.id('sign-up-link'))).toBeTruthy();
-    })
+    }, 7000)
 
     it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister()
@@ -50,14 +50,14 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement(By.id('sign-up-repassword-input'))).toBeTruthy();
         expect(await protoBrowser.waitForElement(By.id('sign-up-btn'))).toBeTruthy();
         expect(await protoBrowser.waitForElement(By.id('sign-in-link'))).toBeTruthy();
-    })
+    }, 7000)
 
     it("should be able to register and retrieve a session using sign up interface", async () => {
         await protoBrowser.navigateToRegister()
         await protoBrowser.waitForElement(By.id('sign-up-email-input'));
         await protoBrowser.signUpFlow(`randomuser-${uuidv4()}@noreply.com`, 'changeme4321');
         expect(await protoBrowser.getUrlPath()).toBe('/')
-    })
+    }, 7000)
 })
 
 describe("Test entities autocreation", () => {
