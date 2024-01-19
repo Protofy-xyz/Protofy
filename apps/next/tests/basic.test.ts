@@ -56,7 +56,7 @@ describe("Basic tests", () => {
     })
 })
 
-describe.skip("Test entities autocreation", () => {
+describe("Test entities autocreation", () => {
     const USER_IDENTIFIER = 'user@user.user'
     const USER_PASSWORD = 'user1234'
     let protoBrowser: ProtoBrowser;

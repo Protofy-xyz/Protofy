@@ -75,7 +75,7 @@ export class ProtoBrowser {
         await this.waitForElement('#header-session-user-id');
         await this.clickElement('#layout-menu-btn')
         await this.clickElement('#pop-over-workspace-link')
-        await this.getPage().waitForURL('**/admin/*');
+        await this.getPage().waitForURL('**/admin/*', {timeout: 60000});
     }
 
     async signInSubmit(email: string, password: string) {
