@@ -158,7 +158,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
                         zIndex: rightPanelVisible ? 100000 : -10,
                         display: 'flex'
                     }}>
-                    <div style={{ height: '100%', display: 'flex', flex: 1 }}>
+                    <div style={{ height: '100%', display: 'flex', flexDirection: 'column',  width: '100%' }}>
                         {rightPanelContent}
                     </div>
                 </Panel>
