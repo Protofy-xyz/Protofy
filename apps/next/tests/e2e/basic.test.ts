@@ -1,4 +1,4 @@
-import { ProtoBrowser } from './ProtoBrowser'
+import { ProtoBrowser } from '../ProtoBrowser'
 const { execSync } = require('child_process');
 const path = require('path')
 const { v4: uuidv4 } = require('uuid');
