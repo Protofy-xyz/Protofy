@@ -29,6 +29,8 @@ import mpu6050 from './MPU6050'
 import i2cSensorMatrix from './I2cSensorMatrix'
 import sen55 from './SEN55'
 import mhz19 from './MHZ19'
+import i2cBus from './i2cBus'
+import pca9685 from './PCA9685'
 
 export default {
   wifi: wifi,
@@ -61,5 +63,7 @@ export default {
   mpu6050:mpu6050,
   i2cSensorMatrix:i2cSensorMatrix,
   sen55:sen55,
-  mhz19:mhz19
+  mhz19:mhz19,
+  i2cBus:i2cBus,
+  pca9685:pca9685
 }

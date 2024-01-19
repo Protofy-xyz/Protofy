@@ -8,6 +8,8 @@ const BinarySensor = dynamic(() => import('./BinarySensor'))
 const NeopixelsBus = dynamic(() => import('./NeopixelsBus'))
 const Relay = dynamic(() => import('./Relay'))
 const ADCSensor = dynamic(() => import('./ADCSensor'))
+const I2cBus = dynamic(() => import('./I2cBus'))
+const PCA9685 = dynamic(() => import('./PCA9685'))
 const Dfplayer = dynamic(() => import('./Dfplayer'))
 const ModbusLoadCell = dynamic(() => import('./ModbusLoadCell'))
 
@@ -103,6 +105,20 @@ const deviceMasks = [
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('adcSensor'),
     getComponent: (node, nodeData, children) => <ADCSensor node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'adcSensor', param1: '"analogic"', param2: '"30s"', param3: '"auto"' } }
+  },
+  {
+    id: 'I2cBus',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('i2cBus'),
+    getComponent: (node, nodeData, children) => <I2cBus node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'i2cBus', param1: '""', param2: '22', param3: true } }
+  },
+  {
+    id: 'PCA9685',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('pca9685'),
+    getComponent: (node, nodeData, children) => <PCA9685 node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'pca9685', param1: '""', param2: '1000', param3: false, param4: '0x40', param5 : '""'} }
   },
   // {
   //   id: 'PulseCounter',
