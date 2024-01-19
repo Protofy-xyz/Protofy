@@ -16,7 +16,7 @@
     "serve": "NODE_ENV=production next start --port 4000",
     "lint": "next lint",
     "test": "yarn test:deps && jest --colors --detectOpenHandles",
-    "test:deps": "npx playwright install && npx playwright install-deps"
+    "test:deps": "npx playwright --version | grep -q 'Version' || (npx playwright install && npx playwright install-deps)"
   },
   "dependencies": {
     "@craftjs/core": "0.2.0-beta.8",
