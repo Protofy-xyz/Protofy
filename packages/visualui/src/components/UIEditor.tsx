@@ -141,7 +141,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         </Button>
                     </XStack>
                     <ToggleGroup display={monacoHasChanges ? 'none' : 'flex'} theme={"dark"} type="single" defaultValue="preview" disableDeactivation>
-                        <ToggleGroup.Item value="code" onPress={() => setCodeEditorVisible(true)} >
+                        <ToggleGroup.Item value="code" onPress={() => { setPreview(false); setCodeEditorVisible(true)} }>
                             <Code />
                         </ToggleGroup.Item>
                         <ToggleGroup.Item value="flow" onPress={() => { setPreview(false); setCodeEditorVisible(false) }}>
