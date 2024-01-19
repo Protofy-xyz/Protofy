@@ -65,7 +65,7 @@ export default {
             }}
             showActionsBar={isSaveActive}
             mode={"device"}
-            customComponents={router.pathname && typeof window !== undefined ? getFlowsCustomComponents(router.pathname, router.query) : []}
+            customComponents={getFlowsCustomComponents(router.pathname, router.query)}
             bridgeNode={false}
             setSourceCode={(sourceCode) => {
               console.log('set new sourcecode from flows: ', sourceCode)
