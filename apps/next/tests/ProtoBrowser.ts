@@ -44,7 +44,7 @@ export class ProtoBrowser {
 
     async waitForElement(locator: string): Promise<any> {
         const page = this.getPage()
-        await (page.locator(locator)).waitFor()
+        await (page.locator(locator)).waitFor({timeout: 60000})
         return page.$(locator)
     }
 
