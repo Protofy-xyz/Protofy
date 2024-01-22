@@ -1,7 +1,12 @@
-import Source, { resetTestUUID } from 'visualui/src/models/Source';
+import Source from 'visualui/src/models/Source';
+
+var globalUuid = 0;
+const testUUID = () => "nodeId-" + globalUuid++
+const resetTestUUID = () => globalUuid = 0
+
 
 beforeEach(() => {
-    return resetTestUUID();
+    resetTestUUID();
 });
 describe("Test Node Ops", () => {
     describe("Test JsxElement operations", () => {
@@ -110,13 +115,13 @@ describe("Test Node Ops", () => {
             it("obtains the identifier value prop of JsxElement", () => {
                 const source1 = `<View></View>`
                 let sourceFile1 = Source.parse(source1)
-                sourceFile1 = sourceFile1.identifyElements(true)
+                sourceFile1 = sourceFile1.identifyElements(testUUID)
                 const content1 = sourceFile1.getContent()
                 expect(Source.getIdentifier(content1)).toBe('nodeId-0')
                 resetTestUUID()
                 const source2 = `<View><Input/></View>`
                 let sourceFile2 = Source.parse(source2)
-                sourceFile2 = sourceFile2.identifyElements(true)
+                sourceFile2 = sourceFile2.identifyElements(testUUID)
                 const content2 = sourceFile2.getContent()
                 const selfClosingElement = Source.getJsxElementByIdentifier(content2, 'nodeId-1')
                 expect(Source.getIdentifier(selfClosingElement)).toBe('nodeId-1')
@@ -125,24 +130,24 @@ describe("Test Node Ops", () => {
         describe("Methods with identify/unidentify props to source jsxElements", () => {
             it("adds _nodeId to all JsxElements of soruce", () => {
                 const source1 = `<Text><Input/><Button><Icon/></Button><Box></Box></Text>`
-                const newSource1 = Source.parse(source1).identifyElements(true);
+                const newSource1 = Source.parse(source1).identifyElements(testUUID);
                 expect(newSource1.getContent().getText()).toBe(`<Text _nodeId="nodeId-0" ><Input _nodeId="nodeId-1" /><Button _nodeId="nodeId-2" ><Icon _nodeId="nodeId-3" /></Button><Box _nodeId="nodeId-4" ></Box></Text>`)
                 resetTestUUID()
                 const source2 = '<View atr1="1" atr2={2} atr3></View>'
-                const newSource2 = Source.parse(source2).identifyElements(true);
+                const newSource2 = Source.parse(source2).identifyElements(testUUID);
                 expect(newSource2.getContent().getText()).toBe(`<View  _nodeId="nodeId-0" atr1="1" atr2={2} atr3></View>`)
                 resetTestUUID()
                 const source3 = `<Text atr1="1" atr2={2} atr3><Input atr1="1" atr2={2} atr3/><Button atr1="1" atr2={2} atr3><Icon atr1="1" atr2={2} atr3/></Button><Box atr1="1" atr2={2} atr3></Box></Text>`
-                const newSource3 = Source.parse(source3).identifyElements(true);
+                const newSource3 = Source.parse(source3).identifyElements(testUUID);
                 expect(newSource3.getContent().getText()).toBe(`<Text  _nodeId="nodeId-0" atr1="1" atr2={2} atr3><Input  _nodeId="nodeId-1" atr1="1" atr2={2} atr3/><Button  _nodeId="nodeId-2" atr1="1" atr2={2} atr3><Icon  _nodeId="nodeId-3" atr1="1" atr2={2} atr3/></Button><Box  _nodeId="nodeId-4" atr1="1" atr2={2} atr3></Box></Text>`)
             })
             it("preserve _nodeId prop if the node has it", () => {
                 const source1 = `<Text _nodeId="rocket" atr="nasa"></Text>`
-                const newSource1 = Source.parse(source1).identifyElements(true);
+                const newSource1 = Source.parse(source1).identifyElements(testUUID);
                 expect(newSource1.getContent().getText()).toBe(`<Text _nodeId="rocket" atr="nasa"></Text>`)
                 resetTestUUID()
                 const source2 = `<Text _nodeId="rocket"><Input/><Button _nodeId="nasa"><Icon _nodeId="protofito"/></Button><Box></Box></Text>`
-                const newSource2 = Source.parse(source2).identifyElements(true);
+                const newSource2 = Source.parse(source2).identifyElements(testUUID);
                 expect(newSource2.getContent().getText()).toBe(`<Text _nodeId="rocket"><Input _nodeId="nodeId-0" /><Button _nodeId="nasa"><Icon _nodeId="protofito"/></Button><Box _nodeId="nodeId-1" ></Box></Text>`)
                 resetTestUUID()
             })
@@ -156,7 +161,7 @@ describe("Test Node Ops", () => {
             })
             it("verify complete flow of identify/unidentify nodes", () => {
                 const source1 = `<Text _nodeId="rocket"><Input/><Button _nodeId="nasa"><Icon _nodeId="protofito"/></Button><Box></Box></Text>`
-                let newSource1 = Source.parse(source1).identifyElements(true);
+                let newSource1 = Source.parse(source1).identifyElements(testUUID);
                 expect(newSource1.getContent().getText()).toBe(`<Text _nodeId="rocket"><Input _nodeId="nodeId-0" /><Button _nodeId="nasa"><Icon _nodeId="protofito"/></Button><Box _nodeId="nodeId-1" ></Box></Text>`)
                 newSource1 = newSource1.unidentifyElements()
                 expect(newSource1.getContent().getText()).toBe(`<Text ><Input  /><Button ><Icon /></Button><Box  ></Box></Text>`)
@@ -275,7 +280,7 @@ describe("Test Node Ops", () => {
             it("retrieves a JsxElement by its uuid", () => {
                 const source2 = `<View><Input/></View>`
                 let sourceFile2 = Source.parse(source2)
-                sourceFile2 = sourceFile2.identifyElements(true)
+                sourceFile2 = sourceFile2.identifyElements(testUUID)
                 const content2 = sourceFile2.getContent()
                 expect(content2.getText()).toBe(`<View _nodeId="nodeId-0" ><Input _nodeId="nodeId-1" /></View>`)
                 const selfClosingElement = Source.getJsxElementByIdentifier(content2, 'nodeId-1')
@@ -421,7 +426,7 @@ describe("Test CraftData Ops", () => {
         it("generates flatten list of craftNodes given node", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Input value="hello"/><Text>hello</Text></View>`
             let sourceCode = Source.parse(source1)
-            sourceCode = sourceCode.identifyElements(true)
+            sourceCode = sourceCode.identifyElements(testUUID)
             const sourceNode: any = sourceCode.getContent();
             const tree = {} // Craft.JS format to build nodes
             Source.flatten(sourceNode, tree, "ROOT")
@@ -484,7 +489,7 @@ describe("Test CraftData Ops", () => {
         it("generates flatten list of craftNode using 'getNodes'", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Input value="hello"/><Text>hello</Text></View>`
             let sourceNode = Source.parse(source1)
-            sourceNode = sourceNode.identifyElements(true)
+            sourceNode = sourceNode.identifyElements(testUUID)
             const content = sourceNode.getContent();
             const tree = Source.getNodes(content)
             expect(tree).toStrictEqual({
@@ -546,7 +551,7 @@ describe("Test CraftData Ops", () => {
         it("generates CraftJS nodes adding theme and ROOT node using 'toCraftNodes'", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Input value="hello"/><Text>hello</Text></View>`
             let sourceNode1 = Source.parse(source1)
-            sourceNode1 = sourceNode1.identifyElements(true)
+            sourceNode1 = sourceNode1.identifyElements(testUUID)
             const content1 = sourceNode1.getContent();
             const tree1 = Source.toCraftNodes(content1)
             expect(tree1).toStrictEqual({
@@ -621,7 +626,7 @@ describe("Test CraftData Ops", () => {
             resetTestUUID()
             const source2 = `<Background><Button></Button><View></View></Background>`
             let sourceNode2 = Source.parse(source2)
-            sourceNode2 = sourceNode2.identifyElements(true)
+            sourceNode2 = sourceNode2.identifyElements(testUUID)
             const content2 = sourceNode2.getContent();
             const tree2 = Source.toCraftNodes(content2)
             expect(tree2).toStrictEqual({
@@ -683,7 +688,7 @@ describe("Test CraftData Ops", () => {
         it("deletes CraftJS node from all CraftJS nodes", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Input value="hello"/><Text>hello</Text></View>`
             let sourceNode = Source.parse(source1)
-            sourceNode = sourceNode.identifyElements(true)
+            sourceNode = sourceNode.identifyElements(testUUID)
             const content = sourceNode.getContent();
             const tree = Source.toCraftNodes(content)
             expect(tree).toStrictEqual({
@@ -837,7 +842,7 @@ describe("Test CraftData Ops", () => {
             </View>
             `
             let sourceNode = Source.parse(source1) // Source object
-            sourceNode.identifyElements(true)
+            sourceNode.identifyElements(testUUID)
             const conent = sourceNode.getContent();
             const craftNodes = Source.toCraftNodes(conent)
             const newCraftNodes = sourceNode.addCustomProps(craftNodes)
@@ -925,7 +930,7 @@ describe("Test CraftData Ops", () => {
             </View>
             `
             const sourceNode = Source.parse(source1) // Source object
-            const craftData = sourceNode.data(true)
+            const craftData = sourceNode.data(testUUID)
             expect(craftData).toStrictEqual({
                 "ROOT": {
                     "custom": {},
@@ -1010,7 +1015,7 @@ describe("Test CraftData Ops", () => {
             // FIX: doesn't get {true?<Res/>:<Pas/>}
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}} children={MY_CHILDREN}><Box atr1={()=>{console.log('hello')}} atr2={VARIABLE1}></Box><Input children="protofie"/><Text>hello</Text></View>`
             const sourceFile1: Source = Source.parse(source1)
-            let craftData1 = sourceFile1.data(true)
+            let craftData1 = sourceFile1.data(testUUID)
             const sourceFileTransformed1: string = sourceFile1.dump(craftData1, "my_components_dir")
             expect(sourceFileTransformed1).toBe(`<Root data-cy=root-container><View atr1="1" atr2={2} atr4={{background:"red"}}>{MY_CHILDREN}<Box atr1={()=>{console.log('hello')}} atr2={VARIABLE1}></Box><Input children="protofie"/><Text>hello</Text></View></Root>`
             )
@@ -1023,7 +1028,7 @@ describe("Test CraftData Ops", () => {
                 }
             `
             const sourceFile1: Source = Source.parse(source1)
-            let craftData1 = sourceFile1.data(true)
+            let craftData1 = sourceFile1.data(testUUID)
             craftData1 = Source.deleteCraftThemeNode(craftData1);
             // Add new element from uikit
             craftData1["newNode"] = {

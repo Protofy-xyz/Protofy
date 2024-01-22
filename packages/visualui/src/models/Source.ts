@@ -7,11 +7,6 @@ import {
 import parserTypeScript from "prettier/parser-typescript";
 import prettier from "prettier";
 
-var globalUuid = 0;
-const testUUID = () => {
-    return "nodeId-" + (globalUuid++);
-}
-export const resetTestUUID = () => globalUuid = 0
 
 export default class Source {
     ast: any
@@ -404,7 +399,7 @@ export default class Source {
         return {};
     }
 
-    identifyElements(useTestUUID?: boolean): Source { // Identify elements of source code adding to JsxElements a prop named _nodeId with uuid
+    identifyElements(customIdentifier: () => number | string): Source { // Identify elements of source code adding to JsxElements a prop named _nodeId with uuid
         let allJsxElements = Source.getAllJsxElements(this.getContent())
         for (let i = 0; i < allJsxElements.length; i++) {
             let additionalProp = ""
@@ -415,7 +410,7 @@ export default class Source {
                 Source.getJsxAttribute(allJsxElements[i], '_nodeId')
             } catch (e) { // If _nodeId is not found add it
                 //@ts-ignore
-                additionalProp += ` _nodeId="${useTestUUID ? testUUID() : Source.getSameIdAsFlows(allJsxElements[i])}" `
+                additionalProp += ` _nodeId="${customIdentifier ? customIdentifier(): Source.getSameIdAsFlows(allJsxElements[i])}" `
             }
             if (!jsxElementAttributes.length) {
                 posToInsertAttr = Source.getJsxElementName(allJsxElements[i]).node.getEnd();
@@ -473,10 +468,10 @@ export default class Source {
         return this
     }
 
-    data(useTestUUID?: boolean): any { // Gets craftJS nodes
+    data( customIdentifier?: () => string | number): any { // Gets craftJS nodes
         this.convertJsxExpressionToJsxElement(); // Converts elements JsxExpressions blocks into JsxElements named ReactCode
-        if (useTestUUID) {
-            this.identifyElements(useTestUUID)
+        if (customIdentifier) {
+            this.identifyElements(customIdentifier)
         }
         const content = this.getContent();
         let craftNodes = Source.toCraftNodes(content)
