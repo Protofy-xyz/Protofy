@@ -74,7 +74,7 @@ interface FlowProps {
 const FlowsBase = ({
     dataNotify = () => { },
     disableDots = false,
-    bgColor = "white",
+    bgColor = "transparent",
     onShowCode = null,
     sourceCode,
     onSave,
