@@ -335,7 +335,9 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir }: 
 							</Stack>
 							:
 							<ErrorBoundary>
-								<Frame />
+								<div id="editor-frame-container">
+									<Frame />
+								</div>
 							</ErrorBoundary>
 					}
 				</div>

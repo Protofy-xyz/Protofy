@@ -39,6 +39,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
       {fn()}
       <Tinted>
         <Button
+          id='use-edit-btn'
           t="$4"
           r="$4"
           br={"$6"}

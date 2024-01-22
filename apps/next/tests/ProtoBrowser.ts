@@ -42,6 +42,14 @@ export class ProtoBrowser {
         return new URL(await this.getPage().url()).pathname;
     }
 
+    async goTo(path: string) {
+        if (path.startsWith('/')) {
+            path = path.slice(1)
+        }
+        const page = this.getPage()
+        await page.goto(HOST_URL+path)
+    }
+
     async waitForElement(locator: string): Promise<any> {
         const page = this.getPage()
         await (page.locator(locator)).waitFor({timeout: 60000})

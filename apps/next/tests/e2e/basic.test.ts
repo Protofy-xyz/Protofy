@@ -69,6 +69,7 @@ describe("Test admin capabilities", () => {
         protoBrowser = await ProtoBrowser.__newInstance__()
         await protoBrowser.navigateToLogin();
         await protoBrowser.signInSubmit(USER_IDENTIFIER, USER_PASSWORD);
+        await protoBrowser.waitForElement('#header-session-user-id');
     }, 60000)
 
     afterAll(async () => {
@@ -151,8 +152,13 @@ describe("Test admin capabilities", () => {
         })
     })
     describe.skip("Testing page in useEdit mode", () => {
+        beforeAll(async () => {
+            await protoBrowser.goTo('');
+            await protoBrowser.clickElement("#use-edit-btn")
+            await protoBrowser.waitForElement("#editor-frame-container")
+        }, 60000)
         it("should be able to save edited page content", async () => {
-           
+
         })
     })
 })
