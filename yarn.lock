@@ -28262,12 +28262,14 @@ __metadata:
     "@monaco-editor/react": 4.4.6
     "@types/node": 20.6.0
     deep-diff: 1.0.2
+    jest: ~29.7.0
     lucide-react: 0.279.0
     react-resizable-panels: 0.0.45
     react-rnd: 8.0.1
     react-sliding-side-panel: 2.0.3
     react-topics: 0.1.7
     react-use-keypress: 1.3.1
+    ts-jest: ~29.1.1
     ts-node: 10.9.1
     tslib: 2.6.2
     typescript: ^5.2.2
