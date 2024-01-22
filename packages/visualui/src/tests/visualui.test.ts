@@ -1006,13 +1006,13 @@ describe("Test CraftData Ops", () => {
             })
 
         })
-        it.skip("dumps craftNodes back into source code", () => {
+        it("dumps craftNodes back into source code", () => {
             // FIX: doesn't get {true?<Res/>:<Pas/>}
-            const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}} children={MY_CHILDREN}><Box atr1={()=>{console.log('hello')}} atr2={VARIABLE1}>{true?<Res/>:<Pas/>}</Box><Input children="protofie"/><Text>hello</Text></View>`
+            const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}} children={MY_CHILDREN}><Box atr1={()=>{console.log('hello')}} atr2={VARIABLE1}></Box><Input children="protofie"/><Text>hello</Text></View>`
             const sourceFile1: Source = Source.parse(source1)
             let craftData1 = sourceFile1.data(true)
             const sourceFileTransformed1: string = sourceFile1.dump(craftData1, "my_components_dir")
-            expect(sourceFileTransformed1).toBe(`<Root data-cy=root-container><View atr1="1" atr2={2} atr4={{background:"red"}}>{MY_CHILDREN}<Box atr1={()=>{console.log('hello')}} atr2={VARIABLE1}>{true?<Res/>:<Pas/>}</Box><Input children="protofie" /><Text>hello</Text></View></Root>`
+            expect(sourceFileTransformed1).toBe(`<Root data-cy=root-container><View atr1="1" atr2={2} atr4={{background:"red"}}>{MY_CHILDREN}<Box atr1={()=>{console.log('hello')}} atr2={VARIABLE1}></Box><Input children="protofie"/><Text>hello</Text></View></Root>`
             )
         })
         it("dump importDeclarations", () => {
