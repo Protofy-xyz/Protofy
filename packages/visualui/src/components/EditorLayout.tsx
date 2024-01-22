@@ -1,30 +1,26 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import Head from 'next/head'
 import { Frame, useEditor } from "@craftjs/core";
-import { useEditorStore } from "../store/EditorStore";
 import useKeypress from 'react-use-keypress';
 import Diff from 'deep-diff'
 import Source from "../models/Source";
 import { withTopics } from "react-topics";
 import ErrorBoundary from './ErrorBoundary'
-import { JSCodeToOBJ } from "../utils/utils";
 import { notify, computePreviousPositions } from "../utils/utils";
-import { Stack, Spinner, Text, YStack } from "@my/ui"
+import { Stack, Spinner } from "@my/ui"
 
 export type EditorProps = {
 	children?: any;
-	onSave: Function;
+	currentPageContent: string;
 	topics: any;
 	resolveComponentsDir: string;
 };
 
 
-const Editor = ({ children, topics, onSave, resolveComponentsDir }: EditorProps) => {
+const Editor = ({ children, topics, currentPageContent, resolveComponentsDir }: EditorProps) => {
 	const paper = useRef<any>()
-	const currentPageContent = useEditorStore(state => state.currentPageContent)
-	const currentPageInitialJson = useEditorStore(state => state.currentPageInitialJson)
-	const setCurrentPageInitialJson = useEditorStore(state => state.setCurrentPageInitialJson)
 	const [loading, setLoading] = useState(false);
+	const [currentPageInitialJson, setCurrentPageInitialJson] = useState({});
 	const [previousNodes, setPreviousNodes] = useState({});
 	const [selectedNodeId, setSelectedNodeId] = useState();
 

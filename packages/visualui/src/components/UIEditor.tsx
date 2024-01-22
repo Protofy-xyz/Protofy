@@ -2,7 +2,6 @@ import { memo, useEffect, useState, useRef } from "react";
 import { useRouter } from 'next/router'
 import { Editor } from "@craftjs/core";
 import { Layers } from "@craftjs/layers";
-import { useEditorStore } from '../store/EditorStore';
 import { RenderNode } from './RenderNode';
 import paletteComponents from '../palettes';
 import EditorLayout from "./EditorLayout";
@@ -10,7 +9,6 @@ import { Sidebar } from "./Sidebar";
 import MainPanel from "./MainPanel";
 import Monaco from "./Monaco";
 import { X, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, ChevronRight } from "lucide-react";
-import { Flows } from 'protolib';
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
@@ -27,15 +25,14 @@ const Flow = FlowConstructor(UIFLOWID)
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {} }) {
     const editorRef = useRef<any>()
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
-    const currentPageContent = useEditorStore(state => state.currentPageContent)
-    const setCurrentPageContent = useEditorStore(state => state.setCurrentPageContent)
+    const [currentPageContent, setCurrentPageContent] = useState("")
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
     const [monacoHasChanges, setMonacoHasChanges] = useState(false)
     const [preview, setPreview] = useState(true)
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
     const [customizeVisible, setCustomizeVisible] = useState(true);
     const [layerVisible, setLayerVisible] = useState(false);
-    const router = useRouter(); 
+    const router = useRouter();
 
     const { data } = topics;
 
@@ -141,7 +138,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         </Button>
                     </XStack>
                     <ToggleGroup display={monacoHasChanges ? 'none' : 'flex'} theme={"dark"} type="single" defaultValue="preview" disableDeactivation>
-                        <ToggleGroup.Item value="code" onPress={() => { setPreview(false); setCodeEditorVisible(true)} }>
+                        <ToggleGroup.Item value="code" onPress={() => { setPreview(false); setCodeEditorVisible(true) }}>
                             <Code />
                         </ToggleGroup.Item>
                         <ToggleGroup.Item value="flow" onPress={() => { setPreview(false); setCodeEditorVisible(false) }}>
@@ -211,7 +208,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     );
     const EditorPanel = (
         <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid #424242', borderLeft: '2px solid #424242' }}>
-            <EditorLayout onSave={() => null} resolveComponentsDir={resolveComponentsDir}>
+            <EditorLayout currentPageContent={currentPageContent} onSave={() => null} resolveComponentsDir={resolveComponentsDir}>
             </EditorLayout>
         </div>
     )

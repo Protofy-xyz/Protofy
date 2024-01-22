@@ -1,10 +1,8 @@
 import Head from 'next/head'
 import { NextPageContext } from 'next'
-import { useSession, withSession, SSR } from 'protolib'
-import theme from 'visualui/src/components/Theme'
+import { withSession, SSR } from 'protolib'
 
-import { useEditorStore } from 'visualui/src/store/EditorStore';
-import { ToggleGroup, Button, XStack } from "@my/ui"
+import { XStack } from "@my/ui"
 import { Flows } from 'protolib';
 
 export default function ProfilePage(props: any) {
