@@ -22,6 +22,8 @@ const API_TEMPLATES = {
 const API_OBJECT_OPTIONS = {
     Without_Object: 0
 }
+const USER_IDENTIFIER = 'user@user.user'
+const USER_PASSWORD = 'user1234'
 
 describe("Basic tests", () => {
     let protoBrowser: ProtoBrowser;
@@ -55,10 +57,7 @@ describe("Basic tests", () => {
         expect(await protoBrowser.getUrlPath()).toBe('/')
     })
 })
-
-describe("Test entities autocreation", () => {
-    const USER_IDENTIFIER = 'user@user.user'
-    const USER_PASSWORD = 'user1234'
+describe("Test admin capabilities", () => {
     let protoBrowser: ProtoBrowser;
 
     beforeAll(async () => { // Create a user with admin role
@@ -70,81 +69,90 @@ describe("Test entities autocreation", () => {
         protoBrowser = await ProtoBrowser.__newInstance__()
         await protoBrowser.navigateToLogin();
         await protoBrowser.signInSubmit(USER_IDENTIFIER, USER_PASSWORD);
-        await protoBrowser.navigateToWorkspace();
     }, 60000)
 
     afterAll(async () => {
         await protoBrowser.close()
     })
 
-    describe("test api creations", () => {
-        it("should be able to create an empty api", async () => {
-            const apiName = 'testapi'
-            await protoBrowser.navigateToWorkspaceSection('apis')
-            await protoBrowser.getEditableObjectCreate()
-            await protoBrowser.fillEditableObjectInput('name', apiName)
-            await protoBrowser.fillEditableObjectSelect('template', API_TEMPLATES.Empty)
-            await protoBrowser.fillEditableObjectSelect('object', API_OBJECT_OPTIONS.Without_Object)
-            await protoBrowser.submitEditableObject()
-            await protoBrowser.waitForElement(`#apis-datatable-${apiName}`)
-            expect(await protoBrowser.getElementText(`#apis-datatable-${apiName}`)).toBe(apiName);
+    describe("Test entities autocreation", () => {
+        beforeAll(async () => {
+            await protoBrowser.navigateToWorkspace();
         }, 60000)
-    })
+        describe("test api creations", () => {
+            it("should be able to create an empty api", async () => {
+                const apiName = 'testapi'
+                await protoBrowser.navigateToWorkspaceSection('apis')
+                await protoBrowser.getEditableObjectCreate()
+                await protoBrowser.fillEditableObjectInput('name', apiName)
+                await protoBrowser.fillEditableObjectSelect('template', API_TEMPLATES.Empty)
+                await protoBrowser.fillEditableObjectSelect('object', API_OBJECT_OPTIONS.Without_Object)
+                await protoBrowser.submitEditableObject()
+                await protoBrowser.waitForElement(`#apis-datatable-${apiName}`)
+                expect(await protoBrowser.getElementText(`#apis-datatable-${apiName}`)).toBe(apiName);
+            }, 60000)
+        })
 
-    describe("test object creation", () => {
-        beforeEach(async () => {
-            await protoBrowser.navigateToWorkspaceSection('objects')
-            await protoBrowser.getEditableObjectCreate()
-        }, 60000)
-
-        it("should be able to create a simple object", async () => {
-            const objectName = 'testObject'
-            await protoBrowser.fillEditableObjectInput('name', objectName)
-            // Open editable form
-            await protoBrowser.clickElement("xpath=//*[@id='eo-formgroup']/span/div/div/span/button")
-            await protoBrowser.clickElement("#eo-obj-comp-btn")
-            // Fill object key
-            const keyName = "myKey"
-            await protoBrowser.waitForElement("xpath=//*[@id='eo-add-field-input']/span/input");
-            await protoBrowser.getPage().fill("xpath=//*[@id='eo-add-field-input']/span/input", keyName);
-            await protoBrowser.clickElement("#alert-dlg-accept")
-            await protoBrowser.submitEditableObject()
-            await protoBrowser.waitForElement(`#objects-datatable-${objectName}`)
-            expect(await protoBrowser.getElementText(`#objects-datatable-${objectName}`)).toBe(objectName);
-        }, 60000)
-    })
-
-    describe("test page entity", () => {
-        describe("test page creation", () => {
+        describe("test object creation", () => {
             beforeEach(async () => {
-                await protoBrowser.navigateToWorkspaceSection('pages')
+                await protoBrowser.navigateToWorkspaceSection('objects')
                 await protoBrowser.getEditableObjectCreate()
             }, 60000)
-            it("should be able to create a blank page", async () => {
-                const pageName = 'testpage'
-                const pageRoute = 'testpage'
-                // Select template
-                await protoBrowser.clickElement(`#pages-template-${PAGE_TEMPLATES.BLANK}`)
-                await protoBrowser.clickElement(`#admin-pages-add-btn`)
-                // Configure page
-                await protoBrowser.fillEditableObjectInput('name', pageName)
-                await protoBrowser.fillEditableObjectInput('route', pageRoute)
-                await protoBrowser.clickElement(`#admin-pages-add-btn`)
-                expect(await protoBrowser.getElementText(`#pages-datatable-${pageName}`)).toBe(pageName);
+
+            it("should be able to create a simple object", async () => {
+                const objectName = 'testObject'
+                await protoBrowser.fillEditableObjectInput('name', objectName)
+                // Open editable form
+                await protoBrowser.clickElement("xpath=//*[@id='eo-formgroup']/span/div/div/span/button")
+                await protoBrowser.clickElement("#eo-obj-comp-btn")
+                // Fill object key
+                const keyName = "myKey"
+                await protoBrowser.waitForElement("xpath=//*[@id='eo-add-field-input']/span/input");
+                await protoBrowser.getPage().fill("xpath=//*[@id='eo-add-field-input']/span/input", keyName);
+                await protoBrowser.clickElement("#alert-dlg-accept")
+                await protoBrowser.submitEditableObject()
+                await protoBrowser.waitForElement(`#objects-datatable-${objectName}`)
+                expect(await protoBrowser.getElementText(`#objects-datatable-${objectName}`)).toBe(objectName);
             }, 60000)
         })
 
-        describe("test edit page", () => {
-            beforeEach(async () => {
-                await protoBrowser.navigateToWorkspaceSection('pages')
-            }, 60000)
-            it("should be able to edit the page", async () => {
-                await protoBrowser.waitForElement('#admin-dataview-add-btn');
-                await protoBrowser.clickElement("#more-btn-home")
-                await protoBrowser.clickElement("#more-btn-home-option-1")
-                expect(await protoBrowser.waitForElement('#file-widget-home')).toBeTruthy();
-            }, 60000)
-        })
+        describe("test page entity", () => {
+            describe("test page creation", () => {
+                beforeEach(async () => {
+                    await protoBrowser.navigateToWorkspaceSection('pages')
+                    await protoBrowser.getEditableObjectCreate()
+                }, 60000)
+                it("should be able to create a blank page", async () => {
+                    const pageName = 'testpage'
+                    const pageRoute = 'testpage'
+                    // Select template
+                    await protoBrowser.clickElement(`#pages-template-${PAGE_TEMPLATES.BLANK}`)
+                    await protoBrowser.clickElement(`#admin-pages-add-btn`)
+                    // Configure page
+                    await protoBrowser.fillEditableObjectInput('name', pageName)
+                    await protoBrowser.fillEditableObjectInput('route', pageRoute)
+                    await protoBrowser.clickElement(`#admin-pages-add-btn`)
+                    expect(await protoBrowser.getElementText(`#pages-datatable-${pageName}`)).toBe(pageName);
+                }, 60000)
+            })
 
+            describe("test edit page", () => {
+                beforeEach(async () => {
+                    await protoBrowser.navigateToWorkspaceSection('pages')
+                }, 60000)
+                it("should be able to edit the page", async () => {
+                    await protoBrowser.waitForElement('#admin-dataview-add-btn');
+                    await protoBrowser.clickElement("#more-btn-home")
+                    await protoBrowser.clickElement("#more-btn-home-option-1")
+                    expect(await protoBrowser.waitForElement('#file-widget-home')).toBeTruthy();
+                }, 60000)
+            })
+
+        })
+    })
+    describe.skip("Testing page in useEdit mode", () => {
+        it("should be able to save edited page content", async () => {
+           
+        })
     })
 })
