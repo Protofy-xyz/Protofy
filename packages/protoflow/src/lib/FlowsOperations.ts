@@ -2,7 +2,7 @@ import { NodeTypes } from '../nodes';
 import { generateId } from './IdGenerator';
 import { Project, IndentationText, ScriptTarget, ScriptKind, LanguageVariant, SyntaxKind } from "ts-morph";
 
-export const removeDataChildAndReorder = (data, posToRemove) => {
+export const removeDataChildAndReorder = (data = {}, posToRemove) => {
     let deletedElementData
     const newData = Object.keys(data).reduce((total, key) => {
         if (key.startsWith('child-')) {
