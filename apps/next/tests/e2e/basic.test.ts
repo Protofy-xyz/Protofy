@@ -29,7 +29,7 @@ describe("Basic tests", () => {
     let protoBrowser: ProtoBrowser;
     beforeEach(async () => {
         protoBrowser = await ProtoBrowser.__newInstance__()
-    })
+    }, 8000)
     afterEach(async () => {
         await protoBrowser.close()
     })
