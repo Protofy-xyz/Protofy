@@ -2,14 +2,13 @@ import { PageModel } from '.'
 import { DataView } from 'protolib'
 import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR } from 'protolib'
 import { z } from 'protolib/base'
-import { XStack, YStack, useThemeName, useToastController } from '@my/ui'
+import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
 import { getURLWithToken } from '../../lib/Session'
 import { useState } from 'react'
 import { getPendingResult } from '../../base'
 import { usePendingEffect } from '../../lib/usePendingEffect'
-import { ScrollView } from 'tamagui'
 import { useRouter } from 'next/router'
 import { AlertDialog } from '../../components/AlertDialog'
 import { Slides } from '../../components/Slides'
@@ -32,7 +31,7 @@ const templates = {
         }),
         extraValidation: (data) => {
             if (!Object.keys(data).includes('object')) {
-                return {error: "object cant be empty"}
+                return { error: "object cant be empty" }
             }
             return
         }
@@ -50,9 +49,14 @@ const SelectGrid = ({ children }) => {
 
 const FirstSlide = ({ selected, setSelected }) => {
     const themeName = useThemeName();
-    return <SelectGrid>
-        {Object.keys(templates).map((template) => <TemplatePreview theme={themeName} template={template} isSelected={selected == template} onPress={() => setSelected(template)} />)}
-    </SelectGrid>
+    return <YStack>
+        <ScrollView mah={500}>
+            <SelectGrid>
+                {Object.keys(templates).map((template) => <TemplatePreview theme={themeName} template={template} isSelected={selected == template} onPress={() => setSelected(template)} />)}
+            </SelectGrid>
+        </ScrollView>
+        <Spacer marginBottom="$8" />
+    </YStack>
 }
 
 const SecondSlide = ({ data, setData, error, setError, objects }) => {
