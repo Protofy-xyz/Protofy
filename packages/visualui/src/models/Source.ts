@@ -508,7 +508,9 @@ export default class Source {
                 parser: "typescript",
                 plugins: [parserTypeScript]
             })
-        } catch (e) { console.error('Could not format text. Error: ' + e) }
+        } catch (e) { 
+            // console.error('Could not format text. Error: ' + e) 
+        }
         return formatedText ?? unformatedText
     }
 

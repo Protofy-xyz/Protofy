@@ -29,12 +29,5 @@
     "ts-node": "10.9.1",
     "tslib": "2.6.2",
     "typescript": "^5.2.2"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "jest-expect-message"
-    ],
-    "preset": "ts-jest",
-    "testEnvironment": "node"
   }
 }

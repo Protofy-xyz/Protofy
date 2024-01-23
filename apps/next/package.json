@@ -57,20 +57,5 @@
     "pm2": "^5.3.0",
     "selenium-webdriver": "~4.16.0",
     "ts-jest": "~29.1.1"
-  },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "./tests/tsconfig.json"
-      }
-    },
-    "setupFilesAfterEnv": [
-      "jest-expect-message"
-    ],
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "testMatch": [
-      "<rootDir>/tests/**/*.test.ts"
-    ]
   }
 }
