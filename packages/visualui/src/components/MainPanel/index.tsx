@@ -15,7 +15,7 @@ type Props = {
     topics: any
 };
 
-const FloatingIcon = ({ children, onClick, disabled = false }) => <div onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex', cursor: 'pointer' }}>
+const FloatingIcon = ({ id = undefined, children, onClick, disabled = false }) => <div id={id} onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex', cursor: 'pointer' }}>
     {children}
 </div>
 
@@ -108,6 +108,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
                     />
                 </FloatingIcon>
                 <FloatingIcon
+                    id="save-nodes-btn"
                     onClick={() => publish("savenodes", { value: 'visual-ui' })}
                 >
                     <Save
@@ -122,7 +123,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
             </div>
             <PanelGroup direction="horizontal" style={{ height: '100%', display: 'flex' }}>
                 <Panel>
-                    <div style={{display: 'flex', flex: 1, height: '100vh'}}>
+                    <div style={{ display: 'flex', flex: 1, height: '100vh' }}>
                         {centerPanelContent}
                     </div>
                 </Panel>
@@ -158,7 +159,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
                         zIndex: rightPanelVisible ? 100000 : -10,
                         display: 'flex'
                     }}>
-                    <div style={{ height: '100%', display: 'flex', flexDirection: 'column',  width: '100%' }}>
+                    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', width: '100%' }}>
                         {rightPanelContent}
                     </div>
                 </Panel>

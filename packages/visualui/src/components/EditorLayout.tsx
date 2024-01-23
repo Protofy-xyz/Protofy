@@ -284,6 +284,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir }: 
 	useEffect(() => {
 		const reload = async (retry: number) => {
 			try {
+				setLoading(true)
 				await loadEditorNodes()
 				setLoading(false)
 			} catch (e) {
@@ -328,7 +329,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir }: 
 							<Stack style={{ height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
 								<div>
 									<Spinner size="large" marginBottom="20px"></Spinner>
-									<div>
+									<div id="editor-loading">
 										Loading Content...
 									</div>
 								</div>

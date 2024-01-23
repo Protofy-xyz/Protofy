@@ -1,6 +1,7 @@
 const { chromium, firefox, webkit } = require('playwright');
 const HOST_URL = 'http://localhost:8080/'
-
+const height = 1080
+const width = 1920
 export class ProtoBrowser {
     browser: any;
     page: any;
@@ -11,7 +12,7 @@ export class ProtoBrowser {
     static async __newInstance__(): Promise<ProtoBrowser> {
         const brwsr = await chromium.launch();  // Or 'firefox' or 'webkit'.
         const context = await brwsr.newContext({
-            viewport: { width: 1920, height: 1080 } // Set the viewport size
+            viewport: { width: width, height: height } // Set the viewport size
         });
         const page = await context.newPage();
         await page.goto(HOST_URL);
@@ -38,21 +39,29 @@ export class ProtoBrowser {
         return this.browser;
     }
 
+    static getViewPortSize(): { width: number, height: number } {
+        return { width, height };
+    }
+
     async getUrlPath(): Promise<string> {
         return new URL(await this.getPage().url()).pathname;
     }
 
-    async goTo(path: string) {
+    async goTo(path: string): Promise<any> {
         if (path.startsWith('/')) {
             path = path.slice(1)
         }
         const page = this.getPage()
-        await page.goto(HOST_URL+path)
+        await page.goto(HOST_URL + path)
+    }
+
+    async mouseClick(x: number = 0, y: number = 0, clickButton: "left" | "right" | "middle" = "left"): Promise<any> {
+        await this.getPage().mouse.click(x, y, { button: clickButton });
     }
 
     async waitForElement(locator: string): Promise<any> {
         const page = this.getPage()
-        await (page.locator(locator)).waitFor({timeout: 60000})
+        await (page.locator(locator)).waitFor({ timeout: 60000 })
         return page.$(locator)
     }
 
@@ -83,7 +92,7 @@ export class ProtoBrowser {
         await this.waitForElement('#header-session-user-id');
         await this.clickElement('#layout-menu-btn')
         await this.clickElement('#pop-over-workspace-link')
-        await this.getPage().waitForURL('**/admin/*', {timeout: 60000});
+        await this.getPage().waitForURL('**/admin/*', { timeout: 60000 });
     }
 
     async signInSubmit(email: string, password: string) {

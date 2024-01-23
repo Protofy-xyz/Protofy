@@ -102,6 +102,7 @@ export const RenderNode = ({ render }) => {
                     ?
                     ReactDOM.createPortal(
                         <div
+                            id="my-renderedNode"
                             ref={currentRef}
                             style={{
                                 left: getPos(dom).left,
@@ -185,12 +186,13 @@ export const RenderNode = ({ render }) => {
                                     <div
                                         style={{ cursor: "pointer" }}
                                         title="Delete"
+                                        id='render-node-delete-btn'
+                                        onClick={(e: React.MouseEvent) => {
+                                            e.stopPropagation();
+                                            actions.delete(id);
+                                        }}
                                     >
                                         <Trash2
-                                            onMouseDown={(e: React.MouseEvent) => {
-                                                e.stopPropagation();
-                                                actions.delete(id);
-                                            }}
                                             color="white"
                                             size={14}
                                         />
