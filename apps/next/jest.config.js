@@ -5,9 +5,6 @@ module.exports = {
             { tsconfig: './tests/tsconfig.json' },
         ],
     },
-    setupFilesAfterEnv: [
-        "jest-expect-message"
-    ],
     preset: "ts-jest",
     testEnvironment: "node",
     testMatch: [
