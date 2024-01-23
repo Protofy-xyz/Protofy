@@ -1,8 +1,9 @@
 import {Protofy} from 'protolib/base'
+import { Application } from 'express';
 
 Protofy("type", "IOTRouter")
 
-export default (app, context) => {
+export default (app:Application, context) => {
 
     const { devicePub, deviceSub } = context
 

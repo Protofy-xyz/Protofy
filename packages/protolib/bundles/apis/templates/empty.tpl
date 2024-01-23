@@ -21,10 +21,11 @@ use the chat if in doubt
 
 import { handler } from 'protolib/api'
 import {Protofy} from 'protolib/base'
+import { Application } from 'express';
 
 Protofy("type", "CustomAPI")
 
-export default (app, context) => {
+export default (app:Application, context) => {
     //put your apis here
 }
 
