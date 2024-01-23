@@ -59,9 +59,9 @@ export class ProtoBrowser {
         await this.getPage().mouse.click(x, y, { button: clickButton });
     }
 
-    async waitForElement(locator: string): Promise<any> {
+    async waitForElement(locator: string, timeout: number = 60000): Promise<any> {
         const page = this.getPage()
-        await (page.locator(locator)).waitFor({ timeout: 60000 })
+        await (page.locator(locator)).waitFor({ timeout })
         return page.$(locator)
     }
 

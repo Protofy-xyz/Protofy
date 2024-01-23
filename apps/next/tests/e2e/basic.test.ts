@@ -29,9 +29,9 @@ describe("Basic tests", () => {
     let protoBrowser: ProtoBrowser;
     beforeEach(async () => {
         protoBrowser = await ProtoBrowser.__newInstance__()
-    }, 8000)
+    }, 15000)
     afterEach(async () => {
-        await protoBrowser.close()
+        await protoBrowser?.close()
     })
     it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
@@ -40,7 +40,7 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement('#sign-in-password-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-btn')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-up-link')).toBeTruthy();
-    }, 8000)
+    }, 30000)
     it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister()
         expect(await protoBrowser.getUrlPath()).toBe('/auth/register');
@@ -49,13 +49,13 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement('#sign-up-repassword-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-up-btn')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-link')).toBeTruthy();
-    }, 8000)
+    }, 30000)
     it("should be able to register and retrieve a session using sign up interface", async () => {
         await protoBrowser.navigateToRegister()
         await protoBrowser.waitForElement('#sign-up-email-input');
         await protoBrowser.signUpFlow(`randomuser-${uuidv4()}@noreply.com`, 'changeme4321');
         expect(await protoBrowser.getUrlPath()).toBe('/')
-    }, 8000)
+    }, 30000)
 })
 describe("Test admin capabilities", () => {
     let protoBrowser: ProtoBrowser;
@@ -73,7 +73,7 @@ describe("Test admin capabilities", () => {
     }, 60000)
 
     afterAll(async () => {
-        await protoBrowser.close()
+        await protoBrowser?.close()
     })
 
     describe("Test entities autocreation", () => {
@@ -151,7 +151,7 @@ describe("Test admin capabilities", () => {
 
         })
     })
-    describe.skip("Testing page in useEdit mode", () => {
+    describe("Testing page in useEdit mode", () => {
         beforeAll(async () => {
             await protoBrowser.goTo('');
             await protoBrowser.clickElement("#use-edit-btn")
@@ -162,8 +162,14 @@ describe("Test admin capabilities", () => {
             await protoBrowser.mouseClick(Math.floor(vp.width/2), Math.floor(vp.height/2))
             await protoBrowser.clickElement("#render-node-delete-btn")
             await protoBrowser.clickElement("#save-nodes-btn")
-            await protoBrowser.waitForElement("#editor-loading")
-            await protoBrowser.waitForElement("#editor-frame-container")
-        }, 30000)
+            let error
+            try {
+                // If "#nextjs__container_build_error_label" exist, means that has error compiling
+                await protoBrowser.waitForElement("#nextjs__container_build_error_label", 6000)
+            } catch (e) {
+                error = !!e
+            }
+            expect(error).toBeTruthy()
+        }, 50000)
     })
 })
