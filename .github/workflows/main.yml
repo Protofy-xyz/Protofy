@@ -40,7 +40,7 @@ jobs:
           details: Test Succeeded!
           username: ${{ github.event.pusher.name }}
           color: '#00e065'
-          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/logo-protofy.png
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_green.png
           description: |
             Event: push
             Repo: Protofy-xyz/Protofy
