@@ -3,17 +3,17 @@ import { Application } from 'express';
 
 Protofy("type", "IOTRouter")
 
-export default (app:Application, context) => {
-
-    const { devicePub, deviceSub } = context
-
-    ///YOUR LOGIC HERE:
-
+export default (app, {devicePub, deviceSub, mqtt}) => {
+    ///PUT YOUR ROUTER LOGIC HERE
+    //devicePub function allows to communicate with devices via mqtt
+    //deviceSub allows to receive notifications from devices via mqtt
+    //app is a normal expressjs object
+    //mqtt is a mqttclient connection
+    
     //IoT device flow example:
     // deviceSub('testdevice', 'binary_sensor', 'testbutton', (message) => {
     //     message == 'ON' ?
     //         devicePub('testdevice', 'switch', 'testrelay', 'OFF')
     //         : devicePub('testdevice', 'switch', 'testrelay', 'ON')
     // })
-
 }
