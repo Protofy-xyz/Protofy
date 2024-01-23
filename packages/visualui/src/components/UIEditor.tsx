@@ -67,7 +67,10 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     const missingJsxImportsText = missingJsxImports.reduce((total, impData) => {
                         let impText;
                         let moduleSpecifier = impData.moduleSpecifier;
-                        if (impData.namedImports?.length) { // is named import
+                        if (!moduleSpecifier) {
+                            impText = ""
+                        }
+                        else if (impData.namedImports?.length) { // is named import
                             const namedImportName = impData.namedImports[0]?.alias
                                 ? (impData.namedImports[0]?.name + " as " + impData.namedImports[0]?.alias)
                                 : impData.namedImports[0]?.name;
