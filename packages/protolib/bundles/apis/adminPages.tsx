@@ -206,7 +206,7 @@ export default {
                         DataTable2.column("object", "object", true, row => <Chip text={row.object} color={row.object == 'None' ? '$gray5' : '$color5'} />),
                     )}
                     extraFieldsFormsAdd={objects.isLoaded ? {
-                        template: z.union([z.literal("Automatic CRUD"), z.literal("Automatic CRUD (custom storage)"), z.literal("IOT Router"), z.literal("empty")]).after("name"),
+                        template: z.union([z.literal("Automatic CRUD"), z.literal("Automatic CRUD (custom storage)"), z.literal("IOT Router"), z.literal("Custom API")]).after("name"),
                         object: z.union([z.literal("without object"), ...(objects.data.items.map(o => z.literal(o.name)))] as any).after('name'),
                     }:{}}
                     extraMenuActions={[
