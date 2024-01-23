@@ -42,15 +42,15 @@ jobs:
           color: '#00e065'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/logo-protofy.png
           description: |
-            Event: push
-            Repo: Protofy-xyz/Protofy
-            Ref: ${{ github.ref }}
-            Workflow: ${{ github.workflow }}
-            Author: ${{ github.event.head_commit.author.name }}
-            Committer: ${{ github.event.head_commit.committer.name }}
-            Pusher: ${{ github.event.pusher.name }}
-            Commit: [${{ github.event.head_commit.id }}](${{ github.event.head_commit.url }})
-            Commit Message: ${{ github.event.head_commit.message }}
+            **Event:** push
+            **Repo:** Protofy-xyz/Protofy
+            **Ref:** ${{ github.ref }}
+            **Workflow:** ${{ github.workflow }}
+            **Author:** ${{ github.event.head_commit.author.name }}
+            **Committer:** ${{ github.event.head_commit.committer.name }}
+            **Pusher:** ${{ github.event.pusher.name }}
+            **Commit URL:** ${{ github.event.head_commit.url }}
+            **Commit Message:** ${{ github.event.head_commit.message }}
 
           footer: Severity: Informational
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
