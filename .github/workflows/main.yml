@@ -52,12 +52,12 @@ jobs:
             Commit URL: ${{ github.event.head_commit.url }}
             Commit Message: ${{ github.event.head_commit.message }}
 
-            Test Succeeded!
+            Tests Succeeded!
 
             Severity: Informational
 
           footer: This is a footer.
-          text: This is where text goes.
+          text: Tests Succeed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Failure
