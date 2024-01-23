@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "./tests"
   ],
   "scripts": {
     "service-start": "NODE_ENV=production pm2 start ecosystem.config.js && yarn monit",
@@ -51,7 +52,7 @@
     "stop": "pm2 stop all",
     "logs": "pm2 logs",
     "create-environment": "node copy.js",
-    "test:all": "yarn workspaces foreach run test"
+    "test:all": " yarn workspaces foreach run test"
   },
   "resolutions": {
     "react": "^18.2.0",
