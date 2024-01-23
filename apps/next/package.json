@@ -68,6 +68,9 @@
       "jest-expect-message"
     ],
     "preset": "ts-jest",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/tests/**/*.test.ts"
+    ]
   }
 }
