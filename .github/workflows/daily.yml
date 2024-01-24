@@ -33,18 +33,37 @@ jobs:
     - name: Start "Protofy"
       run: node .github/scripts/start.js
     
-    - name: Set result output
-      id: set-result
-      if: always()  # This step will run regardless of previous step's success/failure
-      run:  echo "::set-output name=result::${{ matrix.os }}: ${{ job.status }}"
+    - name: Save result # save result
+      if: always()
+      run: |
+        echo "${{ matrix.os }}: ${{ job.status }}" >> ${{ runner.temp }}/result.txt
+
+    - name: Upload result # upload saved result as artifact to be consumed at notify job
+      uses: actions/upload-artifact@v2
+      with:
+        name: result-${{ matrix.os }}
+        path: ${{ runner.temp }}/result.txt
 
   notify:
     runs-on: ubuntu-latest
     needs: build
     if: always()  # This ensures that the notification job runs whether the build job succeeds or fails
     steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v2
+
+    - name: Combine results
+      id: combine-results
+      run: |
+        cat result-* > combined_results.txt
+        echo "Combined results:"
+        cat combined_results.txt
+        echo "RESULTS=$(cat combined_results.txt | base64)" >> $GITHUB_ENV
+
     - name: Daily build Report
       uses: rjstone/discord-webhook-notify@v1
+      env:
+        RESULTS: ${{ env.RESULTS }}
       with:
           severity: info
           details: Daily Build Succeeded!
@@ -52,12 +71,7 @@ jobs:
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
           description: |
             Event: Daily Build
-            ubuntu-18.04: ${{ needs.build.outputs.ubuntu-18.04 }}
-            ubuntu-20.04: ${{ needs.build.outputs.ubuntu-20.04 }}
-            ubuntu-22.04: ${{ needs.build.outputs.ubuntu-22.04 }}
-            windows-latest: ${{ needs.build.outputs.windows-latest }}
-            macos-12: ${{ needs.build.outputs.macos-12 }}
-            macos-13: ${{ needs.build.outputs.macos-13 }}
+            $(echo $RESULTS | base64 --decode)
 
           footer: Daily report.
           text: Check daily report!
