@@ -60,8 +60,9 @@ jobs:
           fi
         done
         echo "Combined results result:"
-        cat combined_results.txt
-        echo "RESULTS=$(cat combined_results.txt)" >> $GITHUB_ENV
+        echo "RESULTS<<EOF" >> $GITHUB_ENV
+        cat combined_results.txt >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     - name: Daily build Report
       uses: rjstone/discord-webhook-notify@v1
       env:
