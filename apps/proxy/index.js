@@ -1,14 +1,15 @@
 const Redbird = require('redbird-no-etcd');
-const cookie = require('cookie');
 const environments = require('../../packages/app/bundles/environments')
+const logger = require('./logger');
+
 const isProduction = process.env.NODE_ENV === 'production';
 const Port = process.env.PORT ?? (isProduction ? 8000 : 8080);
 const defaultEnvironment = environments[isProduction?'prod':'dev']
 
-console.log('Proxy environments:', environments)
-console.log('Proxy default environment:', defaultEnvironment)
-console.log('Proxy mode:', isProduction?'producton':'development')
-console.log('Proxy port:', Port)
+logger.debug('Proxy environments:', environments)
+logger.debug('Proxy default environment:', defaultEnvironment)
+logger.info('Proxy mode:', isProduction?'producton':'development')
+logger.info('Proxy port:', Port)
 
 function getEnvironment(key, host, req) {
     const prefix = host.split('.')[0];
@@ -76,7 +77,8 @@ var proxy = new Redbird({
     port: Port,
     bunyan: {
         name: 'redbird',
-        level: 'error'
+        level: 'error',
+        formatter: "pretty"
     },
     resolvers: [
         devResolver,

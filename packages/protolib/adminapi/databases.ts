@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import {connectDB, getDB, handler, app} from 'protolib/api'
 import { getInitialData } from 'app/initialData';
 
-console.log(`API Module loaded: ${__filename.split('.')[0]}`);
+//console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 
 export const getDatabases = async () => {
     return (await fs.promises.readdir('../../'+path.join('data', 'databases'))).map((name)=>{

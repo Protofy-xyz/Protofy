@@ -2,19 +2,17 @@ import dotenv from 'dotenv'
 // get config vars
 dotenv.config({ path: '../../.env' });
 
-import aedes from 'aedes';
 import http from 'http';
-import WebSocket, { Server } from 'ws';
-import net from 'net';
 import app from './api'
 import {generateEvent} from 'app/bundles/library'
+import { logger } from './logger';
 const isProduction = process.env.NODE_ENV === 'production';
 
 const server = http.createServer(app);
 const PORT = isProduction?4001:3001
 
 server.listen(PORT, () => {
-  console.log(`Express server listening at http://localhost:${PORT}`);
+  logger.info(`Express server listening at http://localhost:${PORT}`);
 });
 
 // generateEvent({

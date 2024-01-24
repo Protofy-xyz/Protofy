@@ -6,7 +6,7 @@ import {getServiceToken} from 'protolib/api/lib/serviceToken'
 import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";
 
-console.log(`API Module loaded: ${__filename.split('.')[0]}`);
+//console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 
 const dbPath = '../../data/databases/auth'
 const groupDBPath = '../../data/databases/auth_groups'

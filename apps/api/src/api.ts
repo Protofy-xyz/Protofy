@@ -2,9 +2,11 @@ import { app, getMQTTClient } from 'protolib/api'
 import * as path from 'path';
 import * as fs from 'fs';
 import BundleAPI from 'app/bundles/apis'
+import { logger } from './logger';
+
 const modulesDir = path.join(__dirname, 'modules');
 
-const mqtt = getMQTTClient()
+const mqtt = getMQTTClient(logger)
 
 const topicSub = (topic, cb) => {
     mqtt.subscribe(topic)
@@ -33,13 +35,14 @@ const devicePub = async (deviceName, component, componentName, command) => {
 fs.readdir(modulesDir, (error, files) => {
 
     if (error) {
-        return console.error('Error reading modules directory: ' + error);
+        logger.error('Error reading modules directory: ' + error);
+        return
     }
 
     files.forEach((file) => {
         if (path.extname(file) === '.ts') {
             require(path.join(modulesDir, file));
-            console.log(`API Module loaded: ${file.substr(0, file.length - 3)}`);
+            logger.debug(`API Module loaded: ${file.substr(0, file.length - 3)}`);
         }
     })
 })

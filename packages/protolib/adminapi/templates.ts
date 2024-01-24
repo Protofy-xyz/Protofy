@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import {templates} from 'app/templates'
 import {connectDB, handler, app} from 'protolib/api'
 
-console.log(`API Module loaded: ${__filename.split('.')[0]}`);
+//console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 
 const requireAdmin = () => handler(async (req, res, session, next) => {
     if(!session || !session.user.admin) {

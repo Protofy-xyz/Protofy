@@ -1,4 +1,5 @@
 import dotenv from 'dotenv'
+import { logger } from './logger';
 // get config vars
 dotenv.config({ path: '../../.env' });
 
@@ -34,7 +35,7 @@ server.on('upgrade', (request, socket, head) => {
 const PORT = isProduction?4002:3002
 
 server.listen(PORT, () => {
-  console.log(`Express server listening at http://localhost:${PORT}`);
+  logger.info(`Express server listening at http://localhost:${PORT}`);
 });
 
 const mqttServer = net.createServer((socket) => {
@@ -43,7 +44,7 @@ const mqttServer = net.createServer((socket) => {
 
 const mqttPort = isProduction? 8883 : 1883
 mqttServer.listen(mqttPort, () => {
-  console.log('MQTT server listening on port '+mqttPort);
+  logger.info('MQTT server listening on port '+mqttPort);
 });
 
 // generateEvent({
