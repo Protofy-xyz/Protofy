@@ -74,6 +74,8 @@ By default there is a proxy running on port `8080` that redirects to the **next.
 
 Once the Next.js app is running you can go to `http://localhost:8080` to see the web app. 
 
+*Reminder: If you have problems accessing the services, remember to check your firewall configuration.*
+
 ## 🙋‍♂️ Adding a user
 The first time you run the starter you won't have users. You can easily create one on `http://localhost:8080/auth/login` but this one will be a normal user. If you want to create an admin user you can do it by running the following command:
 
