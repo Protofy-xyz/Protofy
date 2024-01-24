@@ -7,6 +7,6 @@ module.exports = pino({
       colorize: true
     }
   },
-  name: 'api',
+  name: 'proxy',
   level: 'debug'
 });
