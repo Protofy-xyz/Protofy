@@ -12,7 +12,7 @@ const main = async () => {
         failure: '🔴',
         cancelled: '🟠'
     }
-    const content = `${matrixOS}: ${STATUS[jobStatus] ?? "❓"}`;
-    fs.writeFileSync(path.join(runnerTempDir+'\n', "result.txt"), content, 'utf8')
+    const content = `${matrixOS}: ${STATUS[jobStatus] ?? "❓"}`+'\n';
+    fs.writeFileSync(path.join(runnerTempDir, "result.txt"), content, 'utf8')
 }
 main()
