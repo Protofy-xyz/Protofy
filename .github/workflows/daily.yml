@@ -35,11 +35,11 @@ jobs:
       run: node .github/scripts/start.js
     
     - name: Save result
-      if: always() && ${{ matrix.os }} != "windows-latest"
+      if: ${{ always() && matrix.os != 'windows-latest' }}
       run: node .github/scripts/save_result.js ${{ matrix.os }} ${{ job.status }} ${{ runner.temp }}
     
     - name: Save result
-      if: always() && ${{ matrix.os }} == "windows-latest"
+      if: ${{ always() && matrix.os == 'windows-latest' }}
       run: node .github\scripts\save_result.js ${{ matrix.os }} ${{ job.status }} ${{ runner.temp }}
     
     - name: Upload result # upload saved result as artifact to be consumed at notify job
