@@ -33,6 +33,7 @@
     "eslint-config-next": "^13.0.4",
     "jest": "~29.7.0",
     "next": "^13.5.2",
+    "pino": "8.17.2",
     "pm2": "^5.3.0",
     "protolib": "0.0.1",
     "raf": "^3.4.1",
@@ -45,7 +46,6 @@
     "react-native-web-lite": "latest",
     "react-topics": "0.1.7",
     "three": "0.146.0",
-    "ts-jest": "~29.1.1",
-    "zombie": "6.1.4"
+    "ts-jest": "~29.1.1"
   }
 }
