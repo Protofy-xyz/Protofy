@@ -65,7 +65,8 @@ jobs:
         echo "RESULTS=$(cat combined_results.txt | base64)" >> $GITHUB_ENV
     - name: Decode Results
       run: |
-        echo "DECODED_RESULTS=$(echo $RESULTS | base64 --decode)" >> $GITHUB_ENV
+        decoded=$(echo $COMBINED_RESULTS | base64 --decode | sed ':a;N;$!ba;s/\n/;/g')
+        echo "DECODED_RESULTS=${decoded}" >> $GITHUB_ENV
 
     - name: Daily build Report
       uses: rjstone/discord-webhook-notify@v1
