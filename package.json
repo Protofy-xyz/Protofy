@@ -53,7 +53,8 @@
     "stop": "pm2 stop all",
     "logs": "pm2 logs",
     "create-environment": "node copy.js",
-    "test:all": " yarn workspaces foreach run test"
+    "test:all": "yarn workspaces foreach run test",
+    "test:global":"yarn workspace tests test"
   },
   "resolutions": {
     "react": "^18.2.0",
