@@ -4,7 +4,8 @@ const exec = require('child_process').exec;
 
 const PROJECT_DIR = path.join(__dirname, "..", "..")
 const DEV_SERVER_URL = "http://127.0.0.1:8080"
-const TIMEOUT = 120000 // 2 min
+const args = process.argv.slice(2);
+const timeout = args[0] ?? 180000;// default 3 min
 const RETRY_TIME = 1000 // 1 sec
 // Run project
 const start = () => {
@@ -30,7 +31,7 @@ const healthCheck = () => { // Check system is up and ready to use
         setTimeout(() => {
             clearInterval(interval)
             reject("Error: healthcheck timeout.")
-        }, TIMEOUT)
+        }, timeout)
     })
 }
 
