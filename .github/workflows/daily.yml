@@ -10,7 +10,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-20.04, macos-13, macos-12]  # add , windows-latest
+        os: [ubuntu-22.04, ubuntu-20.04, macos-13, macos-12]
+      fail-fast: false # Allow other jobs to continue if one fails
 
     steps:
     - name: Checkout repository
@@ -81,7 +82,6 @@ jobs:
         RESULTS: ${{ env.RESULTS }}
       with:
           severity: info
-          details: Daily Build Report!
           color: '#a600e0'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
           description: |
