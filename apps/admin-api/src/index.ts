@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import { logger } from './logger';
+import {setLoggerConfig, getLogger } from 'protolib/base';
 // get config vars
 dotenv.config({ path: '../../.env' });
 
@@ -10,6 +10,8 @@ import net from 'net';
 import app from './api'
 import {generateEvent} from 'app/bundles/library'
 
+setLoggerConfig({name: "admin-api"})
+const logger = getLogger()
 const isProduction = process.env.NODE_ENV === 'production';
 const aedesInstance = new aedes();
 const server = http.createServer(app);

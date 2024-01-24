@@ -5,6 +5,9 @@ import {connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app
 import {getServiceToken} from 'protolib/api/lib/serviceToken'
 import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";
+import { getLogger } from '../base';
+
+const logger = getLogger()
 
 //console.log(`API Module loaded: ${__filename.split('.')[0]}`);
 

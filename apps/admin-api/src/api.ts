@@ -3,10 +3,11 @@ import * as path from 'path';
 import * as fs from 'fs';
 import adminModules from 'protolib/adminapi'
 import BundleAPI from 'app/bundles/adminapi'
-import { logger } from './logger';
 import httpLogger from "pino-http";
+import {getLogger } from 'protolib/base';
 
 const modulesDir = path.join(__dirname, 'modules');
+const logger = getLogger()
 logger.debug('Admin modules: ', adminModules)
 
 fs.readdir(modulesDir, (error, files) => {

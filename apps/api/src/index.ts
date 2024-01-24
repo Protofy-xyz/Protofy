@@ -1,11 +1,16 @@
 import dotenv from 'dotenv'
+import {setLoggerConfig, getLogger } from 'protolib/base';
+
 // get config vars
 dotenv.config({ path: '../../.env' });
 
 import http from 'http';
 import app from './api'
 import {generateEvent} from 'app/bundles/library'
-import { logger } from './logger';
+
+
+setLoggerConfig({name: "api"})
+const logger = getLogger()
 const isProduction = process.env.NODE_ENV === 'production';
 
 const server = http.createServer(app);

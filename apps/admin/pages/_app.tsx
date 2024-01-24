@@ -21,9 +21,10 @@ import { SiteConfig } from 'app/conf'
 import { AppConfContext } from 'app/provider/AppConf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
-import { initSchemaSystem } from 'protolib/base'
+import { initSchemaSystem, setLoggerConfig } from 'protolib/base'
 
 initSchemaSystem()
+setLoggerConfig({name: "admin"})
 
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css')
