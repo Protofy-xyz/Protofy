@@ -55,7 +55,11 @@ jobs:
     - name: Combine results
       id: combine-results
       run: |
-        cat result-* > combined_results.txt
+        for result_dir in result-*; do
+          if [ -d "$result_dir" ]; then
+            cat "$result_dir/result.txt" >> combined_results.txt
+          fi
+        done
         echo "Combined results:"
         cat combined_results.txt
         echo "RESULTS=$(cat combined_results.txt | base64)" >> $GITHUB_ENV
