@@ -1,0 +1,99 @@
+name: Daily Multi-OS Job
+
+on:
+  schedule:
+    - cron: '30 11 * * *'  # Runs at 11:30 UTC every day
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, windows-latest, macos-12, macos-13]  # macOS versions for Monterey and Ventura respectively
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.4'
+        cache: 'yarn'
+
+    - name: Health check versions
+      run: |
+        node -v
+        yarn -v
+
+    - name: Install NodeJS dependencies
+      run: yarn
+    
+    - name: Start "Protofy"
+      run: node .github/scripts/start.js
+    
+    - name: Daily build success
+      uses: rjstone/discord-webhook-notify@v1
+      if: success()
+      with:
+          severity: info
+          details: Daily Build Succeeded!
+          username: ${{ github.event.pusher.name }}
+          color: '#a600e0'
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
+          description: |
+            Event: Daily Build
+            Repo: Protofy-xyz/Protofy
+            Ref: ${{ github.ref }}
+
+            Daily Build Succeeded!
+
+            Severity: Informational
+
+          footer: Succeed.
+          text: Tests Succeed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+    - name: Test Failure
+      uses: rjstone/discord-webhook-notify@v1
+      if: failure()
+      with:
+          severity: error
+          details: Test Failed!
+          username: ${{ github.event.pusher.name }}
+          color: '#a600e0'
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
+          description: |
+            Event: Daily Build
+            Repo: Protofy-xyz/Protofy
+            Ref: ${{ github.ref }}
+
+            Daily Build Error!
+
+            Severity: Error
+
+          footer: You must check your changes.
+          text: Tests Error!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+    - name: Test Cancelled
+      uses: rjstone/discord-webhook-notify@v1
+      if: cancelled()
+      with:
+          severity: warn
+          details: Job Cancelled!
+          username: ${{ github.event.pusher.name }}
+          color: '#a600e0'
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
+          description: |
+            Event: Daily Build
+            Repo: Protofy-xyz/Protofy
+            Ref: ${{ github.ref }}
+
+            Daily Build Cancelled!
+
+            Severity: Warning
+
+          footer: You must check github actions workflow status.
+          text: Job Cancelled!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
