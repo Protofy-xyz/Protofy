@@ -36,7 +36,7 @@ import HorizontalBox from '../components/HorizontalBox'
 import HoveredGroup from '../components/HoveredGroup'
 import { HR } from '../components/HR'
 import { IconStack } from '../components/IconStack'
-import Image  from '../components/Image'
+import Image from '../components/Image'
 import { ItemCard } from '../components/ItemCard'
 import { ButtonLink, Link, ParagraphLink } from '../components/Link'
 import { LinkGroup, LinkGroupItem } from '../components/LinkGroup'
@@ -68,7 +68,7 @@ import TooltipContainer from '../components/TooltipContainer'
 import { TwitterIcon } from '../components/icons/TwitterIcon'
 
 import { UL } from '../components/UL'
-import Video  from '../components/Video'
+import Video from '../components/Video'
 //import { unwrapText } from '../components/unwrapText'
 import XCenterStack from '../components/XCenterStack'
 
@@ -100,7 +100,7 @@ export default {
     selectedElement: 'two'
   }),
   ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {}, {}, true),
-  ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }),
+  ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
   ...cw(ButtonGroup, 'EyeOff', 'ButtonGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ButtonLink, 'ExternalLink', 'ButtonLink', { href: "/hello", children: "hello" }),
   ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "hello" }, {}, {}, true),
@@ -113,10 +113,10 @@ export default {
   ...cw(ContainerLarge, 'Package', 'ContainerLarge', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ContainerXL, 'Container', 'ContainerXL', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(CopyBubble, 'Copy', 'CopyBubble', { text: "copy" }),
-  ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }),
+  ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { canMoveIn: () => false }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
   ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
-  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }),
+  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
   ...cw(ElevatedArea, 'GalleryThumbnails', 'ElevatedArea'),
   ...cw(ErrorMessage, 'AlertTriangle', 'ErrorMessage'),
   ...cw(FeatureItem, 'CheckCircle2', 'FeatureItem', { label: "hello", children: "world" }),
@@ -133,7 +133,7 @@ export default {
   ...cw(HR, 'MinusSquare', 'HR'),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }, {}, {}, true),
-  ...cw(Image, 'MinusSquare', 'Image', { }, {}, {}, true),
+  ...cw(Image, 'MinusSquare', 'Image', {}, {}, {}, true),
   ...cw(Link, 'Link', 'Link', { href: "/hello", children: "hello" }),
   ...cw(LinkGroup, 'Group', 'LinkGroup', { href: "/hello", children: "hello" }),
   ...cw(LinkGroupItem, 'Puzzle', 'LinkGroupItem', { href: "/hello", children: "hello" }),
@@ -178,7 +178,7 @@ export default {
   ...cw(TooltipContainer, 'BoxSelect', 'TooltipContainer', { tooltipText: "Hello" }),
   ...cw(TwitterIcon, 'LogoIcon', 'TwitterIcon', { width: 23 }),
   ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }, {}, {}, true),
-  ...cw(Video, 'Video', 'Video', { }, {}, {}, true),
+  ...cw(Video, 'Video', 'Video', {}, {}, {}, true),
   ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
   ...cw(AlertDialog, 'Group', 'AlertDialog')
 }
