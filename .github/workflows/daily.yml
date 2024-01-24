@@ -36,7 +36,7 @@ jobs:
     
     - name: Save result
       if: always()
-      run: node .github/scripts/save_result.js
+      run: node .github/scripts/save_result.js ${{ matrix.os }} ${{ job.status }} ${{ runner.temp }}
       
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       uses: actions/upload-artifact@v2
