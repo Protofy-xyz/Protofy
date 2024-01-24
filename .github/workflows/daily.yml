@@ -43,7 +43,7 @@ jobs:
       run: node .github\scripts\save_result.js ${{ matrix.os }} ${{ job.status }} ${{ runner.temp }}
     
     - name: Upload result # upload saved result as artifact to be consumed at notify job
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: result-${{ matrix.os }}
         path: ${{ runner.temp }}/result.txt
@@ -54,7 +54,7 @@ jobs:
     if: always()  # This ensures that the notification job runs whether the build job succeeds or fails
     steps:
     - name: Download all artifacts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
 
     - name: Combine results
       run: |
