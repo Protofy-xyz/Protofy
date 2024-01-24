@@ -32,15 +32,19 @@ jobs:
     
     - name: Start "Protofy"
       run: node .github/scripts/start.js
+    
+    - name: Set result output
+      id: set-result
+      if: always()  # This step will run regardless of previous step's success/failure
+      run:  echo "::set-output name=result::${{ matrix.os }}: ${{ job.status }}"
 
   notify:
     runs-on: ubuntu-latest
     needs: build
     if: always()  # This ensures that the notification job runs whether the build job succeeds or fails
     steps:
-    - name: Daily build success
+    - name: Daily build Report
       uses: rjstone/discord-webhook-notify@v1
-      if: success()
       with:
           severity: info
           details: Daily Build Succeeded!
@@ -48,55 +52,13 @@ jobs:
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
           description: |
             Event: Daily Build
-            Repo: Protofy-xyz/Protofy
-            Ref: ${{ github.ref }}
+            ubuntu-18.04: ${{ needs.build.outputs.ubuntu-18.04 }}
+            ubuntu-20.04: ${{ needs.build.outputs.ubuntu-20.04 }}
+            ubuntu-22.04: ${{ needs.build.outputs.ubuntu-22.04 }}
+            windows-latest: ${{ needs.build.outputs.windows-latest }}
+            macos-12: ${{ needs.build.outputs.macos-12 }}
+            macos-13: ${{ needs.build.outputs.macos-13 }}
 
-            Daily Build Succeeded!
-
-            Severity: Informational
-
-          footer: Succeed.
-          text: Tests Succeed!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-
-    - name: Test Failure
-      uses: rjstone/discord-webhook-notify@v1
-      if: failure()
-      with:
-          severity: error
-          details: Test Failed!
-          color: '#a600e0'
-          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
-          description: |
-            Event: Daily Build
-            Repo: Protofy-xyz/Protofy
-            Ref: ${{ github.ref }}
-
-            Daily Build Error!
-
-            Severity: Error
-
-          footer: You must check your changes.
-          text: Tests Error!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-
-    - name: Test Cancelled
-      uses: rjstone/discord-webhook-notify@v1
-      if: cancelled()
-      with:
-          severity: warn
-          details: Job Cancelled!
-          color: '#a600e0'
-          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
-          description: |
-            Event: Daily Build
-            Repo: Protofy-xyz/Protofy
-            Ref: ${{ github.ref }}
-
-            Daily Build Cancelled!
-
-            Severity: Warning
-
-          footer: You must check github actions workflow status.
-          text: Job Cancelled!
+          footer: Daily report.
+          text: Check daily report!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
