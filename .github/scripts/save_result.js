@@ -13,6 +13,6 @@ const main = async () => {
         cancelled: '🟠'
     }
     const content = `${matrixOS}: ${STATUS[jobStatus] ?? "❓"}`;
-    fs.writeFileSync(path.join(runnerTempDir, "result.txt"), content)
+    fs.writeFileSync(path.join(runnerTempDir, "result.txt"), content, 'utf8')
 }
 main()
