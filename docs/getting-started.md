@@ -14,6 +14,8 @@ We like to think of prototype as a CMS + Framework + Framework UI
 ## Minimum requirements
 - Windows 11, Ubuntu 20.04 or MacOS Big Sur
 - Node.js v18
+- RAM 8 GB
+- Intel® Celeron® J4125 2.00 GHz
 
 ## 🏃‍♂️ Run the project 
 
