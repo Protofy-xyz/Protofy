@@ -63,11 +63,14 @@ jobs:
         echo "Combined results:"
         cat combined_results.txt
         echo "RESULTS=$(cat combined_results.txt | base64)" >> $GITHUB_ENV
+    - name: Decode Results
+      run: |
+        echo "DECODED_RESULTS=$(echo $RESULTS | base64 --decode)" >> $GITHUB_ENV
 
     - name: Daily build Report
       uses: rjstone/discord-webhook-notify@v1
       env:
-        RESULTS: ${{ env.RESULTS }}
+        DECODED_RESULTS: ${{ env.DECODED_RESULTS }}
       with:
           severity: info
           details: Daily Build Report!
@@ -75,7 +78,7 @@ jobs:
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
           description: |
             Event: Daily Build
-            ${{ env.RESULTS }}
+            ${{ env.DECODED_RESULTS }}
 
           footer: Daily report.
           text: Check daily report!
