@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-22.04, macos-13]  # add , windows-latest, macos-12
+        os: [ubuntu-22.04, ubuntu-20.04, macos-13, macos-12]  # add , windows-latest
 
     steps:
     - name: Checkout repository
@@ -85,9 +85,10 @@ jobs:
           color: '#a600e0'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
           description: |
-            Event: Daily Build
+            Daily OS Build Report 👀 
+
             ${{ env.RESULTS }}
 
           footer: Daily report.
-          text: Check daily report!
+          text: 🚨 Check daily report! 🚨
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
