@@ -2,7 +2,8 @@ name: Daily Multi-OS Job
 
 on:
   schedule:
-    - cron: '30 11 * * *'  # Runs at 11:30 UTC every day
+    - cron: '0 12 * * *'  # Runs at 12:00 UTC every day
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   build:
