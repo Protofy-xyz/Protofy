@@ -34,14 +34,10 @@ jobs:
     - name: Start "Protofy"
       run: node .github/scripts/start.js
     
-    - name: Save result (Unix) 
-      if: always() && matrix.os != 'windows-latest'
-      run: ./.github/scripts/save_result
+    - name: Save result
+      if: always()
+      run: node .github/scripts/save_result.js
       
-    - name: Save result (Windows) 
-      if: always() && matrix.os == 'windows-latest'
-      run: .\.github\scripts\save_result.ps1
-
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       uses: actions/upload-artifact@v2
       with:
