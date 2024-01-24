@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-20.04, macos-13, macos-12, windows-latest]
+        os: [ubuntu-22.04, ubuntu-20.04] # , macos-13, macos-12, windows-latest
       fail-fast: false # Allow other jobs to continue if one fails
 
     steps:
@@ -53,19 +53,19 @@ jobs:
       uses: actions/download-artifact@v2
 
     - name: Combine results
-      id: combine-results
       run: |
+        ls -la
         for result_dir in result-*; do
           if [ -d "$result_dir" ]; then
             cat "$result_dir/result.txt" >> combined_results.txt
           fi
         done
-        echo "Combined results:"
+        echo "Combined results result:"
         cat combined_results.txt
         # Use the EOF method to handle multi-line strings
-        echo "RESULTS<<EOF" >> $GITHUB_ENV
-        cat combined_results.txt >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
+        # echo "RESULTS<<EOF" >> $GITHUB_ENV
+        # cat combined_results.txt >> $GITHUB_ENV
+        # echo "EOF" >> $GITHUB_ENV
 
     - name: Daily build Report
       uses: rjstone/discord-webhook-notify@v1
