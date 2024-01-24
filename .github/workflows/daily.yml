@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-22.04, macos-13]  # add , windows-latest, macos-12, macos-13 -> macOS versions for Monterey and Ventura respectively
+        os: [ubuntu-20.04, ubuntu-22.04, macos-13]  # add , windows-latest, macos-12
 
     steps:
     - name: Checkout repository
@@ -36,7 +36,15 @@ jobs:
     - name: Save result # save result
       if: always()
       run: |
-        echo "${{ matrix.os }}: ${{ job.status }}" >> ${{ runner.temp }}/result.txt
+        if [ "${{ job.status }}" == "success" ]; then
+          echo "${{ matrix.os }}: 🟢" >> ${{ runner.temp }}/result.txt
+        elif [ "${{ job.status }}" == "failure" ]; then
+          echo "${{ matrix.os }}: 🔴" >> ${{ runner.temp }}/result.txt
+        elif [ "${{ job.status }}" == "cancelled" ]; then
+          echo "${{ matrix.os }}: 🟠" >> ${{ runner.temp }}/result.txt
+        else
+          echo "${{ matrix.os }}: ❓" >> ${{ runner.temp }}/result.txt
+        fi
 
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       uses: actions/upload-artifact@v2
