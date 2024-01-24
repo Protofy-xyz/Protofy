@@ -9957,6 +9957,7 @@ __metadata:
     moment: 2.29.4
     multer: 1.4.5-lts.1
     pino: 8.17.2
+    pino-http: 9.0.0
     pino-pretty: 10.3.1
     pm2: ^5.3.0
     ts-morph: 20.0.0
@@ -10286,6 +10287,7 @@ __metadata:
     mime-types: ^2.1.35
     moment: 2.29.4
     pino: 8.17.2
+    pino-http: 9.0.0
     pino-pretty: 10.3.1
     pm2: ^5.3.0
     ts-morph: 20.0.0
@@ -22391,6 +22393,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pino-http@npm:9.0.0":
+  version: 9.0.0
+  resolution: "pino-http@npm:9.0.0"
+  dependencies:
+    get-caller-file: ^2.0.5
+    pino: ^8.17.1
+    pino-std-serializers: ^6.2.2
+    process-warning: ^3.0.0
+  checksum: 61be08f23f07f4429cab1b78bdc2d048b4bbbd1c2a20e87b2ae01d5b2bc7fce2d1cfe06396e2694fc321ba4aeb7426da9bc50f74af958e7adef92504dc66c7fb
+  languageName: node
+  linkType: hard
+
 "pino-pretty@npm:10.3.1":
   version: 10.3.1
   resolution: "pino-pretty@npm:10.3.1"
@@ -22422,14 +22436,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-std-serializers@npm:^6.0.0":
+"pino-std-serializers@npm:^6.0.0, pino-std-serializers@npm:^6.2.2":
   version: 6.2.2
   resolution: "pino-std-serializers@npm:6.2.2"
   checksum: aeb0662edc46ec926de9961ed4780a4f0586bb7c37d212cd469c069639e7816887a62c5093bc93f260a4e0900322f44fc8ab1343b5a9fa2864a888acccdb22a4
   languageName: node
   linkType: hard
 
-"pino@npm:8.17.2":
+"pino@npm:8.17.2, pino@npm:^8.17.1":
   version: 8.17.2
   resolution: "pino@npm:8.17.2"
   dependencies:

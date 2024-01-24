@@ -1,9 +1,10 @@
-import {app, getMQTTClient} from 'protolib/api'
+import { app, getMQTTClient } from 'protolib/api'
 import * as path from 'path';
 import * as fs from 'fs';
 import adminModules from 'protolib/adminapi'
 import BundleAPI from 'app/bundles/adminapi'
 import { logger } from './logger';
+import httpLogger from "pino-http";
 
 const modulesDir = path.join(__dirname, 'modules');
 logger.debug('Admin modules: ', adminModules)
@@ -16,10 +17,39 @@ fs.readdir(modulesDir, (error, files) => {
     files.forEach((file) => {
         if (path.extname(file) === '.ts') {
             require(path.join(modulesDir, file));
-            logger.debug(`API Module loaded: ${file.substr(0, file.length-3)}`);
+            logger.debug(`API Module loaded: ${file.substr(0, file.length - 3)}`);
         }
     })
 })
 
-BundleAPI(app, {mqtt:getMQTTClient(logger)})
+export const logRequest = httpLogger({
+    serializers: {
+        req: (req) => {
+          if (process.env.NODE_ENV === "development") {
+            return {
+              method: req.method,
+              url: req.url,
+            };
+          } else {
+            return req;
+          }
+        },
+        res: (res) => {
+            if (process.env.NODE_ENV === "development") {
+              return {
+                code: res.statusCode,
+              };
+            } else {
+              return res;
+            }
+        },
+    },
+    level: "info",
+    transport: {
+        target: 'pino-pretty'
+    }
+});
+
+app.use(logRequest);
+BundleAPI(app, { mqtt: getMQTTClient(logger) })
 export default app
