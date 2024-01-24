@@ -54,7 +54,6 @@ jobs:
 
     - name: Combine results
       run: |
-        ls -la
         for result_dir in result-*; do
           if [ -d "$result_dir" ]; then
             cat "$result_dir/result.txt" >> combined_results.txt
@@ -62,11 +61,9 @@ jobs:
         done
         echo "Combined results result:"
         cat combined_results.txt
-        # Use the EOF method to handle multi-line strings
-        # echo "RESULTS<<EOF" >> $GITHUB_ENV
-        # cat combined_results.txt >> $GITHUB_ENV
-        # echo "EOF" >> $GITHUB_ENV
-
+        echo "RESULTS<<EOF" >> $GITHUB_ENV
+        cat combined_results.txt >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     - name: Daily build Report
       uses: rjstone/discord-webhook-notify@v1
       env:
