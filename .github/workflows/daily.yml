@@ -62,7 +62,10 @@ jobs:
         done
         echo "Combined results:"
         cat combined_results.txt
-        echo "RESULTS=$(cat combined_results.txt)" >> $GITHUB_ENV
+        # Use the EOF method to handle multi-line strings
+        echo "RESULTS<<EOF" >> $GITHUB_ENV
+        cat combined_results.txt >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
 
     - name: Daily build Report
       uses: rjstone/discord-webhook-notify@v1
