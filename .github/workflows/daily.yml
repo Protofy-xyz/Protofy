@@ -70,12 +70,12 @@ jobs:
         RESULTS: ${{ env.RESULTS }}
       with:
           severity: info
-          details: Daily Build Succeeded!
+          details: Daily Build Report!
           color: '#a600e0'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
           description: |
             Event: Daily Build
-            $(echo $RESULTS | base64 --decode)
+            ${{ env.RESULTS }}
 
           footer: Daily report.
           text: Check daily report!
