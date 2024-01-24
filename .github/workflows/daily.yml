@@ -34,18 +34,13 @@ jobs:
     - name: Start "Protofy"
       run: node .github/scripts/start.js
     
-    - name: Save result # save result
-      if: always()
-      run: |
-        if [ "${{ job.status }}" == "success" ]; then
-          echo "${{ matrix.os }}: 🟢" >> ${{ runner.temp }}/result.txt
-        elif [ "${{ job.status }}" == "failure" ]; then
-          echo "${{ matrix.os }}: 🔴" >> ${{ runner.temp }}/result.txt
-        elif [ "${{ job.status }}" == "cancelled" ]; then
-          echo "${{ matrix.os }}: 🟠" >> ${{ runner.temp }}/result.txt
-        else
-          echo "${{ matrix.os }}: ❓" >> ${{ runner.temp }}/result.txt
-        fi
+    - name: Save result (Unix) 
+      if: always() && matrix.os != 'windows-latest'
+      run: ./.github/scripts/save_result
+      
+    - name: Save result (Windows) 
+      if: always() && matrix.os == 'windows-latest'
+      run: .\.github\scripts\save_result.ps1
 
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       uses: actions/upload-artifact@v2
