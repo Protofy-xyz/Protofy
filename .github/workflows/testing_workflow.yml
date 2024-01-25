@@ -27,13 +27,17 @@ jobs:
       run: node .github/scripts/start.js
 
     - name: Run tests
-      run: sudo yarn test:all > testsReport.txt # need to be run as admin
+      run: sudo yarn test:all | tee ${{ runner.temp }}/tests.txt # need to be run as admin
     
+    - name: Show output
+      run: cat ${{ runner.temp }}/tests.txt
+
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       if: always()
       uses: actions/upload-artifact@v3
       with:
-        path: testsReport.txt
+        name: reports
+        path: ${{ runner.temp }}/tests.txt
 
   notify:
     runs-on: ubuntu-latest
@@ -43,6 +47,6 @@ jobs:
     - name: Download all artifacts
       uses: actions/download-artifact@v3
 
-    - name: Combine results
+    - name: Show artifacts
       run: |
         ls
