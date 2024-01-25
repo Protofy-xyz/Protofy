@@ -167,8 +167,8 @@ export const removeFileWithImports = async (
 
     try {
         await fs.unlink(filePath);
-    } catch (err) {
-        logger.error({ error: err, filePath }, `Error deleting file: ${filePath} ${err.message}`);
+    } catch (error) {
+        logger.error({ error, filePath }, "Error deleting file")
     }
 
 };
@@ -181,14 +181,14 @@ export const hasFeature = (sourceFile, key) => {
         const property = arg.getProperty(key);
         return property !== undefined;
     } else {
-        logger.error("Cannot check for feature due to missing features marker")
+        logger.info("Cannot check for feature due to missing features marker")
         return false;
     }
 }
 
 export const addFeature = async (sourceFile, key, value) => {
     if (hasFeature(sourceFile, key)) {
-        logger.error(`Feature '${key}' already exists, not adding.`)
+        logger.info({ feature: key },"Feature already exists, not adding")
         return;
     }
 
@@ -203,7 +203,7 @@ export const addFeature = async (sourceFile, key, value) => {
 
 export const removeFeature = async (sourceFile, key) => {
     if (!hasFeature(sourceFile, key)) {
-        logger.error(`Feature '${key}' not found, cannot remove.`)
+        logger.error({ feature: key },"Feature not found, cannot remove")
         return;
     }
 

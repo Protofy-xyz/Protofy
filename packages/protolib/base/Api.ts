@@ -60,7 +60,7 @@ const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult |
         } catch (e: any) {
             let errStr = e.apiError ?? e.toString()
             if (e instanceof SyntaxError) {
-                logger.error(e)
+                logger.error({ error: e }, "Fetch error")
                 errStr = 'Server error. Check configuration and network connection.'
             }
             const err = getPendingResult('error', null, errStr)

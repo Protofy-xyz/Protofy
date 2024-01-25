@@ -38,7 +38,7 @@ const devicePub = async (deviceName, component, componentName, command) => {
 fs.readdir(modulesDir, (error, files) => {
 
     if (error) {
-        logger.error({ error }, `Error reading modules directory: ${error}`)
+        logger.error({ error }, "Error reading modules directory")
         return
     }
 

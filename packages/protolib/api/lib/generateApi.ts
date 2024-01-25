@@ -66,14 +66,13 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
                         key: element.getId(),
                         value: element.serialize()
                     }
-                } catch (e) {
-                    logger.error(`Error inserting initialData for: ${modelName}`);
-                    logger.error({ error: e }, `Error: ${e.message}`);
+                } catch (error) {
+                    logger.error({modelName, error},"Error inserting initialData")
                 }
             }).filter(x => x)
         }
-    } catch (e) {
-        logger.error({ modelName, error: e }, `Error loading initial data for model ${modelName} error: ${e.message}`);
+    } catch (error) {
+        logger.error({ modelName, error }, "Error loading initial data")
         initialData = undefined;
     }
 
@@ -189,8 +188,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 const readData = typeof options.extraData?.read == 'function' ? await options.extraData.read(session, item, req) : (options.extraData?.read ?? {})
                 res.send(await item.readTransformed(transformers, readData))
             }
-        } catch (e) {
-            logger.error({ error: e }, `Error reading from database: ${e.message}`);
+        } catch (error) {
+            logger.error({ error }, "Error reading from database")
             res.status(404).send({ result: "not found" })
         }
     }));

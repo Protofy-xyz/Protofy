@@ -35,9 +35,9 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
                     }
                     await db.put('initialized', 'done')
                     resolve(db)
-                } catch (err) {
-                    logger.error({ error: err }, `Error initializing the database: ${err.message}`);
-                    reject(err)
+                } catch (error) {
+                    logger.error({ error }, "Error initializing the database")
+                    reject(error)
                 }
             }
         }
@@ -48,10 +48,10 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
                 onDone()
             })
     
-            db.on('error', (err:any) => {
+            db.on('error', (error:any) => {
                 clearTimeout(timer)
-                logger.error({ dbPath, error: err }, `Error connecting to the database: ${dbPath} ${err.message}`);
-                reject(err)
+                logger.error({ dbPath, error }, "Error connecting to the database")
+                reject(error)
             })
         }
     })

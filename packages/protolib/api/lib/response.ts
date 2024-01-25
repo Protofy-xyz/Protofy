@@ -5,12 +5,12 @@ const logger = getLogger()
 export const response = async (pendingOperation:Promise<any>, res:any, defaultValue=[], error="Error reading database") => {
     pendingOperation.then((data)=>{
       res.send(data);
-    }).catch((err)=>{
-      if (err.notFound) {
+    }).catch((error)=>{
+      if (error.notFound) {
         res.send([]);
       } else {
-        res.status(500).send("Error reading database");
-        logger.error({ error: err }, `Error reading database: ${err.message}`);
+        res.status(500).send("Error reading database")
+        logger.error({ error }, "Error reading database")
       }
     })
   }

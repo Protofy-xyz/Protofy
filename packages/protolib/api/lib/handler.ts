@@ -26,8 +26,8 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
         token = req.query.token ? req.query.token : session.token
         try {
             decoded = createSession(verifyToken(token))
-        } catch(e) {
-            logger.error({ error: e }, `Error reading token: ${e.message}`);
+        } catch(error) {
+            logger.error({ error }, "Error reading token")
             decoded = createSession()
         }
     } else {
