@@ -52,9 +52,7 @@ const getReportStatus = (report) => { // report: string
 const main = () => {
     const args = process.argv.slice(2)
     const reportPath = args[0]
-    console.log('REPORT PATH: ', reportPath)
     const fs = require('fs')
-    // TODO adapt this to read correct file
     const test_output = fs.readFileSync(reportPath, 'utf-8')
     console.log('testOutput: ', test_output)
     const splitReportArr = splitGeneralReport(test_output)
