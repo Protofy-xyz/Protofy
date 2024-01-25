@@ -1,0 +1,48 @@
+name: Protofy CI
+on:
+  workflow_dispatch: # This allows manual triggering of the workflow
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js 20.4.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.4.x'
+        cache: 'yarn'
+
+    - name: Health check versions
+      run: |
+        node -v
+        yarn -v
+
+    - name: Install NodeJS dependencies
+      run: yarn
+
+    - name: Start "Protofy"
+      run: node .github/scripts/start.js
+
+    - name: Run tests
+      run: sudo yarn test:all > testsReport.txt # need to be run as admin
+    
+    - name: Upload result # upload saved result as artifact to be consumed at notify job
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        path: testsReport.txt
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: build
+    if: always()  # This ensures that the notify job runs whether the test job succeeds or fails
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+
+    - name: Combine results
+      run: |
+        ls
