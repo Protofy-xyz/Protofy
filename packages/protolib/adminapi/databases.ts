@@ -3,8 +3,11 @@ import * as path from 'path';
 import * as fs from 'fs';
 import {connectDB, getDB, handler, app} from 'protolib/api'
 import { getInitialData } from 'app/initialData';
+import { getLogger } from '../base';
 
-//console.log(`API Module loaded: ${__filename.split('.')[0]}`);
+const logger = getLogger()
+
+logger.debug("API Module loaded: %s",__filename.split('.')[0])
 
 export const getDatabases = async () => {
     return (await fs.promises.readdir('../../'+path.join('data', 'databases'))).map((name)=>{

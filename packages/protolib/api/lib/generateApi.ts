@@ -4,6 +4,9 @@ import { connectDB, getDB } from "./db";
 import { handler } from './handler'
 import fs from 'fs';
 import path from 'path';
+import { getLogger } from '../../base';
+
+const logger = getLogger()
 
 type AutoAPIOptions = {
     modelName: string,
@@ -57,20 +60,20 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
         if (fs.existsSync(path.join(dir, 'initialData.json'))) {
             initialData = JSON.parse(fs.readFileSync(path.join(dir, 'initialData.json')).toString()).map(x => {
                 try {
-                    //console.log('loading: ', x)
+                    logger.debug('loading: %o', x)
                     const element = modelType.load(x).create()
                     return {
                         key: element.getId(),
                         value: element.serialize()
                     }
                 } catch (e) {
-                    console.log('Error inserting initialData for: ', modelName)
-                    console.log('Erro: ', e)
+                    logger.error('Error inserting initialData for: %s', modelName)
+                    logger.error('Error: %s', e)
                 }
             }).filter(x => x)
         }
     } catch (e) {
-        console.log('Error loading initial data for model ', modelName, 'error: ', e);
+        logger.error('Error loading initial data for model %s error: %s', modelName, e);
         initialData = undefined;
     }
 
@@ -187,7 +190,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 res.send(await item.readTransformed(transformers, readData))
             }
         } catch(e) {
-            console.error("Error reading from database: ", e)
+            logger.error("Error reading from database: %s", e)
             res.status(404).send({result: "not found"})
         }
     }));

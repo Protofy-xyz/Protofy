@@ -1,6 +1,9 @@
 import { createSession, SessionDataType } from 'protolib/api/lib/session'
 import {ZodObject} from 'protolib/base'
 import { ProtoSchema } from './ProtoSchema';
+import { getLogger } from "./logger"
+
+const logger = getLogger()
 
 function parseSearch(search) {
     const regex = /(\w+):("[^"]+"|\S+)/g;
@@ -70,7 +73,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
             for (const [key, value] of Object.entries(parsed)) {
                 if (!this.data.hasOwnProperty(key) || this.data[key] != value) {
-                    console.log('discarded: ', this.data[key])
+                    logger.debug('discarded: %o', this.data[key])
                     return
                 }
             }
@@ -95,7 +98,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     create(data?): T {
         const transformed = this.getData(data)
-        // console.log('Creating object: ', transformed)
+        logger.debug('Creating object: %o', transformed)
         return (new(this.constructor as new (data: any, session?: SessionDataType) => T)(transformed, this.session)).validate();
     }
 

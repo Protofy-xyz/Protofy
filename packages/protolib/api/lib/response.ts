@@ -1,3 +1,7 @@
+import { getLogger } from '../../base';
+
+const logger = getLogger()
+
 export const response = async (pendingOperation:Promise<any>, res:any, defaultValue=[], error="Error reading database") => {
     pendingOperation.then((data)=>{
       res.send(data);
@@ -6,7 +10,7 @@ export const response = async (pendingOperation:Promise<any>, res:any, defaultVa
         res.send([]);
       } else {
         res.status(500).send("Error reading database");
-        console.error('Error reading database: ', err)
+        logger.error('Error reading database: %s', err)
       }
     })
   }

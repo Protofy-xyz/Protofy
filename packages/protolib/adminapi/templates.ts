@@ -2,7 +2,11 @@ import * as fs from 'fs';
 import {templates} from 'app/templates'
 import {connectDB, handler, app} from 'protolib/api'
 
-//console.log(`API Module loaded: ${__filename.split('.')[0]}`);
+import { getLogger } from '../base';
+
+const logger = getLogger()
+
+logger.debug("API Module loaded: %s",__filename.split('.')[0]);
 
 const requireAdmin = () => handler(async (req, res, session, next) => {
     if(!session || !session.user.admin) {
@@ -23,7 +27,7 @@ app.post('/adminapi/v1/templates/:tplname', requireAdmin(), handler(async (req, 
     const name = params.name.replace(/[^a-zA-Z0-9_.-]/g, '')
     const path = params.data.path.replace(/\.\./g, '')
     const fullpath = '../..'+path+"/"+name
-    console.log('Executing template: ', tplname, 'in: ', fullpath, 'with vars: ', params)
+    logger.info('Executing template: %s in: %s with vars: %o', tplname, fullpath, params)
     await templates[tplname]({connectDB, fs},fullpath, params)
 
     res.send({"result":"created"})

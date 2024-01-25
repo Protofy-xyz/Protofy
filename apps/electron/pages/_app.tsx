@@ -22,10 +22,11 @@ import { AppConfContext } from 'app/provider/AppConf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
-import {setLoggerConfig} from 'protolib/base';
+import {setLoggerConfig} from 'protolib/base/logger';
 
-initSchemaSystem()
 setLoggerConfig({name: "electron"})
+initSchemaSystem()
+
 
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css')

@@ -13,6 +13,9 @@ import { useAtom } from '../../../lib/Atom';
 import { AlertDialog } from '../../../components/AlertDialog';
 import { API } from '../../../base/Api';
 import { Tinted } from '../../../components/Tinted';
+import { getLogger } from "protolib/base"
+
+const logger = getLogger()
 
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
@@ -68,7 +71,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
     )
 
     const onAddFiles = (acceptedFiles: any) => {
-        console.log('files: ', acceptedFiles)
+        logger.info('files: %o', acceptedFiles)
         setShowUploadDialog(true)
         setShowDropMessage(false)
     }
@@ -187,7 +190,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                                         if (customAction) {
                                             setCustomAction(customAction)
                                         }
-                                        console.log('Action: ', data)
+                                        logger.info('Action: %o', data)
                                     }
                                 }}
                                 disableDragAndDrop={true}

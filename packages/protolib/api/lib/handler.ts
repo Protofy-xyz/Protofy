@@ -3,6 +3,9 @@ import type {Request, RequestHandler, Response} from 'express';
 import {ZodError} from "protolib/base";
 import {createSession, SessionDataType} from './session';
 import {verifyToken} from './crypt';
+import { getLogger } from '../../base';
+
+const logger = getLogger()
 
 type Handler = (
     fn: (req: Request, res: Response, session: SessionDataType, next: any) => Promise<void> | void
@@ -24,7 +27,7 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
         try {
             decoded = createSession(verifyToken(token))
         } catch(e) {
-            console.error('Error reading token: ', e)
+            logger.error('Error reading token: %s', e)
             decoded = createSession()
         }
     } else {

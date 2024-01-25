@@ -9,7 +9,7 @@ import {getLogger } from 'protolib/base';
 const modulesDir = path.join(__dirname, 'modules');
 const logger = getLogger()
 
-const mqtt = getMQTTClient(logger)
+const mqtt = getMQTTClient()
 
 const topicSub = (topic, cb) => {
     mqtt.subscribe(topic)

@@ -2,6 +2,9 @@ import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment } from
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { getRoot } from './getRoot';
+import { getLogger } from '../../base';
+
+const logger = getLogger()
 
 export const getImport = (sourceFile, identifier) => {
     const importDeclarations = sourceFile.getImportDeclarations();
@@ -68,7 +71,7 @@ export enum ImportType {
 
 export const addImportToSourceFile = (sourceFile, key: string, type: ImportType, path: string): void => {
     if (getImport(sourceFile, key)) {
-        console.warn(`"${key}" is already imported`);
+        logger.warn(`"${key}" is already imported`);
         return;
     }
     switch (type) {
@@ -112,7 +115,7 @@ export const addObjectLiteralProperty = (
     );
 
     if (existingProperty) {
-        console.warn(`Object already has key: "${key}".`);
+        logger.warn(`Object already has key: "${key}".`);
         return;
     }
 
@@ -140,7 +143,7 @@ export const removeObjectLiteralProperty = (
     if (existingProperty) {
         existingProperty.remove();
     } else {
-        console.warn(`Key "${key}" does not exist on the object.`);
+        logger.warn(`Key "${key}" does not exist on the object.`);
     }
 };
 
@@ -165,7 +168,7 @@ export const removeFileWithImports = async (
     try {
         await fs.unlink(filePath);
     } catch (err) {
-        console.error(`Error deleting file: ${filePath}`, err);
+        logger.error(`Error deleting file: ${filePath} %s`, err);
     }
 
 };
@@ -178,18 +181,18 @@ export const hasFeature = (sourceFile, key) => {
         const property = arg.getProperty(key);
         return property !== undefined;
     } else {
-        console.error("Cannot check for feature due to missing features marker")
+        logger.error("Cannot check for feature due to missing features marker")
         return false;
     }
 }
 
 export const addFeature = async (sourceFile, key, value) => {
     if (hasFeature(sourceFile, key)) {
-        console.error(`Feature '${key}' already exists, not adding.`)
+        logger.error(`Feature '${key}' already exists, not adding.`)
         return;
     }
 
-    console.log('Marker found, writing object');
+    logger.debug('Marker found, writing object');
     let arg = getDefinition(sourceFile, '"features"')
     arg.addPropertyAssignment({
         name: key,
@@ -200,11 +203,11 @@ export const addFeature = async (sourceFile, key, value) => {
 
 export const removeFeature = async (sourceFile, key) => {
     if (!hasFeature(sourceFile, key)) {
-        console.error(`Feature '${key}' not found, cannot remove.`)
+        logger.error(`Feature '${key}' not found, cannot remove.`)
         return;
     }
 
-    console.log('Marker found, removing object property')
+    logger.debug('Marker found, removing object property')
     let arg = getDefinition(sourceFile, '"features"')
     const propertyToRemove = arg.getProperty(key)
     propertyToRemove.remove()

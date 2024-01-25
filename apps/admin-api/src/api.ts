@@ -52,5 +52,5 @@ export const logRequest = httpLogger({
 });
 
 app.use(logRequest);
-BundleAPI(app, { mqtt: getMQTTClient(logger) })
+BundleAPI(app, { mqtt: getMQTTClient() })
 export default app

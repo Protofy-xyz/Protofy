@@ -2,13 +2,17 @@ import { FlowFactory } from 'protoflow';
 import { TopicsProvider } from "react-topics";
 import { useState } from 'react';
 import customMasks from '../../../../app/bundles/masks';
+import { getLogger } from "protolib/base"
+
+const logger = getLogger()
+
 
 const FlowsWidget = ({ mode="js", ...props}: any) => {
     const UIFLOWID = props.flowId || "flows-editor"
     const Flow = FlowFactory(UIFLOWID)
 
     const [content, setContent] = useState(props.content)
-    // console.log("PROPS.MODE: ",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
+    logger.debug("PROPS.MODE: %s %s",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
     if(props.preload) return <></>
     
     const getMode = () => {

@@ -21,7 +21,8 @@ import { SiteConfig } from 'app/conf'
 import { AppConfContext } from 'app/provider/AppConf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
-import { initSchemaSystem, setLoggerConfig } from 'protolib/base'
+import { initSchemaSystem } from 'protolib/base'
+import {setLoggerConfig} from 'protolib/base/logger'
 
 initSchemaSystem()
 setLoggerConfig({name: "admin"})

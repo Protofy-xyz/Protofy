@@ -8,7 +8,7 @@ var config =  {
     }
   },
   name: 'default',
-  level: 'debug'
+  level: 'info'
 }
 var logger;
 

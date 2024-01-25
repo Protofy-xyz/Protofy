@@ -14,6 +14,9 @@ import { defineFileAction } from 'chonky';
 import FileActions from 'app/bundles/fileActions'
 import {Tinted} from '../../../components/Tinted'
 import Chat from '../../../components/Chat'
+import { getLogger } from "protolib/base"
+
+const logger = getLogger()
 
 
 export const FileBrowser = ({ file, path, filesState }: any) => {
@@ -26,7 +29,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const [isModified, setIsModified] = useState(false)
 
     useUpdateEffect(() => {
-        console.log('query:', router.query.path, 'newpath:', currentPath)
+        logger.info('query: %s newpath: %s', router.query.path, currentPath)
         const path = (!currentPath.startsWith('/') ? '/' : '') + currentPath
         if(router.query.path != currentPath) router.push({
             pathname: router.pathname,
@@ -50,21 +53,21 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
     useUpdateEffect(() => {
         const path = router.query.path && router.query.path['split'] ? router.query.path['split']('\\').join('/') : ''
-        console.log('current path: ', path)
+        logger.debug('current path: %s', path)
         if (router.query.file) {
             const file = (path + '/' + router.query.file).replace(/\/+/g, '/')
             setCurrentFile(file)
         } else {
             setCurrentFile('')
             setDialogOpen(false)
-            console.log('useEffect fired!', path);
+            logger.debug('useEffect fired! %s', path);
             setCurrentPath(path)
         }
 
     }, [router.query.path, router.query.file]);
 
     const onOpen = (file: any) => {
-        console.log('on open client: ', file)
+        logger.debug('on open client: %o', file)
         if (file.isDir) return setCurrentPath(file.path ?? file.id)
         router.push('/files?path=' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '&file=' + file.name)
     }

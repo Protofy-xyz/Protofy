@@ -1,14 +1,16 @@
 import { PendingResult, getPendingResult } from "../base/PendingResult";
 import {devMode} from './env'
 import { isElectron } from "./lib/isElectron";
+import { getLogger } from "./logger"
 
+const logger = getLogger()
 let APIURL = devMode?'http://localhost:8080':'http://localhost:8000'
 export const setApiUrl = (apiurl) => APIURL = apiurl 
 export const getApiUrl = () => process?.env?.API_URL ?? APIURL
 
 const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult | undefined> => {
     const SERVER = getApiUrl()
-    // console.log('SERVER: ', SERVER)
+    logger.debug('SERVER: %s', SERVER)
     let realUrl;
 
     if (typeof urlOrData === 'string') {
@@ -58,7 +60,7 @@ const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult |
         } catch (e: any) {
             let errStr = e.apiError ?? e.toString()
             if (e instanceof SyntaxError) {
-                console.error(e)
+                logger.error(e)
                 errStr = 'Server error. Check configuration and network connection.'
             }
             const err = getPendingResult('error', null, errStr)
