@@ -50,4 +50,7 @@ jobs:
 
     - name: Show current dir
       run: pwd # node .github/scripts/retrieveTestsReport.js 
+    
+    - name: Show file content
+      run: cat "$(pwd)/reports/tests.txt"
         
