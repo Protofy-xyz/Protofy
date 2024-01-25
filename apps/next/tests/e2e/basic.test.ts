@@ -169,7 +169,14 @@ describe("Test admin capabilities", () => {
             } catch (e) {
                 error = !!e
             }
-            expect(error).toBeTruthy()
+            expect(error).toBeTruthy() 
         }, 50000)
+        it.skip("should be able to drag and drop all components", async () => {
+            await protoBrowser.clickElement("#components-to-drag-btn")
+            await protoBrowser.waitForElement(".visualui-sidebar")
+            await protoBrowser.takeScreenshot('./visual-sidebar.png')
+            await protoBrowser.dragAndDrop('#drag-element-ButtonSimple', "#home-page")
+            await protoBrowser.waitForElement("#wrapper-ButtonSimple")
+        }, 80000)
     })
 })

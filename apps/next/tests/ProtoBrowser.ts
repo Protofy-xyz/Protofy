@@ -70,6 +70,22 @@ export class ProtoBrowser {
         await this.getPage().click(locator)
     }
 
+    async dragAndDrop(sourceLocator: string, targetLocator: string): Promise<void> {
+        // await source.dragTo(target);
+        await this.waitForElement(sourceLocator)
+        await this.waitForElement(targetLocator)
+        
+        const source = this.getPage().locator(sourceLocator);
+        const target = this.getPage().locator(targetLocator);
+        
+        await source.hover()
+        await this.getPage().mouse.down()
+        // await this.getPage().locator('#sidebar-panel-container').evaluate(element => element.style.display = 'none');
+        await target.hover()
+        // await this.getPage().locator('#sidebar-panel-container').waitFor({state: "hidden"})
+        await this.getPage().mouse.up()
+    }
+
     async getElementText(selector: any): Promise<any> {
         await this.waitForElement(selector)
         return await this.getPage().textContent(selector);
