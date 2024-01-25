@@ -4,12 +4,15 @@ const logger = require('./logger');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const Port = process.env.PORT ?? (isProduction ? 8000 : 8080);
-const defaultEnvironment = environments[isProduction?'prod':'dev']
+const defaultEnvironment = environments[isProduction ? 'prod' : 'dev']
 
-logger.debug({ environments }, `Proxy environments: ${JSON.stringify(environments)}`);
-logger.debug(`Proxy default environment: ${defaultEnvironment}`);
-logger.info(`Proxy mode: ${isProduction ? 'production' : 'development'}`);
-logger.info(`Proxy port: ${Port}`);
+logger.info({
+    config: {
+        enviroment: defaultEnvironment,
+        mode: isProduction ? 'production' : 'development',
+        port: Port
+    }
+}, "Application started: Proxy");
 
 function getEnvironment(key, host, req) {
     const prefix = host.split('.')[0];
@@ -46,7 +49,7 @@ var customResolver2 = function (host, url, req) {
 
     if (/^\/adminapi\//.test(url)) {
         return getEnvironment('adminApi', host, req);
-    } else if(url === '/websocket') {
+    } else if (url === '/websocket') {
         return getEnvironment('websocket', host, req);
     }
 };
@@ -90,3 +93,5 @@ var proxy = new Redbird({
         }
     ]
 });
+
+logger.info({ service: { protocol: "http", port: Port } }, "Service started: HTTP")

@@ -17,7 +17,7 @@ const server = http.createServer(app);
 const PORT = isProduction?4001:3001
 
 server.listen(PORT, () => {
-  logger.info(`Express server listening at http://localhost:${PORT}`);
+  logger.info({service:{protocol: "http", port: PORT}}, "Service started: HTTP")
 });
 
 // generateEvent({
