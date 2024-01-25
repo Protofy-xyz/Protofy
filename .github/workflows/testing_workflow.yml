@@ -52,11 +52,8 @@ jobs:
       run: pwd
     
     - name: List files
-      run: ls -la
+      run: cd ${{ github.workspace }} && ls -la
 
-    - name: List files 2
-      run: cd .. && ls -la
-    
     #- name: Show file content script
     #  run: cat .github/scripts/retrieveTestsReport.js 
       
