@@ -46,7 +46,7 @@ jobs:
       uses: actions/download-artifact@v3
 
     - name: Show artifacts
-      run: ls -la
+      run: cd reports && ls -la
 
     - name: Show current dir
       run: pwd # node .github/scripts/retrieveTestsReport.js 
