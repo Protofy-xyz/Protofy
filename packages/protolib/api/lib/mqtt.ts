@@ -24,7 +24,7 @@ export const getMQTTClient = () => {
         });
 
         mqttClient.on('error', function (error) {
-            logger.error({ error }, `MQTT Error: ${error.message}`);
+            logger.error({ error }, "MQTT Error");
         });
     }
     return mqttClient
