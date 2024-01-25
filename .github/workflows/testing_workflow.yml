@@ -51,6 +51,9 @@ jobs:
     - name: Show current dir
       run: pwd
     
+    - name: List files
+      run: ls -la
+    
     #- name: Show file content script
     #  run: cat .github/scripts/retrieveTestsReport.js 
       
