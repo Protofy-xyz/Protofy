@@ -44,20 +44,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Download all artifacts
       uses: actions/download-artifact@v3
 
-    # - name: Show file content tests
-    #   run: cat reports/tests.txt
-
-    - name: Show current dir
-      run: pwd
-    
-    - name: List files
-      run: cd ${{ github.workspace }} && ls -la
-
-    #- name: Show file content script
-    #  run: cat .github/scripts/retrieveTestsReport.js 
-      
-        
+    - name: Get reports
+      run: node .github/scripts/retrieveTestsReport.js ${{ github.workspace }}/reports/tests.txt
