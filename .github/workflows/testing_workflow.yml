@@ -37,7 +37,7 @@ jobs:
 
   notify:
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
     if: always()  # This ensures that the notify job runs whether the test job succeeds or fails
     steps:
     - name: Download all artifacts
