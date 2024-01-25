@@ -1,6 +1,8 @@
 import dotenv from 'dotenv'
 import {setLoggerConfig, getLogger } from 'protolib/base/logger';
 setLoggerConfig({name: "admin-api"})
+require('events').EventEmitter.defaultMaxListeners = 100;
+
 // get config vars
 dotenv.config({ path: '../../.env' });
 
@@ -10,7 +12,6 @@ import WebSocket, { Server } from 'ws';
 import net from 'net';
 import app from './api'
 import {generateEvent} from 'app/bundles/library'
-
 
 const logger = getLogger()
 const isProduction = process.env.NODE_ENV === 'production';

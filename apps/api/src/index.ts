@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import {setLoggerConfig, getLogger } from 'protolib/base/logger';
 setLoggerConfig({name: "api"})
+require('events').EventEmitter.defaultMaxListeners = 100;
 
 const logger = getLogger()
 // get config vars
