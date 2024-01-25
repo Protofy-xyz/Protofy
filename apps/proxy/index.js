@@ -6,10 +6,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 const Port = process.env.PORT ?? (isProduction ? 8000 : 8080);
 const defaultEnvironment = environments[isProduction?'prod':'dev']
 
-logger.debug('Proxy environments:', environments)
-logger.debug('Proxy default environment:', defaultEnvironment)
-logger.info('Proxy mode:', isProduction?'producton':'development')
-logger.info('Proxy port:', Port)
+logger.debug({ environments }, `Proxy environments: ${JSON.stringify(environments)}`);
+logger.debug(`Proxy default environment: ${defaultEnvironment}`);
+logger.info(`Proxy mode: ${isProduction ? 'production' : 'development'}`);
+logger.info(`Proxy port: ${Port}`);
 
 function getEnvironment(key, host, req) {
     const prefix = host.split('.')[0];

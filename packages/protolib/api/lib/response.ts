@@ -10,7 +10,7 @@ export const response = async (pendingOperation:Promise<any>, res:any, defaultVa
         res.send([]);
       } else {
         res.status(500).send("Error reading database");
-        logger.error('Error reading database: %s', err)
+        logger.error({ error: err }, `Error reading database: ${err.message}`);
       }
     })
   }

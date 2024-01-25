@@ -12,7 +12,7 @@ const FlowsWidget = ({ mode="js", ...props}: any) => {
     const Flow = FlowFactory(UIFLOWID)
 
     const [content, setContent] = useState(props.content)
-    logger.debug("PROPS.MODE: %s %s",props.mode, props.mode?props.mode:props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js'))
+    logger.debug(`PROPS.MODE: ${props.mode} ${props.mode ? props.mode : props.path?.endsWith('.json') ? 'json' : (props.path?.endsWith('yml') || props.path?.endsWith('yaml') ? 'yaml' : 'js')}`);
     if(props.preload) return <></>
     
     const getMode = () => {

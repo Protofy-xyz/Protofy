@@ -47,7 +47,7 @@ const mqttServer = net.createServer((socket) => {
 
 const mqttPort = isProduction? 8883 : 1883
 mqttServer.listen(mqttPort, () => {
-  logger.info('MQTT server listening on port '+mqttPort);
+  logger.info(`MQTT server listening on port ${mqttPort}`)
 });
 
 // generateEvent({

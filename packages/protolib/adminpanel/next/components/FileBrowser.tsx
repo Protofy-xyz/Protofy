@@ -29,7 +29,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const [isModified, setIsModified] = useState(false)
 
     useUpdateEffect(() => {
-        logger.info('query: %s newpath: %s', router.query.path, currentPath)
+        logger.info({ query: router.query.path, newpath: currentPath }, `query: ${router.query.path} newpath: ${currentPath}`)
         const path = (!currentPath.startsWith('/') ? '/' : '') + currentPath
         if(router.query.path != currentPath) router.push({
             pathname: router.pathname,
@@ -53,21 +53,21 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
     useUpdateEffect(() => {
         const path = router.query.path && router.query.path['split'] ? router.query.path['split']('\\').join('/') : ''
-        logger.debug('current path: %s', path)
+        logger.debug(`current path: ${path}`);
         if (router.query.file) {
             const file = (path + '/' + router.query.file).replace(/\/+/g, '/')
             setCurrentFile(file)
         } else {
             setCurrentFile('')
             setDialogOpen(false)
-            logger.debug('useEffect fired! %s', path);
+            logger.debug(`useEffect fired! ${path}`);
             setCurrentPath(path)
         }
 
     }, [router.query.path, router.query.file]);
 
     const onOpen = (file: any) => {
-        logger.debug('on open client: %o', file)
+        logger.debug({ file }, `on open client: ${JSON.stringify(file)}`)
         if (file.isDir) return setCurrentPath(file.path ?? file.id)
         router.push('/files?path=' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '&file=' + file.name)
     }

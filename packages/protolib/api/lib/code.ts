@@ -168,7 +168,7 @@ export const removeFileWithImports = async (
     try {
         await fs.unlink(filePath);
     } catch (err) {
-        logger.error(`Error deleting file: ${filePath} %s`, err);
+        logger.error({ error: err, filePath }, `Error deleting file: ${filePath} ${err.message}`);
     }
 
 };

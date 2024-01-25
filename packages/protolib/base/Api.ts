@@ -10,7 +10,7 @@ export const getApiUrl = () => process?.env?.API_URL ?? APIURL
 
 const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult | undefined> => {
     const SERVER = getApiUrl()
-    logger.debug('SERVER: %s', SERVER)
+    logger.debug(`SERVER: ${SERVER}`);
     let realUrl;
 
     if (typeof urlOrData === 'string') {

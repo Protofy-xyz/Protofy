@@ -7,7 +7,7 @@ import { getLogger } from '../base';
 
 const logger = getLogger()
 
-logger.debug("API Module loaded: %s",__filename.split('.')[0])
+logger.debug(`API Module loaded: ${__filename.split('.')[0]}`)
 
 export const getDatabases = async () => {
     return (await fs.promises.readdir('../../'+path.join('data', 'databases'))).map((name)=>{

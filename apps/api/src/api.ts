@@ -38,14 +38,14 @@ const devicePub = async (deviceName, component, componentName, command) => {
 fs.readdir(modulesDir, (error, files) => {
 
     if (error) {
-        logger.error('Error reading modules directory: ' + error);
+        logger.error({ error }, `Error reading modules directory: ${error}`)
         return
     }
 
     files.forEach((file) => {
         if (path.extname(file) === '.ts') {
             require(path.join(modulesDir, file));
-            logger.debug(`API Module loaded: ${file.substr(0, file.length - 3)}`);
+            logger.debug(`API Module loaded: ${file.substr(0, file.length - 3)}`)
         }
     })
 })

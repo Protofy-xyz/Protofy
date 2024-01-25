@@ -9,7 +9,7 @@ import { getLogger } from '../base';
 
 const logger = getLogger()
 
-logger.debug("API Module loaded: %s",__filename.split('.')[0])
+logger.debug(`API Module loaded: ${__filename.split('.')[0]}`);
 
 const dbPath = '../../data/databases/auth'
 const groupDBPath = '../../data/databases/auth_groups'
@@ -43,7 +43,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req:any, res:any) => {
             return
         }
     } catch(e) {
-        logger.error('ERROR: %s',e)
+        logger.error({ error: e }, `ERROR: ${e.message}`)
     }
     generateEvent({
         path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
@@ -78,7 +78,7 @@ app.post('/adminapi/v1/auth/register', handler(async (req:any, res:any) => {
         try {
             group = JSON.parse(await getDB(groupDBPath).get('user'))
         } catch (e) {
-            logger.error('Error finding group for registered user. Assuming is not admin. Error: %s', e)
+            logger.error({ error: e }, `Error finding group for registered user. Assuming is not admin. Error: ${e.message}`);
         }
 
         generateEvent({

@@ -73,7 +73,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
             for (const [key, value] of Object.entries(parsed)) {
                 if (!this.data.hasOwnProperty(key) || this.data[key] != value) {
-                    logger.debug('discarded: %o', this.data[key])
+                    logger.debug({ data: this.data[key] }, `discarded: ${JSON.stringify(this.data[key])}`)
                     return
                 }
             }
@@ -98,7 +98,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     create(data?): T {
         const transformed = this.getData(data)
-        logger.debug('Creating object: %o', transformed)
+        logger.debug({ transformed }, `Creating object: ${JSON.stringify(transformed)}`)
         return (new(this.constructor as new (data: any, session?: SessionDataType) => T)(transformed, this.session)).validate();
     }
 

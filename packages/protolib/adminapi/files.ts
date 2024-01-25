@@ -76,19 +76,19 @@ const handleFilesRequest = async (req, res) => {
             // if (contentType) {
             //     res.setHeader('Content-Type', contentType);
             // }
-            logger.debug('send file: %s %s', filepath, path.resolve(filepath))
+            logger.debug({ filepath, resolvedPath: path.resolve(filepath) }, `send file: ${filepath} ${path.resolve(filepath)}`)
             if (isDownload) {
                 // Establece el encabezado para forzar la descarga
                 res.setHeader('Content-Disposition', 'attachment; filename='+name);
             }
             res.status(200).sendFile(path.resolve(filepath), { dotfiles: 'allow' }, (err) => {
                 if (err) {
-                    logger.error('Error al enviar el archivo: %s', err);
+                    logger.error({ error: err }, `Error al enviar el archivo: ${err.message}`);
                     res.status(err.status || 500).send('Error al enviar el archivo');
                 }
             });
         } catch (e) {
-            logger.error('Error reading file: %s', e)
+            logger.error({ error: e }, `Error reading file: ${e.message}`);
             res.status(500).send(`Failed to serve the file at path '${name}'`);
         }
     }
@@ -128,7 +128,7 @@ const handleDirectoryCreateRequest = async (req, res, session) => {
         }, getServiceToken());
         res.status(200).send({ result: "directory created" });
     } catch (error) {
-        logger.error("Error creating directory: %s", error);
+        logger.error({ error }, `Error creating directory: ${error.message}`);
         res.status(500).send({ error: "Error creating directory" });
     }
 };
@@ -163,7 +163,7 @@ const handleDeleteRequest = async (req, res, session) => {
         }
         res.status(200).send({ result: "Items deleted" });
     } catch (error) {
-        logger.error("Error deleting items: %s", error);
+        logger.error({ error }, `Error deleting items: ${error.message}`);
         res.status(500).send({ error: "Error deleting items" });
     }
 };
@@ -189,7 +189,7 @@ const handleRenameRequest = async (req, res, session) => {
 
         res.status(200).send({ result: "Item renamed successfully" });
     } catch (error) {
-        logger.error("Error renaming item: %s", error);
+        logger.error({ error }, `Error renaming item: ${error.message}`);
         res.status(500).send({ error: "Error renaming item" });
     }
 };

@@ -7,7 +7,7 @@ const level = require('level-party')
 const dbHandlers:any = {}
 export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
     return new Promise((resolve, reject) => {
-        logger.debug('connecting to database: %s', dbPath)
+        logger.debug(`connecting to database: ${dbPath}`);
         let timer:any;
         if (!(dbPath in dbHandlers)) {
             timer = setTimeout(async () => {
@@ -21,7 +21,7 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
 
         const onDone = async () => {
             clearTimeout(timer)
-            logger.debug('connected to database on: %s', dbPath)
+            logger.debug(`connected to database on: ${dbPath}`)
             try {
                 await db.get('initialized')
                 resolve(db)
@@ -31,12 +31,12 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
                     const _initialData = initialData ? initialData : []
                     for (let item of _initialData) {
                         await db.put(item.key, item.value)
-                        logger.debug("Added: %s -> %o", item.key, item.value)
+                        logger.debug({ key: item.key, value: item.value }, `Added: ${item.key} -> ${JSON.stringify(item.value)}`)
                     }
                     await db.put('initialized', 'done')
                     resolve(db)
                 } catch (err) {
-                    logger.error('Error initializing the database: %s', err)
+                    logger.error({ error: err }, `Error initializing the database: ${err.message}`);
                     reject(err)
                 }
             }
@@ -50,7 +50,7 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
     
             db.on('error', (err:any) => {
                 clearTimeout(timer)
-                logger.error('Error connecting to the database: %s %s', dbPath, err)
+                logger.error({ dbPath, error: err }, `Error connecting to the database: ${dbPath} ${err.message}`);
                 reject(err)
             })
         }

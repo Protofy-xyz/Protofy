@@ -1,24 +1,27 @@
 import pino from 'pino';
 
-var config =  {
-  transport: {
-    target: 'pino-pretty',
-    options: {
-      colorize: true
-    }
-  },
+var config = {
+  ...(process.env.NODE_ENV === 'development' ?
+    {
+      transport: {
+        target: 'pino-pretty',
+        options: {
+          colorize: true
+        }
+      }
+    } : {}),
   name: 'default',
   level: 'info'
 }
 var logger;
 
-export const setLoggerConfig = (customConfig)=> {
+export const setLoggerConfig = (customConfig) => {
   logger = undefined //clear cache
-  config = {...config, ...customConfig}
+  config = { ...config, ...customConfig }
   return config
 }
 
-export const getLogger = ()=>{
+export const getLogger = () => {
   if (!logger) {
     logger = pino(config)
   }

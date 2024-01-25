@@ -6,7 +6,7 @@ import { getLogger } from '../base';
 
 const logger = getLogger()
 
-logger.debug("API Module loaded: %s",__filename.split('.')[0]);
+logger.debug(`API Module loaded: ${__filename.split('.')[0]}`)
 
 const requireAdmin = () => handler(async (req, res, session, next) => {
     if(!session || !session.user.admin) {
@@ -27,7 +27,7 @@ app.post('/adminapi/v1/templates/:tplname', requireAdmin(), handler(async (req, 
     const name = params.name.replace(/[^a-zA-Z0-9_.-]/g, '')
     const path = params.data.path.replace(/\.\./g, '')
     const fullpath = '../..'+path+"/"+name
-    logger.info('Executing template: %s in: %s with vars: %o', tplname, fullpath, params)
+    logger.info({ tplname, fullpath, params }, `Executing template: ${tplname} in: ${fullpath} with vars: ${JSON.stringify(params)}`);
     await templates[tplname]({connectDB, fs},fullpath, params)
 
     res.send({"result":"created"})

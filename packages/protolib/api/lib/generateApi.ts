@@ -1,5 +1,5 @@
 import { generateEvent } from "../../bundles/events/eventsLibrary";
-import {getServiceToken} from 'protolib/api/lib/serviceToken'
+import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import { connectDB, getDB } from "./db";
 import { handler } from './handler'
 import fs from 'fs';
@@ -10,26 +10,26 @@ const logger = getLogger()
 
 type AutoAPIOptions = {
     modelName: string,
-    modelType: any, 
+    modelType: any,
     initialDataDir?: string,
-    prefix?:string,
-    dbName?:string,
+    prefix?: string,
+    dbName?: string,
     transformers?: any,
     connectDB?: any,
-    getDB?:any,
+    getDB?: any,
     operations?: string[],
     single?: boolean,
     disableEvents?: boolean,
-    paginatedRead?:boolean,
-    requiresAdmin?:string[],
-    extraData?:any
+    paginatedRead?: boolean,
+    requiresAdmin?: string[],
+    extraData?: any
 }
 //CreateAPI contract has evolved into a complex thing, this is a better/alternative wrapper
 //that reduces complexity by using a options object 
-export const AutoAPI = ({modelName, modelType,initialDataDir,prefix="/api/v1/", dbName, transformers={}, connectDB, getDB, operations, single, disableEvents, paginatedRead, requiresAdmin, extraData = {}}:AutoAPIOptions) => {
+export const AutoAPI = ({ modelName, modelType, initialDataDir, prefix = "/api/v1/", dbName, transformers = {}, connectDB, getDB, operations, single, disableEvents, paginatedRead, requiresAdmin, extraData = {} }: AutoAPIOptions) => {
     return CreateApi(
-        modelName, 
-        modelType, 
+        modelName,
+        modelType,
         initialDataDir,
         prefix,
         dbName,
@@ -38,7 +38,7 @@ export const AutoAPI = ({modelName, modelType,initialDataDir,prefix="/api/v1/", 
         getDB,
         operations,
         single,
-        {disableEvents, paginatedRead, requiresAdmin, extraData}
+        { disableEvents, paginatedRead, requiresAdmin, extraData }
     )
 }
 /*
@@ -60,20 +60,20 @@ export const CreateApi = (modelName: string, modelType: any, dir: string, prefix
         if (fs.existsSync(path.join(dir, 'initialData.json'))) {
             initialData = JSON.parse(fs.readFileSync(path.join(dir, 'initialData.json')).toString()).map(x => {
                 try {
-                    logger.debug('loading: %o', x)
+                    logger.debug({ x }, `loading: ${JSON.stringify(x)}`)
                     const element = modelType.load(x).create()
                     return {
                         key: element.getId(),
                         value: element.serialize()
                     }
                 } catch (e) {
-                    logger.error('Error inserting initialData for: %s', modelName)
-                    logger.error('Error: %s', e)
+                    logger.error(`Error inserting initialData for: ${modelName}`);
+                    logger.error({ error: e }, `Error: ${e.message}`);
                 }
             }).filter(x => x)
         }
     } catch (e) {
-        logger.error('Error loading initial data for model %s error: %s', modelName, e);
+        logger.error({ modelName, error: e }, `Error loading initial data for model ${modelName} error: ${e.message}`);
         initialData = undefined;
     }
 
@@ -99,15 +99,15 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
             itemsPerPage: itemsPerPage,
             items: req.query.all ? allResults : allResults.slice(page * itemsPerPage, (page + 1) * itemsPerPage),
             total: allResults.length,
-            page: req.query.all? 0 : page,
+            page: req.query.all ? 0 : page,
             pages: req.query.all ? 1 : Math.ceil(allResults.length / itemsPerPage)
         }
         return result
     }
     //list
     !single && operations.includes('list') && app.get(prefix + entityName, handler(async (req, res, session) => {
-        if(options.requiresAdmin && (options.requiresAdmin.includes('list') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
-            res.status(401).send({error: "Unauthorized"})
+        if (options.requiresAdmin && (options.requiresAdmin.includes('list') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+            res.status(401).send({ error: "Unauthorized" })
             return
         }
 
@@ -120,7 +120,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
             if (key != 'initialized') {
                 const model = modelClass.unserialize(value, session);
                 const extraListData = typeof options.extraData?.list == 'function' ? await options.extraData.list(session, model, req) : (options.extraData?.list ?? {})
-                const listItem = await model.listTransformed(search, transformers, session, {...preListData, ...extraListData} );
+                const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData });
 
                 if (listItem && model.isVisible()) {
                     allResults.push(listItem);
@@ -133,15 +133,15 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //create
     operations.includes('create') && app.post(prefix + entityName, handler(async (req, res, session) => {
-        if(options.requiresAdmin && (options.requiresAdmin.includes('create') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
-            res.status(401).send({error: "Unauthorized"})
+        if (options.requiresAdmin && (options.requiresAdmin.includes('create') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+            res.status(401).send({ error: "Unauthorized" })
             return
         }
 
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.load(req.body, session).createTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
-        context && context.mqtt && context.mqtt.publish("notifications/"+entityName + '/create/' + entityModel.getId(), entityModel.serialize())
+        context && context.mqtt && context.mqtt.publish("notifications/" + entityName + '/create/' + entityModel.getId(), entityModel.serialize())
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/create/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
@@ -158,8 +158,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //read
     operations.includes('read') && app.get(prefix + entityName + '/:key', handler(async (req, res, session) => {
-        if(options.requiresAdmin && (options.requiresAdmin.includes('read') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
-            res.status(401).send({error: "Unauthorized"})
+        if (options.requiresAdmin && (options.requiresAdmin.includes('read') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+            res.status(401).send({ error: "Unauthorized" })
             return
         }
 
@@ -189,23 +189,23 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 const readData = typeof options.extraData?.read == 'function' ? await options.extraData.read(session, item, req) : (options.extraData?.read ?? {})
                 res.send(await item.readTransformed(transformers, readData))
             }
-        } catch(e) {
-            logger.error("Error reading from database: %s", e)
-            res.status(404).send({result: "not found"})
+        } catch (e) {
+            logger.error({ error: e }, `Error reading from database: ${e.message}`);
+            res.status(404).send({ result: "not found" })
         }
     }));
 
     //update
     operations.includes('update') && app.post(prefix + entityName + '/:key', handler(async (req, res, session) => {
-        if(options.requiresAdmin && (options.requiresAdmin.includes('update') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
-            res.status(401).send({error: "Unauthorized"})
+        if (options.requiresAdmin && (options.requiresAdmin.includes('update') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+            res.status(401).send({ error: "Unauthorized" })
             return
         }
 
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session), transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
-        context && context.mqtt && context.mqtt.publish("notifications/"+ entityName + '/update/' + entityModel.getId(), entityModel.serialize())
+        context && context.mqtt && context.mqtt.publish("notifications/" + entityName + '/update/' + entityModel.getId(), entityModel.serialize())
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/update/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
@@ -222,14 +222,14 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //delete
     operations.includes('delete') && app.get(prefix + entityName + '/:key/delete', handler(async (req, res, session) => {
-        if(options.requiresAdmin && (options.requiresAdmin.includes('delete') || options.requiresAdmin.includes('*'))&& (!session || !session.user.admin)) {
-            res.status(401).send({error: "Unauthorized"})
+        if (options.requiresAdmin && (options.requiresAdmin.includes('delete') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+            res.status(401).send({ error: "Unauthorized" })
             return
         }
 
         const db = getDB(dbPath, req, session)
         let entityModel
-        if( !options.paginatedRead ){
+        if (!options.paginatedRead) {
             entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).deleteTransformed(transformers))
             await db.put(entityModel.getId(), entityModel.serialize())
         } else {
@@ -237,9 +237,9 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
             await db.put(req.params.key, entityModel.serialize())
         }
 
-        
-        
-        context && context.mqtt && context.mqtt.publish("notifications/"+entityName + '/delete/' + req.params.key, entityModel.serialize())
+
+
+        context && context.mqtt && context.mqtt.publish("notifications/" + entityName + '/delete/' + req.params.key, entityModel.serialize())
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/delete/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
