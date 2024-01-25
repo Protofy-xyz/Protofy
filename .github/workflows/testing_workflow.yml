@@ -26,8 +26,8 @@ jobs:
     - name: Start "Protofy"
       run: node .github/scripts/start.js
 
-    - name: Run tests
-      run: sudo yarn test:all | tee ${{ runner.temp }}/tests.txt # need to be run as admin
+    - name: Run tests # TODO: change test:global --> test:all
+      run: sudo yarn test:global | tee ${{ runner.temp }}/tests.txt # need to be run as admin
     
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       if: always()
@@ -45,5 +45,8 @@ jobs:
       uses: actions/download-artifact@v3
 
     - name: Show artifacts
-      run: ls -la | pwd # node .github/scripts/retrieveTestsReport.js 
+      run: ls -la
+
+    - name: Show current dir
+      run: pwd # node .github/scripts/retrieveTestsReport.js 
         
