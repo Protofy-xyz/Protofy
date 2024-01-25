@@ -48,8 +48,8 @@ jobs:
     - name: Download all artifacts
       uses: actions/download-artifact@v3
 
-    - name: Show file info
-      run: cat /home/runner/work/Protofy/Protofy/reports/tests.txt
+    - name: Show folder info
+      run: cd reports && ls -la
 
     - name: Get reports
       run: node .github/scripts/retrieveTestsReport.js ${{ github.workspace }}/reports/tests.txt
