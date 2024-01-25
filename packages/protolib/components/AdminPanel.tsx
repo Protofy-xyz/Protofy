@@ -28,13 +28,22 @@ export const AdminPanel = ({children }) => {
     const currentWorkspace = settings && settings.workspace? settings.workspace : userSpaces[0]
     
     // console.log('userSpaces: ', userSpaces, 'current Workspace: ', currentWorkspace)
-    return (Workspaces[currentWorkspace] ? <PanelLayout topBar={<>
-        <XStack $lg={{display:"none"}}>
-            <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
-        </XStack>
-    </>} menuContent={<PanelMenu workspace={Workspaces[currentWorkspace]} />}>
-        <XStack f={1} px={"$0"} flexWrap='wrap'>
-            {children}
-        </XStack>
-    </PanelLayout>:<></>)
+    return (
+      Workspaces[currentWorkspace] 
+        ? <PanelLayout 
+            topBar={
+              <>
+                  <XStack>
+                    <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
+                  </XStack>
+              </>
+            } 
+            menuContent={<PanelMenu workspace={Workspaces[currentWorkspace]} />}
+          >
+            <XStack f={1} px={"$0"} flexWrap='wrap'>
+                {children}
+            </XStack>
+          </PanelLayout>
+        : <></>
+    )
 }

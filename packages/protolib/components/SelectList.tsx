@@ -75,6 +75,7 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
                       index={i}
                       key={item}
                       value={item}
+                      style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}
                     >
                       <YStack id={"eo-select-list-"+title+"-item-" + i}></YStack>
                       <Select.ItemText>{item}</Select.ItemText>
