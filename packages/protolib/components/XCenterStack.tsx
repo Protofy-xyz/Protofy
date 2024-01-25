@@ -3,7 +3,7 @@ import { StackProps, XStack } from "tamagui"
 
 const XCenterStack = React.forwardRef((props: StackProps, ref:any) => (
     //@ts-ignore
-    <XStack ref={ref} ai="center" jc="center" $xxs={{ ai: 'center', fw: 'wrap' }} {...props}>
+    <XStack ref={ref} ai="center" jc="center" {...props}>
         {props.children}
     </XStack>
 ))
