@@ -45,14 +45,17 @@ jobs:
     - name: Download all artifacts
       uses: actions/download-artifact@v3
 
-    - name: Show file content tests
-      run: cat reports/tests.txt
+    # - name: Show file content tests
+    #   run: cat reports/tests.txt
 
     - name: Show current dir
       run: pwd
     
     - name: List files
       run: ls -la
+
+    - name: List files 2
+      run: cd .. && ls -la
     
     #- name: Show file content script
     #  run: cat .github/scripts/retrieveTestsReport.js 
