@@ -45,6 +45,10 @@ jobs:
     - name: Download all artifacts
       uses: actions/download-artifact@v3
 
-    - name: Show file content
-      run: node .github/scripts/retrieveTestsReport.js reports/tests.txt
+    - name: Show file content script
+      run: cat .github/scripts/retrieveTestsReport.js 
+
+    - name: Show file content tests
+      run: cat reports/tests.txt
+      
         
