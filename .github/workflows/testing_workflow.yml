@@ -29,9 +29,6 @@ jobs:
     - name: Run tests
       run: sudo yarn test:all | tee ${{ runner.temp }}/tests.txt # need to be run as admin
     
-    - name: Show output
-      run: cat ${{ runner.temp }}/tests.txt
-
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       if: always()
       uses: actions/upload-artifact@v3
