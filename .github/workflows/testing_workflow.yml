@@ -48,5 +48,5 @@ jobs:
       uses: actions/download-artifact@v3
 
     - name: Show artifacts
-      run: |
-        ls -la
+      run: ls -la | cd ./reports && ls -la | pwd # node .github/scripts/retrieveTestsReport.js 
+        
