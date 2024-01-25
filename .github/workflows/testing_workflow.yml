@@ -1,4 +1,4 @@
-name: Protofy CI
+name: Testing workflow Protofy CI
 on:
   workflow_dispatch: # This allows manual triggering of the workflow
 
