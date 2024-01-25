@@ -51,10 +51,12 @@ const getReportStatus = (report) => { // report: string
 
 const main = () => {
     const args = process.argv.slice(2)
-    const reportFile = args[0]
+    const reportPath = args[0]
+    console.log('REPORT PATH: ', reportPath)
     const fs = require('fs')
     // TODO adapt this to read correct file
-    const test_output = fs.readFileSync(reportFile, 'utf-8')
+    const test_output = fs.readFileSync(reportPath, 'utf-8')
+    console.log('testOutput: ', test_output)
     const splitReportArr = splitGeneralReport(test_output)
     const status = splitReportArr.map(report => getReportStatus(report))
     const output = status.reduce((total, s) => {
