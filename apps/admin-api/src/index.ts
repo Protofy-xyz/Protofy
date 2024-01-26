@@ -1,9 +1,10 @@
 import dotenv from 'dotenv'
 import {setLoggerConfig, getLogger } from 'protolib/base/logger';
+setLoggerConfig({name: "admin-api"})
 import { app, getMQTTClient } from 'protolib/api'
 import BundleAPI from 'app/bundles/adminapi'
 
-setLoggerConfig({name: "admin-api"})
+
 require('events').EventEmitter.defaultMaxListeners = 100;
 
 // get config vars

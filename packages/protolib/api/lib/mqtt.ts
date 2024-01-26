@@ -10,21 +10,31 @@ var mqttClient = null;
 export const getMQTTClient = () => {
     if(!mqttClient) {
         mqttClient = mqtt.connect(mqttServer);
+        mqttClient.hasConnected = false
+        mqttClient.retries = 0
         
         mqttClient.on('connect', function () {
+            mqttClient.hasConnected = true
+            mqttClient.retries = 0
             logger.info('Connected to MQTT');
         });
 
         mqttClient.on('reconnect', function () {
-            logger.info('Reconnecting to MQTT...');
+            if(mqttClient.hasConnected || mqttClient.retries > 10) {
+                logger.info('Trying to connect MQTT...');
+            }
         });
 
         mqttClient.on('offline', function () {
-            logger.info('MQTT disconnected');
+            if(mqttClient.hasConnected) {
+                logger.info('MQTT disconnected');
+            }
         });
 
         mqttClient.on('error', function (error) {
-            logger.error({ error }, "MQTT Error");
+            if(mqttClient.hasConnected) {
+                logger.error({ error }, "MQTT Error");
+            }
         });
     }
     return mqttClient
