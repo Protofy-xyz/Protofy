@@ -29,12 +29,50 @@ jobs:
     - name: Start "Protofy"
       run: node .github/scripts/start.js
 
-    - name: Run tests
-      run: sudo yarn test:all # need to be run as admin
+    - name: Run tests 
+      run: |
+        set -o pipefail
+        sudo yarn test:all | tee ${{ runner.temp }}/test_output.txt
+
+    - name: Get test report
+      if: always() # executed always even if job fails
+      run: node .github/scripts/retrieveTestsReport.js ${{ runner.temp }}/test_output.txt > ${{ runner.temp }}/testsReport.txt
+
+    - name: Show output report
+      run: cat ${{ runner.temp }}/testsReport.txt
+
+    - name: Upload result # upload saved result as artifact to be consumed at notify job
+      if: always() # executed always even if job fails
+      uses: actions/upload-artifact@v3
+      with:
+        name: reports
+        path: ${{ runner.temp }}/testsReport.txt
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()  # This ensures that the notify job runs whether the test job succeeds or fails
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+  
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+
+    - name: '[healthcheck] "test" job status and testsReprot content'
+      run: |
+        echo "${{ needs.test.result }}"
+        cat reports/testsReport.txt
     
+    - name: Save report to environment variable
+      run: |
+        echo "TEST_REPORT<<EOF" >> $GITHUB_ENV
+        cat reports/testsReport.txt | sed 's/\x1b\[[0-9;]*m//g' >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+
     - name: Test Success
       uses: rjstone/discord-webhook-notify@v1
-      if: success()
+      if: needs.test.result == 'success'
       with:
           severity: info
           details: Test Succeeded!
@@ -42,6 +80,8 @@ jobs:
           color: '#00e065'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_green.png
           description: |
+            ${{ env.TEST_REPORT }}
+            ----------------------
             Event: push
             Repo: Protofy-xyz/Protofy
             Ref: ${{ github.ref }}
@@ -57,12 +97,11 @@ jobs:
             Severity: Informational
 
           footer: Succeed.
-          text: Tests Succeed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Failure
       uses: rjstone/discord-webhook-notify@v1
-      if: failure()
+      if: needs.test.result == 'failure'
       with:
           severity: error
           details: Test Failed!
@@ -70,6 +109,8 @@ jobs:
           color: '#f13932'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_red.png
           description: |
+            ${{ env.TEST_REPORT }}
+            
             Event: push
             Repo: Protofy-xyz/Protofy
             Ref: ${{ github.ref }}
@@ -85,12 +126,11 @@ jobs:
             Severity: Error
 
           footer: You must check your changes.
-          text: Tests Error!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Cancelled
       uses: rjstone/discord-webhook-notify@v1
-      if: cancelled()
+      if: needs.test.result == 'cancelled'
       with:
           severity: warn
           details: Job Cancelled!
@@ -112,6 +152,5 @@ jobs:
 
             Severity: Warning
 
-          footer: You must check github actions workflow status.
-          text: Job Cancelled!
+          footer: Cancelled Job.
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
