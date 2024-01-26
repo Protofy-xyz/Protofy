@@ -87,7 +87,6 @@ jobs:
             Severity: Informational
 
           footer: Succeed.
-          text: Tests Succeed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Failure
@@ -115,7 +114,6 @@ jobs:
             Severity: Error
 
           footer: You must check your changes.
-          text: Tests Error!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Cancelled
@@ -142,6 +140,5 @@ jobs:
 
             Severity: Warning
 
-          footer: You must check github actions workflow status.
-          text: Job Cancelled!
+          footer: Cancelled Job.
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
