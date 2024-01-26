@@ -160,9 +160,10 @@ describe("Test admin capabilities", () => {
             await protoBrowser.clickElement("#use-edit-btn")
             await protoBrowser.waitForElement("#editor-frame-container")
         }, 60000)
+
         it("should be able to save edited page content", async () => {
             const vp = ProtoBrowser.getViewPortSize()
-            await protoBrowser.mouseClick(Math.floor(vp.width/2), Math.floor(vp.height/2))
+            await protoBrowser.mouseClick(Math.floor(vp.width / 2), Math.floor(vp.height / 2))
             await protoBrowser.clickElement("#render-node-delete-btn")
             await protoBrowser.clickElement("#save-nodes-btn")
             let error
@@ -172,16 +173,21 @@ describe("Test admin capabilities", () => {
             } catch (e) {
                 error = !!e
             }
-            expect(error).toBeTruthy() 
+            expect(error).toBeTruthy()
         }, 50000)
-        it.skip("should be able to drag and drop all components", async () => {
-            await protoBrowser.clickElement("#components-to-drag-btn")
-            await protoBrowser.evaluate(".glass", element => element.style.display = 'none')
-            await protoBrowser.waitForElement(".glass", 6000, {state: "hidden"})
-            await protoBrowser.waitForElement(".visualui-sidebar")
-            await protoBrowser.dragAndDrop('#drag-element-BigTitle', "#home-page")
-            await protoBrowser.waitForElement("#wrapper-BigTitle")
-            await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
+
+        it("should be able to drag and drop all components", async () => {
+            const elementArr = ['BigTitle']
+            await Promise.all(elementArr.map(async ele => {
+                await protoBrowser.clickElement("#components-to-drag-btn")
+                await protoBrowser.evaluate(".glass", element => element.style.display = 'none')
+                await protoBrowser.waitForElement(".glass", 6000, { state: "hidden" })
+                await protoBrowser.waitForElement(".visualui-sidebar")
+                await protoBrowser.dragAndDrop('#drag-element-' + ele, "#home-page")
+                // await protoBrowser.waitForElement('[id^="wrapper-'+ele+'-"]')
+                
+                await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
+            }));
             await protoBrowser.clickElement("#save-nodes-btn")
         }, 80000)
     })

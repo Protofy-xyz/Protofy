@@ -93,6 +93,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
                 </SPanel>
             </div>
             <div
+                id="left-actions-container"
                 style={{
                     display: openPanel ? "none" : "flex",
                     position: 'fixed',

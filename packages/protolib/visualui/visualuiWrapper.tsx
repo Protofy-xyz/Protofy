@@ -29,7 +29,7 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
             selected: node.events.selected,
             custom: node.data.custom,
         }));
-        return <Component id={"wrapper-"+name} ref={connect} {...visualUIOnlyFallbackProps} {...props}>
+        return <Component ref={connect} {...visualUIOnlyFallbackProps} {...props}>
             {
                 editableText && typeof props.children == 'string'
                     ? <ContentEditable
@@ -50,7 +50,7 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
             canMoveIn: () => false
         }
     }
-    
+
     UiComponent.craft = {
         related: {
         },

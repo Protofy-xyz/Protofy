@@ -1,7 +1,7 @@
 const { chromium, firefox, webkit } = require('playwright');
 const HOST_URL = 'http://localhost:8080/'
-const height = 1080
-const width = 1920
+const height = 720
+const width = 1280
 export class ProtoBrowser {
     browser: any;
     page: any;
