@@ -184,8 +184,6 @@ describe("Test admin capabilities", () => {
                 await protoBrowser.waitForElement(".glass", 6000, { state: "hidden" })
                 await protoBrowser.waitForElement(".visualui-sidebar")
                 await protoBrowser.dragAndDrop('#drag-element-' + ele, "#home-page")
-                // await protoBrowser.waitForElement('[id^="wrapper-'+ele+'-"]')
-                
                 await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
             }));
             await protoBrowser.clickElement("#save-nodes-btn")
