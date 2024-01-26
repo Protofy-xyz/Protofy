@@ -64,7 +64,7 @@ jobs:
     - name: Save report to environment variable
       run: |
         echo "TEST_REPORT<<EOF" >> $GITHUB_ENV
-        cat reports/testsReport.txt >> $GITHUB_ENV
+        cat reports/testsReport.txt | sed 's/\x1b\[[0-9;]*m//g' >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
 
     - name: Test Success
