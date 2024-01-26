@@ -28,22 +28,13 @@ jobs:
       run: node .github/scripts/start.js
 
     - name: Run tests # TODO: change test:global --> test:all
-      run: sudo yarn test:global | tee tests.txt # need to be run as admin
+      run: sudo yarn test:global > tee tests.txt # need to be run as admin
     
     - name: Check report
-      run: cat tests.txt 
-    
-    - name: CUrrent pwd
-      run: pwd
-
-    - name: Current files
-      run: ls -la
-    
-    - name: Git workflow dir
-      run: cd ${{ github.workspace }} && ls -la
+      run: cat tests.txt
 
     - name: Get test report
-      run: node .github/scripts/retrieveTestsReport.js ./tests.txt > testsReport.txt
+      run: node .github/scripts/retrieveTestsReport.js ${{ github.workspace }}/tests.txt > testsReport.txt
 
     - name: Visualize output
       run: cat ${{ runner.temp }}/testsReport.txt
