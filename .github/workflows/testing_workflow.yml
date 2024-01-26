@@ -106,6 +106,8 @@ jobs:
           color: '#f13932'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_red.png
           description: |
+            ${{ env.TEST_REPORT }}
+            ----------------------
             Event: push
             Repo: Protofy-xyz/Protofy
             Ref: ${{ github.ref }}
