@@ -71,7 +71,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
     )
 
     const onAddFiles = (acceptedFiles: any) => {
-        logger.info({ acceptedFiles }, `files: ${JSON.stringify(acceptedFiles)}`);
+        logger.info({ files: acceptedFiles }, "Uploaded files")
         setShowUploadDialog(true)
         setShowDropMessage(false)
     }
@@ -190,7 +190,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                                         if (customAction) {
                                             setCustomAction(customAction)
                                         }
-                                        logger.info({ data }, `Action: ${JSON.stringify(data)}`)
+                                        logger.info({ data }, "File action")
                                     }
                                 }}
                                 disableDragAndDrop={true}

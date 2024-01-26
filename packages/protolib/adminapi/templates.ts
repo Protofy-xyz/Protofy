@@ -27,7 +27,7 @@ app.post('/adminapi/v1/templates/:tplname', requireAdmin(), handler(async (req, 
     const name = params.name.replace(/[^a-zA-Z0-9_.-]/g, '')
     const path = params.data.path.replace(/\.\./g, '')
     const fullpath = '../..'+path+"/"+name
-    logger.info({ tplname, fullpath, params }, `Executing template: ${tplname} in: ${fullpath} with vars: ${JSON.stringify(params)}`);
+    logger.info({ template: {name: tplname, path: fullpath, vars: params }}, "Executing template: " + tplname)
     await templates[tplname]({connectDB, fs},fullpath, params)
 
     res.send({"result":"created"})
