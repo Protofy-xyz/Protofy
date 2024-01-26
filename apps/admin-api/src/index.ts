@@ -10,7 +10,7 @@ import aedes from 'aedes';
 import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
-import app from './api'
+import getApp from './api'
 import { generateEvent } from 'app/bundles/library'
 
 const logger = getLogger()
@@ -18,7 +18,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const start = async () => {
   const aedesInstance = new aedes();
-  const server = http.createServer(app);
+  const server = http.createServer(await getApp);
 
   // Crea un WebSocket server
   const wss = new Server({ noServer: true });
