@@ -1,5 +1,8 @@
 import dotenv from 'dotenv'
 import {setLoggerConfig, getLogger } from 'protolib/base/logger';
+import { app, getMQTTClient } from 'protolib/api'
+import BundleAPI from 'app/bundles/adminapi'
+
 setLoggerConfig({name: "admin-api"})
 require('events').EventEmitter.defaultMaxListeners = 100;
 
@@ -10,16 +13,18 @@ import aedes from 'aedes';
 import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
-import app from './api'
 import {generateEvent} from 'app/bundles/library'
 
 const logger = getLogger()
 const isProduction = process.env.NODE_ENV === 'production';
 const aedesInstance = new aedes();
+
+BundleAPI(app, { mqtt: getMQTTClient() })
 const server = http.createServer(app);
 
 // Crea un WebSocket server
 const wss = new Server({ noServer: true });
+
 
 wss.on('connection', (ws: WebSocket) => {
   const stream = WebSocket.createWebSocketStream(ws, { decodeStrings: false });
