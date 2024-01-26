@@ -54,6 +54,7 @@
     "logs": "pm2 logs",
     "create-environment": "node copy.js",
     "test:all": "yarn workspaces foreach run test",
+    "test:all:debug": "TEST_DEBUG=true yarn test:all",
     "test:global": "yarn workspace tests test",
     "test:e2egen": "npx playwright codegen"
   },

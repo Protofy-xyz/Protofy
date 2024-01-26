@@ -1,4 +1,7 @@
 import { ProtoBrowser } from '../ProtoBrowser'
+
+const DEBUG = process.env.TEST_DEBUG === 'true';
+
 const { execSync } = require('child_process');
 const path = require('path')
 const { v4: uuidv4 } = require('uuid');
@@ -28,7 +31,7 @@ const USER_PASSWORD = 'user1234'
 describe("Basic tests", () => {
     let protoBrowser: ProtoBrowser;
     beforeEach(async () => {
-        protoBrowser = await ProtoBrowser.__newInstance__()
+        protoBrowser = await ProtoBrowser.__newInstance__(!DEBUG)
     }, 15000)
     afterEach(async () => {
         await protoBrowser?.close()

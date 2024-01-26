@@ -9,8 +9,8 @@ export class ProtoBrowser {
         this.browser = browser
     }
 
-    static async __newInstance__(): Promise<ProtoBrowser> {
-        const brwsr = await chromium.launch();  // Or 'firefox' or 'webkit'.
+    static async __newInstance__(headless = true): Promise<ProtoBrowser> {
+        const brwsr = await chromium.launch({ headless });  // Or 'firefox' or 'webkit'.
         const context = await brwsr.newContext({
             viewport: { width: width, height: height } // Set the viewport size
         });
