@@ -87,19 +87,13 @@ jobs:
           description: |
             ${{ env.TEST_REPORT }}
 
-            - **Workflow:** ${{ github.workflow }}
             - **Event:** push
             - **Repo:** Protofy-xyz/Protofy at ${{ github.ref }}
             - **Author:** ${{ github.event.head_commit.author.name }}
             - **Committer [pusher]:** ${{ github.event.head_commit.committer.name }} [${{ github.event.pusher.name }}]
-            - **Commit:** ${{ github.event.head_commit.url }}
-            - **Commit Message:** ${{ github.event.head_commit.message }}
+            - **Commit:** [${{ github.sha }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
 
-            Tests Succeeded!
-
-            Severity: Informational
-
-          footer: Succeed.
+          footer: "**Workflow:** ${{ github.workflow }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Failure
