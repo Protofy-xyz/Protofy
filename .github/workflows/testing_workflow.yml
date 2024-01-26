@@ -64,7 +64,7 @@ jobs:
     
     - name: Test Success
       uses: rjstone/discord-webhook-notify@v1
-      if: false
+      if: needs.test.result == 'success'
       with:
           severity: info
           details: Test Succeeded!
@@ -92,7 +92,7 @@ jobs:
 
     - name: Test Failure
       uses: rjstone/discord-webhook-notify@v1
-      if: false
+        if: needs.test.result == 'failure'
       with:
           severity: error
           details: Test Failed!
@@ -120,7 +120,7 @@ jobs:
 
     - name: Test Cancelled
       uses: rjstone/discord-webhook-notify@v1
-      if: false
+      if: needs.test.result == 'cancelled'
       with:
           severity: warn
           details: Job Cancelled!
