@@ -6,13 +6,13 @@ const logger = getLogger()
 // get config vars
 dotenv.config({ path: '../../.env' });
 import http from 'http';
-import getApp from './api'
+import app from './api'
 import { generateEvent } from 'app/bundles/library'
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 const start = async () => {
-  const server = http.createServer(await getApp());
+  const server = http.createServer(app);
   const PORT = isProduction ? 4001 : 3001
 
   server.listen(PORT, () => {
