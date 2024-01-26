@@ -28,13 +28,13 @@ jobs:
       run: node .github/scripts/start.js
 
     - name: Run tests # TODO: change test:global --> test:all
-      run: yarn test:global > tests.txt # need to be run as admin
+      run: yarn test:global > tst_output.txt # need to be run as admin
     
     - name: Check permissions
       run: ls -la
 
     - name: Check report
-      run: cat tests.txt
+      run: cat tst_output.txt
 
     - name: Get test report
       run: node .github/scripts/retrieveTestsReport.js ${{ github.workspace }}/tests.txt > testsReport.txt
