@@ -18,7 +18,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const start = async () => {
   const aedesInstance = new aedes();
-  const server = http.createServer(await getApp());
+  const server = http.createServer(await getApp);
 
   // Crea un WebSocket server
   const wss = new Server({ noServer: true });
