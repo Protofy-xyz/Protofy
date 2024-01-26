@@ -24,7 +24,6 @@ jobs:
       run: yarn
 
     - name: Start "Protofy"
-      if: false # TODO delete this line
       run: node .github/scripts/start.js
 
     - name: Run tests 
@@ -34,15 +33,13 @@ jobs:
       run: cat ${{ runner.temp }}/test_output.txt
 
     - name: Get test report
-      if: false
-      run: node .github/scripts/retrieveTestsReport.js ${{ github.workspace }}/tests.txt > testsReport.txt
+      run: node .github/scripts/retrieveTestsReport.js ${{ runner.temp }}/test_output.txt > ${{ runner.temp }}/testsReport.txt
 
     - name: Upload result # upload saved result as artifact to be consumed at notify job
-      if: false
       uses: actions/upload-artifact@v3
       with:
         name: reports
-        path: ${{ runner.temp }}/tests.txt
+        path: ${{ runner.temp }}/testsReport.txt
 
   notify:
     runs-on: ubuntu-latest
@@ -56,4 +53,4 @@ jobs:
       uses: actions/download-artifact@v3
 
     - name: Show folder info
-      run: cd reports && ls -la
+      run: cat reports/testsReport.txt

@@ -54,13 +54,8 @@ const main = () => {
     const reportPath = args[0]
     console.log('reportPath: ', reportPath)
     const fs = require('fs')
-    try {
-        const test_output = fs.readFileSync(reportPath, 'utf-8')
-        console.log('prev output')
-        console.log('test_output: ', test_output)
-    }catch(e) {console.log('ERROR reading file: ', e)}
-    return
-    console.log('testOutput: ', test_output)
+    const test_output = fs.readFileSync(reportPath, 'utf-8')
+    console.log('test_output: ', test_output)
     const splitReportArr = splitGeneralReport(test_output)
     const status = splitReportArr.map(report => getReportStatus(report))
     const output = status.reduce((total, s) => {
