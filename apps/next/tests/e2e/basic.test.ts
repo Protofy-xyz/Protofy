@@ -69,7 +69,7 @@ describe("Test admin capabilities", () => {
             expect(output.includes('Done')).toBeTruthy();
         } catch (e) { } // Prevent crash when user already exist
         // Login and navigate to workspace
-        protoBrowser = await ProtoBrowser.__newInstance__()
+        protoBrowser = await ProtoBrowser.__newInstance__(!DEBUG)
         await protoBrowser.navigateToLogin();
         await protoBrowser.signInSubmit(USER_IDENTIFIER, USER_PASSWORD);
         await protoBrowser.waitForElement('#header-session-user-id');
@@ -176,10 +176,13 @@ describe("Test admin capabilities", () => {
         }, 50000)
         it.skip("should be able to drag and drop all components", async () => {
             await protoBrowser.clickElement("#components-to-drag-btn")
+            await protoBrowser.evaluate(".glass", element => element.style.display = 'none')
+            await protoBrowser.waitForElement(".glass", 6000, {state: "hidden"})
             await protoBrowser.waitForElement(".visualui-sidebar")
-            await protoBrowser.takeScreenshot('./visual-sidebar.png')
-            await protoBrowser.dragAndDrop('#drag-element-ButtonSimple', "#home-page")
-            await protoBrowser.waitForElement("#wrapper-ButtonSimple")
+            await protoBrowser.dragAndDrop('#drag-element-BigTitle', "#home-page")
+            await protoBrowser.waitForElement("#wrapper-BigTitle")
+            await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
+            await protoBrowser.clickElement("#save-nodes-btn")
         }, 80000)
     })
 })
