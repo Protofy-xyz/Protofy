@@ -35,6 +35,9 @@ jobs:
     - name: Get test report
       run: node .github/scripts/retrieveTestsReport.js ${{ runner.temp }}/test_output.txt > ${{ runner.temp }}/testsReport.txt
 
+    - name: Output report
+      run: cat ${{ runner.temp }}/testsReport.txt
+
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       uses: actions/upload-artifact@v3
       with:
