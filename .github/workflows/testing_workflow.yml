@@ -29,16 +29,15 @@ jobs:
     - name: Run tests 
       run: sudo yarn test:all | tee ${{ runner.temp }}/test_output.txt
 
-    - name: Show output
-      run: cat ${{ runner.temp }}/test_output.txt
-
     - name: Get test report
+      if: always() # executed always even if job fails
       run: node .github/scripts/retrieveTestsReport.js ${{ runner.temp }}/test_output.txt > ${{ runner.temp }}/testsReport.txt
 
-    - name: Output report
+    - name: Show output report
       run: cat ${{ runner.temp }}/testsReport.txt
 
     - name: Upload result # upload saved result as artifact to be consumed at notify job
+      if: always() # executed always even if job fails
       uses: actions/upload-artifact@v3
       with:
         name: reports
@@ -57,3 +56,6 @@ jobs:
 
     - name: Show folder info
       run: cat reports/testsReport.txt
+    
+    - name: Show job["test"] status   
+      run: ${{ needs.test.result }} # Retrieves the state of previous job "test"
