@@ -4,6 +4,7 @@ const fs = require('fs')
 const INVALID_DEPENDENCIES = ["bindings", "deasync", "node-etcd"]
 
 describe("Protofy setup tests", () => {
+    it("Should fail (testing purposes)", () => expect(true).toBe(false))
     it("Should have a yarn.lock file and avoid usage of OS dependent packages", () => {
         const validDependencies = () => {
             const yarnLockContent = fs.readFileSync(path.join(__dirname, '../yarn.lock'), 'utf-8');
