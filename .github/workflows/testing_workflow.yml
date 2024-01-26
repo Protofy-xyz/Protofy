@@ -30,8 +30,14 @@ jobs:
     - name: Run tests # TODO: change test:global --> test:all
       run: sudo yarn test:global | tee ${{ runner.temp }}/tests.txt # need to be run as admin
     
+    - name: Check report
+      run: cat ${{ runner.temp }}/tests.txt 
+
     - name: Get test report
       run: node .github/scripts/retrieveTestsReport.js ${{ runner.temp }}/tests.txt > ${{ runner.temp }}/testsReport.txt
+
+    - name: Visualize output
+      run: cat ${{ runner.temp }}/testsReport.txt
 
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       if: always()
