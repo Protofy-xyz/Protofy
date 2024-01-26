@@ -10,14 +10,6 @@ const Relay = ({node= {}, nodeData= {}, children}: any) => {
         { label: 'Restore Mode', static:true, field: 'param2', type: 'select', data:['"ALWAYS_ON"', '"ALWAYS_OFF"'] }
     ] as Field[]
     
-    // const [state,setState] = useState("Not detected");
-    // const { message } = useSubscription(['newplatform/mydevice/switch/light/state']);
-    // console.log("NOOOOOOOODE: ",nodeData["param1"])
-    // useEffect(()=>{
-    //     console.log("AAAAAAAAAAAAAAAAAA", message)
-    // },[message])
-    // const subsystemData = getSubsystem()
-    // const type = 'switch';
     return (
         <Node node={node} isPreview={!node.id} title='GPIO Switch' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />

@@ -13,9 +13,9 @@ const Wifi = ({node= {}, nodeData= {}, children}: any) => {
     
     // const [state,setState] = useState("Not detected");
     // const { message } = useSubscription(['newplatform/mydevice/switch/light/state']);
-    // console.log("NOOOOOOOODE: ",nodeData["param1"])
+    // console.log("node: ",nodeData["param1"])
     // useEffect(()=>{
-    //     console.log("AAAAAAAAAAAAAAAAAA", message)
+    //     console.log("message", message)
     // },[message])
     // const subsystemData = getSubsystem()
     // const type = 'switch';

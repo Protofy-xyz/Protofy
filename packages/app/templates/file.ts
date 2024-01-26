@@ -1,7 +1,10 @@
 import Handlebars from "handlebars"
+import { getLogger } from "protolib/base"
+
+const logger = getLogger()
 
 export const file = async (lib, path, vars) => {
-    console.log('template file executed: ', vars, path)
+    logger.info({template:{path, params: vars}}, "Template file executed")
     const apiPath = path
     if (lib.fs.existsSync(apiPath)) {
         throw "File already exists"
@@ -20,5 +23,5 @@ export const file = async (lib, path, vars) => {
     const templateFunction = Handlebars.compile(template);
     const result = templateFunction({ name: vars.name, ...vars.data?.options?.variables });
     await lib.fs.promises.writeFile(apiPath, result)
-    console.log('New file created with template file: ', apiPath)
+    logger.info({template: apiPath}, "New file created with template file")
 }

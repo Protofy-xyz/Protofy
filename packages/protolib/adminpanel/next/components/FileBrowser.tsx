@@ -29,7 +29,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const [isModified, setIsModified] = useState(false)
 
     useUpdateEffect(() => {
-        logger.info({ query: router.query.path, newpath: currentPath }, `query: ${router.query.path} newpath: ${currentPath}`)
+        logger.debug({ query: router.query.path, newpath: currentPath }, `query: ${router.query.path} newpath: ${currentPath}`)
         const path = (!currentPath.startsWith('/') ? '/' : '') + currentPath
         if(router.query.path != currentPath) router.push({
             pathname: router.pathname,

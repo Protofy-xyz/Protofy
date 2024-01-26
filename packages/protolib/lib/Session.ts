@@ -4,6 +4,9 @@ import * as cookie from 'cookie'
 import { createSession, validateSession, SessionDataType, getSessionContext } from '../api/lib/session';
 import { NextPageContext } from 'next'
 import { parse } from 'cookie';
+import { getLogger } from "protolib/base"
+
+const logger = getLogger()
 const environments = require('../../app/bundles/environments')
 
 
@@ -52,9 +55,9 @@ export const getSessionCookie = async (cookieStr) => {
                     ...validatedData
                 }
              } as SessionDataType
-        } catch(e) {
-            console.log("ERROR validating session: ", e)
-            if(e == "Server Error") {
+        } catch(error) {
+            logger.error({ error },"ERROR validating session")
+            if(error == "Server Error") {
                 throw "Server Error"
             }
 
@@ -156,6 +159,6 @@ export const getURLWithToken = (url, context:NextPageContext) => {
     }
   
     const finalUrl = url + (session && session.token ? (url.includes('?') ? '&':'?')+'token='+session.token+__env : '')
-    // console.log('final URL: ', finalUrl)
+    logger.debug({url: finalUrl}, "Return url with session token")
     return finalUrl
   }

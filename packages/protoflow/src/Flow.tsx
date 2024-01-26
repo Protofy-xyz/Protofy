@@ -28,6 +28,9 @@ import Diff from 'deep-diff';
 import DynamicCustomComponent from './DynamicCustomComponent';
 import GetDynamicCustomComponent from './DynamicCustomComponent';
 import { generateId } from './lib/IdGenerator';
+import { getLogger } from "protolib/base"
+
+const logger = getLogger()
 
 interface customComponentInterface {
     check: Function,
@@ -274,7 +277,7 @@ const FlowComponent = ({
                 ...(customComponent && customComponent.filterChildren ? customComponent.filterChildren(node, childNodeList, edges, nodeDataTable, fakeSetNodeData) : childNodeList),
             ]
 
-            console.log('result: ', result)
+            logger.debug({sourceFile: result}, "Result of read source file")
 
             if (flowNodeType && flowNodeType.filterChildren) {
                 return flowNodeType.filterChildren(node, result, edges, nodeDataTable, fakeSetNodeData)
@@ -286,7 +289,7 @@ const FlowComponent = ({
         let nodes = data
 
         //add visual layers
-        console.log('CONFIG IN FLOWS: ', config)
+        logger.info({config}, "Config in flows")
         if (config && config.layers && config.layers.length) {
             nodes = [...nodes, ...config.layers.map(l => {
                 const layerId = 'Layer_' + generateId()
@@ -327,7 +330,7 @@ const FlowComponent = ({
             const positions = nodes.map((node) => ({ id: node.id, position: node.position }))
             if (!preview && onSave && nodes?.length) onSave(content, positions, { nodesData: nodeData, nodes })
         } catch (e) {
-            console.log('errorlel: ', e)
+            logger.error({ error: e }, "Error saving nodes")
             const parts = e.codeFrame.split("\n").find(l => l.startsWith('> ')).split('|')
             parts.shift()
             const linePos = e.loc.start.column
@@ -644,15 +647,15 @@ const FlowComponent = ({
         try {
             //restore components before dump
             const content = await onSaveNodes(true);
-            console.log('onGraphChanged', content)
+            logger.debug({ content }, "onGraphChanged")
             if (content !== undefined) {
-                console.log('firing on edit: ', content)
+                logger.info( { content }, "Firing on edit")
                 onEdit(content)
             } else {
-                console.error('There was an error in the code, not emitting')
+                logger.error('There was an error in the code, not emitting')
             }
-        } catch (e) {
-            console.log("Error on change: ", e)
+        } catch (error) {
+            logger.error({ error }, "Error on graph change")
         }
     }
 
@@ -688,7 +691,7 @@ const FlowComponent = ({
         }
 
         if (nodesDiffs && nodesDiffs.length || edgesDiffs && edgesDiffs.length) {
-            console.log('diffx: ', nodesDiffs, edgesDiffs)
+            logger.debug({nodesDiffs, edgesDiffs}, "Diffs")
             if (edgesDiffs && !nodesDiffs) {
                 reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
                 setInitialEdges(edges)
@@ -794,7 +797,7 @@ const FlowComponent = ({
                         const newParentNodeData = reorderDataChilds(prevParentNodeData, childrenIndexes, offset)
                         setNodeData(parent, newParentNodeData)
                         const newEdges = reorderEdgeChilds(edges, parent, offset, childrenIndexes)
-                        console.log('DEV: new edges: ', newEdges)
+                        logger.info({ newEdges }, "DEV: new edges")
                         setEdges(newEdges)
                         return
                     }
@@ -848,7 +851,7 @@ const FlowComponent = ({
         const diffableNodeData = deleteAdditionalKeys(nodeData)
         const diffs = getDiffs(prevNodeData, diffableNodeData)
         if (diffs?.length) {
-            console.log('diffx: ', diffs, 'comparing: ', prevNodeData, 'with: ', diffableNodeData)
+            logger.debug( { diffs, prevNodeData, diffableNodeData }, "Comparing prevNodeData with diffableNodeData")
             setHasChanges(true)
             onNodeDataChange()
             setPrevNodeData(diffableNodeData)
