@@ -93,7 +93,7 @@ jobs:
             - **Committer [pusher]:** ${{ github.event.head_commit.committer.name }} [${{ github.event.pusher.name }}]
             - **Commit:** [${{ github.sha }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
 
-          footer: "**Workflow:** ${{ github.workflow }}"
+          footer: "Workflow: ${{ github.workflow }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Failure
@@ -109,20 +109,12 @@ jobs:
             ${{ env.TEST_REPORT }}
             
             - **Event:** push
-            - **Repo:** Protofy-xyz/Protofy
-            - **Ref:** ${{ github.ref }}
-            - **Workflow:** ${{ github.workflow }}
+            - **Repo:** Protofy-xyz/Protofy at ${{ github.ref }}
             - **Author:** ${{ github.event.head_commit.author.name }}
-            - **Committer:** ${{ github.event.head_commit.committer.name }}
-            - **Pusher:** ${{ github.event.pusher.name }}
-            - **Commit URL:** ${{ github.event.head_commit.url }}
-            - **Commit Message:** ${{ github.event.head_commit.message }}
+            - **Committer [pusher]:** ${{ github.event.head_commit.committer.name }} [${{ github.event.pusher.name }}]
+            - **Commit:** [${{ github.sha }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
 
-            Tests Error!
-
-            Severity: Error
-
-          footer: You must check your changes.
+          footer: "Workflow: ${{ github.workflow }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Cancelled
@@ -136,18 +128,11 @@ jobs:
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_orange.png
           description: |
             - **Event:** push
-            - **Repo:** Protofy-xyz/Protofy
-            - **Ref:** ${{ github.ref }}
-            - **Workflow:** ${{ github.workflow }}
+            - **Repo:** Protofy-xyz/Protofy at ${{ github.ref }}
             - **Author:** ${{ github.event.head_commit.author.name }}
-            - **Committer:** ${{ github.event.head_commit.committer.name }}
-            - **Pusher:** ${{ github.event.pusher.name }}
-            - **Commit URL:** ${{ github.event.head_commit.url }}
-            - **Commit Message:** ${{ github.event.head_commit.message }}
+            - **Committer [pusher]:** ${{ github.event.head_commit.committer.name }} [${{ github.event.pusher.name }}]
+            - **Commit:** [${{ github.sha }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
 
-            Job cancelled!
 
-            Severity: Warning
-
-          footer: Cancelled Job.
+          footer: "Workflow: ${{ github.workflow }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
