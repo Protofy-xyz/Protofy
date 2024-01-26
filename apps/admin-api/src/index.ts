@@ -3,7 +3,7 @@ import {setLoggerConfig, getLogger } from 'protolib/base/logger';
 setLoggerConfig({name: "admin-api"})
 import { app, getMQTTClient } from 'protolib/api'
 import BundleAPI from 'app/bundles/adminapi'
-
+import adminModules from 'protolib/adminapi'
 
 require('events').EventEmitter.defaultMaxListeners = 100;
 
@@ -17,6 +17,8 @@ import net from 'net';
 import {generateEvent} from 'app/bundles/library'
 
 const logger = getLogger()
+
+logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
 const isProduction = process.env.NODE_ENV === 'production';
 const aedesInstance = new aedes();
 
