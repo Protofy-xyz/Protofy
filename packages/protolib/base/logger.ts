@@ -1,7 +1,7 @@
 import pino from 'pino';
 
 var config = {
-  ...(process.env.NODE_ENV === 'development' ?
+  ...(process.env.NODE_ENV === 'development' && typeof window === undefined ?
     {
       transport: {
         target: 'pino-pretty',
