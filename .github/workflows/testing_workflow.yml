@@ -56,12 +56,17 @@ jobs:
     - name: Download all artifacts
       uses: actions/download-artifact@v3
 
-    - name: Show folder info
-      run: cat reports/testsReport.txt
+    - name: '[healthcheck] "test" job status and testsReprot content'
+      run: |
+        echo "${{ needs.test.result }}"
+        cat reports/testsReport.txt
     
-    - name: Show job["test"] status   
-      run: echo "${{ needs.test.result }}" # Retrieves the state of previous job "test"
-    
+    - name: Save report to environment variable
+      run: |
+        echo "TEST_REPORT<<EOF" >> $GITHUB_ENV
+        cat reports/testsReport.txt >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+
     - name: Test Success
       uses: rjstone/discord-webhook-notify@v1
       if: needs.test.result == 'success'
@@ -72,6 +77,8 @@ jobs:
           color: '#00e065'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_green.png
           description: |
+            ${{ env.TEST_REPORT }}
+            ----------------------
             Event: push
             Repo: Protofy-xyz/Protofy
             Ref: ${{ github.ref }}
