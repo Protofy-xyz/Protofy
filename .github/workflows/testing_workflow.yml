@@ -27,7 +27,9 @@ jobs:
       run: node .github/scripts/start.js
 
     - name: Run tests 
-      run: sudo yarn test:all | tee ${{ runner.temp }}/test_output.txt
+      run: |
+        set -o pipefail
+        sudo yarn test:all | tee ${{ runner.temp }}/test_output.txt
 
     - name: Get test report
       if: always() # executed always even if job fails
