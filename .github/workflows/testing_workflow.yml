@@ -58,4 +58,88 @@ jobs:
       run: cat reports/testsReport.txt
     
     - name: Show job["test"] status   
-      run: ${{ needs.test.result }} # Retrieves the state of previous job "test"
+      run: echo "${{ needs.test.result }}" # Retrieves the state of previous job "test"
+    
+    - name: Test Success
+      uses: rjstone/discord-webhook-notify@v1
+      if: false
+      with:
+          severity: info
+          details: Test Succeeded!
+          username: ${{ github.event.pusher.name }}
+          color: '#00e065'
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_green.png
+          description: |
+            Event: push
+            Repo: Protofy-xyz/Protofy
+            Ref: ${{ github.ref }}
+            Workflow: ${{ github.workflow }}
+            Author: ${{ github.event.head_commit.author.name }}
+            Committer: ${{ github.event.head_commit.committer.name }}
+            Pusher: ${{ github.event.pusher.name }}
+            Commit URL: ${{ github.event.head_commit.url }}
+            Commit Message: ${{ github.event.head_commit.message }}
+
+            Tests Succeeded!
+
+            Severity: Informational
+
+          footer: Succeed.
+          text: Tests Succeed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+    - name: Test Failure
+      uses: rjstone/discord-webhook-notify@v1
+      if: false
+      with:
+          severity: error
+          details: Test Failed!
+          username: ${{ github.event.pusher.name }}
+          color: '#f13932'
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_red.png
+          description: |
+            Event: push
+            Repo: Protofy-xyz/Protofy
+            Ref: ${{ github.ref }}
+            Workflow: ${{ github.workflow }}
+            Author: ${{ github.event.head_commit.author.name }}
+            Committer: ${{ github.event.head_commit.committer.name }}
+            Pusher: ${{ github.event.pusher.name }}
+            Commit URL: ${{ github.event.head_commit.url }}
+            Commit Message: ${{ github.event.head_commit.message }}
+
+            Tests Error!
+
+            Severity: Error
+
+          footer: You must check your changes.
+          text: Tests Error!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+    - name: Test Cancelled
+      uses: rjstone/discord-webhook-notify@v1
+      if: false
+      with:
+          severity: warn
+          details: Job Cancelled!
+          username: ${{ github.event.pusher.name }}
+          color: '#ffa600'
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_orange.png
+          description: |
+            Event: push
+            Repo: Protofy-xyz/Protofy
+            Ref: ${{ github.ref }}
+            Workflow: ${{ github.workflow }}
+            Author: ${{ github.event.head_commit.author.name }}
+            Committer: ${{ github.event.head_commit.committer.name }}
+            Pusher: ${{ github.event.pusher.name }}
+            Commit URL: ${{ github.event.head_commit.url }}
+            Commit Message: ${{ github.event.head_commit.message }}
+
+            Job cancelled!
+
+            Severity: Warning
+
+          footer: You must check github actions workflow status.
+          text: Job Cancelled!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
