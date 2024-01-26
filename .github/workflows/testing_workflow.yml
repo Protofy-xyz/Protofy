@@ -33,7 +33,7 @@ jobs:
     - name: Get test report
       run: node .github/scripts/retrieveTestsReport.js ${{ runner.temp }}/tests.txt > ${{ runner.temp }}/testsReport.txt
 
-    - nane: Visualize output
+    - name: Visualize output
     - run: cat ${{ runner.temp }}/testsReport.txt
 
     - name: Upload result # upload saved result as artifact to be consumed at notify job
