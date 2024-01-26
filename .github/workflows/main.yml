@@ -56,6 +56,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
   
+    - name: Set up Node.js 20.4.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.4.x'
+
     - name: Download all artifacts
       uses: actions/download-artifact@v3
 
@@ -81,16 +86,16 @@ jobs:
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_green.png
           description: |
             ${{ env.TEST_REPORT }}
-            ----------------------
-            Event: push
-            Repo: Protofy-xyz/Protofy
-            Ref: ${{ github.ref }}
-            Workflow: ${{ github.workflow }}
-            Author: ${{ github.event.head_commit.author.name }}
-            Committer: ${{ github.event.head_commit.committer.name }}
-            Pusher: ${{ github.event.pusher.name }}
-            Commit URL: ${{ github.event.head_commit.url }}
-            Commit Message: ${{ github.event.head_commit.message }}
+
+            **Event:** push
+            **Repo:** Protofy-xyz/Protofy
+            **Ref:** ${{ github.ref }}
+            **Workflow:** ${{ github.workflow }}
+            **Author:** ${{ github.event.head_commit.author.name }}
+            **Committer:** ${{ github.event.head_commit.committer.name }}
+            **Pusher:** ${{ github.event.pusher.name }}
+            **Commit URL:** ${{ github.event.head_commit.url }}
+            **Commit Message:** ${{ github.event.head_commit.message }}
 
             Tests Succeeded!
 
