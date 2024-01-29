@@ -23,4 +23,7 @@ describe("Protofy setup tests", () => {
 
         expect(validDependencies()).toBe(true);
     })
+    it.skip("skips the test for testing purposes", () => {
+        expect(true).toBe(true)
+    })
 })
