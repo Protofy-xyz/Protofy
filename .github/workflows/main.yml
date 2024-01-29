@@ -75,6 +75,14 @@ jobs:
         cat reports/testsReport.txt | sed 's/\x1b\[[0-9;]*m//g' >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
 
+    - name: Get skipped status to retrieve color and save it to environment variable
+      run: |
+        SKIPPED=$(cat reports/testsReport.txt | grep "🟠PASS" > /dev/null && echo "True" || echo "False")
+        if [ "$SKIPPED" = "True" ]; then
+          echo "TEST_COLOR=#ffa600" >> $GITHUB_ENV 
+        else
+          echo "TEST_COLOR=#00e065" >> $GITHUB_ENV
+
     - name: Test Success
       uses: rjstone/discord-webhook-notify@v1
       if: needs.test.result == 'success'
@@ -82,7 +90,7 @@ jobs:
           severity: info
           details: Test Succeeded!
           username: ${{ github.event.pusher.name }}
-          color: '#00e065'
+          color: ${{ env.TEST_COLOR }}
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_green.png
           description: |
             ${{ env.TEST_REPORT }}
