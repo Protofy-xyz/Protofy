@@ -80,11 +80,11 @@ jobs:
         if grep -q "🚧 PASS" reports/testsReport.txt; then
           echo "SKIPPED=True" >> $GITHUB_ENV
           echo "TEST_COLOR=#ffa600" >> $GITHUB_ENV
-          echo "TEST_AVATAR_COLOR=green" >> $GITHUB_ENV
+          echo "TEST_AVATAR_COLOR=orange" >> $GITHUB_ENV
         else
           echo "SKIPPED=False" >> $GITHUB_ENV
           echo "TEST_COLOR=#00e065" >> $GITHUB_ENV
-          echo "TEST_AVATAR_COLOR=orange" >> $GITHUB_ENV
+          echo "TEST_AVATAR_COLOR=green" >> $GITHUB_ENV
         fi
 
     - name: Test Success
