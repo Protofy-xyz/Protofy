@@ -115,6 +115,7 @@ export const Sidebar = ({
                                                                         : React.createElement(data.element)
                                                                 })}
                                                                 id={"drag-element-"+componentName}
+                                                                className={"draggable-element"}
                                                                 style={{ textAlign: 'center', marginTop: '10px', height: '50px', width: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                                             >
                                                                 <Icon

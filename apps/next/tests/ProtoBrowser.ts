@@ -70,23 +70,35 @@ export class ProtoBrowser {
         await this.getPage().click(locator)
     }
 
-    async evaluate(loacator: string, cb: Function = (element) => {}): Promise<void> {
+    async evaluate(loacator: string, cb: Function = (element) => { }): Promise<void> {
         await this.getPage().locator(loacator).evaluate(cb);
     }
 
     async dragAndDrop(sourceLocator: string, targetLocator: string): Promise<void> {
         await this.waitForElement(sourceLocator)
         await this.waitForElement(targetLocator)
-        
+
         const source = this.getPage().locator(sourceLocator);
         const target = this.getPage().locator(targetLocator);
-        
+
         await source.dragTo(target);
     }
 
     async getElementText(selector: any): Promise<any> {
         await this.waitForElement(selector)
         return await this.getPage().textContent(selector);
+    }
+
+    async getClassNameIds(locator: string): Promise<any> {
+        const page = this.getPage()
+        const elements = await page.$$(locator);
+
+        const idsArray = await Promise.all(elements.map(async element => {
+            const id = await page.evaluate(el => el.id, element);
+            return id;
+        }));
+
+        return idsArray
     }
 
     async navigateToLogin() {

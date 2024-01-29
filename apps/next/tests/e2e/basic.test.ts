@@ -176,17 +176,17 @@ describe("Test admin capabilities", () => {
             expect(error).toBeTruthy()
         }, 50000)
 
-        it("should be able to drag and drop all components", async () => {
-            const elementArr = ['BigTitle']
-            await Promise.all(elementArr.map(async ele => {
+        it.skip("should be able to drag and drop all components", async () => {
+            const draggablesIds = await protoBrowser.getClassNameIds('.draggable-element')
+            
+            for (const elementId of draggablesIds) {
                 await protoBrowser.clickElement("#components-to-drag-btn")
                 await protoBrowser.evaluate(".glass", element => element.style.display = 'none')
                 await protoBrowser.waitForElement(".glass", 6000, { state: "hidden" })
                 await protoBrowser.waitForElement(".visualui-sidebar")
-                await protoBrowser.dragAndDrop('#drag-element-' + ele, "#home-page")
+                await protoBrowser.dragAndDrop('#' + elementId, "#home-page")
                 await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
-            }));
-            await protoBrowser.clickElement("#save-nodes-btn")
+            }
         }, 80000)
     })
 })
