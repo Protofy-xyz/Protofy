@@ -77,11 +77,13 @@ jobs:
 
     - name: Get skipped status to retrieve color and save it to environment variable
       run: |
-        SKIPPED=$(cat reports/testsReport.txt | grep "🟠PASS" > /dev/null && echo "True" || echo "False")
-        if [ "$SKIPPED" = "True" ]; then
-          echo "TEST_COLOR=#ffa600" >> $GITHUB_ENV 
+        if grep -q "🟠PASS" reports/testsReport.txt; then
+          echo "SKIPPED=True" >> $GITHUB_ENV
+          echo "TEST_COLOR=#ffa600" >> $GITHUB_ENV
         else
+          echo "SKIPPED=False" >> $GITHUB_ENV
           echo "TEST_COLOR=#00e065" >> $GITHUB_ENV
+        fi
 
     - name: Test Success
       uses: rjstone/discord-webhook-notify@v1
