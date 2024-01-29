@@ -80,9 +80,11 @@ jobs:
         if grep -q "🟠PASS" reports/testsReport.txt; then
           echo "SKIPPED=True" >> $GITHUB_ENV
           echo "TEST_COLOR=#ffa600" >> $GITHUB_ENV
+          echo "TEST_AVATAR_COLOR=green" >> $GITHUB_ENV
         else
           echo "SKIPPED=False" >> $GITHUB_ENV
           echo "TEST_COLOR=#00e065" >> $GITHUB_ENV
+          echo "TEST_AVATAR_COLOR=orange" >> $GITHUB_ENV
         fi
 
     - name: Test Success
@@ -93,7 +95,7 @@ jobs:
           details: Test Succeeded!
           username: ${{ github.event.pusher.name }}
           color: ${{ env.TEST_COLOR }}
-          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_green.png
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_${{ env.TEST_AVATAR_COLOR}}.png
           description: |
             ${{ env.TEST_REPORT }}
 
