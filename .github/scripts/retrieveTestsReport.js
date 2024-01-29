@@ -58,13 +58,13 @@ const main = () => {
     const status = splitReportArr.map(report => getReportStatus(report))
     const output = status.reduce((total, s) => {
         let statusBadge = s['status'] == 'FAIL' ?
-            '🔴'
+            '🆘'
             : (
                 (s['status'] == 'PASS' && !s['skipped'])
-                    ? '🟢'
-                    : '🟠'
+                    ? '✅'
+                    : '🚧'
             )
-        total += `-----------------\n${statusBadge}${s['status'] ?? 'SKIP'} --> Total ${s['total']} | ${s['passed']} 🟢 | ${s['failed']} 🔴 | ${s['skipped']} 🟠${s['file'] ? ("\nAt file:" + s['file']) : ''}\n`
+        total += `-----------------\n${statusBadge} ${s['status'] ?? 'SKIP'} --> Total ${s['total']} (**${s['passed']}** pass, **${s['skipped']}** skip, **${s['failed']}** fail)${s['file'] ? ("\nAt file:" + s['file']) : ''}\n`
         return total
     }, "")
     console.log(output)

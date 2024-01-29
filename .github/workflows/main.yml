@@ -77,7 +77,7 @@ jobs:
 
     - name: Get skipped status to retrieve color and save it to environment variable
       run: |
-        if grep -q "🟠PASS" reports/testsReport.txt; then
+        if grep -q "🚧 PASS" reports/testsReport.txt; then
           echo "SKIPPED=True" >> $GITHUB_ENV
           echo "TEST_COLOR=#ffa600" >> $GITHUB_ENV
           echo "TEST_AVATAR_COLOR=green" >> $GITHUB_ENV
