@@ -79,7 +79,7 @@ import htmlBasicElements from './htmlBasics'
 
 const cw = getComponentWrapper('protolib')
 
-const nonDraggable = {custom: {hidden: true}}
+const nonDraggable = { custom: { hidden: true } }
 
 export default {
   ...htmlBasicElements,
@@ -115,7 +115,7 @@ export default {
   ...cw(ContainerLarge, 'Package', 'ContainerLarge', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ContainerXL, 'Container', 'ContainerXL', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(CopyBubble, 'Copy', 'CopyBubble', { text: "copy" }),
-  ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { canMoveIn: () => false }),
+  ...cw(DataCard, 'CreditCard', 'DataCard', { name: "'hello title'", maxWidth: "'300px'", json: `{{ "name": "hello", "surname": "world" }}` }, { canMoveIn: () => false }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
   ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
   ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
