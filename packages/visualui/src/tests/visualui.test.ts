@@ -337,7 +337,7 @@ describe("Test Node Ops", () => {
             const atr1_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[0])).value
             expect(atr1_value).toBe("1")
             const atr2_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[1])).value
-            expect(atr2_value).toBe("{2}")
+            expect(atr2_value).toBe(2)
             const atr3_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[2])).value
             expect(atr3_value).toBeUndefined()
             const atr4_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[3])).value
@@ -345,7 +345,7 @@ describe("Test Node Ops", () => {
             const atr5_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[4])).value
             expect(atr5_value).toBe("{false}")
             const atr6_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[5])).value
-            expect(atr6_value).toBe(`{"hello"}`)
+            expect(atr6_value).toBe("hello")
             const atr7_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[6])).value
             expect(atr7_value).toBe('{isAtr7?"hello":"rip"}')
             const atr8_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[7])).value
@@ -372,12 +372,12 @@ describe("Test CraftData Ops", () => {
                     "resolvedName": "View"
                 },
                 "isCanvas": true,
-                "props": { "atr1": "1", "atr2": "{2}", "atr4": "{{background:\"red\"}}" },
+                "props": { "atr1": "1", "atr2": 2, "atr4": "{{background:\"red\"}}" },
                 "displayName": "View",
                 "custom": {
                     "_nodeType": "JsxElement",
                     "atr1": "StringLiteral",
-                    "atr2": "JsxExpression",
+                    "atr2": "NumericLiteral",
                     "atr4": "JsxExpression",
                 },
                 "hidden": false,
@@ -439,12 +439,12 @@ describe("Test CraftData Ops", () => {
                         "_nodeId": "StringLiteral",
                         "_nodeType": "JsxElement",
                         "atr1": "StringLiteral",
-                        "atr2": "JsxExpression",
+                        "atr2": "NumericLiteral",
                         "atr4": "JsxExpression",
                     },
                     "isCanvas": true,
                     "parent": "ROOT",
-                    "props": { "atr1": "1", "atr2": "{2}", "atr4": "{{background:\"red\"}}", "_nodeId": "nodeId-0", },
+                    "props": { "atr1": "1", "atr2": 2, "atr4": "{{background:\"red\"}}", "_nodeId": "nodeId-0", },
                     "displayName": "View",
                     "hidden": false,
                     "nodes": ["nodeId-1", "nodeId-2"],
@@ -524,13 +524,13 @@ describe("Test CraftData Ops", () => {
                     },
                     "isCanvas": true,
                     "parent": "ROOT",
-                    "props": { "atr1": "1", "atr2": "{2}", "atr4": "{{background:\"red\"}}", "_nodeId": "nodeId-0", },
+                    "props": { "atr1": "1", "atr2": 2, "atr4": "{{background:\"red\"}}", "_nodeId": "nodeId-0", },
                     "displayName": "View",
                     "custom": {
                         "_nodeId": "StringLiteral",
                         "_nodeType": "JsxElement",
                         "atr1": "StringLiteral",
-                        "atr2": "JsxExpression",
+                        "atr2": "NumericLiteral",
                         "atr4": "JsxExpression",
                     },
                     "hidden": false,
@@ -600,13 +600,13 @@ describe("Test CraftData Ops", () => {
                     },
                     "isCanvas": true,
                     "parent": "ROOT",
-                    "props": { "atr1": "1", "atr2": "{2}", "atr4": "{{background:\"red\"}}", "_nodeId": "nodeId-0" },
+                    "props": { "atr1": "1", "atr2": 2, "atr4": "{{background:\"red\"}}", "_nodeId": "nodeId-0" },
                     "displayName": "View",
                     "custom": {
                         "_nodeId": "StringLiteral",
                         "_nodeType": "JsxElement",
                         "atr1": "StringLiteral",
-                        "atr2": "JsxExpression",
+                        "atr2": "NumericLiteral",
                         "atr4": "JsxExpression",
                     },
                     "hidden": false,
@@ -767,7 +767,7 @@ describe("Test CraftData Ops", () => {
                     props: {
                         _nodeId: 'nodeId-0',
                         atr1: '1',
-                        atr2: '{2}',
+                        atr2: 2,
                         atr4: '{{background:"red"}}'
                     },
                     displayName: 'View',
@@ -775,7 +775,7 @@ describe("Test CraftData Ops", () => {
                         _nodeId: 'StringLiteral',
                         _nodeType: "JsxElement",
                         atr1: 'StringLiteral',
-                        atr2: 'JsxExpression',
+                        atr2: 'NumericLiteral',
                         atr4: 'JsxExpression',
                         namedImportName: 'View',
                         namedImportAlias: undefined,
@@ -826,7 +826,7 @@ describe("Test CraftData Ops", () => {
                         "_nodeId": "StringLiteral",
                         "_nodeType": "JsxElement",
                         "atr1": "StringLiteral",
-                        "atr2": "JsxExpression",
+                        "atr2": "NumericLiteral",
                         "atr4": "JsxExpression",
                         "moduleSpecifier": "'react-native'",
                         "namedImportAlias": undefined,
@@ -841,7 +841,7 @@ describe("Test CraftData Ops", () => {
                     "props": {
                         "_nodeId": "nodeId-0",
                         "atr1": "1",
-                        "atr2": "{2}",
+                        "atr2": 2,
                         "atr4": "{{background:\"red\"}}"
                     },
                     "type": { "resolvedName": "View" }

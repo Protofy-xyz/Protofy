@@ -433,13 +433,20 @@ export default class Source {
 
     static nodeValueFactory(node: any): any { // Receives element
         let atrVal
-        const nodeKind = node?.getKindName()
+        var nodeKind = node?.getKindName()
+
         switch (nodeKind) {
             case 'StringLiteral':
                 atrVal = node?.getLiteralValue();
                 break;
             default: //e.g JsxExpression
                 atrVal = node?.getText()
+                const expressionKind = node?.getExpression()?.getKindName()
+
+                if (["NumericLiteral", "StringLiteral"].includes(expressionKind)) {
+                    atrVal = node?.getExpression().getLiteralValue()
+                    nodeKind = expressionKind
+                }
                 break;
         }
         return { value: atrVal, nodeKind }
