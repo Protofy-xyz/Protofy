@@ -486,6 +486,31 @@ describe("Test CraftData Ops", () => {
                 }
             })
         })
+        it("should obtain decoded html text inside Text react tag once flatten craft nodes", () => {
+            const source1 = `
+            <Text>hello></Text>
+            `
+            const sourceNode = Source.parse(source1) // Source object
+            const craftData = sourceNode.data(testUUID)
+            expect(craftData['nodeId-0']).toStrictEqual({
+                "custom": {
+                    "_nodeId": "StringLiteral",
+                    "_nodeType": "JsxElement",
+                    "children": "StringLiteral"
+                },
+                "displayName": "Text",
+                "hidden": false,
+                "isCanvas": true,
+                "linkedNodes": {},
+                "nodes": [],
+                "parent": "ROOT",
+                "props": {
+                    "_nodeId": "nodeId-0",
+                    "children": "hello>"
+                },
+                "type": { "resolvedName": "Text" }
+            })
+        })
         it("generates flatten list of craftNode using 'getNodes'", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Input value="hello"/><Text>hello</Text></View>`
             let sourceNode = Source.parse(source1)

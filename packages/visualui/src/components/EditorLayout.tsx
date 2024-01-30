@@ -8,6 +8,7 @@ import { withTopics } from "react-topics";
 import ErrorBoundary from './ErrorBoundary'
 import { notify, computePreviousPositions } from "../utils/utils";
 import { Stack, Spinner } from "@my/ui"
+import he from 'he';
 
 export type EditorProps = {
 	children?: any;
@@ -64,7 +65,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir }: 
 				const children_diff = nodesChanges.find(d => d.kind == 'E' && d.path[2] == 'children')
 				if (children_diff) { // edited child text
 					const nodeId = children_diff.path[0]
-					const newChildValue = children_diff.rhs
+					const newChildValue = he.decode(children_diff.rhs)
 					topicParams = {
 						action: 'edit-node',
 						nodeId: nodeId,
