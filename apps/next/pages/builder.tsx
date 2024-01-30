@@ -1,46 +1,65 @@
 import { Editor, Element, Frame, useNode, useEditor } from "@craftjs/core";
-import { BigTitle, Monaco, Page } from "protolib";
+import { BigTitle, Monaco, Page, useAtom } from "protolib";
 import protolibPallete from 'protolib/visualui/index'
 import { useEffect, useRef, useState } from "react";
 import Source from "visualui/src/models/Source";
 import palettes from "visualui/src/palettes";
 import { RenderNode } from "visualui/src/components/RenderNode";
 import ErrorBoundary from "visualui/src/components/ErrorBoundary";
+import { atom } from 'jotai'
+
+const codeAtom = atom(`import { BigTitle, Page, UIWrapLib } from "protolib";
+
+const isProtected = Protofy("protected", false);
+
+const Home = (props) => {
+  return (
+    <Page id="custom-id">
+      <BigTitle>Hello</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>Hello</BigTitle>
+      <BigTitle>world</BigTitle>
+       <BigTitle>esto es un test muy largo</BigTitle>
+      <BigTitle>Hello</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+      <BigTitle>world</BigTitle>
+    </Page>
+  );
+};
+
+const cw = UIWrapLib('@my/ui')
+
+export default {
+  route: Protofy("route", "/"),
+  component: (props) =>
+    useEdit(
+      () => Home(props),
+      {
+        ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
+      },
+      "/packages/app/bundles/custom/pages/home.tsx"
+    ),
+  getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined)),
+};
+
+`);
 
 const Builder = () => {
   const [craftNodes, setCraftNodes] = useState({})
   const [initialJson, setInitialJson] = useState()
   const paper = useRef<any>()
   const [loading, setLoading] = useState(true)
-  const [sourceCode, setSourceCode] = useState(`import { BigTitle, Page, UIWrapLib } from "protolib";
-
-  const isProtected = Protofy("protected", false);
-  
-  const Home = (props) => {
-    return (
-      <Page id="home-page">
-        <BigTitle>Hello</BigTitle>
-        <BigTitle>world</BigTitle>
-      </Page>
-    );
-  };
-  
-  const cw = UIWrapLib('@my/ui')
-  
-  export default {
-    route: Protofy("route", "/"),
-    component: (props) =>
-      useEdit(
-        () => Home(props),
-        {
-          ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-        },
-        "/packages/app/bundles/custom/pages/home.tsx"
-      ),
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined)),
-  };
-  
-`)
+  const [sourceCode, setSourceCode] = useAtom(codeAtom)
 
   const { connectors, actions, query, selectedNodeId } = useEditor((state: Node) => {
     return {
@@ -90,9 +109,9 @@ const Builder = () => {
           setTimeout(() => reload(retry + 1), 5000)
           setLoading(true)
         } else {
-          console.error(`Max retry reached! Error deserializing editor nodes (CraftJS nodes). Error: ${e}`)
+          console.error(`Max retry reached! Error deserializing editor nodes(CraftJS nodes).Error: ${e}`)
         }
-        console.error(`Error deserializing editor nodes (CraftJS nodes). Error: ${e}`)
+        console.error(`Error deserializing editor nodes(CraftJS nodes).Error: ${e}`)
       }
     }
     if (sourceCode) {
@@ -123,21 +142,23 @@ const Builder = () => {
             }}
           />
         </div>
-        <div
-          className="page-container"
-          style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '60%', backgroundColor: 'transparent' }}>
+        {/* this page container should go above the frame not here, for the moment let's leave here since it works */}
+        <div className="page-container" style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '60%', backgroundColor: 'transparent' }}>
+          <p style={{
+            position: 'absolute', bottom: '15px', right: '15px', color: 'white', backgroundColor: '#0056ff', padding: '7px 10px',
+            borderRadius: '5px'
+          }}>{selectedNodeId}</p>
           <div
             /* @ts-ignore */
             ref={(ref) => { connectors.select(connectors.hover(ref, null), null) }}
-            style={{ display: 'flex', position: 'relative', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor: '#ececec' }}>
+            style={{
+              display: 'flex', position: 'relative', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'flex-start',
+              alignItems: 'flex-start', backgroundColor: '#ececec', overflow: 'scroll'
+            }}>
             <Frame />
-            <p style={{
-              position: 'absolute', bottom: '15px', right: '15px', color: 'white', backgroundColor: '#0056ff', padding: '7px 10px',
-              borderRadius: '5px'
-            }}>{selectedNodeId}</p>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-
+            <h1>john doe</h1>
           </div>
         </div>
       </div>
@@ -146,11 +167,21 @@ const Builder = () => {
 }
 
 export default function BuilderWrapper() {
+  const [sourceCode, setSourceCode] = useAtom(codeAtom)
+
   return <Editor resolver={{
     ...protolibPallete,
     Root: palettes.craft.Root,
   }}
+    indicator={{
+      transition: 'none',
+      success: 'green',
+      error: 'red'
+    }}
     onRender={RenderNode}
+    onNodesChange={(newNodes) => {
+      console.log('new nodes', newNodes.getNodes())
+    }}
   >
     <Builder />
   </Editor>
