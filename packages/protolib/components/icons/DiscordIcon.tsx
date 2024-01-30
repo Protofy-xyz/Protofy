@@ -1,7 +1,8 @@
 import React from 'react'
 
-export const DiscordIcon = ({ plain, ...props }: any) => (
+export const DiscordIcon = React.forwardRef(({ plain, ...props }: any, ref) => (
   <svg
+    ref={ref}
     width="30"
     height="31"
     viewBox="0 0 30 31"
@@ -16,4 +17,4 @@ export const DiscordIcon = ({ plain, ...props }: any) => (
       fill={plain ? 'var(--color)' : '#7289DA'}
     />
   </svg>
-)
+))
