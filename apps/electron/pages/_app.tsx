@@ -24,7 +24,7 @@ import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
 import { setConfig } from 'protolib/base/Config';
 import {getBaseConfig} from 'app/BaseConfig'
-setConfig({...getBaseConfig(process), logger: {...getBaseConfig(process).logger, name: "electron"}})
+setConfig(getBaseConfig("electron", process))
 initSchemaSystem()
 
 

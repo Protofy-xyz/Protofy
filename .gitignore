@@ -1,6 +1,8 @@
 **/node_modules
 .yarn/*
 data/*
+logs/*
+!logs/.keep
 !data/workspaces
 !data/templates
 !.yarn/patches

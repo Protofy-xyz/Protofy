@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import { setConfig } from 'protolib/base/Config';
 import {getBaseConfig} from 'app/BaseConfig'
-setConfig({...getBaseConfig(process), logger: {...getBaseConfig(process).logger, name: "api"}})
+setConfig(getBaseConfig('api', process))
 import {getLogger } from 'protolib/base/logger';
 require('events').EventEmitter.defaultMaxListeners = 100;
 

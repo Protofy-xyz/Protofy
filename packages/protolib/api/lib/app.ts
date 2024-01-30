@@ -2,7 +2,9 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import httpLogger from "pino-http";
+import { getConfig } from 'protolib/base/Config';
 
+const config = getConfig()
 export const app = express();
 app.use(cors());
 app.use(cookieParser());
@@ -29,8 +31,5 @@ app.use(httpLogger({
             }
         },
     },
-    level: "info",
-    transport: {
-        target: 'pino-pretty'
-    }
+    ...config.logger
 }))

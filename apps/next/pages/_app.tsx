@@ -15,7 +15,7 @@ import 'react-chat-widget/lib/styles.css';
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { setConfig } from 'protolib/base/Config';
 import {getBaseConfig} from 'app/BaseConfig'
-setConfig({...getBaseConfig(process), logger: {...getBaseConfig(process).logger, name: "next"}})
+setConfig(getBaseConfig("next", process))
 import { Provider } from 'app/provider'
 import Head from 'next/head'
 import React, { createContext } from 'react'

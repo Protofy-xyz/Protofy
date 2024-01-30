@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import { setConfig } from 'protolib/base/Config';
 import {getBaseConfig} from 'app/BaseConfig'
-setConfig({...getBaseConfig(process), logger: {...getBaseConfig(process).logger, name: "admin-api"}})
+setConfig(getBaseConfig("admin-api", process))
 import {getLogger } from 'protolib/base/logger';
 import { app, getMQTTClient } from 'protolib/api'
 import BundleAPI from 'app/bundles/adminapi'
