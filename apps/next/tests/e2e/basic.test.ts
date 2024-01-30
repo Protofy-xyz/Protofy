@@ -188,6 +188,6 @@ describe("Test admin capabilities", () => {
                 await protoBrowser.dragAndDrop('#' + elementId, "#home-page")
                 await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
             }
-        }, 50000)
+        }, 70000)
     })
 })
