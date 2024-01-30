@@ -24,7 +24,7 @@ export const Session = atom(
     }
 );
 
-const initialContext = {group: {workspaces:[]}}
+const initialContext = {state: "pending", group: {workspaces:[]}}
 export const SessionContext = atom(initialContext)
 
 export const initSession = (pageSession) => {
