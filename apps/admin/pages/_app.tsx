@@ -1,6 +1,6 @@
 import {setConfig} from 'protolib/base/Config'
 import {getBaseConfig} from 'app/BaseConfig'
-setConfig({...getBaseConfig(process), logger: {...getBaseConfig(process).logger, name: "admin"}})
+setConfig(getBaseConfig('admin', process))
 
 import '@tamagui/core/reset.css'
 import '@tamagui/font-inter/css/400.css'
