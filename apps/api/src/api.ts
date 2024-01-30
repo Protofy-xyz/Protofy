@@ -6,7 +6,8 @@ const mqtt = getMQTTClient()
 
 const topicSub = (topic, cb) => {
     mqtt.subscribe(topic)
-    mqtt.on("message", (topic, message) => {
+    mqtt.on("message", (messageTopic, message) => {
+        if (topic != messageTopic) return
         const parsedMessage = message.toString();
         cb(parsedMessage, topic)
     });
