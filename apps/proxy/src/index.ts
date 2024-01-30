@@ -1,6 +1,11 @@
 const Redbird = require('redbird-no-etcd');
-const environments = require('../../packages/app/bundles/environments')
-const logger = require('./logger');
+import {environments} from 'app/bundles/environments'
+import { setConfig } from 'protolib/base/Config';
+import {getBaseConfig} from 'app/BaseConfig'
+setConfig(getBaseConfig('proxy', process))
+import {getLogger } from 'protolib/base/logger';
+
+const logger = getLogger()
 
 const isProduction = process.env.NODE_ENV === 'production';
 const Port = process.env.PORT ?? (isProduction ? 8000 : 8080);
@@ -42,7 +47,7 @@ var customResolver1 = function (host, url, req) {
     }
 };
 
-customResolver1.priority = 100;
+customResolver1['priority'] = 100;
 
 var customResolver2 = function (host, url, req) {
     addClientIpHeader(req);
@@ -54,7 +59,7 @@ var customResolver2 = function (host, url, req) {
     }
 };
 
-customResolver2.priority = 101;
+customResolver2['priority'] = 101;
 
 var customResolver3 = function (host, url, req) {
     addClientIpHeader(req);
@@ -66,7 +71,7 @@ var customResolver3 = function (host, url, req) {
 
 };
 
-customResolver3.priority = 103;
+customResolver3['priority'] = 103;
 
 var devResolver = function (host, url, req) {
     if (isProduction && host.startsWith('dev.')) {
@@ -74,7 +79,7 @@ var devResolver = function (host, url, req) {
     }
 };
 
-devResolver.priority = 200;
+devResolver['priority'] = 200;
 
 var proxy = new Redbird({
     port: Port,

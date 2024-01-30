@@ -15,8 +15,7 @@ import { Slides } from '../../components/Slides'
 import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
 import TemplatePreview from './TemplatePreview'
-
-const environments = require('../../../app/bundles/environments')
+import {environments} from 'app/bundles/environments'
 
 const PageIcons = {}
 const sourceUrl = '/adminapi/v1/pages'

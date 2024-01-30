@@ -1,4 +1,4 @@
-const environments = {
+export const environments = {
     dev: {
         api: 'http://localhost:3001',
         adminApi: 'http://localhost:3002',
@@ -23,5 +23,3 @@ const environments = {
     //     baseUrl: 'http://dev.protofy.xyz'
     // }
 }
-
-module.exports = environments

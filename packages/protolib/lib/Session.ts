@@ -7,7 +7,7 @@ import { parse } from 'cookie';
 import { getLogger } from "protolib/base"
 
 const logger = getLogger()
-const environments = require('../../app/bundles/environments')
+import {environments} from 'app/bundles/environments'
 
 
 export const SessionData = atomWithStorage("session", createSession())
