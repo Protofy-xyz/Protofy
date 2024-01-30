@@ -16,7 +16,7 @@ const Home = (props) => {
   return (
     <Page id="custom-id">
       <BigTitle>Hello</BigTitle>
-      <XCenterStack>
+      <XCenterStack padding="30px">
         <BigTitle>world</BigTitle>
       </XCenterStack>
     </Page>
