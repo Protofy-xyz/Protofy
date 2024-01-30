@@ -2,7 +2,8 @@ const Redbird = require('redbird-no-etcd');
 import {environments} from 'app/bundles/environments'
 import { setConfig } from 'protolib/base/Config';
 import {getBaseConfig} from 'app/BaseConfig'
-setConfig(getBaseConfig('proxy', process))
+const config = getBaseConfig('proxy', process)
+setConfig(config)
 import {getLogger } from 'protolib/base/logger';
 
 const logger = getLogger()
@@ -83,11 +84,7 @@ devResolver['priority'] = 200;
 
 var proxy = new Redbird({
     port: Port,
-    bunyan: {
-        name: 'redbird',
-        level: 'error',
-        formatter: "pretty"
-    },
+    bunyan: false,
     resolvers: [
         devResolver,
         customResolver1,
