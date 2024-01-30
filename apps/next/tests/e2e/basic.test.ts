@@ -176,10 +176,10 @@ describe("Test admin capabilities", () => {
             expect(error).toBeTruthy()
         }, 50000)
 
-        it.skip("should be able to drag and drop all components", async () => {
+        it("should be able to drag and drop all components", async () => {
             const allDraggablesIds = await protoBrowser.getClassNameIds('.draggable-element')
-            // TODO: Test all draggable elements instead of the first four (now avoid 7 extra minutes just for this test).
-            const draggablesIds = allDraggablesIds.slice(0,4)
+            // TODO: Test all draggable elements instead of the first one (now avoid 7 extra minutes just for this test).
+            const draggablesIds = [allDraggablesIds[0]]
             for (const elementId of draggablesIds) {
                 await protoBrowser.clickElement("#components-to-drag-btn")
                 await protoBrowser.evaluate(".glass", element => element.style.display = 'none')
