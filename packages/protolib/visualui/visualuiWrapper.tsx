@@ -31,10 +31,10 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
         }));
         return <Component ref={connect} {...visualUIOnlyFallbackProps} {...props}>
             {
-                editableText && typeof props.children == 'string'
+                editableText && (typeof props.children == 'string' || typeof props.children == 'number')
                     ? <ContentEditable
                         innerRef={connect}
-                        html={props.children}
+                        html={props.children.toString()}
                         onChange={(e) => {
                             setProp((prop) => (prop.children = e.target.value), 500);
                         }}
