@@ -82,9 +82,19 @@ var devResolver = function (host, url, req) {
 
 devResolver['priority'] = 200;
 
+const originalStdoutWrite = process.stdout.write.bind(process.stdout);
+//@ts-ignore
+process.stdout.write = (chunk, encoding, callback) => {
+    const data = chunk.toString();
+    logger.debug({...JSON.parse(data), level: 20});
+    //originalStdoutWrite(chunk, encoding, callback);
+};
+
 var proxy = new Redbird({
     port: Port,
-    bunyan: false,
+    bunyan: {
+        name: "proxy"
+    },
     resolvers: [
         devResolver,
         customResolver1,

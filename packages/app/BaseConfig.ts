@@ -7,12 +7,14 @@ export const getBaseConfig = (name, process) => {
             targets: [
               {
                 target: 'pino-pretty',
+                level: 'info',
                 options: {
                   colorize: true
                 }
               },
               {
                 target: 'pino/file',
+                level: 'debug',
                 options: {
                   destination: "../../logs/"+name+'.log'
                 }
@@ -22,7 +24,7 @@ export const getBaseConfig = (name, process) => {
           }
         } : {}),
       name: name ?? 'default',
-      level: 'info'
+      level: 'debug'
     }
   }
 }
