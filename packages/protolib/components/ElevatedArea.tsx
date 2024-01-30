@@ -6,7 +6,6 @@ const ElevatedArea = React.forwardRef((props:StackProps, ref:any) => (
         ref={ref}
         //@ts-ignore
         pos="relative"
-        zi={1000}
         elevation="$4"
         py="$4"
         pt="$6"
