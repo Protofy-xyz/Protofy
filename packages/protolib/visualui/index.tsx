@@ -78,7 +78,9 @@ import { AlertDialog } from '../components/AlertDialog'
 import htmlBasicElements from './htmlBasics'
 
 const cw = getComponentWrapper('protolib')
+
 const nonDraggable = {custom: {hidden: true}}
+
 export default {
   ...htmlBasicElements,
   ...cw(ActiveGroup, 'EyeOff', 'ActiveGroup', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
