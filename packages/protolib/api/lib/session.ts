@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import {API} from '../../base/Api'
 
 export const getSessionContext = async (type) => {
-    return {group: type ? (await API.get('/adminapi/v1/groups/'+type)).data : {} }
+    return { state: 'resolved', group: type ? (await API.get('/adminapi/v1/groups/'+type)).data : {} }
 }
 
 export const createSession = (data?:userData, token?:string):SessionDataType => {

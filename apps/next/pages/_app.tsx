@@ -13,6 +13,9 @@ import '../chonky.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import 'react-chat-widget/lib/styles.css';
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
+import { setConfig } from 'protolib/base/Config';
+import {getBaseConfig} from 'app/BaseConfig'
+setConfig({...getBaseConfig(process), logger: {...getBaseConfig(process).logger, name: "next"}})
 import { Provider } from 'app/provider'
 import Head from 'next/head'
 import React, { createContext } from 'react'
@@ -22,11 +25,6 @@ import { AppConfContext } from 'app/provider/AppConf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
-import {setLoggerConfig} from 'protolib/base/logger';
-
-setLoggerConfig({name: "next"})
-initSchemaSystem()
-
 initSchemaSystem()
 
 if (process.env.NODE_ENV === 'production') {

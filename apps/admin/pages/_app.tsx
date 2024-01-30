@@ -1,3 +1,7 @@
+import {setConfig} from 'protolib/base/Config'
+import {getBaseConfig} from 'app/BaseConfig'
+setConfig({...getBaseConfig(process), logger: {...getBaseConfig(process).logger, name: "admin"}})
+
 import '@tamagui/core/reset.css'
 import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
@@ -22,10 +26,8 @@ import { AppConfContext } from 'app/provider/AppConf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
-import {setLoggerConfig} from 'protolib/base/logger'
 
 initSchemaSystem()
-setLoggerConfig({name: "admin"})
 
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css')

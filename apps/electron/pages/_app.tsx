@@ -22,9 +22,9 @@ import { AppConfContext } from 'app/provider/AppConf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
-import {setLoggerConfig} from 'protolib/base/logger';
-
-setLoggerConfig({name: "electron"})
+import { setConfig } from 'protolib/base/Config';
+import {getBaseConfig} from 'app/BaseConfig'
+setConfig({...getBaseConfig(process), logger: {...getBaseConfig(process).logger, name: "electron"}})
 initSchemaSystem()
 
 
