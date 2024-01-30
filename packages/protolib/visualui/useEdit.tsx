@@ -43,6 +43,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
           t="$4"
           r="$4"
           br={"$6"}
+          display={process.env.NODE_ENV == "production" ? 'none' : "flex"} // Hide edit button when production mode
           pos='fixed'
           bc={"$color8"}
           zIndex={9999999999}
