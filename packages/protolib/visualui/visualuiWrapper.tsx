@@ -57,6 +57,7 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
         custom: {
             icon,
             ...importInfo,
+            ...componentRules['custom']
         },
         props: defaultProps,
         displayName: name,

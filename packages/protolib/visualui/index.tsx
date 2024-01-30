@@ -78,15 +78,15 @@ import { AlertDialog } from '../components/AlertDialog'
 import htmlBasicElements from './htmlBasics'
 
 const cw = getComponentWrapper('protolib')
-
+const nonDraggable = {custom: {hidden: true}}
 export default {
   ...htmlBasicElements,
-  ...cw(ActiveGroup, 'EyeOff', 'ActiveGroup', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(ActiveGroupButton, 'EyeOff', 'ActiveGroupButton'),
-  ...cw(ActiveRender, 'EyeOff', 'ActiveRender'),
+  ...cw(ActiveGroup, 'EyeOff', 'ActiveGroup', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
+  ...cw(ActiveGroupButton, 'EyeOff', 'ActiveGroupButton', {}, nonDraggable),
+  ...cw(ActiveRender, 'EyeOff', 'ActiveRender', {}, nonDraggable),
   ...cw(AnounceBubble, 'Tv2', 'AnounceBubble', { href: "/hello", children: "hello" }),
   ...cw(AppBar, 'CreditCard', 'AppBar'),
-  ...cw(AsyncView, 'EyeOff', 'AsyncView'),
+  ...cw(AsyncView, 'EyeOff', 'AsyncView', {}, nonDraggable),
   ...cw(BackgroundGradient, 'Scroll', 'BackgroundGradient'),
   ...cw(BarChart, 'BarChartHorizontalBig', 'BarChart', {
     data: [
@@ -101,7 +101,7 @@ export default {
   }),
   ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {}, {}, true),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
-  ...cw(ButtonGroup, 'EyeOff', 'ButtonGroup', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(ButtonGroup, 'EyeOff', 'ButtonGroup', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
   ...cw(ButtonLink, 'ExternalLink', 'ButtonLink', { href: "/hello", children: "hello" }),
   ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "hello" }, {}, {}, true),
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
@@ -141,7 +141,7 @@ export default {
   ...cw(Logo, 'Cherry', 'Logo', { text: "protofy" }),
   ...cw(LogoIcon, 'Hexagon', 'LogoIcon', { children: "hello world!" }, {}, {}, true),
   ...cw(MainButton, 'MousePointerSquare', 'MainButton', { children: "hello world!" }, {}, {}, true),
-  ...cw(NextLink, 'EyeOff', 'NextLink', { href: "/hello", children: "hello" }),
+  ...cw(NextLink, 'EyeOff', 'NextLink', { href: "/hello", children: "hello" }, nonDraggable),
   ...cw(Notice, 'Globe2', 'Notice', { children: "Hello world!" }, {}, {}, true),
   ...cw(OverlayCard, 'CreditCard', 'OverlayCard', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(OverlayCardBasic, 'CreditCard', 'OverlayCardBasic', {
@@ -150,15 +150,13 @@ export default {
     caption: "go",
     href: "http://google.com"
   }),
-  ...cw(Page, 'EyeOff', 'Page', {}, {
-    canDrag: () => false
-  }, { children: <BasicPlaceHolder /> }),
+  ...cw(Page, 'EyeOff', 'Page', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
   ...cw(PageGlow, 'EyeOff', 'PageGlow'),
   ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem', { text: "hello world" }),
-  ...cw(Pre, 'EyeOff', 'Pre'),
+  ...cw(Pre, 'EyeOff', 'Pre', {}, nonDraggable),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
   ...cw(Search, 'Search', 'Search'),
-  ...cw(Section, 'EyeOff', 'Section'),
+  ...cw(Section, 'EyeOff', 'Section', {}, nonDraggable),
   ...cw(SectionBox, 'RectangleHorizontal', 'SectionBox', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(SectionBlock, 'BoxSelect', 'SectionBlock'),
   ...cw(TitleLink, 'Link', 'TitleLink', { href: "/hello", children: "hello" }),
@@ -180,6 +178,6 @@ export default {
   ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }, {}, {}, true),
   ...cw(Video, 'Video', 'Video', {}, {}, {}, true),
   ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
-  ...cw(AlertDialog, 'Group', 'AlertDialog')
+  ...cw(AlertDialog, 'Group', 'AlertDialog', {}, nonDraggable)
 }
 
