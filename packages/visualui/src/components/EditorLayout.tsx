@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Frame, useEditor } from "@craftjs/core";
 import useKeypress from 'react-use-keypress';
 import Diff from 'deep-diff'
-import Source from "../models/Source";
+import Source from "app/models/Source";
 import { withTopics } from "react-topics";
 import ErrorBoundary from './ErrorBoundary'
 import { notify, computePreviousPositions } from "../utils/utils";

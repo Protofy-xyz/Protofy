@@ -2,7 +2,7 @@ import { Editor, Element, Frame, useNode, useEditor } from "@craftjs/core";
 import { BigTitle, Monaco, Page, useAtom } from "protolib";
 import protolibPallete from 'protolib/visualui/index'
 import { useEffect, useRef, useState } from "react";
-import Source from "visualui/src/models/Source";
+import Source from "app/models/Source";
 import palettes from "visualui/src/palettes";
 import { RenderNode } from "visualui/src/components/RenderNode";
 import ErrorBoundary from "visualui/src/components/ErrorBoundary";
@@ -16,23 +16,9 @@ const Home = (props) => {
   return (
     <Page id="custom-id">
       <BigTitle>Hello</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>Hello</BigTitle>
-      <BigTitle>world</BigTitle>
-       <BigTitle>esto es un test muy largo</BigTitle>
-      <BigTitle>Hello</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
-      <BigTitle>world</BigTitle>
+      <XCenterStack>
+        <BigTitle>world</BigTitle>
+      </XCenterStack>
     </Page>
   );
 };

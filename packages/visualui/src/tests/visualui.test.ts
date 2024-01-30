@@ -1,4 +1,4 @@
-import Source from 'visualui/src/models/Source';
+import Source from 'app/models/Source';
 
 var globalUuid = 0;
 const testUUID = () => "nodeId-" + globalUuid++
