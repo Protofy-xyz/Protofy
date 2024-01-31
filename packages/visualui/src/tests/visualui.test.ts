@@ -330,7 +330,7 @@ describe("Test Node Ops", () => {
         it("Test that JsxElement attributes are passed in correct format: ", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={true} atr5={false} 
                 atr6={"hello"} atr7={isAtr7?"hello":"rip"} atr8={isAtr8??false} atr9={myVar} atr10={myFunction()}
-                atr11={() => {console.log("p")}} atr11={{"backgroundColor":"red","borderWidth":1, margin: MARGIN}}
+                atr11={() => {console.log("p")}} atr12={{ backgroundColor:"red", borderWidth:1, margin: MARGIN}}
             ></View>`
             const conent: any = Source.parse(source1).getContent()
             const elementJsxAtributes: any[] = Source.getAttributes(conent)
@@ -341,9 +341,9 @@ describe("Test Node Ops", () => {
             const atr3_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[2])).value
             expect(atr3_value).toBeUndefined()
             const atr4_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[3])).value
-            expect(atr4_value).toBe("{true}")
+            expect(atr4_value).toBe(true)
             const atr5_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[4])).value
-            expect(atr5_value).toBe("{false}")
+            expect(atr5_value).toBe(false)
             const atr6_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[5])).value
             expect(atr6_value).toBe("hello")
             const atr7_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[6])).value
@@ -357,7 +357,8 @@ describe("Test Node Ops", () => {
             const atr11_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[10])).value
             expect(atr11_value).toBe('{() => {console.log("p")}}')
             const atr12_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[11])).value
-            expect(atr12_value).toBe('{{"backgroundColor":"red","borderWidth":1, margin: MARGIN}}')
+            console.log('DEV;::::: expect...... ', atr12_value)
+            expect(atr12_value).toStrictEqual({"backgroundColor":"red","borderWidth":1, margin: "MARGIN"})
         })
     })
 })
@@ -372,13 +373,13 @@ describe("Test CraftData Ops", () => {
                     "resolvedName": "View"
                 },
                 "isCanvas": true,
-                "props": { "atr1": "1", "atr2": 2, "atr4": "{{background:\"red\"}}" },
+                "props": { "atr1": "1", "atr2": 2, "atr4": {background:"red"} },
                 "displayName": "View",
                 "custom": {
                     "_nodeType": "JsxElement",
                     "atr1": "StringLiteral",
                     "atr2": "NumericLiteral",
-                    "atr4": "JsxExpression",
+                    "atr4": "ObjectLiteralExpression",
                 },
                 "hidden": false,
                 "nodes": [],
@@ -440,11 +441,11 @@ describe("Test CraftData Ops", () => {
                         "_nodeType": "JsxElement",
                         "atr1": "StringLiteral",
                         "atr2": "NumericLiteral",
-                        "atr4": "JsxExpression",
+                        "atr4": "ObjectLiteralExpression",
                     },
                     "isCanvas": true,
                     "parent": "ROOT",
-                    "props": { "atr1": "1", "atr2": 2, "atr4": "{{background:\"red\"}}", "_nodeId": "nodeId-0", },
+                    "props": { "atr1": "1", "atr2": 2, "atr4": { background: "red" }, "_nodeId": "nodeId-0", },
                     "displayName": "View",
                     "hidden": false,
                     "nodes": ["nodeId-1", "nodeId-2"],
@@ -524,14 +525,14 @@ describe("Test CraftData Ops", () => {
                     },
                     "isCanvas": true,
                     "parent": "ROOT",
-                    "props": { "atr1": "1", "atr2": 2, "atr4": "{{background:\"red\"}}", "_nodeId": "nodeId-0", },
+                    "props": { "atr1": "1", "atr2": 2, "atr4": { background: "red" }, "_nodeId": "nodeId-0", },
                     "displayName": "View",
                     "custom": {
                         "_nodeId": "StringLiteral",
                         "_nodeType": "JsxElement",
                         "atr1": "StringLiteral",
                         "atr2": "NumericLiteral",
-                        "atr4": "JsxExpression",
+                        "atr4": "ObjectLiteralExpression",
                     },
                     "hidden": false,
                     "nodes": ["nodeId-1", "nodeId-2"],
@@ -600,14 +601,14 @@ describe("Test CraftData Ops", () => {
                     },
                     "isCanvas": true,
                     "parent": "ROOT",
-                    "props": { "atr1": "1", "atr2": 2, "atr4": "{{background:\"red\"}}", "_nodeId": "nodeId-0" },
+                    "props": { "atr1": "1", "atr2": 2, "atr4": { background: "red" }, "_nodeId": "nodeId-0" },
                     "displayName": "View",
                     "custom": {
                         "_nodeId": "StringLiteral",
                         "_nodeType": "JsxElement",
                         "atr1": "StringLiteral",
                         "atr2": "NumericLiteral",
-                        "atr4": "JsxExpression",
+                        "atr4": "ObjectLiteralExpression",
                     },
                     "hidden": false,
                     "nodes": ["nodeId-1", "nodeId-2"],
@@ -768,7 +769,7 @@ describe("Test CraftData Ops", () => {
                         _nodeId: 'nodeId-0',
                         atr1: '1',
                         atr2: 2,
-                        atr4: '{{background:"red"}}'
+                        atr4: { background: "red" }
                     },
                     displayName: 'View',
                     custom: {
@@ -776,7 +777,7 @@ describe("Test CraftData Ops", () => {
                         _nodeType: "JsxElement",
                         atr1: 'StringLiteral',
                         atr2: 'NumericLiteral',
-                        atr4: 'JsxExpression',
+                        atr4: 'ObjectLiteralExpression',
                         namedImportName: 'View',
                         namedImportAlias: undefined,
                         moduleSpecifier: "'react-native'"
@@ -827,7 +828,7 @@ describe("Test CraftData Ops", () => {
                         "_nodeType": "JsxElement",
                         "atr1": "StringLiteral",
                         "atr2": "NumericLiteral",
-                        "atr4": "JsxExpression",
+                        "atr4": "ObjectLiteralExpression",
                         "moduleSpecifier": "'react-native'",
                         "namedImportAlias": undefined,
                         "namedImportName": "View"
@@ -842,7 +843,7 @@ describe("Test CraftData Ops", () => {
                         "_nodeId": "nodeId-0",
                         "atr1": "1",
                         "atr2": 2,
-                        "atr4": "{{background:\"red\"}}"
+                        "atr4": { background: "red" }
                     },
                     "type": { "resolvedName": "View" }
                 },

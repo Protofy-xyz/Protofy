@@ -57,8 +57,8 @@ export default class Source {
             return this.getJsxSelfClosingElementAttributes(node)
         }
         if (isJsxExpression) {
-          return []
-        }    
+            return []
+        }
     }
 
     static getJsxAttribute(node: any, attributeKey: string): any { // Returns JsxAttribute
@@ -100,7 +100,7 @@ export default class Source {
             return this.getJsxSelfClosingElementIdentifier(node)
         }
         if (isJsxExpression) {
-            return { name: "ReactCode"}
+            return { name: "ReactCode" }
         }
     }
 
@@ -321,7 +321,7 @@ export default class Source {
                 Source.getJsxAttribute(allJsxElements[i], '_nodeId')
             } catch (e) { // If _nodeId is not found add it
                 //@ts-ignore
-                additionalProp += ` _nodeId="${customIdentifier ? customIdentifier(): Source.getSameIdAsFlows(allJsxElements[i])}" `
+                additionalProp += ` _nodeId="${customIdentifier ? customIdentifier() : Source.getSameIdAsFlows(allJsxElements[i])}" `
             }
             if (!jsxElementAttributes.length) {
                 posToInsertAttr = Source.getJsxElementName(allJsxElements[i]).node.getEnd();
@@ -361,25 +361,25 @@ export default class Source {
     }
 
     convertJsxExpressionToJsxElement(): Source {
-      const getCurrentJsxExpressions = () => {
-          const content = this.getContent()
-          let allJsxElements = Source.getAllJsxElements(content)
-          let currentJsxExpressions = allJsxElements.filter(ele => ele.getKindName() == "JsxExpression")
-          return currentJsxExpressions
-      }
-      const convertText = (initExpress) => {
-          if (initExpress.length) {
-              // NOTE: ReactCode is disabled until we figure out how to show them to users (to enable change '' for reactCode const).
-              // const reactCode = `<ReactCode codeBlock="${allJsxElements[i].getText()}"/>`
-              this.ast.replaceText([initExpress[0].getPos(), initExpress[0].getEnd()], '');
-              convertText(getCurrentJsxExpressions())
-          }
-      }
-      convertText(getCurrentJsxExpressions())
-      return this
-  }
+        const getCurrentJsxExpressions = () => {
+            const content = this.getContent()
+            let allJsxElements = Source.getAllJsxElements(content)
+            let currentJsxExpressions = allJsxElements.filter(ele => ele.getKindName() == "JsxExpression")
+            return currentJsxExpressions
+        }
+        const convertText = (initExpress) => {
+            if (initExpress.length) {
+                // NOTE: ReactCode is disabled until we figure out how to show them to users (to enable change '' for reactCode const).
+                // const reactCode = `<ReactCode codeBlock="${allJsxElements[i].getText()}"/>`
+                this.ast.replaceText([initExpress[0].getPos(), initExpress[0].getEnd()], '');
+                convertText(getCurrentJsxExpressions())
+            }
+        }
+        convertText(getCurrentJsxExpressions())
+        return this
+    }
 
-    data( customIdentifier?: () => string | number): any { // Gets craftJS nodes
+    data(customIdentifier?: () => string | number): any { // Gets craftJS nodes
         if (customIdentifier) {
             this.identifyElements(customIdentifier)
         }
@@ -440,12 +440,38 @@ export default class Source {
                 atrVal = node?.getLiteralValue();
                 break;
             default: //e.g JsxExpression
-                atrVal = node?.getText()
-                const expressionKind = node?.getExpression()?.getKindName()
+                const expression = node?.getExpression()
+                const expressionKind = expression?.getKindName()
 
-                if (["NumericLiteral", "StringLiteral"].includes(expressionKind)) {
-                    atrVal = node?.getExpression().getLiteralValue()
-                    nodeKind = expressionKind
+                switch (expressionKind) {
+                    case 'StringLiteral':
+                    case 'NumericLiteral':
+                    case 'TrueKeyword':
+                    case 'FalseKeyword':
+                        atrVal = expression.getLiteralValue()
+                        nodeKind = expressionKind
+                        break
+                    case 'ObjectLiteralExpression':
+                        const tmpProps = expression.getProperties().reduce((total, current) => {
+                            var propKey = current.getName()
+                            var propVal
+                            try {
+                                propVal = current.getInitializer()?.getLiteralValue()
+                            } catch (e) {
+                                propVal = current.getInitializer().getText()
+                            }
+                            return {
+                                ...total,
+                                [propKey]: propVal
+                            }
+                        }, {})
+
+                        atrVal = tmpProps
+                        nodeKind = expressionKind
+                        break
+                    default:
+                        atrVal = node?.getText()
+                        break
                 }
                 break;
         }

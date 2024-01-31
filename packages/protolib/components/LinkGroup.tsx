@@ -62,10 +62,10 @@ const Tag = styled(Text, {
 })
 
 
-export const LinkGroupItem = React.forwardRef(({id, themeColor, children, href}:any, ref:any) => {
+export const LinkGroupItem = React.forwardRef(({id, themeColor, children, href, ...props}:any, ref:any) => {
     const {hovered, setHovered} = useContext(HoveredGroupContext);
     return (<NextLink prefetch={false} href={href}>
-        <Tag theme={themeColor} onHoverIn={() => setHovered(id)} active={hovered === id}>
+        <Tag theme={themeColor} onHoverIn={() => setHovered(id)} active={hovered === id} {...props}>
             {children}
         </Tag>
     </NextLink>)

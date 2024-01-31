@@ -23,24 +23,22 @@ const Home = (props) => {
                 </BigTitle>
                 <XStack alignItems="center" justifyContent="center">
                   <SizableText
-                    fontSize="$12"
-                    lineHeight="$10"
                     $xs={{ fontSize: 10, lineHeight: 10, my: '$3' }}
                     $sm={{ fontSize: 20, lineHeight: 10, my: '$3' }}
                     $md={{ fontSize: 30, lineHeight: 40, my: "$5" }}
                     $gtMd={{ fontSize: 60, lineHeight: 70 }}
-                    o="0.8"
+                    o={0.8}
                     textAlign="center"
                     fontWeight="800"
                     my="$10">
                     <Text fontWeight="800">AI </Text>
-                    <Text fontWeight="400">Supercharged</Text>
-                    <Text fontWeight="800"> LowCode </Text>
+                    <Text fontWeight="400">Supercharged </Text>
+                    <Text fontWeight="800">LowCode </Text>
                     <Text fontWeight="400">Platform</Text>
                     <br />
                     <Text fontWeight="800"> CMS </Text>
-                    <Text fontWeight="400">and</Text>
-                    <Text fontWeight="800"> Framework</Text>
+                    <Text fontWeight="400">and </Text>
+                    <Text fontWeight="800">Framework</Text>
                   </SizableText>
                 </XStack>
                 <YStack
@@ -58,17 +56,10 @@ const Home = (props) => {
                     maw: 900,
                   }}>
                   <LinkGroup>
-                    <LinkGroupItem id={1} href="/docs/core/configuration" themeColor="green_alt2">
-                      Web
-                    </LinkGroupItem>
-                    <Text> </Text>
-                    <LinkGroupItem id={2} href="/docs/intro/why-a-compiler" themeColor="blue_alt2">
-                      Mobile
-                    </LinkGroupItem>
-                    <Text> & </Text>
-                    <LinkGroupItem id={3} href="/docs/components/stacks" themeColor="purple_alt2">
-                      IoT
-                    </LinkGroupItem>
+                    <LinkGroupItem id={1} href="/docs/core/configuration" themeColor="green_alt2" marginRight="11px">Web</LinkGroupItem>
+                    <LinkGroupItem id={2} href="/docs/intro/why-a-compiler" themeColor="blue_alt2">Mobile</LinkGroupItem>
+                    <Text marginHorizontal="13px">&</Text>
+                    <LinkGroupItem id={3} href="/docs/components/stacks" themeColor="purple_alt2">IoT</LinkGroupItem>
                     <Spacer size="$0"></Spacer>
                     <Text>in a single framework!</Text>
                   </LinkGroup>
