@@ -42,6 +42,7 @@ export { default as ActiveRender } from "./components/ActiveRender";
 export * from "./components/PageGlow";
 export * from "./components/HeaderLink";
 export { default as AppBar } from "./components/AppBar";
+export { default as MainPanel } from "./components/MainPanel";
 export * from "./components/AppBar";
 export * from "./components/Head3";
 export * from "./components/DataTable";

@@ -6,9 +6,9 @@ import { RenderNode } from './RenderNode';
 import paletteComponents from '../palettes';
 import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
-import MainPanel from "./MainPanel";
+import { MainPanel } from "protolib";
 import Monaco from "./Monaco";
-import { X, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, ChevronRight } from "lucide-react";
+import { Component, X, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, ChevronRight } from "lucide-react";
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
@@ -16,9 +16,15 @@ import { ToggleGroup, Button, XStack } from "@my/ui"
 import { SidebarItem } from "./Sidebar/SideBarItem";
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
 import { FlowConstructor } from "protoflow";
+import React from "react";
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowConstructor(UIFLOWID)
+
+const FloatingIcon = ({ id = undefined, children, onClick, disabled = false }) => <div id={id} onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex', cursor: 'pointer' }}>
+    {children}
+</div>
+
 /* 
 // const uiStore = useFlowsStore()
 */
@@ -33,8 +39,17 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [customizeVisible, setCustomizeVisible] = useState(true);
     const [layerVisible, setLayerVisible] = useState(false);
     const router = useRouter();
-
+    const { publish } = topics;
     const { data } = topics;
+    const [openPanel, setOpenPanel] = React.useState(false);
+
+    useEffect(() => {
+        const handleClosePanel = () => setOpenPanel(false)
+        window.addEventListener('dragenter', handleClosePanel)
+        return () => {
+            window.removeEventListener('dragenter', handleClosePanel)
+        }
+    }, [])
 
     const allPalettes = { ...paletteComponents, ...userPalettes }
 
@@ -209,6 +224,35 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             />
         </div>
     );
+
+    const onCancelEdit = () => {
+        router.push({
+            query: {}
+        })
+    }
+
+    const actionContent = (
+        <>
+            <FloatingIcon id="components-to-drag-btn" onClick={() => setOpenPanel(true)}>
+                <Component
+                    color="white"
+                />
+            </FloatingIcon>
+            <FloatingIcon
+                id="save-nodes-btn"
+                onClick={() => publish("savenodes", { value: 'visual-ui' })}
+            >
+                <Save
+                    color="white"
+                />
+            </FloatingIcon>
+            <FloatingIcon
+                onClick={onCancelEdit}
+            >
+                <X color="white"></X>
+            </FloatingIcon>
+        </>
+    )
     const EditorPanel = (
         <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid #424242', borderLeft: '2px solid #424242' }}>
             <EditorLayout currentPageContent={currentPageContent} onSave={() => null} resolveComponentsDir={resolveComponentsDir}>
@@ -233,6 +277,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         >
             <div style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                 <MainPanel
+                    openPanel={openPanel}
+                    setOpenPanel={setOpenPanel}
+                    actionContent={actionContent}
                     leftPanelContent={SidebarPanel}
                     centerPanelContent={EditorPanel}
                     rightPanelContent={FlowPanel}

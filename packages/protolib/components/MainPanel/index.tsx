@@ -1,34 +1,26 @@
 
 import React, { memo, useEffect, useRef } from "react";
-import { withTopics } from "react-topics";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Component, Save, X } from 'lucide-react';
 import { useRouter } from "next/router"
 import SPanel from 'react-sliding-side-panel';
 
 type Props = {
+    actionContent?: React.Component | any,
     rightPanelContent: React.Component | any,
     leftPanelContent: React.Component | any,
     centerPanelContent: React.Component | any,
     rightPanelResizable?: boolean,
     rightPanelVisible?: boolean,
-    topics: any
+    openPanel?: boolean,
+    setOpenPanel?: any
 };
 
-const FloatingIcon = ({ id = undefined, children, onClick, disabled = false }) => <div id={id} onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex', cursor: 'pointer' }}>
-    {children}
-</div>
-
-const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, topics }: Props) => {
-
+const MainPanel = ({ actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}}: Props) => {
     const rightRef = useRef()
     const resizerRef = useRef()
     const resizerBarRef = useRef()
     const hoverTimer = useRef(null);
-
-    const { publish } = topics;
-    const [openPanel, setOpenPanel] = React.useState(false);
-    const router = useRouter();
 
     const getLeftWidth = () => {
         const totalWidth = window.innerWidth
@@ -40,11 +32,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
         let percentage = (400 / totalWidth) * 100;
         return percentage;
     }
-    const onCancelEdit = () => {
-        router.push({
-            query: {}
-        })
-    }
+
     const handleMouseEnter = () => {
         hoverTimer.current = setTimeout(() => {
             onHover()
@@ -72,13 +60,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
             rightRef.current.resize(rightPanelResizable ? 50 : getRightWidth(), "percentages")
         }
     }, [rightPanelResizable])
-    useEffect(() => {
-        const handleClosePanel = () => setOpenPanel(false)
-        window.addEventListener('dragenter', handleClosePanel)
-        return () => {
-            window.removeEventListener('dragenter', handleClosePanel)
-        }
-    }, [])
+
     return (
         <div style={{ flex: 1, display: 'flex' }}>
             <div id="sidebar-panel-container" style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute', width: getLeftWidth(), zIndex: 99999999 }}>
@@ -103,24 +85,7 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
                     top: 'calc(50vh - 80px)'
                 }}
             >
-                <FloatingIcon id="components-to-drag-btn" onClick={() => setOpenPanel(true)}>
-                    <Component
-                        color="white"
-                    />
-                </FloatingIcon>
-                <FloatingIcon
-                    id="save-nodes-btn"
-                    onClick={() => publish("savenodes", { value: 'visual-ui' })}
-                >
-                    <Save
-                        color="white"
-                    />
-                </FloatingIcon>
-                <FloatingIcon
-                    onClick={onCancelEdit}
-                >
-                    <X color="white"></X>
-                </FloatingIcon>
+                {actionContent}
             </div>
             <PanelGroup direction="horizontal" style={{ height: '100%', display: 'flex' }}>
                 <Panel>
@@ -169,4 +134,4 @@ const MainPanel = ({ rightPanelContent, leftPanelContent, centerPanelContent, ri
     );
 }
 
-export default memo(withTopics(MainPanel, { topics: ["zoomToNode"] }));
+export default memo(MainPanel);
