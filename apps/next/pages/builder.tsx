@@ -157,7 +157,7 @@ export default function BuilderWrapper() {
 
   return <Editor resolver={{
     ...protolibPallete,
-    Root: palettes.craft.Root,
+    ...palettes.craft
   }}
     indicator={{
       transition: 'none',
