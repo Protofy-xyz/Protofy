@@ -847,3 +847,7 @@ textarea {
   box-sizing: border-box
 }
 
+a.sc-gEvEer > svg {
+  display: flex;
+  align-self: center;
+}
