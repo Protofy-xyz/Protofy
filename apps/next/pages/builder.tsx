@@ -2,7 +2,7 @@ import { Editor, Element, Frame, useNode, useEditor } from "@craftjs/core";
 import { BigTitle, Monaco, Page, useAtom } from "protolib";
 import protolibPallete from 'protolib/visualui/index'
 import { useEffect, useRef, useState } from "react";
-import Source from "app/models/Source";
+import { Source } from "app/models";
 import palettes from "visualui/src/palettes";
 import { RenderNode } from "visualui/src/components/RenderNode";
 import ErrorBoundary from "visualui/src/components/ErrorBoundary";

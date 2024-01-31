@@ -1,2 +1,2 @@
-export * from 'protolib/models'
-export * as Source from './Source'
+// export * from 'protolib/models'
+export * from 'visualui/src/models'
