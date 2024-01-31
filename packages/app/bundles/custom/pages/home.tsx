@@ -116,13 +116,33 @@ const Home = (props) => {
           <HorizontalBox>
             <HoveredGroup>
               <SectionBlock $sm={{ width: '100%' }} id={1} pr="$10" hoveredTheme="green_alt1" nonHoveredTheme="green" flex={1} title="Open Source" href="#">
-                Published under the permissive <strong>MIT</strong> license. The things you build on top of <strong>Protofy</strong> are for yours to keep. We don't force any license on <strong>your creations</strong>.
+                <Text fontWeight="400">Published under the permissive </Text>
+                <Text fontWeight="800">MIT </Text>
+                <Text fontWeight="400">license. The things you build on top of </Text>
+                <Text fontWeight="800">Protofy </Text>
+                <Text fontWeight="400">are for yours to keep. We don't force any license on </Text>
+                <Text fontWeight="800">your creations</Text>
+                <Text fontWeight="400">.</Text>
               </SectionBlock>
               <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={2} pr="$10" hoveredTheme="blue_alt1" nonHoveredTheme="blue" flex={1} title="Developer friendly" href="#">
-                Extend the system using <strong>React</strong> and Javascript / TypeScript, on top of <strong>NextJS</strong>, <strong>Expo</strong> and <strong>Express</strong>. Build beautiful interfaces with <strong>Tamagui</strong>.
+                <Text fontWeight="400">Extend the system using </Text>
+                <Text fontWeight="800">React </Text>
+                <Text fontWeight="400">and Javascript / TypeScript, on top of </Text>
+                <Text fontWeight="800">NextJS </Text>
+                <Text fontWeight="400">, </Text>
+                <Text fontWeight="800">Expo </Text>
+                <Text fontWeight="400">and </Text>
+                <Text fontWeight="800">Express </Text>
+                <Text fontWeight="400">. Build beautiful interfaces with </Text>
+                <Text fontWeight="800">Tamagui</Text>
               </SectionBlock>
               <SectionBlock $sm={{ width: '100%', mt: "$5" }} id={3} hoveredTheme="purple_alt1" nonHoveredTheme="purple" flex={1} title="LowCode" href="#">
-                You can create and manage the system entities using visual <strong>forms and diagrams</strong>, <strong>programming</strong>, or through <strong>ChatGPT</strong>.
+                <Text fontWeight="400">You can create and manage the system entities using visual </Text>
+                <Text fontWeight="800">forms and diagrams</Text>
+                <Text fontWeight="400">, </Text>
+                <Text fontWeight="800">programming </Text>
+                <Text fontWeight="400">, or through  </Text>
+                <Text fontWeight="800">ChatGPT.</Text>
               </SectionBlock>
             </HoveredGroup>
           </HorizontalBox>
@@ -152,7 +172,13 @@ const Home = (props) => {
             <ContainerLarge pb="$20" space="$8">
               <YStack maw="950px" als="center">
                 <Grid gap="25" itemMinWidth="280">
-                  <GridElement title="Real time"><strong>MQTT</strong> and <strong>websockets</strong> provides real time messaging, server side events and <strong>IoT</strong></GridElement>
+                  <GridElement title="Real time">
+                    <Text fontWeight="800">MQTT </Text>
+                    <Text fontWeight="400">and </Text>
+                    <Text fontWeight="800">websockets </Text>
+                    <Text fontWeight="400">provides real time messaging, server side events and  </Text>
+                    <Text fontWeight="800">IoT </Text>
+                  </GridElement>
                   <GridElement title="SSR and CSR">Toggle between Server-side rendering and Client side rendering without changing the code</GridElement>
                   <GridElement title="Object system">Object system based on Zod and OOP to define system entities. Objects allows for Automatic forms, validation, apis and much more.</GridElement>
                   <GridElement title="Full stack">Includes frontend (web and mobile), backend, API system, database system, reverse proxy and realtime messaging</GridElement>
@@ -202,16 +228,25 @@ const Home = (props) => {
           <SpotLight />
           <Theme reset={true}>
             <ContainerLarge position="relative">
-              <XStack px="$6" pt="$8" space="$4" $sm={{ flexDirection: "column", px: 0 }}>
+              <XStack px="$6" pt="$8" gap="$4" $sm={{ flexDirection: "column", px: 0 }}>
                 <YStack w="50%" $sm={{ w: "100%" }}>
-                  <YStack space="$4">
-                    <FeatureItem label="Solid Foundation">Protofy is build on top of open and battle tested technologies like <strong>NextJS</strong>, <strong>Expo</strong>, <strong>Express</strong> and <strong>React</strong></FeatureItem>
+                  <YStack gap="$4">
+                    <FeatureItem margin="$4" label="Solid Foundation">
+                      <Text fontWeight="400">Protofy is build on top of open and battle tested technologies like </Text>
+                      <Text fontWeight="800">NextJS</Text>
+                      <Text fontWeight="400">, </Text>
+                      <Text fontWeight="800">Expo</Text>
+                      <Text fontWeight="400">, </Text>
+                      <Text fontWeight="800">Express </Text>
+                      <Text fontWeight="400">and </Text>
+                      <Text fontWeight="800">React</Text>
+                    </FeatureItem>
                     <FeatureItem label="Procedural UI">High Level and procedural React widgets to generate forms and complex UI like EditableObject or DataView</FeatureItem>
                     <FeatureItem label="Automatic CRUD">Generate CRUD APIs from Zod Schemas. Customize the API using a lightweight object system</FeatureItem>
                   </YStack>
                 </YStack>
                 <YStack w="50%" $sm={{ w: `100%` }}>
-                  <YStack space="$4">
+                  <YStack gap="$4">
                     <FeatureItem label="AI Supercharged">All the Protofy dependencies are Open Source and were present in the ChatGPT training set. The ChatGPT integration allows to generate user interfaces, apis or IoT devices.</FeatureItem>
                     <FeatureItem label="Web and native">The UI system is based on Tamagui, a React universal UI system. You can use Tamagui to create native user interfaces for mobile and web.</FeatureItem>
                     <FeatureItem label="ESP32 IoT">Protofy provides a LowCode system to define and enroll ESPHome devices.</FeatureItem>

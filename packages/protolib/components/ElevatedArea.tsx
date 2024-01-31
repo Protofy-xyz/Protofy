@@ -10,6 +10,7 @@ const ElevatedArea = React.forwardRef((props:StackProps, ref:any) => (
         py="$4"
         pt="$6"
         pb="$10"
+        zIndex={1}
         {...props}
     >
         {/*@ts-ignore*/}
