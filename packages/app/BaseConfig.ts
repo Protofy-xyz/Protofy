@@ -18,6 +18,10 @@ export const getBaseConfig = (name, process) => {
                 options: {
                   destination: "../../logs/"+name+'.log'
                 }
+              },
+              {
+                target: 'protolib/lib/RemoteTransport.ts', // Asegúrate de que la ruta sea correcta
+                options: { /* Opciones para tu transport */ }
               }
             ]
 
