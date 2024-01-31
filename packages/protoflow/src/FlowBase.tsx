@@ -273,7 +273,6 @@ const FlowsBase = ({
                 ...(customComponent && customComponent.filterChildren ? customComponent.filterChildren(node, childNodeList, edges, nodeDataTable, fakeSetNodeData) : childNodeList),
             ]
 
-            console.log('result: ', result)
 
             if (flowNodeType && flowNodeType.filterChildren) {
                 return flowNodeType.filterChildren(node, result, edges, nodeDataTable, fakeSetNodeData)
@@ -285,7 +284,6 @@ const FlowsBase = ({
         let nodes = data
 
         //add visual layers
-        console.log('CONFIG IN FLOWS: ', config)
         if (config && config.layers && config.layers.length) {
             nodes = [...nodes, ...config.layers.map(l => {
                 const layerId = 'Layer_' + generateId()
@@ -326,7 +324,6 @@ const FlowsBase = ({
             const positions = nodes.map((node) => ({ id: node.id, position: node.position }))
             if (!preview && onSave && nodes?.length) onSave(content, positions, { nodesData: nodeData, nodes })
         } catch (e) {
-            console.log('errorlel: ', e)
             const parts = e.codeFrame.split("\n").find(l => l.startsWith('> ')).split('|')
             parts.shift()
             const linePos = e.loc.start.column
@@ -643,15 +640,13 @@ const FlowsBase = ({
         try {
             //restore components before dump
             const content = await onSaveNodes(true);
-            console.log('onGraphChanged', content)
             if (content !== undefined) {
-                console.log('firing on edit: ', content)
                 onEdit(content)
             } else {
                 console.error('There was an error in the code, not emitting')
             }
         } catch (e) {
-            console.log("Error on change: ", e)
+            // console.log("Error on change: ", e)
         }
     }
 
@@ -687,7 +682,6 @@ const FlowsBase = ({
         }
 
         if (nodesDiffs && nodesDiffs.length || edgesDiffs && edgesDiffs.length) {
-            console.log('diffx: ', nodesDiffs, edgesDiffs)
             if (edgesDiffs && !nodesDiffs) {
                 reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
                 setInitialEdges(edges)
@@ -793,7 +787,6 @@ const FlowsBase = ({
                         const newParentNodeData = reorderDataChilds(prevParentNodeData, childrenIndexes, offset)
                         setNodeData(parent, newParentNodeData)
                         const newEdges = reorderEdgeChilds(edges, parent, offset, childrenIndexes)
-                        console.log('DEV: new edges: ', newEdges)
                         setEdges(newEdges)
                         return
                     }
@@ -847,7 +840,6 @@ const FlowsBase = ({
         const diffableNodeData = deleteAdditionalKeys(nodeData)
         const diffs = getDiffs(prevNodeData, diffableNodeData)
         if (diffs?.length) {
-            console.log('diffx: ', diffs, 'comparing: ', prevNodeData, 'with: ', diffableNodeData)
             setHasChanges(true)
             onNodeDataChange()
             setPrevNodeData(diffableNodeData)

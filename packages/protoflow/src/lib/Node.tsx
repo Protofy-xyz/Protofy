@@ -15,7 +15,6 @@ export const createNode = (
     edges?: any,
     nodeStore?: any
 ) => {
-    console.log('create: ', id, deletable)
     let nodeData = {
         id: id ?? generateId(),
         position: { x: position[0], y: position[1] },
@@ -45,15 +44,10 @@ export function saveNodes(nodes: any[], edges: any[], nodesData: any, getFirstNo
     const code = start.dump(startNode, nodes, edges, nodesData, null, mode != 'json', "full")
     if(mode == 'json') {
         const finalCode = JSON.stringify(JSON.parse(code), null, 4);
-        console.log('final JSON: ', finalCode)
         return finalCode
     }
-    console.log('RAW CODE WITH MARKERS BEFORE LINTING: ', code)
     const validatedRawCode = validateCode(code, mode);
-    console.log('Validated code with markers: ', validatedRawCode)
-
     if (validatedRawCode) {
-        console.log('compiled without errors, generate the final code without positional markers')
         const finalCode = start.dump(startNode, nodes, edges, nodesData, null, false, "full")
         return finalCode
     }
@@ -125,9 +119,7 @@ export function connectItem(sourceNode, sourcePort, targetNode, targetPort, data
             itemTarget = { type: 'node', value: { id: targetId } }
         }
 
-        //console.log("item source", `${itemSource.value.id}${portTypes[0]}${sourcePort}`, "  item target", `${itemTarget.value.id}${portTypes[1]}${targetPort}`)
         if (itemSource.type == 'node') {
-            // console.log('CREATING NEW EDGE: ', sourceId, `${sourceId}${portTypes[0]}${sourcePort}`, targetId, `${targetId}${portTypes[1]}${targetPort}`)
             edges.push(connectNodes(itemSource.value.id, `${itemSource.value.id}${portTypes[0]}${sourcePort}`, itemTarget.value.id, `${itemTarget.value.id}${portTypes[1]}${targetPort}`))
             if (disableFieldCompilation) return ''
             var type = NodeTypes[sourceId.split('_')[0]]
@@ -141,7 +133,6 @@ export function connectItem(sourceNode, sourcePort, targetNode, targetPort, data
                 try {
                     nodesData[targetId]['trivia-' + key] = getTrivia(itemSource._astNode)
                 } catch (e) {
-                    console.log('Trivia error: ', targetId, 'trivia-' + key, e)
                 }
             }
             return itemSource ? itemSource.value : ""
@@ -156,9 +147,7 @@ export type DumpType = "full" | "partial"
 
 export function getTrivia(astNode) {
     const fullText: string = astNode.getFullText()
-    //console.log('childFullText fullText inside getTrivia: ', fullText)
     if (astNode.getLeadingTriviaWidth()) {
-        //console.log('childFullText leading trivia width: ', astNode.getLeadingTriviaWidth())
         return fullText.substring(0, astNode.getLeadingTriviaWidth())
     }
     return ''
@@ -198,7 +187,6 @@ export function dumpConnection(node, connection: "source" | "target", portName, 
                 triviaInfo['fromFile'] = true
                 extraContent = getTrivia(astNode)
                 triviaInfo['content'] = extraContent
-                console.log('childFullText extra content: ', "[" + triviaInfo['content'] + "]")
             }
 
             const val = valueComponent.dump(valueNode, nodes, edges, nodesData, metadata, enableMarkers, dumpType, level, extraContent)
