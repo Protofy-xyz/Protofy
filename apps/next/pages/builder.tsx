@@ -54,7 +54,7 @@ const Builder = () => {
   })
 
   const loadEditorNodes = async () => {
-    const source: Source = Source.parse(sourceCode)
+    const source: Source = Source.new(sourceCode)
     let editorNodes = source.data()
     setInitialJson(editorNodes)
     const availableComponents = query?.getOptions()?.resolver ?? {}

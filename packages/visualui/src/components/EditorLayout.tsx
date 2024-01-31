@@ -236,7 +236,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
 	}, [previousNodes])
 
 	const loadEditorNodes = async () => {
-		const source: Source = Source.parse(currentPageContent)
+		const source: Source = Source.new(currentPageContent)
 		let editorNodes = source.data()
 		setCurrentPageInitialJson(editorNodes)
 		const availableComponents = query?.getOptions()?.resolver ?? {}
