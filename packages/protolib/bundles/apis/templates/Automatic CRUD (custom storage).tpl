@@ -5,6 +5,9 @@ import {Objects} from "app/bundles/objects";
 import {AutoAPI} from 'protolib/api'
 import {Protofy} from 'protolib/base'
 import { Application } from 'express';
+import { getLogger } from "protolib/base"
+
+const logger = getLogger()
 
 Protofy("type", "AutoAPI")
 Protofy("object", "{{object}}")

@@ -22,6 +22,9 @@ use the chat if in doubt
 import { handler } from 'protolib/api'
 import {Protofy} from 'protolib/base'
 import { Application } from 'express';
+import { getLogger } from "protolib/base"
+
+const logger = getLogger()
 
 Protofy("type", "CustomAPI")
 

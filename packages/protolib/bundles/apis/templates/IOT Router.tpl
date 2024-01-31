@@ -1,5 +1,8 @@
 import {Protofy} from 'protolib/base'
 import { Application } from 'express';
+import { getLogger } from "protolib/base"
+
+const logger = getLogger()
 
 Protofy("type", "IOTRouter")
 
