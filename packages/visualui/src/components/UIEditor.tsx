@@ -284,6 +284,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     centerPanelContent={EditorPanel}
                     rightPanelContent={FlowPanel}
                     rightPanelResizable={!preview}
+                    rightPanelWidth={!preview?50:0}
                     rightPanelVisible={isSideBarVisible}
                 />
             </div>

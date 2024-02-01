@@ -15,7 +15,6 @@ export function AdminPage({ pageSession, title, children }: any) {
 
   return (
     <Page title={"Protofy - " + title}>
-
       <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName }}>
         <MainPanel rightPanelVisible={false} rightPanelResizable={true} centerPanelContent={<AdminPanel>
           {children}

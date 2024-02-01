@@ -2,7 +2,9 @@ import { XStack } from 'tamagui'
 import { PanelLayout } from 'app/layout/PanelLayout'
 import { SelectList, useWorkspaces, useUserSettings, useSession, PanelMenu} from 'protolib'
 import Workspaces from 'app/bundles/workspaces'
-
+import { InteractiveIcon } from './InteractiveIcon'
+import { Activity } from '@tamagui/lucide-icons'
+import { Tinted } from './Tinted'
 const menuData = {}
 
 const WorkspaceSelector = () => {
@@ -33,8 +35,9 @@ export const AdminPanel = ({children }) => {
         ? <PanelLayout 
             topBar={
               <>
-                  <XStack>
+                  <XStack ai="center">
                     <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
+                    {/* <InteractiveIcon IconColor="var(--color)" Icon={Activity}></InteractiveIcon> */}
                   </XStack>
               </>
             } 

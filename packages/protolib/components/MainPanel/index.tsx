@@ -4,6 +4,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Component, Save, X } from 'lucide-react';
 import { useRouter } from "next/router"
 import SPanel from 'react-sliding-side-panel';
+import { useWindowSize } from 'usehooks-ts'
 
 type Props = {
     actionContent?: React.Component | any,
@@ -13,22 +14,24 @@ type Props = {
     rightPanelResizable?: boolean,
     rightPanelVisible?: boolean,
     openPanel?: boolean,
-    setOpenPanel?: any
+    setOpenPanel?: any,
+    rightPanelWidth?:number
 };
 
-const MainPanel = ({ actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}}: Props) => {
+const MainPanel = ({ rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}}: Props) => {
     const rightRef = useRef()
     const resizerRef = useRef()
     const resizerBarRef = useRef()
     const hoverTimer = useRef(null);
-
+    const size = useWindowSize()
+    
     const getLeftWidth = () => {
-        const totalWidth = window.innerWidth
+        const totalWidth = Math.max(400, size.width)
         let percentage = (300 / totalWidth) * 100;
         return percentage;
     }
     const getRightWidth = () => {
-        const totalWidth = window.innerWidth
+        const totalWidth = Math.max(400, size.width)
         let percentage = (400 / totalWidth) * 100;
         return percentage;
     }
@@ -57,7 +60,7 @@ const MainPanel = ({ actionContent, rightPanelContent, leftPanelContent, centerP
 
     useEffect(() => {
         if (rightRef.current) {
-            rightRef.current.resize(rightPanelResizable ? 50 : getRightWidth(), "percentages")
+            rightRef.current.resize(rightPanelWidth ? rightPanelWidth : getRightWidth(), "percentages")
         }
     }, [rightPanelResizable])
 
@@ -118,7 +121,7 @@ const MainPanel = ({ actionContent, rightPanelContent, leftPanelContent, centerP
                 </PanelResizeHandle>
                 <Panel
                     ref={rightRef} minSize={getRightWidth()}
-                    maxSize={80} defaultSize={rightPanelResizable ? 50 : getRightWidth()}
+                    maxSize={80} defaultSize={rightPanelWidth ? rightPanelWidth : getRightWidth()}
                     style={{
                         // fix first render problem with zoomToNode, can't do it with display: "flex"<->"none"
                         position: rightPanelVisible ? "relative" : "absolute",
