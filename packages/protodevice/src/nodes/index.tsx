@@ -10,6 +10,7 @@ const Relay = dynamic(() => import('./Relay'))
 const ADCSensor = dynamic(() => import('./ADCSensor'))
 const I2cBus = dynamic(() => import('./I2cBus'))
 const PCA9685 = dynamic(() => import('./PCA9685'))
+const Ethernet = dynamic(() => import('./Ethernet'))
 const Dfplayer = dynamic(() => import('./Dfplayer'))
 const ModbusLoadCell = dynamic(() => import('./ModbusLoadCell'))
 
@@ -119,6 +120,13 @@ const deviceMasks = [
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('pca9685'),
     getComponent: (node, nodeData, children) => <PCA9685 node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'pca9685', param1: '""', param2: '1000', param3: false, param4: '0x40', param5 : '""'} }
+  },
+  {
+    id: 'Ethernet',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('ethernet'),
+    getComponent: (node, nodeData, children) => <Ethernet node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'ethernet', param1: '"LAN8720"', param2: '23', param3: '18', param4: '"GPIO17_OUT"', param5 : '0', param6: '12'} }
   },
   // {
   //   id: 'PulseCounter',
