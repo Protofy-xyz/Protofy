@@ -15,12 +15,13 @@ export type EditorProps = {
 	currentPageContent: string;
 	topics: any;
 	resolveComponentsDir: string;
+	onReady?: Function
 };
 
 
-const Editor = ({ children, topics, currentPageContent, resolveComponentsDir }: EditorProps) => {
+const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, onReady = () => { } }: EditorProps) => {
 	const paper = useRef<any>()
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const [currentPageInitialJson, setCurrentPageInitialJson] = useState({});
 	const [previousNodes, setPreviousNodes] = useState({});
 	const [selectedNodeId, setSelectedNodeId] = useState();
@@ -285,13 +286,10 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir }: 
 	useEffect(() => {
 		const reload = async (retry: number) => {
 			try {
-				setLoading(true)
 				await loadEditorNodes()
-				setLoading(false)
 			} catch (e) {
 				if (retry < 10) {
 					setTimeout(() => reload(retry + 1), 5000)
-					setLoading(true)
 				} else {
 					console.error(`Max retry reached! Error deserializing editor nodes (CraftJS nodes). Error: ${e}`)
 				}
@@ -315,7 +313,11 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir }: 
 				<title>Platform UI</title>
 				<link rel="icon" type="image/png" sizes="16x16" href={require("../assets/logo.png")}></link>
 			</Head>
+			{loading ? <Stack style={{ height: '100vh', justifyContent: 'center', alignItems: 'center', zIndex: 100, backgroundColor: '#f0f0f0' }}>
+				<Spinner size="large"></Spinner>
+			</Stack> : null}
 			<div
+				onLoad={() => setLoading(false)}
 				className={"page-container"}
 				style={{ width: '100%', height: '100%' }}
 			>
@@ -325,23 +327,11 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir }: 
 					ref={(ref) => { paper.current = ref; connectors.select(connectors.hover(ref, null), null) }}
 					style={{ flex: 1, position: 'relative', overflow: 'auto', color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto', left: 0, right: 0, width: '100%', height: '100%' }}
 				>
-					{
-						loading ?
-							<Stack style={{ height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-								<div>
-									<Spinner size="large" marginBottom="20px"></Spinner>
-									<div id="editor-loading">
-										Loading Content...
-									</div>
-								</div>
-							</Stack>
-							:
-							<ErrorBoundary>
-								<div id="editor-frame-container">
-									<Frame />
-								</div>
-							</ErrorBoundary>
-					}
+					<ErrorBoundary>
+						<div id="editor-frame-container">
+							<Frame />
+						</div>
+					</ErrorBoundary>
 				</div>
 			</div>
 		</div>
