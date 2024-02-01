@@ -63,7 +63,7 @@ const MainPanel = ({ actionContent, rightPanelContent, leftPanelContent, centerP
 
     return (
         <div style={{ flex: 1, display: 'flex' }}>
-            <div id="sidebar-panel-container" style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute', width: getLeftWidth(), zIndex: 99999999 }}>
+            {leftPanelContent && <div id="sidebar-panel-container" style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute', width: getLeftWidth(), zIndex: 99999999 }}>
                 <SPanel
                     key="sidebar"
                     type={'left'}
@@ -73,8 +73,8 @@ const MainPanel = ({ actionContent, rightPanelContent, leftPanelContent, centerP
                 >
                     {leftPanelContent}
                 </SPanel>
-            </div>
-            <div
+            </div>}
+            {actionContent && <div
                 id="left-actions-container"
                 style={{
                     display: openPanel ? "none" : "flex",
@@ -86,7 +86,7 @@ const MainPanel = ({ actionContent, rightPanelContent, leftPanelContent, centerP
                 }}
             >
                 {actionContent}
-            </div>
+            </div>}
             <PanelGroup direction="horizontal" style={{ height: '100%', display: 'flex' }}>
                 <Panel>
                     <div style={{ display: 'flex', flex: 1, height: '100vh' }}>

@@ -1,6 +1,6 @@
-import { useSession, Page, useUserSettings, useWorkspaces, Tinted, Search, usePrompt, SearchContext, AdminPanel } from 'protolib'
+import { useSession, Page, useUserSettings, useWorkspaces, Tinted, Search, usePrompt, SearchContext, AdminPanel, MainPanel } from 'protolib'
 import dynamic from 'next/dynamic';
-import {addResponseMessage} from 'react-chat-widget'
+import { addResponseMessage } from 'react-chat-widget'
 import { useEffect, useState } from 'react';
 
 const Chat = dynamic(() => import('protolib/components/Chat'), { ssr: false })
@@ -15,10 +15,11 @@ export function AdminPage({ pageSession, title, children }: any) {
 
   return (
     <Page title={"Protofy - " + title}>
-      <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName}}>
-        <AdminPanel>
+
+      <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName }}>
+        <MainPanel rightPanelVisible={false} rightPanelResizable={true} centerPanelContent={<AdminPanel>
           {children}
-        </AdminPanel>
+        </AdminPanel>} />
       </SearchContext.Provider>
       <Tinted>
         <Chat tags={['doc', title]} />
