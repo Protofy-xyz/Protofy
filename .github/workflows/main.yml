@@ -74,6 +74,9 @@ jobs:
         echo "TEST_REPORT<<EOF" >> $GITHUB_ENV
         cat reports/testsReport.txt | sed 's/\x1b\[[0-9;]*m//g' >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
+    
+    - name: Get shorten GitHub sha
+      run: echo "GITHUB_SHORT_SHA=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
 
     - name: Get skipped status to retrieve color and save it to environment variable
       run: |
@@ -103,7 +106,7 @@ jobs:
             - **Repo:** Protofy-xyz/Protofy at ${{ github.ref }}
             - **Author:** ${{ github.event.head_commit.author.name }}
             - **Committer [pusher]:** ${{ github.event.head_commit.committer.name }} [${{ github.event.pusher.name }}]
-            - **Commit:** [${{ github.sha }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
+            - **Commit:** [${{ env.GITHUB_SHORT_SHA }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
 
           footer: "Workflow: ${{ github.workflow }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
@@ -124,7 +127,7 @@ jobs:
             - **Repo:** Protofy-xyz/Protofy at ${{ github.ref }}
             - **Author:** ${{ github.event.head_commit.author.name }}
             - **Committer [pusher]:** ${{ github.event.head_commit.committer.name }} [${{ github.event.pusher.name }}]
-            - **Commit:** [${{ github.sha }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
+            - **Commit:** [${{ env.GITHUB_SHORT_SHA }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
 
           footer: "Workflow: ${{ github.workflow }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
@@ -143,7 +146,7 @@ jobs:
             - **Repo:** Protofy-xyz/Protofy at ${{ github.ref }}
             - **Author:** ${{ github.event.head_commit.author.name }}
             - **Committer [pusher]:** ${{ github.event.head_commit.committer.name }} [${{ github.event.pusher.name }}]
-            - **Commit:** [${{ github.sha }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
+            - **Commit:** [${{ env.GITHUB_SHORT_SHA }}](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }}
 
 
           footer: "Workflow: ${{ github.workflow }}"
