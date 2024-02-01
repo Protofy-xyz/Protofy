@@ -357,7 +357,6 @@ describe("Test Node Ops", () => {
             const atr11_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[10])).value
             expect(atr11_value).toBe('{() => {console.log("p")}}')
             const atr12_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[11])).value
-            console.log('DEV;::::: expect...... ', atr12_value)
             expect(atr12_value).toStrictEqual({"backgroundColor":"red","borderWidth":1, margin: "MARGIN"})
         })
     })
