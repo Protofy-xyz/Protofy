@@ -88,6 +88,7 @@ describe("Test admin capabilities", () => {
                 const apiName = 'testapi'
                 await protoBrowser.navigateToWorkspaceSection('apis')
                 await protoBrowser.getEditableObjectCreate()
+                expect(await protoBrowser.getElementText('#eo-dlg-title')).toBe('Add Api')
                 await protoBrowser.fillEditableObjectInput('name', apiName)
                 await protoBrowser.fillEditableObjectSelect('template', API_TEMPLATES.Empty)
                 await protoBrowser.fillEditableObjectSelect('object', API_OBJECT_OPTIONS.Without_Object)
@@ -104,6 +105,7 @@ describe("Test admin capabilities", () => {
             }, 60000)
 
             it("should be able to create a simple object", async () => {
+                expect(await protoBrowser.getElementText('#eo-dlg-title')).toBe('Add Object')
                 const objectName = 'testObject'
                 await protoBrowser.fillEditableObjectInput('name', objectName)
                 // Open editable form
@@ -135,6 +137,7 @@ describe("Test admin capabilities", () => {
                     // Configure page
                     await protoBrowser.fillEditableObjectInput('name', pageName)
                     await protoBrowser.fillEditableObjectInput('route', pageRoute)
+                    expect(await protoBrowser.getElementText('#eo-dlg-title')).toBe('Add Page')
                     await protoBrowser.clickElement(`#admin-pages-add-btn`)
                     expect(await protoBrowser.getElementText(`#pages-datatable-${pageName}`)).toBe(pageName);
                 }, 60000)

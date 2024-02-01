@@ -1,4 +1,4 @@
-import { Button, Fieldset, Input, Label, Stack, XStack, YStack, Paragraph, Spinner, Text, StackProps, Accordion, Square, Spacer, Switch } from "tamagui";
+import { Button, Fieldset, Input, Label, Stack, XStack, H3, YStack, Paragraph, Spinner, Text, StackProps, Accordion, Square, Spacer, Switch } from "tamagui";
 import { Pencil, Tag, ChevronDown, X, Tags, List, Layers } from '@tamagui/lucide-icons';
 import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog } from 'protolib'
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -159,7 +159,7 @@ const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData,
   const handleAccept = async () => {
     const val = getDefaultValue(ele._def.valueType._def.typeName);
     const id = [...path, ele.name, name].join("/")
-    console.log("ID", id)
+    // console.log("ID", id)
     setMenuOpened(false);
     setName("");
     setOpened(updatePathArray(opened, id))
@@ -513,7 +513,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
     data = _data
     setData = _setData
   }
-  console.log('using data: ', data)
+  // console.log('using data: ', data)
   const [loading, setLoading] = useState(false)
   const [_error, _setError] = useState<any>()
   if ((!error || !setError) && !externalErrorHandling) {
@@ -593,7 +593,6 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
 
   const { tint } = useTint()
 
-
   return <OpenedSectionsContext.Provider value={[openedSections, setOpenedSections]}>
     <Stack width="100%" {...props}>
       <AlertDialog
@@ -617,6 +616,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
       <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
         <YStack width="100%">
           <XStack ai="center">
+            <XStack id="eo-dlg-title"><H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3></XStack>
             {title && <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
               <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>
             </XStack>}
