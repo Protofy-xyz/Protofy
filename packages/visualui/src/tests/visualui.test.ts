@@ -1,4 +1,4 @@
-import Source from 'app/models/Source';
+import { Source } from 'app/models';
 
 var globalUuid = 0;
 const testUUID = () => "nodeId-" + globalUuid++
@@ -12,13 +12,13 @@ describe("Test Node Ops", () => {
     describe("Test JsxElement operations", () => {
         it("gets the first JsxElement of sourceFile", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Box></Box><Text>hello</Text></View>`
-            const firstJsxElement: any = Source.new(source1).getContent();
+            const firstJsxElement: any = Source.parse(source1).getContent();
             expect(firstJsxElement.getText()).toBe('<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Box></Box><Text>hello</Text></View>')
         })
         describe("Test JsxElement Identifier (Tag name)", () => {
             it("check if correct kindName", () => {
                 const source = `<NativeBaseProvider></NativeBaseProvider>`
-                const firstJsxElement: any = Source.new(source).getFirstDescendant("JsxElement");
+                const firstJsxElement: any = Source.parse(source).getFirstDescendant("JsxElement");
                 const isJsxElement = Source.isKind(firstJsxElement, 'JsxElement');
                 const isIdentifier = Source.isKind(firstJsxElement, 'Identifier');
                 expect(isJsxElement).toBe(true);
@@ -26,23 +26,23 @@ describe("Test Node Ops", () => {
             })
             it("get JsxElement Identifier", () => {
                 const source = `<NativeBaseProvider></NativeBaseProvider>`
-                const firstJsxElement: any = Source.new(source).getFirstDescendant("JsxElement");
+                const firstJsxElement: any = Source.parse(source).getFirstDescendant("JsxElement");
                 const identifierName = Source.getJsxElementIdentifier(firstJsxElement).name;
                 const expected = 'NativeBaseProvider'
                 expect(identifierName).toBe(expected);
             });
             it("get JsxSelfClosingElement Identifier", () => {
                 const source = `<NativeBaseProvider/>`
-                const firstJsxSelfClosingElement: any = Source.new(source).getFirstDescendant("JsxSelfClosingElement");
+                const firstJsxSelfClosingElement: any = Source.parse(source).getFirstDescendant("JsxSelfClosingElement");
                 const identifierName: string = Source.getJsxSelfClosingElementIdentifier(firstJsxSelfClosingElement).name
                 const expected = 'NativeBaseProvider'
                 expect(identifierName).toBe(expected);
             });
             it("obtains elements names using getJsxElementName", () => {
                 const source1 = `<NameOne/>`
-                const element1: any = Source.new(source1).getFirstDescendant("JsxSelfClosingElement");
+                const element1: any = Source.parse(source1).getFirstDescendant("JsxSelfClosingElement");
                 const source2 = `<NameTwo></NameTwo>`
-                const element2: any = Source.new(source2).getFirstDescendant("JsxElement");
+                const element2: any = Source.parse(source2).getFirstDescendant("JsxElement");
                 const res1 = Source.getJsxElementName(element1).name
                 const res2 = Source.getJsxElementName(element2).name
                 const expect1 = "NameOne"
@@ -54,52 +54,52 @@ describe("Test Node Ops", () => {
         describe("Test JsxElement attributes", () => {
             it("obtains all attributes using getAttributes", () => {
                 const source1 = `<View atr1="1" atr2={2} atr3></View>`
-                const element1: any = Source.new(source1).getFirstDescendant("JsxElement");
+                const element1: any = Source.parse(source1).getFirstDescendant("JsxElement");
                 const attributesArr1: any = Source.getAttributes(element1);
                 expect(attributesArr1.length).toBe(3)
                 const source2 = `<View></View>`
-                const element2: any = Source.new(source2).getFirstDescendant("JsxElement");
+                const element2: any = Source.parse(source2).getFirstDescendant("JsxElement");
                 const attributesArr2: any = Source.getAttributes(element2);
                 expect(attributesArr2.length).toBe(0)
                 const source3 = `<View atr1="1"/>`
-                const element3: any = Source.new(source3).getFirstDescendant("JsxSelfClosingElement");
+                const element3: any = Source.parse(source3).getFirstDescendant("JsxSelfClosingElement");
                 const attributesArr3: any = Source.getAttributes(element3);
                 expect(attributesArr3.length).toBe(1)
             })
             it("obtains all JsxAttributes from a JsxElement", () => {
                 const source = `<View atr1="1" atr2={2} atr3></View>`
-                const element: any = Source.new(source).getFirstDescendant("JsxElement");
+                const element: any = Source.parse(source).getFirstDescendant("JsxElement");
                 const attributesArr: any = Source.getJsxElementAttributes(element);
                 expect(attributesArr.length).toBe(3)
             })
             it("obtains all JsxAttributes from a JsxSelfClosingElement", () => {
                 const source = `<View atr1="1" atr2={2} atr3/>`
-                const element: any = Source.new(source).getFirstDescendant("JsxSelfClosingElement");
+                const element: any = Source.parse(source).getFirstDescendant("JsxSelfClosingElement");
                 const attributesArr: any = Source.getJsxSelfClosingElementAttributes(element);
                 expect(attributesArr.length).toBe(3)
             })
             it("obtains all specific attribute from a JsxElement", () => {
                 const source = `<View atr1="1" atr2={2} atr3></View>`
-                const element: any = Source.new(source).getFirstDescendant("JsxElement");
+                const element: any = Source.parse(source).getFirstDescendant("JsxElement");
                 const matchedAtribute1: any = Source.getJsxAttribute(element, 'atr1');
                 const atributeKeyName = matchedAtribute1.getNameNode().getText()
                 expect(atributeKeyName).toBe('atr1')
             })
             it("obtains attribute key from JsxAttribute", () => {
                 const source1 = `<View atr1="1" atr2={2} atr3></View>`
-                const element1: any = Source.new(source1).getFirstDescendant("JsxElement");
+                const element1: any = Source.parse(source1).getFirstDescendant("JsxElement");
                 const matchedAtribute1: any = Source.getJsxAttribute(element1, 'atr1');
                 const matchedAtributeKey1 = Source.getAttributeKey(matchedAtribute1)
                 expect(matchedAtributeKey1).toBe('atr1')
                 const source2 = `<View atr2={2}/>`
-                const element2: any = Source.new(source2).getFirstDescendant("JsxSelfClosingElement");
+                const element2: any = Source.parse(source2).getFirstDescendant("JsxSelfClosingElement");
                 const matchedAtribute2: any = Source.getJsxAttribute(element2, 'atr2');
                 const matchedAtributeKey2 = Source.getAttributeKey(matchedAtribute2)
                 expect(matchedAtributeKey2).toBe('atr2')
             })
             it("obtains attribute value from JsxAttribute", () => {
                 const source1 = `<View atr1="1" atr2={2} atr3></View>`
-                const element: any = Source.new(source1).getFirstDescendant("JsxElement");
+                const element: any = Source.parse(source1).getFirstDescendant("JsxElement");
                 const matchedAtribute1: any = Source.getJsxAttribute(element, 'atr1');
                 const matchedAtributeValue1 = Source.getAttributeValue(matchedAtribute1);
                 expect(matchedAtributeValue1.getText()).toBe('"1"')
@@ -114,13 +114,13 @@ describe("Test Node Ops", () => {
             })
             it("obtains the identifier value prop of JsxElement", () => {
                 const source1 = `<View></View>`
-                let sourceFile1 = Source.new(source1)
+                let sourceFile1 = Source.parse(source1)
                 sourceFile1 = sourceFile1.identifyElements(testUUID)
                 const content1 = sourceFile1.getContent()
                 expect(Source.getIdentifier(content1)).toBe('nodeId-0')
                 resetTestUUID()
                 const source2 = `<View><Input/></View>`
-                let sourceFile2 = Source.new(source2)
+                let sourceFile2 = Source.parse(source2)
                 sourceFile2 = sourceFile2.identifyElements(testUUID)
                 const content2 = sourceFile2.getContent()
                 const selfClosingElement = Source.getJsxElementByIdentifier(content2, 'nodeId-1')
@@ -130,38 +130,38 @@ describe("Test Node Ops", () => {
         describe("Methods with identify/unidentify props to source jsxElements", () => {
             it("adds _nodeId to all JsxElements of soruce", () => {
                 const source1 = `<Text><Input/><Button><Icon/></Button><Box></Box></Text>`
-                const newSource1 = Source.new(source1).identifyElements(testUUID);
+                const newSource1 = Source.parse(source1).identifyElements(testUUID);
                 expect(newSource1.getContent().getText()).toBe(`<Text _nodeId="nodeId-0" ><Input _nodeId="nodeId-1" /><Button _nodeId="nodeId-2" ><Icon _nodeId="nodeId-3" /></Button><Box _nodeId="nodeId-4" ></Box></Text>`)
                 resetTestUUID()
                 const source2 = '<View atr1="1" atr2={2} atr3></View>'
-                const newSource2 = Source.new(source2).identifyElements(testUUID);
+                const newSource2 = Source.parse(source2).identifyElements(testUUID);
                 expect(newSource2.getContent().getText()).toBe(`<View  _nodeId="nodeId-0" atr1="1" atr2={2} atr3></View>`)
                 resetTestUUID()
                 const source3 = `<Text atr1="1" atr2={2} atr3><Input atr1="1" atr2={2} atr3/><Button atr1="1" atr2={2} atr3><Icon atr1="1" atr2={2} atr3/></Button><Box atr1="1" atr2={2} atr3></Box></Text>`
-                const newSource3 = Source.new(source3).identifyElements(testUUID);
+                const newSource3 = Source.parse(source3).identifyElements(testUUID);
                 expect(newSource3.getContent().getText()).toBe(`<Text  _nodeId="nodeId-0" atr1="1" atr2={2} atr3><Input  _nodeId="nodeId-1" atr1="1" atr2={2} atr3/><Button  _nodeId="nodeId-2" atr1="1" atr2={2} atr3><Icon  _nodeId="nodeId-3" atr1="1" atr2={2} atr3/></Button><Box  _nodeId="nodeId-4" atr1="1" atr2={2} atr3></Box></Text>`)
             })
             it("preserve _nodeId prop if the node has it", () => {
                 const source1 = `<Text _nodeId="rocket" atr="nasa"></Text>`
-                const newSource1 = Source.new(source1).identifyElements(testUUID);
+                const newSource1 = Source.parse(source1).identifyElements(testUUID);
                 expect(newSource1.getContent().getText()).toBe(`<Text _nodeId="rocket" atr="nasa"></Text>`)
                 resetTestUUID()
                 const source2 = `<Text _nodeId="rocket"><Input/><Button _nodeId="nasa"><Icon _nodeId="protofito"/></Button><Box></Box></Text>`
-                const newSource2 = Source.new(source2).identifyElements(testUUID);
+                const newSource2 = Source.parse(source2).identifyElements(testUUID);
                 expect(newSource2.getContent().getText()).toBe(`<Text _nodeId="rocket"><Input _nodeId="nodeId-0" /><Button _nodeId="nasa"><Icon _nodeId="protofito"/></Button><Box _nodeId="nodeId-1" ></Box></Text>`)
                 resetTestUUID()
             })
             it("deletes _nodeId prop if the node has it", () => {
                 const source1 = `<Text _nodeId="rocket" atr="nasa"></Text>`
-                const newSource1 = Source.new(source1).unidentifyElements();
+                const newSource1 = Source.parse(source1).unidentifyElements();
                 expect(newSource1.getContent().getText()).toBe(`<Text  atr="nasa"></Text>`)
                 const source2 = `<Text atr="nasa"></Text>`
-                const newSource2 = Source.new(source2).unidentifyElements();
+                const newSource2 = Source.parse(source2).unidentifyElements();
                 expect(newSource2.getContent().getText()).toBe(`<Text atr="nasa"></Text>`)
             })
             it("verify complete flow of identify/unidentify nodes", () => {
                 const source1 = `<Text _nodeId="rocket"><Input/><Button _nodeId="nasa"><Icon _nodeId="protofito"/></Button><Box></Box></Text>`
-                let newSource1 = Source.new(source1).identifyElements(testUUID);
+                let newSource1 = Source.parse(source1).identifyElements(testUUID);
                 expect(newSource1.getContent().getText()).toBe(`<Text _nodeId="rocket"><Input _nodeId="nodeId-0" /><Button _nodeId="nasa"><Icon _nodeId="protofito"/></Button><Box _nodeId="nodeId-1" ></Box></Text>`)
                 newSource1 = newSource1.unidentifyElements()
                 expect(newSource1.getContent().getText()).toBe(`<Text ><Input  /><Button ><Icon /></Button><Box  ></Box></Text>`)
@@ -182,11 +182,11 @@ describe("Test Node Ops", () => {
                         </Background>
                     </NativeBaseProvider>
                 `
-                const mainJsxElement1 = Source.new(source1).getContent()
+                const mainJsxElement1 = Source.parse(source1).getContent()
                 const allJsxElements1 = Source.getAllJsxElements(mainJsxElement1)
                 expect(allJsxElements1.length).toBe(7)
                 const source2 = `<Text><Input/><Button><Icon/></Button><Box></Box></Text>`
-                const mainJsxElement2 = Source.new(source2).getContent()
+                const mainJsxElement2 = Source.parse(source2).getContent()
                 const allJsxElements2 = Source.getAllJsxElements(mainJsxElement2)
                 expect(allJsxElements2.length).toBe(5)
             })
@@ -194,7 +194,7 @@ describe("Test Node Ops", () => {
         describe("Test JsxElement children", () => {
             it("finds JsxElement children", () => {
                 const source1 = `<View atr1="1" atr2={2} atr3><View></View><Text>hello</Text></View>`
-                const element1: any = Source.new(source1).getFirstDescendant("JsxElement");
+                const element1: any = Source.parse(source1).getFirstDescendant("JsxElement");
                 const children1: any[] = Source.getJsxChildren(element1)
                 expect(children1.length).toBe(2)
                 expect(Source.isKind(children1[0], 'JsxElement')).toBe(true)
@@ -202,7 +202,7 @@ describe("Test Node Ops", () => {
                 expect(Source.isKind(children1[1], 'JsxElement')).toBe(true)
                 expect(children1[1].getText()).toBe("<Text>hello</Text>")
                 const source2 = `<View>{true?<View></View>:<Text>hello</Text>}</View>`
-                const element2: any = Source.new(source2).getFirstDescendant("JsxElement");
+                const element2: any = Source.parse(source2).getFirstDescendant("JsxElement");
                 const children2: any[] = Source.getJsxChildren(element2)
                 expect(children2.length).toBe(1)
                 expect(Source.isKind(children2[0], 'JsxExpression')).toBe(true)
@@ -218,7 +218,7 @@ describe("Test Node Ops", () => {
                         <Input/>
                     </View>
                     `
-                const element1 = Source.new(source1).getFirstDescendant("JsxElement");
+                const element1 = Source.parse(source1).getFirstDescendant("JsxElement");
                 const children1: any[] = Source.getJsxChildrenFirstLevel(element1)
                 expect(children1.length).toBe(4)
                 const source2 = `
@@ -231,14 +231,14 @@ describe("Test Node Ops", () => {
                         }
                     </View>
                     `
-                const element2 = Source.new(source2).getContent();
+                const element2 = Source.parse(source2).getContent();
                 const children2: any[] = Source.getJsxChildrenFirstLevel(element2)
                 expect(children2.length).toBe(3)
 
             })
             it("finds all children JsxElements/JsxSelfClosingElements/JsxExpression", () => {
                 const source1 = `<View><View atr="1"></View><Text atr="2">hello</Text><Box atr="3"><View atr="4"><View></View></View></Box><Input atr="5"/></View>`
-                const element1 = Source.new(source1).getFirstDescendant("JsxElement");
+                const element1 = Source.parse(source1).getFirstDescendant("JsxElement");
                 const children1: any[] = Source.getAllJsxChildren(element1)
                 expect(children1.length).toBe(6)
                 // Test preserve order on results
@@ -249,17 +249,17 @@ describe("Test Node Ops", () => {
                 expect(children1[4].getText()).toBe('<View></View>')
                 expect(children1[5].getText()).toBe('<Input atr="5"/>')
                 const source2 = `<View><View atr="1"><Box></Box></View>{<Box atr={()=> {}}><Input/></Box>}<Input atr="5"/></View>`
-                const element2 = Source.new(source2).getContent()
+                const element2 = Source.parse(source2).getContent()
                 const children2: any[] = Source.getAllJsxChildren(element2)
                 expect(children2.length).toBe(4)
             })
             it("finds children of JsxText of given JsxElement", () => {
                 const source1 = '<Text>Hello world</Text>'
-                const element1 = Source.new(source1).getFirstDescendant("JsxElement");
+                const element1 = Source.parse(source1).getFirstDescendant("JsxElement");
                 const children1: any = Source.getJsxTextOfJsxElement(element1)
                 expect(children1.getText()).toBe("Hello world")
                 const source2 = '<Text></Text>'
-                const element2 = Source.new(source2).getFirstDescendant("JsxElement");
+                const element2 = Source.parse(source2).getFirstDescendant("JsxElement");
                 const children2: any = Source.getJsxTextOfJsxElement(element2)
                 expect(children2?.getText()).toBe(undefined)
             })
@@ -267,7 +267,7 @@ describe("Test Node Ops", () => {
         describe("Test SyntaxKind of nodes", () => {
             it("checks types of nodes using isKind", () => {
                 const source1 = `<View atr1="1" atr2={2} atr3></View>`
-                const element1: any = Source.new(source1).getFirstDescendant("JsxElement");
+                const element1: any = Source.parse(source1).getFirstDescendant("JsxElement");
                 const matchedAtribute1: any = Source.getJsxAttribute(element1, 'atr1');
                 const matchedAtributeValue1 = Source.getAttributeValue(matchedAtribute1);
                 expect(Source.isKind(element1, 'JsxElement')).toBe(true)
@@ -279,7 +279,7 @@ describe("Test Node Ops", () => {
         describe("Test JsxElements retrieve", () => {
             it("retrieves a JsxElement by its uuid", () => {
                 const source2 = `<View><Input/></View>`
-                let sourceFile2 = Source.new(source2)
+                let sourceFile2 = Source.parse(source2)
                 sourceFile2 = sourceFile2.identifyElements(testUUID)
                 const content2 = sourceFile2.getContent()
                 expect(content2.getText()).toBe(`<View _nodeId="nodeId-0" ><Input _nodeId="nodeId-1" /></View>`)
@@ -290,7 +290,7 @@ describe("Test Node Ops", () => {
         describe("Test transform from parent JsxElement all JsxExpression childs as JsxElemnt with tagName (ReactCode)", () => {
             it("transforms JsxExpressions to JsxElement with tagName (ReactCode)", () => {
                 const source1 = `<View><View></View><View><Text atr={() => {}}>hello</Text></View>{<MyComp atr={()=>{}}><Hello/></MyComp>}</View>`
-                const sourceFile1 = Source.new(source1)
+                const sourceFile1 = Source.parse(source1)
                 const newSource1: Source = sourceFile1.convertJsxExpressionToJsxElement();
                 expect(newSource1.ast.getText()).toBe(`<View><View></View><View><Text atr={() => {}}>hello</Text></View></View>`)
             })
@@ -303,7 +303,7 @@ describe("Test Node Ops", () => {
             import MyComponent3, {MyComponent4, MyComponent5} from 'sourceImport3'\
             import {MyComponent_v1 as MyComponent_v2} from 'sourceImport4'\
         "
-        const importDeclarations: any[] = Source.new(sourceText1).getImportDeclarations()
+        const importDeclarations: any[] = Source.parse(sourceText1).getImportDeclarations()
         expect(importDeclarations.length).toBe(4)
         expect(importDeclarations[0]).toStrictEqual({
             "namedImports": undefined,
@@ -332,7 +332,7 @@ describe("Test Node Ops", () => {
                 atr6={"hello"} atr7={isAtr7?"hello":"rip"} atr8={isAtr8??false} atr9={myVar} atr10={myFunction()}
                 atr11={() => {console.log("p")}} atr12={{ backgroundColor:"red", borderWidth:1, margin: MARGIN}}
             ></View>`
-            const conent: any = Source.new(source1).getContent()
+            const conent: any = Source.parse(source1).getContent()
             const elementJsxAtributes: any[] = Source.getAttributes(conent)
             const atr1_value = Source.nodeValueFactory(Source.getAttributeValue(elementJsxAtributes[0])).value
             expect(atr1_value).toBe("1")
@@ -365,7 +365,7 @@ describe("Test CraftData Ops", () => {
     describe("Test JsxElement to CraftData (CraftJS) node", () => {
         it("generates craft node given node", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Box></Box><Text>hello</Text></View>`
-            const firstJsxElement1: any = Source.new(source1).getContent();
+            const firstJsxElement1: any = Source.parse(source1).getContent();
             const craftData1 = Source.getNodeData(firstJsxElement1)
             expect(craftData1).toStrictEqual({
                 "type": {
@@ -402,7 +402,7 @@ describe("Test CraftData Ops", () => {
                 "linkedNodes": {},
             })
             const source2 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Box></Box>{<Hello/>}<Text>hello</Text></View>`
-            let sourceFile2: Source = Source.new(source2)
+            let sourceFile2: Source = Source.parse(source2)
             sourceFile2 = sourceFile2.convertJsxExpressionToJsxElement()
             const firstJsxElement2 = sourceFile2.getContent()
             const jsxElementReactCode = Source.getJsxChildrenFirstLevel(firstJsxElement2)[1]
@@ -425,7 +425,7 @@ describe("Test CraftData Ops", () => {
         })
         it("generates flatten list of craftNodes given node", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Input value="hello"/><Text>hello</Text></View>`
-            let sourceCode = Source.new(source1)
+            let sourceCode = Source.parse(source1)
             sourceCode = sourceCode.identifyElements(testUUID)
             const sourceNode: any = sourceCode.getContent();
             const tree = {} // Craft.JS format to build nodes
@@ -490,7 +490,7 @@ describe("Test CraftData Ops", () => {
             const source1 = `
             <Text>hello></Text>
             `
-            const sourceNode = Source.new(source1) // Source object
+            const sourceNode = Source.parse(source1) // Source object
             const craftData = sourceNode.data(testUUID)
             expect(craftData['nodeId-0']).toStrictEqual({
                 "custom": {
@@ -513,7 +513,7 @@ describe("Test CraftData Ops", () => {
         })
         it("generates flatten list of craftNode using 'getNodes'", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Input value="hello"/><Text>hello</Text></View>`
-            let sourceNode = Source.new(source1)
+            let sourceNode = Source.parse(source1)
             sourceNode = sourceNode.identifyElements(testUUID)
             const content = sourceNode.getContent();
             const tree = Source.getNodes(content)
@@ -575,7 +575,7 @@ describe("Test CraftData Ops", () => {
         })
         it("generates CraftJS nodes adding theme and ROOT node using 'toCraftNodes'", () => {
             const source1 = `<View atr1="1" atr2={2} atr3 atr4={{background:"red"}}><Input value="hello"/><Text>hello</Text></View>`
-            let sourceNode1 = Source.new(source1)
+            let sourceNode1 = Source.parse(source1)
             sourceNode1 = sourceNode1.identifyElements(testUUID)
             const content1 = sourceNode1.getContent();
             const tree1 = Source.toCraftNodes(content1)
@@ -650,7 +650,7 @@ describe("Test CraftData Ops", () => {
             })
             resetTestUUID()
             const source2 = `<Background><Button></Button><View></View></Background>`
-            let sourceNode2 = Source.new(source2)
+            let sourceNode2 = Source.parse(source2)
             sourceNode2 = sourceNode2.identifyElements(testUUID)
             const content2 = sourceNode2.getContent();
             const tree2 = Source.toCraftNodes(content2)
@@ -720,7 +720,7 @@ describe("Test CraftData Ops", () => {
                 <Text>hello</Text>
             </View>
             `
-            let sourceNode = Source.new(source1) // Source object
+            let sourceNode = Source.parse(source1) // Source object
             sourceNode.identifyElements(testUUID)
             const conent = sourceNode.getContent();
             const craftNodes = Source.toCraftNodes(conent)
@@ -808,7 +808,7 @@ describe("Test CraftData Ops", () => {
                 <Text>hello</Text>
             </View>
             `
-            const sourceNode = Source.new(source1) // Source object
+            const sourceNode = Source.parse(source1) // Source object
             const craftData = sourceNode.data(testUUID)
             expect(craftData).toStrictEqual({
                 "ROOT": {
