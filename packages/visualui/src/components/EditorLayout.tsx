@@ -290,6 +290,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
       } catch (e) {
         if (retry < 10) {
           setTimeout(() => reload(retry + 1), 5000)
+          setLoading(true)
         } else {
           console.error(`Max retry reached! Error deserializing editor nodes (CraftJS nodes). Error: ${e}`)
         }
@@ -297,6 +298,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
       }
     }
     if (currentPageContent) {
+      setLoading(false)
       reload(0)
     }
   }, [currentPageContent])
