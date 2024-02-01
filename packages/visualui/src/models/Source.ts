@@ -10,8 +10,11 @@ import prettier from "prettier";
 
 export class Source {
     ast: any
+    craftNodes: any
+
     constructor(ast: SourceFile) {
         this.ast = ast
+        this.craftNodes = this.data()
     }
 
     static new(source: string): Source {
