@@ -68,7 +68,7 @@ const main = () => {
                     ? '✅'
                     : '🚧'
             )
-        total += `\n${statusBadge} ${s['status'] ?? 'SKIP'} --> Total ${s['total']} (**${s['passed']}** pass, **${s['skipped']}** skip, **${s['failed']}** fail)[${s['time']}] ${s['file'] ? ("\n" + s['file']) : ''}\n-----------------`
+        total += `\n${statusBadge} ${s['status'] ?? 'SKIP'} --> Total ${s['total']} (**${s['passed']}** pass, **${s['skipped']}** skip, **${s['failed']}** fail)\n[**${s['time']}**] ${s['file'] ?? ''}\n-----------------`
         return total
     }, "")
     console.log(output)
