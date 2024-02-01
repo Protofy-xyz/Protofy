@@ -65,8 +65,8 @@ export class ProtoBrowser {
         return page.$(locator)
     }
 
-    async clickElement(locator: any): Promise<any> {
-        await this.waitForElement(locator)
+    async clickElement(locator: any, timeout?: number): Promise<any> {
+        await this.waitForElement(locator, timeout)
         await this.getPage().click(locator)
     }
 
@@ -117,7 +117,7 @@ export class ProtoBrowser {
     async navigateToWorkspace() {
         await this.waitForElement('#header-session-user-id');
         await this.clickElement('#layout-menu-btn')
-        await this.clickElement('#pop-over-workspace-link')
+        await this.clickElement('#pop-over-workspace-link', 60000)
         await this.getPage().waitForURL('**/admin/*', { timeout: 60000 });
     }
 
