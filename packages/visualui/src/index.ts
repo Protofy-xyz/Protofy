@@ -1,4 +1,4 @@
 import App from "./App";
 
 export default App;
-export { SourceAtomFactory } from "./SourceAtom"
+export { SourceAtomFactory, useVisualUi } from "./SourceAtom"
