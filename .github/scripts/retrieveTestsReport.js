@@ -45,6 +45,10 @@ const getReportStatus = (report) => { // report: string
             sumary = { ...sumary, passed, failed, skipped, total };
         }
     }
+    if(line.includes('Time:')) {
+        const elapsedTime = line.split('Time:')[1].trim()
+        sumary = { ...sumary,time: elapsedTime };
+    }
     return sumary
 }
 
@@ -64,7 +68,7 @@ const main = () => {
                     ? '✅'
                     : '🚧'
             )
-        total += `-----------------\n${statusBadge} ${s['status'] ?? 'SKIP'} --> Total ${s['total']} (**${s['passed']}** pass, **${s['skipped']}** skip, **${s['failed']}** fail)${s['file'] ? ("\nAt file:" + s['file']) : ''}\n`
+        total += `\n${statusBadge} ${s['status'] ?? 'SKIP'} --> Total ${s['total']} (**${s['passed']}** pass, **${s['skipped']}** skip, **${s['failed']}** fail)[${s['time']}] ${s['file'] ? ("\n" + s['file']) : ''}\n-----------------`
         return total
     }, "")
     console.log(output)
