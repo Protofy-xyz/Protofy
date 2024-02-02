@@ -8,11 +8,7 @@ import { API } from "../base";
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element
     const modelItem = data.model.load(element)
-    const entityName = data.entityName;
-
-    const onDelete = async (key) => {
-        await API.get(`/adminapi/v1/${entityName}/${key}/delete`)
-    }
+    const onDelete = data.onDelete;
 
     return <Stack key={element.key} width={width}>
         <DataCard
@@ -40,7 +36,7 @@ export const DataTableCard = ({ itemMinWidth = 400, rightGap = 30, contentMargin
             id: 'item_'+i,
             element,
             model,
-            entityName: props.entityName
+            onDelete: props.onDelete
         }
     })
 

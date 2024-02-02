@@ -11,8 +11,6 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
     const [open, setOpen] = useState(false)
     const { selected, setSelected, model } = useContext(DataViewContext);
 
-
-
     const addToInitialData = ({ data }) => {
 
     }
@@ -41,14 +39,7 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
             setOpen={setOpen}
             open={open}
             onAccept={async (setOpen) => {
-                if (Array.isArray(element) && sourceUrl) {
-                    const deletePromises = element.map(ele => API.get(`${sourceUrl}/${model.load(ele).getId()}/delete`));
-                    await Promise.all(deletePromises);
-                    setSelected([]);
-                } else if (sourceUrl) {
-                    await API.get(`${sourceUrl}/delete`);
-                }
-                await onDelete(sourceUrl);
+                await onDelete(sourceUrl)
                 setOpen(false);
             }}
             title={'Delete '}

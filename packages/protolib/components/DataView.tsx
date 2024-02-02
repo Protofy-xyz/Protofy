@@ -161,7 +161,15 @@ export function DataView({
             props: {
                 sourceUrl,
                 deleteable: deleteable,
-                onDelete: () => { },
+                onDelete: async (_sourceUrl) => {
+                    if (Array.isArray(selected) && selected.length && sourceUrl) {
+                        const deletePromises = selected.map(ele => API.get(`${sourceUrl}/${model.load(ele).getId()}/delete`));
+                        await Promise.all(deletePromises);
+                        setSelected([]);
+                    } else if (sourceUrl) {
+                        await API.get(`${_sourceUrl}/delete`);
+                    }
+                },
                 enableAddToInitialData,
                 extraMenuActions: extraMenuActions,
                 ...dataTableListProps
@@ -181,7 +189,9 @@ export function DataView({
                 icons,
                 ml: "$5",
                 deleteable: deleteable,
-                onDelete: () => { },
+                onDelete: async (sourceUrl) => { 
+                    await API.get(sourceUrl+'/delete')
+                },
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 extraMenuActions: extraMenuActions,
                 ...dataTableGridProps
@@ -191,7 +201,13 @@ export function DataView({
             name: 'raw',
             icon: Layers,
             component: DataTableCard,
-            props: { mt: "$8", ...dataTableRawProps, entityName }
+            props: {
+                mt: "$8",
+                onDelete: async (key) => {
+                    await API.get(`${sourceUrl}/${key}/delete`);
+                },
+                ...dataTableRawProps
+            }
         }
     ]
 
@@ -225,7 +241,7 @@ export function DataView({
                     >
                         <XStack pt="$4" height={'90vh'} width={"90vw"}>
                             <FileWidget
-                                id={"file-widget-"+getFilenameFromPath(state.editFile ?? '').split('.')[0]}
+                                id={"file-widget-" + getFilenameFromPath(state.editFile ?? '').split('.')[0]}
                                 isFull={false}
                                 hideCloseIcon={false}
                                 isModified={false}
@@ -356,7 +372,7 @@ export function DataView({
                             <Paragraph>
                                 <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
                             </Paragraph>
-                             {hasGlobalMenu?<Tinted><ItemMenu type={"global"} sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraMenuActions}></ItemMenu></Tinted>:<></>}
+                            {hasGlobalMenu ? <Tinted><ItemMenu type={"global"} sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraMenuActions}></ItemMenu></Tinted> : <></>}
                             {toolBarContent}
                         </XStack>
 
