@@ -86,8 +86,25 @@ export const dumpComponentProps = (props, custom) => {
         }, {})
 }
 
+let lastTopicParams;
+let lastTimeoutId;
+let timeoutId;
+
 export const notify = (topicParams: Object, publish: any, cb?: Function) => {
-    publish(UIFLOWID + '/ui', topicParams)
+    if (topicParams['debounce']) {
+        timeoutId = setTimeout(() => {
+            publish(UIFLOWID + '/ui', topicParams)
+        }, 1000);
+
+        if (lastTopicParams && topicParams['nodeId'] == lastTopicParams['nodeId']) {
+            clearTimeout(lastTimeoutId);
+        }
+        lastTopicParams = topicParams
+        lastTimeoutId = timeoutId
+    } else {
+        publish(UIFLOWID + '/ui', topicParams)
+    }
+
     if (cb) {
         cb()
     }
@@ -183,23 +200,23 @@ export const getMissingJsxImports = (nodes: any, nodeData: any, resolveComponent
 
     function processJsxData() {
         let result = [];
-      
+
         for (let element of jsxElementsData) {
-          const { tagName, namedImports, defaultImport } = element;
-      
-          // Caso en que "tagName" no exista en currentImports, y no tenga "namedImports" o "defaultImport".
-          if (!checkExistence(tagName) && !namedImports && !defaultImport) {
-            result.push({ defaultImport: tagName });
-          }
-      
-          // Caso en que "tagName" no exista en currentImports, pero tenga "namedImports" o "defaultImport".
-          if (!checkExistence(tagName) && (namedImports || defaultImport)) {
-            result.push(element);
-          }
+            const { tagName, namedImports, defaultImport } = element;
+
+            // Caso en que "tagName" no exista en currentImports, y no tenga "namedImports" o "defaultImport".
+            if (!checkExistence(tagName) && !namedImports && !defaultImport) {
+                result.push({ defaultImport: tagName });
+            }
+
+            // Caso en que "tagName" no exista en currentImports, pero tenga "namedImports" o "defaultImport".
+            if (!checkExistence(tagName) && (namedImports || defaultImport)) {
+                result.push(element);
+            }
         }
-      
+
         return result;
-      }
+    }
 
     const result = processJsxData()
     return result
@@ -207,18 +224,18 @@ export const getMissingJsxImports = (nodes: any, nodeData: any, resolveComponent
 export { capitalizeFirstLetter }
 
 export function formatText(unformatedText: string): string {
-	let formatedText: string | undefined;
-	try {
-		formatedText = prettier.format(unformatedText, {
-			bracketSameLine: true,
-			jsxBracketSameLine: true,
-			singleAttributePerLine: false,
-			printWidth: 1000,
-			quoteProps: "consistent",
-			jsxSingleQuote: false,
-			parser: "typescript",
-			plugins: [parserTypeScript]
-		})
-	} catch (e) { console.error('Could not format text. Error: ' + e) }
-	return formatedText ?? unformatedText
+    let formatedText: string | undefined;
+    try {
+        formatedText = prettier.format(unformatedText, {
+            bracketSameLine: true,
+            jsxBracketSameLine: true,
+            singleAttributePerLine: false,
+            printWidth: 1000,
+            quoteProps: "consistent",
+            jsxSingleQuote: false,
+            parser: "typescript",
+            plugins: [parserTypeScript]
+        })
+    } catch (e) { console.error('Could not format text. Error: ' + e) }
+    return formatedText ?? unformatedText
 }

@@ -70,7 +70,8 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
           topicParams = {
             action: 'edit-node',
             nodeId: nodeId,
-            newChildValue: newChildValue
+            newChildValue: newChildValue,
+			      debounce: true
           }
         } else if (movedParent_diff) { // moved changing parent
           const nodeId_moved = movedParent_diff.path[0];
