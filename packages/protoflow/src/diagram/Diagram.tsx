@@ -233,7 +233,7 @@ const Diagram = React.forwardRef(({
             if (pastZoomNodes[0] == nodeToZoomId) return
             pastZoomNodes[0] = nodeToZoomId
             setPastZoomNodes([...pastZoomNodes])
-            setTimeout(() => zoomToNode(nodeToZoomId), 50);
+            setTimeout(() => zoomToNode(nodeToZoomId), 80);
             if (nodePreview) hideUnselected(nodeToZoomId)
         }
     }, [data['zoomToNode']])
