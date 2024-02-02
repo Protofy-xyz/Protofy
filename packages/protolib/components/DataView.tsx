@@ -126,7 +126,7 @@ export function DataView({
 
     useEffect(() => {
         if (items && items.isLoaded) {
-            console.log('set current items: ', items)
+            // console.log('set current items: ', items)
             setCurrentItems(items)
         }
     }, [items])

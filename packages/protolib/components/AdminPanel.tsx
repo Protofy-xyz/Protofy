@@ -67,7 +67,6 @@ export const LogPanel = () => {
   const { topic, client, message } = useSubscription('#');
   const [messages, setMessages] = useAtom(BusMessages)
   useUpdateEffect(() => {
-    console.log('DOOOOOOOOOOOOOOOOOOOOOOOOO', message)
     setMessages([message, ...messages.slice(maxLog)])
   }, [message])
 

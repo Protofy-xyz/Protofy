@@ -84,7 +84,7 @@ export const useScroller = <T extends HTMLElement = HTMLElement>(
           tick = void 0
         })
       }
-      console.log('scrollAbleNode: ', scrollAbleNode)
+      // console.log('scrollAbleNode: ', scrollAbleNode)
       scrollAbleNode.addEventListener('scroll', handleScroll)
       return () => {
         scrollAbleNode.removeEventListener('scroll', handleScroll)
