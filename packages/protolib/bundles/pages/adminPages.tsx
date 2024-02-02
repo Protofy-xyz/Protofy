@@ -49,7 +49,7 @@ const SelectGrid = ({ children }) => {
 const FirstSlide = ({ selected, setSelected }) => {
     const themeName = useThemeName();
     return <YStack>
-        <ScrollView mah={500}>
+        <ScrollView mah={"40vh"}>
             <SelectGrid>
                 {Object.keys(templates).map((template) => <TemplatePreview theme={themeName} template={template} isSelected={selected == template} onPress={() => setSelected(template)} />)}
             </SelectGrid>
@@ -112,7 +112,7 @@ export default {
                     description={""}
                 >
                     <YStack f={1} jc="center" ai="center">
-                        <ScrollView maxHeight={"90vh"}>
+                        {/* <ScrollView maxHeight={"90vh"}> */}
                             <XStack mr="$5">
                                 <Slides
                                     lastButtonCaption="Create"
@@ -155,7 +155,7 @@ export default {
                                     ]
                                     }></Slides>
                             </XStack>
-                        </ScrollView>
+                        {/* </ScrollView> */}
                     </YStack>
                 </AlertDialog>
 

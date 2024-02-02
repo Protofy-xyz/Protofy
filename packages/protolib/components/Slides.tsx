@@ -15,7 +15,7 @@ export const Slides = ({ slides, lastButtonCaption, onFinish }) => {
         .join(" / ");
 
     return (
-        <YStack id="admin-dataview-create-dlg" w={800} h={700} p="$3" f={1}>
+        <YStack id="admin-dataview-create-dlg" w={800} mah={700} p="$3" f={1}>
             <XStack id="admin-eo" mt="$4" justifyContent="space-between" width="100%">
                 <Stack flex={1}>
                     <Text fontWeight={"600"} fontSize={16} color="$gray9">{titlesUpToCurrentStep}</Text>
