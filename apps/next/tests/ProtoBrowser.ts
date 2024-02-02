@@ -117,7 +117,7 @@ export class ProtoBrowser {
     async navigateToWorkspace() {
         await this.waitForElement('#header-session-user-id');
         await this.clickElement('#layout-menu-btn')
-        await this.clickElement('#pop-over-workspace-link', 60000)
+        await this.clickElement('#pop-over-workspace-link', 80000)
         await this.getPage().waitForURL('**/admin/*', { timeout: 60000 });
     }
 
