@@ -1,11 +1,12 @@
 import { XStack } from 'tamagui'
 import { PanelLayout } from 'app/layout/PanelLayout'
-import { SelectList, useWorkspaces, useUserSettings, useSession, PanelMenu, MainPanel} from 'protolib'
+import { SelectList, useWorkspaces, useUserSettings, useSession, PanelMenu,MainPanel} from 'protolib'
 import Workspaces from 'app/bundles/workspaces'
 import { InteractiveIcon } from './InteractiveIcon'
 import { Activity } from '@tamagui/lucide-icons'
 import { Tinted } from './Tinted'
 import { atom, useAtom} from 'jotai';
+import { useEffect } from 'react'
 const menuData = {}
 
 const WorkspaceSelector = () => {
@@ -23,19 +24,36 @@ const WorkspaceSelector = () => {
     />:null
 }
 
+
 export const AppState = atom({
   logsPanelOpened: false
 })
+
+export const RightPanelAtom = atom(0)
 
 export const AdminPanel = ({children }) => {
     const [settings] = useUserSettings()
     const userSpaces = useWorkspaces()
     const [session, setSession] = useSession()
     const [appState, setAppState] = useAtom(AppState)
+    const [rightPanelSize, setRightPanelSize] = useAtom(RightPanelAtom)
     const currentWorkspace = settings && settings.workspace? settings.workspace : userSpaces[0]
     
+    const getRightWidth = () => {
+      const totalWidth = Math.max(400, window.innerWidth)
+      let percentage = (400 / totalWidth) * 100;
+      return percentage;
+    }
+
+    useEffect(() => {
+      if(!rightPanelSize) {
+        setRightPanelSize(getRightWidth())
+      }
+    }, [rightPanelSize])
+
+
     // console.log('userSpaces: ', userSpaces, 'current Workspace: ', currentWorkspace)
-    return <MainPanel rightPanelVisible={appState.logsPanelOpened} rightPanelResizable={true} centerPanelContent={Workspaces[currentWorkspace] 
+    return rightPanelSize && <MainPanel rightPanelSize={rightPanelSize} setRightPanelSize={setRightPanelSize} rightPanelStyle={{marginTop: '50px'}} rightPanelVisible={appState.logsPanelOpened} rightPanelResizable={true} centerPanelContent={Workspaces[currentWorkspace] 
         ? <PanelLayout 
             topBar={
               <>

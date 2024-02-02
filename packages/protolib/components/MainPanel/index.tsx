@@ -15,10 +15,13 @@ type Props = {
     rightPanelVisible?: boolean,
     openPanel?: boolean,
     setOpenPanel?: any,
-    rightPanelWidth?:number
+    rightPanelWidth?:number,
+    rightPanelStyle?:any,
+    rightPanelSize?:number,
+    setRightPanelSize?:any
 };
 
-const MainPanel = ({ rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}}: Props) => {
+const MainPanel = ({ rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}}: Props) => {
     const rightRef = useRef()
     const resizerRef = useRef()
     const resizerBarRef = useRef()
@@ -31,6 +34,7 @@ const MainPanel = ({ rightPanelWidth=0, actionContent, rightPanelContent, leftPa
         return percentage;
     }
     const getRightWidth = () => {
+        if(rightPanelSize) return rightPanelSize
         const totalWidth = Math.max(400, size.width)
         let percentage = (400 / totalWidth) * 100;
         return percentage;
@@ -120,13 +124,15 @@ const MainPanel = ({ rightPanelWidth=0, actionContent, rightPanelContent, leftPa
                     </div>
                 </PanelResizeHandle>
                 <Panel
-                    ref={rightRef} minSize={getRightWidth()}
+                    onResize={(size) => setRightPanelSize ? setRightPanelSize(size):null}
+                    ref={rightRef}
                     maxSize={80} defaultSize={rightPanelWidth ? rightPanelWidth : getRightWidth()}
                     style={{
                         // fix first render problem with zoomToNode, can't do it with display: "flex"<->"none"
                         position: rightPanelVisible ? "relative" : "absolute",
                         zIndex: rightPanelVisible ? 100000 : -10,
-                        display: 'flex'
+                        display: 'flex',
+                        ...rightPanelStyle
                     }}>
                     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', width: '100%' }}>
                         {rightPanelContent}
