@@ -191,7 +191,7 @@ export function DataView({
             name: 'raw',
             icon: Layers,
             component: DataTableCard,
-            props: { mt: "$8", ...dataTableRawProps }
+            props: { mt: "$8", ...dataTableRawProps, entityName }
         }
     ]
 
