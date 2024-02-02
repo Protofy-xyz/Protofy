@@ -18,10 +18,11 @@ type Props = {
     rightPanelWidth?:number,
     rightPanelStyle?:any,
     rightPanelSize?:number,
-    setRightPanelSize?:any
+    setRightPanelSize?:any,
+    borderLess?:boolean
 };
 
-const MainPanel = ({ rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}}: Props) => {
+const MainPanel = ({ borderLess, rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}}: Props) => {
     const rightRef = useRef()
     const resizerRef = useRef()
     const resizerBarRef = useRef()
@@ -47,8 +48,8 @@ const MainPanel = ({ rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightP
     };
     const onHover = () => {
         if (resizerRef.current) {
-            resizerRef.current.style.width = '20px'
-            resizerRef.current.style.borderRight = '1px solid #cccccc20'
+            // resizerRef.current.style.width = '20px'
+            // resizerRef.current.style.borderRight = '1px solid #cccccc20'
         }
         if (resizerBarRef.current) resizerBarRef.current.style.display = 'flex'
     }
@@ -56,8 +57,8 @@ const MainPanel = ({ rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightP
         clearTimeout(hoverTimer.current);
         if (resizerRef.current) {
             if (resizerRef.current.isDragging) return
-            resizerRef.current.style.width = '4px'
-            resizerRef.current.style.borderRight = '0px'
+            // resizerRef.current.style.width = '4px'
+            // resizerRef.current.style.borderRight = '0px'
         }
         if (resizerBarRef.current) resizerBarRef.current.style.display = 'none'
     }
@@ -111,7 +112,7 @@ const MainPanel = ({ rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightP
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={onHoverLeave}
                         style={{
-                            backgroundColor: '#252526',
+                            backgroundColor: borderLess?'transparent':'#252526',
                             display: rightPanelVisible && rightPanelResizable ? 'flex' : 'none',
                             width: '4px',
                             height: '100%',
