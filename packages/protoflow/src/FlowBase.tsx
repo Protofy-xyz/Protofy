@@ -104,7 +104,7 @@ const FlowsBase = ({
     path = "Start",
     mode = 'js',
     nodePreview = false,
-    metadata={}
+    metadata = {}
 }: FlowProps) => {
     const { data, publish } = topics;
     const useFlowsStore = useContext(FlowStoreContext)
@@ -735,9 +735,17 @@ const FlowsBase = ({
                     var newChildrenPos = uiData.childrenPos + 1;
                     var initialNodeData = uiData.nodeProps
                     const addedNodeData = Object.keys(initialNodeData).reduce((total, key) => {
-                        const value = initialNodeData[key]
+                        var value: any = initialNodeData[key]
                         var keyName = `prop-${key}`
+
+                        if (typeof value == "string") {
+                            value = '"' + value + '"'
+                        } else if (typeof value == "object") {
+                            value = "{" + JSON.stringify(value) + "}"
+                        }
+
                         var propValue = { key, value }
+
                         if (key == 'children') {
                             keyName = 'child-1'
                             propValue = value
@@ -831,8 +839,8 @@ const FlowsBase = ({
     }, [_customComponents.length])
 
     useEffect(() => {
-        if (sourceCode) { 
-            reload() 
+        if (sourceCode) {
+            reload()
         }
     }, [sourceCode])
 
@@ -928,7 +936,7 @@ const FlowsStoreWrapper = (props) => {
 
     return (
         <FlowStoreContext.Provider value={store}>
-            <FlowsBase {...props}/>
+            <FlowsBase {...props} />
         </FlowStoreContext.Provider>
     );
 }
@@ -937,11 +945,11 @@ export default (props) => {
     const FlowsWithTopics = withTopics(FlowsStoreWrapper, { topics: [props.flowId + '/play', props.flowId + '/ui', 'savenodes'] })
 
     if (props.path) {
-        if ( props.path.endsWith('.json')) {
+        if (props.path.endsWith('.json')) {
             props.mode = 'json'
-        } else if (props.path.endsWith('yml') || props.path.endsWith('yaml')){
+        } else if (props.path.endsWith('yml') || props.path.endsWith('yaml')) {
             props.mode = 'yaml'
-        } 
+        }
     }
 
     return <TopicsProvider>
