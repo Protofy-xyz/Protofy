@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import { ArrowDown, Trash2, Redo, ArrowUp, Move } from 'lucide-react';
 
 export const RenderNode = ({ render }) => {
-    const enableEdit = true
     const { id } = useNode();
     const { actions, query, isActive } = useEditor((_, query) => ({
         isActive: query.getEvent('selected').contains(id),
@@ -46,12 +45,14 @@ export const RenderNode = ({ render }) => {
     const currentRef = useRef<HTMLDivElement>();
     useEffect(() => {
         if (dom) {
-            if ((isActive || isHover) && enableEdit) {
+            if (isActive) {
+                dom.style.border = "1px solid "+ componentColor
+            } else if (isHover) {
                 dom.style.border = "1px dashed "+ componentColor
             }
             else dom.style.border = ""
         }
-    }, [dom, isActive, isHover, enableEdit]);
+    }, [dom, isActive, isHover]);
 
     const getPos = useCallback((dom: HTMLElement) => {
         const { top, left, bottom } = dom
@@ -98,7 +99,7 @@ export const RenderNode = ({ render }) => {
     return (
         <>
             {
-                ((isHover || isActive) && enableEdit)
+                (isHover || isActive)
                     ?
                     ReactDOM.createPortal(
                         <div
