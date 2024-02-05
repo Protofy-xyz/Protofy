@@ -15,7 +15,7 @@
     "build": "cd ../.. && yarn build && cd apps/next && next build",
     "serve": "NODE_ENV=production next start --port 4000",
     "lint": "next lint",
-    "test": "yarn test:deps && jest --colors --detectOpenHandles",
+    "test": "yarn test:deps && jest",
     "test:deps": "npx playwright install && npx playwright install-deps"
   },
   "dependencies": {

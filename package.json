@@ -53,9 +53,10 @@
     "stop": "pm2 stop all",
     "logs": "pm2 logs",
     "create-environment": "node copy.js",
-    "test:all": "yarn workspaces foreach run test",
-    "test:all:debug": "TEST_DEBUG=true yarn test:all",
-    "test:global": "yarn workspace tests test",
+    "test:all:long": "LONG_TESTS=true yarn test:all",
+    "test:all": "FORCE_COLOR=1 yarn workspaces foreach run test",
+    "test:all:debug": "FORCE_COLOR=1 TEST_DEBUG=true yarn test:all",
+    "test:global": "FORCE_COLOR=1 yarn workspace tests test",
     "test:e2egen": "npx playwright codegen"
   },
   "resolutions": {
