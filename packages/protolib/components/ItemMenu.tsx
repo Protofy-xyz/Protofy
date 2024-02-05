@@ -62,7 +62,7 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
                                 return (!action.menus && type === "item" || action.menus && action.menus?.includes(type)) && action.isVisible && action.isVisible(element) && <MenuButton id={`more-btn-${sourceUrl.split("/").slice(-1)}-option-${i+1}`} type={type} key={i} text={action.text} Icon={action.icon} onPress={action.action}></MenuButton>
                             })}
                             {false && enableAddToInitialData && <MenuButton type={type} text={"Add to initial data"} Icon={FilePlus} onPress={(data, e) => { e.stopPropagation(); addToInitialData(data), setMenuOpened(false) }}></MenuButton>}
-                            {hideDeleteButton ? <></> : <MenuButton type={type} text={"Delete"} Icon={Trash2} disabled={!deleteable(element)} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>}
+                            {hideDeleteButton ? <></> : <MenuButton type={type} text={"Delete"} id={`more-btn-${sourceUrl.split("/").slice(-1)}-delete`} Icon={Trash2} disabled={!deleteable(element)} onPress={(data, e) => { e.stopPropagation(); setOpen(true); setMenuOpened(false) }}></MenuButton>}
                         </YStack>
                     </YStack>
                 </Tinted>

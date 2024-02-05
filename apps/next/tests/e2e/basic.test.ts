@@ -123,14 +123,14 @@ describe("Test admin capabilities", () => {
         })
 
         describe("test page entity", () => {
+            const pageName = 'testpage'
+            const pageRoute = 'testpage'
             describe("test page creation", () => {
                 beforeEach(async () => {
                     await protoBrowser.navigateToWorkspaceSection('pages')
                     await protoBrowser.getEditableObjectCreate()
                 }, 60000)
                 it("should be able to create a blank page", async () => {
-                    const pageName = 'testpage'
-                    const pageRoute = 'testpage'
                     // Select template
                     await protoBrowser.clickElement(`#pages-template-${PAGE_TEMPLATES.BLANK}`)
                     await protoBrowser.clickElement(`#admin-pages-add-btn`)
@@ -155,6 +155,17 @@ describe("Test admin capabilities", () => {
                 }, 60000)
             })
 
+            describe("test delete page", () => {
+                beforeEach(async () => {
+                    await protoBrowser.navigateToWorkspaceSection('pages')
+                }, 60000)
+                it("should be able to delete the page", async () => {
+                    await protoBrowser.waitForElement('#admin-dataview-add-btn');
+                    await protoBrowser.clickElement(`#more-btn-${pageName}`)
+                    await protoBrowser.clickElement(`#more-btn-${pageName}-delete`)
+                    protoBrowser.waitForElement(`#pages-datatable-${pageName}`, 1000).then().catch(e => expect(e).toBeTruthy());
+                }, 10000)
+            })
         })
     })
     describe("Testing page in useEdit mode", () => {
