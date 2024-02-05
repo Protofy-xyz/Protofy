@@ -363,8 +363,13 @@ const FlowsBase = ({
         var parentId
         var nodeId = payload.nodeId
         var param = payload.param
-        var value = payload.value
         var topicParams
+        var value = payload.value
+
+        try {
+            value = JSON.parse(value)
+        } catch (e) { }
+
         switch (action) {
             case 'delete-node':
                 const deletedNodes = payload

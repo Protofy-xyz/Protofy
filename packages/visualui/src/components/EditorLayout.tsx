@@ -71,7 +71,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
             action: 'edit-node',
             nodeId: nodeId,
             newChildValue: newChildValue,
-			      debounce: true
+            debounce: true
           }
         } else if (movedParent_diff) { // moved changing parent
           const nodeId_moved = movedParent_diff.path[0];
@@ -130,6 +130,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
     const nodeId = flowData.nodeId;
     const value = flowData.value;
     const modifiedKey = flowData.param;
+
     switch (action) {
       case 'delete-node':
         if (flowData.deletedNodeType != "JsxElement") return
@@ -154,11 +155,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
         if (!modifiedKey) return
         try {
           actions.setOptions(options => options['skipTopic'] = true)
-          let val = value;
-          try {
-            val = JSON.parse(val)
-          } catch (e) { }
-          actions.setProp(nodeId, (props) => props[modifiedKey] = val)
+          actions.setProp(nodeId, (props) => props[modifiedKey] = value)
           actions.setCustom(nodeId, (custom) => custom[modifiedKey] = "JsxText")
           const deleteKey = flowData?.deleteKey
           if (deleteKey) {
