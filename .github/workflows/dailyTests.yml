@@ -1,6 +1,8 @@
-name: Testing workflow Protofy CI
+name: Protofy CI Daily tests
 on:
-  workflow_dispatch: # This allows manual triggering of the workflow
+  schedule:
+    - cron: '0 8,20 * * *'  # Runs at  8 AM, 20 PM UTC every day
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   test:
@@ -29,7 +31,7 @@ jobs:
     - name: Run tests 
       run: |
         set -o pipefail
-        sudo yarn test:all | tee ${{ runner.temp }}/test_output.txt
+        sudo yarn test:all:long | tee ${{ runner.temp }}/test_output.txt
 
     - name: Get test report
       if: always() # executed always even if job fails
@@ -53,6 +55,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
   
+    - name: Set up Node.js 20.4.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.4.x'
+
     - name: Download all artifacts
       uses: actions/download-artifact@v3
 
@@ -66,6 +73,21 @@ jobs:
         echo "TEST_REPORT<<EOF" >> $GITHUB_ENV
         cat reports/testsReport.txt | sed 's/\x1b\[[0-9;]*m//g' >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
+    
+    - name: Get shorten GitHub sha
+      run: echo "GITHUB_SHORT_SHA=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
+
+    - name: Get skipped status to retrieve color and save it to environment variable
+      run: |
+        if grep -q "🚧 PASS" reports/testsReport.txt; then
+          echo "SKIPPED=True" >> $GITHUB_ENV
+          echo "TEST_COLOR=#ffa600" >> $GITHUB_ENV
+          echo "TEST_AVATAR_COLOR=orange" >> $GITHUB_ENV
+        else
+          echo "SKIPPED=False" >> $GITHUB_ENV
+          echo "TEST_COLOR=#00e065" >> $GITHUB_ENV
+          echo "TEST_AVATAR_COLOR=green" >> $GITHUB_ENV
+        fi
 
     - name: Test Success
       uses: rjstone/discord-webhook-notify@v1
@@ -74,26 +96,14 @@ jobs:
           severity: info
           details: Test Succeeded!
           username: ${{ github.event.pusher.name }}
-          color: '#00e065'
-          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_green.png
+          color: ${{ env.TEST_COLOR }}
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_${{ env.TEST_AVATAR_COLOR}}.png
           description: |
+            🚨🚨🚨Long Tests Report🚨🚨🚨
+
             ${{ env.TEST_REPORT }}
-            ----------------------
-            Event: push
-            Repo: Protofy-xyz/Protofy
-            Ref: ${{ github.ref }}
-            Workflow: ${{ github.workflow }}
-            Author: ${{ github.event.head_commit.author.name }}
-            Committer: ${{ github.event.head_commit.committer.name }}
-            Pusher: ${{ github.event.pusher.name }}
-            Commit URL: ${{ github.event.head_commit.url }}
-            Commit Message: ${{ github.event.head_commit.message }}
 
-            Tests Succeeded!
-
-            Severity: Informational
-
-          footer: Succeed.
+          footer: "Workflow: ${{ github.workflow }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Failure
@@ -106,23 +116,11 @@ jobs:
           color: '#f13932'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_red.png
           description: |
+            🚨🚨🚨Long Tests Report🚨🚨🚨
+
             ${{ env.TEST_REPORT }}
-            
-            Event: push
-            Repo: Protofy-xyz/Protofy
-            Ref: ${{ github.ref }}
-            Workflow: ${{ github.workflow }}
-            Author: ${{ github.event.head_commit.author.name }}
-            Committer: ${{ github.event.head_commit.committer.name }}
-            Pusher: ${{ github.event.pusher.name }}
-            Commit URL: ${{ github.event.head_commit.url }}
-            Commit Message: ${{ github.event.head_commit.message }}
 
-            Tests Error!
-
-            Severity: Error
-
-          footer: You must check your changes.
+          footer: "Workflow: ${{ github.workflow }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Test Cancelled
@@ -135,19 +133,9 @@ jobs:
           color: '#ffa600'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_orange.png
           description: |
-            Event: push
-            Repo: Protofy-xyz/Protofy
-            Ref: ${{ github.ref }}
-            Workflow: ${{ github.workflow }}
-            Author: ${{ github.event.head_commit.author.name }}
-            Committer: ${{ github.event.head_commit.committer.name }}
-            Pusher: ${{ github.event.pusher.name }}
-            Commit URL: ${{ github.event.head_commit.url }}
-            Commit Message: ${{ github.event.head_commit.message }}
+            🚨🚨🚨Long Tests Report🚨🚨🚨
 
-            Job cancelled!
+            *Long Tests have beeen cancelled!*
 
-            Severity: Warning
-
-          footer: Cancelled Job.
+          footer: "Workflow: ${{ github.workflow }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
