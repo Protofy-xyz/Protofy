@@ -50,13 +50,13 @@ const MessageList = ({ data, topic }) => {
 
   return <XStack p="$3" ml={"$0"} ai="center" jc="center">
     <YStack>
-      <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" br="$6" width="fit-content" ml={"$3"}>
+      <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" width="fit-content" ml={"$3"}>
         <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
           <Chip text={types[type].name} color={types[type].color} h={25} bold/>
           <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{from}</Text>
         </XStack>
       </XStack>
-      <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" br="$6" width="fit-content" ml={"$3"}>
+      <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" width="fit-content" ml={"$3"}>
         <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
           <Tag color="var(--color7)" strokeWidth={2} size={20} />
           <Text ml={"$2"} o={0.9} fontSize={14} fontWeight={"500"}>{data.msg}</Text>
@@ -101,10 +101,10 @@ export const LogPanel = () => {
     return parsed
   }
 
-  return <ScrollView br="$6" bc="transparent" f={1}>
+  return <ScrollView bc="transparent" f={1}>
     {messages.map((m, i) => {
       const data = parseMessage(m.message)
-      return <XStack bc="transparent" hoverStyle={{ bc: "$" + tint + "4" }} key={i} btw={0} borderTopLeftRadius={!i ? "$6" : "$0"} borderTopRightRadius={!i ? "$6" : "$0"} bbw={i < (messages.length - 1) ? 1 : 0} boc={"$color4"}>
+      return <XStack bc="transparent" hoverStyle={{ bc: "$" + tint + "4" }} key={i} btw={0} bbw={1} boc={"$color4"}>
         <Tinted>
           <MessageList data={data} topic={m.topic} />
         </Tinted>
