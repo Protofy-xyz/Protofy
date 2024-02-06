@@ -16,7 +16,7 @@ export function AdminPage({ pageSession, title, children }: any) {
   usePrompt(() => `The user is browsing an admin page in the admin panel. The title of the admin page is: "${title}"`)
 
   return (
-    <Page title={"Protofy - " + title}>
+    <Page title={"Protofy - " + title} backgroundColor={'$bgPanel'}>
       <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName }}>
         <AdminPanel>
           {children}
