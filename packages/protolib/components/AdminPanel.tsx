@@ -67,9 +67,14 @@ export const LogPanel = () => {
   const { topic, client, message } = useSubscription('#');
   const [messages, setMessages] = useAtom(BusMessages)
   useUpdateEffect(() => {
-    setMessages([message, ...messages.slice(maxLog)])
+    // console.log('message: ', message)
+    setMessages([message, ...messages.slice(0, maxLog)])
   }, [message])
 
+  // useUpdateEffect(() => {
+  //   console.log('messages: ', messages)
+  // }, [messages])
+  
   const { tint } = useTint()
 
   const parseMessage = (msg) => {
@@ -122,7 +127,7 @@ export const AdminPanel = ({ children }) => {
         <>
           <XStack ai="center">
             <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
-            {/* <InteractiveIcon onPress={() => setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })} IconColor="var(--color)" Icon={Activity}></InteractiveIcon> */}
+            <InteractiveIcon onPress={() => setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })} IconColor="var(--color)" Icon={Activity}></InteractiveIcon>
           </XStack>
         </>
       }
