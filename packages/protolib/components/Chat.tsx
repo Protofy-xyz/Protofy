@@ -217,7 +217,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
 
     return (
         <Tinted>
-            <div ref={chatContainer} onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()} style={{ transform: 'none', zIndex: zIndex, bottom: 0, right: 0, position: "fixed" }}>
+            <div ref={chatContainer} onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()} style={{ transform: 'none', zIndex: 100000, bottom: 0, right: 0, position: "fixed" }}>
                 <div style={{ position: 'absolute' }}>
                     <Widget
                         title="Asistant"
