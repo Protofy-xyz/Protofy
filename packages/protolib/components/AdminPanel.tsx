@@ -1,6 +1,6 @@
-import { XStack, YStack, Text, ScrollView } from 'tamagui'
+import { XStack, YStack, Text, ScrollView, Chip } from 'tamagui'
 import { PanelLayout } from 'app/layout/PanelLayout'
-import { SelectList, useWorkspaces, useUserSettings, useSession, PanelMenu, MainPanel, JSONViewer, useTint} from 'protolib'
+import { SelectList, useWorkspaces, useUserSettings, useSession, PanelMenu, MainPanel, JSONViewer, useTint } from 'protolib'
 import Workspaces from 'app/bundles/workspaces'
 import { InteractiveIcon } from './InteractiveIcon'
 import { Activity, Radio, Tag } from '@tamagui/lucide-icons'
@@ -36,36 +36,34 @@ export const RightPanelAtom = atom(0)
 export const BusMessages = atom([])
 
 const MessageList = ({ data, topic }) => {
+  const from = topic.split("/")[1]
+  const type = topic.split("/")[2]
   return <XStack p="$3" ml={"$0"} ai="center" jc="center">
-      {/* <YStack jc="center" mr="$4"><MessageSquare color="var(--color7)" strokeWidth={1} /></YStack> */}
-      <YStack>
-          <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" br="$6" width="fit-content" ml={"$3"}>
-              <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
-                  <Radio color="var(--color7)" strokeWidth={2} size={20} />
-                  <Text ml={"$2"} o={0.9} fontSize={14} fontWeight={"500"}>{topic}</Text>
-              </XStack>
-              {/* <Chip width="fit-content" text={m.topic} color={'$color5'} /> */}
-          </XStack>
-          <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" br="$6" width="fit-content" ml={"$3"}>
-              <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
-                  <Tag color="var(--color7)" strokeWidth={2} size={20} />
-                  <Text ml={"$2"} o={0.9} fontSize={14} fontWeight={"500"}>{data.msg}</Text>
-              </XStack>
-              {/* <Chip width="fit-content" text={m.topic} color={'$color5'} /> */}
-          </XStack>
-          {/* <Chip width="fit-content" text={m.topic} color={'$color5'} /> */}
-          {/* <Text>{m.message}</Text> */}
-          <JSONViewer
-              onChange={() => { }}
-              editable={false}
-              data={data}
-              key={JSON.stringify(data)}
-              collapsible
-              compact={false}
-              defaultCollapsed={true}
-          //collapsedNodes={{0:{root: true}}}
-          />
-      </YStack>
+    {/* <YStack jc="center" mr="$4"><MessageSquare color="var(--color7)" strokeWidth={1} /></YStack> */}
+    <YStack>
+      <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" br="$6" width="fit-content" ml={"$3"}>
+        <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
+          <Radio color="var(--color7)" strokeWidth={2} size={20} />
+          <Text ml={"$2"} o={0.9} fontSize={14} fontWeight={"500"}>{from}</Text>
+        </XStack>
+      </XStack>
+      <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" br="$6" width="fit-content" ml={"$3"}>
+        <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
+          <Tag color="var(--color7)" strokeWidth={2} size={20} />
+          <Text ml={"$2"} o={0.9} fontSize={14} fontWeight={"500"}>{data.msg}</Text>
+        </XStack>
+      </XStack>
+      <JSONViewer
+        onChange={() => { }}
+        editable={false}
+        data={data}
+        key={JSON.stringify(data)}
+        collapsible
+        compact={false}
+        defaultCollapsed={true}
+      //collapsedNodes={{0:{root: true}}}
+      />
+    </YStack>
   </XStack>
 }
 
@@ -81,7 +79,7 @@ export const LogPanel = () => {
   // useUpdateEffect(() => {
   //   console.log('messages: ', messages)
   // }, [messages])
-  
+
   const { tint } = useTint()
 
   const parseMessage = (msg) => {
@@ -95,14 +93,14 @@ export const LogPanel = () => {
   }
 
   return <ScrollView br="$6" bc="$background" f={1}>
-                      {messages.map((m, i) => {
-                        const data = parseMessage(m.message)
-                        return <XStack bc="transparent" hoverStyle={{ bc: "$" + tint + "4" }} key={i} btw={0} borderTopLeftRadius={!i?"$6":"$0"} borderTopRightRadius={!i?"$6":"$0"} bbw={i<(messages.length-1) ? 1 : 0} boc={"$color4"}>
-                            <Tinted>
-                                <MessageList data={data} topic={m.topic} />
-                            </Tinted>
-                        </XStack>
-                    })}
+    {messages.map((m, i) => {
+      const data = parseMessage(m.message)
+      return <XStack bc="transparent" hoverStyle={{ bc: "$" + tint + "4" }} key={i} btw={0} borderTopLeftRadius={!i ? "$6" : "$0"} borderTopRightRadius={!i ? "$6" : "$0"} bbw={i < (messages.length - 1) ? 1 : 0} boc={"$color4"}>
+        <Tinted>
+          <MessageList data={data} topic={m.topic} />
+        </Tinted>
+      </XStack>
+    })}
   </ScrollView>
 }
 
