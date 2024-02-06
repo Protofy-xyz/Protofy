@@ -833,6 +833,7 @@ textarea {
 
 *::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
   background-color: transparent;
 }
 
@@ -843,7 +844,7 @@ textarea {
 
 *::-webkit-scrollbar-thumb {
   border-radius: 8px;
-  background-color: var(--color10);
+  background-color: var(--gray5);
   box-sizing: border-box
 }
 
