@@ -147,6 +147,10 @@ export class ProtoBrowser {
         await this.getPage().goto(HOST_URL + `admin/${entity}`);
     }
 
+    async navigateToDocumentation() {
+        await this.getPage().goto(HOST_URL + `documentation`);
+    }
+
     async getEditableObjectCreate() {
         /*open create dialog */
         await this.clickElement('#admin-dataview-add-btn');

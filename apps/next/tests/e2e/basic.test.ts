@@ -36,6 +36,10 @@ describe("Basic tests", () => {
     afterEach(async () => {
         await protoBrowser?.close()
     })
+    it("should have a documentation page", async () => {
+        await protoBrowser.navigateToDocumentation()
+        expect(await protoBrowser.waitForElement('#__next')).toBeTruthy();
+    }, 30000)
     it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
         expect(await protoBrowser.getUrlPath()).toBe('/auth/login');
