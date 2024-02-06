@@ -1,0 +1,22 @@
+{
+  "name": "nextra",
+  "version": "1.0.0",
+  "description": "Documentation service",
+  "scripts": {
+    "dev": "next -p 7000",
+    "build": "next build",
+    "start": "next start -p 7700",
+    "service-start": "NODE_ENV=production pm2 start pm2.config.js",
+    "service-start-dev": "pm2 start pm2.config.js",
+    "logs": "pm2 logs",
+    "stop": "pm2 stop nextra",
+    "kill": "pm2 kill",
+    "status": "pm2 status nextra"
+  },
+  "dependencies": {
+    "next": "^13.5.2",
+    "nextra": "^2.13.3",
+    "nextra-theme-docs": "^2.13.3",
+    "pm2": "^5.3.0"
+  }
+}

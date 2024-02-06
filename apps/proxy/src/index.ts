@@ -65,7 +65,6 @@ customResolver2['priority'] = 101;
 var customResolver3 = function (host, url, req) {
     addClientIpHeader(req);
 
-    // Verifica si la URL comienza con /admin/
     if (/^\/admin\//.test(url)) {
         return getEnvironment('admin', host, req);
     }
@@ -73,6 +72,17 @@ var customResolver3 = function (host, url, req) {
 };
 
 customResolver3['priority'] = 103;
+
+var customResolver4 = function (host, url, req) {
+    addClientIpHeader(req);
+    
+    if (/^\/documentation/.test(url)) {
+        return getEnvironment('docs', host, req);
+    }
+
+};
+
+customResolver4['priority'] = 104;
 
 var devResolver = function (host, url, req) {
     if (isProduction && host.startsWith('dev.')) {
@@ -100,6 +110,7 @@ var proxy = new Redbird({
         customResolver1,
         customResolver2,
         customResolver3,
+        customResolver4,
         function (host, url, req) {
             return getEnvironment('frontend', host, req);
         }

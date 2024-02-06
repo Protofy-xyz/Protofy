@@ -44,7 +44,7 @@
     "add-user": "yarn workspace api add-user",
     "pull": "git pull && yarn workspaces foreach run pull",
     "fix": "manypkg fix",
-    "build": "yarn workspaces foreach --exclude next-app --exclude electron-app --exclude admin run build",
+    "build": "yarn workspaces foreach --exclude next-app --exclude electron-app --exclude nextra --exclude admin run build",
     "check-deps": "check-dependency-version-consistency .",
     "status": "pm2 status",
     "monit": "pm2 monit",

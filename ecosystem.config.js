@@ -4,6 +4,7 @@ module.exports = {
       ...require('./apps/api/pm2.config.js').apps,
       ...require('./apps/proxy/pm2.config.js').apps,
       ...require('./apps/next/pm2.config.js').apps,
-      ...require('./apps/admin/pm2.config.js').apps
+      ...require('./apps/admin/pm2.config.js').apps,
+      ...require('./apps/nextra/pm2.config.js').apps
     ]
 };
