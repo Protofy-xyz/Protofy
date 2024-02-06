@@ -101,7 +101,7 @@ export const LogPanel = () => {
     return parsed
   }
 
-  return <ScrollView br="$6" bc="$color1" f={1}>
+  return <ScrollView br="$6" bc="transparent" f={1}>
     {messages.map((m, i) => {
       const data = parseMessage(m.message)
       return <XStack bc="transparent" hoverStyle={{ bc: "$" + tint + "4" }} key={i} btw={0} borderTopLeftRadius={!i ? "$6" : "$0"} borderTopRightRadius={!i ? "$6" : "$0"} bbw={i < (messages.length - 1) ? 1 : 0} boc={"$color4"}>
