@@ -8,5 +8,6 @@ export const EventsAPI = AutoAPI({
     prefix: '/adminapi/v1/',
     dbName: 'events',
     disableEvents: true,
-    requiresAdmin: ['*']
+    requiresAdmin: ['*'],
+    logLevel: "debug"
 })

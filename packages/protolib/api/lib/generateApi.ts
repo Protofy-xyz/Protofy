@@ -22,11 +22,12 @@ type AutoAPIOptions = {
     disableEvents?: boolean,
     paginatedRead?: boolean,
     requiresAdmin?: string[],
-    extraData?: any
+    extraData?: any,
+    logLevel?:string
 }
 //CreateAPI contract has evolved into a complex thing, this is a better/alternative wrapper
 //that reduces complexity by using a options object 
-export const AutoAPI = ({ modelName, modelType, initialDataDir, prefix = "/api/v1/", dbName, transformers = {}, connectDB, getDB, operations, single, disableEvents, paginatedRead, requiresAdmin, extraData = {} }: AutoAPIOptions) => {
+export const AutoAPI = ({ modelName, modelType, initialDataDir, prefix = "/api/v1/", dbName, transformers = {}, connectDB, getDB, operations, single, disableEvents, paginatedRead, requiresAdmin, extraData = {}, logLevel = 'info' }: AutoAPIOptions) => {
     return CreateApi(
         modelName,
         modelType,
@@ -38,7 +39,7 @@ export const AutoAPI = ({ modelName, modelType, initialDataDir, prefix = "/api/v
         getDB,
         operations,
         single,
-        { disableEvents, paginatedRead, requiresAdmin, extraData }
+        { disableEvents, paginatedRead, requiresAdmin, extraData, logLevel }
     )
 }
 /*
@@ -152,6 +153,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 } // event payload, event-specific data
             }, getServiceToken())
         }
+        logger[options.logLevel ?? 'info']({data: entityModel.read()}, entityName+" created: "+entityModel.getId())
         res.send(await entityModel.readTransformed(transformers))
     }));
 
@@ -216,6 +218,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 } // event payload, event-specific data
             }, getServiceToken())
         }
+        logger[options.logLevel ?? 'info']({data: entityModel.read()}, entityName+" updated: "+entityModel.getId())
         res.send(await entityModel.readTransformed(transformers))
     }));
 
@@ -251,6 +254,8 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
                 } // event payload, event-specific data
             }, getServiceToken())
         }
+
+        logger[options.logLevel ?? 'info']({data: entityModel.read()}, entityName+" deleted: "+entityModel.getId())
         res.send({ "result": "deleted" })
     }));
 }
