@@ -3,7 +3,7 @@ import { PanelLayout } from 'app/layout/PanelLayout'
 import { SelectList, useWorkspaces, useUserSettings, useSession, PanelMenu, MainPanel, JSONViewer, useTint, Chip } from 'protolib'
 import Workspaces from 'app/bundles/workspaces'
 import { InteractiveIcon } from './InteractiveIcon'
-import { Activity, Radio, Tag } from '@tamagui/lucide-icons'
+import { Activity, Radio, Tag, Hash } from '@tamagui/lucide-icons'
 import { Tinted } from './Tinted'
 import { atom, useAtom } from 'jotai';
 import { useEffect, useState } from 'react'
@@ -58,7 +58,7 @@ const MessageList = ({ data, topic }) => {
       </XStack>
       <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" width="fit-content" ml={"$3"}>
         <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
-          <Tag color="var(--color7)" strokeWidth={2} size={20} />
+          <Hash color="var(--color7)" strokeWidth={2} size={20} />
           <Text ml={"$2"} o={0.9} fontSize={14} fontWeight={"500"}>{data.msg}</Text>
         </XStack>
       </XStack>
