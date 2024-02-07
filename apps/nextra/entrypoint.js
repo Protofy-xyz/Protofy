@@ -12,7 +12,7 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  const PORT = dev ? 7000 : 7700;
+  const PORT = dev ? 7600 : 7700;
   server.listen(PORT, (err) => {
     if (err) throw err;
     console.log(`> Ready on http://localhost:${PORT}`);

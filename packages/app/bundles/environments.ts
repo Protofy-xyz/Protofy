@@ -5,7 +5,7 @@ export const environments = {
         frontend: 'http://localhost:3000',
         websocket: 'http://localhost:3002',
         admin: 'http://localhost:3003',
-        docs: 'http://localhost:7000'
+        docs: 'http://localhost:7600'
     },
     prod: {
         api: 'http://localhost:4001',

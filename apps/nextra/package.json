@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Documentation service",
   "scripts": {
-    "dev": "next -p 7000",
+    "dev": "next -p 7600",
     "build": "next build",
     "start": "next start -p 7700",
     "service-start": "NODE_ENV=production pm2 start pm2.config.js",
