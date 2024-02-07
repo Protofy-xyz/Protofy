@@ -3,6 +3,7 @@ export default {
     project: {
       link: 'https://github.com/Protofy-xyz/Protofy'
     },
-    docsRepositoryBase: 'https://github.com/Protofy-xyz/Protofy/tree/main/apps/nextra'
+    docsRepositoryBase: 'https://github.com/Protofy-xyz/Protofy/tree/main/apps/nextra',
+    footer: false
     // ... other theme options
   }
