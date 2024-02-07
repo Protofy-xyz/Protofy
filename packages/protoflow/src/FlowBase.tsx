@@ -743,7 +743,7 @@ const FlowsBase = ({
                         var value: any = initialNodeData[key]
                         var keyName = `prop-${key}`
 
-                        if (typeof value == "string") {
+                        if (typeof value == "string" && key != "children") {
                             value = '"' + value + '"'
                         } else if (typeof value == "object") {
                             value = "{" + JSON.stringify(value) + "}"
@@ -762,7 +762,6 @@ const FlowsBase = ({
                     }, {
                         name: nodeName
                     })
-
                     var newNodesData = { ...nodeData, [nodeId]: addedNodeData }
                     var customNode = _customComponents.find((n: any) => n.id == nodeName)
                     if (customNode) { //Check if node has mask
