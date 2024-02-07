@@ -109,7 +109,7 @@ export default {
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(CheckCircle, 'Check', 'CheckCircle'),
   ...cw(Code, 'Code', 'Code', { children: "helloworld" }, {}, {}, true),
-  ...cw(CodeInline, 'Terminal', 'CodeInLine', { children: "helloworld" }, {}, {}, true),
+  ...cw(CodeInline, 'Terminal', 'CodeInline', { children: "helloworld" }, {}, {}, true),
   ...cw(ColorToggleButton, 'ToggleRight', 'ColorToggleButton'),
   ...cw(Container, 'Box', 'Container', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ContainerLarge, 'Package', 'ContainerLarge', {}, {}, { children: <BasicPlaceHolder /> }),
