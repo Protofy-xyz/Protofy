@@ -14,6 +14,7 @@ export class Source {
       this.ast = ast
   }
 
+  // sourceCode -> Ast
   static parse(source: string): Source {
       const project = new Project({
           useInMemoryFileSystem: true,
@@ -25,6 +26,17 @@ export class Source {
           },
       })
       return new Source(project.createSourceFile('_temp2.tsx', source, { overwrite: true }))
+  }
+
+  // Ast -> craftNodes
+  data(customIdentifier?: () => string | number): any { // Gets craftJS nodes
+    if (customIdentifier) {
+        this.identifyElements(customIdentifier)
+    }
+    const content = this.getContent();
+    let craftNodes = Source.toCraftNodes(content)
+    craftNodes = this.addCustomProps(craftNodes) // Adds imports
+    return craftNodes;
   }
 
   getContent(): Node {
@@ -377,16 +389,6 @@ export class Source {
       }
       convertText(getCurrentJsxExpressions())
       return this
-  }
-
-  data(customIdentifier?: () => string | number): any { // Gets craftJS nodes
-      if (customIdentifier) {
-          this.identifyElements(customIdentifier)
-      }
-      const content = this.getContent();
-      let craftNodes = Source.toCraftNodes(content)
-      craftNodes = this.addCustomProps(craftNodes) // Adds imports
-      return craftNodes;
   }
 
   static reactElementFactory(craftNode: any, childElem: string): string {
