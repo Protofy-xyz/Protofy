@@ -13,6 +13,13 @@ export default {
     link: 'https://github.com/Protofy-xyz/Protofy'
   },
   docsRepositoryBase: 'https://github.com/Protofy-xyz/Protofy/tree/main/apps/nextra',
-  footer: false
+  footer: { text: (
+    <span>
+      {new Date().getFullYear()} ©{' '}
+      <a href="https://protofy.xyz" target="_blank">
+        Protofy
+      </a>
+    </span>
+  )}
   // ... other theme options
 }
