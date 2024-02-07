@@ -266,7 +266,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                             } else if (result.data.error) {
                                 var errorMsg = result.data.error.message
                                 if (result.data.error.code == "invalid_api_key") {
-                                    errorMsg = errorMsg + '\nPlease add your key on "apps/admin-api/.env": \nOPENAI_API_KEY={YOUR KEY HERE}'
+                                    errorMsg = errorMsg + '\nPlease add your key on ".env": \nOPENAI_API_KEY={YOUR KEY HERE}'
                                 }
                                 addResponseMessage(errorMsg)
                             } else {
