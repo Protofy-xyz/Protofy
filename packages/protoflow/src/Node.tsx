@@ -267,7 +267,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                             })
                         }}
                         value={tmpRangeValue} min={min} max={max} />
-                    {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '5px', left: '7px', marginRight: '-8px', width: '10px' }}>{post(tmpRangeValue)}</div> : null}
+                    {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '5px', left: '7px', marginRight: '-8px', width: '18px' }}>{post(tmpRangeValue)}</div> : null}
                 </>
             case 'boolean':
                 const stringToBolean = (myVar) => {
@@ -320,7 +320,8 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         onBlur={param.onBlur}
                         disabled={disabled || param.isDisabled}
                         style={{
-                            marginRight: ["case", "child"].includes(param.fieldType) ? "20px" : "0px"
+                            marginRight: ["case", "child"].includes(param.fieldType) ? "20px" : "0px",
+                            paddingLeft: type && icons[type] ? "30px": undefined
                         }}>
                         {param.error ? <div style={{ alignItems: 'center', marginTop: '5px', display: 'flex' }}>
                             <AlertCircle size={"14px"} color='red' style={{ alignSelf: 'center', marginRight: '5px' }} />
