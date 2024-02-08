@@ -247,18 +247,27 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 const max = param.data?.max ? param.data.max : 100
                 const step = param.data?.step
                 const defaultValue = param.data?.defaultValue
-                const initialRangeValue = nodeData[param.field] ? nodeData[param.field] : (defaultValue ?? min)
-                const [tmpRangeValue, setTmpRangeValue] = React.useState(initialRangeValue);
+                const initialRangeValue = nodeData[param.field]?.value ?? nodeData[param.field] ?? (defaultValue ?? min)
+                const [tmpRangeValue, setTmpRangeValue] = React.useState(Number(pre(initialRangeValue)));
                 return <>
                     <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: useTheme('interactiveColor'), height: '5px', borderWidth: '4px solid blue', backgroundColor: useTheme("inputBackgroundColor"), borderRadius: '10px' }}
                         step={step}
-                        onChange={(event: any) => setTmpRangeValue(event.target.value)}
+                        onChange={(event: any) => setTmpRangeValue(Number(event.target.value))}
                         onMouseUp={() => {
                             dataNotify({ id: id, paramField: param.field, newValue: tmpRangeValue });
-                            setNodeData(id, { ...nodeData, [param.field]: tmpRangeValue })
+                            setNodeData(id, { 
+                                ...nodeData, [param.field]: isParameter || isProp ? 
+                                    { 
+                                        ...nodeData[param.field], 
+                                        key: nodeData[param.field]?.key ?? param.label, 
+                                        value: post(tmpRangeValue),
+                                        kind: param.data?.kind ?? 'NumericLiteral'
+                                    } 
+                                    : post(tmpRangeValue) 
+                            })
                         }}
                         value={tmpRangeValue} min={min} max={max} />
-                    {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '5px', left: '7px', marginRight: '-8px', width: '10px' }}>{nodeData[param.field] ? nodeData[param.field] : initialRangeValue}</div> : null}
+                    {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '5px', left: '7px', marginRight: '-8px', width: '10px' }}>{post(tmpRangeValue)}</div> : null}
                 </>
             case 'boolean':
                 const stringToBolean = (myVar) => {

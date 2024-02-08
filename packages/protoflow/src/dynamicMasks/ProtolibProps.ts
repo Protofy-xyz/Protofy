@@ -32,10 +32,17 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
         { field: 'prop-justifyContent', label: 'justifyContent', type: 'select', fieldType: 'prop', data: [defaultValue, ...justifyContentAlignments], static: true },
         { field: 'prop-alignContent', label: 'alignContent', type: 'select', fieldType: 'prop', data: [defaultValue, ...justifyContentAlignments], static: true },
         { field: 'prop-alignItems', label: 'alignItems', type: 'select', fieldType: 'prop', data: [defaultValue, ...alignItemsAlignments], static: true },
-        { field: 'prop-margin', label: 'margin', type: 'select', fieldType: 'prop', data: sizes ? [defaultValue, ...sizes] : [], static: true },
+        {
+            field: 'prop-margin', label: 'margin', type: 'range', fieldType: 'prop', data: {
+                step: 1,
+                min: 1,
+                max: 20,
+                kind: "StringLiteral"
+            }, pre: (s) => s[0] == "$" ? s.split("$")[1] : s, post: (s) => "$" + s, static: true
+        },
         { field: 'prop-padding', label: 'padding', type: 'select', fieldType: 'prop', data: sizes ? [defaultValue, ...sizes] : [], static: true },
         { field: 'prop-space', label: 'space', type: 'select', fieldType: 'prop', data: spaces ? [defaultValue, ...spaces] : [], static: true },
-        { field: 'prop-opacity', label: 'opacity', type: 'range', fieldType: 'prop', data: {min: 0, max: 1, step: 0.1, defaultValue: 1}, static: true },
+        { field: 'prop-opacity', label: 'opacity', type: 'range', fieldType: 'prop', data: { min: 0, max: 1, step: 0.1, defaultValue: 1 }, static: true },
         { field: 'prop-width', label: 'width', type: 'input', fieldType: 'prop', static: true },
         { field: 'prop-height', label: 'height', type: 'input', fieldType: 'prop', static: true },
         { field: 'prop-zi', label: 'zi', type: 'select', fieldType: 'prop', data: zIndexes ? [defaultValue, ...zIndexes] : [], static: true },
