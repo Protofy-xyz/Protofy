@@ -248,11 +248,11 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 const step = param.data?.step
                 const defaultValue = param.data?.defaultValue
                 const initialRangeValue = nodeData[param.field]?.value ?? nodeData[param.field] ?? (defaultValue ?? min)
-                const [tmpRangeValue, setTmpRangeValue] = React.useState(Number(pre(initialRangeValue)));
+                const [tmpRangeValue, setTmpRangeValue] = React.useState(pre(initialRangeValue));
                 return <>
                     <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: useTheme('interactiveColor'), height: '5px', borderWidth: '4px solid blue', backgroundColor: useTheme("inputBackgroundColor"), borderRadius: '10px' }}
                         step={step}
-                        onChange={(event: any) => setTmpRangeValue(Number(event.target.value))}
+                        onChange={(event: any) => setTmpRangeValue(event.target.value)}
                         onMouseUp={() => {
                             dataNotify({ id: id, paramField: param.field, newValue: tmpRangeValue });
                             setNodeData(id, { 
