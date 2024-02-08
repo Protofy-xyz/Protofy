@@ -141,7 +141,7 @@ const Home = (props) => {
                 <Text fontWeight="800">forms and diagrams</Text>
                 <Text fontWeight="400">, </Text>
                 <Text fontWeight="800">programming </Text>
-                <Text fontWeight="400">, or through  </Text>
+                <Text fontWeight="400">, or through </Text>
                 <Text fontWeight="800">ChatGPT.</Text>
               </SectionBlock>
             </HoveredGroup>
@@ -176,7 +176,7 @@ const Home = (props) => {
                     <Text fontWeight="800">MQTT </Text>
                     <Text fontWeight="400">and </Text>
                     <Text fontWeight="800">websockets </Text>
-                    <Text fontWeight="400">provides real time messaging, server side events and  </Text>
+                    <Text fontWeight="400">provides real time messaging, server side events and </Text>
                     <Text fontWeight="800">IoT </Text>
                   </GridElement>
                   <GridElement title="SSR and CSR">Toggle between Server-side rendering and Client side rendering without changing the code</GridElement>
