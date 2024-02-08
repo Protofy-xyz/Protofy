@@ -15,7 +15,7 @@ import useTheme from './diagram/Theme';
 import { DataOutput } from './lib/types';
 import { read } from './lib/memory';
 import NodeSelect from './diagram/NodeSelect';
-import { X, ChevronUp, AlertCircle } from 'lucide-react';
+import { X, ChevronUp, AlertCircle, Type, Hash, Braces, ToggleLeft } from 'lucide-react';
 
 export interface Field {
     field: string,
@@ -257,7 +257,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                             dataNotify({ id: id, paramField: param.field, newValue: tmpRangeValue });
                             setNodeData(id, { ...nodeData, [param.field]: tmpRangeValue })
                         }}
-                        value={tmpRangeValue} min={min} max={max}/>
+                        value={tmpRangeValue} min={min} max={max} />
                     {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '5px', left: '7px', marginRight: '-8px', width: '10px' }}>{nodeData[param.field] ? nodeData[param.field] : initialRangeValue}</div> : null}
                 </>
             case 'boolean':
@@ -279,22 +279,47 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         style={{ all: "revert", width: nodeFontSize, margin: "2px 0px 2px 0px", accentColor: useTheme("interactiveColor"), transform: `scale(${useTheme('nodeFontSize') / 15})`, marginRight: '5px' }} />
                 </span>
             default:
-                return <NodeInput
-                    id={id}
-                    post={(v) => isParameter || isProp ? { key: nodeData[param.field]?.key ?? param.label, value: post(v) } : post(v)}
-                    pre={(v) => (v?.value ?? v) ?? ''}
-                    field={param.field}
-                    onBlur={param.onBlur}
-                    disabled={disabled || param.isDisabled}
-                    style={{
-                        marginRight: ["case", "child"].includes(param.fieldType) ? "20px" : "0px"
-                    }}>
-                    {param.error ? <div style={{ alignItems: 'center', marginTop: '5px', display: 'flex' }}>
-                        <AlertCircle size={"14px"} color='red' style={{ alignSelf: 'center', marginRight: '5px' }} />
-                        <Text style={{ color: 'red', fontSize: '12px' }}>
-                            {param.error}
-                        </Text> </div> : null}
-                </NodeInput>
+                const type = nodeData[param.field]?.kind
+                const icons = {
+                    "StringLiteral": Type,
+                    "NumericLiteral": Hash,
+                    "TrueKeyword": ToggleLeft,
+                    "ObjectLiteralExpression": Braces,
+                    "FalseKeyword": ToggleLeft
+                }
+                return <>
+                    {type && icons[type]
+                        ? <div
+                            style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: 'pointer' }}
+                            onClick={() => {
+                                setNodeData(id, {
+                                    ...nodeData, [param.field]: {
+                                        ...nodeData[param.field],
+                                        kind: Object.keys(icons)[(Object.keys(icons).indexOf(type) + 1) % (Object.keys(icons).length - 1)]
+                                    }
+                                })
+                            }}
+                        >
+                            {React.createElement(icons[type], { size: 16, color: useTheme('interactiveColor') })}
+                        </div>
+                        : <></>}
+                    <NodeInput
+                        id={id}
+                        post={(v) => isParameter || isProp ? { ...nodeData[param.field], key: nodeData[param.field]?.key ?? param.label, value: post(v) } : post(v)}
+                        pre={(v) => (v?.value ?? v) ?? ''}
+                        field={param.field}
+                        onBlur={param.onBlur}
+                        disabled={disabled || param.isDisabled}
+                        style={{
+                            marginRight: ["case", "child"].includes(param.fieldType) ? "20px" : "0px"
+                        }}>
+                        {param.error ? <div style={{ alignItems: 'center', marginTop: '5px', display: 'flex' }}>
+                            <AlertCircle size={"14px"} color='red' style={{ alignSelf: 'center', marginRight: '5px' }} />
+                            <Text style={{ color: 'red', fontSize: '12px' }}>
+                                {param.error}
+                            </Text> </div> : null}
+                    </NodeInput>
+                </>
         }
     }
     const getValue = () => {

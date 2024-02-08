@@ -7,7 +7,6 @@ import AddPropButton from '../AddPropButton';
 import { SyntaxKind } from "ts-morph";
 import { Code } from 'lucide-react';
 
-
 const JsxElement = (node) => {
     const { id, type } = node
     const useFlowsStore = useContext(FlowStoreContext)
@@ -48,20 +47,29 @@ JsxElement.getData = (node, data, nodesData, edges) => {
         let sourceKey
         let sourceValue
         let propName
+        let attrData
+
         if (attribute.getKindName() == "JsxSpreadAttribute") {
             propName = 'prop-spreaded-' + i;
             sourceKey = '';
             sourceValue = attribute.getText()
         } else {
+            var initializer = attribute?.getInitializer()
+            attrData = getAttributeData(initializer)
             sourceKey = attribute.getNameNode().getText()
             propName = 'prop-' + sourceKey
-            sourceValue = connectItem(attribute?.getInitializer(), 'output', node, propName, data, nodesData, edges, propName)
+
+            if (!attrData) {
+                attrData = {
+                    value: connectItem(attribute?.getInitializer(), 'output', node, propName, data, nodesData, edges, propName) ?? ''
+                }
+            }
         }
         return {
             ...obj,
             [propName]: {
                 key: sourceKey ?? '',
-                value: sourceValue ?? '',
+                ...attrData
             }
         }
     }, {})
@@ -98,7 +106,13 @@ JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers
             objParam = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
         } else {
             let objKey = data[prop].key
-            let objValue = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            const dumpedAttr = dumpAttributeData(data[prop])
+            let objValue
+            if (dumpedAttr) {
+                objValue = dumpedAttr
+            } else {
+                objValue = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            }
             objParam = `${objKey}=${objValue} `
             if (!objValue || !objKey) return total
         }
@@ -113,46 +127,64 @@ JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers
 
 export default React.memo(JsxElement)
 
-// WIP: if abstract JsxElement, JsxSelfClosingElement and Fragment into same box
-// function getTagName(node, type): { name: string } {
-//     let jsxElementName
-//     switch (type) {
-//         case 'JsxFragment':
-//             jsxElementName = ''
-//             break;
-//         case 'JsxSelfClosingElement':
-//             jsxElementName = node?.getTagNameNode()?.getText()
-//             break;
-//         case 'JsxElement':
-//             jsxElementName = node?.getOpeningElement()?.getTagNameNode()?.getText();
-//             break;
-//         default:
-//             jsxElementName = ''
-//             break;
-//     }
-//     return {
-//         name: jsxElementName,
-//     }
-// }
+export function dumpAttributeData(attrData: {kind: string, value: any}): any {
+    const expressionKind = attrData.kind
+    var value = attrData.value
+    switch (expressionKind) {
+        case 'StringLiteral':
+            return '"' + value + '"'
+        case 'NumericLiteral':
+        case 'TrueKeyword':
+        case 'FalseKeyword':
+            break
+        default:
+            return
+    }
+    return "{" + value + "}"
+}
 
-// function getAttributes(node,type): any[] {
-//     let jsxAttributes
-//     switch (type) {
-//         case 'JsxFragment':
-//             jsxAttributes = []
-//             break;
-//         case 'JsxSelfClosingElement':
-//             jsxAttributes = node?.getAttributes()
-//             break;
-//         case 'JsxElement':
-//             jsxAttributes = node?.getOpeningElement()?.getAttributes();
-//             break;
-//         default:
-//             jsxAttributes = []
-//             break;
-//     }
-//     return jsxAttributes
-// }
+export function getAttributeData(node: any): any {
+    let atrVal
+    var attributeKind = node?.getKindName()
+    var kind
 
+    switch (attributeKind) {
+        case 'StringLiteral':
+            atrVal = node?.getLiteralValue();
+            kind = attributeKind
+            break;
+        default: //e.g JsxExpression
+            const expression = node?.getExpression()
+            kind = expression?.getKindName()
 
+            switch (kind) {
+                case 'StringLiteral':
+                case 'NumericLiteral':
+                case 'TrueKeyword':
+                case 'FalseKeyword':
+                    atrVal = expression.getLiteralValue()
+                    break
+                // case 'ObjectLiteralExpression':
+                //     const tmpProps = expression.getProperties().reduce((total, current) => {
+                //         var propKey = current.getName()
+                //         var propVal
+                //         try {
+                //             propVal = current.getInitializer()?.getLiteralValue()
+                //         } catch (e) {
+                //             propVal = current.getInitializer().getText()
+                //         }
+                //         return {
+                //             ...total,
+                //             [propKey]: propVal
+                //         }
+                //     }, {})
 
+                //     atrVal = tmpProps
+                //     break
+                default:
+                    return
+            }
+            break;
+    }
+    return { value: atrVal, attributeKind, kind }
+}
