@@ -550,7 +550,7 @@ const FlowsBase = ({
                 } else {
                     param = getPropName(diff.path[1]); // Care with child- props
                     value = diff.rhs
-                    if (!value || !param || typeof (value) == 'object') return
+                    if (!value || !param || typeof (value) == 'object' || diff.path[2] == 'kind' ) return
                     isProp = !param.includes('child');
                     if (isProp) {
                         param = nodeData[nodeId]['prop-' + param]?.key ?? param
@@ -743,13 +743,7 @@ const FlowsBase = ({
                     const addedNodeData = Object.keys(initialNodeData).reduce((total, key) => {
                         var value: any = initialNodeData[key]
                         var keyName = `prop-${key}`
-                        const valueType = typeof value
                         const valueKind = getKindName(value)
-                        if (valueType == "string" && key != "children") {
-                            value = '"' + value + '"'
-                        } else if (valueType == "object" && !Array.isArray(value)) {
-                            value = "{" + JSON.stringify(value) + "}"
-                        }
 
                         var propValue = { key, value, kind: valueKind }
 
