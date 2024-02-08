@@ -28,6 +28,7 @@ import Diff from 'deep-diff';
 import DynamicCustomComponent from './DynamicCustomComponent';
 import GetDynamicCustomComponent from './DynamicCustomComponent';
 import { generateId } from './lib/IdGenerator';
+import { getKindName } from './nodes/JsxElement';
 
 interface customComponentInterface {
     check: Function,
@@ -742,14 +743,15 @@ const FlowsBase = ({
                     const addedNodeData = Object.keys(initialNodeData).reduce((total, key) => {
                         var value: any = initialNodeData[key]
                         var keyName = `prop-${key}`
-
-                        if (typeof value == "string" && key != "children") {
+                        const valueType = typeof value
+                        const valueKind = getKindName(value)
+                        if (valueType == "string" && key != "children") {
                             value = '"' + value + '"'
-                        } else if (typeof value == "object") {
+                        } else if (valueType == "object" && !Array.isArray(value)) {
                             value = "{" + JSON.stringify(value) + "}"
                         }
 
-                        var propValue = { key, value }
+                        var propValue = { key, value, kind: valueKind }
 
                         if (key == 'children') {
                             keyName = 'child-1'

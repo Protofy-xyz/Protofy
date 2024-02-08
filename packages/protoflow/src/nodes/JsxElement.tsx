@@ -127,6 +127,20 @@ JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers
 
 export default React.memo(JsxElement)
 
+// TODO: export function to protolib
+export function getKindName(value) {
+    switch (typeof value) {
+        case 'number':
+            return 'NumericLiteral'
+        case 'string':
+            return 'StringLiteral'
+        case 'boolean':
+            return 'TrueKeyword'
+        case 'object':
+            return Array.isArray(value) ? 'ArrayLiteralExpression' : 'ObjectLiteralExpression'
+    }
+}
+// TODO: export function to protolib
 export function dumpAttributeData(attrData: {kind: string, value: any}): any {
     const expressionKind = attrData.kind
     var value = attrData.value
@@ -142,7 +156,7 @@ export function dumpAttributeData(attrData: {kind: string, value: any}): any {
     }
     return "{" + value + "}"
 }
-
+// TODO: export function to protolib
 export function getAttributeData(node: any): any {
     let atrVal
     var attributeKind = node?.getKindName()
