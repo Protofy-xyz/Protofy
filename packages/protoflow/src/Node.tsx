@@ -140,7 +140,6 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
 
     const checkRef: any = React.useRef()
     const textBoxRef: any = React.useRef()
-    const parentRef: any = React.useRef()
 
     const pre = param.pre ? param.pre : (str) => str
     const post = param.post ? param.post : (str) => str
@@ -250,6 +249,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 const initialRangeValue = nodeData[param.field]?.value ?? nodeData[param.field] ?? (defaultValue ?? min)
                 const [tmpRangeValue, setTmpRangeValue] = React.useState(pre(initialRangeValue));
                 return <>
+                    {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '3px', width: max.toString().length * 18, textAlign: 'left' }}>{post(tmpRangeValue)}</div> : null}
                     <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: useTheme('interactiveColor'), height: '5px', borderWidth: '4px solid blue', backgroundColor: useTheme("inputBackgroundColor"), borderRadius: '10px' }}
                         step={step}
                         onChange={(event: any) => setTmpRangeValue(event.target.value)}
@@ -267,7 +267,6 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                             })
                         }}
                         value={tmpRangeValue} min={min} max={max} />
-                    {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '5px', left: '7px', marginRight: '-8px', width: '18px' }}>{post(tmpRangeValue)}</div> : null}
                 </>
             case 'boolean':
                 const stringToBolean = (myVar) => {
@@ -376,7 +375,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
     const ref = React.useRef()
 
     return (
-        <div ref={parentRef} style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', zIndex: param.type == 'select' || param.type == 'colorPicker' ? 1100 : 0, flexDirection: "column" }}>
+        <div style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', zIndex: param.type == 'select' || param.type == 'colorPicker' ? 1100 : 0, flexDirection: "column" }}>
             {
                 !isDefaultCase ?
                     <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
@@ -576,7 +575,7 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
 
             // Itera sobre todos los elementos para encontrar el más ancho
             elements.forEach(key => {
-                let width = key.firstElementChild.offsetWidth;
+                let width = key.firstElementChild?.offsetWidth;
                 if (width > maxWidth) {
                     maxWidth = width;
                 }
