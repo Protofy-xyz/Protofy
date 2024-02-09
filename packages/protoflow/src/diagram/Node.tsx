@@ -17,9 +17,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     const errorData = useFlowsStore(state => state.errorData)
     const flexRef = useRef()
     const boxRef = useRef()
-    const editingLayout = useFlowsStore(state => state.editingLayout)
-    const isNodePreviewMode = editingLayout == 'node'
-
+    const isNodePreviewMode = node?.data.preview == 'node'
     const nodeStyle = contentStyle
     // const scale = chroma.scale([(chroma.scale([color, 'white']))(0.5).hex(), 'white']).mode('lab');
 
@@ -35,7 +33,6 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     const borderWidthSelected = useTheme('borderWidthSelected')
     const themeBackgroundColor = useTheme('nodeBackgroundColor')
     const isHover = useHover(flexRef)
-    const currentBorder = isPreview ? 0 : (node?.selected ? borderWidthSelected : borderWidth)
     const titleSize = (useTheme('nodeFontSize') / 100) * 100
 
     const innerRadius = '12px '
@@ -114,9 +111,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
     const plusColor = useTheme('plusColor')
     const borderColor = useTheme('nodeBorderColor')
     const borderWidth = useTheme('nodeBorderWidth')
-    const nodeFontSize = useTheme('nodeFontSize')
-    const editingLayout = useFlowsStore(state => state.editingLayout)
-    const isNodePreviewMode = editingLayout == 'node'
+    const isNodePreviewMode = edges[0]?.data && edges[0]?.data['preview'] == 'node'
     const onOpenMenu = () => {
         setMenu("open", [handleRef?.current.getBoundingClientRect().right + 200, handleRef?.current.getBoundingClientRect().top - 30], {
             targetHandle: id,

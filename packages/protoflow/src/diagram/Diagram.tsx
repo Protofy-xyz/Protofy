@@ -74,7 +74,6 @@ const Diagram = React.forwardRef(({
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData)
     const setThemeMode = useFlowsStore(state => state.setTemeMode)
-    const setEdittingLayout = useFlowsStore(state => state.setEdittingLayout)
     const [internalData, setInternalData] = useState([])
     const { project, setViewport, getNodes, getViewport, setCenter, setNodes, setEdges, getEdges } = useReactFlow();
     const { undo, redo, takeSnapshot, clearNodes } = useUndoRedo();
@@ -87,6 +86,8 @@ const Diagram = React.forwardRef(({
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const [pastZoomNodes, setPastZoomNodes] = useState([])
     const { data, publish } = topics;
+
+    const preview = nodePreview ? 'node' : 'default'
 
     const onDragOver = useCallback((event) => {
         event.preventDefault();
@@ -158,13 +159,13 @@ const Diagram = React.forwardRef(({
     );
 
     const showAll = () => {
-        setEdges(getEdges().map(e => ({ ...e, hidden: false })))
-        setNodes(getNodes().map(n => ({ ...n, hidden: false })))
+        setEdges(getEdges().map(e => ({ ...e, hidden: false, data: { ...e.data, preview } })))
+        setNodes(getNodes().map(n => ({ ...n, hidden: false, data: { ...n.data, preview } })))
     }
     const hideUnselected = (selectedNodeId) => {
         if (selectedNodeId) {
-            setEdges(getEdges().map(e => ({ ...e, hidden: true })))
-            setNodes(getNodes().map(n => ({ ...n, hidden: n.id != selectedNodeId })))
+            setEdges(getEdges().map(e => ({ ...e, hidden: true, data: { ...e.data, preview } })))
+            setNodes(getNodes().map(n => ({ ...n, hidden: n.id != selectedNodeId, data: { ...n.data, preview } })))
         }
     }
     const zoomToNode = useCallback((selectedNodeId) => {
@@ -241,11 +242,11 @@ const Diagram = React.forwardRef(({
     useEffect(() => {
         if (!nodePreview) showAll()
         else hideUnselected(pastZoomNodes[0])
-        setEdittingLayout(nodePreview ? 'node' : 'default')
         setTimeout(() => zoomToNode(pastZoomNodes[0]), 80);
     }, [nodePreview])
 
     const proOptions = { hideAttribution: true };
+
     return (<div style={{ width: '100%', height: "100%" }}>
         <SelectionListener onSelectionChange={onSelectionChange} />
         <div style={{ height: '100%' }} ref={reactFlowWrapper as any}>
