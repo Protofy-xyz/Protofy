@@ -1,11 +1,11 @@
 import { z } from "protolib/base";
 import { Schema } from 'protolib/base'
-import moment from "moment";
 import { AutoModel } from 'protolib/base'
 
 export const GroupSchema = Schema.object({
   name: z.string().label('name').hint('user, admin, ...').static().id().search(),
   workspaces: z.array(z.string()).hidden(),
+  permissions: z.array(z.string()).optional(),
   admin: z.boolean().optional()
 })
 
