@@ -1,5 +1,6 @@
 import { FlowStoreContext } from "../store/FlowsStore"
 import { useContext } from 'react';
+import { getAlignmentProps } from "./AlignmentType";
 
 export const getProtolibParams = (enabledProps = ["*"]) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -26,8 +27,8 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
         { field: 'prop-br', label: 'br', type: 'select', fieldType: 'prop', data: radiuses ? [defaultValue, ...radiuses] : [], static: true },
         { field: 'prop-bw', label: 'bw', type: 'select', fieldType: 'prop', data: sizes ? [defaultValue, ...sizes] : [], static: true },
         { field: 'prop-size', label: 'size', type: 'select', fieldType: 'prop', data: sizes ? [defaultValue, ...sizes] : [], static: true },
-        { field: 'prop-alignSelf', label: 'alignSelf', type: 'select', fieldType: 'prop', data: [defaultValue, ...alignItemsAlignments], static: true },
-        { field: 'prop-textAlign', label: 'textAlign', type: 'select', fieldType: 'prop', data: [defaultValue, ...textAlingments], static: true },
+        // { field: 'prop-alignSelf', label: 'alignSelf', type: 'select', fieldType: 'prop', data: [defaultValue, ...alignItemsAlignments], static: true },
+        // { field: 'prop-textAlign', label: 'textAlign', type: 'select', fieldType: 'prop', data: [defaultValue, ...textAlingments], static: true },
         { field: 'prop-flexDirection', label: 'flexDirection', type: 'select', fieldType: 'prop', data: [defaultValue, ...flexDirection], static: true },
         { field: 'prop-justifyContent', label: 'justifyContent', type: 'select', fieldType: 'prop', data: [defaultValue, ...justifyContentAlignments], static: true },
         { field: 'prop-alignContent', label: 'alignContent', type: 'select', fieldType: 'prop', data: [defaultValue, ...justifyContentAlignments], static: true },
@@ -51,5 +52,6 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
 
 export const getProtolibProps = () => {
     const params = getProtolibParams()
-    return params.map(p => p.field)
+    const alignmentProps = getAlignmentProps().map(p => 'prop-'+p)
+    return [...params.map(p => p.field), ...alignmentProps]
 }

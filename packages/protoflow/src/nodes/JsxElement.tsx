@@ -200,5 +200,5 @@ export function getAttributeData(node: any): any {
             }
             break;
     }
-    return { value: atrVal, attributeKind, kind }
+    return { value: atrVal, kind }
 }
