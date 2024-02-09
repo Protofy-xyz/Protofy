@@ -220,7 +220,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
             <div ref={chatContainer} onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()} style={{ transform: 'none', zIndex: 100000, bottom: 0, right: 0, position: "fixed" }}>
                 <div style={{ position: 'absolute' }}>
                     <Widget
-                        title="Asistant"
+                        title="Assistant"
                         subtitle="Get help, ideas and documentation"
                         handleNewUserMessage={async (message) => {
                             //generate prompts
