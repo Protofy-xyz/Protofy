@@ -36,7 +36,7 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
         {
             field: 'prop-margin', label: 'margin', type: 'range', fieldType: 'prop', data: {
                 step: 1,
-                min: 1,
+                min: 0,
                 max: 20,
                 kind: "StringLiteral"
             }, pre: (s) => s[0] == "$" ? s.split("$")[1] : s, post: (s) => "$" + s, static: true
