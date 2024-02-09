@@ -31,7 +31,6 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             const redirectPropName = redirectProp?.params?.port;
                             const hasProtolibProps = mask.data.body.find(i => i.type == 'protolibProps')
                             const protolibProps = getProtolibProps()
-                            console.log('DEV: element.prop: ', {hasProtolibProps, propsArray, protolibProps})
                             return <>
                                 <NodeParams id={node.id} params={element.prop} />
                                 <NodeParams
