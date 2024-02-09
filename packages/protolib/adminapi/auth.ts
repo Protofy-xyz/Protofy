@@ -37,7 +37,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
                 id: storedUser.username,
                 type: storedUser.type,
                 admin: group.admin ? true : false,
-                permissions: [...(group.admin ? ["*"] : []), ...(group.permissions ?? []), ...(storedUser.permissions ?? [])]
+                permissions: [...(group.admin ? ["*"] : []), storedUser.type, ...(group.permissions ?? []), ...(storedUser.permissions ?? [])]
             }
             res.send({
                 session: genNewSession(newSession),
@@ -70,6 +70,7 @@ app.get('/adminapi/v1/auth/validate', handler(async (req: any, res: any, session
 
 app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
     const request: RegisterRequest = req.body
+    const defaultGroup = "user"
     RegisterSchema.parse(request)
     if (await existsKey(dbPath, request.username)) {
         res.status(500).send({ fieldErrors: { 'username': 'A user with the same email already exists' } });
@@ -78,13 +79,13 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
         const newUser = {
             ...newUserData,
             createdAt: moment().toISOString(),
-            from: 'api',
-            type: 'user'
+            from: 'api'
         }
         await getDB(dbPath).put(request.username, JSON.stringify({...newUser, password: await hash(password)}))
         let group = {
             admin: false,
-            permissions: []
+            permissions: [],
+            type: defaultGroup
         };
         try {
             group = JSON.parse(await getDB(groupDBPath).get('user'))
@@ -103,9 +104,9 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
 
         const newSession = {
             id: request.username,
-            type: "user",
+            type: defaultGroup,
             admin: group.admin ? true : false,
-            permissions: [...(group.admin ? ["*"] : []), ...(group.permissions ?? [])]
+            permissions: [...(group.admin ? ["*"] : []), defaultGroup, ...(group.permissions ?? [])]
         }
         res.send({
             session: genNewSession(newSession),

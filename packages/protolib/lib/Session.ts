@@ -1,5 +1,5 @@
-import { atom, useAtom} from 'jotai';
-import { atomWithStorage, useHydrateAtoms} from 'jotai/utils';
+import { atom, useAtom } from 'jotai';
+import { atomWithStorage, useHydrateAtoms } from 'jotai/utils';
 import * as cookie from 'cookie'
 import { createSession, validateSession, SessionDataType, getSessionContext } from '../api/lib/session';
 import { NextPageContext } from 'next'
@@ -7,24 +7,24 @@ import { parse } from 'cookie';
 import { getLogger } from "protolib/base"
 
 const logger = getLogger()
-import {environments} from 'app/bundles/environments'
+import { environments } from 'app/bundles/environments'
 
 
 export const SessionData = atomWithStorage("session", createSession())
-export const UserSettingsAtom = atomWithStorage("userSettings", {} as any )
+export const UserSettingsAtom = atomWithStorage("userSettings", {} as any)
 
 export const Session = atom(
-    (get) => get(SessionData), 
+    (get) => get(SessionData),
     (get, set, data: SessionDataType) => {
-        if(typeof window !== 'undefined') {
+        if (typeof window !== 'undefined') {
             //store a cookie
-            document.cookie = "session=" + encodeURIComponent(JSON.stringify(data) ?? '')+";path=/";
+            document.cookie = "session=" + encodeURIComponent(JSON.stringify(data) ?? '') + ";path=/";
         }
         set(SessionData, data);
     }
 );
 
-const initialContext = {state: "pending", group: {workspaces:[]}}
+const initialContext = { state: "pending", group: { workspaces: [] } }
 export const SessionContext = atom(initialContext)
 
 export const initSession = (pageSession) => {
@@ -44,20 +44,20 @@ export const hasSessionCookie = (cookieStr) => {
 
 export const getSessionCookie = async (cookieStr) => {
     const parsedCookies = cookie.parse(cookieStr ?? '');
-    if(parsedCookies.session) {
+    if (parsedCookies.session) {
         try {
             const data = JSON.parse(parsedCookies.session)
-            const {iat, exp, ...validatedData} = await validateSession(data)
+            const { iat, exp, ...validatedData } = await validateSession(data)
             return {
                 ...data,
                 user: {
                     ...data.user,
                     ...validatedData
                 }
-             } as SessionDataType
-        } catch(error) {
-            logger.error({ error },"ERROR validating session")
-            if(error == "Server Error") {
+            } as SessionDataType
+        } catch (error) {
+            logger.error({ error }, "ERROR validating session")
+            if (error == "Server Error") {
                 throw "Server Error"
             }
 
@@ -71,31 +71,36 @@ const fail = (returnUrl?) => {
     return {
         redirect: {
             permanent: false,
-            destination: "/auth/login"+(returnUrl?"?return="+returnUrl:"")
+            destination: "/auth/login" + (returnUrl ? "?return=" + returnUrl : "")
         }
     }
 }
-export const withSession = async (context:any, validTypes?:string[]|any[]|null, props?:any) => {
+export const withSession = async (context: any, permissions?: string[] | any[] | null, props?: any) => {
     let session;
     let sessionError;
+    const hasSomePermission = (validPermissions, userPermissions) => {
+        logger.trace({validPermissions, userPermissions}, "Checking permissions to access page");
+        return validPermissions.some((perm) => userPermissions.includes(perm))
+    }
+
     try {
         //try to get session. This can fail because of unavailable api
         //in case of error, let the client handle the session itself in CSR mode
         session = await getSessionCookie(context.req.headers.cookie)
-    } catch(e) {
+    } catch (e) {
         sessionError = true
     }
 
-    if(validTypes && !sessionError) {
-        if(!session) return fail(context.req.url)
-        if(validTypes.length && !session?.user?.admin && !validTypes.includes(session?.user?.type ?? '')) return fail()
+    if (permissions && !sessionError) {
+        if (!session) return fail(context.req.url)
+        if (permissions.length && !session?.user?.admin && !hasSomePermission(permissions, session?.user?.permissions ?? [])) return fail()
     }
 
-    return { 
-        props: { 
-            pageSession:  {session: sessionError? null : (session ?? createSession()), context: await getSessionContext(session?.user?.type)},
-            ...(typeof props === "function"? await props() : props),
-        } 
+    return {
+        props: {
+            pageSession: { session: sessionError ? null : (session ?? createSession()), context: await getSessionContext(session?.user?.type) },
+            ...(typeof props === "function" ? await props() : props),
+        }
     }
 }
 
@@ -128,17 +133,17 @@ export const useUserSettings = () => {
     const [settings, setSettings] = useAtom(UserSettingsAtom)
     const [session] = useSession()
     return [
-        session && settings[session.user.id] ? settings[session.user.id]: {},
-        (val)=> setSettings({...settings, [session.user.id]:val})
+        session && settings[session.user.id] ? settings[session.user.id] : {},
+        (val) => setSettings({ ...settings, [session.user.id]: val })
     ]
 }
 
-export const getURLWithToken = (url, context:NextPageContext) => {
+export const getURLWithToken = (url, context: NextPageContext) => {
     const { req } = context;
     const cookies = req.headers.cookie;
     const host = req.headers.host || '';
     const prefix = host.split('.')[0] //get prefix from url for example: test.protofy.xyz:8080 -> test
-    if(!url.startsWith('http') && !url.startsWith('https') && environments[prefix]) {
+    if (!url.startsWith('http') && !url.startsWith('https') && environments[prefix]) {
         //no url has been provided, and there is an environment for this host
         //so, use the url in hosts
         url = environments[prefix].api + url
@@ -147,18 +152,18 @@ export const getURLWithToken = (url, context:NextPageContext) => {
     let session;
     let __env = ''
     if (cookies) {
-      try {
-        const parsedCookies = parse(cookies);
-        session = JSON.parse(parsedCookies.session);
-        if(session.environment) {
-            __env = '&__env='+session.environment
+        try {
+            const parsedCookies = parse(cookies);
+            session = JSON.parse(parsedCookies.session);
+            if (session.environment) {
+                __env = '&__env=' + session.environment
+            }
+        } catch (e) {
+            session = null
         }
-      } catch(e) {
-        session = null
-      }
     }
-  
-    const finalUrl = url + (session && session.token ? (url.includes('?') ? '&':'?')+'token='+session.token+__env : '')
-    logger.debug({url: finalUrl}, "Return url with session token")
+
+    const finalUrl = url + (session && session.token ? (url.includes('?') ? '&' : '?') + 'token=' + session.token + __env : '')
+    logger.debug({ url: finalUrl }, "Return url with session token")
     return finalUrl
-  }
+}

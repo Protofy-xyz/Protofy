@@ -37,7 +37,8 @@ export const validateSession = async (session:SessionDataType):Promise<validated
 export type userData = {
     id?: string,
     type?: string
-    admin?: boolean
+    admin?: boolean,
+    permissions?: string[]
 }
 
 export type validatedUserData = userData & {

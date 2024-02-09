@@ -7,9 +7,9 @@ import { parse } from 'cookie';
 
 export const SSR = (fn) => SiteConfig.SSR ? fn : undefined
 
-export function DataSSR(sourceUrl, allowdUserTypes?:string[]|any[]|null, props={}) {
+export function DataSSR(sourceUrl, permissions?:string[]|any[]|null, props={}) {
     return SSR(async (context:NextPageContext) => {
-        return withSession(context, allowdUserTypes, {
+        return withSession(context, permissions, {
           pageState: {
             sourceUrl,
             initialItems: await API.get({url: sourceUrl, ...props}),
@@ -19,7 +19,7 @@ export function DataSSR(sourceUrl, allowdUserTypes?:string[]|any[]|null, props={
     })
 }
 
-export function PaginatedDataSSR(sourceUrl: string|Function, allowdUserTypes?:string[]|any[]|null, dataProps:any={}, extraData:any={}) {
+export function PaginatedDataSSR(sourceUrl: string|Function, permissions?:string[]|any[]|null, dataProps:any={}, extraData:any={}) {
   return SSR(async (context:NextPageContext) => {
     const _dataProps = {
       itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : '',
@@ -34,7 +34,7 @@ export function PaginatedDataSSR(sourceUrl: string|Function, allowdUserTypes?:st
     }
     const _sourceUrl = typeof sourceUrl === 'function' ? sourceUrl(context) : sourceUrl
 
-    return withSession(context, allowdUserTypes, {
+    return withSession(context, permissions, {
       sourceUrl: _sourceUrl,
       initialItems: await API.get({url: getURLWithToken(_sourceUrl, context), ..._dataProps}),
       itemData: context.query.item ? await API.get(getURLWithToken(_sourceUrl+'/'+context.query.item, context)) : '',
