@@ -59,7 +59,6 @@
                 "props": [
                     "flexDirection",
                     "justifyContent",
-                    "alignContent",
                     "alignItems",
                     "width",
                     "height"
@@ -175,7 +174,6 @@
                 "type": "protolibProps",
                 "props": [
                     "color",
-                    "textAlign",
                     "margin",
                     "padding"
                 ]

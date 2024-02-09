@@ -2,9 +2,16 @@ import React, { useContext } from 'react';
 import useTheme from '../diagram/Theme';
 import Text from '../diagram/NodeText'
 import { FlowStoreContext } from '../store/FlowsStore';
-import { AlignLeft, AlignCenter, AlignRight, AlignJustify, AlignStartVertical, AlignEndVertical, AlignCenterVertical, StretchVertical } from 'lucide-react';
+import {
+    AlignLeft, AlignCenter, AlignRight, AlignJustify,
+    AlignStartVertical, AlignEndVertical, AlignCenterVertical, StretchVertical,
+    ArrowRightFromLine, ArrowLeftFromLine, ArrowDownFromLine, ArrowUpFromLine,
+    AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd, AlignVerticalSpaceAround, AlignVerticalSpaceBetween
+} from 'lucide-react';
 
-export const getAlignmentProps = () => ["alignSelf", "textAlign"]
+export const getAlignmentProps = () => [
+    "alignSelf", "alignItems", "textAlign", "flexDirection", "justifyContent", "alignContent"
+]
 
 export default ({ nodeData = {}, field, node }) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -26,7 +33,7 @@ export default ({ nodeData = {}, field, node }) => {
     }
 
     const Icon = ({ icon, label }) => {
-        return <div style={{ cursor: 'pointer' }} onClick={() => onSelectAlignment(label)}>
+        return <div title={label} style={{ cursor: 'pointer' }} onClick={() => onSelectAlignment(label)}>
             {React.createElement(icon, { color: getIconColor(label) })}
         </div>
     }
@@ -39,6 +46,7 @@ export default ({ nodeData = {}, field, node }) => {
                     <Icon icon={AlignRight} label={'right'} />
                     <Icon icon={AlignJustify} label={'justify'} />
                 </div>
+            case 'alignItems':
             case 'alignSelf':
                 return <div style={{ gap: '10px', display: 'flex' }}>
                     <Icon icon={AlignStartVertical} label={'start'} />
@@ -46,6 +54,24 @@ export default ({ nodeData = {}, field, node }) => {
                     <Icon icon={AlignEndVertical} label={'end'} />
                     <Icon icon={StretchVertical} label={'stretch'} />
                 </div>
+            case 'flexDirection':
+                return <div style={{ gap: '10px', display: 'flex' }}>
+                    <Icon icon={ArrowRightFromLine} label={'row'} />
+                    <Icon icon={ArrowLeftFromLine} label={'row-reverse'} />
+                    <Icon icon={ArrowDownFromLine} label={'column'} />
+                    <Icon icon={ArrowUpFromLine} label={'column-reverse'} />
+                </div>
+            // const justifyContentAlignments = ['"start"', '"center"', '"space-between"', '"space-around"', '"space-evently"']
+            case 'justifyContent':
+            case 'alignContent':
+                return <div style={{ gap: '10px', display: 'flex' }}>
+                    <Icon icon={AlignVerticalJustifyStart} label={'start'} />
+                    <Icon icon={AlignVerticalJustifyCenter} label={'center'} />
+                    <Icon icon={AlignVerticalJustifyEnd} label={'end'} />
+                    <Icon icon={AlignVerticalSpaceBetween} label={'space-between'} />
+                    <Icon icon={AlignVerticalSpaceAround} label={'space-around'} />
+                </div>
+
 
         }
     }
