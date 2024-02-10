@@ -1,5 +1,21 @@
-export const getBaseConfig = (name, process) => {
-  return {
+export function deepMerge(target, source) {
+  Object.keys(source).forEach(key => {
+    const sourceValue = source[key];
+    if (typeof sourceValue === 'object' && sourceValue !== null) {
+      if (!target[key] || typeof target[key] !== 'object') {
+        target[key] = {};
+      }
+      deepMerge(target[key], sourceValue);
+    } else {
+      target[key] = sourceValue;
+    }
+  });
+  return target;
+}
+
+
+export const getBaseConfig = (name, process, config?) => {
+  const BaseConfig = {
     logger: {
       ...(process && process.env.NODE_ENV === 'development' && typeof window === "undefined" ?
         {
@@ -16,7 +32,7 @@ export const getBaseConfig = (name, process) => {
                 target: 'pino/file',
                 level: 'debug',
                 options: {
-                  destination: "../../logs/"+name+'.log'
+                  destination: "../../logs/" + name + '.log'
                 }
               },
               {
@@ -31,4 +47,5 @@ export const getBaseConfig = (name, process) => {
       level: 'debug'
     }
   }
+  return config ? deepMerge(BaseConfig, config) : BaseConfig
 }
