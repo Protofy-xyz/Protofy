@@ -1,9 +1,10 @@
 import dotenv from 'dotenv'
 import { setConfig, getConfig } from 'protolib/base/Config';
-import { getBaseConfig } from 'app/BaseConfig'
+import { getBaseConfig, getConfigWithoutSecrets } from 'app/BaseConfig'
 // get config vars
 dotenv.config({ path: '../../.env' });
-setConfig(getBaseConfig("admin-api", process))
+import { getServiceToken } from 'protolib/api/lib/serviceToken'
+setConfig(getBaseConfig("admin-api", process, getServiceToken()))
 import { getLogger } from 'protolib/base/logger';
 import { app, getMQTTClient } from 'protolib/api'
 import BundleAPI from 'app/bundles/adminapi'
@@ -15,27 +16,36 @@ import WebSocket, { Server } from 'ws';
 import net from 'net';
 import { generateEvent } from 'app/bundles/library'
 
+
 const logger = getLogger()
 const config = getConfig()
 
-logger.info({ config }, "Service Started: admin-api")
+logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: admin-api")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
 const isProduction = process.env.NODE_ENV === 'production';
 const aedesInstance = new aedes();
 aedesInstance.authenticate = function (client, username, password, callback) {
   if (!username) {
-    logger.info({}, "MQTT anonymous connect")
+    logger.info({client}, "MQTT anonymous login request")
   } else {
-    logger.info({ username }, "MQTT login received: " + username)
+    logger.info({username}, "MQTT user login request: "+username)
   }
 
-  callback(null, true)
+  if(config.mqtt.auth){
+    if (!username || !password) {
+      logger.error({}, "MQTT anonymous login refused: mqtt requires auth")
+    } else {
+      //TODO: auth
+      callback(null, true)
+    }
+  } else{
+    callback(null, true)
+  }
 }
 
-BundleAPI(app, { mqtt: getMQTTClient() })
+BundleAPI(app, { mqtt: getMQTTClient('admin-api', getServiceToken()) })
 const server = http.createServer(app);
 
-// Crea un WebSocket server
 const wss = new Server({ noServer: true });
 
 

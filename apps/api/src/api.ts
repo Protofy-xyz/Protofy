@@ -1,8 +1,9 @@
 import { app, getMQTTClient } from 'protolib/api'
 import BundleAPI from 'app/bundles/apis'
 import {getLogger } from 'protolib/base';
+import { getServiceToken } from 'protolib/api/lib/serviceToken'
 const logger = getLogger()
-const mqtt = getMQTTClient()
+const mqtt = getMQTTClient('api', getServiceToken())
 
 const topicSub = (topic, cb) => {
     mqtt.subscribe(topic)
