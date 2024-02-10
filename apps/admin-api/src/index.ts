@@ -23,6 +23,15 @@ const logger = getLogger()
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
 const isProduction = process.env.NODE_ENV === 'production';
 const aedesInstance = new aedes();
+aedesInstance.authenticate = function (client, username, password, callback) {
+  if (!username) {
+    logger.info({}, "MQTT anonymous connect")
+  } else {
+    logger.info({username}, "MQTT login received: " + username)
+  }
+
+  callback(null, true)
+}
 
 BundleAPI(app, { mqtt: getMQTTClient() })
 const server = http.createServer(app);
@@ -56,7 +65,7 @@ const mqttServer = net.createServer((socket) => {
   aedesInstance.handle(socket);
 });
 
-const mqttPort = isProduction? 8883 : 1883
+const mqttPort = isProduction ? 8883 : 1883
 mqttServer.listen(mqttPort, () => {
   logger.info({service:{protocol: "mqtt", port: mqttPort}}, "Service started: MQTT")
 });
