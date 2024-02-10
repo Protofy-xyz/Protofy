@@ -4,7 +4,8 @@
     "private": true,
     "source": "src",
     "scripts": {
-        "start": "NODE_ENV=production ts-node --files --project tsconfig.json src/index.ts",
+        "start-debug": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
+        "start": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
         "start-dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
         "service-start": "NODE_ENV=production pm2 start pm2.config.js",
         "service-start-dev": "pm2 start pm2.config.js",
@@ -14,9 +15,11 @@
         "status": "pm2 status api"
     },
     "dependencies": {
+        "dotenv": "^16.3.1",
         "pino": "8.17.2",
         "pino-pretty": "10.3.1",
         "pm2": "^5.3.0",
-        "redbird-no-etcd": "0.10.0-0"
+        "redbird-no-etcd": "0.10.0-0",
+        "ts-node": "10.9.1"
     }
 }
