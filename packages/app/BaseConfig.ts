@@ -13,41 +13,91 @@ export function deepMerge(target, source) {
   return target;
 }
 
-export const getBaseConfig = (name, process, config?) => {
+export const getConfigWithoutSecrets = (config) => {
+  const forbiddenKeys = ['secret', 'token', 'password'];
+
+  const filterConfig = (obj) => {
+    if (Array.isArray(obj)) {
+      return obj.map(item => {
+        if (typeof item === 'object' && item !== null) {
+          return filterConfig(item);
+        }
+        return item;
+      });
+    } else if (typeof obj === 'object' && obj !== null) {
+      return Object.keys(obj).reduce((acc, key) => {
+        if (!forbiddenKeys.includes(key)) {
+          acc[key] = filterConfig(obj[key]);
+        }
+        return acc;
+      }, {});
+    }
+    return obj;
+  };
+
+  return filterConfig(config);
+};
+
+export const getBaseConfig = (name, process, token?, config?) => {
   const BaseConfig = {
     mqtt: {
       auth: process.env.ENABLE_MQTT_AUTH === "true" ? true : false
     },
+    // logger: {
+    //   ...(process && process.env.NODE_ENV === 'development' && typeof window === "undefined" ?
+    //     {
+    //       transport: {
+    //         targets: [
+    //           {
+    //             target: 'pino-pretty',
+    //             level: 'info',
+    //             options: {
+    //               colorize: true
+    //             }
+    //           }
+    //         ]
+    //       }
+    //     } : {}),
+    //   name: name ?? 'default',
+    //   level: 'debug'
+    // }
     logger: {
-      ...(process && process.env.NODE_ENV === 'development' && typeof window === "undefined" ?
-        {
-          transport: {
-            targets: [
-              {
-                target: 'pino-pretty',
-                level: 'info',
-                options: {
-                  colorize: true
-                }
-              },
-              {
-                target: 'pino/file',
-                level: 'debug',
-                options: {
-                  destination: "../../logs/" + name + '.log'
-                }
-              },
-              {
-                target: 'protolib/lib/RemoteTransport.ts', // Asegúrate de que la ruta sea correcta
-                options: { /* Opciones para tu transport */ }
+      transport: {
+        targets: [
+          //prettify logs if in server-side, and only in development mode
+          ...(process && process.env.NODE_ENV === 'development' && typeof window === "undefined" ? [{
+            target: 'pino-pretty',
+            level: 'info',
+            options: {
+              colorize: true
+            }
+          }] : []),
+          //adds log to file if in server-side
+          ...(process && typeof window === "undefined" ? [
+            {
+              target: 'pino/file',
+              level: 'debug',
+              options: {
+                destination: "../../logs/" + name + '.log'
               }
-            ]
-
-          }
-        } : {}),
+            }
+          ] : []),
+          //adds log to mqtt if in server-side and a serviceToken is available
+          ...(process && typeof window === "undefined" && token ? [
+            {
+              target: 'protolib/lib/RemoteTransport.ts',
+              options: {
+                username: name,
+                password: token
+              }
+            }
+          ] : []),
+        ]
+      },
       name: name ?? 'default',
       level: 'debug'
     }
   }
+
   return config ? deepMerge(BaseConfig, config) : BaseConfig
 }
