@@ -1,3 +1,5 @@
+import dotenv from 'dotenv'
+dotenv.config({ path: '../../.env' });
 const Redbird = require('redbird-no-etcd');
 import {environments} from 'app/bundles/environments'
 import { setConfig } from 'protolib/base/Config';
@@ -92,13 +94,23 @@ var devResolver = function (host, url, req) {
 
 devResolver['priority'] = 200;
 
+
+
 const originalStdoutWrite = process.stdout.write.bind(process.stdout);
 //@ts-ignore
 process.stdout.write = (chunk, encoding, callback) => {
     const data = chunk.toString();
-    logger.debug({...JSON.parse(data), level: 20});
-    //originalStdoutWrite(chunk, encoding, callback);
+    const content = JSON.parse(data)
+    logger.debug({...content, level: 20});
+    if(content.level == 50 && content.code != 'ECONNREFUSED' && content.code != 'ECONNRESET') {
+        originalStdoutWrite(chunk, encoding, callback); //display critical errors in console
+    }
+
 };
+
+process.on('uncaughtException', (err) => {
+    originalStdoutWrite('whoops! there was an error');
+});
 
 var proxy = new Redbird({
     port: Port,
