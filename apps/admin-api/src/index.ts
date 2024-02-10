@@ -1,25 +1,24 @@
 import dotenv from 'dotenv'
-import { setConfig } from 'protolib/base/Config';
-import {getBaseConfig} from 'app/BaseConfig'
+import { setConfig, getConfig } from 'protolib/base/Config';
+import { getBaseConfig } from 'app/BaseConfig'
+// get config vars
+dotenv.config({ path: '../../.env' });
 setConfig(getBaseConfig("admin-api", process))
-import {getLogger } from 'protolib/base/logger';
+import { getLogger } from 'protolib/base/logger';
 import { app, getMQTTClient } from 'protolib/api'
 import BundleAPI from 'app/bundles/adminapi'
 import adminModules from 'protolib/adminapi'
-
 require('events').EventEmitter.defaultMaxListeners = 100;
-
-// get config vars
-dotenv.config({ path: '../../.env' });
-
 import aedes from 'aedes';
 import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
-import {generateEvent} from 'app/bundles/library'
+import { generateEvent } from 'app/bundles/library'
 
 const logger = getLogger()
+const config = getConfig()
 
+logger.info({ config }, "Service Started: admin-api")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
 const isProduction = process.env.NODE_ENV === 'production';
 const aedesInstance = new aedes();
@@ -27,7 +26,7 @@ aedesInstance.authenticate = function (client, username, password, callback) {
   if (!username) {
     logger.info({}, "MQTT anonymous connect")
   } else {
-    logger.info({username}, "MQTT login received: " + username)
+    logger.info({ username }, "MQTT login received: " + username)
   }
 
   callback(null, true)
@@ -51,14 +50,14 @@ server.on('upgrade', (request, socket, head) => {
       wss.emit('connection', ws, request);
     });
   } else {
-      socket.destroy();
+    socket.destroy();
   }
 });
 
-const PORT = isProduction?4002:3002
+const PORT = isProduction ? 4002 : 3002
 
 server.listen(PORT, () => {
-  logger.info({service:{protocol: "http", port: PORT}}, "Service started: HTTP")
+  logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
 });
 
 const mqttServer = net.createServer((socket) => {
@@ -67,7 +66,7 @@ const mqttServer = net.createServer((socket) => {
 
 const mqttPort = isProduction ? 8883 : 1883
 mqttServer.listen(mqttPort, () => {
-  logger.info({service:{protocol: "mqtt", port: mqttPort}}, "Service started: MQTT")
+  logger.debug({ service: { protocol: "mqtt", port: mqttPort } }, "Service started: MQTT")
 });
 
 // generateEvent({
