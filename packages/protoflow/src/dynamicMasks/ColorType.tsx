@@ -37,6 +37,7 @@ export default ({ nodeData = {}, field, node }) => {
     const pickerStyles = { default: { card: { background: 'transparent', border: '0px', boxShadow: 'none' } } }
 
     const onSubmitThemeColor = (col) => {
+        if (!col) return
         setNodeData(node.id, { ...nodeData, [dataKey]: { ...data, key: field, value: col, kind: 'StringLiteral' } })
         setTmpColor(col)
     }
@@ -96,8 +97,8 @@ export default ({ nodeData = {}, field, node }) => {
                                                 onChangeComplete={val => {
                                                     const valToFind = convertirHSLAString(val.hsl)
                                                     const matchedKey = Object.keys(colors).find(colorKey => colors[colorKey].val == valToFind && colorKey.endsWith(THEMENAME))
-                                                    const newColor = matchedKey.replace(THEMENAME, '')
-                                                    onSubmitThemeColor(newColor)
+                                                    const newColor = matchedKey?.replace(THEMENAME, '')
+                                                    onSubmitThemeColor(newColor??val.hex)
                                                 }}
                                                 width={'210px'}
                                                 colors={colorArrs.flat(1)}
