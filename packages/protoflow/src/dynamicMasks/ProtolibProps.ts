@@ -17,9 +17,7 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
     const defaultValue = undefined
 
     return [
-        { field: 'prop-bgColor', label: 'bgColor', type: 'select', fieldType: 'prop', data: colors ? [defaultValue, ...colors] : [], static: true },
         { field: 'prop-fontSize', label: 'fontSize', type: 'select', fieldType: 'prop', data: sizes ? [defaultValue, ...sizes] : [], static: true },
-        // { field: 'prop-color', label: 'color', type: 'select', fieldType: 'prop', data: colors ? [defaultValue, ...colors] : [], static: true },
         { field: 'prop-br', label: 'br', type: 'select', fieldType: 'prop', data: radiuses ? [defaultValue, ...radiuses] : [], static: true },
         { field: 'prop-bw', label: 'bw', type: 'select', fieldType: 'prop', data: sizes ? [defaultValue, ...sizes] : [], static: true },
         { field: 'prop-size', label: 'size', type: 'select', fieldType: 'prop', data: sizes ? [defaultValue, ...sizes] : [], static: true },

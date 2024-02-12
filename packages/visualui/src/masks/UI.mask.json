@@ -42,21 +42,9 @@
         },
         "body": [
             {
-                "type": "prop",
-                "prop": [
-                    {
-                        "label": "backgroundColor",
-                        "field": "prop-backgroundColor",
-                        "fieldType": "prop",
-                        "static": true,
-                        "type": "colorPicker"
-                    }
-                ],
-                "disableAdd": true
-            },
-            {
                 "type": "protolibProps",
                 "props": [
+                    "bgColor",
                     "flexDirection",
                     "justifyContent",
                     "alignItems",

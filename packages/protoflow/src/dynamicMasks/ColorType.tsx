@@ -8,7 +8,7 @@ import { useThemeName, Popover, ToggleGroup, Theme } from "@my/ui";
 import { Pipette, Palette } from 'lucide-react'
 
 export const getColorProps = () => [
-    "color"
+    "color", "bgColor"
 ]
 
 export default ({ nodeData = {}, field, node }) => {
@@ -44,6 +44,7 @@ export default ({ nodeData = {}, field, node }) => {
     const getInput = () => {
         switch (field) {
             case 'color':
+            case 'bgColor':
                 return <div style={{ gap: '10px', display: 'flex', alignItems: 'center' }}>
                     <Popover placement='left'>
                         <Popover.Trigger asChild>
@@ -52,6 +53,7 @@ export default ({ nodeData = {}, field, node }) => {
                                     width: "28px", height: "28px", cursor: 'pointer',
                                     backgroundColor: colors[value + THEMENAME]?.val ?? value,
                                     borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
+                                    border: !value ? '1px solid white' : ''
                                 }}>
                             </div>
                         </Popover.Trigger>
