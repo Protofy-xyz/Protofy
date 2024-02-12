@@ -22,6 +22,16 @@ export default ({ nodeData = {}, field, node }) => {
     const dataKey = 'prop-' + field
     const data = nodeData[dataKey]
     const value = data?.value
+    const rotation = getIconRotation()
+
+    function getIconRotation() {
+        let rot = '0deg';
+        const isRowDir = Boolean(nodeData["prop-flexDirection"]?.value?.startsWith("row"))
+        if(isRowDir) {
+            rot = field == 'alignItems' ? '90deg': '-90deg'
+        }
+        return rot;
+    }
 
     const getIconColor = (type) => {
         if (value == type) return 'white'
@@ -32,8 +42,8 @@ export default ({ nodeData = {}, field, node }) => {
         setNodeData(node.id, { ...nodeData, [dataKey]: { ...data, key: field, value: val, kind: 'StringLiteral' } })
     }
 
-    const Icon = ({ icon, label }) => {
-        return <div title={label} style={{ cursor: 'pointer' }} onClick={() => onSelectAlignment(label)}>
+    const Icon = ({ icon, label, rotate = '0deg'}) => {
+        return <div title={label} style={{ cursor: 'pointer', rotate: rotate }} onClick={() => onSelectAlignment(label)}>
             {React.createElement(icon, { color: getIconColor(label) })}
         </div>
     }
@@ -49,10 +59,10 @@ export default ({ nodeData = {}, field, node }) => {
             case 'alignItems':
             case 'alignSelf':
                 return <div style={{ gap: '10px', display: 'flex' }}>
-                    <Icon icon={AlignStartVertical} label={'start'} />
-                    <Icon icon={AlignCenterVertical} label={'center'} />
-                    <Icon icon={AlignEndVertical} label={'end'} />
-                    <Icon icon={StretchVertical} label={'stretch'} />
+                    <Icon rotate={rotation} icon={AlignStartVertical} label={'start'} />
+                    <Icon rotate={rotation} icon={AlignCenterVertical} label={'center'} />
+                    <Icon rotate={rotation} icon={AlignEndVertical} label={'end'} />
+                    <Icon rotate={rotation} icon={StretchVertical} label={'stretch'} />
                 </div>
             case 'flexDirection':
                 return <div style={{ gap: '10px', display: 'flex' }}>
@@ -65,11 +75,11 @@ export default ({ nodeData = {}, field, node }) => {
             case 'justifyContent':
             case 'alignContent':
                 return <div style={{ gap: '10px', display: 'flex' }}>
-                    <Icon icon={AlignVerticalJustifyStart} label={'start'} />
-                    <Icon icon={AlignVerticalJustifyCenter} label={'center'} />
-                    <Icon icon={AlignVerticalJustifyEnd} label={'end'} />
-                    <Icon icon={AlignVerticalSpaceBetween} label={'space-between'} />
-                    <Icon icon={AlignVerticalSpaceAround} label={'space-around'} />
+                    <Icon rotate={rotation} icon={AlignVerticalJustifyStart} label={'start'} />
+                    <Icon rotate={rotation} icon={AlignVerticalJustifyCenter} label={'center'} />
+                    <Icon rotate={rotation} icon={AlignVerticalJustifyEnd} label={'end'} />
+                    <Icon rotate={rotation} icon={AlignVerticalSpaceBetween} label={'space-between'} />
+                    <Icon rotate={rotation} icon={AlignVerticalSpaceAround} label={'space-around'} />
                 </div>
 
 
