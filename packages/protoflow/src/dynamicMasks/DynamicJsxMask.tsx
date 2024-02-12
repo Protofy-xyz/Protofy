@@ -5,6 +5,7 @@ import AddPropButton from '../AddPropButton';
 import { Code } from 'lucide-react'
 import { getProtolibParams, getProtolibProps } from './ProtolibProps';
 import AlignmentType, { getAlignmentProps } from './AlignmentType';
+import ColorType, { getColorProps } from './ColorType';
 
 const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const propsArray: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('prop-')).map((prop: any, i) => {
@@ -53,11 +54,17 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         }
                         case 'protolibProps': {
                             const alignmentProps = getAlignmentProps()
+                            const colorProps = getColorProps()
 
                             return <>
                                 {
                                     element.props.filter(p => alignmentProps.includes(p))?.map(field => (
                                         <AlignmentType node={node} field={field} nodeData={nodeData} />
+                                    ))
+                                }
+                                {
+                                    element.props.filter(p => colorProps.includes(p))?.map(field => (
+                                        <ColorType node={node} field={field} nodeData={nodeData} />
                                     ))
                                 }
                                 <NodeParams id={node.id} params={getProtolibParams(element.props)} />
