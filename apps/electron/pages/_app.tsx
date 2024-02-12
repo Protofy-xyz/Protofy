@@ -33,6 +33,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 function MyApp({ Component, pageProps }: SolitoAppProps) {
+  //@ts-ignore
+  const [session] = useSession(pageProps['pageSession'])
   const isElectron = () => {
     // Renderer process
     if (typeof window !== 'undefined' && typeof window.process === 'object' && window.process.type === 'renderer') {
@@ -65,7 +67,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <JotaiProvider>
-        <Connector brokerUrl={brokerUrl}>
+        <Connector brokerUrl={brokerUrl} options={{username: session?.user?.id, password: session?.token}}>
           <ThemeProvider>
             <AppConfContext.Provider value={SiteConfig}>
               <Component {...pageProps} />

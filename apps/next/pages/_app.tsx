@@ -33,7 +33,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 function MyApp({ Component, pageProps }: SolitoAppProps) {
-  const [session] = useSession()
+  //@ts-ignore
+  const [session] = useSession(pageProps['pageSession'])
+
   const isElectron = () => {
     // Renderer process
     if (typeof window !== 'undefined' && typeof window.process === 'object' && window.process.type === 'renderer') {
@@ -58,6 +60,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
     document.location.href = document.location.protocol + '//' + document.location.hostname + ':8080'
     return <>This is an internal port for diagnostic purposes. Redirecting to default development port...</>
   }
+
   return (
     <>
       <Head>

@@ -10,7 +10,10 @@ const logger = getLogger()
 import { environments } from 'app/bundles/environments'
 
 
-export const SessionData = atomWithStorage("session", createSession())
+export const SessionData = atomWithStorage("session", createSession(), undefined, {
+    unstable_getOnInit: true
+})
+
 export const UserSettingsAtom = atomWithStorage("userSettings", {} as any)
 
 export const Session = atom(
@@ -96,9 +99,10 @@ export const withSession = async (context: any, permissions?: string[] | any[] |
         if (permissions.length && !session?.user?.admin && !hasSomePermission(permissions, session?.user?.permissions ?? [])) return fail()
     }
 
+    const pageSession = { session: sessionError ? null : (session ?? createSession()), context: await getSessionContext(session?.user?.type) }
     return {
         props: {
-            pageSession: { session: sessionError ? null : (session ?? createSession()), context: await getSessionContext(session?.user?.type) },
+            pageSession: pageSession,
             ...(typeof props === "function" ? await props() : props),
         }
     }
