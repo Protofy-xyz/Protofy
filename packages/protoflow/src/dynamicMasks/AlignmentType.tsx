@@ -16,7 +16,7 @@ export const getAlignmentProps = () => [
 export default ({ nodeData = {}, field, node }) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
-
+    const deletePropNodeData = useFlowsStore(state => state.deletePropNodeData)
     const nodeFontSize = useTheme('nodeFontSize')
 
     const dataKey = 'prop-' + field
@@ -38,12 +38,17 @@ export default ({ nodeData = {}, field, node }) => {
         else return
     }
 
-    const onSelectAlignment = (val) => {
-        setNodeData(node.id, { ...nodeData, [dataKey]: { ...data, key: field, value: val, kind: 'StringLiteral' } })
+    const onToggleAlignment = (val) => {
+        if(value == val) {// deletes nodeData 
+            deletePropNodeData(node.id, dataKey)
+        }
+        else{ // add new prop to nodeData
+            setNodeData(node.id, { ...nodeData, [dataKey]: { ...data, key: field, value: val, kind: 'StringLiteral' } })
+        }
     }
 
     const Icon = ({ icon, label, rotate = '0deg'}) => {
-        return <div title={label} style={{ cursor: 'pointer', rotate: rotate }} onClick={() => onSelectAlignment(label)}>
+        return <div title={label} style={{ cursor: 'pointer', rotate: rotate }} onClick={() => onToggleAlignment(label)}>
             {React.createElement(icon, { color: getIconColor(label) })}
         </div>
     }
