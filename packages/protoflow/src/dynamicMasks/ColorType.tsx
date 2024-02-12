@@ -4,7 +4,7 @@ import Text from '../diagram/NodeText'
 import { FlowStoreContext } from '../store/FlowsStore';
 import { GithubPicker, SketchPicker } from "react-color";
 import Input from '../diagram/NodeInput'
-import { useThemeName, Popover, ToggleGroup, Theme } from "@my/ui";
+import { useThemeName, Popover, ToggleGroup, Theme } from "tamagui";
 import { Pipette, Palette } from 'lucide-react'
 
 export const getColorProps = () => [

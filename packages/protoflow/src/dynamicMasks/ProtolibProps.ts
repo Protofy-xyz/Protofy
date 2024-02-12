@@ -48,6 +48,6 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
 export const getProtolibProps = () => {
     const params = getProtolibParams()
     const alignmentProps = getAlignmentProps().map(p => 'prop-'+p)
-    const colorsProps = getColorProps().map(p => 'prop-'+p)
+    const colorsProps = [] //getColorProps().map(p => 'prop-'+p)
     return [...params.map(p => p.field), ...alignmentProps, ...colorsProps]
 }
