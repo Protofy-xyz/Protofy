@@ -43,24 +43,6 @@ export const getBaseConfig = (name, process, token?, config?) => {
     mqtt: {
       auth: process.env.ENABLE_MQTT_AUTH === "true" ? true : false
     },
-    // logger: {
-    //   ...(process && process.env.NODE_ENV === 'development' && typeof window === "undefined" ?
-    //     {
-    //       transport: {
-    //         targets: [
-    //           {
-    //             target: 'pino-pretty',
-    //             level: 'info',
-    //             options: {
-    //               colorize: true
-    //             }
-    //           }
-    //         ]
-    //       }
-    //     } : {}),
-    //   name: name ?? 'default',
-    //   level: 'debug'
-    // }
     logger: {
       transport: {
         targets: [
