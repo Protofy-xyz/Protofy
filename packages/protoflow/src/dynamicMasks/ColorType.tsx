@@ -4,15 +4,27 @@ import Text from '../diagram/NodeText'
 import { FlowStoreContext } from '../store/FlowsStore';
 import { GithubPicker, SketchPicker } from "react-color";
 import Input from '../diagram/NodeInput'
-import { useThemeName, Popover, ToggleGroup, Theme } from "tamagui";
+import Popover from '../diagram/NodePopover';
 import { Pipette, Palette } from 'lucide-react'
 
 export const getColorProps = () => [
     "color", "bgColor"
 ]
 
+const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
+    <div onClick={onPress}
+        style={{
+            padding: '5px',
+            backgroundColor: selected ? '#EBEBEB' : '#F8F8F8',
+            display: 'flex', alignContent: 'center',
+            alignItems: 'center'
+        }}
+        {...props}>
+    </div>
+)
+
 export default ({ nodeData = {}, field, node }) => {
-    const rawThemeName = useThemeName()
+    const rawThemeName = 'dark'
     const THEMENAME = rawThemeName.charAt(0).toUpperCase() + rawThemeName.slice(1)
 
     const useFlowsStore = useContext(FlowStoreContext)
@@ -31,6 +43,7 @@ export default ({ nodeData = {}, field, node }) => {
     const data = nodeData[dataKey]
     const value = data?.value
 
+    const [isColorVisible, setIsColorVisible] = React.useState(false);
     const [colorMode, setColorMode] = React.useState('theme');
     const [tmpColor, setTmpColor] = useState(value)
 
@@ -42,82 +55,76 @@ export default ({ nodeData = {}, field, node }) => {
         setTmpColor(col)
     }
 
+
     const getInput = () => {
         switch (field) {
             case 'color':
             case 'bgColor':
-                return <div style={{ gap: '10px', display: 'flex', alignItems: 'center' }}>
-                    <Popover placement='left'>
-                        <Popover.Trigger asChild>
-                            <div
-                                style={{
-                                    width: "28px", height: "28px", cursor: 'pointer',
-                                    backgroundColor: colors[value + THEMENAME]?.val ?? value,
-                                    borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
-                                    border: !value ? '1px solid white' : ''
-                                }}>
+                return <>
+                    <div
+                        onClick={() => setIsColorVisible(!isColorVisible)}
+                        style={{
+                            width: "28px", height: "28px", cursor: 'pointer',
+                            backgroundColor: colors[value + THEMENAME]?.val ?? value,
+                            borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
+                            border: !value ? '1px solid white' : ''
+                        }}
+                    >
+                    </div>
+                    <Popover onDismiss={() => setIsColorVisible(false)} visible={isColorVisible}>
+                        <div>
+                            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', padding: '6px' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Text style={{ color: 'black', fontFamily: 'Jost-Medium', fontSize: '16px', paddingLeft: 0 }}>Choose a Color</Text>
+                                    <Text style={{ color: 'gray', fontSize: '14px', paddingLeft: 0, textAlign: 'left' }} >{colorMode == 'theme' ? 'Theme Color' : 'Custom Color'}</Text>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '6px', border: '1px solid #cccccc', overflow: 'hidden', height: '28px' }}>
+                                    <ToggleItem selected={colorMode == 'theme'} onPress={() => setColorMode('theme')}>
+                                        <Palette size={'16px'} color={colorMode == 'theme' ? interactiveColor : 'gray'} fillOpacity={0} />
+                                    </ToggleItem>
+                                    <ToggleItem selected={colorMode == 'custom'} onPress={() => setColorMode('custom')}>
+                                        <Pipette size={'16px'} color={colorMode == 'custom' ? interactiveColor : 'gray'} fillOpacity={0} />
+                                    </ToggleItem>
+                                </div>
                             </div>
-                        </Popover.Trigger>
-                        <Input
-                            onBlur={() => onSubmitThemeColor(tmpColor)}
-                            style={{
-                                fontSize: nodeFontSize + 'px',
-                                fontWeight: 'medium', paddingLeft: '38px'
-                            }}
-                            value={tmpColor}
-                            placeholder="default"
-                            onChange={t => setTmpColor(t.target.value)}
-                        />
-                        <Theme reset >
-                            <Theme name='light' >
-                                <Popover.Content width={'250px'} height={'380px'} backgroundColor='white' borderWidth="1px" borderColor='gray'>
-                                    <Popover.Arrow />
-                                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <Text style={{ color: 'black', fontFamily: 'Jost-Medium', fontSize: '16px', paddingLeft: 0 }}>Choose a Color</Text>
-                                            <Text style={{ color: 'gray', fontSize: '14px', paddingLeft: 0 }} >{colorMode == 'theme' ? 'Theme Color' : 'Custom Color'}</Text>
-                                        </div>
-                                        <ToggleGroup disableDeactivation={true} value={colorMode} onValueChange={val => setColorMode(val)} type="single" orientation='horizontal' size='$2' height='30px'>
-                                            <ToggleGroup.Item value="theme">
-                                                <Palette color={colorMode == 'theme' ? interactiveColor : 'gray'} fillOpacity={0} />
-                                            </ToggleGroup.Item>
-                                            <ToggleGroup.Item value="custom">
-                                                <Pipette color={colorMode == 'custom' ? interactiveColor : 'gray'} fillOpacity={0} />
-                                            </ToggleGroup.Item>
-                                        </ToggleGroup>
-                                    </div>
-                                    {colorMode == 'theme'
-                                        ?
-                                        // <Popover.Close>
-                                        <Popover.ScrollView style={{ height: '280px', marginTop: '5px' }}>
-                                            <GithubPicker
-                                                className={"loooll"}
-                                                styles={pickerStyles}
-                                                triangle='hide'
-                                                onChangeComplete={val => {
-                                                    const valToFind = convertirHSLAString(val.hsl)
-                                                    const matchedKey = Object.keys(colors).find(colorKey => colors[colorKey].val == valToFind && colorKey.endsWith(THEMENAME))
-                                                    const newColor = matchedKey?.replace(THEMENAME, '')
-                                                    onSubmitThemeColor(newColor??val.hex)
-                                                }}
-                                                width={'210px'}
-                                                colors={colorArrs.flat(1)}
-                                            />
-                                        </Popover.ScrollView>
-                                        // </Popover.Close>
-                                        : <SketchPicker
-                                            color={tmpColor}
-                                            onChangeComplete={(newColor) => {
-                                                onSubmitThemeColor(newColor.hex)
-                                            }}
-                                            styles={{ default: { picker: { background: 'transparent', border: '0px', boxShadow: 'none', width: '210px' } } }}
-                                        />
-                                    }
-                                </Popover.Content>
-                            </Theme>
-                        </Theme>
+                            {colorMode == 'theme'
+                                ?
+                                <div style={{ height: '280px', marginTop: '5px', overflowY: 'scroll' }}>
+                                    <GithubPicker
+                                        className={"loooll"}
+                                        styles={pickerStyles}
+                                        triangle='hide'
+                                        onChangeComplete={val => {
+                                            const valToFind = convertirHSLAString(val.hsl)
+                                            const matchedKey = Object.keys(colors).find(colorKey => colors[colorKey].val == valToFind && colorKey.endsWith(THEMENAME))
+                                            const newColor = matchedKey?.replace(THEMENAME, '')
+                                            onSubmitThemeColor(newColor ?? val.hex)
+                                        }}
+                                        width={'220px'}
+                                        colors={colorArrs.flat(1)}
+                                    />
+                                </div>
+                                : <SketchPicker
+                                    color={tmpColor}
+                                    onChangeComplete={(newColor) => {
+                                        onSubmitThemeColor(newColor.hex)
+                                    }}
+                                    styles={{ default: { picker: { background: 'transparent', border: '0px', boxShadow: 'none', width: '210px' } } }}
+                                />
+                            }
+                        </div>
                     </Popover>
-                </div >
+                    <Input
+                        onBlur={() => onSubmitThemeColor(tmpColor)}
+                        style={{
+                            fontSize: nodeFontSize + 'px',
+                            fontWeight: 'medium', paddingLeft: '38px'
+                        }}
+                        value={tmpColor}
+                        placeholder="default"
+                        onChange={t => setTmpColor(t.target.value)}
+                    />
+                </>
         }
     }
     return <div style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column" }}>
