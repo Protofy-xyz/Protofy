@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import useTheme from '../diagram/Theme';
 import Text from '../diagram/NodeText'
 import { FlowStoreContext } from '../store/FlowsStore';
-import { SwatchesPicker, SketchPicker, GithubPicker } from "react-color";
-import { Pipette } from 'lucide-react';
+import { GithubPicker } from "react-color";
+import Input from '../diagram/NodeInput'
 
 export const getColorProps = () => [
     "color"
@@ -27,19 +27,36 @@ export default ({ nodeData = {}, field, node }) => {
     const data = nodeData[dataKey]
     const value = data?.value
 
-    const onSelectThemeColor = (val) => {
-        const newColor = val.replace(THEMEMODE, '')
-        setNodeData(node.id, { ...nodeData, [dataKey]: { ...data, key: field, value: newColor, kind: 'StringLiteral' } })
-    }
-
     const [colorPickerVisible, setColorPickerVisible] = React.useState(false);
+    const [tmpColor, setTmpColor] = useState(value)
+
+    const onSubmitThemeColor = (col) => {
+        setNodeData(node.id, { ...nodeData, [dataKey]: { ...data, key: field, value: col, kind: 'StringLiteral' } })
+        setTmpColor(col)
+    }
 
     const getInput = () => {
         switch (field) {
             case 'color':
-                return <div style={{ gap: '10px', display: 'flex' }}>
-                    <div onClick={() => setColorPickerVisible(!colorPickerVisible)} style={{ width: "36px", height: "36px", backgroundColor: colors[value + THEMEMODE]?.val ?? value, border: "1px #cccccc solid", borderRadius: 5 }}></div>
-                    {/* <Pipette style={{ cursor: 'pointer' }} onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></Pipette> */}
+                return <div style={{ gap: '10px', display: 'flex', alignItems: 'center' }}>
+                    <div
+                        onClick={() => setColorPickerVisible(!colorPickerVisible)}
+                        style={{
+                            width: "28px", height: "28px", cursor: 'pointer',
+                            backgroundColor: colors[value + THEMEMODE]?.val ?? value,
+                            borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px'
+                        }}>
+                    </div>
+                    <Input
+                        onBlur={() => onSubmitThemeColor(tmpColor)}
+                        style={{
+                            fontSize: nodeFontSize + 'px',
+                            fontWeight: 'medium', paddingLeft: '38px'
+                        }}
+                        value={tmpColor}
+                        placeholder="default"
+                        onChange={t => setTmpColor(t.target.value)}
+                    />
                     <div style={{ cursor: "pointer", position: "absolute", zIndex: 900000, top: '50px', marginLeft: '-90px' }}>
                         {colorPickerVisible
                             ? <GithubPicker
@@ -47,7 +64,8 @@ export default ({ nodeData = {}, field, node }) => {
                                 onChangeComplete={val => {
                                     const valToFind = convertirHSLAString(val.hsl)
                                     const matchedKey = Object.keys(colors).find(colorKey => colors[colorKey].val == valToFind && colorKey.endsWith(THEMEMODE))
-                                    onSelectThemeColor(matchedKey)
+                                    const newColor = matchedKey.replace(THEMEMODE, '')
+                                    onSubmitThemeColor(newColor)
                                     setColorPickerVisible(false)
                                 }}
                                 width={'320px'}
