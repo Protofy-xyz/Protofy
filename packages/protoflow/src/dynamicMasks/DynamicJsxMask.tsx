@@ -19,7 +19,7 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                     switch (element.type) {
                         case 'child': {
                             const childs: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('child-')).map((prop: any, i) => {
-                                const dynamicMask = element.child?.find(c => c.field === prop)
+                                const dynamicMask = element.data?.find(c => c.field === prop)
                                 return { label: dynamicMask ? dynamicMask.label : ('Child' + (i + 1)), field: prop, fieldType: 'child', deleteable: dynamicMask ? false : true } as Field
                             })
                             return <>
@@ -33,11 +33,11 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             const hasProtolibProps = mask.data.body.find(i => i.type == 'protolibProps')
                             const protolibProps = getProtolibProps()
                             return <>
-                                <NodeParams id={node.id} params={element.props} />
+                                <NodeParams id={node.id} params={element.data} />
                                 <NodeParams
                                     id={node.id}
                                     params={propsArray.filter(p => !protolibProps.includes(p.field) || !hasProtolibProps)
-                                        .filter(item => !element.props.find(i => i.field == item.field) && (item.field != redirectPropName))
+                                        .filter(item => !element.data.find(i => i.field == item.field) && (item.field != redirectPropName))
                                     }
                                 />
                                 {!element.disableAdd ? <AddPropButton id={node.id} type="Prop" nodeData={nodeData} /> : null}
@@ -58,16 +58,16 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
 
                             return <>
                                 {
-                                    element.props.filter(p => colorProps.includes(p))?.map(field => (
+                                    element.data.filter(p => colorProps.includes(p))?.map(field => (
                                         <ColorType node={node} field={field} nodeData={nodeData} />
                                     ))
                                 }
                                 {
-                                    element.props.filter(p => alignmentProps.includes(p))?.map(field => (
+                                    element.data.filter(p => alignmentProps.includes(p))?.map(field => (
                                         <AlignmentType node={node} field={field} nodeData={nodeData} />
                                     ))
                                 }
-                                <NodeParams id={node.id} params={getProtolibParams(element.props)} />
+                                <NodeParams id={node.id} params={getProtolibParams(element.data)} />
                             </>
                         }
                     }

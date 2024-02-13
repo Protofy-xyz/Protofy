@@ -10,7 +10,7 @@
         "body": [
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "flexDirection",
                     "justifyContent",
                     "alignContent",
@@ -21,7 +21,7 @@
             },
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "Child1",
                         "field": "child-1",
@@ -43,7 +43,7 @@
         "body": [
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "backgroundColor",
                     "flexDirection",
                     "justifyContent",
@@ -54,7 +54,7 @@
             },
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "Child1",
                         "field": "child-1",
@@ -76,7 +76,7 @@
         "body": [
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "width",
                     "height",
                     "opacity"
@@ -84,7 +84,7 @@
             },
             {
                 "type": "prop",
-                "props": [
+                "data": [
                     {
                         "label": "url",
                         "field": "prop-url",
@@ -107,13 +107,13 @@
         "body": [
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "*"
                 ]
             },
             {
                 "type": "prop",
-                "props": [
+                "data": [
                     {
                         "label": "title",
                         "field": "prop-title",
@@ -126,7 +126,7 @@
             },
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "Child1",
                         "field": "child-1",
@@ -148,7 +148,7 @@
         "body": [
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "caption",
                         "field": "child-1",
@@ -160,7 +160,7 @@
             },
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "color",
                     "margin",
                     "padding"
@@ -168,7 +168,7 @@
             },
             {
                 "type": "prop",
-                "props": []
+                "data": []
             }
         ]
     },
@@ -183,7 +183,7 @@
         "body": [
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "caption",
                         "field": "child-1",
@@ -195,7 +195,7 @@
             },
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "color",
                     "textAlign",
                     "margin",
@@ -205,7 +205,7 @@
             },
             {
                 "type": "prop",
-                "props": []
+                "data": []
             }
         ]
     },
@@ -220,7 +220,7 @@
         "body": [
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "caption",
                         "field": "child-1",
@@ -232,7 +232,7 @@
             },
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "color",
                     "textAlign",
                     "margin",
@@ -242,7 +242,7 @@
             },
             {
                 "type": "prop",
-                "props": []
+                "data": []
             }
         ]
     },
@@ -257,7 +257,7 @@
         "body": [
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "caption",
                         "field": "child-1",
@@ -269,7 +269,7 @@
             },
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "color",
                     "textAlign",
                     "margin",
@@ -279,7 +279,7 @@
             },
             {
                 "type": "prop",
-                "props": []
+                "data": []
             }
         ]
     },
@@ -294,7 +294,7 @@
         "body": [
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "caption",
                         "field": "child-1",
@@ -306,7 +306,7 @@
             },
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "textAlign",
                     "margin",
                     "padding"
@@ -314,7 +314,7 @@
             },
             {
                 "type": "prop",
-                "props": []
+                "data": []
             }
         ]
     },
@@ -329,7 +329,7 @@
         "body": [
             {
                 "type": "prop",
-                "props": [
+                "data": [
                     {
                         "label": "title",
                         "field": "prop-title",
@@ -348,7 +348,7 @@
             },
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "Child1",
                         "field": "child-1",
@@ -370,7 +370,7 @@
         "body": [
             {
                 "type": "child",
-                "child": [
+                "data": [
                     {
                         "label": "caption",
                         "field": "child-1",
@@ -382,14 +382,14 @@
             },
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "margin",
                     "padding"
                 ]
             },
             {
                 "type": "prop",
-                "props": [
+                "data": [
                     {
                         "label": "color",
                         "field": "prop-color",
@@ -419,7 +419,7 @@
         "body": [
             {
                 "type": "prop",
-                "props": [
+                "data": [
                     {
                         "label": "title",
                         "field": "prop-title",
@@ -439,7 +439,7 @@
             },
             {
                 "type": "protolibProps",
-                "props": [
+                "data": [
                     "margin",
                     "padding"
                 ]
