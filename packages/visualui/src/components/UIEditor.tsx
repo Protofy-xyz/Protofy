@@ -1,7 +1,7 @@
 import { memo, useEffect, useState, useRef } from "react";
 import { useRouter } from 'next/router'
-import { Editor } from "@craftjs/core";
-import { Layers } from "@craftjs/layers";
+import { Editor } from "@protocraft/core";
+import { Layers } from "@protocraft/layers";
 import { RenderNode } from './RenderNode';
 import paletteComponents from '../palettes';
 import EditorLayout from "./EditorLayout";

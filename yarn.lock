@@ -6018,6 +6018,49 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@protocraft/core@npm:0.2.4-2":
+  version: 0.2.4-2
+  resolution: "@protocraft/core@npm:0.2.4-2"
+  dependencies:
+    "@protocraft/utils": 0.2.1-3
+    debounce: ^1.2.0
+    lodash: ^4.17.21
+    tiny-invariant: ^1.0.6
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 396374c796003859e22f431bdeaf94aee75fb62aef0be4881043f7d48ce9b40f162be8e5c983e50e98befda1b0a6c4c5d708e75918003100c9ac31dba207ee74
+  languageName: node
+  linkType: hard
+
+"@protocraft/layers@npm:0.2.1-2":
+  version: 0.2.1-2
+  resolution: "@protocraft/layers@npm:0.2.1-2"
+  dependencies:
+    "@protocraft/utils": 0.2.1-3
+    react-contenteditable: ^3.3.3
+  peerDependencies:
+    "@protocraft/core": 0.2.4-2
+    react: ^16.8.0 || ^17 || ^18
+    styled-components: ">= 4"
+  checksum: 907977f90872329545df1c1a2094480794f3047c099b072a2009c6f6dd89cd9c2f1daec9f86e8cb961952b9ee1280d7e500ed29202eaa529d128142c0d57170c
+  languageName: node
+  linkType: hard
+
+"@protocraft/utils@npm:0.2.1-3":
+  version: 0.2.1-3
+  resolution: "@protocraft/utils@npm:0.2.1-3"
+  dependencies:
+    immer: ^9.0.6
+    lodash: ^4.17.21
+    nanoid: ^3.1.23
+    shallowequal: ^1.1.0
+    tiny-invariant: ^1.0.6
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 362cf2755f323c85e38943665c78b46a0393fb2db5c95f387d338060d8fbdb9ccf2ce534021f6c1130a1e20c560835f991fbccb00de7b90c3276fb7c60a82af8
+  languageName: node
+  linkType: hard
+
 "@radix-ui/primitive@npm:1.0.1":
   version: 1.0.1
   resolution: "@radix-ui/primitive@npm:1.0.1"
@@ -10342,9 +10385,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "admin@workspace:apps/admin"
   dependencies:
-    "@craftjs/core": 0.2.0-beta.8
-    "@craftjs/layers": 0.2.1
     "@jest/globals": ~29.7.0
+    "@protocraft/core": 0.2.4-2
+    "@protocraft/layers": 0.2.1-2
     "@react-three/drei": 9.77.3
     "@react-three/fiber": 8.8.10
     "@tamagui/config": latest
@@ -23389,9 +23432,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "next-app@workspace:apps/next"
   dependencies:
-    "@craftjs/core": 0.2.0-beta.8
-    "@craftjs/layers": 0.2.1
     "@jest/globals": ~29.7.0
+    "@protocraft/core": 0.2.4-2
+    "@protocraft/layers": 0.2.1-2
     "@react-three/drei": 9.77.3
     "@react-three/fiber": 8.8.10
     "@tamagui/config": latest
