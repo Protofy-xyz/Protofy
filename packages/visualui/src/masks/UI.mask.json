@@ -44,7 +44,7 @@
             {
                 "type": "protolibProps",
                 "props": [
-                    "bgColor",
+                    "backgroundColor",
                     "flexDirection",
                     "justifyContent",
                     "alignItems",

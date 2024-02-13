@@ -8,7 +8,7 @@ import Popover from '../diagram/NodePopover';
 import { Pipette, Palette } from 'lucide-react'
 
 export const getColorProps = () => [
-    "color", "bgColor"
+    "color", "bgColor", "backgroundColor"
 ]
 
 const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
@@ -59,6 +59,7 @@ export default ({ nodeData = {}, field, node }) => {
         switch (field) {
             case 'color':
             case 'bgColor':
+            case 'backgroundColor':
                 return <>
                     <Popover trigger={
                         <div
