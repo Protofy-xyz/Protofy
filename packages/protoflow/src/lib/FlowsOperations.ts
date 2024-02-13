@@ -178,7 +178,7 @@ export const findJsxElementDumpedPropValue = (nodes, edges, nodeData, nodeId, no
     const dumpCode = dumpContent(nodes, edges, nodeData, nodeId, nodeType)
     const source = getSource(dumpCode)
     //@ts-ignore
-    const propContent = source.getFirstDescendantByKind(SyntaxKind["JsxElement"])?.getOpeningElement()?.getAttributes()?.find(atr => atr?.getName() == propKey)
+    const propContent = source.getFirstDescendantByKind(SyntaxKind["JsxElement"])?.getOpeningElement()?.getAttributes()?.find(atr => atr?.getName && atr.getName() == propKey)
     //@ts-ignore
     const propValue = propContent?.getInitializer()?.getText();
     return propValue
