@@ -33,11 +33,11 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             const hasProtolibProps = mask.data.body.find(i => i.type == 'protolibProps')
                             const protolibProps = getProtolibProps()
                             return <>
-                                <NodeParams id={node.id} params={element.prop} />
+                                <NodeParams id={node.id} params={element.props} />
                                 <NodeParams
                                     id={node.id}
                                     params={propsArray.filter(p => !protolibProps.includes(p.field) || !hasProtolibProps)
-                                        .filter(item => !element.prop.find(i => i.field == item.field) && (item.field != redirectPropName))
+                                        .filter(item => !element.props.find(i => i.field == item.field) && (item.field != redirectPropName))
                                     }
                                 />
                                 {!element.disableAdd ? <AddPropButton id={node.id} type="Prop" nodeData={nodeData} /> : null}
@@ -80,7 +80,7 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
 DynamicJsxMask.check = (node, nodeData, data) => {
     var initialCheck = false
     if (data.initialData) {
-        var initialDataArr = data.body?.find(b => b.type == 'prop')?.prop?.map(i => i?.field)
+        var initialDataArr = data.body?.find(b => b.type == 'prop')?.props?.map(i => i?.field)
         var dataArr = Object.keys(nodeData)
         initialCheck = initialDataArr?.filter(i => !dataArr.includes(i)).length == 0 ? true : false
     }
