@@ -68,7 +68,7 @@ interface FlowProps {
     defaultViewPort?: { x: number, y: number, zoom: number },
     path?: string,
     mode?: 'js' | 'json' | 'device',
-    nodePreview?: boolean,
+    nodePreview?: 'preview' | 'flow-preview' | 'flow',
     metadata?: any
 }
 
@@ -104,7 +104,7 @@ const FlowsBase = ({
     defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
     path = "Start",
     mode = 'js',
-    nodePreview = false,
+    nodePreview = 'preview',
     metadata = {}
 }: FlowProps) => {
     const { data, publish } = topics;
@@ -924,7 +924,7 @@ const FlowsBase = ({
                         </Panel>
                         : null
                 }
-            </Diagram> : <p>hola</p>}
+            </Diagram> : <></>}
         </div>
 
     );

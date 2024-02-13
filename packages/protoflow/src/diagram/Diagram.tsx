@@ -41,7 +41,7 @@ type DiagramParams = {
     theme?: any,
     defaultViewPort?: { x: number, y: number, zoom: number },
     onViewPortChange?: any,
-    nodePreview?: boolean
+    nodePreview?: 'preview' | 'flow-preview' | 'flow'
 }
 
 const Diagram = React.forwardRef(({
@@ -67,7 +67,7 @@ const Diagram = React.forwardRef(({
     theme = {},
     defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
     onViewPortChange = () => { },
-    nodePreview = false
+    nodePreview = 'flow'
 }: DiagramParams, ref) => {
     const reactFlowWrapper = useRef<HTMLElement | null>(null);
     const isDiagramVisible = reactFlowWrapper.current?.getBoundingClientRect()?.height > 0
@@ -87,7 +87,7 @@ const Diagram = React.forwardRef(({
     const [pastZoomNodes, setPastZoomNodes] = useState([])
     const { data, publish } = topics;
 
-    const preview = nodePreview ? 'node' : 'default'
+    const preview = nodePreview === 'preview' ? 'node' : 'default'
 
     const onDragOver = useCallback((event) => {
         event.preventDefault();
@@ -118,7 +118,6 @@ const Diagram = React.forwardRef(({
             const deletedKey = edge.targetHandle.replace(parentId, '').slice(1)
             let parentType = nodeTypes[parentId.split('_')[0]]
             if (parentType.type) parentType = parentType.type
-            console.log('parent type: ', parentType)
 
             if (deletedKey) {
                 if (parentType.onDeleteConnection) {
@@ -162,6 +161,28 @@ const Diagram = React.forwardRef(({
         setEdges(getEdges().map(e => ({ ...e, hidden: false, data: { ...e.data, preview } })))
         setNodes(getNodes().map(n => ({ ...n, hidden: false, data: { ...n.data, preview } })))
     }
+
+    const findConnectedNodes = (nodeId, currentNodes = []) => { // get node ids connected to specific node
+        const edge = getEdges().find(e => e.target == nodeId)
+        if (edge) {
+            const n_id = edge.source // next connected node Id
+            return findConnectedNodes(n_id, [...currentNodes, n_id])
+        }
+        return currentNodes;
+    }
+
+    const showSelectedContext = (selectedNodeId) => {
+        const matchNodeIds = findConnectedNodes(selectedNodeId, [selectedNodeId])
+        let newNodes = getNodes().map(n => {
+            return { ...n, hidden: !matchNodeIds.includes(n.id), data: { ...n.data, preview } }
+        })
+        let newEdges = getEdges().map(e => {
+            return { ...e, hidden: !matchNodeIds.includes(e.target), data: { ...e.data, preview } }
+        })
+        setEdges(newEdges)
+        setNodes(newNodes)
+    }
+
     const hideUnselected = (selectedNodeId) => {
         if (selectedNodeId) {
             setEdges(getEdges().map(e => ({ ...e, hidden: true, data: { ...e.data, preview } })))
@@ -175,9 +196,9 @@ const Diagram = React.forwardRef(({
             return n.id == selectedNodeId
         })
         if (!selectedNode) return
-        const flowsWidth = reactFlowWrapper.current.offsetWidth
+        const flowsWidth = reactFlowWrapper.current?.offsetWidth
         if (!flowsWidth) return // skip if diagram is not visible
-        const flowsHeight = reactFlowWrapper.current.offsetHeight
+        const flowsHeight = reactFlowWrapper.current?.offsetHeight
         const posX = selectedNode.position.x + selectedNode.width / 2
         const posY = selectedNode.position.y + (flowsHeight / 2) - 50
         setNodes(nds => {
@@ -190,7 +211,7 @@ const Diagram = React.forwardRef(({
             }
             return nds
         })
-        setCenter(posX, posY, { zoom: 1, duration: nodePreview ? 1 : 500 })
+        setCenter(posX, posY, { zoom: 1, duration: nodePreview === 'preview' ? 1 : 500 })
     }, [setCenter, nodePreview, nodes]);
 
     useKeypress(['z', 'Z'], async (event) => {
@@ -235,15 +256,26 @@ const Diagram = React.forwardRef(({
             pastZoomNodes[0] = nodeToZoomId
             setPastZoomNodes([...pastZoomNodes])
             setTimeout(() => zoomToNode(nodeToZoomId), 80);
-            if (nodePreview) hideUnselected(nodeToZoomId)
+            if (nodePreview === 'preview') hideUnselected(nodeToZoomId)
         }
     }, [data['zoomToNode']])
 
     useEffect(() => {
-        if (!nodePreview) showAll()
-        else hideUnselected(pastZoomNodes[0])
+        switch (nodePreview) {
+            case 'preview':
+                hideUnselected(pastZoomNodes[0])
+                break;
+            case 'flow-preview':
+                showSelectedContext(pastZoomNodes[0])
+                break;
+            case 'flow':
+                showAll()
+                break;
+            default:
+                console.error('Unauthorized value for nodePreview: ', nodePreview)
+        }
         setTimeout(() => zoomToNode(pastZoomNodes[0]), 80);
-    }, [nodePreview])
+    }, [nodePreview, pastZoomNodes[0]])
 
     const proOptions = { hideAttribution: true };
 
@@ -271,8 +303,8 @@ const Diagram = React.forwardRef(({
                 style={{ cursor: "pointer", ...style }}
                 onDragOver={onDragOver}
                 edgeTypes={edgeTypes}
-                zoomOnScroll={!nodePreview}
-                panOnDrag={!nodePreview}
+                zoomOnScroll={nodePreview !== 'preview'}
+                panOnDrag={nodePreview !== 'preview'}
                 minZoom={0.3}
                 maxZoom={2}
                 onInit={(reactFlowInstance: any) => {

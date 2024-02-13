@@ -8,7 +8,7 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import { MainPanel } from "protolib";
 import Monaco from "./Monaco";
-import { Component, X, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, ChevronRight } from "lucide-react";
+import { Component, X, Share2, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, ChevronRight } from "lucide-react";
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
@@ -34,7 +34,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [currentPageContent, setCurrentPageContent] = useState("")
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
     const [monacoHasChanges, setMonacoHasChanges] = useState(false)
-    const [preview, setPreview] = useState(true)
+    const [preview, setPreview] = useState('preview')
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
     const [customizeVisible, setCustomizeVisible] = useState(true);
     const [layerVisible, setLayerVisible] = useState(false);
@@ -156,13 +156,16 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         </Button>
                     </XStack>
                     <ToggleGroup display={monacoHasChanges ? 'none' : 'flex'} theme={"dark"} type="single" defaultValue="preview" disableDeactivation>
-                        <ToggleGroup.Item value="code" onPress={() => { setPreview(false); setCodeEditorVisible(true) }}>
+                        <ToggleGroup.Item value="code" onPress={() => { setPreview(undefined); setCodeEditorVisible(true) }}>
                             <Code />
                         </ToggleGroup.Item>
-                        <ToggleGroup.Item value="flow" onPress={() => { setPreview(false); setCodeEditorVisible(false) }}>
+                        <ToggleGroup.Item value="flow" onPress={() => { setPreview('flow'); setCodeEditorVisible(false) }}>
+                            <Share2 />
+                        </ToggleGroup.Item>
+                        <ToggleGroup.Item value="flow-preview" onPress={() => { setPreview('flow-preview'); setCodeEditorVisible(false) }}>
                             <Workflow />
                         </ToggleGroup.Item>
-                        <ToggleGroup.Item value="preview" onPress={() => { setPreview(true); setCodeEditorVisible(false) }}>
+                        <ToggleGroup.Item value="preview" onPress={() => { setPreview('preview'); setCodeEditorVisible(false) }}>
                             <SlidersHorizontal />
                         </ToggleGroup.Item>
                     </ToggleGroup>
@@ -284,7 +287,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     centerPanelContent={EditorPanel}
                     rightPanelContent={FlowPanel}
                     rightPanelResizable={!preview}
-                    rightPanelWidth={!preview?50:0}
+                    rightPanelWidth={!preview ? 50 : 0}
                     rightPanelVisible={isSideBarVisible}
                 />
             </div>
