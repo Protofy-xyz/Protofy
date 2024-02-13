@@ -1,5 +1,5 @@
 import React from "react";
-import { useNode } from "@protocraft/core";
+import { useNode } from "@craftjs/core";
 import { CopyPlus } from '@tamagui/lucide-icons'
 import { H4 } from 'tamagui'
 import Center from '../components/Center'
