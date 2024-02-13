@@ -43,7 +43,6 @@ export default ({ nodeData = {}, field, node }) => {
     const data = nodeData[dataKey]
     const value = data?.value
 
-    const [isColorVisible, setIsColorVisible] = React.useState(false);
     const [colorMode, setColorMode] = React.useState('theme');
     const [tmpColor, setTmpColor] = useState(value)
 
@@ -61,17 +60,18 @@ export default ({ nodeData = {}, field, node }) => {
             case 'color':
             case 'bgColor':
                 return <>
-                    <div
-                        onClick={() => setIsColorVisible(!isColorVisible)}
-                        style={{
-                            width: "28px", height: "28px", cursor: 'pointer',
-                            backgroundColor: colors[value + THEMENAME]?.val ?? value,
-                            borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
-                            border: !value ? '1px solid white' : ''
-                        }}
+                    <Popover trigger={
+                        <div
+                            style={{
+                                width: "28px", height: "28px", cursor: 'pointer',
+                                backgroundColor: colors[value + THEMENAME]?.val ?? value,
+                                borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
+                                border: !value ? '1px solid white' : '', top: '13px'
+                            }}
+                        >
+                        </div>
+                    }
                     >
-                    </div>
-                    <Popover onDismiss={() => setIsColorVisible(false)} visible={isColorVisible}>
                         <div>
                             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', padding: '6px' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
