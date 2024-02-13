@@ -17,7 +17,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     const errorData = useFlowsStore(state => state.errorData)
     const flexRef = useRef()
     const boxRef = useRef()
-    const isNodePreviewMode = node?.data.preview == 'node'
+    const isNodePreviewMode = node?.data?.preview == 'node'
     const nodeStyle = contentStyle
     // const scale = chroma.scale([(chroma.scale([color, 'white']))(0.5).hex(), 'white']).mode('lab');
 
