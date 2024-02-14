@@ -414,7 +414,7 @@ const FlowsBase = ({
             case 'add-node':
                 const newEdge = payload.newEdge;
                 const initialData = payload.initialData;
-                const nodeName = initialData.name;
+                const nodeName = initialData?.name;
                 const type = payload.node?.type;
 
                 nodeId = payload.node.id;
