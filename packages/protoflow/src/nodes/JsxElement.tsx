@@ -6,6 +6,8 @@ import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { SyntaxKind } from "ts-morph";
 import { Code } from 'lucide-react';
+import { Button, YStack } from '@my/ui'
+import { DEV_WIP_GM } from '../toggles';
 
 const JsxElement = (node) => {
     const { id, type } = node
@@ -26,9 +28,31 @@ const JsxElement = (node) => {
 
     const nodeParamsProps: Field[] = name.concat(props)
     const nodeParamsChilds: Field[] = childs
+    const generateMask = () => {
+        fetch('/adminapi/v1/mask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: nodeData.name,
+                data: Object.keys(nodeData).filter(k => k.startsWith('prop')).map(k => nodeData[k].key),
+                type: "JsxElement"
+            }),
+        })
+            .then(response => response.json())
+            .then(data => console.log(data))
+    }
 
     return (
-        <Node icon={Code} node={node} isPreview={!id} title={"<x ...></x>"} id={id} color={nodeColors[type]}>
+        <Node headerContent={<div>hello</div>} icon={Code} node={node} isPreview={!id} title={"<x ...></x>"} id={id} color={nodeColors[type]}>
+            {
+                DEV_WIP_GM && <YStack justifyContent='center'>
+                    <Button alignSelf="center" theme={"blue"} mb="$3" onPress={generateMask}>
+                        create mask
+                    </Button>
+                </YStack>
+            }
             <NodeParams id={id} params={nodeParamsProps} />
             <AddPropButton id={id} nodeData={nodeData} type={"Prop"} />
             <NodeParams id={id} params={nodeParamsChilds} />

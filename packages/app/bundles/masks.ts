@@ -35,5 +35,5 @@ export const getFlowMasks = (path: string, queryParams: {}) => {
         return [...visualuiTemplateMasks, ...customVisualUIMasks]
     }
 
-    return []
+    return [...customVisualUIMasks]
 }

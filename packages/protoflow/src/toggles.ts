@@ -6,4 +6,6 @@ export const DEVMODE = false;
 export const POKAYOKE_ENABLED = true;
 
 //disables/enables tree structure in blocks, to help arrange elk nodes
-export const NODE_TREE = false;
+export const NODE_TREE = false; 
+// toggle generateMask UI
+export const DEV_WIP_GM = false; 
