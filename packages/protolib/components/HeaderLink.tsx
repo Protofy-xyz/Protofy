@@ -5,7 +5,7 @@ import { Paragraph, TooltipSimple, styled } from 'tamagui'
 import { NextLink } from './NextLink'
 import { AppBarProps } from './AppBar'
 
-const HeadAnchor = styled(Paragraph, {
+export const HeadAnchor = styled(Paragraph, {
   //@ts-ignore
   px: '$3', py: '$2',  size: '$5',  w: '100%',
   cursor: 'pointer',

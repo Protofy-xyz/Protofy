@@ -1,4 +1,4 @@
-import { HeaderContents as ProtoHeaderContents, HeaderContentsProps, HeaderLink, useSession, ConnectionIndicator, Tinted } from 'protolib'
+import { HeaderContents as ProtoHeaderContents, HeaderContentsProps, HeaderLink, HeadAnchor, useSession, ConnectionIndicator, Tinted } from 'protolib'
 import { Text } from 'tamagui'
 import { useAtom } from 'jotai'
 import { Paragraph, Theme, XStack } from '@my/ui';
@@ -13,8 +13,7 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
       {props.topBar}
       <XStack $xs={{ display: 'none' }}>
         <Tinted>
-          
-          <HeaderLink id="header-session-doc" href="/documentation">Docs</HeaderLink>
+          <XStack ai="center" top="-1px"><a id="header-session-doc" href="/documentation"><HeadAnchor>Docs</HeadAnchor></a></XStack>
           
           {
             session.loggedIn ? <HeaderLink id="header-session-user-id" href="/profile">{session.user.id}</HeaderLink> : <HeaderLink href="/auth/login" id="header-login-link" >Login</HeaderLink>
