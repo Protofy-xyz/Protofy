@@ -32,7 +32,7 @@ export const getFlowMasks = (path: string, queryParams: {}) => {
     const query = JSON.stringify(queryParams)
 
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) {
-        return [...visualuiTemplateMasks, customVisualUIMasks]
+        return [...visualuiTemplateMasks, ...customVisualUIMasks]
     }
 
     return []
