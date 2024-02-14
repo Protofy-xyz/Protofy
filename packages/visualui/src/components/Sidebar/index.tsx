@@ -1,5 +1,5 @@
 import React from "react";
-import { Element, useEditor } from "@craftjs/core";
+import { Element, useEditor } from "@protocraft/core";
 import PageMenu from "./PageMenu";
 import { getIcon } from "../../utils/craftComponent";
 import Icon from '../Icon';

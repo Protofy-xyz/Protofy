@@ -1,5 +1,5 @@
-import { useNode, useEditor } from '@craftjs/core';
-import { ROOT_NODE } from '@craftjs/utils';
+import { useNode, useEditor } from "@protocraft/core";
+import { ROOT_NODE } from "@craftjs/utils";
 import React, { useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { ArrowDown, Trash2, Redo, ArrowUp, Move } from 'lucide-react';

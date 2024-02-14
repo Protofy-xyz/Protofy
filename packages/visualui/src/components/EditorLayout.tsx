@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import Head from 'next/head'
-import { Frame, useEditor } from "@craftjs/core";
+import { Frame, useEditor } from "@protocraft/core";
 import useKeypress from 'react-use-keypress';
 import Diff from 'deep-diff'
 import { Source } from "app/models";
