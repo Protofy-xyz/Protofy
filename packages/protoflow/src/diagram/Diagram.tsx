@@ -162,17 +162,20 @@ const Diagram = React.forwardRef(({
         setNodes(getNodes().map(n => ({ ...n, hidden: false, data: { ...n.data, preview } })))
     }
 
-    const findConnectedNodes = (nodeId, currentNodes = []) => { // get node ids connected to specific node
-        const edge = getEdges().find(e => e.target == nodeId)
-        if (edge) {
-            const n_id = edge.source // next connected node Id
-            return findConnectedNodes(n_id, [...currentNodes, n_id])
+    const findConnectedNodes = (nodeId) => { // get node ids connected to specific node
+        let result = [nodeId];
+        const elems = getEdges().filter(e => e.target == nodeId)
+        if (elems.length) {
+            elems.forEach(e => {
+                result = result.concat(...findConnectedNodes(e.source))
+            })
         }
-        return currentNodes;
+        return result;
     }
 
+
     const showSelectedContext = (selectedNodeId) => {
-        const matchNodeIds = findConnectedNodes(selectedNodeId, [selectedNodeId])
+        const matchNodeIds = findConnectedNodes(selectedNodeId)
         let newNodes = getNodes().map(n => {
             return { ...n, hidden: !matchNodeIds.includes(n.id), data: { ...n.data, preview } }
         })
