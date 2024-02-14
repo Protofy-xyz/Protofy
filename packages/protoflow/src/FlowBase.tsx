@@ -1,3 +1,9 @@
+import '@tamagui/core/reset.css'
+import '@tamagui/font-inter/css/400.css'
+import '@tamagui/font-inter/css/700.css'
+import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
+import { Provider } from 'app/provider'
+
 import React, { useCallback, useMemo, useEffect, useRef, useState, useContext } from 'react';
 import {
     useNodesState,
@@ -5,7 +11,6 @@ import {
     addEdge,
     Panel
 } from 'reactflow';
-//import 'reactflow/dist/style.css';
 import { PORT_TYPES, createNode, getId, saveNodes } from './lib/Node';
 import { getDiffs } from './lib/diff'
 import { NodeTypes } from './nodes';
@@ -550,7 +555,7 @@ const FlowsBase = ({
                 } else {
                     param = getPropName(diff.path[1]); // Care with child- props
                     value = diff.rhs
-                    if (!value || !param || typeof (value) == 'object' || diff.path[2] == 'kind' ) return
+                    if (!value || !param || typeof (value) == 'object' || diff.path[2] == 'kind') return
                     isProp = !param.includes('child');
                     if (isProp) {
                         param = nodeData[nodeId]['prop-' + param]?.key ?? param
@@ -931,18 +936,35 @@ const FlowsBase = ({
 }
 
 // create a component that wraps the topics HOC
-const FlowsStoreWrapper = (props) => {
+const FlowsWrapper = (props) => {
     const store = useMemo(useFlowsStore, []);
 
     return (
         <FlowStoreContext.Provider value={store}>
-            <FlowsBase {...props} />
+            <ThemeProvider>
+                <FlowsBase {...props} />
+            </ThemeProvider>
         </FlowStoreContext.Provider>
     );
 }
 
+const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+    const [theme, setTheme] = useRootTheme()
+
+    return (
+        <NextThemeProvider
+            onChangeTheme={(next) => {
+                setTheme(next as any)
+            }}
+        >
+            <Provider disableRootThemeClass defaultTheme={theme}>
+                {children}
+            </Provider>
+        </NextThemeProvider>
+    )
+}
 export default (props) => {
-    const FlowsWithTopics = withTopics(FlowsStoreWrapper, { topics: [props.flowId + '/play', props.flowId + '/ui', 'savenodes'] })
+    const FlowsWithTopics = withTopics(FlowsWrapper, { topics: [props.flowId + '/play', props.flowId + '/ui', 'savenodes'] })
 
     if (props.path) {
         if (props.path.endsWith('.json')) {
@@ -957,4 +979,4 @@ export default (props) => {
     </TopicsProvider>
 }
 
-export const FlowConstructor = (flowId) => withTopics(FlowsStoreWrapper, { topics: [flowId + '/play', flowId + '/ui', 'savenodes'] })
+export const FlowConstructor = (flowId) => withTopics(FlowsWrapper, { topics: [flowId + '/play', flowId + '/ui', 'savenodes'] })
