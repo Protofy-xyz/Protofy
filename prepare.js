@@ -12,7 +12,6 @@ if (!semver.satisfies(process.version, requiredVersion)) {
 const isLatest = process.argv.length > 2 && process.argv[2] == '--latest'
 
 const modules = JSON.parse(fs.readFileSync('./modules.json').toString())
-// console.log('modules', modules)
 
 function isEmpty(path) {
     return fs.readdirSync(path).length === 0;
