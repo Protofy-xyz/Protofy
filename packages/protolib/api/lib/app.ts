@@ -35,5 +35,6 @@ app.use(httpLogger({
         },
     },
 
-    ...config.logger
+    ...config.logger,
+    useLevel: 'debug'
 }))
