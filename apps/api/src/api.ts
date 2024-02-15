@@ -31,5 +31,5 @@ const devicePub = async (deviceName, component, componentName, command) => {
 }
 
 
-BundleAPI(app, { mqtt, devicePub, deviceSub })
+BundleAPI(app, { mqtt, devicePub, deviceSub, topicPub, topicSub })
 export default app
