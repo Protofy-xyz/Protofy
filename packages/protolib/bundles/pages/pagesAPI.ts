@@ -9,6 +9,8 @@ import { API } from 'protolib/base'
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
+const adminPagesDir = (root) => fspath.join(root, "/apps/admin/pages/")
+const appPagesDir = (root, isAdmin = false) => (isAdmin ? adminPagesDir(root) : nextPagesDir(root))
 const electronPagesDir = (root) => fspath.join(root, "/apps/electron/pages/")
 
 const getPage = (pagePath, req) => {
@@ -125,13 +127,14 @@ const getDB = (path, req, session) => {
         console.log('Deleted')
       }
 
-      //link in nextPages
+      //link in nextPages or adminPages
+      const pagesAppDir = appPagesDir(getRoot(req), template == 'admin') // Get pagesDir of next or admin depends on template choosen
       try {
         //TODO: routes with subdirectories
-        const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), fspath.basename(value.route) + '.tsx')
-        await fs.access(nextFilePath, fs.constants.F_OK)
+        const appFilePath = fspath.join(pagesAppDir, fspath.basename(value.route) + '.tsx')
+        await fs.access(appFilePath, fs.constants.F_OK)
         if (!value.web) {
-          await fs.unlink(nextFilePath)
+          await fs.unlink(appFilePath)
         }
         // console.log('File: ' + filePath + ' already exists, not executing template')
       } catch (error) {
@@ -147,7 +150,7 @@ const getDB = (path, req, session) => {
                   upperName: value.name ? value.name.charAt(0).toUpperCase() + value.name.slice(1) : ''
                 }
               },
-              path: nextPagesDir(getRoot(req))
+              path: pagesAppDir
             }
           })
           if (result.isError) {
