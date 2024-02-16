@@ -17,6 +17,7 @@ import { SidebarItem } from "./Sidebar/SideBarItem";
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
 import { FlowConstructor } from "protoflow";
 import React from "react";
+import { newVisualUiContext } from "../visualUiHooks";
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowConstructor(UIFLOWID)
@@ -273,10 +274,16 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         return () => window.removeEventListener('resize', handleResize);
     }, [])
 
+    const options = {
+      resolver: availableCraftComponents, 
+      onRender: RenderNode
+    }
+    const context = newVisualUiContext(options)
+
     return <div ref={editorRef} style={{ display: 'flex', flex: 1, width: '100%' }}>
         <Editor
-            resolver={availableCraftComponents}
-            onRender={RenderNode}
+          {...options}
+          parentContext={context}
         >
             <div style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                 <MainPanel
