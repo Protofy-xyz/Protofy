@@ -1,7 +1,5 @@
 import { FlowStoreContext } from "../store/FlowsStore"
 import { useContext } from 'react';
-import { getAlignmentProps } from "./AlignmentType";
-import { getColorProps } from "./ColorType";
 
 export const getProtolibParams = (enabledProps = ["*"]) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -42,12 +40,14 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
         { field: 'prop-width', label: 'width', type: 'input', fieldType: 'prop', static: true },
         { field: 'prop-height', label: 'height', type: 'input', fieldType: 'prop', static: true },
         { field: 'prop-zi', label: 'zi', type: 'select', fieldType: 'prop', data: zIndexes ? [defaultValue, ...zIndexes] : [], static: true },
-    ].filter(item => allPropsEnabled || enabledProps.includes(item.label))
+    ].filter(item => allPropsEnabled || enabledProps.includes(item.field))
 }
+export const getPropsFieldNamesArr = (itemArr) => itemArr.map(i => i.fieldType ? (i.fieldType + '-' + i.field) : i.field)
 
-export const getProtolibProps = () => {
+export const getProtolibProps = (data) => {
+    const rawData = data.find(i => i.type == 'protolibProps')?.data ?? []
+    const maskProps = getPropsFieldNamesArr(rawData)
+    
     const params = getProtolibParams()
-    const alignmentProps = getAlignmentProps().map(p => 'prop-'+p)
-    const colorsProps = getColorProps().map(p => 'prop-'+p)
-    return [...params.map(p => p.field), ...alignmentProps, ...colorsProps]
+    return [...params.map(p => p.field), ...maskProps]
 }

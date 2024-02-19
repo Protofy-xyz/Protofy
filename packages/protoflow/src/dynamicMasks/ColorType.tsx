@@ -7,10 +7,6 @@ import Input from '../diagram/NodeInput'
 import Popover from '../diagram/NodePopover';
 import { Pipette, Palette } from 'lucide-react'
 
-export const getColorProps = () => [
-    "color", "bgColor", "backgroundColor"
-]
-
 const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     <div onClick={onPress}
         style={{
@@ -23,7 +19,7 @@ const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     </div>
 )
 
-export default ({ nodeData = {}, field, node }) => {
+export default ({ nodeData = {}, node, item }) => {
     const rawThemeName = 'dark'
     const THEMENAME = rawThemeName.charAt(0).toUpperCase() + rawThemeName.slice(1)
 
@@ -39,7 +35,9 @@ export default ({ nodeData = {}, field, node }) => {
 
     const colorArrs = tones.map(t => Object.keys(colors).filter(c => c.startsWith(t) && c.endsWith(THEMENAME)).map(c => colors[c].val)) // [[], []]
 
-    const dataKey = 'prop-' + field
+    const { field, label, type, fieldType } = item
+
+    const dataKey = fieldType ? (fieldType + '-' + field) : field
     const data = nodeData[dataKey]
     const value = data?.value
 
@@ -56,10 +54,9 @@ export default ({ nodeData = {}, field, node }) => {
 
 
     const getInput = () => {
-        switch (field) {
-            case 'color':
-            case 'bgColor':
-            case 'backgroundColor':
+        switch (type) {
+            case 'color-default':
+            default:
                 return <>
                     <Popover trigger={
                         <div
@@ -131,7 +128,7 @@ export default ({ nodeData = {}, field, node }) => {
     return <div style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column" }}>
         <div style={{ fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
             <div className={"handleKey"} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <Text>{field}</Text>
+                <Text>{label}</Text>
             </div>
             <div className={"handleValue"} style={{ minWidth: '180px', marginRight: '10px', display: 'flex', flexDirection: 'row', flexGrow: 1, alignItems: 'center' }}>
                 {getInput()}
