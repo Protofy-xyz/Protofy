@@ -32,7 +32,7 @@ export const AppState = atomWithStorage("adminPanelAppState", {
   logsPanelOpened: false
 })
 
-export const RightPanelAtom = atom(0)
+export const RightPanelAtom = atom(20)
 export const BusMessages = atom([])
 
 const types = {
@@ -117,7 +117,6 @@ export const LogPanel = () => {
 export const AdminPanel = ({ children }) => {
   const [settings] = useUserSettings()
   const userSpaces = useWorkspaces()
-  const [session, setSession] = useSession()
   const [appState, setAppState] = useAtom(AppState)
   const [rightPanelSize, setRightPanelSize] = useAtom(RightPanelAtom)
   const currentWorkspace = settings && settings.workspace ? settings.workspace : userSpaces[0]
