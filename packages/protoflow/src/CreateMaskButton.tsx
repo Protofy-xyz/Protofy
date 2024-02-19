@@ -17,7 +17,14 @@ export default ({ nodeData, type }: Props) => {
             },
             body: JSON.stringify({
                 name: nodeData.name,
-                data: Object.keys(nodeData).filter(k => k.startsWith('prop')).map(k => nodeData[k].key),
+                data: Object.keys(nodeData).filter(k => k.startsWith('prop')).map(k => {
+                    return {
+                        label: nodeData[k].key,
+                        field: nodeData[k].key,
+                        //"type": "color-default",
+                        fieldType: 'prop'
+                    }
+                }),
                 type: type
             }),
         })
