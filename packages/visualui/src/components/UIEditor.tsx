@@ -137,7 +137,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             style={{ display: 'flex', width: '100%', top: isSideBarVisible ? 0 : -1000000000000, position: isSideBarVisible ? 'relative' : 'absolute', height: '100%' }}
         >
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
-                <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 9999999999999, backgroundColor: '#252526', borderBottom: '1px solid #cccccc20' }}>
+                <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 999999, backgroundColor: '#252526', borderBottom: '1px solid #cccccc20' }}>
                     <XStack theme="dark">
                         <Button
                             onPress={(e) => { setIsSideBarVisible(false); setCodeEditorVisible(false); e.stopPropagation() }}
