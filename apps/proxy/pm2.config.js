@@ -8,7 +8,7 @@ module.exports = {
             name: isProduction ? 'proxy' : 'proxy-dev',
             script: path.join(currentDir, '../../node_modules/ts-node/dist/bin.js'),
             args: '--files --project tsconfig.json src/index.ts',
-            watch: isProduction ? false : ["src/**", "../../packages/protolib/**"],
+            watch: isProduction ? false : ["src/**"],
             autorestart: !isProduction,
             ignore_watch: ["src/**/*.spec.ts"],
             watch_options: {
