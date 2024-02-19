@@ -397,14 +397,12 @@ const FlowsBase = ({
                     if (nodeData[parentId]) {
                         const { data: newParentData } = removeDataChildAndReorder(nodeData[parentId], childPosToDelete)
                         setNodesData({ ...nodeData, [parentId]: newParentData })
-                    } else {
-                        setNodesData({ ...nodeData })
                     }
-                    const childNum = Number(edgeToDelete?.targetHandle.split('child-')[1])
-                    // FIX only remove edge of the first deleted node
-                    const newEdges = moveEdgeChildAndReorder(edges, deletedNodesIds[0], parentId, childNum)
 
-                    setEdges(newEdges)
+                    // const childNum = Number(edgeToDelete?.targetHandle.split('child-')[1])
+                    // FIX only remove edge of the first deleted node
+                    // const newEdges = moveEdgeChildAndReorder(edges, deletedNodesIds[0], parentId, childNum)
+                    // setEdges(newEdges)
                 }
                 publish("flow/editor", topicParams)
                 break
