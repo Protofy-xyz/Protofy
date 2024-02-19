@@ -35,7 +35,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [currentPageContent, setCurrentPageContent] = useState("")
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
     const [monacoHasChanges, setMonacoHasChanges] = useState(false)
-    const [preview, setPreview] = useState('preview')
+    const [flowViewMode, setFlowViewMode] = useState('preview')
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
     const [customizeVisible, setCustomizeVisible] = useState(true);
     const [layerVisible, setLayerVisible] = useState(false);
@@ -43,6 +43,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const { publish } = topics;
     const { data } = topics;
     const [openPanel, setOpenPanel] = React.useState(false);
+
+    const isViewModePreview = flowViewMode == 'preview'
 
     useEffect(() => {
         const handleClosePanel = () => setOpenPanel(false)
@@ -157,16 +159,16 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         </Button>
                     </XStack>
                     <ToggleGroup display={monacoHasChanges ? 'none' : 'flex'} theme={"dark"} type="single" defaultValue="preview" disableDeactivation>
-                        <ToggleGroup.Item value="code" onPress={() => { setPreview(undefined); setCodeEditorVisible(true) }}>
+                        <ToggleGroup.Item value="code" onPress={() => { setFlowViewMode(undefined); setCodeEditorVisible(true) }}>
                             <Code />
                         </ToggleGroup.Item>
-                        <ToggleGroup.Item value="flow" onPress={() => { setPreview('flow'); setCodeEditorVisible(false) }}>
+                        <ToggleGroup.Item value="flow" onPress={() => { setFlowViewMode('flow'); setCodeEditorVisible(false) }}>
                             <Share2 />
                         </ToggleGroup.Item>
-                        <ToggleGroup.Item value="flow-preview" onPress={() => { setPreview('flow-preview'); setCodeEditorVisible(false) }}>
+                        <ToggleGroup.Item value="flow-preview" onPress={() => { setFlowViewMode('flow-preview'); setCodeEditorVisible(false) }}>
                             <Workflow />
                         </ToggleGroup.Item>
-                        <ToggleGroup.Item value="preview" onPress={() => { setPreview('preview'); setCodeEditorVisible(false) }}>
+                        <ToggleGroup.Item value="preview" onPress={() => { setFlowViewMode('preview'); setCodeEditorVisible(false) }}>
                             <SlidersHorizontal />
                         </ToggleGroup.Item>
                     </ToggleGroup>
@@ -186,7 +188,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         onChange={(val) => setCustomizeVisible(val)}
                     >
                         <Flow
-                            disableDots={!isActive || preview}
+                            disableDots={!isActive || isViewModePreview}
                             sourceCode={currentPageContent}
                             setSourceCode={setCurrentPageContent}
                             customComponents={getFlowsCustomComponents(router.pathname, router.query)}
@@ -194,12 +196,12 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             enableCommunicationInterface={true}
                             // store={uiStore}
                             config={{ masks: getFlowMasks(router.pathname, router.query) }}
-                            zoomOnDoubleClick={!preview}
+                            zoomOnDoubleClick={!isViewModePreview}
                             flowId={UIFLOWID}
                             themeMode={'dark'}
                             bgColor={'#252526'}
                             theme={theme}
-                            nodePreview={preview}
+                            nodePreview={flowViewMode}
                             metadata={metadata}
                         />
                     </SidebarItem>
@@ -293,8 +295,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     leftPanelContent={SidebarPanel}
                     centerPanelContent={EditorPanel}
                     rightPanelContent={FlowPanel}
-                    rightPanelResizable={!preview}
-                    rightPanelWidth={!preview ? 50 : 0}
+                    rightPanelResizable={!isViewModePreview}
+                    rightPanelWidth={!isViewModePreview ? 50 : 0}
                     rightPanelVisible={isSideBarVisible}
                 />
             </div>
