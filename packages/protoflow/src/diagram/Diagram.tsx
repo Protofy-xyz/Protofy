@@ -87,7 +87,8 @@ const Diagram = React.forwardRef(({
     const [pastZoomNodes, setPastZoomNodes] = useState([])
     const { data, publish } = topics;
 
-    const preview = nodePreview === 'preview' ? 'node' : 'default'
+    const isViewModePreview = nodePreview === 'preview'
+    const preview = isViewModePreview ? 'node' : 'default'
 
     const onDragOver = useCallback((event) => {
         event.preventDefault();
@@ -202,8 +203,10 @@ const Diagram = React.forwardRef(({
         const flowsWidth = reactFlowWrapper.current?.offsetWidth
         if (!flowsWidth) return // skip if diagram is not visible
         const flowsHeight = reactFlowWrapper.current?.offsetHeight
+        const marginTop = isViewModePreview ? 10 : 50
         const posX = selectedNode.position.x + selectedNode.width / 2
-        const posY = selectedNode.position.y + (flowsHeight / 2) - 50
+        const posY = selectedNode.position.y + (flowsHeight / 2) - marginTop
+
         setNodes(nds => {
             nds[selectedNodeIndex] = {
                 ...nds[selectedNodeIndex],
@@ -214,7 +217,7 @@ const Diagram = React.forwardRef(({
             }
             return nds
         })
-        setCenter(posX, posY, { zoom: 1, duration: nodePreview === 'preview' ? 1 : 500 })
+        setCenter(posX, posY, { zoom: 1, duration: isViewModePreview ? 1 : 500 })
     }, [setCenter, nodePreview, nodes]);
 
     useKeypress(['z', 'Z'], async (event) => {
@@ -259,7 +262,7 @@ const Diagram = React.forwardRef(({
             pastZoomNodes[0] = nodeToZoomId
             setPastZoomNodes([...pastZoomNodes])
             setTimeout(() => zoomToNode(nodeToZoomId), 80);
-            if (nodePreview === 'preview') hideUnselected(nodeToZoomId)
+            if (isViewModePreview) hideUnselected(nodeToZoomId)
         }
     }, [data['zoomToNode']])
 
