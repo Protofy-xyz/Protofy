@@ -1,5 +1,7 @@
 import { FlowStoreContext } from "../store/FlowsStore"
 import { useContext } from 'react';
+import { getAlignmentTypes } from "./AlignmentType";
+import { getColorTypes } from "./ColorType";
 
 export const getProtolibParams = (enabledProps = ["*"]) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -7,7 +9,6 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
 
     const allPropsEnabled = enabledProps[0] == "*"
 
-    const colors = Object.keys(metadata?.tamagui?.color ?? {}).filter(item => item.startsWith("$")).map(k => '"' + metadata?.tamagui?.color[k].key + '"')
     const sizes = Object.keys(metadata?.tamagui?.size ?? {}).filter(item => item.startsWith("$")).map(k => '"' + metadata?.tamagui?.size[k].key + '"')
     const radiuses = Object.keys(metadata?.tamagui?.radius ?? {}).filter(item => item.startsWith("$")).map(k => '"' + metadata?.tamagui?.radius[k].key + '"')
     const spaces = Object.keys(metadata?.tamagui?.space ?? {}).filter(item => item.startsWith("$")).map(k => '"' + metadata?.tamagui?.space[k].key + '"')
@@ -47,7 +48,14 @@ export const getPropsFieldNamesArr = (itemArr) => itemArr.map(i => i.fieldType ?
 export const getProtolibProps = (data) => {
     const rawData = data.find(i => i.type == 'protolibProps')?.data ?? []
     const maskProps = getPropsFieldNamesArr(rawData)
-    
+
     const params = getProtolibParams()
     return [...params.map(p => p.field), ...maskProps]
+}
+
+export const getAllTypes = () => {
+    const alignmentTypes = getAlignmentTypes()
+    const colorTypes = getColorTypes()
+
+    return [...alignmentTypes, ...colorTypes]
 }

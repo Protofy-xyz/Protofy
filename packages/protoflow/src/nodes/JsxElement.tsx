@@ -32,7 +32,7 @@ const JsxElement = (node) => {
     return (
         <Node headerContent={<div>hello</div>} icon={Code} node={node} isPreview={!id} title={"<x ...></x>"} id={id} color={nodeColors[type]}>
             {
-                DEV_WIP_GM && <CreateMaskButton nodeData={nodeData} type='JsxElement'/>
+                DEV_WIP_GM && <CreateMaskButton nodeData={nodeData} maskType='JsxElement'/>
             }
             <NodeParams id={id} params={nodeParamsProps} />
             <AddPropButton id={id} nodeData={nodeData} type={"Prop"} />

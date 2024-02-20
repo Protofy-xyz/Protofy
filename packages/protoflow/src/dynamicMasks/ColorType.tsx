@@ -19,6 +19,8 @@ const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     </div>
 )
 
+export const getColorTypes = () => ['color-default']
+
 export default ({ nodeData = {}, node, item }) => {
     const rawThemeName = 'dark'
     const THEMENAME = rawThemeName.charAt(0).toUpperCase() + rawThemeName.slice(1)
