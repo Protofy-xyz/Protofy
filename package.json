@@ -54,10 +54,10 @@
     "logs": "pm2 logs",
     "create-environment": "node copy.js",
     "test:all:long": "LONG_TESTS=true yarn test:all",
-    "test:all": "FORCE_COLOR=1 yarn workspaces foreach run test",
+    "test:all": "NODE_ENV=development FORCE_COLOR=1 yarn workspaces foreach run test",
     "test:all:debug": "FORCE_COLOR=1 TEST_DEBUG=true yarn test:all",
-    "test:global": "FORCE_COLOR=1 yarn workspace tests test",
-    "test:e2egen": "npx playwright codegen"
+    "test:global": "NODE_ENV=development FORCE_COLOR=1 yarn workspace tests test",
+    "test:e2egen": "NODE_ENV=development npx playwright codegen"
   },
   "resolutions": {
     "react": "^18.2.0",
