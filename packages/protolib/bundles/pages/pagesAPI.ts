@@ -9,7 +9,7 @@ import { API } from 'protolib/base'
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
-const adminPagesDir = (root) => fspath.join(root, "/apps/admin/pages/")
+const adminPagesDir = (root) => fspath.join(root, "/apps/next/pages/workspace")
 const appPagesDir = (root, isAdmin = false) => (isAdmin ? adminPagesDir(root) : nextPagesDir(root))
 const electronPagesDir = (root) => fspath.join(root, "/apps/electron/pages/")
 
