@@ -67,7 +67,7 @@ export default {
                     name="database"
                     onSelectItem={(item) => {
                         //console.log("ITEMMM", item, item.getId())
-                        router.push('/databases/view?database=' + item.getId())
+                        router.push('databases/view?database=' + item.getId())
                     }}
                     // hideAdd={true}
                     model={DatabaseModel}
