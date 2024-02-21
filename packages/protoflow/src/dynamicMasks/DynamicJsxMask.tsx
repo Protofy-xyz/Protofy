@@ -3,11 +3,11 @@ import Node, { Field, FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import AddPropButton from '../AddPropButton';
 import { Code } from 'lucide-react'
-import { getPropsFieldNamesArr, getCustomParams, getCustomProps } from './CustomProps';
+import { getCustomPropsFields } from './CustomProps';
 import AlignmentType from './AlignmentType';
 import ColorType from './ColorType';
 
-const TypeProp = ({ item, node, nodeData }) => {
+const CustomPropType = ({ item, node, nodeData }) => {
     var type = item.type ?? ''
     var category = type.split('-')[0]
 
@@ -45,7 +45,7 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             const redirectProp = mask.data.body.find(e => e.type == 'redirect');
                             const redirectPropName = redirectProp?.params?.port;
                             const hasCustomProps = mask.data.body.find(i => i.type == 'custom-prop')
-                            const customProps = getCustomProps(mask.data.body)
+                            const customProps = getCustomPropsFields(mask.data.body)
 
                             return <>
                                 <NodeParams id={node.id} params={element.data} />
@@ -68,13 +68,11 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
                         }
                         case 'custom-prop': {
-                            const fieldArr = getPropsFieldNamesArr(element.data)
-
                             return <>
                                 {
-                                    element.data.map((item, index) => <TypeProp key={index} item={item} node={node} nodeData={nodeData} />)
+                                    element.data.map((item, index) => <CustomPropType key={index} item={item} node={node} nodeData={nodeData} />)
                                 }
-                                <NodeParams id={node.id} params={getCustomParams(fieldArr)} />
+                                {/* <NodeParams id={node.id} params={getCustomParams(fieldArr)} /> */}
                             </>
                         }
                     }

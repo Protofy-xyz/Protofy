@@ -73,6 +73,15 @@ export default ({ nodeData, maskType }: Props) => {
         }
     }
     const generateMask = () => {
+        const convertedData = maskBodyData.map(e => {
+            return {
+                ...e,
+                field: 'prop-' + e.field
+            }
+        })
+        const customPropsData = convertedData.filter(c => c.type)
+        const defaultPropsData = convertedData.filter(c => !c.type)
+
         fetch('/adminapi/v1/mask', {
             method: 'POST',
             headers: {
@@ -89,7 +98,11 @@ export default ({ nodeData, maskType }: Props) => {
                 "body": [
                     {
                         "type": "custom-prop",
-                        "data": maskBodyData
+                        "data": customPropsData
+                    },
+                    {
+                        "type": "prop",
+                        "data": defaultPropsData
                     },
                     {
                         "type": "child",
@@ -152,7 +165,7 @@ export default ({ nodeData, maskType }: Props) => {
                         <Input
                             value={newField}
                             onChangeText={setNewField}
-                            placeholder='field name...'
+                            placeholder='prop name...'
                         />
                         <TypeSelect value={newType} onValueChange={setNewType} items={items} />
                         <Button size="$4" onPress={onAddType} theme='blue'>Add</Button>
@@ -180,7 +193,7 @@ const PropEditor = ({ item, selectItems, onChange, index, onDelete }) => {
             value={field}
             onBlur={() => onChange(index, 'field', field)}
             onChangeText={setField}
-            placeholder='field name...'
+            placeholder='prop name...'
         />
         <TypeSelect value={item?.type} onValueChange={(val) => onChange(index, 'type', val)} items={selectItems} />
         <Button size="$4" onPress={() => onDelete(item.field)} icon={X}></Button>
