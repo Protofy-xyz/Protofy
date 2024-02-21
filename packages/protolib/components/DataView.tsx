@@ -218,7 +218,7 @@ export function DataView({
         icon: MapPin,
         component: MapView,
         props: {
-            mt: "$8",
+            mt: "$3",
             onDelete: async (key) => {
                 await API.get(`${sourceUrl}/${key}/delete`);
             },

@@ -1,6 +1,7 @@
 import '@tamagui/core/reset.css'
 import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
+import "mapbox-gl/dist/mapbox-gl.css"
 import '../app.css'
 import 'raf/polyfill'
 import 'reactflow/dist/style.css'
