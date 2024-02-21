@@ -19,7 +19,7 @@ const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     </div>
 )
 
-export const getColorTypes = () => ['color-default']
+export const getColorTypes = () => ['color']
 
 export default ({ nodeData = {}, node, item }) => {
     const rawThemeName = 'dark'
@@ -29,13 +29,13 @@ export default ({ nodeData = {}, node, item }) => {
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const metadata = useFlowsStore(state => state.metadata)
 
-    const colors = metadata?.tamagui?.color
+    const themeColors = metadata?.tamagui?.color
     const nodeFontSize = useTheme('nodeFontSize')
     const interactiveColor = useTheme('interactiveColor')
 
     const tones = ['blue', 'gray', 'green', 'orange', 'pink', 'purple', 'red', 'yellow']
 
-    const colorArrs = tones.map(t => Object.keys(colors).filter(c => c.startsWith(t) && c.endsWith(THEMENAME)).map(c => colors[c].val)) // [[], []]
+    const colorList = tones.map(t => Object.keys(themeColors).filter(c => c.startsWith(t) && c.endsWith(THEMENAME)).map(c => themeColors[c].val)).flat(1) // [[], []]
 
     const { field, label, type, fieldType } = item
 
@@ -57,14 +57,14 @@ export default ({ nodeData = {}, node, item }) => {
 
     const getInput = () => {
         switch (type) {
-            case 'color-default':
+            case 'color':
             default:
                 return <>
                     <Popover trigger={
                         <div
                             style={{
                                 width: "28px", height: "28px", cursor: 'pointer',
-                                backgroundColor: colors[value + THEMENAME]?.val ?? value,
+                                backgroundColor: themeColors[value + THEMENAME]?.val ?? value,
                                 borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
                                 border: !value ? '1px solid white' : '', top: '13px'
                             }}
@@ -91,17 +91,16 @@ export default ({ nodeData = {}, node, item }) => {
                                 ?
                                 <div style={{ height: '280px', marginTop: '5px', overflowY: 'scroll' }}>
                                     <GithubPicker
-                                        className={"loooll"}
                                         styles={pickerStyles}
                                         triangle='hide'
                                         onChangeComplete={val => {
                                             const valToFind = convertirHSLAString(val.hsl)
-                                            const matchedKey = Object.keys(colors).find(colorKey => colors[colorKey].val == valToFind && colorKey.endsWith(THEMENAME))
+                                            const matchedKey = Object.keys(themeColors).find(colorKey => themeColors[colorKey].val == valToFind && colorKey.endsWith(THEMENAME))
                                             const newColor = matchedKey?.replace(THEMENAME, '')
                                             onSubmitThemeColor(newColor ?? val.hex)
                                         }}
                                         width={'220px'}
-                                        colors={colorArrs.flat(1)}
+                                        colors={colorList}
                                     />
                                 </div>
                                 : <SketchPicker

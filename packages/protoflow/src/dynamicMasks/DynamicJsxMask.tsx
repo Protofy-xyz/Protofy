@@ -9,14 +9,7 @@ import ColorType from './ColorType';
 
 const TypeProp = ({ item, node, nodeData }) => {
     var type = item.type ?? ''
-    var category
-
-    if (type.startsWith('alignment-')) {
-        category = 'alignment'
-
-    } else if (type.startsWith('color-')) {
-        category = 'color'
-    }
+    var category = type.split('-')[0]
 
     switch (category) {
         case 'alignment':

@@ -14,7 +14,7 @@
                     {
                         "label": "backgroundColor",
                         "field": "backgroundColor",
-                        "type": "color-default",
+                        "type": "color",
                         "fieldType": "prop"
                     },
                     {
@@ -65,7 +65,7 @@
                     {
                         "label": "backgroundColor",
                         "field": "backgroundColor",
-                        "type": "color-default",
+                        "type": "color",
                         "fieldType": "prop"
                     },
                     {
@@ -159,7 +159,7 @@
                     {
                         "label": "backgroundColor",
                         "field": "backgroundColor",
-                        "type": "color-default",
+                        "type": "color",
                         "fieldType": "prop"
                     },
                     {
@@ -235,7 +235,7 @@
                     {
                         "label": "color",
                         "field": "color",
-                        "type": "color-default",
+                        "type": "color",
                         "fieldType": "prop"
                     },
                     {
@@ -289,7 +289,7 @@
                     {
                         "label": "color",
                         "field": "color",
-                        "type": "color-default",
+                        "type": "color",
                         "fieldType": "prop"
                     },
                     {
@@ -349,7 +349,7 @@
                     {
                         "label": "color",
                         "field": "color",
-                        "type": "color-default",
+                        "type": "color",
                         "fieldType": "prop"
                     },
                     {
@@ -414,7 +414,7 @@
                     {
                         "label": "color",
                         "field": "color",
-                        "type": "color-default",
+                        "type": "color",
                         "fieldType": "prop"
                     },
                     {
