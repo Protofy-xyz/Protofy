@@ -79,10 +79,32 @@ export default ({ nodeData, maskType }: Props) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: nodeData.name,
-                data: maskBodyData,
-                type: maskType
-            }),
+                "id": nodeData.name,
+                "title": nodeData.name,
+                "path": "*",
+                "type": maskType,
+                "filter": {
+                    "name": nodeData.name
+                },
+                "body": [
+                    {
+                        "type": "custom-prop",
+                        "data": maskBodyData
+                    },
+                    {
+                        "type": "child",
+                        "data": [
+                            {
+                                "label": "Child1",
+                                "field": "child-1",
+                                "fieldType": "child",
+                                "type": "child"
+                            }
+                        ]
+                    }
+                ]
+            }
+            )
         })
             .then(response => response.json())
             .then(data => console.log(data))
@@ -165,7 +187,7 @@ const PropEditor = ({ item, selectItems, onChange, index, onDelete }) => {
     </XStack>
 }
 
-const TypeSelect = ({ value, onValueChange, items }) => <Select value={value??'default'} onValueChange={onValueChange} disablePreventBodyScroll>
+const TypeSelect = ({ value, onValueChange, items }) => <Select value={value ?? 'default'} onValueChange={onValueChange} disablePreventBodyScroll>
     <Select.Trigger width={220} iconAfter={ChevronDown}>
         <Select.Value placeholder="default" />
     </Select.Trigger>

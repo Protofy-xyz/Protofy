@@ -11,34 +11,7 @@ export function MasksAPI(app, context) {
         const path = "/packages/app/bundles/custom/masks/custom.masks.json".replace(/\/+/g, '/')
         const currentMasks = await API.get('/adminapi/v1/files/' + path + '?token=' + getServiceToken())
         
-        const maskData = req.body
-
-        const newMask = {
-            "id": maskData.name,
-            "title": maskData.name,
-            "path": "*",
-            "type": maskData.type,
-            "filter": {
-                "name": maskData.name
-            },
-            "body": [
-                {
-                    "type": "protolibProps",
-                    "data": maskData.data
-                },
-                {
-                    "type": "child",
-                    "data": [
-                        {
-                            "label": "Child1",
-                            "field": "child-1",
-                            "fieldType": "child",
-                            "type": "child"
-                        }
-                    ]
-                }
-            ]
-        }
+        const newMask = req.body
 
         const newMasks = [...currentMasks.data, newMask]
 
