@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { getAlignmentTypes } from "./AlignmentType";
 import { getColorTypes } from "./ColorType";
 
-export const getProtolibParams = (enabledProps = ["*"]) => {
+export const getCustomParams = (enabledProps = ["*"]) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const metadata = useFlowsStore(state => state.metadata)
 
@@ -45,11 +45,11 @@ export const getProtolibParams = (enabledProps = ["*"]) => {
 }
 export const getPropsFieldNamesArr = (itemArr) => itemArr.map(i => i.fieldType ? (i.fieldType + '-' + i.field) : i.field)
 
-export const getProtolibProps = (data) => {
-    const rawData = data.find(i => i.type == 'protolibProps')?.data ?? []
+export const getCustomProps = (data) => {
+    const rawData = data.find(i => i.type == 'custom-prop')?.data ?? []
     const maskProps = getPropsFieldNamesArr(rawData)
 
-    const params = getProtolibParams()
+    const params = getCustomParams()
     return [...params.map(p => p.field), ...maskProps]
 }
 

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Button, YStack, Dialog, Select, XStack, Input } from '@my/ui'
 import useTheme from './diagram/Theme';
 import { Drama, X, Check, ChevronDown } from 'lucide-react';
-import { getAllTypes } from './dynamicMasks/ProtolibProps';
+import { getAllTypes } from './dynamicMasks/CustomProps';
 
 type Props = {
     nodeData: any;

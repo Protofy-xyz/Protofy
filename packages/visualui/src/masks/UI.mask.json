@@ -9,7 +9,7 @@
         },
         "body": [
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "backgroundColor",
@@ -60,7 +60,7 @@
         },
         "body": [
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "backgroundColor",
@@ -111,7 +111,7 @@
         },
         "body": [
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "width",
@@ -154,7 +154,7 @@
         },
         "body": [
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "backgroundColor",
@@ -230,7 +230,7 @@
                 "disableAdd": true
             },
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "color",
@@ -284,7 +284,7 @@
                 "disableAdd": true
             },
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "color",
@@ -344,7 +344,7 @@
                 "disableAdd": true
             },
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "color",
@@ -409,7 +409,7 @@
                 "disableAdd": true
             },
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "color",
@@ -469,7 +469,7 @@
                 "disableAdd": true
             },
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "textAlign",
@@ -558,7 +558,7 @@
                 "disableAdd": true
             },
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "margin",
@@ -623,7 +623,7 @@
                 "disableAdd": true
             },
             {
-                "type": "protolibProps",
+                "type": "custom-prop",
                 "data": [
                     {
                         "label": "margin",

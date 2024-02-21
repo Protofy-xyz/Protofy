@@ -3,7 +3,7 @@ import Node, { Field, FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import AddPropButton from '../AddPropButton';
 import { Code } from 'lucide-react'
-import { getPropsFieldNamesArr, getProtolibParams, getProtolibProps } from './ProtolibProps';
+import { getPropsFieldNamesArr, getCustomParams, getCustomProps } from './CustomProps';
 import AlignmentType from './AlignmentType';
 import ColorType from './ColorType';
 
@@ -44,14 +44,14 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         case 'prop': {
                             const redirectProp = mask.data.body.find(e => e.type == 'redirect');
                             const redirectPropName = redirectProp?.params?.port;
-                            const hasProtolibProps = mask.data.body.find(i => i.type == 'protolibProps')
-                            const protolibProps = getProtolibProps(mask.data.body)
+                            const hasCustomProps = mask.data.body.find(i => i.type == 'custom-prop')
+                            const customProps = getCustomProps(mask.data.body)
 
                             return <>
                                 <NodeParams id={node.id} params={element.data} />
                                 <NodeParams
                                     id={node.id}
-                                    params={propsArray.filter(p => !protolibProps.includes(p.field) || !hasProtolibProps)
+                                    params={propsArray.filter(p => !customProps.includes(p.field) || !hasCustomProps)
                                         .filter(item => !element.data.find(i => i.field == item.field) && (item.field != redirectPropName))
                                     }
                                 />
@@ -67,14 +67,14 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         case 'redirect': {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
                         }
-                        case 'protolibProps': {
+                        case 'custom-prop': {
                             const fieldArr = getPropsFieldNamesArr(element.data)
 
                             return <>
                                 {
                                     element.data.map((item, index) => <TypeProp key={index} item={item} node={node} nodeData={nodeData} />)
                                 }
-                                <NodeParams id={node.id} params={getProtolibParams(fieldArr)} />
+                                <NodeParams id={node.id} params={getCustomParams(fieldArr)} />
                             </>
                         }
                     }
