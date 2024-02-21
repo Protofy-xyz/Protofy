@@ -9602,13 +9602,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/google.maps@npm:^3.54.10":
-  version: 3.55.3
-  resolution: "@types/google.maps@npm:3.55.3"
-  checksum: 456e88424ba0426ab8d5b7f33a8df68427e597ef04e0bcca4a1aaf722aa7da2ce9662521d4fe626ff74485acbc84688e1573ae2cfce7d6f5735873d09eb173dd
-  languageName: node
-  linkType: hard
-
 "@types/graceful-fs@npm:^4.1.3":
   version: 4.1.9
   resolution: "@types/graceful-fs@npm:4.1.9"
@@ -10306,19 +10299,6 @@ __metadata:
   peerDependencies:
     react: ">= 16.8.0"
   checksum: d43a2296e536ea8e4885ca082b7c554eabb0e19bb7f89b5db96e0511712c849db879de64c2746c94e3c9a5032e8918c90ace67fc023c754034d75b2ea3b727c4
-  languageName: node
-  linkType: hard
-
-"@vis.gl/react-google-maps@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "@vis.gl/react-google-maps@npm:0.7.0"
-  dependencies:
-    "@types/google.maps": ^3.54.10
-    fast-deep-equal: ^3.1.3
-  peerDependencies:
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: f40781f6d18eb872feab92030ef521c3c49702b5d33f4a89b66fb9ea6d06a4b76f17d1bf84d7c91ff4fe20beac77ba6520de66b4ca89625ee100455fe9a7ca9f
   languageName: node
   linkType: hard
 
@@ -25681,7 +25661,6 @@ __metadata:
     "@tamagui/font-silkscreen": latest
     "@types/react": ^18.0.27
     "@types/react-native": ^0.71.3
-    "@vis.gl/react-google-maps": ^0.7.0
     cookie: ^0.6.0
     jotai: ^2.4.2
     jsonwebtoken: ^9.0.2
