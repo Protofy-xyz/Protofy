@@ -68,7 +68,7 @@ export default ({ nodeData, maskType }: Props) => {
     }
     const onOpenChange = (open) => {
         if (!open) {
-            setMaskBodyData([])
+            setMaskBodyData(initialData)
             clearNewData()
         }
     }
