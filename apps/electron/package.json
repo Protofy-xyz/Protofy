@@ -6,8 +6,9 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "export": "next export",
     "electron": "NODE_ENV=development electron ./index.js",
-    "package": "yarn build && yarn package-fast",
+    "package": "yarn build && yarn export && yarn package-fast",
     "package-fast": "electron-builder"
   },
   "dependencies": {
