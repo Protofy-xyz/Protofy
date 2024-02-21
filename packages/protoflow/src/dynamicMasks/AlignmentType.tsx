@@ -19,8 +19,8 @@ export default ({ nodeData = {}, item, node }) => {
 
     const { field, label, type, fieldType } = item
 
-    const dataKey = fieldType ? (fieldType + '-' + field) : field
-    const data = nodeData[dataKey]
+    const fieldKey = field.replace(fieldType + '-', '')
+    const data = nodeData[field]
     const value = data?.value
     const rotation = getIconRotation()
 
@@ -28,7 +28,7 @@ export default ({ nodeData = {}, item, node }) => {
         let rot = '0deg';
         const isRowDir = Boolean(nodeData["prop-flexDirection"]?.value?.startsWith("row"))
         if (isRowDir) {
-            rot = field == 'alignItems' ? '90deg' : '-90deg'
+            rot = fieldKey == 'alignItems' ? '90deg' : '-90deg'
         }
         return rot;
     }
@@ -40,10 +40,10 @@ export default ({ nodeData = {}, item, node }) => {
 
     const onToggleAlignment = (val) => {
         if (value == val) {// deletes nodeData 
-            deletePropNodeData(node.id, dataKey)
+            deletePropNodeData(node.id, field)
         }
         else { // add new prop to nodeData
-            setNodeData(node.id, { ...nodeData, [dataKey]: { ...data, key: field, value: val, kind: 'StringLiteral' } })
+            setNodeData(node.id, { ...nodeData, [field]: { ...data, key: fieldKey, value: val, kind: 'StringLiteral' } })
         }
     }
 

@@ -13,25 +13,25 @@
                 "data": [
                     {
                         "label": "backgroundColor",
-                        "field": "backgroundColor",
+                        "field": "prop-backgroundColor",
                         "type": "color",
                         "fieldType": "prop"
                     },
                     {
                         "label": "flexDirection",
-                        "field": "flexDirection",
+                        "field": "prop-flexDirection",
                         "type": "alignment-flex",
                         "fieldType": "prop"
                     },
                     {
                         "label": "justifyContent",
-                        "field": "justifyContent",
+                        "field": "prop-justifyContent",
                         "type": "alignment-content",
                         "fieldType": "prop"
                     },
                     {
                         "label": "alignItems",
-                        "field": "alignItems",
+                        "field": "prop-alignItems",
                         "type": "alignment-items",
                         "fieldType": "prop"
                     }
@@ -64,25 +64,25 @@
                 "data": [
                     {
                         "label": "backgroundColor",
-                        "field": "backgroundColor",
+                        "field": "prop-backgroundColor",
                         "type": "color",
                         "fieldType": "prop"
                     },
                     {
                         "label": "flexDirection",
-                        "field": "flexDirection",
+                        "field": "prop-flexDirection",
                         "type": "alignment-flex",
                         "fieldType": "prop"
                     },
                     {
                         "label": "justifyContent",
-                        "field": "justifyContent",
+                        "field": "prop-justifyContent",
                         "type": "alignment-content",
                         "fieldType": "prop"
                     },
                     {
                         "label": "alignItems",
-                        "field": "alignItems",
+                        "field": "prop-alignItems",
                         "type": "alignment-items",
                         "fieldType": "prop"
                     }
@@ -115,17 +115,17 @@
                 "data": [
                     {
                         "label": "width",
-                        "field": "width",
+                        "field": "prop-width",
                         "fieldType": "prop"
                     },
                     {
                         "label": "height",
-                        "field": "height",
+                        "field": "prop-height",
                         "fieldType": "prop"
                     },
                     {
                         "label": "opacity",
-                        "field": "opacity",
+                        "field": "prop-opacity",
                         "fieldType": "prop"
                     }
                 ]
@@ -157,25 +157,25 @@
                 "data": [
                     {
                         "label": "backgroundColor",
-                        "field": "backgroundColor",
+                        "field": "prop-backgroundColor",
                         "type": "color",
                         "fieldType": "prop"
                     },
                     {
                         "label": "flexDirection",
-                        "field": "flexDirection",
+                        "field": "prop-flexDirection",
                         "type": "alignment-flex",
                         "fieldType": "prop"
                     },
                     {
                         "label": "justifyContent",
-                        "field": "justifyContent",
+                        "field": "prop-justifyContent",
                         "type": "alignment-content",
                         "fieldType": "prop"
                     },
                     {
                         "label": "alignItems",
-                        "field": "alignItems",
+                        "field": "prop-alignItems",
                         "type": "alignment-items",
                         "fieldType": "prop"
                     }
@@ -232,24 +232,24 @@
                 "data": [
                     {
                         "label": "color",
-                        "field": "color",
+                        "field": "prop-color",
                         "type": "color",
                         "fieldType": "prop"
                     },
                     {
                         "label": "flexDirection",
-                        "field": "flexDirection",
+                        "field": "prop-flexDirection",
                         "type": "alignment-flex",
                         "fieldType": "prop"
                     },
                     {
                         "label": "padding",
-                        "field": "padding",
+                        "field": "prop-padding",
                         "fieldType": "prop"
                     },
                     {
                         "label": "margin",
-                        "field": "margin",
+                        "field": "prop-margin",
                         "fieldType": "prop"
                     }
                 ]
@@ -286,30 +286,30 @@
                 "data": [
                     {
                         "label": "color",
-                        "field": "color",
+                        "field": "prop-color",
                         "type": "color",
                         "fieldType": "prop"
                     },
                     {
                         "label": "textAlign",
-                        "field": "textAlign",
+                        "field": "prop-textAlign",
                         "type": "alignment-text",
                         "fieldType": "prop"
                     },
                     {
                         "label": "alignSelf",
-                        "field": "alignSelf",
+                        "field": "prop-alignSelf",
                         "type": "alignment-items",
                         "fieldType": "prop"
                     },
                     {
                         "label": "margin",
-                        "field": "margin",
+                        "field": "prop-margin",
                         "fieldType": "prop"
                     },
                     {
                         "label": "padding",
-                        "field": "padding",
+                        "field": "prop-padding",
                         "fieldType": "prop"
                     }
                 ]
@@ -346,25 +346,25 @@
                 "data": [
                     {
                         "label": "color",
-                        "field": "color",
+                        "field": "prop-color",
                         "type": "color",
                         "fieldType": "prop"
                     },
                     {
                         "label": "textAlign",
-                        "field": "textAlign",
+                        "field": "prop-textAlign",
                         "type": "alignment-text",
                         "fieldType": "prop"
                     },
                     {
                         "label": "alignSelf",
-                        "field": "alignSelf",
+                        "field": "prop-alignSelf",
                         "type": "alignment-items",
                         "fieldType": "prop"
                     },
                     {
                         "label": "margin",
-                        "field": "margin",
+                        "field": "prop-margin",
                         "fieldType": "prop"
                     },
                     {
@@ -374,7 +374,7 @@
                     },
                     {
                         "label": "padding",
-                        "field": "padding",
+                        "field": "prop-padding",
                         "fieldType": "prop"
                     }
                 ]
@@ -411,30 +411,30 @@
                 "data": [
                     {
                         "label": "color",
-                        "field": "color",
+                        "field": "prop-color",
                         "type": "color",
                         "fieldType": "prop"
                     },
                     {
                         "label": "textAlign",
-                        "field": "textAlign",
+                        "field": "prop-textAlign",
                         "type": "alignment-text",
                         "fieldType": "prop"
                     },
                     {
                         "label": "alignSelf",
-                        "field": "alignSelf",
+                        "field": "prop-alignSelf",
                         "type": "alignment-items",
                         "fieldType": "prop"
                     },
                     {
                         "label": "margin",
-                        "field": "margin",
+                        "field": "prop-margin",
                         "fieldType": "prop"
                     },
                     {
                         "label": "padding",
-                        "field": "padding",
+                        "field": "prop-padding",
                         "fieldType": "prop"
                     }
                 ]
@@ -471,18 +471,18 @@
                 "data": [
                     {
                         "label": "textAlign",
-                        "field": "textAlign",
+                        "field": "prop-textAlign",
                         "type": "alignment-text",
                         "fieldType": "prop"
                     },
                     {
                         "label": "margin",
-                        "field": "margin",
+                        "field": "prop-margin",
                         "fieldType": "prop"
                     },
                     {
                         "label": "padding",
-                        "field": "padding",
+                        "field": "prop-padding",
                         "fieldType": "prop"
                     }
                 ]
@@ -559,12 +559,12 @@
                 "data": [
                     {
                         "label": "margin",
-                        "field": "margin",
+                        "field": "prop-margin",
                         "fieldType": "prop"
                     },
                     {
                         "label": "padding",
-                        "field": "padding",
+                        "field": "prop-padding",
                         "fieldType": "prop"
                     }
                 ]
@@ -622,12 +622,12 @@
                 "data": [
                     {
                         "label": "margin",
-                        "field": "margin",
+                        "field": "prop-margin",
                         "fieldType": "prop"
                     },
                     {
                         "label": "padding",
-                        "field": "padding",
+                        "field": "prop-padding",
                         "fieldType": "prop"
                     }
                 ]

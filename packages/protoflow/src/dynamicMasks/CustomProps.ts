@@ -43,7 +43,7 @@ export const getCustomParams = (enabledProps = ["*"]) => {
         { field: 'prop-zi', label: 'zi', type: 'select', fieldType: 'prop', data: zIndexes ? [defaultValue, ...zIndexes] : [], static: true },
     ].filter(item => allPropsEnabled || enabledProps.includes(item.field))
 }
-export const getPropsFieldNamesArr = (itemArr) => itemArr.map(i => i.fieldType ? (i.fieldType + '-' + i.field) : i.field)
+export const getPropsFieldNamesArr = (itemArr) => itemArr.map(i => i.field)
 
 export const getCustomProps = (data) => {
     const rawData = data.find(i => i.type == 'custom-prop')?.data ?? []

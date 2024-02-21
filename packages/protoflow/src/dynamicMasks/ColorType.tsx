@@ -39,8 +39,9 @@ export default ({ nodeData = {}, node, item }) => {
 
     const { field, label, type, fieldType } = item
 
-    const dataKey = fieldType ? (fieldType + '-' + field) : field
-    const data = nodeData[dataKey]
+    const fieldKey = field.replace(fieldType + '-', '')
+
+    const data = nodeData[field]
     const value = data?.value
 
     const [colorMode, setColorMode] = React.useState('theme');
@@ -50,7 +51,7 @@ export default ({ nodeData = {}, node, item }) => {
 
     const onSubmitThemeColor = (col) => {
         if (!col) return
-        setNodeData(node.id, { ...nodeData, [dataKey]: { ...data, key: field, value: col, kind: 'StringLiteral' } })
+        setNodeData(node.id, { ...nodeData, [field]: { ...data, key: fieldKey, value: col, kind: 'StringLiteral' } })
         setTmpColor(col)
     }
 
