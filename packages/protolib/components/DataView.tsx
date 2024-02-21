@@ -1,5 +1,5 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
-import { Center, usePendingEffect, useRemoteStateList, ObjectGrid, DataTableCard, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { Center, usePendingEffect, useRemoteStateList, ObjectGrid, DataTableCard, MapView, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
@@ -77,6 +77,7 @@ export function DataView({
     dataTableRawProps = {},
     dataTableListProps = {},
     dataTableGridProps = {},
+    dataMapProps = {},
     extraFieldsForms = {},
     extraFieldsFormsEdit = {},
     extraFieldsFormsAdd = {},
@@ -215,13 +216,13 @@ export function DataView({
     const mapView = {
         name: 'map',
         icon: MapPin,
-        component: DataTableCard,
+        component: MapView,
         props: {
             mt: "$8",
             onDelete: async (key) => {
                 await API.get(`${sourceUrl}/${key}/delete`);
             },
-            ...dataTableRawProps
+            ...dataMapProps
         }
     }
 
