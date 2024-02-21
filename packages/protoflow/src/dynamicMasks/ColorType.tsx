@@ -6,6 +6,7 @@ import { GithubPicker, SketchPicker } from "react-color";
 import Input from '../diagram/NodeInput'
 import Popover from '../diagram/NodePopover';
 import { Pipette, Palette } from 'lucide-react'
+import { CustomProp } from './CustomProps';
 
 const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     <div onClick={onPress}
@@ -127,16 +128,9 @@ export default ({ nodeData = {}, node, item }) => {
                 </>
         }
     }
-    return <div style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column" }}>
-        <div style={{ fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-            <div className={"handleKey"} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <Text>{label}</Text>
-            </div>
-            <div className={"handleValue"} style={{ minWidth: '180px', marginRight: '10px', display: 'flex', flexDirection: 'row', flexGrow: 1, alignItems: 'center' }}>
-                {getInput()}
-            </div>
-        </div>
-    </div>
+
+    return <CustomProp label={label} input={getInput()}/>
+
 }
 
 function convertirHSLAString(colorHSLA) {

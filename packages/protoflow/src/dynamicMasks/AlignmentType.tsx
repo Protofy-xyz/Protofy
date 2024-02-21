@@ -8,6 +8,7 @@ import {
     ArrowRightFromLine, ArrowLeftFromLine, ArrowDownFromLine, ArrowUpFromLine,
     AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd, AlignVerticalSpaceAround, AlignVerticalSpaceBetween
 } from 'lucide-react';
+import { CustomProp } from './CustomProps';
 
 export const getAlignmentTypes = () => ['alignment-text', 'alignment-items', 'alignment-flex', 'alignment-content']
 
@@ -86,14 +87,6 @@ export default ({ nodeData = {}, item, node }) => {
         }
     }
 
-    return <div style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column" }}>
-        <div style={{ fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-            <div className={"handleKey"} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <Text>{label}</Text>
-            </div>
-            <div className={"handleValue"} style={{ minWidth: '180px', marginRight: '10px', display: 'flex', flexDirection: 'row', flexGrow: 1, alignItems: 'center' }}>
-                {getInput()}
-            </div>
-        </div>
-    </div>
+    return <CustomProp label={label} input={getInput()}/>
+
 }

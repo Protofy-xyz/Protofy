@@ -3,23 +3,7 @@ import Node, { Field, FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import AddPropButton from '../AddPropButton';
 import { Code } from 'lucide-react'
-import { getCustomPropsFields } from './CustomProps';
-import AlignmentType from './AlignmentType';
-import ColorType from './ColorType';
-
-const CustomPropType = ({ item, node, nodeData }) => {
-    var type = item.type ?? ''
-    var category = type.split('-')[0]
-
-    switch (category) {
-        case 'alignment':
-            return <AlignmentType key={type} node={node} item={item} nodeData={nodeData} />
-        case 'color':
-            return <ColorType key={type} node={node} item={item} nodeData={nodeData} />
-        default:
-            return <></>
-    }
-}
+import { CustomPropType, getCustomPropsFields } from './CustomProps';
 
 const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const propsArray: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('prop-')).map((prop: any, i) => {
@@ -72,7 +56,6 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                                 {
                                     element.data.map((item, index) => <CustomPropType key={index} item={item} node={node} nodeData={nodeData} />)
                                 }
-                                {/* <NodeParams id={node.id} params={getCustomParams(fieldArr)} /> */}
                             </>
                         }
                     }
