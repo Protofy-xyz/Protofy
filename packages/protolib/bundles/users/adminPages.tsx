@@ -49,6 +49,7 @@ export default {
 
             return (<AdminPage title="Users" pageSession={pageSession}>
                 <DataView
+                    enableMapView
                     integratedChat
                     enableAddToInitialData
                     entityName={'accounts'}

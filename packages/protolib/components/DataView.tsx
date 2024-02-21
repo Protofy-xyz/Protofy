@@ -1,7 +1,7 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
 import { Center, usePendingEffect, useRemoteStateList, ObjectGrid, DataTableCard, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
@@ -91,6 +91,7 @@ export function DataView({
     objectProps = {},
     disableRealTimeUpdates = false,
     refreshOnHotReload = false,
+    enableMapView = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const { query } = useRouter();
@@ -153,7 +154,7 @@ export function DataView({
     const onSearch = async (text) => setSearch(text)
     const toast = useToastController()
 
-    const defaultViews = [
+    var defaultViews = [
         {
             name: 'list',
             icon: List,
@@ -210,6 +211,23 @@ export function DataView({
             }
         }
     ]
+
+    const mapView = {
+        name: 'map',
+        icon: MapPin,
+        component: DataTableCard,
+        props: {
+            mt: "$8",
+            onDelete: async (key) => {
+                await API.get(`${sourceUrl}/${key}/delete`);
+            },
+            ...dataTableRawProps
+        }
+    }
+
+    if(enableMapView) {
+        defaultViews = [...defaultViews, mapView]
+    }
 
     const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))
 
