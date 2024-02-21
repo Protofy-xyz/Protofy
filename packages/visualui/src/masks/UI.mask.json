@@ -137,8 +137,7 @@
                         "label": "url",
                         "field": "prop-url",
                         "fieldType": "prop",
-                        "static": true,
-                        "type": "prop"
+                        "static": true
                     }
                 ]
             }
@@ -189,8 +188,7 @@
                         "label": "title",
                         "field": "prop-title",
                         "fieldType": "prop",
-                        "static": true,
-                        "type": "prop"
+                        "static": true
                     }
                 ],
                 "disableAdd": false
@@ -518,8 +516,7 @@
                         "label": "description",
                         "field": "prop-description",
                         "fieldType": "prop",
-                        "static": true,
-                        "type": "prop"
+                        "static": true
                     }
                 ]
             },
@@ -609,15 +606,13 @@
                         "label": "title",
                         "field": "prop-title",
                         "fieldType": "prop",
-                        "static": true,
-                        "type": "prop"
+                        "static": true
                     },
                     {
                         "label": "subtitle",
                         "field": "prop-subtitle",
                         "fieldType": "prop",
-                        "static": true,
-                        "type": "prop"
+                        "static": true
                     }
                 ],
                 "disableAdd": true
