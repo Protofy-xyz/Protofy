@@ -7,16 +7,20 @@ export default {
         "System": [
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
+            { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
+            // { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
+            { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
+        ],
+        "Development": [
+            { "name": "Files", "icon": "folder", "type": "files", "path": "/?path=packages/app/bundles/custom" },
             { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },
             { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
             { "name": "APIs", "icon": ToyBrick, "type": "apis", "path": "/" },
-            { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
-            // { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
-            { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/?path=/apps/next/public" },
-            { "name": "Files", "icon": "folder", "type": "files", "path": "/?path=packages/app/bundles/custom" },    
-            { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
+        ],
+        "CMS": [
+            { "name": "Databases", "icon": "database", "type": "databases", "path": "/"},
             { "name": "Resources", "icon": Library, "type": "resources", "path": "/"},
-            { "name": "Databases", "icon": "database", "type": "databases", "path": "/"}
+            { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/?path=/apps/next/public" },
         ],
         "Devices":[
             { "name": "Devices", "icon": "serverConf", "type":"devices", "path": "/"},
