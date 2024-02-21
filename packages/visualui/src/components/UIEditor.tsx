@@ -29,7 +29,7 @@ const FloatingIcon = ({ id = undefined, children, onClick, disabled = false }) =
 /* 
 // const uiStore = useFlowsStore()
 */
-function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {} }) {
+function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, setContext }) {
     const editorRef = useRef<any>()
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const [currentPageContent, setCurrentPageContent] = useState("")
@@ -276,11 +276,13 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         return () => window.removeEventListener('resize', handleResize);
     }, [])
 
+    // for outside context usage
     const options = {
       resolver: availableCraftComponents, 
       onRender: RenderNode
     }
     const context = newVisualUiContext(options)
+    if (setContext)  setContext(context) // atom shared context
 
     return <div ref={editorRef} style={{ display: 'flex', flex: 1, width: '100%' }}>
         <Editor

@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react'
-import { useAtom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import { EditorStore, useEditorContext } from "@protocraft/core";
 
+// create craftjs context 
 export function newVisualUiContext(options: any) {
   return useEditorContext(options)
 }
 
+// handle no contextAtom provided on UIEditor()
+export function useVisualUiAtom(_atom: any) {
+  const contextAtom = _atom ?? null
+  return contextAtom ? useAtom(contextAtom) : [null, null]
+}
+
+// hook for visualUiState management
 export function useVisualUi(atom, callb, defState) {
   const [state, setState] = useState(defState)
   const [craftContext] = useAtom<EditorStore>(atom)
