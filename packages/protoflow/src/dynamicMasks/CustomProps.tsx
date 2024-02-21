@@ -4,6 +4,7 @@ import AlignmentType, { getAlignmentTypes } from "./AlignmentType";
 import ColorType, { getColorTypes } from "./ColorType";
 import Text from '../diagram/NodeText'
 import useTheme from "../diagram/Theme";
+import RangeType, { getRangeTypes } from "./RangeType";
 
 export const getCustomPropsFields = (data) => {
     const rawData = data.find(i => i.type == 'custom-prop')?.data ?? []
@@ -15,8 +16,9 @@ export const getCustomPropsFields = (data) => {
 export const getAllTypes = () => {
     const alignmentTypes = getAlignmentTypes()
     const colorTypes = getColorTypes()
+    const rangeTypes = getRangeTypes()
 
-    return [...alignmentTypes, ...colorTypes]
+    return [...alignmentTypes, ...colorTypes, ...rangeTypes]
 }
 
 export const CustomPropType = ({ item, node, nodeData }) => {
@@ -25,15 +27,20 @@ export const CustomPropType = ({ item, node, nodeData }) => {
 
     switch (category) {
         case 'alignment':
-            return <AlignmentType key={type} node={node} item={item} nodeData={nodeData} />
+            return <AlignmentType node={node} item={item} nodeData={nodeData} />
+
         case 'color':
-            return <ColorType key={type} node={node} item={item} nodeData={nodeData} />
+            return <ColorType node={node} item={item} nodeData={nodeData} />
+
+        case 'range':
+            return <RangeType node={node} item={item} nodeData={nodeData} />
+
         default:
             return <></>
     }
 }
 
-export const CustomProp = ({label, input}: any) => {
+export const CustomProp = ({ label, input }: any) => {
     const nodeFontSize = useTheme('nodeFontSize')
 
     return <div style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column" }}>
