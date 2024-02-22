@@ -47,14 +47,14 @@ const GridElementCard = ({ index, data, width }) => {
                     onDelete={data.onDelete}
                     deleteable={data.deleteable}
                     extraMenuActions={data.extraMenuActions}
-                    
+
                 />
             </Stack>
         }
     </ItemCard>
 }
 
-export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 40, onSelectItem = (id) => { }, extraMenuActions, spacing = 20, getPicture, getBody,getCard, model, items, sourceUrl, customFields, onDelete, deleteable, extraFields, icons, children, ...props }: any & StackProps) => {
+export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 50, onSelectItem = (id) => { }, extraMenuActions, spacing = 20, getPicture, getBody,getCard, model, items, sourceUrl, customFields, onDelete, deleteable, extraFields, icons, children, ...props }: any & StackProps) => {
     const containerRef = useRef(null)
 
     const data = items.map((element, i) => {
@@ -82,7 +82,7 @@ export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinW
     })
 
     return <Stack f={1} ref={containerRef} {...props}>
-            <Grid overScanBy={overScanBy} key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth} />
+        <Grid overScanBy={overScanBy} key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth} />
         {children}
     </Stack>
 }

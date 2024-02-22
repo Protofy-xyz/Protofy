@@ -219,7 +219,7 @@ const FormGroup = ({ ele, title, children, icon, simple = false, path }) => {
   const [opened, setOpened] = useContext(OpenedSectionsContext);
   const name = [...path, ele.name].join("/")
   // console.log("PATH: ", [...path, ele.name].join("/"))
-  const content = <XStack id="eo-formgroup" br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}>
+  const content = <XStack mb={'$2'} id="eo-formgroup" br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}>
     <Accordion value={opened} onValueChange={(localOpened) => setOpened(localOpened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
       <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={name}>
         <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes(name) ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
@@ -586,7 +586,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
     <YStack f={1}>
       <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>
-    {currentMode == 'preview' && <Stack t={"$-5"}>
+    {currentMode == 'preview' && <Stack t={"$-10"}>
       <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={onDelete} deleteable={deleteable} element={model.load(data.data)} extraMenuActions={extraMenuActions} />
     </Stack>}
   </XStack>), [columnMargin, groups, columnWidth, numColumns])
@@ -616,7 +616,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
       <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
         <YStack width="100%">
           <XStack ai="center">
-            <XStack id="eo-dlg-title"><H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3></XStack>
+            <XStack m={currentMode == 'preview' ? '$5' : undefined} id="eo-dlg-title"><H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3></XStack>
             {title && <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
               <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>
             </XStack>}
