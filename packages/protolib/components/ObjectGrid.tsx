@@ -43,7 +43,6 @@ const GridElementCard = ({ index, data, width }) => {
                     icons={data.icons}
                     customFields={data.customFields}
                     columnWidth={width - data.contentMargin}
-                    columnMargin={0}
                     onDelete={data.onDelete}
                     deleteable={data.deleteable}
                     extraMenuActions={data.extraMenuActions}

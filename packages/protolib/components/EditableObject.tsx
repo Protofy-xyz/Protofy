@@ -456,7 +456,7 @@ const GridElement = ({ index, data, width }) => {
   const realSize = data.ele._def.size || 1
   // console.log('colwidth: ', colWidth, realSize, columnMargin/Math.max(1,((colWidth*2)-(realSize*2))))
 
-  return <XStack f={1} width={(width * realSize) + ((realSize - 1) * (data.columnMargin / realSize))} key={data.x} mb={'$0'}>
+  return <XStack f={1} width={(width * realSize) + ((realSize - 1) * (data.columnMargin / realSize))} key={data.x}>
     {getElement({
       ele: data.ele,
       icon: data.icon,
@@ -586,7 +586,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
     <YStack f={1}>
       <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>
-    {currentMode == 'preview' && <Stack t={"$-10"}>
+    {currentMode == 'preview' && <Stack t={"$-7"}>
       <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={onDelete} deleteable={deleteable} element={model.load(data.data)} extraMenuActions={extraMenuActions} />
     </Stack>}
   </XStack>), [columnMargin, groups, columnWidth, numColumns])
@@ -616,7 +616,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
       <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
         <YStack width="100%">
           <XStack ai="center">
-            <XStack m={currentMode == 'preview' ? '$5' : undefined} id="eo-dlg-title"><H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3></XStack>
+            <XStack  mt={currentMode == 'preview' ? '$4' : undefined} ml={currentMode == 'preview' ? '$4' : undefined} id="eo-dlg-title"><H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3></XStack>
             {title && <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
               <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>
             </XStack>}
