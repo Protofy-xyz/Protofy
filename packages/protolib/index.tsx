@@ -20,6 +20,7 @@ export * from "./components/LinkGroup";
 export { default as ErrorMessage } from "./components/ErrorMessage";
 export * from "./components/Code";
 export { default as XCenterStack } from "./components/XCenterStack";
+export { default as YCenterStack } from "./components/YCenterStack"; 
 export { default as BigTitle } from "./components/BigTitle";
 export { default as Image } from "./components/Image";
 export { default as Video } from "./components/Video";
