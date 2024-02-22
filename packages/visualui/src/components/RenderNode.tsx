@@ -40,17 +40,19 @@ export const RenderNode = ({ render }) => {
         )
     });
 
-    const componentColor = unknown ?  "#EF9364" : "#2680EB"
+    const componentColor = unknown ? "#EF9364" : "#2680EB"
+    const iconSize = 20
+    const border = '1px solid gray'
 
     const currentRef = useRef<HTMLDivElement>();
     useEffect(() => {
         if (dom) {
             if (isActive) {
-                dom.style.border = "1px solid "+ componentColor
+                dom.style.boxShadow = "inset 0px 0px 0px 2px " + componentColor
             } else if (isHover) {
-                dom.style.border = "1px dashed "+ componentColor
+                dom.style.boxShadow = "inset 0px 0px 0px 1px " + componentColor
             }
-            else dom.style.border = ""
+            else dom.style.boxShadow = ""
         }
     }, [dom, isActive, isHover]);
 
@@ -99,7 +101,7 @@ export const RenderNode = ({ render }) => {
     return (
         <>
             {
-                (isHover || isActive)
+                (isActive)
                     ?
                     ReactDOM.createPortal(
                         <div
@@ -110,19 +112,22 @@ export const RenderNode = ({ render }) => {
                                 top: getPos(dom).top,
                                 zIndex: 9999999999999999999999999999999,
                                 position: "fixed",
-                                backgroundColor: componentColor,
-                                padding: "10px",
+                                backgroundColor: "#252526",
+                                border: border,
+                                padding: "16px",
                                 color: "white",
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                height: "30px",
-                                marginTop: "-29px",
-                                pointerEvents: 'auto'
+                                height: "50px",
+                                marginTop: "-60px",
+                                pointerEvents: 'auto',
+                                gap: 20
                             }}
                         >
-                            <div style={{ fontSize: 10, color: 'white', marginRight: 10 }}>{name}{unknown ? ' (Unknown)' : ''}</div>
-                            <div style={{ display: 'flex', flexDirection: "row", flex: 1 }}>
+                            <div style={{ fontSize: 14, color: 'white' }}>{name}{unknown ? ' (Unknown)' : ''}</div>
+                            <div style={{ height: '50px', borderLeft: border }}></div>
+                            <div style={{ display: 'flex', flexDirection: "row", flex: 1, gap: "20px" }}>
                                 {moveable ? (
                                     <div
                                         ref={drag}
@@ -131,14 +136,14 @@ export const RenderNode = ({ render }) => {
                                     >
                                         <Move
                                             color="white"
-                                            size={14}
+                                            size={iconSize}
                                         />
                                     </div>
                                 ) : null}
                                 {id !== ROOT_NODE && parent != "ROOT" ?
                                     <div
-                                        style={{ margin: "0px 8px 0px 8px", cursor: "pointer" }}
-                                        title="Go to parent"
+                                        style={{ cursor: "pointer" }}
+                                        title="Select parent"
                                     >
                                         <ArrowUp
                                             onMouseDown={(e) => {
@@ -146,14 +151,14 @@ export const RenderNode = ({ render }) => {
                                                 e.stopPropagation()
                                             }}
                                             color="white"
-                                            size={14}
+                                            size={iconSize}
                                         />
                                     </div>
                                     : null}
                                 {childs.length ?
                                     <div
-                                        style={{ marginRight: parent != "ROOT" ? "8px" : "", cursor: "pointer" }}
-                                        title="Go to first child"
+                                        style={{ cursor: "pointer" }}
+                                        title="Select first child"
                                     >
                                         <ArrowDown
                                             onMouseDown={(e) => {
@@ -161,14 +166,14 @@ export const RenderNode = ({ render }) => {
                                                 e.stopPropagation()
                                             }}
                                             color="white"
-                                            size={14}
+                                            size={iconSize}
                                         />
                                     </div>
                                     : null}
                                 {nodeAndSiblings?.length > 1 ?
                                     <div
-                                        style={{ margin: "0px 8px 0px 0px", cursor: "pointer" }}
-                                        title="Go to next sibling"
+                                        style={{ cursor: "pointer" }}
+                                        title="Select next sibling"
                                     >
                                         <Redo
                                             onMouseDown={(e) => {
@@ -179,7 +184,7 @@ export const RenderNode = ({ render }) => {
                                                 e.stopPropagation()
                                             }}
                                             color="white"
-                                            size={14}
+                                            size={iconSize}
                                         />
                                     </div>
                                     : null}
@@ -195,7 +200,7 @@ export const RenderNode = ({ render }) => {
                                     >
                                         <Trash2
                                             color="white"
-                                            size={14}
+                                            size={iconSize}
                                         />
                                     </div>
                                 ) : null}
