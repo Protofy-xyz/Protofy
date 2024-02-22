@@ -61,7 +61,7 @@ export const RenderNode = ({ render }) => {
             ? dom.getBoundingClientRect()
             : { top: 0, left: 0, bottom: 0 };
         return {
-            top: `${top > 2 ? top : bottom}px`,
+            top: `${top > 10 ? (top - 60) : (bottom + 10)}px`,
             left: `${left}px`,
         };
     }, []);
@@ -120,7 +120,6 @@ export const RenderNode = ({ render }) => {
                                 justifyContent: "space-between",
                                 alignItems: "center",
                                 height: "50px",
-                                marginTop: "-60px",
                                 pointerEvents: 'auto',
                                 gap: 20
                             }}
