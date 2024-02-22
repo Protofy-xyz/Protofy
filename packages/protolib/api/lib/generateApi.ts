@@ -141,7 +141,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.load(req.body, session).createTransformed(transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
-        context && context.mqtt && context.mqtt.publish("notifications/" + entityName + '/create/' + entityModel.getId(), entityModel.serialize())
+        context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('create'), entityModel.getNotificationsPayload()) 
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/create/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
@@ -206,7 +206,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelClass.unserialize(await db.get(req.params.key), session).updateTransformed(modelClass.load(req.body, session), transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
-        context && context.mqtt && context.mqtt.publish("notifications/" + entityName + '/update/' + entityModel.getId(), entityModel.serialize())
+        context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/update/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
@@ -241,7 +241,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
 
 
-        context && context.mqtt && context.mqtt.publish("notifications/" + entityName + '/delete/' + req.params.key, entityModel.serialize())
+        context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('delete'), entityModel.getNotificationsPayload())
         if (!options.disableEvents) {
             generateEvent({
                 path: entityName + '/delete/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online

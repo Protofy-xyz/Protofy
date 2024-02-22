@@ -48,8 +48,21 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.objectSchema
     }
 
+    getModelName() {
+        const className = this.constructor.name;
+        return className.substring(0, className.length - 5).toLowerCase();
+    }
+
     getId() {
         return this.data[this.idField]
+    }
+
+    getNotificationsTopic(action: string): string {
+        return `notifications/${this.getModelName()}/${action}/${this.getId()}`
+    }
+
+    getNotificationsPayload() {
+        return this.serialize()
     }
 
     setId(id: string, newData?): T {
