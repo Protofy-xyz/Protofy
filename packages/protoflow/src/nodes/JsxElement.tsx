@@ -32,7 +32,7 @@ const JsxElement = (node) => {
     return (
         <Node headerContent={<div>hello</div>} icon={Code} node={node} isPreview={!id} title={"<x ...></x>"} id={id} color={nodeColors[type]}>
             {
-                DEV_WIP_GM && <CreateMaskButton nodeData={nodeData} maskType='JsxElement'/>
+                DEV_WIP_GM && <CreateMaskButton nodeData={nodeData} maskType='JsxElement' />
             }
             <NodeParams id={id} params={nodeParamsProps} />
             <AddPropButton id={id} nodeData={nodeData} type={"Prop"} />
@@ -66,7 +66,7 @@ JsxElement.getData = (node, data, nodesData, edges) => {
 
             if (!attrData) {
                 attrData = {
-                    value: connectItem(attribute?.getInitializer(), 'output', node, propName, data, nodesData, edges, propName) ?? ''
+                    value: connectItem(initializer.getExpression(), 'output', node, propName, data, nodesData, edges, propName) ?? ''
                 }
             }
         }
@@ -116,7 +116,7 @@ JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers
             if (dumpedAttr) {
                 objValue = dumpedAttr
             } else {
-                objValue = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+                objValue = "{" + dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level) + "}"
             }
             objParam = `${objKey}=${objValue} `
             if (!objValue || !objKey) return total
@@ -146,7 +146,7 @@ export function getKindName(value) {
     }
 }
 // TODO: export function to protolib
-export function dumpAttributeData(attrData: {kind: string, value: any}): any {
+export function dumpAttributeData(attrData: { kind: string, value: any }): any {
     const expressionKind = attrData.kind
     var value = attrData.value
     switch (expressionKind) {

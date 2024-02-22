@@ -32,4 +32,9 @@ JsxExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMark
     return a
 }
 
+JsxExpression.isShadow = (node, data, mode, edges) => {
+    if (node.getParent().getKindName() == 'JsxAttribute') return true
+    return false
+} 
+
 export default React.memo(JsxExpression)
