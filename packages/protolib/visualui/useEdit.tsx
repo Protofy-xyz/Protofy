@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import { API, Tinted } from 'protolib'
 import { Pencil } from '@tamagui/lucide-icons'
 import { getTokens } from '@tamagui/core'
-import { Button, useMedia, useTheme, useThemeName } from 'tamagui'
+import { Button } from 'tamagui'
 import { useRouter } from "next/router"
 import dynamic from 'next/dynamic';
-import protolibPalette from './index'
+import { palettes } from './index'
 import { Session } from 'protolib'
 import { useAtom } from 'jotai'
 import {useIsEditing} from './useIsEditing'
@@ -81,6 +81,6 @@ const VisualUILoader = ({ userComponents, path, metadata }) => { // Should be in
       setFileContent(res.data)
     }
   }, [res])
-  return <UiManager metadata={metadata} userPalettes={{ protolib: protolibPalette, user: userComponents }} _sourceCode={fileContent} onSave={onSave} />
+  return <UiManager metadata={metadata} userPalettes={{ ...palettes, user: userComponents }} _sourceCode={fileContent} onSave={onSave} />
 
 }

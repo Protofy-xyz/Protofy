@@ -31,7 +31,7 @@ const MainPanel = ({ borderLess, rightPanelSize,setRightPanelSize,rightPanelStyl
     
     const getLeftWidth = () => {
         const totalWidth = Math.max(400, size.width)
-        let percentage = (300 / totalWidth) * 100;
+        let percentage = (350 / totalWidth) * 100;
         return percentage;
     }
     const getRightWidth = () => {

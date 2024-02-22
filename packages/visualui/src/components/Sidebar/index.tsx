@@ -65,7 +65,7 @@ export const Sidebar = ({
 
 
     return (
-        <div className={'visualui-sidebar'} style={{backgroundColor: 'rgb(37, 37, 38)'}}>
+        <div className={'visualui-sidebar'} style={{ backgroundColor: 'rgb(37, 37, 38)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '4px' }}>
                 <div ref={viewRef} style={{ padding: '4px', display: 'flex', flexDirection: "column", flex: 1 }}>
                     <p style={{ padding: '18px 0px 0px 14px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
@@ -74,7 +74,6 @@ export const Sidebar = ({
                             style={{
                                 fontFamily: 'Jost-Regular',
                                 padding: '8px 8px 8px 36px',
-                                // border: 'grey',
                                 display: 'flex',
                                 boxSizing: 'border-box',
                                 fontSize: '14px',
@@ -97,14 +96,23 @@ export const Sidebar = ({
                             palettesArr.map((palette, i) => {
                                 return (
                                     <div key={i} style={{ flexDirection: 'column', display: 'flex', marginBottom: '25px' }}>
-                                        <p style={{ paddingLeft: '18px', marginTop: '0px', fontSize: '12px', color: 'grey' }}>{palette}</p>
-                                        <div className={'visualui-sidebar-list'} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start' }}>
+                                        <p style={{ paddingLeft: '16px', marginBottom: '10px', fontSize: '12px', color: 'grey' }}>{palette.toUpperCase()}</p>
+                                        <div className={'visualui-sidebar-list'} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start', gap: '8px' }}>
                                             {
                                                 Object.keys(filteredDropableComponents[palette]).map((componentName, i) => {
                                                     const data = filteredDropableComponents[palette][componentName]
+
                                                     return (data?.nonDeletable ?
                                                         null
-                                                        : <div key={i} title={componentName} style={{ display: 'flex', margin: '8px', cursor: 'grab' }}>
+                                                        : <div key={i}
+                                                            onMouseEnter={(e) => {
+                                                                e.currentTarget.style.backgroundColor = '#FFFFFF10'
+                                                            }}
+                                                            onMouseLeave={(e) => {
+                                                                e.currentTarget.style.backgroundColor = ''
+                                                            }}
+                                                            title={componentName}
+                                                            style={{ display: 'flex', cursor: 'grab', borderRadius: '6px' }}>
                                                             <div
                                                                 ref={ref => connectors.create(ref, () => {
                                                                     return (data.dropable) ?
@@ -114,17 +122,17 @@ export const Sidebar = ({
                                                                         ></Element>
                                                                         : React.createElement(data.element)
                                                                 })}
-                                                                id={"drag-element-"+componentName}
+                                                                id={"drag-element-" + componentName}
                                                                 className={"draggable-element"}
-                                                                style={{ textAlign: 'center', marginTop: '10px', height: '50px', width: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                                                                style={{ textAlign: 'center', paddingTop: '10px', paddingBottom: '10px', width: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                                             >
                                                                 <Icon
                                                                     name={data.icon}
                                                                     color={"#a8a29e"}
                                                                     size={32}
                                                                 />
-                                                                <div style={{ marginTop: '5px' }}>
-                                                                    <p style={{ fontSize: '10px', width: '100%', color: 'white' }}>
+                                                                <div style={{ marginTop: '14px' }}>
+                                                                    <p style={{ fontSize: '12px', width: '100%', color: 'white', padding: '5px' }}>
                                                                         {truncate_with_ellipsis(componentName, 12)}
                                                                     </p>
                                                                 </div>

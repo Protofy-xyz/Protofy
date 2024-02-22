@@ -81,7 +81,34 @@ const cw = getComponentWrapper('protolib')
 
 const nonDraggable = { custom: { hidden: true } }
 
-export default {
+export const textPalette = {
+  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, {}, {}, true),
+  ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, {}, {}, true),
+  ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, {}, {}, true),
+  ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
+  ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
+  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
+}
+
+export const layoutPalette = {
+  ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(ContainerXL, 'Container', 'ContainerXL', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(ContainerLarge, 'Package', 'ContainerLarge', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(Section, 'EyeOff', 'Section', {}, nonDraggable),
+  ...cw(SectionBox, 'RectangleHorizontal', 'SectionBox', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(SectionBlock, 'BoxSelect', 'SectionBlock'),
+  ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
+}
+
+export const basicPalette = {
+  ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {}, {}, true),
+  ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "Press Me" }, {}, {}, true),
+  ...cw(Container, 'Box', 'Container', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(Image, 'MinusSquare', 'Image', {}, {}, {}, true),
+} 
+
+export const miscellanyPalette = {
   ...htmlBasicElements,
   ...cw(ActiveGroup, 'EyeOff', 'ActiveGroup', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
   ...cw(ActiveGroupButton, 'EyeOff', 'ActiveGroupButton', {}, nonDraggable),
@@ -101,24 +128,16 @@ export default {
     animatedEnter: false,
     selectedElement: 'two'
   }),
-  ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {}, {}, true),
-  ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
   ...cw(ButtonGroup, 'EyeOff', 'ButtonGroup', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
   ...cw(ButtonLink, 'ExternalLink', 'ButtonLink', { href: "/hello", children: "hello" }),
-  ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "hello" }, {}, {}, true),
-  ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(CheckCircle, 'Check', 'CheckCircle'),
   ...cw(Code, 'Code', 'Code', { children: "helloworld" }, {}, {}, true),
   ...cw(CodeInline, 'Terminal', 'CodeInline', { children: "helloworld" }, {}, {}, true),
   ...cw(ColorToggleButton, 'ToggleRight', 'ColorToggleButton'),
-  ...cw(Container, 'Box', 'Container', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(ContainerLarge, 'Package', 'ContainerLarge', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(ContainerXL, 'Container', 'ContainerXL', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(CopyBubble, 'Copy', 'CopyBubble', { text: "copy" }),
   ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { canMoveIn: () => false }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
   ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
-  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
   ...cw(ElevatedArea, 'GalleryThumbnails', 'ElevatedArea'),
   ...cw(ErrorMessage, 'AlertTriangle', 'ErrorMessage'),
   ...cw(FeatureItem, 'CheckCircle2', 'FeatureItem', { label: "hello", children: "world" }),
@@ -126,16 +145,11 @@ export default {
   ...cw(GithubIcon, 'LogoIcon', 'GithubIcon', { width: 23, plain: true }),
   ...cw(Grid, 'LayoutGrid', 'Grid'),
   ...cw(GridElement, 'LayoutGrid', 'GridElement', { title: "hello", children: "world" }),
-  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, {}, {}, true),
-  ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, {}, {}, true),
-  ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, {}, {}, true),
   ...cw(HeaderLink, 'Link2', 'HeaderLink', { href: "/hello", children: "hello" }),
-  ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HR, 'MinusSquare', 'HR'),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }, {}, {}, true),
-  ...cw(Image, 'MinusSquare', 'Image', {}, {}, {}, true),
   ...cw(Link, 'Link', 'Link', { href: "/hello", children: "hello" }),
   ...cw(LinkGroup, 'Group', 'LinkGroup', { href: "/hello", children: "hello" }),
   ...cw(LinkGroupItem, 'Puzzle', 'LinkGroupItem', { href: "/hello", children: "hello" }),
@@ -156,11 +170,7 @@ export default {
   ...cw(PageGlow, 'EyeOff', 'PageGlow'),
   ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem', { text: "hello world" }),
   ...cw(Pre, 'EyeOff', 'Pre', {}, nonDraggable),
-  ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
   ...cw(Search, 'Search', 'Search'),
-  ...cw(Section, 'EyeOff', 'Section', {}, nonDraggable),
-  ...cw(SectionBox, 'RectangleHorizontal', 'SectionBox', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(SectionBlock, 'BoxSelect', 'SectionBlock'),
   ...cw(TitleLink, 'Link', 'TitleLink', { href: "/hello", children: "hello" }),
   ...cw(SideBySide, 'PanelLeftInactive', 'SideBySide'),
   ...cw(SpotLight, 'Sun', 'SpotLight'),
@@ -179,7 +189,14 @@ export default {
   ...cw(TwitterIcon, 'LogoIcon', 'TwitterIcon', { width: 23 }),
   ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }, {}, {}, true),
   ...cw(Video, 'Video', 'Video', {}, {}, {}, true),
-  ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
   ...cw(AlertDialog, 'Group', 'AlertDialog', {}, nonDraggable)
 }
 
+export const palettes = {
+  basic: basicPalette,
+  text: textPalette,
+  layout: layoutPalette,
+  miscellany: miscellanyPalette,
+}
+
+export default miscellanyPalette
