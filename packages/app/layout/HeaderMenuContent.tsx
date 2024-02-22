@@ -4,34 +4,29 @@ import { HeaderLink, Tinted } from 'protolib'
 import { createSession } from 'protolib'
 import { useSession, clearSession, useUserSettings, useSessionContext, useWorkspaces } from 'protolib'
 import { useRouter } from 'next/router'
+import menuOptions from '../bundles/menu'
 import workspaces from '../bundles/workspaces'
 
 export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
   const [session, setSession] = useSession()
   const [sessionContext, setSessionContext] = useSessionContext()
   const userSpaces = useWorkspaces()
-  const logout = () => {
-    clearSession(setSession, setSessionContext)
-  }
-
   const [settings] = useUserSettings()
-  const currentWorkspace = settings && settings.workspace? settings.workspace : userSpaces[0]
+  const currentWorkspace = settings && settings.workspace ? settings.workspace : userSpaces[0]
   //@ts-ignore
   const workspace = workspaces[currentWorkspace]
 
+  console.log('workspace:', workspace)
   return (
     <YStack miw={230} p="$3" ai="flex-end">
       <Tinted>
-        {session.loggedIn ? <>
-          <HeaderLink href="/profile">Profile</HeaderLink>
-          {workspace && workspace.default ?<HeaderLink href={workspace.default} id="pop-over-workspace-link" >{workspace.label}</HeaderLink>:null}
-          <HeaderLink onClick={logout} href={"/"}>Logout</HeaderLink>
-        </> : <HeaderLink href="/auth/login">Login</HeaderLink>}
-        {/* <Separator my="$4" w="100%" />
-
-            <Separator my="$4" w="100%" /> */}
+        {menuOptions.filter((menu, i) => !menu['visibility'] || menu['visibility'](session, workspace)).map((menu, i) => {
+          return <HeaderLink onClick={() => menu['onClick'] && menu['onClick'](setSession, setSessionContext)} href={typeof menu['path'] == 'function' ? menu['path'](workspace, session) : menu['path']}>
+            {typeof menu['label'] == 'function' ? menu['label'](workspace, session) : menu['label']}
+          </HeaderLink>
+        })
+        }
       </Tinted>
-
     </YStack>
   )
 })
