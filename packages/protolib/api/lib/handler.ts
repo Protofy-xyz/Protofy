@@ -41,7 +41,12 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
             res.status(500).send(err)
             return;
         }
-
-        res.status(500).send({error: e.toString()})
+        if(e.toString() == 'E_PERM') {
+            res.status(403).send({error: e.toString()})
+        } else if(e.toString() == 'E_AUTH') {
+            res.status(401).send({error: e.toString()})
+        } else {
+            res.status(500).send({error: e.toString()})
+        }
     }
 };

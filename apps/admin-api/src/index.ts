@@ -3,6 +3,7 @@ import { setConfig, getConfig } from 'protolib/base/Config';
 import { getBaseConfig, getConfigWithoutSecrets } from 'app/BaseConfig'
 // get config vars
 dotenv.config({ path: '../../.env' });
+global.defaultRoute = '/adminapi/v1'
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 setConfig(getBaseConfig("admin-api", process, getServiceToken()))
 import { getLogger } from 'protolib/base/logger';

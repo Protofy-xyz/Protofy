@@ -3,7 +3,12 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import httpLogger from "pino-http";
 import { getConfig } from 'protolib/base/Config';
+import { getLogger } from 'protolib/base/logger';
+import { handler } from './handler'
+import listEndpoints from "express-list-endpoints";
+import { hasPermission } from '../../base/lib/perms';
 
+const logger = getLogger()
 const config = getConfig()
 export const app = express();
 app.use(cors());
@@ -38,3 +43,10 @@ app.use(httpLogger({
     ...config.logger,
     useLevel: 'debug'
 }))
+
+app.get(global.defaultRoute+'/endpoints', handler(async (req, res, session, next) => {
+    hasPermission(session, 'admin/endpoints/list')
+    res.send(listEndpoints(app))
+}))
+
+logger.debug({route: global.defaultRoute}, "Default route: "+global.defaultRoute)

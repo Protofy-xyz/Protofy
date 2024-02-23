@@ -9,6 +9,7 @@ require('events').EventEmitter.defaultMaxListeners = 100;
 const logger = getLogger()
 const config = getConfig()
 import http from 'http';
+global.defaultRoute = '/api/v1'
 import app from './api'
 import {generateEvent} from 'app/bundles/library'
 
