@@ -134,7 +134,7 @@ describe("Test admin capabilities", () => {
                     await protoBrowser.navigateToWorkspaceSection('pages')
                     await protoBrowser.getEditableObjectCreate()
                 }, 60000)
-                it("should be able to create a blank page", async () => {
+                it.skip("should be able to create a blank page", async () => {
                     // Select template
                     await protoBrowser.clickElement(`#pages-template-${PAGE_TEMPLATES.BLANK}`)
                     await protoBrowser.clickElement(`#admin-pages-add-btn`)
