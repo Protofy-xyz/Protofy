@@ -9,7 +9,8 @@ export default [
     {
         label: (workspace, session) => workspace.label,
         path: (workspace, session) => workspace.default,
-        visibility: (session, workspace) => session.loggedIn && workspace && workspace.default
+        visibility: (session, workspace) => session.loggedIn && workspace && workspace.default,
+        id: 'pop-over-workspace-link'
     },
     { label: "Login", path: "/auth/login", visibility: session => !session.loggedIn },
     { label: "Logout", path: "/", visibility: session => session.loggedIn, onClick: logout },
