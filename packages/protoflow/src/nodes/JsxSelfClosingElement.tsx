@@ -5,6 +5,7 @@ import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { Code } from 'lucide-react';
+import { dumpAttributeData, getAttributeData } from './JsxElement';
 
 const JsxSelfClosingElement = (node) => {
     const { id, type } = node
@@ -38,20 +39,30 @@ JsxSelfClosingElement.getData = (node, data, nodesData, edges) => {
         let sourceKey
         let sourceValue
         let propName
+        let attrData
         if (attribute.getKindName() == "JsxSpreadAttribute") {
             propName = 'prop-spreaded-'+i;
             sourceKey = '';
-            sourceValue = attribute.getText()
+            attrData = {
+                value: attribute.getText()
+            }
         } else {
+            var initializer = attribute?.getInitializer()
             sourceKey = attribute.getNameNode().getText()
             propName = 'prop-' + sourceKey
-            sourceValue = connectItem(attribute?.getInitializer(), 'output', node, propName, data, nodesData, edges, propName)
+            attrData = getAttributeData(initializer)
+            
+            if (!attrData) {
+                attrData = {
+                    value: connectItem(initializer?.getExpression(), 'output', node, propName, data, nodesData, edges, propName) ?? ''
+                }
+            }
         }
         return {
             ...obj,
             [propName]: {
                 key: sourceKey ?? '',
-                value: sourceValue ?? '',
+                ...attrData
             }
         }
     }, {})
@@ -68,8 +79,16 @@ JsxSelfClosingElement.dump = (node, nodes, edges, nodesData, metadata = null, en
             objParam =  dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
         } else {
             let objKey = data[prop].key
-            let objValue = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-            objParam = `${objKey}=${objValue} `
+            const dumpedAttr = dumpAttributeData(data[prop])
+            let objValue
+            if (dumpedAttr) {
+                objValue = dumpedAttr
+            } else {
+                const dumpVal = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+                objValue = dumpVal ? ("{" + dumpVal + "}") : undefined
+            }
+            objParam = objValue ? `${objKey}=${objValue} ` : `${objKey}`
+            if (!objKey) return total
         }
         return total + objParam
     }, "")

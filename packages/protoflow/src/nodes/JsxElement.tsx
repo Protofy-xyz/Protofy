@@ -57,7 +57,9 @@ JsxElement.getData = (node, data, nodesData, edges) => {
         if (attribute.getKindName() == "JsxSpreadAttribute") {
             propName = 'prop-spreaded-' + i;
             sourceKey = '';
-            sourceValue = attribute.getText()
+            attrData = {
+                value: attribute.getText()
+            }
         } else {
             var initializer = attribute?.getInitializer()
             attrData = getAttributeData(initializer)
@@ -66,7 +68,7 @@ JsxElement.getData = (node, data, nodesData, edges) => {
 
             if (!attrData) {
                 attrData = {
-                    value: connectItem(initializer.getExpression(), 'output', node, propName, data, nodesData, edges, propName) ?? ''
+                    value: connectItem(initializer?.getExpression(), 'output', node, propName, data, nodesData, edges, propName) ?? ''
                 }
             }
         }
@@ -116,10 +118,11 @@ JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers
             if (dumpedAttr) {
                 objValue = dumpedAttr
             } else {
-                objValue = "{" + dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level) + "}"
+                const dumpVal = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+                objValue = dumpVal ? ("{" + dumpVal + "}") : undefined
             }
-            objParam = `${objKey}=${objValue} `
-            if (!objValue || !objKey) return total
+            objParam = objValue ? `${objKey}=${objValue} ` : `${objKey}`
+            if (!objKey) return total
         }
         return total + objParam
     }, "")
