@@ -11,6 +11,7 @@ import {DataView, API, AdminPage, PaginatedDataSSR } from 'protolib'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
+const { actionFetch } = API;
 const {name, prefix} = Objects.{{_object}}.getApiOptions()
 const sourceUrl = prefix + name
 

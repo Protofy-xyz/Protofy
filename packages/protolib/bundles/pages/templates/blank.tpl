@@ -11,6 +11,7 @@ import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 
 const isProtected = Protofy("protected", {{protected}})
+const { actionFetch } = API;
 
 const PageComponent = (props) => {
     return (

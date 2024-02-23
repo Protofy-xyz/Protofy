@@ -1,12 +1,13 @@
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, SizableText } from "@my/ui";
-import { UIWrapLib, UIWrap, SSR, TintSection, ContainerLarge, BigTitle, LinkGroup, LinkGroupItem, XCenterStack, NextLink, TooltipContainer, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, BackgroundGradient, ElevatedArea, GridElement, RainbowText, FeatureItem, PageGlow, withSession, Page, Grid, useEdit } from "protolib";
+import { UIWrapLib, UIWrap, SSR, TintSection, ContainerLarge, BigTitle, LinkGroup, LinkGroupItem, XCenterStack, NextLink, TooltipContainer, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, BackgroundGradient, ElevatedArea, GridElement, RainbowText, FeatureItem, PageGlow, withSession, Page, Grid, useEdit, API } from "protolib";
 import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
     
 const isProtected = Protofy("protected", {{protected}})
-    
+const { actionFetch } = API;
+
 const PageComponent = (props) => {
   return (
     <Page id="home-page">

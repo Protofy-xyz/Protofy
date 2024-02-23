@@ -1,11 +1,12 @@
 import { YStack, Text, XStack, H4 } from "@my/ui";
-import { Image, SSR, ContainerLarge, withSession, Page, Grid, NextLink, Logo, FooterElement, Footer as ProtoFooter }
+import { Image, SSR, ContainerLarge, withSession, Page, Grid, NextLink, Logo, FooterElement, Footer as ProtoFooter, API }
 from "protolib";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { Paragraph } from '@my/ui';
 
 const isProtected = Protofy("protected", {{protected}})
+const { actionFetch } = API;
 
 const CURRENCY = "$"
 const products = [
