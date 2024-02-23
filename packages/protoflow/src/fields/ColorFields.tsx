@@ -52,6 +52,7 @@ export default ({ nodeData = {}, node, item }) => {
 
     const onSubmitThemeColor = (col) => {
         if (!col) return
+        // current case is fieldType == "prop"
         setNodeData(node.id, { ...nodeData, [field]: { ...data, key: fieldKey, value: col, kind: 'StringLiteral' } })
         setTmpColor(col)
     }

@@ -16,6 +16,7 @@ export default ({ nodeData = {}, item, node }) => {
     const value = data?.value
 
     const onValueChange = (val) => {
+        // current case is fieldType == "prop"
         setNodeData(node.id, { ...nodeData, [field]: { ...data, key: fieldKey, value: val, kind: 'StringLiteral' } })
     }
 

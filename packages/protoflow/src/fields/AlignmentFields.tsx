@@ -41,6 +41,7 @@ export default ({ nodeData = {}, item, node }) => {
             deletePropNodeData(node.id, field)
         }
         else { // add new prop to nodeData
+            // current case is fieldType == "prop"
             setNodeData(node.id, { ...nodeData, [field]: { ...data, key: fieldKey, value: val, kind: 'StringLiteral' } })
         }
     }
