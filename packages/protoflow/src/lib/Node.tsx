@@ -76,7 +76,7 @@ export const PORT_TYPES = {
     data: '-'
 }
 export const POKA_HANDLE_TYPES = {
-    prop: ['JsxExpression'],
+    prop: ['ArrowFunction', 'CallExpression', 'JsxElement', 'JsxFragment', 'JsxSelfClosingElement', 'ObjectBindingPattern', 'ObjectLiteralExpression'],
     expression: ['ArrowFunction', 'CallExpression', 'JsxElement', 'JsxFragment', 'JsxSelfClosingElement', 'ObjectBindingPattern', 'ObjectLiteralExpression'],
     child: ['Block', 'JsxElement', 'JsxFragment', 'JsxSelfClosingElement'],
     incrementor: ['BinaryExpression'],
