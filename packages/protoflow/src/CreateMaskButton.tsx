@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Button, YStack, Dialog, Select, XStack, Input } from '@my/ui'
 import useTheme from './diagram/Theme';
 import { Drama, X, Check, ChevronDown } from 'lucide-react';
-import { getAllTypes } from './dynamicMasks/CustomProps';
+import { getAllFieldTypes } from './fields';
 
 type Props = {
     nodeData: any;
@@ -26,7 +26,7 @@ export default ({ nodeData, maskType }: Props) => {
     const [maskBodyData, setMaskBodyData] = useState<BodyDataProps[]>(initialData)
     const [newType, setNewType] = useState<string | undefined>(undefined)
     const [newField, setNewField] = useState<string>('')
-    const items = [undefined, ...getAllTypes()]
+    const items = [undefined, ...getAllFieldTypes()]
 
     const clearNewData = () => {
         setNewType('')
@@ -97,7 +97,7 @@ export default ({ nodeData, maskType }: Props) => {
                 },
                 "body": [
                     {
-                        "type": "custom-prop",
+                        "type": "custom-field",
                         "data": customPropsData
                     },
                     {

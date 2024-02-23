@@ -6,7 +6,7 @@ import { GithubPicker, SketchPicker } from "react-color";
 import Input from '../diagram/NodeInput'
 import Popover from '../diagram/NodePopover';
 import { Pipette, Palette } from 'lucide-react'
-import { CustomProp } from './CustomProps';
+import { CustomField } from '.';
 
 const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     <div onClick={onPress}
@@ -96,7 +96,7 @@ export default ({ nodeData = {}, node, item }) => {
                                         styles={pickerStyles}
                                         triangle='hide'
                                         onChangeComplete={val => {
-                                            const valToFind = convertirHSLAString(val.hsl)
+                                            const valToFind = hslaToString(val.hsl)
                                             const matchedKey = Object.keys(themeColors).find(colorKey => themeColors[colorKey].val == valToFind && colorKey.endsWith(THEMENAME))
                                             const newColor = matchedKey?.replace(THEMENAME, '')
                                             onSubmitThemeColor(newColor ?? val.hex)
@@ -129,11 +129,11 @@ export default ({ nodeData = {}, node, item }) => {
         }
     }
 
-    return <CustomProp label={label} input={getInput()}/>
+    return <CustomField label={label} input={getInput()}/>
 
 }
 
-function convertirHSLAString(colorHSLA) {
+function hslaToString(colorHSLA) {
     const { h, s, l, a } = colorHSLA;
 
     const hValue = Math.round(h);

@@ -3,7 +3,7 @@ import Node, { Field, FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import AddPropButton from '../AddPropButton';
 import { Code } from 'lucide-react'
-import { CustomPropType, getCustomPropsFields } from './CustomProps';
+import { CustomFieldType, getCustomFields } from '../fields';
 
 const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const propsArray: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('prop-')).map((prop: any, i) => {
@@ -28,8 +28,8 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         case 'prop': {
                             const redirectProp = mask.data.body.find(e => e.type == 'redirect');
                             const redirectPropName = redirectProp?.params?.port;
-                            const hasCustomProps = mask.data.body.find(i => i.type == 'custom-prop')
-                            const customProps = getCustomPropsFields(mask.data.body)
+                            const hasCustomProps = mask.data.body.find(i => i.type == 'custom-field')
+                            const customProps = getCustomFields(mask.data.body)
 
                             return <>
                                 <NodeParams id={node.id} params={element.data} />
@@ -51,10 +51,10 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         case 'redirect': {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
                         }
-                        case 'custom-prop': {
+                        case 'custom-field': {
                             return <>
                                 {
-                                    element.data.map((item, index) => <CustomPropType key={index} item={item} node={node} nodeData={nodeData} />)
+                                    element.data.map((item, index) => <CustomFieldType key={index} item={item} node={node} nodeData={nodeData} />)
                                 }
                             </>
                         }

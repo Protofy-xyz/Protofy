@@ -1,6 +1,4 @@
 import React, { useContext } from 'react';
-import useTheme from '../diagram/Theme';
-import Text from '../diagram/NodeText'
 import { FlowStoreContext } from '../store/FlowsStore';
 import {
     AlignLeft, AlignCenter, AlignRight, AlignJustify,
@@ -8,7 +6,7 @@ import {
     ArrowRightFromLine, ArrowLeftFromLine, ArrowDownFromLine, ArrowUpFromLine,
     AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd, AlignVerticalSpaceAround, AlignVerticalSpaceBetween
 } from 'lucide-react';
-import { CustomProp } from './CustomProps';
+import { CustomField } from '.';
 
 export const getAlignmentTypes = () => ['alignment-text', 'alignment-items', 'alignment-flex', 'alignment-content']
 
@@ -16,7 +14,6 @@ export default ({ nodeData = {}, item, node }) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const deletePropNodeData = useFlowsStore(state => state.deletePropNodeData)
-    const nodeFontSize = useTheme('nodeFontSize')
 
     const { field, label, type, fieldType } = item
 
@@ -87,6 +84,6 @@ export default ({ nodeData = {}, item, node }) => {
         }
     }
 
-    return <CustomProp label={label} input={getInput()}/>
+    return <CustomField label={label} input={getInput()}/>
 
 }

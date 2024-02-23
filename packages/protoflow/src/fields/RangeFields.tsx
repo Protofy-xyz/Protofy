@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import useTheme from '../diagram/Theme';
 import { FlowStoreContext } from '../store/FlowsStore';
-import { CustomProp } from './CustomProps';
+import { CustomField } from '.';
 
 export const getRangeTypes = () => ['range-theme']
 
@@ -39,6 +39,6 @@ export default ({ nodeData = {}, item, node }) => {
         }
     }
 
-    return <CustomProp label={label} input={getInput()} />
+    return <CustomField label={label} input={getInput()} />
 
 }
