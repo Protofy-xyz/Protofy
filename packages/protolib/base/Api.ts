@@ -79,6 +79,8 @@ const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult |
 
 }
 export const API = {
+    //@ts-ignore
+    actionFetch: (...arg) => () => _fetch(...arg),
     fetch: _fetch,
     //@ts-ignore
     get: (url, update?, plain?):Promise<PendingResult> => _fetch(url, null, update, plain),
