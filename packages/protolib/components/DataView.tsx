@@ -226,7 +226,7 @@ export function DataView({
         }
     }
 
-    if(enableMapView) {
+    if(enableMapView && process.env.NEXT_PUBLIC_MAPBOX_TOKEN && process.env.NEXT_PUBLIC_MAPBOX_TOKEN !== "PUT_HERE_YOUR_API_KEY") {
         defaultViews = [...defaultViews, mapView]
     }
 
