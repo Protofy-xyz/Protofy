@@ -30,7 +30,6 @@ const GridElementCard = ({ index, data, width }) => {
         {data.getBody ? data.getBody(element, width) :
             <Stack mb={"$4"} key={element.key} width={width}>
                 <EditableObject
-                    title={''}
                     initialData={data.element}
                     name={modelItem.getId()}
                     spinnerSize={75}

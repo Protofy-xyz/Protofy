@@ -91,8 +91,7 @@ export function DataView({
     integratedChat = false,
     objectProps = {},
     disableRealTimeUpdates = false,
-    refreshOnHotReload = false,
-    enableMapView = false
+    refreshOnHotReload = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const { query } = useRouter();
@@ -226,8 +225,12 @@ export function DataView({
         }
     }
 
-    if(enableMapView && process.env.NEXT_PUBLIC_MAPBOX_TOKEN && process.env.NEXT_PUBLIC_MAPBOX_TOKEN !== "PUT_HERE_YOUR_API_KEY") {
-        defaultViews = [...defaultViews, mapView]
+
+    if(process.env.NEXT_PUBLIC_MAPBOX_TOKEN && process.env.NEXT_PUBLIC_MAPBOX_TOKEN !== "PUT_HERE_YOUR_API_KEY") {
+        const locationProps = model.load({}).getObjectSchema().is('location')
+        if(locationProps.getFields().length) {
+            defaultViews = [...defaultViews, mapView]
+        }
     }
 
     const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))

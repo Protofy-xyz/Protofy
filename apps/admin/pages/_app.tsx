@@ -14,6 +14,7 @@ import 'protoflow/src/diagram/menu.module.css'
 import 'react-sliding-side-panel/lib/index.css'
 import 'protolib/styles/datatable.css';
 import '../chat.css'
+import '../map.css'
 import '../chonky.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import 'react-chat-widget/lib/styles.css';

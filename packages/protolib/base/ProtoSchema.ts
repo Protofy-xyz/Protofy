@@ -9,6 +9,11 @@ export class ProtoSchema {
         return Object.keys(this.shape)
     }
 
+    //get field definition
+    getFieldKeyDefinition(field: string, key: string) {
+        return this.shape[field] ? this.shape[field]._def[key] : undefined
+    }
+
     applyGenerators(data: any) {
         let newData = {...data}
         Object.keys(this.shape).forEach((key) => {

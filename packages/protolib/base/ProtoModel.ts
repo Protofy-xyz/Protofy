@@ -1,5 +1,5 @@
 import { createSession, SessionDataType } from 'protolib/api/lib/session'
-import {ZodObject} from 'protolib/base'
+import { ZodObject } from 'protolib/base'
 import { ProtoSchema } from './ProtoSchema';
 import { getLogger } from "./logger"
 
@@ -37,7 +37,12 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         this.session = session ?? createSession();
         this.schema = schema
         this.objectSchema = ProtoSchema.load(this.schema)
-        this.idField = this.objectSchema.getFirst('id') ?? 'id'
+        let idSchemas = this.objectSchema.is('id')
+        if(idSchemas.getFields().length > 1) {
+            idSchemas = idSchemas.isNot('fallbackId') //only use fallbackid if no other id is provided.
+                                                      //this allows to have a overwritteable default id in BaseSchema.
+        }
+        this.idField = idSchemas.getFirst('id') ?? 'id'
     }
 
     get(key: string, defaultValue?) {
@@ -51,6 +56,24 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     getModelName() {
         const className = this.constructor.name;
         return className.substring(0, className.length - 5).toLowerCase();
+    }
+
+    getLocation() : {lat: string, lon: string} | undefined {
+        const locationFields = this.objectSchema.is('location').getFields()
+        if (!locationFields.length) {
+            throw "Model error: " + this.getModelName() + " doesn't have location information"
+        }
+        const field = locationFields[0]
+        const latKey = this.objectSchema.getFieldKeyDefinition(field, 'latKey')
+        const lonKey = this.objectSchema.getFieldKeyDefinition(field, 'lonKey')
+        if(!this.data[field]) {
+            return
+        }
+
+        return {
+            lat: this.data[field][latKey],
+            lon: this.data[field][lonKey]
+        }
     }
 
     getId() {
@@ -67,7 +90,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     setId(id: string, newData?): T {
         return new (this.constructor as new (data: any, session?: SessionDataType) => T)({
-            ...(newData? newData : this.data),
+            ...(newData ? newData : this.data),
             [this.idField]: id
         }, this.session);
     }
@@ -81,7 +104,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     list(search?, session?, extraData?): any {
-        if(search) {
+        if (search) {
             const { parsed, searchWithoutTags } = parseSearch(search);
 
             for (const [key, value] of Object.entries(parsed)) {
@@ -92,8 +115,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
             }
 
             const searchFields = this.objectSchema.is('search').getFields()
-            for(var i=0;i<searchFields.length;i++) {
-                if(((this.data[searchFields[i]]+"").toLowerCase()).includes(searchWithoutTags.toLowerCase())) {
+            for (var i = 0; i < searchFields.length; i++) {
+                if (((this.data[searchFields[i]] + "").toLowerCase()).includes(searchWithoutTags.toLowerCase())) {
                     return this.read();
                 }
             }
@@ -102,9 +125,9 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }
     }
 
-    async listTransformed(search?, transformers={}, session?, extraData?): Promise<any> {
+    async listTransformed(search?, transformers = {}, session?, extraData?): Promise<any> {
         const result = this.list(search, session, extraData)
-        if(result) {
+        if (result) {
             return await (this.getObjectSchema().apply('list', result, transformers));
         }
     }
@@ -112,30 +135,30 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     create(data?): T {
         const transformed = this.getData(data)
         logger.debug({ transformed }, `Creating object: ${JSON.stringify(transformed)}`)
-        return (new(this.constructor as new (data: any, session?: SessionDataType) => T)(transformed, this.session)).validate();
+        return (new (this.constructor as new (data: any, session?: SessionDataType) => T)(transformed, this.session)).validate();
     }
 
-    async createTransformed(transformers={}): Promise<T> {
+    async createTransformed(transformers = {}): Promise<T> {
         //loop through fieldDetails keys and find the marked as autogenerate
-        const newData = await this.getObjectSchema().apply('create', {...this.data}, transformers)
+        const newData = await this.getObjectSchema().apply('create', { ...this.data }, transformers)
         return this.create(newData);
     }
 
     read(extraData?): any {
-        return {...this.data}
+        return { ...this.data }
     }
 
-    async readTransformed(transformers={}, extraData?): Promise<any> {
+    async readTransformed(transformers = {}, extraData?): Promise<any> {
         const result = await (this.getObjectSchema().apply('read', this.read(extraData), transformers))
         return result;
     }
 
-    update(updatedModel: T, data?:any): T {
-        return updatedModel.setId(this.getId(), {...(data ? data : updatedModel.data)});
+    update(updatedModel: T, data?: any): T {
+        return updatedModel.setId(this.getId(), { ...(data ? data : updatedModel.data) });
     }
 
-    async updateTransformed(updatedModel: T, transformers={}): Promise<T> {
-        const newData = await this.getObjectSchema().apply('update', {...updatedModel.data}, transformers, {...this.data})
+    async updateTransformed(updatedModel: T, transformers = {}): Promise<T> {
+        const newData = await this.getObjectSchema().apply('update', { ...updatedModel.data }, transformers, { ...this.data })
         return this.update(updatedModel, newData);
     }
 
@@ -146,8 +169,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }, this.session);
     }
 
-    async deleteTransformed(transformers={}): Promise<T> {
-        const newData = await this.getObjectSchema().apply('delete',{...this.data}, transformers)
+    async deleteTransformed(transformers = {}): Promise<T> {
+        const newData = await this.getObjectSchema().apply('delete', { ...this.data }, transformers)
         return this.delete(newData)
     }
 
@@ -160,7 +183,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return JSON.stringify(this.data);
     }
 
-    static getApiOptions():any {
+    static getApiOptions(): any {
         throw new Error("Derived class must implement getApiOptions");
     }
 
@@ -176,7 +199,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this._newInstance(data, session);
     }
 
-    static sort(elements:any[], orderBy, orderDirection) {
+    static sort(elements: any[], orderBy, orderDirection) {
         return elements.sort((a, b) => {
             if (a[orderBy] > b[orderBy]) return orderDirection === 'asc' ? 1 : -1;
             if (a[orderBy] < b[orderBy]) return orderDirection === 'asc' ? -1 : 1;
@@ -185,7 +208,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     getData(data?): any {
-        return {...(this.getObjectSchema().applyGenerators(data??this.data))}
+        return { ...(this.getObjectSchema().applyGenerators(data ?? this.data)) }
     }
 }
 
@@ -220,7 +243,7 @@ export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
 
             public static schemaInstance = schema;
         }
-        
+
         Object.defineProperty(DerivedModel, 'name', { value: name, writable: false });
         return DerivedModel;
     }

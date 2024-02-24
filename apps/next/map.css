@@ -1,0 +1,7 @@
+.mapboxgl-popup-content {
+    background: var(--color1) !important;
+}
+
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+    border-bottom-color: var(--color1) !important;
+}
