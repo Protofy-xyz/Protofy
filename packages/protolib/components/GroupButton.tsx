@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Button, ButtonProps, Stack, XGroup } from "tamagui";
 import { ActiveGroupContext } from "./ActiveGroup";
 
-const GroupButton = React.forwardRef(( props : ButtonProps, ref: any) => {
+const GroupButton = React.forwardRef(( {inActive, ...props} : ButtonProps & {inActive?: boolean}, ref: any) => {
     return (<Stack ref={ref}>
         <XGroup.Item>
             <Button {...{
@@ -10,6 +10,7 @@ const GroupButton = React.forwardRef(( props : ButtonProps, ref: any) => {
                 focusStyle: {outlineWidth:0},
                 borderRadius: 0,
                 size: "$3",
+                o: inActive?0.5:1,
                 // fontFamily: "$silkscreen",
                 ...props
             }} />
