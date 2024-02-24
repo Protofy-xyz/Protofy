@@ -12,11 +12,13 @@ interface ZodExtensions {
     before(field: string): this;
     after(field: string): this;
     dependsOn(field: string, value?: any): this;
+    location(latKey: string, lonKey: string): this;
     generateOptions(call: Function): this; 
     choices(): this; 
     secret(): this;
     static(): this;
     id(): this;
+    fallbackId(): this;
     search(): this;
     displayOptions(options:any): this;
     size(size:number): this; //1, 2, 3, 4...
@@ -148,6 +150,12 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
+    type.prototype.fallbackId = function () {
+        this._def.id = true;
+        this._def.fallbackId = true;
+        return this;
+    };
+
     type.prototype.search = function () {
         this._def.search = true;
         return this;
@@ -155,6 +163,13 @@ function extendZodTypePrototype(type: any) {
 
     type.prototype.size = function (size) {
         this._def.size = size;
+        return this;
+    };
+
+    type.prototype.location = function (latKey, lonKey) {
+        this._def.latKey = latKey;
+        this._def.lonKey = lonKey;
+        this._def.location = true;
         return this;
     };
 
@@ -200,6 +215,6 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: Schema.string().generate(() => uuidv4()).id().hidden(),
+    id: Schema.string().generate(() => uuidv4()).fallbackId().hidden(),
     _deleted: Schema.boolean().optional().hidden(),
 })
