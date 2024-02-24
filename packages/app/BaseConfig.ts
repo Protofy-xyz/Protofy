@@ -68,6 +68,7 @@ export const getBaseConfig = (name, process, token?, config?) => {
           ...(process && typeof window === "undefined" && token ? [
             {
               target: 'protolib/lib/RemoteTransport.ts',
+              level: 'trace',
               options: {
                 username: name,
                 password: token
