@@ -197,7 +197,7 @@ const Tabs = ({ tabs }: any) => {
 };
 
 export const PanelMenu = ({workspace}) => {
-    return (<YStack pt="$10">
+    return (<YStack pt="$8">
         <Tabs tabs={workspace.menu} />
     </YStack>)
 }
