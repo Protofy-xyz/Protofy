@@ -28,7 +28,7 @@ export type TaskRunType = z.infer<typeof TaskRunSchema>;
 
 export class TaskRunModel extends ProtoModel<TaskRunModel> {
     constructor(data: TaskRunType, session?: SessionDataType) {
-        super(data, TaskRunSchema, session);
+        super(data, TaskRunSchema, session, "TaskRun");
     }
 
     //TODO: getapi

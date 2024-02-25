@@ -14,7 +14,7 @@ export const TaskSchema = z.object(Protofy("schema", {
 export type TaskType = z.infer<typeof TaskSchema>;
 export class TaskModel extends ProtoModel<TaskModel> {
     constructor(data: TaskType, session?: SessionDataType) {
-        super(data, TaskSchema, session);
+        super(data, TaskSchema, session, "Task");
     }
 
     getDefaultFilePath() {

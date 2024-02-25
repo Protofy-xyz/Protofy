@@ -23,7 +23,7 @@ export const EventSchema = z.object({
 export type EventType = z.infer<typeof EventSchema>;
 export class EventModel extends ProtoModel<EventModel> {
     constructor(data: EventType, session?: SessionDataType) {
-        super(data, EventSchema, session);
+        super(data, EventSchema, session, "Event");
     }
 
 	list(search?): any {

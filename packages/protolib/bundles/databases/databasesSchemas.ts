@@ -18,7 +18,7 @@ export type DatabaseEntryType = z.infer<typeof DatabaseEntrySchema>;
 
 export class DatabaseEntryModel extends ProtoModel<DatabaseEntryModel> {
     constructor(data: DatabaseEntryType, session?: SessionDataType) {
-        super(data, DatabaseEntrySchema, session);
+        super(data, DatabaseEntrySchema, session, 'Database');
     }
 
 	list(search?): any {

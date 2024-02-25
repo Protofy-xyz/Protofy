@@ -75,7 +75,7 @@ const transformData = (data) => {
 
 export class ObjectModel extends ProtoModel<ObjectModel> {
   constructor(data: ObjectType, session?: SessionDataType) {
-    super(data, ObjectSchema, session);
+    super(data, ObjectSchema, session, "Object");
   }
 
   getDefaultSchemaFilePath() {

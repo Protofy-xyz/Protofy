@@ -29,7 +29,7 @@ export const ResourceSchema = z.object({
 export type ResourceType = z.infer<typeof ResourceSchema>;
 export class ResourceModel extends ProtoModel<ResourceModel> {
     constructor(data: ResourceType, session?: SessionDataType) {
-        super(data, ResourceSchema, session);
+        super(data, ResourceSchema, session, "Resource");
     }
 
     list(search?): any {

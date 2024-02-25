@@ -16,7 +16,7 @@ export type PageType = z.infer<typeof PageSchema>;
 export type ObjectType = z.infer<typeof PageSchema>;
 export class PageModel extends ProtoModel<PageModel> {
     constructor(data: ObjectType, session?: SessionDataType) {
-        super(data, PageSchema, session);
+        super(data, PageSchema, session, "Page");
     }
 
     getDefaultFilePath() {

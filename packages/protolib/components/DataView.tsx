@@ -90,14 +90,17 @@ export function DataView({
     deleteable = () => { return true },
     integratedChat = false,
     objectProps = {},
-    disableRealTimeUpdates = false,
     refreshOnHotReload = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const { query } = useRouter();
     const [state, setState] = useState(pageState ?? query)
-    const [realTimeItems] = disableRealTimeUpdates ? [false] : useRemoteStateList(initialItems, { url: sourceUrl, ...(pageState ?? {}) }, 'notifications/' + model.load({}).getModelName() + "/#", model)
-    const [items, setItems] = useState<PendingResult | undefined>(initialItems);
+    const fetch = async (fn) => {
+        const data = await API.get({ url: sourceUrl, ...state })
+        fn(data)
+    }
+
+    const [items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.load({}).getModelName() + "/#", model)
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
     const [createOpen, setCreateOpen] = useState(false)
     const { push, mergePush, removePush, replace } = usePageParams(state)
@@ -107,11 +110,6 @@ export function DataView({
     const hasGlobalMenu = extraMenuActions && extraMenuActions.some(action => action.menus && action.menus.includes("global"));
 
     useQueryState(setState)
-
-    const fetch = async () => {
-        const data = await API.get({ url: sourceUrl, ...state })
-        setItems(data)
-    }
 
     useEffect(() => {
         if (refreshOnHotReload && process.env.NODE_ENV === 'development' && module['hot']) {
@@ -123,19 +121,12 @@ export function DataView({
         }
     }, []);
 
-    usePendingEffect((s) => { API.get({ url: sourceUrl, ...state }, s) }, setItems, initialItems)
-
     useEffect(() => {
         if (items && items.isLoaded) {
-            console.log('***********************set current items: ', items)
+            // console.log('***********************set current items: ', items)
             setCurrentItems(items)
         }
     }, [items])
-
-    useUpdateEffect(() => {
-        console.log('remote changes received from mqtt, refetch')
-        fetch()
-    }, [realTimeItems])
 
     useUpdateEffect(() => {
         if (search) {
@@ -149,7 +140,7 @@ export function DataView({
         setSearchName(_plural)
     })
 
-    useUpdateEffect(() => { fetch() }, [state.orderBy + '_' + state.itemsPerPage + '_' + state.page + '_' + state.search + '_' + state.orderDirection])
+    useUpdateEffect(() => { fetch(setItems) }, [state.orderBy + '_' + state.itemsPerPage + '_' + state.page + '_' + state.search + '_' + state.orderDirection])
 
     const onSearch = async (text) => setSearch(text)
     const toast = useToastController()
@@ -311,7 +302,7 @@ export function DataView({
                                                 if (result.isError) {
                                                     throw result.error
                                                 }
-                                                fetch()
+                                                //fetch(setItems)
                                                 setCreateOpen(false);
                                                 toast.show(name + ' created', {
                                                     message: obj.getId()
@@ -367,7 +358,7 @@ export function DataView({
                                                 if (result.isError) {
                                                     throw result.error
                                                 }
-                                                fetch()
+                                                //fetch(setItems)
                                                 const { item, ...rest } = state;
                                                 setState(rest)
                                                 toast.show(name + ' updated', {

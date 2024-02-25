@@ -27,16 +27,18 @@ function parseSearch(search) {
 }
 
 export abstract class ProtoModel<T extends ProtoModel<T>> {
-    data: any;
-    session: SessionDataType;
+    data: any
+    session: SessionDataType
     schema: ZodObject<any>
     idField: string
     objectSchema: ProtoSchema
-    constructor(data: any, schema: ZodObject<any>, session?: SessionDataType) {
+    modelName: string
+    constructor(data: any, schema: ZodObject<any>, session?: SessionDataType, modelName?:string) {
         this.data = data;
         this.session = session ?? createSession();
         this.schema = schema
         this.objectSchema = ProtoSchema.load(this.schema)
+        this.modelName = modelName?.toLowerCase() ?? 'unknown'
         let idSchemas = this.objectSchema.is('id')
         if(idSchemas.getFields().length > 1) {
             idSchemas = idSchemas.isNot('fallbackId') //only use fallbackid if no other id is provided.
@@ -54,8 +56,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     getModelName() {
-        const className = this.constructor.name;
-        return className.substring(0, className.length - 5).toLowerCase();
+        return this.modelName
     }
 
     getLocation() : {lat: string, lon: string} | undefined {
@@ -89,10 +90,10 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     setId(id: string, newData?): T {
-        return new (this.constructor as new (data: any, session?: SessionDataType) => T)({
+        return new (this.constructor as new (data: any, session?: SessionDataType, modelName?: string) => T)({
             ...(newData ? newData : this.data),
             [this.idField]: id
-        }, this.session);
+        }, this.session, this.modelName);
     }
 
     isVisible(): boolean {
@@ -135,7 +136,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     create(data?): T {
         const transformed = this.getData(data)
         logger.debug({ transformed }, `Creating object: ${JSON.stringify(transformed)}`)
-        return (new (this.constructor as new (data: any, session?: SessionDataType) => T)(transformed, this.session)).validate();
+        return (new (this.constructor as new (data: any, session?: SessionDataType, modelName?: string) => T)(transformed, this.session, this.modelName)).validate();
     }
 
     async createTransformed(transformers = {}): Promise<T> {
@@ -163,10 +164,10 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     delete(data?): T {
-        return new (this.constructor as new (data: any, session?: SessionDataType) => T)({
+        return new (this.constructor as new (data: any, session?: SessionDataType, modelName?: string) => T)({
             _deleted: true,
             ...(data ? data : this.data)
-        }, this.session);
+        }, this.session, this.modelName);
     }
 
     async deleteTransformed(transformers = {}): Promise<T> {
@@ -215,8 +216,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
     protected static schemaInstance?: ZodObject<any>;
 
-    constructor(data: D, schema: ZodObject<any>, session?: SessionDataType) {
-        super(data, schema, session);
+    constructor(data: D, schema: ZodObject<any>, session?: SessionDataType, modelName?: string) {
+        super(data, schema, session, modelName);
     }
 
     protected static _newInstance(data: any, session?: SessionDataType): AutoModel<any> {
@@ -226,7 +227,7 @@ export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
     static createDerived<D>(name: string, schema: ZodObject<any>, apiName?, apiPrefix?) {
         class DerivedModel extends AutoModel<D> {
             constructor(data: D, session?: SessionDataType) {
-                super(data, schema, session);
+                super(data, schema, session, name.substring(0, name.length - 5).toLowerCase());
             }
 
             // Hacemos _newInstance y schemaInstance públicos sólo para esta clase generada
