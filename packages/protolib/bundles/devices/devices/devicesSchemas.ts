@@ -7,7 +7,11 @@ export const DevicesSchema = Schema.object({
   deviceDefinition: z.string().hidden(),
   substitutions: z.record(z.string().optional(), z.any().optional()).optional(),
   subsystem: z.record(z.string(), z.any()).optional(),
-  data: z.array(z.record(z.string(), z.any())).optional()
+  data: z.array(z.record(z.string(), z.any())).optional(),
+  location: z.object({
+    lat: z.string(),
+    long: z.string()
+  }).optional().location("lat","long")
 })
 export type DevicesType = z.infer<typeof DevicesSchema>;
 export const DevicesModel = AutoModel.createDerived<DevicesType>("DevicesModel", DevicesSchema);
