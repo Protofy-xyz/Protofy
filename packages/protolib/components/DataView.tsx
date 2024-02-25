@@ -96,7 +96,7 @@ export function DataView({
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const { query } = useRouter();
     const [state, setState] = useState(pageState ?? query)
-    const [realTimeItems] = disableRealTimeUpdates ? [false] : useRemoteStateList(initialItems, { url: sourceUrl, ...(pageState ?? {}) }, 'notifications/' + (_plural) + "/#", model)
+    const [realTimeItems] = disableRealTimeUpdates ? [false] : useRemoteStateList(initialItems, { url: sourceUrl, ...(pageState ?? {}) }, 'notifications/' + model.load({}).getModelName() + "/#", model)
     const [items, setItems] = useState<PendingResult | undefined>(initialItems);
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
     const [createOpen, setCreateOpen] = useState(false)
@@ -127,7 +127,7 @@ export function DataView({
 
     useEffect(() => {
         if (items && items.isLoaded) {
-            // console.log('set current items: ', items)
+            console.log('***********************set current items: ', items)
             setCurrentItems(items)
         }
     }, [items])
