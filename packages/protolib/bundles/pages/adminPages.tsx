@@ -37,6 +37,7 @@ const templates = {
     },
     "landing": {},
     "ecomerce": {},
+    "about": {},
     "newsfeed": {},
 }
 
