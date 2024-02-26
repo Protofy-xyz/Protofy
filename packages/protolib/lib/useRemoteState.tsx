@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSubscription } from 'mqtt-react-hooks';
 import { API, usePendingEffect } from 'protolib';
-import { PendingResult } from './createApiAtom';
+import { PendingResult } from '../base';
 
 const disableRealTimeDiff = true //toggle to false to activate realtime updates without refetch
 
