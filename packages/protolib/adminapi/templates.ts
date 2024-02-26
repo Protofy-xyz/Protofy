@@ -24,7 +24,7 @@ app.post('/adminapi/v1/templates/:tplname', requireAdmin(), handler(async (req, 
         throw "No such template: "+tplname
     }
     
-    const name = params.name.replace(/[^a-zA-Z0-9_.-]/g, '')
+    const name = params.name.replace(/[^a-zA-Z0-9\/_.-]/g, '')
     const path = params.data.path.replace(/\.\./g, '')
     const fullpath = '../..'+path+"/"+name
     logger.info({ template: {name: tplname, path: fullpath, vars: params }}, "Executing template: " + tplname)

@@ -9,8 +9,6 @@ import { API } from 'protolib/base'
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
-const adminPagesDir = (root) => fspath.join(root, "/apps/next/pages/workspace")
-const appPagesDir = (root, isAdmin = false) => (isAdmin ? adminPagesDir(root) : nextPagesDir(root))
 const electronPagesDir = (root) => fspath.join(root, "/apps/electron/pages/")
 
 const getPage = (pagePath, req) => {
@@ -20,8 +18,8 @@ const getPage = (pagePath, req) => {
     const routeValue = route.getText().replace(/^["']|["']$/g, '')
     const prot = getDefinition(sourceFile, '"protected"')
     let permissions = getDefinition(sourceFile, '"permissions"')
-    const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : fspath.basename(routeValue)) + '.tsx')
-    const electronFilePath = fspath.join(electronPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : fspath.basename(routeValue)) + '.tsx')
+    const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
+    const electronFilePath = fspath.join(electronPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
     if (!route || !permissions || !prot) return undefined
     if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
       permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
@@ -127,11 +125,11 @@ const getDB = (path, req, session) => {
         console.log('Deleted')
       }
 
-      //link in nextPages or adminPages
-      const pagesAppDir = appPagesDir(getRoot(req), template == 'admin') // Get pagesDir of next or admin depends on template choosen
+      //link in nextPages
+      const pagesAppDir = nextPagesDir(getRoot(req))
       try {
         //TODO: routes with subdirectories
-        const appFilePath = fspath.join(pagesAppDir, fspath.basename(value.route) + '.tsx')
+        const appFilePath = fspath.join(pagesAppDir, value.route + '.tsx')
         await fs.access(appFilePath, fs.constants.F_OK)
         if (!value.web) {
           await fs.unlink(appFilePath)
@@ -141,7 +139,7 @@ const getDB = (path, req, session) => {
         if (value.web) {
           //page does not exist, create it
           const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-            name: fspath.basename(value.route + '.tsx'),
+            name: value.route + '.tsx',
             data: {
               options: {
                 template: `/packages/protolib/bundles/pages/templates/nextPage.tpl`,
@@ -172,7 +170,7 @@ const getDB = (path, req, session) => {
         if (value.electron) {
           //page does not exist, create it
           const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-            name: fspath.basename(value.route + '.tsx'),
+            name: value.route + '.tsx',
             data: {
               options: {
                 template: `/packages/protolib/bundles/pages/templates/electronPage.tpl`,
