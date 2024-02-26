@@ -71,7 +71,7 @@ import { TwitterIcon } from '../components/icons/TwitterIcon'
 import { UL } from '../components/UL'
 import Video from '../components/Video'
 //import { unwrapText } from '../components/unwrapText'
-import XCenterStack from '../components/XCenterStack'
+import HCenterStack from '../components/HCenterStack'
 
 import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
 import { AlertDialog } from '../components/AlertDialog'
@@ -79,7 +79,7 @@ import { AlertDialog } from '../components/AlertDialog'
 import htmlBasicElements from './htmlBasics'
 import VStack from '../components/VStack'
 import HStack from '../components/HStack'
-import YCenterStack from '../components/YCenterStack'
+import VCenterStack from '../components/VCenterStack'
 import Spacer from '../components/Spacer'
 
 const cw = getComponentWrapper('protolib')
@@ -197,8 +197,8 @@ export const miscellanyPalette = {
   ...cw(TwitterIcon, 'LogoIcon', 'TwitterIcon', { width: 23 }),
   ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }, {}, {}, true),
   ...cw(Video, 'Video', 'Video', {}, {}, {}, true),
-  ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
-  ...cw(YCenterStack, 'AlignVerticalSpaceAround', 'YCenterStack'),
+  ...cw(HCenterStack, 'AlignVerticalSpaceAround', 'HCenterStack'),
+  ...cw(VCenterStack, 'AlignVerticalSpaceAround', 'VCenterStack'),
   ...cw(AlertDialog, 'Group', 'AlertDialog', {}, nonDraggable)
 }
 

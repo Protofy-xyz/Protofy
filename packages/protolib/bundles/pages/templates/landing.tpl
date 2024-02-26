@@ -1,5 +1,5 @@
 import { Theme, YStack, Text, XStack, Paragraph, SizableText } from "@my/ui";
-import { UIWrapLib, UIWrap, SSR, TintSection, ContainerLarge, BigTitle, Spacer, LinkGroup, LinkGroupItem, XCenterStack, NextLink, TooltipContainer, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, BackgroundGradient, ElevatedArea, GridElement, RainbowText, FeatureItem, PageGlow, withSession, Page, Grid, useEdit, API } from "protolib";
+import { UIWrapLib, UIWrap, SSR, TintSection, ContainerLarge, BigTitle, Spacer, LinkGroup, LinkGroupItem, HCenterStack, NextLink, TooltipContainer, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, BackgroundGradient, ElevatedArea, GridElement, RainbowText, FeatureItem, PageGlow, withSession, Page, Grid, useEdit, API } from "protolib";
 import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
@@ -65,7 +65,7 @@ const PageComponent = (props) => {
                 </YStack>
               </YStack>
               <Spacer size="$4" />
-              <XCenterStack>
+              <HCenterStack>
                 <NextLink target="_blank" href="https://github.com/Protofy-xyz/Protofy">
                   <TooltipContainer tooltipText="Github">
                     <GithubIcon width={60} height={60} />
@@ -93,7 +93,7 @@ const PageComponent = (props) => {
                     <DiscordIcon plain={true} height={60} width={60} />
                   </TooltipContainer>
                 </NextLink>
-              </XCenterStack>
+              </HCenterStack>
 
             </YStack>
 
