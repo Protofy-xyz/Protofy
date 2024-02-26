@@ -1,13 +1,12 @@
-
+import React from 'react';
 import { addResponseMessage, Widget, toggleMsgLoader } from 'react-chat-widget'
 import { useEffect, useRef, useState } from 'react';
 import { Tinted, API, PromptAtom, PromptResponseAtom } from 'protolib';
 import { useTimeout, useWindowSize, useClickAnyWhere } from 'usehooks-ts';
-import { Paperclip } from 'lucide-react';
+import { Paperclip, Sparkles, X } from 'lucide-react';
 import ReactDOM from 'react-dom/client';
 import { useAtom } from 'jotai';
-import { Button } from '@my/ui';
-
+import { Button, XStack } from '@my/ui';
 const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any) => {
     const [first, setFirst] = useState(true)
     const [lastMessage, setLastMessage] = useAtom(PromptResponseAtom)
@@ -214,6 +213,19 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
     }
 
     const [promptChain] = useAtom(PromptAtom)
+   
+    const getChatIcon = (handleToggle) => (
+        <Button
+            onPress={handleToggle}
+            animation="lazy"
+            alignSelf='flex-end' marginTop='40px' hoverStyle={{ backgroundColor: "$color7" }} backgroundColor={"$color7"} size={"$5"} right="$5" bottom="$5" circular>
+            {
+                isChatOpen
+                    ? <XStack animation='bouncy' enterStyle={{ rotate: '-90deg' }}><X size={"30px"} fillOpacity={0} color='white'></X></XStack>
+                    : <Sparkles fillOpacity={0} color='white'></Sparkles>
+            }
+        </Button>
+    )
 
     return (
         <Tinted>
@@ -221,6 +233,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                 <div style={{ position: 'absolute' }}>
                     <Widget
                         title="Assistant"
+                        launcher={getChatIcon}
                         subtitle="Get help, ideas and documentation"
                         handleNewUserMessage={async (message) => {
                             //generate prompts
