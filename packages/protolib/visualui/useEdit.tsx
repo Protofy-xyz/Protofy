@@ -64,7 +64,7 @@ const VisualUILoader = ({ userComponents, path, metadata }: { userComponents: an
   const [res, setRes] = useState<any>()
   const [fileContent, setFileContent] = useState()
   const toast = useToastController()
-
+  
   const onSave = (content: string) => {
     writeFileContent(content)
   }
@@ -77,12 +77,16 @@ const VisualUILoader = ({ userComponents, path, metadata }: { userComponents: an
 
     API.post(url, { content }, (response: any) => {
       if (response.status == "loaded") {
+
         toast.show('Successfully saved!', {
-          duration: 2000
+          duration: 2000,
+          tint: 'blue'
         })
       } else if (response.isError) {
         toast.show('Error Saving!', {
-          duration: 2000
+          duration: 2000,
+          message: "It looks like something went wrong.",
+          tint: 'red'
         })
       }
     })

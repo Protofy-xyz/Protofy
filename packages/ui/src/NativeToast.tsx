@@ -10,6 +10,7 @@ export const NativeToast = () => {
 
   return (
     <Toast
+      theme={currentToast.tint}
       key={currentToast.id}
       duration={currentToast.duration}
       viewportName={currentToast.viewportName}
