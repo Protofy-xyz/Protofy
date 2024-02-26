@@ -8,7 +8,8 @@ import dynamic from 'next/dynamic';
 import { palettes } from './index'
 import { Session } from 'protolib'
 import { useAtom } from 'jotai'
-import {useIsEditing} from './useIsEditing'
+import { useIsEditing } from './useIsEditing'
+import { useToastController } from '@my/ui'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
@@ -24,6 +25,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
   }
 
   const isAdmin = editorUsers.includes(session?.user?.type)
+
   if (!isAdmin) return fn()
   else if (edit) {
     return <VisualUILoader userComponents={userComponents} path={path} metadata={metadata} />
@@ -35,6 +37,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
         query: { ...router.query, _visualui_edit_: 'page' }
       })
     }
+
     return <div style={{ flex: 1, display: 'flex' }}>
       {fn()}
       <Tinted>
@@ -57,9 +60,11 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
   }
 }
 
-const VisualUILoader = ({ userComponents, path, metadata }) => { // Should be in a component
+const VisualUILoader = ({ userComponents, path, metadata }: { userComponents: any, path: string, metadata: any }) => { // Should be in a component
   const [res, setRes] = useState<any>()
   const [fileContent, setFileContent] = useState()
+  const toast = useToastController()
+
   const onSave = (content: string) => {
     writeFileContent(content)
   }
@@ -69,7 +74,18 @@ const VisualUILoader = ({ userComponents, path, metadata }) => { // Should be in
   }
   const writeFileContent = (content: string) => {
     const url = ('/adminapi/v1/files/' + path).replace(/\/+/g, '/')
-    API.post(url, { content })
+
+    API.post(url, { content }, (response: any) => {
+      if (response.status == "loaded") {
+        toast.show('Successfully saved!', {
+          duration: 2000
+        })
+      } else if (response.isError) {
+        toast.show('Error Saving!', {
+          duration: 2000
+        })
+      }
+    })
   }
 
   useEffect(() => {
