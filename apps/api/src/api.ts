@@ -22,13 +22,45 @@ const deviceSub = (deviceName, component, componentName, cb) => {
     return topicSub(deviceName + '/' + component + '/' + componentName + '/state', cb)
 }
 
-const devicePub = async (deviceName, component, componentName, command) => {
-    if (typeof command == "string") {
-        topicPub(deviceName + '/' + component + '/' + componentName + '/command', command)
-    } else {
-        topicPub(deviceName + '/' + component + '/' + componentName + '/command', JSON.stringify(command))
+const devicePub = async (deviceName, component, componentName) => {
+    var data = null;
+    try{
+        const urlDevices = "http://localhost:8080/adminapi/v1/devices"
+        const res = await fetch(urlDevices);
+        data = await res.json();
+    }catch(err){
+        try{
+            const urlDevices = "http://localhost:8000/adminapi/v1/devices"
+            const res = await fetch(urlDevices);
+            data = await res.json();
+        }catch(err){
+            return;
+        }
+    }
+    const devices = data.items
+    const device = devices.filter((e)=> {return e.name==deviceName})
+    var endpoint = null;
+    var type = null;
+    var value = null;
+    if(device[0].subsystem){
+        const subsystem = device[0].subsystem.filter((e)=>{return e.name == component})[0]
+        console.log("subsystem: ", subsystem)
+        const actions = subsystem.actions
+        const action =actions.filter((e)=>{return e.name == componentName})[0]
+        console.log("action: ", action)
+        if(!action) return
+        endpoint = action.endpoint
+        type = action.payload.type;
+        value = action.payload.value
+    }else{
+        return;
+    }
+    if(!endpoint) return
+    if(type == 'str'){
+        topicPub(deviceName+endpoint,value)
     }
 }
+
 
 
 BundleAPI(app, { mqtt, devicePub, deviceSub, topicPub, topicSub })
