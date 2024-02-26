@@ -1,4 +1,5 @@
 import { Spinner, XStack } from 'tamagui'
+import { useRouter } from 'next/router'
 import { DataCard } from '../../components/DataCard'
 import AsyncView from '../../components/AsyncView'
 import { useFileFromAPI } from '../../lib/useFileFromAPI'
@@ -14,7 +15,9 @@ import { useEffect, useRef, useState } from 'react';
 import { API } from '../../base/Api';
 import { usePrompt, promptCmd } from '../../context/PromptAtom';
 import { useUpdateEffect } from 'usehooks-ts';
-import Flows from '../../adminpanel/features/components/Flows'
+import Flows from '../../adminpanel/features/components/Flows';
+import { getFlowsCustomComponents } from 'app/bundles/masks'
+
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -66,6 +69,7 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
   const [newFileContent, setNewFileContent] = useState('')
   const [loaded, setLoaded] = useState(false)
   const sourceCode = useRef('')
+  const router = useRouter()
 
   const [promptResponse, setPromptResponse] = usePrompt(
     (prompt, total, image) => {
@@ -126,6 +130,7 @@ If you include anything else in your message (like reasonings or natural languag
       </XStack>
       {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={newFileContent ? newFileContent : sourceCode.current} onChange={(code) => { sourceCode.current = code }} /> : <Flows
         isModified={isModified}
+        customComponents = {getFlowsCustomComponents(router.pathname, router.query)}
         onEdit={(code) => { sourceCode.current = code }}
         setIsModified={setIsModified}
         setSourceCode={(sourceCode) => {

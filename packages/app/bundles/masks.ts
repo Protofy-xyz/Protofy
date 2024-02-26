@@ -2,6 +2,10 @@ import devicesMasks from 'protodevice/src/nodes'
 import visualuiTemplateMasks from 'visualui/src/masks/UI.mask.json';
 import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import { BaseJSMasks } from 'protoflow';
+import apiMasks from 'protolib/bundles/apis/masks';
+
+const API_MASKS = true;
+
 
 const paths = {
     devices: [
@@ -13,6 +17,9 @@ const paths = {
     ],
     visualui: [
         'visualui',
+    ],
+    apis:[
+        'apis'
     ]
 }
 
@@ -24,6 +31,10 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     if (paths.devices.includes(segment)) return devicesMasks
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return []
 
+    console.log("🤖 ~ getFlowsCustomComponents ~ API_MASKS:", API_MASKS)
+    if(API_MASKS){
+        if (paths.apis.includes(segment)) return apiMasks
+    }
     return []
 }
 
