@@ -36,4 +36,4 @@ export const validateSession = async (session:SessionDataType):Promise<validated
 //     return result.data as validatedUserData 
 // }
 
-export {userData, validatedUserData, SessionDataType}
+export type {userData, validatedUserData, SessionDataType}
