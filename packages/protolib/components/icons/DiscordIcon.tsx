@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const DiscordIcon = React.forwardRef(({ plain, ...props }: any, ref) => (
+export const DiscordIcon = React.forwardRef(({ plain = true, ...props }: any, ref) => (
   <svg
     ref={ref}
     width="30"

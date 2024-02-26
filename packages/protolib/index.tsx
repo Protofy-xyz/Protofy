@@ -32,8 +32,8 @@ export { default as TabGroup } from "./components/TabGroup";
 export * from "./components/Notice";
 export * from "./components/CheckCircle";
 export { default as Spacer } from './components/Spacer'
-export { default as Row } from './components/Row'
-export { default as Column } from './components/Column'
+export { default as HStack } from './components/HStack'
+export { default as VStack } from './components/VStack'
 export { default as HorizontalBox } from "./components/HorizontalBox";
 export * from "./components/CopyBubble";
 export { default as OverlayCardBasic } from "./components/OverlayCardBasic";
@@ -62,6 +62,7 @@ export { default as RainbowText } from "./components/RainbowText";
 export * from "./components/IconStack";
 export { default as MainButton } from "./components/MainButton";
 export * from "./components/Head1";
+export * from "./components/Text";
 export * from "./components/Link";
 export * from "./components/heroState";
 export { default as OverlayCard } from "./components/OverlayCard";

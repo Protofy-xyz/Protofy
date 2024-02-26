@@ -31,6 +31,7 @@ import GridElement from '../components/GridElement'
 import { Head1 } from '../components/Head1'
 import { Head2 } from '../components/Head2'
 import { Head3 } from '../components/Head3'
+import { Text } from '../components/Text'
 import { HeaderLink } from '../components/HeaderLink'
 import HorizontalBox from '../components/HorizontalBox'
 import HoveredGroup from '../components/HoveredGroup'
@@ -76,8 +77,8 @@ import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
 import { AlertDialog } from '../components/AlertDialog'
 
 import htmlBasicElements from './htmlBasics'
-import Column from '../components/Column'
-import Row from '../components/Row'
+import VStack from '../components/VStack'
+import HStack from '../components/HStack'
 import YCenterStack from '../components/YCenterStack'
 import Spacer from '../components/Spacer'
 
@@ -89,14 +90,15 @@ export const textPalette = {
   ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, {}, {}, true),
   ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, {}, {}, true),
   ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, {}, {}, true),
+  ...cw(Text, 'Type', 'Text', { children: "hello" }, {}, {}, true),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
   ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
 }
 
 export const layoutPalette = {
-  ...cw(Column, 'Columns', 'Column', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(Row, 'Rows', 'Row', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(VStack, 'ArrowDownSquare', 'VStack', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(HStack, 'ArrowRightSquare', 'HStack', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Spacer, 'Maximize2', 'Spacer', { height: '$4' }),
 }
