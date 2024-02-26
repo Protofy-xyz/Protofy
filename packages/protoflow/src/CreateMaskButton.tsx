@@ -13,6 +13,7 @@ type BodyDataProps = {
     field: string;
     type?: string;
     fieldType: string;
+    staticLabel: boolean;
 };
 
 export default ({ nodeData, maskType }: Props) => {
@@ -37,7 +38,8 @@ export default ({ nodeData, maskType }: Props) => {
         var newData: BodyDataProps = {
             label: newField,
             field: newField,
-            fieldType: 'prop'
+            fieldType: 'prop',
+            staticLabel: true
 
         }
         if (newType) {

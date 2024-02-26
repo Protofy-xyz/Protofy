@@ -22,6 +22,7 @@ export interface Field {
     type: 'input' | 'output' | 'select' | 'error' | 'boolean' | 'range' | 'color' | 'colorPicker',
     description?: string,
     label?: string,
+    staticLabel?: boolean,
     data?: any
     static?: boolean,
     fieldType?: string | 'parameter' | 'child' | 'prop' | 'clause',
@@ -333,7 +334,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
     }
     const getValue = () => {
         let label = param?.label ?? param.field
-        if ((isParameter || isProp) && !param.static) {
+        if ((isParameter || isProp) && !param.static && !param.staticLabel) {
             label = keyPre(nodeData[param.field]?.key ?? '')
 
             if (editing) {
