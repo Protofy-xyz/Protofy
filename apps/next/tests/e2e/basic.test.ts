@@ -134,7 +134,7 @@ describe("Test admin capabilities", () => {
                     await protoBrowser.navigateToWorkspaceSection('pages')
                     await protoBrowser.getEditableObjectCreate()
                 }, 60000)
-                it.skip("should be able to create a blank page", async () => {
+                it("should be able to create a blank page", async () => {
                     // Select template
                     await protoBrowser.clickElement(`#pages-template-${PAGE_TEMPLATES.BLANK}`)
                     await protoBrowser.clickElement(`#admin-pages-add-btn`)
@@ -168,7 +168,7 @@ describe("Test admin capabilities", () => {
                     await protoBrowser.clickElement(`#more-btn-${pageName}`)
                     await protoBrowser.clickElement(`#more-btn-${pageName}-delete`)
                     protoBrowser.waitForElement(`#pages-datatable-${pageName}`, 1000).then().catch(e => expect(e).toBeTruthy());
-                }, 10000)
+                }, 60000)
             })
         })
     })
