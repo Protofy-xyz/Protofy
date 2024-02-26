@@ -7,6 +7,7 @@ const NodeSelect = (props) => {
 		const value = event.target.value
 		props.onChange({ label: value, value })
 	}
+	console.log("props: ",props)
 	return (
 		<div style={{ position: 'relative' }}>
 			<select
@@ -30,7 +31,7 @@ const NodeSelect = (props) => {
 				}}
 			>
 				{
-					props.options.map(opt => <option value={opt.value} label={opt.label}></option>)
+					props.options?.map(opt => <option value={opt.value} label={opt.label} selected={opt.value==props.defaultValue.value}></option>)
 				}
 			</select>
 			<ChevronDown style={{ position: 'absolute', right: '10px', top: useTheme('nodeFontSize') / 2 }}/>

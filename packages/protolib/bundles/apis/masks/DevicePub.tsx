@@ -4,37 +4,48 @@ import { useState, useEffect, useContext } from 'react';
 // import {FlowStoreContext } from "./store/FlowsStore"
 
 const getDeviceNames = (devData)=>{
-    return devData?.map(e=>e.name)
+    return devData?.map(e=>'"'+e.name+'"')
 }
 const getDeviceSubsystemsNames = (devData)=>{
-        // devData.map((e)=>{
-
-        // })
-        // const subsystems = device?.subsystem?.filter((e)=>{
-        //     return e.actions.length >0;
-        // })
-        return {"test1":['cohete'],"test2": []}
-
-        //     console.log("Subsystems: ", subsystems)
-        //     const subsystemsNames = subsystems?.map((s)=>{
-        //         return s.name;
-        //     })
+    const deviceSubsystems = {}
+    devData.forEach(device => {
+        const subsystemsNames = device.subsystem?.filter(sub => sub.actions && sub.actions.length > 0).map(sub => '"'+sub.name+'"')
+        deviceSubsystems['"'+device.name+'"'] = subsystemsNames
+    });
+    // console.log("🤖 ~ deviceSubsystems ~ deviceSubsystems:", deviceSubsystems)
+    return deviceSubsystems
 }
 
 const getSubsystemsActions = (devData)=>{
-    return {test1: {cohete: ["Turn On", "Turn Off", "Toggle"]},test2:{}}
+    const deviceSubsystemsActions = {};
+
+    devData.forEach(device => {
+        const deviceName = '"'+device.name+'"';
+        const actions = {};
+
+        device.subsystem?.forEach(subsystem => {
+            subsystem.actions?.forEach(action => {
+                actions['"'+subsystem.name+'"'] = actions['"'+subsystem.name+'"'] || [];
+                actions['"'+subsystem.name+'"'].push('"' + action.name + '"');
+            });
+        });
+
+        deviceSubsystemsActions[deviceName] = actions;
+    });
+    // console.log("🤖 ~ getSubsystemsActions ~ deviceSubsystemsActions:", deviceSubsystemsActions)
+    return deviceSubsystemsActions
+
 }
 
 
 const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
     console.log("nodeParam ", nodeData)
-    console.log("nodeParam ", nodeData['param1'].replaceAll('"\"','').replaceAll('"',''))
+    console.log("nodeParam ", nodeData['param1'])
     const [loadedDevicesData, setLoadedDevicesData] = useState(null)
     const [devicesNames, setDevicesNames] = useState([]);
-    const [deviceSubsystems, setDeviceSubsystems] = useState([]);
-    const [subsystemActions, setSubsystemActions] = useState([]);
-    // const data = useContext(FlowStoreContext)
-    const deviceData = []
+    const [deviceSubsystemsNames, setDeviceSubsystemsNames] = useState([])
+    
+    var deviceData = []
 
     useEffect(() => {
         if (loadedDevicesData) {
@@ -42,70 +53,38 @@ const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
         }
         API.get("/adminapi/v1/devices").then((val) => {
             setLoadedDevicesData(val.data.items);
-            console.log("APIIII -> ", val.data.items)
+            // console.log("APIIII -> ", val.data.items)
             setDevicesNames(val.data.items.map((e) => {
-                return e.name;
+                return '"'+e.name+'"';
             }))
             val.data.items?.map(e=>deviceData.push(e))
-            console.log("deviceNames: ",getDeviceNames(deviceData))
-            console.log("devices subsystems with actions: ",getDeviceSubsystemsNames(deviceData))
-            
+            // console.log("🤖 ~ API.get ~ deviceData:", deviceData)
+            // console.log("deviceNames: ",getDeviceNames(deviceData))
+            // console.log("devices subsystems with actions: ",getDeviceSubsystemsNames(deviceData))
         })
     }, [loadedDevicesData])
-
+    // if(loadedDevicesData){
+    //     console.log("🤖 loadedDevicesData",loadedDevicesData)
+    //         console.log("🤖 param2", getDeviceSubsystemsNames(loadedDevicesData))
+    //         console.log("🤖 param3", getSubsystemsActions(loadedDevicesData))
+    // }
     const devs = {
         test1: { cohete: ["Turn ON", "Turn OFF", "Toggle"] } ,
         test2: [] 
     }
 
-    // useEffect(()=>{
-    //     console.log("pa")
-    // }, [data['param1']])
-
-
-    //const options2 = {test1:[op1,op2]}
-    //const options3 = {op1:[pe2,pe3],op2:[pa,pa1]}
-
-    // useEffect(()=>{
-    //     console.log("Ha cambiat param1")
-    //     const device = loadedDevicesData?.filter((e)=>{return e.name == nodeData['param1']})[0];
-    //     console.log("Device: ",device);
-    //     const subsystems = device?.subsystem?.filter((e)=>{
-    //         return e.actions.length >0;
-    //     })
-    //     console.log("Subsystems: ", subsystems)
-    //     const subsystemsNames = subsystems?.map((s)=>{
-    //         return s.name;
-    //     })
-    //     console.log("Subsystems Names: ", subsystemsNames)
-    //     setDeviceSubsystems(subsystemsNames?subsystemsNames:[])
-
-    //     console.log("node: ", nodeData)
-    //     console.log("Subsystems: ", subsystems)
-    //     const actions = subsystems?.filter((e)=>{return e.name == nodeData['param2']})[0]?.actions;
-    //     console.log("Actions: ",actions)
-    //     const actionsNames = actions?.map((e) =>{return e.name;});
-    //     console.log("Actions names: ",actionsNames)
-    //     setSubsystemActions(actionsNames?actionsNames:[])
-    // },[nodeData['param1']])
-
-    // useEffect(()=>{
-
-    //    console.log 
-    // },[nodeData['param2']])
-
     const nodeParams: Field[] = [
         {
-            label: 'Device name', field: 'param1', type: 'select', static: true,
+            label: 'Device name', field: 'param1', type: 'selectWithDefault', static: true, selectedIndex:loadedDevicesData ? devicesNames.indexOf(nodeData['param1']) : 0,
             data: loadedDevicesData ? devicesNames : ['"none"'],
         },
         {
-            label: 'Component', field: 'param2', type: 'select', static: true,
-            data: loadedDevicesData? getDeviceSubsystemsNames(deviceData)[nodeData['param1'].replaceAll('"\"','').replaceAll('"','')] : ['"none"'],
+            label: 'Component', field: 'param2', type: 'selectWithDefault', static: true, selectedIndex: loadedDevicesData && nodeData['param1'] &&  getDeviceSubsystemsNames(loadedDevicesData)[nodeData['param1']] ? getDeviceSubsystemsNames(loadedDevicesData)[nodeData['param1']].indexOf(nodeData['param2']) : 0,
+            data: loadedDevicesData && nodeData['param1'] ? getDeviceSubsystemsNames(loadedDevicesData)[nodeData['param1']]??[] : ['"none"'],
         },
         {
-            label: 'Action', field: 'param3', type: 'select', static: true,
-            data: loadedDevicesData ? getSubsystemsActions(deviceData)[nodeData['param1'].replaceAll('"\"','').replaceAll('"','')][nodeData['param2'].replaceAll('"\"','').replaceAll('"','')]??[] : ['"none"'],
+            label: 'Action', field: 'param3', type: 'selectWithDefault', static: true, selectedIndex: loadedDevicesData && getSubsystemsActions(loadedDevicesData)[nodeData['param1']] ? getSubsystemsActions(loadedDevicesData)[nodeData['param1']][nodeData['param2']]?.indexOf(nodeData['param3']) ??[] : 0,
+            data: loadedDevicesData && getSubsystemsActions(loadedDevicesData)[nodeData['param1']] ? getSubsystemsActions(loadedDevicesData)[nodeData['param1']][nodeData['param2']] ??[] : ['"none"'],
         }
     ] as Field[]
 

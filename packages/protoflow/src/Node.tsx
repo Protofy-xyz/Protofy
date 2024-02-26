@@ -19,7 +19,7 @@ import { X, ChevronUp, AlertCircle, Type, Hash, Braces, ToggleLeft } from 'lucid
 
 export interface Field {
     field: string,
-    type: 'input' | 'output' | 'select' | 'error' | 'boolean' | 'range' | 'color' | 'colorPicker',
+    type: 'input' | 'output' | 'select' | 'error' | 'boolean' | 'range' | 'color' | 'colorPicker' | 'selectWithDefault',
     description?: string,
     label?: string,
     staticLabel?: boolean,
@@ -36,7 +36,8 @@ export interface Field {
     isDisabled?: boolean,
     onBlur?: Function,
     lowercase?: boolean,
-    separator?: string | ':' | '='
+    separator?: string | ':' | '=',
+    selectedIndex?: any
 }
 
 
@@ -153,6 +154,27 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
 
     const getInput = (disabled?) => {
         switch (param.type) {
+            case 'selectWithDefault':
+                // {param.data}
+                const onChangeSelect1 = (data) => {
+                    var tmpData = { [param.field]: (isProp || nodeData[param.field]?.value) ? { key: param.label, value: data?.value } : data?.value }
+                    setNodeData(id, { ...nodeData, ...tmpData })
+                    dataNotify({ id: id, paramField: param.field, newValue: data?.value })
+                }
+                const options1 = param.data?.map((item, index) => {
+                    var extraProps = item?.color ? { color: item.color } : {}
+                    return { label: item ?? "default", value: item, ...extraProps }
+                })
+                return <div style={{ flex: 1, zIndex: 1000 }}>
+                <NodeSelect
+                    onChange={onChangeSelect1}
+                    defaultValue={{
+                        value: param.data[param.selectedIndex],
+                        label: param.data[param.selectedIndex]
+                    }}
+                 options={options1}
+                    />
+                </div>
             case 'select':
                 const onChangeSelect = (data) => {
                     var tmpData = { [param.field]: (isProp || nodeData[param.field]?.value) ? { key: param.label, value: data?.value } : data?.value }
