@@ -79,6 +79,7 @@ import htmlBasicElements from './htmlBasics'
 import Column from '../components/Column'
 import Row from '../components/Row'
 import YCenterStack from '../components/YCenterStack'
+import Spacer from '../components/Spacer'
 
 const cw = getComponentWrapper('protolib')
 
@@ -97,6 +98,7 @@ export const layoutPalette = {
   ...cw(Column, 'Columns', 'Column', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Row, 'Rows', 'Row', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(Spacer, 'Maximize2', 'Spacer', { height: '$4' }),
 }
 
 export const basicPalette = {

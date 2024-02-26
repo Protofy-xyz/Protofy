@@ -31,6 +31,7 @@ export * from "./components/Grid";
 export { default as TabGroup } from "./components/TabGroup";
 export * from "./components/Notice";
 export * from "./components/CheckCircle";
+export { default as Spacer } from './components/Spacer'
 export { default as Row } from './components/Row'
 export { default as Column } from './components/Column'
 export { default as HorizontalBox } from "./components/HorizontalBox";
