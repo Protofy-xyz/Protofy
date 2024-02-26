@@ -76,6 +76,9 @@ import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
 import { AlertDialog } from '../components/AlertDialog'
 
 import htmlBasicElements from './htmlBasics'
+import Column from '../components/Column'
+import Row from '../components/Row'
+import YCenterStack from '../components/YCenterStack'
 
 const cw = getComponentWrapper('protolib')
 
@@ -91,14 +94,9 @@ export const textPalette = {
 }
 
 export const layoutPalette = {
+  ...cw(Column, 'Columns', 'Column', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(Row, 'Rows', 'Row', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(ContainerXL, 'Container', 'ContainerXL', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(ContainerLarge, 'Package', 'ContainerLarge', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(Section, 'EyeOff', 'Section', {}, nonDraggable),
-  ...cw(SectionBox, 'RectangleHorizontal', 'SectionBox', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(SectionBlock, 'BoxSelect', 'SectionBlock'),
-  ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
 }
 
 export const basicPalette = {
@@ -133,8 +131,11 @@ export const miscellanyPalette = {
   ...cw(CheckCircle, 'Check', 'CheckCircle'),
   ...cw(Code, 'Code', 'Code', { children: "helloworld" }, {}, {}, true),
   ...cw(CodeInline, 'Terminal', 'CodeInline', { children: "helloworld" }, {}, {}, true),
+  ...cw(ContainerLarge, 'Package', 'ContainerLarge', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(ContainerXL, 'Container', 'ContainerXL', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ColorToggleButton, 'ToggleRight', 'ColorToggleButton'),
   ...cw(CopyBubble, 'Copy', 'CopyBubble', { text: "copy" }),
+  ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { canMoveIn: () => false }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
   ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
@@ -171,6 +172,9 @@ export const miscellanyPalette = {
   ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem', { text: "hello world" }),
   ...cw(Pre, 'EyeOff', 'Pre', {}, nonDraggable),
   ...cw(Search, 'Search', 'Search'),
+  ...cw(Section, 'EyeOff', 'Section', {}, nonDraggable),
+  ...cw(SectionBox, 'RectangleHorizontal', 'SectionBox', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(SectionBlock, 'BoxSelect', 'SectionBlock'),
   ...cw(TitleLink, 'Link', 'TitleLink', { href: "/hello", children: "hello" }),
   ...cw(SideBySide, 'PanelLeftInactive', 'SideBySide'),
   ...cw(SpotLight, 'Sun', 'SpotLight'),
@@ -189,6 +193,8 @@ export const miscellanyPalette = {
   ...cw(TwitterIcon, 'LogoIcon', 'TwitterIcon', { width: 23 }),
   ...cw(UL, 'MessageCircle', 'UL', { children: "hello world" }, {}, {}, true),
   ...cw(Video, 'Video', 'Video', {}, {}, {}, true),
+  ...cw(XCenterStack, 'AlignVerticalSpaceAround', 'XCenterStack'),
+  ...cw(YCenterStack, 'AlignVerticalSpaceAround', 'YCenterStack'),
   ...cw(AlertDialog, 'Group', 'AlertDialog', {}, nonDraggable)
 }
 

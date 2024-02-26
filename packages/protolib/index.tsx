@@ -31,6 +31,8 @@ export * from "./components/Grid";
 export { default as TabGroup } from "./components/TabGroup";
 export * from "./components/Notice";
 export * from "./components/CheckCircle";
+export { default as Row } from './components/Row'
+export { default as Column } from './components/Column'
 export { default as HorizontalBox } from "./components/HorizontalBox";
 export * from "./components/CopyBubble";
 export { default as OverlayCardBasic } from "./components/OverlayCardBasic";
