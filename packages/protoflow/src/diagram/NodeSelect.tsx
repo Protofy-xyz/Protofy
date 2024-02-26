@@ -7,11 +7,11 @@ const NodeSelect = (props) => {
 		const value = event.target.value
 		props.onChange({ label: value, value })
 	}
-	console.log("props: ",props)
 	return (
 		<div style={{ position: 'relative' }}>
 			<select
 				defaultValue={props.defaultValue.value}
+				onClick={onSelect} // To handle changes even with one option
 				onChange={onSelect}
 				style={{
 					width: '100%',

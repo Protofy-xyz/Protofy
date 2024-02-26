@@ -4,7 +4,7 @@ import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import { BaseJSMasks } from 'protoflow';
 import apiMasks from 'protolib/bundles/apis/masks';
 
-const API_MASKS = false;
+const API_MASKS = true;
 
 
 const paths = {
