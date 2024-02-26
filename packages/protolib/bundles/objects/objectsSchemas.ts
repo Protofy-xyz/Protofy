@@ -40,7 +40,8 @@ export const BaseObjectSchema = z.object({
           z.literal("onRead"),
           z.literal("onDelete"),
           z.literal("onList"),
-          z.literal("name")
+          z.literal("name"),
+          z.literal("location")
         ]),
         params: z.array(z.string()).optional()
       }).name('name')).optional()
