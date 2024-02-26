@@ -8,8 +8,8 @@ Ignore background white, black, or greyscale colors if match with provided wiref
 Don't modify export default object
 */
 
-import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "@my/ui"
-import { UIWrapLib, UIWrap, BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API, Tinted, SSR } from "protolib"
+import { Theme, YStack, Text, XStack, Paragraph, } from "@my/ui"
+import { UIWrapLib, UIWrap, BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, Spacer, API, Tinted, SSR } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 
@@ -39,7 +39,6 @@ export default {
         () => PageComponent(props), {
         ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
         ...cw("YStack", YStack),
-        ...cw("Spacer", Spacer),
         ...cw("Text", Text),
         ...cw("XStack", XStack),
         ...cw("Paragraph", Paragraph),

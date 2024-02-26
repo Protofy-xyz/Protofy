@@ -1,5 +1,5 @@
-import { Theme, YStack, Text, Spacer, XStack, Paragraph, SizableText } from "@my/ui";
-import { UIWrapLib, UIWrap, SSR, TintSection, ContainerLarge, BigTitle, LinkGroup, LinkGroupItem, XCenterStack, NextLink, TooltipContainer, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, BackgroundGradient, ElevatedArea, GridElement, RainbowText, FeatureItem, PageGlow, withSession, Page, Grid, useEdit } from "protolib";
+import { Theme, YStack, Text, XStack, Paragraph, SizableText } from "@my/ui";
+import { UIWrapLib, UIWrap, SSR, TintSection, Spacer, ContainerLarge, BigTitle, LinkGroup, LinkGroupItem, XCenterStack, NextLink, TooltipContainer, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, BackgroundGradient, ElevatedArea, GridElement, RainbowText, FeatureItem, PageGlow, withSession, Page, Grid, useEdit } from "protolib";
 import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
@@ -333,7 +333,6 @@ export default {
       {
         ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
         ...cw("YStack", YStack),
-        ...cw("Spacer", Spacer),
         ...cw("Text", Text),
         ...cw("XStack", XStack),
         ...cw("Paragraph", Paragraph),

@@ -5,8 +5,8 @@ if you call paginated apis, you will need to wait for result.isLoaded and look i
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
 
-import { Theme, YStack, Text, Spacer, XStack, Paragraph, } from "@my/ui"
-import { UIWrapLib, UIWrap, BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, API, SSR} from "protolib"
+import { Theme, YStack, Text, XStack, Paragraph, } from "@my/ui"
+import { UIWrapLib, UIWrap, BigTitle, PageGlow, withSession, Page, useEdit, Center, RainbowText, Spacer, API, SSR } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 
@@ -28,7 +28,6 @@ export default {
         () => PageComponent(props), {
         ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
         ...cw("YStack", YStack),
-        ...cw("Spacer", Spacer),
         ...cw("Text", Text),
         ...cw("XStack", XStack),
         ...cw("Paragraph", Paragraph),
