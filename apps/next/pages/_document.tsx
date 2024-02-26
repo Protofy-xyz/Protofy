@@ -76,22 +76,16 @@ export default class Document extends NextDocument {
               (function() {
                 if (typeof window !== 'undefined') {
                   var OriginalWebSocket = window.WebSocket;
-                  window.webSocketInstances = [];
 
                   window.WebSocket = function(url, protocols) {
                     if(url.endsWith('/_next/webpack-hmr') && window.location.search.includes('_visualui_edit_')) {
                       url = url.substr(0, url.length - '/_next/webpack-hmr'.length) + '/websocket';
                     }
                     var instance = new OriginalWebSocket(url, protocols);
-                    window.webSocketInstances.push(instance);
                     return instance;
                   };
 
                   window.WebSocket.prototype = OriginalWebSocket.prototype;
-
-                  window.getWebSocketInstances = function() {
-                    return window.webSocketInstances;
-                  };
                 }
               })();
             `,
