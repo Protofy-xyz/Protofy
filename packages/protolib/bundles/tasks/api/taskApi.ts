@@ -25,6 +25,7 @@ export const TaskApi = (app, mqtt) => {
     initialDataDir: __dirname,
     prefix: '/adminapi/v1/',
     getDB: getDB,
+    connectDB: () => new Promise(resolve => resolve(null)),
     requiresAdmin: ['*'],
     extraData: {
       read: addExtraData,

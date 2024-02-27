@@ -24,7 +24,7 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
             logger.debug(`connected to database on: ${dbPath}`)
             try {
                 await db.get('initialized')
-                resolve(db)
+                resolve(null)
             } catch (e) {
                 logger.info('database not initialized, loading initialData...')
                 try {
@@ -34,7 +34,7 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
                         logger.debug({ key: item.key, value: item.value }, `Added: ${item.key} -> ${JSON.stringify(item.value)}`)
                     }
                     await db.put('initialized', 'done')
-                    resolve(db)
+                    resolve(null)
                 } catch (error) {
                     logger.error({ error }, "Error initializing the database")
                     reject(error)

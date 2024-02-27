@@ -122,5 +122,6 @@ export const APIsAPI = AutoAPI({
   initialDataDir: __dirname,
   prefix: '/adminapi/v1/',
   getDB: getDB,
+  connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*']
 })

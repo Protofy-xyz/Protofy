@@ -65,6 +65,7 @@ export const TaskRunApi = AutoAPI({
     initialDataDir: __dirname,
     prefix: '/adminapi/v1/',
     getDB: getDB,
+    connectDB: () => new Promise(resolve => resolve(null)),
     requiresAdmin: ['*'],
     // extraData: {
     //   prelist: async (session) => {

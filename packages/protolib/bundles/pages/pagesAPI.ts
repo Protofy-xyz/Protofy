@@ -116,7 +116,6 @@ const getDB = (path, req, session) => {
       arg.replaceWithText(value.route ? JSON.stringify(value.route) : '""')
       sourceFile.save()
 
-      console.log('prevPage: --------------------------', prevPage)
       if (prevPage && prevPage.route != value.route) {
         //delete previous route if changed
         const prevFile = fspath.join(nextPagesDir(getRoot(req)), prevPage.route + '.tsx')
@@ -204,5 +203,6 @@ export const PagesAPI = AutoAPI({
   initialDataDir: __dirname,
   prefix: '/adminapi/v1/',
   getDB: getDB,
+  connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*']
 })
