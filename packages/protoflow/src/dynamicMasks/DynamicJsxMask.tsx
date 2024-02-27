@@ -4,6 +4,7 @@ import FallbackPort from '../FallbackPort';
 import AddPropButton from '../AddPropButton';
 import { Code } from 'lucide-react'
 import { CustomFieldType, getCustomFields } from '../fields';
+import useTheme from '../diagram/Theme';
 
 const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const propsArray: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('prop-')).map((prop: any, i) => {
@@ -52,9 +53,35 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
                         }
                         case 'custom-field': {
+                            const undefinedSectionName = 'Props'
+                            const sections = element.data.reduce((total, current) => {
+                                var sectionName = current.section ?? undefinedSectionName
+                                total[sectionName] = [
+                                    ...(total[sectionName] ?? []),
+                                    current
+                                ]
+                                return total
+                            }, {})
+
+                            var sectionArr = Object.keys(sections)
+                            let noSectionIndex = sectionArr.indexOf(undefinedSectionName);
+
+                            if (noSectionIndex !== -1) {
+                                sectionArr.splice(noSectionIndex, 1)
+                                sectionArr.push(undefinedSectionName)
+                            }
                             return <>
                                 {
-                                    element.data.map((item, index) => <CustomFieldType key={index} item={item} node={node} nodeData={nodeData} />)
+                                    sectionArr.map((section, i) => {
+                                        const sectionTitle = section == undefinedSectionName ? '' : section
+                                        return <div key={i}>
+                                            {/* <Text style={{ display: 'flex', padding: '8px 22px', fontFamily: 'Jost-Regular', color: '#F3F3F3' }}>{section}</Text> */}
+                                            {
+                                                sections[section].map((item, index) => <CustomFieldType key={index} item={item} node={node} nodeData={nodeData} />)
+                                            }
+                                            {sectionTitle ? <div style={{ borderBottom: '1px solid ' + useTheme('inputBackgroundColor'), margin: '20px 22px' }}></div> : null}
+                                        </div>
+                                    })
                                 }
                             </>
                         }
