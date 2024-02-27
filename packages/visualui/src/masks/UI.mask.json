@@ -595,6 +595,222 @@
         ]
     },
     {
+        "id": "VCenterStack",
+        "title": "VCenterStack",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "VCenterStack"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "backgroundColor",
+                        "field": "prop-backgroundColor",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "color",
+                        "section": "color"
+                    },
+                    {
+                        "label": "justifyContent",
+                        "field": "prop-justifyContent",
+                        "type": "alignment-content",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignItems",
+                        "field": "prop-alignItems",
+                        "type": "alignment-items",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "border",
+                        "field": "prop-border",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "borderRadius",
+                        "field": "prop-borderRadius",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "elevation",
+                        "field": "prop-elevation",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "gap",
+                        "field": "prop-gap",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "data": []
+            }
+        ]
+    },
+    {
+        "id": "HCenterStack",
+        "title": "HCenterStack",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "HCenterStack"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "backgroundColor",
+                        "field": "prop-backgroundColor",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "color",
+                        "section": "color"
+                    },
+                    {
+                        "label": "justifyContent",
+                        "field": "prop-justifyContent",
+                        "type": "alignment-content",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignItems",
+                        "field": "prop-alignItems",
+                        "type": "alignment-items",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "border",
+                        "field": "prop-border",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "borderRadius",
+                        "field": "prop-borderRadius",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "elevation",
+                        "field": "prop-elevation",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "gap",
+                        "field": "prop-gap",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "data": []
+            }
+        ]
+    },
+    {
         "id": "HStack",
         "title": "HStack",
         "path": "*",
@@ -744,42 +960,54 @@
                 "type": "custom-field",
                 "data": [
                     {
-                        "label": "backgroundColor",
-                        "field": "prop-backgroundColor",
-                        "type": "color",
-                        "fieldType": "prop"
+                        "label": "title",
+                        "field": "prop-title",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "basic"
                     },
                     {
-                        "label": "flexDirection",
-                        "field": "prop-flexDirection",
-                        "type": "alignment-flex",
-                        "fieldType": "prop"
+                        "label": "backgroundColor",
+                        "field": "prop-backgroundColor",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "color",
+                        "section": "basic"
                     },
                     {
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
                     },
                     {
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "gap",
+                        "field": "prop-gap",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
                     }
                 ]
-            },
-            {
-                "type": "prop",
-                "data": [
-                    {
-                        "label": "title",
-                        "field": "prop-title",
-                        "fieldType": "prop",
-                        "static": true
-                    }
-                ],
-                "disableAdd": false
             },
             {
                 "type": "child",
