@@ -1100,20 +1100,47 @@
         },
         "body": [
             {
-                "type": "prop",
+                "type": "custom-field",
                 "data": [
+                    {
+                        "label": "headerTitle",
+                        "field": "prop-headerTitle",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "basic"
+                    },
                     {
                         "label": "title",
                         "field": "prop-title",
                         "fieldType": "prop",
-                        "static": true,
-                        "type": "input"
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "basic"
                     },
                     {
                         "label": "description",
                         "field": "prop-description",
                         "fieldType": "prop",
-                        "static": true
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "basic"
+                    },
+                    {
+                        "label": "tintSwitcher",
+                        "field": "prop-tintSwitcher",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "conf"
+                    },
+                    {
+                        "label": "themeSwitcher",
+                        "field": "prop-themeSwitcher",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "conf"
                     }
                 ]
             },
