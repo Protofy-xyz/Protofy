@@ -553,7 +553,7 @@ const FlowsBase = ({
                 } else {
                     param = getPropName(diff.path[1]); // Care with child- props
                     value = diff.rhs
-                    if (!value || !param || typeof (value) == 'object' || diff.path[2] == 'kind') return
+                    if (value == undefined || !param || typeof (value) == 'object' || diff.path[2] == 'kind') return
                     isProp = !param.includes('child');
                     if (isProp) {
                         param = nodeData[nodeId]['prop-' + param]?.key ?? param
