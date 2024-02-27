@@ -102,7 +102,7 @@ DynamicJsxMask.check = (node, nodeData, data) => {
     else {
         initialCheck = true
     }
-    let result = node.type == data.type && nodeData.name == data.id && initialCheck
+    let result = (node.type == data.type || node.type == "JsxSelfClosingElement")  && nodeData.name == data.id && initialCheck
     return result;
 }
 
