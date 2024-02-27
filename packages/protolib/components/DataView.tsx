@@ -68,6 +68,7 @@ export function DataView({
     extraFields = {},
     columns,
     onEdit = (data) => data,
+    onDelete = (data) => data,
     onAdd = (data) => data,
     views = undefined,
     extraViews = [],
@@ -161,6 +162,7 @@ export function DataView({
                     } else if (sourceUrl) {
                         await API.get(`${_sourceUrl}/delete`);
                     }
+                    onDelete({sourceUrl: _sourceUrl, selected})
                 },
                 enableAddToInitialData,
                 extraMenuActions: extraMenuActions,
@@ -183,6 +185,7 @@ export function DataView({
                 deleteable: deleteable,
                 onDelete: async (sourceUrl) => { 
                     await API.get(sourceUrl+'/delete')
+                    onDelete({sourceUrl, selected})
                 },
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 extraMenuActions: extraMenuActions,
@@ -197,6 +200,7 @@ export function DataView({
                 mt: "$8",
                 onDelete: async (key) => {
                     await API.get(`${sourceUrl}/${key}/delete`);
+                    onDelete({sourceUrl, selected, key})
                 },
                 ...dataTableRawProps
             }
