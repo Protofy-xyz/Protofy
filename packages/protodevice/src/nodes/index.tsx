@@ -13,7 +13,7 @@ const PCA9685 = dynamic(() => import('./PCA9685'))
 const Ethernet = dynamic(() => import('./Ethernet'))
 const Dfplayer = dynamic(() => import('./Dfplayer'))
 const ModbusLoadCell = dynamic(() => import('./ModbusLoadCell'))
-
+const SEN55 =  dynamic(() => import('./SEN55'))
 // import PulseCounter from "./PulseCounter";
 // import LEDCOutput from "./LEDCOutput";
 // import PIRSensor from "./PIRSensor"
@@ -268,12 +268,13 @@ const deviceMasks = [
   //   getComponent: I2cSensorMatrix,
   //   getInitialData: () => { return { to: 'i2cSensorMatrix', param1: '""', param2: '22', param3: '"30s"', param4: '"0x23"', param5: '"0x40"', param6: '"0x75"', param7: '"0x68"'} }
   // },
-  // {
-  //   id: 'SEN55',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('sen55'),
-  //   getComponent: SEN55,
-  //   getInitialData: () => { return { to: 'sen55', param1: '""', param2: '22', param3: '"0x69"', param4: '"30s"'} }
+  {
+    id: 'SEN55',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('sen55'),
+    getComponent: (node, nodeData, children) => <SEN55 node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'sen55', param1: '""', param2: '""', param3: '"0x69"', param4: '"30s"'} }
+  }, 
   // },
   // {
   //   id: 'MHZ19',
