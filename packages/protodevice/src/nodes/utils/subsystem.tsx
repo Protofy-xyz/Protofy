@@ -36,9 +36,18 @@ const subsystem = (subsystem, deviceName) => {
         React.useEffect(() => {
             setValue(message?.message?.toString())
         }, [message])
+        let units = '';
+        if (monitor.units) {
+            units = monitor.units;
+        }
+        const renderChip = value ? (
+            <Chip text={`${value} ${units}`}></Chip>
+        ) : null;
+    
         return (
-            <XStack>
-                <Text marginLeft={4} textAlign={"left"}><Chip text={value}></Chip></Text>
+            <XStack gap="$3">
+                <Text marginLeft={4} textAlign={"left"}>{monitor.name}: </Text>
+                {renderChip}
             </XStack>
         );
     });
@@ -53,10 +62,8 @@ const subsystem = (subsystem, deviceName) => {
                         {actionButtons}
                     </XStack>
 
-                    <YStack alignItems={'center'}> 
-                    <Text >
+                    <YStack alignItems={'left'} gap="$3"> 
                         {monitorLabels}
-                    </Text>
                     </YStack>
                 </YStack>
             </Tinted>
