@@ -5,6 +5,7 @@ import AlignmentType, { getAlignmentTypes } from "./AlignmentFields";
 import ColorType, { getColorTypes } from "./ColorFields";
 import RangeType, { getRangeTypes } from "./RangeFields";
 import ToggleFields, { getToggleTypes } from "./ToggleFields";
+import InputFields, { getInputTypes } from "./InputFields";
 
 export const getCustomFields = (data) => {
     const rawData = data.find(i => i.type == 'custom-field')?.data ?? []
@@ -18,8 +19,9 @@ export const getAllFieldTypes = () => {
     const colorTypes = getColorTypes()
     const rangeTypes = getRangeTypes()
     const toggleTypes = getToggleTypes()
+    const inputTypes = getInputTypes()
 
-    return [...alignmentTypes, ...colorTypes, ...rangeTypes, ...toggleTypes]
+    return [...alignmentTypes, ...colorTypes, ...rangeTypes, ...toggleTypes, ...inputTypes]
 }
 
 export const CustomFieldType = ({ item, node, nodeData }) => {
@@ -38,6 +40,9 @@ export const CustomFieldType = ({ item, node, nodeData }) => {
 
         case 'toggle':
             return <ToggleFields node={node} item={item} nodeData={nodeData} />
+
+        case 'input':
+            return <InputFields node={node} item={item} nodeData={nodeData} />
 
         default:
             return <></>
