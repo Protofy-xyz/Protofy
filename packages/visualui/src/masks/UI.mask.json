@@ -1,5 +1,116 @@
 [
     {
+        "id": "ButtonSimple",
+        "title": "ButtonSimple",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "ButtonSimple"
+        },
+        "body": [
+            {
+                "type": "child",
+                "data": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "size",
+                        "field": "prop-size",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "circular",
+                        "field": "prop-circular",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "chromeless",
+                        "field": "prop-chromeless",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "borderRadius",
+                        "field": "prop-borderRadius",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    }
+                ]
+            },
+            {
+                "type": "prop",
+                "data": [
+                    {
+                        "label": "onPress",
+                        "field": "prop-onPress",
+                        "fieldType": "prop",
+                        "staticLabel": true
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "id": "Container",
         "title": "Container",
         "path": "*",
@@ -39,14 +150,7 @@
             },
             {
                 "type": "child",
-                "data": [
-                    {
-                        "label": "Child1",
-                        "field": "child-1",
-                        "fieldType": "child",
-                        "type": "child"
-                    }
-                ]
+                "data": []
             }
         ]
     },
@@ -66,38 +170,35 @@
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
                         "type": "color",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "section": "style"
                     },
                     {
                         "label": "flexDirection",
                         "field": "prop-flexDirection",
                         "type": "alignment-flex",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "section": "layout"
                     },
                     {
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "section": "layout"
                     },
                     {
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "section": "layout"
                     }
                 ]
             },
             {
                 "type": "child",
-                "data": [
-                    {
-                        "label": "Child1",
-                        "field": "child-1",
-                        "fieldType": "child",
-                        "type": "child"
-                    }
-                ]
+                "data": []
             }
         ]
     },
@@ -195,14 +296,7 @@
             },
             {
                 "type": "child",
-                "data": [
-                    {
-                        "label": "Child1",
-                        "field": "child-1",
-                        "fieldType": "child",
-                        "type": "child"
-                    }
-                ]
+                "data": []
             }
         ]
     },
@@ -522,14 +616,7 @@
             },
             {
                 "type": "child",
-                "data": [
-                    {
-                        "label": "Child1",
-                        "field": "child-1",
-                        "fieldType": "child",
-                        "type": "child"
-                    }
-                ]
+                "data": []
             }
         ]
     },
