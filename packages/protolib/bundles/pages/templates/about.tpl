@@ -5,8 +5,8 @@ if you call paginated apis, you will need to wait for result.isLoaded and look i
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
 
-import { Protofy, Text, VStack, HStack, Image, HCenterStack, Page, UIWrapLib, UIWrap, SSR, useEdit, withSession, Center, GithubIcon, DiscordIcon, TwitterIcon, API } from 'protolib'
-import React, { useState } from 'react'
+import { Protofy, Text, VStack, Image, HCenterStack, Page, UIWrapLib, UIWrap, SSR, useEdit, withSession, Center, GithubIcon, DiscordIcon, TwitterIcon, API } from 'protolib'
+import React from 'react'
 import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
 
