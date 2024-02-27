@@ -17,7 +17,7 @@ const generateBackup = async (element) => {
     } else if (typeof element === 'string' && element === "*") {
         ids = ["*"];
     } else if (typeof element === 'object' && element !== null && element.data) {
-        ids =  [element.data.name];
+        ids = [element.data.name];
     } else {
         throw new Error("Invalid input for extractIds");
     }
@@ -30,6 +30,26 @@ export default {
             const router = useRouter()
             const [open, setOpen] = useState(false)
             const [backupId, setBackupId] = useState("")
+            const [currentType, setCurrentType] = useState("")
+            const [numSelectedItems, setNumSelectedItems] = useState(0)
+
+            const dialogMessages = {
+                "item": {
+                    buttonCaption: "Backup",
+                    title: "Create Backup",
+                    description: "Are you sure want to backup this database?"
+                },
+                "bulk": {
+                    buttonCaption: "Backup",
+                    title: "Create Backups",
+                    description: "Are you sure want to backup "+ numSelectedItems +" databases?"
+                },
+                "global": {
+                    buttonCaption: "Backup all databases",
+                    title: "Create Backups",
+                    description: "Are you sure want to backup all databases?"
+                }
+            }
 
             usePrompt(() => `At this moment the user is browsing the databases list page. The databases list page allows to list the system databases. Databases are based on leveldb, and stored under /data/databases.
             The user can use the database management page to view system databases, or can select a specific database from the list, and view the entries for the selected database.
@@ -50,9 +70,9 @@ export default {
                         await generateBackup(backupId)
                         setOpen(false);
                     }}
-                    title={'Create Backup'}
-                    description={"Are you sure want to backup this item?"}
-                    w={280}
+                    title={dialogMessages[currentType]?.title}
+                    description={dialogMessages[currentType]?.description}
+                    w={400}
                 >
                     <YStack f={1} jc="center" ai="center">
 
@@ -75,9 +95,17 @@ export default {
                     icons={DatabaseIcons}
                     extraMenuActions={[
                         {
-                            text: "Backup",
+                            text: (type) => dialogMessages[type].buttonCaption,
                             icon: DatabaseBackup,
                             action: (element) => {
+                                let type = "item"
+                                if (element == "*") {
+                                    type = "global"
+                                } else if (Array.isArray(element)) {
+                                    type = "bulk"
+                                    setNumSelectedItems(element.length)
+                                }
+                                setCurrentType(type)
                                 setBackupId(element)
                                 setOpen(true)
                             },
