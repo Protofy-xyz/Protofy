@@ -106,9 +106,9 @@ export const layoutPalette = {
 export const basicPalette = {
   ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {}, {}, true),
   ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "Press Me" }, {}, {}, true),
-  ...cw(Container, 'Box', 'Container', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(Image, 'MinusSquare', 'Image', {}, {}, {}, true),
-} 
+  ...cw(Container, 'SquareAsterisk', 'Container', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(Image, 'Image', 'Image', { url: "https://picsum.photos/200" }, {}, {}, true),
+}
 
 export const miscellanyPalette = {
   ...htmlBasicElements,

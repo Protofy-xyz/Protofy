@@ -1,5 +1,81 @@
 [
     {
+        "id": "BigTitle",
+        "title": "BigTitle",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "BigTitle"
+        },
+        "body": [
+            {
+                "type": "child",
+                "data": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "color",
+                        "field": "prop-color",
+                        "type": "color",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "color"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "id": "ButtonSimple",
         "title": "ButtonSimple",
         "path": "*",
@@ -122,30 +198,110 @@
             {
                 "type": "custom-field",
                 "data": [
+                    
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
+                        "fieldType": "prop",
+                        "staticLabel": true,
                         "type": "color",
-                        "fieldType": "prop"
+                        "section": "color"
                     },
                     {
                         "label": "flexDirection",
                         "field": "prop-flexDirection",
                         "type": "alignment-flex",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
                     },
                     {
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
                     },
                     {
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "border",
+                        "field": "prop-border",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "borderRadius",
+                        "field": "prop-borderRadius",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "elevation",
+                        "field": "prop-elevation",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "gap",
+                        "field": "prop-gap",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
                     }
+                ]
+            },
+            {
+                "type": "custom-field",
+                "data": [
+                    
+                    
                 ]
             },
             {
@@ -169,15 +325,17 @@
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
-                        "type": "color",
                         "fieldType": "prop",
-                        "section": "style"
+                        "staticLabel": true,
+                        "type": "color",
+                        "section": "color"
                     },
                     {
                         "label": "flexDirection",
                         "field": "prop-flexDirection",
                         "type": "alignment-flex",
                         "fieldType": "prop",
+                        "staticLabel": true,
                         "section": "layout"
                     },
                     {
@@ -185,6 +343,7 @@
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
                         "fieldType": "prop",
+                        "staticLabel": true,
                         "section": "layout"
                     },
                     {
@@ -192,8 +351,80 @@
                         "field": "prop-alignItems",
                         "type": "alignment-items",
                         "fieldType": "prop",
+                        "staticLabel": true,
                         "section": "layout"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "border",
+                        "field": "prop-border",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "borderRadius",
+                        "field": "prop-borderRadius",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "elevation",
+                        "field": "prop-elevation",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "gap",
+                        "field": "prop-gap",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
                     }
+                ]
+            },
+            {
+                "type": "custom-field",
+                "data": [
+                    
+                    
                 ]
             },
             {
@@ -215,32 +446,50 @@
                 "type": "custom-field",
                 "data": [
                     {
+                        "label": "url",
+                        "field": "prop-url",
+                        "type": "input",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "media"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
                     },
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "opacity",
-                        "field": "prop-opacity",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
                     }
                 ]
             },
             {
-                "type": "prop",
-                "data": [
-                    {
-                        "label": "url",
-                        "field": "prop-url",
-                        "fieldType": "prop",
-                        "static": true
-                    }
-                ]
+                "type": "child",
+                "data": []
             }
         ]
     },
@@ -296,60 +545,6 @@
             },
             {
                 "type": "child",
-                "data": []
-            }
-        ]
-    },
-    {
-        "id": "BigTitle",
-        "title": "BigTitle",
-        "path": "*",
-        "type": "JsxElement",
-        "filter": {
-            "name": "BigTitle"
-        },
-        "body": [
-            {
-                "type": "child",
-                "data": [
-                    {
-                        "label": "caption",
-                        "field": "child-1",
-                        "fieldType": "child",
-                        "type": "child"
-                    }
-                ],
-                "disableAdd": true
-            },
-            {
-                "type": "custom-field",
-                "data": [
-                    {
-                        "label": "color",
-                        "field": "prop-color",
-                        "type": "color",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "flexDirection",
-                        "field": "prop-flexDirection",
-                        "type": "alignment-flex",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "padding",
-                        "field": "prop-padding",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "margin",
-                        "field": "prop-margin",
-                        "fieldType": "prop"
-                    }
-                ]
-            },
-            {
-                "type": "prop",
                 "data": []
             }
         ]
