@@ -36,12 +36,9 @@ const subsystem = (subsystem, deviceName) => {
         React.useEffect(() => {
             setValue(message?.message?.toString())
         }, [message])
-        let units = '';
-        if (monitor.units) {
-            units = monitor.units;
-        }
+
         const renderChip = value ? (
-            <Chip text={`${value} ${units}`}></Chip>
+            <Chip text={`${value} ${monitor.units ? monitor.units : ''}`}></Chip>
         ) : null;
     
         return (
