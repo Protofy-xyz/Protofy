@@ -13,8 +13,9 @@ export default (app, {devicePub, deviceSub, mqtt}) => {
     //app is a normal expressjs object
     //mqtt is a mqttclient connection
     
+    // TODO refactor this example (message callback)
     //IoT device flow example:
-    // deviceSub('testdevice', 'binary_sensor', 'testbutton', (message) => {
+    // deviceSub('testdevice', 'testbutton', (message) => {
     //     message == 'ON' ?
     //         devicePub('testdevice', 'switch', 'testrelay', 'OFF')
     //         : devicePub('testdevice', 'switch', 'testrelay', 'ON')
