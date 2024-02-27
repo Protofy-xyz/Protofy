@@ -106,7 +106,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     }
     //list
     !single && operations.includes('list') && app.get(prefix + entityName, handler(async (req, res, session) => {
-        if (options.requiresAdmin && (options.requiresAdmin.includes('list') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+        if (options.requiresAdmin && (options.requiresAdmin.includes('list') || options.requiresAdmin.includes('*')) && (!session || !session?.user?.admin)) {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
@@ -133,7 +133,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //create
     operations.includes('create') && app.post(prefix + entityName, handler(async (req, res, session) => {
-        if (options.requiresAdmin && (options.requiresAdmin.includes('create') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+        if (options.requiresAdmin && (options.requiresAdmin.includes('create') || options.requiresAdmin.includes('*')) && (!session || !session?.user?.admin)) {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
@@ -159,7 +159,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //read
     operations.includes('read') && app.get(prefix + entityName + '/:key', handler(async (req, res, session) => {
-        if (options.requiresAdmin && (options.requiresAdmin.includes('read') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+        if (options.requiresAdmin && (options.requiresAdmin.includes('read') || options.requiresAdmin.includes('*')) && (!session || !session?.user?.admin)) {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
@@ -198,7 +198,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //update
     operations.includes('update') && app.post(prefix + entityName + '/:key', handler(async (req, res, session) => {
-        if (options.requiresAdmin && (options.requiresAdmin.includes('update') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+        if (options.requiresAdmin && (options.requiresAdmin.includes('update') || options.requiresAdmin.includes('*')) && (!session || !session?.user?.admin)) {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
@@ -224,7 +224,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
 
     //delete
     operations.includes('delete') && app.get(prefix + entityName + '/:key/delete', handler(async (req, res, session) => {
-        if (options.requiresAdmin && (options.requiresAdmin.includes('delete') || options.requiresAdmin.includes('*')) && (!session || !session.user.admin)) {
+        if (options.requiresAdmin && (options.requiresAdmin.includes('delete') || options.requiresAdmin.includes('*')) && (!session || !session?.user?.admin)) {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
