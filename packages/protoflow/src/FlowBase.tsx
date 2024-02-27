@@ -599,7 +599,7 @@ const FlowsBase = ({
                 param = getPropName(param); // Care with child- props
                 const targetHandle = nodeId + PORT_TYPES.data + diff.path[1]
                 if (Boolean(isConnected(targetHandle))) return // If its already connected skip modificate
-                if (!val || !param) return
+                if (val == undefined || !param) return
                 const isProp = !param.includes('child');
                 payload = { nodeId, param, value: val, isProp }
             }
