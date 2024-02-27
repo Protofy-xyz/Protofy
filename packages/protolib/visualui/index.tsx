@@ -99,7 +99,7 @@ export const layoutPalette = {
   ...cw(VStack, 'ArrowDownSquare', 'VStack', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HStack, 'ArrowRightSquare', 'HStack', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(Spacer, 'Maximize2', 'Spacer', { height: '$4' }),
+  ...cw(Spacer, 'Maximize2', 'Spacer', { size: '$8' }),
 }
 
 export const basicPalette = {

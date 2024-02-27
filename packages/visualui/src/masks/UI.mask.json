@@ -487,6 +487,251 @@
         ]
     },
     {
+        "id": "VStack",
+        "title": "VStack",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "VStack"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "backgroundColor",
+                        "field": "prop-backgroundColor",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "color",
+                        "section": "color"
+                    },
+                    {
+                        "label": "justifyContent",
+                        "field": "prop-justifyContent",
+                        "type": "alignment-content",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignItems",
+                        "field": "prop-alignItems",
+                        "type": "alignment-items",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "border",
+                        "field": "prop-border",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "borderRadius",
+                        "field": "prop-borderRadius",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "elevation",
+                        "field": "prop-elevation",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "gap",
+                        "field": "prop-gap",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "data": []
+            }
+        ]
+    },
+    {
+        "id": "HStack",
+        "title": "HStack",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "HStack"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "backgroundColor",
+                        "field": "prop-backgroundColor",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "color",
+                        "section": "color"
+                    },
+                    {
+                        "label": "justifyContent",
+                        "field": "prop-justifyContent",
+                        "type": "alignment-content",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignItems",
+                        "field": "prop-alignItems",
+                        "type": "alignment-items",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "border",
+                        "field": "prop-border",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "borderRadius",
+                        "field": "prop-borderRadius",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "elevation",
+                        "field": "prop-elevation",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "gap",
+                        "field": "prop-gap",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "data": []
+            }
+        ]
+    },
+    {
+        "id": "Spacer",
+        "title": "Spacer",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Spacer"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "size",
+                        "field": "prop-size",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "data": [],
+                "disableAdd": true
+            }
+        ]
+    },
+    {
         "id": "Page",
         "title": "Page",
         "path": "*",
