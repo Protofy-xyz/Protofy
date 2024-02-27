@@ -198,7 +198,6 @@
             {
                 "type": "custom-field",
                 "data": [
-                    
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
@@ -299,10 +298,7 @@
             },
             {
                 "type": "custom-field",
-                "data": [
-                    
-                    
-                ]
+                "data": []
             },
             {
                 "type": "child",
@@ -422,10 +418,7 @@
             },
             {
                 "type": "custom-field",
-                "data": [
-                    
-                    
-                ]
+                "data": []
             },
             {
                 "type": "child",
@@ -577,29 +570,57 @@
                         "label": "color",
                         "field": "prop-color",
                         "type": "color",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "textAlign",
-                        "field": "prop-textAlign",
-                        "type": "alignment-text",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "alignSelf",
-                        "field": "prop-alignSelf",
-                        "type": "alignment-items",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "color"
                     },
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
                     },
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "textAlign",
+                        "field": "prop-textAlign",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-text",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
                     }
                 ]
             },
@@ -637,34 +658,57 @@
                         "label": "color",
                         "field": "prop-color",
                         "type": "color",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "textAlign",
-                        "field": "prop-textAlign",
-                        "type": "alignment-text",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "alignSelf",
-                        "field": "prop-alignSelf",
-                        "type": "alignment-items",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "color"
                     },
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "padding",
-                        "field": "padding",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
                     },
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "textAlign",
+                        "field": "prop-textAlign",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-text",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
                     }
                 ]
             },
@@ -702,29 +746,153 @@
                         "label": "color",
                         "field": "prop-color",
                         "type": "color",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "textAlign",
-                        "field": "prop-textAlign",
-                        "type": "alignment-text",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "alignSelf",
-                        "field": "prop-alignSelf",
-                        "type": "alignment-items",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "color"
                     },
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
                     },
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "textAlign",
+                        "field": "prop-textAlign",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-text",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    }
+                ]
+            },
+            {
+                "type": "prop",
+                "data": []
+            }
+        ]
+    },
+    {
+        "id": "Text",
+        "title": "Text",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Text"
+        },
+        "body": [
+            {
+                "type": "child",
+                "data": [
+                    {
+                        "label": "caption",
+                        "field": "child-1",
+                        "fieldType": "child",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "color",
+                        "field": "prop-color",
+                        "type": "color",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontSize",
+                        "field": "prop-fontSize",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "basic"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "textAlign",
+                        "field": "prop-textAlign",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-text",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
                     }
                 ]
             },
@@ -759,20 +927,160 @@
                 "type": "custom-field",
                 "data": [
                     {
-                        "label": "textAlign",
-                        "field": "prop-textAlign",
-                        "type": "alignment-text",
-                        "fieldType": "prop"
-                    },
-                    {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
                     },
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop"
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "textAlign",
+                        "field": "prop-textAlign",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-text",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    }
+                ]
+            },
+            {
+                "type": "prop",
+                "data": []
+            }
+        ]
+    },
+    {
+        "id": "BlockTitle",
+        "title": "BlockTitle",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "BlockTitle"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "title",
+                        "field": "prop-title",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "basic"
+                    },
+                    {
+                        "label": "subtitle",
+                        "field": "prop-subtitle",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "basic"
+                    },
+                    {
+                        "label": "titleColor",
+                        "field": "prop-titleColor",
+                        "type": "color",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "basic"
+                    },
+                    {
+                        "label": "subtitleColor",
+                        "field": "prop-subtitleColor",
+                        "type": "color",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "basic"
+                    },
+                    {
+                        "label": "space",
+                        "field": "prop-space",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "flexDirection",
+                        "field": "prop-flexDirection",
+                        "type": "alignment-flex",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
                     }
                 ]
             },
@@ -867,50 +1175,6 @@
                         "fieldType": "prop",
                         "static": true,
                         "type": "colorPicker"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "id": "BlockTitle",
-        "title": "BlockTitle",
-        "path": "*",
-        "type": "JsxElement",
-        "filter": {
-            "name": "BlockTitle"
-        },
-        "body": [
-            {
-                "type": "prop",
-                "data": [
-                    {
-                        "label": "title",
-                        "field": "prop-title",
-                        "fieldType": "prop",
-                        "static": true
-                    },
-                    {
-                        "label": "subtitle",
-                        "field": "prop-subtitle",
-                        "fieldType": "prop",
-                        "static": true
-                    }
-                ],
-                "disableAdd": true
-            },
-            {
-                "type": "custom-field",
-                "data": [
-                    {
-                        "label": "margin",
-                        "field": "prop-margin",
-                        "fieldType": "prop"
-                    },
-                    {
-                        "label": "padding",
-                        "field": "prop-padding",
-                        "fieldType": "prop"
                     }
                 ]
             }

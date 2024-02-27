@@ -93,7 +93,6 @@ export const textPalette = {
   ...cw(Text, 'Type', 'Text', { children: "hello" }, {}, {}, true),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
-  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
 }
 
 export const layoutPalette = {
@@ -143,6 +142,7 @@ export const miscellanyPalette = {
   ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { canMoveIn: () => false }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
   ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
+  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
   ...cw(ElevatedArea, 'GalleryThumbnails', 'ElevatedArea'),
   ...cw(ErrorMessage, 'AlertTriangle', 'ErrorMessage'),
   ...cw(FeatureItem, 'CheckCircle2', 'FeatureItem', { label: "hello", children: "world" }),
