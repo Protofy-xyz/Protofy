@@ -50,7 +50,7 @@ const SelectGrid = ({ children }) => {
 const FirstSlide = ({ selected, setSelected }) => {
     const themeName = useThemeName();
     return <YStack>
-        <ScrollView mah={"40vh"}>
+        <ScrollView mah={"500px"}>
             <SelectGrid>
                 {Object.keys(templates).map((template) => <TemplatePreview theme={themeName} template={template} isSelected={selected == template} onPress={() => setSelected(template)} />)}
             </SelectGrid>

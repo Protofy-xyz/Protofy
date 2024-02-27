@@ -6,7 +6,7 @@ import { Button, Image } from 'tamagui'
 
 export default ({ template, isSelected, onPress, theme }) => {
     const [previewVisible, setPreviewVisible] = useState(false);
-    const templateUrl = `https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/templates/${template}-${theme}.png`
+    const templateUrl = `/images/templates/${template}-${theme}.png`
     let height = 120 * 1.5
     let width = 238 * 1.5
     return (
