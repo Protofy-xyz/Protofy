@@ -14,6 +14,8 @@ const Ethernet = dynamic(() => import('./Ethernet'))
 const Dfplayer = dynamic(() => import('./Dfplayer'))
 const ModbusLoadCell = dynamic(() => import('./ModbusLoadCell'))
 const SEN55 =  dynamic(() => import('./SEN55'))
+const MHZ19 =  dynamic(() => import('./MHZ19'))
+const UARTBus =  dynamic(() => import('./UARTBus'))
 // import PulseCounter from "./PulseCounter";
 // import LEDCOutput from "./LEDCOutput";
 // import PIRSensor from "./PIRSensor"
@@ -113,6 +115,13 @@ const deviceMasks = [
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('i2cBus'),
     getComponent: (node, nodeData, children) => <I2cBus node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'i2cBus', param1: '""', param2: '22', param3: true } }
+  },
+  {
+    id: 'UARTBus',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('uartBus'),
+    getComponent: (node, nodeData, children) => <UARTBus node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'uartBus', param1: '""', param2: '17', param3: '"9600"'} }
   },
   {
     id: 'PCA9685',
@@ -275,14 +284,13 @@ const deviceMasks = [
     getComponent: (node, nodeData, children) => <SEN55 node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'sen55', param1: '""', param2: '""', param3: '"0x69"', param4: '"30s"'} }
   }, 
-  // },
-  // {
-  //   id: 'MHZ19',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mhz19'),
-  //   getComponent: MHZ19,
-  //   getInitialData: () => { return { to: 'mhz19', param1: '""', param2: '', param3: '"30s"'} }
-  // }
+  {
+    id: 'MHZ19',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mhz19'),
+    getComponent: (node, nodeData, children) => <MHZ19 node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'mhz19', param1: '""', param2: '""', param3: '"30s"'} }
+  }, 
 ]
   
 export default deviceMasks.map((e) => {

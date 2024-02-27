@@ -1,18 +1,14 @@
-import React from "react";
-import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
-import { pinTable } from '../../../lib/device/Device'
+import {Node, Field, NodeParams } from 'protoflow';
 
-const MHZ19 = (node: any = {}, nodeData = {}, children) => {
+const MHZ19 = ({node = {}, nodeData = {}, children}: any) => {
     const transitionErrorMsg = 'Add units s/ms'
-
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input', pre: (str) => str?.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"' },
+        { label: 'Name', static: true, field: 'param1', type: 'input' },
         {
-            label: 'Rx Pin', static: true, field: 'param2', type: 'select',
-            data: pinTable.filter(item => !['GND', 'CMD', '0'].includes(item))
+            label: 'UART bus name', static: true, field: 'param2', type: 'input',
         },
         {
-            label: 'Update Interval', static: true, field: 'param3', type: 'input', pre: (str) => str?.replace(/['"]+/g, ''), post: (str) => '"' + str + '"',
+            label: 'Update Interval', static: true, field: 'param3', type: 'input',
             error: !['s', 'ms'].includes(nodeData['param3']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         }
     ] as Field[]
