@@ -22,37 +22,40 @@ export default ({ nodeData = {}, item, node }) => {
         setNodeData(node.id, { ...nodeData, [field]: { ...data, key: fieldKey, value: val, kind: 'FalseKeyword' } })
     }
 
-    const ItemButton = ({ itemValue, onPress }) => (
-        <Button
+    const ToggleGroup = ({ defaultValue = false, values }) => <XStack
+        width="100%"
+        height='38px'
+        space="4px"
+        paddingHorizontal="2px"
+        backgroundColor={useTheme('inputBackgroundColor')}
+        alignItems='center'
+        justifyContent='space-around'
+        borderRadius="$2"
+    >
+        {values.map((v) => <ItemButton defaultValue={defaultValue} itemValue={v} onPress={onValueChange} />)}
+    </XStack>
+
+    const ItemButton = ({ itemValue, onPress, defaultValue = false }) => {
+        const isSelected = value == itemValue //|| !value && itemValue == defaultValue
+        return <Button
             onPress={() => onPress(itemValue)}
             f={1}
-            chromeless={!(value == itemValue)}
+            chromeless={!isSelected}
             size={"$3"}
             height="34px"
             borderRadius="$1"
             fontSize="$4"
         >
             <Text> {itemValue ? 'true' : 'false'} </Text>
-        </Button>)
+        </Button>
+    }
 
     const getInput = () => {
         switch (type) {
             case 'toggle-boolean':
             default:
                 return <>
-                    <XStack
-                        width="100%"
-                        height='38px'
-                        space="4px"
-                        paddingHorizontal="2px"
-                        backgroundColor={useTheme('inputBackgroundColor')}
-                        alignItems='center'
-                        justifyContent='space-around'
-                        borderRadius="$2"
-                    >
-                        <ItemButton itemValue={false} onPress={onValueChange} />
-                        <ItemButton itemValue={true} onPress={onValueChange} />
-                    </XStack>
+                    <ToggleGroup values={[false, true]} />
                 </>
         }
     }

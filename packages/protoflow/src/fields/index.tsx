@@ -4,7 +4,7 @@ import Text from '../diagram/NodeText'
 import AlignmentType, { getAlignmentTypes } from "./AlignmentFields";
 import ColorType, { getColorTypes } from "./ColorFields";
 import RangeType, { getRangeTypes } from "./RangeFields";
-import BooleanFields, { getToggleTypes } from "./ToggleFields";
+import ToggleFields, { getToggleTypes } from "./ToggleFields";
 
 export const getCustomFields = (data) => {
     const rawData = data.find(i => i.type == 'custom-field')?.data ?? []
@@ -36,8 +36,8 @@ export const CustomFieldType = ({ item, node, nodeData }) => {
         case 'range':
             return <RangeType node={node} item={item} nodeData={nodeData} />
 
-        case 'boolean':
-            return <BooleanFields node={node} item={item} nodeData={nodeData} />
+        case 'toggle':
+            return <ToggleFields node={node} item={item} nodeData={nodeData} />
 
         default:
             return <></>
