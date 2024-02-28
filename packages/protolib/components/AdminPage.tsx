@@ -2,13 +2,13 @@ import { useSession, Page, useUserSettings, useWorkspaces, Tinted, Search, usePr
 import dynamic from 'next/dynamic';
 import { addResponseMessage } from 'react-chat-widget'
 import { useEffect, useState } from 'react';
-import {AppState} from './AdminPanel'
-import { useAtom} from 'jotai';
+import { AppState } from './AdminPanel'
+import { useAtom } from 'jotai';
 
 const Chat = dynamic(() => import('protolib/components/Chat'), { ssr: false })
 
 // console.log('widget: ', Widget)
-export function AdminPage({ pageSession, title, children }: any) {
+export function AdminPage({ pageSession, title, children, integratedChat = true }: any) {
   useSession(pageSession)
   const [search, setSearch] = useState('')
   const [searchName, setSearchName] = useState('')
@@ -23,7 +23,7 @@ export function AdminPage({ pageSession, title, children }: any) {
         </AdminPanel>
       </SearchContext.Provider>
       <Tinted>
-        <Chat tags={['doc', title]} />
+        {integratedChat && <Chat tags={['doc', title]} />}
       </Tinted>
     </Page>
   )
