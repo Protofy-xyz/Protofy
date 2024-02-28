@@ -16,6 +16,7 @@ const ModbusLoadCell = dynamic(() => import('./ModbusLoadCell'))
 const SEN55 =  dynamic(() => import('./SEN55'))
 const MHZ19 =  dynamic(() => import('./MHZ19'))
 const UARTBus =  dynamic(() => import('./UARTBus'))
+const MPU6050 = dynamic(() => import('./MPU6050'))
 // import PulseCounter from "./PulseCounter";
 // import LEDCOutput from "./LEDCOutput";
 // import PIRSensor from "./PIRSensor"
@@ -263,13 +264,13 @@ const deviceMasks = [
   //   getComponent: SEN0377,
   //   getInitialData: () => { return { to: 'sen0377', param1: '""', param2: '22', param3: '"0x75"', param4: '"30s"'} }
   // },
-  // {
-  //   id: 'MPU6050',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mpu6050'),
-  //   getComponent: MPU6050,
-  //   getInitialData: () => { return { to: 'mpu6050', param1: '""', param2: '22', param3: '"0x68"', param4: '"30s"'} }
-  // },
+  {
+    id: 'MPU6050',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mpu6050'),
+    getComponent: (node, nodeData, children) => <MPU6050 node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'mpu6050', param1: '""', param2: '""', param3: '"0x68"', param4: '"30s"'} }
+  }, 
   // {
   //   id: 'I2cSensorMatrix',
   //   type: 'CallExpression',
