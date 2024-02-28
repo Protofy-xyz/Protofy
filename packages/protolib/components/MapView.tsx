@@ -1,20 +1,20 @@
-import { Paragraph, Stack, StackProps, Text, XStack, YStack } from "tamagui"
-import { useContext, useEffect, useMemo, useRef, useState } from "react"
+import { YStack, Stack, XStack, Paragraph, H2, StackProps, Text } from "@my/ui"
+import { AlertTriangle } from '@tamagui/lucide-icons'
+import { useContext, useMemo, useRef, useState } from "react"
 import { DataViewContext } from "./DataView"
 import Map, {
   Marker,
   Popup,
   NavigationControl,
   FullscreenControl,
-  ScaleControl,
   GeolocateControl
 } from 'react-map-gl';
 import { useThemeSetting } from '@tamagui/next-theme'
-import Center from "./Center"
 import { EditableObject } from "./EditableObject";
 import { getPendingResult } from "../base/PendingResult";
 import { Tinted } from "./Tinted";
 import { useTint } from "../lib/Tints";
+import Center from './Center'
 
 export const MapView = ({ ...props }: any & StackProps) => {
   const { resolvedTheme } = useThemeSetting()
@@ -38,7 +38,7 @@ export const MapView = ({ ...props }: any & StackProps) => {
     () =>
       locationItems.map((item, index) => (
         <Marker
-          color={"var(--"+tint+"10)"}
+          color={"var(--" + tint + "10)"}
           key={`marker-${index}`}
           longitude={item.location.lon}
           latitude={item.location.lat}
@@ -112,7 +112,20 @@ export const MapView = ({ ...props }: any & StackProps) => {
             </Popup>
 
           )}
-        </Map> : <Text>Mapview is disabled: Missing mapbox api key</Text>
+        </Map> :
+        <YStack flex={1} alignItems="center" justifyContent="center" space="$4" mt="$-10">
+          <Center>
+            <AlertTriangle size="$7" />
+            <H2 mt="$6">
+              <Text>Missing </Text>
+              <Tinted><Text color='var(--color10)'>API Key</Text></Tinted>
+            </H2>
+            <Paragraph ta="center" mt="$6" size={"$7"}>Map rendering is unavailable without a Mapbox access token.</Paragraph>
+            <Tinted>
+              <Paragraph ta="center" size={"$7"}>Please visit <a style={{ fontWeight: "bold", color: `var(--color10)` }} href="https://www.mapbox.com" target="_blank" rel="noopener noreferrer">Mapbox</a> to create your token and enable map features.</Paragraph>
+            </Tinted>
+          </Center>
+        </YStack>
       }
     </Stack >)
 }

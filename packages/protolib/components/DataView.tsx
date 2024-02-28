@@ -162,7 +162,7 @@ export function DataView({
                     } else if (sourceUrl) {
                         await API.get(`${_sourceUrl}/delete`);
                     }
-                    onDelete({sourceUrl: _sourceUrl, selected})
+                    onDelete({ sourceUrl: _sourceUrl, selected })
                 },
                 enableAddToInitialData,
                 extraMenuActions: extraMenuActions,
@@ -183,9 +183,9 @@ export function DataView({
                 icons,
                 ml: "$5",
                 deleteable: deleteable,
-                onDelete: async (sourceUrl) => { 
-                    await API.get(sourceUrl+'/delete')
-                    onDelete({sourceUrl, selected})
+                onDelete: async (sourceUrl) => {
+                    await API.get(sourceUrl + '/delete')
+                    onDelete({ sourceUrl, selected })
                 },
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 extraMenuActions: extraMenuActions,
@@ -200,7 +200,7 @@ export function DataView({
                 mt: "$8",
                 onDelete: async (key) => {
                     await API.get(`${sourceUrl}/${key}/delete`);
-                    onDelete({sourceUrl, selected, key})
+                    onDelete({ sourceUrl, selected, key })
                 },
                 ...dataTableRawProps
             }
@@ -220,12 +220,9 @@ export function DataView({
         }
     }
 
-
-    if(process.env.NEXT_PUBLIC_MAPBOX_TOKEN && process.env.NEXT_PUBLIC_MAPBOX_TOKEN !== "PUT_HERE_YOUR_API_KEY") {
-        const locationProps = model.load({}).getObjectSchema().is('location')
-        if(locationProps.getFields().length) {
-            defaultViews = [...defaultViews, mapView]
-        }
+    const locationProps = model.load({}).getObjectSchema().is('location')
+    if (locationProps.getFields().length) {
+        defaultViews = [...defaultViews, mapView]
     }
 
     const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))
