@@ -1679,5 +1679,128 @@
                 ]
             }
         ]
+    },
+    {
+        "id": "GithubIcon",
+        "title": "GithubIcon",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "GithubIcon"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "color",
+                        "field": "prop-color",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "color"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "type": "range-px",
+                        "staticLabel": true
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "type": "range-px",
+                        "staticLabel": true
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "data": []
+            }
+        ]
+    },
+    {
+        "id": "DiscordIcon",
+        "title": "DiscordIcon",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "DiscordIcon"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "color",
+                        "field": "prop-color",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "color"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "type": "range-px",
+                        "staticLabel": true
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "type": "range-px",
+                        "staticLabel": true
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "data": []
+            }
+        ]
+    },
+    {
+        "id": "TwitterIcon",
+        "title": "TwitterIcon",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "TwitterIcon"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "color",
+                        "field": "prop-color",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "color"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "fieldType": "prop",
+                        "type": "range-px",
+                        "staticLabel": true
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "fieldType": "prop",
+                        "type": "range-px",
+                        "staticLabel": true
+                    }
+                ]
+            },
+            {
+                "type": "child",
+                "data": []
+            }
+        ]
     }
 ]
