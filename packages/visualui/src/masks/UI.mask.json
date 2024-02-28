@@ -477,12 +477,20 @@
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
+                    },
+                    {
+                        "label": "opacity",
+                        "field": "prop-opacity",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range",
+                        "data": {
+                            "max": 1,
+                            "step": 0.1
+                        },
+                        "section": "decoration"
                     }
                 ]
-            },
-            {
-                "type": "child",
-                "data": []
             }
         ]
     },
