@@ -21,7 +21,8 @@ export default ({ nodeData, maskType }: Props) => {
         return {
             label: nodeData[k].key,
             field: nodeData[k].key,
-            fieldType: 'prop'
+            fieldType: 'prop',
+            staticLabel: true
         }
     })
     const [maskBodyData, setMaskBodyData] = useState<BodyDataProps[]>(initialData)
@@ -40,7 +41,6 @@ export default ({ nodeData, maskType }: Props) => {
             field: newField,
             fieldType: 'prop',
             staticLabel: true
-
         }
         if (newType) {
             newData.type = newType
@@ -108,14 +108,7 @@ export default ({ nodeData, maskType }: Props) => {
                     },
                     {
                         "type": "child",
-                        "data": [
-                            {
-                                "label": "Child1",
-                                "field": "child-1",
-                                "fieldType": "child",
-                                "type": "child"
-                            }
-                        ]
+                        "data": []
                     }
                 ]
             }
