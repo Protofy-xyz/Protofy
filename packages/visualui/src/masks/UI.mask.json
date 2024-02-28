@@ -447,20 +447,19 @@
                         "section": "media"
                     },
                     {
-                        "label": "margin",
-                        "field": "prop-margin",
+                        "label": "resizeMode",
+                        "field": "prop-resizeMode",
                         "fieldType": "prop",
                         "staticLabel": true,
-                        "type": "range-theme",
-                        "section": "layout"
-                    },
-                    {
-                        "label": "alignSelf",
-                        "field": "prop-alignSelf",
-                        "fieldType": "prop",
-                        "staticLabel": true,
-                        "type": "alignment-items",
-                        "section": "layout"
+                        "type": "select",
+                        "data": [
+                            "center",
+                            "contain",
+                            "cover",
+                            "repeat",
+                            "stretch"
+                        ],
+                        "section": "dimensions"
                     },
                     {
                         "label": "width",
@@ -477,6 +476,22 @@
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
                     },
                     {
                         "label": "opacity",
@@ -1325,6 +1340,27 @@
                         "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontWeight",
+                        "field": "prop-fontWeight",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "100",
+                            "200",
+                            "300",
+                            "400",
+                            "500",
+                            "600",
+                            "700",
+                            "800",
+                            "900",
+                            "bold",
+                            "normal"
+                        ],
                         "section": "basic"
                     },
                     {
