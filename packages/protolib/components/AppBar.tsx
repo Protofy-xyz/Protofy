@@ -22,7 +22,7 @@ export type AppBarProps = {
   backgroundColor?: string
 }
 
-export const AppBar = React.forwardRef(({ backgroundColor = "$background", containerProps = {}, height = undefined, fullscreen = false, translucid = true, dettached = true, position = 'top', ...props }: AppBarProps, ref: any) => {
+export const AppBar = React.forwardRef(({ backgroundColor, containerProps = {}, height = undefined, fullscreen = false, translucid = true, dettached = true, position = 'top', ...props }: AppBarProps, ref: any) => {
   const [isScrolled, setIsScrolled] = React.useState(false)
   const headerContainerRef = React.useRef(null)
 
