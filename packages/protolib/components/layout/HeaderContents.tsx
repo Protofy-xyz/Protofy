@@ -38,7 +38,7 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
             
 
             <TooltipGroup delay={tooltipDelay}>
-              <XGroup boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
+              <XGroup boc="$color2" bw={themeSwitcher && tintSwitcher ? 1: undefined} mah={32} bc="transparent" ai="center" size="$3">
                 {themeSwitcher && <XGroup.Item>
                   <ThemeToggle borderWidth={0} chromeless />
                 </XGroup.Item>}
