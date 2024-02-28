@@ -39,23 +39,24 @@ export const AppBar = React.forwardRef(({ backgroundColor = "$background", conta
   }
 
   const getContent = () => (<XStack
-      ref={ref}
-      alignItems="center"
-      tag="header"
-      justifyContent="space-between"
-      position="relative"
-      paddingHorizontal={props.floating ? 0 : '$2'}
-      zIndex={50000}
-    >
-      {React.useMemo(
-        () => props.children,
-        [props, translucid, position]
-      )}
-    </XStack>
-)
+    ref={ref}
+    alignItems="center"
+    tag="header"
+    justifyContent="space-between"
+    position="relative"
+    paddingHorizontal={props.floating ? 0 : '$2'}
+    zIndex={50000}
+  >
+    {React.useMemo(
+      () => props.children,
+      [props, translucid, position]
+    )}
+  </XStack>
+  )
   return (
     <>
       <XStack
+        backgroundColor={backgroundColor}
         // @ts-ignore
         ref={headerContainerRef}
         pos="fixed"
