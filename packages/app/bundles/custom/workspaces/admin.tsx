@@ -1,7 +1,7 @@
 import { Cog, Inbox, Library, ToyBrick } from '@tamagui/lucide-icons'
 
 export default {
-    "default": "/admin/events",
+    "default": "/admin/pages",
     "label": "Workspace",
     "menu": {
         "System": [
