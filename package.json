@@ -10,7 +10,6 @@
   "scripts": {
     "service-start": "NODE_ENV=production pm2 start ecosystem.config.js && yarn monit",
     "service-start-dev": "yarn prepare-dev && node prepare.js && yarn pre-build && yarn service-start-dev-fast",
-    "dev-full": "FULLDEV=1 yarn dev",
     "dev": "yarn service-start-dev",
     "prod": "yarn service-start",
     "dev-latest": "yarn service-start-dev-latest",
@@ -19,8 +18,6 @@
     "service-start-dev-fast": "pm2 start ecosystem.config.js && yarn monit",
     "start": "yarn start-dev",
     "start-prod": "NODE_ENV=production pm2 start ecosystem.config.js --no-daemon",
-    "start-dev-full": "FULLDEV=1 yarn start-dev",
-    "start-dev-full-fast": "FULLDEV=1 yarn start-dev-fast",
     "start-dev": "yarn prepare-dev && node prepare.js && yarn pre-build && yarn start-dev-fast",
     "start-dev-latest": "yarn prepare-dev && node prepare.js --latest && yarn pre-build && yarn start-dev-fast",
     "start-dev-fast": "pm2 start ecosystem.config.js --no-daemon",
