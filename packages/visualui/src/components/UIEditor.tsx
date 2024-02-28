@@ -82,7 +82,11 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 const previousImports = astContent.getImportDeclarations();
                 const missingJsxImports = getMissingJsxImports(data.nodes, data.nodesData, resolveComponentsDir)
                 if (missingJsxImports.length) {
-                    const missingJsxImportsText = missingJsxImports.reduce((total, impData) => {
+                    const filteredMissingJsxImports = missingJsxImports.filter((imp, index, arr) =>
+                        index === arr.findIndex((t) => (
+                            JSON.stringify(t) === JSON.stringify(imp)
+                        )))
+                    const missingJsxImportsText = filteredMissingJsxImports.reduce((total, impData) => {
                         let impText;
                         let moduleSpecifier = impData.moduleSpecifier;
                         if (!moduleSpecifier) {
@@ -278,16 +282,16 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
 
     // for outside context usage
     const options = {
-      resolver: availableCraftComponents, 
-      onRender: RenderNode
+        resolver: availableCraftComponents,
+        onRender: RenderNode
     }
     const context = newVisualUiContext(options)
-    if (setContext)  setContext(context) // atom shared context
+    if (setContext) setContext(context) // atom shared context
 
     return <div ref={editorRef} style={{ display: 'flex', flex: 1, width: '100%' }}>
         <Editor
-          {...options}
-          parentContext={context}
+            {...options}
+            parentContext={context}
         >
             <div style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                 <MainPanel
