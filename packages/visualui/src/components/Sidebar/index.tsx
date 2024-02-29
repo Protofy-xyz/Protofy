@@ -65,7 +65,7 @@ export const Sidebar = ({
 
 
     return (
-        <div className={'visualui-sidebar'} style={{ backgroundColor: 'rgb(37, 37, 38)' }}>
+        <div className={'visualui-sidebar'} style={{ backgroundColor: 'rgb(37, 37, 38, 0.97)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '4px' }}>
                 <div ref={viewRef} style={{ padding: '4px', display: 'flex', flexDirection: "column", flex: 1 }}>
                     <p style={{ padding: '18px 0px 0px 14px', fontSize: '18px', color: 'white', fontWeight: '400' }}>Components</p>
