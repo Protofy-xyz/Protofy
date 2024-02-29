@@ -36,7 +36,7 @@ const Popover = ({ children, trigger }) => {
                     <div
                         ref={popoverRef}
                         style={{
-                            position: 'fixed', width: '250px', height: '380px',
+                            position: 'fixed', width: '250px',
                             top: 0, left: '50%', zIndex: 10000, backgroundColor: '#fff',
                             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", padding: '10px',
                             borderRadius: '4px', minWidth: '200px', transform: 'translateX(-50%)'
