@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import Node, { FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import Button from '../Button';
 import Link from '../Link';
 import { MessageSquare } from 'lucide-react'
+import { FlowStoreContext } from '../store/FlowsStore';
+import NodeSelect from '../diagram/NodeSelect';
+import { CustomField } from '../fields';
 
 const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const [result, setResult] = React.useState("")
+    const [apiRes, setApiRes] = React.useState()
+
+    const useFlowsStore = useContext(FlowStoreContext)
+    const setNodeData = useFlowsStore(state => state.setNodeData)
+
+    // TODO: Refactor api case
+    const apiType = mask.data.body.find(e => e.type == 'api')
+    if (apiType) {
+        useEffect(() => {
+            const apiUrl = apiType.data.apiUrl
+            fetch(apiUrl).then(response => response.json())
+                .then(data => {
+                    setApiRes(data)
+                })
+        }, [])
+    }
+
     return (
         <Node icon={MessageSquare} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color="#BCAAA4" skipCustom={true}>
             {
@@ -23,6 +43,27 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         }
                         case 'redirect': {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
+                        }
+                        case 'api': { // TODO: Refactor this type and make it generic
+                            const apiList = apiRes?.map(a => ({ label: a.path, value: `"` + a.path + `"` })) ?? []
+                            const field = element.data.field
+                            const fieldValue = nodeData[field]
+                            const onChangeSelect = (data) => {
+                                setNodeData(node.id, { ...nodeData, [field]: data.value })
+                            }
+                            console.log('DEV: fieldValue: ', { fieldValue, apiList })
+                            return <>
+                                <CustomField label={element.data.label} input={
+                                    apiList.length && fieldValue ? <NodeSelect
+                                        onChange={onChangeSelect}
+                                        defaultValue={{
+                                            value: fieldValue,
+                                            label: fieldValue
+                                        }}
+                                        options={apiList}
+                                    /> : <></>
+                                } />
+                            </>
                         }
                         case 'link': {
                             return <>

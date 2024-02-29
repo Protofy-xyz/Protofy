@@ -26,10 +26,8 @@ export const BaseJSMasks = [
     },
     "body": [
       {
-        "type": "params",
-        "params": [
-          { label: "url", field: "param1", type: "input" }
-        ],
+        "type": "api",
+        "data": { label: "url", field: "param1", apiUrl: "api/v1/endpoints" }
       },
       {
         "type": "link",
