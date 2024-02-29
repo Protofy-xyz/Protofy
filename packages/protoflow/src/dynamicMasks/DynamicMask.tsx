@@ -2,6 +2,7 @@ import React from 'react';
 import Node, { FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import Button from '../Button';
+import Link from '../Link';
 import { MessageSquare } from 'lucide-react'
 
 const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
@@ -23,21 +24,26 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         case 'redirect': {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
                         }
+                        case 'link': {
+                            return <>
+                                <Link target="_blank" href={element.data.url}>{element.data.text}</Link>
+                            </>
+                        }
                         case 'button': {
                             return <>
-                            <Button onPress={async () => {
-                                const func = new Function('data', `
+                                <Button onPress={async () => {
+                                    const func = new Function('data', `
                                     return (async () => {
                                         ${element.params.onPress}
                                     })();
                                 `);
-                                const result = await func(nodeData)
-                                setResult(result)
-                                console.log("result: ", result)
-                            }} label={element.params.label}></Button>
-                            {result && element.params.displayResult?<>
-                                <textarea style={{width:"100%", height: "150px", fontSize: "20px"}}>{JSON.stringify(result)}</textarea>
-                            </>:null}
+                                    const result = await func(nodeData)
+                                    setResult(result)
+                                    console.log("result: ", result)
+                                }} label={element.params.label}></Button>
+                                {result && element.params.displayResult ? <>
+                                    <textarea style={{ width: "100%", height: "150px", fontSize: "20px" }}>{JSON.stringify(result)}</textarea>
+                                </> : null}
                             </>
                         }
                     }

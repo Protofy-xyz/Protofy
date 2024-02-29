@@ -29,7 +29,14 @@ export const BaseJSMasks = [
         "type": "params",
         "params": [
           { label: "url", field: "param1", type: "input" }
-        ]
+        ],
+      },
+      {
+        "type": "link",
+        "data": {
+          "text": "Need to create an API?",
+          "url": "/admin/apis"
+        }
       }
     ],
     "initialData": { to: 'actionFetch', param1: '"adminapi/v1/apis"' }
