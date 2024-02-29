@@ -1,18 +1,14 @@
 import { ThemeToggle, GithubIcon, HeaderLink, NextLink, ColorToggleButton, LogoIcon, Session} from 'protolib'
 import * as React from 'react'
 import {
-  Text,
   TooltipGroup,
-  TooltipSimple,
-  VisuallyHidden,
   XGroup,
   XStack,
-  YStack,
 } from 'tamagui'
 
 
 export type HeaderContentsProps = {
-  logoSize?: number,  
+  logoSize?: number,
   menu?: any,
   centerArea?: string,
   logo?: any
@@ -29,26 +25,25 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
   return (
     <>
       <XStack ai="center" space="$4">
+        {(logo || themeSwitcher || tintSwitcher) &&
           <XStack f={1} minWidth={210}>
-              <NextLink href={logoHref}>
-                <XStack py={logoSize/4} ai="center" px="$3" cur="pointer" my={-20}>
-                  {logo}
-                </XStack>
-              </NextLink>
-            
-
-            <TooltipGroup delay={tooltipDelay}>
-              <XGroup boc="$color2" bw={themeSwitcher || tintSwitcher ? 1: undefined} mah={32} bc="transparent" ai="center" size="$3">
-                {themeSwitcher && <XGroup.Item>
-                  <ThemeToggle borderWidth={0} chromeless />
-                </XGroup.Item>}
-                {tintSwitcher && <XGroup.Item>
-                  <ColorToggleButton borderWidth={0} chromeless />
-                </XGroup.Item> }
-              </XGroup>
-            </TooltipGroup>
-          </XStack>
-          {leftArea}
+            {logo && <NextLink href={logoHref}>
+              <XStack py={logoSize/4} ai="center" px="$3" cur="pointer" my={-20}>
+                {logo}
+              </XStack>
+            </NextLink>}{(themeSwitcher || tintSwitcher) &&
+              <TooltipGroup delay={tooltipDelay}>
+                <XGroup boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
+                  {themeSwitcher && <XGroup.Item>
+                    <ThemeToggle borderWidth={0} chromeless />
+                  </XGroup.Item>}
+                  {tintSwitcher && <XGroup.Item>
+                    <ColorToggleButton borderWidth={0} chromeless />
+                  </XGroup.Item> }
+                </XGroup>
+              </TooltipGroup>}
+          </XStack>}
+        {leftArea}
       </XStack>
 
 
@@ -77,8 +72,8 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
         marginRight="$3"
       >
         <XStack ai="center" space="$3">
-            {rightArea}
-            {menu}
+          {rightArea}
+          {menu}
         </XStack>
       </XStack>
     </>
