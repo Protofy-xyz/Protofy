@@ -30,10 +30,10 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     const themeBorderColor = useTheme('borderColor')
     const borderColor = isError ? colorError : themeBorderColor
     const borderWidth = useTheme('borderWidth')
-    const borderWidthSelected = useTheme('borderWidthSelected')
     const themeBackgroundColor = useTheme('nodeBackgroundColor')
     const isHover = useHover(flexRef)
     const titleSize = (useTheme('nodeFontSize') / 100) * 100
+    const selectedColor = useTheme('selectedColor')
 
     const innerRadius = '12px '
     const innerBorderRadius = (mode == 'column' ? innerRadius + innerRadius + ' 0px 0px' : innerRadius + '0px 0px ' + innerRadius)
@@ -45,6 +45,13 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
         nodeStyle['overflow'] = 'scroll'
         nodeStyle['overflowX'] = 'hidden'
     }
+
+    const getNodeShadow = () => {
+        if (isNodePreviewMode) return 'none'
+        else if (!isPreview && node?.selected) return "0px 0px 0px 2px " + selectedColor
+        else return generateBoxShadow(container ? 0 : isHover ? 10 : 3)
+    }
+
     return (
         <div
             id={id}
@@ -53,14 +60,10 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
             style={{
                 //@ts-ignore
                 display: 'flex', minHeight: !isPreview ? "80px" : "30px", flexDirection: mode,
-                // border: currentBorder + "px solid " + borderColor,
-                // position: 'relative',
-                // top: '-'+currentBorder+'px',
-                // left: '-'+currentBorder+'px',
                 borderRadius: 13,
                 textAlign: "center",
                 fontSize: useTheme('nodeFontSize'),
-                boxShadow: isNodePreviewMode ? "none" : generateBoxShadow(container ? 0 : isHover ? 10 : !isPreview && node?.selected ? 10 : 3),
+                boxShadow: getNodeShadow(),
                 cursor: isNodePreviewMode ? 'default' : undefined,
                 ...style,
             }}
