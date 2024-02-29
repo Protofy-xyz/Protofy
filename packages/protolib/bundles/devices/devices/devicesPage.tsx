@@ -118,7 +118,13 @@ export default {
       const componentsTree = deviceObj.getComponentsTree(deviceName, deviceDefinition)
       const yaml = deviceObj.dump("yaml")
       const subsystems = deviceObj.getSubsystemsTree(deviceName, deviceDefinition)
-      API.post("/adminapi/v1/devices/" + deviceName, { subsystem: subsystems, deviceDefinition: deviceDefinitionId })
+      const deviceObject = await API.get("/adminapi/v1/devices/" + deviceName)
+      if (deviceObject.isError) {
+        alert(deviceObject.error)
+        return;
+      }
+      deviceObject.data.subsystem = subsystems
+      API.post("/adminapi/v1/devices/" + deviceName,  deviceObject.data )
       console.log("ComponentsTree: ", componentsTree)
       console.log("Subsystems: ", subsystems)
       yamlRef.current = yaml
