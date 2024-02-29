@@ -108,6 +108,14 @@
                         "section": "layout"
                     },
                     {
+                        "label": "textColor",
+                        "field": "prop-textColor",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "color",
+                        "section": "layout"
+                    },
+                    {
                         "label": "margin",
                         "field": "prop-margin",
                         "fieldType": "prop",

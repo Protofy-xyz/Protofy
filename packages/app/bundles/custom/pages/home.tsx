@@ -107,7 +107,7 @@ const Home = (props) => {
               <Theme reset>
                 <ButtonSimple>
                   <GithubIcon width="16" />
-                  <Text fontFamily="$silkscreen" fontSize="$4"> Star plz </Text>
+                  <Text marginHorizontal="$2" fontFamily="$silkscreen" fontSize="$4"> Star plz </Text>
                   <Star width="13" />
                 </ButtonSimple>
               </Theme>

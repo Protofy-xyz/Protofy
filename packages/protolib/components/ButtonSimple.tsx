@@ -1,18 +1,19 @@
-import { ButtonProps, Button } from "tamagui"
+import { ButtonProps, Button, Text } from "tamagui"
 import React from 'react'
 
-const ButtonSimple = React.forwardRef((props:ButtonProps, ref:any) => (
+const ButtonSimple = React.forwardRef(({textColor = undefined, fontFamily = "$silkscreen", ...props}: ButtonProps & any, ref: any) => (
     <Button
         //@ts-ignore
         ref={ref}
         borderRadius="$10"
         size="$3"
         elevate
-        fontFamily="$silkscreen"
         space="$3"
         {...props}
     >
-        {props.children}
+        <Text color={textColor} fontFamily={fontFamily} display="flex" alignItems="center">
+            {props.children}
+        </Text>
     </Button>
 ))
 
