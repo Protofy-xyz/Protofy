@@ -32,10 +32,9 @@ import PhantomBox from './PhantomBox'
 import TypeAliasDeclaration from './TypeAliasDeclaration';
 import InterfaceDeclaration from './InterfaceDeclaration';
 import ObjectBindingPattern from './ObjectBindingPattern';
-import JsxElement from './JsxElement';
+import { JsxElementFactory } from './JsxElement';
 import JsxExpression from './JsxExpression';
 import JsxFragment from './JsxFragment';
-import JsxSelfClosingElement from './JsxSelfClosingElement';
 import { ForXStatementFactory } from './ForXStatement';
 import DeleteExpression from './DeleteExpression';
 import SpreadAssignment from './SpreadAssignment';
@@ -86,10 +85,10 @@ const UINodeTypes = {
     TypeAliasDeclaration: TypeAliasDeclaration,
     InterfaceDeclaration: InterfaceDeclaration,
     ObjectBindingPattern: ObjectBindingPattern,
-    JsxElement: JsxElement,
+    JsxElement: JsxElementFactory('JsxElement'),
     JsxExpression: JsxExpression,
     JsxFragment: JsxFragment,
-    JsxSelfClosingElement: JsxSelfClosingElement,
+    JsxSelfClosingElement: JsxElementFactory('JsxSelfClosingElement'),
     DeleteExpression: DeleteExpression,
     SpreadAssignment: SpreadAssignment,
     CaseClause: Block,

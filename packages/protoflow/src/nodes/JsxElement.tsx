@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { memo, useContext } from 'react';
 import { dumpConnection, connectItem, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
 import { nodeColors } from '.';
@@ -9,133 +9,140 @@ import { Code } from 'lucide-react';
 import { DEV_WIP_GM } from '../toggles';
 import CreateMaskButton from '../CreateMaskButton';
 
-const JsxElement = (node) => {
-    const { id, type } = node
-    const useFlowsStore = useContext(FlowStoreContext)
-    const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
+export const JsxElementFactory = (JsxType) => {
+    const isSelfClosingElement = JsxType == 'JsxSelfClosingElement'
 
-    const name = [
-        { label: 'TagName', static: true, field: 'name', type: 'input', description: 'JsxElement name' },
-    ] as Field[]
+    const component = (node) => {
+        const { id, type } = node
+        const useFlowsStore = useContext(FlowStoreContext)
+        const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
-    const props: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('prop-')).map((prop: any, i) => {
-        return { label: prop.substr(5), field: prop, fieldType: 'prop', deleteable: true } as Field
-    })
+        const name = [
+            { label: 'TagName', static: true, field: 'name', type: 'input', description: 'JsxElement name' },
+        ] as Field[]
 
-    const childs: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('child-')).map((prop: any, i) => {
-        return { label: 'Child' + (i + 1), field: prop, fieldType: 'child', deleteable: true } as Field
-    })
+        const props: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('prop-')).map((prop: any, i) => {
+            return { label: prop.substr(5), field: prop, fieldType: 'prop', deleteable: true } as Field
+        })
 
-    const nodeParamsProps: Field[] = name.concat(props)
-    const nodeParamsChilds: Field[] = childs
+        const childs: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('child-')).map((prop: any, i) => {
+            return { label: 'Child' + (i + 1), field: prop, fieldType: 'child', deleteable: true } as Field
+        })
 
-    return (
-        <Node headerContent={<div>hello</div>} icon={Code} node={node} isPreview={!id} title={"<x ...></x>"} id={id} color={nodeColors[type]}>
-            {
-                DEV_WIP_GM && <CreateMaskButton nodeData={nodeData} maskType='JsxElement' />
-            }
-            <NodeParams id={id} params={nodeParamsProps} />
-            <AddPropButton id={id} nodeData={nodeData} type={"Prop"} />
-            <NodeParams id={id} params={nodeParamsChilds} />
-            <AddPropButton id={id} nodeData={nodeData} type={"Child"} />
-        </Node>
-    );
-}
-JsxElement.keyWords = ["jsx", "jsxelement", "react", "tsx", "fragment", "selfclosed"]
+        const nodeParamsProps: Field[] = name.concat(props)
+        const nodeParamsChilds: Field[] = childs
 
-JsxElement.getData = (node, data, nodesData, edges) => {
+        return (
+            <Node headerContent={<div>hello</div>} icon={Code} node={node} isPreview={!id} title={"<x ...></x>"} id={id} color={nodeColors[type]}>
+                {
+                    DEV_WIP_GM && <CreateMaskButton nodeData={nodeData} maskType='JsxElement' />
+                }
+                <NodeParams id={id} params={nodeParamsProps} />
+                <AddPropButton id={id} nodeData={nodeData} type={"Prop"} />
+                <NodeParams id={id} params={nodeParamsChilds} />
+                <AddPropButton id={id} nodeData={nodeData} type={"Child"} />
+            </Node>
+        );
+    }
 
-    const tagName = { name: node?.getOpeningElement()?.getTagNameNode()?.getText() };
-    const jsxAttributes = node?.getOpeningElement()?.getAttributes();
+    component.keyWords = ["jsx", "jsxelement", "react", "tsx", "fragment", "selfclosed"]
+    component.getData = (node, data, nodesData, edges) => {
 
-    const props = jsxAttributes?.reduce((obj, attribute, i) => {
-        let sourceKey
-        let sourceValue
-        let propName
-        let attrData
+        // const tagName = { name: node?.getTagNameNode()?.getText() }
+        const tagName = { name: isSelfClosingElement ? node?.getTagNameNode()?.getText() : node?.getOpeningElement()?.getTagNameNode()?.getText() };
+        const jsxAttributes = isSelfClosingElement ? node?.getAttributes() : node?.getOpeningElement()?.getAttributes();
 
-        if (attribute.getKindName() == "JsxSpreadAttribute") {
-            propName = 'prop-spreaded-' + i;
-            sourceKey = '';
-            attrData = {
-                value: attribute.getText()
-            }
-        } else {
-            var initializer = attribute?.getInitializer()
-            attrData = getAttributeData(initializer)
-            sourceKey = attribute.getNameNode().getText()
-            propName = 'prop-' + sourceKey
+        const props = jsxAttributes?.reduce((obj, attribute, i) => {
+            let sourceKey
+            let propName
+            let attrData
 
-            if (!attrData) {
+            if (attribute.getKindName() == "JsxSpreadAttribute") {
+                propName = 'prop-spreaded-' + i;
+                sourceKey = '';
                 attrData = {
-                    value: connectItem(initializer?.getExpression(), 'output', node, propName, data, nodesData, edges, propName) ?? ''
+                    value: attribute.getText()
+                }
+            } else {
+                var initializer = attribute?.getInitializer()
+                attrData = getAttributeData(initializer)
+                sourceKey = attribute.getNameNode().getText()
+                propName = 'prop-' + sourceKey
+
+                if (!attrData) {
+                    attrData = {
+                        value: connectItem(initializer?.getExpression(), 'output', node, propName, data, nodesData, edges, propName) ?? ''
+                    }
                 }
             }
-        }
-        return {
-            ...obj,
-            [propName]: {
-                key: sourceKey ?? '',
-                ...attrData
+            return {
+                ...obj,
+                [propName]: {
+                    key: sourceKey ?? '',
+                    ...attrData
+                }
             }
-        }
-    }, {})
+        }, {})
 
-    const childSyntaxList = node.getChildrenOfKind(SyntaxKind.SyntaxList)[0];
-    const children = childSyntaxList.getChildren();
-    const jsxChilds = children.filter(c => ['JsxElement', 'JsxSelfClosingElement', 'JsxExpression', 'JsxFragment', 'JsxText'].includes(c.getKindName()) && c.getText())
-    const childs = jsxChilds?.reduce((obj, child, i) => {
-        const key = `child-${i + 1}`
-        return {
-            ...obj,
-            [key]: connectItem(child, 'output', node, key, data, nodesData, edges, key)
-        }
-    }, {})
+        const childSyntaxList = node.getChildrenOfKind(SyntaxKind.SyntaxList)[0];
+        const children = !isSelfClosingElement ? childSyntaxList.getChildren() : [];
+        const jsxChilds = children.filter(c => ['JsxElement', 'JsxSelfClosingElement', 'JsxExpression', 'JsxFragment', 'JsxText'].includes(c.getKindName()) && c.getText())
+        const childs = jsxChilds?.reduce((obj, child, i) => {
+            const key = `child-${i + 1}`
+            return {
+                ...obj,
+                [key]: connectItem(child, 'output', node, key, data, nodesData, edges, key)
+            }
+        }, {})
 
-    return { ...tagName, ...props, ...childs }
-}
+        return { ...tagName, ...props, ...childs }
+    }
 
-JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level = 0) => {
-    const data = nodesData[node.id] ?? {};
-    const jsxTagName = data?.name
-    const fallbackText = data._fallBack?.reduce((total, fb) => {
-        const content = dumpConnection(node, fb.type, fb.fallbackPort, fb.portType, null, edges, nodes, nodesData, metadata, false, 'full')
-        if (!content) {
-            return total = total + fb.fallbackText + " "
-        } else {
-            return total = total + (fb.preText + content + fb.postText) + " "
-        }
-    }, "") ?? ''
-    const fallbackProps = data._fallBack?.map(i => i.port) ?? []
-    const props = Object.keys(data).filter(key => key.startsWith('prop-') && !fallbackProps.includes(key)).reduce((total, prop) => {
-        let objParam
-        if (prop.startsWith("prop-spreaded")) {
-            objParam = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-        } else {
-            let objKey = data[prop]?.key ?? prop.replace('prop-', '')
-            let objValue
-            const dumpedAttr = dumpAttributeData(data[prop])
-            if (dumpedAttr) {
-                objValue = dumpedAttr
+    component.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level = 0) => {
+        const data = nodesData[node.id] ?? {};
+        const jsxTagName = data?.name
+        const fallbackText = data._fallBack?.reduce((total, fb) => {
+            const content = dumpConnection(node, fb.type, fb.fallbackPort, fb.portType, null, edges, nodes, nodesData, metadata, false, 'full')
+            if (!content) {
+                return total = total + fb.fallbackText + " "
             } else {
-                const dumpVal = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-                objValue = dumpVal ? ("{" + dumpVal + "}") : undefined
+                return total = total + (fb.preText + content + fb.postText) + " "
             }
-            objParam = objValue ? `${objKey}=${objValue} ` : `${objKey}`
-            if (!objKey) return total
-        }
-        return total + objParam
-    }, "")
-    const childs = Object.keys(data).filter(key => key.startsWith('child-')).reduce((total, child) => {
-        let childValue = dumpConnection(node, "target", child, PORT_TYPES.data, data[child] ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-        return total + "\t" + childValue + "\n"
-    }, "")
-    return `<${jsxTagName} ` + fallbackText + props + `>\n${childs}</${jsxTagName}>` + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+        }, "") ?? ''
+        const fallbackProps = data._fallBack?.map(i => i.port) ?? []
+        const props = Object.keys(data).filter(key => key.startsWith('prop-') && !fallbackProps.includes(key)).reduce((total, prop) => {
+            let objParam
+            if (prop.startsWith("prop-spreaded")) {
+                objParam = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            } else {
+                let objKey = data[prop]?.key ?? prop.replace('prop-', '')
+                let objValue
+                const dumpedAttr = dumpAttributeData(data[prop])
+                if (dumpedAttr) {
+                    objValue = dumpedAttr
+                } else {
+                    const dumpVal = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+                    objValue = dumpVal ? ("{" + dumpVal + "}") : undefined
+                }
+                objParam = objValue ? `${objKey}=${objValue} ` : `${objKey}`
+                if (!objKey) return total
+            }
+            return total + objParam
+        }, "")
+        const childs = Object.keys(data).filter(key => key.startsWith('child-')).reduce((total, child) => {
+            let childValue = dumpConnection(node, "target", child, PORT_TYPES.data, data[child] ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            return total + "\t" + childValue + "\n"
+        }, "")
+        const elementClosing = isSelfClosingElement ? "/>" : `>\n${childs}</${jsxTagName}>`
+        return `<${jsxTagName} ` + fallbackText + props + elementClosing + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+    }
+    return component
 }
 
-export default React.memo(JsxElement)
+const JsxElementNode = JsxElementFactory('JsxElement')
 
-// TODO: export function to protolib
+export default memo(JsxElementNode)
+
 export function getKindName(value) {
     switch (typeof value) {
         case 'number':
@@ -149,7 +156,7 @@ export function getKindName(value) {
     }
 }
 // TODO: export function to protolib
-export function dumpAttributeData(attrData: { kind: string, value: any }): any {
+function dumpAttributeData(attrData: { kind: string, value: any }): any {
     if (!attrData) return
     const expressionKind = attrData.kind
     var value = attrData.value
@@ -166,7 +173,7 @@ export function dumpAttributeData(attrData: { kind: string, value: any }): any {
     return "{" + value + "}"
 }
 // TODO: export function to protolib
-export function getAttributeData(node: any): any {
+function getAttributeData(node: any): any {
     let atrVal
     var attributeKind = node?.getKindName()
     var kind
