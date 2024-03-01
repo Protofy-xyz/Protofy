@@ -89,7 +89,6 @@ export function DataView({
     onAddButton = undefined,
     extraMenuActions = [],
     deleteable = () => { return true },
-    integratedChat = false,
     objectProps = {},
     refreshOnHotReload = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {

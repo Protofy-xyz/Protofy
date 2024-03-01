@@ -20,7 +20,6 @@ export default {
     component: ({pageState, initialItems, pageSession, extraData}:any) => {
         return (<AdminPage title="{{object}}" pageSession={pageSession}>
             <DataView
-                integratedChat
                 sourceUrl={sourceUrl}
                 initialItems={initialItems}
                 numColumnsForm={1}
