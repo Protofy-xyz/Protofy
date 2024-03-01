@@ -13,7 +13,7 @@ import { Search } from 'lucide-react'
 
 const pokayokeEnabled = POKAYOKE_ENABLED ?? false
 
-export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customComponents = [], style = {}, diagramNodes, setNodes, setNodeData, edges, setEdges, takeSnapshot = () => null, reactFlowWrapper = null, topics, onAddNode = (node: any, newEdge: any, initialData: any) => null, onEditDiagram = (nodes, edges, focus) => { } }) => {
+export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customComponents = [], style = {}, diagramNodes, setNodes, setNodeData, nodeData, edges, setEdges, takeSnapshot = () => null, reactFlowWrapper = null, topics, onAddNode = (node: any, newEdge: any, initialData: any) => null, onEditDiagram = (nodes, edges, focus) => { } }) => {
     const panelRef = useRef()
     const inputRef = useRef()
     const scrollRef: any = useRef()
@@ -97,6 +97,7 @@ export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customCom
         var newEdges = []
         var initialData = {}
         var edgesToDelete = []
+
         if (customNode) {
             initialData = customNode.getInitialData()
             setNodeData(id, initialData)
@@ -107,16 +108,21 @@ export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customCom
             newEdges.push(...splitOpenerEdge(menuOpener, id, defaultHandle))
             edgesToDelete.push(menuOpener.edgeId)
         } else {
+            const target = menuOpener.target
+
             const newEdge = {
                 animated: false,
                 id: generateId(),
                 source: id,
                 sourceHandle: id + '-output',
-                target: menuOpener.target,
+                target: target,
                 targetHandle: menuOpener.targetHandle,
                 type: 'custom'
             }
             newEdges.push(newEdge)
+            if (!nodeData[target].hasOwnProperty(handleTypeOpener)) {
+                setNodeData(target, { [handleTypeOpener]: undefined })
+            }
             onAddNode(newNode[0], newEdge, initialData) // createNode returns array, get frist position
         }
 

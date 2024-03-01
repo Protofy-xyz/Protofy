@@ -78,9 +78,9 @@ JsxSelfClosingElement.dump = (node, nodes, edges, nodesData, metadata = null, en
         if(prop.startsWith("prop-spreaded")) {
             objParam =  dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
         } else {
-            let objKey = data[prop].key
-            const dumpedAttr = dumpAttributeData(data[prop])
+            let objKey = data[prop]?.key ?? prop.replace('prop-', '')
             let objValue
+            const dumpedAttr = dumpAttributeData(data[prop])
             if (dumpedAttr) {
                 objValue = dumpedAttr
             } else {

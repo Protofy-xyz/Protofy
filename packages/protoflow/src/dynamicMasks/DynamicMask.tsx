@@ -51,7 +51,7 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             const onChangeSelect = (data) => {
                                 setNodeData(node.id, { ...nodeData, [field]: data.value })
                             }
-                            console.log('DEV: fieldValue: ', { fieldValue, apiList })
+
                             return <>
                                 <CustomField label={element.data.label} input={
                                     apiList.length && fieldValue ? <NodeSelect

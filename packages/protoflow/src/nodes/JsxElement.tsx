@@ -112,9 +112,9 @@ JsxElement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers
         if (prop.startsWith("prop-spreaded")) {
             objParam = dumpConnection(node, "target", prop, PORT_TYPES.data, data[prop]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
         } else {
-            let objKey = data[prop].key
-            const dumpedAttr = dumpAttributeData(data[prop])
+            let objKey = data[prop]?.key ?? prop.replace('prop-', '')
             let objValue
+            const dumpedAttr = dumpAttributeData(data[prop])
             if (dumpedAttr) {
                 objValue = dumpedAttr
             } else {
@@ -150,6 +150,7 @@ export function getKindName(value) {
 }
 // TODO: export function to protolib
 export function dumpAttributeData(attrData: { kind: string, value: any }): any {
+    if (!attrData) return
     const expressionKind = attrData.kind
     var value = attrData.value
     switch (expressionKind) {

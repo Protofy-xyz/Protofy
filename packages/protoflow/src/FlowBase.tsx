@@ -541,7 +541,7 @@ const FlowsBase = ({
 
             let value
             let param
-            if (type == 'JsxElement' || type == 'JsxSelfClosingElement') {
+            if (type == 'JsxElement' || type == 'JsxSelfClosingElement') {
                 let isProp
                 if (diff.path[2] == 'key') {
                     param = diff.rhs
@@ -590,7 +590,7 @@ const FlowsBase = ({
             const nodeType = nodes.find(n => n.id == nodeId)?.type
             let param = diff.path[1]
             let payload;
-            if (nodeType == 'JsxElement' || nodeType == 'JsxSelfClosingElement') {
+            if (nodeType == 'JsxElement' || nodeType == 'JsxSelfClosingElement') {
                 let val = diff.rhs
                 if (typeof val == 'object') {
                     param = param.split("-")[0] + "-" + val.key;
@@ -897,6 +897,7 @@ const FlowsBase = ({
                             setNodes={setNodes}
                             setEdges={setEdges}
                             setNodeData={setNodeData}
+                            nodeData={nodeData}
                             style={{
                                 position: 'absolute',
                                 top: '0px',
