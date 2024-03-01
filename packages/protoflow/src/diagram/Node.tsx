@@ -47,9 +47,9 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     }
 
     const getNodeShadow = () => {
-        if (isNodePreviewMode) return 'none'
+        if (isNodePreviewMode || container) return 'none'
         else if (!isPreview && node?.selected) return "0px 0px 0px 2px " + selectedColor
-        else return generateBoxShadow(container ? 0 : isHover ? 10 : 3)
+        else return generateBoxShadow(isHover ? 10 : 3)
     }
 
     return (
