@@ -1,6 +1,8 @@
 import { connectNodes } from './Edge';
 import { NodeTypes } from '../nodes';
 import { generateId } from './IdGenerator';
+import parserTypeScript from "prettier/parser-typescript.js";
+import prettier from "prettier/standalone.js";
 
 const nodeWidth = 300;
 const nodeHeight = 200;
@@ -46,17 +48,22 @@ export function saveNodes(nodes: any[], edges: any[], nodesData: any, getFirstNo
         const finalCode = JSON.stringify(JSON.parse(code), null, 4);
         return finalCode
     }
-    const validatedRawCode = validateCode(code, mode);
+    const validatedRawCode = validateCode(code, mode); 
     if (validatedRawCode) {
         const finalCode = start.dump(startNode, nodes, edges, nodesData, null, false, "full")
-        return finalCode
+        return validateCode(finalCode, mode)
     }
     //TODO: handle error, look for markers and highlight the box
     return '';
 }
 
 export function validateCode(content: string, mode: string) {
-    return content
+    const formatedCurrentPageContent = prettier.format(content, {
+        quoteProps: "consistent",
+        parser: "typescript",
+        plugins: [parserTypeScript]
+    })
+    return formatedCurrentPageContent
 }
 
 export function getId(node) {
