@@ -10,12 +10,14 @@ import prettier from "prettier";
 
 export class Source {
   ast: any
-  constructor(ast: SourceFile) {
+  metadata: any
+  constructor(ast: SourceFile, metadata) {
       this.ast = ast
+      this.metadata = metadata
   }
 
   // sourceCode -> Ast
-  static parse(source: string): Source {
+  static parse(source: string, metadata = {}): Source {
       const project = new Project({
           useInMemoryFileSystem: true,
           manipulationSettings: { indentationText: IndentationText.Tab },
@@ -25,7 +27,7 @@ export class Source {
               languageVariant: LanguageVariant.JSX
           },
       })
-      return new Source(project.createSourceFile('_temp2.tsx', source, { overwrite: true }))
+      return new Source(project.createSourceFile('_temp2.tsx', source, { overwrite: true }), metadata)
   }
 
   // Ast -> craftNodes
@@ -34,7 +36,7 @@ export class Source {
         this.identifyElements(customIdentifier)
     }
     const content = this.getContent();
-    let craftNodes = Source.toCraftNodes(content)
+    let craftNodes = this.toCraftNodes(content)
     craftNodes = this.addCustomProps(craftNodes) // Adds imports
     return craftNodes;
   }
@@ -50,14 +52,14 @@ export class Source {
           : this.ast?.getFirstDescendant();
   }
 
-  static getAllJsxElements(node: any): any {
+  getAllJsxElements(node: any): any {
       const mainNode = node;
       const allChildren = this.getAllJsxChildren(mainNode)
       const allJsxElements = [mainNode, ...allChildren]
       return allJsxElements
   }
 
-  static getAttributes(node: any): any {
+  getAttributes(node: any): any {
       const isJsxElement = this.isKind(node, "JsxElement")
       const isJsxSelfClosingElement = this.isKind(node, "JsxSelfClosingElement")
       const isJsxExpression = this.isKind(node, "JsxExpression")
@@ -73,34 +75,34 @@ export class Source {
       }
   }
 
-  static getJsxAttribute(node: any, attributeKey: string): any { // Returns JsxAttribute
+  getJsxAttribute(node: any, attributeKey: string): any { // Returns JsxAttribute
       if (!node || (!this.isKind(node, 'JsxElement') && !this.isKind(node, 'JsxSelfClosingElement'))) throw "Error node provided is not a JsxElement or JsxSelfClosingElement, can't get the specified attribute"
       const matchedJsxAttribute: any = this.getAttributes(node).find((jsxAtr: any) => jsxAtr.getNameNode().getText() == attributeKey)
       if (!matchedJsxAttribute) throw `Can't get attribute ${attributeKey}`
       return matchedJsxAttribute;
   }
 
-  static getAttributeKey(node: any): string {
+  getAttributeKey(node: any): string {
       if (!node || !this.isKind(node, 'JsxAttribute')) throw "Can't get attribute key, the node provided isn't a JsxAttribute"
       return node.getNameNode().getText()
   }
 
-  static getAttributeValue(node: any): any { // returns a Node
+  getAttributeValue(node: any): any { // returns a Node
       if (!node || !this.isKind(node, 'JsxAttribute')) throw "Can't get attribute value, the node provided isn't a JsxAttribute"
       return node.getInitializer()
   }
 
-  static getJsxElementAttributes(node: any): any {
+  getJsxElementAttributes(node: any): any {
       if (!node || !this.isKind(node, 'JsxElement')) throw "Error node provided is not a JsxElement, can't get its attributes"
       return node.getOpeningElement().getAttributes()
   }
 
-  static getJsxSelfClosingElementAttributes(node: any): any {
+  getJsxSelfClosingElementAttributes(node: any): any {
       if (!node || !this.isKind(node, 'JsxSelfClosingElement')) throw "Error node provided is not a JsxSelfClosingElement, can't get its attributes"
       return node.getAttributes()
   }
 
-  static getJsxElementName(node: any): any {
+  getJsxElementName(node: any): any {
       const isJsxElement = this.isKind(node, "JsxElement")
       const isJsxSelfClosingElement = this.isKind(node, "JsxSelfClosingElement")
       const isJsxExpression = this.isKind(node, "JsxExpression")
@@ -116,7 +118,7 @@ export class Source {
       }
   }
 
-  static getJsxElementIdentifier(node: any): any {
+  getJsxElementIdentifier(node: any): any {
       if (!node || !this.isKind(node, 'JsxElement')) throw "Error node provided is not a JsxElement, can't get its Identifier"
       const openingElement: any = node.getOpeningElement();
       const identifier: any = openingElement.getTagNameNode()
@@ -124,14 +126,14 @@ export class Source {
       return { node: identifier, name: identifierName }
   }
 
-  static getJsxSelfClosingElementIdentifier(node: any): any {
+  getJsxSelfClosingElementIdentifier(node: any): any {
       if (!node || !this.isKind(node, 'JsxSelfClosingElement')) throw "Error node provided is not a JsxSelfClosingElement, can't get its Identifier"
       const identifier: any = node.getTagNameNode()
       const identifierName: string = identifier.getText()
       return { node: identifier, name: identifierName }
   }
 
-  static getJsxChildren(node: any): any[] {
+  getJsxChildren(node: any): any[] {
       if (this.isKind(node, 'JsxSelfClosingElement')) throw "Can't obtain children from JsxSelfClosingElement"
       if (!node || !this.isKind(node, 'JsxElement')) throw "Can't obtain node children"
       const childSyntaxList = node.getChildrenOfKind(SyntaxKind.SyntaxList)[0];
@@ -139,19 +141,19 @@ export class Source {
       return children
   }
 
-  static getJsxTextOfJsxElement(node: any): any {
+  getJsxTextOfJsxElement(node: any): any {
       if (this.isKind(node, 'JsxExpression')) return undefined
       if (this.isKind(node, 'JsxSelfClosingElement')) return undefined // Self closing element can't have children
       const children = this.getJsxChildren(node)
       if (children.length && this.isKind(children[0], 'JsxText')) return children[0]
   }
 
-  static getJsxChildrenFirstLevel(node: any): any[] {
+  getJsxChildrenFirstLevel(node: any): any[] {
       if (this.isKind(node, 'JsxSelfClosingElement') || this.isKind(node, 'JsxExpression')) return
       return this.getJsxChildren(node).filter(c => this.isKind(c, 'JsxElement') || this.isKind(c, 'JsxSelfClosingElement') || this.isKind(c, 'JsxExpression'))
   }
 
-  static getAllJsxChildren(node: any): any[] {
+  getAllJsxChildren(node: any): any[] {
       let jsxChildren
       try { // Try-catch to avoid crash when analize a node that is not a JsxElement/JsxSelfClosingElement
           jsxChildren = this.getJsxChildrenFirstLevel(node)
@@ -162,11 +164,11 @@ export class Source {
       return jsxChildren?.sort((a, b) => a.getPos() - b.getPos()) ?? []
   }
 
-  static isKind(node: any, kindName: string): boolean {
+  isKind(node: any, kindName: string): boolean {
       return kindName == node.getKindName()
   }
 
-  static getNodeData(node: any): any {
+  getNodeData(node: any): any {
       const name = this.getJsxElementName(node).name
       const attributes = this.getAttributes(node)
       let props: any = {}
@@ -204,12 +206,12 @@ export class Source {
       }
   }
 
-  static flatten(node: any, tree, parent: any): any {
+  flatten(node: any, tree, parent: any): any {
       if (!node || (!this.isKind(node, 'JsxElement') && !this.isKind(node, 'JsxSelfClosingElement') && !this.isKind(node, 'JsxExpression'))) {
           return // throw "Can't provide flatten to node that has not JsxElement or JsxSelfClosingElement kind"
       }
 
-      const uuid = Source.getIdentifier(node) ?? this.getIdFromSourceCode(node)
+      const uuid = this.getIdentifier(node) ?? this.getIdFromSourceCode(node)
       const nodeData = this.getNodeData(node)
       let nodes: any[] = []
       let childs = this.getJsxChildrenFirstLevel(node)
@@ -226,7 +228,7 @@ export class Source {
       return uuid
   }
 
-  static getNodes(node: any) {
+  getNodes(node: any) {
       if (!node || !this.isKind(node, 'JsxElement')) throw "Can't getNodes from the give node that has no kind of type JsxElement"
       const tree = {} // Craft.JS format to build nodes
       this.flatten(node, tree, "ROOT")
@@ -234,7 +236,7 @@ export class Source {
       return tree
   }
 
-  static toCraftNodes(node: any): any { // Add ROOT node and Theme node and generate Craft nodes using provided node
+  toCraftNodes(node: any): any { // Add ROOT node and Theme node and generate Craft nodes using provided node
       let rootNodeData = {
           "type": {
               "resolvedName": "Root"
@@ -271,7 +273,7 @@ export class Source {
       let newCraftNodes = {} // Craft nodes with custom props
       Object.keys(craftNodes).forEach((id) => {
           const craftNode = craftNodes[id]
-          const nodeImportsInfo = Source.getDisplayNameInNamedImports(craftNode.displayName, importDeclarations)
+          const nodeImportsInfo = this.getDisplayNameInNamedImports(craftNode.displayName, importDeclarations)
           const newCraftNode = { ...craftNode, "custom": { ...craftNode.custom, ...nodeImportsInfo } }
           newCraftNodes = { ...newCraftNodes, [id]: newCraftNode }
       })
@@ -291,7 +293,7 @@ export class Source {
       return res;
   }
 
-  static getDisplayNameInNamedImports(displayName: string, importDeclarations: any[]) { // Get import info of craftjs node
+  getDisplayNameInNamedImports(displayName: string, importDeclarations: any[]) { // Get import info of craftjs node
       for (let i = 0; i < importDeclarations?.length; i++) {
           const currentImport = importDeclarations[i]
           const namedImports = currentImport?.namedImports;
@@ -323,20 +325,20 @@ export class Source {
   }
 
   identifyElements(customIdentifier: () => number | string): Source { // Identify elements of source code adding to JsxElements a prop named _nodeId with uuid
-      let allJsxElements = Source.getAllJsxElements(this.getContent())
+      let allJsxElements = this.getAllJsxElements(this.getContent())
       for (let i = 0; i < allJsxElements.length; i++) {
           let additionalProp = ""
           let posToInsertAttr
-          allJsxElements = Source.getAllJsxElements(this.getContent())
-          const jsxElementAttributes = Source.getAttributes(allJsxElements[i])
+          allJsxElements = this.getAllJsxElements(this.getContent())
+          const jsxElementAttributes = this.getAttributes(allJsxElements[i])
           try {
-              Source.getJsxAttribute(allJsxElements[i], '_nodeId')
+              this.getJsxAttribute(allJsxElements[i], '_nodeId')
           } catch (e) { // If _nodeId is not found add it
               //@ts-ignore
-              additionalProp += ` _nodeId="${customIdentifier ? customIdentifier() : Source.getSameIdAsFlows(allJsxElements[i])}" `
+              additionalProp += ` _nodeId="${customIdentifier ? customIdentifier() : this.getSameIdAsFlows(allJsxElements[i])}" `
           }
           if (!jsxElementAttributes.length) {
-              posToInsertAttr = Source.getJsxElementName(allJsxElements[i]).node.getEnd();
+              posToInsertAttr = this.getJsxElementName(allJsxElements[i]).node.getEnd();
           } else {
               posToInsertAttr = jsxElementAttributes[0].getStart();
           }
@@ -345,27 +347,27 @@ export class Source {
       return this
   }
 
-  static getIdentifier(node: any): string {
+  getIdentifier(node: any): string {
       try {
-          const jsxAtr: any = Source.getJsxAttribute(node, '_nodeId')
-          const elem_uuid: any = Source.getAttributeValue(jsxAtr)
+          const jsxAtr: any = this.getJsxAttribute(node, '_nodeId')
+          const elem_uuid: any = this.getAttributeValue(jsxAtr)
           return this.nodeValueFactory(elem_uuid).value
       } catch (e) { console.error("Could not find node identifier") }
   }
 
   unidentifyElements(): Source { // Unidentify elements of source code deleting the prop "_nodeId" of JsxElements
-      let allJsxElements = Source.getAllJsxElements(this.getContent())
+      let allJsxElements = this.getAllJsxElements(this.getContent())
       for (let i = 0; i < allJsxElements.length; i++) {
-          allJsxElements = Source.getAllJsxElements(this.getContent())
+          allJsxElements = this.getAllJsxElements(this.getContent())
           try {
-              const jsxAtribute_nodeId = Source.getJsxAttribute(allJsxElements[i], '_nodeId')
+              const jsxAtribute_nodeId = this.getJsxAttribute(allJsxElements[i], '_nodeId')
               this.ast.removeText(jsxAtribute_nodeId.getStart(), jsxAtribute_nodeId.getEnd());
           } catch (e) { } // prop "_nodeId not found"
       }
       return this;
   }
 
-  static getJsxElementByIdentifier(node: any, uuid: string): any {
+  getJsxElementByIdentifier(node: any, uuid: string): any {
       const allJsxElements = this.getAllJsxElements(node)
       const matchedElement = allJsxElements.find(e => this.getIdentifier(e) == uuid)
       if (!matchedElement) throw `Could not find element specified with uuid "${uuid}" in the provided node`
@@ -375,7 +377,7 @@ export class Source {
   convertJsxExpressionToJsxElement(): Source {
       const getCurrentJsxExpressions = () => {
           const content = this.getContent()
-          let allJsxElements = Source.getAllJsxElements(content)
+          let allJsxElements = this.getAllJsxElements(content)
           let currentJsxExpressions = allJsxElements.filter(ele => ele.getKindName() == "JsxExpression")
           return currentJsxExpressions
       }
@@ -391,7 +393,7 @@ export class Source {
       return this
   }
 
-  static reactElementFactory(craftNode: any, childElem: string): string {
+  reactElementFactory(craftNode: any, childElem: string): string {
       let element; // JsxElement (or selfclosing) or JsxExpression block
       const displayName = craftNode.displayName
       switch (displayName) {
@@ -433,7 +435,7 @@ export class Source {
       return element
   }
 
-  static nodeValueFactory(node: any): any { // Receives element
+  nodeValueFactory(node: any): any { // Receives element
       let atrVal
       var nodeKind = node?.getKindName()
 
@@ -480,7 +482,7 @@ export class Source {
       return { value: atrVal, nodeKind }
   }
 
-  static getIdFromSourceCode(node) {
+  getIdFromSourceCode(node) {
       try {
           return node.getKindName() + '_' + node._compilerNode.pos + '_' + node._compilerNode.end
       } catch (e) {

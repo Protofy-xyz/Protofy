@@ -16,11 +16,12 @@ export type EditorProps = {
   currentPageContent: string;
   topics: any;
   resolveComponentsDir: string;
-  onReady?: Function
+  onReady?: Function;
+  metadata?: any 
 };
 
 
-const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, onReady = () => { } }: EditorProps) => {
+const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {} }: EditorProps) => {
   const paper = useRef<any>()
   const [loading, setLoading] = useState(true);
   const [currentPageInitialJson, setCurrentPageInitialJson] = useState({});
@@ -133,7 +134,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
   }, [previousNodes])
 
   const loadEditorNodes = async () => {
-    const source: Source = Source.parse(currentPageContent)
+    const source: Source = Source.parse(currentPageContent, metadata)
     let editorNodes = source.data()
     setCurrentPageInitialJson(editorNodes)
     const availableComponents = query?.getOptions()?.resolver ?? {}

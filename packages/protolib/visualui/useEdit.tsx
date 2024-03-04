@@ -15,13 +15,14 @@ const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
 
 
-export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"]) => {
+export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context) => {
   const router = useRouter()
   const [session] = useAtom(Session)
   const edit = useIsEditing()
 
   const metadata = {
-    "tamagui": getTokens()
+    "tamagui": getTokens(),
+    "context": context
   }
 
   const isAdmin = editorUsers.includes(session?.user?.type)
@@ -77,7 +78,6 @@ const VisualUILoader = ({ userComponents, path, metadata }: { userComponents: an
 
     API.post(url, { content }, (response: any) => {
       if (response.status == "loaded") {
-
         toast.show('Successfully saved!', {
           duration: 2000,
           tint: 'blue'

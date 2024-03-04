@@ -265,7 +265,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     )
     const EditorPanel = (
         <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid #424242', borderLeft: '2px solid #424242' }}>
-            <EditorLayout currentPageContent={currentPageContent} onSave={() => null} resolveComponentsDir={resolveComponentsDir}>
+            <EditorLayout metadata={metadata} currentPageContent={currentPageContent} onSave={() => null} resolveComponentsDir={resolveComponentsDir}>
             </EditorLayout>
         </div>
     )
