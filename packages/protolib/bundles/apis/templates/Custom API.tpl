@@ -18,22 +18,22 @@ the session argument is a session object, with the following shape:
 use the chat if in doubt
 */
 
-
-import { handler } from 'protolib/api'
-import {Protofy} from 'protolib/base'
-import { Application } from 'express';
+import { getAuth } from "protolib/api";
+import { Protofy } from 'protolib/base'
 import { getLogger } from "protolib/base"
+import { Application } from 'express';
 
 const logger = getLogger()
 
 Protofy("type", "CustomAPI")
 
-export default Protofy("code",(app, {devicePub, deviceSub, mqtt}) => {
+export default Protofy("code",(app:Application, {devicePub, deviceSub, mqtt}) => {
     //PUT YOUR API HERE
     //devicePub function allows to communicate with devices via mqtt
     //deviceSub allows to receive notifications from devices via mqtt
     //app is a normal expressjs object
     //mqtt is a mqttclient connection
+    console.log("Custom API {{name}} started")
 })
 
 

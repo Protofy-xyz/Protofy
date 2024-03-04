@@ -139,7 +139,7 @@ If you include anything else in your message (like reasonings or natural languag
             if (isPartial.current) {
               const sourceFile = toSourceFile(fileContent.data)
               const definition = getDefinition(sourceFile, '"code"').getBody()
-              definition.replaceWithText("{\n" + sourceCode.current + "}");
+              definition.replaceWithText("{\n" + sourceCode.current + "\n}");
               const code = prettier.format(sourceFile.getFullText(), {
                 quoteProps: "consistent",
                 parser: "typescript",

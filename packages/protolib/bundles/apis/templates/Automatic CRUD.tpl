@@ -1,8 +1,9 @@
-import {Objects} from "app/bundles/objects";
-import {AutoAPI} from 'protolib/api'
-import {Protofy} from 'protolib/base'
+import { Objects } from "app/bundles/objects";
+import { AutoAPI } from 'protolib/api'
+import { Protofy } from 'protolib/base'
 import { Application } from 'express';
 import { getLogger } from "protolib/base"
+import { getAuth } from "protolib/api";
 
 const logger = getLogger()
 

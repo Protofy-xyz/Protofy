@@ -17,15 +17,16 @@ the session argument is a session object, with the following shape:
 use the chat if in doubt
 */
 
-import {Protofy} from 'protolib/base'
-import { Application } from 'express';
+import { Protofy } from 'protolib/base'
+import { getAuth } from "protolib/api";
 import { getLogger } from "protolib/base"
+import { Application } from 'express';
 
 const logger = getLogger()
 
 Protofy("type", "IOTRouter")
 
-export default Protofy("code",(app, {devicePub, deviceSub, mqtt}) => {
+export default Protofy("code",(app: App, {devicePub, deviceSub, mqtt}) => {
     ///PUT YOUR ROUTER LOGIC HERE
     //devicePub function allows to communicate with devices via mqtt
     //deviceSub allows to receive notifications from devices via mqtt
@@ -39,4 +40,6 @@ export default Protofy("code",(app, {devicePub, deviceSub, mqtt}) => {
     //         devicePub('testdevice', 'switch', 'testrelay', 'OFF')
     //         : devicePub('testdevice', 'switch', 'testrelay', 'ON')
     // })
+
+    console.log("IOT Router {{name}} started")
 })

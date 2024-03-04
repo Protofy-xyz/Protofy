@@ -11,7 +11,7 @@ type Handler = (
     fn: (req: Request, res: Response, session: SessionDataType, next: any) => Promise<void> | void
 ) => RequestHandler;
 
-export const handler: Handler = fn => async (req:any, res:any, next:any) => {
+export const getAuth = (req) => {
     //try to recover identify from token
     let decoded;
     let session;
@@ -31,10 +31,15 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
             decoded = createSession()
         }
     } else {
-        createSession()
+        decoded = createSession()
     }
+    return {session: decoded, token}
+}
+
+export const handler: Handler = fn => async (req:any, res:any, next:any) => {
     try {
-        await fn(req, res, {...decoded, token: token}, next);
+        const params = getAuth(req)
+        await fn(req, res, {...params.session, token: params.token}, next);
     } catch (e:any) {
         if (e instanceof ZodError) {
             const err = e.flatten()
