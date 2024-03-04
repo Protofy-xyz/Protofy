@@ -26,7 +26,7 @@ const templates = {
     "default": {},
     "admin": {
         extraFields: (objects) => ({
-            object: z.union([z.literal("without object"), ...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route')
+            object: z.union([...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route')
         }),
         extraValidation: (data) => {
             if (!Object.keys(data).includes('object')) {
