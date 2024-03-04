@@ -1,6 +1,28 @@
-//this is an Automatic LCRUD API with custom storage layer
-//getDB provides iterator, get and put. 
-//The storage layer used by generateApi/AutoAPI to interact with the storage
+/*
+
+This is an Automatic LCRUD API with custom storage layer.
+getDB provides iterator, get and put. 
+The storage layer used by generateApi/AutoAPI to interact with the storage
+
+app is an express object, you can use app.get/app.post to create new endpoints
+you can define newendpoints like:
+
+app.get('/api/v1/testapi', handler(async (req, res, session, next) => {
+    //you code goes here
+    //reply with res.send(...)
+}))
+
+the session argument is a session object, with the following shape:
+{
+    user: { admin: boolean, id: string, type: string },
+    token: string,
+    loggedIn: boolean
+}
+
+use the chat if in doubt
+*/
+
+
 import {Objects} from "app/bundles/objects";
 import {AutoAPI} from 'protolib/api'
 import {Protofy} from 'protolib/base'
@@ -48,6 +70,6 @@ const {{name}}API = AutoAPI({
     }
 })
 
-export default (app:Application, context) => {
+export default Protofy("code",(app:Application, context) => {
     {{name}}API(app, context)   
-}
+})
