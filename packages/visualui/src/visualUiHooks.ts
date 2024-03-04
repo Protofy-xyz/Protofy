@@ -41,8 +41,8 @@ export function useVisualUi(atom, callb, defState) {
   }
 }
 
-// toggle communication mode
-export function useComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData) {
+// toggle communication mode visualUi
+export function useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData) {
   useEffect(() => {
     const flowData = topicData
     const action = flowData.action

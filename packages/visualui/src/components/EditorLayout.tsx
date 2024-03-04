@@ -9,7 +9,7 @@ import ErrorBoundary from './ErrorBoundary'
 import { notify, computePreviousPositions } from "../utils/utils";
 import { Stack, Spinner } from "@my/ui"
 import he from 'he';
-import { useComms } from "../visualUiHooks";
+import { useVisualUiComms } from "../visualUiHooks";
 
 export type EditorProps = {
   children?: any;
@@ -126,7 +126,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
   }, [selectedNodeId])
 
   // udpate state based on topics
-  useComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'])
+  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'])
 
   useEffect(() => {
     actions.setOptions(options => options['skipTopic'] = false)
