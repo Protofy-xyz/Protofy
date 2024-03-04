@@ -8,7 +8,13 @@ const mqtt = getMQTTClient('api', getServiceToken())
 const topicSub = (topic, cb) => {
     mqtt.subscribe(topic)
     mqtt.on("message", (messageTopic, message) => {
-        if (topic != messageTopic) return
+        const isWildcard = topic.endsWith("#");
+        if (!isWildcard && topic != messageTopic) {
+            return
+        }
+        if (isWildcard && !messageTopic.startsWith(topic.slice(0, -1).replace(/\/$/, ''))) {
+            return
+        }
         const parsedMessage = message.toString();
         cb(parsedMessage, topic)
     });

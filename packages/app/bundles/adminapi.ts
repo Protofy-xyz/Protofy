@@ -17,6 +17,7 @@ import { WorkspacesAPI } from 'protolib/bundles/workspaces/workspacesAPI'
 import { ResourcesAPI } from 'protolib/bundles/resources/resourcesAPI'
 import { AiAssistantsAPI } from 'protolib/bundles/aiAssistants/aiAssistantsAPI';
 import { MasksAPI } from 'protolib/bundles/visualui/masksAPI';
+import { SignalingAPI } from 'protolib/bundles/signalings/signalingsAPI';
 
 export default (app, context) => {
   UsersAPI(app, context)
@@ -38,4 +39,5 @@ export default (app, context) => {
   ResourcesAPI(app, context)
   AiAssistantsAPI(app, context)
   MasksAPI(app, context)
+  SignalingAPI(app, context)
 }

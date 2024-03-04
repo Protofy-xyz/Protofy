@@ -54,7 +54,8 @@
     "test:all": "NODE_ENV=development FORCE_COLOR=1 yarn workspaces foreach run test",
     "test:all:debug": "FORCE_COLOR=1 TEST_DEBUG=true yarn test:all",
     "test:global": "NODE_ENV=development FORCE_COLOR=1 yarn workspace tests test",
-    "test:e2egen": "NODE_ENV=development npx playwright codegen"
+    "test:e2egen": "NODE_ENV=development npx playwright codegen",
+    "test:protolib": "FORCE_COLOR=1 yarn workspace protolib test"
   },
   "resolutions": {
     "react": "^18.2.0",
