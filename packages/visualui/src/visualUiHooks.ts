@@ -40,3 +40,112 @@ export function useVisualUi(atom, callb, defState) {
     set: 'baby'
   }
 }
+
+// toggle communication mode
+export function useComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData) {
+  useEffect(() => {
+    const flowData = topicData
+    const action = flowData.action
+    const nodeId = flowData.nodeId;
+    const value = flowData.value;
+    const modifiedKey = flowData.param;
+
+    switch (action) {
+      case 'delete-node':
+        if (flowData.deletedNodeType != "JsxElement") return
+        actions.setOptions(options => options['skipTopic'] = true)
+        flowData.nodesToDelete?.forEach(nId => actions.delete(nId))
+        setPreviousNodes(JSON.parse(query.serialize()));
+        break;
+      case 'delete-data':
+        if (!modifiedKey) return
+        try {
+          actions.setOptions(options => options['skipTopic'] = true)
+          actions.setProp(nodeId, (props) => {
+            delete props[modifiedKey]
+            return props
+          })
+          setPreviousNodes(JSON.parse(query.serialize()));
+        } catch (e) {
+          console.error('error deleting data. ', e)
+        }
+        break;
+      case 'edit-data': // modify existing node prop/child
+        if (!modifiedKey) return
+        try {
+          actions.setOptions(options => options['skipTopic'] = true)
+          actions.setProp(nodeId, (props) => props[modifiedKey] = value)
+          actions.setCustom(nodeId, (custom) => custom[modifiedKey] = "JsxText")
+          const deleteKey = flowData?.deleteKey
+          if (deleteKey) {
+            actions.setProp(nodeId, (props) => {
+              delete props[deleteKey]
+              return props
+            })
+          }
+          setPreviousNodes(JSON.parse(query.serialize()));
+        } catch (e) {
+          console.error('error editing data. ', e)
+        }
+        break;
+      case 'add-data': // modify existing node adding new prop/child
+        let newNodes = JSON.parse(query.serialize())
+        if (!newNodes[nodeId]) return
+        try {
+          newNodes[nodeId] = { ...newNodes[nodeId], props: { ...newNodes[nodeId].props, [modifiedKey]: value } }
+          actions.setOptions(options => options['skipTopic'] = true)
+          actions.setProp(nodeId, (props) => props[modifiedKey] = value)
+          setPreviousNodes(newNodes);
+        } catch (e) {
+          console.error('error adding data. ', e)
+        }
+        break;
+      case 'add-node':
+        const type = flowData.type
+        const childrenIndex = flowData.childrenPos;
+        const name = flowData.nodeName;
+        const parentId = flowData.parent;
+        if (type == "JsxElement") { // Is a new component
+          const newCraftNodeData = {
+            displayName: name,
+            props: {},
+            custom: {
+              defaultImport: name,
+              moduleSpecifier: `"${resolveComponentsDir}${name}"`,
+              _nodeType: "JsxElement"
+            },
+            hidden: false,
+            isCanvas: true,
+            parent: parentId,
+            type: {
+              resolvedName: name
+            },
+            nodes: []
+          }
+          const prevNodes = JSON.parse(query.serialize());
+          if (!parentId || !prevNodes) return
+          try {
+            const newTree = appendNewNodeToTree(prevNodes, nodeId, newCraftNodeData, parentId, childrenIndex)
+            actions.setOptions(options => options['skipTopic'] = true)
+            actions.deserialize(newTree);
+            setPreviousNodes(JSON.parse(query.serialize()));
+          } catch (e) {
+            console.error('error adding node (JsxElement). ', e)
+          }
+        } else { // is a prop of a component
+          try {
+            const newPropData = flowData.data;
+            if (!newPropData?.isAncestorJsxElement) return
+            actions.setOptions(options => options['skipTopic'] = true)
+            actions.setProp(parentId, (props) => props[newPropData.key] = newPropData.value)
+            setPreviousNodes(JSON.parse(query.serialize()));
+          } catch (e) {
+            console.error('error adding node (Not a JsxElement). ', e)
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  }, [topicData])
+}
