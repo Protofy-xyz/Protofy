@@ -17,7 +17,10 @@ import { usePrompt, promptCmd } from '../../context/PromptAtom';
 import { useUpdateEffect } from 'usehooks-ts';
 import Flows from '../../adminpanel/features/components/Flows';
 import { getFlowsCustomComponents } from 'app/bundles/masks'
-
+import { getDefinition, toSourceFile } from '../../api/lib/code'
+import { ArrowFunction } from 'ts-morph';
+import parserTypeScript from "prettier/parser-typescript.js";
+import prettier from "prettier/standalone.js";
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -68,6 +71,7 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
   const [fileContent, setFileContent] = useFileFromAPI(path)
   const [newFileContent, setNewFileContent] = useState('')
   const [loaded, setLoaded] = useState(false)
+  const isPartial = useRef(false)
   const sourceCode = useRef('')
   const router = useRouter()
 
@@ -101,13 +105,21 @@ If you include anything else in your message (like reasonings or natural languag
 
   useEffect(() => {
     if (fileContent.isLoaded) {
-      sourceCode.current = fileContent.data
+      const sourceFile = toSourceFile(fileContent.data)
+      const definition = getDefinition(sourceFile, '"code"')
+      if (definition && ArrowFunction.isArrowFunction(definition)) {
+        sourceCode.current = definition.getBodyText()
+        isPartial.current = true
+      } else {
+        isPartial.current = false
+        sourceCode.current = fileContent.data
+      }
       setLoaded(true)
     }
   }, [fileContent]);
 
   const { resolvedTheme } = useThemeSetting()
-  const [mode, setMode] = useState('code')
+  const [mode, setMode] = useState('flow')
 
   return <AsyncView atom={fileContent}>
     <XStack mt={isFull ? 50 : 30} f={1} width={"100%"}>
@@ -123,14 +135,29 @@ If you include anything else in your message (like reasonings or natural languag
           </IconContainer>}
         <SaveButton
           path={path}
-          getContent={() => sourceCode.current}
+          getContent={() => {
+            if (isPartial.current) {
+              const sourceFile = toSourceFile(fileContent.data)
+              const definition = getDefinition(sourceFile, '"code"').getBody()
+              definition.replaceWithText("{\n" + sourceCode.current + "}");
+              const code = prettier.format(sourceFile.getFullText(), {
+                quoteProps: "consistent",
+                parser: "typescript",
+                plugins: [parserTypeScript]
+              })
+              if(code) {
+                return code
+              }
+            }
+            return sourceCode.current
+          }}
           positionStyle={{ position: "relative" }}
         />
         {extraIcons}
       </XStack>
       {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={newFileContent ? newFileContent : sourceCode.current} onChange={(code) => { sourceCode.current = code }} /> : <Flows
         isModified={isModified}
-        customComponents = {getFlowsCustomComponents(router.pathname, router.query)}
+        customComponents={getFlowsCustomComponents(router.pathname, router.query)}
         onEdit={(code) => { sourceCode.current = code }}
         setIsModified={setIsModified}
         setSourceCode={(sourceCode) => {

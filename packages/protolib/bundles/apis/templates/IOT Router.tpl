@@ -2,10 +2,10 @@
 app is an express object, you can use app.get/app.post to create new endpoints
 you can define newendpoints like:
 
-app.get('/api/v1/testapi', handler(async (req, res, session, next) => {
+app.get('/api/v1/testapi', (req, res) => {
     //you code goes here
     //reply with res.send(...)
-}))
+})
 
 the session argument is a session object, with the following shape:
 {

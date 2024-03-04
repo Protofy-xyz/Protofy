@@ -1,5 +1,4 @@
 import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
-import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { getRoot } from './getRoot';
 import { getLogger } from '../../base';
@@ -47,6 +46,12 @@ export const getSourceFile = (path) => {
     const project = new Project();
     const sourceFile = project.addSourceFileAtPath(path)
     return sourceFile
+}
+
+export const toSourceFile = (code: string) => {
+    const project = new Project({useInMemoryFileSystem: true});
+    let source = project.createSourceFile('_temp1.tsx', code, { overwrite: true })
+    return source
 }
 
 export const extractChainCalls = (callExpr) => {
@@ -106,7 +111,6 @@ export const addObjectLiteralProperty = (
     key: string,
     value: string
 ): void => {
-    // Intentar obtener la propiedad por clave como identificador o como una propiedad computada.
     const existingProperty = objectLiteral.getProperty(p =>
         p instanceof PropertyAssignment &&
         ((p.getNameNode().getKind() === SyntaxKind.Identifier && p.getName() === key) ||
@@ -119,7 +123,6 @@ export const addObjectLiteralProperty = (
         return;
     }
 
-    // Añadir la propiedad como una propiedad computada si la clave tiene caracteres especiales.
     const isNormalIdentifier = /^[a-zA-Z_$][a-zA-Z\d_$]*$/.test(key);
     const propertyName = isNormalIdentifier ? key : `["${key}"]`;
 
@@ -148,7 +151,7 @@ export const removeObjectLiteralProperty = (
 };
 
 export const removeFileWithImports = async (
-    root, value, type, indexFilePath, req
+    root, value, type, indexFilePath, req, fs
 ) => {
 
     const localPath = './' + fspath.basename(value.name).toLowerCase();
@@ -188,7 +191,7 @@ export const hasFeature = (sourceFile, key) => {
 
 export const addFeature = async (sourceFile, key, value) => {
     if (hasFeature(sourceFile, key)) {
-        logger.info({ feature: key },"Feature already exists, not adding")
+        logger.info({ feature: key }, "Feature already exists, not adding")
         return;
     }
 
@@ -196,14 +199,14 @@ export const addFeature = async (sourceFile, key, value) => {
     let arg = getDefinition(sourceFile, '"features"')
     arg.addPropertyAssignment({
         name: key,
-        initializer: value // Puede ser un string, número, otro objeto, etc.
+        initializer: value
     });
     await sourceFile.save()
 }
 
 export const removeFeature = async (sourceFile, key) => {
     if (!hasFeature(sourceFile, key)) {
-        logger.error({ feature: key },"Feature not found, cannot remove")
+        logger.error({ feature: key }, "Feature not found, cannot remove")
         return;
     }
 

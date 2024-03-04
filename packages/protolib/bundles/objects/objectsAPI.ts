@@ -110,7 +110,7 @@ const getDB = (path, req, session) => {
       value = JSON.parse(value)
       const filePath = getRoot(req) + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts'
       if (value._deleted) {
-        removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req);
+        removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req, fs);
       } else {
         let exists
         try {

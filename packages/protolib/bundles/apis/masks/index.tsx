@@ -22,15 +22,12 @@ const apiMasks = [
         id: 'CloudApi',
         type: 'CallExpression',
         check: (node, nodeData) => {
-          if(nodeData.to == "app.get"){
-          console.log("param2: ",nodeData.param2);
-          console.log("nodeData: ",nodeData);
-          }
-          return(
-          node.type == "CallExpression"
-          && nodeData.param2?.startsWith('(req,res) =>')
-          && (nodeData.to == 'app.get' || nodeData.to == 'app.post')
-        )},
+            return (
+                node.type == "CallExpression"
+                && nodeData.param2?.startsWith('(req,res) =>')
+                && (nodeData.to == 'app.get' || nodeData.to == 'app.post')
+            )
+        },
         getComponent: ApiMask,
         filterChildren: filterCallback(),
         restoreChildren: restoreCallback(),

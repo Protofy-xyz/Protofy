@@ -23,7 +23,7 @@ const getAPI = (apiPath, req) => {
 
 const deleteAPI = (req, value) => {
   const api = getAPI(fspath.basename(value.name) + '.ts', req)
-  removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req);
+  removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req, fs);
   if (api.type === "AutoAPI") {
     const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(api.object))
     let sourceFile = getSourceFile(objectPath)
