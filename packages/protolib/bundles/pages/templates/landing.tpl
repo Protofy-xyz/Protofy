@@ -290,5 +290,5 @@ const PageComponent = (props) => {
 export default {
       route: Protofy("route", "{{route}}"),
         component: (props) => PageComponent(props),
-        getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{permissions}}):undefined))
+        getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{{permissions}}}):undefined))
     }

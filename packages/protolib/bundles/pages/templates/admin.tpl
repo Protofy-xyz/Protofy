@@ -30,5 +30,5 @@ export default {
             />
         </AdminPage>)
     }, 
-    getServerSideProps: PaginatedDataSSR(sourceUrl, isProtected?Protofy("permissions", {{permissions}}):undefined)
+    getServerSideProps: PaginatedDataSSR(sourceUrl, isProtected?Protofy("permissions", {{{permissions}}}):undefined)
 }

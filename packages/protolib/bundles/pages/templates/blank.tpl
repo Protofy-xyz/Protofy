@@ -33,5 +33,5 @@ export default {
         ...cw("Paragraph", Paragraph),
         ...cw("Theme", Theme)
     }, "/packages/app/bundles/custom/pages/{{name}}.tsx"),
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{permissions}}):undefined))
+    getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{{permissions}}}):undefined))
 }

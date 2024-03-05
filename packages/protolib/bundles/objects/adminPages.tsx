@@ -32,6 +32,7 @@ export default {
                     )}
                     extraFieldsFormsAdd={{
                         api: z.boolean().after("keys").label("automatic crud api").defaultValue(true),
+                        adminPage: z.boolean().after("keys").label("admin page").defaultValue(true),
                     }}
                     // hideAdd={true}
                     model={ObjectModel}
