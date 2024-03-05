@@ -15,7 +15,7 @@ export default ({ nodeData = {}, item, node }) => {
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const deletePropNodeData = useFlowsStore(state => state.deletePropNodeData)
 
-    const { field, label, type, fieldType } = item
+    const { field, label, type, fieldType, menuActions } = item
 
     const fieldKey = field.replace(fieldType + '-', '')
     const data = nodeData[field]
@@ -85,6 +85,6 @@ export default ({ nodeData = {}, item, node }) => {
         }
     }
 
-    return <CustomField label={label} input={getInput()}/>
+    return <CustomField label={label} input={getInput()} menuActions={menuActions}/>
 
 }
