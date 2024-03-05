@@ -18,9 +18,7 @@ import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
 import { FlowConstructor } from "protoflow";
 import React from "react";
 import { newVisualUiContext } from "../visualUiHooks";
-
-export const UIFLOWID = "flows-ui"
-const Flow = FlowConstructor(UIFLOWID)
+import { VisualUiFlows } from "./VisualUiFlows";
 
 const FloatingIcon = ({ id = undefined, children, onClick, disabled = false }) => <div id={id} onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex', cursor: 'pointer' }}>
     {children}
@@ -191,17 +189,14 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         visible={customizeVisible}
                         onChange={(val) => setCustomizeVisible(val)}
                     >
-                        <Flow
+                        <VisualUiFlows
                             disableDots={!isActive || isViewModePreview}
                             sourceCode={currentPageContent}
                             setSourceCode={setCurrentPageContent}
                             customComponents={getFlowsCustomComponents(router.pathname, router.query)}
                             onSave={(code, _, data) => onEditorSave('flows', code, data)}
-                            enableCommunicationInterface={true}
-                            // store={uiStore}
                             config={{ masks: getFlowMasks(router.pathname, router.query) }}
                             zoomOnDoubleClick={!isViewModePreview}
-                            flowId={UIFLOWID}
                             themeMode={'dark'}
                             bgColor={'#252526'}
                             theme={theme}

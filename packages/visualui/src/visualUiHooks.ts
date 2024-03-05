@@ -17,6 +17,7 @@ export function useVisualUiAtom(_atom: any) {
 // hook for visualUiState management
 export function useVisualUi(atom, callb, defState) {
   const [state, setState] = useState(defState)
+  const [lastEvent, setLastEvent] = useState<any>(null)
   const [craftContext] = useAtom<EditorStore>(atom)
 
   useEffect(() => {
@@ -35,10 +36,14 @@ export function useVisualUi(atom, callb, defState) {
     );
   }, [craftContext])
 
+  useEffect(() => {
+    console.log('boyyyy')
+  }, [craftContext.query.serialize()])
+
   return {
     state: state,
     visualUiData: craftContext,
-    set: 'baby'
+    lastEvent: lastEvent
   }
 }
 
