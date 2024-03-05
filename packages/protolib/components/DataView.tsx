@@ -239,11 +239,14 @@ export function DataView({
             Error: {items.error && items.error.error ? items.error.error : items.error}
         </Center>
     }
+    if(state.editFile) {
+        
+    }
     return (<AsyncView atom={currentItems}>
         <YStack height="100%" f={1}>
             <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>
                 <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
-                    <AlertDialog
+                    {/* <AlertDialog
                         integratedChat
                         p={"$0"}
                         hideAccept
@@ -251,13 +254,13 @@ export function DataView({
                             removePush('editFile')
                         }}
                         open={state.editFile}
-                    >
-                        <XStack pt="$4" height={'90vh'} width={"90vw"}>
-                            <FileWidget
+                    > */}
+                    { 
+                        state.editFile && <FileWidget
                                 id={"file-widget-" + getFilenameFromPath(state.editFile ?? '').split('.')[0]}
                                 isFull={false}
                                 hideCloseIcon={false}
-                                isModified={false}
+                                isModified={true}
                                 setIsModified={() => { }}
                                 icons={[
                                     <IconContainer onPress={() => {
@@ -269,9 +272,9 @@ export function DataView({
                                 currentFileName={getFilenameFromPath(state.editFile ?? '')}
                                 currentFile={state.editFile}
                             />
-                        </XStack>
-
-                    </AlertDialog>
+                    }
+{/* 
+                    </AlertDialog> */}
 
                     <AlertDialog
                         integratedChat
@@ -378,83 +381,84 @@ export function DataView({
                             </ScrollView>
                         </YStack>
                     </AlertDialog>
+                    {!state.editFile && <>
+                        <XStack pt="$3" px="$7" mb="$1">
+                            <XStack left={-12} f={1} ai="center">
 
-                    <XStack pt="$3" px="$7" mb="$1">
-                        <XStack left={-12} f={1} ai="center">
+                                <Paragraph>
+                                    <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
+                                </Paragraph>
+                                {hasGlobalMenu ? <Tinted><ItemMenu type={"global"} sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraMenuActions}></ItemMenu></Tinted> : <></>}
+                                {toolBarContent}
+                            </XStack>
 
-                            <Paragraph>
-                                <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
-                            </Paragraph>
-                            {hasGlobalMenu ? <Tinted><ItemMenu type={"global"} sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraMenuActions}></ItemMenu></Tinted> : <></>}
-                            {toolBarContent}
-                        </XStack>
-
-                        <XStack ai="center">
-                            <XStack ai="center" ml="$3">
-                                {currentItems.isLoaded && <XStack ml={"$2"}>
-                                    <XStack ml={"$5"} ai="center">
+                            <XStack ai="center">
+                                <XStack ai="center" ml="$3">
+                                    {currentItems.isLoaded && <XStack ml={"$2"}>
                                         <XStack ml={"$5"} ai="center">
-                                            <Text fontSize={14} color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page) + 1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page + 1)))} of {currentItems.data.total}</Text>
+                                            <XStack ml={"$5"} ai="center">
+                                                <Text fontSize={14} color="$color10">{(currentItems.data.itemsPerPage * currentItems.data.page) + 1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page + 1)))} of {currentItems.data.total}</Text>
+                                            </XStack>
+                                            <Tinted>
+                                                <InteractiveIcon
+                                                    Icon={ChevronLeft}
+                                                    onPress={(e) => {
+                                                        e.stopPropagation();
+                                                        if (currentItems.data.page > 0) {
+                                                            push("page", currentItems.data.page - 1);
+                                                        }
+                                                    }} ml={"$3"}
+                                                    disabled={!(currentItems.data.page > 0)} />
+                                                <Spacer size="$3" />
+                                                <InteractiveIcon
+                                                    Icon={ChevronRight}
+                                                    onPress={(e) => {
+                                                        e.stopPropagation();
+                                                        if (currentItems.data.page < totalPages - 1) {
+                                                            push("page", currentItems.data.page + 1);
+                                                        }
+                                                    }}
+                                                    ml={"$3"}
+                                                    disabled={!(currentItems.data.page < totalPages - 1)} />
+                                            </Tinted>
                                         </XStack>
-                                        <Tinted>
-                                            <InteractiveIcon
-                                                Icon={ChevronLeft}
-                                                onPress={(e) => {
-                                                    e.stopPropagation();
-                                                    if (currentItems.data.page > 0) {
-                                                        push("page", currentItems.data.page - 1);
-                                                    }
-                                                }} ml={"$3"}
-                                                disabled={!(currentItems.data.page > 0)} />
-                                            <Spacer size="$3" />
-                                            <InteractiveIcon
-                                                Icon={ChevronRight}
-                                                onPress={(e) => {
-                                                    e.stopPropagation();
-                                                    if (currentItems.data.page < totalPages - 1) {
-                                                        push("page", currentItems.data.page + 1);
-                                                    }
-                                                }}
-                                                ml={"$3"}
-                                                disabled={!(currentItems.data.page < totalPages - 1)} />
-                                        </Tinted>
-                                    </XStack>
-                                </XStack>}
-                            </XStack>
-                            <XStack ai="center" marginLeft="$3">
-                                {!disableViewSelector && <ButtonGroup marginRight="$3">
-                                    {
-                                        tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
-                                            {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
-                                        </ActiveGroupButton>)
+                                    </XStack>}
+                                </XStack>
+                                <XStack ai="center" marginLeft="$3">
+                                    {!disableViewSelector && <ButtonGroup marginRight="$3">
+                                        {
+                                            tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
+                                                {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
+                                            </ActiveGroupButton>)
+                                        }
+                                    </ButtonGroup>}
+                                    {!hideAdd && <Tinted>
+                                        <Button id={"admin-dataview-add-btn"} hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
+                                            onAddButton ? onAddButton() : setCreateOpen(true)
+                                        }} chromeless={true}>
+                                            <Plus color={"$color10"} />
+                                        </Button>
+                                    </Tinted>
                                     }
-                                </ButtonGroup>}
-                                {!hideAdd && <Tinted>
-                                    <Button id={"admin-dataview-add-btn"} hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
-                                        onAddButton ? onAddButton() : setCreateOpen(true)
-                                    }} chromeless={true}>
-                                        <Plus color={"$color10"} />
-                                    </Button>
-                                </Tinted>
-                                }
+                                </XStack>
                             </XStack>
                         </XStack>
-                    </XStack>
 
-                    {items && items.isError && (
-                        <Notice>
-                            <Paragraph>{getErrorMessage(items.error)}</Paragraph>
-                        </Notice>
-                    )}
-                    <Stack f={1}>
-                        <AsyncView atom={currentItems}>
-                            {
-                                tableViews.map((v, index) => <ActiveRender height="100%" key={index} activeId={index}>
-                                    {React.createElement(v.component, { ...v.props } ?? {})}
-                                </ActiveRender>
-                                )}
-                        </AsyncView>
-                    </Stack>
+                        {items && items.isError && (
+                            <Notice>
+                                <Paragraph>{getErrorMessage(items.error)}</Paragraph>
+                            </Notice>
+                        )}
+                        <Stack f={1}>
+                            <AsyncView atom={currentItems}>
+                                {
+                                    tableViews.map((v, index) => <ActiveRender height="100%" key={index} activeId={index}>
+                                        {React.createElement(v.component, { ...v.props } ?? {})}
+                                    </ActiveRender>
+                                    )}
+                            </AsyncView>
+                        </Stack>
+                    </>}
                 </ActiveGroup>
             </DataViewContext.Provider>
         </YStack>

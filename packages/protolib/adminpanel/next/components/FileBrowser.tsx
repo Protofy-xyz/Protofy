@@ -74,7 +74,8 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
 
     const { resolvedTheme } = useThemeSetting()
 
-    const isFull = router.query?.full
+    const isFull = router.query?.file
+    
     const getWidget = () => <FileWidget
         isFull={isFull}
         hideCloseIcon={isFull ? true : false}
@@ -92,6 +93,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
         currentFileName={currentFileName}
         backgroundColor={isFull ? '$colorTransparent' : (resolvedTheme == 'dark' ? "#1e1e1e" : 'white')}
         currentFile={currentFile}
+        mt={20}
     />
 
     return (

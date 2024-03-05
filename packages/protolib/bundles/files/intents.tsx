@@ -121,17 +121,18 @@ If you include anything else in your message (like reasonings or natural languag
   const { resolvedTheme } = useThemeSetting()
   const [mode, setMode] = useState('flow')
 
+  
   return <AsyncView atom={fileContent}>
-    <XStack mt={isFull ? 50 : 30} f={1} width={"100%"}>
+    <XStack mt={30} f={1} width={"100%"}>
       {/* <Theme name={tint as any}> */}
-      <XStack position="absolute" right={isFull ? 0 : 20} top={isFull ? -35 : -32}>
+      <XStack position="absolute" right={20} top={-32}>
         {mode == 'code' ? <IconContainer onPress={() => setMode('flow')}>
           {/* <SizableText mr={"$2"}>Save</SizableText> */}
-          <Workflow color="var(--color)" size={isFull ? "$2" : "$1"} />
+          <Workflow color="var(--color)" size={"$1"} />
         </IconContainer> :
           <IconContainer onPress={() => setMode('code')}>
             {/* <SizableText mr={"$2"}>Save</SizableText> */}
-            <Code color="var(--color)" size={isFull ? "$2" : "$1"} />
+            <Code color="var(--color)" size={"$1"} />
           </IconContainer>}
         <SaveButton
           path={path}

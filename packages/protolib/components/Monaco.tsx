@@ -76,7 +76,7 @@ export const Monaco = ({
                 { token: 'punctuation', foreground: tokenColor },
             ],
             colors: {
-                'editor.background': theme.background.val,
+                'editor.background': resolvedTheme === 'dark' ? '#151515' : '#FFFFFF',
             }
         });
     }
