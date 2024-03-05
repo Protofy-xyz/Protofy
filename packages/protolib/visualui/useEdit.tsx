@@ -13,9 +13,7 @@ import { useToastController } from '@my/ui'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
-
-
-export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}) => {
+export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}, visualUiContext = null) => {
   const router = useRouter()
   const [session] = useAtom(Session)
   const edit = useIsEditing()
@@ -29,7 +27,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
 
   if (!isAdmin) return fn()
   else if (edit) {
-    return <VisualUILoader userComponents={userComponents} path={path} metadata={metadata} />
+    return <VisualUILoader userComponents={userComponents} path={path} metadata={metadata} visualUiContext={visualUiContext}/>
   }
   else {
     const onEdit = () => {
@@ -61,7 +59,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
   }
 }
 
-const VisualUILoader = ({ userComponents, path, metadata }: { userComponents: any, path: string, metadata: any }) => { // Should be in a component
+const VisualUILoader = ({ userComponents, path, metadata, visualUiContext }: { userComponents: any, path: string, metadata: any, visualUiContext: any}) => { // Should be in a component
   const [res, setRes] = useState<any>()
   const [fileContent, setFileContent] = useState()
   const toast = useToastController()
@@ -101,6 +99,5 @@ const VisualUILoader = ({ userComponents, path, metadata }: { userComponents: an
       setFileContent(res.data)
     }
   }, [res])
-  return <UiManager metadata={metadata} userPalettes={{ ...palettes, user: userComponents }} _sourceCode={fileContent} onSave={onSave} />
-
+  return <UiManager metadata={metadata} userPalettes={{ ...palettes, user: userComponents }} _sourceCode={fileContent} onSave={onSave} contextAtom={visualUiContext} />
 }

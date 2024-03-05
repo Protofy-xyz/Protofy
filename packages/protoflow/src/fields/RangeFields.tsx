@@ -11,7 +11,7 @@ export default ({ nodeData = {}, item, node }) => {
 
     const defData = {
         "range-theme": { // e.g. "$10"
-            pre: s => s[0] == "$" ? s.split("$")[1] : s, 
+            pre: s => s[0] == "$" ? s.split("$")[1] : s,
             post: s => "$" + s,
             max: 20,
             min: 0,
@@ -34,7 +34,7 @@ export default ({ nodeData = {}, item, node }) => {
         }
     }
 
-    const { field, label, type, fieldType, data } = item
+    const { field, label, type, fieldType, data, menuActions } = item
 
     const fieldKey = field.replace(fieldType + '-', '')
     const itemData = nodeData[field]
@@ -54,22 +54,24 @@ export default ({ nodeData = {}, item, node }) => {
     }
 
     const getInput = () => {
-        const initialRangeValue = value ?? 0
+        const DefaultAbbr = 'D.'
+        const initialRangeValue = value ?? DefaultAbbr
         const [tmpRangeValue, setTmpRangeValue] = React.useState(pre(initialRangeValue));
+        const currentVal = !value ? DefaultAbbr : tmpRangeValue
 
         return <>
-            <div style={{ fontSize: '14px', position: 'relative', top: '3px', width: max.toString().length * 18, textAlign: 'left', color: useTheme('textColor') }}>{post(tmpRangeValue)}</div>
-            <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: useTheme('interactiveColor'), height: '5px', borderWidth: '4px solid blue', backgroundColor: useTheme("inputBackgroundColor"), borderRadius: '10px' }}
+            <div style={{ fontSize: '14px', position: 'relative', top: '3px', width: max.toString().length * 18, textAlign: 'left', color: useTheme('textColor') }}>{post(currentVal)}</div>
+            <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: value ? useTheme('interactiveColor') : useTheme('disableTextColor'), height: '5px', borderWidth: '4px solid blue', backgroundColor: useTheme("inputBackgroundColor"), borderRadius: '10px' }}
                 step={step}
                 onChange={(event: any) => setTmpRangeValue(event.target.value)}
                 onMouseUp={() => onValueChange(post(tmpRangeValue))}
-                value={tmpRangeValue}
+                value={currentVal}
                 min={min}
                 max={max}
             />
         </>
     }
 
-    return <CustomField label={label} input={getInput()} />
+    return <CustomField label={label} input={getInput()} menuActions={menuActions} />
 
 }

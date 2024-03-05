@@ -4,7 +4,7 @@ import Text from '../diagram/NodeText'
 import { FlowStoreContext } from '../store/FlowsStore';
 import { GithubPicker, SketchPicker } from "react-color";
 import Input from '../diagram/NodeInput'
-import Popover from '../diagram/NodePopover';
+import { Popover } from '@my/ui'
 import { Pipette, Palette } from 'lucide-react'
 import { CustomField } from '.';
 
@@ -37,13 +37,14 @@ export default ({ nodeData = {}, node, item }) => {
 
     const tones = ['blue', 'gray', 'green', 'orange', 'pink', 'purple', 'red', 'yellow']
 
-    const { field, label, type, fieldType } = item
+    const { field, label, type, fieldType, menuActions } = item
 
     const fieldKey = field.replace(fieldType + '-', '')
     const data = nodeData[field]
     const value = data?.value
 
     const [tmpColor, setTmpColor] = useState(value)
+    const [menuOpened, setMenuOpened] = React.useState(false)
 
     const getColorPreview = () => {
         if (!value) return ''
@@ -132,21 +133,23 @@ export default ({ nodeData = {}, node, item }) => {
         }
     }
 
-    return <CustomField label={label} input={
+    return <CustomField label={label} menuActions={menuActions} input={
         <>
-            <Popover trigger={
-                <div
-                    style={{
-                        width: "28px", height: "28px", cursor: 'pointer',
-                        backgroundColor: getColorPreview(),
-                        borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
-                        border: !value ? '1px solid white' : '', top: '13px'
-                    }}
-                >
-                </div>
-            }
-            >
-                {getInput()}
+            <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="left-start">
+                <Popover.Trigger>
+                    <div
+                        style={{
+                            width: "28px", height: "28px", cursor: 'pointer',
+                            backgroundColor: getColorPreview(),
+                            borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
+                            border: !value ? '1px solid white' : '', top: '13px'
+                        }}
+                    >
+                    </div>
+                </Popover.Trigger>
+                <Popover.Content theme="light" space={0} width='250px' bw={1} boc="$borderColor" bc={"$color1"} >
+                    {getInput()}
+                </Popover.Content>
             </Popover>
             <Input
                 onBlur={() => onSubmitThemeColor(tmpColor)}
