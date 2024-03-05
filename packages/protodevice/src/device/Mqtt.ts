@@ -3,13 +3,12 @@ class Mqtt {
   topic_prefix
   name
   type
-  constructor(broker, topic_prefix) {
+  constructor(broker) {
     this.broker = broker
-    this.topic_prefix = topic_prefix
     this.name = this.type = 'mqtt'
   }
   attach(pin, deviceComponents) {
-    this.topic_prefix = deviceComponents.esphome.name
+    this.topic_prefix = "devices/" + deviceComponents.esphome.name //Should have same shape as getPeripheralTopic() in deviceSchema.ts
     const componentObjects = [
       {
         name: this.type,
@@ -52,6 +51,6 @@ class Mqtt {
   }
 }
 
-export default function mqtt(broker, topic_prefix) {
-  return new Mqtt(broker, topic_prefix)
+export default function mqtt(broker) {
+  return new Mqtt(broker)
 }

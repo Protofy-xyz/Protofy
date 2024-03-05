@@ -61,7 +61,7 @@ const deviceMasks = [
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mqtt'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <Mqtt node={node} nodeData={nodeData} children={children}/>,
-    getInitialData: () => { return { to: 'mqtt', param1: '"BROKERADDRESS"', param2: '""' } }
+    getInitialData: () => { return { to: 'mqtt', param1: '"BROKERADDRESS"' } }
   },
   // {
   //   id: 'DeepSleep',

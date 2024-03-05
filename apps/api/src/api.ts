@@ -2,6 +2,8 @@ import { app, getMQTTClient } from 'protolib/api'
 import BundleAPI from 'app/bundles/apis'
 import {getLogger } from 'protolib/base';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import { getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
+
 const logger = getLogger()
 const mqtt = getMQTTClient('api', getServiceToken())
 
@@ -63,7 +65,7 @@ const devicePub = async (deviceName, component, componentName) => {
     }
     if(!endpoint) return
     if(type == 'str'){
-        topicPub(deviceName+endpoint,value)
+        topicPub(getPeripheralTopic(deviceName, endpoint),value)
     }
 }
 

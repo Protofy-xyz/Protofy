@@ -11,7 +11,11 @@ export const DevicesSchema = Schema.object({
   location: z.object({
     lat: z.string(),
     long: z.string()
-  }).optional().location("lat","long")
+  }).optional().location("lat", "long")
 })
 export type DevicesType = z.infer<typeof DevicesSchema>;
 export const DevicesModel = AutoModel.createDerived<DevicesType>("DevicesModel", DevicesSchema);
+
+export const getPeripheralTopic = (deviceName: string, endpoint: string = '') => {
+  return "devices/" + deviceName + endpoint
+}

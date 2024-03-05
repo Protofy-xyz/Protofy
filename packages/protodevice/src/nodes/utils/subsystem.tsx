@@ -1,16 +1,15 @@
 import { useMqttState, useSubscription } from 'mqtt-react-hooks';
 import React, { useState } from "react";
-import { XStack, YStack, Text, Paragraph, Button,  } from '@my/ui';
-import { ElevatedArea, ContainerLarge, Tinted,Chip } from 'protolib';
-
+import { XStack, YStack, Text, Paragraph, Button, } from '@my/ui';
+import { ElevatedArea, ContainerLarge, Tinted, Chip } from 'protolib';
+import { getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 
 const subsystem = (subsystem, deviceName) => {
     const { client } = useMqttState();
 
     const buttonAction = (action) => {
         if (action.connectionType == "mqtt") {
-            client.publish(deviceName + action.endpoint, action.payload.value.toString())
-            console.log("🚀 ~ file: subsystem.tsx:12 ~ buttonAction ~ deviceName+action.endpoint, action.payload.value:", deviceName + action.endpoint, action.payload.value)
+            client.publish(getPeripheralTopic(deviceName, action.endpoint), action.payload.value.toString())
         }
     }
 
@@ -20,8 +19,8 @@ const subsystem = (subsystem, deviceName) => {
             key={action.name} // Make sure to provide a unique key for each Button
             onPress={() => { buttonAction(action) }}
             color="$color10"
-            //style={{ border: "1px solid #cccccc", borderRadius: "5px", marginRight: "5px", padding: "10px" }}
-            >
+        //style={{ border: "1px solid #cccccc", borderRadius: "5px", marginRight: "5px", padding: "10px" }}
+        >
             {action.name}
         </Button>
     ));
@@ -30,8 +29,7 @@ const subsystem = (subsystem, deviceName) => {
         // Define the state hook outside of JSX mapping
         const [value, setValue] = useState('');
         //const value = 'test'
-        const { message } = useSubscription(deviceName + monitor.endpoint)
-        console.log("🚀 ~ file: subsystem.tsx:32 ~ monitorLabels ~ deviceName+monitor.endpoint:", deviceName + monitor.endpoint)
+        const { message } = useSubscription(getPeripheralTopic(deviceName, monitor.endpoint))
 
         React.useEffect(() => {
             setValue(message?.message?.toString())
@@ -40,7 +38,7 @@ const subsystem = (subsystem, deviceName) => {
         const renderChip = value ? (
             <Chip text={`${value} ${monitor.units ? monitor.units : ''}`}></Chip>
         ) : null;
-    
+
         return (
             <XStack gap="$3">
                 <Text marginLeft={4} textAlign={"left"}>{monitor.name}: </Text>
@@ -59,7 +57,7 @@ const subsystem = (subsystem, deviceName) => {
                         {actionButtons}
                     </XStack>
 
-                    <YStack alignItems={'left'} gap="$3"> 
+                    <YStack alignItems={'left'} gap="$3">
                         {monitorLabels}
                     </YStack>
                 </YStack>
