@@ -27,27 +27,32 @@ export const getAllFieldTypes = () => {
 }
 
 export const CustomFieldType = ({ item, node, nodeData }) => {
-    var type = item.type ?? ''
-    var category = type.split('-')[0]
+    var itemData = { ...item }
 
+    if (nodeData[item.field]?.kind == "Identifier") {
+        itemData['type'] = "input"
+    }
+
+    var type = itemData.type ?? ''
+    var category = type.split('-')[0]
     switch (category) {
         case 'alignment':
-            return <AlignmentType node={node} item={item} nodeData={nodeData} />
+            return <AlignmentType node={node} item={itemData} nodeData={nodeData} />
 
         case 'color':
-            return <ColorType node={node} item={item} nodeData={nodeData} />
+            return <ColorType node={node} item={itemData} nodeData={nodeData} />
 
         case 'range':
-            return <RangeType node={node} item={item} nodeData={nodeData} />
+            return <RangeType node={node} item={itemData} nodeData={nodeData} />
 
         case 'toggle':
-            return <ToggleFields node={node} item={item} nodeData={nodeData} />
+            return <ToggleFields node={node} item={itemData} nodeData={nodeData} />
 
         case 'select':
-            return <SelectFields node={node} item={item} nodeData={nodeData} />
+            return <SelectFields node={node} item={itemData} nodeData={nodeData} />
 
         case 'input':
-            return <InputFields node={node} item={item} nodeData={nodeData} />
+            return <InputFields node={node} item={itemData} nodeData={nodeData} />
 
         default:
             return <></>

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import useTheme from '../diagram/Theme';
 import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
-import { Type, Hash, Braces, ToggleLeft } from 'lucide-react';
+import { Type, Hash, Braces, ToggleLeft, VariableIcon } from 'lucide-react';
 import Input from '../diagram/NodeInput'
 
 export const getInputTypes = () => ['input']
@@ -24,10 +24,12 @@ export default ({ nodeData = {}, item, node }) => {
         "NumericLiteral": Hash,
         "TrueKeyword": ToggleLeft,
         "ObjectLiteralExpression": Braces,
-        "FalseKeyword": ToggleLeft
+        "FalseKeyword": ToggleLeft,
+        "Identifier": VariableIcon
     }
+    const iconList = Object.keys(icons).filter(i => i != 'Identifier')
 
-    const defaultKindValue = Object.keys(icons)[0]
+    const defaultKindValue = iconList[0]
     const kindValue = data?.kind ?? defaultKindValue
 
     const onValueChange = (val) => {
@@ -39,7 +41,7 @@ export default ({ nodeData = {}, item, node }) => {
         setNodeData(node.id, {
             ...nodeData, [field]: {
                 ...data,
-                kind: Object.keys(icons)[(Object.keys(icons).indexOf(kindValue) + 1) % (Object.keys(icons).length - 1)]
+                kind: iconList[(iconList.indexOf(kindValue) + 1) % (iconList.length - 1)]
             }
         })
     }
@@ -51,13 +53,14 @@ export default ({ nodeData = {}, item, node }) => {
             // cases: boolean, number, string, object
             case 'input':
             default:
+                const enabledToggle = iconList.includes(kindValue)
                 return <>
                     {icons[kindValue]
                         ? <div
-                            style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: 'pointer' }}
-                            onClick={onToggleType}
+                            style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: enabledToggle ? 'pointer' : '' }}
+                            onClick={enabledToggle ? onToggleType : null}
                         >
-                            {React.createElement(icons[kindValue], { size: 16, color: useTheme('interactiveColor') })}
+                            {React.createElement(icons[kindValue], { size: 16, color: enabledToggle ? useTheme('interactiveColor') : useTheme('disableTextColor') })}
                         </div>
                         : <></>}
                     <Input

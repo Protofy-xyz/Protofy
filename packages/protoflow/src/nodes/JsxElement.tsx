@@ -166,6 +166,7 @@ function dumpAttributeData(attrData: { kind: string, value: any }): any {
         case 'NumericLiteral':
         case 'TrueKeyword':
         case 'FalseKeyword':
+        case 'Identifier':
             break
         default:
             return
@@ -193,6 +194,9 @@ function getAttributeData(node: any): any {
                 case 'TrueKeyword':
                 case 'FalseKeyword':
                     atrVal = expression.getLiteralValue()
+                    break
+                case 'Identifier':
+                    atrVal = expression.getText()
                     break
                 // case 'ObjectLiteralExpression':
                 //     const tmpProps = expression.getProperties().reduce((total, current) => {
