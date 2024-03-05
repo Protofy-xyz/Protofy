@@ -1,6 +1,7 @@
 import { APIModel } from ".";
 import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports, addFeature, removeFeature, hasFeature } from '../../api'
 import { promises as fs } from 'fs';
+import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { API } from 'protolib/base'
 import { getServiceToken } from "../../api/lib/serviceToken";
@@ -44,7 +45,7 @@ async function checkFileExists(filePath) {
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const files = (await fs.readdir(APIDir(getRoot(req)))).filter(f => f != 'index.ts')
+      const files = (await fs.readdir(APIDir(getRoot(req)))).filter(f => f != 'index.ts' && !fsSync.lstatSync(fspath.join(APIDir(getRoot(req)), f)).isDirectory() && f.endsWith('.ts'))
       const apis = await Promise.all(files.map(async f => getAPI(f, req)));
 
       for (const api of apis) {
