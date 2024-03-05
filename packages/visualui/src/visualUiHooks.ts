@@ -8,7 +8,7 @@ export function newVisualUiContext(options: any) {
   return useEditorContext(options)
 }
 
-// handle no contextAtom provided on UIEditor()
+// handle no contextAtom provided on UIEditor()/useEdit()
 export function useVisualUiAtom(_atom: any) {
   const contextAtom = _atom ?? null
   return contextAtom ? useAtom(contextAtom) : [null, null]
