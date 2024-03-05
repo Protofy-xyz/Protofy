@@ -61,7 +61,7 @@ export const RenderNode = ({ render }) => {
             ? dom.getBoundingClientRect()
             : { top: 0, left: 0, bottom: 0 };
         return {
-            top: `${top > 10 ? (top - 60) : (bottom + 10)}px`,
+            top: `${top > 100 ? (top - 60) : (bottom + 10)}px`,
             left: `${left}px`,
         };
     }, []);
