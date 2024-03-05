@@ -1,6 +1,6 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
-import { Center, usePendingEffect, useRemoteStateList, ObjectGrid, DataTableCard, MapView, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { Center, useRemoteStateList, ObjectGrid, DataTableCard, MapView, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { createContext, forwardRef, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
 import { getErrorMessage, useToastController } from '@my/ui'
@@ -49,7 +49,7 @@ export const DataViewContext = createContext<DataViewState>({
     sourceUrl: ""
 });
 
-export function DataView({
+export const DataView = forwardRef(({
     onSelectItem,
     itemData,
     rowIcon,
@@ -91,7 +91,7 @@ export function DataView({
     deleteable = () => { return true },
     objectProps = {},
     refreshOnHotReload = false
-}: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any) {
+}: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any, ref) => {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const { query } = useRouter();
     const [state, setState] = useState(pageState ?? query)
@@ -242,8 +242,8 @@ export function DataView({
     if(state.editFile) {
         
     }
-    return (<AsyncView atom={currentItems}>
-        <YStack height="100%" f={1}>
+    return (<AsyncView  atom={currentItems}>
+        <YStack ref={ref} height="100%" f={1}>
             <DataViewContext.Provider value={{ items: currentItems, sourceUrl, model, selected, setSelected, onSelectItem, state, push, mergePush, removePush, replace, tableColumns: columns, rowIcon }}>
                 <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
                     {/* <AlertDialog
@@ -464,4 +464,4 @@ export function DataView({
         </YStack>
     </AsyncView>
     )
-}
+})
