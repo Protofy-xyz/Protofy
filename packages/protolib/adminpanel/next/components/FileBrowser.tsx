@@ -69,7 +69,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const onOpen = (file: any) => {
         logger.debug({ file }, `on open client: ${JSON.stringify(file)}`)
         if (file.isDir) return setCurrentPath(file.path ?? file.id)
-        router.push('/files?path=' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '&file=' + file.name)
+        router.push('files?path=' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '&file=' + file.name)
     }
 
     const { resolvedTheme } = useThemeSetting()
