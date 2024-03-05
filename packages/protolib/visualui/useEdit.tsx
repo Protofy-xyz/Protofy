@@ -15,7 +15,7 @@ const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
 
 
-export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context) => {
+export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}) => {
   const router = useRouter()
   const [session] = useAtom(Session)
   const edit = useIsEditing()
