@@ -471,8 +471,10 @@ export class Source {
                         nodeKind = expressionKind
                         break
                     case 'Identifier':
-                        atrVal = this.metadata?.context[expression.getText()] != undefined ? this.metadata?.context[expression.getText()] : node?.getText()
-                        break
+                        if (this.metadata?.context && this.metadata?.context[expression.getText()] != undefined) {
+                            atrVal = this.metadata?.context[expression.getText()]
+                            break
+                        }
                     default:
                         atrVal = node?.getText()
                         break
