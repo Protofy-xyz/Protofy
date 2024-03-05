@@ -114,7 +114,7 @@ export default {
       const jsCode = deviceDefinition.config.components;
       const deviceCode = 'device(' + jsCode + ')';
       console.log("-------DEVICE CODE------------", deviceCode)
-      const deviceObj = eval(deviceCode)
+      const deviceObj = eval(deviceCode.replace(/;/g, ""))
       const componentsTree = deviceObj.getComponentsTree(deviceName, deviceDefinition)
       const yaml = deviceObj.dump("yaml")
       const subsystems = deviceObj.getSubsystemsTree(deviceName, deviceDefinition)
