@@ -33,7 +33,7 @@ export default Protofy("code",(app:Application, {devicePub, deviceSub, mqtt}) =>
     //deviceSub allows to receive notifications from devices via mqtt
     //app is a normal expressjs object
     //mqtt is a mqttclient connection
-    console.log("Custom API {{name}} started")
+    logger.info("Custom API {{name}} started")
 })
 
 

@@ -41,5 +41,5 @@ export default Protofy("code",(app: App, {devicePub, deviceSub, mqtt}) => {
     //         : devicePub('testdevice', 'switch', 'testrelay', 'ON')
     // })
 
-    console.log("IOT Router {{name}} started")
+    logger.info("IOT Router {{name}} started")
 })
