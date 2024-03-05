@@ -3,6 +3,8 @@ import { GroupModel } from 'protolib/bundles/groups/groupsSchemas'
 import { EventModel } from 'protolib/bundles/events/eventsSchemas'
 import { ObjectModel } from 'protolib/bundles/objects/objectsSchemas'
 import { WorkspaceModel } from 'protolib/bundles/workspaces/WorkspaceModel'
+import { APIModel } from 'protolib/bundles/apis/APISchemas'
+
 import LocalObjects from './custom/objects'
 
 export const Objects = {
@@ -11,5 +13,6 @@ export const Objects = {
     group: GroupModel,
     object: ObjectModel,
     workspace: WorkspaceModel,
+    api: APIModel,
     ...LocalObjects,
 }

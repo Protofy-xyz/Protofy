@@ -5,6 +5,7 @@ import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import { API } from 'protolib/base'
+import { Objects } from "app/bundles/objects";
 
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
 
@@ -144,6 +145,16 @@ const getDB = (path, req, session) => {
 
 
         await setSchema(filePath, result, value, req)
+        //if api is selected, create an autoapi for the object
+        if(value.api && session) {
+          console.log('value: ', value, 'session: ', session)
+          const objectApi = Objects.api.load({
+            name: value.name,
+            object: value.name,
+            template: "Automatic CRUD"
+          })
+          await API.post("/adminapi/v1/apis?token="+session.token, objectApi.create().getData())
+        }
       }
     },
 
