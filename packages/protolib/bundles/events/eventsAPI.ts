@@ -1,7 +1,9 @@
-import { EventModel } from ".";
-import {AutoAPI, CreateApi} from '../../api'
+import { EventModel, EventType } from ".";
+import { AutoAPI } from '../../api'
+import { getServiceToken } from "../../api/lib/serviceToken";
+import { API } from "../../base";
 
-export const EventsAPI = AutoAPI({
+const EventAPI = AutoAPI({
     modelName: 'events',
     modelType: EventModel,
     initialDataDir: __dirname,
@@ -11,3 +13,17 @@ export const EventsAPI = AutoAPI({
     requiresAdmin: ['*'],
     logLevel: "debug"
 })
+
+export const EventsAPI = async (app, context) => {
+    EventAPI(app, context)
+    app.get('/adminapi/v1/events/signaling/list', async (req, res) => {
+        const { isError, data } = await API.get('/adminapi/v1/events?token=' + getServiceToken() + '&all=1'); // TODO: Change for event api call that search
+        if (isError) {
+            res.send("Error obtaining signaling events")
+            return;
+        }
+        const events = data?.items;
+        const signalingEventsData = events?.filter((event: EventType) => event.path === 'signaling'); // should be at endpoint for event model applying search filter (related with previous one "TODO")
+        res.send(signalingEventsData)
+    })
+}

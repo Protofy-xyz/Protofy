@@ -44,7 +44,28 @@ aedesInstance.authenticate = function (client, username, password, callback) {
   }
 }
 
-BundleAPI(app, { mqtt: getMQTTClient('admin-api', getServiceToken()) })
+const mqtt = getMQTTClient('admin-api', getServiceToken())
+
+const topicSub = (topic, cb) => {
+  mqtt.subscribe(topic)
+  mqtt.on("message", (messageTopic, message) => {
+    const isWildcard = topic.endsWith("#");
+    if (!isWildcard && topic != messageTopic) {
+      return
+    }
+    if (isWildcard && !messageTopic.startsWith(topic.slice(0, -1).replace(/\/$/, ''))) {
+      return
+    }
+    const parsedMessage = message.toString();
+    cb(parsedMessage, topic)
+  });
+};
+
+const topicPub = (topic, data) => {
+  mqtt.publish(topic, data)
+}
+
+BundleAPI(app, { mqtt, topicSub, topicPub })
 const server = http.createServer(app);
 
 const wss = new Server({ noServer: true });
