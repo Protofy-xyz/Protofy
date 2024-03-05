@@ -98,7 +98,7 @@ export const CustomField = ({ label, input, menuActions = undefined }: any) => {
                                 <MoreVertical size={16} color={useTheme('textColor')} />
                             </div>
                         </Popover.Trigger>
-                        <Popover.Content theme="light" padding={0} space={0} bw={1} boc="$borderColor" bc={"$color1"} >
+                        <Popover.Content padding={0} space={0} shadowRadius={"$4"} shadowColor={"black"} shadowOpacity={0.6} bc={useTheme('nodeBackgroundColor')} >
                             {menuActions.map((action, i) => {
                                 return <XStack
                                     key={i} gap="$2" ml={"$1"} o={1}
@@ -109,9 +109,12 @@ export const CustomField = ({ label, input, menuActions = undefined }: any) => {
                                         action.action()
                                         setMenuOpened(false)
                                     }}
+                                    hoverStyle={{
+                                        backgroundColor: useTheme('interactiveColor')
+                                    }}
                                 >
-                                    {React.createElement(action.icon, { color: 'black', size: "16px", strokeWidth: 2 })}
-                                    <Text style={{ color: 'black', fontSize: '16px',  fontFamily: 'Jost-Medium' }} >{action.text}</Text>
+                                    {React.createElement(action.icon, { size: "16px", strokeWidth: 2 })}
+                                    <Text style={{ fontSize: '16px',  fontFamily: 'Jost-Medium' }} >{action.text}</Text>
                                 </XStack>
                             })}
                         </Popover.Content>

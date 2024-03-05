@@ -12,7 +12,7 @@ const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     <div onClick={onPress}
         style={{
             padding: '5px',
-            backgroundColor: selected ? '#EBEBEB' : '#F8F8F8',
+            backgroundColor: selected ? useTheme('interactiveColor') : useTheme('inputBackgroundColor'),
             display: 'flex', alignContent: 'center',
             alignItems: 'center'
         }}
@@ -69,7 +69,7 @@ export default ({ nodeData = {}, node, item }) => {
 
                 return <>
                     <div style={{ width: '100%', padding: '6px' }}>
-                        <Text style={{ color: 'black', fontFamily: 'Jost-Medium', fontSize: '16px', paddingLeft: 0, alignSelf: 'flex-start' }}>Choose a Theme</Text>
+                        <Text style={{ fontFamily: 'Jost-Medium', fontSize: '16px', paddingLeft: 0, alignSelf: 'flex-start' }}>Choose a Theme</Text>
                     </div>
                     <GithubPicker
                         styles={pickerStyles}
@@ -92,15 +92,15 @@ export default ({ nodeData = {}, node, item }) => {
                     <div style={{ height: '380px' }}>
                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', padding: '6px' }}>
                             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <Text style={{ color: 'black', fontFamily: 'Jost-Medium', fontSize: '16px', paddingLeft: 0 }}>Choose a Color</Text>
+                                <Text style={{ fontFamily: 'Jost-Medium', fontSize: '16px', paddingLeft: 0 }}>Choose a Color</Text>
                                 <Text style={{ color: 'gray', fontSize: '14px', paddingLeft: 0, textAlign: 'left' }} >{colorMode == 'theme' ? 'Theme Color' : 'Custom Color'}</Text>
                             </div>
-                            <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '6px', border: '1px solid #cccccc', overflow: 'hidden', height: '28px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '6px', overflow: 'hidden', height: '28px' }}>
                                 <ToggleItem selected={colorMode == 'theme'} onPress={() => setColorMode('theme')}>
-                                    <Palette size={'16px'} color={colorMode == 'theme' ? interactiveColor : 'gray'} fillOpacity={0} />
+                                    <Palette size={'16px'} color={useTheme('textColor')} fillOpacity={0} />
                                 </ToggleItem>
                                 <ToggleItem selected={colorMode == 'custom'} onPress={() => setColorMode('custom')}>
-                                    <Pipette size={'16px'} color={colorMode == 'custom' ? interactiveColor : 'gray'} fillOpacity={0} />
+                                    <Pipette size={'16px'} color={useTheme('textColor')} fillOpacity={0} />
                                 </ToggleItem>
                             </div>
                         </div>
@@ -147,7 +147,7 @@ export default ({ nodeData = {}, node, item }) => {
                     >
                     </div>
                 </Popover.Trigger>
-                <Popover.Content theme="light" space={0} width='250px' bw={1} boc="$borderColor" bc={"$color1"} >
+                <Popover.Content marginRight="20px" space={0} width='250px' shadowRadius={"$4"} shadowColor={"black"} shadowOpacity={0.6} bc={useTheme('nodeBackgroundColor')} >
                     {getInput()}
                 </Popover.Content>
             </Popover>
