@@ -2,6 +2,7 @@ import React from 'react';
 import useTheme from './Theme';
 
 const NodeInput = React.forwardRef((props:any, ref) => {
+  const nodeBorderColor = useTheme('nodeBorderColor')
   return (
     <input
       {...props}
@@ -21,6 +22,14 @@ const NodeInput = React.forwardRef((props:any, ref) => {
         boxSizing: 'border-box',
         cursor: props.readOnly ? 'grab' : 'text',
         ...props.style
+      }}
+      onFocus={e => {
+        e.currentTarget.style.boxShadow = "inset 0px 0px 0px 2px " + nodeBorderColor
+        props.onFocus ? props.onFocus(e) : null
+      }}
+      onBlur={e => {
+        e.currentTarget.style.boxShadow = ""
+        props.onBlur ? props.onBlur(e) : null
       }}
     >
       {props.children}
