@@ -3,6 +3,7 @@ import { DevicesModel } from ".";
 import { AutoAPI } from '../../../api'
 import { getServiceToken } from "protolib/api/lib/serviceToken";
 import { generateEvent } from "protolib/bundles/events/eventsLibrary";
+import { getLogger } from 'protolib/base/logger';
 
 export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
@@ -10,6 +11,8 @@ export const DevicesAutoAPI = AutoAPI({
     initialDataDir: __dirname,
     prefix: '/adminapi/v1/'
 })
+
+const logger = getLogger()
 
 export const DevicesAPI = (app, context) => {
     const { topicSub } = context;
@@ -28,21 +31,24 @@ export const DevicesAPI = (app, context) => {
         let parsedMessage = message;
         try {
             parsedMessage = JSON.parse(message);
-        } catch (err) {}
-
-        await generateEvent(
-            {
-                path: device, // == "devices"
-                from: endpoint,
-                user: deviceName,
-                payload: {
-                    message: parsedMessage,
-                    deviceName,
-                    endpoint
-                }
-            },
-            getServiceToken()
-        );
+        } catch (err) { }
+        if (endpoint == 'debug') {
+            logger.debug({ from: device, deviceName, endpoint }, JSON.stringify({topic, message}))
+        } else {
+            await generateEvent(
+                {
+                    path: device, // == "devices"
+                    from: endpoint,
+                    user: deviceName,
+                    payload: {
+                        message: parsedMessage,
+                        deviceName,
+                        endpoint
+                    }
+                },
+                getServiceToken()
+            );
+        }
     }))
 
     app.get('/adminapi/v1/notifications', async (req, res) => {
