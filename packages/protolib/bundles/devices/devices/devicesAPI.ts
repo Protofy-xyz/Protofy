@@ -25,13 +25,18 @@ export const DevicesAPI = (app, context) => {
         const device = splitted[0];
         const deviceName = splitted[1];
         const endpoint = splitted.slice(2).join("/")
+        let parsedMessage = message;
+        try {
+            parsedMessage = JSON.parse(message);
+        } catch (err) {}
+
         await generateEvent(
             {
                 path: device, // == "devices"
                 from: endpoint,
                 user: deviceName,
                 payload: {
-                    message: message,
+                    message: parsedMessage,
                     deviceName,
                     endpoint
                 }
