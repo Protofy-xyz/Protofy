@@ -18,7 +18,7 @@ const topicSub = (topic, cb) => {
             return
         }
         const parsedMessage = message.toString();
-        cb(parsedMessage, topic)
+        cb(parsedMessage, messageTopic)
     });
 };
 

@@ -27,7 +27,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const aedesInstance = new aedes();
 aedesInstance.authenticate = function (client, username, password, callback) {
   if (!username) {
-    logger.info({client}, "MQTT anonymous login request")
+    logger.info({}, "MQTT anonymous login request")
   } else {
     logger.info({username}, "MQTT user login request: "+username)
   }
@@ -57,7 +57,7 @@ const topicSub = (topic, cb) => {
       return
     }
     const parsedMessage = message.toString();
-    cb(parsedMessage, topic)
+    cb(parsedMessage, messageTopic)
   });
 };
 
