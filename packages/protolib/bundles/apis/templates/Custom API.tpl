@@ -23,7 +23,9 @@ import { Protofy } from 'protolib/base'
 import { getLogger } from "protolib/base"
 import { Application } from 'express';
 import fs from 'fs'
+import path from "path";
 
+const root = path.join(process.cwd(), '..', '..')
 const logger = getLogger()
 
 Protofy("type", "CustomAPI")
