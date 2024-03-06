@@ -8,12 +8,13 @@ import {
     reorderDataChilds, reorderEdgeChilds 
 } from 'protoflow/src/lib/FlowsOperations'
 
-const UIFLOWID = "flows-ui"
+export const UIFLOWID = "flows-ui"
 const Flow = FlowConstructor(UIFLOWID)
 
 export const VisualUiFlows = (props) => {
     return <Flow 
         {...props} 
+        flowId={UIFLOWID}
         enableCommunicationInterface={useFlowsComms}
     />
 }
@@ -23,6 +24,7 @@ function useFlowsComms({ edges, nodeData, nodes, setEdges, setNodesData, deleteN
     const router = useRouter()
     const queryParams = router.query
 
+    console.log('flowId', flowId)
     if (queryParams.experimental_comms === 'true') {
         useEffect(() => {
             console.log('flows: experimental communications')
