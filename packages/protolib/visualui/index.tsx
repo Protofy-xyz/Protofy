@@ -18,6 +18,7 @@ import { Container, ContainerLarge, ContainerXL } from '../components/Container'
 import { CopyBubble } from '../components/CopyBubble'
 import { DataCard } from '../components/DataCard'
 import { DataTable } from '../components/DataTable'
+import { DataView } from '../components/DataView'
 import { DiscordIcon } from '../components/icons/DiscordIcon'
 import { GithubIcon } from '../components/icons/GithubIcon'
 import EditableText from '../components/EditableText'
@@ -81,6 +82,7 @@ import VStack from '../components/VStack'
 import HStack from '../components/HStack'
 import VCenterStack from '../components/VCenterStack'
 import Spacer from '../components/Spacer'
+import { AdminPage } from '../components/AdminPage'
 
 const cw = getComponentWrapper('protolib')
 
@@ -141,6 +143,7 @@ export const miscellanyPalette = {
   ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { canMoveIn: () => false }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
+  ...cw(DataView, 'EyeOff', 'DataView', {}, nonDraggable),
   ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
   ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
   ...cw(ElevatedArea, 'GalleryThumbnails', 'ElevatedArea'),
@@ -172,6 +175,7 @@ export const miscellanyPalette = {
     href: "http://google.com"
   }),
   ...cw(Page, 'EyeOff', 'Page', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
+  ...cw(AdminPage, 'EyeOff', 'AdminPage', {}, nonDraggable),
   ...cw(PageGlow, 'EyeOff', 'PageGlow'),
   ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem', { text: "hello world" }),
   ...cw(Pre, 'EyeOff', 'Pre', {}, nonDraggable),

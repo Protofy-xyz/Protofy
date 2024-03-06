@@ -13,6 +13,18 @@ import { useToastController } from '@my/ui'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
+type OptionsProps = {
+  components?: any,
+  path: string
+  editors?: string[],
+  context?: any,
+  visualUiContext?: any
+}
+
+export const useUIEdit = (fn, options: OptionsProps) => {
+  return useEdit(fn, options.components, options.path, options.editors, options.context, options.visualUiContext)
+}
+
 export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}, visualUiContext = null) => {
   const router = useRouter()
   const [session] = useAtom(Session)
