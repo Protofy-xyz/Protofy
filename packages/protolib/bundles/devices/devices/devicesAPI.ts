@@ -1,27 +1,46 @@
+import { API } from "protolib/base";
 import { DevicesModel } from ".";
-import { AutoAPI, CreateApi } from '../../../api'
-import { getLogger } from "protolib/base"
-import { getBaseConfig, getConfigWithoutSecrets } from 'app/BaseConfig'
-import { setConfig, getConfig } from 'protolib/base/Config';
+import { AutoAPI } from '../../../api'
+import { getServiceToken } from "protolib/api/lib/serviceToken";
+import { generateEvent } from "protolib/bundles/events/eventsLibrary";
 
-const DevicesAutoAPI = AutoAPI({
+export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
     modelType: DevicesModel,
     initialDataDir: __dirname,
     prefix: '/adminapi/v1/'
 })
 
-const logger = getLogger()
-const config = getConfig()
-
 export const DevicesAPI = (app, context) => {
+    const { topicSub } = context;
     DevicesAutoAPI(app, context)
-    // const { topicPub, topicSub, mqtt } = context;
+    // Device topics: devices/[deviceName]/[endpoint], en caso de no tener endpoint: devices/[deviceName]
+    /* examples
+        devices/patata/switch/relay/status
+        devices/patata/button/relay/status
+        ...
+    */
+    topicSub('devices/#', (async (message: string, topic: string) => {
+        const splitted = topic.split("/");
+        const device = splitted[0];
+        const deviceName = splitted[1];
+        const endpoint = splitted.slice(2).join("/")
+        await generateEvent(
+            {
+                path: device, // == "devices"
+                from: endpoint,
+                user: deviceName,
+                payload: {
+                    message: message,
+                    deviceName,
+                    endpoint
+                }
+            },
+            getServiceToken()
+        );
+    }))
 
-
-    // topicSub('adminEvent', (async (message: string, topic: string) => {
-    //     logger.info({ config: getConfigWithoutSecrets(config) }, "Recieved device event")
-    //     // const data = AdminEventModel.load(JSON.parse(message)).getData()
-    //     // READ 'data' if needed
-    // }))
+    app.get('/adminapi/v1/notifications', async (req, res) => {
+        const { data: events } = await API.get('/adminapi/v1/events?all=1&token=' + getServiceToken())
+    })
 }
