@@ -17,3 +17,4 @@ export { default as FallbackPort } from './src/FallbackPort';
 export { generateId } from './src/lib/IdGenerator';
 export { connectNodes } from './src/lib/Edge';
 export { Panel } from 'reactflow';
+export { default as Button } from './src/Button'

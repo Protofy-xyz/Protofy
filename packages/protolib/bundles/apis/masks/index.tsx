@@ -1,6 +1,8 @@
 import DevicePub from './DevicePub';
 import ApiResponse from './ApiResponse'
 import ApiMask from './ApiMask'
+import Logger from './Logger'
+
 import { filterCallback, restoreCallback } from 'protoflow';
 
 const apiMasks = [
@@ -10,6 +12,13 @@ const apiMasks = [
         check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('devicePub'), //TODO: Change output function name
         getComponent: (node, nodeData, children) => <DevicePub node={node} nodeData={nodeData} children={children} />,
         getInitialData: () => { return { to: 'devicePub', param1: '"none"', param2: '"none"', param3: '"none"' } }
+    },
+    {
+        id: 'logger',
+        type: 'CallExpression',
+        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('logger.'),
+        getComponent: (node, nodeData, children) => <Logger node={node} nodeData={nodeData} children={children} />,
+        getInitialData: () => { return { to: 'logger.info', param1: '{}', param2: '"message"' } }
     },
     {
         id: 'res.send',

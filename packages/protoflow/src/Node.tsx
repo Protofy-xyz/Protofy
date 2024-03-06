@@ -563,6 +563,25 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
     const isConnected = isNodeConnected(edges, id)
     const content = React.useRef()
 
+    const computeLayout = () => {
+        if (content.current) {
+            //@ts-ignore
+            const elements = content.current.querySelectorAll('.handleKey')
+            let maxWidth = 0
+            elements.forEach(key => {
+                let width = key.firstElementChild?.offsetWidth
+                if (width > maxWidth) {
+                    maxWidth = width
+                }
+            });
+            elements.forEach(key => {
+                key.style.width = maxWidth + 15 + 'px'
+            });
+        }
+    }
+
+    useEffect(() => computeLayout(), [])
+
     if (!skipCustom) {
         const mask = getCustomComponent(node, nodeData, customComponents)
         const customComponent = mask?.getComponent(node, nodeData, topics, mask)
@@ -588,30 +607,6 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
     if (node && node.data && node.data.height) extraStyle.minHeight = node.data.height + 'px'
 
     if (node.id && !nodeData?._metadata?.layouted) extraStyle.opacity = '0'
-
-    const computeLayout = () => {
-        if (content.current) {
-            //@ts-ignore
-            const elements = content.current.querySelectorAll('.handleKey')
-
-            let maxWidth = 0;
-
-            // Itera sobre todos los elementos para encontrar el más ancho
-            elements.forEach(key => {
-                let width = key.firstElementChild?.offsetWidth;
-                if (width > maxWidth) {
-                    maxWidth = width;
-                }
-            });
-
-            // Aplica el ancho máximo a todos los elementos
-            elements.forEach(key => {
-                key.style.width = maxWidth + 15 + 'px';
-            });
-        }
-    }
-
-    useEffect(() => computeLayout(), [])
 
     return (
         <DiagramNode
