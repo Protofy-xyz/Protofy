@@ -46,7 +46,7 @@ export default ({ nodeData = {}, item, node }) => {
             borderRadius="$1"
             fontSize="$4"
         >
-            <Text> {itemValue ? 'true' : 'false'} </Text>
+            <Text style={{color: !isSelected ? useTheme('disableTextColor') : ''}}> {itemValue ? 'true' : 'false'} </Text>
         </Button>
     }
 

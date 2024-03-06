@@ -1,5 +1,6 @@
 export default {
     nodeBackgroundColor: '#252526',
+    interactiveHoverColor: '#4772b330',
     borderColor: 'grey',
     blockPort: 'grey',
     flowPort: 'grey',
