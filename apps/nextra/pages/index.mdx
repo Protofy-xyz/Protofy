@@ -30,24 +30,44 @@ You can run the project using your local environment or using docker.
 
 Clone the project:
 
-```
+```bash
 git clone https://github.com/Protofy-xyz/Protofy.git
 cd Protofy
 ```
 
 ### Option 1: Local environment (simpler): 
 
-To run Protofy in your local environment. 
+To run Protofy in your local environment you first need to know that Protofy runs using **NodeJS**, you should have already installed it. If not, we provide you some links to install NodeJS:
 
-If you don't have yarn installed globally, you may need to do (first time only):
 
-```
+import { Tabs } from 'nextra/components'
+ 
+    <Tabs items={['Ubuntu', 'MacOS', 'Windows', 'Other']}>
+    <Tabs.Tab>
+    ```bash
+    cd ~
+    curl -sL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh #change setup_20.x for the desired version
+    sudo bash /tmp/nodesource_setup.sh
+    sudo apt install nodejs
+    node -v #check version
+    ```
+    </Tabs.Tab>
+    <Tabs.Tab>You can download latest NodeJS version for MacOS [here](https://nodejs.org/en/download).</Tabs.Tab>
+    <Tabs.Tab>You can download latest NodeJS version for Windows [here](https://nodejs.org/en/download).</Tabs.Tab>
+    <Tabs.Tab>Check available NodeJS installers [here](https://nodejs.org/en/download).</Tabs.Tab>
+    </Tabs>
+
+ 
+
+Also you must have installed **yarn** globally, you may need to do (first time only):
+
+```bash
 npm i -g yarn
 ```
 
-Start protofy in development mode (hot reload)
+Start Protofy in development mode (hot reload)
 
-```sh
+```bash
 yarn && yarn start-dev
 ```
 
@@ -56,21 +76,21 @@ yarn && yarn start-dev
 
 To run the project using docker (no node or npm needed) just run:
 
-```
+```bash
 cd docker
 ./start-dev
 ```
 
 if you want to run it in background mode, use:
 
-```
+```bash
 cd docker
 ./dev
 ```
 
 To compile protofy in production mode using docker:
 
-```
+```bash
 cd docker
 ./web-build
 ./start-prod
@@ -87,13 +107,13 @@ Once the Next.js app is running you can go to `http://localhost:8080` to see the
 ## 🙋‍♂️ Adding a user
 The first time you run the starter you won't have users. You can easily create one on `http://localhost:8080/auth/login` but this one will be a normal user. If you want to create an admin user you can do it by running the following command:
 
-```sh
+```bash
 yarn add-user user@email.com password admin
 ```
 
 Or if you started with docker: 
 
-```
+```bash
 cd docker
 ./add-user
 ```
@@ -103,13 +123,13 @@ The admin panel requires to have a user with `admin` type to be able to access i
 
 Normal users can register through the interface, or you can create user accounts (whout admin panel access):
 
-```sh
+```bash
 yarn add-user user@email.com password user
 ```
 
 Or if you started with docker: 
 
-```
+```bash
 cd docker
 ./add-user
 ```
