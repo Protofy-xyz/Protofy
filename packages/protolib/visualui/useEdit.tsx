@@ -21,7 +21,7 @@ type OptionsProps = {
   visualUiContext?: any
 }
 
-export const useUIEdit = (fn, options: OptionsProps) => {
+export const useEditor = (fn, options: OptionsProps) => {
   return useEdit(fn, options.components, options.path, options.editors, options.context, options.visualUiContext)
 }
 
