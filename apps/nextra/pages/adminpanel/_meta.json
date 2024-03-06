@@ -1,5 +1,7 @@
 {
     "index": "Introduction",
     "access": "How to access",
-    "extending": "Extending Admin Panel"
+    "extending": "Extending Admin Panel",
+    "configuringAdminpage": "Configuring Admin Page",
+    "entitycreation": "Entities Creation"
 }
