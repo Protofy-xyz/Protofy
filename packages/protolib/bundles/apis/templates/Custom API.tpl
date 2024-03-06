@@ -22,6 +22,7 @@ import { getAuth } from "protolib/api";
 import { Protofy } from 'protolib/base'
 import { getLogger } from "protolib/base"
 import { Application } from 'express';
+import fs from 'fs'
 
 const logger = getLogger()
 
