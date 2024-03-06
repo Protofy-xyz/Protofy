@@ -1,3 +1,82 @@
 #  🔭 Extending Admin Panel
 So maybe your project has a specific use case that Protofy doesn't cover, or you want to add a new feature to the admin panel. In this section we will explain how to extend admin panel to add new features to your project.
 
+## Changing Sidebar
+You can change the content of sidebar panel going to `packages/app/boundles/custom/workspaces/admin.tsx`. All configurations of the following sections are
+related with editing the previous file.
+### Changing sidebar sections
+To add new section you must add new key to menu, key is going to be the name of the section.
+Previous state:
+```typescript filename="packages/app/boundles/custom/workspaces/admin.tsx"
+export default {
+    "default": "/admin/pages",
+    "label": "Workspace",
+    "menu": {
+        "System": [
+            { "name": "Users", "icon": "users", "type": "users", "path": "/" },
+            ...
+        ],
+        ...
+    }
+}
+```
+New state:
+```typescript {9} filename="packages/app/boundles/custom/workspaces/admin.tsx"
+export default {
+    "default": "/admin/pages",
+    "label": "Workspace",
+    "menu": {
+        "System": [
+            { "name": "Users", "icon": "users", "type": "users", "path": "/" },
+            ...
+        ],
+        "New Section": [],
+        ...
+    }
+}
+```
+Check the updated changes in the UI.
+![new section](/documentation/adminpanel/new_section_example.png)
+
+### Adding subsections to sidebar section
+To add subsections to a section all you have to do is add an object with the following properties inside array of dependencies of your section:
+```json filename="example of array properties"
+    { "name": "New Subsection", "icon": "serverConf", "type":"users", "path": "/"}
+```
+Here is an explaination of each of the properties that accepts the object that creates a subsection:
+
+<table>
+  <tbody>
+    {[
+      { property: 'Property', description: 'Description' },
+      { property: 'name', description: 'Name of the subsection.' },
+      { property: 'icon', description: 'Icon to display at left side of name.' },
+      { property: 'type', description: 'Api endpoint model.' },
+      { property: 'path', description: 'Default path to concat to URL when navigate to this subsection.' }
+    ].map(item => (
+      <tr key={item.property}>
+        <td>{item.property}</td>
+        <td>{item.description}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+Here is an example of how to add subsection to "New Section" section:
+```typescript {9-11} filename="packages/app/boundles/custom/workspaces/admin.tsx"
+export default {
+    "default": "/admin/pages",
+    "label": "Workspace",
+    "menu": {
+        "System": [
+            { "name": "Users", "icon": "users", "type": "users", "path": "/" },
+            ...
+        ],
+        "New Section": [
+            { "name": "New Subsection", "icon": "serverConf", "type":"users", "path": "/"}
+        ],
+        ...
+    }
+}
+```
+![new-subsection](/documentation/adminpanel/new_subsection.png)
