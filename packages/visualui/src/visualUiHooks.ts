@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { atom, useAtom } from 'jotai'
 import { EditorStore, useEditorContext } from "@protocraft/core";
 import { useRouter } from 'next/router'
+import Diff from 'deep-diff'
 
 // create craftjs context 
 export function newVisualUiContext(options: any) {
@@ -14,31 +15,41 @@ export function useVisualUiAtom(_atom: any) {
   return contextAtom ? useAtom(contextAtom) : [null, null]
 }
 
-// hook for visualUiState management
+// hook to subscribe to a visualUi instance state
+// *client* refers to any subscriber
 export function useVisualUi(atom, callb, defState) {
   if (atom) {
-    const [state, setState] = useState(defState)
-    const [lastEvent, setLastEvent] = useState<any>(null)
-    const [craftContext] = useAtom<EditorStore>(atom)
+    const [craftContext] = useAtom<EditorStore>(atom) // protocraft internal state
+    const [prevNodes, setPreviousNodes] = useState<string>(null) // previous nodes on every udpate
+    const [lastEvent, setLastEvent] = useState<any>(null) // get last event triggered by any
+    const [state, setState] = useState(defState) // client wanted internal state based on a callback trigger
 
     useEffect(() => {
         if (!craftContext || !craftContext['subscribe']) return
 
         craftContext.subscribe(
-        (_) => {
-            setState((prev: any) => {
-            const result = callb(prev, craftContext)
-            return result ?? prev
-            })
-        },
-        () => {
-            // we need to discover more about this callback
-        }
+            (_) => {
+                setState((prev: any) => {
+                    const result = callb(prev, craftContext)
+                    return result ?? prev
+                })
+            },
+            () => {
+                // we need to discover more about this callback
+            }
         );
     }, [craftContext])
 
     useEffect(() => {
-        console.log('boyyyy')
+        if (craftContext.history.timeline.length < 1) return  // this is to avoid empty initializer of craft
+        if (lastEvent === null && prevNodes === null) { // first load
+            setPreviousNodes(craftContext.query.serialize())
+            return 
+        } 
+
+        const currentEditorNodes: any = JSON.parse(craftContext.query.serialize())
+        const diffs = Diff.diff(JSON.parse(prevNodes), JSON.parse(craftContext.query.serialize())) 
+        console.log('difss')
     }, [craftContext.query.serialize()])
 
     return {
