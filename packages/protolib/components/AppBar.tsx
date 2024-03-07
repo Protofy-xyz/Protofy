@@ -39,14 +39,16 @@ export const AppBar = React.forwardRef(({ backgroundColor, containerProps = {}, 
   }
 
   const [_, forceUpdate] = React.useState<any>(false) //TODO: create generic function for fixed
+  const [top, setTop] = React.useState<any>(0) //TODO: create generic function for fixed
   React.useEffect(() => {
     // Note: This useEffect makes AppBar responsive for visual ui
     const pageElem = document.getElementById('protolib-page-container')
     const resizeHandler = () => {
-        //@ts-ignore
-        headerContainerRef.current.width = pageElem?.offsetWidth
-        headerContainerRef.current.top = pageElem?.clientTop
-        forceUpdate(s => !s)
+      //@ts-ignore
+      headerContainerRef.current.width = pageElem?.offsetWidth
+      headerContainerRef.current.top = pageElem?.clientTop
+      setTop(pageElem?.clientTop)
+      forceUpdate(s => !s)
     };
     if (pageElem) {
       const resizeObserver = new ResizeObserver(resizeHandler);
@@ -81,7 +83,7 @@ export const AppBar = React.forwardRef(({ backgroundColor, containerProps = {}, 
         ref={headerContainerRef}
         // @ts-ignore
         pos="fixed"
-        top={headerContainerRef.current?.top ?? position == 'top' ? 0 : undefined}
+        top={top ?? position == 'top' ? 0 : undefined}
         bottom={position == 'bottom' ? 0 : undefined}
         left={0}
         right={0}
