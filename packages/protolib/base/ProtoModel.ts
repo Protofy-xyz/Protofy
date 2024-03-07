@@ -110,7 +110,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
             for (const [key, value] of Object.entries(parsed)) {
                 if (!this.data.hasOwnProperty(key) || this.data[key] != value) {
-                    logger.debug({ data: this.data[key] }, `discarded: ${JSON.stringify(this.data[key])}`)
+                    //logger.debug({ data: this.data[key] }, `discarded: ${JSON.stringify(this.data[key])}`)
                     return
                 }
             }
