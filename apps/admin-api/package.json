@@ -19,6 +19,7 @@
     "status": "pm2 status admin-api"
   },
   "dependencies": {
+    "chokidar": "^3.5.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

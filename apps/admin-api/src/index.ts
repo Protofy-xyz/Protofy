@@ -16,7 +16,7 @@ import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
 import { generateEvent } from 'app/bundles/library'
-
+import chokidar from 'chokidar';
 
 const logger = getLogger()
 const config = getConfig()
@@ -101,9 +101,33 @@ mqttServer.listen(mqttPort, () => {
   logger.debug({ service: { protocol: "mqtt", port: mqttPort } }, "Service started: MQTT")
 });
 
-// generateEvent({
-//   path: 'services/start/adminapi', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-//   from: 'api', // system entity where the event was generated (next, api, cmd...)
-//   user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-//   payload: {}, // event payload, event-specific data
-// })
+generateEvent({
+  path: 'services/adminapi/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+  from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+  user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+  payload: {}, // event payload, event-specific data
+}, getServiceToken())
+
+if(process.env.NODE_ENV != 'production') {
+  const pathsToWatch = [
+    'src/**',
+    '../../packages/protolib/**',
+    '../../packages/app/bundles/**'
+  ];
+  
+  const watcher = chokidar.watch(pathsToWatch, {
+    ignored: /(^|[/\\])\../,
+    persistent: true
+  });
+  
+  watcher.on('change', async (path) => {
+    console.log(`File ${path} has been changed.`);
+    await generateEvent({
+      path: 'services/adminapi/stop', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+      from: 'adminapi', // system entity where the event was generated (next, api, cmd...)
+      user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+      payload: {}, // event payload, event-specific data
+    }, getServiceToken())
+    process.exit(0)
+  });
+}
