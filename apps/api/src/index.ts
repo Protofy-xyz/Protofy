@@ -36,12 +36,12 @@ generateEvent({
 if (process.env.NODE_ENV != 'production') {
   const pathsToWatch = [
     'src/**',
-    '../../packages/protolib/**',
-    '../../packages/app/bundles/**'
+    '../../packages/app/bundles/**',
+    '../../packages/protolib/**'
   ];
 
   const watcher = chokidar.watch(pathsToWatch, {
-    ignored: /(^|[/\\])\../,
+    ignored: /^([.][^.\/\\])|([\/\\]+[.][^.])/,
     persistent: true
   });
 
