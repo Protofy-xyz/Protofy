@@ -19,13 +19,20 @@ type OptionsProps = {
   editors?: string[],
   context?: any,
   visualUiContext?: any
+  triggerProps?: TriggerProps
+}
+type TriggerProps = {
+  right?: string | number,
+  top?: string | number,
+  left?: string | number,
+  bottom?: string | number
 }
 
 export const useEditor = (fn, options: OptionsProps) => {
-  return useEdit(fn, options.components, options.path, options.editors, options.context, options.visualUiContext)
+  return useEdit(fn, options.components, options.path, options.editors, options.context, options.visualUiContext, options)
 }
 
-export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}, visualUiContext = null) => {
+export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}, visualUiContext = null, options = {}) => {
   const router = useRouter()
   const [session] = useAtom(Session)
   const edit = useIsEditing()
@@ -49,13 +56,15 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
       })
     }
 
+    const triggerProps = {
+      ...(options['triggerProps'] ?? {top: "$4", right: "$4"})
+    }
+
     return <div style={{ flex: 1, display: 'flex' }}>
       {fn()}
       <Tinted>
         <Button
           id='use-edit-btn'
-          t="$4"
-          r="$4"
           br={"$6"}
           display={process.env.NODE_ENV == "production" ? 'none' : "flex"} // Hide edit button when production mode
           pos='fixed'
@@ -63,6 +72,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
           zIndex={9999999999}
           circular
           onPress={onEdit}
+          {...triggerProps}
         >
           <Pencil fillOpacity={0} color='white' />
         </Button>
