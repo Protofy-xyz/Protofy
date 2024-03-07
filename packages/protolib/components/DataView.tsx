@@ -427,7 +427,7 @@ export const DataView = forwardRef(({
                                 <XStack ai="center" marginLeft="$3">
                                     {!disableViewSelector && <ButtonGroup marginRight="$3">
                                         {
-                                            tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
+                                            tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>
                                                 {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
                                             </ActiveGroupButton>)
                                         }

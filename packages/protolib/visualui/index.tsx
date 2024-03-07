@@ -106,7 +106,16 @@ export const layoutPalette = {
 
 export const basicPalette = {
   ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {}, {}, true),
-  ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "Press Me" }, {}, {}, true),
+  ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "Press Me" }, {
+    custom: {
+      options: [
+        {
+          action: ({ dom }) => { dom.focus() },
+          name: "Focus element"
+        }
+      ]
+    }
+  }, {}, true),
   ...cw(Container, 'SquareAsterisk', 'Container', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Image, 'Image', 'Image', { url: "https://picsum.photos/200" }, {}, {}, true),
 }
@@ -143,7 +152,25 @@ export const miscellanyPalette = {
   ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { canMoveIn: () => false }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
-  ...cw(DataView, 'EyeOff', 'DataView', {}, nonDraggable),
+  ...cw(DataView, 'EyeOff', 'DataView', {}, {
+    custom: {
+      hidden: true,
+      options: [
+        {
+          action: ({ dom }) => { dom.querySelector('#tableView-list').click() },
+          name: "Change to List View"
+        },
+        {
+          action: ({ dom }) => { dom.querySelector('#tableView-grid')?.click() },
+          name: "Change to Grid View"
+        },
+        {
+          action: ({ dom }) => { dom.querySelector('#tableView-raw')?.click() },
+          name: "Change to Raw View"
+        }
+      ]
+    }
+  }),
   ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
   ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
   ...cw(ElevatedArea, 'GalleryThumbnails', 'ElevatedArea'),

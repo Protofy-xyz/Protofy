@@ -15,7 +15,6 @@ import { withTopics } from "react-topics";
 import { ToggleGroup, Button, XStack } from "@my/ui"
 import { SidebarItem } from "./Sidebar/SideBarItem";
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
-import { FlowConstructor } from "protoflow";
 import React from "react";
 import { newVisualUiContext } from "../visualUiHooks";
 import { VisualUiFlows } from "./VisualUiFlows";
@@ -29,6 +28,7 @@ const FloatingIcon = ({ id = undefined, children, onClick, disabled = false }) =
 */
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, setContext }) {
     const editorRef = useRef<any>()
+    const enableClickEventsRef = useRef();
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const [currentPageContent, setCurrentPageContent] = useState("")
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
@@ -275,10 +275,21 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         return () => window.removeEventListener('resize', handleResize);
     }, [])
 
+    useEffect(() => {
+        // Prevents click events to interact inside editor-layout
+        const handleEvent = (e) => {
+            if (enableClickEventsRef.current) return
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        document.getElementById("editor-layout")?.addEventListener('click', handleEvent)
+        return () => document.getElementById("editor-layout")?.removeEventListener('click', handleEvent)
+    }, [])
+
     // for outside context usage
     const options = {
         resolver: availableCraftComponents,
-        onRender: RenderNode
+        onRender: ({ ...props }: any) => RenderNode({ ...props, onEnableEvents: (s) => { enableClickEventsRef.current = s } })
     }
     const context = newVisualUiContext(options)
     if (setContext) setContext(context) // atom shared context

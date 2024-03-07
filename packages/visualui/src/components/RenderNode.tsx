@@ -1,10 +1,12 @@
 import { useNode, useEditor } from "@protocraft/core";
 import { ROOT_NODE } from "@craftjs/utils";
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { ArrowDown, Trash2, Redo, ArrowUp, Move } from 'lucide-react';
+import { ArrowDown, Trash2, Redo, ArrowUp, Move, MoreVertical } from 'lucide-react';
+import { Popover } from '@my/ui'
+import visualUItheme from "./Theme";
 
-export const RenderNode = ({ render }) => {
+export const RenderNode = ({ render, onEnableEvents }) => {
     const { id } = useNode();
     const { actions, query, isActive } = useEditor((_, query) => ({
         isActive: query.getEvent('selected').contains(id),
@@ -21,10 +23,13 @@ export const RenderNode = ({ render }) => {
         childs,
         nodeAndSiblings,
         nodeId,
-        unknown
+        unknown,
+        setProp,
+        custom
     } = useNode((node) => {
         return (
             {
+                custom: node.data.custom,
                 unknown: node.data.custom.unknown ?? false,
                 nodeId: node.id,
                 isHover: node.events.hovered,
@@ -43,6 +48,7 @@ export const RenderNode = ({ render }) => {
     const componentColor = unknown ? "#EF9364" : "#2680EB"
     const iconSize = 20
     const border = '1px solid gray'
+    const barHeight = 50
 
     const currentRef = useRef<HTMLDivElement>();
     useEffect(() => {
@@ -60,9 +66,15 @@ export const RenderNode = ({ render }) => {
         const { top, left, bottom } = dom
             ? dom.getBoundingClientRect()
             : { top: 0, left: 0, bottom: 0 };
+
+        let topPos
+
+        if (top > 100) topPos = top - 60
+        else topPos = bottom - 50
+
         return {
-            top: `${top > 100 ? (top - 60) : (bottom + 10)}px`,
-            left: `${left}px`,
+            top: topPos,
+            left: left,
         };
     }, []);
 
@@ -87,16 +99,6 @@ export const RenderNode = ({ render }) => {
         };
     }, [scroll]);
 
-    useEffect(() => {
-        // Prevents click events to interact inside editor-layout
-        const handleEvent = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        document.getElementById("editor-layout")?.addEventListener('click', handleEvent)
-        return () => document.getElementById("editor-layout")?.removeEventListener('click', handleEvent)
-    }, [])
-
 
     return (
         <>
@@ -112,20 +114,20 @@ export const RenderNode = ({ render }) => {
                                 top: getPos(dom).top,
                                 zIndex: 9999999999999999999999999999999,
                                 position: "fixed",
-                                backgroundColor: "#252526",
+                                backgroundColor: visualUItheme.nodeBackgroundColor,
                                 border: border,
                                 padding: "16px",
                                 color: "white",
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                height: "50px",
+                                height: barHeight,
                                 pointerEvents: 'auto',
                                 gap: 20
                             }}
                         >
                             <div style={{ fontSize: 14, color: 'white' }}>{name}{unknown ? ' (Unknown)' : ''}</div>
-                            <div style={{ height: '50px', borderLeft: border }}></div>
+                            <div style={{ height: barHeight, borderLeft: border }}></div>
                             <div style={{ display: 'flex', flexDirection: "row", flex: 1, gap: "20px" }}>
                                 {moveable ? (
                                     <div
@@ -204,6 +206,39 @@ export const RenderNode = ({ render }) => {
                                     </div>
                                 ) : null}
 
+                                {
+                                    custom.options ?
+                                        <Popover placement="top" onOpenChange={onEnableEvents}>
+                                            <Popover.Trigger>
+                                                <div
+                                                    style={{ cursor: "pointer" }}
+                                                    title="Delete"
+                                                    id='render-node-delete-btn'
+                                                >
+                                                    <MoreVertical
+                                                        color="white"
+                                                        size={iconSize}
+                                                    />
+                                                </div>
+                                            </Popover.Trigger>
+                                            <Popover.Content gap="$4" br="$0" shadowRadius={"$4"} shadowColor={"black"} boc="gray" bw="1px" shadowOpacity={0.6} bc={visualUItheme.nodeBackgroundColor}>
+                                                <div style={{ color: 'gray', alignSelf: 'flex-start' }}>Options</div>
+                                                {
+                                                    custom.options?.map((st) => (<div
+                                                        style={{ cursor: "pointer", alignSelf: 'flex-start' }}
+                                                        onClick={(e: React.MouseEvent) => {
+                                                            e.stopPropagation();
+                                                            st.action({ setProp, dom })
+                                                        }}
+                                                    >
+                                                        <div>{st.name}</div>
+                                                    </div>))
+                                                }
+                                            </Popover.Content>
+                                        </Popover>
+
+                                        : null
+                                }
                             </div>
                         </div>,
                         document.querySelector('.page-container')
