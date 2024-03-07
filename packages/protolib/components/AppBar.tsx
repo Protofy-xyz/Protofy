@@ -44,7 +44,8 @@ export const AppBar = React.forwardRef(({ backgroundColor, containerProps = {}, 
     const pageElem = document.getElementById('protolib-page-container')
     const resizeHandler = () => {
         //@ts-ignore
-        headerContainerRef.current = pageElem?.offsetWidth
+        headerContainerRef.current.width = pageElem?.offsetWidth
+        headerContainerRef.current.top = pageElem?.clientTop
         forceUpdate(s => !s)
     };
     if (pageElem) {
@@ -80,14 +81,14 @@ export const AppBar = React.forwardRef(({ backgroundColor, containerProps = {}, 
         ref={headerContainerRef}
         // @ts-ignore
         pos="fixed"
-        top={position == 'top' ? 0 : undefined}
+        top={headerContainerRef.current?.top ?? position == 'top' ? 0 : undefined}
         bottom={position == 'bottom' ? 0 : undefined}
         left={0}
         right={0}
         alignItems="center"
         justifyContent="center"
         zi={50000}
-        width={headerContainerRef.current ?? "100%"}
+        width={headerContainerRef.current?.width ?? "100%"}
       >
         {/*@ts-ignore*/}
         <XStack width="100%" maw={dettached ? 1120 : undefined} pos="relative">
