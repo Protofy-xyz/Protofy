@@ -16,47 +16,51 @@ export function useVisualUiAtom(_atom: any) {
 
 // hook for visualUiState management
 export function useVisualUi(atom, callb, defState) {
-  const [state, setState] = useState(defState)
-  const [lastEvent, setLastEvent] = useState<any>(null)
-  const [craftContext] = useAtom<EditorStore>(atom)
+  if (atom) {
+    const [state, setState] = useState(defState)
+    const [lastEvent, setLastEvent] = useState<any>(null)
+    const [craftContext] = useAtom<EditorStore>(atom)
 
-  useEffect(() => {
-    if (!craftContext || !craftContext['subscribe']) return
+    useEffect(() => {
+        if (!craftContext || !craftContext['subscribe']) return
 
-    craftContext.subscribe(
-      (_) => {
-        setState((prev: any) => {
-          const result = callb(prev, craftContext)
-          return result ?? prev
-        })
-      },
-      () => {
-        // we need to discover more about this callback
-      }
-    );
-  }, [craftContext])
+        craftContext.subscribe(
+        (_) => {
+            setState((prev: any) => {
+            const result = callb(prev, craftContext)
+            return result ?? prev
+            })
+        },
+        () => {
+            // we need to discover more about this callback
+        }
+        );
+    }, [craftContext])
 
-  useEffect(() => {
-    console.log('boyyyy')
-  }, [craftContext.query.serialize()])
+    useEffect(() => {
+        console.log('boyyyy')
+    }, [craftContext.query.serialize()])
 
-  return {
-    state: state,
-    visualUiData: craftContext,
-    lastEvent: lastEvent
+    return {
+        state: state,
+        visualUiData: craftContext,
+        lastEvent: lastEvent
+    }
+  } else {
+    throw new Error("useVisualUi(...) must have a defined atom")
   }
 }
 
 // toggle communication mode visualUi
-export function useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData) {
+export function useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData, contextAtom) {
     const router = useRouter()
     const queryParams = router.query
 
     if (queryParams.experimental_comms === 'true') {
-        useEffect(() => {
-            console.log('experimental communications')
-        }, [])
+        console.log('protocraft experimental communications')
+        useVisualUi(contextAtom, () => {}, null)
     } else {
+        console.log('protocraft legacy communications')
         useEffect(() => {
             const flowData = topicData
             const action = flowData.action

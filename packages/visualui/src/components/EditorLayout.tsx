@@ -128,7 +128,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
   }, [selectedNodeId])
 
   // udpate state based on topics
-  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'])
+  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'], contextAtom)
 
   useEffect(() => {
     actions.setOptions(options => options['skipTopic'] = false)
