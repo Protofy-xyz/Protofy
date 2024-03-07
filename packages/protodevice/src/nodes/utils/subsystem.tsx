@@ -9,7 +9,8 @@ const subsystem = (subsystem, deviceName) => {
 
     const buttonAction = (action) => {
         if (action.connectionType == "mqtt") {
-            client.publish(getPeripheralTopic(deviceName, action.endpoint), action.payload.value.toString())
+            console.log("MQTT Dev: ", action.payload)
+            client.publish(getPeripheralTopic(deviceName, action.endpoint),action.payload.type=="json"? JSON.stringify(action.payload.value):action.payload.value.toString())
         }
     }
 
