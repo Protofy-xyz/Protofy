@@ -16,7 +16,7 @@ import { ToggleGroup, Button, XStack } from "@my/ui"
 import { SidebarItem } from "./Sidebar/SideBarItem";
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
 import React from "react";
-import { newVisualUiContext } from "../visualUiHooks";
+import { newVisualUiContext, useVisualUiAtom } from "../visualUiHooks";
 import { VisualUiFlows } from "./VisualUiFlows";
 
 const FloatingIcon = ({ id = undefined, children, onClick, disabled = false }) => <div id={id} onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex', cursor: 'pointer' }}>
@@ -26,7 +26,8 @@ const FloatingIcon = ({ id = undefined, children, onClick, disabled = false }) =
 /* 
 // const uiStore = useFlowsStore()
 */
-function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, setContext }) {
+function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, contextAtom = null }) {
+    const [_, setContext] = useVisualUiAtom(contextAtom)
     const editorRef = useRef<any>()
     const enableClickEventsRef = useRef();
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
@@ -202,6 +203,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             theme={theme}
                             nodePreview={flowViewMode}
                             metadata={metadata}
+                            contextAtom={contextAtom}
                         />
                     </SidebarItem>
                     <SidebarItem
@@ -260,7 +262,13 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     )
     const EditorPanel = (
         <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid #424242', borderLeft: '2px solid #424242' }}>
-            <EditorLayout metadata={metadata} currentPageContent={currentPageContent} onSave={() => null} resolveComponentsDir={resolveComponentsDir}>
+            <EditorLayout 
+                metadata={metadata} 
+                currentPageContent={currentPageContent} 
+                onSave={() => null} 
+                resolveComponentsDir={resolveComponentsDir}
+                contextAtom={contextAtom}
+            >
             </EditorLayout>
         </div>
     )

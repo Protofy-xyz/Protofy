@@ -32,7 +32,7 @@ export const useEditor = (fn, options: OptionsProps) => {
   return useEdit(fn, options.components, options.path, options.editors, options.context, options.visualUiContext, options)
 }
 
-export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}, visualUiContext = null, options = {}) => {
+export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}, visualUiContext: any = undefined, options = {}) => {
   const router = useRouter()
   const [session] = useAtom(Session)
   const edit = useIsEditing()

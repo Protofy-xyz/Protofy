@@ -17,11 +17,12 @@ export type EditorProps = {
   topics: any;
   resolveComponentsDir: string;
   onReady?: Function;
-  metadata?: any 
+  metadata?: any;
+  contextAtom: any; 
 };
 
 
-const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {} }: EditorProps) => {
+const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {}, contextAtom = null }: EditorProps) => {
   const paper = useRef<any>()
   const [loading, setLoading] = useState(true);
   const [currentPageInitialJson, setCurrentPageInitialJson] = useState({});
