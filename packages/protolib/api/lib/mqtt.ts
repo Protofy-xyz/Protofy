@@ -20,18 +20,18 @@ export const getMQTTClient = (username, password?) => {
         mqttClient.on('connect', function () {
             mqttClient.hasConnected = true
             mqttClient.retries = 0
-            logger.info('Connected to MQTT');
+            logger.debug('Connected to MQTT');
         });
 
         mqttClient.on('reconnect', function () {
             if (mqttClient.hasConnected || mqttClient.retries > 10) {
-                logger.info('Trying to connect MQTT...');
+                logger.debug('Trying to connect MQTT...');
             }
         });
 
         mqttClient.on('offline', function () {
             if (mqttClient.hasConnected) {
-                logger.info('MQTT disconnected');
+                logger.debug('MQTT disconnected');
             }
         });
 

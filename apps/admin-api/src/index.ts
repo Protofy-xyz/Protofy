@@ -27,9 +27,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 const aedesInstance = new aedes();
 aedesInstance.authenticate = function (client, username, password, callback) {
   if (!username) {
-    logger.info({}, "MQTT anonymous login request")
+    logger.debug({}, "MQTT anonymous login request")
   } else {
-    logger.info({username}, "MQTT user login request: "+username)
+    logger.debug({username}, "MQTT user login request: "+username)
   }
 
   if(config.mqtt.auth){
