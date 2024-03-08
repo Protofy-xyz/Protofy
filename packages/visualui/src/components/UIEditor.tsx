@@ -107,6 +107,23 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 break;
         }
     }
+
+    const onToggleAppBar = (val) => {
+        if (val == 'code') {
+            codeEditorVisible ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
+            setFlowViewMode(undefined); 
+            setCodeEditorVisible(true); 
+        } else if (val == 'flow') {
+            flowViewMode == val ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
+            setFlowViewMode(val)
+            setCodeEditorVisible(false)
+        } else if (val == 'preview') {
+            ['flow-preview', 'preview'].includes(flowViewMode) ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
+            setFlowViewMode(val)
+            setCodeEditorVisible(false)
+        }
+    }
+
     const onMonacoChange = (code) => {
         setMonacoSourceCode(code)
         if (currentPageContent != code) setMonacoHasChanges(true)
@@ -115,6 +132,12 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const onCancelMonaco = () => {
         setMonacoSourceCode(currentPageContent)
         setMonacoHasChanges(false)
+    }
+
+    const onCancelEdit = () => {
+        router.push({
+            query: {}
+        })
     }
 
     useEffect(() => {
@@ -153,7 +176,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                                 focusStyle={{ backgroundColor: flowViewMode == "flow-preview" ? Theme.interactiveColor : Theme.inputBackgroundColor }}
                                 backgroundColor={flowViewMode == "flow-preview" ? Theme.interactiveColor : Theme.inputBackgroundColor}
                                 value="flow-preview"
-                                onPress={() => { setFlowViewMode('flow-preview'); setCodeEditorVisible(false) }}
+                                onPress={() => setFlowViewMode('flow-preview')}
                             >
                                 <Workflow />
                             </ToggleGroup.Item>
@@ -162,7 +185,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                                 focusStyle={{ backgroundColor: flowViewMode == "preview" ? Theme.interactiveColor : Theme.inputBackgroundColor }}
                                 backgroundColor={flowViewMode == "preview" ? Theme.interactiveColor : Theme.inputBackgroundColor}
                                 value="preview"
-                                onPress={() => { setFlowViewMode('preview'); setCodeEditorVisible(false) }}
+                                onPress={() => setFlowViewMode('preview')}
                             >
                                 <SlidersHorizontal />
                             </ToggleGroup.Item>
@@ -224,12 +247,6 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             />
         </div>
     );
-
-    const onCancelEdit = () => {
-        router.push({
-            query: {}
-        })
-    }
 
     const EditorPanel = (
         <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid #424242', borderLeft: '2px solid #424242' }}>
@@ -295,11 +312,11 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 rightItems={[
                     {
                         icon: Code,
-                        onPress: () => { setFlowViewMode(undefined); setCodeEditorVisible(true); setIsSideBarVisible(true) }
+                        onPress: () => onToggleAppBar('code')
                     },
                     {
                         icon: Share2,
-                        onPress: () => { setFlowViewMode('flow'); setCodeEditorVisible(false); setIsSideBarVisible(true) }
+                        onPress: () => onToggleAppBar('flow')
                     },
                     {
                         id: "save-nodes-btn",
@@ -309,7 +326,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     },
                     {
                         icon: PanelRight,
-                        onPress: () => { setFlowViewMode('preview'); setCodeEditorVisible(false); setIsSideBarVisible(!isSideBarVisible) }
+                        onPress: () => onToggleAppBar('preview')
                     }
                 ]}
             />
