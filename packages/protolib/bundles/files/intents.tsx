@@ -14,7 +14,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react';
 import { API } from '../../base/Api';
 import { usePrompt, promptCmd } from '../../context/PromptAtom';
-import { useUpdateEffect } from 'usehooks-ts';
+import { useInterval, useUpdateEffect } from 'usehooks-ts';
 import Flows from '../../adminpanel/features/components/Flows';
 import { getFlowsCustomComponents } from 'app/bundles/masks'
 import { getDefinition, toSourceFile } from '../../api/lib/code'
@@ -52,17 +52,28 @@ const JSONViewer = ({ extraIcons, name, path }) => {
   </AsyncView>
 }
 
-const SaveButton = ({ path, getContent, positionStyle }) => {
-  const onSave = async () => {
+type SaveButtonStates = "available" | "unavailable" | "loading"
+
+const SaveButton = ({ checkStatus=() => true, defaultState='available', path, getContent, positionStyle, onSave=()=>{} }) => {
+  const [state, setState] = useState(defaultState)
+
+  useInterval(() => {
+    if(checkStatus() && state == 'unavailable') setState('available')
+  }, 250)
+
+  const _onSave = async () => {
+    setState("loading")
     const content = getContent();
     await API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/'), { content });
+    setState(defaultState)
+    onSave()
   };
 
   return (
     <XStack position="absolute" {...positionStyle}>
-      <IconContainer onPress={onSave}>
+      {state != "loading" && <IconContainer disabled={state=='unavailable'} onPress={_onSave}>
         <Save color="var(--color)" size={"$1"} />
-      </IconContainer>
+      </IconContainer>}
     </XStack>
   );
 };
@@ -73,6 +84,7 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
   const [loaded, setLoaded] = useState(false)
   const isPartial = useRef(false)
   const sourceCode = useRef('')
+  const originalSourceCode = useRef('')
   const router = useRouter()
 
   const [promptResponse, setPromptResponse] = usePrompt(
@@ -114,6 +126,7 @@ If you include anything else in your message (like reasonings or natural languag
         isPartial.current = false
         sourceCode.current = fileContent.data
       }
+      originalSourceCode.current = sourceCode.current
       setLoaded(true)
     }
   }, [fileContent]);
@@ -135,6 +148,9 @@ If you include anything else in your message (like reasonings or natural languag
             <Code color="var(--color)" size={"$1"} />
           </IconContainer>}
         <SaveButton
+          onSave={()=>originalSourceCode.current = sourceCode.current}
+          checkStatus={() => sourceCode.current != originalSourceCode.current}
+          defaultState={"unavailable"}
           path={path}
           getContent={() => {
             if (isPartial.current) {
