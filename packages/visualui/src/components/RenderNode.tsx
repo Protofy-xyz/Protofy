@@ -1,10 +1,11 @@
 import { useNode, useEditor } from "@protocraft/core";
 import { ROOT_NODE } from "@craftjs/utils";
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { ArrowDown, Trash2, Redo, ArrowUp, Move, MoreVertical } from 'lucide-react';
-import { Popover } from '@my/ui'
+import { Popover, XStack } from '@my/ui'
 import visualUItheme from "./Theme";
+import Icon from "./Icon";
 
 export const RenderNode = ({ render, onEnableEvents }) => {
     const { id } = useNode();
@@ -25,7 +26,8 @@ export const RenderNode = ({ render, onEnableEvents }) => {
         nodeId,
         unknown,
         setProp,
-        custom
+        custom,
+        props
     } = useNode((node) => {
         return (
             {
@@ -99,6 +101,7 @@ export const RenderNode = ({ render, onEnableEvents }) => {
         };
     }, [scroll]);
 
+    const Separator = (props) => <div style={{ height: barHeight, borderLeft: border }}></div>
 
     return (
         <>
@@ -127,8 +130,8 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                             }}
                         >
                             <div style={{ fontSize: 14, color: 'white' }}>{name}{unknown ? ' (Unknown)' : ''}</div>
-                            <div style={{ height: barHeight, borderLeft: border }}></div>
-                            <div style={{ display: 'flex', flexDirection: "row", flex: 1, gap: "20px" }}>
+                            <Separator/>
+                            <div style={{ display: 'flex', flexDirection: "row", flex: 1, gap: "20px", alignItems: 'center' }}>
                                 {moveable ? (
                                     <div
                                         ref={drag}
@@ -189,6 +192,42 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                         />
                                     </div>
                                     : null}
+                                {
+                                    custom.shortcuts ?
+                                        <XStack ai="center" gap="20px">
+                                            <Separator/>
+                                            {custom.shortcuts.map((shortcut, index) => (
+                                                <Popover key={index} placement="top" onOpenChange={onEnableEvents}>
+                                                    <Popover.Trigger>
+                                                        <div
+                                                            style={{ cursor: "pointer" }}
+                                                        >
+                                                            <Icon
+                                                                name={shortcut.icon(props)}
+                                                                color={'white'}
+                                                                size={iconSize}
+                                                            />
+                                                        </div>
+                                                    </Popover.Trigger>
+                                                    <Popover.Content gap="$4" br="$0" shadowRadius={"$4"} shadowColor={"black"} boc="gray" bw="1px" shadowOpacity={0.6} bc={visualUItheme.nodeBackgroundColor}>
+                                                        {
+                                                            shortcut.menu?.map((sh) => (<div
+                                                                style={{ cursor: "pointer", alignSelf: 'flex-start' }}
+                                                                onClick={(e: React.MouseEvent) => {
+                                                                    e.stopPropagation();
+                                                                    sh.action({ setProp, dom })
+                                                                }}
+                                                            >
+                                                                <div>{sh.name}</div>
+                                                            </div>))
+                                                        }
+                                                    </Popover.Content>
+                                                </Popover>
+                                            ))}
+                                            <Separator/>
+                                        </XStack>
+                                        : null
+                                }
                                 {deletable ? (
                                     <div
                                         style={{ cursor: "pointer" }}
@@ -209,6 +248,7 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                 {
                                     custom.options ?
                                         <Popover placement="top" onOpenChange={onEnableEvents}>
+                                            <Separator/>
                                             <Popover.Trigger>
                                                 <div
                                                     style={{ cursor: "pointer" }}
