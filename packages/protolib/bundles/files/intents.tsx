@@ -21,6 +21,7 @@ import { getDefinition, toSourceFile } from '../../api/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";
+import { useSubscription } from 'mqtt-react-hooks'
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -56,6 +57,22 @@ type SaveButtonStates = "available" | "unavailable" | "loading"
 
 const SaveButton = ({ checkStatus=() => true, defaultState='available', path, getContent, positionStyle, onSave=()=>{} }) => {
   const [state, setState] = useState(defaultState)
+  const { message } = useSubscription('notifications/event/create/#');
+
+  useEffect(() => {
+    if(message && message.message) {
+      try {
+        let content = JSON.parse(message.message as string)
+        if(content['path'] == 'services/api/start') {
+          setState(defaultState)
+          onSave()
+        }
+
+      } catch(e) {
+        console.error('Error parsing message from mqtt: ', e)
+      }
+    }
+  }, [message])
 
   useInterval(() => {
     if(checkStatus() && state == 'unavailable') setState('available')
@@ -65,8 +82,7 @@ const SaveButton = ({ checkStatus=() => true, defaultState='available', path, ge
     setState("loading")
     const content = getContent();
     await API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/'), { content });
-    setState(defaultState)
-    onSave()
+
   };
 
   return (

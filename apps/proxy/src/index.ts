@@ -129,4 +129,4 @@ var proxy = new Redbird({
     ]
 });
 
-logger.info({ service: { protocol: "http", port: Port } }, "Service started: HTTP")
+logger.debug({ service: { protocol: "http", port: Port } }, "Service started: HTTP")

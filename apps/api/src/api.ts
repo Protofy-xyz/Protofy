@@ -9,7 +9,7 @@ import { setConfig, getConfig } from 'protolib/base/Config';
 const logger = getLogger()
 //wait for mqtt before starting api server
 const mqtt = getMQTTClient('api', getServiceToken(), () => {
-    logger.info({ config: getConfigWithoutSecrets(getConfig()) }, "Service Started: api")
+    logger.debug({ config: getConfigWithoutSecrets(getConfig()) }, "Service Started: api")
 
     const topicSub = (topic, cb) => {
         mqtt.subscribe(topic)
