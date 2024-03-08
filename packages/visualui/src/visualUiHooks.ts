@@ -49,10 +49,30 @@ export function useVisualUi(atom, callb?, defState?) {
             return 
         } 
 
-        const currentEditorNodes: any = JSON.parse(craftContext.query.serialize())
-        const diffs = Diff.diff(JSON.parse(prevNodes), JSON.parse(craftContext.query.serialize())) 
-        console.log('in: diffs', diffs)
+        const currentNodes: any = JSON.parse(craftContext.query.serialize())
+        const diffs = Diff.diff(JSON.parse(prevNodes), currentNodes) 
+        console.log('in-dev: diffs', diffs)
         if (diffs.length < 1) return 
+
+        if (diffs.find(d => d.kind == 'N')) { // add case
+            console.log('in: add', diffs.find(d => d.kind == 'N').path, diffs.find(d => d.kind == 'N'))
+            setLastEvent({
+                action: 'add-node'
+            })
+        } else if (diffs.find(d => d.kind == 'D')) { //delete case
+            const deletedNodes = diffs.filter(d => d.kind == 'D').map(n => n.path[0])
+            const parentId = diffs.find(d => d.kind == 'A').path[0]            
+            setLastEvent({
+                action: 'delete-node',
+                deletedNodes: deletedNodes,
+                parent: parentId
+            })
+        } else if (diffs.find(d => d.kind == 'E')) { // edit case
+            console.log('in: edit', diffs.find(d => d.kind == 'E').path, diffs.find(d => d.kind == 'E'))
+            setLastEvent({
+                action: 'add-node'
+            })
+        }
     }, [craftContext.query.serialize()])
 
     return {
@@ -73,7 +93,10 @@ export function useVisualUiComms({ actions, query }, { resolveComponentsDir, app
 
     if (queryParams.experimental_comms === 'true') {
         console.log('protocraft experimental communications')
-        useVisualUi(contextAtom)
+        const {lastEvent} = useVisualUi(contextAtom)
+        useEffect(() => {
+            console.log('in: event', lastEvent)
+        }, [lastEvent])
     } else {
         console.log('protocraft legacy communications')
         useEffect(() => {
