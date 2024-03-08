@@ -5,17 +5,17 @@ import { H4 } from 'tamagui'
 import Center from '../components/Center'
 import ContentEditable from 'react-contenteditable';
 
-export const UIWrap = (name, component, importName, icon?, defaultProps?, componentRules?, visualUIOnlyFallbackProps?, editableText?) => {
+export const UIWrap = (name, component, importName, icon?, defaultProps?, uiData?, visualUIOnlyFallbackProps?, editableText?) => {
     const cw = getComponentWrapper(importName)
-    return cw(component, icon ?? "EyeOff", name, defaultProps, componentRules, visualUIOnlyFallbackProps, editableText)
+    return cw(component, icon ?? "EyeOff", name, defaultProps, uiData, visualUIOnlyFallbackProps, editableText)
 }
 export const UIWrapLib = (importName) => {
     const cw = getComponentWrapper(importName)
-    return (name, Component, icon = "EyeOff", defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps: any = {}, editableText = false) => {
-        return cw(Component, icon, name, defaultProps, componentRules, visualUIOnlyFallbackProps, editableText)
+    return (name, Component, icon = "EyeOff", defaultProps = {}, uiData = {}, visualUIOnlyFallbackProps: any = {}, editableText = false) => {
+        return cw(Component, icon, name, defaultProps, uiData, visualUIOnlyFallbackProps, editableText)
     }
 }
-export const getComponentWrapper = (importName) => (Component, icon, name, defaultProps = {}, componentRules = {}, visualUIOnlyFallbackProps: any = {}, editableText = false) => {
+export const getComponentWrapper = (importName) => (Component, icon, name, defaultProps = {}, uiData = {}, visualUIOnlyFallbackProps: any = {}, editableText = false) => {
     const importInfo = {
         moduleSpecifier: importName,
         namedImports: [{ alias: undefined, name: name }]
@@ -57,13 +57,13 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
         custom: {
             icon,
             ...importInfo,
-            ...componentRules['custom']
+            ...uiData['custom']
         },
         props: defaultProps,
         displayName: name,
         rules: {
             ...defaultRules,
-            ...componentRules
+            ...uiData['rules']
         },
     }
     return { [name]: UiComponent }

@@ -104,7 +104,7 @@ export const textPalette = {
   ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, componentTextRules, {}, true),
   ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, componentTextRules, {}, true),
   ...cw(Text, 'Type', 'Text', { children: "hello" }, componentTextRules, {}, true),
-  ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
+  ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { rules: { canMoveIn: () => false } }),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
 }
 
@@ -170,7 +170,7 @@ export const miscellanyPalette = {
   ...cw(ColorToggleButton, 'ToggleRight', 'ColorToggleButton'),
   ...cw(CopyBubble, 'Copy', 'CopyBubble', { text: "copy" }),
   ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { canMoveIn: () => false }),
+  ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { rules: { canMoveIn: () => false } }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
   ...cw(DataView, 'EyeOff', 'DataView', {}, {
     custom: {
@@ -192,7 +192,7 @@ export const miscellanyPalette = {
     }
   }),
   ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
-  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
+  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { rules: { canMoveIn: () => false } }),
   ...cw(ElevatedArea, 'GalleryThumbnails', 'ElevatedArea'),
   ...cw(ErrorMessage, 'AlertTriangle', 'ErrorMessage'),
   ...cw(FeatureItem, 'CheckCircle2', 'FeatureItem', { label: "hello", children: "world" }),
