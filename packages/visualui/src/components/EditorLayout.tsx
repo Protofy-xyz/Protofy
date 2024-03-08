@@ -67,14 +67,22 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
       } else if (nodesChanges.find(d => d.kind == 'E')) { //case edit
         const movedParent_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == 'parent')
         const children_diff = nodesChanges.find(d => d.kind == 'E' && d.path[2] == 'children')
-        if (children_diff) { // edited child text
-          const nodeId = children_diff.path[0]
-          const newChildValue = he.decode(children_diff.rhs)
+        const props_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == 'props')
+        const move_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == "nodes");
+        
+        if (children_diff || props_diff) { // edited prop or child text
+          const type = children_diff ? 'children' : 'prop'
+          var diff = type == 'children' ? children_diff : props_diff
+          const nodeId = diff.path[0]
+          const value = diff['rhs']
+
           topicParams = {
             action: 'edit-node',
             nodeId: nodeId,
-            newChildValue: newChildValue,
-            debounce: true
+            value: value,
+            type: type,
+            field: diff.path[2],
+            debounce: type == 'children'
           }
         } else if (movedParent_diff) { // moved changing parent
           const nodeId_moved = movedParent_diff.path[0];
@@ -93,7 +101,6 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
             oldPos: oldPos
           }
         } else { // moved inside same parent
-          const move_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == "nodes");
           const parent = move_diff.path[0];
           const newChildrensIds = nodesChanges.sort((a, b) => a.path[2] - b.path[2]).map(d => d.rhs);
           const oldChildrensIds = previousNodes[parent].nodes;
