@@ -74,6 +74,7 @@ const SaveButton = ({ checkStatus=() => true, defaultState='available', path, ge
       {state != "loading" && <IconContainer disabled={state=='unavailable'} onPress={_onSave}>
         <Save color="var(--color)" size={"$1"} />
       </IconContainer>}
+      {state == "loading" && <Spinner color={"$color"} opacity={0.5} size={17} />}
     </XStack>
   );
 };
