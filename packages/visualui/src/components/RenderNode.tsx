@@ -221,7 +221,13 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                                         </Popover.Trigger>
                                                         {
                                                             shortcut.menu
-                                                                ? <Popover.Content gap="$4" br="$0" shadowRadius={"$4"} shadowColor={"black"} boc="gray" bw="1px" shadowOpacity={0.6} bc={visualUItheme.nodeBackgroundColor}>
+                                                                ? <Popover.Content
+                                                                    gap="$4" br="$0" shadowRadius={"$4"} shadowColor={"black"}
+                                                                    boc="gray" bw="1px" shadowOpacity={0.6}
+                                                                    bc={visualUItheme.nodeBackgroundColor} maxHeight={"350px"}
+                                                                    //@ts-ignore
+                                                                    overflow='scroll' overflowX="hidden"
+                                                                >
                                                                     {
                                                                         shortcut.menu?.map((sh) => (<div
                                                                             style={{ cursor: "pointer", alignSelf: 'flex-start' }}
@@ -275,7 +281,6 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                                 </Clickable>
                                             </Popover.Trigger>
                                             <Popover.Content gap="$4" br="$0" shadowRadius={"$4"} shadowColor={"black"} boc="gray" bw="1px" shadowOpacity={0.6} bc={visualUItheme.nodeBackgroundColor}>
-                                                <div style={{ color: 'gray', alignSelf: 'flex-start' }}>Options</div>
                                                 {
                                                     custom.options?.map((st) => (<div
                                                         style={{ cursor: "pointer", alignSelf: 'flex-start' }}

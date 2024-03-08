@@ -1111,6 +1111,27 @@
                         "section": "basic"
                     },
                     {
+                        "label": "fontWeight",
+                        "field": "prop-fontWeight",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "100",
+                            "200",
+                            "300",
+                            "400",
+                            "500",
+                            "600",
+                            "700",
+                            "800",
+                            "900",
+                            "bold",
+                            "normal"
+                        ],
+                        "section": "basic"
+                    },
+                    {
                         "label": "margin",
                         "field": "prop-margin",
                         "fieldType": "prop",
@@ -1211,6 +1232,27 @@
                         "section": "basic"
                     },
                     {
+                        "label": "fontWeight",
+                        "field": "prop-fontWeight",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "100",
+                            "200",
+                            "300",
+                            "400",
+                            "500",
+                            "600",
+                            "700",
+                            "800",
+                            "900",
+                            "bold",
+                            "normal"
+                        ],
+                        "section": "basic"
+                    },
+                    {
                         "label": "margin",
                         "field": "prop-margin",
                         "fieldType": "prop",
@@ -1307,6 +1349,27 @@
                         "data": [
                             "normal",
                             "italic"
+                        ],
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontWeight",
+                        "field": "prop-fontWeight",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "100",
+                            "200",
+                            "300",
+                            "400",
+                            "500",
+                            "600",
+                            "700",
+                            "800",
+                            "900",
+                            "bold",
+                            "normal"
                         ],
                         "section": "basic"
                     },

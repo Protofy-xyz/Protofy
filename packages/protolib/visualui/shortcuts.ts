@@ -78,3 +78,16 @@ export const fontStyle = {
         return props
     })
 }
+
+export const fontWeight = {
+    icon: (props) => 'Bold',
+    selected: (props) => props.fontWeight == 'bold',
+    action: ({ setProp }) => setProp(props => {
+        if (props.fontWeight == 'bold') {
+            props['fontWeight'] = 'normal'
+        } else {
+            props['fontWeight'] = 'bold'
+        }
+        return props
+    })
+}

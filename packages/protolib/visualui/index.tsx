@@ -83,7 +83,7 @@ import HStack from '../components/HStack'
 import VCenterStack from '../components/VCenterStack'
 import Spacer from '../components/Spacer'
 import { AdminPage } from '../components/AdminPage'
-import { alignSelf, fontStyle, textAlign } from './shortcuts'
+import { alignSelf, fontStyle, textAlign, fontWeight } from './shortcuts'
 
 const cw = getComponentWrapper('protolib')
 
@@ -94,7 +94,8 @@ const componentTextRules = {
     shortcuts: [
       alignSelf,
       textAlign,
-      fontStyle
+      fontStyle,
+      fontWeight
     ]
   }
 }
