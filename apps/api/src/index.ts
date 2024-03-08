@@ -19,8 +19,6 @@ const isProduction = process.env.NODE_ENV === 'production';
 const server = http.createServer(app);
 const PORT = isProduction ? 4001 : 3001
 
-logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: api")
-
 server.listen(PORT, () => {
   logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
 });

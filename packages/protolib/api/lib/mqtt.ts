@@ -7,7 +7,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const mqttServer = process.env.MQTT_URL ?? ('mqtt://localhost:' + (isProduction ? '8883' : '1883'))
 var mqttClient = null;
 
-export const getMQTTClient = (username, password?) => {
+export const getMQTTClient = (username, password?, onConnect?) => {
     if (!mqttClient) {
         mqttClient = mqtt.connect(mqttServer, {
             username: username, 
@@ -18,6 +18,9 @@ export const getMQTTClient = (username, password?) => {
         mqttClient.retries = 0
 
         mqttClient.on('connect', function () {
+            if(!mqttClient.hasConnected && onConnect) {
+                onConnect(mqttClient)
+            }
             mqttClient.hasConnected = true
             mqttClient.retries = 0
             logger.debug('Connected to MQTT');
