@@ -83,16 +83,32 @@ import HStack from '../components/HStack'
 import VCenterStack from '../components/VCenterStack'
 import Spacer from '../components/Spacer'
 import { AdminPage } from '../components/AdminPage'
+import { alignSelf, fontStyle, textAlign } from './shortcuts'
 
 const cw = getComponentWrapper('protolib')
 
 const nonDraggable = { custom: { hidden: true } }
 
 export const textPalette = {
-  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, {}, {}, true),
+  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, {
+    custom: {
+      shortcuts: [
+        alignSelf,
+        textAlign
+      ]
+    }
+  }, {}, true),
   ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, {}, {}, true),
   ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, {}, {}, true),
-  ...cw(Text, 'Type', 'Text', { children: "hello" }, {}, {}, true),
+  ...cw(Text, 'Type', 'Text', { children: "hello" }, {
+    custom: {
+      shortcuts: [
+        alignSelf,
+        textAlign,
+        fontStyle
+      ]
+    }
+  }, {}, true),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
 }
@@ -108,6 +124,9 @@ export const basicPalette = {
   ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {}, {}, true),
   ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "Press Me" }, {
     custom: {
+      shortcuts: [
+        alignSelf
+      ],
       options: [
         {
           action: ({ dom }) => { dom.focus() },
