@@ -85,8 +85,8 @@ export const RenderNode = ({ render, onEnableEvents }) => {
         else topPos = bottom - 50
 
         return {
-            top: topPos,
-            left: left,
+            top: topPos + "px",
+            left: left + "px",
         };
     }, []);
 
