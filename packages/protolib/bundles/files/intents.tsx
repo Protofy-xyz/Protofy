@@ -82,7 +82,10 @@ const SaveButton = ({ checkStatus=() => true, defaultState='available', path, ge
     setState("loading")
     const content = getContent();
     await API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/'), { content });
-
+    if(!path.startsWith('/packages/app/bundles/custom/apis/')) {
+      setState(defaultState)
+      onSave()
+    }
   };
 
   return (
