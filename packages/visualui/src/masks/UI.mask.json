@@ -29,7 +29,19 @@
                         "type": "color",
                         "fieldType": "prop",
                         "staticLabel": true,
-                        "section": "color"
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontStyle",
+                        "field": "prop-fontStyle",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "normal",
+                            "italic"
+                        ],
+                        "section": "basic"
                     },
                     {
                         "label": "margin",
@@ -1084,7 +1096,19 @@
                         "type": "color",
                         "fieldType": "prop",
                         "staticLabel": true,
-                        "section": "color"
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontStyle",
+                        "field": "prop-fontStyle",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "normal",
+                            "italic"
+                        ],
+                        "section": "basic"
                     },
                     {
                         "label": "margin",
@@ -1172,7 +1196,19 @@
                         "type": "color",
                         "fieldType": "prop",
                         "staticLabel": true,
-                        "section": "color"
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontStyle",
+                        "field": "prop-fontStyle",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "normal",
+                            "italic"
+                        ],
+                        "section": "basic"
                     },
                     {
                         "label": "margin",
@@ -1260,7 +1296,19 @@
                         "type": "color",
                         "fieldType": "prop",
                         "staticLabel": true,
-                        "section": "color"
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontStyle",
+                        "field": "prop-fontStyle",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "normal",
+                            "italic"
+                        ],
+                        "section": "basic"
                     },
                     {
                         "label": "margin",
@@ -1356,6 +1404,18 @@
                         "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontStyle",
+                        "field": "prop-fontStyle",
+                        "fieldType": "prop",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "normal",
+                            "italic"
+                        ],
                         "section": "basic"
                     },
                     {

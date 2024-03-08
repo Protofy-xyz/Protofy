@@ -89,26 +89,21 @@ const cw = getComponentWrapper('protolib')
 
 const nonDraggable = { custom: { hidden: true } }
 
+const componentTextRules = {
+  custom: {
+    shortcuts: [
+      alignSelf,
+      textAlign,
+      fontStyle
+    ]
+  }
+}
+
 export const textPalette = {
-  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, {
-    custom: {
-      shortcuts: [
-        alignSelf,
-        textAlign
-      ]
-    }
-  }, {}, true),
-  ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, {}, {}, true),
-  ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, {}, {}, true),
-  ...cw(Text, 'Type', 'Text', { children: "hello" }, {
-    custom: {
-      shortcuts: [
-        alignSelf,
-        textAlign,
-        fontStyle
-      ]
-    }
-  }, {}, true),
+  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, componentTextRules, {}, true),
+  ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, componentTextRules, {}, true),
+  ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, componentTextRules, {}, true),
+  ...cw(Text, 'Type', 'Text', { children: "hello" }, componentTextRules, {}, true),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
 }
@@ -121,7 +116,13 @@ export const layoutPalette = {
 }
 
 export const basicPalette = {
-  ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {}, {}, true),
+  ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {
+    custom: {
+      shortcuts: [
+        fontStyle
+      ]
+    }
+  }, {}, true),
   ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "Press Me" }, {
     custom: {
       shortcuts: [
