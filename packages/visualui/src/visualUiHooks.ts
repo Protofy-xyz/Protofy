@@ -17,20 +17,21 @@ export function useVisualUiAtom(_atom: any) {
 
 // hook to subscribe to a visualUi instance state
 // *client* refers to any subscriber
-export function useVisualUi(atom, callb, defState) {
+export function useVisualUi(atom, callb?, defState?) {
   if (atom) {
     const [craftContext] = useAtom<EditorStore>(atom) // protocraft internal state
     const [prevNodes, setPreviousNodes] = useState<string>(null) // previous nodes on every udpate
     const [lastEvent, setLastEvent] = useState<any>(null) // get last event triggered by any
-    const [state, setState] = useState(defState) // client wanted internal state based on a callback trigger
+    const [state, setState] = useState(defState ?? null) // client wanted internal state based on a callback trigger
 
+    // state reducer
     useEffect(() => {
         if (!craftContext || !craftContext['subscribe']) return
 
         craftContext.subscribe(
             (_) => {
                 setState((prev: any) => {
-                    const result = callb(prev, craftContext)
+                    const result = callb && callb(prev, craftContext)
                     return result ?? prev
                 })
             },
@@ -40,6 +41,7 @@ export function useVisualUi(atom, callb, defState) {
         );
     }, [craftContext])
 
+    // events
     useEffect(() => {
         if (craftContext.history.timeline.length < 1) return  // this is to avoid empty initializer of craft
         if (lastEvent === null && prevNodes === null) { // first load
@@ -49,12 +51,14 @@ export function useVisualUi(atom, callb, defState) {
 
         const currentEditorNodes: any = JSON.parse(craftContext.query.serialize())
         const diffs = Diff.diff(JSON.parse(prevNodes), JSON.parse(craftContext.query.serialize())) 
-        console.log('difss')
+        console.log('in: diffs', diffs)
+        if (diffs.length < 1) return 
     }, [craftContext.query.serialize()])
 
     return {
+        actions: craftContext.actions, 
+        query: craftContext.query, 
         state: state,
-        visualUiData: craftContext,
         lastEvent: lastEvent
     }
   } else {
@@ -69,7 +73,7 @@ export function useVisualUiComms({ actions, query }, { resolveComponentsDir, app
 
     if (queryParams.experimental_comms === 'true') {
         console.log('protocraft experimental communications')
-        useVisualUi(contextAtom, () => {}, null)
+        useVisualUi(contextAtom)
     } else {
         console.log('protocraft legacy communications')
         useEffect(() => {
