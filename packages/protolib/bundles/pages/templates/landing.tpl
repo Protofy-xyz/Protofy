@@ -71,23 +71,6 @@ const PageComponent = (props) => {
                     <GithubIcon width={60} height={60} />
                   </TooltipContainer>
                 </NextLink>
-                <XStack
-                  ai="center"
-                  jc="center"
-                  space="$2"
-                  $xxs={{#curlyBraces}}
-                    // words web-only
-                    // @ts-ignore
-                    order: "-1",
-                    mx: "50%",
-                  {{/curlyBraces}}>
-                  {/* <NextLink href="#">
-                    <MainButton buttonProps={{#curlyBraces}} w: 120, h: 52 {{/curlyBraces}}>How?</MainButton>
-                  </NextLink>
-                  <NextLink href="#">
-                    <MainButton buttonProps={{#curlyBraces}} w: 118, h: 52 {{/curlyBraces}}>Docs</MainButton>
-                  </NextLink> */}
-                </XStack>
                 <NextLink target="_blank" href="https://discord.gg/VpeZxMFfYW">
                   <TooltipContainer tooltipText="Discord">
                     <DiscordIcon plain={true} height={60} width={60} />
