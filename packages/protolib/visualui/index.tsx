@@ -254,11 +254,9 @@ export const miscellanyPalette = {
   ...cw(AlertDialog, 'Group', 'AlertDialog', {}, nonDraggable)
 }
 
-export const palettes = {
+export default {
   basic: basicPalette,
   text: textPalette,
   layout: layoutPalette,
   miscellany: miscellanyPalette,
 }
-
-export default miscellanyPalette

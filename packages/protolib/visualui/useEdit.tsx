@@ -5,7 +5,7 @@ import { getTokens } from '@tamagui/core'
 import { Button } from 'tamagui'
 import { useRouter } from "next/router"
 import dynamic from 'next/dynamic';
-import { palettes } from './index'
+import { palettes } from 'app/bundles/palettes'
 import { Session } from 'protolib'
 import { useAtom } from 'jotai'
 import { useIsEditing } from './useIsEditing'
