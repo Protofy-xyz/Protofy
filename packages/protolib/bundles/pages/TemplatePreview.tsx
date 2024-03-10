@@ -35,7 +35,7 @@ export const TemplatePreview = ({ template, isSelected, onPress, theme }) => {
                     </NextLink>
                 </YStack>
                 <XStack jc='space-between' borderTopWidth={"$0.5"} borderColor={"$gray8"} backgroundColor={"$gray3"} py="$1" px="$2">
-                    <Paragraph>{template.name}</Paragraph>
+                    <Paragraph>{template.name ?? template.id}</Paragraph>
                 </XStack>
             </YStack>
         </Tinted>
