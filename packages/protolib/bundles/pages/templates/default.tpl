@@ -18,14 +18,12 @@ const { actionFetch } = API;
 
 const PageComponent = (props) => {
 return (
-<Page height="99vh">
+<Page minHeight="100vh">
     <DefaultLayout title="Protofy" description="Made with love from Barcelona">
-        <Tinted>
-            {/* add your content here, this is just an example with a big text */}
-            <YStack mt="$10">
-                <BigTitle>{{name}}</BigTitle>
-            </YStack>
-        </Tinted>
+        {/* add your content here, this is just an example with a big text */}
+        <YStack mt="$10">
+            <BigTitle>{{name}}</BigTitle>
+        </YStack>
     </DefaultLayout>
 </Page>
 )
