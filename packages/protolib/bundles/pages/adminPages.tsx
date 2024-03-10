@@ -14,7 +14,7 @@ import { AlertDialog } from '../../components/AlertDialog'
 import { Slides } from '../../components/Slides'
 import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
-import TemplatePreview from './TemplatePreview'
+import { TemplatePreview } from './TemplatePreview'
 import {environments} from 'app/bundles/environments'
 
 const PageIcons = {}
@@ -52,7 +52,7 @@ const FirstSlide = ({ selected, setSelected }) => {
     return <YStack>
         <ScrollView mah={"500px"}>
             <SelectGrid>
-                {Object.keys(templates).map((template) => <TemplatePreview theme={themeName} template={template} isSelected={selected == template} onPress={() => setSelected(template)} />)}
+                {Object.keys(templates).map((templateId) => <TemplatePreview theme={themeName} template={templateId} isSelected={selected == templateId} onPress={() => setSelected(templateId)} />)}
             </SelectGrid>
         </ScrollView>
         <Spacer marginBottom="$8" />
