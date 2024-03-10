@@ -15,16 +15,24 @@ import { Slides } from '../../components/Slides'
 import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
 import { TemplatePreview } from './TemplatePreview'
-import {environments} from 'app/bundles/environments'
+import { environments } from 'app/bundles/environments'
 
 const PageIcons = {}
 const sourceUrl = '/adminapi/v1/pages'
 const objectsSourceUrl = '/adminapi/v1/objects?all=1'
 
 const templates = {
-    "blank": {},
-    "default": {},
+    "blank": {
+        id: "blank",
+        name: "Blank"
+    },
+    "default": {
+        id: "default",
+        name: "Default"
+    },
     "admin": {
+        name: "Admin panel",
+        id: "admin",
         extraFields: (objects) => ({
             object: z.union([...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route')
         }),
@@ -35,10 +43,22 @@ const templates = {
             return
         }
     },
-    "landing": {},
-    "ecomerce": {},
-    "about": {},
-    "newsfeed": {},
+    "landing": {
+        id: "landing",
+        name: "Landing"
+    },
+    "ecomerce": {
+        id: "ecomerce",
+        name: "E-commerce"
+    },
+    "about": {
+        id: "about",
+        name: "About"
+    },
+    "newsfeed": {
+        id: "newsfeed",
+        name: "News feed"
+    },
 }
 
 const SelectGrid = ({ children }) => {
@@ -52,7 +72,14 @@ const FirstSlide = ({ selected, setSelected }) => {
     return <YStack>
         <ScrollView mah={"500px"}>
             <SelectGrid>
-                {Object.keys(templates).map((templateId) => <TemplatePreview theme={themeName} template={templateId} isSelected={selected == templateId} onPress={() => setSelected(templateId)} />)}
+                {Object.entries(templates).map(([templateId, template]) => (
+                    <TemplatePreview
+                        theme={themeName}
+                        template={template}
+                        isSelected={selected === templateId}
+                        onPress={() => setSelected(templateId)}
+                    />
+                ))}
             </SelectGrid>
         </ScrollView>
         <Spacer marginBottom="$8" />
@@ -114,48 +141,48 @@ export default {
                 >
                     <YStack f={1} jc="center" ai="center">
                         {/* <ScrollView maxHeight={"90vh"}> */}
-                            <XStack mr="$5">
-                                <Slides
-                                    lastButtonCaption="Create"
-                                    onFinish={async () => {
-                                        try {
-                                            //TODO: when using custom data and setData in editablectObject
-                                            //it seems that defaultValue is no longer working
-                                            //we are going to emulate it here until its fixed
-                                            const obj = PageModel.load(data['data'])
-                                            if (templates[data['data'].template].extraValidation) {
-                                                const check = templates[data['data'].template].extraValidation(data['data'])
-                                                if (check?.error) {
-                                                    throw check.error
-                                                }
+                        <XStack mr="$5">
+                            <Slides
+                                lastButtonCaption="Create"
+                                onFinish={async () => {
+                                    try {
+                                        //TODO: when using custom data and setData in editablectObject
+                                        //it seems that defaultValue is no longer working
+                                        //we are going to emulate it here until its fixed
+                                        const obj = PageModel.load(data['data'])
+                                        if (templates[data['data'].template].extraValidation) {
+                                            const check = templates[data['data'].template].extraValidation(data['data'])
+                                            if (check?.error) {
+                                                throw check.error
                                             }
-                                            const result = await API.post(sourceUrl, obj.create().getData())
-                                            if (result.isError) {
-                                                throw result.error
-                                            }
-                                            setAddOpen(false);
-                                            toast.show('Page created', {
-                                                message: obj.getId()
-                                            })
-                                        } catch (e) {
-                                            console.log('original error: ', e)
-                                            setError(getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e))
                                         }
-                                    }}
-                                    slides={[
-                                        {
-                                            name: "Create new page",
-                                            title: "Select your Template",
-                                            component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
-                                        },
-                                        {
-                                            name: "Configure your page",
-                                            title: "Configure your page",
-                                            component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
+                                        const result = await API.post(sourceUrl, obj.create().getData())
+                                        if (result.isError) {
+                                            throw result.error
                                         }
-                                    ]
-                                    }></Slides>
-                            </XStack>
+                                        setAddOpen(false);
+                                        toast.show('Page created', {
+                                            message: obj.getId()
+                                        })
+                                    } catch (e) {
+                                        console.log('original error: ', e)
+                                        setError(getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e))
+                                    }
+                                }}
+                                slides={[
+                                    {
+                                        name: "Create new page",
+                                        title: "Select your Template",
+                                        component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
+                                    },
+                                    {
+                                        name: "Configure your page",
+                                        title: "Configure your page",
+                                        component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
+                                    }
+                                ]
+                                }></Slides>
+                        </XStack>
                         {/* </ScrollView> */}
                     </YStack>
                 </AlertDialog>
