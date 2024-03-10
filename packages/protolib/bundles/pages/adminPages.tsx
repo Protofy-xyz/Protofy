@@ -16,50 +16,11 @@ import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
 import { TemplatePreview } from './TemplatePreview'
 import { environments } from 'app/bundles/environments'
+import { pageTemplates } from 'app/bundles/templates'
 
 const PageIcons = {}
 const sourceUrl = '/adminapi/v1/pages'
 const objectsSourceUrl = '/adminapi/v1/objects?all=1'
-
-const templates = {
-    "blank": {
-        id: "blank",
-        name: "Blank"
-    },
-    "default": {
-        id: "default",
-        name: "Default"
-    },
-    "admin": {
-        name: "Admin panel",
-        id: "admin",
-        extraFields: (objects) => ({
-            object: z.union([...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route')
-        }),
-        extraValidation: (data) => {
-            if (!Object.keys(data).includes('object')) {
-                return { error: "object cant be empty" }
-            }
-            return
-        }
-    },
-    "landing": {
-        id: "landing",
-        name: "Landing"
-    },
-    "ecomerce": {
-        id: "ecomerce",
-        name: "E-commerce"
-    },
-    "about": {
-        id: "about",
-        name: "About"
-    },
-    "newsfeed": {
-        id: "newsfeed",
-        name: "News feed"
-    },
-}
 
 const SelectGrid = ({ children }) => {
     return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
@@ -72,7 +33,7 @@ const FirstSlide = ({ selected, setSelected }) => {
     return <YStack>
         <ScrollView mah={"500px"}>
             <SelectGrid>
-                {Object.entries(templates).map(([templateId, template]) => (
+                {Object.entries(pageTemplates).map(([templateId, template]) => (
                     <TemplatePreview
                         theme={themeName}
                         template={template}
@@ -98,7 +59,7 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
         mode={'add'}
         title={""}
         model={PageModel}
-        extraFields={templates[data['data'].template].extraFields ? templates[data['data'].template].extraFields(objects) : {}}
+        extraFields={pageTemplates[data['data'].template].extraFields ? pageTemplates[data['data'].template].extraFields(objects) : {}}
     />
 }
 
@@ -150,8 +111,8 @@ export default {
                                         //it seems that defaultValue is no longer working
                                         //we are going to emulate it here until its fixed
                                         const obj = PageModel.load(data['data'])
-                                        if (templates[data['data'].template].extraValidation) {
-                                            const check = templates[data['data'].template].extraValidation(data['data'])
+                                        if (pageTemplates[data['data'].template].extraValidation) {
+                                            const check = pageTemplates[data['data'].template].extraValidation(data['data'])
                                             if (check?.error) {
                                                 throw check.error
                                             }
