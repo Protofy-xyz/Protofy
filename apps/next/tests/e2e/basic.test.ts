@@ -182,6 +182,7 @@ describe("Test admin capabilities", () => {
         it("should be able to save edited page content", async () => {
             const vp = ProtoBrowser.getViewPortSize()
             await protoBrowser.mouseClick(Math.floor(vp.width / 2), Math.floor(vp.height / 2))
+            await protoBrowser.clickElement("#render-node-options-btn")
             await protoBrowser.clickElement("#render-node-delete-btn")
             await protoBrowser.clickElement("#save-nodes-btn")
             let error

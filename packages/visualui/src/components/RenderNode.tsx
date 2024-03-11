@@ -1,13 +1,14 @@
-import { forwardRef } from 'react'
+import { forwardRef, createElement, useState } from 'react'
 import { useNode, useEditor } from "@protocraft/core";
 import { ROOT_NODE } from "@craftjs/utils";
 import React, { useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
-import { ArrowDown, Trash2, Redo, ArrowUp, Move, MoreVertical } from 'lucide-react';
-import { Popover, XStack } from '@my/ui'
-import visualUItheme from "./Theme";
+import { ArrowDown, Trash2, Redo, ArrowUp, Move, MoreVertical, Copy } from 'lucide-react';
+import { XStack } from '@my/ui'
+import uiTheme from "./Theme";
 import Icon from "./Icon";
-import Theme from "./Theme";
+import { v4 as uuidv4 } from 'uuid';
+import { UIMenu } from './UIMenu';
 
 const Clickable = forwardRef(({ ...props }: any, ref) => <div
     ref={ref}
@@ -16,6 +17,28 @@ const Clickable = forwardRef(({ ...props }: any, ref) => <div
 >
 
 </div>)
+
+const MenuOption = ({ name, icon = undefined, ...props }: any) => {
+    const [hover, setHover] = useState(false)
+    return <div
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        {...props}
+        style={{
+            cursor: "pointer", justifyContent: 'space-between', width: '100%',
+            display: 'flex', alignItems: 'center', flex: 1, alignSelf: 'flex-start',
+            padding: '12px',
+            ...props.style
+        }}
+    >
+        <div style={{color: hover ? uiTheme.interactiveColor : uiTheme.textColor}}>
+            {name}
+        </div>
+        <div>
+            {icon ? createElement(icon, { color: hover ? uiTheme.interactiveColor : uiTheme.textColor, size: 16, paddingTop: '2px' }) : null}
+        </div>
+    </div>
+}
 
 export const RenderNode = ({ render, onEnableEvents }) => {
     const { id } = useNode();
@@ -37,7 +60,8 @@ export const RenderNode = ({ render, onEnableEvents }) => {
         unknown,
         setProp,
         custom,
-        props
+        props,
+        node
     } = useNode((node) => {
         return (
             {
@@ -46,6 +70,7 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                 nodeId: node.id,
                 isHover: node.events.hovered,
                 dom: node.dom,
+                node,
                 name: node.data.custom.displayName || node.data.displayName,
                 moveable: query.node(node.id).isDraggable(),
                 deletable: query.node(node.id).isDeletable() && query.node(node.id).isDraggable(),
@@ -56,6 +81,8 @@ export const RenderNode = ({ render, onEnableEvents }) => {
             }
         )
     });
+
+    const enableDuplicate = childs.length == 0
 
     const componentColor = unknown ? "#EF9364" : "#2680EB"
     const iconSize = 20
@@ -127,7 +154,7 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                 top: getPos(dom).top,
                                 zIndex: 9999999999999999999999999999999,
                                 position: "fixed",
-                                backgroundColor: visualUItheme.nodeBackgroundColor,
+                                backgroundColor: uiTheme.nodeBackgroundColor,
                                 border: border,
                                 padding: "6px",
                                 color: "white",
@@ -199,102 +226,108 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                         />
                                     </Clickable>
                                     : null}
+
+                                <Separator />
+
                                 {
                                     custom.shortcuts ?
                                         <XStack ai="center" gap="6px">
-                                            <Separator />
                                             {custom.shortcuts.map((shortcut, index) => {
                                                 const isSelected = shortcut?.selected ? shortcut.selected(props) : false
                                                 return (
-                                                    <Popover key={index} placement="top" onOpenChange={onEnableEvents}>
-                                                        <Popover.Trigger>
+                                                    <UIMenu
+                                                        key={index}
+                                                        onOpenChange={onEnableEvents}
+                                                        trigger={
                                                             <Clickable
                                                                 backgroundColor={isSelected ? 'white' : ''}
                                                                 onClick={shortcut.action ? () => shortcut.action({ setProp, dom }) : null}
                                                             >
                                                                 <Icon
                                                                     name={shortcut.icon(props)}
-                                                                    color={isSelected ? Theme.nodeBackgroundColor : 'white'}
+                                                                    color={isSelected ? uiTheme.nodeBackgroundColor : 'white'}
                                                                     size={iconSize}
                                                                 />
                                                             </Clickable>
-                                                        </Popover.Trigger>
-                                                        {
+                                                        }
+                                                        content={
                                                             shortcut.menu
-                                                                ? <Popover.Content
-                                                                    gap="$4" br="$0" shadowRadius={"$4"} shadowColor={"black"}
-                                                                    boc="gray" bw="1px" shadowOpacity={0.6}
-                                                                    bc={visualUItheme.nodeBackgroundColor} maxHeight={"350px"}
-                                                                    //@ts-ignore
-                                                                    overflow='scroll' overflowX="hidden"
-                                                                >
-                                                                    {
-                                                                        shortcut.menu?.map((sh) => (<div
-                                                                            style={{ cursor: "pointer", alignSelf: 'flex-start' }}
-                                                                            onClick={(e: React.MouseEvent) => {
-                                                                                e.stopPropagation();
-                                                                                sh.action({ setProp, dom })
-                                                                            }}
-                                                                        >
-                                                                            <div>{sh.name}</div>
-                                                                        </div>))
-                                                                    }
-                                                                </Popover.Content>
+                                                                ? shortcut.menu?.map((sh) => (<MenuOption
+                                                                    onClick={(e: React.MouseEvent) => {
+                                                                        e.stopPropagation();
+                                                                        sh.action({ setProp, dom })
+                                                                    }}
+                                                                    name={sh.name}
+                                                                />
+                                                                ))
                                                                 : null
                                                         }
-                                                    </Popover>
+                                                    >
+                                                    </UIMenu>
                                                 )
                                             })}
                                             <Separator />
                                         </XStack>
                                         : null
                                 }
-                                {deletable ? (
-                                    <Clickable
-                                        title="Delete"
-                                        id='render-node-delete-btn'
-                                        onClick={(e: React.MouseEvent) => {
-                                            e.stopPropagation();
-                                            actions.delete(id);
-                                        }}
-                                    >
-                                        <Trash2
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </Clickable>
-                                ) : null}
-
                                 {
-                                    custom.options ?
-                                        <Popover placement="top" onOpenChange={onEnableEvents}>
-                                            <Separator />
-                                            <Popover.Trigger>
+                                    custom.options || enableDuplicate || deletable ?
+                                        <UIMenu
+                                            onOpenChange={onEnableEvents}
+                                            trigger={
                                                 <Clickable
-                                                    title="Delete"
-                                                    id='render-node-delete-btn'
+                                                    title="Options"
+                                                    id='render-node-options-btn'
                                                 >
                                                     <MoreVertical
                                                         color="white"
                                                         size={iconSize}
                                                     />
                                                 </Clickable>
-                                            </Popover.Trigger>
-                                            <Popover.Content gap="$4" br="$0" shadowRadius={"$4"} shadowColor={"black"} boc="gray" bw="1px" shadowOpacity={0.6} bc={visualUItheme.nodeBackgroundColor}>
-                                                {
-                                                    custom.options?.map((st) => (<div
-                                                        style={{ cursor: "pointer", alignSelf: 'flex-start' }}
+                                            }
+                                            content={
+                                                <>
+                                                    {enableDuplicate ? <MenuOption
                                                         onClick={(e: React.MouseEvent) => {
                                                             e.stopPropagation();
-                                                            st.action({ setProp, dom })
+                                                            //TODO: Adds suport to duplicate nodes with childs
+                                                            actions.add([
+                                                                //@ts-ignore
+                                                                {
+                                                                    id: uuidv4(),
+                                                                    rules: { ...node.rules },
+                                                                    data: { ...node.data },
+                                                                    events: node.events
+                                                                }
+                                                            ], parent, nodeAndSiblings.indexOf(nodeId) + 1)
                                                         }}
-                                                    >
-                                                        <div>{st.name}</div>
-                                                    </div>))
-                                                }
-                                            </Popover.Content>
-                                        </Popover>
+                                                        icon={Copy}
+                                                        name={"Duplicate"}
+                                                    />
 
+                                                        : null}
+                                                    {
+                                                        custom.options?.map((st) => (<MenuOption
+                                                            onClick={(e: React.MouseEvent) => {
+                                                                e.stopPropagation();
+                                                                st.action({ setProp, dom })
+                                                            }}
+                                                            name={st.name}
+                                                        />))
+                                                    }
+                                                    {deletable ? <MenuOption
+                                                        id='render-node-delete-btn'
+                                                        onClick={(e: React.MouseEvent) => {
+                                                            e.stopPropagation();
+                                                            actions.delete(id);
+                                                        }}
+                                                        icon={Trash2}
+                                                        name={"Delete"}
+                                                    />
+                                                        : null}
+                                                </>
+                                            }
+                                        />
                                         : null
                                 }
                             </div>
