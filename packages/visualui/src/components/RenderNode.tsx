@@ -10,13 +10,29 @@ import Icon from "./Icon";
 import { v4 as uuidv4 } from 'uuid';
 import { UIMenu } from './UIMenu';
 
-const Clickable = forwardRef(({ ...props }: any, ref) => <div
-    ref={ref}
-    {...props}
-    style={{ cursor: "pointer", padding: '6px', borderRadius: '2px', ...props.style, backgroundColor: props.backgroundColor }}
->
+const IconButton = forwardRef(({ icon, iconSize = 20, selected = false, dynamicIcon = undefined, ...props }: any, ref) => {
+    const [hover, setHover] = useState(false)
 
-</div>)
+    return <div
+        ref={ref}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        {...props}
+        style={{
+            cursor: "pointer", padding: '6px', borderRadius: '2px',
+            backgroundColor: selected ? uiTheme.textColor : '',
+            ...props.style
+        }}
+    >
+        {dynamicIcon
+            ? <Icon
+                name={dynamicIcon}
+                color={selected ? uiTheme.nodeBackgroundColor : hover ? uiTheme.interactiveColor : uiTheme.textColor}
+                size={iconSize}
+            />
+            : createElement(icon, { size: iconSize, color: hover ? uiTheme.interactiveColor : uiTheme.textColor })}
+    </div>
+})
 
 const MenuOption = ({ name, icon = undefined, ...props }: any) => {
     const [hover, setHover] = useState(false)
@@ -31,7 +47,7 @@ const MenuOption = ({ name, icon = undefined, ...props }: any) => {
             ...props.style
         }}
     >
-        <div style={{color: hover ? uiTheme.interactiveColor : uiTheme.textColor}}>
+        <div style={{ color: hover ? uiTheme.interactiveColor : uiTheme.textColor }}>
             {name}
         </div>
         <div>
@@ -170,61 +186,45 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                             <Separator />
                             <div style={{ display: 'flex', flexDirection: "row", flex: 1, gap: "6px", alignItems: 'center' }}>
                                 {moveable ? (
-                                    <Clickable
+                                    <IconButton
                                         ref={drag}
                                         style={{ cursor: "grab" }}
                                         title="Move"
-                                    >
-                                        <Move
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </Clickable>
+                                        icon={Move}
+                                    />
                                 ) : null}
                                 {id !== ROOT_NODE && parent != "ROOT" ?
-                                    <Clickable
+                                    <IconButton
                                         title="Select parent"
-                                    >
-                                        <ArrowUp
-                                            onMouseDown={(e) => {
-                                                actions.selectNode(parent);
-                                                e.stopPropagation()
-                                            }}
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </Clickable>
+                                        onMouseDown={(e) => {
+                                            actions.selectNode(parent);
+                                            e.stopPropagation()
+                                        }}
+                                        icon={ArrowUp}
+                                    />
                                     : null}
                                 {childs.length ?
-                                    <Clickable
+                                    <IconButton
                                         title="Select first child"
-                                    >
-                                        <ArrowDown
-                                            onMouseDown={(e) => {
-                                                actions.selectNode(childs[0]);
-                                                e.stopPropagation()
-                                            }}
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </Clickable>
+                                        icon={ArrowDown}
+                                        onMouseDown={(e) => {
+                                            actions.selectNode(childs[0]);
+                                            e.stopPropagation()
+                                        }}
+                                    />
                                     : null}
                                 {nodeAndSiblings?.length > 1 ?
-                                    <Clickable
+                                    <IconButton
                                         title="Select next sibling"
-                                    >
-                                        <Redo
-                                            onMouseDown={(e) => {
-                                                const currentIndex = nodeAndSiblings.indexOf(nodeId)
-                                                const nextIndex = (currentIndex + 1) % nodeAndSiblings.length
-                                                const nextNode = nodeAndSiblings[nextIndex]
-                                                actions.selectNode(nextNode);
-                                                e.stopPropagation()
-                                            }}
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </Clickable>
+                                        icon={Redo}
+                                        onMouseDown={(e) => {
+                                            const currentIndex = nodeAndSiblings.indexOf(nodeId)
+                                            const nextIndex = (currentIndex + 1) % nodeAndSiblings.length
+                                            const nextNode = nodeAndSiblings[nextIndex]
+                                            actions.selectNode(nextNode);
+                                            e.stopPropagation()
+                                        }}
+                                    />
                                     : null}
 
                                 <Separator />
@@ -239,16 +239,11 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                                         key={index}
                                                         onOpenChange={onEnableEvents}
                                                         trigger={
-                                                            <Clickable
-                                                                backgroundColor={isSelected ? 'white' : ''}
+                                                            <IconButton
                                                                 onClick={shortcut.action ? () => shortcut.action({ setProp, dom }) : null}
-                                                            >
-                                                                <Icon
-                                                                    name={shortcut.icon(props)}
-                                                                    color={isSelected ? uiTheme.nodeBackgroundColor : 'white'}
-                                                                    size={iconSize}
-                                                                />
-                                                            </Clickable>
+                                                                selected={isSelected}
+                                                                dynamicIcon={shortcut.icon(props)}
+                                                            />
                                                         }
                                                         content={
                                                             shortcut.menu
@@ -275,15 +270,11 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                         <UIMenu
                                             onOpenChange={onEnableEvents}
                                             trigger={
-                                                <Clickable
+                                                <IconButton
                                                     title="Options"
                                                     id='render-node-options-btn'
-                                                >
-                                                    <MoreVertical
-                                                        color="white"
-                                                        size={iconSize}
-                                                    />
-                                                </Clickable>
+                                                    icon={MoreVertical}
+                                                />
                                             }
                                             content={
                                                 <>
