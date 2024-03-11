@@ -83,13 +83,13 @@ import HStack from '../components/HStack'
 import VCenterStack from '../components/VCenterStack'
 import Spacer from '../components/Spacer'
 import { AdminPage } from '../components/AdminPage'
-import { alignSelf, fontStyle, textAlign, fontWeight } from './shortcuts'
+import { alignSelf, fontStyle, textAlign, fontWeight, flexDirection, justifyContent } from './shortcuts'
 
 const cw = getComponentWrapper('protolib')
 
 const nonDraggable = { custom: { hidden: true } }
 
-const componentTextRules = {
+const uiDataText = {
   custom: {
     shortcuts: [
       alignSelf,
@@ -101,10 +101,10 @@ const componentTextRules = {
 }
 
 export const textPalette = {
-  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, componentTextRules, {}, true),
-  ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, componentTextRules, {}, true),
-  ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, componentTextRules, {}, true),
-  ...cw(Text, 'Type', 'Text', { children: "hello" }, componentTextRules, {}, true),
+  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, uiDataText, {}, true),
+  ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, uiDataText, {}, true),
+  ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, uiDataText, {}, true),
+  ...cw(Text, 'Type', 'Text', { children: "hello" }, uiDataText, {}, true),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { rules: { canMoveIn: () => false } }),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
 }
@@ -137,7 +137,14 @@ export const basicPalette = {
       ]
     }
   }, {}, true),
-  ...cw(Container, 'SquareAsterisk', 'Container', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(Container, 'SquareAsterisk', 'Container', {}, {
+    custom: {
+      shortcuts: [
+        flexDirection,
+        justifyContent
+      ]
+    }
+  }, { children: <BasicPlaceHolder /> }),
   ...cw(Image, 'Image', 'Image', { url: "https://picsum.photos/200" }, {}, {}, true),
 }
 
