@@ -18,7 +18,7 @@ export type EditorProps = {
   resolveComponentsDir: string;
   onReady?: Function;
   metadata?: any;
-  contextAtom: any; 
+  contextAtom: any;
 };
 
 
@@ -41,19 +41,34 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
     if (!skip && nodesChanges?.length && JSON.stringify(nodesChanges) != previousDiffs) {
       var topicParams = {}
       if (nodesChanges.filter(d => d.kind == 'N').length == 1) { //case add
-        const newNodeId = nodesChanges.find(d => d.kind == 'N').path[0]
-        const parentId = currentEditorNodes[newNodeId]['parent']
-        const childrenPos = currentEditorNodes[parentId].nodes.findIndex(n => n == newNodeId)
-        const _data = currentEditorNodes[newNodeId].custom
-        topicParams = {
-          action: 'add-node',
-          nodeId: newNodeId,
-          nodeName: currentEditorNodes[newNodeId]['displayName'],
-          parent: parentId,
-          childrenPos: childrenPos,
-          data: _data,
-          nodeProps: currentEditorNodes[newNodeId]['props']
+        const newChange = nodesChanges.find(d => d.kind == 'N')
+        const isProp = newChange.path[1] == 'props'
+        const newNodeId = newChange.path[0]
+
+        if (isProp) { // case new prop
+          topicParams = {
+            action: 'edit-node',
+            nodeId: newNodeId,
+            value: newChange.rhs,
+            type: 'prop',
+            field: newChange.path[2]
+          }
+
+        } else { // case new node
+          const parentId = currentEditorNodes[newNodeId]['parent']
+          const childrenPos = currentEditorNodes[parentId].nodes.findIndex(n => n == newNodeId)
+          const _data = currentEditorNodes[newNodeId].custom
+          topicParams = {
+            action: 'add-node',
+            nodeId: newNodeId,
+            nodeName: currentEditorNodes[newNodeId]['displayName'],
+            parent: parentId,
+            childrenPos: childrenPos,
+            data: _data,
+            nodeProps: currentEditorNodes[newNodeId]['props']
+          }
         }
+
         notify(topicParams, publish)
       } else if (nodesChanges.find(d => d.kind == 'D')) { //case delete
         const deletedNodes = nodesChanges.filter(d => d.kind == 'D').map(n => n.path[0])
@@ -69,7 +84,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
         const children_diff = nodesChanges.find(d => d.kind == 'E' && d.path[2] == 'children')
         const props_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == 'props')
         const move_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == "nodes");
-        
+
         if (children_diff || props_diff) { // edited prop or child text
           const type = children_diff ? 'children' : 'prop'
           var diff = type == 'children' ? children_diff : props_diff
