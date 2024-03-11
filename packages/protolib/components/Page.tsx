@@ -33,7 +33,7 @@ export const Page = React.forwardRef(({mqttConfig, title, ...props}: {mqttConfig
             {title && <Head>
             <title>{title}</title>
             </Head>}
-            <YStack id={"protolib-page-container"} ref={ref} flex={1} height={"100%"} style={{overflowX:"hidden", ...(isEditing?{backgroundColor: theme.color1.val}:{})}} {...props}>
+            <YStack id={"protolib-page-container"} $xs={{paddingHorizontal: '$5'}} ref={ref} flex={1} height={"100%"} style={{overflowX:"hidden", ...(isEditing?{backgroundColor: theme.color1.val}:{})}} {...props}>
                 {props.children}
             </YStack>
         </>
