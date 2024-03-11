@@ -8,17 +8,17 @@ export const UIMenu = ({ trigger, content, onOpenChange, ...props }) => {
                 trigger
             }
         </Popover.Trigger>
-        <Popover.Content
-            width="250px" 
+        {content ? <Popover.Content
+            width="250px"
             padding="$2"
             paddingRight="$0"
-            br="$0" 
+            br="$0"
             bw="1px"
             display="flex"
-            shadowRadius={"$4"} 
-            shadowColor={"black"} 
+            shadowRadius={"$4"}
+            shadowColor={"black"}
             boc="gray"
-            shadowOpacity={0.6} 
+            shadowOpacity={0.6}
             bc={visualUItheme.nodeBackgroundColor}
             maxHeight={"350px"}
             //@ts-ignore
@@ -27,6 +27,6 @@ export const UIMenu = ({ trigger, content, onOpenChange, ...props }) => {
             {
                 content
             }
-        </Popover.Content>
+        </Popover.Content> : null}
     </Popover>
 }
