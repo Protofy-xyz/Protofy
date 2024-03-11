@@ -95,7 +95,7 @@ export function useVisualUiComms({ actions, query }, { resolveComponentsDir, app
         console.log('protocraft experimental communications')
         const {lastEvent} = useVisualUi(contextAtom)
         useEffect(() => {
-            console.log('in: event', lastEvent)
+            console.log('craftEvent: ', lastEvent)
         }, [lastEvent])
     } else {
         console.log('protocraft legacy communications')

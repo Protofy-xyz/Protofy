@@ -7,23 +7,23 @@ import {
     dumpContent, moveEdgeChildAndReorder, removeDataChildAndReorder,
     reorderDataChilds, reorderEdgeChilds
 } from 'protoflow/src/lib/FlowsOperations'
-import { useVisualUiAtom } from '../visualUiHooks'
+import { useVisualUi, useVisualUiAtom } from '../visualUiHooks'
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowConstructor(UIFLOWID)
 
 export const VisualUiFlows = (props) => {
-    const [context, setContext] = useVisualUiAtom(props.contextAtom)
-
     // flows comms custom hook
     function useFlowsComms({ edges, nodeData, nodes, setEdges, setNodesData, deleteNodes, setNodes, createNode, setNodeData, _customComponents, onSaveNodes, flowId, data }) {
         const router = useRouter()
         const queryParams = router.query
 
         if (queryParams.experimental_comms === 'true') {
+            console.log('flows: experimental communications')
+            const {lastEvent} = useVisualUi(props.contextAtom)
             useEffect(() => {
-                console.log('flows: experimental communications -> ', context)
-            }, [])
+                console.log('flowsEvent: ', lastEvent)
+            }, [lastEvent])
         } else {
             console.log('flows: legacy communications')
             // TODO: JOIN DATA TOPIC USE EFFECTS
