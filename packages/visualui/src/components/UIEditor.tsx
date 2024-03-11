@@ -78,10 +78,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 const previousImports = astContent.getImportDeclarations();
                 const missingJsxImports = getMissingJsxImports(data.nodes, data.nodesData, resolveComponentsDir)
                 if (missingJsxImports.length) {
-                    const filteredMissingJsxImports = missingJsxImports.filter((imp, index, arr) =>
-                        index === arr.findIndex((t) => (
-                            JSON.stringify(t) === JSON.stringify(imp)
-                        )))
+                    const filteredMissingJsxImports = [...new Map(missingJsxImports.map(item => [item['tagName'], item])).values()]
                     const missingJsxImportsText = filteredMissingJsxImports.reduce((total, impData) => {
                         let impText;
                         let moduleSpecifier = impData.moduleSpecifier;
@@ -111,8 +108,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const onToggleAppBar = (val) => {
         if (val == 'code') {
             codeEditorVisible ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
-            setFlowViewMode(undefined); 
-            setCodeEditorVisible(true); 
+            setFlowViewMode(undefined);
+            setCodeEditorVisible(true);
         } else if (val == 'flow') {
             flowViewMode == val ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
             setFlowViewMode(val)
