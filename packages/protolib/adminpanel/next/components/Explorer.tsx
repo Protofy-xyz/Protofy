@@ -31,7 +31,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
     const [openDownloadDialog, setOpenDownloadDialog] = useState(false)
     const [selectedFiles, setSelectedFiles] = useState([])
     const [customAction, setCustomAction] = useState(null)
-    const lastClickTime = useRef(0)
+    const lastClickInfo = useRef({id: null, time: 0})
     const normalizedCurrentPath = currentPath && currentPath.startsWith("/") ? currentPath : (currentPath ? "/" + currentPath: '/')
 
     const onUploadFiles = async () => {
@@ -117,7 +117,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         description="Use those links to download:"
                     >
                         <YStack f={1}>
-                            {selectedFiles.map(f => <a href={"/adminapi/v1/files/" + currentPath + '/' + f + '?download=1'} target="_new">
+                            {selectedFiles.map((f,id) => <a key={id} href={"/adminapi/v1/files/" + currentPath + '/' + f + '?download=1'} target="_new">
                                 <XStack mb="$2" br="$radius.12" p="$2" px="$4" backgroundColor={"$color4"} hoverStyle={{ backgroundColor: "$color6", o: 1 }} o={0.7} ai="center" jc="center">
                                     <Download />
                                     <SizableText ml="$2">{f}</SizableText>
@@ -180,10 +180,12 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                                         //this is a hack because rerenders clear the timer for double click in chonky
                                         //This produces a bug where folders can not be opened if a rerender is done while double click
                                         //We open files whit mouse click file and our own timer for double click
-                                        if ((Math.abs(Date.now() - lastClickTime.current) < 300)) {
+                                        if ((Math.abs(Date.now() - lastClickInfo.current.time) < 750) && data.payload.file.id == lastClickInfo.current.id) {
+                                            lastClickInfo.current = {id: null, time: 0}
                                             onOpen(data.payload.file)
                                         } else {
-                                            lastClickTime.current = Date.now()
+                                            lastClickInfo.current.time = Date.now()
+                                            lastClickInfo.current.id = data.payload.file.id
                                         }
                                     } else {
                                         const customAction = customActions.find(action => action.action.id == data.id)
