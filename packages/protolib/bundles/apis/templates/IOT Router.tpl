@@ -29,7 +29,7 @@ const logger = getLogger()
 
 Protofy("type", "IOTRouter")
 
-export default Protofy("code",(app: App, {devicePub, deviceSub, mqtt}) => {
+export default Protofy("code",(app, {devicePub, deviceSub, mqtt}) => {
     ///PUT YOUR ROUTER LOGIC HERE
     //devicePub function allows to communicate with devices via mqtt
     //deviceSub allows to receive notifications from devices via mqtt
