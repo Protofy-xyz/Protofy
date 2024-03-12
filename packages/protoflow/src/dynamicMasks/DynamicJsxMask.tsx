@@ -79,7 +79,7 @@ const DynamicJsxMask = (node: any = {}, nodeData = {}, topics, mask) => {
                                             {
                                                 sections[section].map((item, index) => <CustomFieldType key={index} item={item} node={node} nodeData={nodeData} />)
                                             }
-                                            {sectionTitle ? <div style={{ borderBottom: '1px solid ' + useTheme('inputBackgroundColor'), margin: '20px 22px' }}></div> : null}
+                                            {sectionTitle ? <div style={{ borderBottom: '1px solid ' + useTheme('separatorColor'), margin: '20px 22px' }}></div> : null}
                                         </div>
                                     })
                                 }

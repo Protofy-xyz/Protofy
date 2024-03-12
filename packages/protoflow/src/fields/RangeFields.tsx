@@ -61,7 +61,7 @@ export default ({ nodeData = {}, item, node }) => {
 
         return <>
             <div style={{ fontSize: '14px', position: 'relative', top: '3px', width: max.toString().length * 18, textAlign: 'left', color: useTheme('textColor') }}>{post(currentVal)}</div>
-            <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: value ? useTheme('interactiveColor') : useTheme('disableTextColor'), height: '5px', borderWidth: '4px solid blue', backgroundColor: useTheme("inputBackgroundColor"), borderRadius: '10px' }}
+            <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: value ? useTheme('interactiveColor') : useTheme('disableTextColor'), height: '5px', borderWidth: '4px solid blue', backgroundColor: useTheme("separatorColor"), borderRadius: '10px' }}
                 step={step}
                 onChange={(event: any) => setTmpRangeValue(event.target.value)}
                 onMouseUp={() => onValueChange(post(tmpRangeValue))}

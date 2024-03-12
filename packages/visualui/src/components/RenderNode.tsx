@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { ArrowDown, Trash2, Redo, ArrowUp, Move, MoreVertical, Copy } from 'lucide-react';
 import { XStack } from '@my/ui'
-import uiTheme from "./Theme";
+import { useUITheme } from "./Theme";
 import Icon from "./Icon";
 import { v4 as uuidv4 } from 'uuid';
 import { MenuOption, UIMenu } from './UIMenu';
@@ -20,17 +20,17 @@ const IconButton = forwardRef(({ icon, iconSize = 20, selected = false, dynamicI
         {...props}
         style={{
             cursor: "pointer", padding: '6px', borderRadius: '2px',
-            backgroundColor: selected ? uiTheme.textColor : '',
+            backgroundColor: selected ? useUITheme('textColor') : '',
             ...props.style
         }}
     >
         {dynamicIcon
             ? <Icon
                 name={dynamicIcon}
-                color={selected ? uiTheme.nodeBackgroundColor : hover ? uiTheme.interactiveColor : uiTheme.textColor}
+                color={selected ? useUITheme('nodeBackgroundColor') : hover ? useUITheme('interactiveColor') : useUITheme('textColor')}
                 size={iconSize}
             />
-            : createElement(icon, { size: iconSize, color: hover ? uiTheme.interactiveColor : uiTheme.textColor })}
+            : createElement(icon, { size: iconSize, color: hover ? useUITheme('interactiveColor') : useUITheme('textColor') })}
     </div>
 })
 
@@ -148,7 +148,7 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                 top: getPos(dom).top,
                                 zIndex: 9999999999999999999999999999999,
                                 position: "fixed",
-                                backgroundColor: uiTheme.nodeBackgroundColor,
+                                backgroundColor: useUITheme('nodeBackgroundColor'),
                                 border: border,
                                 padding: "6px",
                                 color: "white",
@@ -160,7 +160,7 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                 gap: "6px"
                             }}
                         >
-                            <div style={{ fontSize: 14, color: 'white', padding: '10px 20px' }}>{name}{unknown ? ' (Unknown)' : ''}</div>
+                            <div style={{ fontSize: 14, color: useUITheme('textColor'), padding: '10px 20px' }}>{name}{unknown ? ' (Unknown)' : ''}</div>
                             <Separator />
                             <div style={{ display: 'flex', flexDirection: "row", flex: 1, gap: "6px", alignItems: 'center' }}>
                                 {moveable ? (

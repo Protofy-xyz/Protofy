@@ -10,7 +10,7 @@ import { MainPanel } from "protolib";
 import Monaco from "./Monaco";
 import { Component, LogOut, Network, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight, Monitor, Tablet, Smartphone, Check } from "lucide-react";
 import { getMissingJsxImports, getSource } from "../utils/utils";
-import theme from './Theme'
+import Theme, { useUITheme } from './Theme'
 import { withTopics } from "react-topics";
 import { ToggleGroup, Button, XStack } from "@my/ui"
 import { SidebarItem } from "./Sidebar/SideBarItem";
@@ -18,8 +18,8 @@ import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
 import React from "react";
 import { newVisualUiContext, useVisualUiAtom } from "../visualUiHooks";
 import { VisualUiFlows } from "./VisualUiFlows";
-import Theme from "./Theme";
 import EditorBar from "./EditorBar";
+import { useThemeSetting } from '@tamagui/next-theme'
 
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, contextAtom = null }) {
     const [_, setContext] = useVisualUiAtom(contextAtom)
@@ -36,6 +36,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [selectedFrame, setSelectedFrame] = useState('desktop');
 
     const router = useRouter();
+    // const { resolvedTheme } = useThemeSetting();
+    const resolvedTheme = 'dark'
+
     const { publish } = topics;
     const { data } = topics;
     const [openPanel, setOpenPanel] = React.useState(false);
@@ -43,6 +46,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const isViewModePreview = flowViewMode == 'preview'
     const barHeight = "50px"
     const mainPanelHeight = 'calc(100vh - ' + barHeight + ')'
+    const separatorColor = useUITheme('separatorColor')
 
     useEffect(() => {
         const handleClosePanel = () => setOpenPanel(false)
@@ -159,7 +163,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             style={{ display: 'flex', width: '100%', top: isSideBarVisible ? 0 : -1000000000000, position: isSideBarVisible ? 'relative' : 'absolute', height: '100%' }}
         >
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: mainPanelHeight }}>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 999999, backgroundColor: '#252526', borderBottom: '1px solid #cccccc20' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 999999, backgroundColor: useUITheme('nodeBackgroundColor'), borderBottom: '1px solid ' + separatorColor }}>
                     <XStack padding="10px" display={monacoHasChanges && codeEditorVisible ? 'flex' : 'none'} theme={"dark"} marginVertical="$1">
                         <Button size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
                             <X />
@@ -169,20 +173,20 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         </Button>
                     </XStack>
                     <XStack padding="10px" display={['flow-preview', 'preview'].includes(flowViewMode) ? 'flex' : 'none'} >
-                        <ToggleGroup backgroundColor={"red"} theme={"dark"} type="single" defaultValue="preview" disableDeactivation>
+                        <ToggleGroup borderWidth="$0" theme={resolvedTheme == 'dark' ? 'dark' : 'light'} type="single" defaultValue="preview" disableDeactivation>
                             <ToggleGroup.Item
-                                hoverStyle={{ backgroundColor: "#273E61" }}
-                                focusStyle={{ backgroundColor: flowViewMode == "flow-preview" ? Theme.interactiveColor : Theme.inputBackgroundColor }}
-                                backgroundColor={flowViewMode == "flow-preview" ? Theme.interactiveColor : Theme.inputBackgroundColor}
+                                hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }}
+                                focusStyle={{ backgroundColor: flowViewMode == "flow-preview" ? useUITheme('interactiveColor') : useUITheme('inputBackgroundColor') }}
+                                backgroundColor={flowViewMode == "flow-preview" ? useUITheme('interactiveColor') : useUITheme('inputBackgroundColor')}
                                 value="flow-preview"
                                 onPress={() => setFlowViewMode('flow-preview')}
                             >
                                 <Workflow />
                             </ToggleGroup.Item>
                             <ToggleGroup.Item
-                                hoverStyle={{ backgroundColor: "#273E61" }}
-                                focusStyle={{ backgroundColor: flowViewMode == "preview" ? Theme.interactiveColor : Theme.inputBackgroundColor }}
-                                backgroundColor={flowViewMode == "preview" ? Theme.interactiveColor : Theme.inputBackgroundColor}
+                                hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }}
+                                focusStyle={{ backgroundColor: flowViewMode == "preview" ? useUITheme('interactiveColor') : useUITheme('inputBackgroundColor') }}
+                                backgroundColor={flowViewMode == "preview" ? useUITheme('interactiveColor') : useUITheme('inputBackgroundColor')}
                                 value="preview"
                                 onPress={() => setFlowViewMode('preview')}
                             >
@@ -197,7 +201,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         sourceCode={monacoSourceCode}
                     />
                 </div>
-                <div style={{ opacity: 1, marginRight: 0, flex: 1, display: codeEditorVisible ? 'none' : 'flex', flexDirection: 'column', backgroundColor: '#252526' }}>
+                <div style={{ opacity: 1, marginRight: 0, flex: 1, display: codeEditorVisible ? 'none' : 'flex', flexDirection: 'column', backgroundColor: useUITheme('nodeBackgroundColor') }}>
                     <SidebarItem
                         icon={Pencil}
                         title="Customize"
@@ -213,9 +217,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             onSave={(code, _, data) => onEditorSave('flows', code, data)}
                             config={{ masks: getFlowMasks(router.pathname, router.query) }}
                             zoomOnDoubleClick={!isViewModePreview}
-                            themeMode={'dark'}
-                            bgColor={'#252526'}
-                            theme={theme}
+                            themeMode={resolvedTheme}
+                            bgColor={'transparent'}
+                            theme={Theme[resolvedTheme]}
                             nodePreview={flowViewMode}
                             metadata={metadata}
                             contextAtom={contextAtom}
@@ -248,7 +252,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     );
 
     const EditorPanel = (
-        <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid #424242', borderLeft: '2px solid #424242' }}>
+        <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid ' + separatorColor }}>
             <EditorLayout
                 metadata={metadata}
                 frame={selectedFrame}
@@ -301,7 +305,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     {
                         id: "components-to-drag-btn",
                         icon: Component,
-                        buttonProps: { chromeless: false, theme: "blue", backgroundColor: Theme.interactiveColor },
+                        buttonProps: { chromeless: false, theme: "blue", backgroundColor: useUITheme('interactiveColor') },
                         onPress: () => setOpenPanel(true)
                     },
                     {
@@ -342,7 +346,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     {
                         id: "save-nodes-btn",
                         text: 'Save',
-                        buttonProps: { chromeless: false, theme: "blue", backgroundColor: Theme.interactiveColor, paddingHorizontal: "$4" },
+                        buttonProps: { chromeless: false, theme: "blue", backgroundColor: useUITheme('interactiveColor'), paddingHorizontal: "$4" },
                         onPress: () => publish("savenodes", { value: 'visual-ui' })
                     },
                     {

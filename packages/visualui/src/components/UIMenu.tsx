@@ -1,6 +1,6 @@
-import {useState, createElement} from 'react'
+import { useState, createElement } from 'react'
 import { Popover } from "@my/ui";
-import uiTheme from "./Theme";
+import { useUITheme } from "./Theme";
 
 export const MenuOption = ({ name, icon = undefined, ...props }: any) => {
     const [hover, setHover] = useState(false)
@@ -15,11 +15,11 @@ export const MenuOption = ({ name, icon = undefined, ...props }: any) => {
             ...props.style
         }}
     >
-        <div style={{ color: hover ? uiTheme.interactiveColor : uiTheme.textColor }}>
+        <div style={{ color: hover ? useUITheme('interactiveColor') : useUITheme('textColor') }}>
             {name}
         </div>
         <div>
-            {icon ? createElement(icon, { color: hover ? uiTheme.interactiveColor : uiTheme.textColor, size: 16, paddingTop: '2px' }) : null}
+            {icon ? createElement(icon, { color: hover ? useUITheme('interactiveColor') : useUITheme('textColor'), size: 16, paddingTop: '2px' }) : null}
         </div>
     </div>
 }
@@ -42,7 +42,7 @@ export const UIMenu = ({ trigger, content, onOpenChange, ...props }) => {
             shadowColor={"black"}
             boc="gray"
             shadowOpacity={0.6}
-            bc={uiTheme.nodeBackgroundColor}
+            bc={useUITheme('nodeBackgroundColor')}
             maxHeight={"350px"}
             //@ts-ignore
             overflow='scroll' overflowX="hidden"

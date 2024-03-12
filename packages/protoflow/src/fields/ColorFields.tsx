@@ -7,6 +7,7 @@ import Input from '../diagram/NodeInput'
 import { Popover } from '@my/ui'
 import { Pipette, Palette } from 'lucide-react'
 import { CustomField } from '.';
+import { useThemeSetting } from '@tamagui/next-theme'
 
 const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     <div onClick={onPress}
@@ -23,8 +24,9 @@ const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
 export const getColorTypes = () => ['color', 'color-theme']
 
 export default ({ nodeData = {}, node, item }) => {
-    const rawThemeName = 'dark'
-    const THEMENAME = rawThemeName.charAt(0).toUpperCase() + rawThemeName.slice(1)
+    // const { resolvedTheme } = useThemeSetting();
+    const resolvedTheme = 'dark'
+    const THEMENAME = resolvedTheme.charAt(0).toUpperCase() + resolvedTheme.slice(1)
     const lvlAndName = '10' + THEMENAME
 
     const useFlowsStore = useContext(FlowStoreContext)
@@ -33,7 +35,7 @@ export default ({ nodeData = {}, node, item }) => {
 
     const themeColors = metadata?.tamagui?.color
     const nodeFontSize = useTheme('nodeFontSize')
-    const interactiveColor = useTheme('interactiveColor')
+    const textColor = useTheme('textColor')
 
     const tones = ['blue', 'gray', 'green', 'orange', 'pink', 'purple', 'red', 'yellow']
 
@@ -142,7 +144,7 @@ export default ({ nodeData = {}, node, item }) => {
                             width: "28px", height: "28px", cursor: 'pointer',
                             backgroundColor: getColorPreview(),
                             borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
-                            border: !value ? '1px solid white' : '', top: '13px'
+                            border: !value ? '1px solid ' + textColor : '', top: '13px'
                         }}
                     >
                     </div>
