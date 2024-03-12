@@ -8,8 +8,8 @@ import { withTopics } from "react-topics";
 import ErrorBoundary from './ErrorBoundary'
 import { notify, computePreviousPositions } from "../utils/utils";
 import { Stack, Spinner } from "@my/ui"
-import he from 'he';
 import { useVisualUiComms } from "../visualUiHooks";
+import { frames } from "../utils/frames"
 
 export type EditorProps = {
   children?: any;
@@ -19,10 +19,11 @@ export type EditorProps = {
   onReady?: Function;
   metadata?: any;
   contextAtom: any;
+  frame: string;
 };
 
 
-const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {}, contextAtom = null }: EditorProps) => {
+const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {}, contextAtom = null }: EditorProps) => {
   const paper = useRef<any>()
   const [loading, setLoading] = useState(true);
   const [currentPageInitialJson, setCurrentPageInitialJson] = useState({});
@@ -242,13 +243,20 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
       <div
         onLoad={() => setLoading(false)}
         className={"page-container"}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', overflow: 'auto', overflowX: 'hidden' }}
       >
         <div
           id="editor"
           className={"craftjs-renderer"}
           ref={(ref) => { paper.current = ref; connectors.select(connectors.hover(ref, null), null) }}
-          style={{ flex: 1, position: 'relative', overflow: 'auto', color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto', left: 0, right: 0, width: '100%', height: '100%' }}
+          style={{ 
+            flex: 1, position: 'relative', overflow: 'auto', 
+            color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto', 
+            left: 0, right: 0, 
+            width: frames[frame]?.width ?? '100%', 
+            height: frames[frame]?.height  ?? '100%',
+            marginTop: frames[frame]?.marginTop  ?? ''
+          }}
         >
           <ErrorBoundary>
             <div id="editor-frame-container">

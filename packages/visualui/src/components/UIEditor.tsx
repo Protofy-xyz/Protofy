@@ -8,7 +8,7 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import { MainPanel } from "protolib";
 import Monaco from "./Monaco";
-import { Component, LogOut, Network, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight } from "lucide-react";
+import { Component, LogOut, Network, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight, Monitor, Tablet, Smartphone, Check } from "lucide-react";
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
@@ -33,6 +33,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
     const [customizeVisible, setCustomizeVisible] = useState(true);
     const [layerVisible, setLayerVisible] = useState(false);
+    const [selectedFrame, setSelectedFrame] = useState('desktop');
+
     const router = useRouter();
     const { publish } = topics;
     const { data } = topics;
@@ -249,6 +251,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid #424242', borderLeft: '2px solid #424242' }}>
             <EditorLayout
                 metadata={metadata}
+                frame={selectedFrame}
                 currentPageContent={currentPageContent}
                 onSave={() => null}
                 resolveComponentsDir={resolveComponentsDir}
@@ -307,6 +310,27 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     }
                 ]}
                 rightItems={[
+                    // {
+                    //     icon: selectedFrame == 'tablet' ? Tablet : selectedFrame == 'mobile' ? Smartphone : Monitor,
+                    //     menuProps: { placement: 'bottom-end' },
+                    //     menu: [
+                    //         {
+                    //             text: 'Desktop',
+                    //             icon: selectedFrame == 'desktop' ? Check : null,
+                    //             onPress: () => setSelectedFrame('desktop')
+                    //         },
+                    //         {
+                    //             text: 'Tablet',
+                    //             icon: selectedFrame == 'tablet' ? Check : null,
+                    //             onPress: () => setSelectedFrame('tablet')
+                    //         },
+                    //         {
+                    //             text: 'Mobile',
+                    //             icon: selectedFrame == 'mobile' ? Check : null,
+                    //             onPress: () => setSelectedFrame('mobile')
+                    //         }
+                    //     ]
+                    // },
                     {
                         icon: Code,
                         onPress: () => onToggleAppBar('code')

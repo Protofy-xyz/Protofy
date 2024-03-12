@@ -8,7 +8,7 @@ import { XStack } from '@my/ui'
 import uiTheme from "./Theme";
 import Icon from "./Icon";
 import { v4 as uuidv4 } from 'uuid';
-import { UIMenu } from './UIMenu';
+import { MenuOption, UIMenu } from './UIMenu';
 
 const IconButton = forwardRef(({ icon, iconSize = 20, selected = false, dynamicIcon = undefined, ...props }: any, ref) => {
     const [hover, setHover] = useState(false)
@@ -33,28 +33,6 @@ const IconButton = forwardRef(({ icon, iconSize = 20, selected = false, dynamicI
             : createElement(icon, { size: iconSize, color: hover ? uiTheme.interactiveColor : uiTheme.textColor })}
     </div>
 })
-
-const MenuOption = ({ name, icon = undefined, ...props }: any) => {
-    const [hover, setHover] = useState(false)
-    return <div
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        {...props}
-        style={{
-            cursor: "pointer", justifyContent: 'space-between', width: '100%',
-            display: 'flex', alignItems: 'center', flex: 1, alignSelf: 'flex-start',
-            padding: '12px',
-            ...props.style
-        }}
-    >
-        <div style={{ color: hover ? uiTheme.interactiveColor : uiTheme.textColor }}>
-            {name}
-        </div>
-        <div>
-            {icon ? createElement(icon, { color: hover ? uiTheme.interactiveColor : uiTheme.textColor, size: 16, paddingTop: '2px' }) : null}
-        </div>
-    </div>
-}
 
 export const RenderNode = ({ render, onEnableEvents }) => {
     const { id } = useNode();
