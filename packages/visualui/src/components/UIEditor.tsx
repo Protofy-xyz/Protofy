@@ -8,7 +8,7 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import { MainPanel } from "protolib";
 import Monaco from "./Monaco";
-import { Component, LogOut, Share2, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight } from "lucide-react";
+import { Component, LogOut, Network, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight } from "lucide-react";
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import theme from './Theme'
 import { withTopics } from "react-topics";
@@ -312,7 +312,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         onPress: () => onToggleAppBar('code')
                     },
                     {
-                        icon: Share2,
+                        icon: Network,
                         onPress: () => onToggleAppBar('flow')
                     },
                     {
