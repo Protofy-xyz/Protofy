@@ -76,6 +76,7 @@ interface FlowProps {
     mode?: 'js' | 'json' | 'device',
     nodePreview?: 'preview' | 'flow-preview' | 'flow',
     metadata?: any
+    defaultSelected?: Function
 }    
 
 const FlowsBase = ({
@@ -111,7 +112,8 @@ const FlowsBase = ({
     path = "Start",
     mode = 'js',
     nodePreview = 'flow',
-    metadata = {}
+    metadata = {},
+    defaultSelected = () => undefined
 }: FlowProps) => {
     const { data, publish } = topics;
     const useFlowsStore = useContext(FlowStoreContext)
@@ -773,6 +775,7 @@ const FlowsBase = ({
     return (
         <div ref={diagramRef} style={{ height: '100%', width: '100%' }}>
             {display ? <Diagram
+                defaultSelected={defaultSelected}
                 onViewPortChange={onViewPortChange}
                 defaultViewPort={defaultViewPort}
                 themeMode={themeMode}

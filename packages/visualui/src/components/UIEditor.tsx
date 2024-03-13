@@ -223,6 +223,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             nodePreview={flowViewMode}
                             metadata={metadata}
                             contextAtom={contextAtom}
+                            defaultSelected={data => Object.keys(data ?? {}).find(n => n.startsWith('JsxElement') && data[n].name == 'Page')}
                         />
                     </SidebarItem>
                     <SidebarItem

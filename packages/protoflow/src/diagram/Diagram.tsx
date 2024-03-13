@@ -41,7 +41,8 @@ type DiagramParams = {
     theme?: any,
     defaultViewPort?: { x: number, y: number, zoom: number },
     onViewPortChange?: any,
-    nodePreview?: 'preview' | 'flow-preview' | 'flow'
+    nodePreview?: 'preview' | 'flow-preview' | 'flow',
+    defaultSelected?: Function
 }
 
 const Diagram = React.forwardRef(({
@@ -67,7 +68,8 @@ const Diagram = React.forwardRef(({
     theme = {},
     defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
     onViewPortChange = () => { },
-    nodePreview = 'flow'
+    nodePreview = 'flow',
+    defaultSelected = () => undefined
 }: DiagramParams, ref) => {
     const reactFlowWrapper = useRef<HTMLElement | null>(null);
     const isDiagramVisible = reactFlowWrapper.current?.getBoundingClientRect()?.height > 0
@@ -194,30 +196,32 @@ const Diagram = React.forwardRef(({
         }
     }
     const zoomToNode = useCallback((selectedNodeId) => {
-        var selectedNodeIndex
-        const selectedNode = getNodes().find((n, i) => {
-            selectedNodeIndex = i
-            return n.id == selectedNodeId
-        })
-        if (!selectedNode) return
-        const flowsWidth = reactFlowWrapper.current?.offsetWidth
-        if (!flowsWidth) return // skip if diagram is not visible
-        const flowsHeight = reactFlowWrapper.current?.offsetHeight
-        const marginTop = isViewModePreview ? 10 : 50
-        const posX = selectedNode.position.x + selectedNode.width / 2
-        const posY = selectedNode.position.y + (flowsHeight / 2) - marginTop
-
-        setNodes(nds => {
-            nds[selectedNodeIndex] = {
-                ...nds[selectedNodeIndex],
-                data: {
-                    ...nds[selectedNodeIndex]['data'],
-                    flowsHeight: flowsHeight
+        setTimeout(() => {
+            var selectedNodeIndex
+            const selectedNode = getNodes().find((n, i) => {
+                selectedNodeIndex = i
+                return n.id == selectedNodeId
+            })
+            if (!selectedNode) return
+            const flowsWidth = reactFlowWrapper.current?.offsetWidth
+            if (!flowsWidth) return // skip if diagram is not visible
+            const flowsHeight = reactFlowWrapper.current?.offsetHeight
+            const marginTop = isViewModePreview ? 10 : 50
+            const posX = selectedNode.position.x + selectedNode.width / 2
+            const posY = selectedNode.position.y + (flowsHeight / 2) - marginTop
+    
+            setNodes(nds => {
+                nds[selectedNodeIndex] = {
+                    ...nds[selectedNodeIndex],
+                    data: {
+                        ...nds[selectedNodeIndex]['data'],
+                        flowsHeight: flowsHeight
+                    }
                 }
-            }
-            return nds
-        })
-        setCenter(posX, posY, { zoom: 1, duration: isViewModePreview ? 1 : 500 })
+                return nds
+            })
+            setCenter(posX, posY, { zoom: 1, duration: isViewModePreview ? 1 : 500 })
+        }, 20)
     }, [setCenter, nodePreview, nodes]);
 
     useKeypress(['z', 'Z'], async (event) => {
@@ -240,6 +244,9 @@ const Diagram = React.forwardRef(({
     useEffect(() => {
         internalData.push(nodeData)
         setInternalData(internalData)
+        if (reactFlowWrapper.current) {
+            reactFlowWrapper.current['nodeData'] = nodeData
+        }
     }, [nodeData])
 
     useEffect(() => {
@@ -261,10 +268,34 @@ const Diagram = React.forwardRef(({
             if (pastZoomNodes[0] == nodeToZoomId) return
             pastZoomNodes[0] = nodeToZoomId
             setPastZoomNodes([...pastZoomNodes])
-            setTimeout(() => zoomToNode(nodeToZoomId), 80);
+            zoomToNode(nodeToZoomId)
             if (isViewModePreview) hideUnselected(nodeToZoomId)
         }
     }, [data['zoomToNode']])
+
+    useEffect(() => {
+        // If you select a node when the diagram is not visible, it is necessary to zoom in when it is visible again.
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && reactFlowWrapper.current['open'] == false && !pastZoomNodes[0]) {
+                    pastZoomNodes[0] = defaultSelected(reactFlowWrapper.current['nodeData'])
+                    zoomToNode(pastZoomNodes[0])
+                }
+                if (reactFlowWrapper.current) {
+                    reactFlowWrapper.current['open'] = entry.isIntersecting
+                }
+            },
+            {
+                threshold: 0.5 // part of diagram to be visible
+            }
+        );
+        if (reactFlowWrapper.current) {
+            observer.observe(reactFlowWrapper.current);
+        }
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
 
     useEffect(() => {
         switch (nodePreview) {
@@ -280,7 +311,7 @@ const Diagram = React.forwardRef(({
             default:
                 console.error('Unauthorized value for nodePreview: ', nodePreview)
         }
-        setTimeout(() => zoomToNode(pastZoomNodes[0]), 80);
+        zoomToNode(pastZoomNodes[0])
     }, [nodePreview, pastZoomNodes[0]])
 
     const proOptions = { hideAttribution: true };
