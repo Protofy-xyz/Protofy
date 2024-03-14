@@ -90,7 +90,8 @@ export const DataView = forwardRef(({
     extraMenuActions = [],
     deleteable = () => { return true },
     objectProps = {},
-    refreshOnHotReload = false
+    refreshOnHotReload = false,
+    quickRefresh = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any, ref) => {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const { query } = useRouter();
@@ -100,7 +101,7 @@ export const DataView = forwardRef(({
         fn(data)
     }
 
-    const [items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.load({}).getModelName() + "/#", model)
+    const [items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.load({}).getModelName() + "/#", model, quickRefresh)
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
     const [createOpen, setCreateOpen] = useState(false)
     const { push, mergePush, removePush, replace } = usePageParams(state)
