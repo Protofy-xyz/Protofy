@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect, useContext, useEffect, useCallback } from 'react';
-import { Panel, useReactFlow } from 'reactflow';
+import { Panel } from 'reactflow';
 import nodes from '../nodes'
 import { FlowStoreContext } from "../store/FlowsStore";
 import { generateId } from '../lib/IdGenerator';
@@ -10,6 +10,7 @@ import Text from './NodeText';
 import useTheme from './Theme';
 import { splitOpenerEdge } from '../lib/Edge';
 import { Search } from 'lucide-react'
+import { useProtoflow } from '../store/DiagramStore';
 
 const pokayokeEnabled = POKAYOKE_ENABLED ?? false
 
@@ -25,7 +26,7 @@ export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customCom
     const menuPosition = useFlowsStore(state => state.menuPosition)
     const menuOpener = useFlowsStore(state => state.menuOpener)
     const setMenu = useFlowsStore(state => state.setMenu)
-    const { project, setViewport, getViewport, setCenter } = useReactFlow();
+    const { project, setViewport, getViewport, setCenter } = useProtoflow();
     const { publish } = topics;
 
     const menuWidth = 259

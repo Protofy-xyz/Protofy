@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Handle, Position, useEdges, useReactFlow } from 'reactflow';
+import { Handle, Position, useEdges } from 'reactflow';
 import Input from './diagram/NodeInput'
 import Text from './diagram/NodeText'
 import { nodeColors } from './nodes';
@@ -16,6 +16,7 @@ import { DataOutput } from './lib/types';
 import { read } from './lib/memory';
 import NodeSelect from './diagram/NodeSelect';
 import { X, ChevronUp, AlertCircle, Type, Hash, Braces, ToggleLeft } from 'lucide-react';
+import { useProtoflow } from './store/DiagramStore';
 
 export interface Field {
     field: string,
@@ -61,7 +62,7 @@ export const DeleteButton = ({ id, left = false, field }) => {
 export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlur, field, children, style = {}, editing = false }: any) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
-    const { setNodes } = useReactFlow()
+    const { setNodes } = useProtoflow()
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const notify = useFlowsStore(state => state.dataNotify)
     var initialInputValue = pre(nodeData[field]);
@@ -465,7 +466,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
 }
 
 export const HandleOutput = ({ id, param, position = null, style = {}, isConnected = false, dataOutput = DataOutput.data }) => {
-    const { getEdges } = useReactFlow();
+    const { getEdges } = useProtoflow();
     const connected = isHandleConnected(getEdges(), `${id}${PORT_TYPES.data}output`)
     const backgroundColor = (dataOutput == DataOutput.data) ? useTheme('dataPort') : (dataOutput == DataOutput.block) ? useTheme('blockPort') : useTheme('flowPort')
     const useFlowsStore = useContext(FlowStoreContext)

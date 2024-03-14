@@ -6,8 +6,7 @@ import ReactFlow, {
     OnNodesDelete,
     NodeDragHandler,
     OnEdgesDelete,
-    SelectionDragHandler,
-    useReactFlow
+    SelectionDragHandler
 } from 'reactflow';
 import useUndoRedo from '../hooks/useUndoRedo';
 import useKeypress from 'react-use-keypress';
@@ -15,6 +14,7 @@ import { FlowStoreContext } from "../store/FlowsStore"
 import SelectionListener from './SelectionListener';
 import ZoomDetector from '../ZoomDetector';
 import { withTopics } from "react-topics";
+import { useProtoflow } from '../store/DiagramStore';
 
 type DiagramParams = {
     componentsMenu?: any,
@@ -77,7 +77,8 @@ const Diagram = React.forwardRef(({
     const nodeData = useFlowsStore(state => state.nodeData)
     const setThemeMode = useFlowsStore(state => state.setTemeMode)
     const [internalData, setInternalData] = useState([])
-    const { project, setViewport, getNodes, getViewport, setCenter, setNodes, setEdges, getEdges } = useReactFlow();
+    const { project, setViewport, getNodes, getViewport, setCenter, setEdges, getEdges, setNodes } = useProtoflow()
+
     const { undo, redo, takeSnapshot, clearNodes } = useUndoRedo();
     const connectingNode = useRef<{
         handleType?: string;
