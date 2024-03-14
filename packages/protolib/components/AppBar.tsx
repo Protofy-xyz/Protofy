@@ -85,7 +85,9 @@ export const AppBar = React.forwardRef(({ backgroundColor, containerProps = {}, 
         pos="fixed"
         top={top ?? position == 'top' ? 0 : undefined}
         bottom={position == 'bottom' ? 0 : undefined}
-        alignSelf='center'
+        // alignSelf='center'
+        r={0}
+        l={0}
         alignItems="center"
         justifyContent="center"
         zi={50000}
