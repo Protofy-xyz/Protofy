@@ -827,7 +827,7 @@ textarea {
   background-color: transparent;
 }
 .layer-name>h2 {
-  color: #fff;
+  color: var(--color12);
   font-weight: 400;
 }
 

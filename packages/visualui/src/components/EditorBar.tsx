@@ -16,10 +16,12 @@ const BarButton = ({ icon = undefined, onPress, text = undefined, buttonProps = 
                     fontSize="$5"
                     borderRadius="$2"
                     icon={icon}
+                    hoverStyle={{ backgroundColor: 'transparent' }}
                     color={hovered && !buttonProps['theme'] ? useUITheme('interactiveColor') : useUITheme('textColor')}
                     onMouseEnter={e => setHovered(true)}
                     onMouseLeave={e => setHovered(false)}
                     scaleIcon={1.5}
+                    textProps={{ ...buttonProps['textProps'] }}
                     {...buttonProps}
                 >
                     {text}

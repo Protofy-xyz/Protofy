@@ -24,8 +24,7 @@ const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
 export const getColorTypes = () => ['color', 'color-theme']
 
 export default ({ nodeData = {}, node, item }) => {
-    // const { resolvedTheme } = useThemeSetting();
-    const resolvedTheme = 'dark'
+    const { resolvedTheme } = useThemeSetting();
     const THEMENAME = resolvedTheme.charAt(0).toUpperCase() + resolvedTheme.slice(1)
     const lvlAndName = '10' + THEMENAME
 
