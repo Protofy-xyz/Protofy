@@ -25,7 +25,8 @@ export const getColorTypes = () => ['color', 'color-theme']
 
 export default ({ nodeData = {}, node, item }) => {
     const { resolvedTheme } = useThemeSetting();
-    const THEMENAME = resolvedTheme.charAt(0).toUpperCase() + resolvedTheme.slice(1)
+    const resolvedThemeName = resolvedTheme ?? 'light'
+    const THEMENAME = resolvedThemeName.charAt(0).toUpperCase() + resolvedThemeName.slice(1)
     const lvlAndName = '10' + THEMENAME
 
     const useFlowsStore = useContext(FlowStoreContext)
