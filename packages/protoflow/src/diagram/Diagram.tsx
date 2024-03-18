@@ -14,7 +14,7 @@ import { FlowStoreContext } from "../store/FlowsStore"
 import SelectionListener from './SelectionListener';
 import ZoomDetector from '../ZoomDetector';
 import { withTopics } from "react-topics";
-import { useProtoflow } from '../store/DiagramStore';
+import { DiagramContext, useProtoflow } from '../store/DiagramStore';
 
 type DiagramParams = {
     componentsMenu?: any,
@@ -162,8 +162,8 @@ const Diagram = React.forwardRef(({
     );
 
     const showAll = () => {
-        setEdges(getEdges().map(e => ({ ...e, hidden: false, data: { ...e.data, preview } })))
-        setNodes(getNodes().map(n => ({ ...n, hidden: false, data: { ...n.data, preview } })))
+        setEdges(edgs => edgs.map(e => ({ ...e, hidden: false })))
+        setNodes(nds => nds.map(n => ({ ...n, hidden: false })))
     }
 
     const findConnectedNodes = (nodeId) => { // get node ids connected to specific node
@@ -180,20 +180,14 @@ const Diagram = React.forwardRef(({
 
     const showSelectedContext = (selectedNodeId) => {
         const matchNodeIds = findConnectedNodes(selectedNodeId)
-        let newNodes = getNodes().map(n => {
-            return { ...n, hidden: !matchNodeIds.includes(n.id), data: { ...n.data, preview } }
-        })
-        let newEdges = getEdges().map(e => {
-            return { ...e, hidden: !matchNodeIds.includes(e.target), data: { ...e.data, preview } }
-        })
-        setEdges(newEdges)
-        setNodes(newNodes)
+        setEdges(edgs => edgs.map(e => ({ ...e, hidden: !matchNodeIds.includes(e.target) })))
+        setNodes(nds => nds.map(n => ({ ...n, hidden: !matchNodeIds.includes(n.id) })))
     }
 
     const hideUnselected = (selectedNodeId) => {
         if (selectedNodeId) {
-            setEdges(getEdges().map(e => ({ ...e, hidden: true, data: { ...e.data, preview } })))
-            setNodes(getNodes().map(n => ({ ...n, hidden: n.id != selectedNodeId, data: { ...n.data, preview } })))
+            setEdges(edgs => edgs.map(e => ({ ...e, hidden: true })))
+            setNodes(nds => nds.map(n => ({ ...n, hidden: n.id != selectedNodeId })))
         }
     }
     const zoomToNode = useCallback((selectedNodeId) => {
@@ -361,9 +355,11 @@ const Diagram = React.forwardRef(({
     </div>)
 })
 
-const DiagramComponent = (props) => <ReactFlowProvider>
-    <Diagram {...props} />
-</ReactFlowProvider>
+const DiagramComponent = (props) => <DiagramContext.Provider value={{ nodePreview: props.nodePreview }}>
+    <ReactFlowProvider>
+        <Diagram {...props} />
+    </ReactFlowProvider>
+</DiagramContext.Provider>
 
 export default React.memo(withTopics(DiagramComponent, { topics: ['zoomToNode', 'flow/editor'] }))
 
