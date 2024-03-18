@@ -104,7 +104,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.data._deleted ? true : false;
     }
 
-    list(search?, session?, extraData?): any {
+    list(search?, session?, extraData?, params?): any {
         if (search) {
             const { parsed, searchWithoutTags } = parseSearch(search);
 
@@ -126,8 +126,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }
     }
 
-    async listTransformed(search?, transformers = {}, session?, extraData?): Promise<any> {
-        const result = this.list(search, session, extraData)
+    async listTransformed(search?, transformers = {}, session?, extraData?, params?): Promise<any> {
+        const result = this.list(search, session, extraData, params)
         if (result) {
             return await (this.getObjectSchema().apply('list', result, transformers));
         }

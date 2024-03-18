@@ -38,8 +38,9 @@ export class {{name}}Model extends ProtoModel<{{name}}Model> {
         return updatedModel.setId(this.getId(), { ...(data ? data : updatedModel.data) });
     }
 
-	list(search?, session?, extraData?): {{name}}Type[] {
-        return super.list(search, session, extraData)
+	list(search?, session?, extraData?, params?): {{name}}Type[] {
+        const result = super.list(search, session, extraData, params)
+        return result
     }
 
     delete(data?): {{name}}Model {

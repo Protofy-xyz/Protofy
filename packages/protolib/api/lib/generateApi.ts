@@ -120,7 +120,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
             if (key != 'initialized') {
                 const model = modelClass.unserialize(value, session);
                 const extraListData = typeof options.extraData?.list == 'function' ? await options.extraData.list(session, model, req) : (options.extraData?.list ?? {})
-                const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData });
+                const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, req.query);
 
                 if (listItem && model.isVisible()) {
                     allResults.push(listItem);
