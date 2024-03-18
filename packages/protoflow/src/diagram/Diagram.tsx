@@ -205,16 +205,6 @@ const Diagram = React.forwardRef(({
             const posX = selectedNode.position.x + selectedNode.width / 2
             const posY = selectedNode.position.y + (flowsHeight / 2) - marginTop
 
-            setNodes(nds => {
-                nds[selectedNodeIndex] = {
-                    ...nds[selectedNodeIndex],
-                    data: {
-                        ...nds[selectedNodeIndex]['data'],
-                        flowsHeight: flowsHeight
-                    }
-                }
-                return nds
-            })
             setCenter(posX, posY, { zoom: 1, duration: isViewModePreview ? 1 : 500 })
         }, 80)
     }, [setCenter, nodePreview, nodes]);
@@ -313,7 +303,7 @@ const Diagram = React.forwardRef(({
 
     const proOptions = { hideAttribution: true };
 
-    return (<div style={{ width: '100%', height: "100%" }}>
+    return (<div style={{ width: '100%', height: "100%" }} ref={ref as any}>
         <SelectionListener onSelectionChange={onSelectionChange} />
         <div style={{ height: '100%' }} ref={reactFlowWrapper as any}>
             <ReactFlow
@@ -355,11 +345,15 @@ const Diagram = React.forwardRef(({
     </div>)
 })
 
-const DiagramComponent = (props) => <DiagramContext.Provider value={{ nodePreview: props.nodePreview }}>
-    <ReactFlowProvider>
-        <Diagram {...props} />
-    </ReactFlowProvider>
-</DiagramContext.Provider>
+const DiagramComponent = (props) => {
+    const diagramRef = useRef(null);
+
+    return <DiagramContext.Provider value={{ nodePreview: props.nodePreview, height: diagramRef.current?.offsetHeight }}>
+        <ReactFlowProvider>
+            <Diagram ref={diagramRef} {...props} />
+        </ReactFlowProvider>
+    </DiagramContext.Provider>
+}
 
 export default React.memo(withTopics(DiagramComponent, { topics: ['zoomToNode', 'flow/editor'] }))
 

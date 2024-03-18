@@ -9,20 +9,24 @@ import {
 type OnChange<ChangesType> = (changes: ChangesType[]) => void;
 
 type DiagramState = {
-    nodePreview: string
+    nodePreview: string,
+    height: number | undefined
 }
 
 export const DiagramContext = createContext<DiagramState>({
-    nodePreview: ''
+    nodePreview: '',
+    height: undefined
 });
 
 const getExtraData = () => {
-    const { nodePreview } = useContext(DiagramContext);
+    const { nodePreview, height } = useContext(DiagramContext);
 
     const isViewModePreview = nodePreview === 'preview'
     const preview = isViewModePreview ? 'node' : 'default'
+
     return {
-        preview
+        preview,
+        flowsHeight: height
     }
 }
 
