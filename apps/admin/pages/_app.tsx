@@ -23,12 +23,11 @@ import { Provider } from 'app/provider'
 import Head from 'next/head'
 import React, { createContext } from 'react'
 import type { SolitoAppProps } from 'solito'
-import { SiteConfig } from 'app/conf'
-import { AppConfContext } from 'app/provider/AppConf'
+import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
-import {useSession} from 'protolib'
+import {useSession, AppConfContext} from 'protolib'
 
 initSchemaSystem()
 
@@ -75,7 +74,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
       <JotaiProvider>
         <Connector brokerUrl={brokerUrl} options={{username: session?.user?.id, password: session?.token}}>
           <ThemeProvider>
-            <AppConfContext.Provider value={SiteConfig}>
+            <AppConfContext.Provider value={AppConfig}>
               <Component {...pageProps} />
             </AppConfContext.Provider>
           </ThemeProvider>

@@ -1,6 +1,5 @@
-import {Link as ProtoLink, LinkProps} from 'protolib'
+import {Link as ProtoLink, LinkProps, AppConfContext} from 'protolib'
 import {useContext} from 'react'
-import {AppConfContext} from '../provider/AppConf'
 
 export const Link = (props:LinkProps) => {
     const SiteConfig = useContext(AppConfContext);
