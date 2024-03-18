@@ -87,7 +87,7 @@ const Diagram = React.forwardRef(({
     } | null>(null);
     const setMenu = useFlowsStore(state => state.setMenu)
     const setNodeData = useFlowsStore(state => state.setNodeData)
-    const [pastZoomNodes, setPastZoomNodes] = useState([])
+    const [zoomNodes, setZoomNodes] = useState([])
     const { data, publish } = topics;
 
     const isViewModePreview = nodePreview === 'preview'
@@ -222,16 +222,16 @@ const Diagram = React.forwardRef(({
                 return nds
             })
             setCenter(posX, posY, { zoom: 1, duration: isViewModePreview ? 1 : 500 })
-        }, 20)
+        }, 80)
     }, [setCenter, nodePreview, nodes]);
 
     const updatesNodesVisibility = () => {
         switch (nodePreview) {
             case 'preview':
-                hideUnselected(pastZoomNodes[0])
+                hideUnselected(zoomNodes[0])
                 break;
             case 'flow-preview':
-                showSelectedContext(pastZoomNodes[0])
+                showSelectedContext(zoomNodes[0])
                 break;
             case 'flow':
                 showAll()
@@ -282,11 +282,9 @@ const Diagram = React.forwardRef(({
     useEffect(() => {
         const nodeToZoomId = data['zoomToNode']?.id
         if (nodeToZoomId) {
-            if (pastZoomNodes[0] == nodeToZoomId) return
-            pastZoomNodes[0] = nodeToZoomId
-            setPastZoomNodes([...pastZoomNodes])
-            updatesNodesVisibility()
-            zoomToNode(nodeToZoomId)
+            if (zoomNodes[0] == nodeToZoomId) return
+            zoomNodes[0] = nodeToZoomId
+            setZoomNodes([...zoomNodes])
         }
     }, [data['zoomToNode']])
 
@@ -294,9 +292,9 @@ const Diagram = React.forwardRef(({
         // If you select a node when the diagram is not visible, it is necessary to zoom in when it is visible again.
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting && reactFlowWrapper.current['open'] == false && !pastZoomNodes[0]) {
-                    pastZoomNodes[0] = defaultSelected(reactFlowWrapper.current['nodeData'])
-                    zoomToNode(pastZoomNodes[0])
+                if (entry.isIntersecting && reactFlowWrapper.current['open'] == false && !zoomNodes[0]) {
+                    zoomNodes[0] = defaultSelected(reactFlowWrapper.current['nodeData'])
+                    setZoomNodes([...zoomNodes])
                 }
                 if (reactFlowWrapper.current) {
                     reactFlowWrapper.current['open'] = entry.isIntersecting
@@ -316,8 +314,8 @@ const Diagram = React.forwardRef(({
 
     useEffect(() => {
         updatesNodesVisibility()
-        zoomToNode(pastZoomNodes[0])
-    }, [nodePreview])
+        zoomToNode(zoomNodes[0])
+    }, [nodePreview, zoomNodes[0]])
 
     const proOptions = { hideAttribution: true };
 
