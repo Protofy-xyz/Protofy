@@ -30,6 +30,18 @@ const getExtraData = () => {
     }
 }
 
+const wrapDiagramItem = (payload, dataToAdd) => { // wrapper for diagram edges and nodes
+    var wrappedElements
+    if (typeof payload === 'function') {
+        wrappedElements = ele => {
+            return payload(ele.map(e => ({ ...e, data: { ...e.data, ...dataToAdd } })))
+        }
+    } else {
+        wrappedElements = payload.map(e => ({ ...e, data: { ...e.data, ...dataToAdd } }))
+    }
+    return wrappedElements
+}
+
 export const useProtoflow = () => {
     const {
         setNodes: reactFlowSetNodes,
@@ -47,26 +59,10 @@ export const useProtoflow = () => {
     const extraData = getExtraData()
 
     const setNodes: (payload: Node<any>[] | ((nodes: Node<any>[]) => Node<any>[])) => void = (payload) => {
-        var wrappedNodes
-        if (typeof payload === 'function') {
-            wrappedNodes = nds => {
-                return payload(nds.map(n => ({ ...n, data: { ...n.data, ...extraData } })))
-            }
-        } else {
-            wrappedNodes = payload.map(n => ({ ...n, data: { ...n.data, ...extraData } }))
-        }
-        reactFlowSetNodes(wrappedNodes);
+        reactFlowSetNodes(wrapDiagramItem(payload, extraData));
     };
     const setEdges: (payload: Edge<any>[] | ((edges: Edge<any>[]) => Edge<any>[])) => void = (payload) => {
-        var wrappedEdges
-        if (typeof payload === 'function') {
-            wrappedEdges = edgs => {
-                return payload(edgs.map(e => ({ ...e, data: { ...e.data, ...extraData } })))
-            }
-        } else {
-            wrappedEdges = payload.map(e => ({ ...e, data: { ...e.data, ...extraData } }))
-        }
-        reactFlowSetEdges(wrappedEdges)
+        reactFlowSetEdges(wrapDiagramItem(payload, extraData))
     }
 
     return {
@@ -85,38 +81,20 @@ export const useProtoflow = () => {
 
 export const useProtoNodesState = (initialItems: Node<any, string>[]): [Node<any, string>[], Dispatch<SetStateAction<Node<any, string>[]>>, OnChange<NodeChange>] => {
     const extraData = getExtraData()
-    const [nodes, reactFlowSetNodes, onNodesChange] = useNodesState(initialItems.map(i => ({ ...i, data: { ...i.data, ...extraData } })))
+    
+    const [nodes, reactFlowSetNodes, onNodesChange] = useNodesState(wrapDiagramItem(initialItems, extraData))
 
-    const setNodes: Dispatch<SetStateAction<Node<any, string>[]>> = (payload: any) => {
-        var wrappedNodes
-        if (typeof payload === 'function') {
-            wrappedNodes = nds => {
-                return payload(nds.map(e => ({ ...e, data: { ...e.data, ...extraData } })))
-            }
-        } else {
-            wrappedNodes = payload.map(e => ({ ...e, data: { ...e.data, ...extraData } }))
-        }
-        reactFlowSetNodes(wrappedNodes)
-    }
+    const setNodes: Dispatch<SetStateAction<Node<any, string>[]>> = (payload: any) => reactFlowSetNodes(wrapDiagramItem(payload, extraData))
 
     return [nodes, setNodes, onNodesChange]
 }
 
 export const useProtoEdgesState = (initialItems: Edge<any>[]): [Edge<any>[], Dispatch<SetStateAction<Edge<any>[]>>, OnChange<EdgeChange>] => {
     const extraData = getExtraData()
-    const [edges, reactFlowSetEdges, onEdgesChange] = useEdgesState(initialItems.map(i => ({ ...i, data: { ...i.data, ...extraData } })))
 
-    const setEdges: Dispatch<SetStateAction<Edge<any>[]>> = (payload: any) => {
-        var wrappedEdges
-        if (typeof payload === 'function') {
-            wrappedEdges = nds => {
-                return payload(nds.map(e => ({ ...e, data: { ...e.data, ...extraData } })))
-            }
-        } else {
-            wrappedEdges = payload.map(e => ({ ...e, data: { ...e.data, ...extraData } }))
-        }
-        reactFlowSetEdges(wrappedEdges)
-    }
+    const [edges, reactFlowSetEdges, onEdgesChange] = useEdgesState(wrapDiagramItem(initialItems, extraData))
+
+    const setEdges: Dispatch<SetStateAction<Edge<any>[]>> = (payload: any) => reactFlowSetEdges(wrapDiagramItem(payload, extraData))
 
     return [edges, setEdges, onEdgesChange]
 }
@@ -126,5 +104,5 @@ export const useProtoEdges = (): Edge<unknown>[] => {
 }
 
 export const addProtoEdge = (edgeParams: Edge | Connection, edges: Edge[]) => {
-    return addReactFlowEdge({...edgeParams, type: 'custom', animated: false}, edges)
+    return addReactFlowEdge({ ...edgeParams, type: 'custom', animated: false }, edges)
 }
