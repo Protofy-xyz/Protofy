@@ -230,7 +230,6 @@ export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
                 super(data, schema, session, name.substring(0, name.length - 5).toLowerCase());
             }
 
-            // Hacemos _newInstance y schemaInstance públicos sólo para esta clase generada
             public static _newInstance(data: any, session?: SessionDataType): AutoModel<any> {
                 return new DerivedModel(data, session);
             }
