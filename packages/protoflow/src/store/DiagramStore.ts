@@ -84,13 +84,19 @@ export const useProtoflow = () => {
 };
 
 export const useProtoNodesState = (initialItems: Node<any, string>[]): [Node<any, string>[], Dispatch<SetStateAction<Node<any, string>[]>>, OnChange<NodeChange>] => {
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialItems.map(i => ({ ...i, data: { ...i.data, ...getExtraData() } })))
+    const extraData = getExtraData()
+    const [nodes, reactFlowSetNodes, onNodesChange] = useNodesState(initialItems.map(i => ({ ...i, data: { ...i.data, ...extraData } })))
+
+    const setNodes: Dispatch<SetStateAction<Node<any, string>[]>> = (nodes: any[]) => reactFlowSetNodes(nodes.map(ele => ({ ...ele, data: { ...ele.data, ...extraData } })))
 
     return [nodes, setNodes, onNodesChange]
 }
 
 export const useProtoEdgesState = (initialItems: Edge<any>[]): [Edge<any>[], Dispatch<SetStateAction<Edge<any>[]>>, OnChange<EdgeChange>] => {
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialItems.map(i => ({ ...i, data: { ...i.data, ...getExtraData() } })))
+    const extraData = getExtraData()
+    const [edges, reactFlowSetEdges, onEdgesChange] = useEdgesState(initialItems.map(i => ({ ...i, data: { ...i.data, ...extraData } })))
+
+    const setEdges: Dispatch<SetStateAction<Edge<any>[]>> = (edgs: any[]) => reactFlowSetEdges(edgs.map(ele => ({ ...ele, data: { ...ele.data, ...extraData } })))
 
     return [edges, setEdges, onEdgesChange]
 }
