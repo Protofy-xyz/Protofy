@@ -123,7 +123,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             setCodeEditorVisible(false)
         } else if (val == 'preview') {
             ['flow-preview', 'preview'].includes(flowViewMode) ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
-            setFlowViewMode(val)
+            setFlowViewMode(flowViewMode)
             setCodeEditorVisible(false)
         }
     }
