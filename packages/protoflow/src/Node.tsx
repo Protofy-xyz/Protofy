@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Handle, Position, useEdges } from 'reactflow';
+import { Handle, Position } from 'reactflow';
 import Input from './diagram/NodeInput'
 import Text from './diagram/NodeText'
 import { nodeColors } from './nodes';
@@ -16,7 +16,7 @@ import { DataOutput } from './lib/types';
 import { read } from './lib/memory';
 import NodeSelect from './diagram/NodeSelect';
 import { X, ChevronUp, AlertCircle, Type, Hash, Braces, ToggleLeft } from 'lucide-react';
-import { useProtoflow } from './store/DiagramStore';
+import { useProtoflow, useProtoEdges } from './store/DiagramStore';
 
 export interface Field {
     field: string,
@@ -135,7 +135,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
     const notify = useFlowsStore(state => state.dataNotify)
     const deletePropNodeData = useFlowsStore(state => state.deletePropNodeData)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
-    const edges = useEdges();
+    const edges = useProtoEdges();
     const isConnected = edges.find(e => e.targetHandle == `${id}${PORT_TYPES.data}${param.field}`)
     const isDeletedLeft = param.fieldType == 'child'
     const isParameter = param.fieldType == 'parameter'
@@ -560,7 +560,7 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const customComponents = useFlowsStore(state => state.customComponents)
-    const edges = useEdges();
+    const edges = useProtoEdges();
     const isConnected = isNodeConnected(edges, id)
     const content = React.useRef()
 

@@ -25,7 +25,7 @@ import {
 import Diff from 'deep-diff';
 import GetDynamicCustomComponent from './DynamicCustomComponent';
 import { generateId } from './lib/IdGenerator';
-import { useProtoEdges, useProtoNodes, addEdge } from './store/DiagramStore'
+import { useProtoEdgesState, useProtoNodesState, addEdge } from './store/DiagramStore'
 
 interface customComponentInterface {
     check: Function,
@@ -132,8 +132,8 @@ const FlowsBase = ({
     const edgeTypes = useMemo(() => {
         return { custom: (props) => CustomEdge(props, bridgeNode) }
     }, []);
-    const [nodes, setNodes, onNodesChange] = useProtoNodes(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useProtoEdges(initialEdges);
+    const [nodes, setNodes, onNodesChange] = useProtoNodesState(initialNodes);
+    const [edges, setEdges, onEdgesChange] = useProtoEdgesState(initialEdges);
     const [hasChanges, setHasChanges] = useState(false);
     const [prevNodeData, setPrevNodeData] = useState(deleteAdditionalKeys(nodeData));
 

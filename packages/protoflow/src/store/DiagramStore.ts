@@ -1,5 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
-import { useReactFlow, Node, Edge, useNodesState, useEdgesState, EdgeChange, NodeChange, addEdge as addReactFlowEdge, Connection } from 'reactflow';
+import {
+    useReactFlow, Node, Edge, useNodesState,
+    useEdgesState, EdgeChange, NodeChange,
+    addEdge as addReactFlowEdge, Connection,
+    useEdges
+} from 'reactflow';
 
 type OnChange<ChangesType> = (changes: ChangesType[]) => void;
 
@@ -38,17 +43,22 @@ export const useProtoflow = () => {
     }
 };
 
-export const useProtoNodes = (initialItems: Node<any, string>[]): [Node<any, string>[], Dispatch<SetStateAction<Node<any, string>[]>>, OnChange<NodeChange>] => {
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialItems)
+export const useProtoNodesState = (initialItems: Node<any, string>[]): [Node<any, string>[], Dispatch<SetStateAction<Node<any, string>[]>>, OnChange<NodeChange>] => {
+    const [nodes, setNodes, onNodesChange] = useNodesState(initialItems.map(i => ({ ...i, data: { ...i.data, preview: 'node' } })))
 
     return [nodes, setNodes, onNodesChange]
 }
 
-export const useProtoEdges = (initialItems: Edge<any>[]): [Edge<any>[], Dispatch<SetStateAction<Edge<any>[]>>, OnChange<EdgeChange>] => {
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialItems)
+export const useProtoEdgesState = (initialItems: Edge<any>[]): [Edge<any>[], Dispatch<SetStateAction<Edge<any>[]>>, OnChange<EdgeChange>] => {
+    const [edges, setEdges, onEdgesChange] = useEdgesState(initialItems.map(i => ({ ...i, data: { ...i.data, preview: 'node' } })))
 
     return [edges, setEdges, onEdgesChange]
 }
+
+export const useProtoEdges = (): Edge<unknown>[] => {
+    return useEdges()
+}
+
 export const addEdge = (edgeParams: Edge | Connection, edges: Edge[]) => {
     return addReactFlowEdge(edgeParams, edges)
 }
