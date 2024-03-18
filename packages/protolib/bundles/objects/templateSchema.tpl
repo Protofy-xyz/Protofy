@@ -1,6 +1,8 @@
 import { ProtoModel, SessionDataType, z } from "protolib/base";
 import { Protofy, Schema, BaseSchema } from 'protolib/base'
+import { getLogger } from 'protolib/base';
 
+const logger = getLogger()
 Protofy("features", {})
 
 export const Base{{name}}Schema = Schema.object(Protofy("schema", {}))
@@ -20,7 +22,7 @@ export class {{name}}Model extends ProtoModel<{{name}}Model> {
     public static getApiOptions() {
         return {
             name: '{{pluralName}}',
-            prefix: '/api/v1'
+            prefix: '/api/v1/'
         }
     }
 
