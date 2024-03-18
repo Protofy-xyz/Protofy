@@ -210,7 +210,7 @@ const Diagram = React.forwardRef(({
             const marginTop = isViewModePreview ? 10 : 50
             const posX = selectedNode.position.x + selectedNode.width / 2
             const posY = selectedNode.position.y + (flowsHeight / 2) - marginTop
-    
+
             setNodes(nds => {
                 nds[selectedNodeIndex] = {
                     ...nds[selectedNodeIndex],
@@ -224,6 +224,22 @@ const Diagram = React.forwardRef(({
             setCenter(posX, posY, { zoom: 1, duration: isViewModePreview ? 1 : 500 })
         }, 20)
     }, [setCenter, nodePreview, nodes]);
+
+    const updatesNodesVisibility = () => {
+        switch (nodePreview) {
+            case 'preview':
+                hideUnselected(pastZoomNodes[0])
+                break;
+            case 'flow-preview':
+                showSelectedContext(pastZoomNodes[0])
+                break;
+            case 'flow':
+                showAll()
+                break;
+            default:
+                console.error('Unauthorized value for nodePreview: ', nodePreview)
+        }
+    }
 
     useKeypress(['z', 'Z'], async (event) => {
         if (!isDiagramVisible) return
@@ -269,8 +285,8 @@ const Diagram = React.forwardRef(({
             if (pastZoomNodes[0] == nodeToZoomId) return
             pastZoomNodes[0] = nodeToZoomId
             setPastZoomNodes([...pastZoomNodes])
+            updatesNodesVisibility()
             zoomToNode(nodeToZoomId)
-            if (isViewModePreview) hideUnselected(nodeToZoomId)
         }
     }, [data['zoomToNode']])
 
@@ -299,21 +315,9 @@ const Diagram = React.forwardRef(({
     }, []);
 
     useEffect(() => {
-        switch (nodePreview) {
-            case 'preview':
-                hideUnselected(pastZoomNodes[0])
-                break;
-            case 'flow-preview':
-                showSelectedContext(pastZoomNodes[0])
-                break;
-            case 'flow':
-                showAll()
-                break;
-            default:
-                console.error('Unauthorized value for nodePreview: ', nodePreview)
-        }
+        updatesNodesVisibility()
         zoomToNode(pastZoomNodes[0])
-    }, [nodePreview, pastZoomNodes[0]])
+    }, [nodePreview])
 
     const proOptions = { hideAttribution: true };
 
