@@ -27,15 +27,18 @@ export class {{name}}Model extends ProtoModel<{{name}}Model> {
     }
 
     create(data?):{{name}}Model {
-        return super.create(data)
+        const result = super.create(data)
+        return result
     }
 
     read(extraData?): {{name}}Type {
-        return super.read(extraData)
+        const result = super.read(extraData)
+        return result
     }
 
     update(updatedModel: {{name}}Model, data?: {{name}}Type): {{name}}Model {
-        return updatedModel.setId(this.getId(), { ...(data ? data : updatedModel.data) });
+        const result = super.update(updatedModel, data)
+        return result
     }
 
 	list(search?, session?, extraData?, params?): {{name}}Type[] {
@@ -44,8 +47,8 @@ export class {{name}}Model extends ProtoModel<{{name}}Model> {
     }
 
     delete(data?): {{name}}Model {
-        return super.delete(data)
-
+        const result = super.delete(data)
+        return result
     }
 
     protected static _newInstance(data: any, session?: SessionDataType): {{name}}Model {
