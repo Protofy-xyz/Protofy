@@ -3,15 +3,8 @@ import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { Provider } from 'app/provider'
-import { useRouter } from 'next/router'
-
 import React, { useCallback, useMemo, useEffect, useRef, useState, useContext } from 'react';
-import {
-    useNodesState,
-    useEdgesState,
-    addEdge,
-    Panel
-} from 'reactflow';
+import { Panel } from 'reactflow';
 import { PORT_TYPES, createNode, getId, saveNodes } from './lib/Node';
 import { getDiffs } from './lib/diff'
 import { NodeTypes } from './nodes';
@@ -19,22 +12,20 @@ import Menu from './diagram/Menu';
 import CustomEdge from './Edge';
 import ActionsBar, { reLayout } from './ActionsBar';
 import getCustomComponent from './nodes/custom';
-import layouts from './diagram/layouts'
 import Diagram from './diagram/Diagram';
 import { withTopics, TopicsProvider } from "react-topics";
-import { Project, IndentationText, ScriptTarget, ScriptKind, LanguageVariant, SyntaxKind } from "ts-morph";
+import { Project, IndentationText, ScriptTarget, ScriptKind, LanguageVariant } from "ts-morph";
 import { useFlowsStore, FlowStoreContext } from "./store/FlowsStore"
 import { validateCode } from './lib/Node'
 import {
-    addChildNodeDataAndReorder, addEdgeChildAndReorder, deleteNodes,
-    moveEdgeChildAndReorder, removeDataChildAndReorder, reorderDataChilds, reorderEdgeChilds,
+    deleteNodes,
+    removeDataChildAndReorder,
     deleteAdditionalKeys, dumpContent, findJsxElementByNodeId, findJsxElementDumpedPropValue
 } from './lib/FlowsOperations';
 import Diff from 'deep-diff';
-import DynamicCustomComponent from './DynamicCustomComponent';
 import GetDynamicCustomComponent from './DynamicCustomComponent';
 import { generateId } from './lib/IdGenerator';
-import { getKindName } from './nodes/JsxElement';
+import { useProtoEdges, useProtoNodes, addEdge } from './store/DiagramStore'
 
 interface customComponentInterface {
     check: Function,
@@ -77,7 +68,7 @@ interface FlowProps {
     nodePreview?: 'preview' | 'flow-preview' | 'flow',
     metadata?: any
     defaultSelected?: Function
-}    
+}
 
 const FlowsBase = ({
     dataNotify = () => { },
@@ -141,8 +132,8 @@ const FlowsBase = ({
     const edgeTypes = useMemo(() => {
         return { custom: (props) => CustomEdge(props, bridgeNode) }
     }, []);
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [nodes, setNodes, onNodesChange] = useProtoNodes(initialNodes);
+    const [edges, setEdges, onEdgesChange] = useProtoEdges(initialEdges);
     const [hasChanges, setHasChanges] = useState(false);
     const [prevNodeData, setPrevNodeData] = useState(deleteAdditionalKeys(nodeData));
 
@@ -724,18 +715,18 @@ const FlowsBase = ({
 
     if (enableCommunicationInterface) {
         const context = {
-            edges, 
-            nodeData, 
-            nodes, 
-            setEdges, 
-            createNode, 
-            setNodeData, 
-            setNodes, 
-            setNodesData, 
-            deleteNodes, 
-            onSaveNodes, 
-            _customComponents, 
-            flowId, 
+            edges,
+            nodeData,
+            nodes,
+            setEdges,
+            createNode,
+            setNodeData,
+            setNodes,
+            setNodesData,
+            deleteNodes,
+            onSaveNodes,
+            _customComponents,
+            flowId,
             data
         }
         enableCommunicationInterface(context)
