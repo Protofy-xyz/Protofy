@@ -23,6 +23,7 @@
     "removeComments": false,
     "skipLibCheck": true,
     "sourceMap": false,
+    "strict": false,
     "strictNullChecks": false,
     "target": "es2020",
     "types": [
