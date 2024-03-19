@@ -7,4 +7,5 @@ services:
       - ADMIN_API_URL=http://admin-api:3002
       - API_URL=http://api:3001
       - SITE_URL=http://site:3000
+      - ADMIN_SITE_URL=http://admin:3003 
       - NODE_ENV=development

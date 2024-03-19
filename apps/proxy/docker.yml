@@ -9,6 +9,7 @@ services:
       - ADMIN_API_URL=http://admin-api:4002
       - API_URL=http://api:4001
       - SITE_URL=http://site:4000
+      - ADMIN_SITE_URL=http://admin:4003 
       - NODE_ENV=production
     volumes:
       - ../../:/workspace
