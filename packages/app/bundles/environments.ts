@@ -5,7 +5,7 @@ export const environments = {
         frontend: process.env.SITE_URL ?? 'http://localhost:3000',
         // TODO add missing docker url from docker envs
         websocket: 'http://localhost:3002',
-        admin: 'http://localhost:3003',
+        admin: process.env.ADMIN_SITE_URL ?? 'http://localhost:3003',
         docs: 'http://localhost:7600'
     },
     prod: {
@@ -14,7 +14,7 @@ export const environments = {
         frontend: process.env.SITE_URL ?? 'http://localhost:4000/',
         // TODO add missing docker url from docker from docker envs
         websocket: 'http://localhost:4002/',
-        admin: 'http://localhost:4003/',
+        admin: process.env.ADMIN_SITE_URL ?? 'http://localhost:4003/',
         docs: 'http://localhost:7700/'
     }
 }
