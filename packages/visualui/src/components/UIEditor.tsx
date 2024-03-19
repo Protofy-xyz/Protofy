@@ -8,7 +8,7 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import { MainPanel } from "protolib";
 import Monaco from "./Monaco";
-import { Component, LogOut, Network, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight, Monitor, Tablet, Smartphone, SunMoon, Sun, Moon } from "lucide-react";
+import { Plus, LogOut, Network, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight, Monitor, Tablet, Smartphone, SunMoon, Sun, Moon } from "lucide-react";
 import { getMissingJsxImports, getSource } from "../utils/utils";
 import Theme, { useUITheme } from './Theme'
 import { withTopics } from "react-topics";
@@ -307,7 +307,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 leftItems={[
                     {
                         id: "components-to-drag-btn",
-                        icon: Component,
+                        icon: Plus,
                         buttonProps: {
                             chromeless: false, color: "white", backgroundColor: useUITheme('interactiveColor'),
                             hoverStyle: { backgroundColor: useUITheme('interactiveHoverColorDarken') }
@@ -320,7 +320,12 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     },
                     {
                         icon: LogOut,
-                        onPress: onCancelEdit
+                        text: 'Exit',
+                        onPress: onCancelEdit,
+                        buttonProps: {
+                            variant: 'outlined', chromeless: false, borderWidth: '$0.5', borderColor: useUITheme('textColor'),
+                            hoverStyle: { variant: 'outlined', chromeless: false, borderWidth: '$0.5', borderColor: useUITheme('interactiveColor') }
+                        }
                     }
                 ]}
                 rightItems={[
@@ -355,6 +360,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     },
                     {
                         id: "save-nodes-btn",
+                        icon: Save,
                         text: 'Save',
                         buttonProps: { 
                             chromeless: false, color: 'white', backgroundColor: useUITheme('interactiveColor'), paddingHorizontal: "$4", 
