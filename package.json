@@ -36,6 +36,8 @@
     "web:extract": "DISABLE_EXTRACTION=false yarn workspace next-app dev",
     "web:build": "yarn workspace next-app build",
     "web:serve": "NODE_ENV=production yarn workspace next-app serve",
+    "admin-prod": "yarn workspace admin service-start",
+    "admin-dev": "yarn workspace admin service-start-dev",
     "proxy-dev": "yarn workspace proxy start-dev",
     "proxy-prod": "yarn workspace proxy start",
     "admin-api-dev": "yarn workspace admin-api start-dev",
