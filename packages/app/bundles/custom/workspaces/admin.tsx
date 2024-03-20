@@ -7,7 +7,7 @@ export default {
         "System": [
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
-            { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
+            { "name": "Events", "icon": "activity", "type": "events", "path": "/?page=0&orderBy=created&orderDirection=desc" },
             // { "name": "Tasks", "icon": "zap", "type": "tasks", "path": "/" },
             { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
         ],

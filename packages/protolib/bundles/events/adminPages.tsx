@@ -5,7 +5,7 @@ import { ClipboardList } from '@tamagui/lucide-icons';
 import { JSONViewer } from '../../components/jsonui'
 import { usePrompt } from '../../context/PromptAtom'
 
-const format = 'YYYY-MM-DD HH:mm:ss'
+const format = 'HH:mm:ss DD-MM-YYYY'
 const EventIcons =  {}
 const sourceUrl = '/adminapi/v1/events'
 
