@@ -1,7 +1,5 @@
 @echo off
 
-setlocal enabledelayedexpansion
-
 :: Loop through all arguments to check if --prod is present
 set "DEV_MODE=true"
 :loop
@@ -34,7 +32,7 @@ for /d %%i in ("%appsDir%*") do (
   set "dir=%%i"
   :: Remove last backslash from dir
   set "dir=!dir:~0,-1!"
-  
+
   :: Check if have docker.yml or docker.dev.yml
   if exist "!dir!\docker.yml" (
     set "compose_files=!compose_files! -f !dir!\docker.yml"
