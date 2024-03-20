@@ -136,10 +136,11 @@ export function useVisualUi(atom, callb?, defState?) {
 
 // check comms version 
 export function experimentalComms() {
-    const router = useRouter()
-    const queryParams = router.query
-    const experimentalComms = queryParams.experimental_comms === 'true' ? true : false
-    return experimentalComms
+    const urlParams = new URLSearchParams(window.location.search);
+    const experimental = urlParams.get('experimental_comms');
+    return experimental === 'true' 
+        ? true 
+        : false
 }
 
 // toggle communication mode visualUi
