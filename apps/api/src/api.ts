@@ -1,6 +1,6 @@
 import { app, getMQTTClient } from 'protolib/api'
 import BundleAPI from 'app/bundles/apis'
-import {getLogger } from 'protolib/base';
+import {getLogger, getApiUrl } from 'protolib/base';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import { getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 import { getBaseConfig, getConfigWithoutSecrets } from 'app/BaseConfig'
@@ -36,13 +36,14 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
     
     const devicePub = async (deviceName, component, componentName) => {
         var data = null;
+        const SERVER = getApiUrl()
         try{
-            const urlDevices = "http://localhost:8080/adminapi/v1/devices"
+            const urlDevices = `${SERVER}/adminapi/v1/devices`
             const res = await fetch(urlDevices);
             data = await res.json();
         }catch(err){
             try{
-                const urlDevices = "http://localhost:8000/adminapi/v1/devices"
+                const urlDevices = `${SERVER}/adminapi/v1/devices`
                 const res = await fetch(urlDevices);
                 data = await res.json();
             }catch(err){
