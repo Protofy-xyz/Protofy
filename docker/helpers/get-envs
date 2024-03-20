@@ -39,3 +39,6 @@ for dir in "${servicesDir[@]}"; do
 done
 
 SERVICES_COMPOSE_FILES=$compose_files
+
+echo "Docker compose command: $DOCKER_COMPOSE_CMD"
+echo "Compose files: $SERVICES_COMPOSE_FILES"

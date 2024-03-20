@@ -38,5 +38,7 @@ for /d %%i in ("%appsDir%*") do (
     set "compose_files=!compose_files! -f !dir!\docker.dev.yml"
   )
 )
-
 set "SERVICES_COMPOSE_FILES=!compose_files!"
+
+echo Docker compose command: !DOCKER_COMPOSE_CMD!
+echo Compose files: !SERVICES_COMPOSE_FILES!
