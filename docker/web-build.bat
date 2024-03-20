@@ -1,3 +1,4 @@
+setlocal enabledelayedexpansion
 @echo off
 CALL .\helpers\get-envs.bat || (echo Failed to run helpers\get-envs.bat & exit /b)
 CALL .\init.bat || (echo Failed to run init.bat & exit /b)
