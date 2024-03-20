@@ -1,4 +1,5 @@
 #!/bin/bash
+source ./helpers/get-envs
 ./init
 ./build
-docker-compose -f web-build.yml up
+$DOCKER_COMPOSE_CMD -f web-build.yml up

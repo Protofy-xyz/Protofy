@@ -1,1 +1,2 @@
-docker-compose -p protofy stop
+CALL .\helpers\get-envs.bat || (echo Failed to run helpers\get-envs.bat & exit /b)
+%DOCKER_COMPOSE_CMD% -p protofy stop
