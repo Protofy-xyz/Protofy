@@ -4,7 +4,7 @@
   "description": "Documentation service",
   "scripts": {
     "dev": "next -p 7600",
-    "build": "next build",
+    "build": "cd ../.. && yarn build && cd apps/nextra && next build",
     "start": "next start -p 7700",
     "service-start": "NODE_ENV=production pm2 start pm2.config.js",
     "service-start-dev": "NODE_ENV=development pm2 start pm2.config.js",
