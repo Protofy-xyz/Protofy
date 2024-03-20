@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "prepare-dev": "node prepare.js",
-    "start": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
-    "start-dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
+    "admin-api-start": "yarn service-start --no-daemon",
+    "admin-api-start-dev": "yarn service-start-dev --no-daemon",
     "service-start": "NODE_ENV=production pm2 start pm2.config.js",
     "service-start-dev": "NODE_ENV=development pm2 start pm2.config.js",
     "logs": "pm2 logs",
