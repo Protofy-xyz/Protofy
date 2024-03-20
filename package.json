@@ -44,6 +44,8 @@
     "admin-api-prod": "yarn workspace admin-api start",
     "api-dev": "yarn workspace api start-dev",
     "api-prod": "yarn workspace api start",
+    "docs-prod": "yarn workspace nextra service-start",
+    "docs-dev": "yarn workspace nextra service-start-dev",
     "add-user": "yarn workspace api add-user",
     "pull": "git pull && yarn workspaces foreach run pull",
     "fix": "manypkg fix",
