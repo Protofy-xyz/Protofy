@@ -1,5 +1,4 @@
 @echo off
-
 :: Loop through all arguments to check if --prod is present
 set "DEV_MODE=true"
 :loop
@@ -19,7 +18,6 @@ set "DOCKER_COMPOSE_CMD=docker-compose"
 docker compose version >nul 2>&1
 if %ERRORLEVEL% equ 0 set "DOCKER_COMPOSE_CMD=docker compose"
 
-
 :: This script gets the docker.yml files and docker.dev.yml files
 :: from each service inside "<root_project_dir>\apps"
 :: If flag --prod is provided only returns docker.yml files
@@ -31,8 +29,7 @@ set "servicesDir="
 for /d %%i in ("%appsDir%*") do (
   set "dir=%%i"
   :: Remove last backslash from dir
-  set "dir=!dir:~0,-1!"
-
+  if "!dir:~-1!"=="\" set "dir=!dir:~0,-1!"
   :: Check if have docker.yml or docker.dev.yml
   if exist "!dir!\docker.yml" (
     set "compose_files=!compose_files! -f !dir!\docker.yml"
