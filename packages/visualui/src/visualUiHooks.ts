@@ -134,12 +134,17 @@ export function useVisualUi(atom, callb?, defState?) {
   }
 }
 
-// toggle communication mode visualUi
-export function useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData, contextAtom) {
+// check comms version 
+export function experimentalComms() {
     const router = useRouter()
     const queryParams = router.query
+    const experimentalComms = queryParams.experimental_comms === 'true' ? true : false
+    return experimentalComms
+}
 
-    if (queryParams.experimental_comms === 'true') {
+// toggle communication mode visualUi
+export function useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData, contextAtom) {
+    if (experimentalComms()) {
         console.log('protocraft experimental communications')
         const {lastEvent} = useVisualUi(contextAtom)
         useEffect(() => {

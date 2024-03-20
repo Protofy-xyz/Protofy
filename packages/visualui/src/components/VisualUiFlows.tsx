@@ -7,7 +7,7 @@ import {
     dumpContent, moveEdgeChildAndReorder, removeDataChildAndReorder,
     reorderDataChilds, reorderEdgeChilds
 } from 'protoflow/src/lib/FlowsOperations'
-import { useVisualUi, useVisualUiAtom } from '../visualUiHooks'
+import { experimentalComms, useVisualUi, useVisualUiAtom } from '../visualUiHooks'
 
 export const UIFLOWID = "flows-ui"
 const Flow = FlowConstructor(UIFLOWID)
@@ -15,10 +15,7 @@ const Flow = FlowConstructor(UIFLOWID)
 export const VisualUiFlows = (props) => {
     // flows comms custom hook
     function useFlowsComms({ edges, nodeData, nodes, setEdges, setNodesData, deleteNodes, setNodes, createNode, setNodeData, _customComponents, onSaveNodes, flowId, data }) {
-        const router = useRouter()
-        const queryParams = router.query
-
-        if (queryParams.experimental_comms === 'true') {
+        if (experimentalComms()) {
             console.log('flows: experimental communications')
             const {lastEvent} = useVisualUi(props.contextAtom)
             useEffect(() => {
