@@ -20,6 +20,7 @@ const MHZ19 =  dynamic(() => import('./MHZ19'))
 const UARTBus =  dynamic(() => import('./UARTBus'))
 const MPU6050 = dynamic(() => import('./MPU6050'))
 const HX711 = dynamic(() => import('./HX711'))
+const A4988 = dynamic(() => import('./A4988'))
 // import PulseCounter from "./PulseCounter";
 // import LEDCOutput from "./LEDCOutput";
 // import PIRSensor from "./PIRSensor"
@@ -182,6 +183,13 @@ const deviceMasks = [
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('hx711'),
     getComponent: (node, nodeData, children) => <HX711 node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'hx711', param1: '""', param2: '', param3: '"128"', param4: '"60s"' } }
+  },
+  {
+    id: 'A4988',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('a4988'),
+    getComponent: (node, nodeData, children) => <A4988 node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'a4988', param1: '""', param2: '""', param3: '"250 steps/s"', param4: '"none"', param5: '"inf"', param6: '"inf"' } }
   },
 
   // {

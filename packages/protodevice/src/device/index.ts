@@ -34,6 +34,7 @@ import pca9685 from './PCA9685'
 import ethernet from './Ethernet'
 import microfirePhEcTemp from './MicrofirePhEcTemp'
 import uartBus from './uartBus'
+import a4988 from './A4988'
 
 export default {
   wifi: wifi,
@@ -71,5 +72,6 @@ export default {
   pca9685:pca9685,
   ethernet:ethernet,
   microfirePhEcTemp: microfirePhEcTemp,
-  uartBus:uartBus
+  uartBus:uartBus,
+  a4988:a4988
 }
