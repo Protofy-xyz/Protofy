@@ -50,8 +50,4 @@ export const DevicesAPI = (app, context) => {
             );
         }
     }))
-
-    app.get('/adminapi/v1/notifications', async (req, res) => {
-        const { data: events } = await API.get('/adminapi/v1/events?all=1&token=' + getServiceToken())
-    })
 }
