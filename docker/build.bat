@@ -1,2 +1,5 @@
-docker build -t protofy/workspace . && docker-compose -f build.yml up
+setlocal enabledelayedexpansion
+CALL .\helpers\get-envs.bat
+
+docker build -t protofy/workspace . && %DOCKER_COMPOSE_CMD% -f build.yml up
 exit /b 0

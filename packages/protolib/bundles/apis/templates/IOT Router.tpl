@@ -21,12 +21,15 @@ import { Protofy } from 'protolib/base'
 import { getAuth } from "protolib/api";
 import { getLogger } from "protolib/base"
 import { Application } from 'express';
+import fs from 'fs'
+import path from "path";
 
+const root = path.join(process.cwd(), '..', '..')
 const logger = getLogger()
 
 Protofy("type", "IOTRouter")
 
-export default Protofy("code",(app: App, {devicePub, deviceSub, mqtt}) => {
+export default Protofy("code",(app, {devicePub, deviceSub, mqtt}) => {
     ///PUT YOUR ROUTER LOGIC HERE
     //devicePub function allows to communicate with devices via mqtt
     //deviceSub allows to receive notifications from devices via mqtt

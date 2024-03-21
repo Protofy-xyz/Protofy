@@ -41,7 +41,8 @@ class Mqtt {
       actions: [],
       monitors: [
         {
-          name: 'Device status',
+          name: 'status',
+          label: 'Device status',
           description: 'Gets the status of the mqtt connection',
           endpoint: '/status',
           connectionType: 'mqtt',

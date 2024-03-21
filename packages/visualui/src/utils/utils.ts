@@ -1,7 +1,8 @@
-import { UIFLOWID } from "../components/UIEditor";
 import { Project, IndentationText, ScriptTarget, ScriptKind, LanguageVariant } from "ts-morph";
 import parserTypeScript from "prettier/parser-typescript";
 import prettier from "prettier";
+import { UIFLOWID } from "../components/VisualUiFlows";
+import { experimentalComms } from "../visualUiHooks";
 
 function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -91,7 +92,7 @@ let lastTimeoutId;
 let timeoutId;
 
 export const notify = (topicParams: Object, publish: any, cb?: Function) => {
-    if (topicParams['debounce']) {
+    if (topicParams['debounce'] && !experimentalComms()) {
         timeoutId = setTimeout(() => {
             publish(UIFLOWID + '/ui', topicParams)
         }, 1000);

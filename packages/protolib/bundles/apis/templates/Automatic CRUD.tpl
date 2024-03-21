@@ -4,7 +4,10 @@ import { Protofy } from 'protolib/base'
 import { Application } from 'express';
 import { getLogger } from "protolib/base"
 import { getAuth } from "protolib/api";
+import fs from 'fs'
+import path from "path";
 
+const root = path.join(process.cwd(), '..', '..')
 const logger = getLogger()
 
 Protofy("type", "AutoAPI")

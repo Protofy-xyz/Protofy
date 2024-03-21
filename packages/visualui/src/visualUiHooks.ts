@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { atom, useAtom } from 'jotai'
 import { EditorStore, useEditorContext } from "@protocraft/core";
 import { useRouter } from 'next/router'
+import Diff from 'deep-diff'
+import { computePreviousPositions } from './utils/utils';
 
 // create craftjs context 
 export function newVisualUiContext(options: any) {
@@ -14,49 +16,143 @@ export function useVisualUiAtom(_atom: any) {
   return contextAtom ? useAtom(contextAtom) : [null, null]
 }
 
-// hook for visualUiState management
-export function useVisualUi(atom, callb, defState) {
-  const [state, setState] = useState(defState)
-  const [lastEvent, setLastEvent] = useState<any>(null)
-  const [craftContext] = useAtom<EditorStore>(atom)
+// hook to subscribe to a visualUi instance state
+// *client* refers to any subscriber
+export function useVisualUi(atom, callb?, defState?) {
+  if (atom) {
+    const [craftContext] = useAtom<EditorStore>(atom) // protocraft internal state
+    const [prevNodes, setPreviousNodes] = useState<string>(null) // previous nodes on every udpate
+    const [lastEvent, setLastEvent] = useState<any>(null) // get last event triggered by any
+    const [state, setState] = useState(defState ?? null) // client wanted internal state based on a callback trigger
 
-  useEffect(() => {
-    if (!craftContext || !craftContext['subscribe']) return
+    // state reducer
+    useEffect(() => {
+        if (!craftContext || !craftContext['subscribe']) return
 
-    craftContext.subscribe(
-      (_) => {
-        setState((prev: any) => {
-          const result = callb(prev, craftContext)
-          return result ?? prev
-        })
-      },
-      () => {
-        // we need to discover more about this callback
-      }
-    );
-  }, [craftContext])
+        craftContext.subscribe(
+            (_) => {
+                setState((prev: any) => {
+                    const result = callb && callb(prev, craftContext)
+                    return result ?? prev
+                })
+            },
+            () => {
+                // we need to discover more about this callback
+            }
+        );
+    }, [craftContext])
 
-  useEffect(() => {
-    console.log('boyyyy')
-  }, [craftContext.query.serialize()])
+    // events
+    useEffect(() => {
+        if (craftContext.history.timeline.length < 1) return  // this is to avoid empty initializer of craft
+        if (lastEvent === null && prevNodes === null) { // first load
+            setPreviousNodes(craftContext.query.serialize())
+            return 
+        } 
 
-  return {
-    state: state,
-    visualUiData: craftContext,
-    lastEvent: lastEvent
+        const currentNodes: any = JSON.parse(craftContext.query.serialize())
+        const diffs = Diff.diff(JSON.parse(prevNodes), currentNodes) 
+        console.log('in-dev: diffs', diffs)
+        if (diffs.length < 1) return 
+
+        if (diffs.find(d => d.kind == 'N')) { // add case
+            console.log('in: add', diffs.find(d => d.kind == 'N').path, diffs.find(d => d.kind == 'N'))
+            setLastEvent({
+                action: 'add-node'
+            })
+        } else if (diffs.find(d => d.kind == 'D')) { //delete case
+            const deletedNodes = diffs.filter(d => d.kind == 'D').map(n => n.path[0])
+            const parentId = diffs.find(d => d.kind == 'A').path[0]            
+            setLastEvent({
+                action: 'delete-node',
+                deletedNodes: deletedNodes,
+                parent: parentId
+            })
+        } else if (diffs.find(d => d.kind == 'E')) { // edit case
+            console.log('in: edit', diffs.find(d => d.kind == 'E').path, diffs.find(d => d.kind == 'E'))
+
+            const movedParent_diff = diffs.find(d => d.kind == 'E' && d.path[1] == 'parent')
+            const children_diff = diffs.find(d => d.kind == 'E' && d.path[2] == 'children')
+            const props_diff = diffs.find(d => d.kind == 'E' && d.path[1] == 'props')
+            const move_diff = diffs.find(d => d.kind == 'E' && d.path[1] == "nodes");
+            
+            if (children_diff || props_diff) { // edited prop or child text
+                const type = children_diff ? 'children' : 'prop'
+                var diff = type == 'children' ? children_diff : props_diff
+                const nodeId = diff.path[0]
+                const value = diff['rhs']
+
+                let event = {
+                    action: 'edit-node',
+                    nodeId: nodeId,
+                    value: value,
+                    type: type,
+                    field: diff.path[2],
+                }
+                setLastEvent(event)
+            } else if (movedParent_diff) { // moved changing parent
+                const nodeId_moved = movedParent_diff.path[0];
+                const nodeId_newParent = movedParent_diff.rhs;
+                const nodeId_oldParent = movedParent_diff.lhs;
+                const oldPos = JSON.parse(prevNodes)[nodeId_oldParent].nodes.findIndex(n => n == nodeId_moved);
+                const newPos_diff = diffs.find(d => d.kind == 'E' && d.path[0] == nodeId_newParent && d.rhs == nodeId_moved)
+                const newPos = newPos_diff?.path[2] ?? -1; // If no find change position, then means that is added to the last position of parent childs
+                let event = {
+                    action: 'move-node',
+                    isSameParent: false,
+                    nodeId: nodeId_moved,
+                    oldParentId: nodeId_oldParent,
+                    newParentId: nodeId_newParent,
+                    newPos: newPos,
+                    oldPos: oldPos
+                }
+                setLastEvent(event)
+            } else { // moved inside same parent
+                const parent = move_diff.path[0];
+                const newChildrensIds = diffs.sort((a, b) => a.path[2] - b.path[2]).map(d => d.rhs);
+                const oldChildrensIds = JSON.parse(prevNodes)[parent].nodes;
+                const childrenIndexes = computePreviousPositions(oldChildrensIds, newChildrensIds)
+                let event = {
+                    action: 'move-node',
+                    isSameParent: true,
+                    parent: parent,
+                    childrenIndexes: childrenIndexes
+                }
+                setLastEvent(event)
+            }
+        }
+    }, [craftContext.query.serialize()])
+
+    return {
+        actions: craftContext.actions, 
+        query: craftContext.query, 
+        state: state,
+        lastEvent: lastEvent
+    }
+  } else {
+    throw new Error("useVisualUi(...) must have a defined atom")
   }
 }
 
-// toggle communication mode visualUi
-export function useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData) {
-    const router = useRouter()
-    const queryParams = router.query
+// check comms version 
+export function experimentalComms() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const experimental = urlParams.get('experimental_comms');
+    return experimental === 'true' 
+        ? true 
+        : false
+}
 
-    if (queryParams.experimental_comms === 'true') {
+// toggle communication mode visualUi
+export function useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData, contextAtom) {
+    if (experimentalComms()) {
+        console.log('protocraft experimental communications')
+        const {lastEvent} = useVisualUi(contextAtom)
         useEffect(() => {
-            console.log('experimental communications')
-        }, [])
+            console.log('craftEvent: ', lastEvent)
+        }, [lastEvent])
     } else {
+        console.log('protocraft legacy communications')
         useEffect(() => {
             const flowData = topicData
             const action = flowData.action

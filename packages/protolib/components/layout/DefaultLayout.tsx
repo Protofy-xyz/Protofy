@@ -1,6 +1,6 @@
 import { AppBar, Tinted } from 'protolib'
 import { ToastProvider, ToastViewport } from '@tamagui/toast'
-// import { NextSeo } from 'next-seo'
+import { NextSeo } from 'next-seo'
 import React from 'react'
 import { Stack, StackProps, XStack, YStack } from 'tamagui'
 import { Toast, useToastState } from '@my/ui'
@@ -63,12 +63,12 @@ export const DefaultLayout = React.forwardRef(({
 } & StackProps, ref: any) => {
   return (
     <Stack f={1} ref={ref} height="100%" {...props}>
-      {/* <NextSeo
+      <NextSeo
         title={title}
         description={description}
         openGraph={openGraph}
         {...seoProps}
-      /> */}
+      />
 
       <ToastProvider swipeDirection="horizontal">
           <Tinted><ToastArea /></Tinted>

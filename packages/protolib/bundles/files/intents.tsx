@@ -14,13 +14,14 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react';
 import { API } from '../../base/Api';
 import { usePrompt, promptCmd } from '../../context/PromptAtom';
-import { useUpdateEffect } from 'usehooks-ts';
+import { useInterval, useUpdateEffect } from 'usehooks-ts';
 import Flows from '../../adminpanel/features/components/Flows';
 import { getFlowsCustomComponents } from 'app/bundles/masks'
 import { getDefinition, toSourceFile } from '../../api/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";
+import { useSubscription } from 'mqtt-react-hooks'
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -52,17 +53,47 @@ const JSONViewer = ({ extraIcons, name, path }) => {
   </AsyncView>
 }
 
-const SaveButton = ({ path, getContent, positionStyle }) => {
-  const onSave = async () => {
+type SaveButtonStates = "available" | "unavailable" | "loading"
+
+const SaveButton = ({ checkStatus=() => true, defaultState='available', path, getContent, positionStyle, onSave=()=>{} }) => {
+  const [state, setState] = useState(defaultState)
+  const { message } = useSubscription('notifications/event/create/#');
+
+  useEffect(() => {
+    if(message && message.message) {
+      try {
+        let content = JSON.parse(message.message as string)
+        if(content['path'] == 'services/api/start') {
+          setState(defaultState)
+          onSave()
+        }
+
+      } catch(e) {
+        console.error('Error parsing message from mqtt: ', e)
+      }
+    }
+  }, [message])
+
+  useInterval(() => {
+    if(checkStatus() && state == 'unavailable') setState('available')
+  }, 250)
+
+  const _onSave = async () => {
+    setState("loading")
     const content = getContent();
     await API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/'), { content });
+    if(!path.startsWith('/packages/app/bundles/custom/apis/')) {
+      setState(defaultState)
+      onSave()
+    }
   };
 
   return (
     <XStack position="absolute" {...positionStyle}>
-      <IconContainer onPress={onSave}>
+      {state != "loading" && <IconContainer disabled={state=='unavailable'} onPress={_onSave}>
         <Save color="var(--color)" size={"$1"} />
-      </IconContainer>
+      </IconContainer>}
+      {state == "loading" && <Spinner color={"$color"} opacity={0.5} size={17} />}
     </XStack>
   );
 };
@@ -73,6 +104,7 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
   const [loaded, setLoaded] = useState(false)
   const isPartial = useRef(false)
   const sourceCode = useRef('')
+  const originalSourceCode = useRef('')
   const router = useRouter()
 
   const [promptResponse, setPromptResponse] = usePrompt(
@@ -114,6 +146,7 @@ If you include anything else in your message (like reasonings or natural languag
         isPartial.current = false
         sourceCode.current = fileContent.data
       }
+      originalSourceCode.current = sourceCode.current
       setLoaded(true)
     }
   }, [fileContent]);
@@ -135,6 +168,9 @@ If you include anything else in your message (like reasonings or natural languag
             <Code color="var(--color)" size={"$1"} />
           </IconContainer>}
         <SaveButton
+          onSave={()=>originalSourceCode.current = sourceCode.current}
+          checkStatus={() => sourceCode.current != originalSourceCode.current}
+          defaultState={"unavailable"}
           path={path}
           getContent={() => {
             if (isPartial.current) {

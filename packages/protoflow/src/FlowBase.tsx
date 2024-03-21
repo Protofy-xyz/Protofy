@@ -3,15 +3,8 @@ import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { Provider } from 'app/provider'
-import { useRouter } from 'next/router'
-
 import React, { useCallback, useMemo, useEffect, useRef, useState, useContext } from 'react';
-import {
-    useNodesState,
-    useEdgesState,
-    addEdge,
-    Panel
-} from 'reactflow';
+import { Panel } from 'reactflow';
 import { PORT_TYPES, createNode, getId, saveNodes } from './lib/Node';
 import { getDiffs } from './lib/diff'
 import { NodeTypes } from './nodes';
@@ -19,22 +12,20 @@ import Menu from './diagram/Menu';
 import CustomEdge from './Edge';
 import ActionsBar, { reLayout } from './ActionsBar';
 import getCustomComponent from './nodes/custom';
-import layouts from './diagram/layouts'
 import Diagram from './diagram/Diagram';
 import { withTopics, TopicsProvider } from "react-topics";
-import { Project, IndentationText, ScriptTarget, ScriptKind, LanguageVariant, SyntaxKind } from "ts-morph";
+import { Project, IndentationText, ScriptTarget, ScriptKind, LanguageVariant } from "ts-morph";
 import { useFlowsStore, FlowStoreContext } from "./store/FlowsStore"
 import { validateCode } from './lib/Node'
 import {
-    addChildNodeDataAndReorder, addEdgeChildAndReorder, deleteNodes,
-    moveEdgeChildAndReorder, removeDataChildAndReorder, reorderDataChilds, reorderEdgeChilds,
+    deleteNodes,
+    removeDataChildAndReorder,
     deleteAdditionalKeys, dumpContent, findJsxElementByNodeId, findJsxElementDumpedPropValue
 } from './lib/FlowsOperations';
 import Diff from 'deep-diff';
-import DynamicCustomComponent from './DynamicCustomComponent';
 import GetDynamicCustomComponent from './DynamicCustomComponent';
 import { generateId } from './lib/IdGenerator';
-import { getKindName } from './nodes/JsxElement';
+import { useProtoEdgesState, useProtoNodesState, addProtoEdge } from './store/DiagramStore'
 
 interface customComponentInterface {
     check: Function,
@@ -76,7 +67,8 @@ interface FlowProps {
     mode?: 'js' | 'json' | 'device',
     nodePreview?: 'preview' | 'flow-preview' | 'flow',
     metadata?: any
-}    
+    defaultSelected?: Function
+}
 
 const FlowsBase = ({
     dataNotify = () => { },
@@ -111,7 +103,8 @@ const FlowsBase = ({
     path = "Start",
     mode = 'js',
     nodePreview = 'flow',
-    metadata = {}
+    metadata = {},
+    defaultSelected = () => undefined
 }: FlowProps) => {
     const { data, publish } = topics;
     const useFlowsStore = useContext(FlowStoreContext)
@@ -139,12 +132,12 @@ const FlowsBase = ({
     const edgeTypes = useMemo(() => {
         return { custom: (props) => CustomEdge(props, bridgeNode) }
     }, []);
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [nodes, setNodes, onNodesChange] = useProtoNodesState(initialNodes);
+    const [edges, setEdges, onEdgesChange] = useProtoEdgesState(initialEdges);
     const [hasChanges, setHasChanges] = useState(false);
     const [prevNodeData, setPrevNodeData] = useState(deleteAdditionalKeys(nodeData));
 
-    const onConnect = useCallback((params) => setEdges((eds) => addEdge({ ...params, type: 'custom', animated: false }, eds)), [setEdges]);
+    const onConnect = useCallback((params) => setEdges((eds) => addProtoEdge(params, eds)), [setEdges]);
 
     const reload = async () => {
         clearNodesData()
@@ -722,18 +715,18 @@ const FlowsBase = ({
 
     if (enableCommunicationInterface) {
         const context = {
-            edges, 
-            nodeData, 
-            nodes, 
-            setEdges, 
-            createNode, 
-            setNodeData, 
-            setNodes, 
-            setNodesData, 
-            deleteNodes, 
-            onSaveNodes, 
-            _customComponents, 
-            flowId, 
+            edges,
+            nodeData,
+            nodes,
+            setEdges,
+            createNode,
+            setNodeData,
+            setNodes,
+            setNodesData,
+            deleteNodes,
+            onSaveNodes,
+            _customComponents,
+            flowId,
             data
         }
         enableCommunicationInterface(context)
@@ -773,6 +766,7 @@ const FlowsBase = ({
     return (
         <div ref={diagramRef} style={{ height: '100%', width: '100%' }}>
             {display ? <Diagram
+                defaultSelected={defaultSelected}
                 onViewPortChange={onViewPortChange}
                 defaultViewPort={defaultViewPort}
                 themeMode={themeMode}

@@ -8,8 +8,8 @@ import { withTopics } from "react-topics";
 import ErrorBoundary from './ErrorBoundary'
 import { notify, computePreviousPositions } from "../utils/utils";
 import { Stack, Spinner } from "@my/ui"
-import he from 'he';
 import { useVisualUiComms } from "../visualUiHooks";
+import { frames } from "../utils/frames"
 
 export type EditorProps = {
   children?: any;
@@ -17,11 +17,13 @@ export type EditorProps = {
   topics: any;
   resolveComponentsDir: string;
   onReady?: Function;
-  metadata?: any 
+  metadata?: any;
+  contextAtom: any;
+  frame: string;
 };
 
 
-const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {} }: EditorProps) => {
+const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {}, contextAtom = null }: EditorProps) => {
   const paper = useRef<any>()
   const [loading, setLoading] = useState(true);
   const [currentPageInitialJson, setCurrentPageInitialJson] = useState({});
@@ -40,19 +42,34 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
     if (!skip && nodesChanges?.length && JSON.stringify(nodesChanges) != previousDiffs) {
       var topicParams = {}
       if (nodesChanges.filter(d => d.kind == 'N').length == 1) { //case add
-        const newNodeId = nodesChanges.find(d => d.kind == 'N').path[0]
-        const parentId = currentEditorNodes[newNodeId]['parent']
-        const childrenPos = currentEditorNodes[parentId].nodes.findIndex(n => n == newNodeId)
-        const _data = currentEditorNodes[newNodeId].custom
-        topicParams = {
-          action: 'add-node',
-          nodeId: newNodeId,
-          nodeName: currentEditorNodes[newNodeId]['displayName'],
-          parent: parentId,
-          childrenPos: childrenPos,
-          data: _data,
-          nodeProps: currentEditorNodes[newNodeId]['props']
+        const newChange = nodesChanges.find(d => d.kind == 'N')
+        const isProp = newChange.path[1] == 'props'
+        const newNodeId = newChange.path[0]
+
+        if (isProp) { // case new prop
+          topicParams = {
+            action: 'edit-node',
+            nodeId: newNodeId,
+            value: newChange.rhs,
+            type: 'prop',
+            field: newChange.path[2]
+          }
+
+        } else { // case new node
+          const parentId = currentEditorNodes[newNodeId]['parent']
+          const childrenPos = currentEditorNodes[parentId].nodes.findIndex(n => n == newNodeId)
+          const _data = currentEditorNodes[newNodeId].custom
+          topicParams = {
+            action: 'add-node',
+            nodeId: newNodeId,
+            nodeName: currentEditorNodes[newNodeId]['displayName'],
+            parent: parentId,
+            childrenPos: childrenPos,
+            data: _data,
+            nodeProps: currentEditorNodes[newNodeId]['props']
+          }
         }
+
         notify(topicParams, publish)
       } else if (nodesChanges.find(d => d.kind == 'D')) { //case delete
         const deletedNodes = nodesChanges.filter(d => d.kind == 'D').map(n => n.path[0])
@@ -66,14 +83,22 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
       } else if (nodesChanges.find(d => d.kind == 'E')) { //case edit
         const movedParent_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == 'parent')
         const children_diff = nodesChanges.find(d => d.kind == 'E' && d.path[2] == 'children')
-        if (children_diff) { // edited child text
-          const nodeId = children_diff.path[0]
-          const newChildValue = he.decode(children_diff.rhs)
+        const props_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == 'props')
+        const move_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == "nodes");
+
+        if (children_diff || props_diff) { // edited prop or child text
+          const type = children_diff ? 'children' : 'prop'
+          var diff = type == 'children' ? children_diff : props_diff
+          const nodeId = diff.path[0]
+          const value = diff['rhs']
+
           topicParams = {
             action: 'edit-node',
             nodeId: nodeId,
-            newChildValue: newChildValue,
-            debounce: true
+            value: value,
+            type: type,
+            field: diff.path[2],
+            debounce: type == 'children'
           }
         } else if (movedParent_diff) { // moved changing parent
           const nodeId_moved = movedParent_diff.path[0];
@@ -92,7 +117,6 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
             oldPos: oldPos
           }
         } else { // moved inside same parent
-          const move_diff = nodesChanges.find(d => d.kind == 'E' && d.path[1] == "nodes");
           const parent = move_diff.path[0];
           const newChildrensIds = nodesChanges.sort((a, b) => a.path[2] - b.path[2]).map(d => d.rhs);
           const oldChildrensIds = previousNodes[parent].nodes;
@@ -127,7 +151,7 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
   }, [selectedNodeId])
 
   // udpate state based on topics
-  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'])
+  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'], contextAtom)
 
   useEffect(() => {
     actions.setOptions(options => options['skipTopic'] = false)
@@ -219,13 +243,20 @@ const Editor = ({ children, topics, currentPageContent, resolveComponentsDir, on
       <div
         onLoad={() => setLoading(false)}
         className={"page-container"}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', overflow: 'auto', overflowX: 'hidden' }}
       >
         <div
           id="editor"
           className={"craftjs-renderer"}
           ref={(ref) => { paper.current = ref; connectors.select(connectors.hover(ref, null), null) }}
-          style={{ flex: 1, position: 'relative', overflow: 'auto', color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto', left: 0, right: 0, width: '100%', height: '100%' }}
+          style={{ 
+            flex: 1, position: 'relative', overflow: 'auto', 
+            color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto', 
+            left: 0, right: 0, 
+            width: frames[frame]?.width ?? '100%', 
+            height: frames[frame]?.height  ?? '100%',
+            marginTop: frames[frame]?.marginTop  ?? ''
+          }}
         >
           <ErrorBoundary>
             <div id="editor-frame-container">

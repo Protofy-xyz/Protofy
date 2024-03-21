@@ -4,7 +4,7 @@ import { FlowStoreContext } from "../store/FlowsStore"
 type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "textColor" | "interactiveColor" | 'interactiveHoverColor' | 'inputBorder' | 'borderColor'
     | 'borderWidth' | 'borderWidthSelected' | 'colorError' | 'handleBorderColor' | 'flowOutputColor' | 'dataOutputColor' | 'highlightInputBackgroundColor' | 'blockPort' | 'flowPort'
     | 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor' | 'disableTextColor' | 'nodeEdgeWidth' | 'nodeEdgeStyle'
-    | 'plusColor' | 'selectedColor'
+    | 'plusColor' | 'selectedColor' | 'separatorColor'
 
 const commonVars: any = {
     nodeBorderWidth: '1px',
@@ -42,7 +42,8 @@ const Theme = {
         dataPort: '#fefefe',
         nodeBorderColor: '#aaa',
         titleColor: '#222',
-        containerColor: '#00000005'
+        containerColor: '#00000005',
+        separatorColor: '#D4D4D4'
     },
     dark: {
         ...commonVars,
@@ -67,7 +68,8 @@ const Theme = {
         dataPort: 'grey',
         nodeBorderColor: outlineColorDark,
         titleColor: 'black',
-        containerColor: '#FFFFFF05'
+        containerColor: '#FFFFFF05',
+        separatorColor: '#424242'
     }
 }
 

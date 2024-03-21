@@ -9,7 +9,8 @@ const subsystem = (subsystem, deviceName) => {
 
     const buttonAction = (action) => {
         if (action.connectionType == "mqtt") {
-            client.publish(getPeripheralTopic(deviceName, action.endpoint), action.payload.value.toString())
+            console.log("MQTT Dev: ", action.payload)
+            client.publish(getPeripheralTopic(deviceName, action.endpoint),action.payload.type=="json"? JSON.stringify(action.payload.value):action.payload.value.toString())
         }
     }
 
@@ -21,7 +22,7 @@ const subsystem = (subsystem, deviceName) => {
             color="$color10"
         //style={{ border: "1px solid #cccccc", borderRadius: "5px", marginRight: "5px", padding: "10px" }}
         >
-            {action.name}
+            {action.label ?? action.name}
         </Button>
     ));
 
@@ -41,7 +42,7 @@ const subsystem = (subsystem, deviceName) => {
 
         return (
             <XStack gap="$3">
-                <Text marginLeft={4} textAlign={"left"}>{monitor.name}: </Text>
+                <Text marginLeft={4} textAlign={"left"}>{monitor.label ?? monitor.name}: </Text>
                 {renderChip}
             </XStack>
         );

@@ -1,1 +1,3 @@
-docker-compose -p protofy -f ..\apps\admin-api\docker.yml -f ..\apps\api\docker.yml -f ..\apps\next\docker.yml -f ..\apps\proxy\docker.yml up
+setlocal enabledelayedexpansion
+CALL .\helpers\get-envs.bat --prod || (echo Failed to run helpers\get-envs.bat & exit /b)
+%DOCKER_COMPOSE_CMD% -p protofy %SERVICES_COMPOSE_FILES% up

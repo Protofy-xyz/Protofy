@@ -14,32 +14,13 @@ import { AlertDialog } from '../../components/AlertDialog'
 import { Slides } from '../../components/Slides'
 import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
-import TemplatePreview from './TemplatePreview'
-import {environments} from 'app/bundles/environments'
+import { TemplatePreview } from './TemplatePreview'
+import { environments } from 'app/bundles/environments'
+import { pageTemplates } from 'app/bundles/templates'
 
 const PageIcons = {}
 const sourceUrl = '/adminapi/v1/pages'
 const objectsSourceUrl = '/adminapi/v1/objects?all=1'
-
-const templates = {
-    "blank": {},
-    "default": {},
-    "admin": {
-        extraFields: (objects) => ({
-            object: z.union([...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route')
-        }),
-        extraValidation: (data) => {
-            if (!Object.keys(data).includes('object')) {
-                return { error: "object cant be empty" }
-            }
-            return
-        }
-    },
-    "landing": {},
-    "ecomerce": {},
-    "about": {},
-    "newsfeed": {},
-}
 
 const SelectGrid = ({ children }) => {
     return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
@@ -52,7 +33,14 @@ const FirstSlide = ({ selected, setSelected }) => {
     return <YStack>
         <ScrollView mah={"500px"}>
             <SelectGrid>
-                {Object.keys(templates).map((template) => <TemplatePreview theme={themeName} template={template} isSelected={selected == template} onPress={() => setSelected(template)} />)}
+                {Object.entries(pageTemplates).map(([templateId, template]) => (
+                    <TemplatePreview
+                        theme={themeName}
+                        template={template}
+                        isSelected={selected === templateId}
+                        onPress={() => setSelected(templateId)}
+                    />
+                ))}
             </SelectGrid>
         </ScrollView>
         <Spacer marginBottom="$8" />
@@ -71,7 +59,7 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
         mode={'add'}
         title={""}
         model={PageModel}
-        extraFields={templates[data['data'].template].extraFields ? templates[data['data'].template].extraFields(objects) : {}}
+        extraFields={pageTemplates[data['data'].template].extraFields ? pageTemplates[data['data'].template].extraFields(objects) : {}}
     />
 }
 
@@ -114,48 +102,48 @@ export default {
                 >
                     <YStack f={1} jc="center" ai="center">
                         {/* <ScrollView maxHeight={"90vh"}> */}
-                            <XStack mr="$5">
-                                <Slides
-                                    lastButtonCaption="Create"
-                                    onFinish={async () => {
-                                        try {
-                                            //TODO: when using custom data and setData in editablectObject
-                                            //it seems that defaultValue is no longer working
-                                            //we are going to emulate it here until its fixed
-                                            const obj = PageModel.load(data['data'])
-                                            if (templates[data['data'].template].extraValidation) {
-                                                const check = templates[data['data'].template].extraValidation(data['data'])
-                                                if (check?.error) {
-                                                    throw check.error
-                                                }
+                        <XStack mr="$5">
+                            <Slides
+                                lastButtonCaption="Create"
+                                onFinish={async () => {
+                                    try {
+                                        //TODO: when using custom data and setData in editablectObject
+                                        //it seems that defaultValue is no longer working
+                                        //we are going to emulate it here until its fixed
+                                        const obj = PageModel.load(data['data'])
+                                        if (pageTemplates[data['data'].template].extraValidation) {
+                                            const check = pageTemplates[data['data'].template].extraValidation(data['data'])
+                                            if (check?.error) {
+                                                throw check.error
                                             }
-                                            const result = await API.post(sourceUrl, obj.create().getData())
-                                            if (result.isError) {
-                                                throw result.error
-                                            }
-                                            setAddOpen(false);
-                                            toast.show('Page created', {
-                                                message: obj.getId()
-                                            })
-                                        } catch (e) {
-                                            console.log('original error: ', e)
-                                            setError(getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e))
                                         }
-                                    }}
-                                    slides={[
-                                        {
-                                            name: "Create new page",
-                                            title: "Select your Template",
-                                            component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
-                                        },
-                                        {
-                                            name: "Configure your page",
-                                            title: "Configure your page",
-                                            component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
+                                        const result = await API.post(sourceUrl, obj.create().getData())
+                                        if (result.isError) {
+                                            throw result.error
                                         }
-                                    ]
-                                    }></Slides>
-                            </XStack>
+                                        setAddOpen(false);
+                                        toast.show('Page created', {
+                                            message: obj.getId()
+                                        })
+                                    } catch (e) {
+                                        console.log('original error: ', e)
+                                        setError(getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e))
+                                    }
+                                }}
+                                slides={[
+                                    {
+                                        name: "Create new page",
+                                        title: "Select your Template",
+                                        component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
+                                    },
+                                    {
+                                        name: "Configure your page",
+                                        title: "Configure your page",
+                                        component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
+                                    }
+                                ]
+                                }></Slides>
+                        </XStack>
                         {/* </ScrollView> */}
                     </YStack>
                 </AlertDialog>

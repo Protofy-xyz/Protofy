@@ -16,7 +16,7 @@ import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
 import { generateEvent } from 'app/bundles/library'
-
+import chokidar from 'chokidar';
 
 const logger = getLogger()
 const config = getConfig()
@@ -27,9 +27,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 const aedesInstance = new aedes();
 aedesInstance.authenticate = function (client, username, password, callback) {
   if (!username) {
-    logger.info({client}, "MQTT anonymous login request")
+    logger.debug({}, "MQTT anonymous login request")
   } else {
-    logger.info({username}, "MQTT user login request: "+username)
+    logger.debug({username}, "MQTT user login request: "+username)
   }
 
   if(config.mqtt.auth){
@@ -57,7 +57,7 @@ const topicSub = (topic, cb) => {
       return
     }
     const parsedMessage = message.toString();
-    cb(parsedMessage, topic)
+    cb(parsedMessage, messageTopic)
   });
 };
 
@@ -101,9 +101,33 @@ mqttServer.listen(mqttPort, () => {
   logger.debug({ service: { protocol: "mqtt", port: mqttPort } }, "Service started: MQTT")
 });
 
-// generateEvent({
-//   path: 'services/start/adminapi', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-//   from: 'api', // system entity where the event was generated (next, api, cmd...)
-//   user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-//   payload: {}, // event payload, event-specific data
-// })
+generateEvent({
+  path: 'services/adminapi/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+  from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+  user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+  payload: {}, // event payload, event-specific data
+}, getServiceToken())
+
+if(process.env.NODE_ENV != 'production') {
+  const pathsToWatch = [
+    'src/**',
+    '../../packages/protolib/**',
+    '../../packages/app/bundles/adminapi.tsx'
+  ];
+  
+  const watcher = chokidar.watch(pathsToWatch, {
+    ignored: /^([.][^.\/\\])|([\/\\]+[.][^.])/,
+    persistent: true
+  });
+  
+  watcher.on('change', async (path) => {
+    console.log(`File ${path} has been changed.`);
+    await generateEvent({
+      path: 'services/adminapi/stop', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+      from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+      user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+      payload: {}, // event payload, event-specific data
+    }, getServiceToken())
+    process.exit(0)
+  });
+}

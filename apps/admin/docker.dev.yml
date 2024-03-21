@@ -1,10 +1,8 @@
 services:
   admin:
-    entrypoint: "yarn web"
     ports:
       - 3003:3003
+    entrypoint: "yarn admin-dev"
     environment:
-      - API_URL=http://proxy:8080
+      - API_URL=http://proxy:8000
       - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true

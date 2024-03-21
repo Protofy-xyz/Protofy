@@ -1,9 +1,7 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import { FlowStoreContext } from "./store/FlowsStore";
-import { useReactFlow } from 'reactflow';
-import { Save, Code, CircleDot, RefreshCcw, AlertTriangle } from 'lucide-react';
+import { Save, Code, RefreshCcw, AlertTriangle } from 'lucide-react';
 import layouts from "./diagram/layouts";
-//import './styles.css'
 
 export type Props = {
   onSave?: Function
@@ -39,12 +37,6 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
   const size = 25
   const useFlowsStore = useContext(FlowStoreContext)
   const saveStatus = useFlowsStore(state => state.saveStatus)
-  const { fitView, setNodes, setEdges, getEdges, getNodes } = useReactFlow();
-
-  const handleTransform = useCallback(() => {
-    //@ts-ignore
-    fitView({ zoom: 1, duration: 800, padding: 0.5 })
-  }, [fitView]);
   
   return (
     <>
@@ -85,17 +77,6 @@ const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstN
         >
           <RefreshCcw color={'white'} size={size} />
         </div> : null}
-        {/*
-        <div
-          onClick={() => handleTransform()}
-          style={{
-            display: 'flex', flexDirection: 'row', justifyContent: 'center',
-            backgroundColor: '#373737', borderRadius: '14px', width: '40px',
-            padding: '5px', marginLeft: '6px', height: '35px'
-          }}
-        >
-          <CircleDot color={'white'} size={size} />
-        </div> */}
       </div>
     </>
   );

@@ -2,7 +2,7 @@ version: '3'
 services:
   builder:
     image: "protofy/workspace"
-    entrypoint: "sh -c 'yarn && yarn prepare-dev && node prepare.js && yarn build && yarn web:build'"
+    entrypoint: "sh -c 'yarn && yarn prepare-dev && node prepare.js && yarn build && yarn web:build && yarn docs:build'"
     volumes:
       - ../:/workspace
       - protofy_modules:/workspace/node_modules

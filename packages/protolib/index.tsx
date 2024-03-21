@@ -63,6 +63,7 @@ export * from "./components/IconStack";
 export { default as MainButton } from "./components/MainButton";
 export * from "./components/Head1";
 export * from "./components/Text";
+export * from "./components/Input";
 export * from "./components/Link";
 export * from "./components/heroState";
 export { default as OverlayCard } from "./components/OverlayCard";
@@ -135,3 +136,4 @@ export * from './components/PanelMenu'
 export { default as Flows } from './adminpanel/features/components/Flows'
 export * from './components/Slides'
 export * from './components/MapView'
+export * from './providers/AppConf'

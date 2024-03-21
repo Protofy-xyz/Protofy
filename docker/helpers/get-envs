@@ -1,0 +1,44 @@
+#!/bin/bash
+# Loop through all arguments to check if --prod is present
+DEV_MODE=true
+for arg in "$@"; do 
+  case "$arg" in
+    --prod)
+      DEV_MODE=false
+      echo "Running in production!"
+      ;;
+  esac
+done
+
+export SERVICES_COMPOSE_FILES=""
+export DOCKER_COMPOSE_CMD="docker-compose"
+
+# Check if 'docker compose' is available
+if docker compose version >/dev/null 2>&1; then
+  DOCKER_COMPOSE_CMD="docker compose"
+fi
+
+# This script gets the docker.yml files and docker.dev.yml files
+# from each service inside "<root_project_dir>/apps"
+# If flag --prod is provided only returns docker.yml files
+
+compose_files=""
+appsDir="../apps/"
+servicesDir=($appsDir*/)
+
+# Get compose files paths followed by -f <dir1>/docker.yml -f <dir2>/docker.yml ...
+for dir in "${servicesDir[@]}"; do
+  dir="${dir%/}" # Remove last backslash from dir
+  # Check if have docker.yml or docker.dev.yml
+  if [[ -f "${dir}/docker.yml" ]]; then
+    compose_files+=" -f $dir/docker.yml"
+  fi
+  if [[ "$DEV_MODE" == "true" && -f "${dir}/docker.dev.yml" ]]; then
+    compose_files+=" -f $dir/docker.dev.yml"
+  fi
+done
+
+SERVICES_COMPOSE_FILES=$compose_files
+
+echo "Docker compose command: $DOCKER_COMPOSE_CMD"
+echo "Compose files: $SERVICES_COMPOSE_FILES"

@@ -7,6 +7,7 @@ import {
     AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd, AlignVerticalSpaceAround, AlignVerticalSpaceBetween
 } from 'lucide-react';
 import { CustomField } from '.';
+import useTheme from '../diagram/Theme';
 
 export const getAlignmentTypes = () => ['alignment-text', 'alignment-items', 'alignment-flex', 'alignment-content']
 
@@ -14,6 +15,9 @@ export default ({ nodeData = {}, item, node }) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const deletePropNodeData = useFlowsStore(state => state.deletePropNodeData)
+
+    const interactiveColor = useTheme('interactiveColor')
+    const disableTextColor = useTheme('disableTextColor')
 
     const { field, label, type, fieldType, menuActions } = item
 
@@ -32,8 +36,8 @@ export default ({ nodeData = {}, item, node }) => {
     }
 
     const getIconColor = (type) => {
-        if (value == type) return 'white'
-        else return
+        if (value == type) return interactiveColor
+        else return disableTextColor
     }
 
     const onToggleAlignment = (val) => {

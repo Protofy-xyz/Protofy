@@ -104,13 +104,13 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.data._deleted ? true : false;
     }
 
-    list(search?, session?, extraData?): any {
+    list(search?, session?, extraData?, params?): any {
         if (search) {
             const { parsed, searchWithoutTags } = parseSearch(search);
 
             for (const [key, value] of Object.entries(parsed)) {
                 if (!this.data.hasOwnProperty(key) || this.data[key] != value) {
-                    logger.debug({ data: this.data[key] }, `discarded: ${JSON.stringify(this.data[key])}`)
+                    //logger.debug({ data: this.data[key] }, `discarded: ${JSON.stringify(this.data[key])}`)
                     return
                 }
             }
@@ -126,8 +126,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }
     }
 
-    async listTransformed(search?, transformers = {}, session?, extraData?): Promise<any> {
-        const result = this.list(search, session, extraData)
+    async listTransformed(search?, transformers = {}, session?, extraData?, params?): Promise<any> {
+        const result = this.list(search, session, extraData, params)
         if (result) {
             return await (this.getObjectSchema().apply('list', result, transformers));
         }
@@ -230,7 +230,6 @@ export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
                 super(data, schema, session, name.substring(0, name.length - 5).toLowerCase());
             }
 
-            // Hacemos _newInstance y schemaInstance públicos sólo para esta clase generada
             public static _newInstance(data: any, session?: SessionDataType): AutoModel<any> {
                 return new DerivedModel(data, session);
             }

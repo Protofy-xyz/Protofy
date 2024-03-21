@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import UIEditor from './components/UIEditor'
 import { TopicsProvider } from "react-topics";
 import { formatText } from "./utils/utils";
-import { useVisualUiAtom } from "./visualUiHooks";
 
 type Props = {
 	userPalettes: any,
@@ -16,7 +15,6 @@ type Props = {
 }
 
 export default ({ userPalettes = {}, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", onSave = () => null, metadata = {}, contextAtom }: Props) => {
-  const [_, setContext] = useVisualUiAtom(contextAtom)
 	const [currentPage, setCurrentPage] = useState(_currentPage);
 
 	const onSendMessage = async (event: any) => {
@@ -45,7 +43,7 @@ export default ({ userPalettes = {}, _sourceCode = "", _resolveComponentsDir = "
 						sendMessage={onSendMessage}
 						resolveComponentsDir={`${_resolveComponentsDir}/`}
 						metadata={metadata}
-            setContext={setContext}
+            contextAtom={contextAtom}
 					/>
 					: null
 			}

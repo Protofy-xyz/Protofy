@@ -24,7 +24,7 @@ export const runTask = async (name, parameters, session, onDone?, onError?, onNo
         if (task) {
             generateEvent({
                 path: 'tasks/run/'+name, //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-                from: 'api', // system entity where the event was generated (next, api, cmd...)
+                from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
                 user: session?.user?.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {task: taskRun.getData()} // event payload, event-specific data
             }, getServiceToken())
@@ -33,7 +33,7 @@ export const runTask = async (name, parameters, session, onDone?, onError?, onNo
             db.put(taskRun.getId(), taskRun.toSuccess().serialize())
             generateEvent({
                 path: 'tasks/done/'+name, //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-                from: 'api', // system entity where the event was generated (next, api, cmd...)
+                from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
                 user: session?.user?.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {task: taskRun.getData()} // event payload, event-specific data
             }, getServiceToken())
@@ -41,7 +41,7 @@ export const runTask = async (name, parameters, session, onDone?, onError?, onNo
         } else {
             generateEvent({
                 path: 'tasks/error/'+name, //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-                from: 'api', // system entity where the event was generated (next, api, cmd...)
+                from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
                 user: session?.user?.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {task: taskRun.getData(), error: 'notfound'} // event payload, event-specific data
             }, getServiceToken())
@@ -50,7 +50,7 @@ export const runTask = async (name, parameters, session, onDone?, onError?, onNo
     } catch (err) {
         generateEvent({
             path: 'tasks/error/'+name, //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-            from: 'api', // system entity where the event was generated (next, api, cmd...)
+            from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
             user: session?.user?.id, // the original user that generates the action, 'system' if the event originated in the system itself
             payload: {task: taskRun.getData(), error: err.message} // event payload, event-specific data
         }, getServiceToken())

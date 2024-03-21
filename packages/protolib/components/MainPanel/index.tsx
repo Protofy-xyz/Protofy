@@ -11,6 +11,7 @@ type Props = {
     rightPanelContent: React.Component | any,
     leftPanelContent: React.Component | any,
     centerPanelContent: React.Component | any,
+    height: React.Component | any,
     rightPanelResizable?: boolean,
     rightPanelVisible?: boolean,
     openPanel?: boolean,
@@ -22,7 +23,7 @@ type Props = {
     borderLess?:boolean
 };
 
-const MainPanel = ({ borderLess, rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}}: Props) => {
+const MainPanel = ({ borderLess, rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}, height = "100vh"}: Props) => {
     const rightRef = useRef()
     const resizerRef = useRef()
     const resizerBarRef = useRef()
@@ -97,7 +98,7 @@ const MainPanel = ({ borderLess, rightPanelSize,setRightPanelSize,rightPanelStyl
             </div>}
             <PanelGroup direction="horizontal" style={{ height: '100%', display: 'flex' }}>
                 <Panel>
-                    <div style={{ display: 'flex', flex: 1, height: '100vh' }}>
+                    <div style={{ display: 'flex', flex: 1, height: height }}>
                         {centerPanelContent}
                     </div>
                 </Panel>

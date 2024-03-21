@@ -45,7 +45,8 @@ class BinarySensor {
             type: this.type,
             monitors:[
                 {
-                    name: "Button status",
+                    name: "status",
+                    label: "Button status",
                     description: "Get binary sensor status",
                     endpoint: "/"+this.type+"/"+this.name+"/state",
                     connectionType: "mqtt",

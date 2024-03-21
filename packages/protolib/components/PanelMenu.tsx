@@ -37,9 +37,9 @@ import {
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { getPendingResult, API } from 'protolib/base';
-import { AlertDialog, Link, Tinted, PanelMenuItem} from 'protolib';
+import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType} from 'protolib';
 
 const opacity = 1
 const strokeWidth = 2
@@ -141,11 +141,12 @@ const CreateDialog = ({subtab}) => {
 
 const Subtabs = ({ subtabs }: any) => {
     const router = useRouter()
+    const SiteConfig = useContext<SiteConfigType>(AppConfContext);
     return (
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                const href = (subtab.type + '/' + subtab.path).replace(/\/+/g, '/')
+                const href = SiteConfig.workspaceRoot + '/' + (subtab.type + '/' + subtab.path).replace(/\/+/g, '/')
                 return <Link href={href} key={index}>
                     <Tinted>
                         <PanelMenuItem

@@ -13,8 +13,7 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
       {props.topBar}
       <XStack $xs={{ display: 'none' }}>
         <Tinted>
-          <XStack ai="center" top="-1px"><a id="header-session-doc" href="/documentation"><HeadAnchor>Docs</HeadAnchor></a></XStack>
-          
+          <HeaderLink id="header-session-doc" href="/documentation">Docs</HeaderLink>
           {
             session.loggedIn ? <HeaderLink id="header-session-user-id" href="/profile">{session.user.id}</HeaderLink> : <HeaderLink href="/auth/login" id="header-login-link" >Login</HeaderLink>
           }

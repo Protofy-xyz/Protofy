@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-import { Edge, Node, useReactFlow } from 'reactflow';
+import { Edge, Node } from 'reactflow';
 import { FlowStoreContext } from '../store/FlowsStore'
+import { useProtoflow } from '../store/DiagramStore';
 
 type UseUndoRedoOptions = {
     maxHistorySize: number;
@@ -39,7 +40,7 @@ export const useUndoRedo: UseUndoRedo = ({
     const [past, setPast] = useState<HistoryItem[]>([]);
     const [future, setFuture] = useState<HistoryItem[]>([]);
 
-    const { setNodes, setEdges, getNodes, getEdges, deleteElements } = useReactFlow();
+    const { setNodes, setEdges, getNodes, getEdges, deleteElements } = useProtoflow();
 
     const takeSnapshot = useCallback((data) => {
         // push the current graph to the past state
@@ -52,7 +53,7 @@ export const useUndoRedo: UseUndoRedo = ({
     }, [getNodes, getEdges, maxHistorySize]);
 
     const clearNodes = async (mode: 'undo' | 'redo') => {
-        var pastNodesData = past[past.length - 1]?.nodeData ?? {}
+        var pastNodesData = past[past.length - 1]?.nodeData ?? {}
         var futureState = future[future.length - 1]?.nodeData ?? {}
         if (!Object.keys(pastNodesData).length && mode == 'undo') return
         if (!Object.keys(futureState).length && mode == 'redo') return

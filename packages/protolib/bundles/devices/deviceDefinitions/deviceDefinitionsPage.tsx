@@ -26,17 +26,12 @@ const coresSourceUrl = '/adminapi/v1/devicecores?all=1'
 export default {
   component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData }: any) => {
     const [showDialog, setShowDialog] = React.useState(false)
-    const [isSaveActive, setIsSaveActive] = React.useState(false);
     const { resolvedTheme } = useThemeSetting();
     const defaultJsCode = { "components": "[\n \"mydevice\",\n \"esp32dev\",\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n" }
     const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
     // const [isModified,setIsModified] = React.useState(false)
-    const [editedObjectData, setEditedObjectData] = React.useState({})
+    const [editedObjectData, setEditedObjectData] = React.useState<any>({})
     const router = useRouter()
-
-    const saveToFile = (code, path) => {
-      editedObjectData.setData({ components: code, sdkConfig: { board: "esp32dev", framework: { type: "arduino" } } })
-    }
 
     const [boardList, setBoardList] = useState(extraData?.boards ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardList, extraData?.deviceDefinitions)
@@ -53,17 +48,12 @@ export default {
           <Flows
             style={{ width: "100%" }}
             disableDots={true}
-            onSave={isSaveActive
-              ? (o) => {
-                console.log("ON SAVE: ", o);
-                saveToFile(o, "a")
-              } : null}
             hideBaseComponents={true}
             disableStart={true}
             getFirstNode={(nodes) => {
               return nodes.find(n => n.type == 'ArrayLiteralExpression')
             }}
-            showActionsBar={isSaveActive}
+            showActionsBar={false}
             mode={"device"}
             customComponents={getFlowsCustomComponents(router.pathname, router.query)}
             bridgeNode={false}
@@ -81,6 +71,7 @@ export default {
                 //mqttPub('datanotify/' + data.notifyId, JSON.stringify(data))
               }
             }}
+            onEdit={(code) => editedObjectData.setData({ components: code, sdkConfig: { board: "esp32dev", framework: { type: "arduino" } } })}
             positions={[]}
             disableSideBar={true}
             // store={uiStore}
@@ -106,7 +97,10 @@ export default {
           DataTable2.column("name", "name", true),
           DataTable2.column("board", "board", true, (row) => <Chip text={row.board} color={'$gray5'} />),
           DataTable2.column("sdk", "sdk", true, (row) => <Chip text={row.sdk} color={'$gray5'} />),
-          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={async (e) => { console.log("row from Edit: ", row); setIsSaveActive(false); setShowDialog(true); setSourceCode(row.config.components); }}>View</ButtonSimple>)
+          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={async (e) => { 
+            setShowDialog(true)
+            setSourceCode(row.config.components)
+          }}>View</ButtonSimple>)
         )}
         extraFieldsForms={{
           board: z.union(boards.map(o => z.literal(o.name))).after('name'),
@@ -125,9 +119,17 @@ export default {
         customFields={{
           'config': {
             component: (path, data, setData, mode) => {
-              console.log("inputs: ", { path, data, setData, mode })
               if (mode == "preview") { return <></> }
-              return <ButtonSimple onPress={(e) => { setShowDialog(true); setIsSaveActive(true); mode == "add" ? setSourceCode(defaultJsCode.components) : setSourceCode(data.components); setEditedObjectData({ path, data, setData, mode }); console.log("inputs: ", { path, data, setData, mode }) }}>Edit</ButtonSimple>
+              return <ButtonSimple 
+                onPress={(e) => { 
+                  setShowDialog(true)
+                  if(mode == "add") {
+                    setSourceCode(defaultJsCode.components)
+                  } else {
+                    setSourceCode(data.components)
+                  } 
+                  setEditedObjectData({ path, data, setData, mode })
+                }}>Edit</ButtonSimple>
             },
             hideLabel: false
           }

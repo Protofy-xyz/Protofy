@@ -4,14 +4,14 @@ import { useState } from 'react'
 import { Tinted } from '../../components/Tinted'
 import { Button, Image } from 'tamagui'
 
-export default ({ template, isSelected, onPress, theme }) => {
+export const TemplatePreview = ({ template, isSelected, onPress, theme }) => {
     const [previewVisible, setPreviewVisible] = useState(false);
-    const templateUrl = `/images/templates/${template}-${theme}.png`
+    const templateUrl = `/images/templates/${template.id}-${theme}.png`
     let height = 120 * 1.5
     let width = 238 * 1.5
     return (
         <Tinted>
-            <YStack id={"pages-template-" + template} onPress={onPress} onHoverIn={() => setPreviewVisible(true)} onHoverOut={() => setPreviewVisible(false)} overflow='hidden' borderWidth={isSelected ? "$1" : "$0.5"} borderColor={isSelected ? "$color7" : "$gray8"} cursor='pointer' borderRadius={"$3"}>
+            <YStack id={"pages-template-" + template.id} onPress={onPress} onHoverIn={() => setPreviewVisible(true)} onHoverOut={() => setPreviewVisible(false)} overflow='hidden' borderWidth={isSelected ? "$1" : "$0.5"} borderColor={isSelected ? "$color7" : "$gray8"} cursor='pointer' borderRadius={"$3"}>
                 <Image
                     source={{ height: height, width: width, uri: templateUrl }}
                 />
@@ -35,7 +35,7 @@ export default ({ template, isSelected, onPress, theme }) => {
                     </NextLink>
                 </YStack>
                 <XStack jc='space-between' borderTopWidth={"$0.5"} borderColor={"$gray8"} backgroundColor={"$gray3"} py="$1" px="$2">
-                    <Paragraph>{template}</Paragraph>
+                    <Paragraph>{template.name ?? template.id}</Paragraph>
                 </XStack>
             </YStack>
         </Tinted>

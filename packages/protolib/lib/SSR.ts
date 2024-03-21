@@ -3,7 +3,6 @@ import {SiteConfig} from 'app/conf'
 export * from '../components/AdminPage'
 import { NextPageContext } from 'next'
 import { API, withSession, getURLWithToken, AdminPage } from 'protolib'
-import { parse } from 'cookie';
 
 export const SSR = (fn) => SiteConfig.SSR ? fn : undefined
 

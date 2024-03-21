@@ -3,9 +3,7 @@ import { useSubscription } from 'mqtt-react-hooks';
 import { API, usePendingEffect } from 'protolib';
 import { PendingResult } from '../base';
 
-const disableRealTimeDiff = true //toggle to false to activate realtime updates without refetch
-
-export const useRemoteStateList = (items, fetch, topic, model) => {
+export const useRemoteStateList = (items, fetch, topic, model, quickRefresh=false) => { // Quick refresh skips fetch when a change is detected
     const [dataState, setDataState] = useState<PendingResult | undefined>(items);
 
     usePendingEffect((s) => fetch(s), setDataState, dataState)
@@ -19,7 +17,7 @@ export const useRemoteStateList = (items, fetch, topic, model) => {
             const [,,action] = message.topic.split('/')
             // console.log('data: ', mqttData)
             // console.log('action: ', action)
-            if(!disableRealTimeDiff) {
+            if(quickRefresh) {
                 setDataState((prev) => {
                     const currentData = prev.data || {};
                     const items = currentData.items || [];
@@ -46,9 +44,9 @@ export const useRemoteStateList = (items, fetch, topic, model) => {
                             return prev;
                     }
                 });
+            } else {
+                fetch(setDataState)
             }
-
-            fetch(setDataState)
         }
     }, [message]);
 

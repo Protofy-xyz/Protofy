@@ -8,6 +8,7 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 import {Protofy} from 'protolib/base'
 import {Objects} from 'app/bundles/objects'
 import {DataView, API, AdminPage, PaginatedDataSSR } from 'protolib'
+import { Tag } from '@tamagui/lucide-icons'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
@@ -20,6 +21,7 @@ export default {
     component: ({pageState, initialItems, pageSession, extraData}:any) => {
         return (<AdminPage title="{{object}}" pageSession={pageSession}>
             <DataView
+                rowIcon={Tag}
                 sourceUrl={sourceUrl}
                 initialItems={initialItems}
                 numColumnsForm={1}

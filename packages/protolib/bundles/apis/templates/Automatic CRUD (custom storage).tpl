@@ -22,55 +22,63 @@ the session argument is a session object, with the following shape:
 use the chat if in doubt
 */
 
-
 import { Objects } from "app/bundles/objects";
-import { AutoAPI } from 'protolib/api'
-import { Protofy } from 'protolib/base'
-import { Application } from 'express';
-import { getLogger } from "protolib/base"
+import { AutoAPI } from "protolib/api";
+import { Protofy } from "protolib/base";
+import { Application } from "express";
+import { getLogger } from "protolib/base";
 import { getAuth } from "protolib/api";
+import fs from "fs";
+import fsPath from "path";
 
-const logger = getLogger()
+const root = fsPath.join(process.cwd(), '..', '..')
+const logger = getLogger();
 
-Protofy("type", "AutoAPI")
-Protofy("object", "{{object}}")
-const {name, prefix} = Objects.{{object}}.getApiOptions()
+Protofy("type", "AutoAPI");
+Protofy("object", "{{object}}");
+const { name, prefix } = Objects.{{object}}.getApiOptions();
+
+export default Protofy("code", (app: Application, context) => {
+
+    const jsonPath = fsPath.join(root, 'data', '{{object}}.json')
+    
+    const getElements = () => {
+        if (!fs.existsSync(jsonPath)) {
+            fs.writeFileSync(jsonPath, '[]')
+        }
+        return JSON.parse(fs.readFileSync(jsonPath).toString())
+    }
 
 const {{name}}API = AutoAPI({
-    modelName: name,
-    modelType: Objects.{{object}},
-    initialDataDir: __dirname,
-    prefix: prefix,
-    getDB: (path, req, session) => {
-        const db = {
-            async *iterator() {
-                let elements = [] 
-                //TODO: recover your array of elements
-                //elements = await API.call(...) or fs.readdir(...) or whaterver method you use to recover your objects
-                for (const element of elements) {
-                    yield [element.id, JSON.stringify(element)]; //yield each element, to generate an iterable
-                }
-            },
+        modelName: name,
+        modelType: Objects.{{object}},
+        initialDataDir: __dirname,
+        prefix: prefix,
+        getDB: (path, req, session) => {
+            const db = {
+                async *iterator() {
+                    let elements = getElements()
+                    for (const element of elements) {
+                        yield [element.id, JSON.stringify(element)];
+                    }
+                },
 
-            async put(key, value) {
-                //key is the key to store
-                //value is a JSON encoded string to store in the record
-                //value = JSON.parse(value) //decode if needed
-                //TODO: store your value
-            },
+                async put(key, value) {
+                    let elements = getElements()
+                    value = JSON.parse(value)
+                    elements.push(value)
+                    fs.writeFileSync(jsonPath, JSON.stringify(elements, null, 4))
+                },
 
-            async get(key) {
-                let obj = {}
-                //TODO: recover your object. Key is the string of the object key to be retrieved.
-                //obj = await API.call(...) or fs.read(...) or whaterver method you use to read your objects
-                return JSON.stringify(obj)
-            }
-        };
+                async get(key) {
+                    let elements = getElements()
+                    return JSON.stringify(elements.find(element => element.id == key));
+                },
+            };
 
-        return db;
-    }
-})
+            return db;
+        },
+    });
 
-export default Protofy("code",(app:Application, context) => {
     {{name}}API(app, context)   
 })

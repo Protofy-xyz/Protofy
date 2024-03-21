@@ -8,27 +8,23 @@ import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import { MainPanel } from "protolib";
 import Monaco from "./Monaco";
-import { Component, X, Share2, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, ChevronRight } from "lucide-react";
+import { Plus, LogOut, Network, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight, Monitor, Tablet, Smartphone, SunMoon, Sun, Moon } from "lucide-react";
 import { getMissingJsxImports, getSource } from "../utils/utils";
-import theme from './Theme'
+import Theme, { useUITheme } from './Theme'
 import { withTopics } from "react-topics";
 import { ToggleGroup, Button, XStack } from "@my/ui"
 import { SidebarItem } from "./Sidebar/SideBarItem";
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
-import { FlowConstructor } from "protoflow";
 import React from "react";
-import { newVisualUiContext } from "../visualUiHooks";
+import { newVisualUiContext, useVisualUiAtom } from "../visualUiHooks";
 import { VisualUiFlows } from "./VisualUiFlows";
+import EditorBar from "./EditorBar";
+import { useThemeSetting } from '@tamagui/next-theme'
 
-const FloatingIcon = ({ id = undefined, children, onClick, disabled = false }) => <div id={id} onClick={disabled ? () => null : onClick} style={{ marginBottom: 20, backgroundColor: 'black', opacity: disabled ? 0.2 : 1, borderRadius: '100%', justifyContent: 'center', alignItems: 'center', width: '40px', height: '40px', display: 'flex', cursor: 'pointer' }}>
-    {children}
-</div>
-
-/* 
-// const uiStore = useFlowsStore()
-*/
-function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, setContext }) {
+function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, contextAtom = null }) {
+    const [_, setContext] = useVisualUiAtom(contextAtom)
     const editorRef = useRef<any>()
+    const enableClickEventsRef = useRef();
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const [currentPageContent, setCurrentPageContent] = useState("")
     const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
@@ -37,12 +33,21 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
     const [customizeVisible, setCustomizeVisible] = useState(true);
     const [layerVisible, setLayerVisible] = useState(false);
+    const [selectedFrame, setSelectedFrame] = useState('desktop');
+
     const router = useRouter();
+    const { resolvedTheme, toggle: themeToggle, current: currentTheme } = useThemeSetting();
+
+    // const resolvedTheme = 'dark'
+
     const { publish } = topics;
     const { data } = topics;
     const [openPanel, setOpenPanel] = React.useState(false);
 
     const isViewModePreview = flowViewMode == 'preview'
+    const barHeight = "50px"
+    const mainPanelHeight = 'calc(100vh - ' + barHeight + ')'
+    const separatorColor = useUITheme('separatorColor')
 
     useEffect(() => {
         const handleClosePanel = () => setOpenPanel(false)
@@ -80,10 +85,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 const previousImports = astContent.getImportDeclarations();
                 const missingJsxImports = getMissingJsxImports(data.nodes, data.nodesData, resolveComponentsDir)
                 if (missingJsxImports.length) {
-                    const filteredMissingJsxImports = missingJsxImports.filter((imp, index, arr) =>
-                        index === arr.findIndex((t) => (
-                            JSON.stringify(t) === JSON.stringify(imp)
-                        )))
+                    const filteredMissingJsxImports = [...new Map(missingJsxImports.map(item => [item['tagName'], item])).values()]
                     const missingJsxImportsText = filteredMissingJsxImports.reduce((total, impData) => {
                         let impText;
                         let moduleSpecifier = impData.moduleSpecifier;
@@ -109,6 +111,24 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 break;
         }
     }
+
+    const onToggleAppBar = (val) => {
+        if (val == 'code') {
+            codeEditorVisible ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
+            setFlowViewMode(undefined);
+            setCodeEditorVisible(true);
+        } else if (val == 'flow') {
+            flowViewMode == val ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
+            setFlowViewMode(val)
+            setCodeEditorVisible(false)
+        } else if (val == 'preview') {
+            const isValidMode = ['flow-preview', 'preview'].includes(flowViewMode)
+            isValidMode ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
+            setFlowViewMode(isValidMode ? flowViewMode : val)
+            setCodeEditorVisible(false)
+        }
+    }
+
     const onMonacoChange = (code) => {
         setMonacoSourceCode(code)
         if (currentPageContent != code) setMonacoHasChanges(true)
@@ -117,6 +137,12 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const onCancelMonaco = () => {
         setMonacoSourceCode(currentPageContent)
         setMonacoHasChanges(false)
+    }
+
+    const onCancelEdit = () => {
+        router.push({
+            query: {}
+        })
     }
 
     useEffect(() => {
@@ -138,21 +164,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             // FIX: Make disapear panel div while not visible, can't hide it from first render with display: isSidebarVisible ? 'flex':'none'
             style={{ display: 'flex', width: '100%', top: isSideBarVisible ? 0 : -1000000000000, position: isSideBarVisible ? 'relative' : 'absolute', height: '100%' }}
         >
-            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
-                <div style={{ padding: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 999999, backgroundColor: '#252526', borderBottom: '1px solid #cccccc20' }}>
-                    <XStack theme="dark">
-                        <Button
-                            onPress={(e) => { setIsSideBarVisible(false); setCodeEditorVisible(false); e.stopPropagation() }}
-                            hoverStyle={{ opacity: 1 }} opacity={0.7}
-                            size="$3"
-                            chromeless
-                            circular
-                            noTextWrap
-                        >
-                            <ChevronRight fillOpacity={0} style={{ alignSelf: 'center' }} opacity={0.5} color="var(--color)" />
-                        </Button>
-                    </XStack>
-                    <XStack display={monacoHasChanges ? 'flex' : 'none'} theme={"dark"} marginVertical="$1">
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: mainPanelHeight }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 999999, backgroundColor: useUITheme('nodeBackgroundColor'), borderBottom: '1px solid ' + separatorColor }}>
+                    <XStack padding="10px" display={monacoHasChanges && codeEditorVisible ? 'flex' : 'none'} theme={"dark"} marginVertical="$1">
                         <Button size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
                             <X />
                         </Button>
@@ -160,20 +174,28 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             <Save fillOpacity={0} />
                         </Button>
                     </XStack>
-                    <ToggleGroup display={monacoHasChanges ? 'none' : 'flex'} theme={"dark"} type="single" defaultValue="preview" disableDeactivation>
-                        <ToggleGroup.Item value="code" onPress={() => { setFlowViewMode(undefined); setCodeEditorVisible(true) }}>
-                            <Code />
-                        </ToggleGroup.Item>
-                        <ToggleGroup.Item value="flow" onPress={() => { setFlowViewMode('flow'); setCodeEditorVisible(false) }}>
-                            <Share2 />
-                        </ToggleGroup.Item>
-                        <ToggleGroup.Item value="flow-preview" onPress={() => { setFlowViewMode('flow-preview'); setCodeEditorVisible(false) }}>
-                            <Workflow />
-                        </ToggleGroup.Item>
-                        <ToggleGroup.Item value="preview" onPress={() => { setFlowViewMode('preview'); setCodeEditorVisible(false) }}>
-                            <SlidersHorizontal />
-                        </ToggleGroup.Item>
-                    </ToggleGroup>
+                    <XStack padding="10px" display={['flow-preview', 'preview'].includes(flowViewMode) ? 'flex' : 'none'} >
+                        <ToggleGroup borderWidth="$0" theme={resolvedTheme == 'dark' ? 'dark' : 'light'} type="single" defaultValue="preview" disableDeactivation>
+                            <ToggleGroup.Item
+                                hoverStyle={{ backgroundColor: flowViewMode == "flow-preview" ? useUITheme('interactiveHoverColorDarken') : useUITheme('interactiveHoverColor') }}
+                                focusStyle={{ backgroundColor: flowViewMode == "flow-preview" ? useUITheme('interactiveColor') : useUITheme('inputBackgroundColor') }}
+                                backgroundColor={flowViewMode == "flow-preview" ? useUITheme('interactiveColor') : useUITheme('inputBackgroundColor')}
+                                value="flow-preview"
+                                onPress={() => setFlowViewMode('flow-preview')}
+                            >
+                                <Workflow fillOpacity={0} color={flowViewMode == "flow-preview"  && resolvedTheme != 'dark' ? useUITheme('nodeBackgroundColor') : useUITheme('textColor')}/>
+                            </ToggleGroup.Item>
+                            <ToggleGroup.Item
+                                hoverStyle={{ backgroundColor: flowViewMode == "preview" ? useUITheme('interactiveHoverColorDarken') : useUITheme('interactiveHoverColor') }}
+                                focusStyle={{ backgroundColor: flowViewMode == "preview" ? useUITheme('interactiveColor') : useUITheme('inputBackgroundColor') }}
+                                backgroundColor={flowViewMode == "preview" ? useUITheme('interactiveColor') : useUITheme('inputBackgroundColor')}
+                                value="preview"
+                                onPress={() => setFlowViewMode('preview')}
+                            >
+                                <SlidersHorizontal fillOpacity={0} color={flowViewMode == "preview" && resolvedTheme != 'dark' ? useUITheme('nodeBackgroundColor') : useUITheme('textColor')} />
+                            </ToggleGroup.Item>
+                        </ToggleGroup>
+                    </XStack>
                 </div>
                 <div style={{ display: codeEditorVisible ? 'flex' : 'none', flex: 1 }}>
                     <Monaco
@@ -181,7 +203,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         sourceCode={monacoSourceCode}
                     />
                 </div>
-                <div style={{ opacity: 1, marginRight: 0, flex: 1, display: codeEditorVisible ? 'none' : 'flex', flexDirection: 'column', backgroundColor: '#252526' }}>
+                <div style={{ opacity: 1, marginRight: 0, flex: 1, display: codeEditorVisible ? 'none' : 'flex', flexDirection: 'column', backgroundColor: useUITheme('nodeBackgroundColor') }}>
                     <SidebarItem
                         icon={Pencil}
                         title="Customize"
@@ -197,11 +219,13 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             onSave={(code, _, data) => onEditorSave('flows', code, data)}
                             config={{ masks: getFlowMasks(router.pathname, router.query) }}
                             zoomOnDoubleClick={!isViewModePreview}
-                            themeMode={'dark'}
-                            bgColor={'#252526'}
-                            theme={theme}
+                            themeMode={resolvedTheme}
+                            bgColor={'transparent'}
+                            theme={Theme[resolvedTheme]}
                             nodePreview={flowViewMode}
                             metadata={metadata}
+                            contextAtom={contextAtom}
+                            defaultSelected={data => Object.keys(data ?? {}).find(n => n.startsWith('JsxElement') && data[n].name == 'Page')}
                         />
                     </SidebarItem>
                     <SidebarItem
@@ -230,37 +254,16 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         </div>
     );
 
-    const onCancelEdit = () => {
-        router.push({
-            query: {}
-        })
-    }
-
-    const actionContent = (
-        <>
-            <FloatingIcon id="components-to-drag-btn" onClick={() => setOpenPanel(true)}>
-                <Component
-                    color="white"
-                />
-            </FloatingIcon>
-            <FloatingIcon
-                id="save-nodes-btn"
-                onClick={() => publish("savenodes", { value: 'visual-ui' })}
-            >
-                <Save
-                    color="white"
-                />
-            </FloatingIcon>
-            <FloatingIcon
-                onClick={onCancelEdit}
-            >
-                <X color="white"></X>
-            </FloatingIcon>
-        </>
-    )
     const EditorPanel = (
-        <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid #424242', borderLeft: '2px solid #424242' }}>
-            <EditorLayout metadata={metadata} currentPageContent={currentPageContent} onSave={() => null} resolveComponentsDir={resolveComponentsDir}>
+        <div id="editor-layout" style={{ flex: 1, display: 'flex', minWidth: "280px", borderRight: '2px solid ' + separatorColor }}>
+            <EditorLayout
+                metadata={metadata}
+                frame={selectedFrame}
+                currentPageContent={currentPageContent}
+                onSave={() => null}
+                resolveComponentsDir={resolveComponentsDir}
+                contextAtom={contextAtom}
+            >
             </EditorLayout>
         </div>
     )
@@ -275,26 +278,110 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         return () => window.removeEventListener('resize', handleResize);
     }, [])
 
+    useEffect(() => {
+        // Prevents click events to interact inside editor-layout
+        const handleEvent = (e) => {
+            if (enableClickEventsRef.current) return
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        document.getElementById("editor-layout")?.addEventListener('click', handleEvent)
+        return () => document.getElementById("editor-layout")?.removeEventListener('click', handleEvent)
+    }, [])
+
     // for outside context usage
     const options = {
         resolver: availableCraftComponents,
-        onRender: RenderNode
+        onRender: ({ ...props }: any) => RenderNode({ ...props, onEnableEvents: (s) => { enableClickEventsRef.current = s } })
     }
     const context = newVisualUiContext(options)
     if (setContext) setContext(context) // atom shared context
 
-    return <div ref={editorRef} style={{ display: 'flex', flex: 1, width: '100%' }}>
+    return <div ref={editorRef} style={{ display: 'flex', flex: 1, width: '100%', flexDirection: 'column' }}>
         <Editor
             {...options}
             parentContext={context}
         >
+            <EditorBar
+                height={barHeight}
+                leftItems={[
+                    {
+                        id: "components-to-drag-btn",
+                        icon: Plus,
+                        buttonProps: {
+                            chromeless: false, color: "white", backgroundColor: useUITheme('interactiveColor'),
+                            hoverStyle: { backgroundColor: useUITheme('interactiveHoverColorDarken') }
+                        },
+                        onPress: () => setOpenPanel(true)
+                    },
+                    {
+                        icon: currentTheme == 'light' ? Sun : currentTheme == 'dark' ? Moon : SunMoon,
+                        onPress: themeToggle
+                    },
+                    {
+                        icon: LogOut,
+                        text: 'Exit',
+                        onPress: onCancelEdit,
+                        buttonProps: {
+                            variant: 'outlined', chromeless: false, borderWidth: '$0.5', borderColor: useUITheme('textColor'),
+                            hoverStyle: { variant: 'outlined', chromeless: false, borderWidth: '$0.5', borderColor: useUITheme('interactiveColor') }
+                        }
+                    }
+                ]}
+                rightItems={[
+                    // {
+                    //     icon: selectedFrame == 'tablet' ? Tablet : selectedFrame == 'mobile' ? Smartphone : Monitor,
+                    //     menuProps: { placement: 'bottom-end' },
+                    //     menu: [
+                    //         {
+                    //             text: 'Desktop',
+                    //             icon: selectedFrame == 'desktop' ? Check : null,
+                    //             onPress: () => setSelectedFrame('desktop')
+                    //         },
+                    //         {
+                    //             text: 'Tablet',
+                    //             icon: selectedFrame == 'tablet' ? Check : null,
+                    //             onPress: () => setSelectedFrame('tablet')
+                    //         },
+                    //         {
+                    //             text: 'Mobile',
+                    //             icon: selectedFrame == 'mobile' ? Check : null,
+                    //             onPress: () => setSelectedFrame('mobile')
+                    //         }
+                    //     ]
+                    // },
+                    {
+                        icon: Code,
+                        onPress: () => onToggleAppBar('code')
+                    },
+                    {
+                        icon: Network,
+                        onPress: () => onToggleAppBar('flow')
+                    },
+                    {
+                        id: "save-nodes-btn",
+                        icon: Save,
+                        text: 'Save',
+                        buttonProps: { 
+                            chromeless: false, color: 'white', backgroundColor: useUITheme('interactiveColor'), paddingHorizontal: "$4", 
+                            hoverStyle: { backgroundColor: useUITheme('interactiveHoverColorDarken') }
+                        },
+                        onPress: () => publish("savenodes", { value: 'visual-ui' })
+                    },
+                    {
+                        icon: PanelRight,
+                        onPress: () => onToggleAppBar('preview')
+                    }
+                ]}
+            />
             <div style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                 <MainPanel
                     openPanel={openPanel}
                     setOpenPanel={setOpenPanel}
-                    actionContent={actionContent}
                     leftPanelContent={SidebarPanel}
                     centerPanelContent={EditorPanel}
+                    borderLess
+                    height={mainPanelHeight}
                     rightPanelContent={FlowPanel}
                     rightPanelResizable={!isViewModePreview}
                     rightPanelWidth={!isViewModePreview ? 50 : 0}

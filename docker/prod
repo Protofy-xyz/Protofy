@@ -1,2 +1,3 @@
-#!/bin/bash#!/bin/bash
-docker-compose -p protofy -f ../apps/admin-api/docker.yml -f ../apps/api/docker.yml -f ../apps/next/docker.yml -f ../apps/proxy/docker.yml up -d && ./docker-logs
+#!/bin/bash
+source ./helpers/get-envs --prod # Run in PROD mode
+$DOCKER_COMPOSE_CMD -p protofy $SERVICES_COMPOSE_FILES up -d && ./docker-logs

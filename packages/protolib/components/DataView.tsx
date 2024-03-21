@@ -90,7 +90,8 @@ export const DataView = forwardRef(({
     extraMenuActions = [],
     deleteable = () => { return true },
     objectProps = {},
-    refreshOnHotReload = false
+    refreshOnHotReload = false,
+    quickRefresh = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any, ref) => {
     const _plural = (entityName ?? pluralName) ?? name + 's'
     const { query } = useRouter();
@@ -100,7 +101,7 @@ export const DataView = forwardRef(({
         fn(data)
     }
 
-    const [items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.load({}).getModelName() + "/#", model)
+    const [items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.load({}).getModelName() + "/#", model, quickRefresh)
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
     const [createOpen, setCreateOpen] = useState(false)
     const { push, mergePush, removePush, replace } = usePageParams(state)
@@ -427,7 +428,7 @@ export const DataView = forwardRef(({
                                 <XStack ai="center" marginLeft="$3">
                                     {!disableViewSelector && <ButtonGroup marginRight="$3">
                                         {
-                                            tableViews.map((v, index) => <ActiveGroupButton key={index} onSetActive={() => push('view', v.name)} activeId={index}>
+                                            tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>
                                                 {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
                                             </ActiveGroupButton>)
                                         }

@@ -4,7 +4,7 @@ import { Handle, Position } from 'reactflow';
 import chroma from "chroma-js";
 import { FlowStoreContext } from '../store/FlowsStore'
 import { DEVMODE, flowDirection } from '../toggles'
-import { useEdges } from 'reactflow';
+import { useProtoEdges } from '../store/DiagramStore';
 import useTheme from './Theme';
 import { NodeTypes } from './../nodes';
 import { write } from '../lib/memory';
@@ -47,7 +47,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     }
 
     const getNodeShadow = () => {
-        if (isNodePreviewMode || container) return 'none'
+        if (isNodePreviewMode || container) return 'none'
         else if (!isPreview && node?.selected) return "0px 0px 0px 2px " + selectedColor
         else return generateBoxShadow(isHover ? 10 : 3)
     }
@@ -107,7 +107,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
     const labelWidth = 160
     const ml = position == Position.Right ? `-${labelWidth}px` : '25px'
 
-    const edges = useEdges();
+    const edges = useProtoEdges();
     const connected = isHandleConnected(edges, id)
 
     const portSize = useTheme('portSize')

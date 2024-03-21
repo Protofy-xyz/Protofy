@@ -182,6 +182,7 @@ describe("Test admin capabilities", () => {
         it("should be able to save edited page content", async () => {
             const vp = ProtoBrowser.getViewPortSize()
             await protoBrowser.mouseClick(Math.floor(vp.width / 2), Math.floor(vp.height / 2))
+            await protoBrowser.clickElement("#render-node-options-btn")
             await protoBrowser.clickElement("#render-node-delete-btn")
             await protoBrowser.clickElement("#save-nodes-btn")
             let error
@@ -204,7 +205,8 @@ describe("Test admin capabilities", () => {
                 await protoBrowser.waitForElement(".glass", 6000, { state: "hidden" })
                 await protoBrowser.waitForElement(".visualui-sidebar")
                 await protoBrowser.dragAndDrop('#' + elementId, "#home-page")
-                await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
+                //TODO: change "#left-actions-container" id for components container id 
+                // await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
             }
         }, 70000)
     })

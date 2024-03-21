@@ -18,6 +18,7 @@ import { Container, ContainerLarge, ContainerXL } from '../components/Container'
 import { CopyBubble } from '../components/CopyBubble'
 import { DataCard } from '../components/DataCard'
 import { DataTable } from '../components/DataTable'
+import { DataView } from '../components/DataView'
 import { DiscordIcon } from '../components/icons/DiscordIcon'
 import { GithubIcon } from '../components/icons/GithubIcon'
 import EditableText from '../components/EditableText'
@@ -81,17 +82,30 @@ import VStack from '../components/VStack'
 import HStack from '../components/HStack'
 import VCenterStack from '../components/VCenterStack'
 import Spacer from '../components/Spacer'
+import { AdminPage } from '../components/AdminPage'
+import { alignSelf, fontStyle, textAlign, fontWeight, flexDirection, justifyContent } from './shortcuts'
 
 const cw = getComponentWrapper('protolib')
 
 const nonDraggable = { custom: { hidden: true } }
 
+const uiDataText = {
+  custom: {
+    shortcuts: [
+      alignSelf,
+      textAlign,
+      fontStyle,
+      fontWeight
+    ]
+  }
+}
+
 export const textPalette = {
-  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, {}, {}, true),
-  ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, {}, {}, true),
-  ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, {}, {}, true),
-  ...cw(Text, 'Type', 'Text', { children: "hello" }, {}, {}, true),
-  ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { canMoveIn: () => false }),
+  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, uiDataText, {}, true),
+  ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, uiDataText, {}, true),
+  ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, uiDataText, {}, true),
+  ...cw(Text, 'Type', 'Text', { children: "hello" }, uiDataText, {}, true),
+  ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { rules: { canMoveIn: () => false } }),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
 }
 
@@ -103,9 +117,34 @@ export const layoutPalette = {
 }
 
 export const basicPalette = {
-  ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {}, {}, true),
-  ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "Press Me" }, {}, {}, true),
-  ...cw(Container, 'SquareAsterisk', 'Container', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {
+    custom: {
+      shortcuts: [
+        fontStyle
+      ]
+    }
+  }, {}, true),
+  ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "Press Me" }, {
+    custom: {
+      shortcuts: [
+        alignSelf
+      ],
+      options: [
+        {
+          action: ({ dom }) => { dom.focus() },
+          name: "Focus element"
+        }
+      ]
+    }
+  }, {}, true),
+  ...cw(Container, 'SquareAsterisk', 'Container', {}, {
+    custom: {
+      shortcuts: [
+        flexDirection,
+        justifyContent
+      ]
+    }
+  }, { children: <BasicPlaceHolder /> }),
   ...cw(Image, 'Image', 'Image', { url: "https://picsum.photos/200" }, {}, {}, true),
 }
 
@@ -139,10 +178,29 @@ export const miscellanyPalette = {
   ...cw(ColorToggleButton, 'ToggleRight', 'ColorToggleButton'),
   ...cw(CopyBubble, 'Copy', 'CopyBubble', { text: "copy" }),
   ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { canMoveIn: () => false }),
+  ...cw(DataCard, 'CreditCard', 'DataCard', { name: "hello title", maxWidth: "300px", json: { "name": "hello", "surname": "world" } }, { rules: { canMoveIn: () => false } }),
   ...cw(DataTable, 'Table2', 'DataTable', { title: "hello", rows: [['hello', 'world'], ['world', 'hello']] }),
+  ...cw(DataView, 'EyeOff', 'DataView', {}, {
+    custom: {
+      hidden: true,
+      options: [
+        {
+          action: ({ dom }) => { dom.querySelector('#tableView-list').click() },
+          name: "Change to List View"
+        },
+        {
+          action: ({ dom }) => { dom.querySelector('#tableView-grid')?.click() },
+          name: "Change to Grid View"
+        },
+        {
+          action: ({ dom }) => { dom.querySelector('#tableView-raw')?.click() },
+          name: "Change to Raw View"
+        }
+      ]
+    }
+  }),
   ...cw(DiscordIcon, 'LogoIcon', 'DiscordIcon', { width: 23, plain: true }),
-  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { canMoveIn: () => false }),
+  ...cw(EditableText, 'PencilLine', 'EditableText', { description: "hello", text: "world" }, { rules: { canMoveIn: () => false } }),
   ...cw(ElevatedArea, 'GalleryThumbnails', 'ElevatedArea'),
   ...cw(ErrorMessage, 'AlertTriangle', 'ErrorMessage'),
   ...cw(FeatureItem, 'CheckCircle2', 'FeatureItem', { label: "hello", children: "world" }),
@@ -172,6 +230,7 @@ export const miscellanyPalette = {
     href: "http://google.com"
   }),
   ...cw(Page, 'EyeOff', 'Page', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
+  ...cw(AdminPage, 'EyeOff', 'AdminPage', {}, nonDraggable),
   ...cw(PageGlow, 'EyeOff', 'PageGlow'),
   ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem', { text: "hello world" }),
   ...cw(Pre, 'EyeOff', 'Pre', {}, nonDraggable),
@@ -202,11 +261,9 @@ export const miscellanyPalette = {
   ...cw(AlertDialog, 'Group', 'AlertDialog', {}, nonDraggable)
 }
 
-export const palettes = {
+export default {
   basic: basicPalette,
   text: textPalette,
   layout: layoutPalette,
   miscellany: miscellanyPalette,
 }
-
-export default miscellanyPalette

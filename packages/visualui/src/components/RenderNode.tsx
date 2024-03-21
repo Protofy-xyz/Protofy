@@ -1,10 +1,40 @@
+import { forwardRef, createElement, useState } from 'react'
 import { useNode, useEditor } from "@protocraft/core";
 import { ROOT_NODE } from "@craftjs/utils";
 import React, { useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
-import { ArrowDown, Trash2, Redo, ArrowUp, Move } from 'lucide-react';
+import { ArrowDown, Trash2, Redo, ArrowUp, Move, MoreVertical, Copy } from 'lucide-react';
+import { XStack } from '@my/ui'
+import { useUITheme } from "./Theme";
+import Icon from "./Icon";
+import { v4 as uuidv4 } from 'uuid';
+import { MenuOption, UIMenu } from './UIMenu';
 
-export const RenderNode = ({ render }) => {
+const IconButton = forwardRef(({ icon, iconSize = 20, selected = false, dynamicIcon = undefined, ...props }: any, ref) => {
+    const [hover, setHover] = useState(false)
+
+    return <div
+        ref={ref}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        {...props}
+        style={{
+            cursor: "pointer", padding: '6px', borderRadius: '2px',
+            backgroundColor: selected ? useUITheme('textColor') : '',
+            ...props.style
+        }}
+    >
+        {dynamicIcon
+            ? <Icon
+                name={dynamicIcon}
+                color={selected ? useUITheme('nodeBackgroundColor') : hover ? useUITheme('interactiveColor') : useUITheme('textColor')}
+                size={iconSize}
+            />
+            : createElement(icon, { size: iconSize, color: hover ? useUITheme('interactiveColor') : useUITheme('textColor') })}
+    </div>
+})
+
+export const RenderNode = ({ render, onEnableEvents }) => {
     const { id } = useNode();
     const { actions, query, isActive } = useEditor((_, query) => ({
         isActive: query.getEvent('selected').contains(id),
@@ -21,14 +51,20 @@ export const RenderNode = ({ render }) => {
         childs,
         nodeAndSiblings,
         nodeId,
-        unknown
+        unknown,
+        setProp,
+        custom,
+        props,
+        node
     } = useNode((node) => {
         return (
             {
+                custom: node.data.custom,
                 unknown: node.data.custom.unknown ?? false,
                 nodeId: node.id,
                 isHover: node.events.hovered,
                 dom: node.dom,
+                node,
                 name: node.data.custom.displayName || node.data.displayName,
                 moveable: query.node(node.id).isDraggable(),
                 deletable: query.node(node.id).isDeletable() && query.node(node.id).isDraggable(),
@@ -40,9 +76,12 @@ export const RenderNode = ({ render }) => {
         )
     });
 
+    const enableDuplicate = childs.length == 0
+
     const componentColor = unknown ? "#EF9364" : "#2680EB"
     const iconSize = 20
     const border = '1px solid gray'
+    const barHeight = 50
 
     const currentRef = useRef<HTMLDivElement>();
     useEffect(() => {
@@ -60,9 +99,15 @@ export const RenderNode = ({ render }) => {
         const { top, left, bottom } = dom
             ? dom.getBoundingClientRect()
             : { top: 0, left: 0, bottom: 0 };
+
+        let topPos
+
+        if (top > 100) topPos = top - 60
+        else topPos = bottom - 50
+
         return {
-            top: `${top > 100 ? (top - 60) : (bottom + 10)}px`,
-            left: `${left}px`,
+            top: topPos + "px",
+            left: left + "px",
         };
     }, []);
 
@@ -87,16 +132,7 @@ export const RenderNode = ({ render }) => {
         };
     }, [scroll]);
 
-    useEffect(() => {
-        // Prevents click events to interact inside editor-layout
-        const handleEvent = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        document.getElementById("editor-layout")?.addEventListener('click', handleEvent)
-        return () => document.getElementById("editor-layout")?.removeEventListener('click', handleEvent)
-    }, [])
-
+    const Separator = (props) => <div style={{ height: barHeight, borderLeft: border }}></div>
 
     return (
         <>
@@ -112,100 +148,159 @@ export const RenderNode = ({ render }) => {
                                 top: getPos(dom).top,
                                 zIndex: 9999999999999999999999999999999,
                                 position: "fixed",
-                                backgroundColor: "#252526",
+                                backgroundColor: useUITheme('nodeBackgroundColor'),
                                 border: border,
-                                padding: "16px",
+                                padding: "6px",
                                 color: "white",
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                height: "50px",
+                                height: barHeight,
                                 pointerEvents: 'auto',
-                                gap: 20
+                                gap: "6px"
                             }}
                         >
-                            <div style={{ fontSize: 14, color: 'white' }}>{name}{unknown ? ' (Unknown)' : ''}</div>
-                            <div style={{ height: '50px', borderLeft: border }}></div>
-                            <div style={{ display: 'flex', flexDirection: "row", flex: 1, gap: "20px" }}>
+                            <div style={{ fontSize: 14, color: useUITheme('textColor'), padding: '10px 20px' }}>{name}{unknown ? ' (Unknown)' : ''}</div>
+                            <Separator />
+                            <div style={{ display: 'flex', flexDirection: "row", flex: 1, gap: "6px", alignItems: 'center' }}>
                                 {moveable ? (
-                                    <div
+                                    <IconButton
                                         ref={drag}
                                         style={{ cursor: "grab" }}
                                         title="Move"
-                                    >
-                                        <Move
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </div>
+                                        icon={Move}
+                                    />
                                 ) : null}
                                 {id !== ROOT_NODE && parent != "ROOT" ?
-                                    <div
-                                        style={{ cursor: "pointer" }}
+                                    <IconButton
                                         title="Select parent"
-                                    >
-                                        <ArrowUp
-                                            onMouseDown={(e) => {
-                                                actions.selectNode(parent);
-                                                e.stopPropagation()
-                                            }}
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </div>
+                                        onMouseDown={(e) => {
+                                            actions.selectNode(parent);
+                                            e.stopPropagation()
+                                        }}
+                                        icon={ArrowUp}
+                                    />
                                     : null}
                                 {childs.length ?
-                                    <div
-                                        style={{ cursor: "pointer" }}
+                                    <IconButton
                                         title="Select first child"
-                                    >
-                                        <ArrowDown
-                                            onMouseDown={(e) => {
-                                                actions.selectNode(childs[0]);
-                                                e.stopPropagation()
-                                            }}
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </div>
+                                        icon={ArrowDown}
+                                        onMouseDown={(e) => {
+                                            actions.selectNode(childs[0]);
+                                            e.stopPropagation()
+                                        }}
+                                    />
                                     : null}
                                 {nodeAndSiblings?.length > 1 ?
-                                    <div
-                                        style={{ cursor: "pointer" }}
+                                    <IconButton
                                         title="Select next sibling"
-                                    >
-                                        <Redo
-                                            onMouseDown={(e) => {
-                                                const currentIndex = nodeAndSiblings.indexOf(nodeId)
-                                                const nextIndex = (currentIndex + 1) % nodeAndSiblings.length
-                                                const nextNode = nodeAndSiblings[nextIndex]
-                                                actions.selectNode(nextNode);
-                                                e.stopPropagation()
-                                            }}
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </div>
-                                    : null}
-                                {deletable ? (
-                                    <div
-                                        style={{ cursor: "pointer" }}
-                                        title="Delete"
-                                        id='render-node-delete-btn'
-                                        onClick={(e: React.MouseEvent) => {
-                                            e.stopPropagation();
-                                            actions.delete(id);
+                                        icon={Redo}
+                                        onMouseDown={(e) => {
+                                            const currentIndex = nodeAndSiblings.indexOf(nodeId)
+                                            const nextIndex = (currentIndex + 1) % nodeAndSiblings.length
+                                            const nextNode = nodeAndSiblings[nextIndex]
+                                            actions.selectNode(nextNode);
+                                            e.stopPropagation()
                                         }}
-                                    >
-                                        <Trash2
-                                            color="white"
-                                            size={iconSize}
-                                        />
-                                    </div>
-                                ) : null}
+                                    />
+                                    : null}
 
+                                <Separator />
+
+                                {
+                                    custom.shortcuts ?
+                                        <XStack ai="center" gap="6px">
+                                            {custom.shortcuts.map((shortcut, index) => {
+                                                const isSelected = shortcut?.selected ? shortcut.selected(props) : false
+                                                return (
+                                                    <UIMenu
+                                                        key={index}
+                                                        onOpenChange={onEnableEvents}
+                                                        trigger={
+                                                            <IconButton
+                                                                onClick={shortcut.action ? () => shortcut.action({ setProp, dom }) : null}
+                                                                selected={isSelected}
+                                                                dynamicIcon={shortcut.icon(props)}
+                                                            />
+                                                        }
+                                                        content={
+                                                            shortcut.menu
+                                                                ? shortcut.menu?.map((sh) => (<MenuOption
+                                                                    onClick={(e: React.MouseEvent) => {
+                                                                        e.stopPropagation();
+                                                                        sh.action({ setProp, dom })
+                                                                    }}
+                                                                    name={sh.name}
+                                                                />
+                                                                ))
+                                                                : null
+                                                        }
+                                                    >
+                                                    </UIMenu>
+                                                )
+                                            })}
+                                            <Separator />
+                                        </XStack>
+                                        : null
+                                }
+                                {
+                                    custom.options || enableDuplicate || deletable ?
+                                        <UIMenu
+                                            onOpenChange={onEnableEvents}
+                                            trigger={
+                                                <IconButton
+                                                    title="Options"
+                                                    id='render-node-options-btn'
+                                                    icon={MoreVertical}
+                                                />
+                                            }
+                                            content={
+                                                <>
+                                                    {enableDuplicate ? <MenuOption
+                                                        onClick={(e: React.MouseEvent) => {
+                                                            e.stopPropagation();
+                                                            //TODO: Adds suport to duplicate nodes with childs
+                                                            actions.add([
+                                                                //@ts-ignore
+                                                                {
+                                                                    id: uuidv4(),
+                                                                    rules: { ...node.rules },
+                                                                    data: { ...node.data },
+                                                                    events: node.events
+                                                                }
+                                                            ], parent, nodeAndSiblings.indexOf(nodeId) + 1)
+                                                        }}
+                                                        icon={Copy}
+                                                        name={"Duplicate"}
+                                                    />
+
+                                                        : null}
+                                                    {
+                                                        custom.options?.map((st) => (<MenuOption
+                                                            onClick={(e: React.MouseEvent) => {
+                                                                e.stopPropagation();
+                                                                st.action({ setProp, dom })
+                                                            }}
+                                                            name={st.name}
+                                                        />))
+                                                    }
+                                                    {deletable ? <MenuOption
+                                                        id='render-node-delete-btn'
+                                                        onClick={(e: React.MouseEvent) => {
+                                                            e.stopPropagation();
+                                                            actions.delete(id);
+                                                        }}
+                                                        icon={Trash2}
+                                                        name={"Delete"}
+                                                    />
+                                                        : null}
+                                                </>
+                                            }
+                                        />
+                                        : null
+                                }
                             </div>
-                        </div>,
+                        </div >,
                         document.querySelector('.page-container')
                     )
                     : null
