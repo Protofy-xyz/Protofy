@@ -55,7 +55,7 @@ class MHZ19 {
           connectionType: 'mqtt',
         },
         {
-          name: 'CO_2',
+          name: 'CO_2-temp',
           description: 'Get CO_2 status',
           units: 'ºC',
           endpoint: "/"+this.type+"/"+this.name+"-temperature/state",

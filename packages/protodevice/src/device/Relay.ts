@@ -62,7 +62,8 @@ class Relay {
       },
       actions: [
         {
-          name: 'Turn on',
+          name: 'on',
+          label: 'Turn on',
           description: 'turns on the gpio',
           endpoint: "/"+this.type+"/"+this.name+"/command",
           connectionType: 'mqtt',
@@ -72,7 +73,8 @@ class Relay {
           },
         },
         {
-          name: 'Turn off',
+          name: 'off',
+          label: 'Turn off',
           description: 'turns off the gpio',
           endpoint: "/"+this.type+"/"+this.name+"/command",
           connectionType: 'mqtt',
@@ -82,7 +84,8 @@ class Relay {
           },
         },
         {
-          name: 'Toggle',
+          name: 'toggle',
+          label: 'Toggle',
           description: 'Toggles the gpio',
           endpoint: "/"+this.type+"/"+this.name+"/command",
           connectionType: 'mqtt',

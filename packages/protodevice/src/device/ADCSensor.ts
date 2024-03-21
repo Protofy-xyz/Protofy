@@ -49,7 +49,8 @@ class ADCSensor {
             type: this.type,
             monitors:[
                 {
-                    name: "Get status",
+                    name: "status",
+                    label: "Get status",
                     description: "Get sensor status",
                     endpoint: "/"+this.type+"/"+this.name+"/state",
                     connectionType: "mqtt",

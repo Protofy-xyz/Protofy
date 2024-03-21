@@ -267,7 +267,8 @@ class NeopixelsBus {
             type: this.type,
             actions: [
                 {
-                    name: 'Turn on',
+                    name: 'on',
+                    label: 'Turn on',
                     description: 'Turns on the neopixels',
                     endpoint: "/" + this.type + "/" + this.name + "/command",
                     connectionType: 'mqtt',
@@ -286,7 +287,8 @@ class NeopixelsBus {
                     },
                 },
                 {
-                    name: 'Turn off',
+                    name: 'off',
+                    label: 'Turn off',
                     description: 'Turns off the neopixels',
                     endpoint: "/" + this.type + "/" + this.name + "/command",
                     connectionType: 'mqtt',
@@ -305,7 +307,8 @@ class NeopixelsBus {
                     },
                 },
                 {
-                    name: 'Toggle',
+                    name: 'toggle',
+                    label: 'Toggle',
                     description: 'Turn on an effect on the gpio',
                     endpoint: "/" + this.type + "/" + this.name + "/command",
                     connectionType: 'mqtt',
