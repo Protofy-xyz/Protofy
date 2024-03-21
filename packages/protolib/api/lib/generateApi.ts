@@ -23,11 +23,12 @@ type AutoAPIOptions = {
     paginatedRead?: boolean,
     requiresAdmin?: string[],
     extraData?: any,
-    logLevel?:string
+    logLevel?:string,
+    itemsPerPage?:number
 }
 //CreateAPI contract has evolved into a complex thing, this is a better/alternative wrapper
 //that reduces complexity by using a options object 
-export const AutoAPI = ({ modelName, modelType, initialDataDir, prefix = "/api/v1/", dbName, transformers = {}, connectDB, getDB, operations, single, disableEvents, paginatedRead, requiresAdmin, extraData = {}, logLevel = 'info' }: AutoAPIOptions) => {
+export const AutoAPI = ({ modelName, modelType, initialDataDir, prefix = "/api/v1/", dbName, transformers = {}, connectDB, getDB, operations, single, disableEvents, paginatedRead, requiresAdmin, extraData = {}, logLevel = 'info', itemsPerPage=25 }: AutoAPIOptions) => {
     return CreateApi(
         modelName,
         modelType,
@@ -39,7 +40,7 @@ export const AutoAPI = ({ modelName, modelType, initialDataDir, prefix = "/api/v
         getDB,
         operations,
         single,
-        { disableEvents, paginatedRead, requiresAdmin, extraData, logLevel }
+        { disableEvents, paginatedRead, requiresAdmin, extraData, logLevel, itemsPerPage}
     )
 }
 /*
@@ -86,7 +87,9 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
     const dbPath = '../../data/databases/' + (dbName ? dbName : entityName)
     connectDB(dbPath, initialData) //preconnect database
     const _list = (req, allResults) => {
-        const itemsPerPage = Math.max(Number(req.query.itemsPerPage) || 25, 1);
+        console.log('items per page::::::::::::::::::::::::::::::::::::::', options);
+        
+        const itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (options.itemsPerPage??25), 1);
         const page = Number(req.query.page) || 0;
 
         const orderBy: string = req.query.orderBy as string;

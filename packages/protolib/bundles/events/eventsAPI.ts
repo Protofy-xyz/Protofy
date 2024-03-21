@@ -11,7 +11,8 @@ const EventAPI = AutoAPI({
     dbName: 'events',
     disableEvents: true,
     requiresAdmin: ['*'],
-    logLevel: "debug"
+    logLevel: "debug",
+    itemsPerPage: 100
 })
 
 export const EventsAPI = async (app, context) => {
