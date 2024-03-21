@@ -1,11 +1,13 @@
-# 💼 Admin Panel
-The admin panel (or workspace) is the place where you can create and manage your pages, apis, devices, etc. This panel is a Next.js app that runs on port `3000` by default, but with our Redbird proxy runs in `8080` port.
+# 🛠️ Admin Panel
+The **admin panel** is the place that allow you to customize your aplication and services there you can create and manage your system entities, like pages, apis, devices, users, objects, etc...
 
 import {Callout} from 'nextra/components'
 
 <Callout type="warning">
-You need to have (and be logged) with a **admin** type user to be able to access the admin panel. Learn how to do it [here](/adminpanel/access)
+The admin panel requires to have (and be logged) as a `admin` user type.
+Learn how to do it [here](/adminpanel/access)
 </Callout>
+
 
 ![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/events/events-1.png)
 
@@ -61,19 +63,4 @@ The objects section is the way to create domain related objects. For example, if
 The APIs section allows to create Rest or Rest-like APIs for almost everything you want. You can select a default API type like `Automatic CRUD` and `IOT Router` or create your `own` type by using a custom template. 
 
 ### 📄 Pages
-
 Pages can be website pages, mobile pages or desktop pages. It allows you to list, create, edit and delete the user facing pages in your system.
-
-![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/pages/create-page.gif)
-
-When creating a page, the following options are required:
-
-  - **Name**: The name of the page. This will be used to create the file in the project.
-  - **Route**: The route of the page on the web or app, like `/help` or `/downloads`.
-  - **Template**: The template that will be used to create the page.
-  - **Object**: Comming soon.
-  - **Require user**: If the page requires admin user to be accessed. 
-  - **Permissions**: Comming soon. 
-
-The pages are created in the path `packages/app/bundles/custom/pages/pageName.tsx` of the project. This means that you can manually create a page without using the admin panel. 
-

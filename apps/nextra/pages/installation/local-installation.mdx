@@ -1,0 +1,41 @@
+# Local Installation 🛠️
+
+To run Protofy in your local environment you first need to know that Protofy runs using **NodeJS**, you should have already installed it. If not, we provide you some links to install NodeJS:
+
+
+import { Tabs } from 'nextra/components'
+ 
+    <Tabs items={['Ubuntu', 'MacOS', 'Windows', 'Other']}>
+    <Tabs.Tab>
+    ```bash
+    cd ~
+    curl -sL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh #change setup_20.x for the desired version
+    sudo bash /tmp/nodesource_setup.sh
+    sudo apt install nodejs
+    node -v #check version
+    ```
+    </Tabs.Tab>
+    <Tabs.Tab>You can download latest NodeJS version for MacOS [here](https://nodejs.org/en/download).</Tabs.Tab>
+    <Tabs.Tab>You can download latest NodeJS version for Windows [here](https://nodejs.org/en/download).</Tabs.Tab>
+    <Tabs.Tab>Check available NodeJS installers [here](https://nodejs.org/en/download).</Tabs.Tab>
+    </Tabs>
+
+ 
+
+Also you must have installed **yarn** globally, you may need to do (first time only):
+
+```bash
+npm i -g yarn
+```
+
+Start Protofy in development mode (hot reload)
+
+```bash
+yarn && yarn start-dev
+```
+
+Start Protofy in production mode
+
+```bash
+yarn && yarn start-prod
+```

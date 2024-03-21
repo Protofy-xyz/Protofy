@@ -1,12 +1,23 @@
 # How to access admin panel?
 
-import {Steps} from 'nextra/components'
+import {Steps, Tabs} from 'nextra/components'
 
 <Steps>
     ### Create user of type **admin** (if already haven't)
+    <Tabs items={['Local (NodeJS)', 'Docker']}>
+    <Tabs.Tab>
     ```bash filename="At root project directory"
     yarn add-user randomuser@randomemail.random randompassword admin 
     ```
+    </Tabs.Tab>
+    <Tabs.Tab>
+     ```bash filename="At root project directory"
+    cd docker
+    ./add-user
+    ```
+    </Tabs.Tab>
+    </Tabs>
+   
     ### Go to login
     ![login-step-1](/documentation/adminpanel/login_step.png)
 
