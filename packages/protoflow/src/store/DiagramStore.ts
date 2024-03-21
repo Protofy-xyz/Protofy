@@ -79,9 +79,8 @@ export const useProtoflow = () => {
     }
 };
 
-export const useProtoNodesState = (initialItems: Node<any, string>[]): [Node<any, string>[], Dispatch<SetStateAction<Node<any, string>[]>>, OnChange<NodeChange>] => {
-    const extraData = getExtraData()
-    
+export const useProtoNodesState = (initialItems: Node<any, string>[], extraData: DiagramState | {} = {}): [Node<any, string>[], Dispatch<SetStateAction<Node<any, string>[]>>, OnChange<NodeChange>] => {
+
     const [nodes, reactFlowSetNodes, onNodesChange] = useNodesState(wrapDiagramItem(initialItems, extraData))
 
     const setNodes: Dispatch<SetStateAction<Node<any, string>[]>> = (payload: any) => reactFlowSetNodes(wrapDiagramItem(payload, extraData))
@@ -89,8 +88,7 @@ export const useProtoNodesState = (initialItems: Node<any, string>[]): [Node<any
     return [nodes, setNodes, onNodesChange]
 }
 
-export const useProtoEdgesState = (initialItems: Edge<any>[]): [Edge<any>[], Dispatch<SetStateAction<Edge<any>[]>>, OnChange<EdgeChange>] => {
-    const extraData = getExtraData()
+export const useProtoEdgesState = (initialItems: Edge<any>[], extraData: DiagramState | {} = {}): [Edge<any>[], Dispatch<SetStateAction<Edge<any>[]>>, OnChange<EdgeChange>] => {
 
     const [edges, reactFlowSetEdges, onEdgesChange] = useEdgesState(wrapDiagramItem(initialItems, extraData))
 

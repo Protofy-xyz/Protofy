@@ -132,8 +132,8 @@ const FlowsBase = ({
     const edgeTypes = useMemo(() => {
         return { custom: (props) => CustomEdge(props, bridgeNode) }
     }, []);
-    const [nodes, setNodes, onNodesChange] = useProtoNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useProtoEdgesState(initialEdges);
+    const [nodes, setNodes, onNodesChange] = useProtoNodesState(initialNodes, { nodePreview: nodePreview, height: diagramRef.current?.offsetHeight });
+    const [edges, setEdges, onEdgesChange] = useProtoEdgesState(initialEdges, { nodePreview: nodePreview, height: diagramRef.current?.offsetHeight });
     const [hasChanges, setHasChanges] = useState(false);
     const [prevNodeData, setPrevNodeData] = useState(deleteAdditionalKeys(nodeData));
 
