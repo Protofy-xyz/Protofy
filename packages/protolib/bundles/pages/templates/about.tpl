@@ -5,7 +5,7 @@ if you call paginated apis, you will need to wait for result.isLoaded and look i
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
 
-import { Protofy, Text, VStack, Image, HCenterStack, Page, UIWrapLib, UIWrap, SSR, useEdit, withSession, Center, GithubIcon, DiscordIcon, TwitterIcon, API } from 'protolib'
+import { Protofy, Text, VStack, Image, HCenterStack, Page, UIWrapLib, UIWrap, SSR, useEditor, withSession, Center, GithubIcon, DiscordIcon, TwitterIcon, API } from 'protolib'
 import React from 'react'
 import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
@@ -66,10 +66,15 @@ const cw = UIWrapLib('@my/ui')
 
 export default {
   route: Protofy("route", "{{route}}"),
-  component: (props) => useEdit(
-    () => PageComponent(props), {
-    ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-    ...cw("Theme", Theme)
-  }, "/packages/app/bundles/custom/pages/{{name}}.tsx"),
+  component: (props) => useEditor(
+    () => PageComponent(props),
+    {
+        path: "/packages/app/bundles/custom/pages/{{name}}.tsx",
+        components: {
+          ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
+          ...cw("Theme", Theme)
+        }
+    }, 
+  ),
   getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined))
 }
