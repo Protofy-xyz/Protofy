@@ -1,19 +1,28 @@
-# 💼 Workspace
+# 🛠️ Admin Panel
+The **admin panel** is the place that allow you to customize your aplication and services there you can create and manage your system entities, like pages, apis, devices, users, objects, etc...
+
+import {Callout} from 'nextra/components'
+
+<Callout type="warning">
+The admin panel requires to have (and be logged) as a `admin` user type.
+Learn how to do it [here](/adminpanel/access)
+</Callout>
+
+
 ![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/events/events-1.png)
-The workspace (or admin panel) is the place where you can create and manage your pages, apis, devices, etc. This panel is a Next.js app that runs on port `3000` by default, but with our Redbird proxy runs in `8080` port.
 
-> Remeber that you need to have a user with `admin` type to be able to access the workspace.
-
-The workspace has two main sections: **Sidebar** and **Section Preview**.
+The **Admin Panel** has two main sections: **Sidebar** and **Section Preview**.
 
 ![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/workspace/sections.png)
 
 ## 📚 Sidebar
-Here you will have all the available sections to manage your project. You can add new pages, apis, devices, etc. If you feel with the sufficient knowledge you can also edit the code of the project to add new features to this sidebar. 
+Here you will have all the available sections to manage your project. You can add new pages, apis, devices, etc. 
+If you are confident in your knowledge of the component, you can also edit the code of the project to add new features to this sidebar. 
 
 On this sidebar you will find the following sections:
 
-- System
+<details>
+  <summary>System</summary>
   - Users: Manage users and user types.
   - Groups: Manage groups.
   - Objects: Create domain related objects.
@@ -25,15 +34,18 @@ On this sidebar you will find the following sections:
   - Messages: Visualize messages arrived to the system (mqtt).
   - Resources: Create a resource for the project (Tutorial, invoice, etc).
   - Databases: Manage you project persistent state management. 
-
-- Devices
+</details>
+<details>
+  <summary>Devices</summary>
   - Devices: Manage devices (HomeDevice 1, Protofy office iot, etc).
   - Definition: Create definitions for a board (Sound sensor, temperature sensor, etc)
   - Boards: Create boards that your devices will use (ESP32 DevKit, Arduino UNO, etc)
   - Cores: Create cores that your boards will use (Arduino, ESP32, etc)
   - Sdks: Create availables sdks for your project devices (ESPHome, Platformio). 
+</details>
 
-This sections are the default ones, but you can add new ones or remove them if you want. See [extending protofy](/docs/extending-protofy.md) for more information.
+
+This sections are the default ones, but you can add new ones or remove them if you want. See [extending Admin Panel](/adminpanel/extending) for more information.
 
 ## 📱 Section Preview
 The section preview will show you the content of the section to manage it.
@@ -45,25 +57,10 @@ Users section is the place where you can manage users, see their information, ch
 Every user is part of a group. The groups are used to manage permissions in the system. For example, you can create a group called `manager` and give it permissions to manage the whole system. Let's see how to create a group. 
 
 ### 🧩 Objects
-The objects section is the way to create domain related objects. For example, if you want to create a `message` object you can do it using the workspace.
+The objects section is the way to create domain related objects. For example, if you want to create a `message` object you can do it using the admin panel.
 
 ### 🔎 APIs
 The APIs section allows to create Rest or Rest-like APIs for almost everything you want. You can select a default API type like `Automatic CRUD` and `IOT Router` or create your `own` type by using a custom template. 
 
 ### 📄 Pages
-
 Pages can be website pages, mobile pages or desktop pages. It allows you to list, create, edit and delete the user facing pages in your system.
-
-![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/pages/create-page.gif)
-
-When creating a page, the following options are required:
-
-  - **Name**: The name of the page. This will be used to create the file in the project.
-  - **Route**: The route of the page on the web or app, like /help or /downloads.
-  - **Template**: The template that will be used to create the page.
-  - **Object**: Comming soon.
-  - **Require user**: If the page requires admin user to be accessed. 
-  - **Permissions**: Comming soon. 
-
-The pages are created in the path `packages/app/bundles/custom/pages/pageName.tsx` of the project. This means that you can manually create a page without using the workspace. 
-

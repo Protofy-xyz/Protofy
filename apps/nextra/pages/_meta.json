@@ -1,4 +1,7 @@
 {
     "index": "Introduction",
-    "workspace": "Workspace"
-  }
+    "installation": "Installation",
+    "getting-started": "Getting Started",
+    "adminpanel": "Admin Panel",
+    "components": "Components"
+}

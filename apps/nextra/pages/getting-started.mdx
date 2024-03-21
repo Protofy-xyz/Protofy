@@ -1,0 +1,41 @@
+# Getting Started
+
+
+## Access the system
+
+By default if you are in `development` there is a proxy running on port `8080` that redirects to the **next.js** app on port `3000` and the **api** on port `3001` and the **admin-api** on port `3002`. You can go to `apps/proxy/index.ts` to change defaults or add more services like the expo app.
+
+Once the Next.js app is running you can go to `http://localhost:8080` to see the web app. 
+
+import { Callout } from 'nextra/components'
+
+<Callout>
+  If you have problems accessing the services, remember to check your firewall configuration.
+</Callout>
+
+## 🙋‍♂️ Adding a user
+The first time you run the starter you won't have users. You can easily create one by registering throught the interface at `http://localhost:8080/auth/register`, but this one will be a normal user. 
+
+If you want to create an admin user you can do it using CLI by running the following command:
+
+```bash
+yarn add-user user@email.com password admin
+# yarn add-user [your-email] [your-password] [user-type]
+```
+
+Or if you started with **Docker**: 
+
+```bash
+cd docker
+./add-user
+```
+
+We've just created a user with `admin` type!
+
+## 🛠️ Building and Customizing your Project
+The **admin panel** is the place that allow you to customize your aplication and services there you can create and manage your system entities, like pages, apis, devices, users, objects, etc...
+To learn more about the admin panel, click [here](/adminpanel).
+<Callout type="warning">
+The admin panel requires to have a user with `admin`.
+Once you've logged in with and admin account, you will be able to access the admin panel. 
+</Callout>
