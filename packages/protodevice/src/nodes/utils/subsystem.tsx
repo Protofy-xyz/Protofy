@@ -1,6 +1,6 @@
 import { useMqttState, useSubscription } from 'mqtt-react-hooks';
 import React, { useState } from "react";
-import { XStack, YStack, Text, Paragraph, Button, } from '@my/ui';
+import { XStack, YStack, Text, Paragraph, Button, Input } from '@my/ui';
 import { ElevatedArea, ContainerLarge, Tinted, Chip } from 'protolib';
 import { getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 
@@ -15,16 +15,42 @@ const subsystem = (subsystem, deviceName) => {
     }
 
     // Map the actions to buttons and return them as JSX
-    const actionButtons = subsystem.actions?.map(action => (
+    const actionButtons = subsystem.actions?.map(action => {
+        const [value, setValue] = useState('');
+
+        return(action.payload.value ?
+
         <Button
             key={action.name} // Make sure to provide a unique key for each Button
             onPress={() => { buttonAction(action) }}
             color="$color10"
-        //style={{ border: "1px solid #cccccc", borderRadius: "5px", marginRight: "5px", padding: "10px" }}
+            title={"Description: " + action.description}
         >
             {action.label ?? action.name}
         </Button>
-    ));
+        
+        :<XStack gap="$3">
+            <Input
+                value={value}
+                onChange={async (e) =>  setValue(e.target.value)}
+                width={80}
+                placeholder="value"
+                mr={8}
+            />
+            <Button
+                key={action.name} // Make sure to provide a unique key for each Button
+                onPress={() => { 
+                    console.log("HOLAAAA", value)
+                    client.publish(getPeripheralTopic(deviceName, action.endpoint),action.payload.type=="json"? JSON.stringify(value):value.toString())
+                }}
+                color="$color10"
+                title={"Description: " + action.description}
+            >
+                {action.label ?? action.name}
+            </Button>
+        </XStack>);
+
+    });
 
     const monitorLabels = subsystem.monitors?.map(monitor => {
         // Define the state hook outside of JSX mapping
@@ -54,9 +80,9 @@ const subsystem = (subsystem, deviceName) => {
             <Tinted>
                 <Paragraph textAlign='left' color={'$color10'}>{subsystem.name}</Paragraph>
                 <YStack mb="10px" mt="10px" alignSelf='flex-start'>
-                    <XStack gap="$2">
+                    <YStack gap="$2">
                         {actionButtons}
-                    </XStack>
+                    </YStack>
 
                     <YStack alignItems={'left'} gap="$3">
                         {monitorLabels}
