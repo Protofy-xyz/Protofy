@@ -27,7 +27,7 @@ export class SignalingModel extends ProtoModel<SignalingModel>{
         const data = this.getData()
         return {
             path: 'signaling',
-            from: 'api',
+            from: 'admin-api',
             user: 'system',
             payload: { ...data }
         }

@@ -45,7 +45,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
             })
             generateEvent({
                 path: 'auth/login/success', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-                from: 'api', // system entity where the event was generated (next, api, cmd...)
+                from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
                 user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: { clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
             }, getServiceToken())
@@ -57,7 +57,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
     }
     generateEvent({
         path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-        from: 'api', // system entity where the event was generated (next, api, cmd...)
+        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
         user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
         payload: { clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
     }, getServiceToken())
@@ -95,7 +95,7 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
 
         generateEvent({
             path: 'auth/register/user', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-            from: 'api', // system entity where the event was generated (next, api, cmd...)
+            from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
             user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
             payload: {} // event payload, event-specific data
         }, getServiceToken())

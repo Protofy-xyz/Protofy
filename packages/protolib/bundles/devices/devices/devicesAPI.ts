@@ -38,7 +38,7 @@ export const DevicesAPI = (app, context) => {
             await generateEvent(
                 {
                     path: endpoint, 
-                    from: device, // == "devices"
+                    from: "device",
                     user: deviceName,
                     payload: {
                         message: parsedMessage,

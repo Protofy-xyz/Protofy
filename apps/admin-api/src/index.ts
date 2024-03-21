@@ -124,7 +124,7 @@ if(process.env.NODE_ENV != 'production') {
     console.log(`File ${path} has been changed.`);
     await generateEvent({
       path: 'services/adminapi/stop', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-      from: 'adminapi', // system entity where the event was generated (next, api, cmd...)
+      from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
       user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
       payload: {}, // event payload, event-specific data
     }, getServiceToken())
