@@ -39,7 +39,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     const innerBorderRadius = (mode == 'column' ? innerRadius + innerRadius + ' 0px 0px' : innerRadius + '0px 0px ' + innerRadius)
 
     if (node && node.data && node.data.flowsHeight && isNodePreviewMode) {
-        const maxHeight = node.data.flowsHeight - 80
+        const maxHeight = node.data.flowsHeight - 20
         nodeStyle['height'] = maxHeight + 'px'
         nodeStyle['maxHeight'] = maxHeight + 'px'
         nodeStyle['overflow'] = 'scroll'

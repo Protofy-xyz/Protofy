@@ -133,7 +133,7 @@ const FlowsBase = ({
         return { custom: (props) => CustomEdge(props, bridgeNode) }
     }, []);
     
-    const extraStateData = { nodePreview: nodePreview, height: diagramRef.current?.offsetHeight }
+    const extraStateData = { nodePreview: nodePreview, flowsHeight: diagramRef.current?.offsetHeight }
 
     const [nodes, setNodes, onNodesChange] = useProtoNodesState(initialNodes, extraStateData);
     const [edges, setEdges, onEdgesChange] = useProtoEdgesState(initialEdges, extraStateData);

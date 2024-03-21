@@ -348,7 +348,7 @@ const Diagram = React.forwardRef(({
 const DiagramComponent = (props) => {
     const diagramRef = useRef(null);
 
-    return <DiagramContext.Provider value={{ nodePreview: props.nodePreview, height: diagramRef.current?.offsetHeight }}>
+    return <DiagramContext.Provider value={{ nodePreview: props.nodePreview, flowsHeight: diagramRef.current?.offsetHeight }}>
         <ReactFlowProvider>
             <Diagram ref={diagramRef} {...props} />
         </ReactFlowProvider>
