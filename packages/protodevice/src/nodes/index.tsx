@@ -13,6 +13,8 @@ const PCA9685 = dynamic(() => import('./PCA9685'))
 const Ethernet = dynamic(() => import('./Ethernet'))
 const Dfplayer = dynamic(() => import('./Dfplayer'))
 const ModbusLoadCell = dynamic(() => import('./ModbusLoadCell'))
+const TempHumidity = dynamic(() => import('./TempHumidity'))
+const MicrofirePhEcTemp = dynamic(() => import('./MicrofirePhEcTemp'))
 const SEN55 =  dynamic(() => import('./SEN55'))
 const MHZ19 =  dynamic(() => import('./MHZ19'))
 const UARTBus =  dynamic(() => import('./UARTBus'))
@@ -139,6 +141,20 @@ const deviceMasks = [
     getComponent: (node, nodeData, children) => <Ethernet node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'ethernet', param1: '"LAN8720"', param2: '23', param3: '18', param4: '"GPIO17_OUT"', param5 : '0', param6: '12'} }
   },
+  {
+    id: 'TempHumidity',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('tempHumidity'),
+    getComponent: (node, nodeData, children) => <TempHumidity node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'tempHumidity', param1: '"temperaturehumidity"', param2: '"DHT22"', param3: '"60s"' } }
+  },
+  {
+    id: 'MicrofirePhEcTemp',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('microfirePhEcTemp'),
+    getComponent: (node, nodeData, children) => <MicrofirePhEcTemp node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'microfirePhEcTemp', param1: '"phectemp"', param2: 22, param3: '"60s"' } }
+  },
   // {
   //   id: 'PulseCounter',
   //   type: 'CallExpression',
@@ -230,13 +246,6 @@ const deviceMasks = [
   //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mpr121'),
   //   getComponent: Mpr121,
   //   getInitialData: () => { return { to: 'mpr121', param1: '""', param2: '"22"', param3: false, param4: false, param5: false, param6: false, param7: false, param8: false, param9: false, param10: false, param11: false, param12: false, param13: false, param14: false } }
-  // },
-  // {
-  //   id: 'TempHumidity',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('tempHumidity'),
-  //   getComponent: TempHumidity,
-  //   getInitialData: () => { return { to: 'tempHumidity', param1: '""', param2: '"DHT11"', param3: '"60s"' } }
   // },
   // {
   //   id: 'ModbusLoadCell',
