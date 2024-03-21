@@ -1,5 +1,5 @@
 import { Node, Field, NodeParams } from 'protoflow';
-import { API } from 'protolib';
+import { API, Text } from 'protolib';
 import { useState, useEffect } from 'react';
 
 const getDeviceSubsystemsNames = (devData) => {
@@ -35,20 +35,31 @@ const getDeviceNames = (devData) => devData?.map((device) => '"' + device.name +
 
 const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
     const [devicesData, setDevicesData] = useState<any[]>([]);
-
+    const [payloadVisibility, setPayloadVisibility] = useState(false);
     let deviceName = nodeData['param1'];
     let deviceComponent = nodeData['param2'];
     let deviceAction = nodeData['param3'];
 
+    const updatePayloadVisibility = async (devicesData) => {
+        const subsystem = devicesData.filter( device => device.name === deviceName.replaceAll('"', ''))[0]?.subsystem
+        const actions = subsystem?.filter( subsystem => subsystem.name === deviceComponent.replaceAll('"', ''))[0]?.actions
+        const payloadValue = actions?.filter( action => action.name === deviceAction.replaceAll('"', ''))[0]?.payload?.value
+        setPayloadVisibility(payloadValue ? true : false)
+    }
     const getDevices = async () => {
         const { data } = await API.get("/adminapi/v1/devices")
         const devices = data.items;
         setDevicesData([...devices]);
+        updatePayloadVisibility(devices)
     }
 
     useEffect(() => {
         getDevices()
     }, [])
+    
+    useEffect(() => {
+        updatePayloadVisibility(devicesData)
+    }, [deviceAction])
 
     const nodeParams: Field[] = [
         {
@@ -68,9 +79,16 @@ const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
         }
     ] as Field[]
 
+    const actionPayloadNodeParams: Field[] = [
+        {
+            label: 'Action payload', field: 'param4', type: 'input', static: true,
+        }
+    ] as Field[]
+    
     return (
         <Node node={node} isPreview={!node.id} title='devicePub' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
+            {payloadVisibility ? <></> : <NodeParams id={node.id} params={actionPayloadNodeParams} />}
         </Node>
     )
 }

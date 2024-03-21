@@ -34,7 +34,7 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
         return topicSub(deviceName + '/' + component + '/' + componentName + '/state', cb)
     }
     
-    const devicePub = async (deviceName, component, componentName) => {
+    const devicePub = async (deviceName, component, componentName, payload?) => {
         var data = null;
         const SERVER = getApiUrl()
         try{
@@ -69,8 +69,12 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
             return;
         }
         if(!endpoint) return
-        if(type == 'str'){
-            topicPub(getPeripheralTopic(deviceName, endpoint),value)
+        if(payload){
+            topicPub(getPeripheralTopic(deviceName, endpoint),String(payload))
+        }else{
+            if(type == 'str'){
+                topicPub(getPeripheralTopic(deviceName, endpoint),value)
+            }
         }
     }
     
