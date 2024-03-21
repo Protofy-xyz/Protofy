@@ -54,4 +54,8 @@ export class {{name}}Model extends ProtoModel<{{name}}Model> {
     protected static _newInstance(data: any, session?: SessionDataType): {{name}}Model {
         return new {{name}}Model(data, session);
     }
+
+    static load(data: any, session?: SessionDataType): {{name}}Model {
+        return this._newInstance(data, session);
+    }
 }
