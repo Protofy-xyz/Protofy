@@ -17,6 +17,7 @@ const SEN55 =  dynamic(() => import('./SEN55'))
 const MHZ19 =  dynamic(() => import('./MHZ19'))
 const UARTBus =  dynamic(() => import('./UARTBus'))
 const MPU6050 = dynamic(() => import('./MPU6050'))
+const HX711 = dynamic(() => import('./HX711'))
 // import PulseCounter from "./PulseCounter";
 // import LEDCOutput from "./LEDCOutput";
 // import PIRSensor from "./PIRSensor"
@@ -159,13 +160,14 @@ const deviceMasks = [
   //   getComponent: PIRSensor,
   //   getInitialData: () => { return { to: 'pirSensor', param1: '""' } }
   // },
-  // {
-  //   id: 'HX711',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('hx711'),
-  //   getComponent: HX711,
-  //   getInitialData: () => { return { to: 'hx711', param1: '""', param2: '', param3: '"128"', param4: '"60s"' } }
-  // },
+  {
+    id: 'HX711',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('hx711'),
+    getComponent: (node, nodeData, children) => <HX711 node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'hx711', param1: '""', param2: '', param3: '"128"', param4: '"60s"' } }
+  },
+
   // {
   //   id: 'Dfplayer',
   //   type: 'CallExpression',
