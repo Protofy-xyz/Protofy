@@ -4,6 +4,7 @@ const Mqtt = ({node= {}, nodeData= {}, children}: any) => {
 
     const nodeParams: Field[] = [
         { label: 'Broker', field: 'param1', type: 'input', static: true },
+        { label: 'Port', field: 'param2', type: 'input', static: true },
     ] as Field[]
     
     return (
