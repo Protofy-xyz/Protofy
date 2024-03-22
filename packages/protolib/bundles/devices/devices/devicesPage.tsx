@@ -8,7 +8,7 @@ import { connectSerialPort, flash } from "../devicesUtils";
 import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
 import DeviceModal from 'protodevice/src/DeviceModal'
 import deviceFunctions from 'protodevice/src/device'
-import Subsystem from 'protodevice/src/nodes/utils/subsystem'
+import Subsystem from 'protodevice/src/Subsystem'
 import { Paragraph, TextArea, XStack, YStack } from '@my/ui';
 import { getPendingResult } from "protolib/base";
 
