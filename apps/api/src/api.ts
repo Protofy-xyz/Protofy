@@ -30,8 +30,32 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
         mqtt.publish(topic, data)
     }
     
-    const deviceSub = (deviceName, component, componentName, cb) => {
-        return topicSub(deviceName + '/' + component + '/' + componentName + '/state', cb)
+    const deviceSub = async (deviceName, component, cb) => {
+        var data = null
+        const SERVER = getApiUrl()
+        try{
+            const urlDevices = `${SERVER}/adminapi/v1/devices`
+            const res = await fetch(urlDevices);
+            data = await res.json();
+        }catch(err){
+            return;
+        }
+        const devices = data.items
+        const device = devices.filter((e)=> {return e.name==deviceName})
+        var endpoint = null;
+        var type = null;
+        if(device[0].subsystem){
+            const subsystem = device[0].subsystem.filter((e)=>{return e.name == component})[0]
+            console.log("subsystem: ", subsystem)
+            const monitor = subsystem.monitors[0]
+            console.log("monitor: ", monitor)
+            if(!monitor) return
+            endpoint = monitor.endpoint
+        }else{
+            return;
+        }
+        if(!endpoint) return
+        return topicSub(getPeripheralTopic(deviceName, endpoint), cb)
     }
     
     const devicePub = async (deviceName, component, componentName, payload?) => {
@@ -42,13 +66,7 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
             const res = await fetch(urlDevices);
             data = await res.json();
         }catch(err){
-            try{
-                const urlDevices = `${SERVER}/adminapi/v1/devices`
-                const res = await fetch(urlDevices);
-                data = await res.json();
-            }catch(err){
-                return;
-            }
+            return;
         }
         const devices = data.items
         const device = devices.filter((e)=> {return e.name==deviceName})
