@@ -22,3 +22,57 @@ There is also a packages/ folder with a set of available libraries, and packages
 There is an Object system based on Zod + some custom extensions, and a system to create Rest APIs from Zod schemas, combined with react widgets that provides automatic forms and interactive widgets, for a given Zod Schema.
 
 The system can be configured and extended by any user using the web admin panel, or by editing the code using your prefered code editor. 
+
+## Folder layout
+import { FileTree } from 'nextra/components'
+ 
+<FileTree>
+  <FileTree.Folder name="Protofy" defaultOpen>
+    <FileTree.Folder name="apps" defaultOpen>
+      <FileTree.File name="admin" />
+      <FileTree.File name="admin-api" />
+      <FileTree.File name="api" />
+      <FileTree.File name="electron" />
+      <FileTree.File name="expo" />
+      <FileTree.File name="next" />
+      <FileTree.File name="nextra" />
+      <FileTree.File name="proxy" />
+    </FileTree.Folder>
+    <FileTree.Folder name="data" defaultOpen>
+      <FileTree.Folder name="databases" defaultOpen/>
+    </FileTree.Folder>
+    <FileTree.Folder name="docker">
+    </FileTree.Folder>
+    <FileTree.Folder name="packages" defaultOpen>
+        <FileTree.Folder name="app">
+        </FileTree.Folder>
+        <FileTree.Folder name="protodevice">
+        </FileTree.Folder>
+        <FileTree.Folder name="protoflow">
+        </FileTree.Folder>
+        <FileTree.Folder name="protolib">
+        </FileTree.Folder>
+        <FileTree.Folder name="ui">
+        </FileTree.Folder>
+        <FileTree.Folder name="visualui">
+        </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="tests">
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+## 📦 Included packages
+
+- `Protoflow` LowCode interactive diagram system for Javascript and Typescript
+- `VisualUI` What you see is what you get (wysiwyg) for react, like FlutterFlow but for react
+- `Protolib` Protofy Framework on top of react, express and tamagui
+- `Express` API system based on NodeJS (With automatic CRUD creation)
+- `Aedes` mqtt server
+- `Redbird` http reverse proxy
+- [Tamagui](https://tamagui.dev) 🪄
+- [Solito](https://solito.dev) for cross-platform navigation
+- `Expo SDK`
+- `Next.js`
+- `Expo Router`
+- `Many more things!`
