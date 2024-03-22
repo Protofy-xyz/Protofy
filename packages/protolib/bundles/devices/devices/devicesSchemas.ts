@@ -33,6 +33,20 @@ export class DeviceSubsystemAction {
   }
 }
 
+export class DeviceSubsystemMonitor{
+  data: any
+  device: string
+  constructor(device, data) {
+    this.data = data
+    this.device = device
+  }
+
+  getEndpoint() {
+    return getPeripheralTopic(this.device, this.data.endpoint)
+  }
+  
+}
+
 export class DeviceSubsystem {
   data: any
   device: string
@@ -49,6 +63,16 @@ export class DeviceSubsystem {
     const actionData = this.data.actions.find(a => a.name == name)
     if(actionData) {
       return new DeviceSubsystemAction(this.device, actionData)
+    }
+  }
+  getMonitor(name: string) {
+    if(!this.data || !this.data.monitors) {
+      return
+    }
+
+    const monitorData = this.data.monitors.find(a => a.name == name)
+    if(monitorData) {
+      return new DeviceSubsystemMonitor(this.device, monitorData)
     }
   }
 }
