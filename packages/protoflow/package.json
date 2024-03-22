@@ -23,6 +23,7 @@
     "immer": "9.0.5",
     "lucide-react": "0.279.0",
     "prettier": "^2.8.1",
+    "protolib": "0.0.1",
     "react": "^18.2.0",
     "react-color": "2.19.3",
     "react-select": "5.7.0",
