@@ -82,6 +82,23 @@ const callText = async (url: string, method: string, params?: string, token?: st
 const sourceUrl = '/adminapi/v1/devices'
 const definitionsSourceUrl = '/adminapi/v1/deviceDefinitions?all=1'
 
+type DeviceCardProps = {
+  data:any
+}
+const DeviceCard = ({data}:DeviceCardProps) => {
+  var subsystemData = []
+  data.subsystem?.forEach(element => {
+    subsystemData.push(subsystem(element, data.name))
+  });
+
+  return <YStack px={"$2"} pb="$5" f={1}>
+    <Tinted>
+      <Paragraph mt="20px" ml="20px" fontWeight="700" size="$7">{data.name}</Paragraph>
+      {subsystemData}
+    </Tinted>
+  </YStack>
+}
+
 export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
     if (typeof window !== 'undefined') {
@@ -249,18 +266,7 @@ export default {
           itemMinWidth: 320,
           spacing: 20,
           onSelectItem: () => { },
-          getBody: (data, width) => {
-            var subsystemData = []
-            data.subsystem?.forEach(element => {
-              subsystemData.push(subsystem(element, data.name))
-            });
-            return <YStack px={"$2"} pb="$5" f={1}>
-              <Tinted>
-                <Paragraph mt="20px" ml="20px" fontWeight="700" size="$7">{data.name}</Paragraph>
-                {subsystemData}
-              </Tinted>
-            </YStack>
-          }
+          getBody: (data, width) => <DeviceCard data={data} />
         }}
       />
     </AdminPage>)
