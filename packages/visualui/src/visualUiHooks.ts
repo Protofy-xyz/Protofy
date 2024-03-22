@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { atom, useAtom } from 'jotai'
 import { EditorStore, useEditorContext } from "@protocraft/core";
 import { useRouter } from 'next/router'
@@ -52,15 +52,15 @@ export function useVisualUi(atom, callb?, defState?) {
 
         const currentNodes: any = JSON.parse(craftContext.query.serialize())
         const diffs = Diff.diff(JSON.parse(prevNodes), currentNodes) 
-        console.log('in-dev: diffs', diffs)
         if (diffs.length < 1) return 
 
         if (diffs.find(d => d.kind == 'N')) { // add case
-            console.log('in: add', diffs.find(d => d.kind == 'N').path, diffs.find(d => d.kind == 'N'))
+            console.log('[useVisualUi] Event: new')
             setLastEvent({
                 action: 'add-node'
             })
         } else if (diffs.find(d => d.kind == 'D')) { //delete case
+            console.log('[useVisualUi] Event: delete')
             const deletedNodes = diffs.filter(d => d.kind == 'D').map(n => n.path[0])
             const parentId = diffs.find(d => d.kind == 'A').path[0]            
             setLastEvent({
@@ -69,14 +69,13 @@ export function useVisualUi(atom, callb?, defState?) {
                 parent: parentId
             })
         } else if (diffs.find(d => d.kind == 'E')) { // edit case
-            console.log('in: edit', diffs.find(d => d.kind == 'E').path, diffs.find(d => d.kind == 'E'))
-
             const movedParent_diff = diffs.find(d => d.kind == 'E' && d.path[1] == 'parent')
             const children_diff = diffs.find(d => d.kind == 'E' && d.path[2] == 'children')
             const props_diff = diffs.find(d => d.kind == 'E' && d.path[1] == 'props')
             const move_diff = diffs.find(d => d.kind == 'E' && d.path[1] == "nodes");
             
             if (children_diff || props_diff) { // edited prop or child text
+                console.log('[useVisualUi] Event: edit')
                 const type = children_diff ? 'children' : 'prop'
                 var diff = type == 'children' ? children_diff : props_diff
                 const nodeId = diff.path[0]
@@ -91,6 +90,7 @@ export function useVisualUi(atom, callb?, defState?) {
                 }
                 setLastEvent(event)
             } else if (movedParent_diff) { // moved changing parent
+                console.log('[useVisualUi] Event: move (diff parent)')
                 const nodeId_moved = movedParent_diff.path[0];
                 const nodeId_newParent = movedParent_diff.rhs;
                 const nodeId_oldParent = movedParent_diff.lhs;
@@ -108,6 +108,7 @@ export function useVisualUi(atom, callb?, defState?) {
                 }
                 setLastEvent(event)
             } else { // moved inside same parent
+                console.log('[useVisualUi] Event: move (same parent)')
                 const parent = move_diff.path[0];
                 const newChildrensIds = diffs.sort((a, b) => a.path[2] - b.path[2]).map(d => d.rhs);
                 const oldChildrensIds = JSON.parse(prevNodes)[parent].nodes;
