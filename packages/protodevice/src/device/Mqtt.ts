@@ -3,8 +3,10 @@ class Mqtt {
   topic_prefix
   name
   type
-  constructor(broker) {
+  port
+  constructor(broker, port) {
     this.broker = broker
+    this.port = port
     this.name = this.type = 'mqtt'
   }
   attach(pin, deviceComponents) {
@@ -15,6 +17,7 @@ class Mqtt {
         config: {
           broker: this.broker,
           topic_prefix: this.topic_prefix,
+          port: this.port
         },
         subsystem: this.getSubsystem()
       }
@@ -52,6 +55,6 @@ class Mqtt {
   }
 }
 
-export default function mqtt(broker) {
-  return new Mqtt(broker)
+export default function mqtt(broker, port) {
+  return new Mqtt(broker, port)
 }

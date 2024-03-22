@@ -19,7 +19,46 @@ export const VisualUiFlows = (props) => {
             console.log('flows: experimental communications')
             const {lastEvent} = useVisualUi(props.contextAtom)
             useEffect(() => {
-                console.log('flowsEvent: ', lastEvent)
+                console.log('lastEvent: ', lastEvent)
+                if (lastEvent) {
+                    switch (lastEvent.action) {
+                        case "add-node": {
+                            break; 
+                        }; 
+                        case "edit-node": {
+                            console.log("visual event: edit-node"); 
+                            var editedNodeData
+                            const field = lastEvent.field
+                            const newValue = lastEvent.value
+                            const nodeId = lastEvent.nodeId
+
+                            if (lastEvent.type == 'prop') {
+                                editedNodeData = {
+                                    ["prop-" + field]: { ...nodeData[nodeId]["prop-" + field], value: newValue, key: field, kind: getKindName(newValue) }
+                                }
+                            } else {// edit node child
+                                editedNodeData = {
+                                    "child-1": newValue
+                                }
+                            }
+                            var newNodesData = {
+                                ...nodeData, [nodeId]: {
+                                    ...nodeData[nodeId],
+                                    ...editedNodeData
+                                }
+                            }
+
+                            setNodesData(newNodesData)
+                            break;
+                        }; 
+                        case "delete-node": {
+                            break; 
+                        }
+                        default: {
+                            throw new Error("useVisualUi(...): Unhandled event type"); 
+                        }
+                    } 
+                }
             }, [lastEvent])
         } else {
             console.log('flows: legacy communications')
