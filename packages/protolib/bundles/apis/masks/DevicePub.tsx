@@ -41,7 +41,7 @@ const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
     let deviceAction = nodeData['param3'];
 
     const updatePayloadVisibility = async (devicesData) => {
-        const subsystem = devicesData.filter( device => device.name === deviceName.replaceAll('"', ''))[0]?.subsystem
+        const subsystem = devicesData.filter( device => device.name === deviceName?.replaceAll('"', ''))[0]?.subsystem
         const actions = subsystem?.filter( subsystem => subsystem.name === deviceComponent.replaceAll('"', ''))[0]?.actions
         const payloadValue = actions?.filter( action => action.name === deviceAction.replaceAll('"', ''))[0]?.payload?.value
         setPayloadVisibility(payloadValue ? true : false)

@@ -30,7 +30,7 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
         mqtt.publish(topic, data)
     }
     
-    const deviceSub = async (deviceName, component, cb) => {
+    const deviceSub = async (deviceName, component, monitorName, cb) => {
         var data = null
         const SERVER = getApiUrl()
         try{
@@ -47,7 +47,8 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
         if(device[0].subsystem){
             const subsystem = device[0].subsystem.filter((e)=>{return e.name == component})[0]
             console.log("subsystem: ", subsystem)
-            const monitor = subsystem.monitors[0]
+            const monitors = subsystem.monitors
+            const monitor =monitors.filter((e)=>{return e.name == monitorName})[0]
             console.log("monitor: ", monitor)
             if(!monitor) return
             endpoint = monitor.endpoint

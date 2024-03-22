@@ -39,7 +39,7 @@ const getSubsystemsMonitors = (devData) => {
         const monitors = {};
 
         device.subsystem?.forEach(subsystem => {
-            subsystem.actions?.forEach(monitor => {
+            subsystem.monitors?.forEach(monitor => {
                 monitors['"' + subsystem.name + '"'] = monitors['"' + subsystem.name + '"'] || [];
                 monitors['"' + subsystem.name + '"'].push('"' + monitor.name + '"');
             });
@@ -47,6 +47,7 @@ const getSubsystemsMonitors = (devData) => {
 
         deviceSubsystemsMonitors[deviceName] = monitors;
     });
+    console.log("DeviceSubsystemsMonitors: ", deviceSubsystemsMonitors)
     return deviceSubsystemsMonitors
 
 }
@@ -59,7 +60,7 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
     // const [payloadVisibility, setPayloadVisibility] = useState(false);
     let deviceName = nodeData['param1'];
     let deviceComponent = nodeData['param2'];
-    // let deviceAction = nodeData['param3'];
+    let deviceMonitor= nodeData['param3'];
 
     // const updatePayloadVisibility = async (devicesData) => {
     //     const subsystem = devicesData.filter( device => device.name === deviceName.replaceAll('"', ''))[0]?.subsystem
@@ -70,7 +71,7 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
     const getDevices = async () => {
         const { data } = await API.get("/adminapi/v1/devices")
         console.log("Readed deviceSub items: ",data)
-        const devices = data.items;
+        const devices = data?.items;
         setDevicesData([...devices]);
         // updatePayloadVisibility(devices)
     }
@@ -94,11 +95,11 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
             selectedIndex: getDeviceSubsystemsNames(devicesData)[deviceName]?.indexOf(deviceComponent) ?? 0,
             data: devicesData ? (getDeviceSubsystemsNames(devicesData)[deviceName] ?? []) : ['"none"'],
         },
-        // {
-        //     label: 'Monitor', field: 'param3', type: 'selectWithDefault', static: true,
-        //     selectedIndex: devicesData && getSubsystemsActions(devicesData)[deviceName] ? getSubsystemsActions(devicesData)[deviceName][deviceComponent]?.indexOf(deviceAction) ?? [] : 0,
-        //     data: devicesData && getSubsystemsActions(devicesData)[deviceName] ? getSubsystemsActions(devicesData)[deviceName][deviceComponent] ?? [] : ['"none"'],
-        // }
+        {
+            label: 'Monitor', field: 'param3', type: 'selectWithDefault', static: true,
+            selectedIndex: devicesData && getSubsystemsMonitors(devicesData)[deviceName] ? getSubsystemsMonitors(devicesData)[deviceName][deviceComponent]?.indexOf(deviceMonitor) ?? [] : 0,
+            data: devicesData && getSubsystemsMonitors(devicesData)[deviceName] ? getSubsystemsMonitors(devicesData)[deviceName][deviceComponent] ?? [] : ['"none"'],
+        }
     ] as Field[]
 
     // const actionPayloadNodeParams: Field[] = [
@@ -111,9 +112,9 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
         <Node node={node} isPreview={!node.id} title='deviceSub' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
             {/* {payloadVisibility ? <></> : <NodeParams id={node.id} params={actionPayloadNodeParams} />} */}
-            <div style={{ paddingBottom: "30px" }}>
-            <FlowPort id={node.id} type='output' label='On (message, topic)' style={{ top: '170px' }} handleId={'request'} />
-            <FallbackPort node={node} port={'param3'} type={"target"} fallbackPort={'request'} portType={"_"} preText="(message,topic) => " postText="" />
+            <div style={{ marginTop: "35px" }}>
+                <FlowPort id={node.id} type='output' label='On (message, topic)' style={{ top: '225px' }} handleId={'request'} />
+                <FallbackPort node={node} port={'param4'} type={"target"} fallbackPort={'request'} portType={"_"} preText="(message,topic) => " postText="" />
             </div>
         </Node>
     )
