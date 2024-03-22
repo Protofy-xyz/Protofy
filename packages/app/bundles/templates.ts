@@ -30,6 +30,10 @@ export const pageTemplates = {
         id: "landing",
         name: "Landing"
     },
+    "iot": {
+        id: "iot",
+        name: "IoT Panel"
+    },
     "ecomerce": {
         id: "ecomerce",
         name: "E-commerce"

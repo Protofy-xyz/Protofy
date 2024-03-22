@@ -96,6 +96,7 @@ const getDB = (path, req, session) => {
           }
         })
         if (result.isError) {
+          console.error("Error executing template: ", result)
           throw result.error
         }
       }
