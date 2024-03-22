@@ -52,7 +52,31 @@ const GridElementCard = ({ index, data, width }) => {
     </ItemCard>
 }
 
-export const ObjectGrid = ({ overScanBy=5, gridElementCard = undefined, itemMinWidth = 400, itemHeight, rightGap = 30, contentMargin = 50, onSelectItem = (id) => { }, extraMenuActions, spacing = 20, getPicture, getBody,getCard, model, items, sourceUrl, customFields, onDelete, deleteable, extraFields, icons, children, ...props }: any & StackProps) => {
+export const ObjectGrid = ({ 
+        overScanBy=5, 
+        gridElementCard = undefined, 
+        itemMinWidth = 400, 
+        itemHeight, 
+        rightGap = 30, 
+        contentMargin = 50, 
+        onSelectItem = (id) => { }, 
+        extraMenuActions, 
+        spacing = 20, 
+        getPicture, 
+        getBody,
+        getCard, 
+        model, 
+        items, 
+        sourceUrl, 
+        customFields, 
+        onDelete, 
+        deleteable, 
+        extraFields, 
+        icons, 
+        children, 
+        ...props 
+    }: any & StackProps) => {
+
     const containerRef = useRef(null)
 
     const data = items.map((element, i) => {

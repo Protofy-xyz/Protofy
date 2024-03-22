@@ -189,6 +189,9 @@ export const DataView = forwardRef(({
                 },
                 onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 extraMenuActions: extraMenuActions,
+                itemMinHeight: 320,
+                itemMinWidth: 320,
+                spacing: 20,
                 ...dataTableGridProps
             }
         },

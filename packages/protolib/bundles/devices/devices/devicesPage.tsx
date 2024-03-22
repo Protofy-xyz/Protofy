@@ -235,6 +235,7 @@ export default {
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} />
       </Connector>
       <DataView
+        defaultView={"grid"}
         integratedChat
         itemData={itemData}
         rowIcon={Router}
@@ -255,12 +256,8 @@ export default {
         model={DevicesModel}
         pageState={pageState}
         icons={DevicesIcons}
-        //dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
         dataTableGridProps={{
-          itemMinHeight: 320,
-          itemMinWidth: 320,
-          spacing: 20,
-          onSelectItem: () => { },
+          onSelectItem: (item) => { },
           getBody: (data, width) => <DeviceCard data={data} />
         }}
       />
