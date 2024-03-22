@@ -94,6 +94,9 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
             if(type == 'str'){
                 topicPub(getPeripheralTopic(deviceName, endpoint),value)
             }
+            if(type == 'json'){
+                topicPub(getPeripheralTopic(deviceName, endpoint),JSON.stringify(value))
+            }
         }
     }
     
