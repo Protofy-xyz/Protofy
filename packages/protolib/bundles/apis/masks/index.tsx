@@ -21,7 +21,7 @@ const apiMasks = [
         getComponent: (node, nodeData, children) => <DeviceSub node={node} nodeData={nodeData} children={children} />,
         filterChildren: filterCallback("3"),
         restoreChildren: restoreCallback("3"),
-        getInitialData: () => { return { to: 'deviceSub', param1: '"none"'} }
+        getInitialData: () => { return { to: 'deviceSub', param1: '"none"', param2: '"none"', param3: '(message,topic) =>' } }
     },
     {
         id: 'logger',
