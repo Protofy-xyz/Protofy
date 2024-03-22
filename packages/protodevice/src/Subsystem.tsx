@@ -25,6 +25,7 @@ const subsystem = ({subsystem, deviceName}) => {
             onPress={() => { buttonAction(action) }}
             color="$color10"
             title={"Description: " + action.description}
+            flex={1}
         >
             {action.label ?? action.name}
         </Button>
@@ -36,6 +37,7 @@ const subsystem = ({subsystem, deviceName}) => {
                 width={80}
                 placeholder="value"
                 mr={8}
+                flex={1}
             />
             <Button
                 key={action.name} // Make sure to provide a unique key for each Button
@@ -45,6 +47,7 @@ const subsystem = ({subsystem, deviceName}) => {
                 }}
                 color="$color10"
                 title={"Description: " + action.description}
+                flex={1}
             >
                 {action.label ?? action.name}
             </Button>
@@ -80,7 +83,7 @@ const subsystem = ({subsystem, deviceName}) => {
             <Tinted>
                 <Paragraph textAlign='left' color={'$color10'}>{subsystem.name}</Paragraph>
                 <YStack mb="10px" mt="10px" alignSelf='flex-start'>
-                    <XStack gap="$2">
+                    <XStack gap="$2" flexWrap='wrap'>
                         {actionButtons}
                     </XStack>
 
