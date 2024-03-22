@@ -69,6 +69,7 @@ export default ({ nodeData = {}, item, node }) => {
                             fontSize: useTheme('nodeFontSize'),
                             fontWeight: 'medium', paddingLeft: '38px'
                         }}
+                        options={item.data?.options}
                         value={tmpValue}
                         placeholder="default"
                         onChange={t => setTmpValue(t.target.value)}

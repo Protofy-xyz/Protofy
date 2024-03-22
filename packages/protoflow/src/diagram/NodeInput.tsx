@@ -1,10 +1,12 @@
 import React from 'react';
 import useTheme from './Theme';
+import { Input } from 'protolib'
 
 const NodeInput = React.forwardRef((props:any, ref) => {
   const nodeBorderColor = useTheme('nodeBorderColor')
   return (
-    <input
+    <Input
+      unstyled={true}
       {...props}
       ref={ref}
       style={{
@@ -33,7 +35,7 @@ const NodeInput = React.forwardRef((props:any, ref) => {
       }}
     >
       {props.children}
-    </input>
+    </Input>
   );
 })
 

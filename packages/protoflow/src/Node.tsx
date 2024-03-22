@@ -339,6 +339,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         id={id}
                         post={(v) => isParameter || isProp ? { ...nodeData[param.field], key: nodeData[param.field]?.key ?? param.label, value: post(v) } : post(v)}
                         pre={(v) => (v?.value ?? v) ?? ''}
+                        options={param.data?.options}
                         field={param.field}
                         onBlur={param.onBlur}
                         disabled={disabled || param.isDisabled}
