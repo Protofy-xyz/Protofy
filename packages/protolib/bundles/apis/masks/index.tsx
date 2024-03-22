@@ -1,7 +1,8 @@
 import DevicePub from './DevicePub';
-import ApiResponse from './ApiResponse'
-import ApiMask from './ApiMask'
-import Logger from './Logger'
+import DeviceSub from './DeviceSub';
+import ApiResponse from './ApiResponse';
+import ApiMask from './ApiMask';
+import Logger from './Logger';
 
 import { filterCallback, restoreCallback } from 'protoflow';
 
@@ -12,6 +13,15 @@ const apiMasks = [
         check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('devicePub'), //TODO: Change output function name
         getComponent: (node, nodeData, children) => <DevicePub node={node} nodeData={nodeData} children={children} />,
         getInitialData: () => { return { to: 'devicePub', param1: '"none"', param2: '"none"', param3: '"none"' } }
+    },
+    {
+        id: 'deviceSub',
+        type: 'CallExpression',
+        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('deviceSub'),
+        getComponent: (node, nodeData, children) => <DeviceSub node={node} nodeData={nodeData} children={children} />,
+        filterChildren: filterCallback("3"),
+        restoreChildren: restoreCallback("3"),
+        getInitialData: () => { return { to: 'deviceSub', param1: '"none"'} }
     },
     {
         id: 'logger',
