@@ -54,7 +54,7 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
                         }
                         case 'api': { // TODO: Refactor this type and make it generic
-                            const apiList = apiRes?.map(a => ({ label: a.path, value: `"` + a.path + `"` })) ?? []
+                            const apiList = apiRes?.map(element.data?.resList ?? (() => undefined))?.filter(e => e) ?? []
                             const field = element.data.field
                             const fieldValue = nodeData[field]
                             const onChangeSelect = (data) => {
