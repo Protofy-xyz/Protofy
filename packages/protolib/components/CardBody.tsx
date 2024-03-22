@@ -1,25 +1,15 @@
-import { Paragraph, XStack, YStack, YStackProps } from "tamagui"
+import { YStack, Paragraph } from "@my/ui"
 import { Tinted } from "./Tinted"
 
-export const CardBody = ({title=null, extra=null, description=null, descriptionExtra=null, ...props}: any & YStackProps) => {
-    return <YStack px={"$5"} f={1}>
-        <XStack f={1}>
-            <Tinted>
-                <XStack f={1}>
-                    {title}
-                </XStack>
-                <XStack>
-                    {extra}
-                </XStack>
-            </Tinted>
-        </XStack>
-        {(description || descriptionExtra) && <XStack mt="$2" f={1}>
-            <YStack f={1}>
-                {description}
-            </YStack>
-            <XStack>
-                {descriptionExtra}
-            </XStack>
-        </XStack>}
+type CardBodyProps = {
+    title: any,
+    children: any
+}
+export const CardBody = ({ title, children }: CardBodyProps) => {
+    return <YStack px={"$2"} pb="$5" f={1}>
+        <Tinted>
+            <Paragraph mt="20px" ml="20px" fontWeight="700" size="$7">{title}</Paragraph>
+            {children}
+        </Tinted>
     </YStack>
 }

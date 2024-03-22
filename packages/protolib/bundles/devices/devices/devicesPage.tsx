@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple, Tinted, AdminPage, PaginatedDataSSR, usePendingEffect } from 'protolib'
+import { API, DataTable2, DataView, ButtonSimple, Tinted, AdminPage, PaginatedDataSSR, usePendingEffect, CardBody } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
@@ -81,18 +81,6 @@ const callText = async (url: string, method: string, params?: string, token?: st
 
 const sourceUrl = '/adminapi/v1/devices'
 const definitionsSourceUrl = '/adminapi/v1/deviceDefinitions?all=1'
-
-type DeviceCardProps = {
-  data:any
-}
-const DeviceCard = ({data}:DeviceCardProps) => {
-  return <YStack px={"$2"} pb="$5" f={1}>
-    <Tinted>
-      <Paragraph mt="20px" ml="20px" fontWeight="700" size="$7">{data.name}</Paragraph>
-      {data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name}/>)}
-    </Tinted>
-  </YStack>
-}
 
 export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
@@ -241,10 +229,7 @@ export default {
         rowIcon={Router}
         sourceUrl={sourceUrl}
         initialItems={initialItems}
-        numColumnsForm={1}
         name="device"
-        onAdd={data => { return data }}
-        onEdit={data => { return data }}
         columns={DataTable2.columns(
           DataTable2.column("name", "name", true),
           DataTable2.column("device definition", "deviceDefinition", true),
@@ -258,7 +243,9 @@ export default {
         icons={DevicesIcons}
         dataTableGridProps={{
           onSelectItem: (item) => { },
-          getBody: (data, width) => <DeviceCard data={data} />
+          getBody: (data) => <CardBody title={data.name}>
+            {data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name}/>)}
+          </CardBody>
         }}
       />
     </AdminPage>)
