@@ -4,7 +4,7 @@ import { XStack, YStack, Text, Paragraph, Button, Input } from '@my/ui';
 import { ElevatedArea, ContainerLarge, Tinted, Chip } from 'protolib';
 import { getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 
-const subsystem = (subsystem, deviceName) => {
+const subsystem = ({subsystem, deviceName}) => {
     const { client } = useMqttState();
 
     const buttonAction = (action) => {
@@ -80,13 +80,13 @@ const subsystem = (subsystem, deviceName) => {
             <Tinted>
                 <Paragraph textAlign='left' color={'$color10'}>{subsystem.name}</Paragraph>
                 <YStack mb="10px" mt="10px" alignSelf='flex-start'>
-                    <YStack gap="$2">
+                    <XStack gap="$2">
                         {actionButtons}
-                    </YStack>
+                    </XStack>
 
-                    <YStack alignItems={'left'} gap="$3">
+                    <XStack alignItems={'left'} gap="$3">
                         {monitorLabels}
-                    </YStack>
+                    </XStack>
                 </YStack>
             </Tinted>
         </ContainerLarge>

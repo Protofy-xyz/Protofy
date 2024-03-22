@@ -8,7 +8,7 @@ import { connectSerialPort, flash } from "../devicesUtils";
 import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
 import DeviceModal from 'protodevice/src/DeviceModal'
 import deviceFunctions from 'protodevice/src/device'
-import subsystem from 'protodevice/src/nodes/utils/subsystem'
+import Subsystem from 'protodevice/src/nodes/utils/subsystem'
 import { Paragraph, TextArea, XStack, YStack } from '@my/ui';
 import { getPendingResult } from "protolib/base";
 
@@ -86,15 +86,10 @@ type DeviceCardProps = {
   data:any
 }
 const DeviceCard = ({data}:DeviceCardProps) => {
-  var subsystemData = []
-  data.subsystem?.forEach(element => {
-    subsystemData.push(subsystem(element, data.name))
-  });
-
   return <YStack px={"$2"} pb="$5" f={1}>
     <Tinted>
       <Paragraph mt="20px" ml="20px" fontWeight="700" size="$7">{data.name}</Paragraph>
-      {subsystemData}
+      {data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name}/>)}
     </Tinted>
   </YStack>
 }
