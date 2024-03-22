@@ -27,7 +27,7 @@ export const BaseJSMasks = [
     "body": [
       {
         "type": "api",
-        "data": { label: "url", field: "param1", apiUrl: "api/v1/endpoints", resList: a => ({ label: a.path, value: `"` + a.path + `"` }) }
+        "data": { label: "url", field: "param1", apiUrl: "api/v1/endpoints", list: 'return { label: res.path, value: `"` + res.path + `"` }' }
       },
       {
         "type": "link",
@@ -37,7 +37,7 @@ export const BaseJSMasks = [
         }
       }
     ],
-    "initialData": { to: 'actionFetch', param1: '"adminapi/v1/apis"', param2: "lol.png" }
+    "initialData": { to: 'actionFetch', param1: '"adminapi/v1/apis"' }
   },
   // {
   //   id: 'Console',
