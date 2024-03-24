@@ -19,9 +19,11 @@ export type DevicesType = z.infer<typeof DevicesSchema>;
 export class DeviceSubsystemAction {
   data: any
   device: string
-  constructor(device, data) {
+  subsystem: string
+  constructor(device, subsystem, data) {
     this.data = data
     this.device = device
+    this.subsystem = subsystem
   }
 
   getEndpoint() {
@@ -36,9 +38,11 @@ export class DeviceSubsystemAction {
 export class DeviceSubsystemMonitor{
   data: any
   device: string
-  constructor(device, data) {
+  subsystem: string
+  constructor(device, subsystem, data) {
     this.data = data
     this.device = device
+    this.subsystem = subsystem
   }
 
   getEndpoint() {
@@ -48,7 +52,18 @@ export class DeviceSubsystemMonitor{
   getEventPath() {
     return this.getEndpoint().split('/').slice(-3).join('/')
   }
+
+  getLabel() {
+    return this.data.label ?? this.data.name
+  }
   
+  getUnits() {
+    return this.data.units ? this.data.units : ''
+  }
+
+  getValueAPIURL() {
+    return "/adminapi/v1/devices/"+this.device+"/"+this.subsystem+"/monitors/"+this.data.name
+  }
 }
 
 export class DeviceSubsystem {
@@ -66,7 +81,7 @@ export class DeviceSubsystem {
 
     const actionData = this.data.actions.find(a => a.name == name)
     if(actionData) {
-      return new DeviceSubsystemAction(this.device, actionData)
+      return new DeviceSubsystemAction(this.device, name, actionData)
     }
   }
   getMonitor(name: string) {
@@ -76,7 +91,7 @@ export class DeviceSubsystem {
 
     const monitorData = this.data.monitors.find(a => a.name == name)
     if(monitorData) {
-      return new DeviceSubsystemMonitor(this.device, monitorData)
+      return new DeviceSubsystemMonitor(this.device, name, monitorData)
     }
   }
 }
