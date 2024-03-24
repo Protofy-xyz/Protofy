@@ -26,7 +26,16 @@ export class EventModel extends ProtoModel<EventModel> {
         super(data, EventSchema, session, "Event");
     }
 
-	list(search?): any {
+	list(search?, session?, extraData?, params?): any {
+        if(params) {
+            const {page, orderBy, orderDirection, search, ...filters} = params
+
+            const allFiltersMatch = Object.keys(filters).every(key => {
+                return this.data && this.data[key] == filters[key];
+            });
+
+            if(!allFiltersMatch) return
+        }
         if(search) {
 			if(JSON.stringify(this.data).toLowerCase().includes(search.toLowerCase())) {
 				return this.read()
