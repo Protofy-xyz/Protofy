@@ -42,7 +42,6 @@ const subsystem = ({subsystem, deviceName}) => {
             <Button
                 key={action.name} // Make sure to provide a unique key for each Button
                 onPress={() => { 
-                    console.log("HOLAAAA", value)
                     client.publish(getPeripheralTopic(deviceName, action.endpoint),action.payload.type=="json"? JSON.stringify(value):value.toString())
                 }}
                 color="$color10"
