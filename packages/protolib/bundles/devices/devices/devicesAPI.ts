@@ -20,15 +20,16 @@ export const DevicesAPI = (app, context) => {
     DevicesAutoAPI(app, context)
     // Device topics: devices/[deviceName]/[endpoint], en caso de no tener endpoint: devices/[deviceName]
     /* examples
-        devices/patata/switch/relay/status
-        devices/patata/button/relay/status
+        devices/patata/switch/relay/actions/status
+        devices/patata/button/relay/actions/status
         ...
     */
-    app.get('/adminapi/v1/devices/:device/:subsystem/:action', handler(async (req, res, session) => {
+    app.get('/adminapi/v1/devices/:device/:subsystem/actions/:action', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
         }
+
         const db = getDB('../../data/databases/devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
         const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
@@ -49,6 +50,35 @@ export const DevicesAPI = (app, context) => {
             device: req.params.device,
             result: 'done'
         })
+    }))
+
+    app.get('/adminapi/v1/devices/:device/:subsystem/monitors/:monitor', handler(async (req, res, session) => {
+        if(!session || !session.user.admin) {
+            res.status(401).send({error: "Unauthorized"})
+            return
+        }
+
+        const db = getDB('../../data/databases/devices')
+        const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
+        const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
+        if(!subsystem) {
+            res.status(404).send(`Subsytem [${req.params.subsystem}] not found in device [${req.params.device}]`)
+            return
+        }
+
+        const monitor = subsystem.getMonitor(req.params.monitor)
+        if(!monitor) {
+            res.status(404).send(`Monitor [${req.params.monitor}] not found in Subsytem [${req.params.subsystem}] for device [${req.params.device}]`)
+            return
+        }
+    
+        const data = await API.get(`/adminapi/v1/events?from=device&user=${req.params.device}&path=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`)
+
+        if(!data || !data.data ||  !data.data['items'] || !data.data['items'].length) {
+            res.status(404).send(`No value found for monitor`)
+            return
+        }
+        res.send({value: data.data['items'][0].payload?.message})
     }))
 
     topicSub('devices/#', (async (message: string, topic: string) => {

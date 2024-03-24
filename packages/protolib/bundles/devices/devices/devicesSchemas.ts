@@ -44,6 +44,10 @@ export class DeviceSubsystemMonitor{
   getEndpoint() {
     return getPeripheralTopic(this.device, this.data.endpoint)
   }
+
+  getEventPath() {
+    return this.getEndpoint().split('/').slice(-3).join('/')
+  }
   
 }
 

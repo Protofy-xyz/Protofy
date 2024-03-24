@@ -28,7 +28,7 @@ export class EventModel extends ProtoModel<EventModel> {
 
 	list(search?, session?, extraData?, params?): any {
         if(params) {
-            const {itemsPerPage, page, orderBy, orderDirection, search, ...filters} = params
+            const {itemsPerPage, page, orderBy, orderDirection, search, token, ...filters} = params
 
             const allFiltersMatch = Object.keys(filters).every(key => {
                 return this.data && this.data[key] == filters[key];
