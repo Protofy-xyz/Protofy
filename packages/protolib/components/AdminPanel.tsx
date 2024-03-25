@@ -135,13 +135,13 @@ export const LogPanel = () => {
   };
 
   return <YStack>
-    <XStack ai="center">
+    <XStack ai="center" backgroundColor={'$backgroundTransparent'}>
       <Input
         focusStyle={{ borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 1, outlineWidth: 0 }}
         borderBottomWidth={1}
         forceStyle='focus'
         br={0}
-        // backgroundColor={'transparent'}
+        backgroundColor={'$backgroundTransparent'}
         value={search}
         width={"100%"}
         onChangeText={(text) => {
