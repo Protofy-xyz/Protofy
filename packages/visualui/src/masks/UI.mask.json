@@ -428,6 +428,13 @@
                 }
             },
             {
+                "type": "link",
+                "data": {
+                    "text": "Need to upload a file?",
+                    "url": "admin/files?path=/apps/next/public"
+                }
+            },
+            {
                 "type": "custom-field",
                 "data": [
                     {
