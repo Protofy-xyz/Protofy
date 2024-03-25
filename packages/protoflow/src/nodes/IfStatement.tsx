@@ -7,7 +7,7 @@ import { FlowStoreContext } from "../store/FlowsStore";
 import { DataOutput } from '../lib/types';
 import useTheme from '../diagram/Theme';
 
-const minBlockHeight = 0
+const minBlockHeight = 260
 const marginBottomElse = 0
 const IfStatement = (node) => {
     const { id, type } = node
@@ -28,7 +28,7 @@ const IfStatement = (node) => {
         const condition = getConnectedNodeMeta("condition", PORT_TYPES.data)
         const then = getConnectedNodeMeta("then", PORT_TYPES.flow)
 
-        return (Math.max(0, ((condition?condition.height:0)+(then?Math.min(nodeFontSize*10, then.height):0)))) //getSizeOfLastChild(metaData.childHeights)+headerSize
+        return (Math.max(minBlockHeight, ((condition?condition.height:0)+(then?Math.min(nodeFontSize*10, then.height):0)))) //getSizeOfLastChild(metaData.childHeights)+headerSize
     }
 
     const getConnectedPos = (handle, defaultValue) => {
