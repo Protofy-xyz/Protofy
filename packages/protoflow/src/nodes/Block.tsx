@@ -56,13 +56,13 @@ const Block = (node) => {
     const typeConf = {
         SourceFile: {
             // icon: Box,
-            color: '#F7B500',
+            color: nodeColors[type],
             output: false,
             title: currentPath.split(/[/\\]/).pop()
         },
         Block: {
             icon: ListOrdered,
-            color: '#ccc',
+            color: nodeColors[type],
             title: 'Block'
         },
         CaseClause: {
@@ -72,7 +72,7 @@ const Block = (node) => {
         },
         DefaultClause: {
             icon: Square,
-            color: nodeColors['CaseClause'],
+            color: nodeColors[type],
             title: 'Case Clause'
         }
     }
