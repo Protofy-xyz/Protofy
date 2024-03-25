@@ -51,6 +51,7 @@ const Block = (node) => {
     extraStyle.minHeight = height + 'px'
     extraStyle.border = 0
     extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px':'200px'
+
     const containerColor =  useTheme('containerColor')
     const typeConf = {
         SourceFile: {
@@ -121,7 +122,7 @@ const Block = (node) => {
                     opacity: 1,
                     pointerEvents: 'none',
                     borderRadius: "0px "+nodeFontSize/1.3+"px "+nodeFontSize/1.3+ "px "+ nodeFontSize/1.3+'px',position:'absolute', 
-                    width: metaData.childWidth+'px', 
+                    width: metaData.childWidth+(metaData.childWidth > 700 ? 100 : 0)+'px', 
                     height: height-headerSize-(nodeFontSize*2)+'px', 
                     backgroundColor: containerColor,
                     borderLeft: nodeFontSize/2+'px solid '+typeConf[type].color,
