@@ -81,7 +81,20 @@ const Block = (node) => {
             const connectedEdges = edges.filter(e => e.target == id)
             if (nodeData.mode != 'json' && (connectedEdges.length == nodeData?.connections?.length || !nodeData?.connections?.length)) {
                 addConnection()
+            } else {
+                //remove connections
+                const lastConnected = connectedEdges.reduce((last, current) => {
+                    const x = parseInt(current.targetHandle.slice(id.length+6), 10)
+                    return x > last ? x : last
+                }, -1)
+                
+                console.log(id, 'prev: ', nodeData?.connections, 'edges: ', connectedEdges, lastConnected, 'should be: ', lastConnected)
+                setNodeData(id, {
+                    ...nodeData,
+                    connections: nodeData.connections.slice(0, lastConnected+2)
+                })
             }
+
         }, [edges, nodeData?.connections?.length])
     }
 
