@@ -4,7 +4,7 @@ import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
 import { Type, Hash, Braces, ToggleLeft, VariableIcon } from 'lucide-react';
 import Input from '../diagram/NodeInput'
-import { getNodeDataField } from '../utils';
+import { getDataFromField } from '../utils';
 
 export const getInputTypes = () => ['input']
 
@@ -33,7 +33,7 @@ export default ({ nodeData = {}, item, node }) => {
     const kindValue = data?.kind ?? defaultKindValue
 
     const onValueChange = (val) => {
-        setNodeData(node.id, { ...nodeData, [field]: getNodeDataField(val, field, nodeData) })
+        setNodeData(node.id, { ...nodeData, [field]: getDataFromField(val, field, nodeData) })
     }
 
     const onToggleType = () => {

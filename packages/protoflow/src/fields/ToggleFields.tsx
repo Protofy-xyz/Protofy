@@ -5,7 +5,7 @@ import { CustomField } from '.';
 import { XStack, Button } from "@my/ui"
 import Text from '../diagram/NodeText'
 import { useThemeSetting } from '@tamagui/next-theme'
-import { getNodeDataField } from '../utils';
+import { getDataFromField } from '../utils';
 
 export const getToggleTypes = () => ['toggle-boolean']
 
@@ -20,7 +20,7 @@ export default ({ nodeData = {}, item, node }) => {
     const value = data?.value
 
     const onValueChange = (val) => {
-        setNodeData(node.id, { ...nodeData, [field]: getNodeDataField(val, field, nodeData, { kind: 'FalseKeyword' }) })
+        setNodeData(node.id, { ...nodeData, [field]: getDataFromField(val, field, nodeData, { kind: 'FalseKeyword' }) })
     }
 
     const borderWidth = useTheme('inputBorder').split(' ')[0]

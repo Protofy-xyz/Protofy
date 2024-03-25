@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import useTheme from '../diagram/Theme';
 import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
-import { getNodeDataField } from '../utils';
+import { getDataFromField } from '../utils';
 
 export const getRangeTypes = () => ['range-theme', 'range-px', 'range']
 
@@ -49,7 +49,7 @@ export default ({ nodeData = {}, item, node }) => {
     const kind = rangeData?.kind ?? defData['default']?.kind
 
     const onValueChange = (val) => {
-        setNodeData(node.id, { ...nodeData, [field]: getNodeDataField(val, field, nodeData, { kind }) })
+        setNodeData(node.id, { ...nodeData, [field]: getDataFromField(val, field, nodeData, { kind }) })
     }
 
     const getInput = () => {

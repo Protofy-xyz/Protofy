@@ -8,7 +8,7 @@ import { Popover } from '@my/ui'
 import { Pipette, Palette } from 'lucide-react'
 import { CustomField } from '.';
 import { useThemeSetting } from '@tamagui/next-theme'
-import { getNodeDataField } from '../utils';
+import { getDataFromField } from '../utils';
 
 const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     <div onClick={onPress}
@@ -58,7 +58,7 @@ export default ({ nodeData = {}, node, item }) => {
 
     const onSubmitThemeColor = (col) => {
         if (!col) return
-        setNodeData(node.id, { ...nodeData, [field]: getNodeDataField(col, field, nodeData) })
+        setNodeData(node.id, { ...nodeData, [field]: getDataFromField(col, field, nodeData) })
 
         setTmpColor(col)
     }

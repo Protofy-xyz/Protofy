@@ -17,6 +17,7 @@ import { read } from './lib/memory';
 import NodeSelect from './diagram/NodeSelect';
 import { X, ChevronUp, AlertCircle, Type, Hash, Braces, ToggleLeft } from 'lucide-react';
 import { useProtoflow, useProtoEdges } from './store/DiagramStore';
+import { getFieldValue, getDataFromField } from './utils';
 
 export interface Field {
     field: string,
@@ -102,7 +103,7 @@ export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlu
 
     const _onBlur = () => {
         if (!disabled) {
-            setNodeData(id, { ...nodeData, [field]: post(tmpInputValue) })
+            setNodeData(id, { ...nodeData, [field]: getDataFromField(post(tmpInputValue), field, nodeData) })
             dataNotify({ id: id, paramField: field, newValue: tmpInputValue })
         }
         if (onBlur) onBlur(tmpInputValue);
@@ -156,10 +157,8 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
     const getInput = (disabled?) => {
         switch (param.type) {
             case 'selectWithDefault':
-                // {param.data}
                 const onChangeSelect1 = (data) => {
-                    var tmpData = { [param.field]: (isProp || nodeData[param.field]?.value) ? { key: param.label, value: data?.value } : data?.value }
-                    setNodeData(id, { ...nodeData, ...tmpData })
+                    setNodeData(id, { ...nodeData, [param.field]: getDataFromField(data?.value, param.field, nodeData) })
                     dataNotify({ id: id, paramField: param.field, newValue: data?.value })
                 }
                 const options1 = param.data?.map((item, index) => {
@@ -167,19 +166,18 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     return { label: item ?? "default", value: item, ...extraProps }
                 })
                 return <div style={{ flex: 1, zIndex: 1000 }}>
-                <NodeSelect
-                    onChange={onChangeSelect1}
-                    defaultValue={{
-                        value: param.data[param.selectedIndex],
-                        label: param.data[param.selectedIndex]
-                    }}
-                 options={options1}
+                    <NodeSelect
+                        onChange={onChangeSelect1}
+                        defaultValue={{
+                            value: param.data[param.selectedIndex],
+                            label: param.data[param.selectedIndex]
+                        }}
+                        options={options1}
                     />
                 </div>
             case 'select':
                 const onChangeSelect = (data) => {
-                    var tmpData = { [param.field]: (isProp || nodeData[param.field]?.value) ? { key: param.label, value: data?.value } : data?.value }
-                    setNodeData(id, { ...nodeData, ...tmpData })
+                    setNodeData(id, { ...nodeData, [param.field]: getDataFromField(data?.value, param.field, nodeData) })
                     dataNotify({ id: id, paramField: param.field, newValue: data?.value })
                 }
                 const options = param.data?.map((item, index) => {
@@ -191,15 +189,14 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     <NodeSelect
                         onChange={onChangeSelect}
                         defaultValue={{
-                            value: (isProp || nodeData[param.field]?.value) ? nodeData[param.field]?.value : nodeData[param.field],
-                            label: nodeData[param.field]?.value ?? nodeData[param.field]
+                            value: getFieldValue(param.field, nodeData),
+                            label: getFieldValue(param.field, nodeData)
                         }}
                         options={options} />
                 </div>
             case 'select-multi':
                 const onChangeSelectMulti = (data) => {
                     const dataValues = data.map(obj => obj.value.replace(/"/g, ''));
-                    console.log("🚀 ~ file: Node.tsx:142 ~ onChangeSelectMulti ~ dataValues:", dataValues)
                     setNodeData(id, { ...nodeData, dataValues })
                     dataNotify({ id: id, paramField: param.field, newValue: dataValues })
                 }
@@ -258,7 +255,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                                 color={initColor}
                                 onChangeComplete={(newColor) => {
                                     dataNotify({ id: id, paramField: param.field, newValue: { r: newColor.rgb.r, g: newColor.rgb.g, b: newColor.rgb.b, a: newColor.rgb.a } })
-                                    setNodeData(id, { ...nodeData, [param.field]: newColor.hex })
+                                    setNodeData(id, { ...nodeData, [param.field]: getDataFromField(newColor.hex, param.field, nodeData) })
                                 }}
                             />
                             : null
@@ -279,16 +276,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         onChange={(event: any) => setTmpRangeValue(event.target.value)}
                         onMouseUp={() => {
                             dataNotify({ id: id, paramField: param.field, newValue: tmpRangeValue });
-                            setNodeData(id, { 
-                                ...nodeData, [param.field]: isParameter || isProp ? 
-                                    { 
-                                        ...nodeData[param.field], 
-                                        key: nodeData[param.field]?.key ?? param.label, 
-                                        value: post(tmpRangeValue),
-                                        kind: param.data?.kind ?? 'NumericLiteral'
-                                    } 
-                                    : post(tmpRangeValue) 
-                            })
+                            setNodeData(id, { ...nodeData, [param.field]: getDataFromField(post(tmpRangeValue), param.field, nodeData) })
                         }}
                         value={tmpRangeValue} min={min} max={max} />
                 </>
@@ -304,8 +292,8 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     <input type='checkbox'
                         onChange={() => {
                             dataNotify({ id: id, paramField: param.field, newValue: !checked });
-                            setNodeData(id, { ...nodeData, [param.field]: !checked }),
-                                setChecked(!checked)
+                            setNodeData(id, { ...nodeData, [param.field]: getDataFromField(!checked, param.field, nodeData) })
+                            setChecked(!checked)
                         }}
                         checked={checked ? true : false}
                         style={{ all: "revert", width: nodeFontSize, margin: "2px 0px 2px 0px", accentColor: useTheme("interactiveColor"), transform: `scale(${useTheme('nodeFontSize') / 15})`, marginRight: '5px' }} />
@@ -323,10 +311,11 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     {type && icons[type]
                         ? <div
                             style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: 'pointer' }}
-                            onClick={() => {
+                            onClick={() => {                               
                                 setNodeData(id, {
                                     ...nodeData, [param.field]: {
                                         ...nodeData[param.field],
+                                        // TODO: Changes kind names from helper instead of icon list
                                         kind: Object.keys(icons)[(Object.keys(icons).indexOf(type) + 1) % (Object.keys(icons).length - 1)]
                                     }
                                 })
@@ -345,7 +334,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         disabled={disabled || param.isDisabled}
                         style={{
                             marginRight: ["case", "child"].includes(param.fieldType) ? "20px" : "0px",
-                            paddingLeft: type && icons[type] ? "30px": undefined
+                            paddingLeft: type && icons[type] ? "30px" : undefined
                         }}>
                         {param.error ? <div style={{ alignItems: 'center', marginTop: '5px', display: 'flex' }}>
                             <AlertCircle size={"14px"} color='red' style={{ alignSelf: 'center', marginRight: '5px' }} />

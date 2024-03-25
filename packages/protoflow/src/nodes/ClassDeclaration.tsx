@@ -18,7 +18,7 @@ export const ClassFactory = (classType) => {
         const memberArr = Object.keys(nodeData)?.filter(n => n.startsWith('member-'))
         const members: Field[] = memberArr?.map((member, i) => {
             //TODO: change deleteable to true (both) once delete nodes fixed
-            if (member.startsWith('member-attr-')) {
+            if (member.startsWith('param-')) {
                 return { field: member, type: 'input', fieldType: 'parameter', separator: '=', deleteable: false } as Field
             } else {
                 return { label: `Member [${i}]`, field: member, type: 'input', deleteable: true } as Field
@@ -35,7 +35,7 @@ export const ClassFactory = (classType) => {
 
         const onAddParam = (type) => {
             if (type == 'attribute') {
-                setNodeData(id, { ...nodeData, [`member-attr-${memberArr.length}`]: { type: 'attribute', key: '', value: '' } })
+                setNodeData(id, { ...nodeData, [`param-${memberArr.length}`]: { type: 'attribute', key: '', value: '' } })
             } else {
                 setNodeData(id, { ...nodeData, [`member-${memberArr.length}`]: '' })
             }
@@ -60,7 +60,7 @@ export const ClassFactory = (classType) => {
             var field = 'member-' + i
             var memberData = {}
             if (param.getKindName() == 'PropertyDeclaration') {
-                var field = 'member-attr-' + i
+                var field = 'param-' + i
                 const paramKey = param.getName()
                 const typeNode = param.getTypeNode()
                 const paramValue = param.getInitializer()?.getText() ?? ''
@@ -98,7 +98,7 @@ export const ClassFactory = (classType) => {
     components.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level = 0) => {
         const data = nodesData[node.id] ?? {};
         const body = Object.keys(data)?.filter(n => n.startsWith('member-')).reduce((total, param, i) => {
-            if (param.startsWith('member-attr-')) {
+            if (param.startsWith('param-')) {
                 const paramKey = data[param].key ?? ''
                 const paramValue = data[param].value
                 const paramSymbol = data['type-' + param] && paramValue ? ':' : '='
