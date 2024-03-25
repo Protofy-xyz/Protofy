@@ -14,7 +14,7 @@ const DeleteExpression = (node) => {
         { label: 'Expression', field: 'expression', type: 'input' },
     ]
     return (
-        <Node icon={Trash}  node={node} isPreview={!id} title={"delete "+ nodeData?.expression ?? 'expression'} params={nodeParams} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
+        <Node icon={Trash}  node={node} isPreview={!id} title={"delete "+ (nodeData?.expression ? nodeData.expression : 'expression')} params={nodeParams} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
         </Node>
     );
 }
