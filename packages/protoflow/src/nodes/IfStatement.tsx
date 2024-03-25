@@ -24,6 +24,7 @@ const IfStatement = (node) => {
     const getConnectedNodeMeta = (handle, portType) => metaData.childHeights.find(c => c.node?.edge?.targetHandle == id+portType+handle)
 
     const getBlockHeight = () => {
+        if(!id) return
         if(!metaData.childHeight) return minBlockHeight
         const condition = getConnectedNodeMeta("condition", PORT_TYPES.data)
         const then = getConnectedNodeMeta("then", PORT_TYPES.flow)
@@ -44,7 +45,7 @@ const IfStatement = (node) => {
     return (
         <Node style={{minHeight:blockHeight+'px'}} icon={Split} node={node} isPreview={!id} title={!id?'if' : 'if ( '+nodeData.condition+' )'} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
             <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '0px', marginBottom: '20px' }} />
-            <FlowPort id={id} type='input' label='Then' style={{ top: getConnectedPos('then', nodeFontSize*10)+'px' }} handleId={'then'} />
+            <FlowPort id={id} type='input' label='Then' style={{ top: getConnectedPos('then', nodeFontSize*8)+'px' }} handleId={'then'} />
             <FlowPort id={id} type='input' label='Else' style={{ top: Math.max(0, blockHeight-nodeFontSize)+'px'}} handleId={'else'} />
         </Node>
     );
