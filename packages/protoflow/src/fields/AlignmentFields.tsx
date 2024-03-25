@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { CustomField } from '.';
 import useTheme from '../diagram/Theme';
-import { getDataFromField } from '../utils';
+import { getDataFromField, getFieldValue } from '../utils';
 
 export const getAlignmentTypes = () => ['alignment-text', 'alignment-items', 'alignment-flex', 'alignment-content']
 
@@ -23,8 +23,7 @@ export default ({ nodeData = {}, item, node }) => {
     const { field, label, type, fieldType, menuActions } = item
 
     const fieldKey = field.replace(fieldType + '-', '')
-    const data = nodeData[field]
-    const value = data?.value
+    const value = getFieldValue(field, nodeData)
     const rotation = getIconRotation()
 
     function getIconRotation() {

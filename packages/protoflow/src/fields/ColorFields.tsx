@@ -8,7 +8,7 @@ import { Popover } from '@my/ui'
 import { Pipette, Palette } from 'lucide-react'
 import { CustomField } from '.';
 import { useThemeSetting } from '@tamagui/next-theme'
-import { getDataFromField } from '../utils';
+import { getDataFromField, getFieldValue } from '../utils';
 
 const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     <div onClick={onPress}
@@ -42,8 +42,7 @@ export default ({ nodeData = {}, node, item }) => {
 
     const { field, label, type, menuActions } = item
 
-    const data = nodeData[field]
-    const value = data?.value
+    const value = getFieldValue(field, nodeData)
 
     const [tmpColor, setTmpColor] = useState(value)
     const [menuOpened, setMenuOpened] = React.useState(false)

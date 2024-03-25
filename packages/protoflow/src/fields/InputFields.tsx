@@ -4,7 +4,7 @@ import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
 import { Type, Hash, Braces, ToggleLeft, VariableIcon } from 'lucide-react';
 import Input from '../diagram/NodeInput'
-import { getDataFromField } from '../utils';
+import { getDataFromField, getFieldType, getFieldValue } from '../utils';
 
 export const getInputTypes = () => ['input']
 
@@ -15,7 +15,7 @@ export default ({ nodeData = {}, item, node }) => {
     const { field, label, type, menuActions } = item
 
     const data = nodeData[field]
-    const value = data?.value
+    const value = getFieldValue(field, nodeData)
 
     const [tmpValue, setTmpValue] = useState(value)
 
@@ -27,9 +27,9 @@ export default ({ nodeData = {}, item, node }) => {
         "FalseKeyword": ToggleLeft,
         "Identifier": VariableIcon
     }
-    const iconList = Object.keys(icons).filter(i => i != 'Identifier')
+    const toggleableList = Object.keys(icons).filter(i => i != 'Identifier')
 
-    const defaultKindValue = iconList[0]
+    const defaultKindValue = toggleableList[0]
     const kindValue = data?.kind ?? defaultKindValue
 
     const onValueChange = (val) => {
@@ -40,7 +40,7 @@ export default ({ nodeData = {}, item, node }) => {
         setNodeData(node.id, {
             ...nodeData, [field]: {
                 ...data,
-                kind: iconList[(iconList.indexOf(kindValue) + 1) % (iconList.length - 1)]
+                kind: toggleableList[(toggleableList.indexOf(kindValue) + 1) % (toggleableList.length - 1)]
             }
         })
     }
@@ -52,9 +52,10 @@ export default ({ nodeData = {}, item, node }) => {
             // cases: boolean, number, string, object
             case 'input':
             default:
-                const enabledToggle = iconList.includes(kindValue)
+                const enabledToggle = toggleableList.includes(kindValue)
+                const isDetailedType = getFieldType(field) == "detailed"
                 return <>
-                    {icons[kindValue]
+                    {icons[kindValue] && isDetailedType
                         ? <div
                             style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: enabledToggle ? 'pointer' : '' }}
                             onClick={enabledToggle ? onToggleType : null}
@@ -66,7 +67,7 @@ export default ({ nodeData = {}, item, node }) => {
                         onBlur={() => onValueChange(tmpValue)}
                         style={{
                             fontSize: useTheme('nodeFontSize'),
-                            fontWeight: 'medium', paddingLeft: '38px'
+                            fontWeight: 'medium', paddingLeft: isDetailedType ? '38px' : undefined
                         }}
                         options={item.data?.options}
                         value={tmpValue}

@@ -3,7 +3,7 @@ import useTheme from '../diagram/Theme';
 import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
 import Select from '../diagram/NodeSelect';
-import { getDataFromField } from '../utils';
+import { getDataFromField, getFieldValue } from '../utils';
 
 export const getSelectTypes = () => ['select']
 
@@ -13,8 +13,7 @@ export default ({ nodeData = {}, item, node }) => {
 
     const { field, label, type, data, menuActions } = item
 
-    const itemData = nodeData[field]
-    const value = itemData?.value
+    const value = getFieldValue(field, nodeData)
 
     const options = (data ?? []).map(opt => ({ label: opt, value: opt }))
 

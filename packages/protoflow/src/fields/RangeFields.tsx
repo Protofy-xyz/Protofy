@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import useTheme from '../diagram/Theme';
 import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
-import { getDataFromField } from '../utils';
+import { getDataFromField, getFieldValue } from '../utils';
 
 export const getRangeTypes = () => ['range-theme', 'range-px', 'range']
 
@@ -37,8 +37,7 @@ export default ({ nodeData = {}, item, node }) => {
 
     const { field, label, type, data, menuActions } = item
 
-    const itemData = nodeData[field]
-    const value = itemData?.value
+    const value = getFieldValue(field, nodeData)
 
     const rangeData = { ...defData[type], ...data }
     const pre = rangeData?.pre ?? defData['default']?.pre

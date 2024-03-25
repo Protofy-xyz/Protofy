@@ -419,15 +419,17 @@
         },
         "body": [
             {
+                "type": "api",
+                "data": {
+                    "label": "url",
+                    "field": "prop-url",
+                    "apiUrl": "adminapi/v1/files//apps/next/public",
+                    "list": "return res.isDir ? undefined : res.name"
+                }
+            },
+            {
                 "type": "custom-field",
                 "data": [
-                    {
-                        "label": "url",
-                        "field": "prop-url",
-                        "type": "input",
-                        "staticLabel": true,
-                        "section": "media"
-                    },
                     {
                         "label": "resizeMode",
                         "field": "prop-resizeMode",

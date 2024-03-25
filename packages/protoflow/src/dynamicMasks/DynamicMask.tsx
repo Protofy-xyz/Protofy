@@ -1,16 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import Button from '../Button';
 import Link from '../Link';
 import { MessageSquare, Code } from 'lucide-react'
-import { FlowStoreContext } from '../store/FlowsStore';
-import NodeSelect from '../diagram/NodeSelect';
-import { CustomField, CustomFieldType, getCustomFields } from '../fields';
+import { CustomFieldType, getCustomFields } from '../fields';
 import AddPropButton from '../AddPropButton';
 import useTheme from '../diagram/Theme';
 import { nodeColors } from '../nodes';
-import { getFieldValue, getDataFromField } from '../utils';
+import InputFields from '../fields/InputFields';
 
 const Icons = {
     "CallExpression": MessageSquare,
@@ -21,9 +19,6 @@ const Icons = {
 const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const [result, setResult] = React.useState("")
     const [apiRes, setApiRes] = React.useState()
-
-    const useFlowsStore = useContext(FlowStoreContext)
-    const setNodeData = useFlowsStore(state => state.setNodeData)
 
     // TODO: Refactor api case
     const apiType = mask.data.body.find(e => e.type == 'api')
@@ -58,23 +53,20 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             const resListFunction = new Function('res', element.data?.list)
                             const apiList = apiRes?.map(resListFunction)?.filter(e => e) ?? []
                             const field = element.data.field
-                            const fieldValue = getFieldValue(field, nodeData)
-
-                            const onChangeSelect = (data) => {
-                                setNodeData(node.id, { ...nodeData, [field]: getDataFromField(data.value, field, nodeData) })
-                            }
 
                             return <>
-                                <CustomField label={element.data.label} input={
-                                    apiList.length > 0 ? <NodeSelect
-                                        onChange={onChangeSelect}
-                                        defaultValue={{
-                                            value: fieldValue,
-                                            label: fieldValue
-                                        }}
-                                        options={apiList}
-                                    /> : <></>
-                                } />
+                                <InputFields
+                                    node={node}
+                                    nodeData={nodeData}
+                                    item={{
+                                        field,
+                                        label: element.data.label,
+                                        type: 'input',
+                                        data: {
+                                            options: apiList
+                                        }
+                                    }}
+                                />
                             </>
                         }
                         case 'link': {
