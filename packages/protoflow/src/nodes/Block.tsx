@@ -87,8 +87,8 @@ const Block = (node) => {
                     const x = parseInt(current.targetHandle.slice(id.length+6), 10)
                     return x > last ? x : last
                 }, -1)
-                
-                console.log(id, 'prev: ', nodeData?.connections, 'edges: ', connectedEdges, lastConnected, 'should be: ', lastConnected)
+
+                // console.log(id, 'prev: ', nodeData?.connections, 'edges: ', connectedEdges, lastConnected, 'should be: ', lastConnected)
                 setNodeData(id, {
                     ...nodeData,
                     connections: nodeData.connections.slice(0, lastConnected+2)
