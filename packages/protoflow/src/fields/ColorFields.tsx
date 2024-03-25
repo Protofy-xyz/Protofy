@@ -8,6 +8,7 @@ import { Popover } from '@my/ui'
 import { Pipette, Palette } from 'lucide-react'
 import { CustomField } from '.';
 import { useThemeSetting } from '@tamagui/next-theme'
+import { getNodeDataField } from '../utils';
 
 const ToggleItem = ({ onPress = (e) => { }, selected = false, ...props }) => (
     <div onClick={onPress}
@@ -39,9 +40,8 @@ export default ({ nodeData = {}, node, item }) => {
 
     const tones = ['blue', 'gray', 'green', 'orange', 'pink', 'purple', 'red', 'yellow']
 
-    const { field, label, type, fieldType, menuActions } = item
+    const { field, label, type, menuActions } = item
 
-    const fieldKey = field.replace(fieldType + '-', '')
     const data = nodeData[field]
     const value = data?.value
 
@@ -58,8 +58,8 @@ export default ({ nodeData = {}, node, item }) => {
 
     const onSubmitThemeColor = (col) => {
         if (!col) return
-        // current case is fieldType == "prop"
-        setNodeData(node.id, { ...nodeData, [field]: { ...data, key: fieldKey, value: col, kind: 'StringLiteral' } })
+        setNodeData(node.id, { ...nodeData, [field]: getNodeDataField(col, field, nodeData) })
+
         setTmpColor(col)
     }
 

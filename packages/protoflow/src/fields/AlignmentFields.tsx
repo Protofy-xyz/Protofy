@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { CustomField } from '.';
 import useTheme from '../diagram/Theme';
+import { getNodeDataField } from '../utils';
 
 export const getAlignmentTypes = () => ['alignment-text', 'alignment-items', 'alignment-flex', 'alignment-content']
 
@@ -45,8 +46,7 @@ export default ({ nodeData = {}, item, node }) => {
             deletePropNodeData(node.id, field)
         }
         else { // add new prop to nodeData
-            // current case is fieldType == "prop"
-            setNodeData(node.id, { ...nodeData, [field]: { ...data, key: fieldKey, value: val, kind: 'StringLiteral' } })
+            setNodeData(node.id, { ...nodeData, [field]: getNodeDataField(val, field, nodeData) })
         }
     }
 
@@ -89,6 +89,6 @@ export default ({ nodeData = {}, item, node }) => {
         }
     }
 
-    return <CustomField label={label} input={getInput()} menuActions={menuActions}/>
+    return <CustomField label={label} input={getInput()} menuActions={menuActions} />
 
 }
