@@ -14,7 +14,6 @@
                     {
                         "label": "caption",
                         "field": "child-1",
-                        "fieldType": "child",
                         "type": "child"
                     }
                 ],
@@ -27,14 +26,12 @@
                         "label": "color",
                         "field": "prop-color",
                         "type": "color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "basic"
                     },
                     {
                         "label": "fontStyle",
                         "field": "prop-fontStyle",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -46,7 +43,6 @@
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -54,7 +50,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -62,7 +57,6 @@
                     {
                         "label": "alignSelf",
                         "field": "prop-alignSelf",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-items",
                         "section": "layout"
@@ -70,7 +64,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -78,7 +71,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -102,7 +94,6 @@
                     {
                         "label": "caption",
                         "field": "child-1",
-                        "fieldType": "child",
                         "type": "child"
                     }
                 ],
@@ -114,7 +105,6 @@
                     {
                         "label": "theme",
                         "field": "prop-theme",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color-theme",
                         "section": "layout"
@@ -122,7 +112,6 @@
                     {
                         "label": "textColor",
                         "field": "prop-textColor",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color",
                         "section": "layout"
@@ -130,7 +119,6 @@
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -138,7 +126,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -146,7 +133,6 @@
                     {
                         "label": "size",
                         "field": "prop-size",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "dimensions"
@@ -154,7 +140,6 @@
                     {
                         "label": "circular",
                         "field": "prop-circular",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "decoration"
@@ -162,7 +147,6 @@
                     {
                         "label": "chromeless",
                         "field": "prop-chromeless",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "decoration"
@@ -170,7 +154,6 @@
                     {
                         "label": "alignSelf",
                         "field": "prop-alignSelf",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-items",
                         "section": "layout"
@@ -178,7 +161,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -186,7 +168,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -194,7 +175,6 @@
                     {
                         "label": "borderRadius",
                         "field": "prop-borderRadius",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -207,7 +187,6 @@
                     {
                         "label": "onPress",
                         "field": "prop-onPress",
-                        "fieldType": "prop",
                         "staticLabel": true
                     }
                 ]
@@ -229,7 +208,6 @@
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color",
                         "section": "color"
@@ -238,7 +216,6 @@
                         "label": "flexDirection",
                         "field": "prop-flexDirection",
                         "type": "alignment-flex",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
@@ -246,7 +223,6 @@
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
@@ -254,14 +230,12 @@
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -269,7 +243,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -277,7 +250,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -285,7 +257,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -293,7 +264,6 @@
                     {
                         "label": "border",
                         "field": "prop-border",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "decoration"
@@ -301,7 +271,6 @@
                     {
                         "label": "borderRadius",
                         "field": "prop-borderRadius",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -309,7 +278,6 @@
                     {
                         "label": "elevation",
                         "field": "prop-elevation",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "decoration"
@@ -317,7 +285,6 @@
                     {
                         "label": "gap",
                         "field": "prop-gap",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -349,7 +316,6 @@
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color",
                         "section": "color"
@@ -358,7 +324,6 @@
                         "label": "flexDirection",
                         "field": "prop-flexDirection",
                         "type": "alignment-flex",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
@@ -366,7 +331,6 @@
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
@@ -374,14 +338,12 @@
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -389,7 +351,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -397,7 +358,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -405,7 +365,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -413,7 +372,6 @@
                     {
                         "label": "border",
                         "field": "prop-border",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "decoration"
@@ -421,7 +379,6 @@
                     {
                         "label": "borderRadius",
                         "field": "prop-borderRadius",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -429,7 +386,6 @@
                     {
                         "label": "elevation",
                         "field": "prop-elevation",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "decoration"
@@ -437,7 +393,6 @@
                     {
                         "label": "gap",
                         "field": "prop-gap",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -470,14 +425,12 @@
                         "label": "url",
                         "field": "prop-url",
                         "type": "input",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "media"
                     },
                     {
                         "label": "resizeMode",
                         "field": "prop-resizeMode",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -492,7 +445,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -500,7 +452,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -508,7 +459,6 @@
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -516,7 +466,6 @@
                     {
                         "label": "alignSelf",
                         "field": "prop-alignSelf",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-items",
                         "section": "layout"
@@ -524,7 +473,6 @@
                     {
                         "label": "opacity",
                         "field": "prop-opacity",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range",
                         "data": {
@@ -552,7 +500,6 @@
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color",
                         "section": "color"
@@ -561,7 +508,6 @@
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
@@ -569,14 +515,12 @@
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -584,7 +528,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -592,7 +535,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -600,7 +542,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -608,7 +549,6 @@
                     {
                         "label": "border",
                         "field": "prop-border",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "decoration"
@@ -616,7 +556,6 @@
                     {
                         "label": "borderRadius",
                         "field": "prop-borderRadius",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -624,7 +563,6 @@
                     {
                         "label": "elevation",
                         "field": "prop-elevation",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "decoration"
@@ -632,7 +570,6 @@
                     {
                         "label": "gap",
                         "field": "prop-gap",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -660,7 +597,6 @@
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color",
                         "section": "color"
@@ -669,7 +605,6 @@
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
@@ -677,14 +612,12 @@
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -692,7 +625,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -700,7 +632,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -708,7 +639,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -716,7 +646,6 @@
                     {
                         "label": "border",
                         "field": "prop-border",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "decoration"
@@ -724,7 +653,6 @@
                     {
                         "label": "borderRadius",
                         "field": "prop-borderRadius",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -732,7 +660,6 @@
                     {
                         "label": "elevation",
                         "field": "prop-elevation",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "decoration"
@@ -740,7 +667,6 @@
                     {
                         "label": "gap",
                         "field": "prop-gap",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -768,7 +694,6 @@
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color",
                         "section": "color"
@@ -777,7 +702,6 @@
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
@@ -785,14 +709,12 @@
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -800,7 +722,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -808,7 +729,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -816,7 +736,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -824,7 +743,6 @@
                     {
                         "label": "border",
                         "field": "prop-border",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "decoration"
@@ -832,7 +750,6 @@
                     {
                         "label": "borderRadius",
                         "field": "prop-borderRadius",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -840,7 +757,6 @@
                     {
                         "label": "elevation",
                         "field": "prop-elevation",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "decoration"
@@ -848,7 +764,6 @@
                     {
                         "label": "gap",
                         "field": "prop-gap",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -876,7 +791,6 @@
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color",
                         "section": "color"
@@ -885,7 +799,6 @@
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
@@ -893,14 +806,12 @@
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -908,7 +819,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -916,7 +826,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -924,7 +833,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -932,7 +840,6 @@
                     {
                         "label": "border",
                         "field": "prop-border",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "decoration"
@@ -940,7 +847,6 @@
                     {
                         "label": "borderRadius",
                         "field": "prop-borderRadius",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -948,7 +854,6 @@
                     {
                         "label": "elevation",
                         "field": "prop-elevation",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "decoration"
@@ -956,7 +861,6 @@
                     {
                         "label": "gap",
                         "field": "prop-gap",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -984,7 +888,6 @@
                     {
                         "label": "size",
                         "field": "prop-size",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1013,7 +916,6 @@
                     {
                         "label": "title",
                         "field": "prop-title",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "basic"
@@ -1021,7 +923,6 @@
                     {
                         "label": "backgroundColor",
                         "field": "prop-backgroundColor",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color",
                         "section": "basic"
@@ -1030,7 +931,6 @@
                         "label": "justifyContent",
                         "field": "prop-justifyContent",
                         "type": "alignment-content",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
@@ -1038,14 +938,12 @@
                         "label": "alignItems",
                         "field": "prop-alignItems",
                         "type": "alignment-items",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1053,7 +951,6 @@
                     {
                         "label": "gap",
                         "field": "prop-gap",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "decoration"
@@ -1081,7 +978,6 @@
                     {
                         "label": "caption",
                         "field": "child-1",
-                        "fieldType": "child",
                         "type": "child"
                     }
                 ],
@@ -1094,14 +990,12 @@
                         "label": "color",
                         "field": "prop-color",
                         "type": "color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "basic"
                     },
                     {
                         "label": "fontStyle",
                         "field": "prop-fontStyle",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -1113,7 +1007,6 @@
                     {
                         "label": "fontWeight",
                         "field": "prop-fontWeight",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -1134,7 +1027,6 @@
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1142,7 +1034,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1150,7 +1041,6 @@
                     {
                         "label": "alignSelf",
                         "field": "prop-alignSelf",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-items",
                         "section": "layout"
@@ -1158,7 +1048,6 @@
                     {
                         "label": "textAlign",
                         "field": "prop-textAlign",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-text",
                         "section": "layout"
@@ -1166,7 +1055,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1174,7 +1062,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1202,7 +1089,6 @@
                     {
                         "label": "caption",
                         "field": "child-1",
-                        "fieldType": "child",
                         "type": "child"
                     }
                 ],
@@ -1215,14 +1101,12 @@
                         "label": "color",
                         "field": "prop-color",
                         "type": "color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "basic"
                     },
                     {
                         "label": "fontStyle",
                         "field": "prop-fontStyle",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -1234,7 +1118,6 @@
                     {
                         "label": "fontWeight",
                         "field": "prop-fontWeight",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -1255,7 +1138,6 @@
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1263,7 +1145,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1271,7 +1152,6 @@
                     {
                         "label": "alignSelf",
                         "field": "prop-alignSelf",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-items",
                         "section": "layout"
@@ -1279,7 +1159,6 @@
                     {
                         "label": "textAlign",
                         "field": "prop-textAlign",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-text",
                         "section": "layout"
@@ -1287,7 +1166,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1295,7 +1173,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1323,7 +1200,6 @@
                     {
                         "label": "caption",
                         "field": "child-1",
-                        "fieldType": "child",
                         "type": "child"
                     }
                 ],
@@ -1336,14 +1212,12 @@
                         "label": "color",
                         "field": "prop-color",
                         "type": "color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "basic"
                     },
                     {
                         "label": "fontStyle",
                         "field": "prop-fontStyle",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -1355,7 +1229,6 @@
                     {
                         "label": "fontWeight",
                         "field": "prop-fontWeight",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -1376,7 +1249,6 @@
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1384,7 +1256,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1392,7 +1263,6 @@
                     {
                         "label": "alignSelf",
                         "field": "prop-alignSelf",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-items",
                         "section": "layout"
@@ -1400,7 +1270,6 @@
                     {
                         "label": "textAlign",
                         "field": "prop-textAlign",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-text",
                         "section": "layout"
@@ -1408,7 +1277,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1416,7 +1284,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1444,7 +1311,6 @@
                     {
                         "label": "caption",
                         "field": "child-1",
-                        "fieldType": "child",
                         "type": "child"
                     }
                 ],
@@ -1457,14 +1323,12 @@
                         "label": "color",
                         "field": "prop-color",
                         "type": "color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "basic"
                     },
                     {
                         "label": "fontSize",
                         "field": "prop-fontSize",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "basic"
@@ -1472,7 +1336,6 @@
                     {
                         "label": "fontStyle",
                         "field": "prop-fontStyle",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -1484,7 +1347,6 @@
                     {
                         "label": "fontWeight",
                         "field": "prop-fontWeight",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "select",
                         "data": [
@@ -1505,7 +1367,6 @@
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1513,7 +1374,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1521,7 +1381,6 @@
                     {
                         "label": "alignSelf",
                         "field": "prop-alignSelf",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-items",
                         "section": "layout"
@@ -1529,7 +1388,6 @@
                     {
                         "label": "textAlign",
                         "field": "prop-textAlign",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-text",
                         "section": "layout"
@@ -1537,7 +1395,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1545,7 +1402,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1573,7 +1429,6 @@
                     {
                         "label": "caption",
                         "field": "child-1",
-                        "fieldType": "child",
                         "type": "child"
                     }
                 ],
@@ -1585,7 +1440,6 @@
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1593,7 +1447,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1601,7 +1454,6 @@
                     {
                         "label": "alignSelf",
                         "field": "prop-alignSelf",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-items",
                         "section": "layout"
@@ -1609,7 +1461,6 @@
                     {
                         "label": "textAlign",
                         "field": "prop-textAlign",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-text",
                         "section": "layout"
@@ -1617,7 +1468,6 @@
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1625,7 +1475,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1653,7 +1502,6 @@
                     {
                         "label": "title",
                         "field": "prop-title",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "basic"
@@ -1661,7 +1509,6 @@
                     {
                         "label": "subtitle",
                         "field": "prop-subtitle",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "basic"
@@ -1670,7 +1517,6 @@
                         "label": "titleColor",
                         "field": "prop-titleColor",
                         "type": "color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "basic"
                     },
@@ -1678,14 +1524,12 @@
                         "label": "subtitleColor",
                         "field": "prop-subtitleColor",
                         "type": "color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "basic"
                     },
                     {
                         "label": "space",
                         "field": "prop-space",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1693,7 +1537,6 @@
                     {
                         "label": "margin",
                         "field": "prop-margin",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1701,7 +1544,6 @@
                     {
                         "label": "padding",
                         "field": "prop-padding",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "range-theme",
                         "section": "layout"
@@ -1709,7 +1551,6 @@
                     {
                         "label": "alignSelf",
                         "field": "prop-alignSelf",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "alignment-items",
                         "section": "layout"
@@ -1718,14 +1559,12 @@
                         "label": "flexDirection",
                         "field": "prop-flexDirection",
                         "type": "alignment-flex",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "section": "layout"
                     },
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1733,7 +1572,6 @@
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "dimensions"
@@ -1761,7 +1599,6 @@
                     {
                         "label": "headerTitle",
                         "field": "prop-headerTitle",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "basic"
@@ -1769,7 +1606,6 @@
                     {
                         "label": "title",
                         "field": "prop-title",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "basic"
@@ -1777,7 +1613,6 @@
                     {
                         "label": "description",
                         "field": "prop-description",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "input",
                         "section": "basic"
@@ -1785,7 +1620,6 @@
                     {
                         "label": "tintSwitcher",
                         "field": "prop-tintSwitcher",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "conf"
@@ -1793,7 +1627,6 @@
                     {
                         "label": "themeSwitcher",
                         "field": "prop-themeSwitcher",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "toggle-boolean",
                         "section": "conf"
@@ -1821,7 +1654,6 @@
                     {
                         "label": "caption",
                         "field": "child-1",
-                        "fieldType": "child",
                         "type": "child"
                     }
                 ],
@@ -1832,13 +1664,11 @@
                 "data": [
                     {
                         "label": "margin",
-                        "field": "prop-margin",
-                        "fieldType": "prop"
+                        "field": "prop-margin"
                     },
                     {
                         "label": "padding",
-                        "field": "prop-padding",
-                        "fieldType": "prop"
+                        "field": "prop-padding"
                     }
                 ]
             },
@@ -1848,14 +1678,12 @@
                     {
                         "label": "color",
                         "field": "prop-color",
-                        "fieldType": "prop",
                         "static": true,
                         "type": "colorPicker"
                     },
                     {
                         "label": "textColor",
                         "field": "prop-textColor",
-                        "fieldType": "prop",
                         "static": true,
                         "type": "colorPicker"
                     }
@@ -1878,21 +1706,18 @@
                     {
                         "label": "color",
                         "field": "prop-color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color"
                     },
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "type": "range-px",
                         "staticLabel": true
                     },
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "type": "range-px",
                         "staticLabel": true
                     }
@@ -1919,21 +1744,18 @@
                     {
                         "label": "color",
                         "field": "prop-color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color"
                     },
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "type": "range-px",
                         "staticLabel": true
                     },
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "type": "range-px",
                         "staticLabel": true
                     }
@@ -1960,21 +1782,18 @@
                     {
                         "label": "color",
                         "field": "prop-color",
-                        "fieldType": "prop",
                         "staticLabel": true,
                         "type": "color"
                     },
                     {
                         "label": "height",
                         "field": "prop-height",
-                        "fieldType": "prop",
                         "type": "range-px",
                         "staticLabel": true
                     },
                     {
                         "label": "width",
                         "field": "prop-width",
-                        "fieldType": "prop",
                         "type": "range-px",
                         "staticLabel": true
                     }
