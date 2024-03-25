@@ -10,6 +10,7 @@ import { CustomField, CustomFieldType, getCustomFields } from '../fields';
 import AddPropButton from '../AddPropButton';
 import useTheme from '../diagram/Theme';
 import { nodeColors } from '../nodes';
+import { getFieldValue, getNodeDataField } from '../utils';
 
 const Icons = {
     "CallExpression": MessageSquare,
@@ -57,9 +58,10 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             const resListFunction = new Function('res', element.data?.list)
                             const apiList = apiRes?.map(resListFunction)?.filter(e => e) ?? []
                             const field = element.data.field
-                            const fieldValue = nodeData[field]
+                            const fieldValue = getFieldValue(nodeData[field], field, nodeData)
+
                             const onChangeSelect = (data) => {
-                                setNodeData(node.id, { ...nodeData, [field]: data.value })
+                                setNodeData(node.id, { ...nodeData, [field]: getNodeDataField(data.value, field, nodeData) })
                             }
 
                             return <>
