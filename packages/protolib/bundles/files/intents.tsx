@@ -21,7 +21,7 @@ import { getDefinition, toSourceFile } from '../../api/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";
-import { useSubscription } from 'mqtt-react-hooks'
+import { useEventEffect } from 'protolib/bundles/events/hooks'
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -55,34 +55,25 @@ const JSONViewer = ({ extraIcons, name, path }) => {
 
 type SaveButtonStates = "available" | "unavailable" | "loading"
 
-const SaveButton = ({ checkStatus=() => true, defaultState='available', path, getContent, positionStyle, onSave=()=>{} }) => {
+const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path, getContent, positionStyle, onSave = () => { } }) => {
   const [state, setState] = useState(defaultState)
-  const { message } = useSubscription('notifications/event/create/#');
 
-  useEffect(() => {
-    if(message && message.message) {
-      try {
-        let content = JSON.parse(message.message as string)
-        if(content['path'] == 'services/api/start') {
-          setState(defaultState)
-          onSave()
-        }
+  const onEvent = (event) => {
+    setState(defaultState)
+    onSave()
+  }
 
-      } catch(e) {
-        console.error('Error parsing message from mqtt: ', e)
-      }
-    }
-  }, [message])
+  useEventEffect(onEvent, { path: 'services/api/start' })
 
   useInterval(() => {
-    if(checkStatus() && state == 'unavailable') setState('available')
+    if (checkStatus() && state == 'unavailable') setState('available')
   }, 250)
 
   const _onSave = async () => {
     setState("loading")
     const content = getContent();
     await API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/'), { content });
-    if(!path.startsWith('/packages/app/bundles/custom/apis/')) {
+    if (!path.startsWith('/packages/app/bundles/custom/apis/')) {
       setState(defaultState)
       onSave()
     }
@@ -90,7 +81,7 @@ const SaveButton = ({ checkStatus=() => true, defaultState='available', path, ge
 
   return (
     <XStack position="absolute" {...positionStyle}>
-      {state != "loading" && <IconContainer disabled={state=='unavailable'} onPress={_onSave}>
+      {state != "loading" && <IconContainer disabled={state == 'unavailable'} onPress={_onSave}>
         <Save color="var(--color)" size={"$1"} />
       </IconContainer>}
       {state == "loading" && <Spinner color={"$color"} opacity={0.5} size={17} />}
@@ -154,7 +145,7 @@ If you include anything else in your message (like reasonings or natural languag
   const { resolvedTheme } = useThemeSetting()
   const [mode, setMode] = useState('flow')
 
-  
+
   return <AsyncView atom={fileContent}>
     <XStack mt={30} f={1} width={"100%"}>
       {/* <Theme name={tint as any}> */}
@@ -168,7 +159,7 @@ If you include anything else in your message (like reasonings or natural languag
             <Code color="var(--color)" size={"$1"} />
           </IconContainer>}
         <SaveButton
-          onSave={()=>originalSourceCode.current = sourceCode.current}
+          onSave={() => originalSourceCode.current = sourceCode.current}
           checkStatus={() => sourceCode.current != originalSourceCode.current}
           defaultState={"unavailable"}
           path={path}
@@ -182,7 +173,7 @@ If you include anything else in your message (like reasonings or natural languag
                 parser: "typescript",
                 plugins: [parserTypeScript]
               })
-              if(code) {
+              if (code) {
                 return code
               }
             }
