@@ -1,16 +1,17 @@
 import React from 'react';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 import { LayoutTemplate } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const TemplateExpression =(node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams: Field[] = [
         { label: 'Template', field: 'value', type: 'input'},
     ]
 
     return (
-        <Node icon={LayoutTemplate} node={node} isPreview={!id} title={"template"} id={id} params={nodeParams} color={nodeColors[type]}/>
+        <Node icon={LayoutTemplate} node={node} isPreview={!id} title={"template"} id={id} params={nodeParams} color={color}/>
     );
 }
 TemplateExpression.keyWords = ["Template"]

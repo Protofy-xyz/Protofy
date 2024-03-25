@@ -1,9 +1,10 @@
 import React, { memo } from 'react';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
+import { useNodeColor } from '../diagram/Theme';
 
 const SetNode = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams: Field[] = [
         { label: 'From', field: 'from', type: 'input', description: 'Identifier name. Leave empty to access current scope' },
         { label: 'Key', field: 'key', type: 'input' },
@@ -11,7 +12,7 @@ const SetNode = (node) => {
     ]
 
     return (
-        <Node node={node} isPreview={!id} title='Set' id={id} params={nodeParams} color={nodeColors[type]}/>
+        <Node node={node} isPreview={!id} title='Set' id={id} params={nodeParams} color={color}/>
     );
 }
 

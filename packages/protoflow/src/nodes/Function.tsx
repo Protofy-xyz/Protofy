@@ -1,5 +1,4 @@
 import React, { memo, useContext } from 'react';
-import { nodeColors } from '.';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
 import AddPropButton from '../AddPropButton';
@@ -7,9 +6,11 @@ import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { SyntaxKind } from "ts-morph";
 import { FunctionSquare } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const Function = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const isArrow = (type == 'ArrowFunction')
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
@@ -20,7 +21,7 @@ const Function = (node) => {
     }))
 
     return (
-        <Node icon={FunctionSquare} node={node} isPreview={!id} title={isArrow ? '=>' : nodeData.name?nodeData.name:'function'} id={id} color={nodeColors[type]}>
+        <Node icon={FunctionSquare} node={node} isPreview={!id} title={isArrow ? '=>' : nodeData.name?nodeData.name:'function'} id={id} color={color}>
             <NodeParams id={id} params={[{ label: 'Call', field: 'call', fieldType: 'call', type: 'input' }]} />
             <NodeParams id={id} params={nodeParams} />
             {type != 'FunctionExpression' ?

@@ -1,14 +1,15 @@
 import React, {useContext} from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { DataOutput } from '../lib/types';
 import { Reply } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 
 const ReturnStatement =(node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams: Field[] = [
         { label: 'Value', field: 'value', type: 'input'},
     ]
@@ -17,7 +18,7 @@ const ReturnStatement =(node) => {
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
     return (
-        <Node icon={Reply} node={node} isPreview={!id} title={"return"+(!node.id?'':(' '+nodeData.value))} id={id} params={nodeParams} color={nodeColors[type]} dataOutput = {DataOutput.flow}/>
+        <Node icon={Reply} node={node} isPreview={!id} title={"return"+(!node.id?'':(' '+nodeData.value))} id={id} params={nodeParams} color={color} dataOutput = {DataOutput.flow}/>
     );
 }
 ReturnStatement.keyWords = ["return"]

@@ -1,16 +1,17 @@
 import React, { useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { SyntaxKind } from "ts-morph";
 import { Shapes } from 'lucide-react';
 import { DataOutput } from '../lib/types';
+import { useNodeColor } from '../diagram/Theme';
 
 const InterfaceDeclaration = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const name = [
@@ -21,7 +22,7 @@ const InterfaceDeclaration = (node) => {
     }))
 
     return (
-        <Node icon={Shapes} node={node} isPreview={!id} title={"interface"} id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
+        <Node icon={Shapes} node={node} isPreview={!id} title={"interface"} id={id} color={color} dataOutput = {DataOutput.flow}>
             <NodeParams id={id} params={[{ label: 'Export', field: 'export', type: 'boolean', static: true }]} />
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton id={id} nodeData={nodeData} />

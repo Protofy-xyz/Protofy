@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import { dumpConnection, connectItem, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { SyntaxKind } from "ts-morph";
 import { Code } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const JsxFragment = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
@@ -18,7 +19,7 @@ const JsxFragment = (node) => {
     const nodeParamsChilds: Field[] = childs
 
     return (
-        <Node icon={Code}  node={node} isPreview={!id} title={"<></>"} id={id} color={nodeColors[type]}>
+        <Node icon={Code}  node={node} isPreview={!id} title={"<></>"} id={id} color={color}>
             <NodeParams id={id} params={nodeParamsChilds} />
             <AddPropButton id={id} nodeData={nodeData} type={"Child"} />
         </Node>

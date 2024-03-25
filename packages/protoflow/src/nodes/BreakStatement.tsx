@@ -1,17 +1,17 @@
 import React from 'react';
 import { dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 import { Link2Off } from 'lucide-react';
-import useTheme from '../diagram/Theme';
+import useTheme, { useNodeColor } from '../diagram/Theme';
 
 const BreakStatement =(node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams: Field[] = []
 
     const nodeFontSize = useTheme('nodeFontSize')
     return (
-        <Node icon={Link2Off} style={{minHeight: id ? (nodeFontSize*4+'px') : nodeFontSize, minWidth: nodeFontSize*10+'px'}} node={node} isPreview={!id} title={"break"} id={id} params={nodeParams} color={nodeColors[type]}/>
+        <Node icon={Link2Off} style={{minHeight: id ? (nodeFontSize*4+'px') : nodeFontSize, minWidth: nodeFontSize*10+'px'}} node={node} isPreview={!id} title={"break"} id={id} params={nodeParams} color={color}/>
     );
 }
 BreakStatement.keyWords = ["break"]

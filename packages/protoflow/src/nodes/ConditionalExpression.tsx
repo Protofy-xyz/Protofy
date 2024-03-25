@@ -1,18 +1,19 @@
 import React, { memo } from 'react';
-import { nodeColors } from '.';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { Split } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const ConditionalExpression = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams: Field[] = [
         { label: 'Condition', field: 'condition', type: 'input' },
         { label: 'When true', field: 'whenTrue', type: 'input' },
         { label: 'When false', field: 'whenFalse', type: 'input' },
     ]
     return (
-        <Node icon={Split}  node={node} isPreview={!id} title='ternary' params={nodeParams} id={id} color={nodeColors[type]} >
+        <Node icon={Split}  node={node} isPreview={!id} title='ternary' params={nodeParams} id={id} color={color} >
         </Node>
     );
 }

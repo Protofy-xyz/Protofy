@@ -1,14 +1,15 @@
 import React, { memo, useContext } from 'react';
-import { nodeColors } from '.';
 import { dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import AddPropButton from '../AddPropButton';
 import Node, { Field, NodeParams } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { FileInput } from 'lucide-react';
 import { DataOutput } from '../lib/types';
+import { useNodeColor } from '../diagram/Theme';
 
 const ImportDeclaration = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
@@ -23,7 +24,7 @@ const ImportDeclaration = (node) => {
     ].concat(named)
 
     return (
-        <Node icon={FileInput} node={node} isPreview={!id} title='import' id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
+        <Node icon={FileInput} node={node} isPreview={!id} title='import' id={id} color={color} dataOutput = {DataOutput.flow}>
             <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '10px' }} />
             <AddPropButton id={id} nodeData={nodeData} type={"Import"} style={{marginBottom: '20px'}}/>
         </Node>

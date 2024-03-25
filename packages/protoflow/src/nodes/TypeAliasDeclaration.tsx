@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import { dumpConnection, PORT_TYPES, DumpType, connectItem } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { Shapes } from 'lucide-react';
 import { DataOutput } from '../lib/types';
+import { useNodeColor } from '../diagram/Theme';
 
 const TypeAliasDeclaration = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const name = [
@@ -18,7 +19,7 @@ const TypeAliasDeclaration = (node) => {
         return { label: '[' + i + ']', field: param, type: 'input', deleteable: true } as Field
     }))
     return (
-        <Node icon={Shapes} node={node} isPreview={!id} title={(nodeData.export ? 'export ' : '') + "type " + (nodeData.name ?? '')} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
+        <Node icon={Shapes} node={node} isPreview={!id} title={(nodeData.export ? 'export ' : '') + "type " + (nodeData.name ?? '')} id={id} color={color} dataOutput={DataOutput.flow}>
             <NodeParams id={id} params={[{ label: 'Export', field: 'export', type: 'boolean', static: true }]} />
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton id={id} nodeData={nodeData} type='Union'/>

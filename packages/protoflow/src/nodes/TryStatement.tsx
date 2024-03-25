@@ -1,17 +1,19 @@
 import React, { memo } from 'react';
-import { nodeColors } from '.';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
 import { DataOutput } from '../lib/types';
 import { ListTodo } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const TryStatement = (node) => {
     const { id, type } = node
     const nodeParams: Field[] = [
         { label: 'Error', field: 'error', type: 'input', static: true }
     ]
+    const color = useNodeColor(type)
+    
     return (
-        <Node icon={ListTodo} node={node} isPreview={!id} title='try' id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
+        <Node icon={ListTodo} node={node} isPreview={!id} title='try' id={id} color={color} dataOutput = {DataOutput.flow}>
             <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '70px', marginBottom: '30px' }} />
             <FlowPort id={id} type='input' label='Try' style={{ top: '60px' }} handleId={'try'} />
             <FlowPort id={id} type='input' label='Catch' style={{ top: '90px' }} handleId={'catch'} />

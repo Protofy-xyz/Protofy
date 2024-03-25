@@ -1,18 +1,19 @@
 import React, { useContext } from 'react';
 import { dumpConnection, connectItem, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import { Code } from 'lucide-react';
 import { DataOutput } from '../lib/types';
+import { useNodeColor } from '../diagram/Theme';
 
 const JsxExpression = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams: Field[] = [
         { label: '{jsx}', field: 'expression', type: 'input', description: 'JsxExpression' }
     ]
 
     return (
-        <Node icon={Code}  node={node} isPreview={!id} title={"{Jsx}"} id={id} params={nodeParams} color={nodeColors[type]} dataOutput = {DataOutput.jsx}/>
+        <Node icon={Code}  node={node} isPreview={!id} title={"{Jsx}"} id={id} params={nodeParams} color={color} dataOutput = {DataOutput.jsx}/>
     );
 }
 JsxExpression.keyWords = ["jsx", "jsxexpression", "expression", "tsx", "{}"]

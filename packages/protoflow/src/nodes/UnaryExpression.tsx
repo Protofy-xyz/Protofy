@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { Calculator } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 export const UnaryExpressionFactory = (mode:"pre" | "post") => {
     const UnaryExpression = (node) => {
         const { id, type } = node
+        const color = useNodeColor(type)
         const useFlowsStore = useContext(FlowStoreContext)
         const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
         const nodeParams: Field[] = [
@@ -23,7 +24,7 @@ export const UnaryExpressionFactory = (mode:"pre" | "post") => {
         const operator = nodeData.operator ?? '++'
         const operand = nodeData.value ?? 'x'
         return (
-            <Node icon={Calculator} node={node} isPreview={!id} title={mode == 'pre'? operator+operand:operand+operator} id={id} params={nodeParams} color={nodeColors[type]}/>
+            <Node icon={Calculator} node={node} isPreview={!id} title={mode == 'pre'? operator+operand:operand+operator} id={id} params={nodeParams} color={color}/>
         );
     }
     UnaryExpression.keyWords = ["pre", "++x", "x++","-x"]

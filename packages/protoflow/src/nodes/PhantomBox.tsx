@@ -1,15 +1,16 @@
 import React, { memo, useContext } from 'react';
-import { nodeColors } from '.';
 import Node, { HandleOutput } from '../Node';
 import Text from '../diagram/NodeText';
 import { FlowStoreContext } from "../store/FlowsStore";
+import { useNodeColor } from '../diagram/Theme';
 
 const PhantomBox = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const setMenu = useFlowsStore(state => state.setMenu)
     return (
-        <Node style={{borderColor:'#bbb', borderStyle: 'dashed', borderWidth:2}} output={false} node={node} isPreview={!id} id={id} color={nodeColors[type]}>
+        <Node style={{borderColor:'#bbb', borderStyle: 'dashed', borderWidth:2}} output={false} node={node} isPreview={!id} id={id} color={color}>
             <div onClick={(event: any) => {
                 const { clientX, clientY } = event;
                 console.log('event: ', event)

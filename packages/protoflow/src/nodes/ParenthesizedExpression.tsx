@@ -1,19 +1,21 @@
 import React, { memo } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType, getId } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 import { Parentheses } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const ParenthesizedExpression = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams: Field[] = [
         { label: 'Value', field: 'value', type: 'input' },
     ]
 
     return (
-        <Node icon={Parentheses} node={node} isPreview={!id} title={'()'} id={id} params={nodeParams} color={nodeColors[type]} />
+        <Node icon={Parentheses} node={node} isPreview={!id} title={'()'} id={id} params={nodeParams} color={color} />
     );
 }
+
 ParenthesizedExpression.keyWords = ["()"]
 ParenthesizedExpression.getData = (node, data, nodesData, edges, mode) => {
     //console.log('in ParenthesizedExpression.getData: ', node)

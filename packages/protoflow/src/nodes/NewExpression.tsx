@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, HandleOutput, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import AddPropButton from '../AddPropButton';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { CopyPlus } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const NewExpression =(node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const params:Field[] = Object.keys(nodeData).filter(key => key.startsWith('param')).map((param, i) => {
@@ -19,7 +20,7 @@ const NewExpression =(node) => {
     const nodeOutput: Field = { label: 'Output', field: 'value', type: 'output' }
 
     return (
-        <Node icon={CopyPlus} output={{ label: 'Output', field: 'value', type: 'output' }} node={node} isPreview={!id} title={"new"} id={id}  color={nodeColors[type]}>
+        <Node icon={CopyPlus} output={{ label: 'Output', field: 'value', type: 'output' }} node={node} isPreview={!id} title={"new"} id={id}  color={color}>
             <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '10px' }} />
             <AddPropButton id={id} nodeData={nodeData} type={"param"}/>
             <HandleOutput id={id} param={nodeOutput} />

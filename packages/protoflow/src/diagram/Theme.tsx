@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { FlowStoreContext } from "../store/FlowsStore"
+import { NodeTypes } from '../..';
 
 type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "textColor" | "interactiveColor" | 'interactiveHoverColor' | 'inputBorder' | 'borderColor'
     | 'borderWidth' | 'borderWidthSelected' | 'colorError' | 'handleBorderColor' | 'flowOutputColor' | 'dataOutputColor' | 'highlightInputBackgroundColor' | 'blockPort' | 'flowPort'
     | 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor' | 'disableTextColor' | 'nodeEdgeWidth' | 'nodeEdgeStyle'
-    | 'plusColor' | 'selectedColor' | 'separatorColor'
+    | 'plusColor' | 'selectedColor' | 'separatorColor' | 'nodePalette'
 
 const commonVars: any = {
     nodeBorderWidth: '1px',
@@ -21,6 +22,50 @@ const outlineColorDark = '#888'
 const Theme = {
     light: {
         ...commonVars,
+        nodePalette: {
+            colors: [
+                '#EF9A9A',
+                '#F48FB1',
+                '#CE93D8',
+                '#B39DDB',
+                '#9FA8DA',
+                '#90CAF9',
+                '#81D4FA',
+                '#80DEEA',
+                '#80CBC4',
+                '#A5D6A7',
+                '#C5E1A5',
+                '#FFF59D',
+                '#FFE082',
+                '#FFCC80',
+                '#FFAB91',
+                '#BCAAA4',
+                '#EEEEEE',
+                '#B0BEC5',
+                '#E57373',
+                '#F06292',
+                '#BA68C8',
+                '#9575CD',
+                '#7986CB',
+                '#64B5F6',
+                '#4FC3F7',
+                '#4DD0E1',
+                '#4DB6AC',
+                '#81C784',
+                '#AED581',
+                '#FFF176',
+                '#FFD54F',
+                '#FFB74D',
+                '#FF8A65',
+                '#A1887F',
+                '#E0E0E0',
+                '#90A4AE'
+            ],
+            custom: {
+                SourceFile: '#F7B500',
+                Block: '#ccc'                
+            }
+        },
         plusColor: '#999',
         edgeColor: '#888',
         nodeBackgroundColor: "#fdfdfd",
@@ -47,6 +92,50 @@ const Theme = {
     },
     dark: {
         ...commonVars,
+        nodePalette: {
+            colors: [
+                '#EF9A9A',
+                '#F48FB1',
+                '#CE93D8',
+                '#B39DDB',
+                '#9FA8DA',
+                '#90CAF9',
+                '#81D4FA',
+                '#80DEEA',
+                '#80CBC4',
+                '#A5D6A7',
+                '#C5E1A5',
+                '#FFF59D',
+                '#FFE082',
+                '#FFCC80',
+                '#FFAB91',
+                '#BCAAA4',
+                '#EEEEEE',
+                '#B0BEC5',
+                '#E57373',
+                '#F06292',
+                '#BA68C8',
+                '#9575CD',
+                '#7986CB',
+                '#64B5F6',
+                '#4FC3F7',
+                '#4DD0E1',
+                '#4DB6AC',
+                '#81C784',
+                '#AED581',
+                '#FFF176',
+                '#FFD54F',
+                '#FFB74D',
+                '#FF8A65',
+                '#A1887F',
+                '#E0E0E0',
+                '#90A4AE'
+            ],
+            custom: {
+                SourceFile: '#F7B500',
+                Block: '#ccc'                
+            }
+        },
         plusColor: 'white',
         handleBorderColor: 'black',
         edgeColor: outlineColorDark,
@@ -85,6 +174,15 @@ const useTheme = (key: themeKey, defaultValue = null) => {
         return defaultValue
     }
 
+}
+
+export const useNodeColor = (type) => {
+    //NodeTypes
+    const nodePalette = useTheme('nodePalette', {
+        colors: ['#ccc'],
+        custom: {}
+    })
+    return nodePalette.custom[type] ?? nodePalette.colors[Object.keys(NodeTypes).indexOf(type) % nodePalette.colors.length]
 }
 
 export default useTheme

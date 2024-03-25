@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 
 const VisualGroup = (node) => {
     console.log('node in visualgroup: ', node)

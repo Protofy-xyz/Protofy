@@ -1,16 +1,17 @@
 import React, { useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { Layers } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 import AddPropButton from '../AddPropButton';
+import { useNodeColor } from '../diagram/Theme';
 
 export const MethodFactory = (methodType) => {
     const component = (node) => {
         const { id, type } = node
+        const color = useNodeColor(type)
         const useFlowsStore = useContext(FlowStoreContext)
         const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
@@ -18,7 +19,7 @@ export const MethodFactory = (methodType) => {
             return { label: param.substr(6), field: param, fieldType: 'parameter' } as Field
         })
         return (
-            <Node icon={Layers} node={node} isPreview={!id} title={methodType} id={id} color={nodeColors[type]} dataOutput={DataOutput.method}>
+            <Node icon={Layers} node={node} isPreview={!id} title={methodType} id={id} color={color} dataOutput={DataOutput.method}>
                 <div style={{ height: '40px' }}></div>
                 {methodType == 'method' ? <NodeParams id={id} params={[{ label: 'Name', field: 'name', type: 'input' }]} /> : null}
                 <NodeParams id={id} params={nodeParams} />

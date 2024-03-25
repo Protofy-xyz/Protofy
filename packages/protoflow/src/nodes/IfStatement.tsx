@@ -1,16 +1,16 @@
 import React, { memo, useContext } from 'react';
-import { nodeColors } from '.';
 import Node, { Field, FlowPort, NodeParams, headerSize } from '../Node';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType, getSizeOfLastChild, getConnectedNode } from '../lib/Node';
 import { Split } from 'lucide-react';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { DataOutput } from '../lib/types';
-import useTheme from '../diagram/Theme';
+import useTheme, { useNodeColor } from '../diagram/Theme';
 
 const minBlockHeight = 260
 const marginBottomElse = 0
 const IfStatement = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams: Field[] = [
         { label: 'Condition', field: 'condition', type: 'input' },
     ]
@@ -43,7 +43,7 @@ const IfStatement = (node) => {
 
     const blockHeight = getBlockHeight()
     return (
-        <Node style={{minHeight:blockHeight+'px'}} icon={Split} node={node} isPreview={!id} title={!id?'if' : 'if ( '+nodeData.condition+' )'} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
+        <Node style={{minHeight:blockHeight+'px'}} icon={Split} node={node} isPreview={!id} title={!id?'if' : 'if ( '+nodeData.condition+' )'} id={id} color={color} dataOutput={DataOutput.flow}>
             <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '0px', marginBottom: '20px' }} />
             <FlowPort id={id} type='input' label='Then' style={{ top: getConnectedPos('then', nodeFontSize*8)+'px' }} handleId={'then'} />
             <FlowPort id={id} type='input' label='Else' style={{ top: Math.max(0, blockHeight-nodeFontSize)+'px'}} handleId={'else'} />

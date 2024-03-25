@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { FileSymlink } from 'lucide-react';
 import { DataOutput } from '../lib/types';
+import { useNodeColor } from '../diagram/Theme';
 
 const ExportDeclaration =(node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
@@ -16,7 +17,7 @@ const ExportDeclaration =(node) => {
     }) as Field[]
 
     return (
-        <Node icon={FileSymlink} node={node} isPreview={!id} title={"export"} id={id} params={nodeParams} color={nodeColors[type]} dataOutput={DataOutput.flow}/>
+        <Node icon={FileSymlink} node={node} isPreview={!id} title={"export"} id={id} params={nodeParams} color={color} dataOutput={DataOutput.flow}/>
     );
 }
 

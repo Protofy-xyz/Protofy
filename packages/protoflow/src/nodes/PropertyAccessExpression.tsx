@@ -1,17 +1,18 @@
 import React, { memo } from 'react';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 import { Crosshair } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const PropertyAccessExpression = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams:Field[] = [
         { label: 'Name', field: 'name', type: 'input' },
         { label: 'Property', field: 'prop', type: 'input' },
     ]
     return (
-        <Node icon={Crosshair} node={node} isPreview={!id} title={"property"} color={nodeColors[type]} id={id} params={nodeParams} />
+        <Node icon={Crosshair} node={node} isPreview={!id} title={"property"} color={color} id={id} params={nodeParams} />
     );;
 }
 PropertyAccessExpression.keyWords = ["property"]

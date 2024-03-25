@@ -1,17 +1,16 @@
 import React from 'react';
 import { dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 import { Redo } from 'lucide-react';
 import { DataOutput } from '../lib/types';
-
+import { useNodeColor } from '../diagram/Theme';
 
 const ContinueStatement =(node) => {
     const { id, type } = node
     const nodeParams: Field[] = []
-
+    const color = useNodeColor(type)
     return (
-        <Node icon={Redo} node={node} isPreview={!id} title={"continue"} id={id} params={nodeParams} color={nodeColors[type]} dataOutput={DataOutput.flow}/>
+        <Node icon={Redo} node={node} isPreview={!id} title={"continue"} id={id} params={nodeParams} color={color} dataOutput={DataOutput.flow}/>
     );
 }
 ContinueStatement.keyWords = ["continue"]

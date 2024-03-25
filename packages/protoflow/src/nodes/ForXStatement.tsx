@@ -1,13 +1,14 @@
 import React, { memo, useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { Network } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 export const ForXStatementFactory = (mode: 'in' | 'of') => {
     const ForXStatement = (node) => {
         const { id, type } = node
+        const color = useNodeColor(type)
         const useFlowsStore = useContext(FlowStoreContext)
         const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
         const nodeParams: Field[] = [
@@ -15,7 +16,7 @@ export const ForXStatementFactory = (mode: 'in' | 'of') => {
             { label: 'Iterator', field: 'iterator', type: 'input' }]
 
         return (
-            <Node icon={Network} node={node} isPreview={!id} title={"for(" + (nodeData?.element ?? 'element') + ` ${mode} ` + (nodeData?.iterator ?? 'item') + ")"} id={id} color={nodeColors[type]}>
+            <Node icon={Network} node={node} isPreview={!id} title={"for(" + (nodeData?.element ?? 'element') + ` ${mode} ` + (nodeData?.iterator ?? 'item') + ")"} id={id} color={color}>
                 <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '0px', marginBottom: '80px' }} />
                 <FlowPort id={id} type='input' label='Loop' style={{ top: '180px' }} handleId={'loop'} />
             </Node>

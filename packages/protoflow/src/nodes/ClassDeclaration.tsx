@@ -1,16 +1,17 @@
 import React, { memo, useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType, getTrivia } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import { isPortConnected } from '../lib/Edge';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { Blocks } from 'lucide-react';
 import { DataOutput } from '../lib/types';
 import Button from '../Button';
+import { useNodeColor } from '../diagram/Theme';
 
 export const ClassFactory = (classType) => {
     const components = (node) => {
         const { id, type } = node
+        const color = useNodeColor(type)
         const useFlowsStore = useContext(FlowStoreContext)
         const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
         const setNodeData = useFlowsStore(state => state.setNodeData)
@@ -42,7 +43,7 @@ export const ClassFactory = (classType) => {
         }
 
         return (
-            <Node icon={Blocks} node={node} isPreview={!id} title={`class ${classType}`} id={id} color={nodeColors[type]} dataOutput={DataOutput.flow}>
+            <Node icon={Blocks} node={node} isPreview={!id} title={`class ${classType}`} id={id} color={color} dataOutput={DataOutput.flow}>
                 {classType == 'declaration' ? <NodeParams id={id} params={declarationParams} /> : null}
                 <NodeParams id={id} params={nodeParams} />
                 <div style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>

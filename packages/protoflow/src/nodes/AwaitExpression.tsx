@@ -1,17 +1,18 @@
 import React from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { nodeColors } from '.';
 import { Timer } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const AwaitExpression =(node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const nodeParams: Field[] = [
         { label: 'Value', field: 'value', type: 'input'},
     ]
 
     return (
-        <Node icon={Timer} node={node} isPreview={!id} title={"await"} id={id} params={nodeParams} color={nodeColors[type]}/>
+        <Node icon={Timer} node={node} isPreview={!id} title={"await"} id={id} params={nodeParams} color={color}/>
     );
 }
 AwaitExpression.keyWords = ['await']

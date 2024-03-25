@@ -1,13 +1,13 @@
 import React, { memo, useContext } from 'react';
 import { dumpConnection, connectItem, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { SyntaxKind } from "ts-morph";
 import { Code } from 'lucide-react';
 import { DEV_WIP_GM } from '../toggles';
 import CreateMaskButton from '../CreateMaskButton';
+import { useNodeColor } from '../diagram/Theme';
 
 export const JsxElementFactory = (JsxType) => {
     const isSelfClosingElement = JsxType == 'JsxSelfClosingElement'
@@ -16,7 +16,7 @@ export const JsxElementFactory = (JsxType) => {
         const { id, type } = node
         const useFlowsStore = useContext(FlowStoreContext)
         const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
-
+        const color = useNodeColor(type)
         const name = [
             { label: 'TagName', static: true, field: 'name', type: 'input', description: 'JsxElement name' },
         ] as Field[]
@@ -33,7 +33,7 @@ export const JsxElementFactory = (JsxType) => {
         const nodeParamsChilds: Field[] = childs
 
         return (
-            <Node headerContent={<div>hello</div>} icon={Code} node={node} isPreview={!id} title={"<x ...></x>"} id={id} color={nodeColors[type]}>
+            <Node headerContent={<div>hello</div>} icon={Code} node={node} isPreview={!id} title={"<x ...></x>"} id={id} color={color}>
                 {
                     DEV_WIP_GM && <CreateMaskButton nodeData={nodeData} maskType='JsxElement' />
                 }

@@ -6,8 +6,7 @@ import Link from '../Link';
 import { MessageSquare, Code } from 'lucide-react'
 import { CustomFieldType, getCustomFields } from '../fields';
 import AddPropButton from '../AddPropButton';
-import useTheme from '../diagram/Theme';
-import { nodeColors } from '../nodes';
+import useTheme, { useNodeColor } from '../diagram/Theme';
 import InputFields from '../fields/InputFields';
 
 const Icons = {
@@ -19,7 +18,7 @@ const Icons = {
 const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
     const [result, setResult] = React.useState("")
     const [apiRes, setApiRes] = React.useState()
-
+    const color = useNodeColor(node.type)
     // TODO: Refactor api case
     const apiType = mask.data.body.find(e => e.type == 'api')
     if (apiType) {
@@ -33,7 +32,7 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
     }
 
     return (
-        <Node icon={Icons[node.type]} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color={nodeColors[node.type]} skipCustom={true}>
+        <Node icon={Icons[node.type]} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color={color} skipCustom={true}>
             {
                 mask.data.body.map(element => {
                     switch (element.type) {

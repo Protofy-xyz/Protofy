@@ -1,15 +1,16 @@
 import React, { memo, useContext } from 'react';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType, getTrivia, getValueTrivia } from '../lib/Node';
 import Node, { Field, isDataPortConnected } from '../Node';
-import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { useEdges } from 'reactflow';
 import { Calculator, Equal } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 export const BinaryExpressionFactory = (_operator: string) => {
     const getFielNameLeft = (operator) => operator == '=' ? 'setLeft' : 'left'
     const BinaryExpression = (node) => {
         const { id, type } = node
+        const color = useNodeColor(type)
         const operatorModeTable = {
             '+': 'operator',
             '-': 'operator',
@@ -67,7 +68,7 @@ export const BinaryExpressionFactory = (_operator: string) => {
                 title={mode == 'operator'?(!isDataPortConnected(id, getFielNameLeft(operator), edges) && nodeData[getFielNameLeft(operator)]?nodeData[getFielNameLeft(operator)]:'...')+(nodeData.operator ? ' ' + nodeData.operator + ' ': ' + ')+(!isDataPortConnected(id, 'right', edges) && nodeData.right?nodeData.right:'...'):mode} 
                 id={id} 
                 params={nodeParams} 
-                color={nodeColors[type]} 
+                color={color} 
             />
         );
     }

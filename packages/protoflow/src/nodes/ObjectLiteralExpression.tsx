@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType, getTrivia } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import AddPropButton from '../AddPropButton';
 import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { TableProperties } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 export const ObjectFactory = (objectType) => {
     const component = (node) => {
         const { id, type } = node
+        const color = useNodeColor(type)
         const useFlowsStore = useContext(FlowStoreContext)
         const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
         const extraProps = nodeData.mode == 'json' ? { keyPre: (str) => str.replace(/^(["'])|(["'])$/g, ''), keyPost: (str) => '"' + str + '"' } : {}
@@ -19,7 +20,7 @@ export const ObjectFactory = (objectType) => {
         })
 
         return (
-            <Node icon={TableProperties} node={node} isPreview={!id} title={objectType == 'typeLiteral' ? "type literal" : "Object"} id={id} color={nodeColors[type]}>
+            <Node icon={TableProperties} node={node} isPreview={!id} title={objectType == 'typeLiteral' ? "type literal" : "Object"} id={id} color={color}>
                 <div style={{ height: '5px' }}></div>
                 <NodeParams id={id} params={nodeParams} />
                 <AddPropButton label={"Add Property"} id={id} nodeData={nodeData} />

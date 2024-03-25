@@ -1,13 +1,14 @@
 import React, { memo, useContext } from 'react';
-import { nodeColors } from '.';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType, getValueTrivia } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
 import AddPropButton from '../AddPropButton';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { ArrowUpRight } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const CallExpression = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const paramsArray = Object.keys(nodeData).filter(key => key.startsWith('param'))
@@ -28,7 +29,7 @@ const CallExpression = (node) => {
     ) as Field[]
 
     return (
-        <Node icon={ArrowUpRight} node={node} isPreview={!id} title={(nodeData.to ? nodeData.to : 'x') + '(' + (paramsArray.map(p => nodeData[p] ? nodeData[p] : '...').join(',')) + ')'} id={id} color={nodeColors[type]}>
+        <Node icon={ArrowUpRight} node={node} isPreview={!id} title={(nodeData.to ? nodeData.to : 'x') + '(' + (paramsArray.map(p => nodeData[p] ? nodeData[p] : '...').join(',')) + ')'} id={id} color={color}>
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton keyId={'param' + nextId} id={id} nodeData={nodeData} />
         </Node>

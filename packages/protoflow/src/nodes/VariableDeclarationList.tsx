@@ -1,14 +1,15 @@
 import React, { memo, useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType, getValueTrivia, getTrivia } from '../lib/Node';
 import Node, { Field, isDataPortConnected } from '../Node';
-import { nodeColors } from '.';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { Equal } from 'lucide-react';
 import { useEdges } from 'reactflow';
+import { useNodeColor } from '../diagram/Theme';
 
 export const VariableDeclarationListNodeFactory = (declarationType) => {
     const component = (node) => {
         const { id, type } = node
+        const color = useNodeColor(type)
         const useFlowsStore = useContext(FlowStoreContext)
         const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
         const nodeType = nodeData['type'] ?? declarationType
@@ -31,7 +32,7 @@ export const VariableDeclarationListNodeFactory = (declarationType) => {
         )
 
         return (
-            <Node icon={Equal} node={node} isPreview={!id} title={(nodeData?.export ? 'export ' : '') + (nodeType) + ' ' + declarationArr.map(d => nodeData[d]).join(',')} id={id} params={nodeParams} color={nodeColors[nodeType + 'Node'] ?? nodeColors[type]} />
+            <Node icon={Equal} node={node} isPreview={!id} title={(nodeData?.export ? 'export ' : '') + (nodeType) + ' ' + declarationArr.map(d => nodeData[d]).join(',')} id={id} params={nodeParams} color={color} />
         );
     }
 

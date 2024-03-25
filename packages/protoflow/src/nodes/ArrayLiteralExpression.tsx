@@ -1,10 +1,10 @@
 import React, { memo, useContext } from 'react';
-import { nodeColors } from '.';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType, getTrivia } from '../lib/Node';
 import AddPropButton from '../AddPropButton';
 import Node, { Field, NodeParams } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { SquareStack } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const ArrayLiteralExpression = (node) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -13,6 +13,7 @@ const ArrayLiteralExpression = (node) => {
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const params = Object.keys(nodeData).filter(key => key.startsWith('element-'))
     const paramLength = params.length
+    const color = useNodeColor(type)
 
     const nodeParams: Field[] = params.map((param, i) => {
         return { label: '[' + i + ']', field: param, type: 'input', deleteable: true } as Field
@@ -29,7 +30,7 @@ const ArrayLiteralExpression = (node) => {
     }
 
     return (
-        <Node icon={SquareStack} node={{ ...node, data: { ...node.data, width: 1 } }} isPreview={!id} title={'array' + (paramLength ? ' ['+paramLength+']':'')} id={id} color={nodeColors[type]} >
+        <Node icon={SquareStack} node={{ ...node, data: { ...node.data, width: 1 } }} isPreview={!id} title={'array' + (paramLength ? ' ['+paramLength+']':'')} id={id} color={color} >
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton id={id} nodeData={nodeData} type={"Element"} />
         </Node>

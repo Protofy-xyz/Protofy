@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
-import { nodeColors } from '.';
 import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { DataOutput } from '../lib/types';
 import { Combine } from 'lucide-react';
+import { useNodeColor } from '../diagram/Theme';
 
 const ObjectBindingPattern = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const nodeParams: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('param-')).map((param: any, i) => {
@@ -17,7 +18,7 @@ const ObjectBindingPattern = (node) => {
     })
 
     return (
-        <Node icon={Combine} node={node} isPreview={!id} title={"object binding"} id={id} color={nodeColors[type]} dataOutput = {DataOutput.binding}>
+        <Node icon={Combine} node={node} isPreview={!id} title={"object binding"} id={id} color={color} dataOutput = {DataOutput.binding}>
             <NodeParams id={id} params={nodeParams} />
             <AddPropButton id={id} nodeData={nodeData} />
         </Node>

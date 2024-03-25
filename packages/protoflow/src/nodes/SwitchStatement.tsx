@@ -1,14 +1,15 @@
 import React, { memo, useContext } from 'react';
-import { nodeColors } from '.';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
 import AddPropButton from '../AddPropButton';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { Split } from 'lucide-react';
 import { DataOutput } from '../lib/types';
+import { useNodeColor } from '../diagram/Theme';
 
 const SwitchStatement = (node) => {
     const { id, type } = node
+    const color = useNodeColor(type)
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     //@ts-ignore
@@ -26,7 +27,7 @@ const SwitchStatement = (node) => {
         { label: `default :`, field: `defaultBlock`, fieldType: 'clause' } as Field
     ]
     return (
-        <Node icon={Split} node={node} isPreview={!id} title='switch' id={id} color={nodeColors[type]} dataOutput = {DataOutput.flow}>
+        <Node icon={Split} node={node} isPreview={!id} title='switch' id={id} color={color} dataOutput = {DataOutput.flow}>
             <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '10px' }} />
             <AddPropButton id={id} nodeData={nodeData} type={'Case'} style={{ marginBottom: '20px' }} />
             <NodeParams id={id} params={defaultParam} boxStyle={{ marginBottom: '10px' }} />
