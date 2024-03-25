@@ -4,7 +4,7 @@ import '@tamagui/font-inter/css/700.css'
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { Provider } from 'app/provider'
 import React, { useCallback, useMemo, useEffect, useRef, useState, useContext } from 'react';
-import { Panel } from 'reactflow';
+import { Panel, useNodesInitialized } from 'reactflow';
 import { PORT_TYPES, createNode, getId, saveNodes } from './lib/Node';
 import { getDiffs } from './lib/diff'
 import { NodeTypes } from './nodes';
@@ -125,6 +125,7 @@ const FlowsBase = ({
     const clearNodesData = useFlowsStore(state => state.clearNodesData)
     const appendCustomComponents = useFlowsStore(state => state.appendCustomComponents)
     const appendedCustomComponents = useFlowsStore(state => state.customComponents)
+
     const nodeData = useFlowsStore(state => state.nodeData)
     const menuState = useFlowsStore(state => state.menuState)
     const _customComponents = [...customComponents, ...(config?.masks?.map(m => GetDynamicCustomComponent(m)) ?? [])].filter(x => x)
@@ -766,6 +767,11 @@ const FlowsBase = ({
             reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
         }
     }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
+
+    if(typeof window !== undefined) window['reLayout'] = () => {
+        reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
+    }
+
     return (
         <div ref={diagramRef} style={{ height: '100%', width: '100%' }}>
             {display ? <Diagram
@@ -786,6 +792,11 @@ const FlowsBase = ({
                 onInit={() => { }}
                 style={{ backgroundColor: bgColor }}
                 nodePreview={nodePreview}
+                onNodeInitializationStatusChange={(status) => {
+                    if(status) {
+                        reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
+                    }
+                }}
                 componentsMenu={
                     menuState != 'closed' ?
                         <Menu
