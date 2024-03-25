@@ -6,7 +6,8 @@ import ReactFlow, {
     OnNodesDelete,
     NodeDragHandler,
     OnEdgesDelete,
-    SelectionDragHandler
+    SelectionDragHandler,
+    useNodesInitialized
 } from 'reactflow';
 import useUndoRedo from '../hooks/useUndoRedo';
 import useKeypress from 'react-use-keypress';
@@ -37,6 +38,7 @@ type DiagramParams = {
     children?: any,
     topics?: any
     onNodesDelete?: any,
+    onNodeInitializationStatusChange?: any,
     themeMode?: "light" | "dark",
     theme?: any,
     defaultViewPort?: { x: number, y: number, zoom: number },
@@ -69,7 +71,8 @@ const Diagram = React.forwardRef(({
     defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
     onViewPortChange = () => { },
     nodePreview = 'flow',
-    defaultSelected = () => undefined
+    defaultSelected = () => undefined,
+    onNodeInitializationStatusChange = (initialized) => undefined 
 }: DiagramParams, ref) => {
     const reactFlowWrapper = useRef<HTMLElement | null>(null);
     const isDiagramVisible = reactFlowWrapper.current?.getBoundingClientRect()?.height > 0
@@ -78,6 +81,9 @@ const Diagram = React.forwardRef(({
     const setThemeMode = useFlowsStore(state => state.setTemeMode)
     const [internalData, setInternalData] = useState([])
     const { project, setViewport, getNodes, getViewport, setCenter, setEdges, getEdges, setNodes } = useProtoflow()
+    const nodesInitialized = useNodesInitialized();
+
+    useEffect(() => onNodeInitializationStatusChange(nodesInitialized), [nodesInitialized])
 
     const { undo, redo, takeSnapshot, clearNodes } = useUndoRedo();
     const connectingNode = useRef<{
@@ -302,7 +308,7 @@ const Diagram = React.forwardRef(({
     }, [nodePreview, zoomNodes[0]])
 
     const proOptions = { hideAttribution: true };
-
+    
     return (<div style={{ width: '100%', height: "100%" }} ref={ref as any}>
         <SelectionListener onSelectionChange={onSelectionChange} />
         <div style={{ height: '100%' }} ref={reactFlowWrapper as any}>

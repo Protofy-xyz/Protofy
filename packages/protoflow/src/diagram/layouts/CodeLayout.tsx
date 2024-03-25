@@ -109,6 +109,7 @@ const computeLayout = (nodes, edges, node, pos={x:0, y: 0}, metadata={}, tracker
 
 const getLayoutedElements = async (nodes, edges, node) => {
     const layoutedNodes = nodes.map(n => {return {...n}})
+    await sleep(1)
     const metadata = computeLayout(layoutedNodes, edges, node)
     await sleep(1)
     return { nodes:layoutedNodes, edges, metadata};

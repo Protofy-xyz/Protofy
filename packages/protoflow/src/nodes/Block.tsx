@@ -75,10 +75,10 @@ const Block = (node) => {
             title: 'Case Clause'
         }
     }
+    const connectedEdges = id ? edges.filter(e => e.target == id) : []
 
     if (id) {
         React.useEffect(() => {
-            const connectedEdges = edges.filter(e => e.target == id)
             if (nodeData.mode != 'json' && (connectedEdges.length == nodeData?.connections?.length || !nodeData?.connections?.length)) {
                 addConnection()
             } else {
@@ -135,7 +135,7 @@ const Block = (node) => {
                     pos = pos + (nodeData.connections.length == 1 ? singleNodeOffset : marginTop)-10
                     //pos = 60 + (i * 60)
                     return <>
-                        <div style={{left: (nodeFontSize/2-1)+'px', position: 'absolute', top: (pos-(nodeFontSize/4)) + 'px', width: nodeFontSize+'px', height: (nodeFontSize/2)+'px', backgroundColor: typeConf[type].color}} />
+                        {connectedEdges.length > 0 && <div style={{left: (nodeFontSize/2-1)+'px', position: 'absolute', top: (pos-(nodeFontSize/4)) + 'px', width: nodeFontSize+'px', height: (nodeFontSize/2)+'px', backgroundColor: typeConf[type].color}} />}
                         <FlowPort key={i} id={id} type='input' label='' style={{ left:isEmpty?'':(nodeFontSize)+'px',top: pos + 'px' }} handleId={'block' + i} allowedTypes={["data", "flow"]}/>
                     </>
                 })}
