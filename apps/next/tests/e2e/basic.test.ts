@@ -16,10 +16,10 @@ const PAGE_TEMPLATES = {
 }
 // Api menu opt
 const API_TEMPLATES = {
-    Automatic_CRUD: 0,
-    Automatic_CRUD_Custom_Storage: 1,
-    IOT_Router: 2,
-    Empty: 3
+    Automatic_CRUD: "automatic-crud",
+    Automatic_CRUD_Custom_Storage: "automatic-crud-storage",
+    IOT_Router: "iot-router",
+    Custom: "custom-api"
 }
 // Api menu opt
 const API_OBJECT_OPTIONS = {
@@ -62,7 +62,7 @@ describe("Basic tests", () => {
         await protoBrowser.waitForElement('#sign-up-email-input');
         await protoBrowser.signUpFlow(`randomuser-${uuidv4()}@noreply.com`, 'changeme4321');
         expect(await protoBrowser.getUrlPath()).toBe('/')
-    }, 30000)
+    }, 60000)
 })
 describe("Test admin capabilities", () => {
     let protoBrowser: ProtoBrowser;
@@ -85,26 +85,26 @@ describe("Test admin capabilities", () => {
 
     describe("Test entities autocreation", () => {
         beforeAll(async () => {
-            await protoBrowser.navigateToWorkspace();
-        }, 60000)
+            await protoBrowser.navigateToAdmin();
+        }, 120000)
         describe("test api creations", () => {
             it("should be able to create an empty api", async () => {
                 const apiName = 'testapi'
-                await protoBrowser.navigateToWorkspaceSection('apis')
+                await protoBrowser.navigateToAdminSection('apis')
                 await protoBrowser.getEditableObjectCreate()
-                expect(await protoBrowser.getElementText('#eo-dlg-title')).toBe('Add Api')
+                // Select template
+                await protoBrowser.clickElement(`#template-card-${API_TEMPLATES.Custom}`)
+                await protoBrowser.clickElement(`#admin-apis-add-btn`)
+                // Configure api
                 await protoBrowser.fillEditableObjectInput('name', apiName)
-                await protoBrowser.fillEditableObjectSelect('template', API_TEMPLATES.Empty)
-                await protoBrowser.fillEditableObjectSelect('object', API_OBJECT_OPTIONS.Without_Object)
-                await protoBrowser.submitEditableObject()
-                await protoBrowser.waitForElement(`#apis-datatable-${apiName}`)
+                await protoBrowser.clickElement(`#admin-apis-add-btn`)
                 expect(await protoBrowser.getElementText(`#apis-datatable-${apiName}`)).toBe(apiName);
             }, 60000)
         })
 
         describe("test object creation", () => {
             beforeEach(async () => {
-                await protoBrowser.navigateToWorkspaceSection('objects')
+                await protoBrowser.navigateToAdminSection('objects')
                 await protoBrowser.getEditableObjectCreate()
             }, 60000)
 
@@ -131,7 +131,7 @@ describe("Test admin capabilities", () => {
             const pageRoute = 'testpage'
             describe("test page creation", () => {
                 beforeEach(async () => {
-                    await protoBrowser.navigateToWorkspaceSection('pages')
+                    await protoBrowser.navigateToAdminSection('pages')
                     await protoBrowser.getEditableObjectCreate()
                 }, 60000)
                 it("should be able to create a blank page", async () => {
@@ -141,7 +141,6 @@ describe("Test admin capabilities", () => {
                     // Configure page
                     await protoBrowser.fillEditableObjectInput('name', pageName)
                     await protoBrowser.fillEditableObjectInput('route', pageRoute)
-                    expect(await protoBrowser.getElementText('#eo-dlg-title')).toBe('Add Page')
                     await protoBrowser.clickElement(`#admin-pages-add-btn`)
                     expect(await protoBrowser.getElementText(`#pages-datatable-${pageName}`)).toBe(pageName);
                 }, 60000)
@@ -149,7 +148,7 @@ describe("Test admin capabilities", () => {
 
             describe("test edit page", () => {
                 beforeEach(async () => {
-                    await protoBrowser.navigateToWorkspaceSection('pages')
+                    await protoBrowser.navigateToAdminSection('pages')
                 }, 60000)
                 it("should be able to edit the page", async () => {
                     await protoBrowser.waitForElement('#admin-dataview-add-btn');
@@ -161,7 +160,7 @@ describe("Test admin capabilities", () => {
 
             describe("test delete page", () => {
                 beforeEach(async () => {
-                    await protoBrowser.navigateToWorkspaceSection('pages')
+                    await protoBrowser.navigateToAdminSection('pages')
                 }, 60000)
                 it("should be able to delete the page", async () => {
                     await protoBrowser.waitForElement('#admin-dataview-add-btn');

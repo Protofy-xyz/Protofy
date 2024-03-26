@@ -14,7 +14,7 @@
   </a>
 </h4>
 
-<p align="center">AI Supercharged LowCode Platform CMS and Framework</p>
+<p align="center">AI Supercharged LowCode Platform CMS and Framework</p> 
 
 ![visual-ui-gif](https://github.com/Protofy-xyz/Protofy/blob/assets/visualui/visualui-2.gif?raw=true)
 

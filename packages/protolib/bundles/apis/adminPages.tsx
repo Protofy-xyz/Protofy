@@ -1,10 +1,10 @@
 import { APIModel } from '.'
-import { DataTable2, API, DataView, AlertDialog, AdminPage, PaginatedDataSSR  } from 'protolib'
-import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView } from "@my/ui";
+import { DataTable2, API, DataView, AlertDialog, AdminPage } from 'protolib'
+import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView, useToastController } from "@my/ui";
 import { ToyBrick, Eye, ChevronDown } from '@tamagui/lucide-icons'
 import { z } from 'protolib/base'
 import { usePageParams } from '../../next'
-import { getURLWithToken, withSession } from '../../lib/Session'
+import { withSession } from '../../lib/Session'
 import { usePrompt } from '../../context/PromptAtom'
 import { Chip } from '../../components/Chip'
 import { useState } from 'react'
@@ -14,9 +14,51 @@ import { Tinted } from '../../components/Tinted';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { getPendingResult } from '../../base';
 import { SSR } from '../../lib/SSR';
-
+import { Slides } from '../../components/Slides';
+import { apiTemplates } from 'app/bundles/templates'
+import { TemplateCard } from './TemplateCard';
+import { EditableObject } from '../../components/EditableObject';
 
 const APIIcons = {}
+
+const SelectGrid = ({ children }) => {
+    return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
+        {children}
+    </XStack>
+}
+const FirstSlide = ({ selected, setSelected }) => {
+    return <YStack>
+        <ScrollView mah={"500px"}>
+            <SelectGrid>
+                {Object.entries(apiTemplates).map(([templateId, template]) => (
+                    <TemplateCard
+                        template={template}
+                        isSelected={selected === templateId}
+                        onPress={() => setSelected(templateId)}
+                    />
+                ))}
+            </SelectGrid>
+        </ScrollView>
+        <Spacer marginBottom="$8" />
+    </YStack>
+}
+
+const SecondSlide = ({ data, setData, error, setError, objects }) => {
+    return <ScrollView height={"200px"}>
+        <EditableObject
+            externalErrorHandling={true}
+            error={error}
+            setError={setError}
+            data={data}
+            setData={setData}
+            numColumns={2}
+            mode={'add'}
+            title={false}
+            model={APIModel}
+            extraFields={apiTemplates[data['data'].template].extraFields ? apiTemplates[data['data'].template].extraFields(objects) : {}}
+        />
+    </ScrollView>
+}
 
 const AccordionMethod = ({ method, path, description, children }) => {
     const [opened, setOpened] = useState([''])
@@ -96,7 +138,7 @@ const objectsSourceUrl = '/adminapi/v1/objects?all=1'
 export default {
     'apis': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
-            const { replace } = usePageParams(pageState??{})
+            const { replace } = usePageParams(pageState ?? {})
             usePrompt(() => `At this moment the user is browsing the Rest API management page. The Rest API management page allows to list, create, read, update and delete API definitions. API definitions are typescript files using express.
             The system allows to create APIs either from an empty template, or from an AutoCRUD template. The automatic crud template creates an automatic CRUD API for a given object. 
             To Automatic CRUD API generates the following endpoints: get /api/v1/:objectName (list), post /api/v1/:objectName (create), post /api/v1/:objectName/:objectId (update), get /api/v1/:objectName/:objectId/delete (delete) and get /api/v1/:objectName/:objectId (read)
@@ -108,10 +150,17 @@ export default {
                     initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
 
+            const defaultData = { data: { template: 'automatic-crud' } }
+
             const [dialogOpen, setDialogOpen] = useState(false)
             const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
             const [currentElement, setCurrentElement] = useState({})
-            let options:any = {}
+            const [addOpen, setAddOpen] = useState(false)
+            const [data, setData] = useState(defaultData)
+            const [error, setError] = useState<any>('')
+            const toast = useToastController()
+
+            let options: any = {}
             const ObjectModel = currentElement?.data?.object ? Objects[currentElement?.data?.object] : null
             if (ObjectModel) {
                 options = ObjectModel.getApiOptions()
@@ -119,7 +168,62 @@ export default {
             //TODO: estaba implementando esto
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
             //replace('editFile', '/packages/app/bundles/custom/apis/')
-            return (<AdminPage title="APIs" pageSession={pageSession}>
+            return (<AdminPage title="Automations" pageSession={pageSession}>
+                <AlertDialog
+                    integratedChat
+                    p={"$2"}
+                    pt="$5"
+                    pl="$5"
+                    setOpen={setAddOpen}
+                    open={addOpen}
+                    hideAccept={true}
+                    description={""}
+                >
+                    <YStack f={1} jc="center" ai="center">
+                        <XStack mr="$5">
+                            <Slides
+                                lastButtonCaption="Create"
+                                id='apis'
+                                onFinish={async () => {
+                                    try {
+                                        //TODO: when using custom data and setData in editablectObject
+                                        //it seems that defaultValue is no longer working
+                                        //we are going to emulate it here until its fixed
+                                        const obj = APIModel.load(data['data'])
+                                        if (apiTemplates[data['data'].template].extraValidation) {
+                                            const check = apiTemplates[data['data'].template].extraValidation(data['data'])
+                                            if (check?.error) {
+                                                throw check.error
+                                            }
+                                        }
+                                        const result = await API.post(sourceUrl, obj.create().getData())
+                                        if (result.isError) {
+                                            throw result.error
+                                        }
+                                        setAddOpen(false);
+                                        toast.show('Automation created', {
+                                            message: obj.getId()
+                                        })
+                                    } catch (e) {
+                                        setError(getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e))
+                                    }
+                                }}
+                                slides={[
+                                    {
+                                        name: "Create new Automation",
+                                        title: "Select your Template",
+                                        component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
+                                    },
+                                    {
+                                        name: apiTemplates[data?.data['template']]['name'],
+                                        title: "Configure your Automation",
+                                        component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
+                                    }
+                                ]
+                                }></Slides>
+                        </XStack>
+                    </YStack>
+                </AlertDialog>
                 <AlertDialog
                     acceptCaption="Close"
                     cancelCaption="Keep editing"
@@ -199,16 +303,13 @@ export default {
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
-                    name="api"
+                    name="Automation"
                     columns={DataTable2.columns(
                         DataTable2.column("name", "name", true, row => <XStack id={"apis-datatable-" + row.name}>{row.name}</XStack>),
                         DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),
                         DataTable2.column("object", "object", true, row => <Chip text={row.object} color={row.object == 'None' ? '$gray5' : '$color5'} />),
                     )}
-                    extraFieldsFormsAdd={objects.isLoaded ? {
-                        template: z.union([z.literal("Automatic CRUD"), z.literal("Automatic CRUD (custom storage)"), z.literal("IOT Router"), z.literal("Custom API")]).after("name"),
-                        object: z.union([z.literal("without object"), ...(objects.data.items.map(o => z.literal(o.name)))] as any).after('name'),
-                    }:{}}
+                    onAddButton={() => setAddOpen(true)}
                     extraMenuActions={[
                         {
                             text: "View API details",

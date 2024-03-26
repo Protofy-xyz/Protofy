@@ -15,7 +15,7 @@ export default {
             { "name": "Files", "icon": "folder", "type": "files", "path": "/?path=packages/app/bundles/custom" },
             { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },
             { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
-            { "name": "APIs", "icon": ToyBrick, "type": "apis", "path": "/" },
+            { "name": "Automations", "icon": ToyBrick, "type": "apis", "path": "/" },
         ],
         "CMS": [
             { "name": "Databases", "icon": "database", "type": "databases", "path": "/"},
