@@ -17,7 +17,7 @@ const PAGE_TEMPLATES = {
 // Api menu opt
 const API_TEMPLATES = {
     Automatic_CRUD: "automatic-crud",
-    Automatic_CRUD_Custom_Storage: "automatic-crud-custom",
+    Automatic_CRUD_Custom_Storage: "automatic-crud-storage",
     IOT_Router: "iot-router",
     Custom: "custom-api"
 }

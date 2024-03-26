@@ -44,7 +44,7 @@ const FirstSlide = ({ selected, setSelected }) => {
 }
 
 const SecondSlide = ({ data, setData, error, setError, objects }) => {
-    return <XStack height={"200px"} jc='center' alignContent='center'>
+    return <ScrollView height={"200px"}>
         <EditableObject
             externalErrorHandling={true}
             error={error}
@@ -57,7 +57,7 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
             model={APIModel}
             extraFields={apiTemplates[data['data'].template].extraFields ? apiTemplates[data['data'].template].extraFields(objects) : {}}
         />
-    </XStack>
+    </ScrollView>
 }
 
 const AccordionMethod = ({ method, path, description, children }) => {
