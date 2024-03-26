@@ -24,7 +24,9 @@ const FormElement = ({ ele, i, icon, children, inArray = false }) => {
       {ele._def.label ?? ele.name}
     </Label>}
     {inArray && <Spacer size="$1" />}
-    {children}
+    <XStack>
+      {children}
+    </XStack>
   </Fieldset>
 }
 
@@ -616,7 +618,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
       <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
         <YStack width="100%">
           <XStack ai="center">
-            <XStack  mt={currentMode == 'preview' ? '$4' : undefined} ml={currentMode == 'preview' ? '$4' : undefined} id="eo-dlg-title"><H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3></XStack>
+            <XStack mt={currentMode == 'preview' ? '$4' : undefined} ml={currentMode == 'preview' ? '$4' : undefined} id="eo-dlg-title"><H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3></XStack>
             {title && <XStack f={EditIconNearTitle ? 0 : 1} mr={"$5"}>
               <Text fontWeight="bold" fontSize={40}><Tinted><Text color="$color9">{capitalize(currentMode)}</Text></Tinted><Text color="$color11"> {capitalize(name)}</Text></Text>
             </XStack>}
