@@ -51,7 +51,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs: test
-    if: always()  # This ensures that the notify job runs whether the test job succeeds or fails
+    if: ${{ always() && github.event_name != 'pull_request' }} # This job runs only if the trigger is not a pull request
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
