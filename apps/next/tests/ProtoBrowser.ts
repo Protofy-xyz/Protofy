@@ -114,7 +114,7 @@ export class ProtoBrowser {
         await this.waitForElement('#sign-up-btn')
     }
 
-    async navigateToWorkspace() {
+    async navigateToAdmin() {
         await this.waitForElement('#header-session-user-id');
         await this.clickElement('#layout-menu-btn')
         await this.clickElement('#pop-over-workspace-link', 70000)
@@ -143,7 +143,7 @@ export class ProtoBrowser {
         await this.waitForElement('#home-page');
     }
 
-    async navigateToWorkspaceSection(entity: string) {
+    async navigateToAdminSection(entity: string) {
         await this.getPage().goto(HOST_URL + `admin/${entity}`);
     }
 
