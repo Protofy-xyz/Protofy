@@ -168,7 +168,7 @@ export default {
             //TODO: estaba implementando esto
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
             //replace('editFile', '/packages/app/bundles/custom/apis/')
-            return (<AdminPage title="APIs" pageSession={pageSession}>
+            return (<AdminPage title="Automations" pageSession={pageSession}>
                 <AlertDialog
                     integratedChat
                     p={"$2"}
@@ -201,7 +201,7 @@ export default {
                                             throw result.error
                                         }
                                         setAddOpen(false);
-                                        toast.show('API created', {
+                                        toast.show('Automation created', {
                                             message: obj.getId()
                                         })
                                     } catch (e) {
@@ -210,13 +210,13 @@ export default {
                                 }}
                                 slides={[
                                     {
-                                        name: "Create new API",
+                                        name: "Create new Automation",
                                         title: "Select your Template",
                                         component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
                                     },
                                     {
                                         name: apiTemplates[data?.data['template']]['name'],
-                                        title: "Configure your API",
+                                        title: "Configure your Automation",
                                         component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
                                     }
                                 ]
@@ -303,7 +303,7 @@ export default {
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
-                    name="api"
+                    name="Automation"
                     columns={DataTable2.columns(
                         DataTable2.column("name", "name", true, row => <XStack id={"apis-datatable-" + row.name}>{row.name}</XStack>),
                         DataTable2.column("type", "type", true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),

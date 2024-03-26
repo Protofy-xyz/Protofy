@@ -35,13 +35,13 @@ export const apiTemplates = {
     "iot-router": {
         id: "iot-router",
         name: "IOT Router",
-        description: 'To control and obtain data with IoT devices.',
+        description: 'Create automations to control IoT devices or responde to IoT events',
         icon: Router
     },
     "custom-api": {
         id: "custom-api",
-        name: "Custom API",
-        description: 'Create your API from scratch or import one from another project',
+        name: "Custom Automation",
+        description: 'Create a custom automation from scratch',
         icon: PencilRuler
     }
 }
