@@ -5,6 +5,7 @@ import { getServiceToken } from "protolib/api/lib/serviceToken";
 import { generateEvent } from "protolib/bundles/events/eventsLibrary";
 import { getLogger } from 'protolib/base/logger';
 import { getInitialData } from 'app/initialData';
+import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
 
@@ -81,6 +82,25 @@ export const DevicesAPI = (app, context) => {
             return
         }
         res.send({value: data.data['items'][0].payload?.message})
+    }))
+
+    app.post('/adminapi/v1/devices/:device/yamls', handler(async (req, res, session) => {
+        if(!session || !session.user.admin) {
+            res.status(401).send({error: "Unauthorized"})
+            return
+        }
+
+        const {yaml} = req.body
+
+        const devicesPath = '../../data/devices/'
+        if(!fs.existsSync(devicesPath)) fs.mkdirSync(devicesPath)
+        const devicePath = path.join(devicesPath, req.params.device)
+        if(!fs.existsSync(devicePath)) fs.mkdirSync(devicePath)
+
+        fs.writeFileSync(path.join(devicePath,"config.yaml"),yaml)
+        fs.writeFileSync(path.join(devicePath,"config_"+ moment().format("DD_MM_YYYY_HH_mm_ss")+".yaml"),yaml)
+
+        res.send({value: yaml})
     }))
 
     topicSub('devices/#', (async (message: string, topic: string) => {

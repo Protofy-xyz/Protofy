@@ -117,8 +117,10 @@ export default {
       const deviceObj = eval(deviceCode.replace(/;/g, ""))
       const componentsTree = deviceObj.getComponentsTree(deviceName, deviceDefinition)
       const yaml = deviceObj.dump("yaml")
+      
       const subsystems = deviceObj.getSubsystemsTree(deviceName, deviceDefinition)
       const deviceObject = await API.get("/adminapi/v1/devices/" + deviceName)
+      await API.post("/adminapi/v1/devices/"+deviceName+"/yamls", {yaml})
       if (deviceObject.isError) {
         alert(deviceObject.error)
         return;
