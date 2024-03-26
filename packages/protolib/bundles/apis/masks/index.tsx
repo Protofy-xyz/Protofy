@@ -10,18 +10,18 @@ const apiMasks = [
     {
         id: 'devicePub',
         type: 'CallExpression',
-        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('devicePub'), //TODO: Change output function name
+        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.devicePub'), //TODO: Change output function name
         getComponent: (node, nodeData, children) => <DevicePub node={node} nodeData={nodeData} children={children} />,
-        getInitialData: () => { return { to: 'devicePub', param1: '"none"', param2: '"none"', param3: '"none"' } }
+        getInitialData: () => { return { to: 'context.devicePub', param1: '"none"', param2: '"none"', param3: '"none"' } }
     },
     {
         id: 'deviceSub',
         type: 'CallExpression',
-        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('deviceSub'),
+        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.deviceSub'),
         getComponent: (node, nodeData, children) => <DeviceSub node={node} nodeData={nodeData} children={children} />,
         filterChildren: filterCallback("4"),
         restoreChildren: restoreCallback("4"),
-        getInitialData: () => { return { to: 'deviceSub', param1: '"none"', param2: '"none"', param3: '"none"', param4: '(message,topic) =>' } }
+        getInitialData: () => { return { to: 'context.deviceSub', param1: '"none"', param2: '"none"', param3: '"none"', param4: '(message,topic) =>' } }
     },
     {
         id: 'logger',

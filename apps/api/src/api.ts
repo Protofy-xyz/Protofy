@@ -5,6 +5,7 @@ import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import { getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 import { getBaseConfig, getConfigWithoutSecrets } from 'app/BaseConfig'
 import { setConfig, getConfig } from 'protolib/base/Config';
+import BundleContext from 'app/bundles/apiContext'
 
 const logger = getLogger()
 //wait for mqtt before starting api server
@@ -101,7 +102,7 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
     }
     
     //wait for mqtt before starting API
-    BundleAPI(app, { mqtt, devicePub, deviceSub, topicPub, topicSub })
+    BundleAPI(app, { mqtt, devicePub, deviceSub, topicPub, topicSub, ...BundleContext })
 })
 
 export default app
