@@ -1,6 +1,7 @@
 import { z } from "protolib/base";
 import { Schema } from 'protolib/base'
 import { AutoModel, ProtoModel, SessionDataType } from 'protolib/base'
+import path from 'path'
 
 export const DevicesSchema = Schema.object({
   name: z.string().hint("Device name").static().regex(/^[a-z0-9A-Z]+$/, "Only lower case chars or numbers").id().search(),
@@ -8,6 +9,7 @@ export const DevicesSchema = Schema.object({
   substitutions: z.record(z.string().optional(), z.any().optional()).optional(),
   subsystem: z.record(z.string(), z.any()).optional(),
   data: z.array(z.record(z.string(), z.any())).optional(),
+  currentSdk: z.string().hidden().generate("esphome"),
   location: z.object({
     lat: z.string(),
     long: z.string()
@@ -107,6 +109,19 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       }
   }
 
+  isInitialized(){
+    return this.data?.subsystem? true: false
+  }
+
+  getConfigDir(){
+    return 'data/devices/'+this.data?.name;
+  }
+
+  getConfigFile(){
+    if(this.data?.currentSdk == "esphome"){
+      return path.join(this.getConfigDir(),"config.yaml")
+    }
+  }
   getSubsystem(name: string) {
     if(!this.data || !this.data.subsystem) {
       return

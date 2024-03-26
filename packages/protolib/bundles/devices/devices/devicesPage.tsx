@@ -11,6 +11,9 @@ import deviceFunctions from 'protodevice/src/device'
 import Subsystem from 'protodevice/src/Subsystem'
 import { Paragraph, TextArea, XStack, YStack } from '@my/ui';
 import { getPendingResult } from "protolib/base";
+import { Pencil } from '@tamagui/lucide-icons';
+import { usePageParams } from '../../../next';
+
 
 const MqttTest = ({ onSetStage, onSetModalFeedback }) => {
   const { message } = useSubscription(['device/compile']);
@@ -84,10 +87,9 @@ const definitionsSourceUrl = '/adminapi/v1/deviceDefinitions?all=1'
 
 export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
+    const { replace } = usePageParams(pageState)
     if (typeof window !== 'undefined') {
       Object.keys(deviceFunctions).forEach(k => (window as any)[k] = deviceFunctions[k])
-    } else {
-      console.log("Errror")
     }
     const [showModal, setShowModal] = useState(false)
     const [modalFeedback, setModalFeedback] = useState<any>()
@@ -249,6 +251,14 @@ export default {
             {data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name}/>)}
           </CardBody>
         }}
+        extraMenuActions={[
+          {
+              text: "Edit config file",
+              icon: Pencil,
+              action: (element) => { replace('editFile', element.getConfigFile()) },
+              isVisible: (element) => element.isInitialized() && element.getConfigFile()
+          }
+      ]}
       />
     </AdminPage>)
   },
