@@ -4,7 +4,6 @@ import usersPages from 'protolib/bundles/users/adminPages'
 import groupsPages from 'protolib/bundles/groups/adminPages'
 import eventsPages from 'protolib/bundles/events/adminPages'
 import objectsPages from 'protolib/bundles/objects/adminPages'
-import tasksPages from 'protolib/bundles/tasks/adminPages'
 import messagesPages from 'protolib/bundles/messages/adminPages'
 import pagesPages from 'protolib/bundles/pages/adminPages'
 import apisPages from 'protolib/bundles/apis/adminPages'
@@ -21,7 +20,6 @@ export default {
     ...objectsPages,
     ...pagesPages,
     ...apisPages,
-    ...tasksPages,
     ...messagesPages,
     ...resourcesPages
 }
