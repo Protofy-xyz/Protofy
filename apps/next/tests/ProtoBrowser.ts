@@ -67,7 +67,7 @@ export class ProtoBrowser {
 
     async clickElement(locator: any, timeout?: number): Promise<any> {
         await this.waitForElement(locator, timeout)
-        await this.getPage().click(locator)
+        await this.getPage().click(locator, { timeout })
     }
 
     async evaluate(loacator: string, cb: Function = (element) => { }): Promise<void> {
