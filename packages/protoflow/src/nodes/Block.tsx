@@ -8,7 +8,7 @@ import { DataOutput } from '../lib/types';
 import useTheme, { useNodeColor, usePrimaryColor } from '../diagram/Theme';
 import { ListOrdered, Square } from 'lucide-react';
 import { generateBoxShadow } from '../lib/shadow';
-import convert from 'color-convert'
+import { useThemeSetting } from '@tamagui/next-theme'
 
 const blockOffset = 200
 const _marginTop = 222
@@ -28,6 +28,7 @@ const Block = (node) => {
     const currentPath = useFlowsStore(state => state.currentPath)
     const nodeFontSize = useTheme('nodeFontSize')
     const portColor = useTheme('blockPort')
+    const { resolvedTheme } = useThemeSetting()
     
     const isEmpty = !metaData.childHeight
     const borderWidth = isEmpty? 0 : nodeFontSize / 3
@@ -53,7 +54,7 @@ const Block = (node) => {
     extraStyle.border = 0
     extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px':'200px'
 
-    const containerColor =  useTheme('containerColor')
+    const containerColor = useTheme('containerColor')
     const typeConf = {
         SourceFile: {
             // icon: Box,
@@ -63,7 +64,7 @@ const Block = (node) => {
         },
         Block: {
             icon: ListOrdered,
-            color: '#cccccc88',
+            color: resolvedTheme == 'dark' ? primaryColor :  '#cccccc88',
             title: 'Block'
         },
         CaseClause: {

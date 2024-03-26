@@ -28,8 +28,8 @@ const Theme = {
         ...commonVars,
         nodePalette: {
             gamut: {
-                hue: 50,
-                saturation: 33,
+                hue: 20,
+                saturation: 30,
                 value: 90
             },
             custom: {
@@ -64,7 +64,7 @@ const Theme = {
         ...commonVars,
         nodePalette: {
             gamut: {
-                hue: 50,
+                hue: 20,
                 saturation: 60,
                 value: 90
             },
@@ -130,7 +130,13 @@ export const usePrimaryColor = () => {
     const nodePalette = useTheme('nodePalette', {})
     const useFlowsStore = useContext(FlowStoreContext)
     const primaryColor = useFlowsStore(state => state.primaryColor)
-    return '#'+convert.hsv.hex(colord(primaryColor).hue(),nodePalette.gamut.saturation,nodePalette.gamut.value)
+    const themeMode = useFlowsStore(state => state.themeMode)
+    if(themeMode == 'dark') {
+        return '#'+convert.hsv.hex(colord(primaryColor).hue(),nodePalette.gamut.saturation-10,nodePalette.gamut.value+5)
+    } else {
+        return '#'+convert.hsv.hex(colord(primaryColor).hue(),nodePalette.gamut.saturation,nodePalette.gamut.value)
+    }
+
 }
 
 export default useTheme
