@@ -35,6 +35,7 @@
     "web": "cd apps/next && yarn next",
     "web:extract": "DISABLE_EXTRACTION=false yarn workspace next-app dev",
     "web:build": "yarn workspace next-app build",
+    "admin:build": "yarn workspace admin build",
     "docs:build": "yarn workspace nextra build",
     "web:serve": "NODE_ENV=production yarn workspace next-app serve",
     "admin-prod": "yarn workspace admin admin-start",
