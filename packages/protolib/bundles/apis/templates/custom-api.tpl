@@ -37,6 +37,10 @@ export default Protofy("code",(app:Application, context) => {
     //app is a normal expressjs object
     //context.mqtt is a mqttclient connection
     logger.info("Custom API {{name}} started")
+    app.get("/api/v1/custom", (req, res) => {
+        logger.info({}, "This a {{name}} log!");
+        res.send("{{name}} API response");
+    });
 })
 
 
