@@ -60,6 +60,7 @@ interface FlowProps {
     config?: any,
     themeMode?: 'light' | 'dark',
     theme?: any,
+    primaryColor: string,
     bridgeNode: boolean,
     onViewPortChange?: Function,
     defaultViewPort?: { x: number, y: number, zoom: number },
@@ -96,6 +97,7 @@ const FlowsBase = ({
     config = {},
     themeMode = 'light',
     theme = {},
+    primaryColor = '#F7B500',
     disableMiniMap = true,
     bridgeNode = false,
     onViewPortChange = () => { },
@@ -775,6 +777,7 @@ const FlowsBase = ({
     return (
         <div ref={diagramRef} style={{ height: '100%', width: '100%' }}>
             {display ? <Diagram
+                primaryColor={primaryColor}
                 defaultSelected={defaultSelected}
                 onViewPortChange={onViewPortChange}
                 defaultViewPort={defaultViewPort}

@@ -28,8 +28,9 @@ type FlowsStoreData = {
     setError: Function,
     clearError: Function,
     themeMode: "light" | "dark",
-    setTemeMode: Function,
+    setThemeMode: Function,
     themeOverride: any,
+    primaryColor: string,
     flowInstance: number,
     currentPath: string,
     setCurrentPath: Function,
@@ -48,6 +49,7 @@ export const useFlowsStore = () => {
         menuPosition: [0, 0],
         menuOpener: '',
         themeMode: "light",
+        primaryColor: '#ccc',
         themeOverride: {},
         flowInstance: Math.random(),
         currentPath: 'Start',
@@ -139,9 +141,10 @@ export const useFlowsStore = () => {
         setSaveStatus: (status: null | 'loading' | 'error') => set(produce((draft: FlowsStoreData) => {
             draft.saveStatus = status;
         })),
-        setTemeMode: (theme: 'light'|'dark', themeOverride) => set(produce((draft: FlowsStoreData) => {
+        setThemeMode: (theme: 'light'|'dark', themeOverride, primaryColor?: string) => set(produce((draft: FlowsStoreData) => {
             draft.themeMode = theme;
             draft.themeOverride = themeOverride;
+            draft.primaryColor = primaryColor ?? '#ccc'
         })),
         setMetadata: (payload) => set(produce((draft: FlowsStoreData) => {
             draft.metadata = payload

@@ -41,6 +41,7 @@ type DiagramParams = {
     onNodeInitializationStatusChange?: any,
     themeMode?: "light" | "dark",
     theme?: any,
+    primaryColor: string,
     defaultViewPort?: { x: number, y: number, zoom: number },
     onViewPortChange?: any,
     nodePreview?: 'preview' | 'flow-preview' | 'flow',
@@ -68,6 +69,7 @@ const Diagram = React.forwardRef(({
     topics,
     themeMode = "light",
     theme = {},
+    primaryColor = '#ccc',
     defaultViewPort = { x: 100, y: window.innerHeight / 4, zoom: 0.8 },
     onViewPortChange = () => { },
     nodePreview = 'flow',
@@ -78,7 +80,7 @@ const Diagram = React.forwardRef(({
     const isDiagramVisible = reactFlowWrapper.current?.getBoundingClientRect()?.height > 0
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData)
-    const setThemeMode = useFlowsStore(state => state.setTemeMode)
+    const setThemeMode = useFlowsStore(state => state.setThemeMode)
     const [internalData, setInternalData] = useState([])
     const { project, setViewport, getNodes, getViewport, setCenter, setEdges, getEdges, setNodes } = useProtoflow()
     const nodesInitialized = useNodesInitialized();
@@ -245,8 +247,8 @@ const Diagram = React.forwardRef(({
     });
 
     useEffect(() => {
-        setThemeMode(themeMode, theme)
-    }, [themeMode, theme])
+        setThemeMode(themeMode, theme, primaryColor)
+    }, [themeMode, theme, primaryColor])
 
     useEffect(() => {
         internalData.push(nodeData)
@@ -335,7 +337,7 @@ const Diagram = React.forwardRef(({
                 edgeTypes={edgeTypes}
                 zoomOnScroll={nodePreview !== 'preview'}
                 panOnDrag={nodePreview !== 'preview'}
-                minZoom={0.3}
+                minZoom={0.05}
                 maxZoom={2}
                 onInit={(reactFlowInstance: any) => {
                     onInit(reactFlowInstance)

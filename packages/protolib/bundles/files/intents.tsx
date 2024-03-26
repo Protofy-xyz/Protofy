@@ -1,4 +1,4 @@
-import { Spinner, XStack } from 'tamagui'
+import { Spinner, XStack, getTokenValue, useTheme, useThemeName } from 'tamagui'
 import { useRouter } from 'next/router'
 import { DataCard } from '../../components/DataCard'
 import AsyncView from '../../components/AsyncView'
@@ -22,6 +22,7 @@ import { ArrowFunction } from 'ts-morph';
 import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";
 import { useEventEffect } from 'protolib/bundles/events/hooks'
+import { useTint } from '../../lib/Tints'
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -97,6 +98,8 @@ const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) =>
   const sourceCode = useRef('')
   const originalSourceCode = useRef('')
   const router = useRouter()
+  const theme = useTheme()
+  const tint = useTint().tint
 
   const [promptResponse, setPromptResponse] = usePrompt(
     (prompt, total, image) => {
@@ -190,9 +193,9 @@ If you include anything else in your message (like reasonings or natural languag
         setIsModified={setIsModified}
         setSourceCode={(sourceCode) => {
           sourceCode.current = sourceCode
-        }} sourceCode={newFileContent ? newFileContent : sourceCode.current} path={path} themeMode={resolvedTheme} />}
+        }} sourceCode={newFileContent ? newFileContent : sourceCode.current} path={path} themeMode={resolvedTheme} primaryColor={resolvedTheme == 'dark' ? theme[tint+'8'].val : theme[tint+'7'].val} />}
       <XStack opacity={0} top={-200000} position={"absolute"}>
-        <Flows preload={true} />
+        <Flows preload={true} primary={"#f00"} />
       </XStack>
       {/* </Theme> */}
     </XStack>

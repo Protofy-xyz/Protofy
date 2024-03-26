@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { FlowStoreContext } from "../store/FlowsStore"
-import { NodeTypes } from '../..';
+import { NodeTypes } from '../nodes';
+import convert from 'color-convert'
+import { colord } from "colord";
 
 type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "textColor" | "interactiveColor" | 'interactiveHoverColor' | 'inputBorder' | 'borderColor'
     | 'borderWidth' | 'borderWidthSelected' | 'colorError' | 'handleBorderColor' | 'flowOutputColor' | 'dataOutputColor' | 'highlightInputBackgroundColor' | 'blockPort' | 'flowPort'
@@ -19,51 +21,19 @@ commonVars.borderWidthSelected = 0.5
 
 const outlineColorLight = '#222'
 const outlineColorDark = '#888'
+
+
 const Theme = {
     light: {
         ...commonVars,
         nodePalette: {
-            colors: [
-                '#EF9A9A',
-                '#F48FB1',
-                '#CE93D8',
-                '#B39DDB',
-                '#9FA8DA',
-                '#90CAF9',
-                '#81D4FA',
-                '#80DEEA',
-                '#80CBC4',
-                '#A5D6A7',
-                '#C5E1A5',
-                '#FFF59D',
-                '#FFE082',
-                '#FFCC80',
-                '#FFAB91',
-                '#BCAAA4',
-                '#EEEEEE',
-                '#B0BEC5',
-                '#E57373',
-                '#F06292',
-                '#BA68C8',
-                '#9575CD',
-                '#7986CB',
-                '#64B5F6',
-                '#4FC3F7',
-                '#4DD0E1',
-                '#4DB6AC',
-                '#81C784',
-                '#AED581',
-                '#FFF176',
-                '#FFD54F',
-                '#FFB74D',
-                '#FF8A65',
-                '#A1887F',
-                '#E0E0E0',
-                '#90A4AE'
-            ],
+            gamut: {
+                hue: 50,
+                saturation: 33,
+                value: 90
+            },
             custom: {
-                SourceFile: '#F7B500',
-                Block: '#ccc'                
+            
             }
         },
         plusColor: '#999',
@@ -86,54 +56,20 @@ const Theme = {
         flowPort: '#fefefe',
         dataPort: '#fefefe',
         nodeBorderColor: '#aaa',
-        titleColor: '#222',
+        titleColor: '#333',
         containerColor: '#00000005',
         separatorColor: '#D4D4D4'
     },
     dark: {
         ...commonVars,
         nodePalette: {
-            colors: [
-                '#EF9A9A',
-                '#F48FB1',
-                '#CE93D8',
-                '#B39DDB',
-                '#9FA8DA',
-                '#90CAF9',
-                '#81D4FA',
-                '#80DEEA',
-                '#80CBC4',
-                '#A5D6A7',
-                '#C5E1A5',
-                '#FFF59D',
-                '#FFE082',
-                '#FFCC80',
-                '#FFAB91',
-                '#BCAAA4',
-                '#EEEEEE',
-                '#B0BEC5',
-                '#E57373',
-                '#F06292',
-                '#BA68C8',
-                '#9575CD',
-                '#7986CB',
-                '#64B5F6',
-                '#4FC3F7',
-                '#4DD0E1',
-                '#4DB6AC',
-                '#81C784',
-                '#AED581',
-                '#FFF176',
-                '#FFD54F',
-                '#FFB74D',
-                '#FF8A65',
-                '#A1887F',
-                '#E0E0E0',
-                '#90A4AE'
-            ],
+            gamut: {
+                hue: 50,
+                saturation: 60,
+                value: 90
+            },
             custom: {
-                SourceFile: '#F7B500',
-                Block: '#ccc'                
+            
             }
         },
         plusColor: 'white',
@@ -175,14 +111,26 @@ const useTheme = (key: themeKey, defaultValue = null) => {
     }
 
 }
+const keys = Object.keys(NodeTypes)
+const totalKeys = keys.length
+const generateColor = (type:string, gamut:{hue: number, saturation: number, value: number}) => {
+    const i = keys.indexOf(type)
+    const h = (100 * (totalKeys / (i+1))) + gamut.hue % 100
+    return "#"+convert.hsv.hex(h, gamut.saturation, gamut.value)
+}
+
 
 export const useNodeColor = (type) => {
     //NodeTypes
-    const nodePalette = useTheme('nodePalette', {
-        colors: ['#ccc'],
-        custom: {}
-    })
-    return nodePalette.custom[type] ?? nodePalette.colors[Object.keys(NodeTypes).indexOf(type) % nodePalette.colors.length]
+    const nodePalette = useTheme('nodePalette', {})
+    return nodePalette.custom[type] ?? generateColor(type, nodePalette.gamut) //nodePalette.colors[Object.keys(NodeTypes).indexOf(type) % nodePalette.colors.length]
+}
+
+export const usePrimaryColor = () => {
+    const nodePalette = useTheme('nodePalette', {})
+    const useFlowsStore = useContext(FlowStoreContext)
+    const primaryColor = useFlowsStore(state => state.primaryColor)
+    return '#'+convert.hsv.hex(colord(primaryColor).hue(),nodePalette.gamut.saturation,nodePalette.gamut.value)
 }
 
 export default useTheme

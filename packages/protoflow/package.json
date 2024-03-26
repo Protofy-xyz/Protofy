@@ -18,6 +18,8 @@
     "@my/ui": "0.0.1",
     "app": "0.0.0",
     "chroma-js": "2.4.2",
+    "color-convert": "2.0.1",
+    "colord": "2.9.3",
     "deep-diff": "1.0.2",
     "elkjs": "0.8.2",
     "immer": "9.0.5",

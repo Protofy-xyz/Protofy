@@ -5,9 +5,10 @@ import { useEdges } from 'reactflow';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { NODE_TREE } from '../toggles';
 import { DataOutput } from '../lib/types';
-import useTheme, { useNodeColor } from '../diagram/Theme';
+import useTheme, { useNodeColor, usePrimaryColor } from '../diagram/Theme';
 import { ListOrdered, Square } from 'lucide-react';
 import { generateBoxShadow } from '../lib/shadow';
+import convert from 'color-convert'
 
 const blockOffset = 200
 const _marginTop = 222
@@ -20,13 +21,13 @@ const _borderWidth = 5
 const Block = (node) => {
     const { id, type } = node
     const useFlowsStore = useContext(FlowStoreContext)
+    const primaryColor = usePrimaryColor()
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const metaData = useFlowsStore(state => state.nodeData[id] && state.nodeData[id]['_metadata'] ? state.nodeData[id]['_metadata'] : {childWidth: 0, childHeight:0, childHeights:[]})
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const currentPath = useFlowsStore(state => state.currentPath)
     const nodeFontSize = useTheme('nodeFontSize')
     const portColor = useTheme('blockPort')
-    const color = useNodeColor(type)
     
     const isEmpty = !metaData.childHeight
     const borderWidth = isEmpty? 0 : nodeFontSize / 3
@@ -57,18 +58,22 @@ const Block = (node) => {
         SourceFile: {
             // icon: Box,
             output: false,
+            color: primaryColor,
             title: currentPath.split(/[/\\]/).pop()
         },
         Block: {
             icon: ListOrdered,
+            color: '#cccccc88',
             title: 'Block'
         },
         CaseClause: {
             icon: Square,
+            color: '#cccccc88',
             title: 'Case Clause'
         },
         DefaultClause: {
             icon: Square,
+            color: '#cccccc88',
             title: 'Case Clause'
         }
     }
@@ -110,7 +115,7 @@ const Block = (node) => {
             title={typeConf[type].title}
             id={id}
             params={[]}
-            color={color}
+            color={typeConf[type].color}
             dataOutput={DataOutput.block}>
             {isEmpty?<div style={{height:nodeFontSize*2+'px'}}></div>:<>
                 <div style={{
@@ -121,7 +126,7 @@ const Block = (node) => {
                     width: metaData.childWidth+(metaData.childWidth > 700 ? 100 : 0)+'px', 
                     height: height-headerSize-(nodeFontSize*2)+'px', 
                     backgroundColor: containerColor,
-                    borderLeft: nodeFontSize/2+'px solid '+color,
+                    borderLeft: nodeFontSize/2+'px solid '+typeConf[type].color,
                     boxShadow: generateBoxShadow(1.5)
                 }}></div>
             </>}
@@ -132,7 +137,7 @@ const Block = (node) => {
                     pos = pos + (nodeData.connections.length == 1 ? singleNodeOffset : marginTop)-10
                     //pos = 60 + (i * 60)
                     return <>
-                        {connectedEdges.length > 0 && <div style={{left: (nodeFontSize/2-1)+'px', position: 'absolute', top: (pos-(nodeFontSize/4)) + 'px', width: nodeFontSize+'px', height: (nodeFontSize/2)+'px', backgroundColor: color}} />}
+                        {connectedEdges.length > 0 && <div style={{left: (nodeFontSize/2-1)+'px', position: 'absolute', top: (pos-(nodeFontSize/4)) + 'px', width: nodeFontSize+'px', height: (nodeFontSize/2)+'px', backgroundColor: typeConf[type].color}} />}
                         <FlowPort key={i} id={id} type='input' label='' style={{ left:isEmpty?'':(nodeFontSize)+'px',top: pos + 'px' }} handleId={'block' + i} allowedTypes={["data", "flow"]}/>
                     </>
                 })}
