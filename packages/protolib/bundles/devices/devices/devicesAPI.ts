@@ -5,6 +5,8 @@ import { getServiceToken } from "protolib/api/lib/serviceToken";
 import { generateEvent } from "protolib/bundles/events/eventsLibrary";
 import { getLogger } from 'protolib/base/logger';
 import { getInitialData } from 'app/initialData';
+import fs from 'fs';
+import path from 'path';
 
 export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
@@ -24,7 +26,7 @@ export const DevicesAPI = (app, context) => {
         devices/patata/button/relay/actions/status
         ...
     */
-    app.get('/adminapi/v1/devices/:device/:subsystem/actions/:action', handler(async (req, res, session) => {
+    app.get('/adminapi/v1/devices/:device/subsystems/:subsystem/actions/:action', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -52,7 +54,7 @@ export const DevicesAPI = (app, context) => {
         })
     }))
 
-    app.get('/adminapi/v1/devices/:device/:subsystem/monitors/:monitor', handler(async (req, res, session) => {
+    app.get('/adminapi/v1/devices/:device/subsystems/:subsystem/monitors/:monitor', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return

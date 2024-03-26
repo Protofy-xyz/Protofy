@@ -62,7 +62,7 @@ export class DeviceSubsystemMonitor{
   }
 
   getValueAPIURL() {
-    return "/adminapi/v1/devices/"+this.device+"/"+this.subsystem+"/monitors/"+this.data.name
+    return "/adminapi/v1/devices/"+this.device+"/subsystems/"+this.subsystem+"/monitors/"+this.data.name
   }
 }
 
