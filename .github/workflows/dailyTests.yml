@@ -25,8 +25,13 @@ jobs:
     - name: Install NodeJS dependencies
       run: yarn
 
-    - name: Start "Protofy"
-      run: node .github/scripts/start.js
+    - name: Start project
+      run: |
+        echo 'Started project'
+        yarn start-dev > /dev/null &
+
+    - name: Healthcheck services start
+      run: node .github/scripts/healthcheck-start.js
 
     - name: Run tests 
       run: |

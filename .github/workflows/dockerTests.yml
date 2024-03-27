@@ -36,4 +36,4 @@ jobs:
         cd docker
         ./logs
     - name: Healthcheck docker services start
-      run: node .github/scripts/start-docker.js
+      run: node .github/scripts/healthcheck-start.js
