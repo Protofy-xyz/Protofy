@@ -1,0 +1,17 @@
+name: Protofy CI Docker tests
+on:
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    - name: Healthcheck versions
+      run: |
+        docker -v
+        docker compose version
+        docker-compose -v
