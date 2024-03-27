@@ -40,7 +40,7 @@ jobs:
       run: node .github/scripts/healthcheck-start.js
   
     - name: Run global tests
-      run: docker exec -ti site sh -c "yarn test:global"
+      run: docker exec -i site sh -c "yarn test:global"
     
     - name: Save result
       if: always()
