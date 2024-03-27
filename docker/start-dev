@@ -1,5 +1,4 @@
 #!/bin/bash
-source ./helpers/get-envs
 ./init
 ./build
-$DOCKER_COMPOSE_CMD -p protofy $SERVICES_COMPOSE_FILES up
+./start-dev-fast
