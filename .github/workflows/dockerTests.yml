@@ -33,4 +33,4 @@ jobs:
     - name: Get logs
       run: |
         cd docker
-        ./docker-logs
+        ./logs
