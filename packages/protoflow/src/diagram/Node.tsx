@@ -166,6 +166,7 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                 {
                     !connected ?
                         <div style={{
+                            pointerEvents: 'none',
                             width: portSize + "px",
                             height: portSize + "px",
                             display: 'flex',
