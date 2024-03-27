@@ -103,7 +103,7 @@ export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlu
 
     const _onBlur = () => {
         if (!disabled) {
-            setNodeData(id, { ...nodeData, [field]: getDataFromField(post(tmpInputValue), field, nodeData) })
+            setNodeData(id, { ...nodeData, [field]: post(tmpInputValue) })
             dataNotify({ id: id, paramField: field, newValue: tmpInputValue })
         }
         if (onBlur) onBlur(tmpInputValue);

@@ -25,8 +25,8 @@ export const getDataFromField = (fieldValue, field = undefined, nodeData = undef
 
     switch (type) {
         case 'detailed':
-            var key = field.split('-')[1]
             var data = nodeData[field]
+            var key = data.key ?? field.split('-')[1]
             nodeDataField = { ...data, key, kind, value: fieldValue }
             break
         case 'literal':
