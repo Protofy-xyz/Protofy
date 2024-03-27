@@ -86,7 +86,7 @@ jobs:
       with:
           severity: info
           color: '#0db7ed'
-          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_blue.png
           description: |
             Docker Report 🐳
 
