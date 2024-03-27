@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 
 const TestMask = ({ node = {}, nodeData = {}, children }: any) => {
     return (
-        <Node node={node} isPreview={!node.id} title='devicePub' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node node={node} isPreview={!node.id} title='testCall' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={[
                 {
                     label: 'Value', 
