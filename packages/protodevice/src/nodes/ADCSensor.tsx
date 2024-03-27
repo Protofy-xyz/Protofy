@@ -5,7 +5,7 @@ import {Node, Field, NodeParams } from 'protoflow';
 // import { useDeviceStore } from "../oldThings/DeviceStore";
 // import { useSubscription } from "mqtt-react-hooks";
 
-const ADCSensor = ({node= {}, nodeData= {}, children}: any) => {
+const ADCSensor = ({node= {}, nodeData= {}, children, color}: any) => {
     const [name,setName] = React.useState(nodeData['param1'])
     const nameErrorMsg = 'Reserved name'
     const intervalErrorMsg = 'Add units h/m/s/ms'
@@ -35,7 +35,7 @@ const ADCSensor = ({node= {}, nodeData= {}, children}: any) => {
     //     setAdcValue(parseFloat(message?.message?.toString())*100/3.3)
     // }, [message])
     return (
-        <Node node={node} isPreview={!node.id} title='Analog Sensor' color="#FFCC80" id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='Analog Sensor' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
             {/* <HandleOutput id={node.id} param={nodeOutput} /> */}
             {/* <XStack>

@@ -5,7 +5,7 @@ import {Node, Field, NodeParams } from 'protoflow';
 // import { useDeviceStore } from "../oldThings/DeviceStore";
 // import { useSubscription } from "mqtt-react-hooks";
 
-const SEN55 = ({node= {}, nodeData= {}, children}: any) => {
+const SEN55 = ({node= {}, nodeData= {}, children, color}: any) => {
     const [name,setName] = React.useState(nodeData['param1'])
     const nameErrorMsg = 'Reserved name'
     const intervalErrorMsg = 'Add units h/m/s/ms'
@@ -26,7 +26,7 @@ const SEN55 = ({node= {}, nodeData= {}, children}: any) => {
         }
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='SEN55' color="#337786" id={node.id} skipCustom={true} >
+        <Node node={node} isPreview={!node.id} title='SEN55' color={color} id={node.id} skipCustom={true} >
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

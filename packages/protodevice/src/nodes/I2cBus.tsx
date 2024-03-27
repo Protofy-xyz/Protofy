@@ -43,7 +43,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const I2cBus = ({node= {}, nodeData= {}, children}: any) => {
+const I2cBus = ({node= {}, nodeData= {}, children, color}: any) => {
     const [name,setName] = React.useState(nodeData['param1'])
     const nameErrorMsg = 'Reserved name'
     const nodeParams: Field[] = [
@@ -60,7 +60,7 @@ const I2cBus = ({node= {}, nodeData= {}, children}: any) => {
         }
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='i2c Bus' color="#FF8080" id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='i2c Bus' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     ) 

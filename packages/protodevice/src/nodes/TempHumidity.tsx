@@ -3,7 +3,7 @@ import { Node, Field, NodeParams } from 'protoflow';
 // import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
 // import { pinTable } from '../../../lib/device/Device'
 
-const TempHumidity = ({ node = {}, nodeData = {}, children }: any) => {
+const TempHumidity = ({ node = {}, nodeData = {}, children, color }: any) => {
     const transitionErrorMsg = 'Add units s/ms'
 
     const nodeParams: Field[] = [
@@ -18,7 +18,7 @@ const TempHumidity = ({ node = {}, nodeData = {}, children }: any) => {
         }
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='Temperature & Humidity' color="#B0BEC5" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node node={node} isPreview={!node.id} title='Temperature & Humidity' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

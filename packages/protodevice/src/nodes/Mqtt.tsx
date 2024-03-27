@@ -1,6 +1,6 @@
 import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 
-const Mqtt = ({node= {}, nodeData= {}, children}: any) => {
+const Mqtt = ({node= {}, nodeData= {}, children, color}: any) => {
 
     const nodeParams: Field[] = [
         { label: 'Broker', field: 'param1', type: 'input', static: true },
@@ -8,7 +8,7 @@ const Mqtt = ({node= {}, nodeData= {}, children}: any) => {
     ] as Field[]
     
     return (
-        <Node node={node} isPreview={!node.id} title='Mqtt' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node node={node} isPreview={!node.id} title='Mqtt' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

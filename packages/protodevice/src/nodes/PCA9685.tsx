@@ -1,7 +1,7 @@
 import React from "react";
 import {Node, Field, NodeParams } from 'protoflow';
 
-const PCA9685 = ({node= {}, nodeData= {}, children}: any) => {
+const PCA9685 = ({node= {}, nodeData= {}, children, color}: any) => {
     const [name,setName] = React.useState(nodeData['param1'])
     const nameErrorMsg = 'Reserved name'
     const nodeParams: Field[] = [
@@ -23,7 +23,7 @@ const PCA9685 = ({node= {}, nodeData= {}, children}: any) => {
         },
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='PCA9685' color="#35b3b5" id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='PCA9685' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     ) 

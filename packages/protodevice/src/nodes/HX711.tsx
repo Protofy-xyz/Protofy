@@ -41,7 +41,7 @@ const ports = [
     { "number": 18, "side": "right", "name": "7", "type": "IO", "analog": false, "description": "GPIO7, D0", "maxVoltage": 3.3, "rtc": false },
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
-const HX711 =  ({node= {}, nodeData= {}, children}: any) => {
+const HX711 =  ({node= {}, nodeData= {}, children, color}: any) => {
     const transitionErrorMsg = 'Add units s/ms'
     const nameErrorMsg = 'Reserved name'
     const [name,setName] = React.useState(nodeData['param1'])
@@ -60,7 +60,7 @@ const HX711 =  ({node= {}, nodeData= {}, children}: any) => {
         }
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='HX711 Load Cell' color="#B0BEC5" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node node={node} isPreview={!node.id} title='HX711 Load Cell' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

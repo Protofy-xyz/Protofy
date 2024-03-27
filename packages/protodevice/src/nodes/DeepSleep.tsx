@@ -41,7 +41,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const DeepSleep = ({node= {}, nodeData= {}, children}: any) => {
+const DeepSleep = ({node= {}, nodeData= {}, children, color}: any) => {
 
     const nodeParams: Field[] = [
         { label: 'Run duration', field: 'param1', type: 'input', static: true},
@@ -53,7 +53,7 @@ const DeepSleep = ({node= {}, nodeData= {}, children}: any) => {
     ] as Field[]
     
     return (
-        <Node node={node} isPreview={!node.id} title='Deep Sleep' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node node={node} isPreview={!node.id} title='Deep Sleep' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

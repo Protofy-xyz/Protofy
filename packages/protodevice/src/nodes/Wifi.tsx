@@ -1,6 +1,6 @@
 import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 
-const Wifi = ({node= {}, nodeData= {}, children}: any) => {
+const Wifi = ({node= {}, nodeData= {}, children, color}: any) => {
 
     const nodeParams: Field[] = [
         { label: 'SSID', field: 'param1', type: 'input', static: true },
@@ -20,7 +20,7 @@ const Wifi = ({node= {}, nodeData= {}, children}: any) => {
     // const subsystemData = getSubsystem()
     // const type = 'switch';
     return (
-        <Node node={node} isPreview={!node.id} title='Wifi' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node node={node} isPreview={!node.id} title='Wifi' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

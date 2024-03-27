@@ -1,7 +1,7 @@
 import React from "react";
 import {Node, Field, NodeParams } from 'protoflow';
 
-const MPU6050 = ({node= {}, nodeData= {}, children}: any) => {
+const MPU6050 = ({node= {}, nodeData= {}, children, color}: any) => {
     const [name,setName] = React.useState(nodeData['param1'])
     const nameErrorMsg = 'Reserved name'
     const intervalErrorMsg = 'Add units h/m/s/ms'
@@ -22,7 +22,7 @@ const MPU6050 = ({node= {}, nodeData= {}, children}: any) => {
         }
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='MPU6050' color="#845686" id={node.id} skipCustom={true} >
+        <Node node={node} isPreview={!node.id} title='MPU6050' color={color} id={node.id} skipCustom={true} >
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

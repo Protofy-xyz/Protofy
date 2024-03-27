@@ -42,7 +42,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const Ethernet = ({node= {}, nodeData= {}, children}: any) => {
+const Ethernet = ({node= {}, nodeData= {}, children, color}: any) => {
     const nodeParams: Field[] = [
         {
             label: 'Type', static: true, field: 'param1', type: 'select',
@@ -69,7 +69,7 @@ const Ethernet = ({node= {}, nodeData= {}, children}: any) => {
         },
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='Ethernet' color="#4bf542" id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='Ethernet' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     ) 

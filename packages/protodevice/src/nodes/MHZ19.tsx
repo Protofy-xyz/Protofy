@@ -1,6 +1,6 @@
 import {Node, Field, NodeParams } from 'protoflow';
 
-const MHZ19 = ({node = {}, nodeData = {}, children}: any) => {
+const MHZ19 = ({node = {}, nodeData = {}, children, color}: any) => {
     const transitionErrorMsg = 'Add units s/ms'
     const nodeParams: Field[] = [
         { label: 'Name', static: true, field: 'param1', type: 'input' },
@@ -13,7 +13,7 @@ const MHZ19 = ({node = {}, nodeData = {}, children}: any) => {
         }
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='MH-Z19' color="#A832A8" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node node={node} isPreview={!node.id} title='MH-Z19' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

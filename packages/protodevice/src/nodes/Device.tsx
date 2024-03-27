@@ -50,7 +50,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const Device = ({node= {}, nodeData= {}, topics = {}}: any) => {
+const Device = ({node= {}, nodeData= {}, topics = {}, color}: any) => {
     const { publish, data } = topics;
     const { id, type } = node
     const useFlowsStore = useContext(FlowStoreContext)
@@ -130,7 +130,7 @@ const Device = ({node= {}, nodeData= {}, topics = {}}: any) => {
     console.log("Calculanting: ",Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")))
     console.log("Boolean value: ",Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")).length >35)
     return (
-        <Node output={false} skipCustom={true} node={node} color='#8FCAF9' isPreview={!id} title='ESP32' id={id} margin='200px' >
+        <Node output={false} skipCustom={true} node={node} color={color} isPreview={!id} title='ESP32' id={id} margin='200px' >
             {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
             {/* <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button> */}
             {/* <div style={{ alignItems: 'center', justifyContent: 'flex-end', paddingLeft: "14px", paddingRight: "14px", paddingTop: "10px",paddingBottom: "10px" }}>

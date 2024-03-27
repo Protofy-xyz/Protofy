@@ -119,6 +119,14 @@ const generateColor = (type:string, gamut:{hue: number, saturation: number, valu
     return "#"+convert.hsv.hex(h, gamut.saturation, gamut.value)
 }
 
+export const generateColorbyIndex = (index, arrLength) => {
+    const nodePalette = useTheme('nodePalette', {})
+    const gamut = nodePalette.gamut
+    var i = index < 0 ? 0 : index
+
+    const h = (100 * (arrLength / (i + 1))) + gamut.hue % 100
+    return "#" + convert.hsv.hex(h, gamut.saturation, gamut.value)
+}
 
 export const useNodeColor = (type) => {
     //NodeTypes

@@ -1,7 +1,7 @@
 import React from "react";
 import {Node, Field, NodeParams } from 'protoflow';
 
-const NeopixelsBus = ({node= {}, nodeData= {}, children}: any) => {
+const NeopixelsBus = ({node= {}, nodeData= {}, children, color}: any) => {
     const transitionErrorMsg = 'Add units s/ms'
 
     const nodeParams: Field[] = [
@@ -62,7 +62,7 @@ const NeopixelsBus = ({node= {}, nodeData= {}, children}: any) => {
         },
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='Neopixels' color="#C5E1A4" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node node={node} isPreview={!node.id} title='Neopixels' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

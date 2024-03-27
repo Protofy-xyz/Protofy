@@ -4,7 +4,7 @@ import pinTable from '../device/Device'
 // import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
 // import { pinTable } from '../../../lib/device/Device'
 
-const MicrofirePhEcTemp = ({ node = {}, nodeData = {}, children }: any) => {
+const MicrofirePhEcTemp = ({ node = {}, nodeData = {}, children, color }: any) => {
     const transitionErrorMsg = 'Add units s/ms'
     const intervalErrorMsg = 'Add units h/m/s/ms'
     //TODO Get ports from device definition
@@ -63,7 +63,7 @@ const MicrofirePhEcTemp = ({ node = {}, nodeData = {}, children }: any) => {
         },
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='pH & EC & WaterTemp Microfire' color="#FFFF00" id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='pH & EC & WaterTemp Microfire' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )
