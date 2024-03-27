@@ -25,3 +25,12 @@ jobs:
       run: |
         cd docker 
         ./build
+    - name: Start Docker project in Development and background
+      run: |
+        cd docker 
+        source ./helpers/get-envs
+        $DOCKER_COMPOSE_CMD -p protofy $SERVICES_COMPOSE_FILES up -d
+    - name: Get logs
+      run: |
+        cd docker
+        ./docker-logs
