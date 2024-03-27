@@ -84,9 +84,6 @@ describe("Test admin capabilities", () => {
     })
 
     describe("Test entities autocreation", () => {
-        beforeAll(async () => {
-            await protoBrowser.navigateToAdmin();
-        }, 120000)
         describe("test api creations", () => {
             it("should be able to create an empty api", async () => {
                 const apiName = 'testapi'

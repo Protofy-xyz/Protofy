@@ -116,8 +116,10 @@ export class ProtoBrowser {
 
     async navigateToAdmin() {
         await this.waitForElement('#header-session-user-id');
-        await this.clickElement('#layout-menu-btn')
-        await this.clickElement('#pop-over-workspace-link', 70000)
+        // legacy - stay here if needed 
+        /// await this.clickElement('#layout-menu-btn')
+        // await this.clickElement('#pop-over-workspace-link', 70000)
+        await this.getPage().goto(HOST_URL + `admin/pages`);
         await this.getPage().waitForURL('**/admin/*', { timeout: 60000 });
     }
 
@@ -145,6 +147,7 @@ export class ProtoBrowser {
 
     async navigateToAdminSection(entity: string) {
         await this.getPage().goto(HOST_URL + `admin/${entity}`);
+        await this.getPage().waitForURL(`**/admin/${entity}`, { timeout: 60000 });
     }
 
     async navigateToDocumentation() {
