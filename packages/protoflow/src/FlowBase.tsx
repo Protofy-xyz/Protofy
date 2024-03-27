@@ -143,6 +143,7 @@ const FlowsBase = ({
     const [hasChanges, setHasChanges] = useState(false);
     const [prevNodeData, setPrevNodeData] = useState(deleteAdditionalKeys(nodeData));
 
+    const rendered = useRef(false)
     const onConnect = useCallback((params) => setEdges((eds) => addProtoEdge(params, eds)), [setEdges]);
 
     const reload = async () => {
@@ -693,6 +694,7 @@ const FlowsBase = ({
         if (nodesDiffs && nodesDiffs.length || edgesDiffs && edgesDiffs.length) {
             if (edgesDiffs && !nodesDiffs) {
                 reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
+                rendered.current = true
                 setInitialEdges(edges)
             }
             if (!showActionsBar) {
@@ -767,6 +769,7 @@ const FlowsBase = ({
     useEffect(() => {
         if (nodes && nodes.length && nodes.filter(n => n.width && n.height).length == nodes.length) {
             reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
+            rendered.current = true
         }
     }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
 
@@ -796,7 +799,7 @@ const FlowsBase = ({
                 style={{ backgroundColor: bgColor }}
                 nodePreview={nodePreview}
                 onNodeInitializationStatusChange={(status) => {
-                    if(status) {
+                    if(status && rendered.current) {
                         reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
                     }
                 }}
