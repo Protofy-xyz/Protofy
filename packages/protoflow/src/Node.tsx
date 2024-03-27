@@ -176,7 +176,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
     //end of boolean
 
     //range
-    const min = param.data?.min ? param.data.min : 0
+    const min = param.data?.min != undefined ? param.data.min : 0
     const defaultValue = param.data?.defaultValue
     const initialRangeValue = nodeData[param.field]?.value ?? nodeData[param.field] ?? (defaultValue ?? min)
     const [tmpRangeValue, setTmpRangeValue] = React.useState(pre(initialRangeValue));
@@ -290,8 +290,8 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     </div>
                 </div>)
             case 'range':
-                const max = param.data?.max ? param.data.max : 100
-                const step = param.data?.step
+                const max = param.data?.max != undefined ? param.data.max : 100
+                const step = param.data?.step != undefined ? param.data?.step : 1
 
                 return <>
                     {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '3px', width: max.toString().length * 18, textAlign: 'left' }}>{post(tmpRangeValue)}</div> : null}

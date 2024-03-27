@@ -1,7 +1,7 @@
+import React from 'react';
 import { filterCallback, restoreCallback } from 'protoflow';
+import TestMask from './TestMask'
 
-const customMasks = [
-
-]
-
-export default customMasks
+export default {
+    api: [ TestMask ]
+}
