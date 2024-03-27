@@ -11,6 +11,7 @@ import { createGenericFont } from './createGenericFont'
 import { animations } from './animations'
 import { themes } from './themes'
 import { tokens } from './tokens'
+import uiConfig from './uiConfig'
 
 export const cherryBombFont = createCherryBombFont()
 export const munroFont = createMunroFont()
@@ -234,14 +235,4 @@ export const createConfig = (aditionalConfig: any = {}) => {
   return createTamagui(newConfig)
 }
 
-export const config = createConfig({
-  // example
-  // settings: {
-  //   defaultTint: 'orange'
-  // },
-  // themes: {
-  //   dark_green: {
-  //     // color:'#00FF00'
-  //   }
-  // }
-})
+export const config = createConfig(uiConfig)
