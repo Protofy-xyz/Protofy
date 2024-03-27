@@ -44,12 +44,12 @@ jobs:
     
     - name: Save result
       if: always()
-      run: node .github/scripts/save_result.js Docker(Ubuntu-22.04) ${{ job.status }} ${{ runner.temp }}
+      run: node .github/scripts/save_result.js Docker_DEV ${{ job.status }} ${{ runner.temp }}
     
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       uses: actions/upload-artifact@v3
       with:
-        name: result-Docker(Ubuntu-22.04)
+        name: result_Docker
         path: ${{ runner.temp }}/result.txt
   
   notify:
