@@ -30,7 +30,10 @@ jobs:
         cd docker 
         source ./helpers/get-envs
         $DOCKER_COMPOSE_CMD -p protofy $SERVICES_COMPOSE_FILES up -d
-    - name: Get logs
+    - name: Services logs
+      if: false # skip by deault enable for debugging purposes
       run: |
         cd docker
         ./logs
+    - name: Healthcheck docker services start
+      run: node .github/scripts/start-docker.js
