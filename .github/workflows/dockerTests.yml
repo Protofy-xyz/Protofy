@@ -1,7 +1,8 @@
 name: Protofy CI Docker tests
 on:
   workflow_dispatch:  # Allows manual triggering
-
+  # schedule:
+    # - cron: '0 2,8,14,20 * * *'  # Runs at 2 AM, 8 AM, 2 PM, and 8 PM UTC every day
 jobs:
   test:
     runs-on: ubuntu-22.04
@@ -37,3 +38,16 @@ jobs:
         ./logs
     - name: Healthcheck docker services start
       run: node .github/scripts/healthcheck-start.js
+  
+    - name: Run global tests
+      run: docker exec -ti site sh -c "yarn test:global"
+    
+    - name: Save result
+      if: always()
+      run: node .github/scripts/save_result.js docker_dev ${{ job.status }} ${{ runner.temp }}
+    
+    - name: Upload result # upload saved result as artifact to be consumed at notify job
+      uses: actions/upload-artifact@v3
+      with:
+        name: result-docker_dev
+        path: ${{ runner.temp }}/result.txt
