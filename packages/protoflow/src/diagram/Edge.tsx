@@ -44,7 +44,7 @@ export default function CustomEdge({
         className="react-flow__edge"
         d={edgePath}
         fill="none"
-        stroke-dasharray={nodeEdgeStyle}
+        strokeDasharray={nodeEdgeStyle}
       />
       <path
         id={id}
