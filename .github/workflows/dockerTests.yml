@@ -17,3 +17,11 @@ jobs:
         docker-compose -v
         id
         groups
+    - name: Prepare Docker Volumes 
+      run: |
+        cd docker 
+        ./init
+    - name: Build Image
+      run: |
+        cd docker 
+        ./build
