@@ -1,8 +1,8 @@
 name: Protofy CI Docker tests
 on:
   workflow_dispatch:  # Allows manual triggering
-  # schedule:
-    # - cron: '0 2,8,14,20 * * *'  # Runs at 2 AM, 8 AM, 2 PM, and 8 PM UTC every day
+  schedule:
+    - cron: '0 2,8,14,20 * * *'  # Runs at 2 AM, 8 AM, 2 PM, and 8 PM UTC every day
 jobs:
   test:
     runs-on: ubuntu-22.04
