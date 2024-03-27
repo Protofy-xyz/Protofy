@@ -44,12 +44,12 @@ jobs:
     
     - name: Save result
       if: always()
-      run: node .github/scripts/save_result.js docker_dev ${{ job.status }} ${{ runner.temp }}
+      run: node .github/scripts/save_result.js Docker(Ubuntu-22.04) ${{ job.status }} ${{ runner.temp }}
     
     - name: Upload result # upload saved result as artifact to be consumed at notify job
       uses: actions/upload-artifact@v3
       with:
-        name: result-docker_dev
+        name: result-Docker(Ubuntu-22.04)
         path: ${{ runner.temp }}/result.txt
   
   notify:
@@ -71,5 +71,20 @@ jobs:
         echo "RESULTS<<EOF" >> $GITHUB_ENV
         cat combined_results.txt >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
-    - name: Show combined
-      run: echo combined_results.txt
+
+    - name: Docker Report
+      uses: rjstone/discord-webhook-notify@v1
+      env:
+        RESULTS: ${{ env.RESULTS }}
+      with:
+          severity: info
+          color: '#a600e0'
+          avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
+          description: |
+            Docker Report 🐳
+
+            ${{ env.RESULTS }}
+
+          footer: Daily Docker report.
+          text: 🐳 Check Docker report! 🐳
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
