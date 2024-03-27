@@ -15,3 +15,5 @@ jobs:
         docker -v
         docker compose version
         docker-compose -v
+        id
+        groups
