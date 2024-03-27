@@ -9,8 +9,18 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
+    
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-docker-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
+
     - name: Healthcheck versions
       run: |
         docker -v
@@ -18,24 +28,32 @@ jobs:
         docker-compose -v
         id
         groups
+
     - name: Prepare Docker Volumes 
       run: |
         cd docker 
         ./init
+
     - name: Build Image
+      # same as script inside docker/build, but catching
       run: |
         cd docker 
-        ./build
+        source ./helpers/get-envs
+        docker buildx build --push --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache,mode=max -t protofy/workspace . 
+        $DOCKER_COMPOSE_CMD -f build.yml up
+
     - name: Start Docker project in Development and background
       run: |
         cd docker 
         source ./helpers/get-envs
         $DOCKER_COMPOSE_CMD -p protofy $SERVICES_COMPOSE_FILES up -d
+
     - name: Services logs
       if: false # skip by deault enable for debugging purposes
       run: |
         cd docker
         ./logs
+
     - name: Healthcheck docker services start
       run: node .github/scripts/healthcheck-start.js
   
