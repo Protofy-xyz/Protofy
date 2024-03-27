@@ -150,9 +150,37 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
     const keyPre = param.keyPre ? param.keyPre : (str) => str
     const keyPost = param.keyPost ? param.keyPost : (str) => str
 
+    const inputBorderMulti = useTheme("inputBorder");
+    const textColorMulti = useTheme("textColor")
+    const inputBg = useTheme("inputBackgroundColor")
+    const interactiveColor = useTheme('interactiveColor')
+    const nodeFontSize = useTheme('nodeFontSize')
+
     const dataNotify = (data) => {
         notify({ ...data, notifyId: nodeData._dataNotifyId })
     }
+
+    //color
+    const [colorPickerVisible, setColorPickerVisible] = React.useState(false);
+    //end of color
+
+    //boolean
+    const stringToBolean = (myVar) => {
+        if (typeof myVar === 'string' || myVar instanceof String)
+            return myVar == "true" ? true : false;
+        else
+            return myVar;
+    }
+
+    const [checked, setChecked] = React.useState(stringToBolean(nodeData[param.field]));
+    //end of boolean
+
+    //range
+    const min = param.data?.min ? param.data.min : 0
+    const defaultValue = param.data?.defaultValue
+    const initialRangeValue = nodeData[param.field]?.value ?? nodeData[param.field] ?? (defaultValue ?? min)
+    const [tmpRangeValue, setTmpRangeValue] = React.useState(pre(initialRangeValue));
+    // end of range
 
     const getInput = (disabled?) => {
         switch (param.type) {
@@ -200,12 +228,11 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     setNodeData(id, { ...nodeData, dataValues })
                     dataNotify({ id: id, paramField: param.field, newValue: dataValues })
                 }
-                const inputBorderMulti = useTheme("inputBorder");
-                const textColorMulti = useTheme("textColor")
+
                 const colourStylesMulti = {
                     control: (styles, state) => ({
                         ...styles,
-                        backgroundColor: useTheme("inputBackgroundColor"),
+                        backgroundColor: inputBg,
                         borderColor: state.isSelected ? inputBorderMulti : "transparent",
                         textColor: textColorMulti,
                         width: 'fit-content'
@@ -218,7 +245,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     menu: (styles) => {
                         return {
                             ...styles, color: textColorMulti,
-                            backgroundColor: useTheme("inputBackgroundColor"),
+                            backgroundColor: inputBg,
                         }
                     },
                 };
@@ -245,7 +272,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
 
             case 'colorPicker':
                 const initColor = nodeData[param.field] ? pre(nodeData[param.field]) : "#404040"
-                const [colorPickerVisible, setColorPickerVisible] = React.useState(false);
+
                 return (<div style={{ cursor: "pointer" }}>
                     <div style={{ width: "36px", height: "36px", backgroundColor: initColor, border: colorPickerVisible ? borderWidth + " solid " + borderColor : "1px #cccccc solid", borderRadius: 5 }} onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></div>
                     <div style={{ cursor: "pointer", position: "absolute", zIndex: 1100 }}>
@@ -263,15 +290,12 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     </div>
                 </div>)
             case 'range':
-                const min = param.data?.min ? param.data.min : 0
                 const max = param.data?.max ? param.data.max : 100
                 const step = param.data?.step
-                const defaultValue = param.data?.defaultValue
-                const initialRangeValue = nodeData[param.field]?.value ?? nodeData[param.field] ?? (defaultValue ?? min)
-                const [tmpRangeValue, setTmpRangeValue] = React.useState(pre(initialRangeValue));
+
                 return <>
                     {!param.hideLabel ? <div style={{ fontSize: '14px', position: 'relative', top: '3px', width: max.toString().length * 18, textAlign: 'left' }}>{post(tmpRangeValue)}</div> : null}
-                    <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: useTheme('interactiveColor'), height: '5px', borderWidth: '4px solid blue', backgroundColor: useTheme("inputBackgroundColor"), borderRadius: '10px' }}
+                    <input type="range" style={{ width: '100%', marginTop: '6px', accentColor: interactiveColor, height: '5px', borderWidth: '4px solid blue', backgroundColor: inputBg, borderRadius: '10px' }}
                         step={step}
                         onChange={(event: any) => setTmpRangeValue(event.target.value)}
                         onMouseUp={() => {
@@ -281,13 +305,6 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         value={tmpRangeValue} min={min} max={max} />
                 </>
             case 'boolean':
-                const stringToBolean = (myVar) => {
-                    if (typeof myVar === 'string' || myVar instanceof String)
-                        return myVar == "true" ? true : false;
-                    else
-                        return myVar;
-                }
-                const [checked, setChecked] = React.useState(stringToBolean(nodeData[param.field]));
                 return <span ref={checkRef}>
                     <input type='checkbox'
                         onChange={() => {
@@ -296,7 +313,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                             setChecked(!checked)
                         }}
                         checked={checked ? true : false}
-                        style={{ all: "revert", width: nodeFontSize, margin: "2px 0px 2px 0px", accentColor: useTheme("interactiveColor"), transform: `scale(${useTheme('nodeFontSize') / 15})`, marginRight: '5px' }} />
+                        style={{ all: "revert", width: nodeFontSize, margin: "2px 0px 2px 0px", accentColor: interactiveColor, transform: `scale(${nodeFontSize / 15})`, marginRight: '5px' }} />
                 </span>
             default:
                 const type = nodeData[param.field]?.kind
@@ -321,7 +338,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                                 })
                             }}
                         >
-                            {React.createElement(icons[type], { size: 16, color: useTheme('interactiveColor') })}
+                            {React.createElement(icons[type], { size: 16, color: interactiveColor })}
                         </div>
                         : <></>}
                     <NodeInput
@@ -384,7 +401,6 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
     const handleBorderColor = useTheme("handleBorderColor");
     const dataOutputColor = useTheme('dataOutputColor');
     const dataPort = useTheme("dataPort");
-    const nodeFontSize = useTheme('nodeFontSize')
 
     const ref = React.useRef()
 
