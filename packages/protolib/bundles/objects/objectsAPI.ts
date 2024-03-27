@@ -150,7 +150,7 @@ const getDB = (path, req, session) => {
           const objectApi = Objects.api.load({
             name: value.name,
             object: value.name,
-            template: "Automatic CRUD"
+            template: "automatic-crud"
           })
           await API.post("/adminapi/v1/apis?token="+session.token, objectApi.create().getData())
           if(value.adminPage) {
