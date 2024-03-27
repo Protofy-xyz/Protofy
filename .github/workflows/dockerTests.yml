@@ -85,7 +85,7 @@ jobs:
         RESULTS: ${{ env.RESULTS }}
       with:
           severity: info
-          color: '#a600e0'
+          color: '#0db7ed'
           avatarUrl: https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/protofito_purple.png
           description: |
             Docker Report 🐳
