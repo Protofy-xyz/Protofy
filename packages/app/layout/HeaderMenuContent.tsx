@@ -21,7 +21,7 @@ export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
     <YStack miw={230} p="$3" ai="flex-end">
       <Tinted>
         {menuOptions.filter((menu, i) => !menu['visibility'] || menu['visibility'](session, workspace)).map((menu, i) => {
-          return <HeaderLink native={true} {...(menu['id']?{id:menu['id']}:{})} onClick={() => menu['onClick'] && menu['onClick'](setSession, setSessionContext)} href={typeof menu['path'] == 'function' ? menu['path'](workspace, session) : menu['path']}>
+          return <HeaderLink key={i} native={true} {...(menu['id']?{id:menu['id']}:{})} onClick={() => menu['onClick'] && menu['onClick'](setSession, setSessionContext)} href={typeof menu['path'] == 'function' ? menu['path'](workspace, session) : menu['path']}>
             {typeof menu['label'] == 'function' ? menu['label'](workspace, session) : menu['label']}
           </HeaderLink>
         })
