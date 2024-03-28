@@ -29,9 +29,9 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     if (paths.devices.includes(segment)) return devicesMasks
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return []
     if (paths.apis.includes(segment)) return [
-        ...apiMasks,
-        ...customMasks.api,
-        ...customEventMasks.api
+        //...customMasks.api, //uncomment to wire your custom masks from custom bundle
+        ...customEventMasks.api,
+        ...apiMasks
     ]
     return []
 }

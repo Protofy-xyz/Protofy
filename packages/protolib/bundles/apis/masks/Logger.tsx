@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
+import { MessageSquare } from 'lucide-react';
 
 const Logger = ({node= {}, nodeData= {}, children}: any) => {
     const nodeParams: Field[] = [
@@ -9,7 +10,7 @@ const Logger = ({node= {}, nodeData= {}, children}: any) => {
     ] as Field[]
     
     return (
-        <Node node={node} isPreview={!node.id} title='Logger' color="#82d0ff" id={node.id} skipCustom={true}>
+        <Node icon={MessageSquare} node={node} isPreview={!node.id} title='Logger' color="#82d0ff" id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

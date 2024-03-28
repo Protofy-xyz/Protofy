@@ -8,20 +8,19 @@ import { filterCallback, restoreCallback } from 'protoflow';
 
 const apiMasks = [
     {
-        id: 'devicePub',
+        id: 'CloudApi',
         type: 'CallExpression',
-        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.devicePub'), //TODO: Change output function name
-        getComponent: (node, nodeData, children) => <DevicePub node={node} nodeData={nodeData} children={children} />,
-        getInitialData: () => { return { to: 'context.devicePub', param1: '"none"', param2: '"none"', param3: '"none"' } }
-    },
-    {
-        id: 'deviceSub',
-        type: 'CallExpression',
-        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.deviceSub'),
-        getComponent: (node, nodeData, children) => <DeviceSub node={node} nodeData={nodeData} children={children} />,
-        filterChildren: filterCallback("4"),
-        restoreChildren: restoreCallback("4"),
-        getInitialData: () => { return { to: 'context.deviceSub', param1: '"none"', param2: '"none"', param3: '"none"', param4: '(message,topic) =>' } }
+        check: (node, nodeData) => {
+            return (
+                node.type == "CallExpression"
+                && nodeData.param2?.startsWith('(req,res) =>')
+                && (nodeData.to == 'app.get' || nodeData.to == 'app.post')
+            )
+        },
+        getComponent: ApiMask,
+        filterChildren: filterCallback(),
+        restoreChildren: restoreCallback(),
+        getInitialData: () => { return { to: 'app.get', param1: '"/api/v1/"', param2: '(req,res) =>' } }
     },
     {
         id: 'logger',
@@ -38,19 +37,20 @@ const apiMasks = [
         getInitialData: () => { return { to: 'res.send', param1: '"Response"' } }
     },
     {
-        id: 'CloudApi',
+        id: 'devicePub',
         type: 'CallExpression',
-        check: (node, nodeData) => {
-            return (
-                node.type == "CallExpression"
-                && nodeData.param2?.startsWith('(req,res) =>')
-                && (nodeData.to == 'app.get' || nodeData.to == 'app.post')
-            )
-        },
-        getComponent: ApiMask,
-        filterChildren: filterCallback(),
-        restoreChildren: restoreCallback(),
-        getInitialData: () => { return { to: 'app.get', param1: '"/api/v1/"', param2: '(req,res) =>' } }
+        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.devicePub'), //TODO: Change output function name
+        getComponent: (node, nodeData, children) => <DevicePub node={node} nodeData={nodeData} children={children} />,
+        getInitialData: () => { return { to: 'context.devicePub', param1: '"none"', param2: '"none"', param3: '"none"' } }
+    },
+    {
+        id: 'deviceSub',
+        type: 'CallExpression',
+        check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.deviceSub'),
+        getComponent: (node, nodeData, children) => <DeviceSub node={node} nodeData={nodeData} children={children} />,
+        filterChildren: filterCallback("4"),
+        restoreChildren: restoreCallback("4"),
+        getInitialData: () => { return { to: 'context.deviceSub', param1: '"none"', param2: '"none"', param3: '"none"', param4: '(message,topic) =>' } }
     }
 ]
 

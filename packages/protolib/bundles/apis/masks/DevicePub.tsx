@@ -1,6 +1,8 @@
 import { Node, Field, NodeParams } from 'protoflow';
 import { API, Text } from 'protolib';
 import { useState, useEffect } from 'react';
+import {useColorFromPalette} from 'protoflow/src/diagram/Theme'
+import { Play } from 'lucide-react';
 
 const getDeviceSubsystemsNames = (devData) => {
     const deviceSubsystems = {}
@@ -34,6 +36,7 @@ const getDeviceNames = (devData) => devData?.map((device) => '"' + device.name +
 
 
 const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
+    const color = useColorFromPalette(6)
     const [devicesData, setDevicesData] = useState<any[]>([]);
     const [payloadVisibility, setPayloadVisibility] = useState(false);
     let deviceName = nodeData['param1'];
@@ -86,7 +89,7 @@ const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
     ] as Field[]
     
     return (
-        <Node node={node} isPreview={!node.id} title='devicePub' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node icon={Play} node={node} isPreview={!node.id} title='Device Action' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
             {payloadVisibility ? <></> : <NodeParams id={node.id} params={actionPayloadNodeParams} />}
         </Node>

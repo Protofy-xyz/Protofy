@@ -1,4 +1,5 @@
 import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
+import { Reply } from 'lucide-react';
 
 const ApiResponse = ({node= {}, nodeData= {}, children}: any) => {
 
@@ -8,7 +9,7 @@ const ApiResponse = ({node= {}, nodeData= {}, children}: any) => {
     ] as Field[]
     
     return (
-        <Node node={node} isPreview={!node.id} title='Api Response' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node icon={Reply} node={node} isPreview={!node.id} title='Api Response' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

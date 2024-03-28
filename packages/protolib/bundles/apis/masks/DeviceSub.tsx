@@ -1,6 +1,8 @@
 import { Node, Field, NodeParams, FlowPort, FallbackPort } from 'protoflow';
 import { API, Text } from 'protolib';
 import { useState, useEffect } from 'react';
+import {useColorFromPalette} from 'protoflow/src/diagram/Theme'
+import { Cable } from 'lucide-react';
 
 const getDeviceSubsystemsNames = (devData) => {
     const deviceSubsystems = {}
@@ -56,6 +58,7 @@ const getDeviceNames = (devData) => devData?.map((device) => '"' + device.name +
 
 
 const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
+    const color = useColorFromPalette(7)
     const [devicesData, setDevicesData] = useState<any[]>([]);
     // const [payloadVisibility, setPayloadVisibility] = useState(false);
     let deviceName = nodeData['param1'];
@@ -109,7 +112,7 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
     // ] as Field[]
     
     return (
-        <Node node={node} isPreview={!node.id} title='deviceSub' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node icon={Cable} node={node} isPreview={!node.id} title='Device Listener' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
             {/* {payloadVisibility ? <></> : <NodeParams id={node.id} params={actionPayloadNodeParams} />} */}
             <div style={{ marginTop: "35px" }}>

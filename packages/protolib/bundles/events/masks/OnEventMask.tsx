@@ -1,12 +1,11 @@
-import { Node, Field, FlowPort, NodeParams, FallbackPort, Button, filterCallback, restoreCallback} from 'protoflow';
-import { API } from 'protolib'
-import DevicePub from 'protolib/bundles/apis/masks/DevicePub';
-import React from 'react';
-import { useState, useEffect } from 'react';
+import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback} from 'protoflow';
+import {useColorFromPalette} from 'protoflow/src/diagram/Theme'
+import { Cable } from 'lucide-react';
 
 const OnEventMask = ({ node = {}, nodeData = {}, children }: any) => {
+    const color = useColorFromPalette(55)
     return (
-        <Node node={node} isPreview={!node.id} title='On Event' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node icon={Cable} node={node} isPreview={!node.id} title='On Event' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={[{ label: 'Event Path', field: 'param3', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'From', field: 'param4', type: 'input' }]} />
             <div style={{ paddingBottom: "30px" }}>
