@@ -29,7 +29,7 @@ export const MenuOption = ({ name, icon = undefined, selected = false, ...props 
 }
 
 export const UIMenu = ({ trigger, content, onOpenChange, ...props }) => {
-    return <Popover placement="top" onOpenChange={onOpenChange} {...props}>
+    return <Popover allowFlip onOpenChange={onOpenChange} {...props}>
         <Popover.Trigger>
             {
                 trigger
