@@ -79,7 +79,7 @@ const UINodeTypes = {
     ExportDeclaration: ExportDeclaration,
     NewExpression: NewExpression,
     TryStatement: TryStatement,
-    AwaitExpression: AwaitExpression,
+    //AwaitExpression: AwaitExpression,
     PropertyAccessExpression: PropertyAccessExpression,
     TypeLiteral: ObjectFactory('typeLiteral'),
     TypeAliasDeclaration: TypeAliasDeclaration,

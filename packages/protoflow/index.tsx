@@ -12,7 +12,7 @@ export { default as layouts } from './src/diagram/layouts';
 export { isHandleConnected } from './src/diagram/Node';
 export {useFlowsStore, FlowStoreContext} from './src/store/FlowsStore'
 export {BaseJSMasks} from './src/nodes/custom'
-export { filterCallback, restoreCallback, filterCallbackProp, restoreCallbackProp, filterAwait, restoreAwait } from './src/lib/Mask';
+export { filterCallback, restoreCallback, filterCallbackProp, restoreCallbackProp } from './src/lib/Mask';
 export { default as FallbackPort } from './src/FallbackPort';
 export { generateId } from './src/lib/IdGenerator';
 export { connectNodes } from './src/lib/Edge';

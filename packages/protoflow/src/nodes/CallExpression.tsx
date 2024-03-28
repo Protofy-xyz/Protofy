@@ -5,6 +5,7 @@ import AddPropButton from '../AddPropButton';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { ArrowUpRight } from 'lucide-react';
 import { useNodeColor } from '../diagram/Theme';
+import { SyntaxKind } from 'ts-morph';
 
 const CallExpression = (node) => {
     const { id, type } = node
@@ -31,6 +32,7 @@ const CallExpression = (node) => {
     return (
         <Node icon={ArrowUpRight} node={node} isPreview={!id} title={(nodeData.to ? nodeData.to : 'x') + '(' + (paramsArray.map(p => nodeData[p] ? nodeData[p] : '...').join(',')) + ')'} id={id} color={color}>
             <NodeParams id={id} params={nodeParams} />
+            <NodeParams id={id} params={[{ label: 'Await', field: 'await', type: 'boolean', static: true }]} />
             <AddPropButton keyId={'param' + nextId} id={id} nodeData={nodeData} />
         </Node>
     );
@@ -38,13 +40,14 @@ const CallExpression = (node) => {
 CallExpression.keyWords = ['call']
 CallExpression.defaultHandle = PORT_TYPES.data + 'to'
 CallExpression.getData = (node, data, nodesData, edges) => {
-    //console.log('in CallExpression.getData: ', node)
+    const parentNode = node.getParent()
     return {
         to: connectItem(node.getExpression(), 'output', node, 'to', data, nodesData, edges, 'to'),
+        await: parentNode && parentNode.getKind() === SyntaxKind.AwaitExpression,
         ...node.getArguments().reduce((obj, param, i) => {
             return { 
                 ...obj, 
-                ['param' + (i + 1)]: connectItem(param, 'output', node, 'param' + (i + 1), data, nodesData, edges, 'param' + (i + 1)) 
+                ['param' + (i + 1)]: connectItem(param, 'output', node, 'param' + (i + 1), data, nodesData, edges, 'param' + (i + 1))
             }
         }, {})
     }
@@ -84,7 +87,7 @@ CallExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMar
     })
     const callName = dumpConnection(node, "target", "to", PORT_TYPES.data, data?.to ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
 
-    return callName ? callName + "(" + params.join(',') + getTriviaBeforeCloseParenToken(data._astNode) + ")" : '' + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+    return callName ? (data.await?'await ':'')+callName + "(" + params.join(',') + getTriviaBeforeCloseParenToken(data._astNode) + ")" : '' + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
 }
 
 export default memo(CallExpression)
