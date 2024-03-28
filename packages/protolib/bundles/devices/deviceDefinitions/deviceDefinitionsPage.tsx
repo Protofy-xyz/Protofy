@@ -47,7 +47,7 @@ export default {
         <XStack f={1} minWidth={"100%"}>
           <Flows
             style={{ width: "100%" }}
-            disableDots={true}
+            disableDots={false}
             hideBaseComponents={true}
             disableStart={true}
             getFirstNode={(nodes) => {
