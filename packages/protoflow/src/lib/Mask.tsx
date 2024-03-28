@@ -18,6 +18,7 @@ export const filterCallbackProp = () => {
         return childScope.filter(child => !nodesIdsToFilter?.includes(child?.id))
     }
 }
+
 export const filterCallback = (numParam = "2") => {
     return (node, childScope, edges) => {
         const callbackId = edges.find(e => e.targetHandle == getId(node) + '-param' + numParam)?.source
@@ -29,6 +30,29 @@ export const filterCallback = (numParam = "2") => {
         return childScope.filter(child => child?.id != callbackId)
     }
 }
+
+export const filterAwait = () => {
+    return (node, childScope, edges) => {
+        return childScope
+    }
+}
+
+export const restoreAwait = () => {
+    return (node, nodes, originalNodes, edges, originalEdges) => {
+        // const arrowEdge = originalEdges.find(e => e.targetHandle == node.id + '-param' + numParam)
+        let recoveredEdges = []
+        let recoveredNodes: any = []
+        // if (arrowEdge) {
+        //     const arrowNode = originalNodes?.find(n => n.id == arrowEdge.source)
+        //     if (arrowNode) {
+        //         recoveredNodes.push(arrowNode)
+        //     }
+        //     recoveredEdges = originalEdges.filter((e) => e.source == arrowNode?.id || e.target == arrowNode?.id)
+        // }
+        return { nodes: [...recoveredNodes, ...nodes], edges: [...recoveredEdges, ...edges] }
+    }
+}
+
 export const restoreCallback = (numParam = "2") => {
     return (node, nodes, originalNodes, edges, originalEdges) => {
         const arrowEdge = originalEdges.find(e => e.targetHandle == node.id + '-param' + numParam)
