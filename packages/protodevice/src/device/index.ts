@@ -5,7 +5,7 @@ import binarySensor from './BinarySensor'
 import device from './Device'
 import neopixelsBus from './NeopixelsBus'
 import output from './Output'
-import relay from './Relay'
+import {relay, GPIOSwitch} from './Relay'
 import adcSensor from './ADCSensor'
 import pulseCounter from './PulseCounter'
 import ledcOutput from './LEDCOutput'
@@ -45,6 +45,7 @@ export default {
   binarySensor: binarySensor,
   neopixelsBus: neopixelsBus,
   relay: relay,
+  GPIOSwitch: GPIOSwitch,
   adcSensor: adcSensor,
   capacitiveSoilMoistureSensor: capacitiveSoilMoistureSensor,
   pulseCounter: pulseCounter,

@@ -10,7 +10,7 @@ const BinarySensor = ({node= {}, nodeData= {}, children, color}: any) => {
     const type = 'binary_sensor';
 
     return (
-        <Node node={node} isPreview={!node.id} title='Button' color={color} id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='Switch' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
             <NodeBus componentName={name} type={type}/>
         </Node>

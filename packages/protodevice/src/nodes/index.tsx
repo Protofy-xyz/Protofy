@@ -8,6 +8,7 @@ const DeepSleep = dynamic(() => import('./DeepSleep'))
 const BinarySensor = dynamic(() => import('./BinarySensor'))
 const NeopixelsBus = dynamic(() => import('./NeopixelsBus'))
 const Relay = dynamic(() => import('./Relay'))
+const GPIOSwitch = dynamic(() => import('./GPIOSwitch'))
 const ADCSensor = dynamic(() => import('./ADCSensor'))
 const I2cBus = dynamic(() => import('./I2cBus'))
 const PCA9685 = dynamic(() => import('./PCA9685'))
@@ -83,6 +84,13 @@ const deviceMasks = [
     getInitialData: () => { return { to: 'relay', param1: '""', param2: '"ALWAYS_OFF"' } }
   },
 
+  {
+    id: 'GPIOSwitch',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('GPIOSwitch'), //TODO: Change output function name
+    getComponent: (node, nodeData, children) => <GPIOSwitch color={getColor('GPIOSwitch')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'GPIOSwitch', param1: '""', param2: '"ALWAYS_OFF"' } }
+  },
 
   // This was commented on previous platform versions
   // {
