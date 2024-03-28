@@ -29,11 +29,11 @@ const apiMasks = [
         check: (node, nodeData) => {
             return (
                 node.type == "CallExpression"
-                && (nodeData.to == 'API.get' || nodeData.to == 'API.post')
+                && (nodeData.to == 'context.fetch')
             )
         },
         getComponent: Fetch,
-        getInitialData: () => { return { to: 'API.get', param1: '"/api/v1/"', param2: '', await: true } }
+        getInitialData: () => { return { to: 'context.fetch', param1: "\"get\"", param2: '"/api/v1/"', param3: false, param4: "", await: true } }
     },
     {
         id: 'logger',
