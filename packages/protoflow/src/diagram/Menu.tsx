@@ -241,7 +241,7 @@ export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customCom
                             value={searchValue}
                             onKeyDown={onKeyDown}
                             onChange={t => setSearchValue(t.target.value)}
-                            placeholder="search nodel"
+                            placeholder="search node"
                         />
                         <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
                     </div>
