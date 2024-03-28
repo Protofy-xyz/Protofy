@@ -2,6 +2,7 @@ import DevicePub from './DevicePub';
 import DeviceSub from './DeviceSub';
 import ApiResponse from './ApiResponse';
 import ApiMask from './ApiMask';
+import Fetch from './Fetch'
 import Logger from './Logger';
 
 import { filterCallback, restoreCallback } from 'protoflow';
@@ -21,6 +22,18 @@ const apiMasks = [
         filterChildren: filterCallback(),
         restoreChildren: restoreCallback(),
         getInitialData: () => { return { to: 'app.get', param1: '"/api/v1/"', param2: 'async (req,res) =>' } }
+    },
+    {
+        id: 'Fetch',
+        type: 'CallExpression',
+        check: (node, nodeData) => {
+            return (
+                node.type == "CallExpression"
+                && (nodeData.to == 'API.get' || nodeData.to == 'API.post')
+            )
+        },
+        getComponent: Fetch,
+        getInitialData: () => { return { to: 'API.get', param1: '"/api/v1/"', param2: '', await: true } }
     },
     {
         id: 'logger',
