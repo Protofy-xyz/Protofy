@@ -3,9 +3,11 @@ import { Text } from 'tamagui'
 import { useAtom } from 'jotai'
 import { Paragraph, Theme, XStack } from '@my/ui';
 import { Cloud, CloudOff } from '@tamagui/lucide-icons';
+import dynamic from 'next/dynamic';
 
 export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: string }) => {
-  const [session] = useSession();
+  //@ts-ignore
+  const SessionInfo = dynamic(() => import('./SessionInfo'), { ssr: false })
 
   return <ProtoHeaderContents
     logo={<Paragraph mr={"$2"}><Text fontSize={20} fontWeight={"400"}>{props.headerTitle ?? 'Protofy'}</Text></Paragraph>}
@@ -15,7 +17,7 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
         <Tinted>
           <HeaderLink id="header-session-doc" href="/documentation">Docs</HeaderLink>
           {
-            session.loggedIn ? <HeaderLink id="header-session-user-id" href="/profile">{session.user.id}</HeaderLink> : <HeaderLink href="/auth/login" id="header-login-link" >Login</HeaderLink>
+            <SessionInfo />
           }
         </Tinted>
       </XStack>
@@ -26,3 +28,5 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
     {...props}
   />
 }
+
+
