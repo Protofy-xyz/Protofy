@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple, Tinted, AdminPage, PaginatedDataSSR, usePendingEffect, CardBody } from 'protolib'
+import { API, DataTable2, DataView, ButtonSimple, Tinted, AdminPage, PaginatedDataSSR, usePendingEffect, CardBody, ItemMenu } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
@@ -9,9 +9,9 @@ import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
 import DeviceModal from 'protodevice/src/DeviceModal'
 import deviceFunctions from 'protodevice/src/device'
 import Subsystem from 'protodevice/src/Subsystem'
-import { Paragraph, TextArea, XStack, YStack } from '@my/ui';
+import { Paragraph, Stack, TextArea, XStack, YStack } from '@my/ui';
 import { getPendingResult } from "protolib/base";
-import { Pencil } from '@tamagui/lucide-icons';
+import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
 
 
@@ -32,13 +32,15 @@ const MqttTest = ({ onSetStage, onSetModalFeedback }) => {
           onSetStage('upload')
         } else if (data.event == 'exit' && data.code != 0) {
           console.error('Error compiling', messages)
-          onSetModalFeedback({ message: <YStack f={1} height="100%">
-            <Paragraph color="$red8" mt="$3">Error compiling code.</Paragraph>
-            <Paragraph color="$red8">Please check your flow configuration.</Paragraph>
-            <TextArea textAlign="left" f={1} mt="$2" mb={"$5"}>
-              {messages.map((ele) => ele.data).join('')}
-            </TextArea>
-          </YStack>, details: { error: true } })
+          onSetModalFeedback({
+            message: <YStack f={1} height="100%">
+              <Paragraph color="$red8" mt="$3">Error compiling code.</Paragraph>
+              <Paragraph color="$red8">Please check your flow configuration.</Paragraph>
+              <TextArea textAlign="left" f={1} mt="$2" mb={"$5"}>
+                {messages.map((ele) => ele.data).join('')}
+              </TextArea>
+            </YStack>, details: { error: true }
+          })
         }
         setMessages([...messages, data])
       }
@@ -119,16 +121,16 @@ export default {
       const deviceObj = eval(deviceCode.replace(/;/g, ""))
       const componentsTree = deviceObj.getComponentsTree(deviceName, deviceDefinition)
       const yaml = deviceObj.dump("yaml")
-      
+
       const subsystems = deviceObj.getSubsystemsTree(deviceName, deviceDefinition)
       const deviceObject = await API.get("/adminapi/v1/devices/" + deviceName)
-      await API.post("/adminapi/v1/devices/"+deviceName+"/yamls", {yaml})
+      await API.post("/adminapi/v1/devices/" + deviceName + "/yamls", { yaml })
       if (deviceObject.isError) {
         alert(deviceObject.error)
         return;
       }
       deviceObject.data.subsystem = subsystems
-      API.post("/adminapi/v1/devices/" + deviceName,  deviceObject.data )
+      API.post("/adminapi/v1/devices/" + deviceName, deviceObject.data)
       console.log("ComponentsTree: ", componentsTree)
       console.log("Subsystems: ", subsystems)
       yamlRef.current = yaml
@@ -221,6 +223,21 @@ export default {
     const [deviceDefinitions, setDeviceDefinitions] = useState(extraData?.deviceDefinitions ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: definitionsSourceUrl }, s) }, setDeviceDefinitions, extraData?.deviceDefinitions)
 
+    const extraMenuActions = [
+      {
+        text: "Edit config file",
+        icon: Pencil,
+        action: (element) => { replace('editFile', element.getConfigFile()) },
+        isVisible: (element) => element.isInitialized() && element.getConfigFile()
+      },
+      {
+        text: "Upload",
+        icon: UploadCloud,
+        action: (element) => { flashDevice(element.data.name, element.data.deviceDefinition) },
+        isVisible: (element) => true
+      }
+    ]
+    
     return (<AdminPage title="Devices" pageSession={pageSession}>
       <Connector brokerUrl="wss://firmware.protofy.xyz/ws">
         <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
@@ -240,7 +257,7 @@ export default {
           DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={(e) => { flashDevice(row.name, row.deviceDefinition); }}>Upload</ButtonSimple>)
         )}
         extraFieldsForms={{
-          deviceDefinition: z.union(deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => z.literal(DeviceDefinitionModel.load(i).getId())): []).after('name'),
+          deviceDefinition: z.union(deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => z.literal(DeviceDefinitionModel.load(i).getId())) : []).after('name'),
         }}
         model={DevicesModel}
         pageState={pageState}
@@ -248,17 +265,15 @@ export default {
         dataTableGridProps={{
           onSelectItem: (item) => { },
           getBody: (data) => <CardBody title={data.name}>
-            {data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name}/>)}
+            {/* <Stack t={"$-7"}>
+              <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl) => {
+                await API.get(sourceUrl + '/delete')
+              }} deleteable={() => true} element={DevicesModel.load(data.data)} extraMenuActions={extraMenuActions} />
+            </Stack> */}
+            {data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)}
           </CardBody>
         }}
-        extraMenuActions={[
-          {
-              text: "Edit config file",
-              icon: Pencil,
-              action: (element) => { replace('editFile', element.getConfigFile()) },
-              isVisible: (element) => element.isInitialized() && element.getConfigFile()
-          }
-      ]}
+        extraMenuActions={extraMenuActions}
       />
     </AdminPage>)
   },
