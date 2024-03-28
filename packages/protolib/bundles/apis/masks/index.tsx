@@ -33,7 +33,7 @@ const apiMasks = [
             )
         },
         getComponent: Fetch,
-        getInitialData: () => { return { to: 'context.fetch', param1: "\"get\"", param2: '"/api/v1/"', param3: false, param4: "", await: true } }
+        getInitialData: () => { return { to: 'context.fetch', param1: "\"get\"", param2: '"/api/v1/"', param3: "", param4: false, param5: "", await: true } }
     },
     {
         id: 'logger',

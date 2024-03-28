@@ -7,9 +7,10 @@ const Fecth = (node: any = {}, nodeData = {}) => {
             <NodeParams id={node.id} params={[{ label: 'Method', field: 'param1', type: 'select', data: ["\"get\"", "\"post\""], static: true }]} />
             <NodeParams id={node.id} params={[{ label: 'Path', field: 'param2', type: 'input'}]} />
             {
-                nodeData?.param1 == "\"post\"" && <NodeParams id={node.id} params={[{ label: 'Body', field: 'param4', type: 'input'}]} />
+                nodeData?.param1 == "\"post\"" && <NodeParams id={node.id} params={[{ label: 'Body', field: 'param5', type: 'input'}]} />
             }
-            <NodeParams id={node.id} params={[{ label: 'Use admin token', field: 'param3', type: 'boolean'}]} />
+            <NodeParams id={node.id} params={[{ label: 'Data Key', field: 'param3', type: 'input'}]} />
+            <NodeParams id={node.id} params={[{ label: 'Use admin token', field: 'param4', type: 'boolean'}]} />
         </Node>
     )
 }
