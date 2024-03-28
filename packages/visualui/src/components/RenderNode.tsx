@@ -100,14 +100,30 @@ export const RenderNode = ({ render, onEnableEvents }) => {
             ? dom.getBoundingClientRect()
             : { top: 0, left: 0, bottom: 0 };
 
+        const margin = 5
         let topPos
+        let leftPos = left < margin ? margin : left
 
-        if (top > 100) topPos = top - 60
-        else topPos = bottom - 50
+        var body = document.body,
+            html = document.documentElement;
+
+        var height = Math.max(body.scrollHeight, body.offsetHeight,
+            html.clientHeight, html.scrollHeight, html.offsetHeight);
+
+        if (top > 120) { // top
+            topPos = top - 60
+        } else if ((height - bottom) > 70 && bottom > 60) { // bottom
+            topPos = bottom + 10
+        } else if ((height - bottom) < 120 && bottom > 120) { // in
+            topPos = bottom - (barHeight + margin)
+            leftPos = margin
+        } else { // hide
+            topPos = -20000
+        }
 
         return {
             top: topPos + "px",
-            left: left + "px",
+            left: leftPos + "px",
         };
     }, []);
 
