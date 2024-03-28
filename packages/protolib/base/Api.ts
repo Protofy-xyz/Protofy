@@ -8,7 +8,9 @@ let APIURL = devMode?'http://localhost:8080':'http://localhost:8000'
 export const setApiUrl = (apiurl) => APIURL = apiurl 
 export const getApiUrl = () => process?.env?.API_URL ?? APIURL
 
-const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult | undefined> => {
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+const _fetch = async (urlOrData, data?, update?, plain?, retryNum=0):Promise<PendingResult | undefined> => {
     const SERVER = getApiUrl()
     logger.debug(`SERVER: ${SERVER}`);
     let realUrl;
@@ -40,9 +42,20 @@ const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult |
                 body: JSON.stringify(data) 
             }:undefined);
 
-            
-            const resData = !plain ? await res.json() : await res.text()
+            let resData
+            try {
+                resData = await res.text()
+                if(!plain) resData = JSON.parse(resData)
+            } catch(e) {
+                console.error("Error decoding JSON response from API: ", realUrl, e)
+            }
+
             if (!res.ok) {
+                console.error('API retry: ', res.status, realUrl)
+                if(retryNum < 5 && res.status != 404) {
+                    await wait(1000);
+                    return _fetch(urlOrData, data, update, plain, retryNum + 1)
+                }
                 const err = getPendingResult('error', null, resData)
                 if (update) {
                     update(err)
@@ -58,6 +71,11 @@ const _fetch = async (urlOrData, data?, update?, plain?):Promise<PendingResult |
                 return response
             }
         } catch (e: any) {
+            console.error('API retry: ', e, realUrl)
+            if(retryNum < 5) {
+                await wait(2000);
+                return _fetch(urlOrData, data, update, plain, retryNum + 1)
+            }
             let errStr = e.apiError ?? e.toString()
             if (e instanceof SyntaxError) {
                 logger.error({ error: e }, "Fetch error")

@@ -78,7 +78,7 @@ export const DevicesAPI = (app, context) => {
         const data = await API.get(`/adminapi/v1/events?from=device&user=${req.params.device}&path=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`)
 
         if(!data || !data.data ||  !data.data['items'] || !data.data['items'].length) {
-            res.status(404).send(`No value found for monitor`)
+            res.status(404).send({value:null})
             return
         }
         res.send({value: data.data['items'][0].payload?.message})
