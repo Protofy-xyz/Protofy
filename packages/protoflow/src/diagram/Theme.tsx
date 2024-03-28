@@ -113,8 +113,8 @@ const useTheme = (key: themeKey, defaultValue = null) => {
 }
 const keys = Object.keys(NodeTypes)
 const totalKeys = keys.length
-const generateColor = (type:string, gamut:{hue: number, saturation: number, value: number}) => {
-    const i = keys.indexOf(type)
+const generateColor = (type:string, gamut:{hue: number, saturation: number, value: number}, index?) => {
+    const i = typeof type !== "undefined" ? keys.indexOf(type) : index 
     const h = (100 * (totalKeys / (i+1))) + gamut.hue % 100
     return "#"+convert.hsv.hex(h, gamut.saturation, gamut.value)
 }
@@ -128,10 +128,15 @@ export const generateColorbyIndex = (index, arrLength) => {
     return "#" + convert.hsv.hex(h, gamut.saturation, gamut.value)
 }
 
-export const useNodeColor = (type) => {
+export const useNodeColor = (type?) => {
     //NodeTypes
     const nodePalette = useTheme('nodePalette', {})
-    return nodePalette.custom[type] ?? generateColor(type, nodePalette.gamut) //nodePalette.colors[Object.keys(NodeTypes).indexOf(type) % nodePalette.colors.length]
+    return type && nodePalette.custom[type] ? nodePalette.custom[type] : generateColor(type, nodePalette.gamut) //nodePalette.colors[Object.keys(NodeTypes).indexOf(type) % nodePalette.colors.length]
+}
+
+export const useColorFromPalette = (index) => {
+    const nodePalette = useTheme('nodePalette', {})
+    return generateColor(undefined, nodePalette.gamut, index)
 }
 
 export const usePrimaryColor = () => {

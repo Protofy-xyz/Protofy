@@ -4,6 +4,7 @@ import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import { BaseJSMasks } from 'protoflow';
 import apiMasks from 'protolib/bundles/apis/masks';
 import customMasks from 'app/bundles/custom/masks'
+import customEventMasks from 'protolib/bundles/events/masks'
 const paths = {
     devices: [
         'devices',
@@ -29,7 +30,8 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return []
     if (paths.apis.includes(segment)) return [
         ...apiMasks,
-        ...customMasks.api
+        ...customMasks.api,
+        ...customEventMasks.api
     ]
     return []
 }
