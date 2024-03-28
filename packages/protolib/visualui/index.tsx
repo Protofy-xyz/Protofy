@@ -83,7 +83,7 @@ import HStack from '../components/HStack'
 import VCenterStack from '../components/VCenterStack'
 import Spacer from '../components/Spacer'
 import { AdminPage } from '../components/AdminPage'
-import { alignSelf, fontStyle, textAlign, fontWeight, flexDirection, justifyContent } from './shortcuts'
+import { alignSelf, fontStyle, textAlign, fontWeight, flexDirection, justifyContent, resizeMode } from './shortcuts'
 
 const cw = getComponentWrapper('protolib')
 
@@ -145,7 +145,14 @@ export const basicPalette = {
       ]
     }
   }, { children: <BasicPlaceHolder /> }),
-  ...cw(Image, 'Image', 'Image', { url: "https://picsum.photos/200" }, {}, {}, true),
+  ...cw(Image, 'Image', 'Image', { url: "https://picsum.photos/200" }, {
+    custom: {
+      shortcuts: [
+        alignSelf,
+        resizeMode
+      ]
+    }
+  }, {}, true),
 }
 
 export const miscellanyPalette = {

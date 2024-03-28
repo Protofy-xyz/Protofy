@@ -1,9 +1,12 @@
 import { useState, createElement } from 'react'
 import { Popover } from "@my/ui";
 import { useUITheme } from "./Theme";
+import { Check } from 'lucide-react'
 
-export const MenuOption = ({ name, icon = undefined, ...props }: any) => {
+export const MenuOption = ({ name, icon = undefined, selected = false, ...props }: any) => {
     const [hover, setHover] = useState(false)
+    const color = hover ? useUITheme('interactiveColor') : useUITheme('textColor')
+
     return <div
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
@@ -15,11 +18,12 @@ export const MenuOption = ({ name, icon = undefined, ...props }: any) => {
             ...props.style
         }}
     >
-        <div style={{ color: hover ? useUITheme('interactiveColor') : useUITheme('textColor') }}>
+        <div style={{ color: color }}>
             {name}
         </div>
         <div>
-            {icon ? createElement(icon, { color: hover ? useUITheme('interactiveColor') : useUITheme('textColor'), size: 16, paddingTop: '2px' }) : null}
+            {icon ? createElement(icon, { color: color, size: 16, paddingTop: '2px' }) : null}
+            {selected ? <Check size={16} style={{marginLeft: '10px'}} color={color} /> : null}
         </div>
     </div>
 }

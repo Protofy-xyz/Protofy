@@ -230,6 +230,7 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                                                         e.stopPropagation();
                                                                         sh.action({ setProp, dom })
                                                                     }}
+                                                                    selected={sh?.selected ? sh.selected(props) : false}
                                                                     name={sh.name}
                                                                 />
                                                                 ))
