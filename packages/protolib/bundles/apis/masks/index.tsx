@@ -13,14 +13,14 @@ const apiMasks = [
         check: (node, nodeData) => {
             return (
                 node.type == "CallExpression"
-                && nodeData.param2?.startsWith('(req,res) =>')
+                && (nodeData.param2?.startsWith('async (req,res) =>') || nodeData.param2?.startsWith('(req,res) =>'))
                 && (nodeData.to == 'app.get' || nodeData.to == 'app.post')
             )
         },
         getComponent: ApiMask,
         filterChildren: filterCallback(),
         restoreChildren: restoreCallback(),
-        getInitialData: () => { return { to: 'app.get', param1: '"/api/v1/"', param2: '(req,res) =>' } }
+        getInitialData: () => { return { to: 'app.get', param1: '"/api/v1/"', param2: 'async (req,res) =>' } }
     },
     {
         id: 'logger',

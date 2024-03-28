@@ -10,7 +10,7 @@ const ApiMask = (node: any = {}, nodeData = {}) => {
       <NodeParams id={node.id} params={[{ label: 'Path', field: 'param1', type: 'input' }]} />
       <div style={{ paddingBottom: "30px" }}>
         <FlowPort id={node.id} type='input' label='On Request (req, res)' style={{ top: '170px' }} handleId={'request'} />
-        <FallbackPort node={node} port={'param2'} type={"target"} fallbackPort={'request'} portType={"_"} preText="(req, res) => " postText="" />
+        <FallbackPort node={node} port={'param2'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (req, res) => " postText="" />
       </div>
 
       {nodeData && nodeData['to'] == 'app.get' && <Button label="Make request" onPress={() => {
