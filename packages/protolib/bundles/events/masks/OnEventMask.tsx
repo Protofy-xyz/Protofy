@@ -23,7 +23,7 @@ export default {
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to == 'context.onEvent' && nodeData.param4 != '"device"' && nodeData.param4 != "'device'",
     getComponent: (node, nodeData, children) => <OnEventMask node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'context.onEvent', param1: 'context', param2: '(event) =>' , param3: '""', param4: '"device"' } },
+    getInitialData: () => { return { to: 'context.onEvent', param1: 'context', param2: '(event) =>' , param3: '""', param4: '""' } },
     filterChildren: filterCallback(),
     restoreChildren: restoreCallback(),
 }
