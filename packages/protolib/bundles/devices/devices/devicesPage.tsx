@@ -233,7 +233,7 @@ export default {
       {
         text: "Upload",
         icon: UploadCloud,
-        action: (element) => { flashDevice(element.data.name, element.data.deviceDefinition) },
+        action: (element) => {flashDevice(element.data.name, element.data.deviceDefinition) },
         isVisible: (element) => true
       }
     ]
@@ -265,12 +265,14 @@ export default {
         dataTableGridProps={{
           onSelectItem: (item) => { },
           getBody: (data) => <CardBody title={data.name}>
-            {/* <Stack t={"$-7"}>
+            <Stack right={20} top={20} position={"absolute"}>
               <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl) => {
                 await API.get(sourceUrl + '/delete')
-              }} deleteable={() => true} element={DevicesModel.load(data.data)} extraMenuActions={extraMenuActions} />
-            </Stack> */}
-            {data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)}
+              }} deleteable={() => true} element={DevicesModel.load(data)} extraMenuActions={extraMenuActions} />
+            </Stack>
+            <YStack f={1}>
+              {data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)}
+            </YStack>
           </CardBody>
         }}
         extraMenuActions={extraMenuActions}
