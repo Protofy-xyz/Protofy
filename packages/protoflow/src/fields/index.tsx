@@ -81,8 +81,8 @@ export const CustomField = ({ label, input, menuActions = undefined }: any) => {
 
     return <div style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column" }}>
         <div style={{ fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-            <div className={"handleKey"} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 2 }}>
-                <Text width="100%">{label}</Text>
+            <div className={"handleKey"} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 2, overflow: 'hidden' }}>
+                <Text title={label} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{label}</Text>
             </div>
             <div className={"handleValue"} style={{ minWidth: '180px', marginRight: '10px', display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 3 }}>
                 {input}
@@ -114,7 +114,7 @@ export const CustomField = ({ label, input, menuActions = undefined }: any) => {
                                     }}
                                 >
                                     {React.createElement(action.icon, { size: "16px", strokeWidth: 2 })}
-                                    <Text style={{ fontSize: '16px',  fontFamily: 'Jost-Medium' }} >{action.text}</Text>
+                                    <Text style={{ fontSize: '16px', fontFamily: 'Jost-Medium' }} >{action.text}</Text>
                                 </XStack>
                             })}
                         </Popover.Content>
