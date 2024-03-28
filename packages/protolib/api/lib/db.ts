@@ -63,7 +63,7 @@ export const existsKey = async (dbPath: string, key: string) => {
         await db.get(key)
         return true
     } catch (e:any) {
-        if(e.notFound) {
+        if(e.name == 'NotFoundError') {
             return false
         } else {
             throw e

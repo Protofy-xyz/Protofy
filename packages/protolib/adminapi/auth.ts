@@ -28,6 +28,17 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
     const request: LoginRequest = req.body
     LoginSchema.parse(request)
     try {
+        if(!await existsKey(dbPath, request.username)) {
+            res.status(401).send('"Incorrect user or password"')
+            generateEvent({
+                path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+                user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
+                payload: { clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
+            }, getServiceToken())
+            return
+        }
+
         const storedUser = JSON.parse(await getDB(dbPath).get(request.username))
         if (await checkPassword(request.password, storedUser.password)) {
             //update lastLogin
@@ -51,17 +62,20 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
             }, getServiceToken())
             logger.info({ newSession }, "Session created: " + request.username)
             return
+        } else {
+            generateEvent({
+                path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+                user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
+                payload: { clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
+            }, getServiceToken())
+            res.status(401).send('"Incorrect user or password"')
         }
     } catch (error) {
         logger.error({ error }, "Login error")
+        res.status(500).send('"Server error"')
+        return
     }
-    generateEvent({
-        path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
-        user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
-        payload: { clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
-    }, getServiceToken())
-    res.status(500).send('"Incorrect user or password"')
 }));
 
 app.get('/adminapi/v1/auth/validate', handler(async (req: any, res: any, session) => {
