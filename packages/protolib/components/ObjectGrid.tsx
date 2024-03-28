@@ -17,7 +17,7 @@ const GridElementCard = ({ index, data, width }) => {
         topBarOutSideScrollArea={false}
         backgroundColor={"$color1"}
         elevation={"$0"}
-        hoverStyle={{ o: 0.8, backgroundColor: '$' + tint.tint + '1', elevation: "$1" }}
+        hoverStyle={{...(data.disableItemSelection ? {} : { o: 0.8, backgroundColor: '$' + tint.tint + '1', elevation: "$1" })}}
         borderWidth={1}
         pointerEvents='none'
         pointerEventsControls="none"
@@ -60,6 +60,7 @@ export const ObjectGrid = ({
         rightGap = 30, 
         contentMargin = 50, 
         onSelectItem = (id) => { }, 
+        disableItemSelection = false,
         extraMenuActions, 
         spacing = 20, 
         getPicture, 
@@ -99,7 +100,7 @@ export const ObjectGrid = ({
             deleteable,
             itemHeight,
             extraMenuActions,
-
+            disableItemSelection
         }
     })
 

@@ -263,6 +263,7 @@ export default {
         pageState={pageState}
         icons={DevicesIcons}
         dataTableGridProps={{
+          disableItemSelection: true,
           onSelectItem: (item) => { },
           getBody: (data) => <CardBody title={data.name}>
             <Stack right={20} top={20} position={"absolute"}>
