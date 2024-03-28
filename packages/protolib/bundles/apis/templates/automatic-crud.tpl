@@ -21,7 +21,7 @@ const {{name}}API = AutoAPI({
     prefix: prefix
 })
 
-export default Protofy("code",(app:Application, context) => {
+export default Protofy("code", async (app:Application, context) => {
     {{name}}API(app, context) 
     //you can add more apis here, like:
     /*

@@ -38,7 +38,7 @@ Protofy("type", "AutoAPI");
 Protofy("object", "{{object}}");
 const { name, prefix } = Objects.{{object}}.getApiOptions();
 
-export default Protofy("code", (app: Application, context) => {
+export default Protofy("code", async (app: Application, context) => {
 
     const jsonPath = fsPath.join(root, 'data', '{{object}}.json')
     

@@ -30,17 +30,13 @@ const logger = getLogger()
 
 Protofy("type", "CustomAPI")
 
-export default Protofy("code",(app:Application, context) => {
+export default Protofy("code", async (app:Application, context) => {
     //PUT YOUR API HERE
     //context.devicePub function allows to communicate with devices via mqtt
-    //contextdeviceSub allows to receive notifications from devices via mqtt
+    //context.deviceSub allows to receive notifications from devices via mqtt
     //app is a normal expressjs object
     //context.mqtt is a mqttclient connection
     logger.info("Custom API {{name}} started")
-    app.get("/api/v1/custom", (req, res) => {
-        logger.info({}, "This a {{name}} log!");
-        res.send("{{name}} API response");
-    });
 })
 
 
