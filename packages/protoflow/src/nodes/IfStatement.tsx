@@ -74,9 +74,9 @@ IfStatement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarker
     const elseBody = dumpConnection(node, "target", "else", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
     let elseData = ''
     if(elseBody) {
-        elseData = ' else '+elseBody
+        elseData = " else \n"+elseBody
     }
-    return "if("+condition+")" + body + elseData + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+    return "if("+condition+")\n" + body + "\n" + elseData + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
 }
 
 IfStatement.getChildPosition = (node, childPos, originalPos, childNode, type) => {
