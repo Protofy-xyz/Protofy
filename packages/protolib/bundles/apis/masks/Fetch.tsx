@@ -9,7 +9,7 @@ const Fecth = (node: any = {}, nodeData = {}) => {
             {
                 nodeData?.param1 == "\"post\"" && <NodeParams id={node.id} params={[{ label: 'Body', field: 'param4', type: 'input'}]} />
             }
-            <NodeParams id={node.id} params={[{ label: 'Has Token', field: 'param3', type: 'boolean'}]} />
+            <NodeParams id={node.id} params={[{ label: 'Use admin token', field: 'param3', type: 'boolean'}]} />
         </Node>
     )
 }

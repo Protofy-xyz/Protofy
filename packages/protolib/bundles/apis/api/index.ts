@@ -10,7 +10,7 @@ export const automation = (name,app,cb)=>{
     })
 }
 
-export const fetch = (method, url, data={}, hasSarviceToken=false)=>{
+export const fetch = (method, url, hasSarviceToken=false, data={})=>{
     var urlEnch = url
     if(hasSarviceToken) {
         urlEnch = url.includes("?")? `${url}&token=${getServiceToken()}`: `${url}?token=${getServiceToken()}`
