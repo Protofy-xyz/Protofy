@@ -14,7 +14,23 @@ import { useProtoflow } from '../store/DiagramStore';
 
 const pokayokeEnabled = POKAYOKE_ENABLED ?? false
 
-export default withTopics(({ enabledNodes = ['*'], hideBaseComponents, customComponents = [], style = {}, diagramNodes, setNodes, setNodeData, nodeData, edges, setEdges, takeSnapshot = () => null, reactFlowWrapper = null, topics, onAddNode = (node: any, newEdge: any, initialData: any) => null, onEditDiagram = (nodes, edges, focus) => { } }) => {
+export default withTopics(({
+    enabledNodes = ['*'],
+    hideBaseComponents,
+    customComponents = [],
+    style = {},
+    diagramNodes,
+    setNodes,
+    setNodeData,
+    nodeData,
+    edges,
+    setEdges,
+    takeSnapshot = () => null,
+    reactFlowWrapper = null,
+    topics,
+    onAddNode = (node: any, newEdge: any, initialData: any) => null,
+    onEditDiagram = (nodes, edges, focus) => { }
+}) => {
     const panelRef = useRef()
     const inputRef = useRef()
     const scrollRef: any = useRef()
