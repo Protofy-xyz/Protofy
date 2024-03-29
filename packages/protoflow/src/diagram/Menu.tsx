@@ -230,6 +230,8 @@ export default withTopics(({
     const inputBorder = useTheme('inputBorder')
     const highlightInputBackgroundColor = useTheme("highlightInputBackgroundColor")
 
+    // const groupByCategory = {}
+
     return (
         <Panel position='top-left'>
             <div
@@ -281,14 +283,15 @@ export default withTopics(({
                                 : null
                         }
                         {_customComponents.map((customNode, index) => {
-                            const realIndex = customNodeList.map(n => n.id.toLowerCase().replace(/\s+/g, '')).indexOf(customNode.id.toLowerCase().replace(/\s+/g, ''))
+                            const nodeId = customNode.id.toLowerCase().replace(/\s+/g, '')
+                            const realIndex = customNodeList.map(n => n.id.toLowerCase().replace(/\s+/g, '')).indexOf(nodeId)
                             const isSelected = realIndex == selectedNode
                             return !customNode.hidden ? (
                                 <div
                                     key={index}
                                     onClick={() => addElement(customNode.type, customNode)}
                                     //@ts-ignore
-                                    style={{ display: !customNodeList.map(n => n.id.toLowerCase().replace(/\s+/g, '')).includes(customNode.id.toLowerCase().replace(/\s+/g, '')) ? 'none' : undefined, marginBottom: '10px' }}>
+                                    style={{ display: realIndex == -1 ? 'none' : undefined, marginBottom: '10px' }}>
                                     <SelectedBorder isSelected={isSelected}>
                                         {customNode.getComponent({ type: customNode.type }, {}, null, customNode)}
                                         {/*React.createElement(mask?.getComponent, { { type: customNode.type }, {}, null, customNode}) */}
