@@ -150,7 +150,7 @@ export default {
                     initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
 
-            const defaultData = { data: { template: 'automatic-crud' } }
+            const defaultData = { data: { template: 'custom-api' } }
 
             const [dialogOpen, setDialogOpen] = useState(false)
             const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))

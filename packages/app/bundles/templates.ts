@@ -1,12 +1,24 @@
 import { z } from 'protolib/base'
-import { Router, Database, RefreshCcwDot, PencilRuler } from 'lucide-react'
+import { Router, Database, DatabaseZap,RefreshCcwDot, PencilRuler } from 'lucide-react'
 
 export const apiTemplates = {
+    "custom-api": {
+        id: "custom-api",
+        name: "Automation",
+        description: 'Create automations that react to events and perform actions (when ..., do ...)',
+        icon: PencilRuler
+    },
+    "iot-router": {
+        id: "iot-router",
+        name: "IOT Router",
+        description: 'Create automations to control IoT devices and react to IoT events',
+        icon: Router
+    },
     "automatic-crud": {
         id: "automatic-crud",
-        name: "Automatic CRUD",
-        description: 'Generic API to create, read, update and delete.',
-        icon: RefreshCcwDot,
+        name: "Object storage",
+        description: 'Create automations to store and retrieve objects from database',
+        icon: DatabaseZap,
         extraFields: (objects) => ({
             object: z.union([z.literal("without object"), ...(objects.data.items.map(o => z.literal(o.name)))] as any).after('name')
         }),
@@ -19,8 +31,8 @@ export const apiTemplates = {
     },
     "automatic-crud-storage": {
         id: "automatic-crud-storage",
-        name: "Automatic CRUD (custom storage)",
-        description: 'Generic API to create, read, update and delete with custom control.',
+        name: "Object storage (custom database)",
+        description: 'Create automations to store and retrieve objects with custom database',
         icon: Database,
         extraFields: (objects) => ({
             object: z.union([z.literal("without object"), ...(objects.data.items.map(o => z.literal(o.name)))] as any).after('name')
@@ -31,18 +43,6 @@ export const apiTemplates = {
             }
             return
         }
-    },
-    "iot-router": {
-        id: "iot-router",
-        name: "IOT Router",
-        description: 'Create automations to control IoT devices or responde to IoT events',
-        icon: Router
-    },
-    "custom-api": {
-        id: "custom-api",
-        name: "Custom Automation",
-        description: 'Create a custom automation from scratch',
-        icon: PencilRuler
     }
 }
 
