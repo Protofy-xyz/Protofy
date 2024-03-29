@@ -41,7 +41,7 @@ const SelectedBorder = (props) => {
             padding: '0px',
             position: 'relative',
             textDecoration: 'none',
-            boxShadow: props.isSelected?boxShadow: "none",
+            boxShadow: props.isSelected ? boxShadow : "none",
             zIndex: '0'
         }}>
             {props.children}
@@ -116,6 +116,16 @@ const Menu = withTopics(({
     const customNodeList = searchValue
         ? _customComponents.filter(customN => customN.id.toLowerCase().includes(searchValue.toLowerCase().trim()) || (customN.keywords && customN.keywords.join().toLowerCase().includes(searchValue.toLowerCase().trim())))
         : _customComponents
+
+    const list = [
+        ...customNodeList.map((node: any) => {
+            return { type: node.type, category: node.category ?? "custom", addElement: () => addElement(node.type, node) }
+        }),
+        ...nodeList.map((node: any) => {
+            return { type: node, category: node.category ?? "javascript", addElement: () => addElement(node) }
+        })
+    ]
+
 
     const groupByCategory = customNodeList.reduce((total, current) => {
         const category = current.category ?? "custom"
@@ -199,10 +209,8 @@ const Menu = withTopics(({
     }, [setViewport]);
 
     const onSubmit = () => {
-        if (selectedNode + 1 > customNodeList.length && nodeList.length) {
-            addElement(nodeList[selectedNode - customNodeList.length])
-        } else if (customNodeList.length) {
-            addElement(customNodeList[selectedNode].type, customNodeList[selectedNode])
+        if(list[selectedNode]){ 
+            list[selectedNode].addElement()
         }
     }
 
@@ -299,7 +307,7 @@ const Menu = withTopics(({
                                     key={index}
                                     onClick={() => addElement(customNode.type, customNode)}
                                     //@ts-ignore
-                                    style={{ display: realIndex == -1 ? 'none' : undefined, marginBottom: '10px', borderRadius:"12px" }}>
+                                    style={{ display: realIndex == -1 ? 'none' : undefined, marginBottom: '10px', borderRadius: "12px" }}>
                                     <SelectedBorder isSelected={isSelected}>
                                         {customNode.getComponent({ type: customNode.type }, {}, null, customNode)}
                                         {/*React.createElement(mask?.getComponent, { { type: customNode.type }, {}, null, customNode}) */}
