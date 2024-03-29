@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { FlowStoreContext } from "../store/FlowsStore"
-import { NodeTypes } from '../nodes';
+import NodeTypes from '../nodes';
 import convert from 'color-convert'
 import { colord } from "colord";
+import { generateBoxShadow } from '../lib/shadow';
 
 type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "textColor" | "interactiveColor" | 'interactiveHoverColor' | 'inputBorder' | 'borderColor'
     | 'borderWidth' | 'borderWidthSelected' | 'colorError' | 'handleBorderColor' | 'flowOutputColor' | 'dataOutputColor' | 'highlightInputBackgroundColor' | 'blockPort' | 'flowPort'
     | 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor' | 'disableTextColor' | 'nodeEdgeWidth' | 'nodeEdgeStyle'
-    | 'plusColor' | 'selectedColor' | 'separatorColor' | 'nodePalette'
+    | 'plusColor' | 'selectedColor' | 'separatorColor' | 'nodePalette' | 'borderColorSelected' | 'borderRadiusSelected' | 'boxShadowSelected'
 
 const commonVars: any = {
     nodeBorderWidth: '1px',
@@ -17,7 +18,8 @@ const commonVars: any = {
 }
 commonVars.portSize = 20
 commonVars.borderWidth = 0//Math.floor(commonVars.nodeFontSize / 10)
-commonVars.borderWidthSelected = 0.5
+commonVars.borderWidthSelected = 0
+commonVars.borderRadiusSelected = 13
 
 const outlineColorLight = '#222'
 const outlineColorDark = '#888'
@@ -33,7 +35,7 @@ const Theme = {
                 value: 90
             },
             custom: {
-            
+
             }
         },
         plusColor: '#999',
@@ -58,7 +60,9 @@ const Theme = {
         nodeBorderColor: '#aaa',
         titleColor: '#333',
         containerColor: '#00000005',
-        separatorColor: '#D4D4D4'
+        separatorColor: '#D4D4D4',
+        borderColorSelected: '#222',
+        boxShadowSelected: generateBoxShadow(12)
     },
     dark: {
         ...commonVars,
@@ -69,7 +73,7 @@ const Theme = {
                 value: 90
             },
             custom: {
-            
+
             }
         },
         plusColor: 'white',
@@ -94,7 +98,9 @@ const Theme = {
         nodeBorderColor: outlineColorDark,
         titleColor: 'black',
         containerColor: '#FFFFFF05',
-        separatorColor: '#424242'
+        separatorColor: '#424242',
+        borderColorSelected: 'white',
+        boxShadowSelected: generateBoxShadow(15, 255, 255, 255)
     }
 }
 
@@ -113,10 +119,10 @@ const useTheme = (key: themeKey, defaultValue = null) => {
 }
 const keys = Object.keys(NodeTypes)
 const totalKeys = keys.length
-const generateColor = (type:string, gamut:{hue: number, saturation: number, value: number}, index?) => {
-    const i = typeof type !== "undefined" ? keys.indexOf(type) : index 
-    const h = (100 * (totalKeys / (i+1))) + gamut.hue % 100
-    return "#"+convert.hsv.hex(h, gamut.saturation, gamut.value)
+const generateColor = (type: string, gamut: { hue: number, saturation: number, value: number }, index?) => {
+    const i = typeof type !== "undefined" ? keys.indexOf(type) : index
+    const h = (100 * (totalKeys / (i + 1))) + gamut.hue % 100
+    return "#" + convert.hsv.hex(h, gamut.saturation, gamut.value)
 }
 
 export const generateColorbyIndex = (index, arrLength) => {
@@ -144,10 +150,10 @@ export const usePrimaryColor = () => {
     const useFlowsStore = useContext(FlowStoreContext)
     const primaryColor = useFlowsStore(state => state.primaryColor)
     const themeMode = useFlowsStore(state => state.themeMode)
-    if(themeMode == 'dark') {
-        return '#'+convert.hsv.hex(colord(primaryColor).hue(),nodePalette.gamut.saturation-10,nodePalette.gamut.value+5)
+    if (themeMode == 'dark') {
+        return '#' + convert.hsv.hex(colord(primaryColor).hue(), nodePalette.gamut.saturation - 10, nodePalette.gamut.value + 5)
     } else {
-        return '#'+convert.hsv.hex(colord(primaryColor).hue(),nodePalette.gamut.saturation,nodePalette.gamut.value)
+        return '#' + convert.hsv.hex(colord(primaryColor).hue(), nodePalette.gamut.saturation, nodePalette.gamut.value)
     }
 
 }

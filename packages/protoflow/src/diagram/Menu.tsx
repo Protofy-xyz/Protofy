@@ -6,7 +6,7 @@ import { generateId } from '../lib/IdGenerator';
 import { PORT_TYPES, createNode } from '../lib/Node';
 import { withTopics } from "react-topics";
 import Text from './NodeText';
-import useTheme from './Theme';
+import useTheme, { usePrimaryColor } from './Theme';
 import { splitOpenerEdge } from '../lib/Edge';
 import { Search } from 'lucide-react'
 import { useProtoflow } from '../store/DiagramStore';
@@ -15,6 +15,39 @@ const menuWidth = 259
 const menuHeight = 500
 const menuMargin = 100
 const inputHeight = 50
+
+const SelectedBorder = (props) => {
+    const borderWidthSelected = useTheme("borderWidthSelected")
+    const primaryColor = useTheme("borderColorSelected")
+    const borderRadius = useTheme("borderRadiusSelected")
+    const boxShadow = useTheme("boxShadowSelected")
+
+
+    return (
+        <div style={{
+            display: 'flex',
+            border: props.isSelected ? `${borderWidthSelected}px solid ${primaryColor}` : '0px solid transparent',
+            borderRadius: (borderRadius) + "px",
+            alignItems: 'stretch',
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            boxSizing: 'border-box',
+            flexBasis: 'auto',
+            flexDirection: 'column',
+            flexShrink: '0',
+            listStyle: 'none',
+            margin: '0px',
+            minHeight: '0px',
+            minWidth: '0px',
+            padding: '0px',
+            position: 'relative',
+            textDecoration: 'none',
+            boxShadow: props.isSelected?boxShadow: "none",
+            zIndex: '0'
+        }}>
+            {props.children}
+        </div>
+    )
+}
 
 const Menu = withTopics(({
     enabledNodes = ['*'],
@@ -190,20 +223,6 @@ const Menu = withTopics(({
         }
     }
 
-    const SelectedBorder = (props) => {
-        return (
-            <div style={{
-                display: 'flex', border: props.isSelected ? `${useTheme("borderWidth")}px solid black` : '0px solid transparent',
-                borderRadius: useTheme("borderWidthSelected") * 2, alignItems: 'stretch', backgroundColor: 'rgba(0, 0, 0, 0)',
-                boxSizing: 'border-box', flexBasis: 'auto', flexDirection: 'column', flexShrink: '0',
-                listStyle: 'none', margin: '0px', minHeight: '0px', minWidth: '0px',
-                padding: '0px', position: 'relative', textDecoration: 'none', zIndex: '0'
-            }}>
-                {props.children}
-            </div>
-        )
-    }
-
     useEffect(() => {
         if (menuState != 'closed') {
             try {
@@ -280,7 +299,7 @@ const Menu = withTopics(({
                                     key={index}
                                     onClick={() => addElement(customNode.type, customNode)}
                                     //@ts-ignore
-                                    style={{ display: realIndex == -1 ? 'none' : undefined, marginBottom: '10px' }}>
+                                    style={{ display: realIndex == -1 ? 'none' : undefined, marginBottom: '10px', borderRadius:"12px" }}>
                                     <SelectedBorder isSelected={isSelected}>
                                         {customNode.getComponent({ type: customNode.type }, {}, null, customNode)}
                                         {/*React.createElement(mask?.getComponent, { { type: customNode.type }, {}, null, customNode}) */}
