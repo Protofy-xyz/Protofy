@@ -1,8 +1,9 @@
-import devicesMasks from 'protodevice/src/nodes'
+import devicesEditorMasks from 'protodevice/src/nodes'
 import visualuiTemplateMasks from 'visualui/src/masks/UI.mask.json';
 import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import { BaseJSMasks } from 'protoflow';
 import apiMasks from 'protolib/bundles/apis/masks';
+import devicesMasks from 'protolib/bundles/devices/devices/masks';
 import customMasks from 'app/bundles/custom/masks'
 import customEventMasks from 'protolib/bundles/events/masks'
 const paths = {
@@ -26,12 +27,13 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     const segment = pathParts[pathParts.length - 1]
     const query = JSON.stringify(queryParams)
 
-    if (paths.devices.includes(segment)) return devicesMasks
+    if (paths.devices.includes(segment)) return devicesEditorMasks
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return []
     if (paths.apis.includes(segment)) return [
-        //...customMasks.api, //uncomment to wire your custom masks from custom bundle
+        ...customMasks.api,
         ...customEventMasks.api,
-        ...apiMasks
+        ...apiMasks,
+        ...devicesMasks.api
     ]
     return []
 }

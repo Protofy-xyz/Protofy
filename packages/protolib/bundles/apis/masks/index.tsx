@@ -12,9 +12,7 @@ const apiMasks = [
     ApiMask,
     Fetch,
     Logger,
-    ApiResponse,
-    DevicePub,
-    DeviceSub
+    ApiResponse
 ]
 
 export default apiMasks;
