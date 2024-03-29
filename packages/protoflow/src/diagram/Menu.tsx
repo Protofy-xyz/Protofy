@@ -1,30 +1,24 @@
-import React, { useState, useRef, useLayoutEffect, useContext, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useContext, useEffect, useCallback } from 'react';
 import { Panel } from 'reactflow';
 import nodes from '../nodes'
 import { FlowStoreContext } from "../store/FlowsStore";
 import { generateId } from '../lib/IdGenerator';
-import { POKA_HANDLE_TYPES, PORT_TYPES, createNode } from '../lib/Node';
+import { PORT_TYPES, createNode } from '../lib/Node';
 import { withTopics } from "react-topics";
-import { POKAYOKE_ENABLED } from '../toggles';
 import Text from './NodeText';
 import useTheme from './Theme';
 import { splitOpenerEdge } from '../lib/Edge';
 import { Search } from 'lucide-react'
 import { useProtoflow } from '../store/DiagramStore';
 
-const pokayokeEnabled = POKAYOKE_ENABLED ?? false
-
 export default withTopics(({
     enabledNodes = ['*'],
     hideBaseComponents,
     customComponents = [],
-    style = {},
     diagramNodes,
-    setNodes,
     setNodeData,
     nodeData,
     edges,
-    setEdges,
     takeSnapshot = () => null,
     reactFlowWrapper = null,
     topics,
@@ -59,6 +53,7 @@ export default withTopics(({
             return reactFlowWrapper?.current.offsetHeight - menuHeight - menuMargin
         }
     }
+
     const getMenuLeft = () => {
         var defaultLeft = (menuPosition[0] - 110)
         if (!reactFlowWrapper?.current) return 100
@@ -70,6 +65,7 @@ export default withTopics(({
             return reactFlowWrapper?.current.offsetWidth - menuWidth - menuMargin
         }
     }
+
     const _nodes: any = Object.fromEntries(
         Object.entries(nodes).filter(([key, value]) => enabledNodes.includes(key) || enabledNodes.includes('*'))
     );
@@ -77,30 +73,17 @@ export default withTopics(({
     const _customComponents = customComponents.filter((c) => enabledNodes.includes(c.type) || enabledNodes.includes('*'))
 
     const handleTypeOpener = menuOpener.targetHandle ? menuOpener.targetHandle.replace(menuOpener.target, '').slice(1) : null
-    var pokaNodesList: any = Object.keys(_nodes)
-    var pokaCustomNodesList: any = _customComponents
-    // WIP FILTER NON CONECTABLE NODES (POKAYOKE)
-    var hasPokaResults = false
-    if (pokayokeEnabled && handleTypeOpener) {
-        var handleStart = Object.keys(POKA_HANDLE_TYPES).find(p => handleTypeOpener.startsWith(p))
-        if (handleStart == 'param' && menuOpener.targetHandle?.endsWith('-key')) {
-            handleStart = 'key'
-        }
-        if (handleStart && POKA_HANDLE_TYPES[handleStart].length) {
-            pokaNodesList = Object.keys(_nodes).filter(n => POKA_HANDLE_TYPES[handleStart].includes(n))
-            pokaCustomNodesList = _customComponents.filter(c => POKA_HANDLE_TYPES[handleStart].includes(c.type))
-            hasPokaResults = true
-        }
-    }
+
     const nodeList = searchValue ? Object.keys(_nodes).filter(n => {
         var node = _nodes[n].type ?? _nodes[n]
         const allKeyWords = [...node.keyWords, node.name]
         //@ts-ignore
         return allKeyWords?.map(k => k.toLowerCase()).join().includes(searchValue.toLowerCase())
-    }) : pokaNodesList
+    }) : Object.keys(_nodes)
+    
     const customNodeList = searchValue
         ? _customComponents.filter(customN => customN.id.toLowerCase().replace(/\s+/g, '').includes(searchValue.toLowerCase().replace(/\s+/g, '')))
-        : pokaCustomNodesList
+        : _customComponents
 
     const extraStyle = menuState != 'open' ? { top: '-5000px' } : { top: getMenuTop() + 'px', left: getMenuLeft() + 'px' }
 
@@ -146,11 +129,11 @@ export default withTopics(({
         const finalEdges = edges.filter((e) => !edgesToDelete.includes(e.id)).concat(newEdges)
         const finalNodes = diagramNodes.concat(newNode);
         setMenu('closed')
+
         const focusElement = (newNodes, diagramRef) => {
             if (!diagramRef) return
-            const diagramRect = diagramRef.getBoundingClientRect();
+            // const diagramRect = diagramRef.getBoundingClientRect();
             const viewport = getViewport()
-            //console.log('infocus', scaledContainerWidth, scaledContainerHeight)
             const myNode = newNodes.find(n => n.id == newNode[0].id)
             const elem = document.getElementById(id)
             const posX = -myNode.position.x //+ (diagramRect.width / 2)
@@ -183,6 +166,7 @@ export default withTopics(({
             addElement(customNodeList[selectedNode].type, customNodeList[selectedNode])
         }
     }
+
     const onKeyDown = (e) => {
         const heightToScroll = 44
         if (e.key == "Enter") {
@@ -199,6 +183,7 @@ export default withTopics(({
             setSelectedNode(0)
         }
     }
+
     const SelectedBorder = (props) => {
         return (
             <div style={{
@@ -230,7 +215,12 @@ export default withTopics(({
     const inputBorder = useTheme('inputBorder')
     const highlightInputBackgroundColor = useTheme("highlightInputBackgroundColor")
 
-    // const groupByCategory = {}
+    const groupByCategory =  _customComponents.reduce((total, current)=>{
+        const category = current.category ?? "custom"
+        if (!total[category]) total[category] = []
+        total[category].push(()=>{})
+        return total
+    }, {})
 
     return (
         <Panel position='top-left'>
@@ -279,7 +269,7 @@ export default withTopics(({
                         }}>
                         {
                             !hideBaseComponents && customNodeList.length
-                                ? <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>Custom {hasPokaResults && !searchValue.length ? '(Suggestions)' : ''}</Text>
+                                ? <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>Custom</Text>
                                 : null
                         }
                         {_customComponents.map((customNode, index) => {
@@ -301,7 +291,7 @@ export default withTopics(({
                         {!hideBaseComponents && customNodeList.length ? <div style={{ margin: '10px 0px 10px 0px' }}></div> : null}
                         {!hideBaseComponents && nodeList.length
                             ? <>
-                                <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>JavaScript {hasPokaResults && !searchValue.length ? '(Suggestions)' : ''}</Text>
+                                <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>JavaScript</Text>
                                 {nodeList.map((nodeName, index) => (
                                     <div onClick={() => addElement(nodeName)} key={index} style={{ marginBottom: '10px' }}>
                                         <SelectedBorder isSelected={customNodeList.length + index == selectedNode}>
