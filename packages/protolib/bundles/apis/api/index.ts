@@ -1,11 +1,16 @@
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import { API } from "protolib/base";
+import {getLogger } from 'protolib/base';
 
-export const automation = (name,app,cb)=>{
+const logger = getLogger()
+
+export const automation = (app, cb, name)=>{
     const url = "/api/v1/automations/"+name;
+
     app.get(url,(req,res)=>{
+        logger.info({name, params: req.query}, "Automation executed: "+name)
         cb(req.query)
-        res.send("OK");
+        res.send('"OK"');
     })
 }
 
