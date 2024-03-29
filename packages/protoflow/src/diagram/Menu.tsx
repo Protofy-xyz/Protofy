@@ -11,7 +11,12 @@ import { splitOpenerEdge } from '../lib/Edge';
 import { Search } from 'lucide-react'
 import { useProtoflow } from '../store/DiagramStore';
 
-export default withTopics(({
+const menuWidth = 259
+const menuHeight = 500
+const menuMargin = 100
+const inputHeight = 50
+
+const Menu = withTopics(({
     enabledNodes = ['*'],
     hideBaseComponents,
     customComponents = [],
@@ -28,20 +33,17 @@ export default withTopics(({
     const panelRef = useRef()
     const inputRef = useRef()
     const scrollRef: any = useRef()
-    const inputHeight = 50
+
     const [searchValue, setSearchValue] = useState('')
     const [selectedNode, setSelectedNode] = useState(0)
+
     const useFlowsStore = useContext(FlowStoreContext)
     const menuState = useFlowsStore(state => state.menuState)
     const menuPosition = useFlowsStore(state => state.menuPosition)
     const menuOpener = useFlowsStore(state => state.menuOpener)
     const setMenu = useFlowsStore(state => state.setMenu)
-    const { project, setViewport, getViewport, setCenter } = useProtoflow();
+    const { project, setViewport, getViewport } = useProtoflow();
     const { publish } = topics;
-
-    const menuWidth = 259
-    const menuHeight = 500
-    const menuMargin = 100
 
     const getMenuTop = () => {
         var defaultTop = (menuPosition[1] - 30)
@@ -66,10 +68,7 @@ export default withTopics(({
         }
     }
 
-    const _nodes: any = Object.fromEntries(
-        Object.entries(nodes).filter(([key, value]) => enabledNodes.includes(key) || enabledNodes.includes('*'))
-    );
-
+    const _nodes: any = Object.fromEntries(Object.entries(nodes).filter(([key, value]) => enabledNodes.includes(key) || enabledNodes.includes('*')))
     const _customComponents = customComponents.filter((c) => enabledNodes.includes(c.type) || enabledNodes.includes('*'))
 
     const handleTypeOpener = menuOpener.targetHandle ? menuOpener.targetHandle.replace(menuOpener.target, '').slice(1) : null
@@ -80,10 +79,17 @@ export default withTopics(({
         //@ts-ignore
         return allKeyWords?.map(k => k.toLowerCase()).join().includes(searchValue.toLowerCase())
     }) : Object.keys(_nodes)
-    
+
     const customNodeList = searchValue
-        ? _customComponents.filter(customN => customN.id.toLowerCase().replace(/\s+/g, '').includes(searchValue.toLowerCase().replace(/\s+/g, '')))
+        ? _customComponents.filter(customN => customN.id.toLowerCase().includes(searchValue.toLowerCase().trim()) || (customN.keywords && customN.keywords.join().toLowerCase().includes(searchValue.toLowerCase().trim())))
         : _customComponents
+
+    const groupByCategory = customNodeList.reduce((total, current) => {
+        const category = current.category ?? "custom"
+        if (!total[category]) total[category] = []
+        total[category].push(() => { })
+        return total
+    }, {})
 
     const extraStyle = menuState != 'open' ? { top: '-5000px' } : { top: getMenuTop() + 'px', left: getMenuLeft() + 'px' }
 
@@ -215,13 +221,6 @@ export default withTopics(({
     const inputBorder = useTheme('inputBorder')
     const highlightInputBackgroundColor = useTheme("highlightInputBackgroundColor")
 
-    const groupByCategory =  _customComponents.reduce((total, current)=>{
-        const category = current.category ?? "custom"
-        if (!total[category]) total[category] = []
-        total[category].push(()=>{})
-        return total
-    }, {})
-
     return (
         <Panel position='top-left'>
             <div
@@ -306,3 +305,5 @@ export default withTopics(({
         </Panel>
     );
 });
+
+export default Menu

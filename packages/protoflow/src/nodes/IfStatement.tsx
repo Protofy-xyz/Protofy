@@ -1,13 +1,13 @@
 import React, { memo, useContext } from 'react';
-import Node, { Field, FlowPort, NodeParams, headerSize } from '../Node';
-import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType, getSizeOfLastChild, getConnectedNode } from '../lib/Node';
+import Node, { Field, FlowPort, NodeParams } from '../Node';
+import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType } from '../lib/Node';
 import { Split } from 'lucide-react';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { DataOutput } from '../lib/types';
 import useTheme, { useNodeColor } from '../diagram/Theme';
 
 const minBlockHeight = 260
-const marginBottomElse = 0
+
 const IfStatement = (node) => {
     const { id, type } = node
     const color = useNodeColor(type)
@@ -52,6 +52,7 @@ const IfStatement = (node) => {
 }
 
 IfStatement.keyWords = ['if']
+IfStatement.category = 'conditionals'
 IfStatement.getData = (node, data, nodesData, edges) => {
     const nodeId = getId(node);
     const thenId = data[getId(node.getThenStatement())]?.value?.id
