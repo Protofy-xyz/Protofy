@@ -10,7 +10,7 @@ const Automation = (node: any = {}, nodeData = {}) => {
         <Node icon={Plug} node={node} isPreview={!node?.id} title='Automation' id={node.id} color={color} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Name', static: true, field: 'param3', type: 'input', pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str + '"' }]} />
             <div>
-                <FlowPort id={node.id} type='input' label='On run (request)' style={{ top: '130px' }} handleId={'request'} />
+                <FlowPort id={node.id} type='input' label='On run (params)' style={{ top: '130px' }} handleId={'request'} />
                 <FallbackPort node={node} port={'param2'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (params) => " postText="" />
             </div>
 
