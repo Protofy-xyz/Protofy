@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import {useColorFromPalette} from 'protoflow/src/diagram/Theme'
 import { Cable } from 'lucide-react';
 
+import { filterCallback, restoreCallback } from 'protoflow';
+
 const getDeviceSubsystemsNames = (devData) => {
     const deviceSubsystems = {}
     devData?.forEach(device => {
@@ -122,4 +124,12 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
         </Node>
     )
 }
-export default DeviceSub
+export default {
+    id: 'deviceSub',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.deviceSub'),
+    getComponent: (node, nodeData, children) => <DeviceSub node={node} nodeData={nodeData} children={children} />,
+    filterChildren: filterCallback("4"),
+    restoreChildren: restoreCallback("4"),
+    getInitialData: () => { return { to: 'context.deviceSub', param1: '"none"', param2: '"none"', param3: '"none"', param4: '(message,topic) =>' } }
+}

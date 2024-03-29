@@ -95,4 +95,10 @@ const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
         </Node>
     )
 }
-export default DevicePub
+export default {
+    id: 'devicePub',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.devicePub'), //TODO: Change output function name
+    getComponent: (node, nodeData, children) => <DevicePub node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'context.devicePub', param1: '"none"', param2: '"none"', param3: '"none"' } }
+}

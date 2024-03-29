@@ -1,6 +1,7 @@
 import { Node, Field, FlowPort, NodeParams, FallbackPort, Button } from 'protoflow';
 import { API } from 'protolib'
 import { Plug } from 'lucide-react';
+import { filterCallback, restoreCallback } from 'protoflow';
 
 const ApiMask = (node: any = {}, nodeData = {}) => {
   const nodeParams: Field[] = [{ label: 'Type', field: 'to', type: 'select', data: ['app.get', 'app.post'], static: true }]
@@ -20,4 +21,18 @@ const ApiMask = (node: any = {}, nodeData = {}) => {
   )
 }
 
-export default ApiMask
+export default     {
+  id: 'CloudApi',
+  type: 'CallExpression',
+  check: (node, nodeData) => {
+      return (
+          node.type == "CallExpression"
+          && (nodeData.param2?.startsWith('async (req,res) =>') || nodeData.param2?.startsWith('(req,res) =>'))
+          && (nodeData.to == 'app.get' || nodeData.to == 'app.post')
+      )
+  },
+  getComponent: ApiMask,
+  filterChildren: filterCallback(),
+  restoreChildren: restoreCallback(),
+  getInitialData: () => { return { to: 'app.get', param1: '"/api/v1/"', param2: 'async (req,res) =>' } }
+}

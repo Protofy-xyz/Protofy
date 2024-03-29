@@ -15,4 +15,10 @@ const ApiResponse = ({node= {}, nodeData= {}, children}: any) => {
     )
 }
 
-export default ApiResponse
+export default {
+    id: 'res.send',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('res.send'), //TODO: Change output function name
+    getComponent: (node, nodeData, children) => <ApiResponse node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'res.send', param1: '"Response"' } }
+}

@@ -16,4 +16,10 @@ const Logger = ({node= {}, nodeData= {}, children}: any) => {
     )
 }
 
-export default Logger
+export default {
+    id: 'logger',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('logger.'),
+    getComponent: (node, nodeData, children) => <Logger node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'logger.info', param1: '{}', param2: '"message"' } }
+}
