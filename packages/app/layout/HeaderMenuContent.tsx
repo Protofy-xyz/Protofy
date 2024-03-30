@@ -16,7 +16,7 @@ export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
   //@ts-ignore
   const workspace = workspaces[currentWorkspace]
 
-  console.log('workspace:', workspace)
+  // console.log('workspace:', workspace)
   return (
     <YStack miw={230} p="$3" ai="flex-end">
       <Tinted>
