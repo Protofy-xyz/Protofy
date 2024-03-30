@@ -2,7 +2,7 @@ import { PageModel } from '.'
 import { DataView } from 'protolib'
 import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR } from 'protolib'
 import { z } from 'protolib/base'
-import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer } from '@my/ui'
+import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
 import { getURLWithToken } from '../../lib/Session'
@@ -157,13 +157,13 @@ export default {
                     rowIcon={() => <></>}
                     objectProps={{ columnWidth: 500 }}
                     columns={DataTable2.columns(
-                        DataTable2.column("", "", true, (row) => <a href={getUrl(row.route.startsWith('/') ? row.route : '/' + row.route)} target='_blank'>
+                        DataTable2.column("", ()=>"", true, (row) => <a href={getUrl(row.route.startsWith('/') ? row.route : '/' + row.route)} target='_blank'>
                             <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
                         </a>, true, '50px'),
-                        DataTable2.column("name", "name", true, (row) => <XStack id={"pages-datatable-" + row.name}>{row.name}</XStack>),
-                        DataTable2.column("route", "route", true),
-                        DataTable2.column("visibility", "protected", true, row => !row.protected ? <Chip text={'public'} color={'$color5'} /> : <Chip text={'protected'} color={'$gray5'} />),
-                        DataTable2.column("permissions", "permissions", true, row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
+                        DataTable2.column("name", row => row.name, true, (row) => <XStack id={"pages-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
+                        DataTable2.column("route", row => row.route, true),
+                        DataTable2.column("visibility", row => row.protected, true, row => !row.protected ? <Chip text={'public'} color={'$color5'} /> : <Chip text={'protected'} color={'$gray5'} />),
+                        DataTable2.column("permissions", row => row.permissions, true, row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
                     )}
                     onAddButton={() => { setAddOpen(true) }}
                     extraMenuActions={[
