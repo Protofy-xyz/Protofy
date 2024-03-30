@@ -1,10 +1,9 @@
-import { Checkbox, Popover, Stack, Theme, XStack, YStack, Text } from "tamagui"
-import { AlertDialog, API } from 'protolib'
-import { useContext, useState } from "react";
+import { Checkbox, Stack, Theme, XStack } from "tamagui"
+import { useContext } from "react";
 import { DataViewContext } from "./DataView";
 import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
-import { CheckCheck, Check, MoreVertical, Trash2 } from '@tamagui/lucide-icons'
+import { CheckCheck, Check } from '@tamagui/lucide-icons'
 import React from "react";
 import { ItemMenu } from "./ItemMenu";
 
@@ -21,19 +20,28 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
                 backgroundColor: 'var(--color4)'
             }
         },
-    ];
+    ]
 
     const elementObj = model.load({})
     const fields = elementObj.getObjectSchema().isDisplay('table')
 
     const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean']
-    const cols = tableColumns ?? DataTable2.columns(...(Object.keys(fields.shape).filter(key => validTypes.includes(fields.shape[key]._def?.typeName)).map(key => DataTable2.column(fields.shape[key]._def?.label ?? key, key, true))))
-    const finalColumns = cols
-
+    const cols = tableColumns ?? DataTable2.columns(
+        ...(
+            Object.keys(fields.shape)
+                .filter(key => validTypes.includes(fields.shape[key]._def?.typeName))
+                .map(key =>
+                    DataTable2.column(
+                        fields.shape[key]._def?.label ?? key,
+                        key,
+                        true
+                    )
+                )
+        )
+    )
     return <XStack pt="$1" flexWrap='wrap'>
         <Tinted>
             <DataTable2.component
-
                 pagination={false}
                 conditionalRowStyles={conditionalRowStyles}
                 rowsPerPage={state.itemsPerPage ? state.itemsPerPage : 25}
@@ -60,7 +68,6 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
                                 </Checkbox>
                             </Stack>
 
-
                             {selected.length > 1 &&
                                 <ItemMenu enableAddToInitialData={enableAddToInitialData}
                                     type={"bulk"}
@@ -72,7 +79,7 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
                                     onDelete={onDelete}
                                     extraMenuActions={extraMenuActions} />}
                         </XStack>
-                    </Theme>, "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
+                    </Theme>, () => "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
                         <Stack mt={"$2"}>
                             <Checkbox
                                 focusStyle={{ outlineWidth: 0 }}
@@ -103,8 +110,17 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
                             deleteable={deleteable}
                             onDelete={onDelete}
                             extraMenuActions={extraMenuActions} />
-                        {rowIcon && <Tinted><Stack o={0.8} ml={"$2"} t={"6px"}>{React.createElement(rowIcon, { size: "$1", color: '$color7' })}</Stack></Tinted>}
-                    </XStack></Theme>, true, rowIcon ? '115px' : '75px'), ...cols]}
+                        {rowIcon && (
+                            <Tinted>
+                                <Stack o={0.8} ml={"$2"} t={"6px"}>
+                                    {React.createElement(rowIcon, { size: "$1", color: '$color7' })}
+                                </Stack>
+                            </Tinted>
+                        )}
+                    </XStack>
+                    </Theme>, true, rowIcon ? '115px' : '75px'),
+                ...cols
+                ]}
                 rows={items?.data?.items}
                 onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}
             />

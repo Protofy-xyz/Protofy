@@ -1,17 +1,17 @@
 import { EventModel } from '.'
-import {DataTable2, Chip, DataView, Tooltip, AdminPage, PaginatedDataSSR } from 'protolib'
-import moment  from 'moment'
+import { DataTable2, Chip, DataView, AdminPage, PaginatedDataSSR } from 'protolib'
+import moment from 'moment'
 import { ClipboardList } from '@tamagui/lucide-icons';
 import { JSONViewer } from '../../components/jsonui'
 import { usePrompt } from '../../context/PromptAtom'
 
 const format = 'HH:mm:ss DD-MM-YYYY'
-const EventIcons =  {}
+const EventIcons = {}
 const sourceUrl = '/adminapi/v1/events'
 
 export default {
     'events': {
-        component: ({pageState, initialItems, pageSession}:any) => {
+        component: ({ pageState, initialItems, pageSession }: any) => {
             usePrompt(() => `At this moment the user is browsing the events list page. The events list page allows to monitor system events. The list is updated automatically if any events occurs.
             An event can be a user created, invalid login attempt, successful login, file edit, file create, file update, and also system object modification events, like "product created", or "product updated".
             Events can be used to monitor the system, auditing pruposes, or to trigger API actions when a specific event happens.
@@ -20,8 +20,8 @@ export default {
             Auth events can be auth/login/success and auth/login/error.
             Events contain data, specific for the event type.
             `+ (
-                initialItems?.isLoaded?'Currently the system returned the following information: '+JSON.stringify(initialItems.data) : ''
-            )) 
+                    initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
+                ))
 
             return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
@@ -36,27 +36,26 @@ export default {
                     defaultView={'list'}
                     rowIcon={ClipboardList}
                     columns={DataTable2.columns(
-                        DataTable2.column("path", "path", true, undefined, true, '250px'),
-                        DataTable2.column("user", "user", true, undefined, true, '200px'),
-                        DataTable2.column("from", "from", true, (row) => <Chip text={row.from} color={'$gray5'} />, true),
-                        DataTable2.column("created", "created", true, (row) => moment(row.created).format(format), true, '200px'),
-                        DataTable2.column("inspect", "payload", false, (row) => <JSONViewer
-                            onChange={() => {}}
+                        DataTable2.column("path", row => row.path, true, undefined, true, '250px'),
+                        DataTable2.column("user", row => row.user, true, undefined, true, '200px'),
+                        DataTable2.column("from", row => row.from, true, (row) => <Chip key={row.rowId} text={row.from} color={'$gray5'} />, true),
+                        DataTable2.column("created", row => row.created, true, (row) => moment(row.created).format(format), true, '200px'),
+                        DataTable2.column("inspect", row => row.payload, false, (row) => <JSONViewer
+                            onChange={() => { }}
                             editable={false}
                             data={row.payload}
                             collapsible
                             compact={false}
                             defaultCollapsed={true}
-                            //collapsedNodes={{0:{root: true}}}
                         />)
                     )}
                     // hideAdd={true}
-                    model={EventModel} 
+                    model={EventModel}
                     pageState={pageState}
                     icons={EventIcons}
                 />
             </AdminPage>)
-        }, 
+        },
         getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {
             orderBy: "created",
             orderDirection: "desc"
