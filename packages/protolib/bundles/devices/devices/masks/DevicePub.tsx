@@ -98,6 +98,8 @@ const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
 export default {
     id: 'devicePub',
     type: 'CallExpression',
+    category: "ioT",
+    keywords: ["automation", 'esp32', 'device', 'iot'],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.devicePub'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <DevicePub node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'context.devicePub', param1: '"none"', param2: '"none"', param3: '"none"' } }

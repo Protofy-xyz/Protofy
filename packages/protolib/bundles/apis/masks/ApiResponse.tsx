@@ -18,6 +18,8 @@ const ApiResponse = ({node= {}, nodeData= {}, children}: any) => {
 export default {
     id: 'res.send',
     type: 'CallExpression',
+    category: "api",
+    keywords: ["api", "rest", "http", "trigger", "automation", 'response'],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('res.send'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <ApiResponse node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'res.send', param1: '"Response"' } }

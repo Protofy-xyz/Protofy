@@ -31,6 +31,8 @@ export default {
             && nodeData.to == 'context.automation'
         )
     },
+    category: "automation",
+    keywords: ["automation", 'trigger'],
     getComponent: Automation,
     filterChildren: filterCallback(),
     restoreChildren: restoreCallback(),

@@ -25,5 +25,7 @@ export default {
         )
     },
     getComponent: Fetch,
+    category: "api",
+    keywords: ["api", "rest", "http", "automation", 'fetch', 'get', 'post'],
     getInitialData: () => { return { to: 'context.fetch', param1: "\"get\"", param2: '"/api/v1/"', param3: "", param4: false, param5: "", await: true } }
 }

@@ -24,7 +24,7 @@ const ApiMask = (node: any = {}, nodeData = {}) => {
 export default     {
   id: 'CloudApi',
   type: 'CallExpression',
-  // category: "automation triggers",
+  category: "api",
   keywords: ["api", "rest", "http", "trigger", "automation"],
   check: (node, nodeData) => {
       return (

@@ -21,6 +21,8 @@ const OnDeviceEventMask = ({ node = {}, nodeData = {}, children }: any) => {
 export default {
     id: 'onDeviceEventMask',
     type: 'CallExpression',
+    category: "ioT",
+    keywords: ["automation", 'esp32', 'device', 'iot', 'trigger'],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to == 'context.onEvent' && nodeData.param4 == '"device"',
     getComponent: (node, nodeData, children) => <OnDeviceEventMask node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'context.onEvent', param1: 'context', param2: '(event) =>' , param3: '""', param4: '"device"' } },
