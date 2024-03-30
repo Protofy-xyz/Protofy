@@ -613,10 +613,14 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
     if (node && node.data && node.data.width) extraStyle.minWidth = node.data.width + 'px'
     if (node && node.data && node.data.height) extraStyle.minHeight = node.data.height + 'px'
 
-    if (node.id && !nodeData?._metadata?.layouted) extraStyle.opacity = '0'
+    const isRendered = nodeData?._metadata?.layouted
+    if (node.id && !isRendered) extraStyle.opacity = '0'
+
+    console.log('meta data: ', nodeData?._metadata)
 
     return (
         <DiagramNode
+            key={isRendered?'rendered':'loading'}
             adaptiveTitleSize={adaptiveTitleSize}
             mode={mode}
             contentStyle={contentStyle}
@@ -632,7 +636,9 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
                 ...style,
                 ...extraStyle
             }}
-            headerContent={<>{!disableOutput && !isPreview && output ? <HandleOutput id={id} param={output} dataOutput={dataOutput} /> : null}</>}
+            headerContent={<>
+                {!disableOutput && !isPreview && output ? <HandleOutput position={nodeData?._metadata?.outputPos == 'right' ? Position.Right : undefined} id={id} param={output} dataOutput={dataOutput} /> : null}
+            </>}
         >
             <div ref={content}>
                 {DEVMODE ? <div>{id}</div> : null}

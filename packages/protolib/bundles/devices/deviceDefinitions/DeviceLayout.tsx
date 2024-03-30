@@ -121,11 +121,11 @@ const getLayoutedElements = async (nodes, edges, node, nodeData) => {
     await elk.layout(graphRight)
 
     var metadata = {}
-    const copyPositions = (children, offset) => children.forEach(nodeWithPosition => {
+    const copyPositions = (children, offset, outputPos) => children.forEach(nodeWithPosition => {
         //copy position from graph
         const currentNode = total.find(c => c.id == nodeWithPosition.id)
         if (currentNode) {
-            metadata[currentNode.id] = {layouted: true}
+            metadata[currentNode.id] = {layouted: true, outputPos: outputPos}
 
             let x = nodeWithPosition.x-offset
             let y = nodeWithPosition.y
@@ -142,14 +142,14 @@ const getLayoutedElements = async (nodes, edges, node, nodeData) => {
             }
         }
         if (nodeWithPosition && nodeWithPosition.children) {
-            copyPositions(nodeWithPosition.children, offset)
+            copyPositions(nodeWithPosition.children, offset, outputPos)
         }
     })
 
     const offsetRight = graphRight.children.reduce((total, c) => Math.max((c.x + c.width-150), total), 0)
-    console.log('offset right', (-offsetRight+400))
-    copyPositions(graphRight.children, offsetRight);
-    copyPositions(graphLeft.children, -150);
+
+    copyPositions(graphRight.children, offsetRight, 'right');
+    copyPositions(graphLeft.children, -150, 'left');
 
 
     return { nodes: total, edges, metadata:metadata};
