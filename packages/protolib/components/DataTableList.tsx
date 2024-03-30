@@ -33,7 +33,7 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
                 .map(key =>
                     DataTable2.column(
                         fields.shape[key]._def?.label ?? key,
-                        key,
+                        row => row[key],
                         true
                     )
                 )
