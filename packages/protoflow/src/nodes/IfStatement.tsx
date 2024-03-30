@@ -52,7 +52,7 @@ const IfStatement = (node) => {
 }
 
 IfStatement.keyWords = ['if']
-IfStatement.category = 'conditionals'
+// IfStatement.category = 'conditionals'
 IfStatement.getData = (node, data, nodesData, edges) => {
     const nodeId = getId(node);
     const thenId = data[getId(node.getThenStatement())]?.value?.id

@@ -22,7 +22,6 @@ const SelectedBorder = (props) => {
     const borderRadius = useTheme("borderRadiusSelected")
     const boxShadow = useTheme("boxShadowSelected")
 
-
     return (
         <div style={{
             display: 'flex',
@@ -47,6 +46,18 @@ const SelectedBorder = (props) => {
             {props.children}
         </div>
     )
+}
+
+const RenderCustomComponent = ({ index, node, addElement, isSelected, realIndex }) => {
+    return <div
+        key={index}
+        onClick={() => addElement(node.type, node)}
+        //@ts-ignore
+        style={{ display: realIndex == -1 ? 'none' : undefined, marginBottom: '10px', borderRadius: "12px" }}>
+        <SelectedBorder isSelected={isSelected}>
+            {node.getComponent({ type: node.type }, {}, null, node)}
+        </SelectedBorder>
+    </div>
 }
 
 const Menu = withTopics(({
@@ -106,31 +117,56 @@ const Menu = withTopics(({
 
     const handleTypeOpener = menuOpener.targetHandle ? menuOpener.targetHandle.replace(menuOpener.target, '').slice(1) : null
 
-    const nodeList = searchValue ? Object.keys(_nodes).filter(n => {
-        var node = _nodes[n].type ?? _nodes[n]
-        const allKeyWords = [...node.keyWords, node.name]
-        //@ts-ignore
-        return allKeyWords?.map(k => k.toLowerCase()).join().includes(searchValue.toLowerCase())
-    }) : Object.keys(_nodes)
 
-    const customNodeList = searchValue
-        ? _customComponents.filter(customN => customN.id.toLowerCase().includes(searchValue.toLowerCase().trim()) || (customN.keywords && customN.keywords.join().toLowerCase().includes(searchValue.toLowerCase().trim())))
-        : _customComponents
+    let nodeList = Object.keys(_nodes).map((key) => {
+        let node = _nodes[key].type ?? _nodes[key]
+        return { node: node, key: key }
+    })
+
+    if (searchValue) {
+        nodeList = nodeList.filter(current => {
+            const allKeyWords = [...current.node.keyWords, current.node.name]
+            //@ts-ignore
+            return allKeyWords?.map(k => k.toLowerCase()).join().includes(searchValue.toLowerCase())
+        })
+    }
+    let customNodeList = _customComponents
+    if (searchValue) {
+        customNodeList = _customComponents.filter(customN => customN.id.toLowerCase().includes(searchValue.toLowerCase().trim()) || (customN.keywords && customN.keywords.join().toLowerCase().includes(searchValue.toLowerCase().trim())))
+    }
 
     const list = [
-        ...customNodeList.map((node: any) => {
-            return { type: node.type, category: node.category ?? "custom", addElement: () => addElement(node.type, node) }
+        ...customNodeList.map((node: any, index) => {
+            return {
+                type: node.type,
+                category: node.category ?? "custom",
+                addElement: () => addElement(node.type, node),
+                render: () => {
+                    const realIndex = customNodeList.findIndex(n => n.id.toLowerCase().trim() == node.id.toLowerCase().trim())
+                    const isSelected = realIndex == selectedNode
+                    return !node.hidden ? <RenderCustomComponent index={index} addElement={addElement} isSelected={isSelected} node={node} realIndex={realIndex} /> : null
+                }
+            }
         }),
-        ...nodeList.map((node: any) => {
-            return { type: node, category: node.category ?? "javascript", addElement: () => addElement(node) }
-        })
+        ...(!hideBaseComponents ? nodeList.map((current: any, index) => {
+            return {
+                type: current.node,
+                category: current.node.category ?? "javascript",
+                addElement: () => addElement(current.key),
+                render: () => {
+                    return <div onClick={() => addElement(current.key)} key={index} style={{ marginBottom: '10px' }}>
+                        <SelectedBorder isSelected={customNodeList.length + index == selectedNode}>
+                            {React.createElement(current.node, { type: current.key })}
+                        </SelectedBorder>
+                    </div>
+                }
+            }
+        }) : [])
     ]
 
-
-    const groupByCategory = customNodeList.reduce((total, current) => {
-        const category = current.category ?? "custom"
-        if (!total[category]) total[category] = []
-        total[category].push(() => { })
+    const groupByCategory = list.reduce((total, current) => {
+        if (!total[current.category]) total[current.category] = []
+        total[current.category].push(current)
         return total
     }, {})
 
@@ -209,7 +245,7 @@ const Menu = withTopics(({
     }, [setViewport]);
 
     const onSubmit = () => {
-        if(list[selectedNode]){ 
+        if (list[selectedNode]) {
             list[selectedNode].addElement()
         }
     }
@@ -293,39 +329,26 @@ const Menu = withTopics(({
                             flexDirection: 'column',
                             paddingRight: scrollRef?.current?.scrollHeight > scrollRef?.current?.clientHeight ? '10px' : '0px'
                         }}>
-                        {
-                            !hideBaseComponents && customNodeList.length
-                                ? <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>Custom</Text>
-                                : null
-                        }
-                        {_customComponents.map((customNode, index) => {
-                            const nodeId = customNode.id.toLowerCase().replace(/\s+/g, '')
-                            const realIndex = customNodeList.map(n => n.id.toLowerCase().replace(/\s+/g, '')).indexOf(nodeId)
-                            const isSelected = realIndex == selectedNode
-                            return !customNode.hidden ? (
-                                <div
-                                    key={index}
-                                    onClick={() => addElement(customNode.type, customNode)}
-                                    //@ts-ignore
-                                    style={{ display: realIndex == -1 ? 'none' : undefined, marginBottom: '10px', borderRadius: "12px" }}>
-                                    <SelectedBorder isSelected={isSelected}>
-                                        {customNode.getComponent({ type: customNode.type }, {}, null, customNode)}
-                                        {/*React.createElement(mask?.getComponent, { { type: customNode.type }, {}, null, customNode}) */}
-                                    </SelectedBorder>
-                                </div>) : null
+
+                        {Object.keys(groupByCategory).map((category, index) => {
+                            return <div key={index}>
+                                <Text
+                                    style={{
+                                        fontSize: '16px',
+                                        fontFamily: 'Jost-Medium',
+                                        marginLeft: '10px'
+                                    }}
+                                >
+                                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                                </Text>
+                                <div style={{marginTop: '12px'}}>
+                                    {groupByCategory[category].map((node, index) => {
+                                        return node.render()
+                                    })}
+                                </div>
+                            </div>
                         })}
-                        {!hideBaseComponents && customNodeList.length ? <div style={{ margin: '10px 0px 10px 0px' }}></div> : null}
-                        {!hideBaseComponents && nodeList.length
-                            ? <>
-                                <Text style={{ fontSize: '16px', marginBottom: '10px', fontFamily: 'Jost-Medium', marginLeft: '10px' }}>JavaScript</Text>
-                                {nodeList.map((nodeName, index) => (
-                                    <div onClick={() => addElement(nodeName)} key={index} style={{ marginBottom: '10px' }}>
-                                        <SelectedBorder isSelected={customNodeList.length + index == selectedNode}>
-                                            {React.createElement(_nodes[nodeName], { type: nodeName })}
-                                        </SelectedBorder>
-                                    </div>
-                                ))}
-                            </> : null}
+
                     </div>
                 </div>
             </div>
