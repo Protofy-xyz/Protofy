@@ -62,7 +62,7 @@ const Theme = {
         containerColor: '#00000005',
         separatorColor: '#D4D4D4',
         borderColorSelected: '#222',
-        boxShadowSelected: generateBoxShadow(12)
+        boxShadowSelected: ''//generateBoxShadow(12)
     },
     dark: {
         ...commonVars,
@@ -100,7 +100,7 @@ const Theme = {
         containerColor: '#FFFFFF05',
         separatorColor: '#424242',
         borderColorSelected: 'white',
-        boxShadowSelected: generateBoxShadow(15, 255, 255, 255)
+        boxShadowSelected: ''//generateBoxShadow(15, 255, 255, 255)
     }
 }
 
