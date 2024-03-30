@@ -1,26 +1,4 @@
-import { NodeTypes } from 'protoflow';
-
-const getChildren = (nodes, edges, node) => {   
-    const children = nodes
-                    .filter(n => edges.find(e => e.source == n.id && e.target == node.id))
-                    .map((n) => {
-                        return {
-                            node: n,
-                            edge: edges.find(e => e.source == n.id && e.target == node.id)
-                        }
-                    })
-    return children
-}
-
-const defaultSpacingFactorX = 1//3.5
-const defaultSpacingFactorY = 1//5
-
-const marginX = 120 //1000
-const marginY = 100 // 500 //separation in y between 2 nodes
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+import ELK from 'elkjs/lib/elk.bundled.js'
 
 function getParentNode(nodeData){
     var node;
@@ -39,123 +17,138 @@ function getEdgeFromSource(edges,source){
     return out[0];
 }
 
-const metas = []
+const layoutOptions = {
+    'elk.algorithm': 'layered',
+    'elk.layered.considerModelOrder.strategy': 'NODES_AND_EDGES',
+    'elk.hierarchyHandling': 'SEPARATE_CHILDREN',
+    'elk.layered.crossingMinimization.forceNodeModelOrder': true,
+    'elk.layered.crossingMinimization.strategy': 'LAYER_SWEEP',
+    'elk.layered.spacing.nodeNodeBetweenLayers': '150',
+    'elk.spacing.nodeNode': '100'
+}
 
-const computeLayout = (nodes, edges, node, nodeData,pos={x:0, y: 0}, metadata={}, tracker={x:0}) => {
-    console.log("----- ENTER ON computeLayout -----")
-    console.log("Nodes: ",nodes)
-    console.log("Edges: ",edges)
-    console.log("Node: ", node)
-    const children = getChildren(nodes, edges, node)
-    const flowNode = NodeTypes[node.type]
-    var nodePositionReference = 'n';
+const toELK = (node, index=0, edges, nodeData) => {
+    return {
+        layoutOptions: node.children?.length?layoutOptions:{}, 
+        id: node.id, 
+        width: node.width, 
+        height: node.height, 
+        children: node.children ? node.children.map((c, index) => toELK(c, index, edges, nodeData)) : [] 
+    };
+}
 
+const getNodePositionReference = (node, nodeData, edges, defaultValue) => {
+    var nodePositionReference = defaultValue;
     const parentNode = getParentNode(nodeData)
-    if(node.id != parentNode?.id){
+    let isRoot = node.id == parentNode?.id
+    if(!isRoot){
         const edge = getEdgeFromSource(edges,node.id)
         nodePositionReference = parentNode._devicePositioning.filter((positionTag: string|undefined)=>{
             if(positionTag){
                 return positionTag.includes(edge.targetHandle.split('element-')[1])
             }
         })[0].split('-')[1]
-        console.log("nodePositionReference: ",nodePositionReference);
     }
-
-    node.position =  {
-        x: nodePositionReference=='r'?-1000+pos.x:pos.x,
-        y: pos.y
-    }
-
-    node.data = {
-        ...node.data,
-        layouted: true
-    }
-
-    metas.push({node})
-    console.log("Metas: ",metas)
-
-    if (flowNode) {
-        const flowNodeType = flowNode.type ?? flowNode
-        if(flowNodeType && flowNodeType.getPosition) {
-            pos = flowNodeType.getPosition(pos, node.type)
-        }
-    }
-
-    const originalPosY = pos.y
-    const originalPosX = pos.x
-
-    let nodeWidth = node.width
-    if (flowNode) {
-        const flowNodeType = flowNode.type ?? flowNode
-        if(flowNodeType && flowNodeType.getWidth) {
-            nodeWidth = flowNodeType.getWidth(node)
-        }
-    }
+    return nodePositionReference
+}
+const getGraph = (direction, nodes, nodeData, edges, total) => {
+    const children = nodes.filter(n => getNodePositionReference(n, nodeData, edges, direction) == direction).map(n => toELK(n, 0, edges, nodeData))
+    const graph = {
+        id: "root",
+        layoutOptions: {
+            ...layoutOptions,
+            'elk.direction': direction == 'l'? 'LEFT':'RIGHT',
+        },
+        children: children,
+        edges: edges.filter(e => children.find(c => c.id == e.source) && children.find(c => c.id == e.target) && total.find(n => n && n.id == e.source) && total.find(n => n && n.id == e.target)).sort((a, b) => {
+            const parts1 = a.targetHandle.split('_')
+            const parts2 = b.targetHandle.split('_')
+            const target1 = parts1[parts1.length - 1]
+            const target2 = parts2[parts2.length - 1]
     
-    let spacingFactorX = defaultSpacingFactorX
-    let spacingFactorY = defaultSpacingFactorY
-    if (flowNode) {
-        const flowNodeType = flowNode.type ?? flowNode
-        if(flowNodeType && flowNodeType.getSpacingFactor) {
-            const { factorX, factorY } = flowNodeType.getSpacingFactor(node)
-            spacingFactorX = factorX
-            spacingFactorY = factorY
-        }
+            if (target1.startsWith('block') && target2.startsWith('block') && a.target == b.target) {
+                const pos1 = parseInt(target1.substr(5), 10)
+                const pos2 = parseInt(target2.substr(5), 10)
+                return pos1 - pos2
+            }
+            return 0
+        }).map((edge, index) => {
+            return { id: edge.id, sources: [edge.source], targets: [edge.target] };
+            //check if the edge should also be copied to the VisualGroup
+        })
     }
+    return graph
+}
+const getLayoutedElements = async (nodes, edges, node, nodeData) => {
+    //create a elk graph
+    const elk = new ELK()
 
+    // console.log('before toFlow: ', nodes)
 
-    const deltaX = nodeWidth + (marginX*spacingFactorX)
-    pos.x += deltaX
+    const flatten = (nodes) => {
+        const total = []
+        const toFlow = (node, parentNode) => {
+            const obj = { ...node, data: {...node.data} }
+            delete obj.children
+            if (parentNode) obj.parentNode = parentNode
+            total.push(obj)
 
+            if (node.children && node.children.length) {
+                const link = edges.find((e) => e.source == node.children[0].id)
+                if(link) {
+                    const newLink = JSON.parse(JSON.stringify(link))
+                    newLink.source = node.id
+                    newLink.sourceHandle = node.id + '-output'
+                    edges.push(newLink)
+                }
 
-    const childHeights = []
-    let prevPos
-    let childTracker
-    let maxTracker = 0
-
-    children.forEach(async (c) => {
-        // console.log("CHILDREN (DEVICELAYOUT): ", c.edge.targetHandle.split('element-')[1])
-        // console.log("NODE INSIDE (DEVICELAYOUT): ",nodeData[node.id]._devicePositioning)
-        
-        if (flowNode) {
-            const flowNodeType = flowNode.type ?? flowNode
-            if(flowNodeType && flowNodeType.getChildPosition) {
-                pos = flowNodeType.getChildPosition(node, pos, {x: originalPosX, y: originalPosY}, c, node.type)
+                node.children.forEach((childNode) => toFlow(childNode, node.id))
             }
         }
 
-        prevPos = {...pos}
-        childTracker = {x:0}
-        computeLayout(nodes, edges, c.node, nodeData, pos,metadata, childTracker)
-        childHeights.push({
-            pos: {...prevPos}, 
-            delta: {x: prevPos.x-node.position.x, y: prevPos.y - originalPosY}, 
-            width: childTracker.x - tracker.x, 
-            height: pos.y - originalPosY, 
-            node: c
-        })
+        nodes.forEach((node) => toFlow(node, null))
+        return total
+    }
 
-        if(childTracker.x > maxTracker) maxTracker = childTracker.x
+    const total = flatten(nodes);
+
+    const graphLeft = getGraph('l', nodes, nodeData, edges, total)
+    const graphRight = getGraph('r', nodes, nodeData, edges, total)
+    //compute positions and sizes
+    //@ts-ignore
+    await elk.layout(graphLeft)
+    //@ts-ignore
+    await elk.layout(graphRight)
+
+    var metadata = {}
+    const copyPositions = (children, offset) => children.forEach(nodeWithPosition => {
+        //copy position from graph
+        const currentNode = total.find(c => c.id == nodeWithPosition.id)
+        if (currentNode) {
+            metadata[currentNode.id] = {layouted: true}
+            let x = nodeWithPosition.x-offset
+            let y = nodeWithPosition.y
+
+            // console.log('node with position: ', nodeWithPosition)
+            currentNode.position = {
+                x: x,
+                y: y
+            }
+            if (nodeWithPosition.children && nodeWithPosition.children.length) {
+                currentNode.data.height = nodeWithPosition.height
+                currentNode.data.width = nodeWithPosition.width
+            }
+        }
+        if (nodeWithPosition && nodeWithPosition.children) {
+            copyPositions(nodeWithPosition.children, offset)
+        }
     })
 
-    tracker.x += deltaX + maxTracker
 
-    metadata[node.id] = {layouted: true, childWidth: tracker.x, childHeight: pos.y - originalPosY, childHeights: childHeights}
-    pos.x -= nodeWidth + (marginX*spacingFactorX)
-    const nodeHeight = node.type == 'Block' || node.type == 'CaseClause' || node.type == 'DefaultClause' ? (metadata[node.id].childHeight?metadata[node.id].childHeight+100:0) : node.height
-    pos.y += pos.y - originalPosY > (nodeHeight+(marginY*spacingFactorY)) ? 0 : (nodeHeight + (marginY*spacingFactorY)) - (pos.y - originalPosY)
-    
-    return metadata
-}
+    copyPositions(graphLeft.children, 0);
+    copyPositions(graphRight.children, 550);
 
-const getLayoutedElements = async (nodes, edges, node,nodeData) => {
-    const layoutedNodes = nodes.map(n => {return {...n}})
-    // console.log("layoutedNodes: ",layoutedNodes)
-    console.log("Enter computeLayout: ", layoutedNodes,edges,node)
-    const metadata = computeLayout(layoutedNodes, edges, node,nodeData)
-    console.log("Returning from computeLayout: ", metadata)
-    await sleep(1)
-    return { nodes:layoutedNodes, edges, metadata};
+    return { nodes: total, edges, metadata:metadata};
 };
 
 export default getLayoutedElements
