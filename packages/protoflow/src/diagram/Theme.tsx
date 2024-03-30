@@ -120,7 +120,7 @@ const useTheme = (key: themeKey, defaultValue = null) => {
 const keys = Object.keys(NodeTypes)
 const totalKeys = keys.length
 const generateColor = (type: string, gamut: { hue: number, saturation: number, value: number }, index?) => {
-    const i = typeof type !== "undefined" ? keys.indexOf(type) : index
+    const i = Math.max(typeof type !== "undefined" ? keys.indexOf(type) : index, 0)
     const h = (100 * (totalKeys / (i + 1))) + gamut.hue % 100
     return "#" + convert.hsv.hex(h, gamut.saturation, gamut.value)
 }
