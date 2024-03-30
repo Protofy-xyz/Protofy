@@ -126,14 +126,16 @@ const getLayoutedElements = async (nodes, edges, node, nodeData) => {
         const currentNode = total.find(c => c.id == nodeWithPosition.id)
         if (currentNode) {
             metadata[currentNode.id] = {layouted: true}
+
             let x = nodeWithPosition.x-offset
             let y = nodeWithPosition.y
 
             // console.log('node with position: ', nodeWithPosition)
             currentNode.position = {
-                x: x,
-                y: y
+                x: currentNode.id == node.id ? 0 : x,
+                y: currentNode.id == node.id ? 0 : y
             }
+
             if (nodeWithPosition.children && nodeWithPosition.children.length) {
                 currentNode.data.height = nodeWithPosition.height
                 currentNode.data.width = nodeWithPosition.width
@@ -144,9 +146,11 @@ const getLayoutedElements = async (nodes, edges, node, nodeData) => {
         }
     })
 
+    const offsetRight = graphRight.children.reduce((total, c) => Math.max((c.x + c.width-150), total), 0)
+    console.log('offset right', (-offsetRight+400))
+    copyPositions(graphRight.children, offsetRight);
+    copyPositions(graphLeft.children, -150);
 
-    copyPositions(graphLeft.children, 0);
-    copyPositions(graphRight.children, 550);
 
     return { nodes: total, edges, metadata:metadata};
 };
