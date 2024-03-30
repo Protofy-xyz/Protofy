@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { CircuitBoard, Tag, BookOpen } from '@tamagui/lucide-icons';
+import { CircuitBoard, Tag, BookOpen, Eye } from '@tamagui/lucide-icons';
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas';
-import { API, Chip, DataTable2, DataView, ButtonSimple, AlertDialog, Center, AdminPage, PaginatedDataSSR } from 'protolib'
+import { API, Chip, DataTable2, DataView, ButtonSimple, AlertDialog, AdminPage, PaginatedDataSSR, InteractiveIcon } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceBoardModel } from '../deviceBoards';
 import { DeviceCoreModel } from '../devicecores';
-import { Spinner, XStack } from "tamagui";
-import dynamic from 'next/dynamic'
+import { XStack } from "tamagui";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { getPendingResult } from "protolib/base";
 import { usePendingEffect } from "protolib";
@@ -30,7 +29,6 @@ export default {
     const { resolvedTheme } = useThemeSetting();
     const defaultJsCode = { "components": "[\n \"mydevice\",\n \"esp32dev\",\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n" }
     const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
-    // const [isModified,setIsModified] = React.useState(false)
     const [editedObjectData, setEditedObjectData] = React.useState<any>({})
     const router = useRouter()
 
@@ -44,7 +42,6 @@ export default {
 
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
       <AlertDialog open={showDialog} setOpen={(open) => { setShowDialog(open) }} hideAccept={true} style={{ width: "80%", height: "80%", padding: '0px', overflow: 'hidden' }}>
-        {/* <Center style={{minWidth: "80%" }}> */}
         <XStack f={1} minWidth={"100%"}>
           <Flows
             style={{ width: "100%" }}
@@ -79,7 +76,6 @@ export default {
             display={true}
             flowId={"flows-editor"}
           />
-          {/* </Center> */}
         </XStack>
       </AlertDialog>
 
@@ -95,13 +91,13 @@ export default {
         onAdd={data => { console.log("DATA (onAdd): ", data); return data }}
         onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
         columns={DataTable2.columns(
-          DataTable2.column("name", "name", true),
-          DataTable2.column("board", "board", true, (row) => <Chip text={row.board} color={'$gray5'} />),
-          DataTable2.column("sdk", "sdk", true, (row) => <Chip text={row.sdk} color={'$gray5'} />),
-          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={async (e) => { 
+          DataTable2.column("", ()=>"", true, (row) => <InteractiveIcon onPress={async (e) => { 
             setShowDialog(true)
             setSourceCode(row.config.components)
-          }}>View</ButtonSimple>)
+          }} Icon={Eye}></InteractiveIcon>, true, '50px'),
+          DataTable2.column("name", row => row.name, true),
+          DataTable2.column("board", row => row.board, true, (row) => <Chip text={row.board} color={'$gray5'} />),
+          DataTable2.column("sdk", row => row.sdk, true, (row) => <Chip text={row.sdk} color={'$gray5'} />),
         )}
         extraFieldsForms={{
           board: z.union(boards.map(o => z.literal(o.name))).after('name'),
