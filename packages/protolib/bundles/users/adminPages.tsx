@@ -84,13 +84,12 @@ export default {
                             /> : false
                         }
                     }}
-
                     columns={DataTable2.columns(
-                        DataTable2.column("email", "username", true),
-                        DataTable2.column("type", "type", true, row => <Chip text={row.type?.toUpperCase()} color={row.type == 'admin' ? '$color5' : '$gray5'} />),
-                        DataTable2.column("from", "from", true, row => <Chip text={row.from?.toUpperCase()} color={row.from == 'cmd' ? '$blue5' : '$gray5'} />),
-                        DataTable2.column("created", "createdAt", true, row => moment(row.createdAt).format(format)),
-                        DataTable2.column("last login", "lastLogin", true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'never'} color={'$gray5'} />)
+                        DataTable2.column("email", row => row.username, true),
+                        DataTable2.column("type", row => row.type, true, row => <Chip text={row.type?.toUpperCase()} color={row.type == 'admin' ? '$color5' : '$gray5'} />),
+                        DataTable2.column("from", row => row.from, true, row => <Chip text={row.from?.toUpperCase()} color={row.from == 'cmd' ? '$blue5' : '$gray5'} />),
+                        DataTable2.column("created", row => row.createdAt, true, row => moment(row.createdAt).format(format)),
+                        DataTable2.column("last login", row => row.lastLogin, true, row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'never'} color={'$gray5'} />)
                     )}
                     extraFieldsForms={{
                         repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()
