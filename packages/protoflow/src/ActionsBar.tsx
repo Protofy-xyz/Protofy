@@ -7,9 +7,7 @@ export type Props = {
   onSave?: Function
   onShowCode?: Function
   onReload: Function
-  hasChanges?: boolean,
-  layout: 'elk' | 'code' | 'device',
-  getFirstNode: Function
+  hasChanges?: boolean
 };
 
 export const reLayout = async (layout, nodes, edges, setNodes, setEdges, getFirstNode, setNodesMetaData=null,nodeData=null) => {
