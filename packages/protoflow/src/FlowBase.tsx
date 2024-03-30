@@ -26,6 +26,7 @@ import Diff from 'deep-diff';
 import GetDynamicCustomComponent from './DynamicCustomComponent';
 import { generateId } from './lib/IdGenerator';
 import { useProtoEdgesState, useProtoNodesState, addProtoEdge } from './store/DiagramStore'
+import layouts from "./diagram/layouts";
 
 interface customComponentInterface {
     check: Function,
@@ -45,6 +46,7 @@ interface FlowProps {
     onReload?: Function,
     disableStart?: boolean,
     getFirstNode?: any,
+    layout?: Function,
     customComponents?: customComponentInterface[],
     hideBaseComponents?: boolean,
     topics?: any,
@@ -65,7 +67,7 @@ interface FlowProps {
     onViewPortChange?: Function,
     defaultViewPort?: { x: number, y: number, zoom: number },
     path?: string,
-    mode?: 'js' | 'json' | 'device',
+    mode?: 'js' | 'json',
     nodePreview?: 'preview' | 'flow-preview' | 'flow',
     metadata?: any
     defaultSelected?: Function
@@ -85,6 +87,7 @@ const FlowsBase = ({
     customComponents = [],
     hideBaseComponents = false,
     positions,
+    layout,
     topics,
     flowId,
     display = true,
@@ -165,7 +168,7 @@ const FlowsBase = ({
         }
     }
 
-    const layout = mode == 'json' ? 'elk' : mode == 'device' ? 'device' : 'code';
+    const currentLayout = layout ? layout : (mode == 'json' ? layouts['elk'] : layouts['code'])
 
     const getEnabledNodesForMode = () => {
         if (mode == 'json') {
@@ -693,7 +696,7 @@ const FlowsBase = ({
 
         if (nodesDiffs && nodesDiffs.length || edgesDiffs && edgesDiffs.length) {
             if (edgesDiffs && !nodesDiffs) {
-                reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
+                reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
                 rendered.current = true
                 setInitialEdges(edges)
             }
@@ -768,13 +771,13 @@ const FlowsBase = ({
 
     useEffect(() => {
         if (nodes && nodes.length && nodes.filter(n => n.width && n.height).length == nodes.length) {
-            reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
+            reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
             rendered.current = true
         }
     }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
 
     if(typeof window !== undefined) window['reLayout'] = () => {
-        reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
+        reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
     }
 
     return (
@@ -800,7 +803,7 @@ const FlowsBase = ({
                 nodePreview={nodePreview}
                 onNodeInitializationStatusChange={(status) => {
                     if(status && rendered.current) {
-                        reLayout(layout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
+                        reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
                     }
                 }}
                 componentsMenu={
@@ -837,8 +840,6 @@ const FlowsBase = ({
                     showActionsBar ?
                         <Panel position="top-center">
                             <ActionsBar
-                                getFirstNode={_getFirstNode}
-                                layout={layout}
                                 onSave={onSaveNodes}
                                 onReload={onReload ? onReloadNodes : null}
                                 onShowCode={onShowCode ? onShowCode : null}

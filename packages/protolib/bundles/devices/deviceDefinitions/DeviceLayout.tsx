@@ -1,4 +1,4 @@
-import { NodeTypes } from './../../nodes';
+import { NodeTypes } from 'protoflow';
 
 const getChildren = (nodes, edges, node) => {   
     const children = nodes
@@ -62,7 +62,7 @@ const computeLayout = (nodes, edges, node, nodeData,pos={x:0, y: 0}, metadata={}
     }
 
     node.position =  {
-        x: nodePositionReference=='r'?-1500+pos.x:pos.x,
+        x: nodePositionReference=='r'?-1000+pos.x:pos.x,
         y: pos.y
     }
 

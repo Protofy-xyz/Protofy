@@ -14,16 +14,13 @@ export type Props = {
 
 export const reLayout = async (layout, nodes, edges, setNodes, setEdges, getFirstNode, setNodesMetaData=null,nodeData=null) => {
   const _nodes = nodes.map(node => ({ ...node })) // Remove positions
-  const { nodes: layoutedNodes, edges: layoutedEdges, metadata } = layout!='device'? await layouts[layout??'code'](
-    _nodes,
-    edges,
-    getFirstNode(_nodes)
-  ):await layouts[layout](
+  const { nodes: layoutedNodes, edges: layoutedEdges, metadata } = await layout(
     _nodes,
     edges,
     getFirstNode(_nodes),
     nodeData
   );
+
   await (setNodesMetaData as any)(metadata)
   await setNodes(layoutedNodes)
   await setEdges(edges)
@@ -31,9 +28,7 @@ export const reLayout = async (layout, nodes, edges, setNodes, setEdges, getFirs
   return {layoutedNodes, layoutedEdges, metadata}
 }
 
-const ActionsBar = ({ layout,hasChanges, onReload, onSave, onShowCode, getFirstNode }: Props) => {
-  
-  const NODE_PADDING = 30;
+const ActionsBar = ({hasChanges, onReload, onSave, onShowCode }: Props) => {
   const size = 25
   const useFlowsStore = useContext(FlowStoreContext)
   const saveStatus = useFlowsStore(state => state.saveStatus)

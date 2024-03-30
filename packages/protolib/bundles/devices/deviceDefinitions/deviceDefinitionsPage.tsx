@@ -13,6 +13,7 @@ import { usePendingEffect } from "protolib";
 import { Flows } from "protolib";
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
 import { useRouter } from 'next/router'
+import layout from './DeviceLayout'
 
 const DeviceDefitionIcons = {
   name: Tag,
@@ -54,7 +55,7 @@ export default {
               return nodes.find(n => n.type == 'ArrayLiteralExpression')
             }}
             showActionsBar={false}
-            mode={"device"}
+            layout={layout}
             customComponents={getFlowsCustomComponents(router.pathname, router.query)}
             bridgeNode={false}
             setSourceCode={(sourceCode) => {
