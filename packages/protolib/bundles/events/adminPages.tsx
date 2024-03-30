@@ -46,7 +46,7 @@ export default {
                             data={row.payload}
                             collapsible
                             compact={false}
-                            defaultCollapsed={false}
+                            defaultCollapsed={true}
                             //collapsedNodes={{0:{root: true}}}
                         />)
                     )}
