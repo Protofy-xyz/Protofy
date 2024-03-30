@@ -15,7 +15,7 @@ const ParenthesizedExpression = (node) => {
         <Node icon={Parentheses} node={node} isPreview={!id} title={'()'} id={id} params={nodeParams} color={color} />
     );
 }
-
+ParenthesizedExpression.category = "operators"
 ParenthesizedExpression.keyWords = ["()"]
 ParenthesizedExpression.getData = (node, data, nodesData, edges, mode) => {
     //console.log('in ParenthesizedExpression.getData: ', node)

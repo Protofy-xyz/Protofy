@@ -21,6 +21,7 @@ const ReturnStatement =(node) => {
         <Node icon={Reply} node={node} isPreview={!id} title={"return"+(!node.id?'':(' '+nodeData.value))} id={id} params={nodeParams} color={color} dataOutput = {DataOutput.flow}/>
     );
 }
+ReturnStatement.category = "common"
 ReturnStatement.keyWords = ["return"]
 ReturnStatement.getData = (node, data, nodesData, edges) => {
     return {

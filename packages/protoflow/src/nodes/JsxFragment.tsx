@@ -25,6 +25,7 @@ const JsxFragment = (node) => {
         </Node>
     );
 }
+JsxFragment.category = 'react'
 JsxFragment.keyWords = ["jsx", "jsxelement", "jsxfragment", "react", "tsx", "fragment", "selfclosed"]
 
 JsxFragment.getData = (node, data, nodesData, edges) => {

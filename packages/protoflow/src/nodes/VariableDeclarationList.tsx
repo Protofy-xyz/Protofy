@@ -35,7 +35,7 @@ export const VariableDeclarationListNodeFactory = (declarationType) => {
             <Node icon={Equal} node={node} isPreview={!id} title={(nodeData?.export ? 'export ' : '') + (nodeType) + ' ' + declarationArr.map(d => nodeData[d]).join(',')} id={id} params={nodeParams} color={color} />
         );
     }
-
+    component.category = "identifiers"
     component.keyWords = ["const", "let", "var"]
     component.getData = (node, data, nodesData, edges) => {
         const type = node.getChildren()[0].getText(); // const, let, var

@@ -20,7 +20,8 @@ const TryStatement = (node) => {
         </Node>
     );
 }
-TryStatement.keyWords = ["try"]
+TryStatement.category = "error control"
+TryStatement.keyWords = ["try", 'catch', 'error', 'exception']
 TryStatement.getData = (node, data, nodesData, edges) => {
     const tryId = data[getId(node.getTryBlock())]?.value?.id
     const catchId = data[getId(node.getCatchClause().getBlock())]?.value?.id

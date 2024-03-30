@@ -37,6 +37,7 @@ const Function = (node) => {
         </Node>
     );
 }
+Function.category= "program structure"
 Function.keyWords = ['function', '=>', 'arrow']
 Function.getData = (node, data, nodesData, edges) => {
     let thenId = getId(node.getBody())

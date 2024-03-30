@@ -18,6 +18,7 @@ const ConditionalExpression = (node) => {
     );
 }
 ConditionalExpression.keyWords = ["ternary"]
+ConditionalExpression.category = 'conditionals'
 ConditionalExpression.getData = (node, data, nodesData, edges) => {
     return {
         condition: connectItem(node?.getCondition(), 'output', node, 'condition', data, nodesData, edges, 'condition'),

@@ -73,6 +73,7 @@ export const BinaryExpressionFactory = (_operator: string) => {
         );
     }
     BinaryExpression.keyWords = ['+', '-', '*', '/', '>', '<', '<=', '==', '!=', '===', '!==', '>=', '||', '&&', '|', '&', 'set', 'operator', 'set', 'property', 'instanceof']
+    BinaryExpression.category = 'operators'
     BinaryExpression.defaultHandle = PORT_TYPES.data + getFielNameLeft(_operator)
     BinaryExpression.getData = (node, data, nodesData, edges) => {
         const operator = node.getOperatorToken().getText()

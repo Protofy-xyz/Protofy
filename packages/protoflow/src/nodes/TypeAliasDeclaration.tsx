@@ -26,6 +26,7 @@ const TypeAliasDeclaration = (node) => {
         </Node>
     );
 }
+TypeAliasDeclaration.category = "type system"
 TypeAliasDeclaration.keyWords = ["type"]
 
 TypeAliasDeclaration.getData = (node, data, nodesData, edges) => {

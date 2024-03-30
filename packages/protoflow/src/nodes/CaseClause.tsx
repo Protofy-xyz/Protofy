@@ -16,6 +16,7 @@ CaseClause.getData = (node, data, edges) => {
         return { type: 'data', value: '' }
     }
 }
+CaseClause.category = 'conditionals'
 
 //disables node creation, even if this component exist.
 //this allows to have 'getData', but CaseClause doesn't exists at diagram level

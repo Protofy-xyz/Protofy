@@ -14,6 +14,7 @@ const TemplateExpression =(node) => {
         <Node icon={LayoutTemplate} node={node} isPreview={!id} title={"template"} id={id} params={nodeParams} color={color}/>
     );
 }
+TemplateExpression.category = "operators"
 TemplateExpression.keyWords = ["Template"]
 TemplateExpression.getData = (node, data, edges) => {
     return {

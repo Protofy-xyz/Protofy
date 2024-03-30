@@ -15,6 +15,7 @@ const PropertyAccessExpression = (node) => {
         <Node icon={Crosshair} node={node} isPreview={!id} title={"property"} color={color} id={id} params={nodeParams} />
     );;
 }
+PropertyAccessExpression.category = "operators"
 PropertyAccessExpression.keyWords = ["property"]
 PropertyAccessExpression.getData = (node, data, nodesData, edges) => {
     //connect all children in a line

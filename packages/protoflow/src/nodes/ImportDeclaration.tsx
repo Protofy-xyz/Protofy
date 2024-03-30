@@ -30,6 +30,7 @@ const ImportDeclaration = (node) => {
         </Node>
     );
 }
+ImportDeclaration.category = "module system"
 ImportDeclaration.keyWords = ['import']
 ImportDeclaration.getData = (node, data, edges) => {
     const elements = node.getNamedImports() ?? []

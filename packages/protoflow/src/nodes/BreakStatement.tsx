@@ -15,6 +15,7 @@ const BreakStatement =(node) => {
     );
 }
 BreakStatement.keyWords = ["break"]
+BreakStatement.category = 'conditionals'
 BreakStatement.getData = (node, data, edges) => {
     return {}
 }

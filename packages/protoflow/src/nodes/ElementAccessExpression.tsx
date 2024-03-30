@@ -19,6 +19,7 @@ const ElementAccessExpression = (node) => {
     );
 }
 ElementAccessExpression.keyWords = ["[]"]
+ElementAccessExpression.category = 'operators'
 ElementAccessExpression.getData = (node, data, nodesData, edges) => {
     return {
         accessName: connectItem(node.getExpression(), 'output', node, 'accessName', data, nodesData, edges, 'accessName'),

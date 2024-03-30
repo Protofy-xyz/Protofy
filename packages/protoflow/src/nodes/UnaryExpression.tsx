@@ -27,7 +27,8 @@ export const UnaryExpressionFactory = (mode:"pre" | "post") => {
             <Node icon={Calculator} node={node} isPreview={!id} title={mode == 'pre'? operator+operand:operand+operator} id={id} params={nodeParams} color={color}/>
         );
     }
-    UnaryExpression.keyWords = ["pre", "++x", "x++","-x"]
+    UnaryExpression.category = "operators"
+    UnaryExpression.keyWords = ["increment", "--", "++","decrement"]
     UnaryExpression.getData = (node, data, nodesData, edges) => {
         const opTable = {
             '40':'-',

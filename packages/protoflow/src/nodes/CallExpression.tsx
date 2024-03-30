@@ -37,7 +37,8 @@ const CallExpression = (node) => {
         </Node>
     );
 }
-CallExpression.keyWords = ['call']
+CallExpression.keyWords = ['call', 'function', 'execute']
+CallExpression.category = 'common'
 CallExpression.defaultHandle = PORT_TYPES.data + 'to'
 CallExpression.getData = (node, data, nodesData, edges) => {
     const parentNode = node.getParent()

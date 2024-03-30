@@ -19,6 +19,7 @@ const DeleteExpression = (node) => {
         </Node>
     );
 }
+DeleteExpression.category = 'operators'
 DeleteExpression.keyWords = ["delete"]
 DeleteExpression.getData = (node, data, nodesData, edges) => {
     return {

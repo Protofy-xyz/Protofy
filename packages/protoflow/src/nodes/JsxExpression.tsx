@@ -16,6 +16,7 @@ const JsxExpression = (node) => {
         <Node icon={Code}  node={node} isPreview={!id} title={"{Jsx}"} id={id} params={nodeParams} color={color} dataOutput = {DataOutput.jsx}/>
     );
 }
+JsxExpression.category = 'react'
 JsxExpression.keyWords = ["jsx", "jsxexpression", "expression", "tsx", "{}"]
 JsxExpression.defaultHandle = PORT_TYPES.data + 'expression'
 

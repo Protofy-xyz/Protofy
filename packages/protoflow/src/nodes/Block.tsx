@@ -152,7 +152,8 @@ const Block = (node) => {
     );
 }
 
-Block.keyWords = ["block", "{}", "CaseClause"]
+Block.keyWords = ["block", "{}", "CaseClause", 'group']
+Block.category = "common"
 Block.defaultHandle = PORT_TYPES.flow + 'block0'
 Block.getData = (node, data, nodesData, edges, mode) => {
     //connect all children in a line

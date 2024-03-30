@@ -20,7 +20,7 @@ const ExportDeclaration =(node) => {
         <Node icon={FileSymlink} node={node} isPreview={!id} title={"export"} id={id} params={nodeParams} color={color} dataOutput={DataOutput.flow}/>
     );
 }
-
+ExportDeclaration.category = "module system"
 ExportDeclaration.keyWords = ["export"]
 ExportDeclaration.getData = (node, data, edges) => {
     const elements = node.getNamedExports() ?? []

@@ -33,7 +33,8 @@ export const MethodFactory = (methodType) => {
             </Node>
         );
     }
-    component.keyWords = ["method", "constructor"]
+    component.category = 'program structure'
+    component.keyWords = ["method", "constructor", 'class']
     component.getData = (node, data, nodesData, edges) => {
 
         connectItem(node.getBody(), 'output', node, 'body', data, nodesData, edges, null, [PORT_TYPES.data, PORT_TYPES.flow])

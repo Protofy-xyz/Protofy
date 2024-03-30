@@ -18,6 +18,7 @@ const ExportAssignment =(node) => {
     );
 }
 
+ExportAssignment.category = "module system"
 ExportAssignment.keyWords = ["export default"]
 ExportAssignment.getData = (node, data, nodesData, edges) => {
     return {

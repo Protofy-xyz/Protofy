@@ -15,6 +15,7 @@ const SpreadAssignment = (node) => {
         <Node icon={Crosshair} node={node} isPreview={!id} title={"..."} color={color} id={id} params={nodeParams} dataOutput = {DataOutput.spread}/>
     );;
 }
+SpreadAssignment.category = "operators"
 SpreadAssignment.keyWords = ["spread", '...']
 SpreadAssignment.getData = (node, data, nodesData, edges) => {
     //connect all children in a line

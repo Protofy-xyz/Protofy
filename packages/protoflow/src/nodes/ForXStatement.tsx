@@ -22,6 +22,7 @@ export const ForXStatementFactory = (mode: 'in' | 'of') => {
             </Node>
         );
     }
+    ForXStatement.category = 'loops'
     ForXStatement.keyWords = ["for", "for-in", "for-of"]
     ForXStatement.getData = (node, data, nodesData, edges) => {
         if (node.getStatement()) {
