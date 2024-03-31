@@ -1,9 +1,7 @@
 import { Stack, StackProps } from "tamagui"
 import { DataCard } from "./DataCard"
-import { useContext, useRef } from "react";
-import { DataViewContext } from "./DataView";
+import { useRef } from "react";
 import { Grid } from './Grid';
-import { API } from "../base";
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element
@@ -27,9 +25,8 @@ const GridElementCard = ({ index, data, width }) => {
     </Stack>
 }
 
-export const DataTableCard = ({ itemMinWidth = 400, rightGap = 30, contentMargin = 40, spacing = 20, ...props }: any & StackProps) => {
+export const DataTableCard = ({ itemMinWidth = 400, rightGap = 30, contentMargin = 40, spacing = 20, items, model, ...props }: any & StackProps) => {
     const containerRef = useRef(null)
-    const { items, model } = useContext(DataViewContext);
 
     const data = items?.data?.items?.map((element, i) => {
         return {

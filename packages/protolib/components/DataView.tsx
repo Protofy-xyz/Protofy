@@ -202,6 +202,8 @@ export const DataView = forwardRef(({
             component: DataTableCard,
             props: {
                 mt: "$8",
+                items,
+                model,
                 onDelete: async (key) => {
                     await API.get(`${sourceUrl}/${key}/delete`);
                     onDelete({ sourceUrl, selected, key })
