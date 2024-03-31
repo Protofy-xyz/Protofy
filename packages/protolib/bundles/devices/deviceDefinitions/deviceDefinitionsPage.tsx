@@ -5,7 +5,7 @@ import { API, Chip, DataTable2, DataView, ButtonSimple, AlertDialog, AdminPage, 
 import { z } from 'protolib/base'
 import { DeviceBoardModel } from '../deviceBoards';
 import { DeviceCoreModel } from '../devicecores';
-import { XStack } from "tamagui";
+import { Button, XStack } from "tamagui";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { getPendingResult } from "protolib/base";
 import { usePendingEffect } from "protolib";
@@ -118,7 +118,8 @@ export default {
           'config': {
             component: (path, data, setData, mode) => {
               if (mode == "preview") { return <></> }
-              return <ButtonSimple 
+              return <Button 
+              style={{width:"100%"}}
                 onPress={(e) => { 
                   setShowDialog(true)
                   if(mode == "add") {
@@ -127,7 +128,7 @@ export default {
                     setSourceCode(data.components)
                   } 
                   setEditedObjectData({ path, data, setData, mode })
-                }}>Edit</ButtonSimple>
+                }}>Edit</Button>
             },
             hideLabel: false
           }
