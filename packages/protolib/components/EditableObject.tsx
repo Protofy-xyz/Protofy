@@ -10,8 +10,6 @@ import { useTint } from 'protolib'
 import { ItemMenu } from "./ItemMenu";
 import { MultiSelectList } from "./MultiSelectList";
 
-
-
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 const iconStyle = { color: "var(--color9)", size: "$1", strokeWidth: 1 }
 
@@ -453,22 +451,18 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
 
 //{...(data.ele._def.size?{width: data.ele._def.size*columnWidth}:{})}
 const GridElement = ({ index, data, width }) => {
-  const size = data.ele._def.size || 0
-  const colWidth = data.ele._def.numColumns || 1
-  const realSize = data.ele._def.size || 1
-  // console.log('colwidth: ', colWidth, realSize, columnMargin/Math.max(1,((colWidth*2)-(realSize*2))))
+  const numColumns = data.ele._def.size || 1
 
-  return <XStack f={1} width={(width * realSize) + ((realSize - 1) * (data.columnMargin / realSize))} key={data.x}>
-    {getElement({
-      ele: data.ele,
-      icon: data.icon,
-      i: data.i,
-      x: data.x,
-      data: data.data || data.defaultData,
-      setData: data.setData,
-      mode: data.mode,
-      customFields: data.customFields
-    })}
+  return <XStack f={1} width={(width * numColumns) + (numColumns === 1 ? data.columnMargin / 2 : ((numColumns - 1) * data.columnMargin))} key={data.x}>{getElement({
+    ele: data.ele,
+    icon: data.icon,
+    i: data.i,
+    x: data.x,
+    data: data.data || data.defaultData,
+    setData: data.setData,
+    mode: data.mode,
+    customFields: data.customFields
+  })}
   </XStack>
 }
 
@@ -582,9 +576,9 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
   }
 
   const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode, mode, originalData])
+  const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} width={autoWidth ? '100%' : columnWidth * numColumns + (numColumns > 1 ? numColumns : 1) * columnMargin} f={1}>
 
-  const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} mt={i ? "$0" : "$0"} width={autoWidth ? '100%' : columnWidth * (numColumns) + columnMargin} f={1}>
-    <YStack f={1}>
+    <YStack f={1} >
       <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
     </YStack>
     {currentMode == 'preview' && <Stack t={"$-7"}>

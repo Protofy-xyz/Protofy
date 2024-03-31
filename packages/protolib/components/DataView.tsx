@@ -292,7 +292,7 @@ export const DataView = forwardRef(({
                     >
                         <YStack f={1} jc="center" ai="center" id={"admin-dataview-create-dlg"}>
                             <ScrollView maxHeight={"90vh"}>
-                                <XStack mr="$5">
+                                <XStack mr="$4">
                                     <EditableObject
                                         id={"admin-eo"}
                                         name={name}
