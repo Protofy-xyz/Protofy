@@ -1,10 +1,8 @@
 import {IntentType} from 'protolib'
 import {processFilesIntent} from 'protolib/bundles/files/intents'
+import { useMemo } from 'react';
 
 export const useIntent = (intent: IntentType) => {
-    let response;
-
     //add your intents here
-    response = processFilesIntent(intent)
-    if(response) return response
+    return processFilesIntent(intent)
 }
