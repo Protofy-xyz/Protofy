@@ -30,8 +30,8 @@ const NodeSelect = (props) => {
 					appearance: 'none'
 				}}
 			>
-				{props.options?.map(opt => (
-					<option key={opt.label} value={opt.value}>{opt.label}</option>
+				{props.options?.map((opt, key) => (
+					<option key={key} value={opt.value}>{opt.label}</option>
 				))}
 			</select>
 			<ChevronDown style={{ position: 'absolute', right: '10px', top: useTheme('nodeFontSize') / 2 }} />
