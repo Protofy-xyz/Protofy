@@ -29,6 +29,7 @@ export default     {
   check: (node, nodeData) => {
       return (
           node.type == "CallExpression"
+          && nodeData.param2 && nodeData.param2.startsWith
           && (nodeData.param2?.startsWith('async (req,res) =>') || nodeData.param2?.startsWith('(req,res) =>'))
           && (nodeData.to == 'app.get' || nodeData.to == 'app.post')
       )

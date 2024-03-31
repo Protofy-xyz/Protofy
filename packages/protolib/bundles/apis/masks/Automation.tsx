@@ -27,8 +27,9 @@ export default {
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression"
-            && (nodeData.param2?.startsWith('async (params) =>') || nodeData.param2?.startsWith('(params) =>'))
             && nodeData.to == 'context.automation'
+            && nodeData.param2 && nodeData.param2.startsWith
+            && (nodeData.param2?.startsWith('async (params) =>') || nodeData.param2?.startsWith('(params) =>'))
         )
     },
     category: "automation",
