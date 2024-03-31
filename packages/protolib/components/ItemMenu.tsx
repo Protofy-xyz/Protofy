@@ -1,19 +1,15 @@
 import { Popover, Stack, XStack, YStack, Text, StackProps } from "tamagui"
-import { AlertDialog, API } from 'protolib'
-import { useContext, useState } from "react";
+import { AlertDialog } from 'protolib'
+import { useState } from "react";
 import { Tinted } from "./Tinted";
 import { MoreVertical, Trash2, FilePlus } from '@tamagui/lucide-icons'
 import { InteractiveIcon } from "./InteractiveIcon";
-import { DataViewContext } from "./DataView";
 
 export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false, onDelete, element, deleteable, extraMenuActions = [], hideDeleteButton, ...props }: { type: string, sourceUrl: string, enableAddToInitialData?: boolean, onDelete?: any, deleteable?: Function, element: any, extraMenuActions?: any, hideDeleteButton?: boolean } & StackProps) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [open, setOpen] = useState(false)
-    const { selected, setSelected, model } = useContext(DataViewContext);
 
-    const addToInitialData = ({ data }) => {
-
-    }
+    const addToInitialData = ({ data }) => { }
 
     const MenuButton = ({ id = "", type, text, Icon, onPress, disabled }: { id?: string, type: string, text: string, Icon: any, onPress: any, disabled?: boolean }) => {
         return <XStack id={id} ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start"
@@ -25,13 +21,11 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
                     onPress(type === "global" ? '*' : element, e)
                     setMenuOpened(false)
                 }
-
             }}>
             <Icon size={"$1"} color={disabled ? "var(--gray9)" : "var(--color9)"} strokeWidth={2} />
             <Text ml={"$3"}>{text}</Text>
         </XStack>
     }
-
 
     return <Stack {...props}>
         <AlertDialog

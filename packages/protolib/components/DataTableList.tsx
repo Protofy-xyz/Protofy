@@ -1,22 +1,29 @@
 import { Checkbox, Stack, Theme, XStack } from "tamagui"
-import { useContext } from "react";
-import { DataViewContext } from "./DataView";
 import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
 import { CheckCheck, Check } from '@tamagui/lucide-icons'
 import React from "react";
 import { ItemMenu } from "./ItemMenu";
+import { usePageParams } from 'protolib/next'
+
 
 
 export const DataTableList = ({
     sourceUrl,
     onDelete = () => { },
+    items,
+    model,
     deleteable = () => { },
     extraMenuActions = [],
     enableAddToInitialData,
+    selected = [],
+    rowIcon,
+    columns,
+    state = {},
+    setSelected = ()=>{},
     onSelectItem = (item) => { }
 }) => {
-    const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon } = useContext(DataViewContext);
+    const { push, mergePush } = usePageParams(state)
     const conditionalRowStyles = [
         {
             when: row => selected.some(item => item.id === model.load(row).getId()),
@@ -33,7 +40,7 @@ export const DataTableList = ({
     const fields = elementObj.getObjectSchema().isDisplay('table')
 
     const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean']
-    const cols = tableColumns ?? DataTable2.columns(
+    const cols = columns ?? DataTable2.columns(
         ...(
             Object.keys(fields.shape)
                 .filter(key => validTypes.includes(fields.shape[key]._def?.typeName))
