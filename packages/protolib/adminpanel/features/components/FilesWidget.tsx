@@ -5,7 +5,7 @@ import { lookup } from 'mrmime';
 import { ChonkyActions } from 'chonky';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
-import { processIntent } from 'app/bundles/intents'
+import { useIntent } from 'app/bundles/intents'
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 //@ts-ignore
@@ -36,7 +36,7 @@ export const FileWidget = ({
 }: FilesWidget & YStackProps) => {
     const mime = lookup(currentFile)
 
-    const resolved = processIntent(getIntent('open', 'files', { isModified, isFull, extraIcons: icons, name: currentFileName, path: currentFile, mime }))
+    const resolved = useIntent(getIntent('open', 'files', { isModified, isFull, extraIcons: icons, name: currentFileName, path: currentFile, mime }))
 
     return <>
         <XStack height={20} />
