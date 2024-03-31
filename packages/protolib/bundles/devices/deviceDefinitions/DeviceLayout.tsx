@@ -115,10 +115,14 @@ const getLayoutedElements = async (nodes, edges, node, nodeData) => {
     const graphLeft = getGraph('l', nodes, nodeData, edges, total)
     const graphRight = getGraph('r', nodes, nodeData, edges, total)
     //compute positions and sizes
-    //@ts-ignore
-    await elk.layout(graphLeft)
-    //@ts-ignore
-    await elk.layout(graphRight)
+    try {
+        //@ts-ignore
+        await elk.layout(graphLeft)
+        //@ts-ignore
+        await elk.layout(graphRight)
+    } catch(e) {
+        console.error("Error in layout: ", e)
+    }
 
     var metadata = {}
     const copyPositions = (children, offset, outputPos) => children.forEach(nodeWithPosition => {
