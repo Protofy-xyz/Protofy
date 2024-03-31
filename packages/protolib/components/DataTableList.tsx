@@ -8,8 +8,15 @@ import React from "react";
 import { ItemMenu } from "./ItemMenu";
 
 
-export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = () => { }, extraMenuActions = [], enableAddToInitialData }) => {
-    const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon, onSelectItem } = useContext(DataViewContext);
+export const DataTableList = ({
+    sourceUrl,
+    onDelete = () => { },
+    deleteable = () => { },
+    extraMenuActions = [],
+    enableAddToInitialData,
+    onSelectItem = (item) => { }
+}) => {
+    const { items, model, selected, setSelected, state, push, replace, mergePush, tableColumns, rowIcon } = useContext(DataViewContext);
     const conditionalRowStyles = [
         {
             when: row => selected.some(item => item.id === model.load(row).getId()),
@@ -122,7 +129,7 @@ export const DataTableList = ({ sourceUrl, onDelete = () => { }, deleteable = ()
                 ...cols
                 ]}
                 rows={items?.data?.items}
-                onRowPress={(rowData) => onSelectItem ? onSelectItem(model.load(rowData)) : replace('item', model.load(rowData).getId())}
+                onRowPress={(rowData) => onSelectItem(model.load(rowData))}
             />
         </Tinted>
     </XStack>

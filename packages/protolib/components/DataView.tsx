@@ -164,6 +164,7 @@ export const DataView = forwardRef(({
                     }
                     onDelete({ sourceUrl: _sourceUrl, selected })
                 },
+                onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
                 enableAddToInitialData,
                 extraMenuActions: extraMenuActions,
                 ...dataTableListProps
