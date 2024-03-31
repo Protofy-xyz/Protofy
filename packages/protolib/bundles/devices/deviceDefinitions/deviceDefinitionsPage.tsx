@@ -48,6 +48,7 @@ export default {
             disableDots={false}
             hideBaseComponents={true}
             disableStart={true}
+            autoFitView={true}
             getFirstNode={(nodes) => {
               return nodes.find(n => n.type == 'ArrayLiteralExpression')
             }}

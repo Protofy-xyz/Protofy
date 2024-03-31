@@ -45,7 +45,8 @@ type DiagramParams = {
     defaultViewPort?: { x: number, y: number, zoom: number },
     onViewPortChange?: any,
     nodePreview?: 'preview' | 'flow-preview' | 'flow',
-    defaultSelected?: Function
+    defaultSelected?: Function,
+    autoFitView?: boolean
 }
 
 const Diagram = React.forwardRef(({
@@ -58,6 +59,7 @@ const Diagram = React.forwardRef(({
     edges = [],
     nodes = [],
     onInit = (reactFlowInstance: any) => { },
+    autoFitView = false,
     onNodesChange = () => { },
     onEdgesChange = () => { },
     onConnect = () => { },
@@ -321,6 +323,10 @@ const Diagram = React.forwardRef(({
                 nodeTypes={nodeTypes}
                 nodes={nodes}
                 edges={edges}
+                fitView={autoFitView}
+                fitViewOptions={{
+                    maxZoom: 0.8
+                }}
                 zoomOnDoubleClick={zoomOnDoubleClick}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}

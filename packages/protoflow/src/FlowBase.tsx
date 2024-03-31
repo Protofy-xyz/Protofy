@@ -70,7 +70,8 @@ interface FlowProps {
     mode?: 'js' | 'json',
     nodePreview?: 'preview' | 'flow-preview' | 'flow',
     metadata?: any
-    defaultSelected?: Function
+    defaultSelected?: Function,
+    autoFitView?: boolean
 }
 
 const FlowsBase = ({
@@ -87,6 +88,7 @@ const FlowsBase = ({
     customComponents = [],
     hideBaseComponents = false,
     positions,
+    autoFitView,
     layout,
     topics,
     flowId,
@@ -114,6 +116,7 @@ const FlowsBase = ({
     const { data, publish } = topics;
     const useFlowsStore = useContext(FlowStoreContext)
     const diagramRef = useRef(null);
+    const flowRef = useRef(null)
     const setError = useFlowsStore(state => state.setError)
     const clearError = useFlowsStore(state => state.clearError)
     const setDataNotify = useFlowsStore(state => state.setDataNotify)
@@ -773,6 +776,7 @@ const FlowsBase = ({
         if (nodes && nodes.length && nodes.filter(n => n.width && n.height).length == nodes.length) {
             reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
             rendered.current = true
+            // flowRef.current.fitView({maxZoom: 0.7})
         }
     }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
 
@@ -783,6 +787,7 @@ const FlowsBase = ({
     return (
         <div ref={diagramRef} style={{ height: '100%', width: '100%' }}>
             {display ? <Diagram
+                autoFitView={autoFitView}
                 primaryColor={primaryColor}
                 defaultSelected={defaultSelected}
                 onViewPortChange={onViewPortChange}
@@ -798,7 +803,9 @@ const FlowsBase = ({
                 onNodesDelete={(nodesToDelete) => actionPublisher('delete-node', nodesToDelete)}
                 onConnect={onConnect}
                 edgeTypes={edgeTypes}
-                onInit={() => { }}
+                onInit={(instance) => {
+                    flowRef.current = instance
+                }}
                 style={{ backgroundColor: bgColor }}
                 nodePreview={nodePreview}
                 onNodeInitializationStatusChange={(status) => {
