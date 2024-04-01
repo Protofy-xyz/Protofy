@@ -4,8 +4,10 @@ import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import { BaseJSMasks } from 'protoflow';
 import apiMasks from 'protolib/bundles/apis/masks';
 import devicesMasks from 'protolib/bundles/devices/devices/masks';
-import customMasks from 'app/bundles/custom/masks'
+import baseMasks from 'protolib/bundles/baseMasks';
 import customEventMasks from 'protolib/bundles/events/masks'
+import customMasks from 'app/bundles/custom/masks'
+
 const paths = {
     devices: [
         'devices',
@@ -33,7 +35,8 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...customMasks.api,
         ...customEventMasks.api,
         ...apiMasks,
-        ...devicesMasks.api
+        ...devicesMasks.api,
+        ...baseMasks.api
     ]
     return []
 }
