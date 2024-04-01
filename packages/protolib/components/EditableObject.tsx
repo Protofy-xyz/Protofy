@@ -498,7 +498,7 @@ export type EditableObjectProps = {
   externalErrorHandling?: Boolean
 }
 
-export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title = true, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
   const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
   const [currentMode, setCurrentMode] = useState(mode)
   const [prevCurrentMode, setPrevCurrentMode] = useState('')
@@ -611,7 +611,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
       <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
         <YStack width="100%">
           <XStack ai="center">
-            {title && <XStack mt={currentMode == 'preview' ? '$4' : undefined} ml={currentMode == 'preview' ? '$4' : undefined} id="eo-dlg-title"><H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3></XStack>}
+            <XStack id="eo-dlg-title">{title??<H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3>}</XStack>
             {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
               if (currentMode == 'edit' && edited) {
                 setDialogOpen(true)

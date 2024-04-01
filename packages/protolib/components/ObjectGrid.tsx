@@ -1,16 +1,18 @@
-import { Paragraph, Stack, StackProps, XStack, YStack } from "tamagui"
+import { H3, Paragraph, Stack, StackProps, XStack, YStack } from "tamagui"
 import { Grid } from './Grid';
 import { EditableObject } from "./EditableObject";
 import { getPendingResult } from '../base/PendingResult'
 import { ItemCard } from "./ItemCard";
 import { useTint } from "protolib";
 import { useRef } from "react";
+import { Tinted } from "./Tinted";
+import {Tag} from '@tamagui/lucide-icons';
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element.data
     const modelItem = data.model.load(element)
     const tint = useTint()
-
+    const Icon = data?.icon ?? <></>
     return data.getCard?data.getCard(element, width) :<ItemCard
         height={data.itemHeight}
         cursor="pointer"
@@ -45,7 +47,9 @@ const GridElementCard = ({ index, data, width }) => {
                     onDelete={data.onDelete}
                     deleteable={data.deleteable}
                     extraMenuActions={data.extraMenuActions}
-
+                    title={<XStack mt="$4" ml={"$4"} ai="center">
+                        {data?.icon && <Stack mr="$2"><Tinted><Icon color="var(--color7)" /></Tinted></Stack>}<H3>{data?.name}</H3>
+                    </XStack>}
                 />
             </Stack>
         }
@@ -74,7 +78,9 @@ export const ObjectGrid = ({
         deleteable, 
         extraFields, 
         icons, 
-        children, 
+        children,
+        name,
+        icon,
         ...props 
     }: any & StackProps) => {
 
@@ -100,7 +106,9 @@ export const ObjectGrid = ({
             deleteable,
             itemHeight,
             extraMenuActions,
-            disableItemSelection
+            disableItemSelection,
+            name,
+            icon
         }
     })
 

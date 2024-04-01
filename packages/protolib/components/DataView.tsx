@@ -169,6 +169,8 @@ export const DataView = forwardRef(({
                 itemMinHeight: 320,
                 itemMinWidth: 320,
                 spacing: 20,
+                name,
+                icon: rowIcon,
                 ...dataTableGridProps
             }
         },
