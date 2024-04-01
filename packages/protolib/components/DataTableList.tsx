@@ -1,7 +1,7 @@
 import { Checkbox, Stack, Theme, XStack } from "tamagui"
 import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
-import { CheckCheck, Check } from '@tamagui/lucide-icons'
+import { CheckCheck, Check, Pencil } from '@tamagui/lucide-icons'
 import { ItemMenu } from "./ItemMenu";
 import { usePageParams } from 'protolib/next'
 import { InteractiveIcon } from "./InteractiveIcon";
@@ -15,7 +15,7 @@ export const DataTableList = ({
     extraMenuActions = [],
     enableAddToInitialData,
     selected = [],
-    rowIcon,
+    rowIcon = Pencil,
     columns,
     state = {},
     setSelected = (item) => { },
@@ -122,11 +122,11 @@ export const DataTableList = ({
                             deleteable={deleteable}
                             onDelete={onDelete}
                             extraMenuActions={extraMenuActions} />
-                        {rowIcon && (
+
                             <InteractiveIcon Icon={rowIcon} onPress={() => onSelectItem(model.load(row))}></InteractiveIcon>
-                        )}
+
                     </XStack>
-                    </Theme>, true, rowIcon ? '115px' : '75px'),
+                    </Theme>, true, '115px'),
                 ...cols
                 ]}
                 rows={items?.data?.items}

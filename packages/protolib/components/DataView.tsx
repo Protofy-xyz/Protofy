@@ -1,7 +1,7 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
 import { Center, useRemoteStateList, ObjectGrid, DataTableCard, MapView, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
-import { createContext, forwardRef, useContext, useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin } from '@tamagui/lucide-icons'
+import { forwardRef, useContext, useEffect, useState } from 'react'
+import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
@@ -140,7 +140,7 @@ export const DataView = forwardRef(({
                 model,
                 selected,
                 setSelected,
-                rowIcon,
+                rowIcon: openMode == "edit" ? Pencil : Eye,
                 columns,
                 state,
                 ...dataTableListProps
@@ -222,9 +222,7 @@ export const DataView = forwardRef(({
             Error: {items.error && items.error.error ? items.error.error : items.error}
         </Center>
     }
-    if (state.editFile) {
-
-    }
+    const RowIcon = rowIcon
     return (<AsyncView atom={currentItems}>
         <YStack ref={ref} height="100%" f={1}>
             <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
@@ -354,7 +352,7 @@ export const DataView = forwardRef(({
                 {!state.editFile && <>
                     <XStack pt="$3" px="$7" mb="$1">
                         <XStack left={-12} f={1} ai="center">
-
+                            {rowIcon && <Stack mr="$3"><Tinted><RowIcon color='var(--color7)' /></Tinted></Stack>}
                             <Paragraph>
                                 <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
                             </Paragraph>
