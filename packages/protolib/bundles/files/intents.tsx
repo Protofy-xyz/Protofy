@@ -90,7 +90,7 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
   );
 };
 
-const FlowsViewer = ({ extraIcons, isFull, path, isModified, setIsModified }) => {
+const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   const [fileContent, setFileContent] = useFileFromAPI(path)
   const [newFileContent, setNewFileContent] = useState('')
   const [loaded, setLoaded] = useState(false)

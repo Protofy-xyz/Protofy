@@ -251,7 +251,6 @@ export const DataView = forwardRef(({
                 {
                     state.editFile && <FileWidget
                         id={"file-widget-" + getFilenameFromPath(state.editFile ?? '').split('.')[0]}
-                        isFull={false}
                         hideCloseIcon={false}
                         isModified={true}
                         setIsModified={() => { }}

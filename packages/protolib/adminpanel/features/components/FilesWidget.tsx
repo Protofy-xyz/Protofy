@@ -12,7 +12,6 @@ setChonkyDefaults({ iconComponent: ChonkyIconFA });
 ChonkyActions.ToggleHiddenFiles.option.defaultValue = false;
 
 type FilesWidget = {
-    isFull: boolean,
     hideCloseIcon: boolean,
     headerStart?: number,
     isModified: boolean,
@@ -25,7 +24,6 @@ type FilesWidget = {
 }
 
 export const FileWidget = ({
-    isFull,
     hideCloseIcon,
     isModified = false,
     setIsModified = () => { },
@@ -36,7 +34,7 @@ export const FileWidget = ({
 }: FilesWidget & YStackProps) => {
     const mime = lookup(currentFile)
 
-    const resolved = useIntent(getIntent('open', 'files', { isModified, isFull, extraIcons: icons, name: currentFileName, path: currentFile, mime }))
+    const resolved = useIntent(getIntent('open', 'files', { isModified, extraIcons: icons, name: currentFileName, path: currentFile, mime }))
 
     return <>
         <XStack height={20} />

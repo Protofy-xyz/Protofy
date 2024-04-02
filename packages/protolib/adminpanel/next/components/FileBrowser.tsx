@@ -77,7 +77,6 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const isFull = router.query?.file
     
     const getWidget = () => <FileWidget
-        isFull={isFull}
         hideCloseIcon={isFull ? true : false}
         isModified={isModified}
         setIsModified={setIsModified}
