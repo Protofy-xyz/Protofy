@@ -200,6 +200,14 @@ export const DataView = forwardRef(({
             onDelete: async (key) => {
                 await API.get(`${sourceUrl}/${key}/delete`);
             },
+            items,
+            model,
+            sourceUrl,
+            extraFields,
+            icons,
+            customFields,
+            deleteable,
+            extraMenuActions,
             ...dataMapProps
         }
     }
