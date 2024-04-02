@@ -16,6 +16,7 @@
     "status": "pm2 status api",
     "build": "cd ../.. && yarn build && cd apps/admin && next build",
     "export": "next export",
+    "package": "yarn build && yarn export",
     "serve": "NODE_ENV=production next start --port 4000",
     "lint": "next lint"
   },
