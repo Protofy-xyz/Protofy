@@ -6,14 +6,14 @@ import path from 'path'
 export const DevicesSchema = Schema.object({
   name: z.string().hint("Device name").static().regex(/^[a-z0-9A-Z]+$/, "Only lower case chars or numbers").id().search(),
   deviceDefinition: z.string().hidden(),
-  substitutions: z.record(z.string().optional(), z.any().optional()).optional(),
-  subsystem: z.record(z.string(), z.any()).optional(),
-  data: z.array(z.record(z.string(), z.any())).optional(),
+  substitutions: z.record(z.string().optional(), z.any().optional()).optional().hidden(),
+  subsystem: z.record(z.string(), z.any()).optional().hidden(),
+  data: z.array(z.record(z.string(), z.any())).optional().hidden(),
   currentSdk: z.string().hidden().generate("esphome"),
   location: z.object({
     lat: z.string(),
     long: z.string()
-  }).optional().location("lat", "long")
+  }).optional().location("lat", "long").hidden()
 })
 export type DevicesType = z.infer<typeof DevicesSchema>;
 // export const DevicesModel = AutoModel.createDerived<DevicesType>("DevicesModel", DevicesSchema);
