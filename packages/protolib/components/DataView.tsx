@@ -1,7 +1,7 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
 import { Center, useRemoteStateList, ObjectGrid, DataTableCard, MapView, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { forwardRef, useContext, useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye } from '@tamagui/lucide-icons'
+import { PlusCircle, Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
@@ -17,6 +17,7 @@ import { SearchContext } from '../context/SearchContext';
 import { InteractiveIcon } from './InteractiveIcon';
 import { ItemMenu } from './ItemMenu';
 import { useRouter } from 'next/router';
+import ErrorMessage from './ErrorMessage';
 
 export const DataView = forwardRef(({
     onSelectItem,
@@ -114,7 +115,7 @@ export const DataView = forwardRef(({
     }, [state.orderBy + '_' + state.itemsPerPage + '_' + state.page + '_' + state.search + '_' + state.orderDirection])
 
     const toast = useToastController()
-
+    const RowIcon = rowIcon
     var defaultViews = [
         {
             name: 'list',
@@ -168,6 +169,17 @@ export const DataView = forwardRef(({
                 extraMenuActions: extraMenuActions,
                 itemMinHeight: 320,
                 itemMinWidth: 320,
+                emptyMessage: <ErrorMessage
+                    icon={RowIcon}
+                    msg={`Empty ${_plural} list`}
+                    detailsColor='$color'
+                    containerProps={{ mt: '-30%', o:0.1 }}
+                    iconProps={{}}
+                >
+                    {/* <XStack o={0.5} space="$1" ai="center">
+                        <Button>{`Add ${name}`}</Button>
+                    </XStack> */}
+                </ErrorMessage>,
                 spacing: 20,
                 name,
                 icon: rowIcon,
@@ -224,7 +236,7 @@ export const DataView = forwardRef(({
             Error: {items.error && items.error.error ? items.error.error : items.error}
         </Center>
     }
-    const RowIcon = rowIcon
+
     return (<AsyncView atom={currentItems}>
         <YStack ref={ref} height="100%" f={1}>
             <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>

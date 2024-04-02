@@ -7,6 +7,7 @@ import { useTint } from "protolib";
 import { useRef } from "react";
 import { Tinted } from "./Tinted";
 import {Tag} from '@tamagui/lucide-icons';
+import ErrorMessage from "./ErrorMessage";
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element.data
@@ -60,6 +61,7 @@ export const ObjectGrid = ({
         overScanBy=5, 
         gridElementCard = undefined, 
         itemMinWidth = 400, 
+        emptyMessage = <></>,
         itemHeight, 
         rightGap = 30, 
         contentMargin = 50, 
@@ -113,7 +115,15 @@ export const ObjectGrid = ({
     })
 
     return <Stack f={1} ref={containerRef} {...props}>
-        <Grid overScanBy={overScanBy} key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth} />
+        {data && data.length > 0 ? <Grid 
+            overScanBy={overScanBy} 
+            key={data.length} 
+            rightGap={rightGap}
+            containerRef={containerRef}
+            spacing={spacing}
+            data={data}
+            card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth}
+        /> : emptyMessage}
         {children}
     </Stack>
 }
