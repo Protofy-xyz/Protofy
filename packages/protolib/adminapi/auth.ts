@@ -25,9 +25,9 @@ const genNewSession = (data: any) => {
 }
 
 app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
-    const request: LoginRequest = req.body
-    LoginSchema.parse(request)
     try {
+        const request: LoginRequest = req.body
+        LoginSchema.parse(request)
         if(!await existsKey(dbPath, request.username)) {
             res.status(401).send('"Incorrect user or password"')
             generateEvent({
@@ -72,8 +72,13 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
             res.status(401).send('"Incorrect user or password"')
         }
     } catch (error) {
+        if(error.name == 'ZodError') {
+            res.status(401).send('"Incorrect user or password"')
+        } else {
+            res.status(500).send('"Server error"')
+        }
+
         logger.error({ error }, "Login error")
-        res.status(500).send('"Server error"')
         return
     }
 }));
