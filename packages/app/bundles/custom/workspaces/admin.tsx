@@ -24,10 +24,7 @@ export default {
         ],
         "Devices":[
             { "name": "Devices", "icon": "serverConf", "type":"devices", "path": "/"},
-            { "name": "Definitions", "icon": "bookOpen", "type":"deviceDefinitions", "path": "/"},
-            { "name": "Boards", "icon": "board", "type":"deviceBoards", "path": "/"},
-            { "name": "Cores", "icon": "cpu", "type":"deviceCores", "path": "/"}, 
-            { "name": "Sdks", "icon": Cog, "type":"deviceSdks", "path": "/"}
+            { "name": "Definitions", "icon": "bookOpen", "type":"deviceDefinitions", "path": "/"}
         ]
     }
 }
