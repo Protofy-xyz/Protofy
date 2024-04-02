@@ -1,4 +1,4 @@
-import { Cog, Inbox, Library, ToyBrick } from '@tamagui/lucide-icons'
+import { Router, Inbox, Library, ToyBrick } from '@tamagui/lucide-icons'
 
 export default {
     "default": "/admin/pages",
@@ -17,7 +17,7 @@ export default {
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "/?path=/apps/next/public" },
         ],
         "IoT Devices":[
-            { "name": "Devices", "icon": "serverConf", "type":"devices", "path": "/"},
+            { "name": "Devices", "icon": Router, "type":"devices", "path": "/"},
             { "name": "Definitions", "icon": "bookOpen", "type":"deviceDefinitions", "path": "/"}
         ]
     }
