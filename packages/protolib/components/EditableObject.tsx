@@ -121,9 +121,9 @@ const ObjectComp = ({ ele, elementDef, icon, path, data, setData, mode, customFi
 
 const UnionsArrayComp = ({ ele, icon, i, inArray, eleArray, formData, generatedOptions, setFormData }) => {
   const primitives = ["ZodNumber", "ZodString", "ZodLiteral"] // add more primitives with the time
-
   let defaultChoices = eleArray.map(zodEle => {
-    return primitives.includes(zodEle.typeName)
+    const type = zodEle.typeName ?? zodEle._def.typeName
+    return primitives.includes(type)
       ? String(zodEle.value)
       : JSON.stringify(zodEle.value)
   })
