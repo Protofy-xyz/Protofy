@@ -279,10 +279,5 @@ export default {
         extraMenuActions={extraMenuActions}
       />
     </AdminPage>)
-  },
-  getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async () => {
-    return {
-      initialDeviceDefinitions: await API.get(definitionsSourceUrl)
-    }
-  })
+  }
 }
