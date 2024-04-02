@@ -14,7 +14,7 @@
     "stop": "pm2 stop api",
     "kill": "pm2 kill",
     "status": "pm2 status api",
-    "build": "cd ../.. && yarn build && cd apps/admin && next build",
+    "build": "next build",
     "export": "next export",
     "package": "yarn build && yarn export",
     "serve": "NODE_ENV=production next start --port 4000",
