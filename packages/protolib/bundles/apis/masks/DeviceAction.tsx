@@ -80,5 +80,5 @@ export default {
     category: "ioT",
     keywords: ['action', "automation", 'esp32', 'device', 'iot'],
     getComponent: DeviceAction,
-    getInitialData: () => { return { to: 'context.deviceAction', param1: "", param2: "", param3: "" } }
+    getInitialData: () => { return { to: 'context.deviceAction', param1: "", param2: "", param3: "", await: true } }
 }
