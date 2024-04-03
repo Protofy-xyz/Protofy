@@ -1,9 +1,21 @@
-import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize, XStack, Paragraph } from "tamagui";
+import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize, XStack, Paragraph, StackProps } from "tamagui";
 import { ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Tinted } from "./Tinted";
 
-export function MultiSelectList({ choices, defaultSelections = [], onSetSelections, maxHeight = "150px" }: any & { onSetChoices: Function, maxHeight: String }) {
+type MultiSelectListProps = {
+  choices: string[],
+  defaultSelections?: string[] | [],
+  onSetSelections?: Function,
+  containerProps?: StackProps
+}
+export function MultiSelectList({ 
+  choices,
+  defaultSelections = [],
+  onSetSelections = (selections) => {},
+  containerProps = {},
+  ...props
+}: MultiSelectListProps & StackProps) {
   const rootRef = useRef(null)
   const [open, setOpen] = useState(false);
   const [selections, setSelections] = useState(defaultSelections);
@@ -39,6 +51,7 @@ export function MultiSelectList({ choices, defaultSelections = [], onSetSelectio
         borderColor='$gray6'
         cursor="pointer"
         onPress={() => setOpen(prev => !prev)}
+        {...props}
       >
         <XStack
           flexWrap="wrap"
@@ -85,9 +98,10 @@ export function MultiSelectList({ choices, defaultSelections = [], onSetSelectio
               outlineWidth={1}
               outlineStyle='solid'
               borderColor='$borderColor'
-              maxHeight={maxHeight}
+              maxHeight={'150px'}
               gap="$1.5"
               overflow="scroll"
+              {...containerProps}
             >
               {
                 choices.map((choice, i) => {
