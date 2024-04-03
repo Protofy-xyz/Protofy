@@ -5,7 +5,7 @@ import { getTokenValue } from 'tamagui';
 import { useTheme } from '@my/ui';
 import { useTint } from '../lib/Tints';
 
-export const InputSelect = React.forwardRef(({ controlStyle = {}, containerStyle = {}, ...props }: any, ref: any) => {
+export const InputSelect = React.forwardRef(({ menuStyle = {},controlStyle = {}, containerStyle = {}, ...props }: any, ref: any) => {
   const { resolvedTheme } = useThemeSetting()
   const theme = useTheme()
   const tint = useTint()
@@ -20,13 +20,13 @@ export const InputSelect = React.forwardRef(({ controlStyle = {}, containerStyle
       option: (provided, state) => ({
         ...provided,
         backgroundColor: state.isSelected ? theme['color7'].val : (state.isFocused ? theme['color5'].val : provided.backgroundColor),
-        // color: state.isFocused ? 'colorDeTextoDeseado' : provided.color,
       }),
       menu: (provided) => ({
         ...provided,
         backgroundColor: theme.bgContent.val,
         borderColor: 'red',
-        zIndex: 9999999999999
+        zIndex: 9999999999999,
+        ...menuStyle
       }),
       control: (provided, state) => ({
         ...provided,
@@ -36,7 +36,7 @@ export const InputSelect = React.forwardRef(({ controlStyle = {}, containerStyle
         boxShadow: 'none',
         borderColor: darkMode ? '#aaa' : '#ccc',
         borderWidth: 0,
-        borderBottomWidth: 1,
+        //borderBottomWidth: 1,
         borderRadius: 0,
         color: 'red',
         "&:hover": {
@@ -44,14 +44,14 @@ export const InputSelect = React.forwardRef(({ controlStyle = {}, containerStyle
           boxShadow: 'none',
           borderColor: theme.color8.val,
           borderWidth: 0,
-          borderBottomWidth: 1
+          // borderBottomWidth: 1
         },
         "&:focus": {
           outline: 'none',
           boxShadow: 'none',
           borderColor: theme.color8.val,
           borderWidth: 0,
-          borderBottomWidth: 1
+          // borderBottomWidth: 1
         },
         ...controlStyle
       }),
