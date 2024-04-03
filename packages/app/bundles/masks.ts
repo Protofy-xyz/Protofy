@@ -4,7 +4,7 @@ import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import { BaseJSMasks } from 'protoflow';
 import apiMasks from 'protolib/bundles/apis/masks';
 import devicesMasks from 'protolib/bundles/devices/devices/masks';
-import baseMasks from 'protolib/bundles/baseMasks';
+import baseMasks from 'protolib/bundles/basemasks';
 import customEventMasks from 'protolib/bundles/events/masks'
 import customMasks from 'app/bundles/custom/masks'
 import cronMasks from 'protolib/bundles/automations/masks';
