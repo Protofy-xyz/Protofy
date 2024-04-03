@@ -50,9 +50,7 @@ const Action = ({deviceName, action, buttonAction}) => {
         />
         <Button
             key={action.name} // Make sure to provide a unique key for each Button
-            onPress={() => { 
-                client.publish(getPeripheralTopic(deviceName, action.endpoint),action.payload.type=="json"? JSON.stringify(value):value.toString())
-            }}
+            onPress={() => { buttonAction(action, value) }}
             color="$color10"
             title={"Description: " + action.description}
             flex={1}
@@ -64,10 +62,11 @@ const Action = ({deviceName, action, buttonAction}) => {
 const subsystem = ({subsystem, deviceName}) => {
     const { client } = useMqttState();
 
-    const buttonAction = (action) => {
+    const buttonAction = (action, value?) => {
+        const sendValue = value != undefined ? value : action.payload.value
         if (action.connectionType == "mqtt") {
             console.log("MQTT Dev: ", action.payload)
-            client.publish(getPeripheralTopic(deviceName, action.endpoint),action.payload.type=="json"? JSON.stringify(action.payload.value):action.payload.value.toString())
+            client.publish(getPeripheralTopic(deviceName, action.endpoint),action.payload.type=="json"? JSON.stringify(sendValue):sendValue.toString())
         }
     }
 
