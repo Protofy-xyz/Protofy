@@ -10,15 +10,15 @@ export class DeviceModel extends ProtoModel<DeviceModel> {
         super(data, DeviceSchema, session)
     }
     getName(doubleQuotted?: boolean): string {
-        return doubleQuotted ?( '"' + this.data?.name + '"' ):this.data?.name;
+        return doubleQuotted ? ('"' + this.data?.name + '"') : this.data?.name;
     }
     getSubsystems(): SubsystemType[] {
         return this.data?.subsystem
     }
-    getSubsystemNames(withAction?: boolean, doubleQuotted?: boolean): string[] { 
+    getSubsystemNames(withAction?: boolean, doubleQuotted?: boolean): string[] {
         // if withAction is enabled return only subsystems that have "actions" to perform
         const subsystemCollection = new SubsystemCollection(this.getSubsystems());
-        return subsystemCollection.getNames(withAction, doubleQuotted)
+        return subsystemCollection?.getNames(withAction, doubleQuotted) ?? []
     }
 }
 
@@ -28,6 +28,9 @@ export class DeviceCollection {
     constructor(items: DeviceDataType[], session?: SessionDataType) {
         this.items = items;
         this.session = session
+    }
+    findByName(name: string, doubleQuotted): DeviceDataType {
+        return this?.items.find((device) => (doubleQuotted ? ('"' + device.name + '"'): device.name) === name)
     }
     getNames(doubleQuotted?: boolean): string[] {
         return this?.items?.map((device: DeviceDataType) => doubleQuotted ? '"' + device?.name + '"' : device?.name)
