@@ -210,7 +210,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('create'), entityModel.getNotificationsPayload())
         if (!options.disableEvents) {
             generateEvent({
-                path: entityName + '/create/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                path: entityName + '/create', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
@@ -275,7 +275,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
         if (!options.disableEvents) {
             generateEvent({
-                path: entityName + '/update/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                path: entityName + '/update', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
@@ -310,7 +310,7 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('delete'), entityModel.getNotificationsPayload())
         if (!options.disableEvents) {
             generateEvent({
-                path: entityName + '/delete/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                path: entityName + '/delete', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
