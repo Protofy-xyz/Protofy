@@ -1,6 +1,11 @@
 import {CronJob, CronJobParams} from 'cron'
 
   
-export function createCronJob(opts: CronJobParams) {
-    return CronJob.from(opts)
+export function createCronJob(cronExpression: string, callb: any) {
+    return new CronJob(
+        cronExpression, // cronTime
+        callb, // onTick
+        null, // onComplete
+        true, // start
+    );
 }

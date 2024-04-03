@@ -18,6 +18,7 @@ import net from 'net';
 import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
 import BundleContext from 'app/bundles/apiContext'
+import {createCronJob} from 'protolib/bundles/automations/cron'
 
 const logger = getLogger()
 const config = getConfig()
@@ -66,7 +67,7 @@ const topicPub = (topic, data) => {
   mqtt.publish(topic, data)
 }
 
-BundleAPI(app, { mqtt, topicSub, topicPub, ...BundleContext  })
+BundleAPI(app, { mqtt, topicSub, topicPub, createCronJob, ...BundleContext  })
 const server = http.createServer(app);
 
 const wss = new Server({ noServer: true });
