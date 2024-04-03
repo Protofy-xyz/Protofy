@@ -2,7 +2,8 @@ import { InputProps, useInputProps } from '@my/ui';
 import {
     styled,
     withStaticProperties,
-    isWeb} from '@tamagui/core'
+    isWeb
+} from '@tamagui/core'
 import { v4 as uuidv4 } from 'uuid';
 import { inputSizeVariant } from '../helpers/InputHelpers'
 import '../styles/styles.css'
@@ -12,19 +13,22 @@ type OptionProps = {
 }
 type MyInputProps = {
     options: string[],
-    children: any
+    children?: any,
+    listProps?: any
 }
 
 const MyOption = ({ value }: OptionProps) => <option value={value} />
 
-const MyInput = ({ children, options = [], ...props }: MyInputProps & any) => {
+const MyInput = ({ children, listProps = {}, options = [], ...props }: MyInputProps & any) => {
     const inputListId = 'input-select-' + uuidv4()
     return <>
         <input list={inputListId} {...props} style={{ fontSize: props.fontSize, ...props.style }} />
-        <datalist className='datalist' id={inputListId}>
-            {children}
-            {options.map((opt, index) => <MyOption key={index} value={opt}></MyOption>)}
-        </datalist>
+        <div {...listProps} style={{maxHeight: '40px'}}>
+            <datalist className='datalist' id={inputListId}>
+                {children}
+                {options.map((opt, index) => <MyOption key={index} value={opt}></MyOption>)}
+            </datalist>
+        </div>
     </>
 }
 
