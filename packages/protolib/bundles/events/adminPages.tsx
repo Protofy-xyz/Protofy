@@ -4,6 +4,9 @@ import moment from 'moment'
 import { ClipboardList } from '@tamagui/lucide-icons';
 import { JSONViewer } from '../../components/jsonui'
 import { usePrompt } from '../../context/PromptAtom'
+import { useEffect, useState } from 'react';
+import { API, getPendingResult } from '../../base';
+import { usePendingEffect } from '../../lib/usePendingEffect';
 
 const format = 'HH:mm:ss DD-MM-YYYY'
 const EventIcons = {}
@@ -23,6 +26,12 @@ export default {
                     initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
 
+            const [options, setOptions] = useState(getPendingResult('pending'))
+            usePendingEffect((s) => { API.get({ url: '/adminapi/v1/events/options/all' }, s) }, setOptions, options)
+
+            useEffect(() => {
+                console.log('we have options: ', options)
+            }, [options])
             return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
                     integratedChat
@@ -55,10 +64,6 @@ export default {
                     icons={EventIcons}
                 />
             </AdminPage>)
-        },
-        getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {
-            orderBy: "created",
-            orderDirection: "desc"
-        })
+        }
     }
 }
