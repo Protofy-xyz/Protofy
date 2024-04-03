@@ -64,6 +64,7 @@ export { default as MainButton } from "./components/MainButton";
 export * from "./components/Head1";
 export * from "./components/Text";
 export * from "./components/Input";
+export * from "./components/InputSelect";
 export * from "./components/Link";
 export * from "./components/heroState";
 export { default as OverlayCard } from "./components/OverlayCard";
