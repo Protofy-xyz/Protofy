@@ -3,35 +3,18 @@ import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Play } from 'lucide-react';
 import { DeviceRepository } from '../../devices/repositories/deviceRepository';
-import { DeviceCollection } from '../../devices/models/DeviceModel';
-
-const getSubsystemsActions = (devData) => {
-    const deviceSubsystemsActions = {};
-
-    devData.forEach(device => {
-        const deviceName = '"' + device.name + '"';
-        const actions = {};
-
-        device.subsystem?.forEach(subsystem => {
-            subsystem.actions?.forEach(action => {
-                actions['"' + subsystem.name + '"'] = actions['"' + subsystem.name + '"'] || [];
-                actions['"' + subsystem.name + '"'].push('"' + action.name + '"');
-            });
-        });
-
-        deviceSubsystemsActions[deviceName] = actions;
-    });
-    return deviceSubsystemsActions
-
-}
+import { DeviceCollection, DeviceModel } from '../../devices/models/DeviceModel';
+import { DeviceDataType, SubsystemType } from '../../devices/models/interfaces';
+import { SubsystemCollection, SubsystemModel } from '../../devices/models/SubsystemModel';
 
 const deviceRepository = new DeviceRepository()
 const DeviceAction = (node: any = {}, nodeData = {}) => {
-    const color = useColorFromPalette(6)
-    const [devicesData, setDevicesData] = useState<any[]>([]);
     let deviceName = nodeData['param1'];
     let deviceComponent = nodeData['param2'];
     let deviceAction = nodeData['param3'];
+    
+    const [devicesData, setDevicesData] = useState<any[]>([]);
+    const color = useColorFromPalette(6)
 
     const getDevices = async () => {
         const { data } = await deviceRepository.list()
@@ -39,33 +22,44 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
         setDevicesData([...devices]);
     }
 
-    useEffect(() => {
-        getDevices()
-    }, [])
-
+    // Device
     const deviceCollection = new DeviceCollection(devicesData);
-    const subsystems = deviceCollection?.getSubsystemsByDeviceName(true);
-    const deviceSubsystems = subsystems[deviceName] ?? [];
-    const selectedSubsystem = devicesData ? deviceSubsystems : ['"none"']
+    const deviceNames = devicesData ? deviceCollection?.getNames(true) : ['"none"'];
+    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName, true);
+    const selectedDeviceIndex: number = deviceNames?.indexOf(deviceName) === -1 || !deviceName ? 0 : deviceCollection?.getIndexByName(deviceName)
+    const selectedDeviceModel = new DeviceModel(selectedDevice)
+    // Subsystem
+    const deviceSubsystems = selectedDeviceModel.getSubsystems()
+    const subsystemsCollection = new SubsystemCollection(deviceSubsystems);
+    const deviceSubsystemsNames = devicesData ? selectedDeviceModel.getSubsystemNames(true, true) : ['"none"']
+    const selectedSubsystemIndex = deviceSubsystemsNames?.indexOf(deviceComponent) === -1 ? 0 : deviceSubsystemsNames?.indexOf(deviceComponent);
+    const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent, true);
+    const selectedSubsystemModel = new SubsystemModel(selectedSubsystem)
+    // Action
+    const subsystemActionNames = devicesData ? selectedSubsystemModel.getActionsNames(true) : ['"none"']
+    const selectedAction = subsystemActionNames.indexOf(deviceAction) === -1 ? 0 : subsystemActionNames?.indexOf(deviceAction)
 
     const nodeParams: Field[] = [
         {
             label: 'Device name', field: 'param1', type: 'selectWithDefault', static: true,
-            selectedIndex: deviceCollection?.getIndexByName(deviceName) === -1 ? 0 : deviceCollection?.getIndexByName(deviceName),
-            data: devicesData ? deviceCollection?.getNames(true) : ['"none"'],
+            selectedIndex: selectedDeviceIndex,
+            data: deviceNames,
         },
         {
             label: 'Component', field: 'param2', type: 'selectWithDefault', static: true,
-            selectedIndex: selectedSubsystem?.indexOf(deviceComponent) ?? 0,
-            data: selectedSubsystem
+            selectedIndex: selectedSubsystemIndex,
+            data: deviceSubsystemsNames
         },
         {
             label: 'Action', field: 'param3', type: 'selectWithDefault', static: true,
-            selectedIndex: devicesData && getSubsystemsActions(devicesData)[deviceName] ? getSubsystemsActions(devicesData)[deviceName][deviceComponent]?.indexOf(deviceAction) ?? [] : 0,
-            data: devicesData && getSubsystemsActions(devicesData)[deviceName] ? getSubsystemsActions(devicesData)[deviceName][deviceComponent] ?? [] : ['"none"'],
+            selectedIndex: selectedAction,
+            data: subsystemActionNames
         }
     ] as Field[]
 
+    useEffect(() => {
+        getDevices()
+    }, [])
 
     return (
         <Node icon={Play} node={node} isPreview={!node.id} title='Device Action' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
