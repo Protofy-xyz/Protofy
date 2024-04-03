@@ -6,7 +6,6 @@ import { getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSche
 import { getBaseConfig, getConfigWithoutSecrets } from 'app/BaseConfig'
 import { setConfig, getConfig } from 'protolib/base/Config';
 import BundleContext from 'app/bundles/apiContext'
-import {createCronJob} from 'protolib/bundles/automations/cron'
 
 
 const logger = getLogger()
@@ -104,7 +103,7 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
     }
     
     //wait for mqtt before starting API
-    BundleAPI(app, { mqtt, devicePub, deviceSub, topicPub, topicSub, createCronJob, ...BundleContext })
+    BundleAPI(app, { mqtt, devicePub, deviceSub, topicPub, topicSub, ...BundleContext })
 })
 
 export default app
