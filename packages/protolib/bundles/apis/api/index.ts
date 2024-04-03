@@ -4,7 +4,7 @@ import {getLogger } from 'protolib/base';
 
 const logger = getLogger()
 
-export const automation = (name,app, cb)=>{
+export const automation = (app, cb, name)=>{
     const url = "/api/v1/automations/"+name;
 
     app.get(url,(req,res)=>{
