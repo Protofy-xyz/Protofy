@@ -185,25 +185,17 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
     const getInput = (disabled?) => {
         switch (param.type) {
             case 'selectWithDefault':
-                const onChangeSelect1 = (data) => {
-                    setNodeData(id, { ...nodeData, [param.field]: getDataFromField(data?.value, param.field, nodeData) })
-                    dataNotify({ id: id, paramField: param.field, newValue: data?.value })
-                }
-                const options1 = param.data?.map((item, index) => {
-                    var extraProps = item?.color ? { color: item.color } : {}
-                    return { label: item ?? "default", value: item, ...extraProps }
-                })
-                return <div style={{ flex: 1, zIndex: 1000 }}>
-                    <NodeSelect
-                        onChange={onChangeSelect1}
-                        defaultValue={{
-                            value: param.data[param.selectedIndex],
-                            label: param.data[param.selectedIndex]
-                        }}
-                        options={options1}
-                    />
-                </div>
             case 'select':
+                const defaultValue = param.type === 'selectWithDefault' ?
+                    {
+                        value: param.data[param.selectedIndex],
+                        label: param.data[param.selectedIndex]
+                    } :
+                    {
+                        value: getFieldValue(param.field, nodeData),
+                        label: getFieldValue(param.field, nodeData)
+                    }
+
                 const onChangeSelect = (data) => {
                     setNodeData(id, { ...nodeData, [param.field]: getDataFromField(data?.value, param.field, nodeData) })
                     dataNotify({ id: id, paramField: param.field, newValue: data?.value })
@@ -216,10 +208,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 return <div style={{ flex: 1, zIndex: 1000 }}>
                     <NodeSelect
                         onChange={onChangeSelect}
-                        defaultValue={{
-                            value: getFieldValue(param.field, nodeData),
-                            label: getFieldValue(param.field, nodeData)
-                        }}
+                        defaultValue={defaultValue}
                         options={options} />
                 </div>
             case 'select-multi':
