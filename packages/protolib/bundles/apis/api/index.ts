@@ -34,3 +34,21 @@ export const fetch = async (method, url, key?, hasSarviceToken=false, data={})=>
 
     return key? result.data[key] : result.data
 }
+
+export const deviceMonitor = async (device, subsystem, monitor) => {
+    const url = `/adminapi/v1/devices/${device}/subsystems/${subsystem}/monitors/${monitor}?token=${getServiceToken()}`
+    let result = await API.get(url)
+    if (result.isError) {
+        throw result.error
+    }
+    return result.data
+}
+
+export const deviceAction = async (device, subsystem, action) => {
+    const url = `/adminapi/v1/devices/${device}/subsystems/${subsystem}/actions/${action}?token=${getServiceToken()}`
+    let result = await API.get(url)
+    if (result.isError) {
+        throw result.error
+    }
+    return result.data
+}
