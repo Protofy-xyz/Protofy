@@ -69,7 +69,7 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
 }
 
 export default {
-    id: 'DeviceActionnnn',
+    id: 'DeviceAction',
     type: 'CallExpression',
     check: (node, nodeData) => {
         return (

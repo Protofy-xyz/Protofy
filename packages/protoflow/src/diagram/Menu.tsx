@@ -144,7 +144,7 @@ const Menu = withTopics(({
                 render: () => {
                     const realIndex = customNodeList.findIndex(n => n.id.toLowerCase().trim() == node.id.toLowerCase().trim())
                     const isSelected = realIndex == selectedNode
-                    return !node.hidden ? <RenderCustomComponent index={index} addElement={addElement} isSelected={isSelected} node={node} realIndex={realIndex} /> : null
+                    return !node.hidden ? <RenderCustomComponent key={index+node.type} index={index} addElement={addElement} isSelected={isSelected} node={node} realIndex={realIndex} /> : null
                 }
             }
         }),
