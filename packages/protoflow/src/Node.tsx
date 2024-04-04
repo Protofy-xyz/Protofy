@@ -21,7 +21,7 @@ import { getFieldValue, getDataFromField } from './utils';
 
 export interface Field {
     field: string,
-    type: 'input' | 'output' | 'select' | 'error' | 'boolean' | 'range' | 'color' | 'colorPicker' | 'selectWithDefault',
+    type: 'input' | 'output' | 'select' | 'error' | 'boolean' | 'range' | 'color' | 'colorPicker',
     description?: string,
     label?: string,
     staticLabel?: boolean,
@@ -184,18 +184,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
 
     const getInput = (disabled?) => {
         switch (param.type) {
-            case 'selectWithDefault':
             case 'select':
-                const defaultValue = param.type === 'selectWithDefault' ?
-                    {
-                        value: param.data[param.selectedIndex],
-                        label: param.data[param.selectedIndex]
-                    } :
-                    {
-                        value: getFieldValue(param.field, nodeData),
-                        label: getFieldValue(param.field, nodeData)
-                    }
-
                 const onChangeSelect = (data) => {
                     setNodeData(id, { ...nodeData, [param.field]: getDataFromField(data?.value, param.field, nodeData) })
                     dataNotify({ id: id, paramField: param.field, newValue: data?.value })
@@ -208,7 +197,10 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 return <div style={{ flex: 1, zIndex: 1000 }}>
                     <NodeSelect
                         onChange={onChangeSelect}
-                        defaultValue={defaultValue}
+                        defaultValue={{
+                            value: getFieldValue(param.field, nodeData),
+                            label: getFieldValue(param.field, nodeData)
+                        }}
                         options={options} />
                 </div>
             case 'select-multi':
@@ -317,7 +309,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     {type && icons[type]
                         ? <div
                             style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: 'pointer' }}
-                            onClick={() => {                               
+                            onClick={() => {
                                 setNodeData(id, {
                                     ...nodeData, [param.field]: {
                                         ...nodeData[param.field],
@@ -609,7 +601,7 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
 
     return (
         <DiagramNode
-            key={isRendered?'rendered':'loading'}
+            key={isRendered ? 'rendered' : 'loading'}
             adaptiveTitleSize={adaptiveTitleSize}
             mode={mode}
             contentStyle={contentStyle}

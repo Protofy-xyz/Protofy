@@ -49,26 +49,28 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
 
     const nodeParams: Field[] = [
         {
-            label: 'Device name', field: 'param1', type: 'selectWithDefault', static: true,
+            label: 'Device name', field: 'param1', type: 'select', static: true,
             selectedIndex: selectedDeviceIndex,
             data: deviceNames,
         },
         {
-            label: 'Component', field: 'param2', type: 'selectWithDefault', static: true,
+            label: 'Component', field: 'param2', type: 'select', static: true,
             selectedIndex: selectedSubsystemIndex,
             data: deviceSubsystemsNames
         },
         {
-            label: 'Action', field: 'param3', type: 'selectWithDefault', static: true,
+            label: 'Action', field: 'param3', type: 'select', static: true,
             selectedIndex: selectedAction,
             data: subsystemActionNames
         }
     ] as Field[]
+
     const actionPayloadNodeParams: Field[] = [
         {
             label: 'Action payload', field: 'param4', type: 'input', static: true,
         }
     ] as Field[]
+
     useEffect(() => {
         getDevices()
     }, [])
