@@ -12,17 +12,18 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
     let deviceName = nodeData['param1'];
     let deviceComponent = nodeData['param2'];
     let deviceAction = nodeData['param3'];
-    
+
     const [devicesData, setDevicesData] = useState<any[]>([]);
     const [payloadVisibility, setPayloadVisibility] = useState(false);
     const color = useColorFromPalette(6)
-    
+
     const updatePayloadVisibility = async (devicesData) => {
-        const subsystem = devicesData.filter( device => device.name === deviceName?.replaceAll('"', ''))[0]?.subsystem
-        const actions = subsystem?.filter( subsystem => subsystem.name === deviceComponent.replaceAll('"', ''))[0]?.actions
-        const payloadValue = actions?.filter( action => action.name === deviceAction.replaceAll('"', ''))[0]?.payload?.value
+        const subsystem = devicesData.filter(device => device.name === deviceName?.replaceAll('"', ''))[0]?.subsystem
+        const actions = subsystem?.filter(subsystem => subsystem.name === deviceComponent.replaceAll('"', ''))[0]?.actions
+        const payloadValue = actions?.filter(action => action.name === deviceAction.replaceAll('"', ''))[0]?.payload?.value
         setPayloadVisibility(payloadValue ? true : false)
     }
+    
     const getDevices = async () => {
         const { data } = await deviceRepository.list()
         const { items: devices } = data;
@@ -32,38 +33,17 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
 
     // Device
     const deviceCollection = new DeviceCollection(devicesData);
-    const deviceNames = devicesData ? deviceCollection?.getNames(true) : ['"none"'];
+    const deviceNames = deviceCollection?.getNames(true) ?? [];
     const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName, true);
-    const selectedDeviceIndex: number = deviceNames?.indexOf(deviceName) === -1 || !deviceName ? 0 : deviceCollection?.getIndexByName(deviceName)
     const selectedDeviceModel = new DeviceModel(selectedDevice)
     // Subsystem
     const deviceSubsystems = selectedDeviceModel.getSubsystems()
     const subsystemsCollection = new SubsystemCollection(deviceSubsystems);
-    const deviceSubsystemsNames = devicesData ? selectedDeviceModel.getSubsystemNames(true, true) : ['"none"']
-    const selectedSubsystemIndex = deviceSubsystemsNames?.indexOf(deviceComponent) === -1 ? 0 : deviceSubsystemsNames?.indexOf(deviceComponent);
+    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames(true, true) ?? [];
     const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent, true);
     const selectedSubsystemModel = new SubsystemModel(selectedSubsystem)
     // Action
-    const subsystemActionNames = devicesData ? selectedSubsystemModel.getActionsNames(true) : ['"none"']
-    const selectedAction = subsystemActionNames.indexOf(deviceAction) === -1 ? 0 : subsystemActionNames?.indexOf(deviceAction)
-
-    const nodeParams: Field[] = [
-        {
-            label: 'Device name', field: 'param1', type: 'select', static: true,
-            selectedIndex: selectedDeviceIndex,
-            data: deviceNames,
-        },
-        {
-            label: 'Component', field: 'param2', type: 'select', static: true,
-            selectedIndex: selectedSubsystemIndex,
-            data: deviceSubsystemsNames
-        },
-        {
-            label: 'Action', field: 'param3', type: 'select', static: true,
-            selectedIndex: selectedAction,
-            data: subsystemActionNames
-        }
-    ] as Field[]
+    const subsystemActionNames = selectedSubsystemModel.getActionsNames(true) ?? [];
 
     const actionPayloadNodeParams: Field[] = [
         {
@@ -74,13 +54,16 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
     useEffect(() => {
         getDevices()
     }, [])
+
     useEffect(() => {
         updatePayloadVisibility(devicesData)
     }, [deviceAction])
 
     return (
         <Node icon={Play} node={node} isPreview={!node.id} title='Device Action' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
-            <NodeParams id={node.id} params={nodeParams} />
+            <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param1', type: 'select', static: true, data: deviceNames }]} />
+            <NodeParams id={node.id} params={[{ label: 'Component', field: 'param2', type: 'select', static: true, data: deviceSubsystemsNames }]} />
+            <NodeParams id={node.id} params={[{ label: 'Action', field: 'param3', type: 'select', static: true, data: subsystemActionNames }]} />
         </Node>
     )
 }
