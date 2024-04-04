@@ -19,7 +19,8 @@ export const DataTableList = ({
     columns,
     state = {},
     setSelected = (item) => { },
-    onSelectItem = (item) => { }
+    onSelectItem = (item) => { },
+    disableRowIcon = false
 }) => {
     const { push, mergePush } = usePageParams(state)
     const conditionalRowStyles = [
@@ -123,7 +124,7 @@ export const DataTableList = ({
                             onDelete={onDelete}
                             extraMenuActions={extraMenuActions} />
 
-                            <InteractiveIcon Icon={rowIcon} onPress={() => onSelectItem(model.load(row))}></InteractiveIcon>
+                        {!disableRowIcon && <InteractiveIcon Icon={rowIcon} onPress={() => onSelectItem(model.load(row))}></InteractiveIcon>}
 
                     </XStack>
                     </Theme>, true, '115px'),
