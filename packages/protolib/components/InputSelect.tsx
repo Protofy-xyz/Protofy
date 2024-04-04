@@ -13,6 +13,7 @@ export const InputSelect = React.forwardRef(({ menuStyle = {},controlStyle = {},
   const DropdownIndicator = () => null;
   const IndicatorSeparator = () => null;
   return <CreatableSelect
+    onChange={props.onChange}
     components={{ DropdownIndicator, IndicatorSeparator }}
     ref={ref}
     isClearable={true}
