@@ -1,4 +1,4 @@
-class I2cBus {
+class I2cBus { 
     type;
     scl;
     scan;
