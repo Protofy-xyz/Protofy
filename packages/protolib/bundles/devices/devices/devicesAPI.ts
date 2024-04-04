@@ -27,7 +27,7 @@ export const DevicesAPI = (app, context) => {
         devices/patata/button/relay/actions/status
         ...
     */
-    app.get('/adminapi/v1/devices/:device/subsystems/:subsystem/actions/:action', handler(async (req, res, session) => {
+    app.get('/adminapi/v1/devices/:device/subsystems/:subsystem/actions/:action/:value', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -46,7 +46,7 @@ export const DevicesAPI = (app, context) => {
             res.status(404).send(`Action [${req.params.action}] not found in Subsytem [${req.params.subsystem}] for device [${req.params.device}]`)
             return
         }
-        topicPub(action.getEndpoint(), action.getValue())
+        topicPub(action.getEndpoint(), req.params.value == "undefined" ? action.getValue() : req.params.value)
         res.send({
             subsystem: req.params.subsystem,
             action: req.params.action,

@@ -44,8 +44,8 @@ export const deviceMonitor = async (device, subsystem, monitor) => {
     return result.data
 }
 
-export const deviceAction = async (device, subsystem, action) => {
-    const url = `/adminapi/v1/devices/${device}/subsystems/${subsystem}/actions/${action}?token=${getServiceToken()}`
+export const deviceAction = async (device, subsystem, action, value?) => {
+    const url = `/adminapi/v1/devices/${device}/subsystems/${subsystem}/actions/${action}/${value}?token=${getServiceToken()}`
     let result = await API.get(url)
     if (result.isError) {
         throw result.error

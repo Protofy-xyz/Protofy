@@ -14,12 +14,20 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
     let deviceAction = nodeData['param3'];
     
     const [devicesData, setDevicesData] = useState<any[]>([]);
+    const [payloadVisibility, setPayloadVisibility] = useState(false);
     const color = useColorFromPalette(6)
-
+    
+    const updatePayloadVisibility = async (devicesData) => {
+        const subsystem = devicesData.filter( device => device.name === deviceName?.replaceAll('"', ''))[0]?.subsystem
+        const actions = subsystem?.filter( subsystem => subsystem.name === deviceComponent.replaceAll('"', ''))[0]?.actions
+        const payloadValue = actions?.filter( action => action.name === deviceAction.replaceAll('"', ''))[0]?.payload?.value
+        setPayloadVisibility(payloadValue ? true : false)
+    }
     const getDevices = async () => {
         const { data } = await deviceRepository.list()
         const { items: devices } = data;
         setDevicesData([...devices]);
+        updatePayloadVisibility(devices)
     }
 
     // Device
@@ -56,10 +64,17 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
             data: subsystemActionNames
         }
     ] as Field[]
-
+    const actionPayloadNodeParams: Field[] = [
+        {
+            label: 'Action payload', field: 'param4', type: 'input', static: true,
+        }
+    ] as Field[]
     useEffect(() => {
         getDevices()
     }, [])
+    useEffect(() => {
+        updatePayloadVisibility(devicesData)
+    }, [deviceAction])
 
     return (
         <Node icon={Play} node={node} isPreview={!node.id} title='Device Action' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
