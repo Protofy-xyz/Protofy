@@ -1,7 +1,9 @@
 import DeviceSub from './DeviceSub';
+import DevicePub from './DevicePub';
 
 const deviceMasks = [
-    DeviceSub
+    DeviceSub,
+    DevicePub
 ]
 
 export default {
