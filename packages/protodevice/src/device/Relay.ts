@@ -102,5 +102,3 @@ class Relay {
 export function relay(name, restoreMode) {
   return new Relay(name, 'gpio', restoreMode)
 }
-
-export const GPIOSwitch = relay
