@@ -1,4 +1,4 @@
-import { Node, NodeParams, Field } from 'protoflow';
+import { Node, NodeParams } from 'protoflow';
 import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Play } from 'lucide-react';
@@ -35,12 +35,13 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
     const selectedSubsystemModel = new SubsystemModel(selectedSubsystem)
     // Action
     const subsystemActionNames = selectedSubsystemModel.getActionsNames(true) ?? [];
-    const selectedAction = selectedSubsystemModel.getActions()?.find((action) => action.name === deviceAction?.replaceAll('"', ''))
+    const selectedAction = selectedSubsystemModel.getActionByName(deviceAction?.replaceAll('"', ''))
     const actionValue = selectedAction?.payload?.value;
 
     useEffect(() => {
         getDevices()
     }, [])
+
     return (
         <Node icon={Play} node={node} isPreview={!node.id} title='Device Action' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param1', type: 'select', static: true, data: deviceNames }]} />

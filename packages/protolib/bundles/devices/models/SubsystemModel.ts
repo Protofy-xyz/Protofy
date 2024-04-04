@@ -11,6 +11,11 @@ export class SubsystemModel extends ProtoModel<SubsystemModel> {
     getName(doubleQuotted?: boolean): string {
         return doubleQuotted ? ('"' + this.data?.name + '"') : this.data?.name;
     }
+
+    getActionByName(name: string): ActionType {
+        return this.getActions()?.find((action) => action.name === name);
+    }
+
     getActions(): ActionType[] {
         return this.data?.actions ?? [];
     }
