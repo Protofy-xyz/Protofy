@@ -48,8 +48,8 @@ class HX711 {
           type: this.type,
           monitors: [
             {
-              name: 'Load cell',
-              label: 'Load',
+              name: 'load',
+              label: 'Load cell',
               description: 'Get load cell status',
               units: 'pts',
               endpoint: "/sensor/"+this.name+"/state",
