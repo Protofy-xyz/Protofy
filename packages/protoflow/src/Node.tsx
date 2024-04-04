@@ -38,8 +38,7 @@ export interface Field {
     isDisabled?: boolean,
     onBlur?: Function,
     lowercase?: boolean,
-    separator?: string | ':' | '=',
-    selectedIndex?: any
+    separator?: string | ':' | '='
 }
 
 
@@ -196,6 +195,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
 
                 return <div style={{ flex: 1, zIndex: 1000 }}>
                     <NodeSelect
+                        value={getFieldValue(param.field, nodeData)}
                         onChange={onChangeSelect}
                         defaultValue={{
                             value: getFieldValue(param.field, nodeData),

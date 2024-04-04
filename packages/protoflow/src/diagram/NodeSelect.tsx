@@ -30,6 +30,7 @@ const NodeSelect = (props) => {
 					appearance: 'none'
 				}}
 			>
+				{props?.value != undefined && <option value="" disabled selected={props?.value === undefined}>{'Select an option...'}</option>}
 				{props.options?.map((opt, key) => (
 					<option key={key} value={opt.value}>{opt.label}</option>
 				))}
