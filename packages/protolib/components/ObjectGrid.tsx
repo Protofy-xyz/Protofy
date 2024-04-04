@@ -16,7 +16,7 @@ const GridElementCard = ({ index, data, width }) => {
     const Icon = data?.icon ?? <></>
     return data.getCard?data.getCard(element, width) :<ItemCard
         height={data.itemHeight}
-        cursor={data.disableItemSelection ? "pointer" : "default"}
+        cursor={data.disableItemSelection ? "default" : "pointer"}
         topBarOutSideScrollArea={false}
         backgroundColor={"$color1"}
         elevation={"$0"}
