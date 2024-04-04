@@ -91,17 +91,17 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
 
     const nodeParams: Field[] = [
         {
-            label: 'Device name', field: 'param1', type: 'selectWithDefault', static: true,
+            label: 'Device name', field: 'param1', type: 'select', static: true,
             selectedIndex: getDeviceNames(devicesData)?.indexOf(deviceName) ?? 0,
             data: devicesData ? getDeviceNames(devicesData) : ['"none"'],
         },
         {
-            label: 'Component', field: 'param2', type: 'selectWithDefault', static: true,
+            label: 'Component', field: 'param2', type: 'select', static: true,
             selectedIndex: getDeviceSubsystemsNames(devicesData)[deviceName]?.indexOf(deviceComponent) ?? 0,
             data: devicesData ? (getDeviceSubsystemsNames(devicesData)[deviceName] ?? []) : ['"none"'],
         },
         {
-            label: 'Monitor', field: 'param3', type: 'selectWithDefault', static: true,
+            label: 'Monitor', field: 'param3', type: 'select', static: true,
             selectedIndex: devicesData && getSubsystemsMonitors(devicesData)[deviceName] ? getSubsystemsMonitors(devicesData)[deviceName][deviceComponent]?.indexOf(deviceMonitor) ?? [] : 0,
             data: devicesData && getSubsystemsMonitors(devicesData)[deviceName] ? getSubsystemsMonitors(devicesData)[deviceName][deviceComponent] ?? [] : ['"none"'],
         }
