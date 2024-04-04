@@ -1,78 +1,37 @@
-import wifi from './Wifi'
-import mqtt from './Mqtt'
-import deepSleep from './DeepSleep'
-import binarySensor from './BinarySensor'
-import device from './Device'
-import neopixelsBus from './NeopixelsBus'
-import output from './Output'
-import {relay, GPIOSwitch} from './Relay'
-import adcSensor from './ADCSensor'
-import pulseCounter from './PulseCounter'
-import ledcOutput from './LEDCOutput'
-import pirSensor from './PIRSensor'
-import hx711 from './HX711'
-import capacitiveSoilMoistureSensor from './CapacitiveSoilMoistureSensor'
-import nfcReader from './NFCReader'
-import ultrasonicDistanceSensor from './UltrasonicDistanceSensor'
-import isOutput from './ISOutput'
-import dfplayer from './DfPlayer'
-import xiaomiMiFlora from './XiaomiMiFlora'
-import climateIR from './ClimateIR'
-import servo from './Servo'
-import mpr121 from './Mpr121'
-import tempHumidity from './TempHumidity'
-import modbusLoadCell from './ModbusLoadCell'
-import bh1750 from './BH1750'
-import hm3301 from './HM3301'
-import sen0377 from './SEN0377'
-import mpu6050 from './MPU6050'
-import i2cSensorMatrix from './I2cSensorMatrix'
-import sen55 from './SEN55'
-import mhz19 from './MHZ19'
-import i2cBus from './i2cBus'
-import pca9685 from './PCA9685'
-import ethernet from './Ethernet'
-import microfirePhEcTemp from './MicrofirePhEcTemp'
-import uartBus from './uartBus'
-import a4988 from './A4988'
-
-export default {
-  wifi: wifi,
-  mqtt: mqtt,
-  deepSleep: deepSleep,
-  device: device,
-  output: output,
-  binarySensor: binarySensor,
-  neopixelsBus: neopixelsBus,
-  relay: relay,
-  GPIOSwitch: GPIOSwitch,
-  adcSensor: adcSensor,
-  capacitiveSoilMoistureSensor: capacitiveSoilMoistureSensor,
-  pulseCounter: pulseCounter,
-  ledcOutput: ledcOutput,
-  pirSensor: pirSensor,
-  hx711: hx711,
-  nfcReader: nfcReader,
-  ultrasonicDistanceSensor: ultrasonicDistanceSensor,
-  isOutput: isOutput,
-  dfplayer: dfplayer,
-  xiaomiMiFlora: xiaomiMiFlora,
-  climateIR: climateIR,
-  servo: servo,
-  mpr121: mpr121,
-  tempHumidity:tempHumidity,
-  modbusLoadCell:modbusLoadCell,
-  bh1750:bh1750,
-  hm3301:hm3301,
-  sen0377:sen0377,
-  mpu6050:mpu6050,
-  i2cSensorMatrix:i2cSensorMatrix,
-  sen55:sen55,
-  mhz19:mhz19,
-  i2cBus:i2cBus,
-  pca9685:pca9685,
-  ethernet:ethernet,
-  microfirePhEcTemp: microfirePhEcTemp,
-  uartBus:uartBus,
-  a4988:a4988
-}
+export { default as wifi } from './Wifi'
+export { default as mqtt } from './Mqtt'
+export { default as deepSleep } from './DeepSleep'
+export { default as binarySensor } from './BinarySensor'
+export { default as device } from './Device'
+export { default as neopixelsBus } from './NeopixelsBus'
+export { default as output } from './Output'
+export { relay, GPIOSwitch } from './Relay'
+export { default as adcSensor } from './ADCSensor'
+export { default as pulseCounter } from './PulseCounter'
+export { default as ledcOutput } from './LEDCOutput'
+export { default as pirSensor } from './PIRSensor'
+export { default as hx711 } from './HX711'
+export { default as capacitiveSoilMoistureSensor } from './CapacitiveSoilMoistureSensor'
+export { default as nfcReader } from './NFCReader'
+export { default as ultrasonicDistanceSensor } from './UltrasonicDistanceSensor'
+export { default as isOutput } from './ISOutput'
+export { default as dfplayer } from './DfPlayer'
+export { default as xiaomiMiFlora } from './XiaomiMiFlora'
+export { default as climateIR } from './ClimateIR'
+export { default as servo } from './Servo'
+export { default as mpr121 } from './Mpr121'
+export { default as tempHumidity } from './TempHumidity'
+export { default as modbusLoadCell } from './ModbusLoadCell'
+export { default as bh1750 } from './BH1750'
+export { default as hm3301 } from './HM3301'
+export { default as sen0377 } from './SEN0377'
+export { default as mpu6050 } from './MPU6050'
+export { default as i2cSensorMatrix } from './I2cSensorMatrix'
+export { default as sen55 } from './SEN55'
+export { default as mhz19 } from './MHZ19'
+export { default as i2cBus } from './i2cBus'
+export { default as pca9685 } from './PCA9685'
+export { default as ethernet } from './Ethernet'
+export { default as microfirePhEcTemp } from './MicrofirePhEcTemp'
+export { default as uartBus } from './uartBus'
+export { default as a4988 } from './A4988'
