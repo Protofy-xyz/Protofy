@@ -1,6 +1,6 @@
 import { onEvent } from 'protolib/bundles/events/api'
 import { automation, fetch, deviceAction, deviceMonitor } from 'protolib/bundles/apis/api/'
-import {createCronJob} from 'protolib/bundles/automations/cron'
+import {createSchedule} from 'protolib/bundles/automations/schedule'
 
 export default {
     onEvent,
@@ -8,5 +8,5 @@ export default {
     fetch,
     deviceAction,
     deviceMonitor,
-    createCronJob
+    createSchedule
 }

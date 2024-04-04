@@ -1,5 +1,5 @@
-import cronMask from './cronMask';
+import scheduleMask from './scheduleMask';
 
 export default [
-    cronMask
+   scheduleMask 
 ]
