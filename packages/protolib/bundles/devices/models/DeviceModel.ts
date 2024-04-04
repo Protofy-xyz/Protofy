@@ -33,7 +33,7 @@ export class DeviceCollection {
         return this?.items.find((device) => (doubleQuotted ? ('"' + device.name + '"'): device.name) === name)
     }
     getNames(doubleQuotted?: boolean): string[] {
-        return this?.items?.map((device: DeviceDataType) => doubleQuotted ? '"' + device?.name + '"' : device?.name)
+        return this?.items?.map((device: DeviceDataType) => doubleQuotted ? '"' + device?.name + '"' : device?.name) ?? []
     }
     getIndexByName(name: string): number {
         return this?.items?.findIndex((device) => device.name === name)
