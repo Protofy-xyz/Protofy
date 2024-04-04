@@ -1,12 +1,8 @@
-import Console from "./Console";
-import SetTimeout from "./SetTimeout";
 import { filterCallback, restoreCallback } from "../../lib/Mask";
-import SetInterval from "./SetInterval";
 import Map from "./Map";
 import Filter from "./Filter";
 import Find from "./Find";
 import Reduce from "./Reduce";
-import Fetch from "./Fetch";
 
 const getMaskFromCodeCheck = (ast) => {
   const param1 = ast?.getArguments ? ast?.getArguments()[0] : null
@@ -39,49 +35,7 @@ export const BaseJSMasks = [
     ],
     "initialData": { to: 'actionFetch', param1: '' }
   },
-  // {
-  //   id: 'Console',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('console.'),
-  //   getComponent: Console,
-  //   getInitialData: () => { return { to: 'console.log', param1: '"Hello World"' } }
-  // },
-  // {
-  //   id: 'SetTimeout',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => {
-  //     var astNode = nodeData?._astNode
-  //     var additionalCheck = astNode ? getMaskFromCodeCheck(astNode) : true
-  //     return (
-  //       node.type == "CallExpression"
-  //       && nodeData.to == 'setTimeout'
-  //       && nodeData.param1.startsWith("() =>")
-  //       && additionalCheck
-  //     )
-  //   },
-  //   getComponent: SetTimeout,
-  //   filterChildren: filterCallback("1"),
-  //   restoreChildren: restoreCallback("1"),
-  //   getInitialData: () => { return { to: 'setTimeout', param2: '1000', param1: "() =>" } }
-  // },
-  // {
-  //   id: 'SetInterval',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => {
-  //     var astNode = nodeData?._astNode
-  //     var additionalCheck = astNode ? getMaskFromCodeCheck(astNode) : true
-  //     return (
-  //       node.type == "CallExpression"
-  //       && nodeData.to == 'setInterval'
-  //       && nodeData.param1.startsWith("() =>")
-  //       && additionalCheck
-  //     )
-  //   },
-  //   getComponent: SetInterval,
-  //   filterChildren: filterCallback("1"),
-  //   restoreChildren: restoreCallback("1"),
-  //   getInitialData: () => { return { to: 'setInterval', param2: '1000', param1: "() =>" } }
-  // },
+
   // {
   //   id: 'Map',
   //   type: 'CallExpression',
@@ -153,13 +107,6 @@ export const BaseJSMasks = [
   //   restoreChildren: restoreCallback("1"),
   //   getInitialData: () => { return { to: '.reduce', param1: "(total,item,i,) =>", param2: "" } }
   // },
-  // {
-  //   id: 'Fetch',
-  //   type: 'CallExpression',
-  //   check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('fetch'),
-  //   getComponent: Fetch,
-  //   getInitialData: () => { return { to: 'fetch', param1: '"/cloudapi/v1/"' } }
-  // }
 ]
 
 const getCustomComponent = (node, nodeData, customComponents) => {
