@@ -1,4 +1,4 @@
-import { Node, Field, FlowPort, NodeParams, FallbackPort, Button } from 'protoflow';
+import { Node, getFieldValue, FlowPort, NodeParams, FallbackPort, Button } from 'protoflow';
 import { API } from 'protolib'
 import { Plug } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
@@ -25,18 +25,19 @@ export default {
     id: 'Automation',
     type: 'CallExpression',
     check: (node, nodeData) => {
+        var param2Val = getFieldValue('param-2', nodeData)
         return (
             node.type == "CallExpression"
             && nodeData.to == 'context.automation'
-            && nodeData["param-2"] && nodeData["param-2"].startsWith
-            && (nodeData["param-2"]?.startsWith('async (params) =>') || nodeData["param-2"]?.startsWith('(params) =>'))
+            && nodeData["param-2"]
+            && (param2Val?.startsWith('async (params) =>') || param2Val?.startsWith('(params) =>'))
         )
     },
     category: "automation",
     keywords: ["automation", 'trigger'],
     getComponent: Automation,
-    filterChildren: filterCallback(),
-    restoreChildren: restoreCallback(),
+    filterChildren: filterCallback('-2'),
+    restoreChildren: restoreCallback('-2'),
     getInitialData: () => {
         return { to: 'context.automation', "param-1": { value: 'app', kind: 'StringLiteral' }, "param-2": { value: 'async (params) =>' }, "param-3": { value: "", kind: "StringLiteral" } }
     }

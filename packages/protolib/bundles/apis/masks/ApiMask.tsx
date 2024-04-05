@@ -1,5 +1,6 @@
 import { Node, Field, FlowPort, NodeParams, FallbackPort, Button } from 'protoflow';
 import { API } from 'protolib'
+import { getFieldValue } from 'protoflow'
 import { Plug } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
 
@@ -27,7 +28,7 @@ export default {
   category: "api",
   keywords: ["api", "rest", "http", "trigger", "automation"],
   check: (node, nodeData) => {
-    var param2Val = nodeData["param-2"] ? nodeData["param-2"]['value'] : nodeData["param-2"]
+    var param2Val = getFieldValue('param-2', nodeData)
     return (
       node.type == "CallExpression"
       && nodeData["param-2"]

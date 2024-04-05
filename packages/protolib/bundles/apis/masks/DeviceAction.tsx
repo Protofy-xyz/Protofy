@@ -1,4 +1,4 @@
-import { Node, NodeParams } from 'protoflow';
+import { Node, NodeParams, getFieldValue } from 'protoflow';
 import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Play } from 'lucide-react';
@@ -9,9 +9,10 @@ import { SubsystemCollection, SubsystemModel } from '../../devices/models/Subsys
 
 const deviceRepository = new DeviceRepository()
 const DeviceAction = (node: any = {}, nodeData = {}) => {
-    let deviceName = nodeData['param-1'] ? nodeData['param-1']['value'] : "";
-    let deviceComponent = nodeData['param-1'] ? nodeData['param-2']['value'] : "";
-    let deviceAction = nodeData['param-1'] ? nodeData['param-3']['value'] : "";
+
+    let deviceName = getFieldValue("param-1", nodeData);
+    let deviceComponent = deviceName ? getFieldValue("param-2", nodeData) : "";
+    let deviceAction = deviceName ? getFieldValue("param-3", nodeData) : "";
 
     const [devicesData, setDevicesData] = useState<any[]>([]);
     const color = useColorFromPalette(6)
@@ -64,5 +65,5 @@ export default {
     category: "ioT",
     keywords: ['action', "automation", 'esp32', 'device', 'iot'],
     getComponent: DeviceAction,
-    getInitialData: () => { return { to: 'context.deviceAction', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": undefined, await:  { value: true, kind: "FalseKeyword" } } }
+    getInitialData: () => { return { to: 'context.deviceAction', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": undefined, await: { value: true, kind: "FalseKeyword" } } }
 }

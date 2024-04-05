@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
+import { Node, Field, NodeParams } from 'protoflow';
 import { MessageSquare } from 'lucide-react';
 
 const Logger = ({ node = {}, nodeData = {}, children }: any) => {

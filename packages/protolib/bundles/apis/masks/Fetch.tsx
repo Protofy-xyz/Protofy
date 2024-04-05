@@ -4,7 +4,7 @@ import { Plug } from 'lucide-react';
 const Fetch = (node: any = {}, nodeData = {}) => {
     return (
         <Node icon={Plug} node={node} isPreview={!node?.id} title='Fetch' id={node.id} color="#A5D6A7" skipCustom={true}>
-            <NodeParams id={node.id} params={[{ label: 'Method', field: 'param-1', type: 'select', data: ["\"get\"", "\"post\""], static: true }]} />
+            <NodeParams id={node.id} params={[{ label: 'Method', field: 'param-1', type: 'select', data: ["get", "post"], static: true }]} />
             <NodeParams id={node.id} params={[{ label: 'Path', field: 'param-2', type: 'input' }]} />
             {
                 nodeData["param-1"] == "\"post\"" && <NodeParams id={node.id} params={[{ label: 'Body', field: 'param-5', type: 'input' }]} />

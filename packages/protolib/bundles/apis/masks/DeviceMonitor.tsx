@@ -1,4 +1,4 @@
-import { Node, NodeParams } from 'protoflow';
+import { Node, NodeParams, getFieldValue } from 'protoflow';
 import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Cable } from 'lucide-react';
@@ -10,9 +10,9 @@ import { SubsystemCollection, SubsystemModel } from '../../devices/models/Subsys
 
 const deviceRepository = new DeviceRepository()
 const DeviceMonitor = ({ node = {}, nodeData = {}, children }: any) => {
-    let deviceName = nodeData['param1'];
-    let deviceComponent = nodeData['param2'];
-    let deviceMonitor = nodeData['param3'];
+    let deviceName = getFieldValue("param-1", nodeData);
+    let deviceComponent = deviceName ? getFieldValue("param-2", nodeData) : "";
+    let deviceMonitor = deviceName ? getFieldValue("param-3", nodeData) : "";
 
     const color = useColorFromPalette(7)
     const [devicesData, setDevicesData] = useState<any[]>([]);
