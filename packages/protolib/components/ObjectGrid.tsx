@@ -16,7 +16,7 @@ const GridElementCard = ({ index, data, width }) => {
     const Icon = data?.icon ?? <></>
     return data.getCard?data.getCard(element, width) :<ItemCard
         height={data.itemHeight}
-        cursor={data.disableItemSelection ? "default" : "pointer"}
+        cursor={data.disableItemSelection?"default":"pointer"}
         topBarOutSideScrollArea={false}
         backgroundColor={"$color1"}
         elevation={"$0"}
@@ -115,7 +115,7 @@ export const ObjectGrid = ({
     })
 
     return <Stack f={1} ref={containerRef} {...props}>
-        {data && data.length > 0 ? <Grid 
+        {data && data.length > 0 ? <Grid
             overScanBy={overScanBy} 
             key={data.length} 
             rightGap={rightGap}

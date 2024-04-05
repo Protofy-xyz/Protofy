@@ -20,7 +20,8 @@ export const DataTableList = ({
     state = {},
     setSelected = (item) => { },
     onSelectItem = (item) => { },
-    disableRowIcon = false
+    disableRowIcon = false,
+    disableItemSelection = false
 }) => {
     const { push, mergePush } = usePageParams(state)
     const conditionalRowStyles = [
@@ -55,6 +56,7 @@ export const DataTableList = ({
     return <XStack pt="$1" flexWrap='wrap'>
         <Tinted>
             <DataTable2.component
+                disableItemSelection={disableItemSelection}
                 pagination={false}
                 conditionalRowStyles={conditionalRowStyles}
                 rowsPerPage={state.itemsPerPage ? state.itemsPerPage : 25}
@@ -124,7 +126,7 @@ export const DataTableList = ({
                             onDelete={onDelete}
                             extraMenuActions={extraMenuActions} />
 
-                        {!disableRowIcon && <InteractiveIcon Icon={rowIcon} onPress={() => onSelectItem(model.load(row))}></InteractiveIcon>}
+                            {!disableRowIcon && <InteractiveIcon Icon={rowIcon} onPress={() => onSelectItem(model.load(row))}></InteractiveIcon>}
 
                     </XStack>
                     </Theme>, true, '115px'),

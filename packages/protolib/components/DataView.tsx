@@ -24,6 +24,7 @@ export const DataView = forwardRef(({
     itemData,
     rowIcon,
     disableViewSelector = false,
+    disableItemSelection = false,
     initialItems,
     sourceUrl,
     numColumnsForm = 1,
@@ -144,6 +145,7 @@ export const DataView = forwardRef(({
                 rowIcon: openMode == "edit" ? Pencil : Eye,
                 columns,
                 state,
+                disableItemSelection,
                 ...dataTableListProps
             }
         },
@@ -183,6 +185,7 @@ export const DataView = forwardRef(({
                 spacing: 20,
                 name,
                 icon: rowIcon,
+                disableItemSelection,
                 ...dataTableGridProps
             }
         },
@@ -198,6 +201,7 @@ export const DataView = forwardRef(({
                     await API.get(`${sourceUrl}/${key}/delete`);
                     onDelete({ sourceUrl, selected, key })
                 },
+                disableItemSelection,
                 ...dataTableRawProps
             }
         }
@@ -220,6 +224,7 @@ export const DataView = forwardRef(({
             customFields,
             deleteable,
             extraMenuActions,
+            disableItemSelection,
             ...dataMapProps
         }
     }
