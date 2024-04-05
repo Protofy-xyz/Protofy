@@ -1,97 +1,53 @@
-import { Node, Field, NodeParams } from 'protoflow';
-import { API, Text } from 'protolib';
+import { Node, NodeParams } from 'protoflow';
 import { useState, useEffect } from 'react';
-import {useColorFromPalette} from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Play } from 'lucide-react';
+import { DeviceRepository } from '../../repositories/deviceRepository';
+import { DeviceCollection, DeviceModel } from '../../models/DeviceModel';
+import { DeviceDataType, SubsystemType } from '../../models/interfaces';
+import { SubsystemCollection, SubsystemModel } from '../../models/SubsystemModel';
 
-const getDeviceSubsystemsNames = (devData) => {
-    const deviceSubsystems = {}
-    devData?.forEach(device => {
-        const subsystemsNames = device?.subsystem?.filter(sub => sub?.actions && sub?.actions?.length).map(sub => '"' + sub.name + '"')
-        deviceSubsystems['"' + device.name + '"'] = subsystemsNames
-    });
-    return deviceSubsystems
-}
-
-const getSubsystemsActions = (devData) => {
-    const deviceSubsystemsActions = {};
-
-    devData.forEach(device => {
-        const deviceName = '"' + device.name + '"';
-        const actions = {};
-
-        device.subsystem?.forEach(subsystem => {
-            subsystem.actions?.forEach(action => {
-                actions['"' + subsystem.name + '"'] = actions['"' + subsystem.name + '"'] || [];
-                actions['"' + subsystem.name + '"'].push('"' + action.name + '"');
-            });
-        });
-
-        deviceSubsystemsActions[deviceName] = actions;
-    });
-    return deviceSubsystemsActions
-
-}
-const getDeviceNames = (devData) => devData?.map((device) => '"' + device.name + '"')
-
-
+const deviceRepository = new DeviceRepository()
 const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
-    const color = useColorFromPalette(6)
-    const [devicesData, setDevicesData] = useState<any[]>([]);
-    const [payloadVisibility, setPayloadVisibility] = useState(false);
     let deviceName = nodeData['param1'];
     let deviceComponent = nodeData['param2'];
     let deviceAction = nodeData['param3'];
 
-    const updatePayloadVisibility = async (devicesData) => {
-        const subsystem = devicesData.filter( device => device.name === deviceName?.replaceAll('"', ''))[0]?.subsystem
-        const actions = subsystem?.filter( subsystem => subsystem.name === deviceComponent.replaceAll('"', ''))[0]?.actions
-        const payloadValue = actions?.filter( action => action.name === deviceAction.replaceAll('"', ''))[0]?.payload?.value
-        setPayloadVisibility(payloadValue ? true : false)
-    }
+    const [devicesData, setDevicesData] = useState<any[]>([]);
+    const color = useColorFromPalette(6)
+
     const getDevices = async () => {
-        const { data } = await API.get("/adminapi/v1/devices")
-        const devices = data.items;
+        const { data } = await deviceRepository.list()
+        const { items: devices } = data;
         setDevicesData([...devices]);
-        updatePayloadVisibility(devices)
     }
+
+    // Device
+    const deviceCollection = new DeviceCollection(devicesData);
+    const deviceNames = deviceCollection?.getNames(true) ?? [];
+    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName, true);
+    const selectedDeviceModel = new DeviceModel(selectedDevice)
+    // Subsystem
+    const deviceSubsystems = selectedDeviceModel.getSubsystems()
+    const subsystemsCollection = new SubsystemCollection(deviceSubsystems);
+    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames(true, true) ?? [];
+    const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent, true);
+    const selectedSubsystemModel = new SubsystemModel(selectedSubsystem)
+    // Action
+    const subsystemActionNames = selectedSubsystemModel.getActionsNames(true) ?? [];
+    const selectedAction = selectedSubsystemModel.getActionByName(deviceAction?.replaceAll('"', ''))
+    const actionValue = selectedAction?.payload?.value;
 
     useEffect(() => {
         getDevices()
     }, [])
 
-    useEffect(() => {
-        updatePayloadVisibility(devicesData)
-    }, [deviceAction])
-
-    const nodeParams: Field[] = [
-        {
-            label: 'Device name', field: 'param1', type: 'select', static: true,
-            selectedIndex: getDeviceNames(devicesData)?.indexOf(deviceName) ?? 0,
-            data: devicesData ? getDeviceNames(devicesData) : ['"none"'],
-        },
-        {
-            label: 'Component', field: 'param2', type: 'select', static: true,
-            selectedIndex: getDeviceSubsystemsNames(devicesData)[deviceName]?.indexOf(deviceComponent) ?? 0,
-            data: devicesData ? (getDeviceSubsystemsNames(devicesData)[deviceName] ?? []) : ['"none"'],
-        },
-        {
-            label: 'Action', field: 'param3', type: 'select', static: true,
-            selectedIndex: devicesData && getSubsystemsActions(devicesData)[deviceName] ? getSubsystemsActions(devicesData)[deviceName][deviceComponent]?.indexOf(deviceAction) ?? [] : 0,
-            data: devicesData && getSubsystemsActions(devicesData)[deviceName] ? getSubsystemsActions(devicesData)[deviceName][deviceComponent] ?? [] : ['"none"'],
-        }
-    ] as Field[]
-
-    const actionPayloadNodeParams: Field[] = [
-        {
-            label: 'Action payload', field: 'param4', type: 'input', static: true,
-        }
-    ] as Field[]
-
     return (
-        <Node icon={Play} node={node} isPreview={!node.id} title='Device Pub' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
-            <NodeParams id={node.id} params={nodeParams} />
-            {payloadVisibility ? <></> : <NodeParams id={node.id} params={actionPayloadNodeParams} />}
+        <Node icon={Play} node={node} isPreview={!node.id} title='Device Publish' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
+            <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param1', type: 'select', static: true, data: deviceNames }]} />
+            {deviceSubsystemsNames?.length ? <NodeParams id={node.id} params={[{ label: 'Component', field: 'param2', type: 'select', static: true, data: deviceSubsystemsNames }]} /> : null}
+            {subsystemActionNames?.length ? <NodeParams id={node.id} params={[{ label: 'Action', field: 'param3', type: 'select', static: true, data: subsystemActionNames }]} /> : null}
+            {!actionValue && deviceAction ?<NodeParams id={node.id} params={[{ label: 'Action payload', field: 'param4', type: 'input', static: true }]} /> : null }
         </Node>
     )
 }
@@ -100,7 +56,7 @@ export default {
     type: 'CallExpression',
     category: "ioT",
     keywords: ["automation", 'esp32', 'device', 'iot'],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.devicePub'), //TODO: Change output function name
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.devicePub'),
     getComponent: (node, nodeData, children) => <DevicePub node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'context.devicePub', param1: '"none"', param2: '"none"', param3: '"none"' } }
+    getInitialData: () => { return { to: 'context.devicePub', param1: "", param2: "", param3: "", param4: "" } }
 }
