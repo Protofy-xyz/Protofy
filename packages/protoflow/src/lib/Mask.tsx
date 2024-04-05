@@ -19,13 +19,13 @@ export const filterCallbackProp = () => {
     }
 }
 
-export const filterCallback = (numParam = "2") => {
+export const filterCallback = (numParam = "2", handleId = "request") => {{
     return (node, childScope, edges) => {
         const callbackId = edges.find(e => e.targetHandle == getId(node) + '-param' + numParam)?.source
         const callBack = edges.find(e => e.targetHandle == callbackId + '_call')
         if (callBack) {
             // console.log('new edge: ', connectNodes(getId(node), getId(node) + '_request', callBack.target, callBack.targetHandle))
-            edges.push(connectNodes(callBack.source, callBack.sourceHandle, getId(node), getId(node) + '_request'))
+            edges.push(connectNodes(callBack.source, callBack.sourceHandle, getId(node), getId(node) + '_' + handleId))
         }
         return childScope.filter(child => child?.id != callbackId)
     }
