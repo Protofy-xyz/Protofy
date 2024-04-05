@@ -36,19 +36,26 @@ export class SubsystemCollection {
     findByName(name: string, doubleQuotted?: boolean): SubsystemType {
         return this.items?.find((subsystem: SubsystemType) => (doubleQuotted ? ('"' + subsystem.name + '"') : subsystem.name) === name)
     }
-    getNames(withAction?: boolean, doubleQuotted?: boolean): string[] { // if withAction is enabled return only subsystems that have "actions" to perform
+    getNames(type?: "action" | "monitor", doubleQuotted?: boolean): string[] { // if withAction is enabled return only subsystems that have "actions" to perform
         // if withAction is enabled return only subsystems that have "actions" to perform
         const subsystemNames = this.items?.reduce((total: string[], subsystem: SubsystemType) => {
-            if (withAction) {
-                if (subsystem?.actions && subsystem.actions?.length) {
+            switch (type) {
+                case 'action':
+                    if (subsystem?.actions && subsystem.actions?.length) {
+                        return total.concat(subsystem.name);
+                    }
+                    else {
+                        return total
+                    }
+                case 'monitor':
+                    if (subsystem?.monitors && subsystem.monitors?.length) {
+                        return total.concat(subsystem.name);
+                    }
+                    else {
+                        return total
+                    }
+                default:
                     return total.concat(subsystem.name);
-                }
-                else {
-                    return total
-                }
-            }
-            else {
-                return total.concat(subsystem.name);
             }
         }, [])
         return doubleQuotted ? subsystemNames?.map(name => '"' + name + '"') : subsystemNames

@@ -15,10 +15,9 @@ export class DeviceModel extends ProtoModel<DeviceModel> {
     getSubsystems(): SubsystemType[] {
         return this.data?.subsystem
     }
-    getSubsystemNames(withAction?: boolean, doubleQuotted?: boolean): string[] {
-        // if withAction is enabled return only subsystems that have "actions" to perform
+    getSubsystemNames(type?: "action" | "monitor", doubleQuotted?: boolean): string[] {
         const subsystemCollection = new SubsystemCollection(this.getSubsystems());
-        return subsystemCollection?.getNames(withAction, doubleQuotted) ?? []
+        return subsystemCollection?.getNames(type, doubleQuotted) ?? []
     }
 }
 
@@ -30,7 +29,7 @@ export class DeviceCollection {
         this.session = session
     }
     findByName(name: string, doubleQuotted): DeviceDataType {
-        return this?.items.find((device) => (doubleQuotted ? ('"' + device.name + '"'): device.name) === name)
+        return this?.items.find((device) => (doubleQuotted ? ('"' + device.name + '"') : device.name) === name)
     }
     getNames(doubleQuotted?: boolean): string[] {
         return this?.items?.map((device: DeviceDataType) => doubleQuotted ? '"' + device?.name + '"' : device?.name) ?? []
@@ -42,7 +41,7 @@ export class DeviceCollection {
         return this.items?.reduce((total, device) => {
             const deviceModel = new DeviceModel(device)
             const deviceName = deviceModel.getName(doubleQuotted);
-            const subsystemNames: string[] = deviceModel.getSubsystemNames(true, doubleQuotted)
+            const subsystemNames: string[] = deviceModel.getSubsystemNames(null, doubleQuotted)
             total[deviceName] = subsystemNames
             return total
         }, {})

@@ -30,7 +30,7 @@ const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
     // Subsystem
     const deviceSubsystems = selectedDeviceModel.getSubsystems()
     const subsystemsCollection = new SubsystemCollection(deviceSubsystems);
-    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames(true, true) ?? [];
+    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames('action', true) ?? [];
     const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent, true);
     const selectedSubsystemModel = new SubsystemModel(selectedSubsystem)
     // Action
