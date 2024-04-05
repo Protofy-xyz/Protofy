@@ -1,5 +1,5 @@
 import { ProtoModel, SessionDataType } from "../../../base";
-import { ActionType, SubsystemSchema, SubsystemType } from "./interfaces";
+import { ActionType, MonitorType, SubsystemSchema, SubsystemType } from "./interfaces";
 
 
 export class SubsystemModel extends ProtoModel<SubsystemModel> {
@@ -16,12 +16,24 @@ export class SubsystemModel extends ProtoModel<SubsystemModel> {
         return this.getActions()?.find((action) => action.name === name);
     }
 
+    getMonitorByName(name: string): MonitorType {
+        return this.getMonitors()?.find((monitor) => monitor.name === name);
+    }
+
     getActions(): ActionType[] {
         return this.data?.actions ?? [];
     }
 
+    getMonitors(): MonitorType[] {
+        return this.data?.monitors ?? [];
+    }
+
     getActionsNames(doubleQuotted?: boolean): string[] {
         return this.getActions()?.map((action: ActionType) => doubleQuotted ? ('"' + action.name + '"') : action?.name) ?? []
+    }
+
+    getMonitorsNames(doubleQuotted?: boolean): string[] {
+        return this.getMonitors()?.map((monitor: MonitorType) => doubleQuotted ? ('"' + monitor.name + '"') : monitor?.name) ?? []
     }
 
 }
