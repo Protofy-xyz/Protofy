@@ -1,5 +1,5 @@
 import { YStack, XStack } from 'tamagui'
-import { 
+import {
     Server,
     Box,
     Boxes,
@@ -29,8 +29,8 @@ import {
     Columns,
     LayoutList,
     Unplug,
-    PersonStanding, 
-    BookOpen, 
+    PersonStanding,
+    BookOpen,
     ServerCog,
     ClipboardList,
     AlertTriangle
@@ -75,8 +75,8 @@ const iconTable = {
     layoutList: <LayoutList color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     columns: <Columns color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     unplug: <Unplug color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    human: <PersonStanding color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />, 
-    bookOpen: <BookOpen color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />, 
+    human: <PersonStanding color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
+    bookOpen: <BookOpen color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     serverConf: <ServerCog color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     activity: <ClipboardList color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
     alert: <AlertTriangle color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
@@ -90,7 +90,7 @@ const getIcon = (Icon) => {
             return iconTable[Icon]
         }
     } else {
-        return <Icon color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} /> 
+        return <Icon color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
     }
 }
 
@@ -134,7 +134,7 @@ const CreateDialog = ({subtab}) => {
                 {result.isError?<Paragraph mb={"$5"} color="$red10">Error: {result.error?.error}</Paragraph>:null}
                 <Input value={name} onChangeText={(text) => setName(text)} f={1} mx={"$8"} textAlign='center' id="name" placeholder={template.placeholder ?? 'name...'} />
             </YStack>
-            
+
         </AlertDialog>
     </XStack>
 }
@@ -146,7 +146,7 @@ const Subtabs = ({ subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                const href = SiteConfig.workspaceRoot + '/' + (subtab.type + '/' + subtab.path).replace(/\/+/g, '/')
+                const href = (SiteConfig.workspaceRoot == '/' ? '' : SiteConfig.workspaceRoot) + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
                 return <Link href={href} key={index}>
                     <Tinted>
                         <PanelMenuItem
@@ -182,7 +182,7 @@ const Tabs = ({ tabs }: any) => {
                                             <ChevronDown size="$1" />
                                         </Square>
                                         <SizableText f={1} ml={"$4"} fontWeight="bold" size={"$5"}>{tab}</SizableText>
-     
+
                                     </XStack>
                                 )}
                             </Accordion.Trigger>
