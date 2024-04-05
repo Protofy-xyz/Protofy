@@ -63,6 +63,6 @@ class Mpr121 {
 }
 
 
-export default function mpr121(name, sclPin, channel0, channel1, channel2, chanel3, channel4, chanel5, channel6, chanel7, channel8, chanel9, channel10, chanel11) {
+export function mpr121(name, sclPin, channel0, channel1, channel2, chanel3, channel4, chanel5, channel6, chanel7, channel8, chanel9, channel10, chanel11) {
     return new Mpr121(name, 'mpr121', "bus_a", sclPin, channel0, channel1, channel2, chanel3, channel4, chanel5, channel6, chanel7, channel8, chanel9, channel10, chanel11)
 }

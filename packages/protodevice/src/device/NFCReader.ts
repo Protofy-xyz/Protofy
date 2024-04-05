@@ -60,6 +60,6 @@ class NFCReader {
 }
 
 
-export default function nfcReader(name, sclPin) { 
+export function nfcReader(name, sclPin) { 
     return new NFCReader(name, 'pn532',"bus_a",sclPin)
 }

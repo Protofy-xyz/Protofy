@@ -49,6 +49,6 @@ class BH1750 {
 }
 
 
-export default function bh1750(name, sclPin, address, updateInterval) {
+export function bh1750(name, sclPin, address, updateInterval) {
     return new BH1750(name, 'bh1750', address, updateInterval, "bus_a", sclPin)
 }

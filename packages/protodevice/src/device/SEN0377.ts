@@ -60,6 +60,6 @@ class SEN0377 {
 }
 
 
-export default function sen0377(name, sclPin, address, updateInterval) {
+export function sen0377(name, sclPin, address, updateInterval) {
     return new SEN0377(name, 'mics_4514', address, updateInterval, "bus_a", sclPin)
 }

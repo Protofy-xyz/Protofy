@@ -265,6 +265,6 @@ ESP_LOGD("Report position", "${this.name} stepper report position set to: %d",  
       }
 }
 
-export default function a4988(name, dirPin, maxSpeed, sleepPin, acceleration, deceleration) { 
+export function a4988(name, dirPin, maxSpeed, sleepPin, acceleration, deceleration) { 
     return new A4988(name, 'a4988', dirPin, maxSpeed, sleepPin, acceleration, deceleration);
 }

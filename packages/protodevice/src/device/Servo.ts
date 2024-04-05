@@ -43,6 +43,6 @@ class Servo {
     }
 }
 
-export default function servo(name) { 
+export function servo(name) { 
     return new Servo(name, 'servo')
 }

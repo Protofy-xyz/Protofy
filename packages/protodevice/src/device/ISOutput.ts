@@ -76,6 +76,6 @@ class ISOutput {
     }
   }
   
-  export default function isOutput(name) { 
+  export function isOutput(name) { 
     return new ISOutput(name, 'pca9685');
   }

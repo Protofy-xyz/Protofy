@@ -215,6 +215,6 @@ class MicrofirePhEcTemp {
 }
 
 
-export default function microfirePhEcTemp(name, updateInterval, scl) {
+export function microfirePhEcTemp(name, updateInterval, scl) {
     return new MicrofirePhEcTemp(name, scl, updateInterval);
 }

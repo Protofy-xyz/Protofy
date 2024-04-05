@@ -112,6 +112,6 @@ class I2cSensorMatrix {
 }
 
 
-export default function i2cSensorMatrix(name, sclPin, updateInterval, bh1750Address, hm3301Address, sen0377Address, mpu6050Address) {
+export function i2cSensorMatrix(name, sclPin, updateInterval, bh1750Address, hm3301Address, sen0377Address, mpu6050Address) {
     return new I2cSensorMatrix(name, sclPin, updateInterval, "bus_a", bh1750Address, hm3301Address, sen0377Address, mpu6050Address)
 }

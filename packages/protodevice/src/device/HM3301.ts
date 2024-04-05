@@ -57,6 +57,6 @@ class HM3301 {
 }
 
 
-export default function hm3301(name, sclPin, address, updateInterval) {
+export function hm3301(name, sclPin, address, updateInterval) {
     return new HM3301(name, 'hm3301', address, updateInterval, "bus_a", sclPin)
 }

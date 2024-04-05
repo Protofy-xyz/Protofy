@@ -149,6 +149,6 @@ dfplayer:
         
  * 
  */
-export default function dfplayer(name, rxPin,busyPin) { 
+export function dfPlayer(name, rxPin,busyPin) { 
     return new Dfplayer(name, 'dfplayer', rxPin, busyPin);
 }

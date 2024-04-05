@@ -49,6 +49,6 @@ class ClimateIR {
 }
 
 
-export default function climateIR(name, protocol, horizontal_default, vertical_default, max_temperature, min_temperature) {
+export function climateIR(name, protocol, horizontal_default, vertical_default, max_temperature, min_temperature) {
     return new ClimateIR(name, 'heatpumpir', protocol, horizontal_default, vertical_default, max_temperature, min_temperature);
 }

@@ -66,6 +66,6 @@ class MHZ19 {
   }
 }
 
-export default function mhz19(name, uartBusName, updateInterval) { 
+export function mhz19(name, uartBusName, updateInterval) { 
     return new MHZ19(name, 'mhz19', uartBusName, updateInterval);
 }

@@ -122,6 +122,6 @@ class SEN55 {
 }
 
 
-export default function sen55(name, i2cBusId, address, updateInterval) {
+export function sen55(name, i2cBusId, address, updateInterval) {
     return new SEN55(name, 'sen5x', i2cBusId, address, updateInterval)
 }

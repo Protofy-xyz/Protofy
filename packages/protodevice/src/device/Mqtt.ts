@@ -55,6 +55,6 @@ class Mqtt {
   }
 }
 
-export default function mqtt(broker, port) {
+export function mqtt(broker, port) {
   return new Mqtt(broker, port)
 }

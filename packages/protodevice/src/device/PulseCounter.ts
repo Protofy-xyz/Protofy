@@ -19,6 +19,6 @@ class PulseCounter {
     }
 }
 
-export default function pulseCounter(name) { 
+export function pulseCounter(name) { 
     return new PulseCounter(name, 'pulse_counter');
 }

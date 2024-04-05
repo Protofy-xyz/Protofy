@@ -160,6 +160,6 @@ id(ds).set_sleep_duration(id(dp_sleep_duration)*1000);`,
   }
 }
 
-export default function deepSleep(run_duration, sleep_duration, wakeup_pin, mqttTopicPrefix) {
+export function deepSleep(run_duration, sleep_duration, wakeup_pin, mqttTopicPrefix) {
   return new DeepSleep(run_duration, sleep_duration, wakeup_pin, mqttTopicPrefix)
 }

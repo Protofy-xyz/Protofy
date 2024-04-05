@@ -51,6 +51,6 @@ class XiaomiMiFlora {
     }
 }
 
-export default function xiaomiMiFlora(name, macAddress) {
+export function xiaomiMiFlora(name, macAddress) {
     return new XiaomiMiFlora(name, 'xiaomi_hhccjcy01', macAddress)
 }

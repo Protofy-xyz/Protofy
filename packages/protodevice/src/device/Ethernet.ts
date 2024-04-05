@@ -48,6 +48,6 @@ class Ethernet {
     }
 }
 
-export default function ethernet(type, mdc_pin, mdio_pin, clk_mode, phy_addr, power_pin) { 
+export function ethernet(type, mdc_pin, mdio_pin, clk_mode, phy_addr, power_pin) { 
     return new Ethernet(type, mdc_pin, mdio_pin, clk_mode, phy_addr, power_pin)
 }

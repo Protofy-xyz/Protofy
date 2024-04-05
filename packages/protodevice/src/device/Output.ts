@@ -15,6 +15,6 @@ class Output {
     }
 }
 
-export default function output(name) { 
+export function output(name) { 
     return new Output(name, 'gpio')
 }

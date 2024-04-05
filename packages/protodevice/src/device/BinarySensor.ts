@@ -56,6 +56,6 @@ class BinarySensor {
     }
 }
 
-export default function binarySensor(name) { 
+export function binarySensor(name) { 
     return new BinarySensor(name, 'gpio')
 }

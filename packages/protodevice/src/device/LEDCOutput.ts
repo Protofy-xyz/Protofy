@@ -69,6 +69,6 @@ script:
   }
 }
 
-export default function lEDCOutput(name,frequency) { 
+export function ledcOutput(name,frequency) { 
   return new LEDCOutput(name, 'ledc',frequency);
 }

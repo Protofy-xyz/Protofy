@@ -60,6 +60,6 @@ class ADCSensor {
     }
 }
 
-export default function adcSensor(name,updateInterval,attenuation) { 
+export function adcSensor(name,updateInterval,attenuation) { 
     return new ADCSensor(name, 'adc',updateInterval, attenuation);
 }

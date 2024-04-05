@@ -71,6 +71,6 @@ class TempHumidity {
 }
 
 
-export default function tempHumidity(name, model, updateInterval) {
+export function tempHumidity(name, model, updateInterval) {
     return new TempHumidity(name, 'dht', model, updateInterval);
 }

@@ -99,6 +99,6 @@ class RelayComponent {
   }
 }
 
-export function Relay(name, restoreMode) {
+export function relay(name, restoreMode) {
   return new RelayComponent(name, 'gpio', restoreMode)
 }

@@ -42,6 +42,6 @@ class UARTBusComponent {
     }
 }
 
-export default function uartBus(id, rx, baudrate) {
+export function uartBus(id, rx, baudrate) {
     return new UARTBusComponent(id, rx, baudrate)
 }

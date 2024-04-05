@@ -35,6 +35,6 @@ class Wifi {
   }
 }
 
-export default function wifi(ssid, password, power_save_mode) {
+export function wifi(ssid, password, power_save_mode) {
   return new Wifi(ssid, password, power_save_mode)
 }

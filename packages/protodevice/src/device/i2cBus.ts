@@ -42,6 +42,6 @@ class I2cBus {
     }
 }
 
-export default function i2cBus(id, scl, scan) { 
+export function i2cBus(id, scl, scan) { 
     return new I2cBus(id, scl, scan)
 }

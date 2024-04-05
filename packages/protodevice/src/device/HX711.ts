@@ -60,6 +60,6 @@ class HX711 {
       }
 }
 
-export default function hx711(name, clkPin, gain, updateInterval) { 
+export function hx711(name, clkPin, gain, updateInterval) { 
     return new HX711(name, 'hx711', clkPin, gain, updateInterval);
 }

@@ -26,6 +26,6 @@ class UltrasonicDistanceSensor {
     }
 }
 
-export default function ultrasonicDistanceSensor(name, echoPin, updateInterval, timeout) { 
+export function ultrasonicDistanceSensor(name, echoPin, updateInterval, timeout) { 
     return new UltrasonicDistanceSensor(name, 'ultrasonic', echoPin, updateInterval, timeout);
 }

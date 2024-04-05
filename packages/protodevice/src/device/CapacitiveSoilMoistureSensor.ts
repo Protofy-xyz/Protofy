@@ -25,6 +25,6 @@ class CapacitiveSoilMoistureSensor {
     }
 }
 
-export default function capacitiveSoilMoistureSensor(name,updateInterval) { 
+export function capacitiveSoilMoistureSensor(name,updateInterval) { 
     return new CapacitiveSoilMoistureSensor(name, 'adc',updateInterval);
 }

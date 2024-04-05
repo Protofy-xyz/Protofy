@@ -105,6 +105,6 @@ class MPU6050 {
 }
 
 
-export default function mpu6050(name, i2cBusId, address, updateInterval) {
+export function mpu6050(name, i2cBusId, address, updateInterval) {
     return new MPU6050(name, 'mpu6050', i2cBusId, address, updateInterval)
 }

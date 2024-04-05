@@ -76,6 +76,6 @@ class Device {
     }
 }
 
-export default function device(deviceInfo) {
+export function device(deviceInfo) {
     return new Device(deviceInfo)
 }

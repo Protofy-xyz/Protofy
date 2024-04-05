@@ -18,6 +18,6 @@ class PIRSensor {
     }
 }
 
-export default function pirSensor(name) { 
+export function pirSensor(name) { 
     return new PIRSensor(name, 'gpio');
 }

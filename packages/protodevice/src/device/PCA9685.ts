@@ -67,6 +67,6 @@ class PCA9685 {
     }
 }
 
-export default function pca9685(name, frequency, external_clock_input, address, i2cBusId) { 
+export function pca9685(name, frequency, external_clock_input, address, i2cBusId) { 
     return new PCA9685(name, frequency, external_clock_input, address, i2cBusId)
 }

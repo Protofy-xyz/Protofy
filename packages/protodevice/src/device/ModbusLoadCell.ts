@@ -151,6 +151,6 @@ class ModbusLoadCell {
         return components
     }
 }
-export default function modbusLoadCell(name, rxPin, enablePin, updateInterval, weightRegister, weightRegisters2Read, stateFlagsRegister) { 
+export function modbusLoadCell(name, rxPin, enablePin, updateInterval, weightRegister, weightRegisters2Read, stateFlagsRegister) { 
     return new ModbusLoadCell(name, 'modbus', rxPin, enablePin, updateInterval, weightRegister, weightRegisters2Read, stateFlagsRegister);
 }
