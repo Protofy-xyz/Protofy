@@ -4,6 +4,7 @@ import Fetch from './Fetch'
 import Logger from './Logger';
 import Automation from './Automation';
 import DeviceAction from './DeviceAction';
+import DeviceMonitor from './DeviceMonitor';
 
 const apiMasks = [
     Automation,
@@ -11,7 +12,8 @@ const apiMasks = [
     Fetch,
     Logger,
     ApiResponse,
-    DeviceAction
+    DeviceAction,
+    DeviceMonitor
 ]
 
 export default apiMasks;
