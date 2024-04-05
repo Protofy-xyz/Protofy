@@ -7,7 +7,7 @@ import ApiCaller from './oldThings/apiCaller';
 // import Settings from './oldThings/settings';
 // import useWebSocket from 'react-use-websocket';
 // import { useFetch } from 'usehooks-ts'
-import deviceFunctions from './device'
+import * as deviceFunctions from './device'
 import DeviceModal from "./DeviceModal";
 import customComponents from "./nodes"
 // import { useDeviceStore } from "./oldThings/DeviceStore";
