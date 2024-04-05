@@ -52,14 +52,14 @@ const MicrofirePhEcTemp = ({ node = {}, nodeData = {}, children, color }: any) =
 
 
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input' },
+        { label: 'Name', static: true, field: 'param-1', type: 'input' },
         {
-            label: 'Scl Pin', static: true, field: 'param2', type: 'select',
+            label: 'Scl Pin', static: true, field: 'param-2', type: 'select',
             data: ports.filter(port => port.type.includes('O') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         },
         {
-            label: 'Update Interval', static: true, field: 'param3', type: 'input',
-            error: !['h', 'm', 's', 'ms'].includes(nodeData['param3']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            label: 'Update Interval', static: true, field: 'param-3', type: 'input',
+            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-3']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         },
     ] as Field[]
     return (

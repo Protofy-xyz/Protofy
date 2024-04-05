@@ -6,7 +6,7 @@ import { Box, Text, Icon} from "native-base";
 const ISOutput = (node: any = {}, nodeData = {}, children) => {
 
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input', pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"' },
+        { label: 'Name', static: true, field: 'param-1', type: 'input', post: (str) => str.toLowerCase()},
     ] as Field[]
     return (
         <Node node={node} isPreview={!node.id} title='IS Output' color="#2e9348" id={node.id} skipCustom={true} disableInput disableOutput>

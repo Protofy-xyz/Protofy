@@ -3,8 +3,8 @@ import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 const Mqtt = ({node= {}, nodeData= {}, children, color}: any) => {
 
     const nodeParams: Field[] = [
-        { label: 'Broker', field: 'param1', type: 'input', static: true },
-        { label: 'Port', field: 'param2', type: 'input', static: true },
+        { label: 'Broker', field: 'param-1', type: 'input', static: true },
+        { label: 'Port', field: 'param-2', type: 'input', static: true },
     ] as Field[]
     
     return (

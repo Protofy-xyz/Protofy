@@ -7,14 +7,14 @@ const TempHumidity = ({ node = {}, nodeData = {}, children, color }: any) => {
     const transitionErrorMsg = 'Add units s/ms'
 
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input' },
+        { label: 'Name', static: true, field: 'param-1', type: 'input' },
         {
-            label: 'Model', static: true, field: 'param2', type: 'select',
-            data: ['"DHT11"', '"DHT22"', '"DHT22_TYPE2"', '"AM2302"', '"RHT03"', '"SI7021"']
+            label: 'Model', static: true, field: 'param-2', type: 'select',
+            data: ["DHT11", "DHT22", "DHT22_TYPE2", "AM2302", "RHT03", "SI7021"]
         },
         {
-            label: 'Update Interval', static: true, field: 'param3', type: 'input',
-            error: !['s', 'ms'].includes(nodeData['param3']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
+            label: 'Update Interval', static: true, field: 'param-3', type: 'input',
+            error: !['s', 'ms'].includes(nodeData['param-3']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         }
     ] as Field[]
     return (

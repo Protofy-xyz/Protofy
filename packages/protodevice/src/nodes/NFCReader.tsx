@@ -8,13 +8,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const NFCReader = (node:any={}, nodeData={}, children) => {
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input', pre:(str) =>str.replace(/['"]+/g, ''), post: (str) => '"'+str.toLowerCase()+'"'},
-        { label: 'SclPin', static: true, field: 'param2', type: 'input', pre:(str) =>str.replace(/['"]+/g, ''), post: (str) => '"'+str+'"'}
+        { label: 'Name', static: true, field: 'param-1', type: 'input', post: (str) => str.toLowerCase()},
+        { label: 'SclPin', static: true, field: 'param-2', type: 'input'}
     ] as Field[]
     const nodeOutput: Field = {label: 'Input (sda)', field: 'value', type: 'output' }
     const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME
     const currentDevice = useDeviceStore(state => state.electronicDevice);
-    const mqttTopic = `${projectName}/${currentDevice}/pn532_i2c/${nodeData['param1']?.replace(/['"]+/g, '')}/state`
+    const mqttTopic = `${projectName}/${currentDevice}/pn532_i2c/${nodeData['param-1']?.replace(/['"]+/g, '')}/state`
     const addChannel = useAppStore(state => state.addChannel)
     const lastMessages = useAppStore(state => state.lastMessagesByTopic[mqttTopic]) ?? []
     addChannel(mqttTopic);

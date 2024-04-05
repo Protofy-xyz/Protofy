@@ -25,6 +25,6 @@ export default ({ componentName ,type }) => {
     return <></>
 }
 
-export const cleanName = (name)=> name? name.replace(/['"]+/g, ''):''
+export const cleanName = (name)=> name ?? ''
 
 export const generateTopic = (currentDevice,type,componentName) => currentDevice && type && componentName ? `${projectName}/${currentDevice}/${type}/${componentName}/state` : null;

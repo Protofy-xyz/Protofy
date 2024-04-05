@@ -44,10 +44,10 @@ const ports = [
 const DeepSleep = ({node= {}, nodeData= {}, children, color}: any) => {
 
     const nodeParams: Field[] = [
-        { label: 'Run duration', field: 'param1', type: 'input', static: true},
-        { label: 'Sleep duration', field: 'param2', type: 'input', static: true },
+        { label: 'Run duration', field: 'param-1', type: 'input', static: true},
+        { label: 'Sleep duration', field: 'param-2', type: 'input', static: true },
         {
-            label: 'Wakeup Pin', static: true, field: 'param3', type: 'select',
+            label: 'Wakeup Pin', static: true, field: 'param-3', type: 'select',
             data: ports.filter(port => port.type.includes('I') && !['EN', '36', '39', 'CLK'].includes(port.name) && port.rtc == true).map(port => port.name)
         }
     ] as Field[]

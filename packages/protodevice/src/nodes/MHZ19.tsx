@@ -3,13 +3,13 @@ import {Node, Field, NodeParams } from 'protoflow';
 const MHZ19 = ({node = {}, nodeData = {}, children, color}: any) => {
     const transitionErrorMsg = 'Add units s/ms'
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input' },
+        { label: 'Name', static: true, field: 'param-1', type: 'input' },
         {
-            label: 'UART bus name', static: true, field: 'param2', type: 'input',
+            label: 'UART bus name', static: true, field: 'param-2', type: 'input',
         },
         {
-            label: 'Update Interval', static: true, field: 'param3', type: 'input',
-            error: !['s', 'ms'].includes(nodeData['param3']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
+            label: 'Update Interval', static: true, field: 'param-3', type: 'input',
+            error: !['s', 'ms'].includes(nodeData['param-3']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         }
     ] as Field[]
     return (

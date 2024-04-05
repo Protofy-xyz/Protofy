@@ -9,21 +9,21 @@ import NodeBus, { cleanName, generateTopic } from "../NodeBus";
 
 const CapacitiveSoilMoistureSensor = (node: any = {}, nodeData = {}, children) => {
     const currentDevice = useDeviceStore(state => state.electronicDevice);
-    const [name,setName] = React.useState(cleanName(nodeData['param1']))
+    const [name,setName] = React.useState(cleanName(nodeData['param-1']))
     const nameErrorMsg = 'Reserved name'
     const intervalErrorMsg = 'Add units h/m/s/ms'
     const nodeParams: Field[] = [
         {
-            label: 'Name', static: true, field: 'param1', type: 'input', onBlur:()=>{setName(cleanName(nodeData['param1']))}, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"',
-            error: nodeData['param1']?.replace(/['"]+/g, '') == 'adc' ? nameErrorMsg : null
+            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(cleanName(nodeData['param-1']))}, post: (str) => str.toLowerCase(),
+            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'adc' ? nameErrorMsg : null
         },
         {
-            label: 'Update Interval', static: true, field: 'param2', type: 'input', pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str + '"',
-            error: !['h', 'm', 's', 'ms'].includes(nodeData['param2']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            label: 'Update Interval', static: true, field: 'param-2', type: 'input',
+            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-2']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         }
     ] as Field[]
     const nodeOutput: Field = { label: 'Input (Pin 32-35)', field: 'value', type: 'output' }
-    //const name = cleanName(nodeData['param1'])
+    //const name = cleanName(nodeData['param-1'])
     const type = 'sensor';
     const mqttTopic = generateTopic(currentDevice,type,name)
     const lastMessages = useAppStore(state => mqttTopic?state.lastMessagesByTopic[mqttTopic]:[]) ?? []

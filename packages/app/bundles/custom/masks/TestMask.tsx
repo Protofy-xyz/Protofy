@@ -10,7 +10,7 @@ const TestMask = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[
                 {
                     label: 'Value', 
-                    field: 'param1', 
+                    field: 'param-1', 
                     type: 'range', 
                     static: true,
                     data: {},
@@ -24,5 +24,5 @@ export default {
     type: 'CallExpression',
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('testCall'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <TestMask node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'testCall', param1: '"none"', param2: '"none"', param3: '"none"' } }
+    getInitialData: () => { return { to: 'testCall', "param-1": '"none"', "param-2": '"none"', "param-3": '"none"' } }
 }

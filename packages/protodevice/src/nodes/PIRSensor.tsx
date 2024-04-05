@@ -8,9 +8,9 @@ import NodeBus, { cleanName, generateTopic } from "../NodeBus";
 
 
 const PIRSensor = (node: any = {}, nodeData = {}, children) => {
-    const [name,setName] = React.useState(cleanName(nodeData['param1']))
+    const [name,setName] = React.useState(cleanName(nodeData['param-1']))
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input', onBlur:()=>{setName(cleanName(nodeData['param1']))}, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"' }
+        { label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(cleanName(nodeData['param-1']))}, post: (str) => str.toLowerCase() }
     ] as Field[]
     // const nodeOutput: Field = { label: 'Output', field: 'value', type: 'output' }
     const currentDevice = useDeviceStore(state => state.electronicDevice);

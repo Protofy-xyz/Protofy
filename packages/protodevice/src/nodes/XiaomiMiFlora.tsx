@@ -7,14 +7,14 @@ import { Flex, HStack, Text } from 'native-base';
 
 const XiaomiMiFlora = (node: any = {}, nodeData = {}, children) => {    
   const fields: Field[] = [
-    { label: 'Id', static: true, field: 'param1', type: 'input', pre: (str) => str?.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"' },
-    { label: 'Mac Address', static: true, field: 'param2', type: 'input', pre: (str) => str?.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"' },
+    { label: 'Id', static: true, field: 'param-1', type: 'input', post: (str) => str.toLowerCase() },
+    { label: 'Mac Address', static: true, field: 'param-2', type: 'input', post: (str) => str.toLowerCase() },
   ]
 
   const type = 'sensor';
   const currentDevice = useDeviceStore(state => state.electronicDevice);
   const sensors = ['temperature', 'moisture', 'illuminance', 'soilconductivity', 'battery_level']
-  const [names, setNames] = React.useState(sensors.map(sensor => cleanName(nodeData['param1'])+sensor))
+  const [names, setNames] = React.useState(sensors.map(sensor => cleanName(nodeData['param-1'])+sensor))
   const mqttTopics = names.map(name => generateTopic(currentDevice, type, name))
   const [lastMessages, setLastMessages] = React.useState(mqttTopics.map(mqttTopic => {
     return useAppStore(state => mqttTopic?state.lastMessagesByTopic[mqttTopic]:[]) ?? []

@@ -30,7 +30,7 @@ const CallExpression = (node) => {
     ) as Field[]
 
     return (
-        <Node icon={ArrowUpRight} node={node} isPreview={!id} title={(nodeData.to ? nodeData.to : 'x') + '(' + (paramsArray.map(p => nodeData[p] ? nodeData[p] : '...').join(',')) + ')'} id={id} color={color}>
+        <Node icon={ArrowUpRight} node={node} isPreview={!id} title={(nodeData.to ? nodeData.to : 'x') + '(' + (paramsArray.map(p => nodeData[p] ? dumpArgumentsData(nodeData[p]) : '...').join(',')) + ')'} id={id} color={color}>
             <NodeParams id={id} params={nodeParams} />
             <NodeParams id={id} params={[{ label: 'Await', field: 'await', type: 'boolean', static: true }]} />
             <AddPropButton keyId={'param' + nextId} id={id} nodeData={nodeData} />
@@ -46,23 +46,30 @@ CallExpression.getData = (node, data, nodesData, edges) => {
         to: connectItem(node.getExpression(), 'output', node, 'to', data, nodesData, edges, 'to'),
         await: parentNode && parentNode.getKind() === SyntaxKind.AwaitExpression,
         ...node.getArguments().reduce((obj, param, i) => {
-            return { 
-                ...obj, 
-                ['param' + (i + 1)]: connectItem(param, 'output', node, 'param' + (i + 1), data, nodesData, edges, 'param' + (i + 1))
+            var paramKey = 'param-' + (i + 1)
+            var paramData = getArgumentsData(param)
+            if (!paramData) {
+                paramData = {
+                    value: connectItem(param, 'output', node, paramKey, data, nodesData, edges, paramKey)
+                }
+            }
+            return {
+                ...obj,
+                [paramKey]: paramData
             }
         }, {})
     }
 }
 
 function getTriviaBeforeCloseParenToken(callNode) {
-    if(!callNode) return ''
+    if (!callNode) return ''
     const fullText = callNode.getSourceFile().getFullText();
     const lastChild = callNode.getLastChild();
 
     if (lastChild && lastChild.getKindName() === 'CloseParenToken') {
         const leadingTriviaWidth = lastChild.getLeadingTriviaWidth();
         const triviaBeforeCloseBrace = fullText.substring(lastChild.getPos(), lastChild.getPos() + leadingTriviaWidth);
-    
+
         return triviaBeforeCloseBrace;
     }
     return '';
@@ -82,13 +89,54 @@ CallExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMar
                 part = fallback.preText + content + fallback.postText
             }
         } else {
-            part = dumpConnection(node, "target", param, PORT_TYPES.data, getValueTrivia(data, param), edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            var dumpedArg = dumpArgumentsData(data[param])
+            if (dumpedArg) {
+                part = dumpedArg
+            } else {
+                part = dumpConnection(node, "target", param, PORT_TYPES.data, getValueTrivia(data, param), edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            }
         }
         return part
     })
     const callName = dumpConnection(node, "target", "to", PORT_TYPES.data, data?.to ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
 
-    return callName ? (data.await?'await ':'')+callName + "(" + params.join(',') + getTriviaBeforeCloseParenToken(data._astNode) + ")" : '' + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+    return callName ? (data.await ? 'await ' : '') + callName + "(" + params.join(',') + getTriviaBeforeCloseParenToken(data._astNode) + ")" : '' + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
 }
 
 export default memo(CallExpression)
+
+function getArgumentsData(node: any): any {
+    let atrVal
+    var kind = node?.getKindName()
+
+    switch (kind) {
+        case 'StringLiteral':
+        case 'NumericLiteral':
+        case 'TrueKeyword':
+        case 'FalseKeyword':
+            atrVal = node?.getLiteralValue();
+            break
+        case 'Identifier':
+            atrVal = node.getText()
+            break
+        default:
+            return
+    }
+    return { value: atrVal, kind }
+}
+
+function dumpArgumentsData(argData: { kind: string, value: any }): any {
+    if (!argData) return
+    const argumentKind = argData.kind
+    var value = argData.value
+    switch (argumentKind) {
+        case 'StringLiteral':
+            return '"' + value + '"'
+        case 'NumericLiteral':
+        case 'TrueKeyword':
+        case 'FalseKeyword':
+        case 'Identifier':
+        default:
+            return String(value)
+    }
+}

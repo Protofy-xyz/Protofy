@@ -8,14 +8,14 @@ const Automation = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(9)
     return (
         <Node icon={Plug} node={node} isPreview={!node?.id} title='Automation' id={node.id} color={color} skipCustom={true}>
-            <NodeParams id={node.id} params={[{ label: 'Name', static: true, field: 'param3', type: 'input', pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str + '"' }]} />
+            <NodeParams id={node.id} params={[{ label: 'Name', static: true, field: 'param-3', type: 'input' }]} />
             <div>
                 <FlowPort id={node.id} type='input' label='On run (params)' style={{ top: '130px' }} handleId={'request'} />
-                <FallbackPort node={node} port={'param2'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (params) => " postText="" />
+                <FallbackPort node={node} port={'param-2'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (params) => " postText="" />
             </div>
 
-            <Button style={{marginTop: '60px'}} label="Run" onPress={() => {
-                API.get('/api/v1/automations/'+eval(nodeData['param3']))
+            <Button style={{ marginTop: '60px' }} label="Run" onPress={() => {
+                API.get('/api/v1/automations/' + nodeData['param-3'].value)
             }} />
         </Node>
     )
@@ -28,8 +28,8 @@ export default {
         return (
             node.type == "CallExpression"
             && nodeData.to == 'context.automation'
-            && nodeData.param2 && nodeData.param2.startsWith
-            && (nodeData.param2?.startsWith('async (params) =>') || nodeData.param2?.startsWith('(params) =>'))
+            && nodeData["param-2"] && nodeData["param-2"].startsWith
+            && (nodeData["param-2"]?.startsWith('async (params) =>') || nodeData["param-2"]?.startsWith('(params) =>'))
         )
     },
     category: "automation",
@@ -37,5 +37,7 @@ export default {
     getComponent: Automation,
     filterChildren: filterCallback(),
     restoreChildren: restoreCallback(),
-    getInitialData: () => { return { to: 'context.automation', param1: 'app', param2: 'async (params) =>', param3: '""' } }
+    getInitialData: () => {
+        return { to: 'context.automation', "param-1": { value: 'app', kind: 'StringLiteral' }, "param-2": { value: 'async (params) =>' }, "param-3": { value: "", kind: "StringLiteral" } }
+    }
 }

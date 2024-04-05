@@ -45,26 +45,26 @@ const ports = [
 const Ethernet = ({node= {}, nodeData= {}, children, color}: any) => {
     const nodeParams: Field[] = [
         {
-            label: 'Type', static: true, field: 'param1', type: 'select',
+            label: 'Type', static: true, field: 'param-1', type: 'select',
             data: ["LAN8720", "RTL8201", "DP83848", "IP101", "JL1101", "KSZ8081", "KSZ8081RNA"]
         },
         {
-            label: 'MDC Pin', static: true, field: 'param2', type: 'select',
+            label: 'MDC Pin', static: true, field: 'param-2', type: 'select',
             data: ports.filter(port => port.type.includes('IO') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         },
         {
-            label: 'MDIO Pin', static: true, field: 'param3', type: 'select',
+            label: 'MDIO Pin', static: true, field: 'param-3', type: 'select',
             data: ports.filter(port => port.type.includes('IO') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         },
         {
-            label: 'Clk mode', static: true, field: 'param4', type: 'select',
+            label: 'Clk mode', static: true, field: 'param-4', type: 'select',
             data: ["GPIO0_IN", "GPIO0_OUT", "GPIO16_OUT", "GPIO17_OUT"]
         },
         { 
-            label: 'Phy address', static: true, field: 'param5', type: 'input'
+            label: 'Phy address', static: true, field: 'param-5', type: 'input'
         },
         {
-            label: 'Power Pin', static: true, field: 'param6', type: 'select',
+            label: 'Power Pin', static: true, field: 'param-6', type: 'select',
             data: ["none"].concat(ports.filter(port => port.type.includes('IO') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name))
         },
     ] as Field[]

@@ -44,31 +44,31 @@ const ports = [
 ]
 
 const A4988 = ({node= {}, nodeData= {}, children, color}: any) => {
-    const [name,setName] = React.useState(nodeData['param1'])
+    const [name,setName] = React.useState(nodeData['param-1'])
     const nameErrorMsg = 'Reserved name'
     const intervalErrorMsg = 'Add units steps/s'
     const nodeParams: Field[] = [
         {
-            label: 'Name', static: true, field: 'param1', type: 'input', onBlur:()=>{setName(nodeData['param1'])},
-            error: nodeData['param1']?.replace(/['"]+/g, '') == 'stepper' ? nameErrorMsg : null
+            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
+            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'stepper' ? nameErrorMsg : null
         },
         {
-            label: 'Dir Pin', static: true, field: 'param2', type: 'select',
+            label: 'Dir Pin', static: true, field: 'param-2', type: 'select',
             data: ports.filter(port => port.type.includes('O') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         },
         {
-            label: 'Max speed', static: true, field: 'param3', type: 'input',
-            error: ![' steps/s'].includes(nodeData['param3']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            label: 'Max speed', static: true, field: 'param-3', type: 'input',
+            error: ![' steps/s'].includes(nodeData['param-3']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         },
         {
-            label: 'Sleep Pin', static: true, field: 'param4', type: 'select',
+            label: 'Sleep Pin', static: true, field: 'param-4', type: 'select',
             data: ["none"].concat(ports.filter(port => port.type.includes('O') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name))
         },
         {
-            label: 'Acceleration', static: true, field: 'param5', type: 'input',
+            label: 'Acceleration', static: true, field: 'param-5', type: 'input',
         },
         {
-            label: 'Deceleration', static: true, field: 'param6', type: 'input',
+            label: 'Deceleration', static: true, field: 'param-6', type: 'input',
         }
     ] as Field[]
     return (

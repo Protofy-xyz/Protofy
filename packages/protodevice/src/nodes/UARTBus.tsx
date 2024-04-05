@@ -44,19 +44,19 @@ const ports = [
 ]
 
 const UARTBus = ({node= {}, nodeData= {}, children, color}: any) => {
-    const [name,setName] = React.useState(nodeData['param1'])
+    const [name,setName] = React.useState(nodeData['param-1'])
     const nameErrorMsg = 'Reserved name'
     const nodeParams: Field[] = [
         {
-            label: 'Bus name', static: true, field: 'param1', type: 'input', onBlur:()=>{setName(nodeData['param1'])},
-            error: nodeData['param1']?.replace(/['"]+/g, '') == 'uart' ? nameErrorMsg : null
+            label: 'Bus name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
+            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'uart' ? nameErrorMsg : null
         },
         {
-            label: 'RX Pin', static: true, field: 'param2', type: 'select',
+            label: 'RX Pin', static: true, field: 'param-2', type: 'select',
             data: ports.filter(port => port.type.includes('O') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name.toString())
         },
         {
-            label: 'Baud rate', static: true, field: 'param3', type: 'input',
+            label: 'Baud rate', static: true, field: 'param-3', type: 'input',
         }
     ] as Field[]
     return (

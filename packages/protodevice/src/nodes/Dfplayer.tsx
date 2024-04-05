@@ -46,12 +46,12 @@ const ports = [
 const Dfplayer = ({node= {}, nodeData= {}, children}: any) => {
 
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input'},
+        { label: 'Name', static: true, field: 'param-1', type: 'input'},
         {
-            label: 'Rx Pin', static: true, field: 'param2', type: 'select',
+            label: 'Rx Pin', static: true, field: 'param-2', type: 'select',
             data: ports.filter(port => port.type.includes('I') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         },{
-            label: 'Busy Pin', static: true, field: 'param3', type: 'select',
+            label: 'Busy Pin', static: true, field: 'param-3', type: 'select',
             data: ports.filter(port => port.type.includes('I') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         }
     ] as Field[]

@@ -116,9 +116,9 @@ export default {
       console.log("---------deviceDefinition----------", deviceDefinition)
       deviceDefinition.board = response1.data
       const jsCode = deviceDefinition.config.components;
-      const deviceCode = 'device(' + jsCode + ')';
+      const deviceCode = 'device(' + jsCode.replace(/;/g, "") + ')';
       console.log("-------DEVICE CODE------------", deviceCode)
-      const deviceObj = eval(deviceCode.replace(/;/g, ""))
+      const deviceObj = eval(deviceCode)
       const componentsTree = deviceObj.getComponentsTree(deviceName, deviceDefinition)
       const yaml = deviceObj.dump("yaml")
 

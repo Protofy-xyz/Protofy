@@ -9,7 +9,7 @@ export class SubsystemModel extends ProtoModel<SubsystemModel> {
         super(data, SubsystemSchema, session)
     }
     getName(doubleQuotted?: boolean): string {
-        return doubleQuotted ? ('"' + this.data?.name + '"') : this.data?.name;
+        return doubleQuotted ? this.data?.name : this.data?.name;
     }
 
     getActionByName(name: string): ActionType {
@@ -29,11 +29,11 @@ export class SubsystemModel extends ProtoModel<SubsystemModel> {
     }
 
     getActionsNames(doubleQuotted?: boolean): string[] {
-        return this.getActions()?.map((action: ActionType) => doubleQuotted ? ('"' + action.name + '"') : action?.name) ?? []
+        return this.getActions()?.map((action: ActionType) => doubleQuotted ? action.name : action?.name) ?? []
     }
 
     getMonitorsNames(doubleQuotted?: boolean): string[] {
-        return this.getMonitors()?.map((monitor: MonitorType) => doubleQuotted ? ('"' + monitor.name + '"') : monitor?.name) ?? []
+        return this.getMonitors()?.map((monitor: MonitorType) => doubleQuotted ? monitor.name : monitor?.name) ?? []
     }
 
 }
@@ -46,7 +46,7 @@ export class SubsystemCollection {
         this.session = session
     }
     findByName(name: string, doubleQuotted?: boolean): SubsystemType {
-        return this.items?.find((subsystem: SubsystemType) => (doubleQuotted ? ('"' + subsystem.name + '"') : subsystem.name) === name)
+        return this.items?.find((subsystem: SubsystemType) => (doubleQuotted ? (subsystem.name) : subsystem.name) === name)
     }
     getNames(type?: "action" | "monitor", doubleQuotted?: boolean): string[] { // if withAction is enabled return only subsystems that have "actions" to perform
         // if withAction is enabled return only subsystems that have "actions" to perform
@@ -70,6 +70,6 @@ export class SubsystemCollection {
                     return total.concat(subsystem.name);
             }
         }, [])
-        return doubleQuotted ? subsystemNames?.map(name => '"' + name + '"') : subsystemNames
+        return doubleQuotted ? subsystemNames?.map(name => name) : subsystemNames
     }
 }

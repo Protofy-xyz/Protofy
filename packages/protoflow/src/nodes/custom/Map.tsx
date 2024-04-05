@@ -9,7 +9,7 @@ const Map = (node: any = {}, nodeData = {}) => {
             <NodeParams id={node.id} params={[{ label: 'Array', field: 'to', type: 'input', pre: (str) => str.replace(".map", ""), post: (str) => str + ".map" }]} />
             <div style={{ marginBottom: '50px' }}></div>
             <FlowPort id={node.id} type='output' label='For Each (item, i)' style={{ top: '110px' }} handleId={'request'} />
-            <FallbackPort node={node} port={'param1'} type={"target"} fallbackPort={'request'} portType={"_"} preText="(item, i) => " postText="" />
+            <FallbackPort node={node} port={'param-1'} type={"target"} fallbackPort={'request'} portType={"_"} preText="(item, i) => " postText="" />
         </Node>
     )
 }

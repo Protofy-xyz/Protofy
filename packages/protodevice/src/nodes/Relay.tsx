@@ -4,8 +4,8 @@ import { Node, Field, NodeParams } from 'protoflow';
 const Relay = ({node= {}, nodeData= {}, children, color}: any) => {
 
     const nodeParams: Field[] = [
-        { label: 'Name', static:true, field: 'param1', type: 'input'},
-        { label: 'Restore Mode', static:true, field: 'param2', type: 'select', data:['"ALWAYS_ON"', '"ALWAYS_OFF"'] }
+        { label: 'Name', static:true, field: 'param-1', type: 'input'},
+        { label: 'Restore Mode', static:true, field: 'param-2', type: 'select', data:["ALWAYS_ON", "ALWAYS_OFF"] }
     ] as Field[]
     
     return (

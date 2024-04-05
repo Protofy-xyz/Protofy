@@ -6,10 +6,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const LEDCOutput = (node: any = {}, nodeData = {}, children) => {
     const errorMsg = 'Units should be Hz'
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input', pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"' },
+        { label: 'Name', static: true, field: 'param-1', type: 'input', post: (str) => str.toLowerCase() },
         {
-            label: 'Frequency', static: true, field: 'param2', type: 'input', pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str + '"',
-            error: !nodeData['param2']?.replace(/['"0-9]+/g, '').endsWith('Hz') ? errorMsg : null
+            label: 'Frequency', static: true, field: 'param-2', type: 'input',
+            error: !nodeData['param-2']?.replace(/['"0-9]+/g, '').endsWith('Hz') ? errorMsg : null
         }
     ] as Field[]
     return (

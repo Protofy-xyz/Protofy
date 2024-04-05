@@ -44,19 +44,19 @@ const ports = [
 const HX711 =  ({node= {}, nodeData= {}, children, color}: any) => {
     const transitionErrorMsg = 'Add units s/ms'
     const nameErrorMsg = 'Reserved name'
-    const [name,setName] = React.useState(nodeData['param1'])
+    const [name,setName] = React.useState(nodeData['param-1'])
     const nodeParams: Field[] = [
         {
-            label: 'Name', static: true, field: 'param1', type: 'input', onBlur:()=>{setName(nodeData['param1'])},
-            error: nodeData['param1']?.replace(/['"]+/g, '') == 'hx711' ? nameErrorMsg : null
+            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
+            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'hx711' ? nameErrorMsg : null
         },        {
-            label: 'CLK Pin', static: true, field: 'param2', type: 'select',
+            label: 'CLK Pin', static: true, field: 'param-2', type: 'select',
             data: ports.filter(port => port.type.includes('O') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         },
-        { label: 'Gain', static: true, field: 'param3', type: 'input'},
+        { label: 'Gain', static: true, field: 'param-3', type: 'input'},
         {
-            label: 'Update Interval', static: true, field: 'param4', type: 'input',
-            error: !['s', 'ms'].includes(nodeData['param4']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
+            label: 'Update Interval', static: true, field: 'param-4', type: 'input',
+            error: !['s', 'ms'].includes(nodeData['param-4']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         }
     ] as Field[]
     return (

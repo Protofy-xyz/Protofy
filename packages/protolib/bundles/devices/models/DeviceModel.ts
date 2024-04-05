@@ -10,7 +10,7 @@ export class DeviceModel extends ProtoModel<DeviceModel> {
         super(data, DeviceSchema, session)
     }
     getName(doubleQuotted?: boolean): string {
-        return doubleQuotted ? ('"' + this.data?.name + '"') : this.data?.name;
+        return doubleQuotted ? this.data?.name : this.data?.name;
     }
     getSubsystems(): SubsystemType[] {
         return this.data?.subsystem
@@ -29,10 +29,10 @@ export class DeviceCollection {
         this.session = session
     }
     findByName(name: string, doubleQuotted): DeviceDataType {
-        return this?.items.find((device) => (doubleQuotted ? ('"' + device.name + '"') : device.name) === name)
+        return this?.items.find((device) => (doubleQuotted ? (device.name) : device.name) === name)
     }
     getNames(doubleQuotted?: boolean): string[] {
-        return this?.items?.map((device: DeviceDataType) => doubleQuotted ? '"' + device?.name + '"' : device?.name) ?? []
+        return this?.items?.map((device: DeviceDataType) => doubleQuotted ? device?.name : device?.name) ?? []
     }
     getIndexByName(name: string): number {
         return this?.items?.findIndex((device) => device.name === name)

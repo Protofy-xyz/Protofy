@@ -3,17 +3,17 @@ import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 const Wifi = ({node= {}, nodeData= {}, children, color}: any) => {
 
     const nodeParams: Field[] = [
-        { label: 'SSID', field: 'param1', type: 'input', static: true },
-        { label: 'Password', field: 'param2', type: 'input', static: true },
+        { label: 'SSID', field: 'param-1', type: 'input', static: true },
+        { label: 'Password', field: 'param-2', type: 'input', static: true },
         {
-            label: 'Power mode', field: 'param3', type: 'select', static: true,
-            data: ['"none"', '"light"', '"high"'],
+            label: 'Power mode', field: 'param-3', type: 'select', static: true,
+            data: ["none", "light", "high"],
         }
     ] as Field[]
     
     // const [state,setState] = useState("Not detected");
     // const { message } = useSubscription(['newplatform/mydevice/switch/light/state']);
-    // console.log("node: ",nodeData["param1"])
+    // console.log("node: ",nodeData["param-1"])
     // useEffect(()=>{
     //     console.log("message", message)
     // },[message])

@@ -23,7 +23,7 @@ export const BaseJSMasks = [
     "body": [
       {
         "type": "api",
-        "data": { label: "url", field: "param1", apiUrl: "api/v1/endpoints", list: "return `'` + res.path + `'`" }
+        "data": { label: "url", field: "param-1", apiUrl: "api/v1/endpoints", list: "return res.path" }
       },
       {
         "type": "link",
@@ -33,7 +33,7 @@ export const BaseJSMasks = [
         }
       }
     ],
-    "initialData": { to: 'actionFetch', param1: '' }
+    "initialData": { to: 'actionFetch', "param-1": { value: "", kind: "StringLiteral" } }
   },
 
   // {
@@ -45,14 +45,14 @@ export const BaseJSMasks = [
   //     return (
   //       node.type == "CallExpression" 
   //       && nodeData.to?.endsWith('.map')
-  //       && nodeData.param1.startsWith("(item,i,) =>")
+  //       && nodeData["param-1"].startsWith("(item,i,) =>")
   //       && additionalCheck
   //       )
   //   },
   //   getComponent: Map,
   //   filterChildren: filterCallback("1"),
   //   restoreChildren: restoreCallback("1"),
-  //   getInitialData: () => { return { to: '.map', param1: "(item,i,) =>" } }
+  //   getInitialData: () => { return { to: '.map', "param-1": "(item,i,) =>" } }
   // },
   // {
   //   id: 'Filter',
@@ -63,14 +63,14 @@ export const BaseJSMasks = [
   //     return (
   //       node.type == "CallExpression" 
   //       && nodeData.to?.endsWith('.filter')
-  //       && nodeData.param1.startsWith("(item,i,) =>")
+  //       && nodeData["param-1"].startsWith("(item,i,) =>")
   //       && additionalCheck
   //       )
   //   },
   //   getComponent: Filter,
   //   filterChildren: filterCallback("1"),
   //   restoreChildren: restoreCallback("1"),
-  //   getInitialData: () => { return { to: '.filter', param1: "(item,i,) =>" } }
+  //   getInitialData: () => { return { to: '.filter', "param-1": "(item,i,) =>" } }
   // },
   // {
   //   id: 'Find',
@@ -81,14 +81,14 @@ export const BaseJSMasks = [
   //     return (
   //       node.type == "CallExpression" 
   //       && nodeData.to?.endsWith('.find')
-  //       && nodeData.param1.startsWith("(item,i,) =>")
+  //       && nodeData["param-1"].startsWith("(item,i,) =>")
   //       && additionalCheck
   //       )
   //   },
   //   getComponent: Find,
   //   filterChildren: filterCallback("1"),
   //   restoreChildren: restoreCallback("1"),
-  //   getInitialData: () => { return { to: '.find', param1: "(item,i,) =>" } }
+  //   getInitialData: () => { return { to: '.find', "param-1": "(item,i,) =>" } }
   // },
   // {
   //   id: 'Reduce',
@@ -99,13 +99,13 @@ export const BaseJSMasks = [
   //     return (
   //     node.type == "CallExpression"
   //     && nodeData.to?.endsWith('.reduce')
-  //     && nodeData.param1.startsWith("(total,item,i,) =>")
+  //     && nodeData["param-1"].startsWith("(total,item,i,) =>")
   //     && additionalCheck
   //   )},
   //   getComponent: Reduce,
   //   filterChildren: filterCallback("1"),
   //   restoreChildren: restoreCallback("1"),
-  //   getInitialData: () => { return { to: '.reduce', param1: "(total,item,i,) =>", param2: "" } }
+  //   getInitialData: () => { return { to: '.reduce', "param-1": "(total,item,i,) =>", "param-2": "" } }
   // },
 ]
 

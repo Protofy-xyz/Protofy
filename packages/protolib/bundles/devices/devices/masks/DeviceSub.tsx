@@ -12,12 +12,12 @@ import { SubsystemCollection, SubsystemModel } from '../../models/SubsystemModel
 const deviceRepository = new DeviceRepository()
 const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
 
-    let deviceName = nodeData['param1'];
-    let deviceComponent = nodeData['param2'];
-    let deviceMonitor = nodeData['param3'];
-
     const color = useColorFromPalette(7)
     const [devicesData, setDevicesData] = useState<any[]>([]);
+    // const [payloadVisibility, setPayloadVisibility] = useState(false);
+    let deviceName = nodeData['param-1'];
+    let deviceComponent = nodeData['param-2'];
+    let deviceMonitor= nodeData['param-3'];
 
     const getDevices = async () => {
         const { data } = await deviceRepository.list()
@@ -68,5 +68,5 @@ export default {
     getComponent: (node, nodeData, children) => <DeviceSub node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterCallback("4"),
     restoreChildren: restoreCallback("4"),
-    getInitialData: () => { return { to: 'context.deviceSub', param1: '', param2: '', param3: '', param4: '(message,topic) =>' } }
+    getInitialData: () => { return { to: 'context.deviceSub', "param-1": '', "param-2": '', "param-3": '', "param-4": '(message,topic) =>' } }
 }

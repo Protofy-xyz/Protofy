@@ -3,12 +3,12 @@ import {Node, Field, NodeParams } from '../../flowslib';
 import NodeBus, { cleanName, generateTopic } from "../NodeBus";
 
 const Servo = (node: any = {}, nodeData = {}, children) => {
-    const [name,setName] = React.useState(cleanName(nodeData['param1']))
+    const [name,setName] = React.useState(cleanName(nodeData['param-1']))
     const nameErrorMsg = 'Reserved name'
     const nodeParams: Field[] = [
         {
-            label: 'Name', static: true, field: 'param1', type: 'input', onBlur:()=>{setName(cleanName(nodeData['param1']))}, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"',
-            error: nodeData['param1']?.replace(/['"]+/g, '') == 'servo' ? nameErrorMsg : null
+            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(cleanName(nodeData['param-1']))}, post: (str) => str.toLowerCase(),
+            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'servo' ? nameErrorMsg : null
         }
     ] as Field[]
     return (

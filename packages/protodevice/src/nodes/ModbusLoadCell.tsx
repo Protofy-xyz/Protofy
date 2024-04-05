@@ -47,25 +47,25 @@ const ModbusLoadCell = ({node= {}, nodeData= {}, children}: any) => {
     const transitionErrorMsg = 'Add units s/ms'
 
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param1', type: 'input' },
+        { label: 'Name', static: true, field: 'param-1', type: 'input' },
         {
-            label: 'Rx Pin', static: true, field: 'param2', type: 'select',
+            label: 'Rx Pin', static: true, field: 'param-2', type: 'select',
             data: ports.filter(port => port.type.includes('I') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         },
         {
-            label: 'DS Enable Pin', static: true, field: 'param3', type: 'select',
+            label: 'DS Enable Pin', static: true, field: 'param-3', type: 'select',
             data: ports.filter(port => port.type.includes('O') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         },
         {
-            label: 'Update Interval', static: true, field: 'param4', type: 'input',
-            error: !['s', 'ms'].includes(nodeData['param4']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
+            label: 'Update Interval', static: true, field: 'param-4', type: 'input',
+            error: !['s', 'ms'].includes(nodeData['param-4']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         },
-        { label: 'Weight register', static: true, field: 'param5', type: 'input'},
+        { label: 'Weight register', static: true, field: 'param-5', type: 'input'},
         {
-            label: 'Weight registers to read', static: true, field: 'param6', type: 'select',
+            label: 'Weight registers to read', static: true, field: 'param-6', type: 'select',
             data: ['1', '2']
         },
-        { label: 'State flags register', static: true, field: 'param7', type: 'input' }
+        { label: 'State flags register', static: true, field: 'param-7', type: 'input' }
     ] as Field[]
     return (
         <Node node={node} isPreview={!node.id} title='Modbus Load Cell' color="#E0B0EE" id={node.id} skipCustom={true} disableInput disableOutput>

@@ -6,21 +6,21 @@ import {Node, Field, NodeParams } from 'protoflow';
 // import { useSubscription } from "mqtt-react-hooks";
 
 const ADCSensor = ({node= {}, nodeData= {}, children, color}: any) => {
-    const [name,setName] = React.useState(nodeData['param1'])
+    const [name,setName] = React.useState(nodeData['param-1'])
     const nameErrorMsg = 'Reserved name'
     const intervalErrorMsg = 'Add units h/m/s/ms'
     const nodeParams: Field[] = [
         {
-            label: 'Name', static: true, field: 'param1', type: 'input', onBlur:()=>{setName(nodeData['param1'])},
-            error: nodeData['param1']?.replace(/['"]+/g, '') == 'adc' ? nameErrorMsg : null
+            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
+            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'adc' ? nameErrorMsg : null
         },
         {
-            label: 'Update Interval', static: true, field: 'param2', type: 'input',
-            error: !['h', 'm', 's', 'ms'].includes(nodeData['param2']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            label: 'Update Interval', static: true, field: 'param-2', type: 'input',
+            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-2']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         },
         {
-            label: 'Attenuation', static: true, field: 'param3', type: 'select',
-            data: ['"auto"','"0db"', '"2.5db"', '"6db"', '"11db"']
+            label: 'Attenuation', static: true, field: 'param-3', type: 'select',
+            data: ["auto","0db", "2.5db", "6db", "11db"]
         }
     ] as Field[]
     // const nodeOutput: Field = { label: 'Input (Pin 32-35)', field: 'value', type: 'output' }
