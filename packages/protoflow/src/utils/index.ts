@@ -19,13 +19,13 @@ export const getDataFromField = (fieldValue, field = undefined, nodeData = undef
 
     const prefix = field.split('-')[0]
     const type = getFieldType(prefix)
+    var data = nodeData[field]
     const kind = data?.kind ?? metadata['kind'] ?? "StringLiteral"
 
     var nodeDataField
 
     switch (type) {
         case 'detailed':
-            var data = nodeData[field]
             var key = field.split('-')[1]
             nodeDataField = { ...data, key, kind, value: fieldValue }
             break
