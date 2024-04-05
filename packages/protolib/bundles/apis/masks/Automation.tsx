@@ -15,7 +15,7 @@ const Automation = (node: any = {}, nodeData = {}) => {
             </div>
 
             <Button style={{ marginTop: '60px' }} label="Run" onPress={() => {
-                API.get('/api/v1/automations/' + nodeData['param-3'].value)
+                API.get('/api/v1/automations/' + getFieldValue('param-3', nodeData))
             }} />
         </Node>
     )
