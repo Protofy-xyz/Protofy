@@ -19,7 +19,7 @@ export const filterCallbackProp = () => {
     }
 }
 
-export const filterCallback = (numParam = "2", handleId = "request") => {{
+export const filterCallback = (numParam = "2", handleId = "request") => {
     return (node, childScope, edges) => {
         const callbackId = edges.find(e => e.targetHandle == getId(node) + '-param' + numParam)?.source
         const callBack = edges.find(e => e.targetHandle == callbackId + '_call')
