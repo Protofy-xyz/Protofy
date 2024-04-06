@@ -272,7 +272,15 @@ export default {
               }} deleteable={() => true} element={DevicesModel.load(data)} extraMenuActions={extraMenuActions} />
             </Stack>
             <YStack f={1}>
-              {data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)}
+              {data?.subsystem 
+                ? data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />) 
+                : (
+                  <>
+                    <Paragraph mt="20px" ml="20px" size={20}>{'You need to upload the device'}</Paragraph>
+                    <ButtonSimple mt="20px" ml="20px" width={100} onPress={() => { flashDevice(data.name, data.deviceDefinition); }}>Upload</ButtonSimple>
+                  </>
+                )
+              }
             </YStack>
           </CardBody>
         }}
