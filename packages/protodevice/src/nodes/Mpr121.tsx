@@ -9,7 +9,7 @@ const Mpr121 = (node: any = {}, nodeData = {}, children) => {
     const nodeParams: Field[] = [
         {
             label: 'Name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(cleanName(nodeData['param-1'])) }, post: (str) => str.toLowerCase(),
-            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'mpr121' ? nameErrorMsg : null
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'mpr121' ? nameErrorMsg : null
         },
         {
             label: 'SCL', static: true, field: 'param-2', type: 'select',

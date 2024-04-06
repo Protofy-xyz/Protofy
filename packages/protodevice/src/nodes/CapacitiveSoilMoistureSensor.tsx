@@ -15,11 +15,11 @@ const CapacitiveSoilMoistureSensor = (node: any = {}, nodeData = {}, children) =
     const nodeParams: Field[] = [
         {
             label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(cleanName(nodeData['param-1']))}, post: (str) => str.toLowerCase(),
-            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'adc' ? nameErrorMsg : null
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'adc' ? nameErrorMsg : null
         },
         {
             label: 'Update Interval', static: true, field: 'param-2', type: 'input',
-            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-2']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-2']?.value?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         }
     ] as Field[]
     const nodeOutput: Field = { label: 'Input (Pin 32-35)', field: 'value', type: 'output' }

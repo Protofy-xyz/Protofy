@@ -21,7 +21,7 @@ const NeopixelsBus = ({node= {}, nodeData= {}, children, color}: any) => {
         },
         {
             label: 'Default transition', static: true, field: 'param-6', type: 'input',
-            error: !['s', 'ms'].includes(nodeData['param-6']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
+            error: !['s', 'ms'].includes(nodeData['param-6']?.value?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         },
         { 
             label: 'Channel', static: true, field: 'param-7', type: 'select' ,

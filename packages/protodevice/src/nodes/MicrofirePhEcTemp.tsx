@@ -59,7 +59,7 @@ const MicrofirePhEcTemp = ({ node = {}, nodeData = {}, children, color }: any) =
         },
         {
             label: 'Update Interval', static: true, field: 'param-3', type: 'input',
-            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-3']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-3']?.value?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         },
     ] as Field[]
     return (

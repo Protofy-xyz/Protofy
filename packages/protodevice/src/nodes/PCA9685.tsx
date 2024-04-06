@@ -7,7 +7,7 @@ const PCA9685 = ({node= {}, nodeData= {}, children, color}: any) => {
     const nodeParams: Field[] = [
         {
             label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
-            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'i2c' ? nameErrorMsg : null
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'i2c' ? nameErrorMsg : null
         },
         {
             label: 'Frequency', static: true, field: 'param-2', type: 'input', 

@@ -50,7 +50,7 @@ const A4988 = ({node= {}, nodeData= {}, children, color}: any) => {
     const nodeParams: Field[] = [
         {
             label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
-            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'stepper' ? nameErrorMsg : null
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'stepper' ? nameErrorMsg : null
         },
         {
             label: 'Dir Pin', static: true, field: 'param-2', type: 'select',
@@ -58,7 +58,7 @@ const A4988 = ({node= {}, nodeData= {}, children, color}: any) => {
         },
         {
             label: 'Max speed', static: true, field: 'param-3', type: 'input',
-            error: ![' steps/s'].includes(nodeData['param-3']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            error: ![' steps/s'].includes(nodeData['param-3']?.value?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         },
         {
             label: 'Sleep Pin', static: true, field: 'param-4', type: 'select',

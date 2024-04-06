@@ -48,7 +48,7 @@ const HX711 =  ({node= {}, nodeData= {}, children, color}: any) => {
     const nodeParams: Field[] = [
         {
             label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
-            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'hx711' ? nameErrorMsg : null
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'hx711' ? nameErrorMsg : null
         },        {
             label: 'CLK Pin', static: true, field: 'param-2', type: 'select',
             data: ports.filter(port => port.type.includes('O') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
@@ -56,7 +56,7 @@ const HX711 =  ({node= {}, nodeData= {}, children, color}: any) => {
         { label: 'Gain', static: true, field: 'param-3', type: 'input'},
         {
             label: 'Update Interval', static: true, field: 'param-4', type: 'input',
-            error: !['s', 'ms'].includes(nodeData['param-4']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
+            error: !['s', 'ms'].includes(nodeData['param-4']?.value?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         }
     ] as Field[]
     return (

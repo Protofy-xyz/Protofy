@@ -13,7 +13,7 @@ const UltrasonicDistanceSensor = (node: any = {}, nodeData = {}, children) => {
         },
         {
             label: 'Update Interval', static: true, field: 'param-3', type: 'input',
-            error: !['s', 'ms'].includes(nodeData['param-3']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
+            error: !['s', 'ms'].includes(nodeData['param-3']?.value?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         },
         {
             label: 'Max distance', static: true, field: 'param-4', type: 'input'

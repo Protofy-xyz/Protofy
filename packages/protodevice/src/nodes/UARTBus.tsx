@@ -49,7 +49,7 @@ const UARTBus = ({node= {}, nodeData= {}, children, color}: any) => {
     const nodeParams: Field[] = [
         {
             label: 'Bus name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
-            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'uart' ? nameErrorMsg : null
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'uart' ? nameErrorMsg : null
         },
         {
             label: 'RX Pin', static: true, field: 'param-2', type: 'select',

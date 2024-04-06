@@ -58,7 +58,7 @@ const ModbusLoadCell = ({node= {}, nodeData= {}, children}: any) => {
         },
         {
             label: 'Update Interval', static: true, field: 'param-4', type: 'input',
-            error: !['s', 'ms'].includes(nodeData['param-4']?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
+            error: !['s', 'ms'].includes(nodeData['param-4']?.value?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         },
         { label: 'Weight register', static: true, field: 'param-5', type: 'input'},
         {

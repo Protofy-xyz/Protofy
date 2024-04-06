@@ -8,7 +8,7 @@ const MPU6050 = ({node= {}, nodeData= {}, children, color}: any) => {
     const nodeParams: Field[] = [
         {
             label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
-            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'mpu6050' ? nameErrorMsg : null
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'mpu6050' ? nameErrorMsg : null
         },
         {
             label: 'i2c bus name', static: true, field: 'param-2', type: 'input',
@@ -18,7 +18,7 @@ const MPU6050 = ({node= {}, nodeData= {}, children, color}: any) => {
         },
         {
             label: 'Update Interval', static: true, field: 'param-4', type: 'input',
-            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-4']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-4']?.value?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         }
     ] as Field[]
     return (

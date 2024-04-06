@@ -9,7 +9,7 @@ const LEDCOutput = (node: any = {}, nodeData = {}, children) => {
         { label: 'Name', static: true, field: 'param-1', type: 'input', post: (str) => str.toLowerCase() },
         {
             label: 'Frequency', static: true, field: 'param-2', type: 'input',
-            error: !nodeData['param-2']?.replace(/['"0-9]+/g, '').endsWith('Hz') ? errorMsg : null
+            error: !nodeData['param-2']?.value?.replace(/['"0-9]+/g, '').endsWith('Hz') ? errorMsg : null
         }
     ] as Field[]
     return (

@@ -10,7 +10,7 @@ const HM3301 = (node: any = {}, nodeData = {}, children) => {
     const nodeParams: Field[] = [
         {
             label: 'Name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(cleanName(nodeData['param-1'])) }, post: (str) => str.toLowerCase(),
-            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'hm3301' ? nameErrorMsg : null
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'hm3301' ? nameErrorMsg : null
         },
         {
             label: 'SCL', static: true, field: 'param-2', type: 'select',
@@ -21,7 +21,7 @@ const HM3301 = (node: any = {}, nodeData = {}, children) => {
         },
         {
             label: 'Update Interval', static: true, field: 'param-4', type: 'input',
-            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-4']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-4']?.value?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         }
         
     ] as Field[]

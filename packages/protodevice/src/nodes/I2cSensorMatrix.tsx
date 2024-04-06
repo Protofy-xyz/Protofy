@@ -11,7 +11,7 @@ const I2cSensorMatrix = (node: any = {}, nodeData = {}, children) => {
     const nodeParams: Field[] = [
         {
             label: 'Name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(cleanName(nodeData['param-1'])) }, post: (str) => str.toLowerCase(),
-            error: nodeData['param-1']?.replace(/['"]+/g, '') == 'mpu6050' ? nameErrorMsg : null
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'mpu6050' ? nameErrorMsg : null
         },
         {
             label: 'SCL', static: true, field: 'param-2', type: 'select',
@@ -19,7 +19,7 @@ const I2cSensorMatrix = (node: any = {}, nodeData = {}, children) => {
         },
         {
             label: 'Update Interval', static: true, field: 'param-3', type: 'input',
-            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-3']?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-3']?.value?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
         },
         { 
             label: 'BH1750 Address', static: true, field: 'param-4', type: 'input'
