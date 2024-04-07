@@ -305,9 +305,9 @@ export default {
                     numColumnsForm={1}
                     name="Automation"
                     columns={DataTable2.columns(
-                        DataTable2.column("name", row => row.name, true, row => <XStack id={"apis-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
-                        DataTable2.column("type", row => row.type, true, row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),
-                        DataTable2.column("object", row => row.object, true, row => <Chip text={row.object} color={row.object == 'None' ? '$gray5' : '$color5'} />),
+                        DataTable2.column("name", row => row.name, 'name', row => <XStack id={"apis-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
+                        DataTable2.column("type", row => row.type, 'type', row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),
+                        DataTable2.column("object", row => row.object, 'object', row => <Chip text={row.object} color={row.object == 'None' ? '$gray5' : '$color5'} />),
                     )}
                     onAddButton={() => setAddOpen(true)}
                     extraMenuActions={[

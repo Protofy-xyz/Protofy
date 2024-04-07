@@ -27,8 +27,8 @@ export default {
                     numColumnsForm={1}
                     name="object"
                     columns={DataTable2.columns(
-                        DataTable2.column("name", row => row.name, true, row => <XStack id={"objects-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
-                        DataTable2.column("features", row => row.features, true, row => Object.keys(row.features).map(f => <Chip text={f} color={'$gray5'} />)),
+                        DataTable2.column("name", row => row.name, "name", row => <XStack id={"objects-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
+                        DataTable2.column("features", row => row.features, "features", row => Object.keys(row.features).map(f => <Chip text={f} color={'$gray5'} />)),
                     )}
                     extraFieldsFormsAdd={{
                         api: z.boolean().after("keys").label("automatic crud api").defaultValue(true),

@@ -19,13 +19,13 @@ export default {
                     numColumnsForm={1}
                     name="resource"
                     columns={DataTable2.columns(
-                        DataTable2.column("", ()=>"", true, (row) => <a href={row.url} target='_blank'>
+                        DataTable2.column("", ()=>"", false, (row) => <a href={row.url} target='_blank'>
                             <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
                         </a>, true, '50px'),
-                        DataTable2.column("name", row => row.name, true, undefined, true, '250px'),
-                        DataTable2.column("url", row => row.url, true, undefined, true, '400px'),
-                        DataTable2.column("type", row => row.type, true, (row) => <Chip text={row.type} color={'$gray5'} />, true, "150px"),
-                        DataTable2.column("tags", row => row.tags, false, (row) => Object.keys(row?.tags ?? []).length ? Object.keys(row.tags).map((k, i) => <Chip ml={i ? '$2' : '$0'} key={k} text={row.tags[k]} color={'$color5'} />) : <Chip text='empty' color={'$gray5'} />, true, '200px')
+                        DataTable2.column("name", row => row.name, "name", undefined, true, '250px'),
+                        DataTable2.column("url", row => row.url, "url", undefined, true, '400px'),
+                        DataTable2.column("type", row => row.type, "type", (row) => <Chip text={row.type} color={'$gray5'} />, true, "150px"),
+                        DataTable2.column("tags", row => row.tags, "tags", (row) => Object.keys(row?.tags ?? []).length ? Object.keys(row.tags).map((k, i) => <Chip ml={i ? '$2' : '$0'} key={k} text={row.tags[k]} color={'$color5'} />) : <Chip text='empty' color={'$gray5'} />, true, '200px')
                     )}
                     model={ResourceModel}
                     pageState={pageState}

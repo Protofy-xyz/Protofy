@@ -92,13 +92,13 @@ export default {
         onAdd={data => { console.log("DATA (onAdd): ", data); return data }}
         onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
         columns={DataTable2.columns(
-          DataTable2.column("", ()=>"", true, (row) => <InteractiveIcon onPress={async (e) => { 
+          DataTable2.column("", ()=>"", false, (row) => <InteractiveIcon onPress={async (e) => { 
             setShowDialog(true)
             setSourceCode(row.config.components)
           }} Icon={Eye}></InteractiveIcon>, true, '50px'),
-          DataTable2.column("name", row => row.name, true),
-          DataTable2.column("board", row => row.board, true, (row) => <Chip text={row.board} color={'$gray5'} />),
-          DataTable2.column("sdk", row => row.sdk, true, (row) => <Chip text={row.sdk} color={'$gray5'} />),
+          DataTable2.column("name", row => row.name, "name"),
+          DataTable2.column("board", row => row.board, "board", (row) => <Chip text={row.board} color={'$gray5'} />),
+          DataTable2.column("sdk", row => row.sdk, "sdk", (row) => <Chip text={row.sdk} color={'$gray5'} />),
         )}
         extraFieldsForms={{
           board: z.union(boards.map(o => z.literal(o.name))).after('name'),

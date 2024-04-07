@@ -60,7 +60,9 @@ export const DataTableList = ({
                 pagination={false}
                 conditionalRowStyles={conditionalRowStyles}
                 rowsPerPage={state.itemsPerPage ? state.itemsPerPage : 25}
-                handleSort={(column, orderDirection) => mergePush({ orderBy: column.name, orderDirection })}
+                handleSort={(column, orderDirection) => {
+                    mergePush({ orderBy: column.sortField, orderDirection })}
+                }
                 handlePerRowsChange={(itemsPerPage) => push('itemsPerPage', itemsPerPage)}
                 handlePageChange={(page) => push('page', parseInt(page, 10) - 1)}
                 currentPage={(isNaN(parseInt(state.page, 10)) ? 0 : parseInt(state.page, 10)) + 1}

@@ -42,7 +42,7 @@ export default {
             ])).generateOptions(() => workspaces.data?.items.map(obj => obj.name)).after('name'),
           }}
           columns={DataTable2.columns(
-            DataTable2.column("name", row => row.name, true, undefined, true, '250px'),
+            DataTable2.column("name", row => row.name, "name", undefined, true, '250px'),
             DataTable2.column("workspaces", row => row.workspaces, false, (row) =>
               Object.keys(row?.workspaces ?? []).length
                 ? Object.keys(row.workspaces).map((k, i) =>

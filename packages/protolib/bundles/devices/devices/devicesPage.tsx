@@ -252,8 +252,8 @@ export default {
         initialItems={initialItems}
         name="device"
         columns={DataTable2.columns(
-          DataTable2.column("name", row => row.name, true),
-          DataTable2.column("device definition", row => row.deviceDefinition, true),
+          DataTable2.column("name", row => row.name, "name"),
+          DataTable2.column("device definition", row => row.deviceDefinition, "deviceDefinition"),
           DataTable2.column("config", row => row.config, false, (row) => <ButtonSimple onPress={(e) => { flashDevice(row.name, row.deviceDefinition); }}>Upload</ButtonSimple>)
         )}
         extraFieldsForms={{

@@ -157,13 +157,13 @@ export default {
                     rowIcon={() => <></>}
                     objectProps={{ columnWidth: 500 }}
                     columns={DataTable2.columns(
-                        DataTable2.column("", ()=>"", true, (row) => <a href={getUrl(row.route.startsWith('/') ? row.route : '/' + row.route)} target='_blank'>
+                        DataTable2.column("", ()=>"", false, (row) => <a href={getUrl(row.route.startsWith('/') ? row.route : '/' + row.route)} target='_blank'>
                             <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
                         </a>, true, '50px'),
-                        DataTable2.column("name", row => row.name, true, (row) => <XStack id={"pages-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
-                        DataTable2.column("route", row => row.route, true),
-                        DataTable2.column("visibility", row => row.protected, true, row => !row.protected ? <Chip text={'public'} color={'$color5'} /> : <Chip text={'protected'} color={'$gray5'} />),
-                        DataTable2.column("permissions", row => row.permissions, true, row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
+                        DataTable2.column("name", row => row.name, "name", (row) => <XStack id={"pages-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
+                        DataTable2.column("route", row => row.route, "route"),
+                        DataTable2.column("visibility", row => row.protected, "protected", row => !row.protected ? <Chip text={'public'} color={'$color5'} /> : <Chip text={'protected'} color={'$gray5'} />),
+                        DataTable2.column("permissions", row => row.permissions, "permissions", row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
                     )}
                     onAddButton={() => { setAddOpen(true) }}
                     extraMenuActions={[

@@ -63,10 +63,10 @@ export default {
 
                     // </XStack>}
                     columns={DataTable2.columns(
-                        DataTable2.column("path", row => row.path, true, undefined, true, '250px'),
-                        DataTable2.column("user", row => row.user, true, undefined, true, '200px'),
-                        DataTable2.column("from", row => row.from, true, (row) => <Chip key={row.rowId} text={row.from} color={'$gray5'} />, true),
-                        DataTable2.column("created", row => row.created, true, (row) => moment(row.created).format(format), true, '200px'),
+                        DataTable2.column("path", row => row.path, "path", undefined, true, '250px'),
+                        DataTable2.column("user", row => row.user, "user", undefined, true, '200px'),
+                        DataTable2.column("from", row => row.from, "from", (row) => <Chip key={row.rowId} text={row.from} color={'$gray5'} />, true),
+                        DataTable2.column("created", row => row.created, "created", (row) => moment(row.created).format(format), true, '200px'),
                         DataTable2.column("inspect", row => row.payload, false, (row) => <JSONViewer
                             onChange={() => { }}
                             editable={false}

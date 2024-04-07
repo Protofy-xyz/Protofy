@@ -27,8 +27,8 @@ export default {
         onAdd={data => { return data }}
         onEdit={data => { return data }}
         columns={DataTable2.columns(
-          DataTable2.column("name", "name", true),
-          DataTable2.column("sdk", "sdk", true, row => <div
+          DataTable2.column("name", (row) => row.name, "name"),
+          DataTable2.column("sdk", (row) => row.sdk, "sdk", row => <div
             style={{ gap: '5px', display: 'flex', flexDirection: 'row' }}
           >
             {

@@ -46,8 +46,9 @@ export const DataTable2 = {
     </DataTableExtensions>
   },
 
-  column: (name, selector?, sortable?, cell?, shrink?, minWidth='') => {
-    return { name, selector, sortable, cell, grow: shrink, minWidth }
+  column: (name, selector?, sortField?, cell?, shrink?, minWidth='') => {
+    const sortable = sortField ? true : false
+    return { name, selector, sortable, sortField, cell, grow: shrink, minWidth}
   },
 
   columns: (...args) => {

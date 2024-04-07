@@ -19,8 +19,8 @@ export default {
         onAdd={data => { return data }}
         onEdit={data => { return data }}
         columns={DataTable2.columns(
-          DataTable2.column("id", "id", true),
-          DataTable2.column("name", "name", true),
+          DataTable2.column("id", (row) => row.id, "id"),
+          DataTable2.column("name", (row) => row.name, "name"),
         )}
         model={DeviceSdkModel}
         pageState={pageState}
