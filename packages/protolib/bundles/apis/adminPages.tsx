@@ -32,6 +32,7 @@ const FirstSlide = ({ selected, setSelected }) => {
             <SelectGrid>
                 {Object.entries(apiTemplates).map(([templateId, template]) => (
                     <TemplateCard
+                        key={templateId}
                         template={template}
                         isSelected={selected === templateId}
                         onPress={() => setSelected(templateId)}
