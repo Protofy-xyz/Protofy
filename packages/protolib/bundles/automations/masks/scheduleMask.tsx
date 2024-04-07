@@ -1,4 +1,4 @@
-import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback } from 'protoflow';
+import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback, getFieldValue } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Timer } from 'lucide-react';
 
@@ -32,7 +32,7 @@ export default {
             && nodeData["param-1"] && nodeData["param-5"]
             && nodeData["param-3"] && nodeData["param-4"]
             && nodeData["param-2"]
-            && (nodeData["param-2"]?.startsWith('async () =>') || nodeData["param-2"]?.startsWith('() =>'))
+            && (getFieldValue("param-2",nodeData)?.startsWith('async () =>') || getFieldValue("param-2",nodeData)?.startsWith('() =>'))
         )
     },
     getComponent: (node, nodeData, children) => <ScheduleMask node={node} nodeData={nodeData} children={children} />,
@@ -46,6 +46,6 @@ export default {
             "param-5": { value: "2024", kind: "StringLiteral" },
         }
     },
-    filterChildren: filterCallback(),
-    restoreChildren: restoreCallback(),
+    filterChildren: filterCallback("-2"),
+    restoreChildren: restoreCallback("-2"),
 } 
