@@ -1,3 +1,6 @@
+import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import { generateEvent } from "../eventsLibrary"
+
 export const onEvent = (context, cb, path?, from?) => {
     context.topicSub('notifications/event/create/#', (async (msg: string, topic: string) => {
         try {
@@ -15,4 +18,13 @@ export const onEvent = (context, cb, path?, from?) => {
             console.error('Error parsing message from mqtt: ', e)
         }
     }))
+}
+
+export const emitEvent = (path, from, user, payload) => {
+    return generateEvent({
+        path,
+        from,
+        user,
+        payload
+    }, getServiceToken())
 }
