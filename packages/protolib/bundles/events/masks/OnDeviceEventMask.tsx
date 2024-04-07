@@ -27,7 +27,7 @@ export default {
     check: (node, nodeData) => {
         return node.type == "CallExpression" 
         && nodeData.to == 'context.onEvent'
-        && getFieldValue('param-2', nodeData)?.startsWith('(event) =>') || getFieldValue('param-2', nodeData)?.startsWith('async (event) =>') 
+        && ( getFieldValue('param-2', nodeData)?.startsWith('(event) =>') || getFieldValue('param-2', nodeData)?.startsWith('async (event) =>') ) 
         && nodeData["param-4"] 
         && getFieldValue('param-4', nodeData) == "device"
     },
