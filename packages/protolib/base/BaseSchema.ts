@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 initSchemaSystem()
 
 interface ZodExtensions {
+    indexed(indexFn?: Function): this;
     label(caption: string): this;
     hint(hintText: string): this;
     display(views?: string[] | undefined): this;
@@ -69,6 +70,12 @@ const onEvent = (that, eventName: string, eventHandler: string, eventContext?: '
 }
 
 function extendZodTypePrototype(type: any) {
+    type.prototype.indexed = function (indexFn?: Function) {
+        this._def.indexed = true;
+        this._def.indexFn = indexFn;
+        return this;
+    };
+
     type.prototype.label = function (caption: string) {
         this._def.label = caption;
         return this;
@@ -147,6 +154,7 @@ function extendZodTypePrototype(type: any) {
 
     type.prototype.id = function () {
         this._def.id = true;
+        this._def.indexed = true;
         return this;
     };
 

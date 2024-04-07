@@ -48,7 +48,7 @@ export const DataTableList = ({
                     DataTable2.column(
                         fields.shape[key]._def?.label ?? key,
                         row => row[key],
-                        true
+                        fields.shape[key]._def?.indexed ? key : false
                     )
                 )
         )
