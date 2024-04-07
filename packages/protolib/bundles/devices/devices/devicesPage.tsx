@@ -252,9 +252,9 @@ export default {
         initialItems={initialItems}
         name="device"
         columns={DataTable2.columns(
-          DataTable2.column("name", "name", true),
-          DataTable2.column("device definition", "deviceDefinition", true),
-          DataTable2.column("config", "config", false, (row) => <ButtonSimple onPress={(e) => { flashDevice(row.name, row.deviceDefinition); }}>Upload</ButtonSimple>)
+          DataTable2.column("name", row => row.name, true),
+          DataTable2.column("device definition", row => row.deviceDefinition, true),
+          DataTable2.column("config", row => row.config, false, (row) => <ButtonSimple onPress={(e) => { flashDevice(row.name, row.deviceDefinition); }}>Upload</ButtonSimple>)
         )}
         extraFieldsForms={{
           deviceDefinition: z.union(deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => z.literal(DeviceDefinitionModel.load(i).getId())) : []).after('name'),
