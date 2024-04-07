@@ -200,14 +200,6 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this._newInstance(data, session);
     }
 
-    static sort(elements: any[], orderBy, orderDirection) {
-        return elements.sort((a, b) => {
-            if (a[orderBy] > b[orderBy]) return orderDirection === 'asc' ? 1 : -1;
-            if (a[orderBy] < b[orderBy]) return orderDirection === 'asc' ? -1 : 1;
-            return 0;
-        });
-    }
-
     getData(data?): any {
         return { ...(this.getObjectSchema().applyGenerators(data ?? this.data)) }
     }

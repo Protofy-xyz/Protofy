@@ -158,7 +158,11 @@ export const BaseApi = (app, entityName, modelClass, initialData, prefix, dbName
         const orderBy: string = req.query.orderBy as string;
         const orderDirection = req.query.orderDirection || 'asc';
         if (orderBy) {
-            allResults = modelClass.sort(allResults, orderBy, orderDirection)
+            allResults = allResults.sort((a, b) => {
+                if (a[orderBy] > b[orderBy]) return orderDirection === 'asc' ? 1 : -1;
+                if (a[orderBy] < b[orderBy]) return orderDirection === 'asc' ? -1 : 1;
+                return 0;
+            });
         }
 
         const result = {
