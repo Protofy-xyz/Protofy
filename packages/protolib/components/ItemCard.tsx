@@ -28,7 +28,7 @@ export const ItemCard = memo(React.forwardRef(
       topBarProps?: StackProps,
       bottomBarProps?: StackProps,
       bottomBar?: any
-      image?: {src: string, width:number, height: number} | null,
+      image?: { src: string, width: number, height: number } | null,
       alt?: number | null
       onHoverSection?: (name: string) => void
       pointerEventsControls?: any
@@ -95,7 +95,7 @@ export const ItemCard = memo(React.forwardRef(
           elevation: "$2",
           overflow: 'hidden',
           ...cardProps
-        }, [
+        },
           !topBarOutSideScrollArea && topBar ? (
             <>
               <XStack
@@ -155,7 +155,7 @@ export const ItemCard = memo(React.forwardRef(
 
             </>
           ) : null
-        ])}
+        )}
       </YStack>
     )
   }
