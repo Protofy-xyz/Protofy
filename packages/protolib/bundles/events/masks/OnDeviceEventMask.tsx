@@ -5,7 +5,6 @@ import { Cable } from 'lucide-react';
 import { getFieldValue } from 'protoflow';
 
 const OnDeviceEventMask = ({ node = {}, nodeData = {}, children }: any) => {
-    console.log("lluis - nodeParam: ",nodeData["param-4"])
     const color = useColorFromPalette(45)
     return (
         <Node icon={Cable} node={node} isPreview={!node.id} title='On Device Event' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
