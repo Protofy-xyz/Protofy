@@ -1,7 +1,7 @@
 
 import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'app/schema';
 import { getInitialData } from 'app/initialData'
-import { connectDB, existsKey, getDB, handler, checkPassword, hash, genToken, app, getSessionContext } from 'protolib/api'
+import { connectDB, getDB, handler, checkPassword, hash, genToken, app, getSessionContext } from 'protolib/api'
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";
@@ -37,14 +37,15 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
     const request: LoginRequest = req.body
     try {
         LoginSchema.parse(request)
-        if(!await existsKey(dbPath, request.username)) {
+        const db = getDB(dbPath, req)
+        if(!await db.exists(request.username)) {
             return fail(request, res)
         }
 
-        const storedUser = JSON.parse(await getDB(dbPath).get(request.username))
+        const storedUser = JSON.parse(await db.get(request.username))
         if (await checkPassword(request.password, storedUser.password)) {
             //update lastLogin
-            await getDB(dbPath).put(storedUser.username, JSON.stringify({ ...storedUser, lastLogin: moment().toISOString() }))
+            await db.put(storedUser.username, JSON.stringify({ ...storedUser, lastLogin: moment().toISOString() }))
             const group = JSON.parse(await getDB(groupDBPath).get(storedUser.type))
             const newSession = {
                 id: storedUser.username,
@@ -87,7 +88,8 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
     const request: RegisterRequest = req.body
     const defaultGroup = "user"
     RegisterSchema.parse(request)
-    if (await existsKey(dbPath, request.username)) {
+    const db = getDB(dbPath, req)
+    if (await db.exists(request.username)) {
         res.status(500).send({ fieldErrors: { 'username': 'A user with the same email already exists' } });
     } else {
         const { rePassword, password, ...newUserData } = request
@@ -96,7 +98,7 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
             createdAt: moment().toISOString(),
             from: 'api'
         }
-        await getDB(dbPath).put(request.username, JSON.stringify({...newUser, password: await hash(password)}))
+        await db.put(request.username, JSON.stringify({...newUser, password: await hash(password)}))
         let group = {
             admin: false,
             permissions: [],

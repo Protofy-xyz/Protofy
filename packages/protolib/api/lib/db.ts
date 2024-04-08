@@ -41,6 +41,19 @@ class ProtoDB {
     iterator(...args) {
         return this.db.iterator(...args);
     }
+
+    async exists(key: string) {
+        try {
+            await this.db.get(key)
+            return true
+        } catch (e:any) {
+            if(e.name == 'NotFoundError') {
+                return false
+            } else {
+                throw e
+            }
+        }
+    }
 }
 
 const dbHandlers:any = {}
@@ -94,20 +107,6 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
             })
         }
     })
-}
-
-export const existsKey = async (dbPath: string, key: string) => {
-    try {
-        const db = getDB(dbPath)
-        await db.get(key)
-        return true
-    } catch (e:any) {
-        if(e.name == 'NotFoundError') {
-            return false
-        } else {
-            throw e
-        }
-    }
 }
 
 export const getDB = (dbPath:string, req?, session?):ProtoDB => {

@@ -1,5 +1,5 @@
 
-import { existsKey, getDB, hash } from 'protolib/api';
+import { getDB, hash } from 'protolib/api';
 import { CmdRegisterSchema} from 'protolib/schema';
 import moment from 'moment';
 
@@ -23,7 +23,9 @@ const addUser = async () => {
         return
     }
 
-    if(await existsKey(dbPath, username)) {
+    const db = getDB(dbPath)
+
+    if(await db.exists(username)) {
         console.error('Error creating user: A user with the same email already exists');
     } else {
         await getDB(dbPath).put(username, JSON.stringify({

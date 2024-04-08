@@ -1,5 +1,5 @@
 import { EventModel, EventType } from ".";
-import { AutoAPI, existsKey, getDB, handler } from '../../api'
+import { AutoAPI, getDB, handler } from '../../api'
 import { getServiceToken } from "../../api/lib/serviceToken";
 import { API } from "../../base";
 
@@ -9,13 +9,13 @@ const dbUsers = '../../data/databases/events_users'
 const dbEvents = '../../data/databases/events'
 
 const registerEventMeta = async (data) => {
-    if(!await existsKey(dbPaths, data.path)) {
+    if(!await getDB(dbPaths).exists(data.path)) {
         await getDB(dbPaths).put(data.path, '1')
     }
-    if(!await existsKey(dbFroms, data.from)) {
+    if(!await getDB(dbFroms).exists(data.from)) {
         await getDB(dbFroms).put(data.from, '1')
     }
-    if(!await existsKey(dbUsers, data.user)) {
+    if(!await getDB(dbUsers).exists(data.user)) {
         await getDB(dbUsers).put(data.user, '1')
     }
 }
