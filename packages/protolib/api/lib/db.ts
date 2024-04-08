@@ -7,9 +7,12 @@ const level = require('level-party')
 abstract class ProtoDB {
     location: string
     options: any
-    constructor(location, options) {
+    constructor(location, options?, context?, name?) {
         this.location = location
         this.options = options
+        if(context) {
+            context[name] = this
+        }
     }
 
     get status() {
@@ -36,12 +39,16 @@ abstract class ProtoDB {
             return false
         }
     }
+
+    static connect(location, options?, context?, name?) {
+        throw "Error: derived classes of ProtoDB should implement connect"
+    }
 }
 
 class ProtoLevelDB extends ProtoDB {
     private db
-    constructor(location, options) {
-        super(location, options);
+    constructor(location, options?, context?, name?) {
+        super(location, options, context, name);
         this.db = level(location, options);
     }
 
@@ -84,6 +91,10 @@ class ProtoLevelDB extends ProtoDB {
                 throw e
             }
         }
+    }
+
+    static connect(location, options?) {
+        return new ProtoLevelDB(location, options)
     }
 }
 
@@ -143,7 +154,7 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
 export const getDB = (dbPath:string, req?, session?):ProtoDB => {
     if (!(dbPath in dbHandlers)) {
         //@ts-ignore
-        dbHandlers[dbPath] = new ProtoLevelDB(dbPath, { valueEncoding: 'json' })
+        dbHandlers[dbPath] = ProtoLevelDB.connect(dbPath, { valueEncoding: 'json' })
         process.on('SIGINT', async () => {
             logger.info('Closing database and terminating process...');
             //@ts-ignore
