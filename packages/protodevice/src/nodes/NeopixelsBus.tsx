@@ -1,11 +1,12 @@
 import React from "react";
-import {Node, Field, NodeParams } from 'protoflow';
+import { Node, Field, NodeParams } from 'protoflow';
+import { getColor } from ".";
 
-const NeopixelsBus = ({node= {}, nodeData= {}, children, color}: any) => {
+const NeopixelsBus = ({ node = {}, nodeData = {}, children, color }: any) => {
     const transitionErrorMsg = 'Add units s/ms'
 
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param-1', type: 'input'},
+        { label: 'Name', static: true, field: 'param-1', type: 'input' },
         { label: '#LEDS', static: true, field: 'param-2', type: 'input' },
         {
             label: 'RGB Order', static: true, field: 'param-3', type: 'select',
@@ -23,8 +24,8 @@ const NeopixelsBus = ({node= {}, nodeData= {}, children, color}: any) => {
             label: 'Default transition', static: true, field: 'param-6', type: 'input',
             error: !['s', 'ms'].includes(nodeData['param-6']?.value?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         },
-        { 
-            label: 'Channel', static: true, field: 'param-7', type: 'select' ,
+        {
+            label: 'Channel', static: true, field: 'param-7', type: 'select',
             data: ['0', '1', '2', '3', '4', '5', '6', '7']
         },
         {
@@ -68,4 +69,10 @@ const NeopixelsBus = ({node= {}, nodeData= {}, children, color}: any) => {
     )
 }
 
-export default NeopixelsBus
+export default {
+    id: 'NeopixelsBus',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('neopixelsBus'), //TODO: Change output function name
+    getComponent: (node, nodeData, children) => <NeopixelsBus color={getColor('NeopixelsBus')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'neopixelsBus', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "16", kind: "StringLiteral" }, "param-3": { value: "GRB", kind: "StringLiteral" }, "param-4": { value: "WS2811", kind: "StringLiteral" }, "param-5": { value: "ALWAYS_ON", kind: "StringLiteral" }, "param-6": { value: "1s", kind: "StringLiteral" }, "param-7": { value: "0", kind: "StringLiteral" }, "param-8": { value: false, kind: "FalseKeyword" }, "param-9": { value: false, kind: "FalseKeyword" }, "param-10": { value: false, kind: "FalseKeyword" }, "param-11": { value: false, kind: "FalseKeyword" }, "param-12": { value: false, kind: "FalseKeyword" }, "param-13": { value: false, kind: "FalseKeyword" }, "param-14": { value: false, kind: "FalseKeyword" }, "param-15": { value: false, kind: "FalseKeyword" }, "param-16": { value: false, kind: "FalseKeyword" }, "param-17": { value: false, kind: "FalseKeyword" }, "param-18": { value: false, kind: "FalseKeyword" } } }
+}

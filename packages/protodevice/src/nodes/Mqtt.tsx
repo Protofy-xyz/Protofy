@@ -1,4 +1,5 @@
 import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
+import { getColor } from '.';
 
 const Mqtt = ({node= {}, nodeData= {}, children, color}: any) => {
 
@@ -14,4 +15,10 @@ const Mqtt = ({node= {}, nodeData= {}, children, color}: any) => {
     )
 }
 
-export default Mqtt
+export default   {
+    id: 'Mqtt',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mqtt'), //TODO: Change output function name
+    getComponent: (node, nodeData, children) => <Mqtt color={getColor('Mqtt')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'mqtt', "param-1": { value: "BROKERADDRESS", kind: "StringLiteral" }, "param-2": { value: "1883", kind: "StringLiteral" } } }
+  }

@@ -1,5 +1,6 @@
 import React from "react";
-import {Node, Field, NodeParams } from 'protoflow';
+import { Node, Field, NodeParams } from 'protoflow';
+import { getColor } from ".";
 
 //TODO Get ports from device definition
 const ports = [
@@ -43,13 +44,13 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const A4988 = ({node= {}, nodeData= {}, children, color}: any) => {
-    const [name,setName] = React.useState(nodeData['param-1'])
+const A4988 = ({ node = {}, nodeData = {}, children, color }: any) => {
+    const [name, setName] = React.useState(nodeData['param-1'])
     const nameErrorMsg = 'Reserved name'
     const intervalErrorMsg = 'Add units steps/s'
     const nodeParams: Field[] = [
         {
-            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
+            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(nodeData['param-1']) },
             error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'stepper' ? nameErrorMsg : null
         },
         {
@@ -75,7 +76,13 @@ const A4988 = ({node= {}, nodeData= {}, children, color}: any) => {
         <Node node={node} isPreview={!node.id} title='A4988 Stepper driver' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
-    ) 
+    )
 }
 
-export default A4988
+export default {
+    id: 'A4988',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('a4988'),
+    getComponent: (node, nodeData, children) => <A4988 color={getColor('A4988')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'a4988', "param-1": "", "param-2": "", "param-3": "250 steps/s", "param-4": "none", "param-5": "inf", "param-6": "inf" } }
+}

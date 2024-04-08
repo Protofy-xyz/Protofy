@@ -1,11 +1,12 @@
-import React,{useContext} from "react";
-import { AddPropButton, PORT_TYPES, Node, NodeParams,FlowStoreContext } from 'protoflow';
+import React, { useContext } from "react";
+import { AddPropButton, PORT_TYPES, Node, NodeParams, FlowStoreContext } from 'protoflow';
 import { Handle, Position, useEdges } from "reactflow";
 // import { useAppStore } from "../../../../../context/appStore";
 import { useDeviceStore } from "../oldThings/DeviceStore";
 // import { MaterialCommunityIcons } from '@expo/vector-icons';
 import esp32c4 from '../assets/esp32c4.png';
-import { useSubscription  } from 'mqtt-react-hooks';
+import { useSubscription } from 'mqtt-react-hooks';
+import { getColor } from ".";
 
 const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId))
 //TODO Get ports from device definition
@@ -50,7 +51,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const Device = ({node= {}, nodeData= {}, topics = {}, color}: any) => {
+const Device = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
     const { publish, data } = topics;
     const { id, type } = node
     const useFlowsStore = useContext(FlowStoreContext)
@@ -116,19 +117,19 @@ const Device = ({node= {}, nodeData= {}, topics = {}, color}: any) => {
     //         setConnected("offline")
     //     }
     // }, [message])
-    const devicePositioning = Array(34).fill(1).map((x,i)=>{
+    const devicePositioning = Array(34).fill(1).map((x, i) => {
         if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
-            return `${i + 2}-${i>14?'l':'r'}-${i}`
+            return `${i + 2}-${i > 14 ? 'l' : 'r'}-${i}`
         }
     })
     console.log("DevicePositioning: ", devicePositioning)
-    if(!nodeData._devicePositioning){
-        setNodeData(node.id,{...nodeData, _devicePositioning: devicePositioning})
+    if (!nodeData._devicePositioning) {
+        setNodeData(node.id, { ...nodeData, _devicePositioning: devicePositioning })
     }
-    console.log("NodeData: ",nodeData)
+    console.log("NodeData: ", nodeData)
     console.log("node: ", node)
-    console.log("Calculanting: ",Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")))
-    console.log("Boolean value: ",Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")).length >35)
+    console.log("Calculanting: ", Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")))
+    console.log("Boolean value: ", Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")).length > 35)
     return (
         <Node output={false} skipCustom={true} node={node} color={color} isPreview={!id} title='ESP32' id={id} margin='200px' >
             {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
@@ -142,7 +143,7 @@ const Device = ({node= {}, nodeData= {}, topics = {}, color}: any) => {
             </div>
             {Array(34).fill(1).map((x, i) => {
                 if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
-                    const idString = `${id}${PORT_TYPES.data}element-${i+2}`;//${i>14?'l':'r'}
+                    const idString = `${id}${PORT_TYPES.data}element-${i + 2}`;//${i>14?'l':'r'}
                     return <Handle
                         key={i}
                         isConnectable={!isHandleConnected(edges, idString)}
@@ -195,4 +196,12 @@ const Device = ({node= {}, nodeData= {}, topics = {}, color}: any) => {
     );
 }
 
-export default Device
+export default {
+    id: 'esp32dev',
+    type: 'ArrayLiteralExpression',
+    check: (node, nodeData) => node.type == "ArrayLiteralExpression" && nodeData['element-1'] == '"esp32dev"',
+    getComponent: (node, nodeData, children) => <Device color={getColor('esp32dev')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: '"esp32dev"' } },
+    hidden: true,
+    nonDeletable: true
+}

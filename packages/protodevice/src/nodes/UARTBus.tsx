@@ -1,5 +1,6 @@
 import React from "react";
-import {Node, Field, NodeParams } from 'protoflow';
+import { Node, Field, NodeParams } from 'protoflow';
+import { getColor } from ".";
 
 //TODO Get ports from device definition
 const ports = [
@@ -43,12 +44,12 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const UARTBus = ({node= {}, nodeData= {}, children, color}: any) => {
-    const [name,setName] = React.useState(nodeData['param-1'])
+const UARTBus = ({ node = {}, nodeData = {}, children, color }: any) => {
+    const [name, setName] = React.useState(nodeData['param-1'])
     const nameErrorMsg = 'Reserved name'
     const nodeParams: Field[] = [
         {
-            label: 'Bus name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
+            label: 'Bus name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(nodeData['param-1']) },
             error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'uart' ? nameErrorMsg : null
         },
         {
@@ -63,7 +64,13 @@ const UARTBus = ({node= {}, nodeData= {}, children, color}: any) => {
         <Node node={node} isPreview={!node.id} title='UART Bus' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
-    ) 
+    )
 }
 
-export default UARTBus
+export default {
+    id: 'UARTBus',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('uartBus'),
+    getComponent: (node, nodeData, children) => <UARTBus color={getColor('UARTBus')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'uartBus', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "17", kind: "StringLiteral" }, "param-3": { value: "9600", kind: "StringLiteral" } } }
+}

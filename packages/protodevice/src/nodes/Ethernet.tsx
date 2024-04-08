@@ -1,5 +1,6 @@
 import React from "react";
-import {Node, Field, NodeParams } from 'protoflow';
+import { Node, Field, NodeParams } from 'protoflow';
+import { getColor } from ".";
 
 const ports = [
     { "number": 1, "side": "left", "name": "3V3", "type": "P", "analog": false, "description": "3V3 Power supply", "maxVoltage": 3.3, "rtc": false },
@@ -42,7 +43,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const Ethernet = ({node= {}, nodeData= {}, children, color}: any) => {
+const Ethernet = ({ node = {}, nodeData = {}, children, color }: any) => {
     const nodeParams: Field[] = [
         {
             label: 'Type', static: true, field: 'param-1', type: 'select',
@@ -60,7 +61,7 @@ const Ethernet = ({node= {}, nodeData= {}, children, color}: any) => {
             label: 'Clk mode', static: true, field: 'param-4', type: 'select',
             data: ["GPIO0_IN", "GPIO0_OUT", "GPIO16_OUT", "GPIO17_OUT"]
         },
-        { 
+        {
             label: 'Phy address', static: true, field: 'param-5', type: 'input'
         },
         {
@@ -72,7 +73,13 @@ const Ethernet = ({node= {}, nodeData= {}, children, color}: any) => {
         <Node node={node} isPreview={!node.id} title='Ethernet' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
-    ) 
+    )
 }
 
-export default Ethernet
+export default {
+    id: 'Ethernet',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('ethernet'),
+    getComponent: (node, nodeData, children) => <Ethernet color={getColor('Ethernet')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'ethernet', "param-1": { value: "LAN8720", kind: "StringLiteral" }, "param-2": { value: 23, kind: "NumericLiteral" }, "param-3": { value: 18, kind: "NumericLiteral" }, "param-4": { value: "GPIO17_OUT", kind: "StringLiteral" }, "param-5": { value: 0, kind: "NumericLiteral" }, "param-6": { value: 12, kind: "NumericLiteral" } } }
+}

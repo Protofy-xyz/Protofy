@@ -1,17 +1,18 @@
 import React from "react";
-import {Node, Field, NodeParams } from 'protoflow';
+import { Node, Field, NodeParams } from 'protoflow';
+import { getColor } from ".";
 // import { Text, Progress, XStack } from "tamagui";
 // import NodeBus, { cleanName, generateTopic } from "../NodeBus";
 // import { useDeviceStore } from "../oldThings/DeviceStore";
 // import { useSubscription } from "mqtt-react-hooks";
 
-const ADCSensor = ({node= {}, nodeData= {}, children, color}: any) => {
-    const [name,setName] = React.useState(nodeData['param-1'])
+const ADCSensor = ({ node = {}, nodeData = {}, children, color }: any) => {
+    const [name, setName] = React.useState(nodeData['param-1'])
     const nameErrorMsg = 'Reserved name'
     const intervalErrorMsg = 'Add units h/m/s/ms'
     const nodeParams: Field[] = [
         {
-            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
+            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(nodeData['param-1']) },
             error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'adc' ? nameErrorMsg : null
         },
         {
@@ -20,17 +21,17 @@ const ADCSensor = ({node= {}, nodeData= {}, children, color}: any) => {
         },
         {
             label: 'Attenuation', static: true, field: 'param-3', type: 'select',
-            data: ["auto","0db", "2.5db", "6db", "11db"]
+            data: ["auto", "0db", "2.5db", "6db", "11db"]
         }
     ] as Field[]
     // const nodeOutput: Field = { label: 'Input (Pin 32-35)', field: 'value', type: 'output' }
     // const currentDevice = useDeviceStore(state => state.electronicDevice);
     // const type = 'sensor';
     // const mqttTopic = generateTopic(currentDevice,type,name)
-        
+
     // const[adcValue,setAdcValue] = React.useState(0);
     // const { message }  = useSubscription(mqttTopic)
-   
+
     // React.useEffect(() => {
     //     setAdcValue(parseFloat(message?.message?.toString())*100/3.3)
     // }, [message])
@@ -50,4 +51,10 @@ const ADCSensor = ({node= {}, nodeData= {}, children, color}: any) => {
     )
 }
 
-export default ADCSensor
+export default {
+    id: 'ADCSensor',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('adcSensor'),
+    getComponent: (node, nodeData, children) => <ADCSensor color={getColor('ADCSensor')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'adcSensor', "param-1": { value: "analogic", kind: "StringLiteral" }, "param-2": { value: "30s", kind: "StringLiteral" }, "param-3": { value: "auto", kind: "StringLiteral" } } }
+}

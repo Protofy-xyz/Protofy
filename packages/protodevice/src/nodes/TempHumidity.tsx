@@ -1,5 +1,6 @@
 import React from "react";
 import { Node, Field, NodeParams } from 'protoflow';
+import { getColor } from ".";
 // import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
 // import { pinTable } from '../../../lib/device/Device'
 
@@ -24,4 +25,10 @@ const TempHumidity = ({ node = {}, nodeData = {}, children, color }: any) => {
     )
 }
 
-export default TempHumidity
+export default {
+    id: 'TempHumidity',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('tempHumidity'),
+    getComponent: (node, nodeData, children) => <TempHumidity color={getColor('TempHumidity')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'tempHumidity', "param-1": { value: "temperaturehumidity", kind: "StringLiteral" }, "param-2": { value: "DHT22", kind: "StringLiteral" }, "param-3": { value: "60s", kind: "StringLiteral" } } }
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import { Node, Field, NodeParams } from 'protoflow';
 import pinTable from '../device/Device'
+import { getColor } from ".";
 // import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
 // import { pinTable } from '../../../lib/device/Device'
 
@@ -69,4 +70,10 @@ const MicrofirePhEcTemp = ({ node = {}, nodeData = {}, children, color }: any) =
     )
 }
 
-export default MicrofirePhEcTemp
+export default {
+    id: 'MicrofirePhEcTemp',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('microfirePhEcTemp'),
+    getComponent: (node, nodeData, children) => <MicrofirePhEcTemp color={getColor('MicrofirePhEcTemp')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'microfirePhEcTemp', "param-1": { value: "phectemp", kind: "StringLiteral" }, "param-2": { value: 22, kind: "NumericLiteral" }, "param-3": { value: "60s", kind: "StringLiteral" } } }
+}

@@ -1,6 +1,7 @@
-import {Node, Field, NodeParams } from 'protoflow';
+import { Node, Field, NodeParams } from 'protoflow';
+import { getColor } from '.';
 
-const MHZ19 = ({node = {}, nodeData = {}, children, color}: any) => {
+const MHZ19 = ({ node = {}, nodeData = {}, children, color }: any) => {
     const transitionErrorMsg = 'Add units s/ms'
     const nodeParams: Field[] = [
         { label: 'Name', static: true, field: 'param-1', type: 'input' },
@@ -19,4 +20,10 @@ const MHZ19 = ({node = {}, nodeData = {}, children, color}: any) => {
     )
 }
 
-export default MHZ19
+export default {
+    id: 'MHZ19',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mhz19'),
+    getComponent: (node, nodeData, children) => <MHZ19 color={getColor('MHZ19')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'mhz19', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "30s", kind: "StringLiteral" } } }
+}

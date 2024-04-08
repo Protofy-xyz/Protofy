@@ -1,5 +1,6 @@
 import React from "react";
-import {Node, Field, NodeParams } from 'protoflow';
+import { Node, Field, NodeParams } from 'protoflow';
+import { getColor } from ".";
 
 //TODO Get ports from device definition
 const ports = [
@@ -43,12 +44,12 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const I2cBus = ({node= {}, nodeData= {}, children, color}: any) => {
-    const [name,setName] = React.useState(nodeData['param-1'])
+const I2cBus = ({ node = {}, nodeData = {}, children, color }: any) => {
+    const [name, setName] = React.useState(nodeData['param-1'])
     const nameErrorMsg = 'Reserved name'
     const nodeParams: Field[] = [
         {
-            label: 'Bus name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
+            label: 'Bus name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(nodeData['param-1']) },
             error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'i2c' ? nameErrorMsg : null
         },
         {
@@ -63,7 +64,13 @@ const I2cBus = ({node= {}, nodeData= {}, children, color}: any) => {
         <Node node={node} isPreview={!node.id} title='i2c Bus' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
-    ) 
+    )
 }
 
-export default I2cBus
+export default {
+    id: 'I2cBus',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('i2cBus'),
+    getComponent: (node, nodeData, children) => <I2cBus color={getColor('I2cBus')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'i2cBus', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "22", kind: "StringLiteral" }, "param-3": { value: true, kind: "FalseKeyword" } } }
+}

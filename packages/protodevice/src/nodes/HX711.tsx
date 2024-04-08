@@ -1,5 +1,6 @@
 import React from "react";
 import { Node, Field, HandleOutput, NodeParams } from "protoflow";
+import { getColor } from ".";
 //TODO Get ports from device definition
 const ports = [
     { "number": 1, "side": "left", "name": "3V3", "type": "P", "analog": false, "description": "3V3 Power supply", "maxVoltage": 3.3, "rtc": false },
@@ -41,19 +42,19 @@ const ports = [
     { "number": 18, "side": "right", "name": "7", "type": "IO", "analog": false, "description": "GPIO7, D0", "maxVoltage": 3.3, "rtc": false },
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
-const HX711 =  ({node= {}, nodeData= {}, children, color}: any) => {
+const HX711 = ({ node = {}, nodeData = {}, children, color }: any) => {
     const transitionErrorMsg = 'Add units s/ms'
     const nameErrorMsg = 'Reserved name'
-    const [name,setName] = React.useState(nodeData['param-1'])
+    const [name, setName] = React.useState(nodeData['param-1'])
     const nodeParams: Field[] = [
         {
-            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur:()=>{setName(nodeData['param-1'])},
+            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(nodeData['param-1']) },
             error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'hx711' ? nameErrorMsg : null
-        },        {
+        }, {
             label: 'CLK Pin', static: true, field: 'param-2', type: 'select',
             data: ports.filter(port => port.type.includes('O') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
         },
-        { label: 'Gain', static: true, field: 'param-3', type: 'input'},
+        { label: 'Gain', static: true, field: 'param-3', type: 'input' },
         {
             label: 'Update Interval', static: true, field: 'param-4', type: 'input',
             error: !['s', 'ms'].includes(nodeData['param-4']?.value?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
@@ -66,4 +67,10 @@ const HX711 =  ({node= {}, nodeData= {}, children, color}: any) => {
     )
 }
 
-export default HX711
+export default {
+    id: 'HX711',
+    type: 'CallExpression',
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('hx711'),
+    getComponent: (node, nodeData, children) => <HX711 color={getColor('HX711')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'hx711', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "128", kind: "StringLiteral" }, "param-4": { value: "60s", kind: "StringLiteral" } } }
+}
