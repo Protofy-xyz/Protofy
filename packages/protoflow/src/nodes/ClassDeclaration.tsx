@@ -16,7 +16,7 @@ export const ClassFactory = (classType) => {
         const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
         const setNodeData = useFlowsStore(state => state.setNodeData)
 
-        const memberArr = Object.keys(nodeData)?.filter(n => n.startsWith('member-'))
+        const memberArr = Object.keys(nodeData)?.filter(n => (n.startsWith('member-') || n.startsWith('param-')))
         const members: Field[] = memberArr?.map((member, i) => {
             //TODO: change deleteable to true (both) once delete nodes fixed
             if (member.startsWith('param-')) {
@@ -99,7 +99,7 @@ export const ClassFactory = (classType) => {
     components.dataOutput = DataOutput.flow
     components.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level = 0) => {
         const data = nodesData[node.id] ?? {};
-        const body = Object.keys(data)?.filter(n => n.startsWith('member-')).reduce((total, param, i) => {
+        const body = Object.keys(data)?.filter(n => (n.startsWith('member-') || n.startsWith('param-'))).reduce((total, param, i) => {
             if (param.startsWith('param-')) {
                 const paramKey = data[param].key ?? ''
                 const paramValue = data[param].value
