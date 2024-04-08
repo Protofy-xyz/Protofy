@@ -308,8 +308,8 @@ class NeopixelsBus {
                 },
                 {
                     name: 'toggle',
-                    label: 'Toggle',
-                    description: 'Turn on an effect on the gpio',
+                    label: 'Pulse Effect',
+                    description: 'Turn on an effect on the neopixel bus',
                     endpoint: "/" + this.type + "/" + this.name + "/command",
                     connectionType: 'mqtt',
                     payload: {
