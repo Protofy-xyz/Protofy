@@ -22,7 +22,6 @@ const registerEventMeta = async (data) => {
 const EventAPI = AutoAPI({
     modelName: 'events',
     modelType: EventModel,
-    initialDataDir: __dirname,
     prefix: '/adminapi/v1/',
     dbName: 'events',
     disableEvents: true,

@@ -1,10 +1,9 @@
 import { UserModel } from "./";
-import {AutoAPI, CreateApi, hash} from '../../api'
+import { AutoAPI, hash} from '../../api'
 
 export const UsersAPI = AutoAPI({
     modelName: 'accounts',
     modelType: UserModel,
-    initialDataDir: __dirname,
     prefix: '/adminapi/v1/',
     dbName: 'auth',
     transformers: {

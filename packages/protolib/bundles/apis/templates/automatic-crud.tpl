@@ -17,7 +17,7 @@ const {name, prefix} = Objects.{{object}}.getApiOptions()
 const {{name}}API = AutoAPI({
     modelName: name,
     modelType: Objects.{{object}},
-    initialDataDir: __dirname,
+    initialData: {},
     prefix: prefix
 })
 

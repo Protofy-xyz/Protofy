@@ -1,10 +1,9 @@
 import { API } from "protolib/base";
 import { DevicesModel } from ".";
-import { connectDB, getDB, AutoAPI, handler } from '../../../api'
+import { getDB, AutoAPI, handler } from '../../../api'
 import { getServiceToken } from "protolib/api/lib/serviceToken";
 import { generateEvent } from "protolib/bundles/events/eventsLibrary";
 import { getLogger } from 'protolib/base/logger';
-import { getInitialData } from 'app/initialData';
 import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
@@ -12,7 +11,6 @@ import path from 'path';
 export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
     modelType: DevicesModel,
-    initialDataDir: __dirname,
     prefix: '/adminapi/v1/'
 })
 

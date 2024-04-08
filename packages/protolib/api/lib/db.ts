@@ -1,5 +1,7 @@
 import { Level } from 'level';
 import { getLogger } from '../../base';
+import path from 'path'
+import fs from 'fs'
 
 const logger = getLogger()
 const level = require('level-party')
@@ -72,7 +74,11 @@ abstract class ProtoDB {
         }
     }
 
-    static initDB(dbPath:string, initialData=[], options?) {
+    static initDB(dbPath:string, initialData={}, options?) {
+        if(!fs.existsSync(dbPath)) {
+            fs.mkdirSync(dbPath)
+        }
+
         return new Promise((resolve, reject) => {
             logger.debug(`connecting to database: ${dbPath}`);
     
@@ -80,18 +86,17 @@ abstract class ProtoDB {
     
             const onDone = async () => {
                 logger.debug(`connected to database on: ${dbPath}`)
-                try {
-                    await db.get('initialized')
-                    resolve(null)
-                } catch (e) {
-                    logger.info('database not initialized, loading initialData...')
+                if(!fs.existsSync(path.join(dbPath, "initialized"))) {
+                    logger.info('database '+dbPath+' not initialized, loading initialData...')
                     try {
-                        const _initialData = initialData ? initialData : []
-                        for (let item of _initialData) {
-                            await db.put(item.key, item.value)
-                            logger.debug({ key: item.key, value: item.value }, `Added: ${item.key} -> ${JSON.stringify(item.value)}`)
+                        const keys = Object.keys(initialData)
+                        
+                        for (let key of keys) {
+                            await db.put(key, JSON.stringify(initialData[key]))
+                            logger.debug({ key: key, value: initialData[key] }, `Added: ${key} -> ${JSON.stringify(initialData[key])}`)
                         }
-                        await db.put('initialized', 'done')
+
+                        await fs.writeFileSync(path.join(dbPath, "initialized"), JSON.stringify(initialData))
                         resolve(null)
                     } catch (error) {
                         logger.error({ error }, "Error initializing the database")
@@ -168,7 +173,7 @@ class ProtoLevelDB extends ProtoDB {
     }
 }
 
-export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
+export const connectDB = (dbPath:string, initialData?: Object) => {
     return ProtoLevelDB.initDB(dbPath, initialData)
 }
 

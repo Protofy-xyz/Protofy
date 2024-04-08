@@ -184,7 +184,6 @@ const getDB = (path, req, session) => {
 export const ObjectsAPI = AutoAPI({
   modelName: 'objects',
   modelType: ObjectModel,
-  initialDataDir: __dirname,
   prefix: '/adminapi/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),

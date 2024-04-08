@@ -1,9 +1,27 @@
 import { DeviceDefinitionModel } from ".";
-import { AutoAPI, CreateApi } from '../../../api'
+import { AutoAPI } from '../../../api'
 
+const initialData = {
+    "Empty device": {
+        "id": "1",
+        "name": "Empty device",
+        "board": "Protofy ESP32 devBoard",
+        "sdk": "esphome",
+        "subsystems": {},
+        "config": {
+            "components": "[\n \"mydevice\",\n \"esp32dev\", \n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null\n]",
+            "sdkConfig": {
+                "board": "esp32dev",
+                "framework": {
+                    "type": "arduino"
+                }
+            }
+        }
+    }
+}
 export const DeviceDefinitionsAPI = AutoAPI({
     modelName: 'devicedefinitions',
     modelType: DeviceDefinitionModel,
-    initialDataDir: __dirname,
+    initialData,
     prefix: '/adminapi/v1/'
 })

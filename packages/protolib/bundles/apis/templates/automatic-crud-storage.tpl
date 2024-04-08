@@ -52,7 +52,7 @@ export default Protofy("code", async (app: Application, context) => {
 const {{name}}API = AutoAPI({
         modelName: name,
         modelType: Objects.{{object}},
-        initialDataDir: __dirname,
+        initialData: {},
         prefix: prefix,
         getDB: (path, req, session) => {
             const db = {

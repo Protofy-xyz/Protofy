@@ -1,11 +1,9 @@
-import { CreateApi, handler } from 'protolib/api'
+import { handler, AutoAPI, getRoot, connectDB, getDB, closeDBS} from 'protolib/api'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as fspath from 'path'
 import fse from 'fs-extra'
 import { DatabaseEntryModel, DatabaseModel } from './databasesSchemas'
-import { connectDB, getDB, closeDBS } from 'protolib/api'
-import { AutoAPI, getRoot } from '../../api'
 
 const dbDir = (root) => fspath.join(root, "/data/databases/")
 
@@ -83,7 +81,6 @@ export const getDatabases = async () => {
 const EventAPI = AutoAPI({
   modelName: 'databases',
   modelType: DatabaseModel,
-  initialDataDir: __dirname,
   prefix: '/adminapi/v1/',
   dbName: '',
   requiresAdmin: ['*'],

@@ -1,9 +1,15 @@
 import { DeviceSdkModel } from ".";
-import { AutoAPI, CreateApi } from '../../../api'
+import { AutoAPI } from '../../../api'
 
+const initialData = {
+    "1": {   
+        "id": "1",
+        "name": "esphome"
+    }
+}
 export const DeviceSdksAPI = AutoAPI({
     modelName: 'devicesdks',
     modelType: DeviceSdkModel,
-    initialDataDir: __dirname,
+    initialData,
     prefix: '/adminapi/v1/'
 })

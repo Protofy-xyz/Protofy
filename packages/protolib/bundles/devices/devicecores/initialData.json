@@ -1,8 +1,0 @@
-[
-    {   
-        "id": "1",
-        "name": "esp32",
-        "sdks": ["esphome"],
-        "config": {}
-    }
-]
