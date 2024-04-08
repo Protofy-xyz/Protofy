@@ -88,18 +88,20 @@ export abstract class ProtoDB {
     
             logger.debug(`connected to database on: ${dbPath}`);
             //check for database version, if it doesnt exists, assume v1
-            if(false && !fs.existsSync(path.join(dbPath, 'version'))) {
+            if(!fs.existsSync(path.join(dbPath, 'version'))) {
+                console.log('Converting from v1 to v2: Detected database version v1 for database: ', dbPath)
                 for await (const [key, value] of db.rootDb.iterator()) {
-                    console.log('key ------------------------------------------>', key)
-
-                    if (!key.includes('!!')) {
+                    if (!key.includes('!')) {
                         if(key != 'initialized') {
+                            console.log('Moving item: ', key, 'from root level to values sublevel')
                             await db.put(key, value);
+                            console.log('will store in sublevel: ', key, value)
                         }
+
                         await db.rootDb.del(key);
                     }
                 }
-                //fs.writeFileSync(path.join(location, 'version'), '2')
+                fs.writeFileSync(path.join(dbPath, 'version'), '2')
             }
             if (!fs.existsSync(path.join(dbPath, "initialized"))) {
                 logger.info('database ' + dbPath + ' not initialized, loading initialData...');
@@ -131,9 +133,7 @@ export class ProtoLevelDB extends ProtoDB {
     constructor(location, options?, config?:ProtoDBConfig) {
         super(location, options, config);
         this.rootDb = level(location, options);
-        //this.db = sublevel(this.rootDb, 'values')
-
-        this.db = this.rootDb
+        this.db = sublevel(this.rootDb, 'values')
     }
 
     get status() {
