@@ -12,7 +12,7 @@ type ProtoDBConfig = {
     name?: string,
     disablePooling?: boolean
 }
-abstract class ProtoDB {
+export abstract class ProtoDB {
     location: string
     options: any //database-level options. If the connector is for leveldb, those are leveldb options
     config: ProtoDBConfig //configuration of the behaviour of the OOP class (disable cache, context and names...)
@@ -78,11 +78,11 @@ abstract class ProtoDB {
         if(!fs.existsSync(dbPath)) {
             fs.mkdirSync(dbPath)
         }
-
+        
         return new Promise((resolve, reject) => {
             logger.debug(`connecting to database: ${dbPath}`);
     
-            const db = getDB(dbPath)
+            const db = this.connect(dbPath)
     
             const onDone = async () => {
                 logger.debug(`connected to database on: ${dbPath}`)
@@ -96,7 +96,7 @@ abstract class ProtoDB {
                             logger.debug({ key: key, value: initialData[key] }, `Added: ${key} -> ${JSON.stringify(initialData[key])}`)
                         }
 
-                        await fs.writeFileSync(path.join(dbPath, "initialized"), JSON.stringify(initialData))
+                        await fs.writeFileSync(path.join(dbPath, "initialized"), JSON.stringify(initialData, null, 4))
                         resolve(null)
                     } catch (error) {
                         logger.error({ error }, "Error initializing the database")
@@ -120,7 +120,7 @@ abstract class ProtoDB {
     }
 }
 
-class ProtoLevelDB extends ProtoDB {
+export class ProtoLevelDB extends ProtoDB {
     private db
     constructor(location, options?, config?:ProtoDBConfig) {
         super(location, options, config);
@@ -168,6 +168,11 @@ class ProtoLevelDB extends ProtoDB {
         }
     }
 
+    static connect(location, options?, config?) {
+        options = options ? {valueEncoding: 'json', ...options} : {valueEncoding: 'json'}
+        return super.connect(location, options, config)
+    }
+
     static getInstance(location, options?, config?:ProtoDBConfig) {
         return new ProtoLevelDB(location, options, config)
     }
@@ -178,7 +183,7 @@ export const connectDB = (dbPath:string, initialData?: Object) => {
 }
 
 export const getDB = (dbPath:string, req?, session?):ProtoDB => {
-    return ProtoLevelDB.connect(dbPath, { valueEncoding: 'json' })
+    return ProtoLevelDB.connect(dbPath)
 }
 
 export const closeDBS = async () => {
