@@ -15,7 +15,6 @@ const dbPath = '../../data/databases/auth'
 const groupDBPath = '../../data/databases/auth_groups'
 
 connectDB(dbPath, getInitialData(dbPath)) //preconnect database
-connectDB(groupDBPath, getInitialData(groupDBPath)) //preco
 
 const genNewSession = (data: any) => {
     return {
@@ -46,7 +45,13 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
         if (await checkPassword(request.password, storedUser.password)) {
             //update lastLogin
             await db.put(storedUser.username, JSON.stringify({ ...storedUser, lastLogin: moment().toISOString() }))
-            const group = JSON.parse(await getDB(groupDBPath).get(storedUser.type))
+            let group
+            try {
+                group = JSON.parse(await getDB(groupDBPath).get(storedUser.type))
+            } catch(e) {
+                logger.error({error: e, user: request.username, group: storedUser.type}, "Error reading group for user")
+                throw "Error reading group for user: "+request.username
+            }
             const newSession = {
                 id: storedUser.username,
                 type: storedUser.type,

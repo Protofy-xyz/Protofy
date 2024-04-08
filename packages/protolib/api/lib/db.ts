@@ -1,16 +1,16 @@
-import { Level } from 'level';
 import { getLogger } from '../../base';
 import path from 'path'
 import fs from 'fs'
 
-const logger = getLogger()
 const level = require('level-party')
+const sublevel = require('subleveldown')
+
+const logger = getLogger()
 const dbHandlers:any = {}
 
 type ProtoDBConfig = {
     context?: any,
-    name?: string,
-    disablePooling?: boolean
+    name?: string
 }
 export abstract class ProtoDB {
     location: string
@@ -56,75 +56,84 @@ export abstract class ProtoDB {
     }
 
     static connect(location, options?, config?:ProtoDBConfig) {
-        if(!config?.disablePooling) {
-            if (!(location in dbHandlers)) {
+        if (!(location in dbHandlers)) {
+            //@ts-ignore
+            dbHandlers[location] = this.getInstance(location, options, config)
+            process.on('SIGINT', async () => {
+                logger.info('Closing database and terminating process...');
                 //@ts-ignore
-                dbHandlers[location] = this.getInstance(location, options, config)
-                process.on('SIGINT', async () => {
-                    logger.info('Closing database and terminating process...');
-                    //@ts-ignore
-                    await dbHandlers[location].close();
-                    process.exit(0);
-                });
-            }
-        
-            return dbHandlers[location]
-        } else {
-            return this.getInstance(location, options, config)
+                await dbHandlers[location].close();
+                process.exit(0);
+            });
         }
+    
+        return dbHandlers[location]
     }
 
-    static initDB(dbPath:string, initialData={}, options?) {
-        if(!fs.existsSync(dbPath)) {
-            fs.mkdirSync(dbPath)
+    static async initDB(dbPath: string, initialData = {}, options?) {
+        if (!fs.existsSync(dbPath)) {
+            fs.mkdirSync(dbPath);
         }
-        
-        return new Promise((resolve, reject) => {
+    
+        const setupDatabase = async () => {
             logger.debug(`connecting to database: ${dbPath}`);
+            const db = this.connect(dbPath);
     
-            const db = this.connect(dbPath)
+            if (db.status !== 'open') {
+                await new Promise((resolve, reject) => {
+                    db.on('open', resolve);
+                    db.on('error', reject);
+                });
+            }
     
-            const onDone = async () => {
-                logger.debug(`connected to database on: ${dbPath}`)
-                if(!fs.existsSync(path.join(dbPath, "initialized"))) {
-                    logger.info('database '+dbPath+' not initialized, loading initialData...')
-                    try {
-                        const keys = Object.keys(initialData)
-                        
-                        for (let key of keys) {
-                            await db.put(key, JSON.stringify(initialData[key]))
-                            logger.debug({ key: key, value: initialData[key] }, `Added: ${key} -> ${JSON.stringify(initialData[key])}`)
-                        }
+            logger.debug(`connected to database on: ${dbPath}`);
+            //check for database version, if it doesnt exists, assume v1
+            if(false && !fs.existsSync(path.join(dbPath, 'version'))) {
+                for await (const [key, value] of db.rootDb.iterator()) {
+                    console.log('key ------------------------------------------>', key)
 
-                        await fs.writeFileSync(path.join(dbPath, "initialized"), JSON.stringify(initialData, null, 4))
-                        resolve(null)
-                    } catch (error) {
-                        logger.error({ error }, "Error initializing the database")
-                        reject(error)
+                    if (!key.includes('!!')) {
+                        if(key != 'initialized') {
+                            await db.put(key, value);
+                        }
+                        await db.rootDb.del(key);
                     }
                 }
+                //fs.writeFileSync(path.join(location, 'version'), '2')
             }
-            if(db.status == 'open') {
-                onDone()
-            } else{
-                db.on('open', async () => {
-                    onDone()
-                })
-        
-                db.on('error', (error:any) => {
-                    logger.error({ dbPath, error }, "Error connecting to the database")
-                    reject(error)
-                })
+            if (!fs.existsSync(path.join(dbPath, "initialized"))) {
+                logger.info('database ' + dbPath + ' not initialized, loading initialData...');
+                
+                const keys = Object.keys(initialData);
+                
+                for (let key of keys) {
+                    await db.put(key, JSON.stringify(initialData[key]));
+                    logger.debug({ key: key, value: initialData[key] }, `Added: ${key} -> ${JSON.stringify(initialData[key])}`);
+                }
+    
+                fs.writeFileSync(path.join(dbPath, "initialized"), JSON.stringify(initialData, null, 4));
             }
-        })
+        }
+    
+        try {
+            await setupDatabase();
+        } catch (error) {
+            logger.error({ error }, "Error initializing the database");
+            throw error; 
+        }
     }
 }
 
+
 export class ProtoLevelDB extends ProtoDB {
+    private rootDb
     private db
     constructor(location, options?, config?:ProtoDBConfig) {
         super(location, options, config);
-        this.db = level(location, options);
+        this.rootDb = level(location, options);
+        //this.db = sublevel(this.rootDb, 'values')
+
+        this.db = this.rootDb
     }
 
     get status() {
@@ -168,12 +177,13 @@ export class ProtoLevelDB extends ProtoDB {
         }
     }
 
-    static connect(location, options?, config?) {
+    static connect(location, options?, config?): ProtoLevelDB {
         options = options ? {valueEncoding: 'json', ...options} : {valueEncoding: 'json'}
         return super.connect(location, options, config)
     }
 
     static getInstance(location, options?, config?:ProtoDBConfig) {
+        options = options ? {valueEncoding: 'json', ...options} : {valueEncoding: 'json'}
         return new ProtoLevelDB(location, options, config)
     }
 }
