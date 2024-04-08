@@ -51,8 +51,16 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.data[key] ?? defaultValue
     }
 
+    static getObjectSchema() {
+        return this._newInstance({}).getObjectSchema()
+    }
+
     getObjectSchema() {
         return this.objectSchema
+    }
+
+    static getModelName() {
+        return this._newInstance({}).getModelName()
     }
 
     getModelName() {

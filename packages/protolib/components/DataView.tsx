@@ -72,7 +72,7 @@ export const DataView = forwardRef(({
         fn(data)
     }
 
-    const [items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.load({}).getModelName() + "/#", model, quickRefresh)
+    const [items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.getModelName() + "/#", model, quickRefresh)
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
     const [createOpen, setCreateOpen] = useState(false)
     const { push, mergePush, removePush, replace } = usePageParams(state)
@@ -229,7 +229,7 @@ export const DataView = forwardRef(({
         }
     }
 
-    const locationProps = model.load({}).getObjectSchema().is('location')
+    const locationProps = model.getObjectSchema().is('location')
     if (locationProps.getFields().length) {
         defaultViews = [...defaultViews, mapView]
     }
