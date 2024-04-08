@@ -36,8 +36,8 @@ export default {
     category: "automation",
     keywords: ["automation", 'trigger'],
     getComponent: Automation,
-    filterChildren: filterCallback('-2'),
-    restoreChildren: restoreCallback('-2'),
+    filterChildren: filterCallback('2'),
+    restoreChildren: restoreCallback('2'),
     getInitialData: () => {
         return { to: 'context.automation', "param-1": { value: 'app', kind: 'StringLiteral' }, "param-2": { value: 'async (params) =>' }, "param-3": { value: "", kind: "StringLiteral" } }
     }

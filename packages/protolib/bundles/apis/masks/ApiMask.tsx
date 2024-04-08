@@ -1,6 +1,5 @@
-import { Node, Field, FlowPort, NodeParams, FallbackPort, Button } from 'protoflow';
+import { Node, Field, FlowPort, NodeParams, FallbackPort, Button, getFieldValue } from 'protoflow';
 import { API } from 'protolib'
-import { getFieldValue } from 'protoflow'
 import { Plug } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
 
@@ -31,13 +30,13 @@ export default {
     var param2Val = getFieldValue('param-2', nodeData)
     return (
       node.type == "CallExpression"
-      && nodeData["param-2"]
+      && nodeData["param-2"] && param2Val?.startsWith
       && (param2Val?.startsWith('async (req,res) =>') || param2Val?.startsWith('(req,res) =>'))
       && (nodeData.to == 'app.get' || nodeData.to == 'app.post')
     )
   },
   getComponent: ApiMask,
-  filterChildren: filterCallback('-2'),
-  restoreChildren: restoreCallback('-2'),
+  filterChildren: filterCallback('2'),
+  restoreChildren: restoreCallback('2'),
   getInitialData: () => { return { to: 'app.get', "param-1": { value: "/api/v1/", kind: "StringLiteral" }, "param-2": { value: 'async (req,res) =>', kind: "Identifier" } } }
 }

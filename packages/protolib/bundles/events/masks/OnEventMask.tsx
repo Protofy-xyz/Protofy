@@ -31,6 +31,6 @@ export default {
     },
     getComponent: (node, nodeData, children) => <OnEventMask node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'context.onEvent', "param-1": { value: 'context', kind: "Identifier" }, "param-2": { value: 'async (event) =>', kind: "Identifier" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": { value: '', kind: "StringLiteral" } } },
-    filterChildren: filterCallback('-2'),
-    restoreChildren: restoreCallback('-2'),
+    filterChildren: filterCallback('2'),
+    restoreChildren: restoreCallback('2'),
 }

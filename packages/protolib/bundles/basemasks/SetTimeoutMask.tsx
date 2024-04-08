@@ -1,4 +1,4 @@
-import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback } from 'protoflow';
+import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback, getFieldValue } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Timer } from 'lucide-react';
 
@@ -22,7 +22,10 @@ export default {
     type: 'CallExpression',
     category: 'timers',
     keywords: ['timers', 'event', 'trigger', 'setTimeout', 'timer', 'wait', 'sleep'],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to == 'setTimeout' && (nodeData["param-1"]?.startsWith('async () =>') || nodeData["param-1"]?.startsWith('() =>')),
+    check: (node, nodeData) => {
+        var param1Val = getFieldValue('param-1', nodeData)
+        return node.type == "CallExpression" && nodeData.to == 'setTimeout' && (param1Val?.startsWith('async () =>') || param1Val?.startsWith('() =>'))
+    },
     getComponent: (node, nodeData, children) => <SetTimeoutMask node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'setTimeout', "param-1": { value: '() =>', kind: "Identifier" }, "param-2": { value: 1000, kind: 'NumericLiteral' } } },
     filterChildren: filterCallback("1"),

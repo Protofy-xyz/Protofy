@@ -1,4 +1,4 @@
-import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback } from 'protoflow';
+import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback, getFieldValue } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Timer } from 'lucide-react';
 
@@ -22,7 +22,13 @@ export default {
     type: 'CallExpression',
     category: 'timers',
     keywords: ['timers', 'event', 'trigger', 'setInterval', 'timer', 'wait', 'sleep'],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to == 'setInterval' && (nodeData["param-1"]?.startsWith('async () =>') || nodeData["param-1"]?.startsWith('() =>')),
+    check: (node, nodeData) => {
+        var param1Val = getFieldValue('param-1', nodeData)
+        return (
+            node.type == "CallExpression" && nodeData.to == 'setInterval'
+            && param1Val?.startsWith
+            && (param1Val?.startsWith('async () =>') || param1Val?.startsWith('() =>'))
+    )},
     getComponent: (node, nodeData, children) => <SetIntervalMask node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'setInterval', "param-1": { value: '() =>', kind: "Identifier" }, "param-2": { value: 1000, kind: "NumericLiteral" } } },
     filterChildren: filterCallback("1"),
