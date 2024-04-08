@@ -7,6 +7,7 @@ import { FlowStoreContext } from "../store/FlowsStore";
 import { SyntaxKind } from "ts-morph";
 import { FunctionSquare } from 'lucide-react';
 import { useNodeColor } from '../diagram/Theme';
+import { dumpArgumentsData, getArgumentsData } from './CallExpression';
 
 const Function = (node) => {
     const { id, type } = node
@@ -21,7 +22,7 @@ const Function = (node) => {
     }))
 
     return (
-        <Node icon={FunctionSquare} node={node} isPreview={!id} title={isArrow ? '=>' : nodeData.name?nodeData.name:'function'} id={id} color={color}>
+        <Node icon={FunctionSquare} node={node} isPreview={!id} title={isArrow ? '=>' : nodeData.name ? nodeData.name : 'function'} id={id} color={color}>
             <NodeParams id={id} params={[{ label: 'Call', field: 'call', fieldType: 'call', type: 'input' }]} />
             <NodeParams id={id} params={nodeParams} />
             {type != 'FunctionExpression' ?
@@ -37,7 +38,7 @@ const Function = (node) => {
         </Node>
     );
 }
-Function.category= "program structure"
+Function.category = "program structure"
 Function.keyWords = ['function', '=>', 'arrow']
 Function.getData = (node, data, nodesData, edges) => {
     let thenId = getId(node.getBody())
@@ -46,7 +47,7 @@ Function.getData = (node, data, nodesData, edges) => {
     return {
         ...node.getParameters().reduce((obj, param, i) => {
             const uuid = generateId()
-            const sourceValue = param.getInitializer()
+
             let sourceKey = param.getName()
             const nodeType = param.getTypeNode()
             const type = nodeType ? nodeType.getText() : null
@@ -54,13 +55,23 @@ Function.getData = (node, data, nodesData, edges) => {
             if (isBindingPattern) {
                 sourceKey = param.getDescendantsOfKind(SyntaxKind.ObjectBindingPattern)[0]
             }
+
+            const initializer = param.getInitializer()
+            var paramData = getArgumentsData(initializer)
+
+            if (!paramData) {
+                paramData = {
+                    value: initializer ? connectItem(initializer, 'output', node, 'param-' + uuid, data, nodesData, edges, 'value') : '',
+                }
+            }
+
             return {
                 ...obj,
                 ['param-' + uuid]: {
-                    key: isBindingPattern ? connectItem(sourceKey, 'output', node, 'param-' + uuid, data, nodesData, edges, 'key') : param.getName(),
-                    value: sourceValue ? connectItem(sourceValue, 'output', node, 'param-' + uuid, data, nodesData, edges, 'value') : '',
                     isBindingPattern: isBindingPattern,
-                    type: type
+                    type: type,
+                    key: isBindingPattern ? connectItem(sourceKey, 'output', node, 'param-' + uuid, data, nodesData, edges, 'key') : param.getName(),
+                    ...paramData
                 }
             }
         }, {
@@ -74,7 +85,7 @@ Function.getData = (node, data, nodesData, edges) => {
     }
 }
 
-Function.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level=0) => {
+Function.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level = 0) => {
     const data = nodesData[node.id] ?? {};
     const params = Object.keys(data).filter(key => key.startsWith('param')).map((param) => {
         let objParam;
@@ -84,7 +95,11 @@ Function.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers =
         }
         else {
             let paramName = dumpConnection(node, "target", param + '-key', PORT_TYPES.data, data[param].key, edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-            const paramValue = dumpConnection(node, "target", param, PORT_TYPES.data, data[param].value, edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            var paramValue = dumpArgumentsData(data[param])
+
+            if (!paramValue) {
+                paramValue = dumpConnection(node, "target", param, PORT_TYPES.data, data[param].value, edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            }
             objParam = paramName + (data[param].type ? `:${data[param].type}` : "") + (paramValue ? ("=" + paramValue) : "")
         }
         return objParam
@@ -96,7 +111,7 @@ Function.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers =
         total += "(" + params.join(',') + ") => " + body
     } else {
         //const wrap = body.startsWith('{') ? false : true
-        total += "function " + data.name + "(" + params.join(',') + ") " + (data.type ? ':'+data.type+' ' : '')  + body
+        total += "function " + data.name + "(" + params.join(',') + ") " + (data.type ? ':' + data.type + ' ' : '') + body
     }
     return total + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
 
