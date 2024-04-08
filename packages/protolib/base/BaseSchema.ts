@@ -1,5 +1,6 @@
 import * as Zod from 'zod'
 import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
 
 initSchemaSystem()
 
@@ -223,6 +224,6 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: Schema.string().generate(() => uuidv4()).fallbackId().hidden(),
+    id: Schema.string().generate(() => moment().format('YYYYMM-DDHHmm-ssSSS') +'-'+uuidv4().split('-')[0]).fallbackId().hidden(),
     _deleted: Schema.boolean().optional().hidden(),
 })
