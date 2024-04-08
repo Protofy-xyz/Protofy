@@ -21,7 +21,7 @@ export const filterCallbackProp = () => {
 
 export const filterCallback = (numParam = "2", handleId = "request") => {
     return (node, childScope, edges) => {
-        const callbackId = edges.find(e => e.targetHandle == getId(node) + '-param' + numParam)?.source
+        const callbackId = edges.find(e => e.targetHandle == getId(node) + '-param-' + numParam)?.source
         const callBack = edges.find(e => e.targetHandle == callbackId + '_call')
         if (callBack) {
             // console.log('new edge: ', connectNodes(getId(node), getId(node) + '_request', callBack.target, callBack.targetHandle))
@@ -33,7 +33,7 @@ export const filterCallback = (numParam = "2", handleId = "request") => {
 
 export const restoreCallback = (numParam = "2") => {
     return (node, nodes, originalNodes, edges, originalEdges) => {
-        const arrowEdge = originalEdges.find(e => e.targetHandle == node.id + '-param' + numParam)
+        const arrowEdge = originalEdges.find(e => e.targetHandle == node.id + '-param-' + numParam)
         let recoveredEdges = []
         let recoveredNodes: any = []
         if (arrowEdge) {

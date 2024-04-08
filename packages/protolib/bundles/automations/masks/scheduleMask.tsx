@@ -46,6 +46,6 @@ export default {
             "param-5": { value: "2024", kind: "StringLiteral" },
         }
     },
-    filterChildren: filterCallback("-2"),
-    restoreChildren: restoreCallback("-2"),
+    filterChildren: filterCallback("2"),
+    restoreChildren: restoreCallback("2"),
 } 
