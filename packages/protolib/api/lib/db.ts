@@ -4,9 +4,44 @@ import { getLogger } from '../../base';
 const logger = getLogger()
 const level = require('level-party')
 
-class ProtoDB {
+abstract class ProtoDB {
+    location: string
+    options: any
+    constructor(location, options) {
+        this.location = location
+        this.options = options
+    }
+
+    get status() {
+        return "open"
+    }
+
+    on(event: string, cb: Function) {
+        if(event == 'open') {
+            cb()
+        }
+    }
+
+    abstract get(key: string, options?:any)
+    abstract put(key: string, value: string, options?:any)
+    abstract del(key: string, options?:any)
+    abstract iterator(options?:any)
+
+    async close() {}
+    async exists(key: string) {
+        try {
+            const result = this.get(key)
+            return result ? true : false
+        } catch (e:any) {
+            return false
+        }
+    }
+}
+
+class ProtoLevelDB extends ProtoDB {
     private db
     constructor(location, options) {
+        super(location, options);
         this.db = level(location, options);
     }
 
@@ -14,37 +49,33 @@ class ProtoDB {
         return this.db.status
     }
 
-    on(...args) {
-        return this.db.on(...args);
+    on(event: string, cb: Function) {
+        return this.db.on(event, cb);
     }
 
-    get(...args) {
-        return this.db.get(...args);
+    get(key: string, options?) {
+        return this.db.get(key, options);
     }
 
-    put(...args) {
-        return this.db.put(...args);
+    del(key: string, options?) {
+        return this.db.del(key, options);
     }
 
-    del(...args) {
-        return this.db.del(...args);
+    put(key: string, value: string, options?) {
+        return this.db.put(key, value, options);
     }
 
-    batch(...args) {
-        return this.db.batch(...args);
+    iterator(options?) {
+        return this.db.iterator(options);
     }
 
-    close(...args) {
-        return this.db.close(...args);
-    }
-
-    iterator(...args) {
-        return this.db.iterator(...args);
+    close() {
+        return this.db.close()
     }
 
     async exists(key: string) {
         try {
-            await this.db.get(key)
+            await this.get(key)
             return true
         } catch (e:any) {
             if(e.name == 'NotFoundError') {
@@ -112,7 +143,7 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
 export const getDB = (dbPath:string, req?, session?):ProtoDB => {
     if (!(dbPath in dbHandlers)) {
         //@ts-ignore
-        dbHandlers[dbPath] = new ProtoDB(dbPath, { valueEncoding: 'json' })
+        dbHandlers[dbPath] = new ProtoLevelDB(dbPath, { valueEncoding: 'json' })
         process.on('SIGINT', async () => {
             logger.info('Closing database and terminating process...');
             //@ts-ignore
