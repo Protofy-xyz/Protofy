@@ -20,7 +20,7 @@ type AutoAPIOptions = {
     operations?: string[],
     single?: boolean,
     disableEvents?: boolean,
-    paginatedRead?: boolean,
+    paginatedRead?: {model:any},
     requiresAdmin?: string[],
     extraData?: any,
     logLevel?: string,

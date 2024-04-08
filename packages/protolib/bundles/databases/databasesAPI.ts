@@ -5,7 +5,7 @@ import * as fspath from 'path'
 import fse from 'fs-extra'
 import { DatabaseEntryModel, DatabaseModel } from './databasesSchemas'
 import { connectDB, getDB, closeDBS } from 'protolib/api'
-import { getRoot } from '../../api'
+import { AutoAPI, getRoot } from '../../api'
 
 const dbDir = (root) => fspath.join(root, "/data/databases/")
 
@@ -64,7 +64,7 @@ const customGetDB = (path, req, session) => {
 
     async *get(key) {
       const dbPath = fspath.join(dbDir(getRoot(req)), fspath.basename(key))
-      const db = getDB(dbPath)
+      const db = getDB(dbPath, req, session)
       yield* db.iterator()
     }
   }
@@ -80,7 +80,22 @@ export const getDatabases = async () => {
   })
 }
 
+const EventAPI = AutoAPI({
+  modelName: 'databases',
+  modelType: DatabaseModel,
+  initialDataDir: __dirname,
+  prefix: '/adminapi/v1/',
+  dbName: '',
+  requiresAdmin: ['*'],
+  connectDB: () => { },
+  getDB: customGetDB,
+  operations: ['list', 'create', 'read', 'delete'],
+  paginatedRead: { model: DatabaseEntryModel }
+})
+
 export const DatabasesAPI = (app, context) => {
+  EventAPI(app, context) //register basic crud
+
   app.post('/adminapi/v1/backup/databases', handler(async (req, res, session) => {
     let ids = req.body
     if (!session || !session.user.admin) {
@@ -122,11 +137,6 @@ export const DatabasesAPI = (app, context) => {
     }
     res.send({ "result": "created" })
   }))
-
-  CreateApi('databases', DatabaseModel, __dirname, '/adminapi/v1/', '', {}, () => { }, customGetDB, ['list', 'create', 'read', 'delete'], false, {
-    paginatedRead: { model: DatabaseEntryModel },
-    requiresAdmin: ['*']
-  })(app, context)
 }
 
 export default DatabasesAPI
