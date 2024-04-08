@@ -14,8 +14,8 @@ const DeviceMonitor = ({ node = {}, nodeData = {}, children }: any) => {
     let deviceComponent = deviceName ? getFieldValue("param-2", nodeData) : "";
     let deviceMonitor = deviceName ? getFieldValue("param-3", nodeData) : "";
 
-    const color = useColorFromPalette(7)
     const [devicesData, setDevicesData] = useState<any[]>([]);
+    const color = useColorFromPalette(7)
 
     const getDevices = async () => {
         const { data } = await deviceRepository.list()
@@ -25,17 +25,17 @@ const DeviceMonitor = ({ node = {}, nodeData = {}, children }: any) => {
 
     // Device
     const deviceCollection = new DeviceCollection(devicesData);
-    const deviceNames = deviceCollection?.getNames(true) ?? [];
-    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName, true);
+    const deviceNames = deviceCollection?.getNames() ?? [];
+    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName);
     const selectedDeviceModel = new DeviceModel(selectedDevice)
     // Subsystem
     const deviceSubsystems = selectedDeviceModel.getSubsystems()
     const subsystemsCollection = new SubsystemCollection(deviceSubsystems);
-    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames('monitor', true) ?? [];
-    const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent, true);
+    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames('monitor') ?? [];
+    const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent);
     const selectedSubsystemModel = new SubsystemModel(selectedSubsystem)
     // Monitor
-    const subsystemMonitorNames = selectedSubsystemModel.getMonitorsNames(true) ?? [];
+    const subsystemMonitorNames = selectedSubsystemModel.getMonitorsNames() ?? [];
     // const selectedMonitor = selectedSubsystemModel.getActionByName(deviceMonitor?.replaceAll('"', ''))
 
     useEffect(() => {
@@ -44,9 +44,9 @@ const DeviceMonitor = ({ node = {}, nodeData = {}, children }: any) => {
 
     return (
         <Node icon={Cable} node={node} isPreview={!node.id} title='Device Monitor' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
-            <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param1', type: 'select', static: true, data: deviceNames }]} />
-            {deviceSubsystemsNames?.length ? <NodeParams id={node.id} params={[{ label: 'Component', field: 'param2', type: 'select', static: true, data: deviceSubsystemsNames }]} /> : null}
-            {subsystemMonitorNames?.length ? <NodeParams id={node.id} params={[{ label: 'Monitor', field: 'param3', type: 'select', static: true, data: subsystemMonitorNames }]} /> : null}
+            <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param-1', type: 'select', static: true, data: deviceNames }]} />
+            {deviceSubsystemsNames?.length ? <NodeParams id={node.id} params={[{ label: 'Component', field: 'param-2', type: 'select', static: true, data: deviceSubsystemsNames }]} /> : null}
+            {subsystemMonitorNames?.length ? <NodeParams id={node.id} params={[{ label: 'Monitor', field: 'param-3', type: 'select', static: true, data: subsystemMonitorNames }]} /> : null}
         </Node>
     )
 }
@@ -57,5 +57,5 @@ export default {
     keywords: ["automation", 'esp32', 'device', 'iot', 'trigger'],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.deviceMonitor'),
     getComponent: (node, nodeData, children) => <DeviceMonitor node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'context.deviceMonitor', param1: '', param2: '', param3: '', await: true } }
+    getInitialData: () => { return { to: 'context.deviceMonitor', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, await: true } }
 }

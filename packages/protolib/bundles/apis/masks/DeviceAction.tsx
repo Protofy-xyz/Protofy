@@ -13,7 +13,6 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
     let deviceName = getFieldValue("param-1", nodeData);
     let deviceComponent = deviceName ? getFieldValue("param-2", nodeData) : "";
     let deviceAction = deviceName ? getFieldValue("param-3", nodeData) : "";
-
     const [devicesData, setDevicesData] = useState<any[]>([]);
     const color = useColorFromPalette(6)
 
@@ -25,17 +24,17 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
 
     // Device
     const deviceCollection = new DeviceCollection(devicesData);
-    const deviceNames = deviceCollection?.getNames(true) ?? [];
-    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName, true);
+    const deviceNames = deviceCollection?.getNames() ?? [];
+    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName);
     const selectedDeviceModel = new DeviceModel(selectedDevice)
     // Subsystem
     const deviceSubsystems = selectedDeviceModel.getSubsystems()
     const subsystemsCollection = new SubsystemCollection(deviceSubsystems);
-    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames('action', true) ?? [];
-    const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent, true);
+    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames('action') ?? [];
+    const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent);
     const selectedSubsystemModel = new SubsystemModel(selectedSubsystem)
     // Action
-    const subsystemActionNames = selectedSubsystemModel.getActionsNames(true) ?? [];
+    const subsystemActionNames = selectedSubsystemModel.getActionsNames() ?? [];
     const selectedAction = selectedSubsystemModel.getActionByName(deviceAction)
     const actionValue = selectedAction?.payload?.value;
 
@@ -65,5 +64,5 @@ export default {
     category: "ioT",
     keywords: ['action', "automation", 'esp32', 'device', 'iot'],
     getComponent: DeviceAction,
-    getInitialData: () => { return { to: 'context.deviceAction', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": undefined, await: { value: true, kind: "FalseKeyword" } } }
+    getInitialData: () => { return { to: 'context.deviceAction', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": undefined, await: true } }
 }
