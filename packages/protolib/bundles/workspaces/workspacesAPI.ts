@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
-import { CreateApi, getRoot } from '../../api'
+import { AutoAPI, CreateApi, getRoot } from '../../api'
 import { WorkspaceModel } from './WorkspaceModel';
 
 
@@ -28,5 +28,16 @@ const customGetDB = (path, req, session) => {
   return db;
 }
 
-export const WorkspacesAPI = CreateApi('workspaces', WorkspaceModel, __dirname, '/adminapi/v1/', '', {}, () => { }, customGetDB, ['list'], false)
+export const WorkspacesAPI = AutoAPI({
+  modelName: 'workspaces',
+  modelType: WorkspaceModel,
+  initialDataDir: __dirname,
+  prefix: '/adminapi/v1/',
+  dbName: '',
+  requiresAdmin: ['*'],
+  connectDB: () => { },
+  getDB: customGetDB,
+  operations: ['list']
+})
+
 export default WorkspacesAPI
