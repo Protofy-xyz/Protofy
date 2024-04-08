@@ -45,8 +45,8 @@ const DeviceMonitor = ({ node = {}, nodeData = {}, children }: any) => {
     return (
         <Node icon={Cable} node={node} isPreview={!node.id} title='Device Monitor' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param-1', type: 'select', static: true, data: deviceNames }]} />
-            {deviceSubsystemsNames?.length ? <NodeParams id={node.id} params={[{ label: 'Component', field: 'param-2', type: 'select', static: true, data: deviceSubsystemsNames }]} /> : null}
-            {subsystemMonitorNames?.length ? <NodeParams id={node.id} params={[{ label: 'Monitor', field: 'param-3', type: 'select', static: true, data: subsystemMonitorNames }]} /> : null}
+            <NodeParams id={node.id} params={[{ label: 'Component', field: 'param-2', type: 'select', static: true, data: deviceSubsystemsNames }]} />
+            <NodeParams id={node.id} params={[{ label: 'Monitor', field: 'param-3', type: 'select', static: true, data: subsystemMonitorNames }]} />
         </Node>
     )
 }
