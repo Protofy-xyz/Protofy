@@ -3,15 +3,24 @@ import { getLogger } from '../../base';
 
 const logger = getLogger()
 const level = require('level-party')
+const dbHandlers:any = {}
 
+type ProtoDBConfig = {
+    context?: any,
+    name?: string,
+    disablePooling?: boolean
+}
 abstract class ProtoDB {
     location: string
-    options: any
-    constructor(location, options?, context?, name?) {
+    options: any //database-level options. If the connector is for leveldb, those are leveldb options
+    config: ProtoDBConfig //configuration of the behaviour of the OOP class (disable cache, context and names...)
+    constructor(location, options?, config?) {
         this.location = location
         this.options = options
-        if(context) {
-            context[name] = this
+        this.config = config ?? {}
+
+        if(config && config.context && config.name) {
+            config.context[config.name] = this
         }
     }
 
@@ -40,15 +49,34 @@ abstract class ProtoDB {
         }
     }
 
-    static connect(location, options?, context?, name?) {
-        throw "Error: derived classes of ProtoDB should implement connect"
+    static getInstance(location, options?, config?: ProtoDBConfig) {
+        throw "Error: derived classes of ProtoDB should implement getInstance"
+    }
+
+    static connect(location, options?, config?:ProtoDBConfig) {
+        if(!config?.disablePooling) {
+            if (!(location in dbHandlers)) {
+                //@ts-ignore
+                dbHandlers[location] = this.getInstance(location, options, config)
+                process.on('SIGINT', async () => {
+                    logger.info('Closing database and terminating process...');
+                    //@ts-ignore
+                    await dbHandlers[location].close();
+                    process.exit(0);
+                });
+            }
+        
+            return dbHandlers[location]
+        } else {
+            return this.getInstance(location, options, config)
+        }
     }
 }
 
 class ProtoLevelDB extends ProtoDB {
     private db
-    constructor(location, options?, context?, name?) {
-        super(location, options, context, name);
+    constructor(location, options?, config?:ProtoDBConfig) {
+        super(location, options, config);
         this.db = level(location, options);
     }
 
@@ -93,12 +121,11 @@ class ProtoLevelDB extends ProtoDB {
         }
     }
 
-    static connect(location, options?) {
-        return new ProtoLevelDB(location, options)
+    static getInstance(location, options?, config?:ProtoDBConfig) {
+        return new ProtoLevelDB(location, options, config)
     }
 }
 
-const dbHandlers:any = {}
 export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
     return new Promise((resolve, reject) => {
         logger.debug(`connecting to database: ${dbPath}`);
@@ -152,18 +179,7 @@ export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
 }
 
 export const getDB = (dbPath:string, req?, session?):ProtoDB => {
-    if (!(dbPath in dbHandlers)) {
-        //@ts-ignore
-        dbHandlers[dbPath] = ProtoLevelDB.connect(dbPath, { valueEncoding: 'json' })
-        process.on('SIGINT', async () => {
-            logger.info('Closing database and terminating process...');
-            //@ts-ignore
-            await dbHandlers[dbPath].close();
-            process.exit(0);
-        });
-    }
-
-    return dbHandlers[dbPath]
+    return ProtoLevelDB.connect(dbPath, { valueEncoding: 'json' })
 }
 
 export const closeDBS = async () => {
