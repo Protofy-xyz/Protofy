@@ -29,7 +29,7 @@ export default {
         return (
             node.type == "CallExpression"
             && nodeData.to == 'context.automation'
-            && nodeData["param-2"]
+            && param2Val
             && (param2Val?.startsWith('async (params) =>') || param2Val?.startsWith('(params) =>'))
         )
     },
