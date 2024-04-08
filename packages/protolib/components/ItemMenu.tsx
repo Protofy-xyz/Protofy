@@ -33,7 +33,7 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
             setOpen={setOpen}
             open={open}
             onAccept={async (setOpen) => {
-                await onDelete(sourceUrl)
+                await onDelete(sourceUrl, element.data[element.idField])
                 setOpen(false);
             }}
             title={'Delete '}

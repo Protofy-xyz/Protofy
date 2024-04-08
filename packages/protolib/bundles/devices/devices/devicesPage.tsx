@@ -267,8 +267,8 @@ export default {
           onSelectItem: (item) => { },
           getBody: (data) => <CardBody title={data.name}>
             <Stack right={20} top={20} position={"absolute"}>
-              <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl) => {
-                await API.get(sourceUrl + '/delete')
+              <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?:string) => {
+                await API.get(`${sourceUrl}/${deviceId}/delete`)
               }} deleteable={() => true} element={DevicesModel.load(data)} extraMenuActions={extraMenuActions} />
             </Stack>
             <YStack f={1}>
