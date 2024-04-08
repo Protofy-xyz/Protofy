@@ -2,8 +2,47 @@ import { Level } from 'level';
 import { getLogger } from '../../base';
 
 const logger = getLogger()
-
 const level = require('level-party')
+
+class ProtoDB {
+    private db
+    constructor(location, options) {
+        this.db = level(location, options);
+    }
+
+    get status() {
+        return this.db.status
+    }
+
+    on(...args) {
+        return this.db.on(...args);
+    }
+
+    get(...args) {
+        return this.db.get(...args);
+    }
+
+    put(...args) {
+        return this.db.put(...args);
+    }
+
+    del(...args) {
+        return this.db.del(...args);
+    }
+
+    batch(...args) {
+        return this.db.batch(...args);
+    }
+
+    close(...args) {
+        return this.db.close(...args);
+    }
+
+    iterator(...args) {
+        return this.db.iterator(...args);
+    }
+}
+
 const dbHandlers:any = {}
 export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
     return new Promise((resolve, reject) => {
@@ -71,13 +110,10 @@ export const existsKey = async (dbPath: string, key: string) => {
     }
 }
 
-export const getDB = (dbPath:string, req?, session?):Level => {
+export const getDB = (dbPath:string, req?, session?):ProtoDB => {
     if (!(dbPath in dbHandlers)) {
         //@ts-ignore
-        dbHandlers[dbPath] = level(dbPath, { valueEncoding: 'json' })
-        dbHandlers[dbPath].exists = function(key: string) {
-            
-        }
+        dbHandlers[dbPath] = new ProtoDB(dbPath, { valueEncoding: 'json' })
         process.on('SIGINT', async () => {
             logger.info('Closing database and terminating process...');
             //@ts-ignore
