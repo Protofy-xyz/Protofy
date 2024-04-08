@@ -41,6 +41,7 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
         const params = getAuth(req)
         await fn(req, res, {...params.session, token: params.token}, next);
     } catch (e:any) {
+        logger.error({error: e}, "Error processing api call")
         if (e instanceof ZodError) {
             const err = e.flatten()
             res.status(500).send(err)

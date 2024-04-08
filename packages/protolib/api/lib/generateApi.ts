@@ -122,7 +122,7 @@ export const AutoAPI = ({
                 const extraListData = typeof extraData?.list == 'function' ? await extraData.list(session, model, req) : (extraData?.list ?? {})
                 const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, await onBeforeList(req.query, session, req));
 
-                if (listItem && model.isVisible()) {
+                if (listItem) {
                     allResults.push(listItem);
                 }
             }
@@ -176,7 +176,7 @@ export const AutoAPI = ({
                         const model = paginatedRead.model.unserialize(await onBeforeRead(value, session, req), session);
                         const listItem = await model.listTransformed(search, transformers);
 
-                        if (listItem && model.isVisible()) {
+                        if (listItem) {
                             allResults.push({ ...listItem, _key: key });
                         }
                     }
@@ -184,9 +184,6 @@ export const AutoAPI = ({
                 res.send(_list(req, await onAfterRead(allResults, session, req)))
             } else {
                 const item = modelType.unserialize(await onBeforeRead(await db.get(req.params.key), session, req), session)
-                if (!item.isVisible()) {
-                    throw "not found"
-                }
                 const readData = typeof extraData?.read == 'function' ? await extraData.read(session, item, req) : (extraData?.read ?? {})
                 res.send(await onAfterRead(await item.readTransformed(transformers, readData), session, req))
             }
@@ -230,16 +227,15 @@ export const AutoAPI = ({
         }
 
         const db = getDB(dbPath, req, session)
-        let entityModel
+        const entityModel = await modelType.unserialize(await db.get(req.params.key), session)
+
         if (!paginatedRead) {
-            entityModel = await (modelType.unserialize(await onBeforeDelete(await db.get(req.params.key), session, req), session).deleteTransformed(transformers))
-            await db.put(entityModel.getId(), entityModel.serialize())
+            onBeforeDelete(await db.get(req.params.key), session, req)
+            await db.del(req.params.key)
         } else {
-            entityModel = modelType.unserialize(await onBeforeDelete("{}", session, req)).delete()
-            await db.put(req.params.key, entityModel.serialize())
+            await onBeforeDelete("{}", session, req)
+            await db.del(req.params.key)
         }
-
-
 
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('delete'), entityModel.getNotificationsPayload())
         if (!disableEvents) {
@@ -254,7 +250,6 @@ export const AutoAPI = ({
                 } // event payload, event-specific data
             }, getServiceToken())
         }
-
         logger[logLevel ?? 'info']({ data: entityModel.read() }, modelName + " deleted: " + entityModel.getId())
         res.send(await onAfterDelete({ "result": "deleted" }, session, req))
     }));
