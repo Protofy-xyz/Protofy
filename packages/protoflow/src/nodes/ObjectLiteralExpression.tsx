@@ -6,6 +6,7 @@ import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { TableProperties } from 'lucide-react';
 import { useNodeColor } from '../diagram/Theme';
+import { dumpArgumentsData, getArgumentsData } from './CallExpression';
 
 export const ObjectFactory = (objectType) => {
     const component = (node) => {
@@ -35,20 +36,30 @@ export const ObjectFactory = (objectType) => {
                 const uuid = generateId()
                 let sourceKey;
                 let sourceValue;
+                var extraData
+
                 if (prop.getKindName() == 'SpreadAssignment') {
                     sourceKey = connectItem(prop, 'output', node, 'param-' + uuid + '-key', data, nodesData, edges)
                 } else {
                     sourceKey = prop.getName()
-                    sourceValue = objectType == 'typeLiteral' 
-                                    ? prop.getType().getText()
-                                    : (prop.getInitializer() ? connectItem(prop.getInitializer(), 'output', node, 'param-' + uuid, data, nodesData, edges, 'param-' + uuid) : '' )
+                    const initializer = prop.getInitializer()
+                    if (objectType == 'typeLiteral') {
+                        sourceValue = prop.getType().getText()
+                    } else if (initializer) {
+                        extraData = getArgumentsData(initializer)
+                       
+                        if (!extraData) {
+                            sourceValue = connectItem(initializer, 'output', node, 'param-' + uuid, data, nodesData, edges, 'param-' + uuid)
+                        }
+                    }
                 }
 
                 return {
                     ...obj,
                     ['param-' + uuid]: {
                         key: sourceKey ?? '',
-                        value: sourceValue ?? ''
+                        value: sourceValue ?? '',
+                        ...extraData
                     },
                     ['trivia-param-' + uuid]: getTrivia(prop),
                     mode: mode
@@ -88,7 +99,10 @@ export const ObjectFactory = (objectType) => {
         const params = Object.keys(data).filter(key => key.startsWith('param')).map((param) => {
             let key = data[param]?.key ?? "";
             const triviaInfo: any = {}
-            const objValue = dumpConnection(node, "target", param, PORT_TYPES.data, data[param]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level + 1, triviaInfo)
+            var objValue = dumpArgumentsData(data[param])
+            if (!objValue) {
+                objValue = dumpConnection(node, "target", param, PORT_TYPES.data, data[param]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level + 1, triviaInfo)
+            }
             const objParam = key + (!objValue ? "" : (":" + space + objValue))
             return { code: objParam, trivia: triviaInfo['content'], paramTrivia: data['trivia-' + param] }
         })

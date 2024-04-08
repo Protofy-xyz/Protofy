@@ -354,7 +354,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         editing={editing}
                         id={id}
                         post={(v) => {
-                            return { key: keyPost(v), value: nodeData[param.field]?.value ?? "" }
+                            return { ...nodeData[param.field], key: keyPost(v), value: nodeData[param.field]?.value ?? "" }
                         }}
                         pre={() => keyPre(nodeData[param.field]?.key ?? '')}
                         field={param.field}

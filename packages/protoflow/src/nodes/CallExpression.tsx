@@ -105,7 +105,7 @@ CallExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMar
 
 export default memo(CallExpression)
 
-function getArgumentsData(node: any): any {
+export function getArgumentsData(node: any): any {
     let atrVal
     var kind = node?.getKindName()
 
@@ -125,7 +125,7 @@ function getArgumentsData(node: any): any {
     return { value: atrVal, kind }
 }
 
-function dumpArgumentsData(argData: { kind: string, value: any }): any {
+export function dumpArgumentsData(argData: { kind: string, value: any }): any {
     if (!argData) return
     const argumentKind = argData.kind
     var value = argData.value

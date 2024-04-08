@@ -26,7 +26,7 @@ export const getDataFromField = (fieldValue, field = undefined, nodeData = undef
 
     switch (type) {
         case 'detailed':
-            var key = field.split('-')[1]
+            var key = data?.key ?? field.split('-')[1]
             nodeDataField = { ...data, key, kind, value: fieldValue }
             break
         case 'literal':
@@ -51,6 +51,24 @@ export const getFieldValue = (field, nodeData) => {
         case 'literal':
         default:
             value = nodeData[field]
+            break
+    }
+    return value
+}
+
+export const getEmptyFieldData = (field) => {
+    const prefix = field.split('-')[0]
+    const type = getFieldType(prefix)
+
+    var value
+
+    switch (type) {
+        case 'detailed':
+            value = { key: "", value: "", kind: "StringLiteral"}
+            break
+        case 'literal':
+        default:
+            value = ""
             break
     }
     return value

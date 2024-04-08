@@ -1,7 +1,8 @@
-import React, { CSSProperties, useContext } from 'react';
+import React, { useContext } from 'react';
 import { generateId } from './lib/IdGenerator';
 import { FlowStoreContext } from "./store/FlowsStore";
 import Button from './Button';
+import { getEmptyFieldData } from './utils';
 
 type ComponentProps = {
     nodeData: any;
@@ -34,7 +35,8 @@ export default ({ nodeData, id, type = 'Param', style = {}, keyId = null, label 
         if (['child', 'case', 'element', 'union'].includes(typeName)) {
             keyId = typeName + '-' + ((Object.keys(nodeData)?.filter(key => key.startsWith(`${typeName}-`)).length + 1) ?? 1)
         }
-        setNodeData(id, { ...nodeData, [keyId]: '' })
+
+        setNodeData(id, { ...nodeData, [keyId]: getEmptyFieldData(keyId) })
     }
 
     return <Button onPress={onAddParam} label={label ?? `Add ${type}`} style={style} />
