@@ -71,6 +71,48 @@ abstract class ProtoDB {
             return this.getInstance(location, options, config)
         }
     }
+
+    static initDB(dbPath:string, initialData=[], options?) {
+        return new Promise((resolve, reject) => {
+            logger.debug(`connecting to database: ${dbPath}`);
+    
+            const db = getDB(dbPath)
+    
+            const onDone = async () => {
+                logger.debug(`connected to database on: ${dbPath}`)
+                try {
+                    await db.get('initialized')
+                    resolve(null)
+                } catch (e) {
+                    logger.info('database not initialized, loading initialData...')
+                    try {
+                        const _initialData = initialData ? initialData : []
+                        for (let item of _initialData) {
+                            await db.put(item.key, item.value)
+                            logger.debug({ key: item.key, value: item.value }, `Added: ${item.key} -> ${JSON.stringify(item.value)}`)
+                        }
+                        await db.put('initialized', 'done')
+                        resolve(null)
+                    } catch (error) {
+                        logger.error({ error }, "Error initializing the database")
+                        reject(error)
+                    }
+                }
+            }
+            if(db.status == 'open') {
+                onDone()
+            } else{
+                db.on('open', async () => {
+                    onDone()
+                })
+        
+                db.on('error', (error:any) => {
+                    logger.error({ dbPath, error }, "Error connecting to the database")
+                    reject(error)
+                })
+            }
+        })
+    }
 }
 
 class ProtoLevelDB extends ProtoDB {
@@ -127,55 +169,7 @@ class ProtoLevelDB extends ProtoDB {
 }
 
 export const connectDB = (dbPath:string, initialData?: any[] | undefined) => {
-    return new Promise((resolve, reject) => {
-        logger.debug(`connecting to database: ${dbPath}`);
-        let timer:any;
-        if (!(dbPath in dbHandlers)) {
-            timer = setTimeout(async () => {
-                logger.error('Database connection is taking too long, remove lock files and restart this process')
-                await db.close()
-                process.exit(1)
-            }, 5000)
-        }
-
-        const db = getDB(dbPath)
-
-        const onDone = async () => {
-            clearTimeout(timer)
-            logger.debug(`connected to database on: ${dbPath}`)
-            try {
-                await db.get('initialized')
-                resolve(null)
-            } catch (e) {
-                logger.info('database not initialized, loading initialData...')
-                try {
-                    const _initialData = initialData ? initialData : []
-                    for (let item of _initialData) {
-                        await db.put(item.key, item.value)
-                        logger.debug({ key: item.key, value: item.value }, `Added: ${item.key} -> ${JSON.stringify(item.value)}`)
-                    }
-                    await db.put('initialized', 'done')
-                    resolve(null)
-                } catch (error) {
-                    logger.error({ error }, "Error initializing the database")
-                    reject(error)
-                }
-            }
-        }
-        if(db.status == 'open') {
-            onDone()
-        } else{
-            db.on('open', async () => {
-                onDone()
-            })
-    
-            db.on('error', (error:any) => {
-                clearTimeout(timer)
-                logger.error({ dbPath, error }, "Error connecting to the database")
-                reject(error)
-            })
-        }
-    })
+    return ProtoLevelDB.initDB(dbPath, initialData)
 }
 
 export const getDB = (dbPath:string, req?, session?):ProtoDB => {
