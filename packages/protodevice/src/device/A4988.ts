@@ -40,7 +40,7 @@ class A4988 {
       });
     }
   
-    exctractComponent(element, deviceComponents) {
+    extractComponent(element, deviceComponents) {
       if (['mqtt', 'esphome'].includes(element.name)) {
         this.extractNestedComponents(element, deviceComponents)
       } else {
@@ -179,7 +179,7 @@ ESP_LOGD("Report position", "${this.name} stepper report position set to: %d",  
         ]
     
         componentObjects.forEach((element, j) => {
-          this.exctractComponent(element, deviceComponents)
+          this.extractComponent(element, deviceComponents)
         })
         return deviceComponents
       }
