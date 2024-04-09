@@ -50,16 +50,20 @@ const SensorRangeEnforcer = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param-1', type: 'select', static: true, data: deviceNames }]} />
             <NodeParams id={node.id} params={[{ label: 'Component', field: 'param-2', type: 'select', static: true, data: deviceSubsystemsNames }]} />
             <NodeParams id={node.id} params={[{ label: 'Monitor', field: 'param-3', type: 'select', static: true, data: subsystemMonitorNames }]} />
-            <NodeParams id={node.id} params={[{ label: 'Desired value', static: true, field: 'param-6', type: 'input' }]} />
-            <NodeParams id={node.id} params={[{ label: 'Threshold', static: true, field: 'param-7', type: 'input' }]}/>
-            
+            <NodeParams id={node.id} params={[{ label: 'Desired value', static: true, field: 'param-5', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'Threshold', static: true, field: 'param-6', type: 'input' }]} />
+
             {
                 // (deviceName && deviceComponent && deviceMonitor) ?
-                    <div style={{ marginTop: "35px" }}>
-                        <FlowPort id={node.id} type='output' label='Action(inc,dec)' style={{ top: '325px' }} handleId={'request'} />
-                        <FallbackPort node={node} port={'param-4'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (inc,dec) => " postText="" />
-                    </div> 
-                    // : null
+                <div style={{ marginTop: "200px" }}>
+                    <FlowPort id={node.id} type='output' label='aboveAction(delta)' style={{ top: '360px' }} handleId={'request'} />
+                    <FallbackPort node={node} port={'param-7'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (delta) => " postText="" />
+                    <FlowPort id={node.id} type='output' label='belowAction(delta)' style={{ top: '410px' }} handleId={'below'} />
+                    <FallbackPort node={node} port={'param-8'} type={"target"} fallbackPort={'below'} portType={"_"} preText="async (delta) => " postText="" />
+                    <FlowPort id={node.id} type='output' label='onRangeAction(delta)' style={{ top: '460px' }} handleId={'range'} />
+                    <FallbackPort node={node} port={'param-9'} type={"target"} fallbackPort={'range'} portType={"_"} preText="async (delta) => " postText="" />
+                </div>
+                // : null
             }
         </Node>
     )
@@ -68,12 +72,62 @@ export default {
     id: 'sensorRangeEnforcer',
     type: 'CallExpression',
     category: "ioT",
-    keywords: ["control", 'sensor', "feedback loop",'esp32', 'device', 'iot'],
+    keywords: ["control", 'sensor', "feedback loop", 'esp32', 'device', 'iot'],
     check: (node, nodeData) => {
         return node.type == "CallExpression" && nodeData.to?.startsWith('context.sensorRangeEnforcer')
     },
     getComponent: (node, nodeData, children) => <SensorRangeEnforcer node={node} nodeData={nodeData} children={children} />,
-    filterChildren: filterCallback("4"),
-    restoreChildren: restoreCallback("4"),
-    getInitialData: () => { return { to: 'context.sensorRangeEnforcer', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": {value: 'async (inc,dec) =>', kind: "Identifier"}, "param-5":{value:"context", kind: "Identifier"}, "param-6": {value: 1.5, kind:"StringLiteral"}, "param-7": {value: 0.3, kind:"StringLiteral"}} }
+    filterChildren: (node, childScope, edges)=>{
+        childScope = filterCallback("7")(node,childScope,edges)
+        childScope = filterCallback("8","below")(node,childScope,edges)
+        childScope = filterCallback("9","range")(node,childScope,edges)
+        return childScope
+    },
+    // restoreChildren:  (node, nodes, originalNodes, edges, originalEdges) =>{
+    //     let result = restoreCallback("7")(node, nodes, originalNodes, edges, originalEdges)
+    //     result = restoreCallback("8")(node, result.nodes, originalNodes, result.edges, originalEdges)
+    //     result = restoreCallback("9")(node, result.nodes, originalNodes, result.edges, originalEdges)
+    //     return result
+    // },
+    getInitialData: () => {
+        return {
+            to: 'context.sensorRangeEnforcer',
+            "param-1": {
+                value: "",
+                kind: "StringLiteral"
+            },
+            "param-2": {
+                value: "",
+                kind: "StringLiteral"
+            },
+            "param-3": {
+                value: "",
+                kind: "StringLiteral"
+            },
+            "param-4": {
+                value: "context",
+                kind: "Identifier"
+            },
+            "param-5": {
+                value: 1.5,
+                kind: "StringLiteral"
+            },
+            "param-6": {
+                value: 0.3,
+                kind: "StringLiteral"
+            },
+            "param-7": {
+                value: "null",
+                kind: "Identifier"
+            },
+            "param-8": {
+                value: "null",
+                kind: "Identifier"
+            },
+            "param-9": {
+                value: "null",
+                kind: "Identifier"
+            }
+        }
+    }
 }
