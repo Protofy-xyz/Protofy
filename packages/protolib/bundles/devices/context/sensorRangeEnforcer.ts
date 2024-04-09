@@ -18,10 +18,12 @@ export function sensorRangeEnforcer(
 ) {
   let desired = Number.parseFloat(desiredValue);
   let thresh = Number.parseFloat(threshold);
-  context.onEvent(
-    context,
-    async (event) => {
-      let sensorValue = Number.parseFloat(event.payload.message);
+  context.deviceSub(
+    deviceName,
+    component,
+    monitor,
+    async (message, topic) => {
+      let sensorValue = Number.parseFloat(message);
       let delta = Math.abs(sensorValue - desired)
       if (sensorValue > (desired + thresh)) {
         if(aboveAction) await aboveAction(delta)
@@ -30,9 +32,7 @@ export function sensorRangeEnforcer(
       } else {
         if(onRangeAction) await onRangeAction(delta)
       }
-    },
-    createDeviceEventPath(deviceName, component, monitor),
-    "device"
+    }
   );
 
 }
