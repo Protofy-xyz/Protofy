@@ -224,6 +224,6 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: Schema.string().generate(() => moment().format('YYYYMM-DDHHmm-ssSSS') +'-'+uuidv4().split('-')[0]).fallbackId().hidden(),
+    id: Schema.string().generate(() => moment().format('YYYYMM-DDHHmm-ssSSS') +'-'+uuidv4().split('-')[0]).fallbackId().hidden().id(),
     _deleted: Schema.boolean().optional().hidden(),
 })

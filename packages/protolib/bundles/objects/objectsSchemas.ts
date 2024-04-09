@@ -1,6 +1,4 @@
 import { z } from "protolib/base";
-import { BaseSchema } from 'protolib/base'
-import { AutoModel } from 'protolib/base'
 import { ProtoModel } from "../../base";
 import { SessionDataType } from "../../api";
 
@@ -53,7 +51,6 @@ export const BaseObjectSchema = z.object({
 })
 
 export const ObjectSchema = z.object({
-  //...BaseSchema.shape,
   ...BaseObjectSchema.shape
 });
 

@@ -140,7 +140,10 @@ export const AutoAPI = ({
 
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelType.load(await onBeforeCreate(req.body, session, req), session).createTransformed(transformers))
-        await db.put(entityModel.getId(), entityModel.serialize())
+        await db.put(entityModel.getId(), entityModel.serialize(), {
+            indexes: entityModel.getIndexes()
+        })
+
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('create'), entityModel.getNotificationsPayload())
         if (!disableEvents) {
             generateEvent({
@@ -202,7 +205,10 @@ export const AutoAPI = ({
 
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelType.unserialize(await db.get(req.params.key), session).updateTransformed(modelType.load(await onBeforeUpdate(req.body, req, session), session), transformers))
-        await db.put(entityModel.getId(), entityModel.serialize())
+        await db.put(entityModel.getId(), entityModel.serialize(), {
+            indexes: entityModel.getIndexes()
+        })
+
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
         if (!disableEvents) {
             generateEvent({

@@ -6,6 +6,7 @@ import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";
 import { getLogger } from '../base';
+import { UserModel } from '../bundles/users';
 
 const logger = getLogger()
 
@@ -42,9 +43,12 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
         }
 
         const storedUser = JSON.parse(await db.get(request.username))
+        const entityModel = UserModel.load(storedUser)
         if (await checkPassword(request.password, storedUser.password)) {
             //update lastLogin
-            await db.put(storedUser.username, JSON.stringify({ ...storedUser, lastLogin: moment().toISOString() }))
+            await db.put(storedUser.username, JSON.stringify({ ...storedUser, lastLogin: moment().toISOString() }), {
+                indexes: entityModel.getIndexes()
+            })
             let group
             try {
                 group = JSON.parse(await getDB(groupDBPath).get(storedUser.type))
@@ -103,7 +107,11 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
             createdAt: moment().toISOString(),
             from: 'api'
         }
-        await db.put(request.username, JSON.stringify({...newUser, password: await hash(password)}))
+        const entityModel = UserModel.load(newUser)
+        await db.put(request.username, JSON.stringify({...newUser, password: await hash(password)}), {
+            indexes: entityModel.getIndexes()
+        })
+
         let group = {
             admin: false,
             permissions: [],

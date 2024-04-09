@@ -2,6 +2,7 @@
 import { getDB, hash } from 'protolib/api';
 import { CmdRegisterSchema} from 'protolib/schema';
 import moment from 'moment';
+import { UserModel } from 'protolib/bundles/users/usersSchemas';
 
 if (process.argv.length !== 5) {
     console.error('Usage: yarn add-user email password type',process.argv.length)
@@ -28,13 +29,15 @@ const addUser = async () => {
     if(await db.exists(username)) {
         console.error('Error creating user: A user with the same email already exists');
     } else {
-        await getDB(dbPath).put(username, JSON.stringify({
+        const userData = {
             username: username, 
             password: await hash(password),
             createdAt: currentDateISO,
             from: 'cmd',
             type: type
-        }))
+        }
+        const entityModel = UserModel.load(userData)
+        await getDB(dbPath).put(username, JSON.stringify(userData), {indexes: entityModel.getIndexes()})
         console.log("Done!")
     }
 }

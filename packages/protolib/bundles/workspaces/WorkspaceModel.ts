@@ -1,5 +1,4 @@
 import { z } from "protolib/base";
-import {BaseSchema} from 'protolib/base'
 import { AutoModel, Schema } from 'protolib/base'
 
 export const WorkspaceResourceSchema = z.object({

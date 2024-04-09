@@ -33,12 +33,14 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     idField: string
     objectSchema: ProtoSchema
     modelName: string
+    indexes: string[]
     constructor(data: any, schema: ZodObject<any>, session?: SessionDataType, modelName?:string) {
         this.data = data;
         this.session = session ?? createSession();
         this.schema = schema
         this.objectSchema = ProtoSchema.load(this.schema)
         this.modelName = modelName?.toLowerCase() ?? 'unknown'
+        this.indexes = this.objectSchema.is('indexed').getFields()
         let idSchemas = this.objectSchema.is('id')
         if(idSchemas.getFields().length > 1) {
             idSchemas = idSchemas.isNot('fallbackId') //only use fallbackid if no other id is provided.
@@ -57,6 +59,10 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     getObjectSchema() {
         return this.objectSchema
+    }
+
+    getIndexes() {
+        return this.indexes
     }
 
     static getModelName() {

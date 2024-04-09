@@ -13,6 +13,7 @@ type ProtoDBConfig = {
     name?: string
 }
 export abstract class ProtoDB {
+    capabilities: string[]
     location: string
     options: any //database-level options. If the connector is for leveldb, those are leveldb options
     config: ProtoDBConfig //configuration of the behaviour of the OOP class (disable cache, context and names...)
@@ -20,7 +21,7 @@ export abstract class ProtoDB {
         this.location = location
         this.options = options
         this.config = config ?? {}
-
+        this.capabilities = []
         if(config && config.context && config.name) {
             config.context[config.name] = this
         }
@@ -34,6 +35,10 @@ export abstract class ProtoDB {
         if(event == 'open') {
             cb()
         }
+    }
+
+    hasCapability(capability: string) {
+        return this.capabilities.includes(capability)
     }
 
     abstract get(key: string, options?:any)
@@ -132,6 +137,7 @@ export class ProtoLevelDB extends ProtoDB {
     private db
     constructor(location, options?, config?:ProtoDBConfig) {
         super(location, options, config);
+        this.capabilities = ['pagination']
         this.rootDb = level(location, options);
         this.db = sublevel(this.rootDb, 'values')
     }
@@ -152,8 +158,30 @@ export class ProtoLevelDB extends ProtoDB {
         return this.db.del(key, options);
     }
 
-    put(key: string, value: string, options?) {
-        return this.db.put(key, value, options);
+    async put(key: string, value: string, options?) {
+        const {keyEncoding, valueEncoding, ...internalOptions} = options ?? {}
+        if(internalOptions && internalOptions.indexes) {
+            const indexes = internalOptions.indexes
+            if(indexes && indexes.length) {
+                const allItems = [JSON.parse(value)]
+                for await (const [itemKey, itemValue] of this.db.iterator()) {
+                    allItems.push(JSON.parse(itemValue))
+                }
+
+                for(var i=0;i<indexes.length;i++) {
+                    const currentIndex = indexes[i]
+                    const ordered = sublevel(this.rootDb, 'order_'+currentIndex)
+                    ordered.clear()
+                    ordered.batch(allItems.map(item => item[currentIndex]+'_'+key).sort().map(k => ({
+                        type: 'put',
+                        key: k,
+                        value: ''
+                    })))
+                }
+            }
+        }
+
+        return await this.db.put(key, value, options);
     }
 
     iterator(options?) {
