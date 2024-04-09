@@ -62,7 +62,8 @@ export default ({ nodeData = {}, node, item}) => {
                     style={{ width: '50px',backgroundColor: '#ececec30', outline: 'none', border: 'none'}}
                     placeHolder="00"
                     type="number"
-                    max={24}
+                    max={23}
+                    min={0}
                     value={time.hours ?? 0}
                     onChange={(e) => localUpdate('hours', e.target.value)}
                     onBlur={(e) =>  update('hours', e.target.value)}
@@ -75,6 +76,7 @@ export default ({ nodeData = {}, node, item}) => {
                     placeHolder="00"
                     type="number"
                     max={59}
+                    min={0}
                     value={time.minutes ?? 0}
                     onChange={(e) => localUpdate('minutes', e.target.value)}
                     onBlur={(e) =>  update('minutes', e.target.value)}

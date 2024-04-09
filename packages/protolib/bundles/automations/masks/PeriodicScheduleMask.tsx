@@ -22,12 +22,12 @@ const PeriodicScheduleMask = ({ node = {}, nodeData = {}, children }: any) => {
                     style={{width: 'fit-content', height: 'fit-content', marginBottom: '5px'}}
                 >Days</NodeText>
                 <WeekdayPicker node={node} nodeData={nodeData} item={{ type: 'days', field: {
-                    days: 'param-3'
+                    days: 'param-4'
                 }}} />
             </div>
             <div style={{ position: 'relative', paddingBottom: '50px' }}>
                 <FlowPort id={node.id} type='input' label='Execute' style={{bottom: '0px' }} handleId={'request'} />
-                <FallbackPort node={node} port={'param-4'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async () =>" postText="" />
+                <FallbackPort node={node} port={'param-3'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async () =>" postText="" />
             </div>
         </Node>
     )
@@ -50,10 +50,10 @@ export default {
             "to": 'context.createPeriodicSchedule',
             "param-1": { value: '13', kind: "StringLiteral" }, // hours
             "param-2": { value: '00', kind: "StringLiteral" }, // minutes
-            "param-3": { value: '', kind: "StringLiteral" }, // days
-            "param-4": { value: "null", kind: "Identifier" }, // callback inicializado correctamente
+            "param-3": { value: "null", kind: "Identifier" }, // callback inicializado correctamente
+            "param-4": { value: '', kind: "StringLiteral" }, // days
         }
     },
-    filterChildren: filterCallback("4"),
-    restoreChildren: restoreCallback("4"),
+    filterChildren: filterCallback("3"),
+    restoreChildren: restoreCallback("3"),
 } 

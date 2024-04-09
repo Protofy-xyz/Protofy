@@ -1,7 +1,7 @@
 import {CronJob} from 'cron'
 import {getLogger } from 'protolib/base';
 
-export const createPeriodicSchedule = (hours, minutes, days, callb) => {    
+export const createPeriodicSchedule = (hours, minutes, callb, days) => {    
     const logger = getLogger()
     const cronExpr = parseCronExpression(minutes, hours, days) 
     new CronJob(
