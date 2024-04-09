@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { FlowStoreContext } from '../store/FlowsStore';
 import Input from '../diagram/NodeInput'
 import { getDataFromField } from '../utils';
+import { usePrimaryColor } from '../diagram/Theme';
 
 export default ({ nodeData = {}, node, item}) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -83,6 +84,7 @@ export default ({ nodeData = {}, node, item}) => {
     }
 
     const DaysComponent = () => {
+        const primaryColor = usePrimaryColor()
         const days = [
             { long: "Monday", short: "M" },
             { long: "Tuesday", short: "T" },
@@ -120,10 +122,10 @@ export default ({ nodeData = {}, node, item}) => {
                         key={day.long}
                         style={{
                             height: '40px', width: '40px', display: 'grid', placeItems: 'center', borderRadius: '5px',
-                            cursor: 'pointer', backgroundColor: selected  ? '#0056ff' : 'transparent'
+                            cursor: 'pointer', backgroundColor: selected  ? primaryColor : 'transparent'
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = selected ? '#0056ff': '#00257a20'}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = selected ? '#0056ff' : 'transparent'}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = selected ? primaryColor: '#00257a20'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = selected ? primaryColor : 'transparent'}
                         onClick={(e) => {
                             e.stopPropagation()
                             update(day.long, selected)   
