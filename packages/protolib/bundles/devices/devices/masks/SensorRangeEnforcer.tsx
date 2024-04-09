@@ -46,7 +46,7 @@ const SensorRangeEnforcer = ({ node = {}, nodeData = {}, children }: any) => {
     }, [])
 
     return (
-        <Node icon={Cable} node={node} isPreview={!node.id} title='SensorRangeEnforcer' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node icon={Cable} node={node} isPreview={!node.id} title='Sensor in Range' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param-1', type: 'select', static: true, data: deviceNames }]} />
             <NodeParams id={node.id} params={[{ label: 'Component', field: 'param-2', type: 'select', static: true, data: deviceSubsystemsNames }]} />
             <NodeParams id={node.id} params={[{ label: 'Monitor', field: 'param-3', type: 'select', static: true, data: subsystemMonitorNames }]} />
@@ -57,11 +57,11 @@ const SensorRangeEnforcer = ({ node = {}, nodeData = {}, children }: any) => {
                 // (deviceName && deviceComponent && deviceMonitor) ?
                 <div style={{ marginTop: "200px" }}>
                     <FlowPort id={node.id} type='output' label='aboveAction(delta)' style={{ top: '360px' }} handleId={'request'} />
-                    <FallbackPort node={node} port={'param-7'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (delta) => " postText="" />
+                    <FallbackPort fallbackText="null" node={node} port={'param-7'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (delta) => " postText="" />
                     <FlowPort id={node.id} type='output' label='belowAction(delta)' style={{ top: '410px' }} handleId={'below'} />
-                    <FallbackPort node={node} port={'param-8'} type={"target"} fallbackPort={'below'} portType={"_"} preText="async (delta) => " postText="" />
+                    <FallbackPort fallbackText="null" node={node} port={'param-8'} type={"target"} fallbackPort={'below'} portType={"_"} preText="async (delta) => " postText="" />
                     <FlowPort id={node.id} type='output' label='onRangeAction(delta)' style={{ top: '460px' }} handleId={'range'} />
-                    <FallbackPort node={node} port={'param-9'} type={"target"} fallbackPort={'range'} portType={"_"} preText="async (delta) => " postText="" />
+                    <FallbackPort fallbackText="null" node={node} port={'param-9'} type={"target"} fallbackPort={'range'} portType={"_"} preText="async (delta) => " postText="" />
                 </div>
                 // : null
             }
@@ -77,18 +77,18 @@ export default {
         return node.type == "CallExpression" && nodeData.to?.startsWith('context.sensorRangeEnforcer')
     },
     getComponent: (node, nodeData, children) => <SensorRangeEnforcer node={node} nodeData={nodeData} children={children} />,
-    filterChildren: (node, childScope, edges)=>{
+    filterChildren: (node, childScope, edges)=> {
         childScope = filterCallback("7")(node,childScope,edges)
         childScope = filterCallback("8","below")(node,childScope,edges)
         childScope = filterCallback("9","range")(node,childScope,edges)
         return childScope
     },
-    // restoreChildren:  (node, nodes, originalNodes, edges, originalEdges) =>{
-    //     let result = restoreCallback("7")(node, nodes, originalNodes, edges, originalEdges)
-    //     result = restoreCallback("8")(node, result.nodes, originalNodes, result.edges, originalEdges)
-    //     result = restoreCallback("9")(node, result.nodes, originalNodes, result.edges, originalEdges)
-    //     return result
-    // },
+    restoreChildren: (node, nodes, originalNodes, edges, originalEdges) => {
+        let result = restoreCallback("7")(node, nodes, originalNodes, edges, originalEdges)
+        result = restoreCallback("8")(node, result.nodes, originalNodes, result.edges, originalEdges)
+        result = restoreCallback("9")(node, result.nodes, originalNodes, result.edges, originalEdges)
+        return result
+    },
     getInitialData: () => {
         return {
             to: 'context.sensorRangeEnforcer',
