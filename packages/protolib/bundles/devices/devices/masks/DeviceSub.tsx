@@ -54,7 +54,7 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
                 (deviceName && deviceComponent && deviceMonitor) ?
                     <div style={{ marginTop: "35px" }}>
                         <FlowPort id={node.id} type='output' label='On (message, topic)' style={{ top: '225px' }} handleId={'request'} />
-                        <FallbackPort node={node} port={'param-4'} type={"target"} fallbackPort={'request'} portType={"_"} preText="(message,topic) => " postText="" />
+                        <FallbackPort node={node} port={'param-4'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (message,topic) => " postText="" />
                     </div> : null
             }
         </Node>
@@ -69,5 +69,5 @@ export default {
     getComponent: (node, nodeData, children) => <DeviceSub node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterCallback("4"),
     restoreChildren: restoreCallback("4"),
-    getInitialData: () => { return { to: 'context.deviceSub', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": '(message,topic) =>' } }
+    getInitialData: () => { return { to: 'context.deviceSub', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": 'async (message,topic) =>' } }
 }
