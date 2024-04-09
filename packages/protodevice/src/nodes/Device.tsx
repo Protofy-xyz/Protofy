@@ -191,7 +191,7 @@ const Device = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
             ></Handle>
             :<></>} */}
             {/* {Object.keys(nodeData).filter(e => e.includes("element-"))} */}
-            <AddPropButton id={id} nodeData={nodeData} type={"Component"} style={{ marginBottom: '20px' }} />
+            {/* <AddPropButton id={id} nodeData={nodeData} type={"Component"} style={{ marginBottom: '20px' }} /> */}
         </Node>
     );
 }
