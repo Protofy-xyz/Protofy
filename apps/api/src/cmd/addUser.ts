@@ -37,7 +37,7 @@ const addUser = async () => {
             type: type
         }
         const entityModel = UserModel.load(userData)
-        await getDB(dbPath).put(username, JSON.stringify(userData), {indexes: entityModel.getIndexes()})
+        await getDB(dbPath).put(username, JSON.stringify(userData))
         console.log("Done!")
     }
 }

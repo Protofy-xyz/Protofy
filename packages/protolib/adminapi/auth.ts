@@ -15,7 +15,7 @@ logger.debug(`API Module loaded: ${__filename.split('.')[0]}`);
 const dbPath = '../../data/databases/auth'
 const groupDBPath = '../../data/databases/auth_groups'
 
-connectDB(dbPath, getInitialData(dbPath)) //preconnect database
+connectDB(dbPath, getInitialData(dbPath), {indexes: UserModel.getIndexes()}) //preconnect database
 
 const genNewSession = (data: any) => {
     return {
@@ -46,9 +46,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
         const entityModel = UserModel.load(storedUser)
         if (await checkPassword(request.password, storedUser.password)) {
             //update lastLogin
-            await db.put(storedUser.username, JSON.stringify({ ...storedUser, lastLogin: moment().toISOString() }), {
-                indexes: entityModel.getIndexes()
-            })
+            await db.put(storedUser.username, JSON.stringify({ ...storedUser, lastLogin: moment().toISOString() }))
             let group
             try {
                 group = JSON.parse(await getDB(groupDBPath).get(storedUser.type))
@@ -108,9 +106,7 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
             from: 'api'
         }
         const entityModel = UserModel.load(newUser)
-        await db.put(request.username, JSON.stringify({...newUser, password: await hash(password)}), {
-            indexes: entityModel.getIndexes()
-        })
+        await db.put(request.username, JSON.stringify({...newUser, password: await hash(password)}))
 
         let group = {
             admin: false,

@@ -80,7 +80,7 @@ export const AutoAPI = ({
     onAfterDelete = async (data, session?, req?) => data
 }: AutoAPIOptions) => (app, context) => {
     const dbPath = '../../data/databases/' + (dbName ? dbName : modelName)
-    connectDB(dbPath, initialData) //preconnect database
+    connectDB(dbPath, initialData, {indexes: modelType.getIndexes()}) //preconnect database
     const _list = (req, allResults, _itemsPerPage) => {
         const page = Number(req.query.page) || 0;
         const orderBy: string = req.query.orderBy as string;
@@ -141,7 +141,9 @@ export const AutoAPI = ({
                 return
             }
         }
-        
+
+        // console.log("********* Using basic retrieval without indexes: ", modelName)
+
         for await (const [key, value] of db.iterator()) {
             const listItem = await parseResult(value)
             if (listItem) {
@@ -162,9 +164,7 @@ export const AutoAPI = ({
 
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelType.load(await onBeforeCreate(req.body, session, req), session).createTransformed(transformers))
-        await db.put(entityModel.getId(), entityModel.serialize(), {
-            indexes: entityModel.getIndexes()
-        })
+        await db.put(entityModel.getId(), entityModel.serialize())
 
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('create'), entityModel.getNotificationsPayload())
         if (!disableEvents) {
@@ -227,9 +227,7 @@ export const AutoAPI = ({
 
         const db = getDB(dbPath, req, session)
         const entityModel = await (modelType.unserialize(await db.get(req.params.key), session).updateTransformed(modelType.load(await onBeforeUpdate(req.body, req, session), session), transformers))
-        await db.put(entityModel.getId(), entityModel.serialize(), {
-            indexes: entityModel.getIndexes()
-        })
+        await db.put(entityModel.getId(), entityModel.serialize())
 
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
         if (!disableEvents) {

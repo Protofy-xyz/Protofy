@@ -33,15 +33,18 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     idField: string
     objectSchema: ProtoSchema
     modelName: string
-    indexes: string[]
+    indexes: {keys: string[], primary: string}
     constructor(data: any, schema: ZodObject<any>, session?: SessionDataType, modelName?:string) {
         this.data = data;
         this.session = session ?? createSession();
         this.schema = schema
         this.objectSchema = ProtoSchema.load(this.schema)
         this.modelName = modelName?.toLowerCase() ?? 'unknown'
-        this.indexes = this.objectSchema.is('indexed').getFields()
         this.idField = this.objectSchema.is('id').getFirst('id') ?? 'id'
+        this.indexes = {
+            primary: this.idField,
+            keys: this.objectSchema.is('indexed').getFields()
+        }
     }
 
     get(key: string, defaultValue?) {
@@ -54,6 +57,10 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     getObjectSchema() {
         return this.objectSchema
+    }
+
+    static getIndexes() {
+        return this._newInstance({}).getIndexes()
     }
 
     getIndexes() {
