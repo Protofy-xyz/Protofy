@@ -4,7 +4,6 @@ import { usePrimaryColor } from 'protoflow/src/diagram/Theme'
 import { Timer } from 'lucide-react';
 import NodeText from 'protoflow/src/diagram/NodeText';
 
-
 const PeriodicScheduleMask = ({ node = {}, nodeData = {}, children }: any) => {
     const primaryColor = usePrimaryColor()
 
@@ -41,9 +40,8 @@ export default {
     keywords: ['timers', 'event', 'trigger', 'setInterval', 'schedule', 'timer', 'wait', 'sleep'],
     check: (node, nodeData) => {
         return (
-            node.type == "CallExpression"
-            && nodeData.to == 'context.createPeriodicSchedule'
-            && (getFieldValue("param-4",nodeData)?.startsWith('async () =>') || getFieldValue("param-4",nodeData)?.startsWith('() =>'))
+            node.type == "CallExpression" &&
+            nodeData.to == 'context.createPeriodicSchedule'
         )
     },
     getComponent: (node, nodeData, children) => <PeriodicScheduleMask node={node} nodeData={nodeData} children={children} />,
@@ -53,7 +51,7 @@ export default {
             "param-1": { value: '13', kind: "StringLiteral" }, // hours
             "param-2": { value: '00', kind: "StringLiteral" }, // minutes
             "param-3": { value: '', kind: "StringLiteral" }, // days
-            "param-4": { value: "async () =>", kind: "Identifier" }, // callb
+            "param-4": { value: "null", kind: "Identifier" }, // callback inicializado correctamente
         }
     },
     filterChildren: filterCallback("4"),
