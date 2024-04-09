@@ -26,7 +26,7 @@ const EventAPI = AutoAPI({
     dbName: 'events',
     disableEvents: true,
     requiresAdmin: ['*'],
-    itemsPerPage: 100,
+    itemsPerPage: 50,
     onAfterCreate: async (data)=> {
         await registerEventMeta(data)
         return data

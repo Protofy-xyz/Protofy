@@ -41,12 +41,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         this.objectSchema = ProtoSchema.load(this.schema)
         this.modelName = modelName?.toLowerCase() ?? 'unknown'
         this.indexes = this.objectSchema.is('indexed').getFields()
-        let idSchemas = this.objectSchema.is('id')
-        if(idSchemas.getFields().length > 1) {
-            idSchemas = idSchemas.isNot('fallbackId') //only use fallbackid if no other id is provided.
-                                                      //this allows to have a overwritteable default id in BaseSchema.
-        }
-        this.idField = idSchemas.getFirst('id') ?? 'id'
+        this.idField = this.objectSchema.is('id').getFirst('id') ?? 'id'
     }
 
     get(key: string, defaultValue?) {
@@ -89,6 +84,10 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
             lat: this.data[field][latKey],
             lon: this.data[field][lonKey]
         }
+    }
+
+    static getIdField() {
+        return this.getObjectSchema().is('id').getFirst('id') ?? 'id'
     }
 
     getId() {

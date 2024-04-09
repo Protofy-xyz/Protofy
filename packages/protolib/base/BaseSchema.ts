@@ -20,7 +20,6 @@ interface ZodExtensions {
     secret(): this;
     static(): this;
     id(): this;
-    fallbackId(): this;
     search(): this;
     displayOptions(options:any): this;
     size(size:number): this; //1, 2, 3, 4...
@@ -159,12 +158,6 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.fallbackId = function () {
-        this._def.id = true;
-        this._def.fallbackId = true;
-        return this;
-    };
-
     type.prototype.search = function () {
         this._def.search = true;
         return this;
@@ -224,6 +217,6 @@ export function initSchemaSystem() {
 }
 
 export const BaseSchema = Schema.object({
-    id: Schema.string().generate(() => moment().format('YYYYMM-DDHHmm-ssSSS') +'-'+uuidv4().split('-')[0]).fallbackId().hidden().id(),
+    id: Schema.string().generate(() => moment().format('YYYYMM-DDHHmm-ssSSS') +'-'+uuidv4().split('-')[0]).hidden().id(),
     _deleted: Schema.boolean().optional().hidden(),
 })

@@ -81,10 +81,8 @@ export const AutoAPI = ({
 }: AutoAPIOptions) => (app, context) => {
     const dbPath = '../../data/databases/' + (dbName ? dbName : modelName)
     connectDB(dbPath, initialData) //preconnect database
-    const _list = (req, allResults) => {
-        const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);
+    const _list = (req, allResults, _itemsPerPage) => {
         const page = Number(req.query.page) || 0;
-
         const orderBy: string = req.query.orderBy as string;
         const orderDirection = req.query.orderDirection || 'asc';
         if (orderBy) {
@@ -116,19 +114,43 @@ export const AutoAPI = ({
 
         const search = req.query.search;
         const preListData = typeof extraData?.prelist == 'function' ? await extraData.prelist(session, req) : (extraData?.prelist ?? {})
-        for await (const [key, value] of db.iterator()) {
-            if (key != 'initialized') {
-                const model = modelType.unserialize(value, session);
-                const extraListData = typeof extraData?.list == 'function' ? await extraData.list(session, model, req) : (extraData?.list ?? {})
-                const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, await onBeforeList(req.query, session, req));
+        const parseResult = async (value) => {
+            const model = modelType.unserialize(value, session);
+            const extraListData = typeof extraData?.list == 'function' ? await extraData.list(session, model, req) : (extraData?.list ?? {})
+            const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, await onBeforeList(req.query, session, req));
+            return listItem
+        }
+        const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);
+        if(db.hasCapability && db.hasCapability('pagination')) {
+            const indexedKeys = await db.getIndexedKeys()
 
-                if (listItem) {
-                    allResults.push(listItem);
+            const total = parseInt(await db.count(), 10)
+            const page = Number(req.query.page) || 0;
+            const orderBy: string = req.query.orderBy ? req.query.orderBy as string : modelType.getIdField()
+            const orderDirection = req.query.orderDirection || 'asc';
+
+            if(indexedKeys.length && indexedKeys.includes(orderBy)) {
+                const result = {
+                    itemsPerPage:_itemsPerPage,
+                    items: await Promise.all((await db.getPageItems(total, orderBy, page, _itemsPerPage, orderDirection)).map(async x => await parseResult(x))),
+                    total: total,
+                    page: req.query.all ? 0 : page,
+                    pages: req.query.all ? 1 : Math.ceil(total / _itemsPerPage)
                 }
+                res.send(await onAfterList(result, session, req));
+                return
+            }
+        }
+        
+        for await (const [key, value] of db.iterator()) {
+            const listItem = await parseResult(value)
+            if (listItem) {
+                allResults.push(listItem);
             }
         }
 
-        res.send(await onAfterList(_list(req, allResults), session, req));
+        res.send(await onAfterList(_list(req, allResults, _itemsPerPage), session, req));
+        
     }));
 
     //create
@@ -184,7 +206,7 @@ export const AutoAPI = ({
                         }
                     }
                 }
-                res.send(_list(req, await onAfterRead(allResults, session, req)))
+                res.send(_list(req, await onAfterRead(allResults, session, req), Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1)))
             } else {
                 const item = modelType.unserialize(await onBeforeRead(await db.get(req.params.key), session, req), session)
                 const readData = typeof extraData?.read == 'function' ? await extraData.read(session, item, req) : (extraData?.read ?? {})

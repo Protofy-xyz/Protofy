@@ -160,7 +160,29 @@ export class ProtoLevelDB extends ProtoDB {
 
     async count() {
         const counter = sublevel(this.rootDb, 'counter')
-        return await JSON.parse(counter.get('total'))
+        return await counter.get('total')
+    }
+
+    async getIndexedKeys() {
+        try {
+            const indexTable = sublevel(this.rootDb, 'indexTable')
+            return JSON.parse(await indexTable.get('indexes'))
+        } catch(e) {
+            logger.error({db: this.location},'Error reading indexes for database: '+this.location)
+        }
+
+        return []
+    }
+
+    async getPageItems(total, key, pageNumber, itemsPerPage, direction='asc') {
+        const ordered = sublevel(this.rootDb, 'order_'+key)
+        const allItems = []
+        const maxLength = String(total - 1).length;
+        for await (const [itemKey] of ordered.iterator({values: false, gt: String(pageNumber * itemsPerPage).padStart(maxLength, '0') , limit: itemsPerPage, reverse: direction == 'desc'})) {
+            allItems.push(itemKey.split('_')[1])
+        }
+        console.log('all items: ', allItems)
+        return await this.db.getMany(allItems)
     }
 
     async put(key: string, value: string, options?) {
@@ -176,11 +198,17 @@ export class ProtoLevelDB extends ProtoDB {
                 const counter = sublevel(this.rootDb, 'counter')
                 await counter.put('total', JSON.stringify(allItems.length))
 
+                const indexTable = sublevel(this.rootDb, 'indexTable')
+                await indexTable.put('indexes', JSON.stringify(indexes))
+                
+                const maxLength = String(allItems.length - 1).length;
                 for(var i=0;i<indexes.length;i++) {
                     const currentIndex = indexes[i]
                     const ordered = sublevel(this.rootDb, 'order_'+currentIndex)
                     ordered.clear()
-                    ordered.batch(allItems.map(item => item[currentIndex]+'_'+key).sort().map(k => ({
+                    ordered.batch(allItems.map((item, i) => {
+                        return String(i).padStart(maxLength, '0')+'_'+item[currentIndex]
+                    }).sort().map(k => ({
                         type: 'put',
                         key: k,
                         value: ''
