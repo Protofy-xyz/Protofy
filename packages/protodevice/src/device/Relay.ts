@@ -1,3 +1,4 @@
+import { extractComponent } from "./utils"
 // class DeviceComponent {
 //   name
 //   config
@@ -9,6 +10,7 @@
 //     this.subsystem = subsystem
 //   }
 // }
+
 
 
 
@@ -37,19 +39,47 @@ class RelayComponent {
           restore_mode: this.restoreMode,
         },
         subsystem: this.getSubsystem()
-      },
+      },          {
+        name: 'mqtt',
+        config: {
+          on_message: [
+            {
+              topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/pulsed_on`,
+              then: [
+                {"switch.turn_on": this.name},
+                //{delay: `!lambda "return atoi(x.c_str());"`},
+                {delay: "@!lambda "+ `"return atoi(x.c_str());"@`},
+                {"switch.turn_off": this.name},
+              ],
+//               then: {
+//                 lambda:
+// `id(${this.name}).turn_on();
+// int value = atoi(x.c_str());
+// id(${this.name}).set_target(value);
+// ESP_LOGD("PulsedOn", "${this.name} stepper target set to: %d",  value);
+// `,
+//               }
+            }
+          ]
+        }
+      }
     ]
 
+    // componentObjects.forEach((element, j) => {
+    //     if (!deviceComponents[element.name]) {
+    //         deviceComponents[element.name] = element.config
+    //     } else {
+    //         if (!Array.isArray(deviceComponents[element.name])) {
+    //             deviceComponents[element.name] = [deviceComponents[element.name]]
+    //         }
+    //         deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
+    //     }
+    // })
+
     componentObjects.forEach((element, j) => {
-        if (!deviceComponents[element.name]) {
-            deviceComponents[element.name] = element.config
-        } else {
-            if (!Array.isArray(deviceComponents[element.name])) {
-                deviceComponents[element.name] = [deviceComponents[element.name]]
-            }
-            deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
-        }
+      deviceComponents = extractComponent(element, deviceComponents, [{ key: 'mqtt', nestedKey: 'on_message' }])
     })
+
     return deviceComponents
   }
 
@@ -92,6 +122,16 @@ class RelayComponent {
           payload: {
             type: 'str',
             value: 'TOGGLE',
+          },
+        },
+        {
+          name: 'pulsed_on',
+          label: 'Pulsed ON ms',
+          description: 'Emmits a ON pulse with programable ms of duration',
+          endpoint: "/"+this.type+"/"+this.name+"/pulsed_on",
+          connectionType: 'mqtt',
+          payload: {
+            type: 'str',
           },
         },
       ]

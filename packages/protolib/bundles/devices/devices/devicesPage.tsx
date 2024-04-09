@@ -120,7 +120,7 @@ export default {
       console.log("-------DEVICE CODE------------", deviceCode)
       const deviceObj = eval(deviceCode)
       const componentsTree = deviceObj.getComponentsTree(deviceName, deviceDefinition)
-      const yaml = deviceObj.dump("yaml")
+      const yaml = deviceObj.dump("yaml").replace(/'@/g,"").replace(/@'/g,"")
 
       const subsystems = deviceObj.getSubsystemsTree(deviceName, deviceDefinition)
       const deviceObject = await API.get("/adminapi/v1/devices/" + deviceName)
