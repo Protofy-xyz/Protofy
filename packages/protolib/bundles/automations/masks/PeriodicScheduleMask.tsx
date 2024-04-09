@@ -1,14 +1,15 @@
 import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback, getFieldValue } from 'protoflow';
 import WeekdayPicker from 'protoflow/src/fields/WeekdayPicker'
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { usePrimaryColor } from 'protoflow/src/diagram/Theme'
 import { Timer } from 'lucide-react';
 import NodeText from 'protoflow/src/diagram/NodeText';
 
+
 const PeriodicScheduleMask = ({ node = {}, nodeData = {}, children }: any) => {
-    const color = useColorFromPalette(55)
+    const primaryColor = usePrimaryColor()
 
     return (
-        <Node icon={Timer} node={node} isPreview={!node.id} title='Periodic Schedule' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node icon={Timer} node={node} isPreview={!node.id} title='Periodic Schedule' color={primaryColor} id={node.id} skipCustom={true} disableInput disableOutput>
             <div style={{ padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
                 <NodeText
                     style={{width: 'fit-content', height: 'fit-content', marginBottom: '5px'}}
