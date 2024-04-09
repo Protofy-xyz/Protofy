@@ -1,5 +1,5 @@
 import { onEvent, emitEvent } from 'protolib/bundles/events/api'
-import { automation, fetch, deviceAction, deviceMonitor } from 'protolib/bundles/apis/api/'
+import { automation, fetch, deviceAction, deviceMonitor, sendMail } from 'protolib/bundles/apis/api/'
 import {createSchedule} from 'protolib/bundles/automations/schedule'
 
 export default {
@@ -10,4 +10,5 @@ export default {
     deviceAction,
     deviceMonitor,
     createSchedule,
+    sendMail
 }
