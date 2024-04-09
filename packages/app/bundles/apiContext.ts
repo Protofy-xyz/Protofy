@@ -3,6 +3,7 @@ import { automation, fetch, deviceAction, deviceMonitor } from 'protolib/bundles
 import {createSchedule} from 'protolib/bundles/automations/schedule'
 import {createPeriodicSchedule} from 'protolib/bundles/automations/periodicSchedule'
 import { sendMailWithResend } from 'protolib/bundles/resend/context'
+import {sensorRangeEnforcer} from 'protolib/bundles/devices/context'
 
 export default {
     onEvent,
@@ -13,5 +14,6 @@ export default {
     deviceMonitor,
     createSchedule,
     createPeriodicSchedule,
-    sendMailWithResend
+    sendMailWithResend,
+    sensorRangeEnforcer
 }
