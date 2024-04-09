@@ -28,7 +28,7 @@ const SendMailResend = (node: any = {}, nodeData = {}) => {
 }
 
 export default {
-    id: 'SendMail',
+    id: 'SendMailResend',
     type: 'CallExpression',
     check: (node, nodeData) => {
         return (
