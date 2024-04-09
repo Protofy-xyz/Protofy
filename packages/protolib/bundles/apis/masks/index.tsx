@@ -5,6 +5,7 @@ import Logger from './Logger';
 import Automation from './Automation';
 import DeviceAction from './DeviceAction';
 import DeviceMonitor from './DeviceMonitor';
+import SendMail from './SendMail';
 
 const apiMasks = [
     Automation,
@@ -13,7 +14,8 @@ const apiMasks = [
     Logger,
     ApiResponse,
     DeviceAction,
-    DeviceMonitor
+    DeviceMonitor,
+    SendMail
 ]
 
 export default apiMasks;
