@@ -7,14 +7,12 @@ import loadingW from './assets/protofitoLoadingW.gif';
 import dancing from './assets/protofitoDancing.gif';
 import dancingW from './assets/protofitoDancingW.gif';
 import { AlertDialog } from 'protolib'
-import { Button, useThemeName} from 'tamagui'
-import { Stack } from "@my/ui";
+import { useThemeName } from 'tamagui'
 
 
 const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
     const isError = modalFeedback?.details?.error
     const isLoading = ['write'].includes(stage) && !isError && !modalFeedback?.message?.includes('Please hold "Boot"')
-    const visibleImage = (isLoading || ['idle', 'compile'].includes(stage)) && !isError
     const themeName = useThemeName();
     const stages = {
         'yaml': 'Uploading yaml to the project...',
@@ -26,24 +24,44 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
 
     const [msg, setMsg] = React.useState(stages[stage])
 
+    const Link = (props) => {
+        return <a
+            target="_blank"
+            style={{ color: 'blue' }}
+            onMouseEnter={(e) => {
+                e.currentTarget.style.textDecoration = 'underline'
+            }}
+            onMouseLeave={(e) => {
+                e.currentTarget.style.textDecoration = 'none'
+            }}
+            {...props}
+        />
+    }
     const ModalText = () => {
         return stage === 'upload'
-        && !isError
-        && (
-            <div style={{ textAlign: 'center', color: isError ? 'red' : '', marginTop: isError ? '80px' : '', marginBottom: '0px' }}>
-                <>If you don't see your device on the menu, download device drivers on
-                    <a href="https://www.silabs.com/documents/public/software/CP210x_Windows_Drivers.zip" target="_blank" style={{ paddingLeft: '5px' }}>
-                        Windows
-                    </a>,
-                    <a href="https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip" target="_blank" style={{ paddingInline: '5px' }}>
-                        Mac
-                    </a>
-                    or <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads" target="_blank">
-                        other OS
-                    </a>
-                </>
-            </div>
-        )
+            && !isError
+            && (
+                <div style={{ textAlign: 'center', color: isError ? 'red' : '', marginTop: '20px', marginBottom: '0px' }}>
+                    <>
+                        {"Note: If you don't see your device on the menu, download device drivers on "}
+                        <Link href="https://www.silabs.com/documents/public/software/CP210x_Windows_Drivers.zip" >
+                            Windows
+                        </Link>
+                        <a>
+                            {', '}
+                        </a>
+                        <Link href="https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip">
+                            Mac
+                        </Link>
+                        <a>
+                            {' or '}
+                        </a>
+                        <Link href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads">
+                            other OS
+                        </Link>
+                    </>
+                </div>
+            )
     }
 
     const stepsTranslator = {
@@ -53,12 +71,25 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
         'idle': '4'
     }
 
+    const images = {
+        "light": {
+            "compile": compiling.src,
+            "loading": loading.src,
+            "idle": dancing.src
+        },
+        "dark": {
+            "compile": compilingW.src,
+            "loading": loadingW.src,
+            "idle": dancingW.src
+        }
+    }
+
     // return (<Modal isOpen={showModal} onClose={() => onCancel()} style={{ position: 'relative',backgroundColor: "yellow"}}>
     return (<AlertDialog open={showModal} hideAccept={true}>
         <div style={{ height: "350px", width: '400px', position: 'relative', overflow: 'visible', justifyContent: "space-between", display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: "flex", flexDirection: "column", height: "100%"}}>
-                <div style={{textAlign: 'center', fontWeight: 'bold', fontSize: 'xs' }}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</div>
-                <div style={{flexGrow: 1, textAlign: 'center', color: isError ? 'red' : '', marginBottom: "0px", marginTop: stepsTranslator[stage] === '2' ? '100px' : '0px' }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 'xs' }}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</div>
+                <div style={{ flexGrow: 1, textAlign: 'center', color: isError ? 'red' : '', marginBottom: "0px", marginTop: stepsTranslator[stage] === '2' ? '100px' : '0px' }}>
                     {
                         modalFeedback && ['write', 'compile', 'upload'].includes(stage)
                             ? modalFeedback.message : msg
@@ -66,27 +97,15 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                 </div>
                 <ModalText />
             </div>
-            {isLoading
-                ? <img
-                    alt="protofito loading"
-                    style={{ height: "160px", width: "300px", alignSelf: "center", marginTop: "30px", marginBottom: "10px", objectFit: 'cover' }}
-                    src={themeName=='light'?loading.src:loadingW.src}
-                />
-                : null}
-            {stage == 'idle' && !isError
-                ? <img
-                    alt="protofito dancing"
-                    style={{ height: "160px", width: "190px", alignSelf: "center", marginTop: "30px", marginBottom: "10px", objectFit: 'cover' }}
-                    src={themeName=='light'?dancing.src:dancingW.src}
-                />
-                : null}
-            {stage == 'compile' && !isError
-                ? <img
-                    alt="protofito compiling"
-                    style={{ height: "160px", width: "180px", alignSelf: "center", marginTop: "30px", marginBottom: "10px", objectFit: 'cover' }}
-                    src={themeName=='light'?compiling.src:compilingW.src}
-                />
-                : null}
+            {
+                !isError && images[themeName][isLoading ? 'loading' : stage] ?
+                    <img
+                        alt="protofito dancing"
+                        style={{ height: "180px", width: isLoading ? "300px" : "190px", alignSelf: "center", objectFit: 'cover', paddingTop: "20px" }}
+                        src={images[themeName][isLoading ? 'loading' : stage]}
+                    /> : null
+            }
+
             <div style={{ justifyContent: 'center', alignSelf: 'center', display: 'flex', gap: "20px" }}>
                 {stage != 'write' && stage != 'idle' || isError ? <button
                     style={{ padding: '10px 20px 10px 20px', backgroundColor: '#cccccc40', borderRadius: '10px' }}
@@ -110,7 +129,6 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                     Done!
                 </button> : <></>}
             </div>
-            {/* </div> */}
         </div>
     </AlertDialog >)
 }
