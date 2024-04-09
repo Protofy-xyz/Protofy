@@ -12,10 +12,10 @@ const SendMail = (node: any = {}, nodeData = {}) => {
 
     return (
         <Node icon={Mail} node={node} isPreview={!node.id} title='Send Mail' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
-            <NodeParams id={node.id} params={[{ label: 'from', field: 'param-1', type: 'input', static: true }]} />
-            <NodeParams id={node.id} params={[{ label: 'to', field: 'param-2', type: 'input', static: true }]} />
-            <NodeParams id={node.id} params={[{ label: 'subject', field: 'param-3', type: 'input', static: true }]} />
-            <NodeParams id={node.id} params={[{ label: 'body', field: 'param-4', type: 'input', static: true }]} />
+            <NodeParams id={node.id} params={[{ label: 'from', field: 'param-1', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'to', field: 'param-2', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'subject', field: 'param-3', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'body', field: 'param-4', type: 'input' }]} />
             {/* {
                 (from && to && subject && body) ?
                     <Button label="Send Mail" onPress={async () => {

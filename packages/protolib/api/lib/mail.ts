@@ -12,7 +12,7 @@ export const sendMailWithResend = async (from, to, subject, html) => {
         from: 'onboarding@resend.dev',
         to: 'gerard@protofy.xyz',
         subject: 'Hello World',
-        html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
+        html: '<p>Congrats on sending your <strong>first email</strong>!</p>' or 'Hello world!'
     } 
     */
     const RESEND_TOKEN = process.env.MAIL_RESEND_TOKEN
