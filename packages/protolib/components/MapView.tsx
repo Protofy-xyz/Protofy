@@ -48,7 +48,7 @@ export const MapView = ({ items, model, sourceUrl, extraFields, icons, customFie
   const width = 300
 
   return (
-    <Stack ref={containerRef} f={1}{...props}>
+    <Stack ref={containerRef} f={1} {...props}>
       {(process.env.NEXT_PUBLIC_MAPBOX_TOKEN && process.env.NEXT_PUBLIC_MAPBOX_TOKEN !== "PUT_HERE_YOUR_API_KEY") ?
         <Map
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
@@ -103,7 +103,7 @@ export const MapView = ({ items, model, sourceUrl, extraFields, icons, customFie
 
           )}
         </Map> :
-        <YStack flex={1} alignItems="center" justifyContent="center" space="$4" mt="$-10">
+        <YStack flex={1} alignItems="center" justifyContent="center" space="$4">
           <Center>
             <AlertTriangle size="$7" />
             <H2 mt="$6">
