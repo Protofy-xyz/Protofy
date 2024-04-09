@@ -158,6 +158,11 @@ export class ProtoLevelDB extends ProtoDB {
         return this.db.del(key, options);
     }
 
+    async count() {
+        const counter = sublevel(this.rootDb, 'counter')
+        return await JSON.parse(counter.get('total'))
+    }
+
     async put(key: string, value: string, options?) {
         const {keyEncoding, valueEncoding, ...internalOptions} = options ?? {}
         if(internalOptions && internalOptions.indexes) {
@@ -167,6 +172,9 @@ export class ProtoLevelDB extends ProtoDB {
                 for await (const [itemKey, itemValue] of this.db.iterator()) {
                     allItems.push(JSON.parse(itemValue))
                 }
+                
+                const counter = sublevel(this.rootDb, 'counter')
+                await counter.put('total', JSON.stringify(allItems.length))
 
                 for(var i=0;i<indexes.length;i++) {
                     const currentIndex = indexes[i]
@@ -203,6 +211,20 @@ export class ProtoLevelDB extends ProtoDB {
                 throw e
             }
         }
+    }
+
+    static async initDB(dbPath: string, initialData = {}, options?) {
+        await super.initDB(dbPath, initialData, options)
+        const rootDb = level(dbPath, options);
+        const db = sublevel(rootDb, 'values')
+        //regenerate counters
+        let total = 0
+        for await (const [itemKey] of db.iterator({values: false})) {
+            total++
+        }
+
+        const counter = sublevel(rootDb, 'counter')
+        await counter.put('total', JSON.stringify(total))
     }
 
     static connect(location, options?, config?): ProtoLevelDB {
