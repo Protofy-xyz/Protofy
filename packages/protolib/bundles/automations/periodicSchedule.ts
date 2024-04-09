@@ -6,8 +6,8 @@ export const createPeriodicSchedule = (hours, minutes, days, callb) => {
     const cronExpr = parseCronExpression(minutes, hours, days) 
     new CronJob(
         cronExpr, // cronTime
-        () => {
-            callb
+        async () => {
+            await callb()
             logger.info('Executed periodic schedule'); 
         }, // onTick
         null, // onComplete
