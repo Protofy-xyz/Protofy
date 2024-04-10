@@ -78,9 +78,11 @@ function getTriviaBeforeCloseParenToken(callNode) {
 CallExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level = 0) => {
     const data = nodesData[node.id] ?? {};
     const keys = Object.keys(data).sort()
+
     const params = keys.filter(key => key.startsWith('param')).sort((a, b) => a.localeCompare(b, 'en', { numeric: true })).map((param) => {
         let part;
         const fallback = data._fallBack ? data._fallBack.find(f => f.port == param) : null
+
         if (fallback) {
             const content = dumpConnection(node, fallback.type, fallback.fallbackPort, fallback.portType, null, edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
             if (!content) {
@@ -89,12 +91,10 @@ CallExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMar
                 part = fallback.preText + content + fallback.postText
             }
         } else {
-            var dumpedArg = dumpArgumentsData(data[param])
-            if (dumpedArg) {
-                part = dumpedArg
-            } else {
-                part = dumpConnection(node, "target", param, PORT_TYPES.data, getValueTrivia(data, param), edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-            }
+            part = dumpConnection(node, "target", param, PORT_TYPES.data, null, edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+            if (!part) {
+                part = dumpArgumentsData(data[param])
+            } 
         }
         return part
     })
