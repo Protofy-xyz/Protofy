@@ -14,9 +14,11 @@ export async function sensorValueTrigger(
 ) {
     let desiredVal = desiredValue
     let sensorValue = await context.deviceMonitor(deviceName, component, monitor);
-    if (desiredVal == sensorValue?.value) {
-        if (equalAction) await equalAction(sensorValue?.value)
+    sensorValue = sensorValue?.value ?? sensorValue
+
+    if (desiredVal == sensorValue) {
+        if (equalAction) await equalAction(sensorValue)
     } else {
-        if (differentAction) await differentAction(sensorValue?.value)
+        if (differentAction) await differentAction(sensorValue)
     }
 }

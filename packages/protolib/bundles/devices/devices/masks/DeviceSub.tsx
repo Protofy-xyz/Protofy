@@ -69,5 +69,5 @@ export default {
     getComponent: (node, nodeData, children) => <DeviceSub node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterCallback("4"),
     restoreChildren: restoreCallback("4"),
-    getInitialData: () => { return { to: 'context.deviceSub', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": 'async (message,topic) =>' } }
+    getInitialData: () => { return { to: 'context.deviceSub', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": { value: 'async (message,topic) =>', kind: 'Identifier' } } }
 }
