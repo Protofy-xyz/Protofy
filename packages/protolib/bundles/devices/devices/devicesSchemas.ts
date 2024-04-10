@@ -13,7 +13,7 @@ export const DevicesSchema = Schema.object({
   location: z.object({
     lat: z.string(),
     long: z.string()
-  }).optional().location("lat", "long").hidden()
+  }).optional().location("lat", "long").hidden().generate(()=>{return {lat: "41.3947846",long: "2.1939663"}},true) // PROTOFY HQ
 })
 export type DevicesType = z.infer<typeof DevicesSchema>;
 // export const DevicesModel = AutoModel.createDerived<DevicesType>("DevicesModel", DevicesSchema);
