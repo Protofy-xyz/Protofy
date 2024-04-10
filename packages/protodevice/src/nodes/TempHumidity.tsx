@@ -26,8 +26,10 @@ const TempHumidity = ({ node = {}, nodeData = {}, children, color }: any) => {
 }
 
 export default {
-    id: 'TempHumidity',
+    id: 'Temp&Humidity',
     type: 'CallExpression',
+    category: "sensors",
+    keywords: ["temperature", "humidity","sensor", "onewire","dht11","dht22","SI7021","RHT03","AM2302", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('tempHumidity'),
     getComponent: (node, nodeData, children) => <TempHumidity color={getColor('TempHumidity')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'tempHumidity', "param-1": { value: "temperaturehumidity", kind: "StringLiteral" }, "param-2": { value: "DHT22", kind: "StringLiteral" }, "param-3": { value: "60s", kind: "StringLiteral" } } }

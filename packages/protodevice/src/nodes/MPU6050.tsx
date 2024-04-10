@@ -32,6 +32,8 @@ const MPU6050 = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'MPU6050',
     type: 'CallExpression',
+    category: "sensors",
+    keywords: ["i2c","mpu6050", "gyroscope", "accelerometer", "balancing", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mpu6050'),
     getComponent: (node, nodeData, children) => <MPU6050 color={getColor('MPU6050')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'mpu6050', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "0x68", kind: "StringLiteral" }, "param-4": { value: "30s", kind: "StringLiteral" } } }

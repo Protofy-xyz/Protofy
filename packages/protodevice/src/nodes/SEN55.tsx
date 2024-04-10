@@ -36,6 +36,8 @@ const SEN55 = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'SEN55',
     type: 'CallExpression',
+    category: "sensors",
+    keywords: ["i2c","sen55", "air", "quality", "pm", "nox", "voc","humidity","temperature", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('sen55'),
     getComponent: (node, nodeData, children) => <SEN55 color={getColor('SEN55')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'sen55', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "0x69", kind: "StringLiteral" }, "param-4": { value: "30s", kind: "StringLiteral" } } }

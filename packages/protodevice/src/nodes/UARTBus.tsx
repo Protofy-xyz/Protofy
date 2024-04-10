@@ -70,6 +70,8 @@ const UARTBus = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'UARTBus',
     type: 'CallExpression',
+    category: "bus",
+    keywords: ["uart","serial", "bus","tx", "rx", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('uartBus'),
     getComponent: (node, nodeData, children) => <UARTBus color={getColor('UARTBus')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'uartBus', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "17", kind: "StringLiteral" }, "param-3": { value: "9600", kind: "StringLiteral" } } }

@@ -18,6 +18,8 @@ const Mqtt = ({node= {}, nodeData= {}, children, color}: any) => {
 export default   {
     id: 'Mqtt',
     type: 'CallExpression',
+    category: "connectivity",
+    keywords: ["mqtt", "bus","mosquitto", "internet", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mqtt'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <Mqtt color={getColor('Mqtt')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'mqtt', "param-1": { value: "BROKERADDRESS", kind: "StringLiteral" }, "param-2": { value: "1883", kind: "StringLiteral" } } }

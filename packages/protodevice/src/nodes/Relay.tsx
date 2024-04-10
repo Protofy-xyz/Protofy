@@ -22,6 +22,8 @@ const Relay = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'Relay',
     type: 'CallExpression',
+    category: "actuator",
+    keywords: ["binary","gpio", "output", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('relay'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <Relay color={getColor('Relay')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'relay', "param-1": { value: "", kind: "StringLiteral" }, "param-2": '"ALWAYS_OFF"' } }

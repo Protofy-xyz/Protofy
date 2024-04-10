@@ -79,6 +79,8 @@ const Ethernet = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'Ethernet',
     type: 'CallExpression',
+    category: "connectivity",
+    keywords: ["ethernet", "bus","tcp", "udp","internet", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('ethernet'),
     getComponent: (node, nodeData, children) => <Ethernet color={getColor('Ethernet')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'ethernet', "param-1": { value: "LAN8720", kind: "StringLiteral" }, "param-2": { value: 23, kind: "NumericLiteral" }, "param-3": { value: 18, kind: "NumericLiteral" }, "param-4": { value: "GPIO17_OUT", kind: "StringLiteral" }, "param-5": { value: 0, kind: "NumericLiteral" }, "param-6": { value: 12, kind: "NumericLiteral" } } }

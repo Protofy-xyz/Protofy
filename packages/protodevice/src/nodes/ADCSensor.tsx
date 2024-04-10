@@ -54,6 +54,8 @@ const ADCSensor = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'ADCSensor',
     type: 'CallExpression',
+    category: "sensors",
+    keywords: ["analog", "adc","sensor","gpio", "voltage", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('adcSensor'),
     getComponent: (node, nodeData, children) => <ADCSensor color={getColor('ADCSensor')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'adcSensor', "param-1": { value: "analogic", kind: "StringLiteral" }, "param-2": { value: "30s", kind: "StringLiteral" }, "param-3": { value: "auto", kind: "StringLiteral" } } }

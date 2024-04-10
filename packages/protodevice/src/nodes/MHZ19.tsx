@@ -23,6 +23,8 @@ const MHZ19 = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'MHZ19',
     type: 'CallExpression',
+    category: "sensors",
+    keywords: ["i2c","mhz19", "air", "quality", "co2", "temperature", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('mhz19'),
     getComponent: (node, nodeData, children) => <MHZ19 color={getColor('MHZ19')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'mhz19', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "30s", kind: "StringLiteral" } } }

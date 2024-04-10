@@ -33,6 +33,8 @@ const PCA9685 = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'PCA9685',
     type: 'CallExpression',
+    category: "actuators",
+    keywords: ["i2c","pca9685", "expansor", "pwm", "motor", "gpio","servo", "led", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('pca9685'),
     getComponent: (node, nodeData, children) => <PCA9685 color={getColor('PCA9685')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'pca9685', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "1000", kind: "StringLiteral" }, "param-3": { value: false, kind: "FalseKeyword" }, "param-4": { value: "0x40", kind: "StringLiteral" }, "param-5": { value: "", kind: "StringLiteral" } } }

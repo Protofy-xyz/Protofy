@@ -21,6 +21,8 @@ const BinarySensor = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'BinarySensor',
     type: 'CallExpression',
+    category: "sensors",
+    keywords: ["binary", "button","gpio", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('binarySensor'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <BinarySensor color={getColor('BinarySensor')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'binarySensor', "param-1": { value: "", kind: "StringLiteral" } } }

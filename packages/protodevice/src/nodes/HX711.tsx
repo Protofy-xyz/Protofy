@@ -70,6 +70,8 @@ const HX711 = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'HX711',
     type: 'CallExpression',
+    category: "sensors",
+    keywords: ["analog", "cell","hx711", "load", "bridge", "wheatstone", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('hx711'),
     getComponent: (node, nodeData, children) => <HX711 color={getColor('HX711')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'hx711', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "128", kind: "StringLiteral" }, "param-4": { value: "60s", kind: "StringLiteral" } } }

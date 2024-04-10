@@ -72,6 +72,8 @@ const NeopixelsBus = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'NeopixelsBus',
     type: 'CallExpression',
+    category: "actuators",
+    keywords: ["neopixel","light", "bus","led","800KBPS", "400KBPS", "400KBPS", "WS2811", "WS2812X", "WS2812", "SK6812", "TM1814", "TM1829", "TM1914", "APA106", "LC8812", "RGB", "RGBW","color", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('neopixelsBus'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <NeopixelsBus color={getColor('NeopixelsBus')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'neopixelsBus', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "16", kind: "StringLiteral" }, "param-3": { value: "GRB", kind: "StringLiteral" }, "param-4": { value: "WS2811", kind: "StringLiteral" }, "param-5": { value: "ALWAYS_ON", kind: "StringLiteral" }, "param-6": { value: "1s", kind: "StringLiteral" }, "param-7": { value: "0", kind: "StringLiteral" }, "param-8": { value: false, kind: "FalseKeyword" }, "param-9": { value: false, kind: "FalseKeyword" }, "param-10": { value: false, kind: "FalseKeyword" }, "param-11": { value: false, kind: "FalseKeyword" }, "param-12": { value: false, kind: "FalseKeyword" }, "param-13": { value: false, kind: "FalseKeyword" }, "param-14": { value: false, kind: "FalseKeyword" }, "param-15": { value: false, kind: "FalseKeyword" }, "param-16": { value: false, kind: "FalseKeyword" }, "param-17": { value: false, kind: "FalseKeyword" }, "param-18": { value: false, kind: "FalseKeyword" } } }

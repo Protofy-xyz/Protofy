@@ -30,6 +30,8 @@ const Wifi = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'Wifi',
     type: 'CallExpression',
+    category: "connectivity",
+    keywords: ["wifi", "bus","tcp", "udp", "ssid","internet", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('wifi'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <Wifi color={getColor('Wifi')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'wifi', "param-1": { value: "SSID", kind: "StringLiteral" }, "param-2": { value: "PASSWORD", kind: "StringLiteral" }, "param-3": { value: "none", kind: "StringLiteral" } } }

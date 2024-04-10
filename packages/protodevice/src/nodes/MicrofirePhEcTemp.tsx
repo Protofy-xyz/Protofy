@@ -73,6 +73,8 @@ const MicrofirePhEcTemp = ({ node = {}, nodeData = {}, children, color }: any) =
 export default {
     id: 'MicrofirePhEcTemp',
     type: 'CallExpression',
+    category: "sensors",
+    keywords: ["i2c","microfire", "ec", "ph", "temperature","water", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('microfirePhEcTemp'),
     getComponent: (node, nodeData, children) => <MicrofirePhEcTemp color={getColor('MicrofirePhEcTemp')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'microfirePhEcTemp', "param-1": { value: "phectemp", kind: "StringLiteral" }, "param-2": { value: 22, kind: "NumericLiteral" }, "param-3": { value: "60s", kind: "StringLiteral" } } }

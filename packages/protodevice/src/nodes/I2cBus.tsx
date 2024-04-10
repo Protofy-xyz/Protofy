@@ -70,6 +70,8 @@ const I2cBus = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'I2cBus',
     type: 'CallExpression',
+    category: "bus",
+    keywords: ["i2c", "bus","sda", "scl", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('i2cBus'),
     getComponent: (node, nodeData, children) => <I2cBus color={getColor('I2cBus')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'i2cBus', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "22", kind: "StringLiteral" }, "param-3": { value: true, kind: "FalseKeyword" } } }
