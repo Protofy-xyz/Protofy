@@ -15,7 +15,7 @@ export const MethodFactory = (methodType) => {
         const useFlowsStore = useContext(FlowStoreContext)
         const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
-        const nodeParams: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('param-')).map((param: any, i) => {
+        const nodeParams: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('param')).map((param: any, i) => {
             return { label: param.substr(6), field: param, fieldType: 'parameter' } as Field
         })
         return (
@@ -23,7 +23,7 @@ export const MethodFactory = (methodType) => {
                 <div style={{ height: '40px' }}></div>
                 {methodType == 'method' ? <NodeParams id={id} params={[{ label: 'Name', field: 'name', type: 'input' }]} /> : null}
                 <NodeParams id={id} params={nodeParams} />
-                <AddPropButton id={id} nodeData={nodeData} type={'param'} />
+                <AddPropButton id={id} nodeData={nodeData} type={'param-'} />
                 <FlowPort id={id} type='input' label='Body' style={{ top: '60px' }} handleId={'body'} />
                 <NodeParams id={id} params={[
                     { label: 'Static', field: 'static', type: 'boolean', static: true },
