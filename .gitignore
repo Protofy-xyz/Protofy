@@ -5,6 +5,7 @@ logs/*
 !logs/.keep
 !data/workspaces
 !data/templates
+!data/devices
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
