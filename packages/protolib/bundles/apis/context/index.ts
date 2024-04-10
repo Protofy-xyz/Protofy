@@ -41,7 +41,7 @@ export const deviceMonitor = async (device, subsystem, monitor) => {
     if (result.isError) {
         throw result.error
     }
-    return result.data
+    return result.data?.value ?? result.data
 }
 
 export const deviceAction = async (device, subsystem, action, value?) => {
