@@ -80,10 +80,16 @@ const getDB = (path, req, session) => {
         }
       }
 
+      const computedName = value.name.charAt(0).toUpperCase() + value.name.slice(1)
+      const codeName = computedName.replace(/\s/g, "")
       const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
         name: value.name + '.ts',
         data: {
-          options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object } },
+          options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { 
+            codeName: codeName,
+            name: computedName, 
+            pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object } 
+          },
           path: '/packages/app/bundles/custom/apis'
         }
       })
@@ -99,13 +105,13 @@ const getDB = (path, req, session) => {
       }
       //link in index.ts
       const sourceFile = getSourceFile(indexFile(getRoot(req)))
-      addImportToSourceFile(sourceFile, value.name + 'Api', ImportType.DEFAULT, './' + value.name)
+      addImportToSourceFile(sourceFile, codeName + 'Api', ImportType.DEFAULT, './' + codeName)
 
       const arg = getDefinition(sourceFile, '"apis"')
       if (!arg) {
         throw "No link definition schema marker found for file: " + path
       }
-      addObjectLiteralProperty(arg, value.name, value.name + 'Api')
+      addObjectLiteralProperty(arg, codeName, codeName + 'Api')
       sourceFile.saveSync();
     },
 

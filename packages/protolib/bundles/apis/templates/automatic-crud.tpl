@@ -14,7 +14,7 @@ Protofy("type", "AutoAPI")
 Protofy("object", "{{object}}")
 const {name, prefix} = Objects.{{object}}.getApiOptions()
 
-const {{name}}API = AutoAPI({
+const {{codeName}}API = AutoAPI({
     modelName: name,
     modelType: Objects.{{object}},
     initialData: {},
@@ -22,10 +22,10 @@ const {{name}}API = AutoAPI({
 })
 
 export default Protofy("code", async (app:Application, context) => {
-    {{name}}API(app, context) 
+    {{codeName}}API(app, context) 
     //you can add more apis here, like:
     /*
-    app.get('/api/v1/test/{{name}}', (req, res) => {
+    app.get('/api/v1/test/{{codeName}}', (req, res) => {
         //you code goes here
         //reply with res.send(...)
     })

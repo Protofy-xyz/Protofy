@@ -49,7 +49,7 @@ export default Protofy("code", async (app: Application, context) => {
         return JSON.parse(fs.readFileSync(jsonPath).toString())
     }
 
-const {{name}}API = AutoAPI({
+    const {{codeName}}API = AutoAPI({
         modelName: name,
         modelType: Objects.{{object}},
         initialData: {},
@@ -80,5 +80,5 @@ const {{name}}API = AutoAPI({
         },
     });
 
-    {{name}}API(app, context)   
+    {{codeName}}API(app, context)   
 })
