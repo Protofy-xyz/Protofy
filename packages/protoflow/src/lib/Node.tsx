@@ -161,7 +161,7 @@ export function getTrivia(astNode) {
 }
 
 export function getValueTrivia(data, valKey) {
-    return (data['trivia-' + valKey] ?? ' ') + (data[valKey] ?? '')
+    return (data['trivia-' + valKey] ?? ' ') + ((data[valKey]?.value ?? data[valKey]) ?? '')
 }
 
 export const getSizeOfLastChild = (childHeights) => childHeights[childHeights.length - 1].height - (childHeights.length > 2 ? childHeights[childHeights.length - 2].height : 0)
