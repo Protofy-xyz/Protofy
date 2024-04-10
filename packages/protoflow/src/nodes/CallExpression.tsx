@@ -33,7 +33,7 @@ const CallExpression = (node) => {
         <Node icon={ArrowUpRight} node={node} isPreview={!id} title={(nodeData.to ? nodeData.to : 'x') + '(' + (paramsArray.map(p => nodeData[p] ? dumpArgumentsData(nodeData[p]) : '...').join(',')) + ')'} id={id} color={color}>
             <NodeParams id={id} params={nodeParams} />
             <NodeParams id={id} params={[{ label: 'Await', field: 'await', type: 'boolean', static: true }]} />
-            <AddPropButton keyId={'param' + nextId} id={id} nodeData={nodeData} />
+            <AddPropButton keyId={'param-' + nextId} id={id} nodeData={nodeData} />
         </Node>
     );
 }
