@@ -13,7 +13,7 @@ const ContinueStatement =(node) => {
         <Node icon={Redo} node={node} isPreview={!id} title={"continue"} id={id} params={nodeParams} color={color} dataOutput={DataOutput.flow}/>
     );
 }
-ContinueStatement.keyWords = ["continue", 'case', 'switch']
+ContinueStatement.keywords = ["continue", 'case', 'switch']
 ContinueStatement.category = 'conditionals'
 ContinueStatement.getData = (node, data, edges) => {
     return {}

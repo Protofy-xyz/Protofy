@@ -36,7 +36,7 @@ export const VariableDeclarationListNodeFactory = (declarationType) => {
         );
     }
     component.category = "identifiers"
-    component.keyWords = ["const", "let", "var"]
+    component.keywords = ["const", "let", "var"]
     component.getData = (node, data, nodesData, edges) => {
         const type = node.getChildren()[0].getText(); // const, let, var
         const declarations = node.getDeclarations().reduce((total, dec, i) => {

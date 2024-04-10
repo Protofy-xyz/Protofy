@@ -17,7 +17,7 @@ const JsxExpression = (node) => {
     );
 }
 JsxExpression.category = 'react'
-JsxExpression.keyWords = ["jsx", "jsxexpression", "expression", "tsx", "{}"]
+JsxExpression.keywords = ["jsx", "jsxexpression", "expression", "tsx", "{}"]
 JsxExpression.defaultHandle = PORT_TYPES.data + 'expression'
 
 JsxExpression.getData = (node, data, nodesData, edges) => {

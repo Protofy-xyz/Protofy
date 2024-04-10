@@ -35,7 +35,7 @@ const SwitchStatement = (node) => {
     );
 }
 SwitchStatement.category = "conditionals"
-SwitchStatement.keyWords = ["switch", 'conditional', 'case', 'if']
+SwitchStatement.keywords = ["switch", 'conditional', 'case', 'if']
 SwitchStatement.getData = (node, data, nodesData, edges) => {
     const clauses = node.getCaseBlock().getClauses();
     let cases = {}

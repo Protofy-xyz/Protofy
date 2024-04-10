@@ -23,7 +23,7 @@ const PhantomBox = (node) => {
         </Node>
     );
 }
-PhantomBox.keyWords = ['phantom']
+PhantomBox.keywords = ['phantom']
 
 PhantomBox.dump = (node, nodes, edges, nodesData) => {
   return ''

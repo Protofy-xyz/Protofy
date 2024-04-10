@@ -16,7 +16,7 @@ const SpreadAssignment = (node) => {
     );;
 }
 SpreadAssignment.category = "operators"
-SpreadAssignment.keyWords = ["spread", '...']
+SpreadAssignment.keywords = ["spread", '...']
 SpreadAssignment.getData = (node, data, nodesData, edges) => {
     //connect all children in a line
     const expression = node.getExpression()

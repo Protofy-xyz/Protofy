@@ -25,7 +25,7 @@ const ObjectBindingPattern = (node) => {
     );
 }
 ObjectBindingPattern.category = 'operators'
-ObjectBindingPattern.keyWords = ["object","binding", "object binding"]
+ObjectBindingPattern.keywords = ["object","binding", "object binding"]
 
 ObjectBindingPattern.getData = (node, data, nodesData, edges) => {
     return {

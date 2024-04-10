@@ -15,7 +15,7 @@ const TemplateExpression =(node) => {
     );
 }
 TemplateExpression.category = "operators"
-TemplateExpression.keyWords = ["Template"]
+TemplateExpression.keywords = ["Template"]
 TemplateExpression.getData = (node, data, edges) => {
     return {
         value: node.getText().slice(1,-1)

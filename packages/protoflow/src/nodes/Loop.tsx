@@ -25,7 +25,7 @@ export const LoopFactory = (mode, submode='') =>{
             </Node>
         );
     }
-    Loop.keyWords = ['for', 'while', 'do-while', 'loop', 'iterator', 'iterate', 'for each', 'repeat']
+    Loop.keywords = ['for', 'while', 'do-while', 'loop', 'iterator', 'iterate', 'for each', 'repeat']
     Loop.category = "loops"
     Loop.getData = (node, data, nodesData, edges) => {
 

@@ -51,7 +51,7 @@ const IfStatement = (node) => {
     );
 }
 
-IfStatement.keyWords = ['if', 'conditional', 'condition']
+IfStatement.keywords = ['if', 'conditional', 'condition']
 IfStatement.category = 'conditionals'
 IfStatement.getData = (node, data, nodesData, edges) => {
     const nodeId = getId(node);

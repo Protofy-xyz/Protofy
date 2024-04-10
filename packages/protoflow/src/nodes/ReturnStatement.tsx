@@ -22,7 +22,7 @@ const ReturnStatement =(node) => {
     );
 }
 ReturnStatement.category = "common"
-ReturnStatement.keyWords = ["return"]
+ReturnStatement.keywords = ["return"]
 ReturnStatement.getData = (node, data, nodesData, edges) => {
     return {
         value: connectItem(node?.getExpression(), 'output', node, 'value', data, nodesData, edges, 'value'),

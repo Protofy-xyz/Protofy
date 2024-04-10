@@ -112,6 +112,8 @@ const Menu = withTopics(({
         }
     }
 
+    const isRelatedKeyWord = (keywords) => keywords?.some(k => k.toLowerCase().includes(searchValue.toLowerCase()) || searchValue.toLowerCase().includes(k.toLowerCase()))
+
     const _nodes: any = Object.fromEntries(Object.entries(nodes).filter(([key, value]) => enabledNodes.includes(key) || enabledNodes.includes('*')))
     const _customComponents = customComponents.filter((c) => enabledNodes.includes(c.type) || enabledNodes.includes('*'))
 
@@ -125,14 +127,17 @@ const Menu = withTopics(({
 
     if (searchValue) {
         nodeList = nodeList.filter(current => {
-            const allKeyWords = [...current.node.keyWords, current.node.name]
+            const nodeKeyWords = [...current.node.keywords, current.node.name]
             //@ts-ignore
-            return allKeyWords?.map(k => k.toLowerCase()).join().includes(searchValue.toLowerCase())
+            return isRelatedKeyWord(nodeKeyWords)
         })
     }
     let customNodeList = _customComponents
     if (searchValue) {
-        customNodeList = _customComponents.filter(customN => customN.id.toLowerCase().includes(searchValue.toLowerCase().trim()) || (customN.keywords && customN.keywords.join().toLowerCase().includes(searchValue.toLowerCase().trim())))
+        customNodeList = _customComponents.filter(customN => {
+            const customNodeKeyWords = [...customN.keywords, customN.id]
+            return isRelatedKeyWord(customNodeKeyWords)
+            })
     }
 
     const list = [
@@ -144,7 +149,7 @@ const Menu = withTopics(({
                 render: () => {
                     const realIndex = customNodeList.findIndex(n => n.id.toLowerCase().trim() == node.id.toLowerCase().trim())
                     const isSelected = realIndex == selectedNode
-                    return !node.hidden ? <RenderCustomComponent key={index+node.id} index={index} addElement={addElement} isSelected={isSelected} node={node} realIndex={realIndex} /> : null
+                    return !node.hidden ? <RenderCustomComponent key={index + node.id} index={index} addElement={addElement} isSelected={isSelected} node={node} realIndex={realIndex} /> : null
                 }
             }
         }),
@@ -341,7 +346,7 @@ const Menu = withTopics(({
                                 >
                                     {category.charAt(0).toUpperCase() + category.slice(1)}
                                 </Text>
-                                <div style={{marginTop: '12px'}}>
+                                <div style={{ marginTop: '12px' }}>
                                     {groupByCategory[category].map((node, index) => {
                                         return node.render()
                                     })}

@@ -21,7 +21,7 @@ const ExportDeclaration =(node) => {
     );
 }
 ExportDeclaration.category = "module system"
-ExportDeclaration.keyWords = ["export"]
+ExportDeclaration.keywords = ["export"]
 ExportDeclaration.getData = (node, data, edges) => {
     const elements = node.getNamedExports() ?? []
 

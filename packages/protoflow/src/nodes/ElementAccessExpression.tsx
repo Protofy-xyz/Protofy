@@ -18,7 +18,7 @@ const ElementAccessExpression = (node) => {
         <Node icon={Network} node={node} isPreview={!id} title={(nodeData?.accessName ?? 'x')+'['+(nodeData?.key ?? 'y')+']'} id={id} params={nodeParams} color={color} />
     );
 }
-ElementAccessExpression.keyWords = ["[]"]
+ElementAccessExpression.keywords = ["[]"]
 ElementAccessExpression.category = 'operators'
 ElementAccessExpression.getData = (node, data, nodesData, edges) => {
     return {

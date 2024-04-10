@@ -45,7 +45,7 @@ export const JsxElementFactory = (JsxType) => {
         );
     }
     component.category = 'react'
-    component.keyWords = ["jsx", "jsxelement", "react", "tsx", "fragment", "selfclosed"]
+    component.keywords = ["jsx", "jsxelement", "react", "tsx", "fragment", "selfclosed"]
     component.getData = (node, data, nodesData, edges) => {
 
         // const tagName = { name: node?.getTagNameNode()?.getText() }

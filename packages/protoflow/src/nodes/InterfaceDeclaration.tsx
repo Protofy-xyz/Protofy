@@ -30,7 +30,7 @@ const InterfaceDeclaration = (node) => {
     );
 }
 InterfaceDeclaration.category = "program structure"
-InterfaceDeclaration.keyWords = ["interface"]
+InterfaceDeclaration.keywords = ["interface"]
 
 InterfaceDeclaration.getData = (node, data, edges) => {
     return {

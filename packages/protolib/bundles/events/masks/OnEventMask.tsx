@@ -22,7 +22,7 @@ export default {
     id: 'onEventMask',
     type: 'CallExpression',
     category: "automation",
-    keywords: ["automation", 'event', 'trigger'],
+    keywords: ["automation", 'trigger', 'on event'],
     check: (node, nodeData) => {
         return node.type == "CallExpression" 
         && nodeData.to == 'context.onEvent'

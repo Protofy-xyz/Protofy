@@ -15,7 +15,7 @@ const AwaitExpression =(node) => {
         <Node icon={Timer} node={node} isPreview={!id} title={"await"} id={id} params={nodeParams} color={color}/>
     );
 }
-AwaitExpression.keyWords = ['await']
+AwaitExpression.keywords = ['await']
 AwaitExpression.getData = (node, data, nodesData, edges) => {
     return {
         value: connectItem(node?.getExpression(), 'output', node, 'value', data, nodesData, edges, 'value'),

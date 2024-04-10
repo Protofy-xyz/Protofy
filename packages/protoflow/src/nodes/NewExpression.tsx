@@ -28,7 +28,7 @@ const NewExpression =(node) => {
     );
 }
 NewExpression.category = 'operators'
-NewExpression.keyWords = ["new"]
+NewExpression.keywords = ["new"]
 NewExpression.getData = (node, data, nodesData, edges) => {
     return {
         ...node.getArguments().reduce((obj, param, i) =>{

@@ -14,7 +14,7 @@ const BreakStatement =(node) => {
         <Node icon={Link2Off} style={{minHeight: id ? (nodeFontSize*4+'px') : nodeFontSize, minWidth: nodeFontSize*10+'px'}} node={node} isPreview={!id} title={"break"} id={id} params={nodeParams} color={color}/>
     );
 }
-BreakStatement.keyWords = ["break"]
+BreakStatement.keywords = ["break"]
 BreakStatement.category = 'conditionals'
 BreakStatement.getData = (node, data, edges) => {
     return {}

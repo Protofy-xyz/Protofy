@@ -16,7 +16,7 @@ const ParenthesizedExpression = (node) => {
     );
 }
 ParenthesizedExpression.category = "operators"
-ParenthesizedExpression.keyWords = ["()"]
+ParenthesizedExpression.keywords = ["()"]
 ParenthesizedExpression.getData = (node, data, nodesData, edges, mode) => {
     //console.log('in ParenthesizedExpression.getData: ', node)
     return {

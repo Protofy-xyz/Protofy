@@ -55,7 +55,7 @@ export const ClassFactory = (classType) => {
             </Node>
         );
     }
-    components.keyWords = ["class", 'structure', 'object oriented']
+    components.keywords = ["class", 'structure', 'object oriented']
     components.category= "program structure"
     components.getData = (node, data, nodesData, edges) => {
         const members = node.getMembers().reduce((obj, param, i) => {

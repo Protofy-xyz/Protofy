@@ -21,7 +21,7 @@ export default {
     id: 'setTimeoutMask',
     type: 'CallExpression',
     category: 'timers',
-    keywords: ['timers', 'event', 'trigger', 'setTimeout', 'timer', 'wait', 'sleep'],
+    keywords: ['timers', 'event', 'trigger', 'setTimeout', 'wait', 'sleep'],
     check: (node, nodeData) => {
         var param1Val = getFieldValue('param-1', nodeData)
         return node.type == "CallExpression" && nodeData.to == 'setTimeout' && (param1Val?.startsWith('async () =>') || param1Val?.startsWith('() =>'))

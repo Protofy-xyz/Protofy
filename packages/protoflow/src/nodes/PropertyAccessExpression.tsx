@@ -16,7 +16,7 @@ const PropertyAccessExpression = (node) => {
     );;
 }
 PropertyAccessExpression.category = "operators"
-PropertyAccessExpression.keyWords = ["property"]
+PropertyAccessExpression.keywords = ["property"]
 PropertyAccessExpression.getData = (node, data, nodesData, edges) => {
     //connect all children in a line
     const name = node.getNameNode()

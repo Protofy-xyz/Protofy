@@ -23,7 +23,7 @@ export const ForXStatementFactory = (mode: 'in' | 'of') => {
         );
     }
     ForXStatement.category = 'loops'
-    ForXStatement.keyWords = ["for", "for-in", "for-of"]
+    ForXStatement.keywords = ["for", "for-in", "for-of"]
     ForXStatement.getData = (node, data, nodesData, edges) => {
         if (node.getStatement()) {
             connectItem(node.getStatement(), 'output', node, 'loop', data, nodesData, edges, null, [PORT_TYPES.data, PORT_TYPES.flow])

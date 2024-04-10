@@ -26,7 +26,7 @@ const JsxFragment = (node) => {
     );
 }
 JsxFragment.category = 'react'
-JsxFragment.keyWords = ["jsx", "jsxelement", "jsxfragment", "react", "tsx", "fragment", "selfclosed"]
+JsxFragment.keywords = ["jsx", "jsxelement", "jsxfragment", "react", "tsx", "fragment", "selfclosed"]
 
 JsxFragment.getData = (node, data, nodesData, edges) => {
     const childSyntaxList = node.getChildrenOfKind(SyntaxKind.SyntaxList)[0];

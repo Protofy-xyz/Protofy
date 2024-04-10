@@ -39,7 +39,7 @@ const Function = (node) => {
     );
 }
 Function.category = "program structure"
-Function.keyWords = ['function', '=>', 'arrow']
+Function.keywords = ['function', '=>', 'arrow']
 Function.getData = (node, data, nodesData, edges) => {
     let thenId = getId(node.getBody())
     const body = connectItem(thenId, 'output', node, 'call', data, nodesData, edges, null, [PORT_TYPES.data, PORT_TYPES.flow])

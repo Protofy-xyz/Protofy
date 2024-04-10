@@ -29,7 +29,7 @@ export const ObjectFactory = (objectType) => {
         );
     }
     component.category = "data structures"
-    component.keyWords = ["object", 'data']
+    component.keywords = ["object", 'data']
     component.getData = (node, data, nodesData, edges, mode) => {
         return {
             ...node[objectType == 'typeLiteral' ? 'getMembers' : 'getProperties']().reduce((obj, prop, i) => {

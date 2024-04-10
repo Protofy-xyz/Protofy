@@ -17,7 +17,7 @@ const ConditionalExpression = (node) => {
         </Node>
     );
 }
-ConditionalExpression.keyWords = ["ternary"]
+ConditionalExpression.keywords = ["ternary"]
 ConditionalExpression.category = 'conditionals'
 ConditionalExpression.getData = (node, data, nodesData, edges) => {
     return {

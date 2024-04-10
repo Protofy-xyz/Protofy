@@ -36,7 +36,7 @@ const ArrayLiteralExpression = (node) => {
         </Node>
     );
 }
-ArrayLiteralExpression.keyWords = ['Array', 'data', 'structure', 'list', 'collection', 'vector', 'dictionary']
+ArrayLiteralExpression.keywords = ['Array', 'data', 'structure', 'list', 'collection', 'vector', 'dictionary']
 ArrayLiteralExpression.category = "data structures"
 ArrayLiteralExpression.defaultHandle = PORT_TYPES.data + 'element-1'
 ArrayLiteralExpression.getData = (node, data, nodesData, edges) => {
