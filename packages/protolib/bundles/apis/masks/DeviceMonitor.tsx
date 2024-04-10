@@ -51,10 +51,10 @@ const DeviceMonitor = ({ node = {}, nodeData = {}, children }: any) => {
     )
 }
 export default {
-    id: 'DeviceMonitor',
+    id: 'deviceMonitor',
     type: 'CallExpression',
     category: "ioT",
-    keywords: ["automation", 'esp32', 'device', 'iot', 'trigger'],
+    keywords: ["automation", 'esp32', 'device', 'iot', 'read sensor', 'read', 'sensor', 'value'],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.deviceMonitor'),
     getComponent: (node, nodeData, children) => <DeviceMonitor node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'context.deviceMonitor', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, await: true } }
