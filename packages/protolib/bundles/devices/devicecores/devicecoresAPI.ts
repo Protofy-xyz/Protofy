@@ -14,5 +14,6 @@ export const DeviceCoresAPI = AutoAPI({
     modelName: 'devicecores',
     modelType: DeviceCoreModel,
     initialData,
+    skipDatabaseIndexes: true,
     prefix: '/adminapi/v1/'
 })

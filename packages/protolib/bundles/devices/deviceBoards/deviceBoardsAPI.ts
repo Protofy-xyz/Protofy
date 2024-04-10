@@ -54,5 +54,6 @@ export const DeviceBoardsAPI = AutoAPI({
     modelName: 'deviceboards',
     modelType: DeviceBoardModel,
     initialData,
+    skipDatabaseIndexes: true,
     prefix: '/adminapi/v1/'
 })

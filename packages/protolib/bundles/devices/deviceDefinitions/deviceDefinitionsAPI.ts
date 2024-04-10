@@ -23,5 +23,6 @@ export const DeviceDefinitionsAPI = AutoAPI({
     modelName: 'devicedefinitions',
     modelType: DeviceDefinitionModel,
     initialData,
+    skipDatabaseIndexes: true,
     prefix: '/adminapi/v1/'
 })

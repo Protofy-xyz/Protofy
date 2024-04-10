@@ -11,7 +11,8 @@ import path from 'path';
 export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
     modelType: DevicesModel,
-    prefix: '/adminapi/v1/'
+    prefix: '/adminapi/v1/',
+    skipDatabaseIndexes: true,
 })
 
 const logger = getLogger()
