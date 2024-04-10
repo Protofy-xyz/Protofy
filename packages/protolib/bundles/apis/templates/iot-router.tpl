@@ -46,7 +46,7 @@ export default Protofy("code", async (app, context) => {
 
     logger.info("IOT Router {{name}} started")
     app.get("/api/v1/action", async (req, res) => {
-        await context.deviceAction("device name", "component name", "component action");
+        await context.deviceAction("", "", "");
         res.send("Action Done");
     });
 })
