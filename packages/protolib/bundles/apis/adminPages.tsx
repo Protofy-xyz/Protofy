@@ -52,7 +52,7 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
             setError={setError}
             data={data}
             setData={setData}
-            numColumns={2}
+            numColumns={apiTemplates[data['data'].template].extraFields?2:1}
             mode={'add'}
             title={false}
             model={APIModel}
