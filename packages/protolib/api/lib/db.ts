@@ -155,7 +155,9 @@ export class ProtoLevelDB extends ProtoDB {
     }
 
     del(key: string, options?) {
-        return this.db.del(key, options);
+        const result = this.db.del(key, options)
+        this.regenerateIndexes()
+        return result
     }
 
     async count() {
@@ -271,8 +273,9 @@ export class ProtoLevelDB extends ProtoDB {
         if(indexes) {
             const indexTable = sublevel(rootDb, 'indexTable')
             await indexTable.put('indexes', JSON.stringify(indexes))
+            this.regenerateIndexes(rootDb, db, dbPath)
         }
-        this.regenerateIndexes(rootDb, db, dbPath)
+
     }
 
     static connect(location, options?, config?): ProtoLevelDB {
