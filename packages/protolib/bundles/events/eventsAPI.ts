@@ -30,7 +30,8 @@ const EventAPI = AutoAPI({
     onAfterCreate: async (data)=> {
         await registerEventMeta(data)
         return data
-    }
+    },
+    logLevel: "debug"
 })
 
 export const EventsAPI = async (app, context) => {
