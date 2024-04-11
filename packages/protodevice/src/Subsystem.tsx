@@ -11,15 +11,19 @@ const Monitor = ({deviceName, monitorData, subsystem}) => {
     //const value = 'test'
     const { message } = useSubscription(monitor.getEndpoint())
     const [result, loading, error] = useFetch(monitor.getValueAPIURL())
-    
+    const [scale, setScale] = useState(1);
+
     React.useEffect(() => {
         setValue(message?.message?.toString())
+        setScale(1.15);
+        setTimeout(() => {
+          setScale(1);
+        }, 200);
     }, [message])
-
     return (
         <XStack gap="$3">
             <Text flex={1} marginLeft={4} textAlign={"left"}>{monitor.getLabel()}: </Text>
-            {(loading || (value === undefined && result?.value === undefined)) ? <Spinner color="$color7" /> : <Chip text={`${value??result?.value} ${monitor.getUnits()}`}></Chip> }
+            {(loading || (value === undefined && result?.value === undefined)) ? <Spinner color="$color7" /> : <Chip color={value === undefined ? 'gray': '$color5'} text={`${value??result?.value} ${monitor.getUnits()}`} scale={scale} animation="bouncy" ></Chip> }
         </XStack>
     );
 }
