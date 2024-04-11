@@ -9,9 +9,9 @@ import { Protofy, Text, VStack, Image, HCenterStack, Page, UIWrapLib, UIWrap, SS
 import React from 'react'
 import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
+import { actions } from "protolib/bundles/visualui";
 
 const isProtected = Protofy("protected", false)
-const { actionFetch } = API;
 
 const PageComponent = (props) => {
   return (

@@ -2,9 +2,9 @@ import { YStack, H1, Text, XStack, H3, Button } from "@my/ui";
 import { SSR, withSession, Page, API } from "protolib";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
+import { actions } from "protolib/bundles/visualui";
 
 const isProtected = Protofy("protected", {{protected}})
-const { actionFetch } = API;
 
 const mainNew = {
     id: '1',

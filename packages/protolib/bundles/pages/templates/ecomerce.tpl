@@ -4,9 +4,9 @@ from "protolib";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { Paragraph } from '@my/ui';
+import { actions } from "protolib/bundles/visualui";
 
 const isProtected = Protofy("protected", {{protected}})
-const { actionFetch } = API;
 
 const CURRENCY = "$"
 const products = [

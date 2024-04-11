@@ -4,9 +4,9 @@ import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
+import { actions } from "protolib/bundles/visualui";
     
 const isProtected = Protofy("protected", {{protected}})
-const { actionFetch } = API;
 
 const PageComponent = (props) => {
   return (
