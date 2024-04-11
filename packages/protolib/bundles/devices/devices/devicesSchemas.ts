@@ -52,7 +52,7 @@ export class DeviceSubsystemMonitor{
   }
 
   getEventPath() {
-    return this.getEndpoint().split('/').slice(-3).join('/')
+    return this.getEndpoint().split('/').slice(2).join('/')
   }
 
   getLabel() {
