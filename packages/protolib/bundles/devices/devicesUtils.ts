@@ -183,10 +183,6 @@ const downloadDeviceFirmwareEndpoint = () => {
     return (`https://${onlineCompiler}/api/v1/device/download?configuration=test.yaml&type=firmware-factory.bin`)
 };
 
-export const onlineCompilerWebSocketUrl = () => {
-    return (`ws://bo-${onlineCompiler}/ws`)
-};
-
 export const onlineCompilerSecureWebSocketUrl = () => {
     return (`wss://${onlineCompiler}/ws`)
 };
