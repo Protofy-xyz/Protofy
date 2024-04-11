@@ -86,5 +86,11 @@ export default {
     keywords: ["stepper", "motor","driver", "A4988", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('a4988'),
     getComponent: (node, nodeData, children) => <A4988 color={getColor('A4988')} node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'a4988', "param-1": "", "param-2": "", "param-3": "250 steps/s", "param-4": "none", "param-5": "inf", "param-6": "inf" } }
+    getInitialData: () => { return { to: 'a4988', 
+    "param-1": { value: "", kind: "StringLiteral" }, 
+    "param-2": { value: "30s", kind: "StringLiteral" },
+    "param-3": { value: "250 steps/s", kind: "StringLiteral" }, 
+    "param-4": { value: "none", kind: "StringLiteral" }, 
+    "param-5": { value: "inf", kind: "StringLiteral" }, 
+    "param-6": { value: "inf", kind: "StringLiteral" }}}
 }
