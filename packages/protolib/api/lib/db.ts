@@ -186,10 +186,36 @@ export class ProtoLevelDB extends ProtoDB {
         return await this.db.getMany(allItems)
     }
 
+    private batchCounter = 0;
+    private batchTimer = null;
+    private batchLimit = 5;
+    private batchTimeout = 100000
+
     async put(key: string, value: string, options?) {
-        const { keyEncoding, valueEncoding, ...internalOptions } = options ?? {}
-        await this.regenerateIndexes(value);
-        return await this.db.put(key, value, options);
+        const batch = false
+        const { keyEncoding, valueEncoding, ...internalOptions } = options ?? {};
+        if (batch) {
+            if(this.batchCounter === this.batchLimit) {
+                this.batchIndexes()
+            } else {
+                this.batchCounter++
+                if (!this.batchTimer) {
+                    this.batchTimer = setTimeout(() => {
+                        this.batchIndexes()
+                    }, this.batchTimeout);
+                }
+            }
+        } else {
+            await this.regenerateIndexes(value);
+        }
+        return await this.db.put(key, value, options)
+    }
+
+    private batchIndexes() {
+        this.regenerateIndexes();
+        clearTimeout(this.batchTimer);
+        this.batchTimer = null;
+        this.batchCounter = 0;
     }
 
     async regenerateIndexes(value?) {
@@ -208,14 +234,21 @@ export class ProtoLevelDB extends ProtoDB {
         if (indexData && indexData.keys.length) {
             const indexes = indexData.keys
             let allItems = []
-            const newItem = value ? JSON.parse(value) : null
+
             for await (const [itemKey, itemValue] of db.iterator()) {
                 allItems.push(JSON.parse(itemValue));
             }
             
-            if(newItem) {
-                allItems = allItems.filter(listItem => listItem[indexData.primary] !== newItem[indexData.primary])
-                allItems.push(newItem)
+            if (Array.isArray(value)) {
+                value.forEach(newItemJson => {
+                    const newItem = JSON.parse(newItemJson);
+                    allItems = allItems.filter(listItem => listItem[indexData.primary] !== newItem[indexData.primary]);
+                    allItems.push(newItem);
+                });
+            } else if (value) {
+                const newItem = JSON.parse(value);
+                allItems = allItems.filter(listItem => listItem[indexData.primary] !== newItem[indexData.primary]);
+                allItems.push(newItem);
             }
             
             const counter = sublevel(rootDb, 'counter');
