@@ -13,6 +13,7 @@ import { Paragraph, Stack, TextArea, XStack, YStack } from '@my/ui';
 import { getPendingResult } from "protolib/base";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
+import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl } from "../devicesUtils";
 
 
 const MqttTest = ({ onSetStage, onSetModalFeedback }) => {
@@ -143,7 +144,7 @@ export default {
       //const deviceObj = eval(deviceCode)
     }
     const sendMessage = async (notUsed) => {
-      await fetch('https://firmware.protofy.xyz/api/v1/device/compile')
+      await fetch(compileActionUrl())
     }
 
     const compile = async () => {
@@ -165,7 +166,7 @@ export default {
 
     const saveYaml = async (yaml) => {
       console.log("Save Yaml")
-      console.log(await callText("https://firmware.protofy.xyz/api/v1/device/edit?configuration=test.yaml", 'POST', yaml));
+      console.log(await callText(postYamlApiEndpoint(), 'POST', yaml));
     }
 
     useEffect(() => {
@@ -237,9 +238,9 @@ export default {
         isVisible: (element) => true
       }
     ]
-    
+
     return (<AdminPage title="Devices" pageSession={pageSession}>
-      <Connector brokerUrl="wss://firmware.protofy.xyz/ws">
+      <Connector brokerUrl= {onlineCompilerSecureWebSocketUrl()}>
         <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} />
       </Connector>

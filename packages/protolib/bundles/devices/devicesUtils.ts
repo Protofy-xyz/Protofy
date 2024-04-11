@@ -3,7 +3,7 @@ import { sleep } from "protodevice/src/sleep";
 import { Build, FlashError } from "protodevice/src/const";
 import { manifest } from "protodevice/src/manifest";
 
-const onlineCompilerUrl = "https://firmware.protofy.xyz/api/v1";
+
 let port;
 
 const resetTransport = async (transport: Transport) => {
@@ -93,7 +93,7 @@ export const flash = async (cb) => {
     const filePromises = build.parts.map(async (part) => {
 
         // const url = "http://bo-firmware.protofy.xyz/api/v1" + "/electronics/download.bin?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
-        const url = onlineCompilerUrl + "/device/download?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
+        const url = downloadDeviceFirmwareEndpoint()
 
         const resp = await fetch(url);
         if (!resp.ok) {
@@ -175,3 +175,26 @@ export const flash = async (cb) => {
     await transport.disconnect();
     cb({ message: "All done!" })
 }
+
+
+const onlineCompiler = "firmware.protofy.xyz";
+
+const downloadDeviceFirmwareEndpoint = () => {
+    return (`https://${onlineCompiler}/api/v1/device/download?configuration=test.yaml&type=firmware-factory.bin`)
+};
+
+export const onlineCompilerWebSocketUrl = () => {
+    return (`ws://bo-${onlineCompiler}/ws`)
+};
+
+export const onlineCompilerSecureWebSocketUrl = () => {
+    return (`wss://${onlineCompiler}/ws`)
+};
+
+export const postYamlApiEndpoint = () => {
+    return (`https://${onlineCompiler}/api/v1/device/edit?configuration=test.yaml`);
+};
+
+export const compileActionUrl = () => {
+    return (`https://${onlineCompiler}/api/v1/device/compile`)
+};
