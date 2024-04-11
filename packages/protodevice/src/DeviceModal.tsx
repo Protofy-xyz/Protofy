@@ -27,7 +27,7 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
     const Link = (props) => {
         return <a
             target="_blank"
-            style={{ color: 'blue' }}
+            style={{ color: '#0090FF' }}
             onMouseEnter={(e) => {
                 e.currentTarget.style.textDecoration = 'underline'
             }}
