@@ -22,5 +22,5 @@ export default {
     keywords: ["logger", 'log', 'console', 'debug'],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('logger.'),
     getComponent: (node, nodeData, children) => <Logger node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'logger.info', "param-1": { value: '', kind: "StringLiteral" }, "param-2": { value: "message", kind: "StringLiteral" } } }
+    getInitialData: () => { return { to: 'logger.info', "param-1": { value: 'null', kind: "Identifier" }, "param-2": { value: "message", kind: "StringLiteral" } } }
 }

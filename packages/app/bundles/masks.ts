@@ -9,6 +9,7 @@ import customEventMasks from 'protolib/bundles/events/masks'
 import customMasks from 'app/bundles/custom/masks'
 import scheduleMasks from 'protolib/bundles/automations/masks';
 import resendMasks from 'protolib/bundles/resend/masks';
+import flowMasks from 'protolib/bundles/flow/masks';
 
 const paths = {
     devices: [
@@ -35,12 +36,13 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return []
     if (paths.apis.includes(segment)) return [
         ...customMasks.api,
+        ...flowMasks,
         ...customEventMasks.api,
         ...apiMasks,
         ...devicesMasks.api,
         ...baseMasks.api,
         ...scheduleMasks,
-        ...resendMasks
+        ...resendMasks,
     ]
     return []
 }

@@ -4,7 +4,7 @@ import {createSchedule} from 'protolib/bundles/automations/schedule'
 import {createPeriodicSchedule} from 'protolib/bundles/automations/periodicSchedule'
 import { sendMailWithResend } from 'protolib/bundles/resend/context'
 import {sensorRangeEnforcer, sensorValueTrigger} from 'protolib/bundles/devices/context'
-
+import flow from 'protolib/bundles/flow/context'
 export default {
     onEvent,
     emitEvent,
@@ -16,5 +16,6 @@ export default {
     createPeriodicSchedule,
     sendMailWithResend,
     sensorRangeEnforcer,
-    sensorValueTrigger
+    sensorValueTrigger,
+    flow
 }
