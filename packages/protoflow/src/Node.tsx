@@ -15,9 +15,10 @@ import useTheme from './diagram/Theme';
 import { DataOutput } from './lib/types';
 import { read } from './lib/memory';
 import NodeSelect from './diagram/NodeSelect';
-import { X, ChevronUp, AlertCircle, Type, Hash, Braces, ToggleLeft } from 'lucide-react';
+import { X, ChevronUp, AlertCircle } from 'lucide-react';
 import { useProtoflow, useProtoEdges } from './store/DiagramStore';
 import { getFieldValue, getDataFromField } from './utils';
+import { getKindIcon, getNextKind, getTypeByKind } from './utils/typesAndKinds';
 
 export interface Field {
     field: string,
@@ -297,16 +298,9 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         style={{ all: "revert", width: nodeFontSize, margin: "2px 0px 2px 0px", accentColor: interactiveColor, transform: `scale(${nodeFontSize / 15})`, marginRight: '5px' }} />
                 </span>
             default:
-                const type = nodeData[param.field]?.kind
-                const icons = {
-                    "StringLiteral": Type,
-                    "NumericLiteral": Hash,
-                    "TrueKeyword": ToggleLeft,
-                    "ObjectLiteralExpression": Braces,
-                    "FalseKeyword": ToggleLeft
-                }
+                const fieldKind = nodeData[param.field]?.kind
                 return <>
-                    {type && icons[type]
+                    {getTypeByKind(fieldKind)
                         ? <div
                             style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: 'pointer' }}
                             onClick={() => {
@@ -314,12 +308,12 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                                     ...nodeData, [param.field]: {
                                         ...nodeData[param.field],
                                         // TODO: Changes kind names from helper instead of icon list
-                                        kind: Object.keys(icons)[(Object.keys(icons).indexOf(type) + 1) % (Object.keys(icons).length - 1)]
+                                        kind: getNextKind(fieldKind)
                                     }
                                 })
                             }}
                         >
-                            {React.createElement(icons[type], { size: 16, color: interactiveColor })}
+                            {React.createElement(getKindIcon(fieldKind), { size: 16, color: interactiveColor })}
                         </div>
                         : <></>}
                     <NodeInput
@@ -332,7 +326,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         disabled={disabled || param.isDisabled}
                         style={{
                             marginRight: ["case", "child"].includes(param.fieldType) ? "20px" : "0px",
-                            paddingLeft: type && icons[type] ? "30px" : undefined
+                            paddingLeft: getTypeByKind(fieldKind) ? "30px" : undefined
                         }}>
                         {param.error ? <div style={{ alignItems: 'center', marginTop: '5px', display: 'flex' }}>
                             <AlertCircle size={"14px"} color='red' style={{ alignSelf: 'center', marginRight: '5px' }} />

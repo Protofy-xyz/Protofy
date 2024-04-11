@@ -94,7 +94,7 @@ CallExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMar
             part = dumpConnection(node, "target", param, PORT_TYPES.data, null, edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
             if (!part) {
                 part = dumpArgumentsData(data[param])
-            } 
+            }
         }
         return part
     })
@@ -108,7 +108,6 @@ export default memo(CallExpression)
 export function getArgumentsData(node: any): any {
     let atrVal
     var kind = node?.getKindName()
-
     switch (kind) {
         case 'StringLiteral':
         case 'NumericLiteral':
@@ -116,6 +115,8 @@ export function getArgumentsData(node: any): any {
         case 'FalseKeyword':
             atrVal = node?.getLiteralValue();
             break
+        case 'NullKeyword':
+        case 'PropertyAccessExpression':
         case 'Identifier':
             atrVal = node.getText()
             break
@@ -136,6 +137,8 @@ export function dumpArgumentsData(argData: { kind: string, value: any }): any {
         case 'TrueKeyword':
         case 'FalseKeyword':
         case 'Identifier':
+        case 'NullKeyword':
+        case 'PropertyAccessExpression':
         default:
             return String(value)
     }
