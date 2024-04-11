@@ -101,7 +101,7 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                 !isError && images[themeName][isLoading ? 'loading' : stage] ?
                     <img
                         alt="protofito dancing"
-                        style={{ height: "180px", width: isLoading ? "300px" : "190px", alignSelf: "center", objectFit: 'cover', paddingTop: "20px" }}
+                        style={{ height: isLoading ? "200px" : "180px", width: isLoading ? "300px" : "190px", alignSelf: "center", objectFit: 'cover', paddingTop: "20px" }}
                         src={images[themeName][isLoading ? 'loading' : stage]}
                     /> : null
             }
