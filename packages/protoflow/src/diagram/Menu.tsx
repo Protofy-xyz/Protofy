@@ -127,7 +127,7 @@ const Menu = withTopics(({
 
     if (searchValue) {
         nodeList = nodeList.filter(current => {
-            const nodeKeyWords = [...current.node.keywords, current.node.name]
+            const nodeKeyWords = [...(current.node?.keywords ?? []), current.node.name]
             //@ts-ignore
             return isRelatedKeyWord(nodeKeyWords)
         })
@@ -135,9 +135,9 @@ const Menu = withTopics(({
     let customNodeList = _customComponents
     if (searchValue) {
         customNodeList = _customComponents.filter(customN => {
-            const customNodeKeyWords = [...customN.keywords, customN.id]
+            const customNodeKeyWords = [...(customN?.keywords ?? []), customN.id]
             return isRelatedKeyWord(customNodeKeyWords)
-            })
+        })
     }
 
     const list = [
