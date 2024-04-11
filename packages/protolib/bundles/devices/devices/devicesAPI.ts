@@ -73,8 +73,9 @@ export const DevicesAPI = (app, context) => {
             res.status(404).send(`Monitor [${req.params.monitor}] not found in Subsytem [${req.params.subsystem}] for device [${req.params.device}]`)
             return
         }
-    
-        const data = await API.get(`/adminapi/v1/events?from=device&user=${req.params.device}&path=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`)
+        
+        const urlLastDeviceEvent = `/adminapi/v1/events?from=device&user=${req.params.device}&path=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
+        const data = await API.get(urlLastDeviceEvent)
 
         if(!data || !data.data ||  !data.data['items'] || !data.data['items'].length) {
             res.status(404).send({value:null})
