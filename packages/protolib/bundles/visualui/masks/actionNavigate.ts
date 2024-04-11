@@ -4,7 +4,7 @@ export const actionNavigate = {
     "path": "*",
     "type": "CallExpression",
     "filter": {
-        "to": "actions.navigate"
+        "to": "uiContext.navigate"
     },
     "body": [
         {
@@ -12,5 +12,5 @@ export const actionNavigate = {
             "params": [{ label: 'route', field: 'param-1', type: 'input' }]
         }
     ],
-    "initialData": { to: 'actions.navigate', "param-1": { value: "", kind: "StringLiteral" } }
+    "initialData": { to: 'uiContext.navigate', "param-1": { value: "", kind: "StringLiteral" } }
 }

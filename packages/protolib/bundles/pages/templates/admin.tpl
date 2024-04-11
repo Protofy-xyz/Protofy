@@ -9,7 +9,7 @@ import {Protofy} from 'protolib/base'
 import {Objects} from 'app/bundles/objects'
 import {DataView, API, AdminPage, PaginatedDataSSR } from 'protolib'
 import { Tag } from '@tamagui/lucide-icons'
-import { actions } from "protolib/bundles/visualui";
+import { uiContext } from "app/bundles/visualuiContext";
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})

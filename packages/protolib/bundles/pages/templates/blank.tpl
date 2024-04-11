@@ -9,7 +9,7 @@ import { Theme, YStack, Text, XStack, Paragraph } from "@my/ui"
 import { UIWrapLib, UIWrap, withSession, Page, useEditor, API, SSR } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
-import { actions } from "protolib/bundles/visualui";
+import { uiContext } from "app/bundles/visualuiContext";
 
 const isProtected = Protofy("protected", {{protected}})
 
