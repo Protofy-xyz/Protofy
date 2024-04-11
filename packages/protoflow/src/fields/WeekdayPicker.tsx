@@ -32,24 +32,26 @@ export default ({ nodeData = {}, node, item}) => {
         }); 
 
         const localUpdate = (type, val) => {
-            if (type === "minutes") {
+            let numVal = Number(val)
+            if (type === "minutes" && numVal >= 0 && numVal < 60) {
                 let minutes = getFieldData(field.hours)
                 minutes = val
                 setTime(prev => ({...prev, minutes}))
-            } else if (type === "hours") {
+            } else if (type === "hours" && numVal >= 0 && numVal < 24) {
                 let hours = getFieldData(field.minutes)
                 hours = val
                 setTime(prev => ({...prev, hours}))
             }
         }
 
-        const update= (type, val) => {
-            if (type === "minutes") {
-              time.minutes = val
-              onUpdate(field.minutes, time.minutes)
-            } else if (type === "hours") {
-              time.hours = val
-              onUpdate(field.hours, time.hours)
+        const update = (type, val) => {
+            let numVal = Number(val)
+            if (type === "minutes" && numVal >= 0 && numVal < 60) {
+                time.minutes = val
+                onUpdate(field.minutes, time.minutes)
+            } else if (type === "hours" && numVal >= 0 && numVal < 24) {
+                time.hours = val
+                onUpdate(field.hours, time.hours)
             }
         }
 
@@ -59,11 +61,9 @@ export default ({ nodeData = {}, node, item}) => {
         >
             <div style={{width: '100%', position: 'relative', display: 'flex'}}>
                 <Input 
-                    style={{ width: '50px',backgroundColor: '#ececec30', outline: 'none', border: 'none'}}
+                    style={{ width: '50px'}}
                     placeHolder="00"
-                    type="number"
-                    max={23}
-                    min={0}
+                    type="text"
                     value={time.hours ?? 0}
                     onChange={(e) => localUpdate('hours', e.target.value)}
                     onBlur={(e) =>  update('hours', e.target.value)}
@@ -72,11 +72,9 @@ export default ({ nodeData = {}, node, item}) => {
             <p style={{width: 'fit-content'}}>:</p>
             <div style={{width: '100%', position: 'relative', display: 'flex'}}>
                 <Input 
-                    style={{ width: '50px',backgroundColor: '#ececec30', outline: 'none', border: 'none'}}
+                    style={{ width: '50px'}}
                     placeHolder="00"
-                    type="number"
-                    max={59}
-                    min={0}
+                    type="text"
                     value={time.minutes ?? 0}
                     onChange={(e) => localUpdate('minutes', e.target.value)}
                     onBlur={(e) =>  update('minutes', e.target.value)}
