@@ -22,6 +22,7 @@ const GPIOSwitch = ({ node = {}, nodeData = {}, children, color }: any) => {
 export default {
     id: 'GPIOSwitch',
     type: 'CallExpression',
+    keywords: ["gpio", "button", "gpio", "device", "switch"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('GPIOSwitch'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <GPIOSwitch color={getColor('GPIOSwitch')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'GPIOSwitch', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "ALWAYS_OFF", kind: "StringLiteral" } } }
