@@ -8,8 +8,8 @@ export const actionNavigate = {
     },
     "body": [
         {
-            "type": "params",
-            "params": [{ label: 'route', field: 'param-1', type: 'input' }]
+            "type": "api",
+            "data": { label: "route", field: "param-1", apiUrl: "/adminapi/v1/pages", list: "return res.route", selector: "items" }
         }
     ],
     "initialData": { to: 'uiContext.navigate', "param-1": { value: "", kind: "StringLiteral" } }

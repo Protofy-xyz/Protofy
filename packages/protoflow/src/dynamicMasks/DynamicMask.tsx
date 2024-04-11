@@ -50,7 +50,10 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                         }
                         case 'api': { // TODO: Refactor this type and make it generic
                             const resListFunction = new Function('res', element.data?.list)
-                            const apiList = apiRes?.map(resListFunction)?.filter(e => e) ?? []
+                            const selectorListFunction = new Function('data', "return data?." + element.data?.selector)
+                            const tmpApiRes = element?.data?.selector && apiRes ? selectorListFunction(apiRes) : apiRes
+
+                            const apiList = tmpApiRes?.map(resListFunction)?.filter(e => e) ?? []
                             const field = element.data.field
 
                             return <>
