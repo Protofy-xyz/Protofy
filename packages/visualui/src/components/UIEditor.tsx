@@ -141,9 +141,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     }
 
     const onCancelEdit = () => {
-        router.push({
-            query: {}
-        })
+        document.location.href = document.location.href.split('?')[0]
     }
 
     useEffect(() => {

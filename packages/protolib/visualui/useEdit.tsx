@@ -50,10 +50,7 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
   }
   else {
     const onEdit = () => {
-      router.push({
-        pathname: router.pathname,
-        query: { ...router.query, _visualui_edit_: 'page' }
-      })
+      window.location.href = window.location.href + (!window.location.href.includes('?') ? '?' : '&') + '_visualui_edit_=page'
     }
 
     const triggerProps = {
