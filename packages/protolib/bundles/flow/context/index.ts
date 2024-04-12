@@ -1,5 +1,7 @@
 import {flowSwitch} from "./flowSwitch";
+import { flowInRange } from "./flowInRange";
 
 export default {
-    switch: flowSwitch
+    switch: flowSwitch,
+    inRange: flowInRange
 }
