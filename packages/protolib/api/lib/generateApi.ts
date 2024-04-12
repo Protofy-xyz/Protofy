@@ -270,8 +270,7 @@ export const AutoAPI = ({
         
         const db = getDB(dbPath, req, session)
         const rawEntityData = await db.get(req.params.key)
-        const entityModel = await modelType.unserialize(rawEntityData, session)
-
+        
         if (!paginatedRead) {
             onBeforeDelete(rawEntityData, session, req)
             await db.del(req.params.key, rawEntityData)
@@ -279,21 +278,26 @@ export const AutoAPI = ({
             await onBeforeDelete("{}", session, req)
             await db.del(req.params.key, rawEntityData)
         }
-
-        context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('delete'), entityModel.getNotificationsPayload())
-        if (!disableEvents) {
-            generateEvent({
-                path: modelName + '/delete', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-                from: 'api', // system entity where the event was generated (next, api, cmd...)
-                user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
-                payload: {
-                    who: '-', //TODO: wire session in dataview to api,
-                    id: entityModel.getId(),
-                    data: entityModel.read()
-                } // event payload, event-specific data
-            }, getServiceToken())
+        try {
+            const entityModel = await modelType.unserialize(rawEntityData, session)
+            context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('delete'), entityModel.getNotificationsPayload())
+            if (!disableEvents) {
+                generateEvent({
+                    path: modelName + '/delete', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                    from: 'api', // system entity where the event was generated (next, api, cmd...)
+                    user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
+                    payload: {
+                        who: '-', //TODO: wire session in dataview to api,
+                        id: entityModel.getId(),
+                        data: entityModel.read()
+                    } // event payload, event-specific data
+                }, getServiceToken())
+            }
+            logger[logLevel ?? 'info']({ data: entityModel.read() }, modelName + " deleted: " + entityModel.getId())
+        } catch (e){
+            logger.error({e}, "Error during delete notification")
         }
-        logger[logLevel ?? 'info']({ data: entityModel.read() }, modelName + " deleted: " + entityModel.getId())
+        
         res.send(await onAfterDelete({ "result": "deleted" }, session, req))
     }));
 }

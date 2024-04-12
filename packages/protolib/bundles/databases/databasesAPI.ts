@@ -49,14 +49,13 @@ const customGetDB = (path, req, session) => {
       }
     },
 
+    async del (key, value) {
+      const origin = fspath.join(dbDir(getRoot(req)), key)
+      const dest = fspath.join(getRoot(req), 'data', 'deleted_databases', key)
+      moveFolder(origin, dest)
+    },
+
     async put(key, value) {
-      value = JSON.parse(value)
-      if (value._deleted) {
-        const origin = fspath.join(dbDir(getRoot(req)), key)
-        const dest = fspath.join(getRoot(req), 'data', 'deleted_databases', key)
-        moveFolder(origin, dest)
-        return
-      }
       await connectDB(fspath.join(dbDir(getRoot(req)), fspath.basename(key)))
     },
 

@@ -107,67 +107,69 @@ const getDB = (path, req, session) => {
       }
     },
 
+    async del(key, value) {
+      value = JSON.parse(value)
+      removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req, fs);
+    },
+
     async put(key, value) {
       value = JSON.parse(value)
       const filePath = getRoot(req) + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts'
-      if (value._deleted) {
-        removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req, fs);
+      let exists
+      try {
+        await fs.access(filePath, fs.constants.F_OK)
+        exists = true
+      } catch (error) {
+        exists = false
+      }
+
+      if (exists) {
+        console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
-        let exists
-        try {
-          await fs.access(filePath, fs.constants.F_OK)
-          exists = true
-        } catch (error) {
-          exists = false
-        }
-
-        if (exists) {
-          console.log('File: ' + filePath + ' already exists, not executing template')
-        } else {
-          const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-            name: value.name + '.ts',
-            data: {
-              options: { template: '/packages/protolib/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },
-              path: '/packages/app/bundles/custom/objects'
-            }
-          })
-
-          if (result.isError) {
-            throw result.error
+        const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+          name: value.name + '.ts',
+          data: {
+            options: { template: '/packages/protolib/bundles/objects/templateSchema.tpl', variables: { name: value.name.charAt(0).toUpperCase() + value.name.slice(1), pluralName: value.name.endsWith('s') ? value.name : value.name + 's' } },
+            path: '/packages/app/bundles/custom/objects'
           }
-        }
+        })
 
-        const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
-          const v = value.keys[current]
-          const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ? current.params.join(',') : '') + ")", '') : ''
-          return total + "\n\t" + current + ": " + "z." + v.type + "(" + (v.params && v.params.length ? v.params.join(',') : '') + ")" + modifiers + ","
-        }, '').slice(0, -1) + "\n}"
-
-
-        await setSchema(filePath, result, value, req)
-        //if api is selected, create an autoapi for the object
-        if(value.api && session) {
-          const objectApi = Objects.api.load({
-            name: value.name,
-            object: value.name,
-            template: "automatic-crud"
-          })
-          await API.post("/adminapi/v1/apis?token="+session.token, objectApi.create().getData())
-          if(value.adminPage) {
-            const objectApi = Objects.page.load({
-              name: value.name,
-              route: "workspace/"+value.name,
-              permissions: ["admin"],
-              web: true,
-              electron: false,
-              protected: true,
-              object: value.name,
-              template: "admin"
-            })
-            await API.post("/adminapi/v1/pages?token="+session.token, objectApi.create().getData())
-          }
+        if (result.isError) {
+          throw result.error
         }
       }
+
+      const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
+        const v = value.keys[current]
+        const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ? current.params.join(',') : '') + ")", '') : ''
+        return total + "\n\t" + current + ": " + "z." + v.type + "(" + (v.params && v.params.length ? v.params.join(',') : '') + ")" + modifiers + ","
+      }, '').slice(0, -1) + "\n}"
+
+
+      await setSchema(filePath, result, value, req)
+      //if api is selected, create an autoapi for the object
+      if (value.api && session) {
+        const objectApi = Objects.api.load({
+          name: value.name,
+          object: value.name,
+          template: "automatic-crud"
+        })
+        await API.post("/adminapi/v1/apis?token=" + session.token, objectApi.create().getData())
+        if (value.adminPage) {
+          const objectApi = Objects.page.load({
+            name: value.name,
+            route: "workspace/" + value.name,
+            permissions: ["admin"],
+            web: true,
+            electron: false,
+            protected: true,
+            object: value.name,
+            template: "admin"
+          })
+          await API.post("/adminapi/v1/pages?token=" + session.token, objectApi.create().getData())
+        }
+      }
+
     },
 
     async get(key) {
