@@ -33,7 +33,9 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     const query = JSON.stringify(queryParams)
 
     if (paths.devices.includes(segment)) return devicesEditorMasks
-    if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return []
+    if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return [
+        ...flowMasks,
+    ]
     if (paths.apis.includes(segment)) return [
         ...customMasks.api,
         ...flowMasks,

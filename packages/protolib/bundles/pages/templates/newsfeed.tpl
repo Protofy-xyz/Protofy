@@ -2,7 +2,7 @@ import { YStack, H1, Text, XStack, H3, Button } from "@my/ui";
 import { SSR, withSession, Page, API } from "protolib";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
-import { uiContext } from "app/bundles/visualuiContext";
+import { context } from "app/bundles/visualuiContext";
 
 const isProtected = Protofy("protected", {{protected}})
 
