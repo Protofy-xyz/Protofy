@@ -267,16 +267,17 @@ export const AutoAPI = ({
             res.status(401).send({ error: "Unauthorized" })
             return
         }
-
+        
         const db = getDB(dbPath, req, session)
-        const entityModel = await modelType.unserialize(await db.get(req.params.key), session)
+        const rawEntityData = await db.get(req.params.key)
+        const entityModel = await modelType.unserialize(rawEntityData, session)
 
         if (!paginatedRead) {
-            onBeforeDelete(await db.get(req.params.key), session, req)
-            await db.del(req.params.key)
+            onBeforeDelete(rawEntityData, session, req)
+            await db.del(req.params.key, rawEntityData)
         } else {
             await onBeforeDelete("{}", session, req)
-            await db.del(req.params.key)
+            await db.del(req.params.key, rawEntityData)
         }
 
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('delete'), entityModel.getNotificationsPayload())

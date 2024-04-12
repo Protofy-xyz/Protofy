@@ -58,17 +58,17 @@ const getDB = (path, req, session) => {
         if (page) yield [page.name, JSON.stringify(page)];
       }
     },
+    async del (key, value) {
+      value = JSON.parse(value)
+      const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
+      await deleteFile(fspath.join(getRoot(req), "apps/next/pages", value.route + '.tsx'))
+      await deleteFile(fspath.join(getRoot(req), "apps/electron/pages", value.route + '.tsx'))
+      await deleteFile(filePath)
+    },
 
     async put(key, value) {
       value = JSON.parse(value)
       const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
-      if (value._deleted) {
-        await deleteFile(fspath.join(getRoot(req), "apps/next/pages", value.route + '.tsx'))
-        await deleteFile(fspath.join(getRoot(req), "apps/electron/pages", value.route + '.tsx'))
-        await deleteFile(filePath)
-        return
-      }
-
       const prevPage = getPage(filePath, req)
       const template = fspath.basename(value.template ?? 'default')
       const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
