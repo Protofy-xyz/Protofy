@@ -9,11 +9,11 @@ import { Protofy, Text, VStack, Image, HCenterStack, Page, UIWrapLib, UIWrap, SS
 import React, { useState } from 'react'
 import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
-import { context } from "app/bundles/visualuiContext";
+import { context } from "app/bundles/uiContext";
 
 const isProtected = Protofy("protected", false)
 
-const PageComponent = ({ currentView, setCurrentView, ...props }) => {
+const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
 
   return (
     <Page>

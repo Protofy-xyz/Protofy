@@ -4,7 +4,7 @@ export const actionNavigate = {
     "path": "*",
     "type": "CallExpression",
     "filter": {
-        "to": "uiContext.navigate"
+        "to": "context.navigate"
     },
     "body": [
         {
@@ -12,5 +12,5 @@ export const actionNavigate = {
             "data": { label: "route", field: "param-1", apiUrl: "/adminapi/v1/pages", list: "return res.route", selector: "items" }
         }
     ],
-    "initialData": { to: 'uiContext.navigate', "param-1": { value: "", kind: "StringLiteral" } }
+    "initialData": { to: 'context.navigate', "param-1": { value: "", kind: "StringLiteral" } }
 }
