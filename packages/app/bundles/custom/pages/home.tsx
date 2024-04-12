@@ -1,5 +1,5 @@
 import { Theme, YStack, Text, XStack, Paragraph, SizableText } from "@my/ui";
-import { UIWrapLib, UIWrap, SSR, TintSection, Spacer, ContainerLarge, BigTitle, LinkGroup, LinkGroupItem, HCenterStack, NextLink, TooltipContainer, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, BackgroundGradient, ElevatedArea, GridElement, RainbowText, FeatureItem, PageGlow, withSession, Page, Grid, useEdit } from "protolib";
+import { UIWrapLib, UIWrap, SSR, TintSection, Spacer, ContainerLarge, BigTitle, LinkGroup, LinkGroupItem, HCenterStack, NextLink, TooltipContainer, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, BackgroundGradient, ElevatedArea, GridElement, RainbowText, FeatureItem, PageGlow, withSession, Page, Grid, useEditor } from "protolib";
 import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
@@ -311,20 +311,22 @@ const cw = UIWrapLib('@my/ui')
 export default {
   route: Protofy("route", "/"),
   component: (props) =>
-    useEdit(
-      () => Home(props),
+    useEditor(
+      <Home {...props} />,
       {
-        ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-        ...cw("YStack", YStack),
-        ...cw("Text", Text),
-        ...cw("XStack", XStack),
-        ...cw("Paragraph", Paragraph),
-        ...cw("Theme", Theme),
-        ...cw("SizableText", SizableText),
-        ...UIWrap("ChevronRight", ChevronRight, "@tamagui/lucide-icons", "ChevronRight"),
-        ...UIWrap("Star", Star, "@tamagui/lucide-icons", "Star")
-      },
-      "/packages/app/bundles/custom/pages/home.tsx"
+        path: "/packages/app/bundles/custom/pages/home.tsx",
+        components: {
+          ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
+          ...cw("YStack", YStack),
+          ...cw("Text", Text),
+          ...cw("XStack", XStack),
+          ...cw("Paragraph", Paragraph),
+          ...cw("Theme", Theme),
+          ...cw("SizableText", SizableText),
+          ...UIWrap("ChevronRight", ChevronRight, "@tamagui/lucide-icons", "ChevronRight"),
+          ...UIWrap("Star", Star, "@tamagui/lucide-icons", "Star")
+        }
+      }
     ),
   getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined)),
 };
