@@ -5,7 +5,7 @@ import { filterCallback, restoreCallback } from 'protoflow';
 import {operations} from '../context/flowSwitch'
 
 const FlowSwitch = ({ node = {}, nodeData = {}, children }: any) => {
-    const color = useColorFromPalette(11)
+    const color = useColorFromPalette(10)
     return (
         <Node icon={Cable} node={node} isPreview={!node.id} title='Flow Switch' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Value 1', field: 'param-1', type: 'input' }]} />

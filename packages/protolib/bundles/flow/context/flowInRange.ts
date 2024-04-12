@@ -21,7 +21,7 @@ export async function flowInRange(
       {
         desiredIsNaN: Number.isNaN(desired),
         threshIsNaN: Number.isNaN(thresh),
-        valueInNumberIsNaN: Number.isNaN(valueInNumber),
+        valueIsNaN: Number.isNaN(valueInNumber),
       },
       'Flow in range error: there is a NaN'
     )

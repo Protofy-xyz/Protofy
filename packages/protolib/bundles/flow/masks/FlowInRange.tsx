@@ -6,7 +6,7 @@ import { filterCallback, restoreCallback } from 'protoflow';
 
 const FlowInRange = ({ node = {}, nodeData = {}, children }: any) => {
 
-    const color = useColorFromPalette(12)
+    const color = useColorFromPalette(11)
     
     return (
         <Node icon={Cable} node={node} isPreview={!node.id} title='Flow In Range' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
@@ -15,14 +15,14 @@ const FlowInRange = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[{ label: 'Threshold (+/-)',  field: 'param-3', type: 'input' }]} />
 
             <div style={{ marginTop: "250px" }}>
-                    <FlowPort id={node.id} type='output' label='aboveAction(delta)' style={{ top: '260px' }} handleId={'request'} />
+                    <FlowPort id={node.id} type='output' label='above (delta)' style={{ top: '260px' }} handleId={'request'} />
                     <FallbackPort fallbackText="null" node={node} port={'param-4'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (delta) => " postText="" />
-                    <FlowPort id={node.id} type='output' label='belowAction(delta)' style={{ top: '310px' }} handleId={'below'} />
+                    <FlowPort id={node.id} type='output' label='below (delta)' style={{ top: '310px' }} handleId={'below'} />
                     <FallbackPort fallbackText="null" node={node} port={'param-5'} type={"target"} fallbackPort={'below'} portType={"_"} preText="async (delta) => " postText="" />
-                    <FlowPort id={node.id} type='output' label='onRangeAction(delta)' style={{ top: '360px' }} handleId={'range'} />
+                    <FlowPort id={node.id} type='output' label='range (delta)' style={{ top: '360px' }} handleId={'range'} />
                     <FallbackPort fallbackText="null" node={node} port={'param-6'} type={"target"} fallbackPort={'range'} portType={"_"} preText="async (delta) => " postText="" />
-                    <FlowPort id={node.id} type='output' label='onError()' style={{ top: '410px' }} handleId={'error'} />
-                    <FallbackPort fallbackText="null" node={node} port={'param-7'} type={"target"} fallbackPort={'error'} portType={"_"} preText="async (delta) => " postText="" />
+                    <FlowPort id={node.id} type='output' label='error' style={{ top: '410px' }} handleId={'error'} />
+                    <FallbackPort fallbackText="null" node={node} port={'param-7'} type={"target"} fallbackPort={'error'} portType={"_"} preText="async () => " postText="" />
             </div>
         </Node>
     )
@@ -54,8 +54,8 @@ export default {
         return {
             to: 'context.flow.inRange',
             "param-1": {
-                value: 1.5,
-                kind: "NumericLiteral"
+                value: "",
+                kind: "Identifier"
             },
             "param-2": {
                 value: 1.5,
