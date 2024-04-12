@@ -4,7 +4,7 @@ import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
-import { uiContext } from "app/bundles/visualuiContext";
+import { context } from "app/bundles/visualuiContext";
     
 const isProtected = Protofy("protected", {{protected}})
 

@@ -9,7 +9,7 @@ import { Protofy, Text, VStack, Image, HCenterStack, Page, UIWrapLib, UIWrap, SS
 import React from 'react'
 import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
-import { uiContext } from "app/bundles/visualuiContext";
+import { context } from "app/bundles/visualuiContext";
 
 const isProtected = Protofy("protected", false)
 

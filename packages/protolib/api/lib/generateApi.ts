@@ -137,14 +137,13 @@ export const AutoAPI = ({
             return listItem
         }
         const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);
-        if(!skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
+        if(!search && !skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
             const indexedKeys = await db.getIndexedKeys()
             const total = parseInt(await db.count(), 10)
             const page = Number(req.query.page) || 0;
             const orderBy: string = req.query.orderBy ? req.query.orderBy as string : modelType.getIdField()
             const orderDirection = req.query.orderDirection || 'asc';
             if(indexedKeys.length && indexedKeys.includes(orderBy)) {
-                
                 const result = {
                     itemsPerPage:_itemsPerPage,
                     items: await Promise.all((await db.getPageItems(total, orderBy, page, _itemsPerPage, orderDirection)).map(async x => await parseResult(x))),
