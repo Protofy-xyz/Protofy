@@ -3,6 +3,7 @@ import visualuiTemplateMasks from 'visualui/src/masks/UI.mask.json';
 import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import uiBundleMasks from 'protolib/bundles/ui/masks';
 import apiMasks from 'protolib/bundles/apis/masks';
+import deviceAction from 'protolib/bundles/apis/masks/DeviceAction';
 import devicesMasks from 'protolib/bundles/devices/devices/masks';
 import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
 import baseMasks from 'protolib/bundles/basemasks';
@@ -37,7 +38,8 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return [
         ...flowMasks,
         ...uiBundleMasks.code,
-        ...devicesUIMasks
+        ...devicesUIMasks,
+        deviceAction
     ]
     if (paths.apis.includes(segment)) return [
         ...customMasks.api,
