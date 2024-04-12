@@ -81,7 +81,7 @@ export const DevicesAPI = (app, context) => {
             res.status(404).send({value:null})
             return
         }
-        res.send({value: data.data['items'][0].payload?.message})
+        res.send({value: data.data['items'][0]?.payload?.message})
     }))
 
     app.post('/adminapi/v1/devices/:device/yamls', handler(async (req, res, session) => {

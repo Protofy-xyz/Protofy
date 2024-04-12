@@ -4,7 +4,7 @@ export const actionFetch = {
     "path": "*",
     "type": "CallExpression",
     "filter": {
-        "to": "uiContext.fetch"
+        "to": "context.fetch"
     },
     "body": [
         {
@@ -19,5 +19,5 @@ export const actionFetch = {
             }
         }
     ],
-    "initialData": { to: 'uiContext.fetch', "param-1": { value: "", kind: "StringLiteral" } }
+    "initialData": { to: 'context.fetch', "param-1": { value: "", kind: "StringLiteral" } }
 }

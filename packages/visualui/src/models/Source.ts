@@ -174,12 +174,15 @@ export class Source {
         attributes.forEach(jsxAtr => {
             const attrKey = this.getAttributeKey(jsxAtr)
             const attrValue = this.getAttributeValue(jsxAtr)
-            const { value, nodeKind } = this.nodeValueFactory(attrValue)
+            const { value, nodeKind, contextId } = this.nodeValueFactory(attrValue)
             if (value && attrKey) {
                 props = { ...props, [attrKey]: value }
             }
             if (nodeKind && attrKey) {
                 custom = { ...custom, [attrKey]: nodeKind }
+            }
+            if (contextId && attrKey) {
+                custom = { ...custom, context : { ...custom?.context, [attrKey]: contextId }}
             }
         })
         // GET JsxText Children
@@ -435,7 +438,7 @@ export class Source {
     nodeValueFactory(node: any): any { // Receives element
         let atrVal
         var nodeKind = node?.getKindName()
-
+        var contextId
         switch (nodeKind) {
             case 'StringLiteral':
                 atrVal = node?.getLiteralValue();
@@ -473,6 +476,7 @@ export class Source {
                     case 'Identifier':
                         if (this.metadata?.context && this.metadata?.context[expression.getText()] != undefined) {
                             atrVal = this.metadata?.context[expression.getText()]
+                            contextId = expression.getText()
                             break
                         }
                     default:
@@ -481,7 +485,7 @@ export class Source {
                 }
                 break;
         }
-        return { value: atrVal, nodeKind }
+        return { value: atrVal, nodeKind, contextId }
     }
 
     getIdFromSourceCode(node) {

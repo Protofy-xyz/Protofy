@@ -34,7 +34,7 @@ const IconButton = forwardRef(({ icon, iconSize = 20, selected = false, dynamicI
     </div>
 })
 
-export const RenderNode = ({ render, onEnableEvents }) => {
+export const RenderNode = ({ render, onEnableEvents, metadata }) => {
     const { id } = useNode();
     const { actions, query, isActive } = useEditor((_, query) => ({
         isActive: query.getEvent('selected').contains(id),
@@ -244,7 +244,7 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                                                 ? shortcut.menu?.map((sh) => (<MenuOption
                                                                     onClick={(e: React.MouseEvent) => {
                                                                         e.stopPropagation();
-                                                                        sh.action({ setProp, dom })
+                                                                        sh.action({ setProp, dom, metadata, props })
                                                                     }}
                                                                     selected={sh?.selected ? sh.selected(props) : false}
                                                                     name={sh.name}
@@ -296,7 +296,8 @@ export const RenderNode = ({ render, onEnableEvents }) => {
                                                         custom.options?.map((st) => (<MenuOption
                                                             onClick={(e: React.MouseEvent) => {
                                                                 e.stopPropagation();
-                                                                st.action({ setProp, dom })
+                                                                onEnableEvents(false)
+                                                                st.action({ setProp, dom, metadata, props })
                                                             }}
                                                             name={st.name}
                                                         />))

@@ -6,14 +6,15 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 */
 
 import { Protofy, Text, VStack, Image, HCenterStack, Page, UIWrapLib, UIWrap, SSR, useEditor, withSession, Center, GithubIcon, DiscordIcon, TwitterIcon, API } from 'protolib'
-import React from 'react'
+import React, { useState } from 'react'
 import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
-import { context } from "app/bundles/visualuiContext";
+import { context } from "app/bundles/uiContext";
 
 const isProtected = Protofy("protected", false)
 
-const PageComponent = (props) => {
+const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
+
   return (
     <Page>
       <DefaultLayout title="Protofy" description="Made with love from Barcelona">
@@ -50,15 +51,24 @@ const cw = UIWrapLib('@my/ui')
 
 export default {
   route: Protofy("route", "{{route}}"),
-  component: (props) => useEditor(
-    () => PageComponent(props),
-    {
-        path: "/packages/app/bundles/custom/pages/{{name}}.tsx",
-        components: {
-          ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-          ...cw("Theme", Theme)
-        }
-    }, 
-  ),
+  component: (props) => {
+    const [currentView, setCurrentView] = useState("default");
+    const setCurrentViewAction = (currentView) => () => setCurrentView(currentView);
+
+    return useEditor(
+      <PageComponent currentView={currentView} setCurrentView={setCurrentViewAction} {...props} />,
+      {
+          path: "/packages/app/bundles/custom/pages/{{name}}.tsx",
+          context: {
+            currentView: currentView,
+            setCurrentView: setCurrentViewAction
+          },
+          components: {
+            ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
+            ...cw("Theme", Theme)
+          }
+      }, 
+    )
+  },
   getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined))
 }
