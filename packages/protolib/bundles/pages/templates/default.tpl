@@ -14,11 +14,15 @@ import { UIWrapLib, UIWrap, BigTitle, withSession, Page, useEditor, API, SSR } f
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 import { context } from "app/bundles/uiContext";
+import { useRouter } from "next/router";
 
 const isProtected = Protofy("protected", {{protected}})
 
 const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
+    const router = useRouter();
+    context.onRender(() => {
 
+    });
     return (
         <Page minHeight="100vh">
             <DefaultLayout title="Protofy" description="Made with love from Barcelona">
@@ -37,15 +41,14 @@ export default {
     route: Protofy("route", "{{route}}"),
     component: (props) => {
         const [currentView, setCurrentView] = useState("default");
-        const setCurrentViewAction = (currentView) => () => setCurrentView(currentView);
 
         return useEditor(
-            <PageComponent currentView={currentView} setCurrentView={setCurrentViewAction} {...props} />,
+            <PageComponent currentView={currentView} setCurrentView={setCurrentView} {...props} />,
             {
                 path: "/packages/app/bundles/custom/pages/{{name}}.tsx",
                 context: {
                     currentView: currentView,
-                    setCurrentView: setCurrentViewAction
+                    setCurrentView: setCurrentView
                 },
                 components: {
                     ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),

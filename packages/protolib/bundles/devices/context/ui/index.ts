@@ -1,5 +1,5 @@
-import { onDeviceEvent } from "./onDeviceEvent";
+import { deviceSub } from "./deviceSub";
 
 export default {
-    onDeviceEvent
+    deviceSub
 }

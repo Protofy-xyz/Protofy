@@ -4,6 +4,7 @@ import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import uiBundleMasks from 'protolib/bundles/ui/masks';
 import apiMasks from 'protolib/bundles/apis/masks';
 import devicesMasks from 'protolib/bundles/devices/devices/masks';
+import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
 import baseMasks from 'protolib/bundles/basemasks';
 import customEventMasks from 'protolib/bundles/events/masks'
 import customMasks from 'app/bundles/custom/masks'
@@ -35,7 +36,8 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     if (paths.devices.includes(segment)) return devicesEditorMasks
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return [
         ...flowMasks,
-        ...uiBundleMasks.code
+        ...uiBundleMasks.code,
+        ...devicesUIMasks
     ]
     if (paths.apis.includes(segment)) return [
         ...customMasks.api,

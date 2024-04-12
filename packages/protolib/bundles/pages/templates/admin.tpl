@@ -10,6 +10,7 @@ import {Objects} from 'app/bundles/objects'
 import {DataView, API, AdminPage, PaginatedDataSSR } from 'protolib'
 import { Tag } from '@tamagui/lucide-icons'
 import { context } from "app/bundles/uiContext";
+import { useRouter } from "next/router";
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})

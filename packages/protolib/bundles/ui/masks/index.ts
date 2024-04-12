@@ -1,5 +1,6 @@
 import { actionFetch } from "./actionFetch";
 import { actionNavigate } from "./actionNavigate";
+import { navigate } from "./navigate";
 import { setCurrentView } from "./changeCurrentView";
 import onRender from "./onRender";
 
@@ -8,7 +9,7 @@ export default {
         actionFetch,
         actionNavigate,
         setCurrentView,
-        //onRender
+        navigate
     ],
     code: [
         onRender

@@ -5,10 +5,15 @@ import Link from "next/link";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { context } from "app/bundles/uiContext";
-    
+import { useRouter } from "next/router";
+
 const isProtected = Protofy("protected", {{protected}})
 
 const PageComponent = (props) => {
+  const router = useRouter();
+  context.onRender(() => {
+
+  });
   return (
     <Page id="home-page">
       <DefaultLayout title="Protofy" description="Made with love from Barcelona">

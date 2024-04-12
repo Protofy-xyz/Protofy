@@ -3,6 +3,7 @@ import { SSR, withSession, Page, API } from "protolib";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { context } from "app/bundles/uiContext";
+import { useRouter } from "next/router";
 
 const isProtected = Protofy("protected", {{protected}})
 
@@ -86,6 +87,10 @@ const sectionTwoNews = [
 ]
 
 const PageComponent = (props) => {
+    const router = useRouter();
+    context.onRender(() => {
+
+    });
     return (
         <Page>
             <DefaultLayout headerTitle="Protofy-Store" title="ProtofyStore" description="Made with love from Barcelona"

@@ -12,6 +12,7 @@ import React from 'react'
 import { Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from 'protolib/bundles/devices/devices';
 import Subsystem from 'protodevice/src/Subsystem'
+import { useRouter } from "next/router";
 
 const isProtected = Protofy("protected", {{protected}})
 const sourceUrl = '/adminapi/v1/devices'
