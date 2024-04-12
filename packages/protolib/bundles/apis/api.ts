@@ -69,7 +69,7 @@ const getDB = (path, req, session) => {
       const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts';
       exists = await checkFileExists(filePath);
 
-      if (template.startsWith("Automatic CRUD")) {
+      if (template.startsWith("automatic-crud")) {
         const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
         ObjectSourceFile = getSourceFile(objectPath)
         exists = hasFeature(ObjectSourceFile, '"AutoAPI"')
@@ -99,7 +99,8 @@ const getDB = (path, req, session) => {
       }
 
       //add autoapi feature in object if needed
-      if (value.object && template.startsWith("Automatic CRUD")) {
+      console.log("*****************************", value.object, template)
+      if (value.object && template.startsWith("automatic-crud")) {
         console.log('Adding feature AutoAPI to object: ', value.object)
         await addFeature(ObjectSourceFile, '"AutoAPI"', "true")
       }
