@@ -53,13 +53,13 @@ const getDB = (path, req, session) => {
       }
     },
 
+    async del(key, value) {
+      value = JSON.parse(value)
+      deleteAPI(req, value)
+    },
+
     async put(key, value) {
       value = JSON.parse(value)
-
-      if (value._deleted) {
-        deleteAPI(req, value)
-        return
-      }
 
       let exists
       let ObjectSourceFile
