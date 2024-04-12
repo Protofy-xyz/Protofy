@@ -1,6 +1,6 @@
 export const setCurrentView = {
-    "id": "ChangeCurrentView",
-    "title": "ChangeCurrentView",
+    "id": "ChangeView",
+    "title": "ChangeView",
     "path": "*",
     "type": "CallExpression",
     "filter": {

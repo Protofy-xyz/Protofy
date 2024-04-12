@@ -1,7 +1,7 @@
 import devicesEditorMasks from 'protodevice/src/nodes'
 import visualuiTemplateMasks from 'visualui/src/masks/UI.mask.json';
 import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
-import visualUIBundleMasks from 'protolib/bundles/visualui/masks';
+import uiBundleMasks from 'protolib/bundles/ui/masks';
 import apiMasks from 'protolib/bundles/apis/masks';
 import devicesMasks from 'protolib/bundles/devices/devices/masks';
 import baseMasks from 'protolib/bundles/basemasks';
@@ -58,7 +58,7 @@ export const getFlowMasks = (path: string, queryParams: {}) => {
         return [
             ...visualuiTemplateMasks, 
             ...customVisualUIMasks,
-            ...visualUIBundleMasks
+            ...uiBundleMasks
         ]
     }
 

@@ -4,7 +4,7 @@ from "protolib";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { Paragraph } from '@my/ui';
-import { context } from "app/bundles/visualuiContext";
+import { context } from "app/bundles/uiContext";
 
 const isProtected = Protofy("protected", {{protected}})
 
