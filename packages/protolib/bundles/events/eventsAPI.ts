@@ -31,7 +31,10 @@ const EventAPI = AutoAPI({
         await registerEventMeta(data)
         return data
     },
-    logLevel: "debug"
+    logLevel: "debug",
+    dbOptions: {
+        batch: true
+    }
 })
 
 export const EventsAPI = async (app, context) => {

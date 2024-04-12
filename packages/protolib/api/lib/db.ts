@@ -8,6 +8,8 @@ const sublevel = require('subleveldown')
 const logger = getLogger()
 const dbHandlers: any = {}
 
+const optionsTable = {}
+
 type ProtoDBConfig = {
     context?: any,
     name?: string
@@ -131,16 +133,27 @@ export abstract class ProtoDB {
     }
 }
 
-
 export class ProtoLevelDB extends ProtoDB {
     private rootDb
     private db
+    private batchCounter
+    private batchTimer
+    private batchLimit
+    private batchTimeout
+    private batch
     constructor(location, options?, config?: ProtoDBConfig) {
         super(location, options, config);
         this.capabilities = ['pagination']
         this.rootDb = level(location, options);
         this.db = sublevel(this.rootDb, 'values')
+        const dbOptions = optionsTable[location] ?? {}
+        this.batch = dbOptions.batch ?? false
+        this.batchLimit =  dbOptions.batchLimit ?? 5
+        this.batchTimeout = dbOptions.batchTimeout ?? 10000
+        this.batchCounter = 0
+        this.batchTimer = null
     }
+
 
     get status() {
         return this.db.status
@@ -186,15 +199,9 @@ export class ProtoLevelDB extends ProtoDB {
         return await this.db.getMany(allItems)
     }
 
-    private batchCounter = 0;
-    private batchTimer = null;
-    private batchLimit = 5;
-    private batchTimeout = 100000
-
     async put(key: string, value: string, options?) {
-        const batch = false
         const { keyEncoding, valueEncoding, ...internalOptions } = options ?? {};
-        if (batch) {
+        if (this.batch) {
             if(this.batchCounter === this.batchLimit) {
                 this.batchIndexes()
             } else {
@@ -258,9 +265,9 @@ export class ProtoLevelDB extends ProtoDB {
             for (var i = 0; i < indexes.length; i++) {
                 const currentIndex = indexes[i];
                 const ordered = sublevel(rootDb, 'order_' + currentIndex);
-                ordered.clear();
-                ordered.batch(allItems.map((item, i) => {
-                    return String(i).padStart(maxLength, '0') + '_' + item[currentIndex];
+                await ordered.clear();
+                await ordered.batch(allItems.map((item, i) => {
+                    return String(i).padStart(maxLength, '0') + '_' + item[indexData.primary]
                 }).sort().map(k => ({
                     type: 'put',
                     key: k,
@@ -292,16 +299,11 @@ export class ProtoLevelDB extends ProtoDB {
     }
 
     static async initDB(dbPath: string, initialData = {}, options?) {
-        const {indexes, ...levelOptions} = options
+        const {indexes, dbOptions, ...levelOptions} = options
+        optionsTable[dbPath] = dbOptions
         await super.initDB(dbPath, initialData, levelOptions)
-
         const rootDb = level(dbPath, levelOptions);
         const db = sublevel(rootDb, 'values')
-        //regenerate counters
-        let total = 0
-        for await (const [itemKey] of db.iterator({ values: false })) {
-            total++
-        }
         
         if(indexes) {
             const indexTable = sublevel(rootDb, 'indexTable')

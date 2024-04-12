@@ -49,7 +49,12 @@ type AutoAPIOptions = {
     onAfterUpdate?: Function,
     onBeforeDelete?: Function,
     onAfterDelete?: Function,
-    skipDatabaseIndexes?: boolean
+    skipDatabaseIndexes?: boolean,
+    dbOptions?: {
+        batch?: boolean,
+        batchLimit?: number,
+        batchTimeout?: number
+    }
 }
 
 export const AutoAPI = ({
@@ -79,10 +84,19 @@ export const AutoAPI = ({
     onAfterUpdate = async (data, session?, req?) => data,
     onBeforeDelete = async (data, session?, req?) => data,
     onAfterDelete = async (data, session?, req?) => data,
-    skipDatabaseIndexes
+    skipDatabaseIndexes,
+    dbOptions = {}
 }: AutoAPIOptions) => (app, context) => {
     const dbPath = '../../data/databases/' + (dbName ? dbName : modelName)
-    connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {indexes: modelType.getIndexes()}) //preconnect database
+    connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {
+        indexes: modelType.getIndexes(),
+        dbOptions: {
+            batch: false,
+            batchLimit: 100,
+            batchTimeout: 5000,
+            ...dbOptions
+        }     
+    }) //preconnect database
     const _list = (req, allResults, _itemsPerPage) => {
         const page = Number(req.query.page) || 0;
         const orderBy: string = req.query.orderBy as string;
@@ -117,7 +131,6 @@ export const AutoAPI = ({
         const search = req.query.search;
         const preListData = typeof extraData?.prelist == 'function' ? await extraData.prelist(session, req) : (extraData?.prelist ?? {})
         const parseResult = async (value) => {
-            // console.log("****************", value)
             const model = modelType.unserialize(value, session);
             const extraListData = typeof extraData?.list == 'function' ? await extraData.list(session, model, req) : (extraData?.list ?? {})
             const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, await onBeforeList(req.query, session, req));
@@ -126,13 +139,12 @@ export const AutoAPI = ({
         const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);
         if(!skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
             const indexedKeys = await db.getIndexedKeys()
-
             const total = parseInt(await db.count(), 10)
             const page = Number(req.query.page) || 0;
             const orderBy: string = req.query.orderBy ? req.query.orderBy as string : modelType.getIdField()
             const orderDirection = req.query.orderDirection || 'asc';
-
             if(indexedKeys.length && indexedKeys.includes(orderBy)) {
+                
                 const result = {
                     itemsPerPage:_itemsPerPage,
                     items: await Promise.all((await db.getPageItems(total, orderBy, page, _itemsPerPage, orderDirection)).map(async x => await parseResult(x))),

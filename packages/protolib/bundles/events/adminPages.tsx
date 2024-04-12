@@ -44,6 +44,7 @@ export default {
                     disableViewSelector={false}
                     defaultView={'list'}
                     rowIcon={ClipboardList}
+                    quickRefresh={true}
                     // toolBarContent={<XStack justifyContent="flex-end" ai="center" width={'100%'} f={1} ml={"$5"}>
                     //     <XStack width={"250px"}>
                     //         <Tinted>
