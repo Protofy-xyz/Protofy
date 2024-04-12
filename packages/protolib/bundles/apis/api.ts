@@ -99,7 +99,6 @@ const getDB = (path, req, session) => {
       }
 
       //add autoapi feature in object if needed
-      console.log("*****************************", value.object, template)
       if (value.object && template.startsWith("automatic-crud")) {
         console.log('Adding feature AutoAPI to object: ', value.object)
         await addFeature(ObjectSourceFile, '"AutoAPI"', "true")
