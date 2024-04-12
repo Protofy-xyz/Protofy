@@ -10,7 +10,7 @@ Don't modify export default object
 
 import React, { useState } from 'react'
 import { Theme, YStack, Text, XStack, Paragraph, } from "@my/ui"
-import { UIWrapLib, UIWrap, BigTitle, withSession, Page, useEditor, API, SSR } from "protolib"
+import { UIWrapLib, UIWrap, BigTitle, withSession, Page, useEditor, API, SSR, VStack } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 import { context } from "app/bundles/uiContext";
@@ -27,9 +27,9 @@ const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
         <Page minHeight="100vh">
             <DefaultLayout title="Protofy" description="Made with love from Barcelona">
                 {/* add your content here, this is just an example with a big text */}
-                <YStack mt="$10">
+                <VStack mt="$10">
                     <BigTitle>{{name}}</BigTitle>
-                </YStack>
+                </VStack>
             </DefaultLayout>
         </Page>
 )
