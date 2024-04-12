@@ -23,8 +23,13 @@ const mqtt = getMQTTClient('api', getServiceToken(), () => {
             if (isWildcard && !messageTopic.startsWith(topic.slice(0, -1).replace(/\/$/, ''))) {
                 return
             }
-            const parsedMessage = message.toString();
+            let parsedMessage = message.toString()
+            try{   
+                parsedMessage=JSON.parse(message);
+            }catch(err){  }
             cb(parsedMessage, messageTopic)
+
+            
         });
     };
     
