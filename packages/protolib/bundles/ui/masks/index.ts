@@ -1,9 +1,16 @@
 import { actionFetch } from "./actionFetch";
 import { actionNavigate } from "./actionNavigate";
 import { setCurrentView } from "./changeCurrentView";
+import onRender from "./onRender";
 
-export default [
-    actionFetch,
-    actionNavigate,
-    setCurrentView
-]
+export default {
+    dynamic: [
+        actionFetch,
+        actionNavigate,
+        setCurrentView,
+        //onRender
+    ],
+    code: [
+        onRender
+    ]
+}
