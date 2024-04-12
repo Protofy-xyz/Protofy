@@ -35,6 +35,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     if (paths.devices.includes(segment)) return devicesEditorMasks
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) return [
         ...flowMasks,
+        ...uiBundleMasks.code
     ]
     if (paths.apis.includes(segment)) return [
         ...customMasks.api,
@@ -58,7 +59,7 @@ export const getFlowMasks = (path: string, queryParams: {}) => {
         return [
             ...visualuiTemplateMasks, 
             ...customVisualUIMasks,
-            ...uiBundleMasks
+            ...uiBundleMasks.dynamic
         ]
     }
 
