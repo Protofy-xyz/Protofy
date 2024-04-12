@@ -131,6 +131,7 @@ const Diagram = React.forwardRef(({
             const parentData = nodeData[parentId]
             const deletedKey = edge.targetHandle.replace(parentId, '').slice(1)
             let parentType = nodeTypes[parentId.split('_')[0]]
+            if (!parentType) return
             if (parentType.type) parentType = parentType.type
 
             if (deletedKey) {
