@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import useTheme from '../diagram/Theme';
 import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
-import { Type, Hash, Braces, ToggleLeft, VariableIcon } from 'lucide-react';
+import { Type, Hash, Braces, ToggleLeft, Code } from 'lucide-react';
 import Input from '../diagram/NodeInput'
 import { getDataFromField, getFieldType, getFieldValue } from '../utils';
 
@@ -22,12 +22,12 @@ export default ({ nodeData = {}, item, node }) => {
     const icons = {
         "StringLiteral": Type,
         "NumericLiteral": Hash,
+        "Identifier": Code,
         "TrueKeyword": ToggleLeft,
         "ObjectLiteralExpression": Braces,
-        "FalseKeyword": ToggleLeft,
-        "Identifier": VariableIcon
+        "FalseKeyword": ToggleLeft
     }
-    const toggleableList = Object.keys(icons).filter(i => i != 'Identifier')
+    const toggleableList = Object.keys(icons)
 
     const defaultKindValue = toggleableList[0]
     const kindValue = data?.kind ?? defaultKindValue
@@ -40,7 +40,7 @@ export default ({ nodeData = {}, item, node }) => {
         setNodeData(node.id, {
             ...nodeData, [field]: {
                 ...data,
-                kind: toggleableList[(toggleableList.indexOf(kindValue) + 1) % (toggleableList.length - 1)]
+                kind: toggleableList[(toggleableList.indexOf(kindValue) + 1) % (toggleableList.length)]
             }
         })
     }

@@ -44,9 +44,9 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
 
   const isAdmin = editorUsers.includes(session?.user?.type)
 
-  if (!isAdmin) return fn()
+  if (!isAdmin) return fn
   else if (edit) {
-    return <VisualUILoader userComponents={userComponents} path={path} metadata={metadata} visualUiContext={visualUiContext}/>
+    return <VisualUILoader userComponents={userComponents} path={path} metadata={metadata} visualUiContext={visualUiContext} />
   }
   else {
     const onEdit = () => {
@@ -57,11 +57,11 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
     }
 
     const triggerProps = {
-      ...(options['triggerProps'] ?? {top: "$4", right: "$4"})
+      ...(options['triggerProps'] ?? { top: "$4", right: "$4" })
     }
 
     return <div style={{ flex: 1, display: 'flex' }}>
-      {fn()}
+      {fn}
       <Tinted>
         <Button
           id='use-edit-btn'
@@ -81,11 +81,11 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
   }
 }
 
-const VisualUILoader = ({ userComponents, path, metadata, visualUiContext }: { userComponents: any, path: string, metadata: any, visualUiContext: any}) => { // Should be in a component
+const VisualUILoader = ({ userComponents, path, metadata, visualUiContext }: { userComponents: any, path: string, metadata: any, visualUiContext: any }) => { // Should be in a component
   const [res, setRes] = useState<any>()
   const [fileContent, setFileContent] = useState()
   const toast = useToastController()
-  
+
   const onSave = (content: string) => {
     writeFileContent(content)
   }

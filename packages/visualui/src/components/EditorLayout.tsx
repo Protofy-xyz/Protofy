@@ -10,6 +10,7 @@ import { notify, computePreviousPositions } from "../utils/utils";
 import { Stack, Spinner } from "@my/ui"
 import { useVisualUiComms } from "../visualUiHooks";
 import { frames } from "../utils/frames"
+import { useUpdateEffect } from "usehooks-ts"
 
 export type EditorProps = {
   children?: any;
@@ -18,12 +19,13 @@ export type EditorProps = {
   resolveComponentsDir: string;
   onReady?: Function;
   metadata?: any;
+  codeRef?: any;
   contextAtom: any;
   frame: string;
 };
 
 
-const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {}, contextAtom = null }: EditorProps) => {
+const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {}, contextAtom = null, codeRef }: EditorProps) => {
   const paper = useRef<any>()
   const [loading, setLoading] = useState(true);
   const [currentPageInitialJson, setCurrentPageInitialJson] = useState({});
@@ -151,14 +153,14 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
   }, [selectedNodeId])
 
   // udpate state based on topics
-  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'], contextAtom)
+  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'], contextAtom, metadata.context)
 
   useEffect(() => {
     actions.setOptions(options => options['skipTopic'] = false)
   }, [previousNodes])
 
-  const loadEditorNodes = async () => {
-    const source: Source = Source.parse(currentPageContent, metadata)
+  const loadEditorNodes = async (cnt) => {
+    const source: Source = Source.parse(cnt, metadata)
     let editorNodes = source.data()
     setCurrentPageInitialJson(editorNodes)
     const availableComponents = query?.getOptions()?.resolver ?? {}
@@ -208,7 +210,7 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
   useEffect(() => {
     const reload = async (retry: number) => {
       try {
-        await loadEditorNodes()
+        await loadEditorNodes(currentPageContent)
       } catch (e) {
         if (retry < 10) {
           setTimeout(() => reload(retry + 1), 5000)
@@ -224,6 +226,23 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
       reload(0)
     }
   }, [currentPageContent])
+
+  useUpdateEffect(() => {
+    const currNodes = JSON.parse(query.serialize())
+    const nodesArr = Object.keys(currNodes)
+    const ndsWithContext = nodesArr.filter(n => currNodes[n].custom?.context)
+    if (ndsWithContext.length == 0) return
+    
+    //updates identifiers values from context
+    actions.setOptions(options => options['skipTopic'] = true)
+    ndsWithContext.forEach(nd => {
+      var ctx = currNodes[nd].custom?.context
+      Object.keys(ctx).forEach(prop => {
+        actions.setProp(nd, (props) => props[prop] = metadata.context[prop])
+      })
+    })
+    setPreviousNodes(JSON.parse(query.serialize()));
+  }, [metadata.context])
 
   return (
     <div style={{
@@ -249,13 +268,13 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
           id="editor"
           className={"craftjs-renderer"}
           ref={(ref) => { paper.current = ref; connectors.select(connectors.hover(ref, null), null) }}
-          style={{ 
-            flex: 1, position: 'relative', overflow: 'auto', 
-            color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto', 
-            left: 0, right: 0, 
-            width: frames[frame]?.width ?? '100%', 
-            height: frames[frame]?.height  ?? '100%',
-            marginTop: frames[frame]?.marginTop  ?? ''
+          style={{
+            flex: 1, position: 'relative', overflow: 'auto',
+            color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto',
+            left: 0, right: 0,
+            width: frames[frame]?.width ?? '100%',
+            height: frames[frame]?.height ?? '100%',
+            marginTop: frames[frame]?.marginTop ?? ''
           }}
         >
           <ErrorBoundary>

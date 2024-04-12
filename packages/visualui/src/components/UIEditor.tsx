@@ -24,6 +24,7 @@ import { useThemeSetting } from '@tamagui/next-theme'
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, contextAtom = null }) {
     const [_, setContext] = useVisualUiAtom(contextAtom)
     const editorRef = useRef<any>()
+    const codeRef = useRef("")
     const enableClickEventsRef = useRef();
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const [currentPageContent, setCurrentPageContent] = useState("")
@@ -183,7 +184,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                                 value="flow-preview"
                                 onPress={() => setFlowViewMode('flow-preview')}
                             >
-                                <Workflow fillOpacity={0} color={flowViewMode == "flow-preview"  && resolvedTheme != 'dark' ? useUITheme('nodeBackgroundColor') : useUITheme('textColor')}/>
+                                <Workflow fillOpacity={0} color={flowViewMode == "flow-preview" && resolvedTheme != 'dark' ? useUITheme('nodeBackgroundColor') : useUITheme('textColor')} />
                             </ToggleGroup.Item>
                             <ToggleGroup.Item
                                 hoverStyle={{ backgroundColor: flowViewMode == "preview" ? useUITheme('interactiveHoverColorDarken') : useUITheme('interactiveHoverColor') }}
@@ -221,6 +222,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             zoomOnDoubleClick={!isViewModePreview}
                             themeMode={resolvedTheme}
                             bgColor={'transparent'}
+                            onEdit={(content) => codeRef.current = content}
                             theme={Theme[resolvedTheme]}
                             nodePreview={flowViewMode}
                             metadata={metadata}
@@ -260,6 +262,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 metadata={metadata}
                 frame={selectedFrame}
                 currentPageContent={currentPageContent}
+                codeRef={codeRef}
                 onSave={() => null}
                 resolveComponentsDir={resolveComponentsDir}
                 contextAtom={contextAtom}
@@ -292,7 +295,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     // for outside context usage
     const options = {
         resolver: availableCraftComponents,
-        onRender: ({ ...props }: any) => RenderNode({ ...props, onEnableEvents: (s) => { enableClickEventsRef.current = s } })
+        onRender: ({ ...props }: any) => RenderNode({ ...props, onEnableEvents: (s) => { enableClickEventsRef.current = s }, metadata })
     }
     const context = newVisualUiContext(options)
     if (setContext) setContext(context) // atom shared context
@@ -362,8 +365,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         id: "save-nodes-btn",
                         icon: Save,
                         text: 'Save',
-                        buttonProps: { 
-                            chromeless: false, color: 'white', backgroundColor: useUITheme('interactiveColor'), paddingHorizontal: "$4", 
+                        buttonProps: {
+                            chromeless: false, color: 'white', backgroundColor: useUITheme('interactiveColor'), paddingHorizontal: "$4",
                             hoverStyle: { backgroundColor: useUITheme('interactiveHoverColorDarken') }
                         },
                         onPress: () => publish("savenodes", { value: 'visual-ui' })

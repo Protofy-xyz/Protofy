@@ -8,6 +8,7 @@ Ignore background white, black, or greyscale colors if match with provided wiref
 Don't modify export default object
 */
 
+import React, { useState } from 'react'
 import { Theme, YStack, Text, XStack, Paragraph, } from "@my/ui"
 import { UIWrapLib, UIWrap, BigTitle, withSession, Page, useEditor, API, SSR } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
@@ -16,7 +17,8 @@ import { context } from "app/bundles/visualuiContext";
 
 const isProtected = Protofy("protected", {{protected}})
 
-const PageComponent = (props) => {
+const PageComponent = ({ currentView, setCurrentView, ...props }) => {
+
     return (
         <Page minHeight="100vh">
             <DefaultLayout title="Protofy" description="Made with love from Barcelona">
@@ -33,19 +35,28 @@ const cw = UIWrapLib('@my/ui')
 
 export default {
     route: Protofy("route", "{{route}}"),
-    component: (props) => useEditor(
-        () => PageComponent(props),
-        {
-            path: "/packages/app/bundles/custom/pages/{{name}}.tsx",
-            components: {
-                ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-                ...cw("YStack", YStack),
-                ...cw("Text", Text),
-                ...cw("XStack", XStack),
-                ...cw("Paragraph", Paragraph),
-                ...cw("Theme", Theme)
-            }
-        },
-    ),
+    component: (props) => {
+        const [currentView, setCurrentView] = useState("default");
+        const setCurrentViewAction = (currentView) => () => setCurrentView(currentView);
+
+        return useEditor(
+            <PageComponent currentView={currentView} setCurrentView={setCurrentViewAction} {...props} />,
+            {
+                path: "/packages/app/bundles/custom/pages/{{name}}.tsx",
+                context: {
+                    currentView: currentView,
+                    setCurrentView: setCurrentViewAction
+                },
+                components: {
+                    ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
+                    ...cw("YStack", YStack),
+                    ...cw("Text", Text),
+                    ...cw("XStack", XStack),
+                    ...cw("Paragraph", Paragraph),
+                    ...cw("Theme", Theme)
+                }
+            },
+        )
+    },
     getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{{permissions}}}):undefined))
 }

@@ -84,6 +84,7 @@ import VCenterStack from '../components/VCenterStack'
 import Spacer from '../components/Spacer'
 import { AdminPage } from '../components/AdminPage'
 import { alignSelf, fontStyle, textAlign, fontWeight, flexDirection, justifyContent, resizeMode } from './shortcuts'
+import { ProtoView } from '../components/ProtoView'
 
 const cw = getComponentWrapper('protolib')
 
@@ -114,6 +115,7 @@ export const layoutPalette = {
   ...cw(HStack, 'ArrowRightSquare', 'HStack', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Spacer, 'Maximize2', 'Spacer', { size: '$8' }),
+  ...cw(ProtoView, 'SquareAsterisk', 'ProtoView', { viewId: "default" }, {}, { placeholder: <BasicPlaceHolder /> }),
 }
 
 export const basicPalette = {
@@ -133,6 +135,13 @@ export const basicPalette = {
         {
           action: ({ dom }) => { dom.focus() },
           name: "Focus element"
+        },
+        {
+          action: ({ dom, metadata, props }) => {
+            const funct = new Function(...Object.keys(metadata.context), "return " + (props.onPress?.slice(1, - 1) ?? ""));
+            props.onPress ? funct(...Object.values(metadata.context))() : null
+          },
+          name: "Click element"
         }
       ]
     }

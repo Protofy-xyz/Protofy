@@ -1,5 +1,47 @@
 [
     {
+        "id": "ProtoView",
+        "title": "ProtoView",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "ProtoView"
+        },
+        "body": [
+            {
+                "type": "child",
+                "data": [
+                    {
+                        "label": "children",
+                        "field": "child-1",
+                        "type": "child",
+                        "staticLabel": true
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "currentView",
+                        "field": "prop-currentView",
+                        "type": "input",
+                        "staticLabel": true,
+                        "section": "basic"
+                    },
+                    {
+                        "label": "viewId",
+                        "field": "prop-viewId",
+                        "type": "input",
+                        "staticLabel": true,
+                        "section": "basic"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "id": "BigTitle",
         "title": "BigTitle",
         "path": "*",
