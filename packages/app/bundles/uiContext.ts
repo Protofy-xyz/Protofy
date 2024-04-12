@@ -6,5 +6,6 @@ export const context = {
     navigate,
     flow,
     onRender,
+    actionNavigate,
     ...deviceContext
 }
