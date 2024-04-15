@@ -30,8 +30,8 @@ JsxExpression.dataOutput = DataOutput.jsx
 JsxExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = false, dumpType: DumpType = "partial", level=0) => {
     const data = nodesData[node.id];
     let expression = dumpConnection(node, "target", "expression", PORT_TYPES.data, data?.expression??"", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-    const a = `{${expression}}`+ dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-    return a
+    const total = `{${expression}}`+ dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+    return total
 }
 
 JsxExpression.isShadow = (node, data, mode, edges) => {
