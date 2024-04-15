@@ -1,5 +1,4 @@
 import devicesEditorMasks from 'protodevice/src/nodes'
-import visualuiTemplateMasks from 'visualui/src/masks/UI.mask.json';
 import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import uiBundleMasks from 'protolib/bundles/ui/masks';
 import apiMasks from 'protolib/bundles/apis/masks';
@@ -61,7 +60,6 @@ export const getFlowMasks = (path: string, queryParams: {}) => {
 
     if (paths.visualui.includes(segment) || (query && paths.visualui.find(p => query.includes(p)))) {
         return [
-            ...visualuiTemplateMasks, 
             ...customVisualUIMasks,
             ...uiBundleMasks.dynamic
         ]
