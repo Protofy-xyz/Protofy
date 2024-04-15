@@ -19,6 +19,7 @@ import A4988 from './A4988';
 import MPU6050 from './MPU6050';
 import SEN55 from './SEN55';
 import MHZ19 from './MHZ19';
+import NFCReader from './NFCReader';
 
 const deviceMasks = [
   Wifi,
@@ -40,6 +41,7 @@ const deviceMasks = [
   MPU6050,
   SEN55,
   MHZ19,
+  NFCReader,
 ]
 
 const masksLength = deviceMasks.length
