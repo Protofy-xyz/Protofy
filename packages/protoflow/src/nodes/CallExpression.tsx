@@ -6,6 +6,7 @@ import { FlowStoreContext } from "../store/FlowsStore";
 import { ArrowUpRight } from 'lucide-react';
 import { useNodeColor } from '../diagram/Theme';
 import { SyntaxKind } from 'ts-morph';
+import { getArgumentsData, dumpArgumentsData } from '../utils/typesAndKinds';
 
 const CallExpression = (node) => {
     const { id, type } = node
@@ -104,42 +105,3 @@ CallExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMar
 }
 
 export default memo(CallExpression)
-
-export function getArgumentsData(node: any): any {
-    let atrVal
-    var kind = node?.getKindName()
-    switch (kind) {
-        case 'StringLiteral':
-        case 'NumericLiteral':
-        case 'TrueKeyword':
-        case 'FalseKeyword':
-            atrVal = node?.getLiteralValue();
-            break
-        case 'NullKeyword':
-        case 'PropertyAccessExpression':
-        case 'Identifier':
-            atrVal = node.getText()
-            break
-        default:
-            return
-    }
-    return { value: atrVal, kind }
-}
-
-export function dumpArgumentsData(argData: { kind: string, value: any }): any {
-    if (!argData) return
-    const argumentKind = argData.kind
-    var value = argData.value
-    switch (argumentKind) {
-        case 'StringLiteral':
-            return '"' + value + '"'
-        case 'NumericLiteral':
-        case 'TrueKeyword':
-        case 'FalseKeyword':
-        case 'Identifier':
-        case 'NullKeyword':
-        case 'PropertyAccessExpression':
-        default:
-            return String(value)
-    }
-}

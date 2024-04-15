@@ -7,7 +7,7 @@ import { FlowStoreContext } from "../store/FlowsStore";
 import { SyntaxKind } from "ts-morph";
 import { FunctionSquare } from 'lucide-react';
 import { useNodeColor } from '../diagram/Theme';
-import { dumpArgumentsData, getArgumentsData } from './CallExpression';
+import { getArgumentsData, dumpArgumentsData } from '../utils/typesAndKinds';
 
 const Function = (node) => {
     const { id, type } = node

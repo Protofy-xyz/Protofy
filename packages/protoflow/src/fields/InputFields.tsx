@@ -2,9 +2,9 @@ import React, { useContext, useState } from 'react';
 import useTheme from '../diagram/Theme';
 import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
-import { Type, Hash, Braces, ToggleLeft, Code } from 'lucide-react';
 import Input from '../diagram/NodeInput'
 import { getDataFromField, getFieldType, getFieldValue } from '../utils';
+import { getKindIcon, getNextKind, getTypeByKind } from '../utils/typesAndKinds';
 
 export const getInputTypes = () => ['input']
 
@@ -19,18 +19,7 @@ export default ({ nodeData = {}, item, node }) => {
 
     const [tmpValue, setTmpValue] = useState(value)
 
-    const icons = {
-        "StringLiteral": Type,
-        "NumericLiteral": Hash,
-        "Identifier": Code,
-        "TrueKeyword": ToggleLeft,
-        "ObjectLiteralExpression": Braces,
-        "FalseKeyword": ToggleLeft
-    }
-    const toggleableList = Object.keys(icons)
-
-    const defaultKindValue = toggleableList[0]
-    const kindValue = data?.kind ?? defaultKindValue
+    const kindValue = data?.kind ?? "StringLiteral"
 
     const onValueChange = (val) => {
         setNodeData(node.id, { ...nodeData, [field]: getDataFromField(val, field, nodeData) })
@@ -40,7 +29,7 @@ export default ({ nodeData = {}, item, node }) => {
         setNodeData(node.id, {
             ...nodeData, [field]: {
                 ...data,
-                kind: toggleableList[(toggleableList.indexOf(kindValue) + 1) % (toggleableList.length)]
+                kind: getNextKind(kindValue)
             }
         })
     }
@@ -52,15 +41,14 @@ export default ({ nodeData = {}, item, node }) => {
             // cases: boolean, number, string, object
             case 'input':
             default:
-                const enabledToggle = toggleableList.includes(kindValue)
                 const isDetailedType = getFieldType(field) == "detailed"
                 return <>
-                    {icons[kindValue] && isDetailedType
+                    {getTypeByKind(kindValue) && isDetailedType
                         ? <div
-                            style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: enabledToggle ? 'pointer' : '' }}
-                            onClick={enabledToggle ? onToggleType : null}
+                            style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: 'pointer' }}
+                            onClick={onToggleType}
                         >
-                            {React.createElement(icons[kindValue], { size: 16, color: enabledToggle ? useTheme('interactiveColor') : useTheme('disableTextColor') })}
+                            {React.createElement(getKindIcon(kindValue), { size: 16, color: useTheme('interactiveColor') })}
                         </div>
                         : <></>}
                     <Input
@@ -78,6 +66,6 @@ export default ({ nodeData = {}, item, node }) => {
         }
     }
 
-    return <CustomField label={label} input={getInput()} menuActions={menuActions}/>
+    return <CustomField label={label} input={getInput()} menuActions={menuActions} />
 
 }
