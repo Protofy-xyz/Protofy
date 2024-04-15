@@ -87,7 +87,7 @@ export const dumpArgumentsData = (data: { kind: string, value: any }) => {
 export const getNextKind = (currentKind) => {
     var currentType = getTypeByKind(currentKind)
     var nextTypeIndex = Object.keys(types).indexOf(currentType) + 1
-    var length = (Object.keys(types).length - 1)
+    var length = Object.keys(types).length
     var nextPos = nextTypeIndex % length
 
     var nextType = Object.keys(types)[nextPos]
