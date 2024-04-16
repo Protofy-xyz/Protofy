@@ -129,6 +129,7 @@ export const AutoAPI = ({
         const allResults: any[] = [];
 
         const search = req.query.search;
+        const filter = req.query.filter;
         const preListData = typeof extraData?.prelist == 'function' ? await extraData.prelist(session, req) : (extraData?.prelist ?? {})
         const parseResult = async (value) => {
             const model = modelType.unserialize(value, session);
@@ -137,7 +138,7 @@ export const AutoAPI = ({
             return listItem
         }
         const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);
-        if(!search && !skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
+        if(!search && !filter && !skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
             const indexedKeys = await db.getIndexedKeys()
             const total = parseInt(await db.count(), 10)
             const page = Number(req.query.page) || 0;
