@@ -45,7 +45,7 @@ export const DevicesAPI = (app, context) => {
             res.status(404).send(`Action [${req.params.action}] not found in Subsytem [${req.params.subsystem}] for device [${req.params.device}]`)
             return
         }
-        topicPub(action.getEndpoint(), req.params.value == "undefined" ? action.getValue() : req.params.value)
+        topicPub(action.getEndpoint(), req.params.value == "undefined" ? JSON.stringify(action.getValue()) : req.params.value)
         res.send({
             subsystem: req.params.subsystem,
             action: req.params.action,
