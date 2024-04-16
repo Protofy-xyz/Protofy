@@ -125,6 +125,28 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     list(search?, session?, extraData?, params?): any {
+        
+        if(params && params.filter) {
+            const allFiltersMatch = Object.keys(params.filter).every(key => {
+                if(params.filter[key].from || params.filter[key].to) {
+                    let valid = true
+                    if(params.filter[key].from && this.data && this.data[key] < params.filter[key].from) {
+                        valid = false
+                    }
+    
+                    if(params.filter[key].to && this.data && this.data[key] > params.filter[key].to) {
+                        valid = false
+                    }
+
+                    return valid
+                } else {
+                    return this.data && this.data[key] == params.filter[key];
+                }
+            });
+
+            if(!allFiltersMatch) return
+        }
+
         if (search) {
             const { parsed, searchWithoutTags } = parseSearch(search);
 

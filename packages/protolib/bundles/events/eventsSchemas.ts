@@ -24,37 +24,6 @@ export class EventModel extends ProtoModel<EventModel> {
         super(data, EventSchema, session, "Event");
     }
 
-	list(search?, session?, extraData?, params?): any {
-        if(params && params.filter) {
-
-            const allFiltersMatch = Object.keys(params.filter).every(key => {
-                if(params.filter[key].from || params.filter[key].to) {
-                    let valid = true
-                    if(params.filter[key].from && this.data && this.data[key] < params.filter[key].from) {
-                        valid = false
-                    }
-    
-                    if(params.filter[key].to && this.data && this.data[key] > params.filter[key].to) {
-                        valid = false
-                    }
-
-                    return valid
-                } else {
-                    return this.data && this.data[key] == params.filter[key];
-                }
-            });
-
-            if(!allFiltersMatch) return
-        }
-        if(search) {
-			if(JSON.stringify(this.data).toLowerCase().includes(search.toLowerCase())) {
-				return this.read()
-			}
-        } else {
-            return this.read();
-        }
-    }
-
     protected static _newInstance(data: any, session?: SessionDataType): EventModel {
         return new EventModel(data, session);
     }
