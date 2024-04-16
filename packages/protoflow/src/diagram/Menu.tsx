@@ -12,7 +12,7 @@ import { Search } from 'lucide-react'
 import { useProtoflow } from '../store/DiagramStore';
 
 const menuWidth = 259
-const menuHeight = 500
+const defMenuHeight = 500
 const menuMargin = 100
 const inputHeight = 50
 
@@ -88,6 +88,9 @@ const Menu = withTopics(({
     const setMenu = useFlowsStore(state => state.setMenu)
     const { project, setViewport, getViewport } = useProtoflow();
     const { publish } = topics;
+
+    const offsetHeight = reactFlowWrapper?.current.offsetHeight
+    const menuHeight = offsetHeight < (defMenuHeight + menuMargin * 2) ? offsetHeight - (menuMargin * 1.5) : defMenuHeight
 
     const getMenuTop = () => {
         var defaultTop = (menuPosition[1] - 30)
