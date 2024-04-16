@@ -92,7 +92,7 @@ export default {
         onAdd={data => { console.log("DATA (onAdd): ", data); return data }}
         onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
         columns={DataTable2.columns(
-          DataTable2.column("", ()=>"", false, (row) => <InteractiveIcon onPress={async (e) => { 
+          DataTable2.column("", () => "", false, (row) => <InteractiveIcon onPress={async (e) => {
             setShowDialog(true)
             setSourceCode(row.config.components)
           }} Icon={Eye}></InteractiveIcon>, true, '50px'),
@@ -110,6 +110,9 @@ export default {
             return []
           }).after("name"),
         }}
+        extraFieldsFormsAdd={{
+          device: z.boolean().after("config").label("automatic device").defaultValue(true)
+        }}
         model={DeviceDefinitionModel}
         pageState={pageState}
         icons={DeviceDefitionIcons}
@@ -118,15 +121,15 @@ export default {
           'config': {
             component: (path, data, setData, mode) => {
               if (mode == "preview") { return <></> }
-              return <Button 
-              style={{width:"100%"}}
-                onPress={(e) => { 
+              return <Button
+                style={{ width: "100%" }}
+                onPress={(e) => {
                   setShowDialog(true)
-                  if(mode == "add") {
+                  if (mode == "add") {
                     setSourceCode(defaultJsCode.components)
                   } else {
                     setSourceCode(data.components)
-                  } 
+                  }
                   setEditedObjectData({ path, data, setData, mode })
                 }}>Edit</Button>
             },
