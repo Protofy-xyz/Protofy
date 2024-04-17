@@ -3,6 +3,7 @@ import { actionNavigate } from "./actionNavigate";
 import { navigate } from "./navigate";
 import { setCurrentView } from "./changeCurrentView";
 import onRender from "./onRender";
+import ButtonSimple from "./ButtonSimple";
 import uiMasks from "./uiMasks.json"
 
 export default {
@@ -14,6 +15,7 @@ export default {
         navigate
     ],
     code: [
-        onRender
+        onRender,
+        ButtonSimple
     ]
 }
