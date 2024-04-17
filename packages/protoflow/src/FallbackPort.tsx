@@ -1,5 +1,6 @@
 import React, {useEffect, useContext} from "react";
 import { FlowStoreContext } from "./store/FlowsStore";
+import { FlowPort } from "./Node";
 
 const FallbackPort = ({node, port, type, fallbackPort, portType, preText, postText, fallbackText=""}) => {
     const useFlowsStore = useContext(FlowStoreContext)
@@ -13,6 +14,18 @@ const FallbackPort = ({node, port, type, fallbackPort, portType, preText, postTe
         }
     }, [node?.id, nodeData])
     return <></>
+}
+
+export const FallbackPortList = ({ fallbacks, node, startPosX }) => {
+    return <>
+        {
+            fallbacks.map((fb, index) => <div key={index}>
+                <div style={{ height: '50px' }}></div>
+                <FlowPort id={node.id} type='input' label={fb.label} style={{ top: startPosX + (50 * (index + 1.6)) }} handleId={fb.field} />
+                <FallbackPort node={node} port={fb.field} type={"target"} fallbackPort={fb.field} portType={"_"} preText={fb.preText} postText={fb.postText} />
+            </div>)
+        }
+    </>
 }
 
 export default FallbackPort
