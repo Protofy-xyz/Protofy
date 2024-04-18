@@ -337,6 +337,7 @@ const FlowsBase = ({
             const positions = nodes.map((node) => ({ id: node.id, position: node.position }))
             if (!preview && onSave && nodes?.length) onSave(content, positions, { nodesData: nodeData, nodes })
         } catch (e) {
+            console.log('ERROR SAVING CODE: ', e.codeFrame, e)
             const parts = e.codeFrame.split("\n").find(l => l.startsWith('> ')).split('|')
             parts.shift()
             const linePos = e.loc.start.column

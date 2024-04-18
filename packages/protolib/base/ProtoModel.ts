@@ -238,6 +238,12 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this._newInstance(JSON.parse(data), session);
     }
 
+    static getApiEndPoint(): string {
+        const options = this.getApiOptions()
+        const prefix = options.prefix.endsWith('/') ? options.prefix.slice(0, -1) : options.prefix;
+        return prefix + '/' + options.name;
+    }
+
     static load(data: any, session?: SessionDataType): ProtoModel<any> {
         return this._newInstance(data, session);
     }

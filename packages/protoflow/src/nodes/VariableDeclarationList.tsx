@@ -17,7 +17,6 @@ export const VariableDeclarationListNodeFactory = (declarationType) => {
         const declarations = Object.keys(nodeData).filter(key => key.startsWith('declarationName'))
         const declarationArr = declarations.length ? declarations : ['declarationName1']
 
-        console.log('mobx: ', nodeData)
         //@ts-ignore
         const nodeParams: Field[] = [
             { label: 'Type', field: 'type', type: 'select', data: ['let', 'const', 'var'], static: true }

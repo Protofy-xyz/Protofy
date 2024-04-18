@@ -1,0 +1,85 @@
+import { Node, NodeParams, FlowPort, FallbackPort, FallbackPortList, filterCallback, restoreCallback } from 'protoflow';
+import { Plug } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { API } from 'protolib/base'
+
+const objectList = (node: any = {}, nodeData = {}) => {
+    const [objects, setObjects] = useState<any[]>([]);
+
+    const getObjects = async () => {
+        const { data } = await API.get('/adminapi/v1/objects?all=1')
+        setObjects(data?.items.map((item: any) => item.name));
+    }
+
+    useEffect(() => {
+        getObjects()
+    }, [])
+
+    return (
+        <Node icon={Plug} node={node} isPreview={!node?.id} title='Object List' id={node.id} color="#A5D6A7" skipCustom={true}>
+            <NodeParams id={node.id} params={[{ label: 'Object', field: 'param-1', type: 'select', static: true, data: objects }]} />
+            <NodeParams id={node.id} params={[{ label: 'Page', field: 'param-2', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'Page size', field: 'param-3', type: 'input' }]} />
+            <FallbackPortList 
+                height='70px'
+                node={node} 
+                fallbacks={[{
+                    "name": "onlist",
+                    "label": "OnList (items, numPages, totalItems)",
+                    "field": "param-5",
+                    "preText": "async (items, numPages, totalItems) => ",
+                    "postText": "",
+                    "fallbackText": "null"
+                }, {
+                    "name": "onerror",
+                    "label": "OnError (error)",
+                    "field": "param-6",
+                    "preText": "async (error) => ",
+                    "fallbackText": "null",
+                    "postText": ""
+                }]} 
+                startPosX={170}
+            />
+{/* 
+            <div style={{ paddingBottom: "120px" }}>
+                <FlowPort id={node.id} type='input' label='On List (items, numPages, totalItems)' style={{ top: '250px' }} handleId={'onlist'} />
+                <FallbackPort node={node} port={"param-5"} type={"target"} fallbackPort={'onlist'} portType={"_"} preText="async (items, numPages, totalItems) => " postText="" />
+            </div> */}
+        </Node>
+    )
+}
+
+export default {
+    id: 'objectList',
+    type: 'CallExpression',
+    check: (node, nodeData) => {
+        return (
+            node.type == "CallExpression"
+            && (nodeData.to == 'context.object.list')
+        )
+    },
+    getComponent: objectList,
+    category: "Objects (CMS)",
+    keywords: ["list", "cms", "object"],
+    filterChildren: (node, childScope, edges) => {
+        childScope = filterCallback("5", "onlist")(node, childScope, edges)
+        childScope = filterCallback("6", "onerror")(node, childScope, edges)
+        return childScope
+    },
+    restoreChildren: (node, nodes, originalNodes, edges, originalEdges) => {
+        let result = restoreCallback("5")(node, nodes, originalNodes, edges, originalEdges)
+        result = restoreCallback("6")(node, result.nodes, originalNodes, result.edges, originalEdges)
+        return result
+    },
+    getInitialData: () => {
+        return {
+            to: 'context.object.list',
+            "param-1": { value: "", kind: "StringLiteral" },
+            "param-2": { value: "0", kind: "NumericLiteral" },
+            "param-3": { value: "50", kind: "NumericLiteral" },
+            "param-4": { value: "null", kind: "Identifier" },
+            "param-5": { value: "null", kind: "Identifier" },
+            "param-6": { value: "null", kind: "Identifier" }
+        }
+    }
+}

@@ -591,7 +591,7 @@ const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column'
     const isRendered = nodeData?._metadata?.layouted
     if (node.id && !isRendered) extraStyle.opacity = '0'
 
-    console.log('meta data: ', nodeData?._metadata)
+    //console.log('meta data: ', nodeData?._metadata)
 
     return (
         <DiagramNode

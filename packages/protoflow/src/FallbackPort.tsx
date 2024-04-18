@@ -16,13 +16,13 @@ const FallbackPort = ({node, port, type, fallbackPort, portType, preText, postTe
     return <></>
 }
 
-export const FallbackPortList = ({ fallbacks, node, startPosX }) => {
+export const FallbackPortList = ({ fallbacks, node, startPosX, height='50px' }) => {
     return <>
         {
             fallbacks.map((fb, index) => <div key={index}>
-                <div style={{ height: '50px' }}></div>
-                <FlowPort id={node.id} type='input' label={fb.label} style={{ top: startPosX + (50 * (index + 1.6)) }} handleId={fb.field} />
-                <FallbackPort node={node} port={fb.field} type={"target"} fallbackPort={fb.field} portType={"_"} preText={fb.preText} postText={fb.postText} />
+                <div style={{ height }}></div>
+                <FlowPort id={node.id} type='input' label={fb.label} style={{ top: startPosX + (50 * (index + 1.6)) }} handleId={fb.name ?? fb.field} />
+                <FallbackPort node={node} port={fb.field} type={"target"} fallbackText={fb.fallbackText ?? ''} fallbackPort={fb.name ?? fb.field} portType={"_"} preText={fb.preText} postText={fb.postText} />
             </div>)
         }
     </>
