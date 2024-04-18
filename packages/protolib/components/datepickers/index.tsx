@@ -17,9 +17,10 @@ type DatePickerProps = {
   placeholder?: string
 }
 
+// the modes 'month' and 'year' use offsetDate and onOffsetChange
+// and 'single', 'multiple', 'range' use selectedDates and onDatesChange
+
 export function DatePicker({ onDatesChange, selectedDates, mode = 'single', config = {}, placeholder, onOffsetChange, offsetDate }: DatePickerProps) {
-  // the modes 'month' and 'year' use offsetDate and onOffsetChange
-  // and 'single', 'multiple', 'range' use selectedDates and onDatesChange
 
   const [selected, onChange] = useState<Date[]>([])
   const [offset, setOffset] = useState<Date>()
