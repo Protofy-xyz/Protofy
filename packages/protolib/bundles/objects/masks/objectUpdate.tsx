@@ -1,11 +1,11 @@
 import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, FlowStoreContext, filterConnection, dumpArgumentsData, getId} from 'protoflow';
-import { PackagePlus } from 'lucide-react';
+import { PenLine } from 'lucide-react';
 import { useEffect, useState, useContext } from 'react';
 import { API } from 'protolib/base'
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { useUpdateEffect } from 'usehooks-ts';
 
-const objectCreate = (node: any = {}, nodeData = {}) => {
+const objectUpdate = (node: any = {}, nodeData = {}) => {
     const [objects, setObjects] = useState<any[]>([])
     const [keys, setKeys] = useState<any[]>([])
     const color = useColorFromPalette(1)
@@ -63,8 +63,8 @@ const objectCreate = (node: any = {}, nodeData = {}) => {
     useEffect(() => {
         setNodeData(node.id, {
             ...nodeData,
-            'param-2': {
-                ...nodeData['param-2'],
+            'param-3': {
+                ...nodeData['param-3'],
                 _dump: (nodeData, level) => {
                     const params = Object.keys(nodeData).filter(key => key.startsWith('mask-')).map((param) => {
                         let key = param.split('-').slice(1).join('-');
@@ -84,28 +84,28 @@ const objectCreate = (node: any = {}, nodeData = {}) => {
     useEffect(() => { onSelectObject() }, [nodeData['param-1'], objects])
 
     return (
-        <Node icon={PackagePlus} node={node} isPreview={!node?.id} title='Object Create' id={node.id} color={color} skipCustom={true}>
+        <Node icon={PenLine} node={node} isPreview={!node?.id} title='Object Update' id={node.id} color={color} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Object', field: 'param-1', type: 'select', static: true, data: objects.map((item: any) => item.name) }]} />
-
+            <NodeParams id={node.id} params={[{ label: 'Object Id', field: 'param-2', type: 'input'}]} />
             <FallbackPortList
                 height='70px'
                 node={node}
                 fallbacks={[{
-                    "name": "oncreate",
-                    "label": "onCreate(item)",
-                    "field": "param-4",
+                    "name": "onupdate",
+                    "label": "onUpdate(item)",
+                    "field": "param-5",
                     "preText": "async (item) => ",
                     "postText": "",
                     "fallbackText": "null"
                 }, {
                     "name": "onerror",
                     "label": "OnError (error)",
-                    "field": "param-5",
+                    "field": "param-6",
                     "preText": "async (error) => ",
                     "fallbackText": "null",
                     "postText": ""
                 }]}
-                startPosX={60}
+                startPosX={110}
             />
             <NodeParams id={node.id} params={Object.keys(keys).map((key, i) => {
                 return { label: key, field: 'mask-' + key, type: 'input', static: true }
@@ -115,21 +115,21 @@ const objectCreate = (node: any = {}, nodeData = {}) => {
 }
 
 export default {
-    id: 'objectCreate',
+    id: 'objectUpdate',
     type: 'CallExpression',
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression"
-            && (nodeData.to == 'context.object.create')
+            && (nodeData.to == 'context.object.update')
         )
     },
-    getComponent: objectCreate,
+    getComponent: objectUpdate,
     category: "Objects (CMS)",
-    keywords: ["create", "cms", "object"],
+    keywords: ["update", "cms", "object"],
     filterChildren: (node, childScope, edges, nodeData, setNodeData) => {
-        childScope = filterCallback("4", "oncreate")(node, childScope, edges)
-        childScope = filterCallback("5", "onerror")(node, childScope, edges)
-        childScope = filterConnection("param-2", (id, nodeData, setNodeData) => {
+        childScope = filterCallback("5", "onupdate")(node, childScope, edges)
+        childScope = filterCallback("6", "onerror")(node, childScope, edges)
+        childScope = filterConnection("param-3", (id, nodeData, setNodeData) => {
             const objData = nodeData[id]
             if(objData) {
                 Object.keys(objData).forEach(key => {
@@ -146,18 +146,19 @@ export default {
         return childScope
     },
     restoreChildren: (node, nodes, originalNodes, edges, originalEdges) => {
-        let result = restoreCallback("4")(node, nodes, originalNodes, edges, originalEdges)
-        result = restoreCallback("5")(node, result.nodes, originalNodes, result.edges, originalEdges)
+        let result = restoreCallback("5")(node, nodes, originalNodes, edges, originalEdges)
+        result = restoreCallback("6")(node, result.nodes, originalNodes, result.edges, originalEdges)
         return result
     },
     getInitialData: () => {
         return {
-            to: 'context.object.create',
+            to: 'context.object.update',
             "param-1": { value: "", kind: "StringLiteral" },
-            "param-2": { value: "{}", kind: "Identifier" },
-            "param-3": { value: "null", kind: "Identifier" },
+            "param-2": { value: "", kind: "StringLiteral" },
+            "param-3": { value: "{}", kind: "Identifier" },
             "param-4": { value: "null", kind: "Identifier" },
-            "param-5": { value: "null", kind: "Identifier" }
+            "param-5": { value: "null", kind: "Identifier" },
+            "param-6": { value: "null", kind: "Identifier" }
         }
     }
 }
