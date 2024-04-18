@@ -1,10 +1,12 @@
 import { Node, NodeParams, FlowPort, FallbackPort, FallbackPortList, filterCallback, restoreCallback } from 'protoflow';
-import { Plug } from 'lucide-react';
+import { ClipboardList } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { API } from 'protolib/base'
+import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 
 const objectList = (node: any = {}, nodeData = {}) => {
     const [objects, setObjects] = useState<any[]>([]);
+    const color = useColorFromPalette(1)
 
     const getObjects = async () => {
         const { data } = await API.get('/adminapi/v1/objects?all=1')
@@ -16,7 +18,7 @@ const objectList = (node: any = {}, nodeData = {}) => {
     }, [])
 
     return (
-        <Node icon={Plug} node={node} isPreview={!node?.id} title='Object List' id={node.id} color="#A5D6A7" skipCustom={true}>
+        <Node icon={ClipboardList} node={node} isPreview={!node?.id} title='Object List' id={node.id} color={color} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Object', field: 'param-1', type: 'select', static: true, data: objects }]} />
             <NodeParams id={node.id} params={[{ label: 'Page', field: 'param-2', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Page size', field: 'param-3', type: 'input' }]} />
@@ -40,11 +42,6 @@ const objectList = (node: any = {}, nodeData = {}) => {
                 }]} 
                 startPosX={170}
             />
-{/* 
-            <div style={{ paddingBottom: "120px" }}>
-                <FlowPort id={node.id} type='input' label='On List (items, numPages, totalItems)' style={{ top: '250px' }} handleId={'onlist'} />
-                <FallbackPort node={node} port={"param-5"} type={"target"} fallbackPort={'onlist'} portType={"_"} preText="async (items, numPages, totalItems) => " postText="" />
-            </div> */}
         </Node>
     )
 }
