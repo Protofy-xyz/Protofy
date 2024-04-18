@@ -18,5 +18,4 @@ export { connectNodes } from './src/lib/Edge';
 export { Panel } from 'reactflow';
 export { default as Button } from './src/Button'
 export { getDataFromField, getFieldValue, getFieldType } from "./src/utils"
-export { CustomFieldType } from './src/fields'
 export { CustomFieldsList } from './src/fields/CustomFieldsList'
