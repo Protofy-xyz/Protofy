@@ -3,6 +3,7 @@ export const getFieldType = (field): 'detailed' | 'literal' => {
     var type
 
     switch (prefix) {
+        case 'mask':
         case 'prop':
         case 'param':
             type = 'detailed' // e.g: field: { value: "20px", key: "fieldKey", kind: "StringLiteral", ... }

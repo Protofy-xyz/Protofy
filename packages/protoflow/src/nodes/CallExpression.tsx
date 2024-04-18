@@ -81,6 +81,8 @@ CallExpression.dump = (node, nodes, edges, nodesData, metadata = null, enableMar
     const keys = Object.keys(data).sort()
 
     const params = keys.filter(key => key.startsWith('param')).sort((a, b) => a.localeCompare(b, 'en', { numeric: true })).map((param) => {
+        if(data[param]?._dump) return data[param]._dump(data, level)
+
         let part;
         const fallback = data._fallBack ? data._fallBack.find(f => f.port == param) : null
 

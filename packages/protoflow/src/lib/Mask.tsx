@@ -12,6 +12,14 @@ export const filterCallbackNodes = (paramId = "2", type = "param", handleId = "r
     }
 }
 
+export const filterConnection = (portId, cb?) => {
+    return (node, childScope, edges, nodeData, setNodeData) => {
+        const callbackId = edges.find(e => e.targetHandle == getId(node) + '-' + portId)?.source
+        if(cb) cb(callbackId, nodeData, setNodeData)
+        return childScope.filter(child => child?.id != callbackId)
+    }
+}
+
 export const filterCallback = (numParam = "2", handleId = "request") => {
     return filterCallbackNodes(numParam, 'param', handleId)
 }
