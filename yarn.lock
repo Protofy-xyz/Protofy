@@ -7148,6 +7148,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rehookify/datepicker@npm:6.6.1":
+  version: 6.6.1
+  resolution: "@rehookify/datepicker@npm:6.6.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 9f1a4453e532fa27003c78fffa51a024fb1d99fb849fa46988b99c6068021b14f11c815cd87b41355fa279fb0784da141145999538ceb33107af5f0cdedcf61c
+  languageName: node
+  linkType: hard
+
 "@root/mkdirp@npm:^1.0.0":
   version: 1.0.0
   resolution: "@root/mkdirp@npm:1.0.0"
@@ -25915,6 +25924,7 @@ __metadata:
     "@jest/globals": ~29.7.0
     "@monaco-editor/react": 4.4.6
     "@my/ui": 0.0.1
+    "@rehookify/datepicker": 6.6.1
     "@tamagui/font-cherry-bomb": latest
     "@tamagui/font-dm-sans": latest
     "@tamagui/font-dm-serif-display": latest

@@ -16,6 +16,7 @@
     "@dnd-kit/sortable": "^7.0.2",
     "@monaco-editor/react": "4.4.6",
     "@my/ui": "0.0.1",
+    "@rehookify/datepicker": "6.6.1",
     "@tamagui/font-cherry-bomb": "latest",
     "@tamagui/font-dm-sans": "latest",
     "@tamagui/font-dm-serif-display": "latest",
