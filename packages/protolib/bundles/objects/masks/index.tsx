@@ -6,8 +6,8 @@ import objectUpdate from "./objectUpdate"
 
 export default [
     objectList,
-    objectDelete,
-    objectRead, 
     objectCreate,
-    objectUpdate
+    objectRead, 
+    objectUpdate,
+    objectDelete,
 ]

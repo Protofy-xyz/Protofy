@@ -39,6 +39,8 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...flowMasks,
         ...uiBundleMasks.code,
         ...devicesUIMasks,
+        ...objectMasks,
+        ...baseMasks.api,
         deviceAction
     ]
     if (paths.apis.includes(segment)) return [
