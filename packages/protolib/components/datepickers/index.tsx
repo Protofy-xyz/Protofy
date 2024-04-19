@@ -89,42 +89,40 @@ export function DatePicker({ onDatesChange, selectedDates, mode = 'single', conf
   }, [selected])
 
   return (
-    <Tinted>
-      <DPicker
-        open={open}
-        onOpenChange={setOpen}
-        config={{
-          selectedDates: dates,
-          onDatesChange: onValueChange,
-          onOffsetChange: onOffChange,
-          offsetDate: offsetValue,
-          calendar: {
-            offsets: [-1, 1],
-          },
-          ...config,
-          dates: {
-            mode: ['year', 'month'].includes(mode) ? 'single' : mode,
-            toggle: true,
-            ...config?.dates
-          },
-        }}
-      >
-        <DPicker.Trigger asChild>
-          <DatePickerInput
-            placeholder={placeholder ?? data[mode].placeholder}
-            value={data[mode].value}
-            onReset={() => {
-              onValueChange([])
-              onOffChange(undefined)
-            }}
-            onButtonPress={() => setOpen(true)}
-          />
-        </DPicker.Trigger>
-        <DPicker.Content>
-          <DPicker.Content.Arrow />
-          {data[mode].body}
-        </DPicker.Content>
-      </DPicker>
-    </Tinted>
+    <DPicker
+      open={open}
+      onOpenChange={setOpen}
+      config={{
+        selectedDates: dates,
+        onDatesChange: onValueChange,
+        onOffsetChange: onOffChange,
+        offsetDate: offsetValue,
+        calendar: {
+          offsets: [-1, 1],
+        },
+        ...config,
+        dates: {
+          mode: ['year', 'month'].includes(mode) ? 'single' : mode,
+          toggle: true,
+          ...config?.dates
+        },
+      }}
+    >
+      <DPicker.Trigger asChild>
+        <DatePickerInput
+          placeholder={placeholder ?? data[mode].placeholder}
+          value={data[mode].value}
+          onReset={() => {
+            onValueChange([])
+            onOffChange(undefined)
+          }}
+          onButtonPress={() => setOpen(true)}
+        />
+      </DPicker.Trigger>
+      <DPicker.Content>
+        <DPicker.Content.Arrow />
+        {data[mode].body}
+      </DPicker.Content>
+    </DPicker>
   )
 }
