@@ -38,7 +38,7 @@ export const DataTableList = ({
 
     const fields = model.getObjectSchema().isDisplay('table')
 
-    const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean']
+    const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean', 'ZodDate']
     const cols = columns ?? DataTable2.columns(
         ...(
             Object.keys(fields.shape)

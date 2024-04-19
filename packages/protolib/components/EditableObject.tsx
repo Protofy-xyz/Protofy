@@ -1,6 +1,6 @@
 import { Button, Fieldset, Input, Label, Stack, XStack, H3, YStack, Paragraph, Spinner, Text, StackProps, Accordion, Square, Spacer, Switch } from "tamagui";
 import { Pencil, Tag, ChevronDown, X, Tags, List, Layers } from '@tamagui/lucide-icons';
-import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog } from 'protolib'
+import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog, DatePicker } from 'protolib'
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getErrorMessage } from "@my/ui";
 import { ProtoSchema } from "protolib/base";
@@ -422,6 +422,21 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
       setFormData(ele.name, generatedOptions)
     }
   }
+
+  if (elementType == "ZodDate" && elementDef?.hasOwnProperty('datePicker')) {
+    var dateMode = elementDef.datePicker
+    var isStringDateType = ['year', 'month'].includes(dateMode)
+
+    return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+      <Stack f={1}>
+        {isStringDateType
+          ? <DatePicker mode={dateMode} offsetDate={getFormData(ele.name) ? new Date(getFormData(ele.name)) : null} onOffsetChange={isStringDateType ? d => setFormData(ele.name, d.toISOString()) : null} />
+          : <DatePicker mode={dateMode} selectedDates={getFormData(ele.name) ? [new Date(getFormData(ele.name))] : null} onDatesChange={!isStringDateType ? d => setFormData(ele.name, d[0]?.toISOString()) : null} />
+        }
+      </Stack>
+    </FormElement>
+  }
+
   return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
     <Stack f={1}>
       <Input
@@ -611,7 +626,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
       <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
         <YStack width="100%">
           <XStack ai="center">
-            <XStack id="eo-dlg-title">{title??<H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3>}</XStack>
+            <XStack id="eo-dlg-title">{title ?? <H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3>}</XStack>
             {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
               if (currentMode == 'edit' && edited) {
                 setDialogOpen(true)

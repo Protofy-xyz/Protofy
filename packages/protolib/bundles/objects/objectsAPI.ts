@@ -139,12 +139,7 @@ const getDB = (path, req, session) => {
         }
       }
 
-      const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
-        const v = value.keys[current]
-        const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ? current.params.join(',') : '') + ")", '') : ''
-        return total + "\n\t" + current + ": " + "z." + v.type + "(" + (v.params && v.params.length ? v.params.join(',') : '') + ")" + modifiers + ","
-      }, '').slice(0, -1) + "\n}"
-
+      const result = ObjectModel.load(value).getSourceCode()
 
       await setSchema(filePath, result, value, req)
       //if api is selected, create an autoapi for the object

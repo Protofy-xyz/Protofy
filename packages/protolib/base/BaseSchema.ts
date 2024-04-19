@@ -10,45 +10,47 @@ interface ZodExtensions {
     hint(hintText: string): this;
     display(views?: string[] | undefined): this;
     hidden(): this;
-    generate(val: any, force?:boolean): this;
+    generate(val: any, force?: boolean): this;
     before(field: string): this;
     after(field: string): this;
+    datePicker(type?: 'single' | 'month' | 'year'): this; // TODO: add types: 'multiple' | 'range' 
     dependsOn(field: string, value?: any): this;
     location(latKey: string, lonKey: string): this;
-    generateOptions(call: Function): this; 
-    choices(): this; 
+    generateOptions(call: Function): this;
+    choices(): this;
     secret(): this;
     static(): this;
     id(): this;
     search(): this;
-    displayOptions(options:any): this;
-    size(size:number): this; //1, 2, 3, 4...
-    group(group:number): this;
-    name(key:string): this;
-    help(description:string): this;
-    defaultValue(value:any): this;
-    onList(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
-    onCreate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
-    onRead(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
-    onUpdate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
-    onDelete(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
-    on(eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?:any): this;
+    displayOptions(options: any): this;
+    size(size: number): this; //1, 2, 3, 4...
+    group(group: number): this;
+    name(key: string): this;
+    help(description: string): this;
+    defaultValue(value: any): this;
+    onList(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any): this;
+    onCreate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any): this;
+    onRead(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any): this;
+    onUpdate(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any): this;
+    onDelete(eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any): this;
+    on(eventName: string, eventHandler: string, eventContext?: 'client' | 'server' | undefined, eventParams?: any): this;
 }
 
 declare module 'zod' {
-    interface ZodString extends ZodExtensions {}
-    interface ZodNumber extends ZodExtensions {}
-    interface ZodBoolean extends ZodExtensions {}
-    interface ZodAny extends ZodExtensions {}
+    interface ZodString extends ZodExtensions { }
+    interface ZodNumber extends ZodExtensions { }
+    interface ZodBoolean extends ZodExtensions { }
+    interface ZodAny extends ZodExtensions { }
     //@ts-ignore
-    interface ZodOptional extends ZodExtensions {}
+    interface ZodOptional extends ZodExtensions { }
     //@ts-ignore
-    interface ZodArray extends ZodExtensions {}
+    interface ZodArray extends ZodExtensions { }
     //@ts-ignore
-    interface ZodUnion extends ZodExtensions {}
+    interface ZodUnion extends ZodExtensions { }
     //@ts-ignore
-    interface ZodObject extends ZodExtensions {}
-    interface ZodRecord extends ZodExtensions {}
+    interface ZodObject extends ZodExtensions { }
+    interface ZodRecord extends ZodExtensions { }
+    interface ZodDate extends ZodExtensions { }
 }
 
 export const Schema = Zod.z
@@ -86,6 +88,12 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
+    type.prototype.datePicker = function (type: string) {
+        this._def.datePicker = type;
+        this._def.coerce = true;
+        return this;
+    };
+
     type.prototype.name = function (key: string) {
         this._def.keyName = key;
         return this;
@@ -96,7 +104,7 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.hidden = function() {
+    type.prototype.hidden = function () {
         this._def.display = ['none']
         return this;
     }
@@ -212,11 +220,11 @@ function extendZodTypePrototype(type: any) {
 
 // Extiende el prototipo general de todos los tipos de Zod
 export function initSchemaSystem() {
-    const zodTypes = [Zod.ZodString, Zod.ZodNumber, Zod.ZodBoolean, Zod.ZodArray, Zod.ZodAny, Zod.ZodOptional, Zod.ZodUnion, Zod.ZodObject, Zod.ZodRecord];
+    const zodTypes = [Zod.ZodString, Zod.ZodNumber, Zod.ZodBoolean, Zod.ZodArray, Zod.ZodAny, Zod.ZodOptional, Zod.ZodUnion, Zod.ZodObject, Zod.ZodRecord, Zod.ZodDate];
     zodTypes.forEach(type => extendZodTypePrototype(type));
 }
 
 export const BaseSchema = Schema.object({
-    id: Schema.string().generate(() => moment().format('YYYYMM-DDHHmm-ssSSS') +'-'+uuidv4().split('-')[0]).hidden().id(),
+    id: Schema.string().generate(() => moment().format('YYYYMM-DDHHmm-ssSSS') + '-' + uuidv4().split('-')[0]).hidden().id(),
     _deleted: Schema.boolean().optional().hidden(),
 })

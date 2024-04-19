@@ -16,7 +16,8 @@ export const BaseObjectSchema = z.object({
         z.literal("array"),
         z.literal("object"),
         z.literal("record"),
-        z.literal("union")
+        z.literal("union"),
+        z.literal("date")
       ]),
       params: z.array(z.string()).optional(),
       modifiers: z.array(z.object({
@@ -39,6 +40,7 @@ export const BaseObjectSchema = z.object({
           z.literal("onDelete"),
           z.literal("onList"),
           z.literal("name"),
+          z.literal("picker"),
           z.literal("location")
         ]),
         params: z.array(z.string()).optional()
@@ -80,6 +82,24 @@ export class ObjectModel extends ProtoModel<ObjectModel> {
     return ObjectModel.getDefaultSchemaFilePath(this.data.name)
   }
 
+  static load(data: any, session?: SessionDataType): ObjectModel {
+    return this._newInstance(data, session);
+  }
+
+  getSourceCode() {
+    const value = this.data
+    const result = "{" + Object.keys(value.keys).reduce((total, current, i) => {
+      const v = value.keys[current]
+      if (v.type == 'date' && (!v.modifiers || !v.modifiers.find(m => m.name == 'datePicker'))) {
+        v.modifiers = [...(v?.modifiers ?? []), { name: 'datePicker', params: [] }]
+      }
+      const modifiers = v.modifiers ? v.modifiers.reduce((total, current) => total + '.' + current.name + "(" + (current.params && current.params.length ? current.params.join(',') : '') + ")", '') : ''
+      return total + "\n\t" + current + ": " + "z." + v.type + "(" + (v.params && v.params.length ? v.params.join(',') : '') + ")" + modifiers + ","
+    }, '').slice(0, -1) + "\n}"
+
+    return result
+  }
+
   static getDefaultSchemaFilePath(name) {
     return '/packages/app/bundles/custom/objects/' + name + '.ts'
   }
@@ -89,7 +109,7 @@ export class ObjectModel extends ProtoModel<ObjectModel> {
     const obj = transformData(_data);
     return super.create(obj);
   }
-  
+
   update(updatedModel, data?) {
     const _data = data ?? updatedModel.data;
     const obj = transformData(_data);
