@@ -108,7 +108,7 @@ export const DatePickerInput = Input.Area.styleable<DatePickerInputProps>(
         <Input size={size} f={1}>
           <Input.Box>
             <Input.Section>
-              <Input.Area value={value} ref={ref} {...rest} />
+              <Input.Area value={value} f={1} ref={ref} {...rest} />
             </Input.Section>
             <Input.Section>
               <Input.Button
