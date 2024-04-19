@@ -1,14 +1,5 @@
+version: "3.8"
+
 services:
   admin:
     container_name: 'admin'
-    image: "protofy/workspace"
-    entrypoint: "yarn admin-prod"
-    environment:
-      - API_URL=http://proxy:8000
-      - NODE_ENV=production
-    volumes:
-      - ../../:/workspace
-      - protofy_modules:/workspace/node_modules
-volumes:
-  protofy_modules:
-    external: true

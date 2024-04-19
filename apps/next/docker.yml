@@ -1,17 +1,5 @@
+version: '3.8'
+
 services:
   site:
     container_name: 'site'
-    image: "protofy/workspace"
-    entrypoint: "yarn web:serve"
-    environment:
-      - API_URL=http://proxy:8000
-      - NODE_ENV=production
-    volumes:
-      - ../../:/workspace
-      - protofy_modules:/workspace/node_modules
-      - protofy_next:/workspace/apps/next/.next
-volumes:
-  protofy_modules:
-    external: true
-  protofy_next:
-    external: true

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  proxy:
+    build:
+      context: ../..  # This should be set to two levels up from where the Dockerfile is, if that's where the folders you want to copy are located.
+      dockerfile: apps/proxy/Dockerfile 
+    entrypoint: "yarn proxy-prod"
+    ports:
+      - 80:8000
+    environment:
+      - ADMIN_API_URL=http://admin-api:4002
+      - API_URL=http://api:4001
+      - SITE_URL=http://site:4000
+      - ADMIN_SITE_URL=http://admin:4003 
+      - DOCS_SITE_URL=http://docs:7700
+      - NODE_ENV=production

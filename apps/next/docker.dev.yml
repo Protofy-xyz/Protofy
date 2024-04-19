@@ -1,5 +1,8 @@
+version: "3.8"
+
 services:
   site:
+    image: "protofy/workspace"
     entrypoint: "yarn web"
     ports:
       - 3000:3000
@@ -8,3 +11,13 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+    volumes:
+      - ../../:/workspace
+      - protofy_modules:/workspace/node_modules
+      - protofy_next:/workspace/apps/next/.next
+      
+volumes:
+  protofy_modules:
+    external: true
+  protofy_next:
+    external: true

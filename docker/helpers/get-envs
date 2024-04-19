@@ -33,8 +33,14 @@ for dir in "${servicesDir[@]}"; do
   if [[ -f "${dir}/docker.yml" ]]; then
     compose_files+=" -f $dir/docker.yml"
   fi
-  if [[ "$DEV_MODE" == "true" && -f "${dir}/docker.dev.yml" ]]; then
-    compose_files+=" -f $dir/docker.dev.yml"
+  if [[ "$DEV_MODE" == "true" ]]; then
+    if [[ -f "${dir}/docker.dev.yml" ]]; then
+      compose_files+=" -f $dir/docker.dev.yml"
+    fi
+  else
+    if [[ -f "${dir}/docker.prod.yml" ]]; then
+      compose_files+=" -f $dir/docker.prod.yml"
+    fi
   fi
 done
 

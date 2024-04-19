@@ -34,8 +34,14 @@ for /d %%i in ("%appsDir%*") do (
   if exist "!dir!\docker.yml" (
     set "compose_files=!compose_files! -f !dir!\docker.yml"
   )
-  if "!DEV_MODE!"=="true" if exist "!dir!\docker.dev.yml" (
-    set "compose_files=!compose_files! -f !dir!\docker.dev.yml"
+  if "!DEV_MODE!"=="true" (
+    if exist "!dir!\docker.dev.yml" (
+      set "compose_files=!compose_files! -f !dir!\docker.dev.yml"
+    )
+  ) else (
+    if exist "!dir!\docker.prod.yml" (
+      set "compose_files=!compose_files! -f !dir!\docker.prod.yml"
+    )
   )
 )
 set "SERVICES_COMPOSE_FILES=!compose_files!"

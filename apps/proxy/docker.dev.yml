@@ -1,8 +1,11 @@
+version: '3.8'
+
 services:
   proxy:
+    image: "protofy/workspace"
+    entrypoint: "yarn proxy-dev"
     ports:
       - 8080:8080
-    entrypoint: "yarn proxy-dev"
     environment:
       - ADMIN_API_URL=http://admin-api:3002
       - API_URL=http://api:3001
@@ -10,3 +13,10 @@ services:
       - ADMIN_SITE_URL=http://admin:3003 
       - DOCS_SITE_URL=http://docs:7600
       - NODE_ENV=development
+    volumes:
+      - ../../:/workspace
+      - protofy_modules:/workspace/node_modules
+
+volumes:
+  protofy_modules:
+    external: true

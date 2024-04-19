@@ -1,14 +1,5 @@
+version: '3.8'
+
 services:
   docs:
     container_name: 'docs'
-    image: "protofy/workspace"
-    entrypoint: "yarn docs-prod"
-    environment:
-      - API_URL=http://proxy:8000
-      - NODE_ENV=production
-    volumes:
-      - ../../:/workspace
-      - protofy_modules:/workspace/node_modules
-volumes:
-  protofy_modules:
-    external: true
