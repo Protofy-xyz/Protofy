@@ -3,7 +3,7 @@ import { PanelLayout } from 'app/layout/PanelLayout'
 import { SelectList, useWorkspaces, useUserSettings, useSession, PanelMenu, MainPanel, JSONViewer, useTint, Chip, ActiveGroup, GroupButton, ButtonGroup, Search } from 'protolib'
 import Workspaces from 'app/bundles/workspaces'
 import { InteractiveIcon } from './InteractiveIcon'
-import { Activity, Radio, Tag, Hash, Microscope, Bug, Info, AlertCircle, XCircle, Bomb, Filter } from '@tamagui/lucide-icons'
+import { Activity, Radio, Tag, Hash, Microscope, Bug, Info, AlertCircle, XCircle, Bomb, Filter} from '@tamagui/lucide-icons'
 import { Tinted } from './Tinted'
 import { atom, useAtom } from 'jotai';
 import { useEffect, useState } from 'react'
@@ -39,12 +39,12 @@ export const RightPanelAtom = atom(20)
 export const BusMessages = atom([])
 
 const types = {
-  10: { name: "TRACE", color: "$green3" },
-  20: { name: "DEBUG", color: "$color4" },
-  30: { name: "INFO", color: "$color7" },
-  40: { name: "WARN", color: "$yellow7" },
-  50: { name: "ERROR", color: "$red7" },
-  60: { name: "FATAL", color: "$red10" }
+  10: { name: "TRACE", color: "$green3", icon: Microscope },
+  20: { name: "DEBUG", color: "$color4", icon: Bug },
+  30: { name: "INFO", color: "$color7", icon: Info },
+  40: { name: "WARN", color: "$yellow7", icon: AlertCircle  },
+  50: { name: "ERROR", color: "$red7", icon: XCircle },
+  60: { name: "FATAL", color: "$red10", icon: Bomb }
 }
 
 const MessageList = ({ data, topic }) => {
@@ -73,7 +73,7 @@ const MessageList = ({ data, topic }) => {
         key={JSON.stringify(data)}
         collapsible
         compact={false}
-        defaultCollapsed={true}
+        defaultCollapsed={false}
       //collapsedNodes={{0:{root: true}}}
       />
     </YStack>
@@ -187,7 +187,7 @@ export const LogPanel = () => {
 
     </XStack>
 
-    <ScrollView bc="transparent" f={1}>
+    <ScrollView bc="transparent" f={1} height={"calc( 100vh - 130px )"}>
       {filteredMessages.map((m, i) => {
         const data = parseMessage(m.message)
         return <XStack bc="transparent" hoverStyle={{ bc: "$" + tint + "4" }} key={i} btw={0} bbw={1} boc={"$color4"}>
