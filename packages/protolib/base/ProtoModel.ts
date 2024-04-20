@@ -40,7 +40,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         this.schema = schema
         this.objectSchema = ProtoSchema.load(this.schema)
         this.modelName = modelName?.toLowerCase() ?? 'unknown'
-        this.idField = this.objectSchema.is('id').getFirst('id') ?? 'id'
+        this.idField = this.objectSchema.is('id').getLast('id') ?? 'id'
         this.indexes = {
             primary: this.idField,
             keys: this.objectSchema.is('indexed').getFields()
@@ -94,7 +94,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     static getIdField() {
-        return this.getObjectSchema().is('id').getFirst('id') ?? 'id'
+        return this.getObjectSchema().is('id').getLast('id') ?? 'id'
     }
 
     getId() {

@@ -72,6 +72,16 @@ export class ProtoSchema {
         })
     }
 
+    getLast(field: string): string | undefined {
+        let lastKey: string | undefined = undefined;
+        Object.keys(this.shape).forEach((key) => {
+            if (this.shape[key]._def[field]) {
+                lastKey = key;
+            }
+        });
+        return lastKey;
+    }
+
     isDisplay(displayType) {
         const validFields = {}
         Object.keys(this.shape).forEach(k => {
