@@ -3,7 +3,7 @@ version: "3.8"
 services:
   admin:
     image: "protofy/workspace"
-    entrypoint: "cd apps/admin && yarn dev-standalone"
+    entrypoint: "sh -c 'cd apps/admin && yarn dev-standalone'"
     ports:
       - 3003:3003
     environment:

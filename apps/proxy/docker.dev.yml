@@ -3,7 +3,7 @@ version: '3.8'
 services:
   proxy:
     image: "protofy/workspace"
-    entrypoint: "yarn proxy-dev"
+    entrypoint: "sh -c 'cd apps/proxy && yarn dev-standalone'"
     ports:
       - 8080:8080
     environment:

@@ -5,7 +5,7 @@ services:
     build:
       context: ../..  # This should be set to two levels up from where the Dockerfile is, if that's where the folders you want to copy are located.
       dockerfile: apps/api/Dockerfile  # Adjust the path to where your Dockerfile is located relative to the context.
-    entrypoint: "cd apps/api && yarn prod-standalone"
+    entrypoint: "sh -c 'cd apps/api && yarn prod-standalone'"
     environment:
       - MQTT_URL=mqtt://admin-api:8883
       - API_URL=http://proxy:8000
