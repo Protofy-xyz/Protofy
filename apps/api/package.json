@@ -9,16 +9,14 @@
   ],
   "scripts": {
     "add-user": "ts-node src/cmd/addUser.ts",
+    "dev-standalone": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
+    "prod-standalone": "NODE_ENV=production ts-node --files --project tsconfig.json src/index.ts",
+    "package": "echo api has nothing to package",
     "prepare-dev": "node prepare.js",
-    "start": "NODE_ENV=production ts-node --files --project tsconfig.json src/index.ts",
-    "api-start-dev": "yarn service-start-dev --no-daemon",
-    "api-start": "yarn service-start --no-daemon",
-    "service-start": "NODE_ENV=production pm2 start pm2.config.js",
-    "service-start-dev": "NODE_ENV=development pm2 start pm2.config.js",
-    "logs": "pm2 logs",
-    "stop": "pm2 stop api",
-    "kill": "pm2 kill",
-    "status": "pm2 status api"
+    "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
+    "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
+    "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
+    "dev-service": "NODE_ENV=development pm2 start pm2.config.js"
   },
   "dependencies": {
     "aedes": "^0.50.0",

@@ -3,7 +3,7 @@ version: '3.8'
 services:
   docs:
     image: "protofy/workspace"
-    entrypoint: "yarn docs-dev"
+    entrypoint: "cd apps/docs && yarn dev-standalone"
     ports:
       - 7600:7600
     environment:

@@ -3,18 +3,15 @@
   "version": "1.0.0",
   "description": "Documentation service",
   "scripts": {
-    "dev": "next -p 7600",
+    "prepare-dev": "node prepare.js",
+    "prod-standalone": "NODE_ENV=production node entrypoint.js",
+    "dev-standalone": "FULLDEV=1 NODE_ENV=development node entrypoint.js",
+    "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
+    "dev-service": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js",
+    "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
+    "dev": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "build": "next build",
-    "package": "yarn build",
-    "start": "next start -p 7700",
-    "service-start": "NODE_ENV=production pm2 start pm2.config.js",
-    "service-start-dev": "NODE_ENV=development pm2 start pm2.config.js",
-    "docs-start": "yarn service-start --no-daemon",
-    "docs-start-dev": "yarn service-start-dev --no-daemon",
-    "logs": "pm2 logs",
-    "stop": "pm2 stop nextra",
-    "kill": "pm2 kill",
-    "status": "pm2 status nextra"
+    "package": "yarn build"
   },
   "dependencies": {
     "next": "^13.5.2",

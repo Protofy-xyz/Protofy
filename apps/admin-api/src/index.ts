@@ -100,14 +100,14 @@ const mqttServer = net.createServer((socket) => {
 const mqttPort = isProduction ? 8883 : 1883
 mqttServer.listen(mqttPort, () => {
   logger.debug({ service: { protocol: "mqtt", port: mqttPort } }, "Service started: MQTT")
+  generateEvent({
+    path: 'services/adminapi/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+    from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+    user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+    payload: {}, // event payload, event-specific data
+  }, getServiceToken())
 });
 
-generateEvent({
-  path: 'services/adminapi/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-  from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
-  user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-  payload: {}, // event payload, event-specific data
-}, getServiceToken())
 
 if(process.env.NODE_ENV != 'production') {
   const pathsToWatch = [

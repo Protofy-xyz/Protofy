@@ -8,15 +8,14 @@
     "src"
   ],
   "scripts": {
-    "prepare-dev": "node prepare.js",
-    "admin-api-start": "yarn service-start --no-daemon",
-    "admin-api-start-dev": "yarn service-start-dev --no-daemon",
-    "service-start": "NODE_ENV=production pm2 start pm2.config.js",
-    "service-start-dev": "NODE_ENV=development pm2 start pm2.config.js",
-    "logs": "pm2 logs",
-    "stop": "pm2 stop admin-api",
-    "kill": "pm2 kill",
-    "status": "pm2 status admin-api"
+    "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
+    "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
+    "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
+    "dev-service": "NODE_ENV=development pm2 start pm2.config.js",
+    "dev-standalone": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
+    "prod-standalone": "NODE_ENV=production ts-node --files --project tsconfig.json src/index.ts",
+    "package": "echo admin-api has nothing to package",
+    "prepare-dev": "node prepare.js"
   },
   "dependencies": {
     "chokidar": "^3.5.3",

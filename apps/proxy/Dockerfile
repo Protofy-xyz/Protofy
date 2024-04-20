@@ -6,7 +6,4 @@ WORKDIR /workspace
 
 COPY . .
 
-RUN yarn
-RUN yarn prepare-dev 
-RUN node prepare.js
-RUN yarn build
+RUN yarn && yarn prepare-dev && cd apps/proxy && yarn package

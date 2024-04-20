@@ -5,11 +5,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
-    "export": "next export",
+    "app-build": "next build",
+    "app-export": "next export",
     "electron": "NODE_ENV=development electron ./index.js",
-    "package": "yarn build && yarn export && yarn package-fast",
-    "package-fast": "electron-builder"
+    "app-package": "yarn build && yarn export && yarn package-fast",
+    "app-package-fast": "electron-builder"
   },
   "dependencies": {
     "express": "^4.18.2"

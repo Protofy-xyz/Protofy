@@ -6,7 +6,7 @@ WORKDIR /workspace
 
 COPY . .
 
-RUN yarn
+RUN yarn && yarn prepare-dev && cd apps/nextra && yarn package
 RUN yarn prepare-dev 
 RUN node prepare.js
 RUN yarn build

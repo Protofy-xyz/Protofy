@@ -12,11 +12,13 @@ if (!isFullDev) {
   app.use((req, res, next) => {
     const parts = req.path.split('/').filter(x => x).filter(x => x != '..').filter((x, i) => !(x=='admin'&&!i))
     var file = path.join('.', 'out', parts.join('/'));
-    console.log('file: ', file)
-    if (fs.existsSync(file)) {
+    //console.log('file: ', file)
+    if (fs.existsSync(file) && fs.lstatSync(file).isFile()) {
       res.sendFile(file, { root: '.' });
     } else {
       if(fs.existsSync(file+'.html')) {
+        res.sendFile(file+'.html', { root: '.' });
+      } else if(fs.existsSync(file+'/index.html')) {
         res.sendFile(file+'.html', { root: '.' });
       } else {
         res.sendFile('404.html', { root: './out' });

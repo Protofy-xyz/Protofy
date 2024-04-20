@@ -8,15 +8,8 @@ module.exports = {
             name: isProduction ? 'admin-api' : 'admin-api-dev',
             script: path.join(currentDir, '../../node_modules/ts-node/dist/bin.js'),
             args: '--files --project tsconfig.json src/index.ts',
-            watch: false, //isProduction ? false : ["src/**", "../../packages/protolib/**"],
+            watch: false,
             autorestart: !isProduction,
-            ignore_watch: ["src/**/*.spec.ts"],
-            watch_options: {
-                "followSymlinks": false,
-                "usePolling": true,
-                "alwaysStat": true,
-                "useFsEvents": false
-            },
             env: {
                 NODE_ENV: isProduction ? 'production' : 'development'
             },

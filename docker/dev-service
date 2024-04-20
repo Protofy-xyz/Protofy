@@ -1,4 +1,4 @@
 #!/bin/bash
 ./init
 ./build
-./start-dev-fast
+./dev-service-fast

@@ -3,7 +3,7 @@ version: '3.8'
 services:
   api:
     image: "protofy/workspace"
-    entrypoint: "yarn api-dev"
+    entrypoint: "cd apps/api && yarn dev-standalone"
     ports:
       - 3001:3001
     environment:

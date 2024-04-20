@@ -2,4 +2,4 @@
 source ./helpers/get-envs
 ./init
 ./build
-$DOCKER_COMPOSE_CMD -f web-build.yml up
+$DOCKER_COMPOSE_CMD -f package.yml up

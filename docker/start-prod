@@ -1,3 +1,0 @@
-#!/bin/bash
-source ./helpers/get-envs --prod # Run in PROD mode
-$DOCKER_COMPOSE_CMD -p protofy $SERVICES_COMPOSE_FILES up

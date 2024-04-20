@@ -6,8 +6,4 @@ WORKDIR /workspace
 
 COPY . .
 
-RUN yarn
-RUN yarn prepare-dev 
-RUN node prepare.js
-RUN yarn build
-RUN yarn web:build
+RUN yarn && yarn prepare-dev && cd apps/next && yarn package

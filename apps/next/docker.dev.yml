@@ -3,7 +3,7 @@ version: "3.8"
 services:
   site:
     image: "protofy/workspace"
-    entrypoint: "yarn web"
+    entrypoint: "cd apps/next && yarn dev-standalone"
     ports:
       - 3000:3000
     environment:

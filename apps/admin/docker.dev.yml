@@ -3,11 +3,11 @@ version: "3.8"
 services:
   admin:
     image: "protofy/workspace"
-    entrypoint: "yarn admin-dev"
+    entrypoint: "cd apps/admin && yarn dev-standalone"
     ports:
       - 3003:3003
     environment:
-      - API_URL=http://proxy:8000
+      - API_URL=http://proxy:8080
       - NODE_ENV=development
     volumes:
       - ../../:/workspace

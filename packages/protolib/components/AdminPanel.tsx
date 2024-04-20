@@ -47,12 +47,17 @@ const types = {
   60: { name: "FATAL", color: "$red10", icon: Bomb }
 }
 
-const MessageList = ({ data, topic }) => {
+const MessageList = React.memo(({ data, topic }) => {
   const from = topic.split("/")[1]
   const type = topic.split("/")[2]
   const Icon = types[type]?.icon
   const { level, time, pid, hostname, msg, name, ...cleanData} = data
-  return <XStack p="$3" ml={"$0"} ai="center" jc="center">
+  return <XStack 
+    p="$3" 
+    ml={"$0"}
+    ai="center"
+    jc="center"
+  >
     <YStack>
       <XStack left={-12} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" width="fit-content" ml={"$3"}>
         <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
@@ -75,7 +80,7 @@ const MessageList = ({ data, topic }) => {
       />
     </YStack>
   </XStack>
-}
+})
 
 export const LogPanel = () => {
   const [appState, setAppState] = useAtom(AppState)
@@ -130,6 +135,7 @@ export const LogPanel = () => {
       levels: levels.includes(level) ? levels.filter(l => l !== level) : [...levels, level],
     });
   };
+  const hoverStyle = React.useMemo(() => ({ bc: "$" + tint + "4" }), [tint]);
 
   return <YStack>
     <XStack ai="center" backgroundColor={'$backgroundTransparent'}>
@@ -187,7 +193,7 @@ export const LogPanel = () => {
     <ScrollView bc="transparent" f={1} height={"calc( 100vh - 130px )"}>
       {filteredMessages.map((m, i) => {
         const data = parseMessage(m.message)
-        return <XStack bc="transparent" hoverStyle={{ bc: "$" + tint + "4" }} key={i} btw={0} bbw={1} boc={"$color4"}>
+        return <XStack bc="transparent" hoverStyle={hoverStyle} key={i} btw={0} bbw={1} boc={"$color4"}>
           <Tinted>
             <MessageList data={data} topic={m.topic} />
           </Tinted>
