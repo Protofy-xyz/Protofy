@@ -50,27 +50,24 @@ const types = {
 const MessageList = ({ data, topic }) => {
   const from = topic.split("/")[1]
   const type = topic.split("/")[2]
-
+  const Icon = types[type]?.icon
+  const { level, time, pid, hostname, msg, name, ...cleanData} = data
   return <XStack p="$3" ml={"$0"} ai="center" jc="center">
     <YStack>
-      <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" width="fit-content" ml={"$3"}>
+      <XStack left={-12} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" width="fit-content" ml={"$3"}>
         <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
           {/* <Chip text={types[type]?.name+"("+topic+")"} color={types[type]?.color} h={25} /> */}
-          <Chip text={types[type]?.name} color={types[type]?.color} h={25} />
-          <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{from}</Text>
-        </XStack>
-      </XStack>
-      <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" width="fit-content" ml={"$3"}>
-        <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
-          <Hash color="var(--color7)" strokeWidth={2} size={20} />
-          <Text ml={"$2"} o={0.9} fontSize={14} fontWeight={"500"}>{data.msg}</Text>
+          <XStack mr={"$2"}><Icon size={20} strokeWidth={2} color={types[type]?.color} /></XStack>
+          {/* <Chip text={types[type]?.name} color={types[type]?.color} h={25} /> */}
+          <Text o={0.7} fontSize={14} fontWeight={"500"}>[{from}]</Text>
+          <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{data.msg}</Text>
         </XStack>
       </XStack>
       <JSONViewer
         onChange={() => { }}
         editable={false}
-        data={data}
-        key={JSON.stringify(data)}
+        data={cleanData}
+        key={JSON.stringify(cleanData)}
         collapsible
         compact={false}
         defaultCollapsed={false}
