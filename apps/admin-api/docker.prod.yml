@@ -4,7 +4,7 @@ services:
   admin-api:
     build:
       context: ../..  # This should be set to two levels up from where the Dockerfile is, if that's where the folders you want to copy are located.
-      dockerfile: apps/admin-api/Dockerfile 
+      dockerfile: apps/admin-api/Dockerfile
     entrypoint: "sh -c 'cd apps/admin-api && yarn prod-standalone'"
     environment:
       - MQTT_URL=mqtt://localhost:8883
