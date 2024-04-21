@@ -5,7 +5,7 @@ services:
     build:
       context: ../..  # This should be set to two levels up from where the Dockerfile is, if that's where the folders you want to copy are located.
       dockerfile: apps/proxy/Dockerfile 
-    entrypoint: "sh -c 'cd apps/proxy && yarn prod-standalone'"
+    entrypoint: "yarn prod-standalone"
     ports:
       - 80:8000
     environment:
