@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -f Dockerfile.prod -t protofy/protofy ../../
+docker build -f Dockerfile.prod -t protofy/protofy ../
