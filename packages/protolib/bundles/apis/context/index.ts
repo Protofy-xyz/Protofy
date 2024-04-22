@@ -14,12 +14,11 @@ export const automation = (app, cb, name)=>{
     })
 }
 
-export const fetch = async (method, url, key?, hasSarviceToken=false, data={})=>{
+export const fetch = async (method, url, data={}, cb, errorCb, hasSarviceToken=false)=>{
     var urlEnch = url
     if(hasSarviceToken) {
         urlEnch = url.includes("?")? `${url}&token=${getServiceToken()}`: `${url}?token=${getServiceToken()}`
     }
-
     
     let result
     if(method == "get") {
@@ -29,10 +28,12 @@ export const fetch = async (method, url, key?, hasSarviceToken=false, data={})=>
     }
 
     if(result.isError) {
+        if(errorCb) errorCb(result.error)
         throw result.error
     }
 
-    return key? result.data[key] : result.data
+    if(cb) cb(result.data)
+    return result.data
 }
 
 export const deviceMonitor = async (device, subsystem, monitor) => {
