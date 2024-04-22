@@ -1,4 +1,4 @@
-import { Node, NodeParams } from 'protoflow';
+import { Node, NodeParams, FlowPort, FallbackPort} from 'protoflow';
 import { Plug } from 'lucide-react';
 
 const Fetch = (node: any = {}, nodeData = {}) => {
@@ -6,11 +6,15 @@ const Fetch = (node: any = {}, nodeData = {}) => {
         <Node icon={Plug} node={node} isPreview={!node?.id} title='Fetch' id={node.id} color="#A5D6A7" skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Method', field: 'param-1', type: 'select', data: ["get", "post"], static: true }]} />
             <NodeParams id={node.id} params={[{ label: 'Path', field: 'param-2', type: 'input' }]} />
-            {
-                nodeData["param-1"] == "\"post\"" && <NodeParams id={node.id} params={[{ label: 'Body', field: 'param-5', type: 'input' }]} />
-            }
-            <NodeParams id={node.id} params={[{ label: 'Data Key', field: 'param-3', type: 'input' }]} />
-            <NodeParams id={node.id} params={[{ label: 'Use admin token', field: 'param-4', type: 'boolean' }]} />
+            <NodeParams id={node.id} params={[{ label: 'Post Data', field: 'param-3', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'Use service token', field: 'param-6', type: 'boolean' }]} />
+            <div style={{ marginTop: "120px" }}>
+                <FlowPort id={node.id} type='output' label='On Response (data)' style={{ top: '300px' }} handleId={'then'} />
+                <FallbackPort fallbackText="null" node={node} port={'param-4'} type={"target"} fallbackPort={'then'} portType={"_"} preText="async (data) => " postText="" />
+                <FlowPort id={node.id} type='output' label='On Error (error)' style={{ top: '350px' }} handleId={'error'} />
+                <FallbackPort fallbackText="null" node={node} port={'param-5'} type={"target"} fallbackPort={'error'} portType={"_"} preText="async (error) => " postText="" />
+            </div>
+
         </Node>
     )
 }
@@ -32,13 +36,10 @@ export default {
             to: 'context.fetch',
             "param-1": { value: "get", kind: "StringLiteral" },
             "param-2": { value: "/api/v1/", kind: "StringLiteral" },
-            "param-3": { value: "", kind: "StringLiteral" },
-            "param-4": {
-                value: false,
-                kind: "FalseKeyword"
-            },
-            "param-5": { value: "", kind: "StringLiteral" },
-            await: true
+            "param-3": { value: "null", kind: "Identifier" },
+            "param-4": { value: "null", kind: "Identifier" },
+            "param-5": { value: "null", kind: "Identifier" },
+            "param-6": { value: false, kind: "FalseKeyword" }
         }
     }
 }
