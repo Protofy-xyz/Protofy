@@ -44,10 +44,10 @@ const DevicePub = ({ node = {}, nodeData = {}, children }: any) => {
 
     return (
         <Node icon={Play} node={node} isPreview={!node.id} title='Device Publish' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
-            <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param-1', type: 'select', static: true, data: deviceNames }]} />
-            {deviceSubsystemsNames?.length ? <NodeParams id={node.id} params={[{ label: 'Component', field: 'param-2', type: 'select', static: true, data: deviceSubsystemsNames }]} /> : null}
-            {subsystemActionNames?.length ? <NodeParams id={node.id} params={[{ label: 'Action', field: 'param-3', type: 'select', static: true, data: subsystemActionNames }]} /> : null}
-            {!actionValue && deviceAction ?<NodeParams id={node.id} params={[{ label: 'Action payload', field: 'param-4', type: 'input', static: true }]} /> : null }
+            <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param-1', type: 'select', data: deviceNames }]} />
+            {deviceSubsystemsNames?.length ? <NodeParams id={node.id} params={[{ label: 'Component', field: 'param-2', type: 'select', data: deviceSubsystemsNames }]} /> : null}
+            {subsystemActionNames?.length ? <NodeParams id={node.id} params={[{ label: 'Action', field: 'param-3', type: 'select', data: subsystemActionNames }]} /> : null}
+            {!actionValue && deviceAction ?<NodeParams id={node.id} params={[{ label: 'Action payload', field: 'param-4', type: 'input' }]} /> : null }
         </Node>
     )
 }
