@@ -13,40 +13,62 @@ import { Paragraph, Stack, TextArea, XStack, YStack } from '@my/ui';
 import { getPendingResult } from "protolib/base";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
-import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl } from "../devicesUtils";
+import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic } from "../devicesUtils";
 
-
-const MqttTest = ({ onSetStage, onSetModalFeedback }) => {
-  const { message } = useSubscription(['device/compile']);
+const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
+  const { message } = useSubscription([compileMessagesTopic(compileSessionId)]);
   //keep a log of messages until success/failure
   //so we can inform the user of the problems if anything fails.
 
   const [messages, setMessages] = useState([])
+  var isDoneCompiling = false
   useEffect(() => {
-    console.log("Compile Message: ", message);
-    try {
-      if (message?.message) {
-        const data = JSON.parse(message?.message.toString());
-        if (data.event == 'exit' && data.code == 0) {
-          setMessages([])
-          console.log("Succesfully compiled");
-          onSetStage('upload')
-        } else if (data.event == 'exit' && data.code != 0) {
-          console.error('Error compiling', messages)
-          onSetModalFeedback({
-            message: <YStack f={1} height="100%">
-              <Paragraph color="$red8" mt="$3">Error compiling code.</Paragraph>
-              <Paragraph color="$red8">Please check your flow configuration.</Paragraph>
-              <TextArea textAlign="left" f={1} mt="$2" mb={"$5"}>
-                {messages.map((ele) => ele.data).join('')}
-              </TextArea>
-            </YStack>, details: { error: true }
-          })
+    if(stage == "compile"){
+      console.log("Compile Message: ", message);
+      try {
+        if (message?.message) {
+          const data = JSON.parse(message?.message.toString());
+          if(data.position!="undefined"){
+            console.log("DEV: ", data)
+            if(data.position && !isDoneCompiling){
+              onSetModalFeedback({
+                message: `Current position in queue: ${data.position}. Status: ${data.status}`,
+                details: { error: false }
+              });
+            }else{
+              onSetModalFeedback({
+                message: `Compiling..................`,
+                details: { error: false }
+              });
+              isDoneCompiling = true
+            }
+          }
+          
+          if (data.event == 'exit' && data.code == 0) {
+            isDoneCompiling = true
+            setMessages([])
+            console.log("Succesfully compiled");
+            onSetStage('upload')
+          } else if (data.event == 'exit' && data.code != 0) {
+            isDoneCompiling = true
+            console.error('Error compiling', messages)
+            onSetModalFeedback({
+              message: <YStack f={1} height="100%">
+                <Paragraph color="$red8" mt="$3">Error compiling code.</Paragraph>
+                <Paragraph color="$red8">Please check your flow configuration.</Paragraph>
+                <TextArea textAlign="left" f={1} mt="$2" mb={"$5"} minHeight={"200px"} value={
+                  messages.map((ele) => ele.message).join('')
+                }>
+                  
+                </TextArea>
+              </YStack>, details: { error: true }
+            })
+          }
+          setMessages([...messages, data])
         }
-        setMessages([...messages, data])
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   }, [message])
   return <></>
@@ -54,17 +76,17 @@ const MqttTest = ({ onSetStage, onSetModalFeedback }) => {
 
 const DevicesIcons = { name: Tag, deviceDefinition: BookOpen }
 
-const callText = async (url: string, method: string, params?: string, token?: string): Promise<any> => {
+const callText = async (url: string, method: string, params?: any, token?: string): Promise<any> => {
   var fetchParams: any = {
     method: method,
     headers: {
-      'Content-Type': 'text/plain;charset=UTF-8'
-    }
+      'Content-Type': 'application/json'
+    },
   }
 
 
   if (params) {
-    fetchParams.body = params;
+    fetchParams.body = JSON.stringify(params);
   }
 
   let separator = '?';
@@ -76,11 +98,6 @@ const callText = async (url: string, method: string, params?: string, token?: st
   console.log("Deff URL: ", defUrl)
   return fetch(defUrl, fetchParams)
     .then(function (response) {
-      if (response.status == 200) {
-        return "ok";
-      } console.log(response.status);
-      if (!response.ok) {
-      }
       return response;
     })
 }
@@ -98,9 +115,12 @@ export default {
     const [modalFeedback, setModalFeedback] = useState<any>()
     const [stage, setStage] = useState('')
     const yamlRef = React.useRef()
+    const [targetDevice, setTargetDevice] = useState('')
+    const [compileSessionId, setCompileSessionId] = useState('')
     // const { message } = useSubscription(['device/compile']);
 
     const flashDevice = async (deviceName, deviceDefinitionId) => {
+      setTargetDevice(deviceName)
       console.log("Flash device: ", { deviceName, deviceDefinitionId });
 
       const response = await API.get('/adminapi/v1/deviceDefinitions/' + deviceDefinitionId);
@@ -143,14 +163,16 @@ export default {
       }
       //const deviceObj = eval(deviceCode)
     }
-    const sendMessage = async (notUsed) => {
-      await fetch(compileActionUrl())
+    const sendMessage = async () => {
+      const response = await fetch(compileActionUrl(targetDevice, compileSessionId))
+      const data = await response.json()
+      console.log("🤖 ~ sendMessage ~ data:", data)
     }
 
     const compile = async () => {
-      setModalFeedback({ message: `Compiling firmware...`, details: { error: false } })
-      const compileMsg = { type: "spawn", configuration: "test.yaml" };
-      sendMessage(JSON.stringify(compileMsg));
+      // setModalFeedback({ message: `Compiling firmware...`, details: { error: false } })
+      // const compileMsg = { type: "spawn", configuration: +".yaml" };
+      sendMessage();
     }
 
     const flashCb = (msgObj) => {
@@ -165,21 +187,25 @@ export default {
     }
 
     const saveYaml = async (yaml) => {
-      console.log("Save Yaml")
-      console.log(await callText(postYamlApiEndpoint(), 'POST', yaml));
+      const response = await callText(postYamlApiEndpoint(targetDevice), 'POST', {"yaml": yaml})
+      const data = await response.json()
+      console.log("Save Yaml, compileSessionId: ", data.compileSessionId);
+      setCompileSessionId(data.compileSessionId)
     }
 
     useEffect(() => {
       const process = async () => {
         if (stage == 'yaml') {
           await saveYaml(yamlRef.current)
-          setStage('compile')
+          setTimeout(() => {
+            setStage('compile')            
+          }, 1*1000);//Todo remove setTimeout
         } else if (stage == 'compile') {
           console.log("stage - compile")
           await compile()
         } else if (stage == 'write') {
           try {
-            await flash(flashCb)
+            await flash(flashCb, targetDevice, compileSessionId)
             setStage('idle')
           } catch (e) { flashCb({ message: 'Error writing the device. Check that the USB connection and serial port are correctly configured.', details: { error: true } }) }
         } else if (stage == 'upload') {
@@ -242,7 +268,7 @@ export default {
     return (<AdminPage title="Devices" pageSession={pageSession}>
       <Connector brokerUrl= {onlineCompilerSecureWebSocketUrl()}>
         <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
-        <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} />
+        <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} compileSessionId={compileSessionId} stage={stage} />
       </Connector>
       <DataView
         defaultView={"grid"}
