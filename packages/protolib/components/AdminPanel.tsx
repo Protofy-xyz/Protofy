@@ -3,7 +3,7 @@ import { PanelLayout } from 'app/layout/PanelLayout'
 import { SelectList, useWorkspaces, useUserSettings, useSession, PanelMenu, MainPanel, JSONViewer, useTint, Chip, ActiveGroup, GroupButton, ButtonGroup, Search } from 'protolib'
 import Workspaces from 'app/bundles/workspaces'
 import { InteractiveIcon } from './InteractiveIcon'
-import { Activity, Radio, Tag, Hash, Microscope, Bug, Info, AlertCircle, XCircle, Bomb, Filter} from '@tamagui/lucide-icons'
+import { Activity, Radio, Tag, Ban, Microscope, Bug, Info, AlertCircle, XCircle, Bomb, Filter } from '@tamagui/lucide-icons'
 import { Tinted } from './Tinted'
 import { atom, useAtom } from 'jotai';
 import { useEffect, useState } from 'react'
@@ -42,7 +42,7 @@ const types = {
   10: { name: "TRACE", color: "$green3", icon: Microscope },
   20: { name: "DEBUG", color: "$color4", icon: Bug },
   30: { name: "INFO", color: "$color7", icon: Info },
-  40: { name: "WARN", color: "$yellow7", icon: AlertCircle  },
+  40: { name: "WARN", color: "$yellow7", icon: AlertCircle },
   50: { name: "ERROR", color: "$red7", icon: XCircle },
   60: { name: "FATAL", color: "$red10", icon: Bomb }
 }
@@ -51,9 +51,9 @@ const MessageList = React.memo(({ data, topic }) => {
   const from = topic.split("/")[1]
   const type = topic.split("/")[2]
   const Icon = types[type]?.icon
-  const { level, time, pid, hostname, msg, name, ...cleanData} = data
-  return <XStack 
-    p="$3" 
+  const { level, time, pid, hostname, msg, name, ...cleanData } = data
+  return <XStack
+    p="$3"
     ml={"$0"}
     ai="center"
     jc="center"
@@ -100,7 +100,7 @@ export const LogPanel = () => {
   }, [message])
 
   useEffect(() => {
-    setFilteredMessages(messages.filter((m:any) => {
+    setFilteredMessages(messages.filter((m: any) => {
       const topic = m?.topic
       const from = topic.split("/")[1]
       //@ts-ignore
@@ -152,10 +152,15 @@ export const LogPanel = () => {
         }}
         placeholder='Filter logs...'
         bw={0}
-        paddingLeft={40}
+        paddingLeft={80}
       />
       <Popover placement="bottom-start">
         <Popover.Trigger position='absolute'>
+          <InteractiveIcon size={20} Icon={Ban} onPress={() => setMessages([])} />
+        </Popover.Trigger>
+      </Popover>
+      <Popover placement="bottom-start">
+        <Popover.Trigger position='absolute' left={35}>
           <InteractiveIcon size={20} Icon={Filter} />
         </Popover.Trigger>
         <Popover.Content padding={0} space={0} bw={1} boc="$borderColor" bc={"$color1"} >
@@ -187,7 +192,6 @@ export const LogPanel = () => {
           </ButtonGroup>
         </Popover.Content>
       </Popover>
-
     </XStack>
 
     <ScrollView bc="transparent" f={1} height={"calc( 100vh - 130px )"}>
