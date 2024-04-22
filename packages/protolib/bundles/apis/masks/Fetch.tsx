@@ -13,7 +13,7 @@ const Fetch = (node: any = {}, nodeData = {}) => {
         const fetchData = async () => {
             const response = await API.get('/api/v1/endpoints');
             if (response.isLoaded) {
-                setEndPoints(response.data)
+                setEndPoints(response.data.filter((endpoint: any) => endpoint.path !== '/api/v1/endpoints'))
             }
         }
         fetchData()
@@ -73,7 +73,7 @@ export default {
             "param-3": { value: "null", kind: "Identifier" },
             "param-4": { value: "null", kind: "Identifier" },
             "param-5": { value: "null", kind: "Identifier" },
-            "param-6": { value: false, kind: "FalseKeyword" }
+            "param-6": { value: "false", kind: "FalseKeyword" }
         }
     }
 }
