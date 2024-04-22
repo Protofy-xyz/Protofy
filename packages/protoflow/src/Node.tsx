@@ -60,7 +60,7 @@ export const DeleteButton = ({ id, left = false, field }) => {
 }
 
 
-export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlur, field, children, style = {}, editing = false }: any) => {
+export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlur, field, children, style = {}, editing = false, options=[]}: any) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const { setNodes } = useProtoflow()
@@ -125,6 +125,7 @@ export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlu
                 value={tmpInputValue}
                 placeholder="default"
                 onChange={t => setTmpInputValue(t.target.value)}
+                options={options}
             />
             {children}
         </div>
