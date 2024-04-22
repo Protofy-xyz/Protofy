@@ -1,9 +1,12 @@
 import { Node, NodeParams, FlowPort, FallbackPort} from 'protoflow';
-import { Plug } from 'lucide-react';
+import { Send } from 'lucide-react';
+import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { filterCallback, restoreCallback } from 'protoflow';
 
 const Fetch = (node: any = {}, nodeData = {}) => {
+    const color = useColorFromPalette(20)
     return (
-        <Node icon={Plug} node={node} isPreview={!node?.id} title='Fetch' id={node.id} color="#A5D6A7" skipCustom={true}>
+        <Node icon={Send} node={node} isPreview={!node?.id} title='Fetch' id={node.id} color={color} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Method', field: 'param-1', type: 'select', data: ["get", "post"], static: true }]} />
             <NodeParams id={node.id} params={[{ label: 'Path', field: 'param-2', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Post Data', field: 'param-3', type: 'input' }]} />
@@ -27,6 +30,16 @@ export default {
             node.type == "CallExpression"
             && (nodeData.to == 'context.fetch')
         )
+    },
+    filterChildren: (node, childScope, edges)=> {
+        childScope = filterCallback("4", "then")(node,childScope,edges)
+        childScope = filterCallback("5", "error")(node,childScope,edges)
+        return childScope
+    },
+    restoreChildren: (node, nodes, originalNodes, edges, originalEdges) => {
+        let result = restoreCallback("4")(node, nodes, originalNodes, edges, originalEdges)
+        result = restoreCallback("5")(node, result.nodes, originalNodes, result.edges, originalEdges)
+        return result
     },
     getComponent: Fetch,
     category: "api",
