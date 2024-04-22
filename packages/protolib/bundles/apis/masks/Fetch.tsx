@@ -1,14 +1,35 @@
-import { Node, NodeParams, FlowPort, FallbackPort} from 'protoflow';
+import { Node, NodeParams, FlowPort, FallbackPort } from 'protoflow';
 import { Send } from 'lucide-react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { filterCallback, restoreCallback } from 'protoflow';
+import { useEffect, useState } from 'react';
+import { API } from 'protolib'
 
 const Fetch = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(20)
+    const [endPoints, setEndPoints] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await API.get('/api/v1/endpoints');
+            if (response.isLoaded) {
+                setEndPoints(response.data)
+            }
+        }
+        fetchData()
+    }, [])
+
     return (
         <Node icon={Send} node={node} isPreview={!node?.id} title='Fetch' id={node.id} color={color} skipCustom={true}>
-            <NodeParams id={node.id} params={[{ label: 'Method', field: 'param-1', type: 'select', data: ["get", "post"], static: true }]} />
-            <NodeParams id={node.id} params={[{ label: 'Path', field: 'param-2', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'Method', field: 'param-1', type: 'select', data: ["get", "post"] }]} />
+            <NodeParams id={node.id} params={[
+                {
+                    label: 'Target',
+                    field: 'param-2',
+                    type: 'input',
+                    data: { options: endPoints.map(endpoint => endpoint.path) }
+                }
+            ]} />
             <NodeParams id={node.id} params={[{ label: 'Post Data', field: 'param-3', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Use service token', field: 'param-6', type: 'boolean' }]} />
             <div style={{ marginTop: "120px" }}>
@@ -31,9 +52,9 @@ export default {
             && (nodeData.to == 'context.fetch')
         )
     },
-    filterChildren: (node, childScope, edges)=> {
-        childScope = filterCallback("4", "then")(node,childScope,edges)
-        childScope = filterCallback("5", "error")(node,childScope,edges)
+    filterChildren: (node, childScope, edges) => {
+        childScope = filterCallback("4", "then")(node, childScope, edges)
+        childScope = filterCallback("5", "error")(node, childScope, edges)
         return childScope
     },
     restoreChildren: (node, nodes, originalNodes, edges, originalEdges) => {
