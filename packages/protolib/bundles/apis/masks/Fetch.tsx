@@ -28,6 +28,17 @@ export default {
     category: "api",
     keywords: ["api", "rest", "http", "automation", 'fetch', 'get', 'post'],
     getInitialData: () => {
-        return { to: 'context.fetch', "param-1": { value: "get", kind: "StringLiteral" }, "param-2": { value: "/api/v1/", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": { value: false, kind: "FalseKeyword", "param-5": { value: "", kind: "StringLiteral" }, await: true } }
+        return {
+            to: 'context.fetch',
+            "param-1": { value: "get", kind: "StringLiteral" },
+            "param-2": { value: "/api/v1/", kind: "StringLiteral" },
+            "param-3": { value: "", kind: "StringLiteral" },
+            "param-4": {
+                value: false,
+                kind: "FalseKeyword"
+            },
+            "param-5": { value: "", kind: "StringLiteral" },
+            await: true
+        }
     }
 }
