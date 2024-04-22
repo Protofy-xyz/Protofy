@@ -5,6 +5,7 @@ import {createPeriodicSchedule} from 'protolib/bundles/automations/periodicSched
 import { sendMailWithResend } from 'protolib/bundles/resend/context'
 import object from 'protolib/bundles/objects/context'
 import flow from 'protolib/bundles/flow/context'
+import os from 'protolib/bundles/os/context'
 export default {
     onEvent,
     emitEvent,
@@ -16,5 +17,6 @@ export default {
     createPeriodicSchedule,
     sendMailWithResend,
     flow,
-    object
+    object,
+    os
 }

@@ -12,6 +12,7 @@ import scheduleMasks from 'protolib/bundles/automations/masks';
 import resendMasks from 'protolib/bundles/resend/masks';
 import flowMasks from 'protolib/bundles/flow/masks';
 import objectMasks from 'protolib/bundles/objects/masks';
+import osMasks from 'protolib/bundles/os/masks'
 
 const paths = {
     devices: [
@@ -52,7 +53,8 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...baseMasks.api,
         ...scheduleMasks,
         ...resendMasks,
-        ...objectMasks
+        ...objectMasks,
+        ...osMasks
     ]
     return []
 }

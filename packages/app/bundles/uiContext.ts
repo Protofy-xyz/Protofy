@@ -2,6 +2,7 @@ import { fetch, actionFetch, navigate, onRender, actionNavigate } from 'protolib
 import flow from 'protolib/bundles/flow/context'
 import deviceContext from 'protolib/bundles/devices/context/ui'
 import object from 'protolib/bundles/objects/context'
+import os from 'protolib/bundles/os/context'
 export const context = {
     fetch,
     actionFetch,
@@ -10,5 +11,6 @@ export const context = {
     object,
     onRender,
     actionNavigate,
-    ...deviceContext
+    ...deviceContext,
+    os
 }
