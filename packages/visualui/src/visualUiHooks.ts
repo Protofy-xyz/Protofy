@@ -147,13 +147,11 @@ export function experimentalComms() {
 // toggle communication mode visualUi
 export function useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, topicData, contextAtom) {
     if (experimentalComms()) {
-        console.log('protocraft experimental communications')
         const {lastEvent} = useVisualUi(contextAtom)
         useEffect(() => {
             console.log('craftEvent: ', lastEvent)
         }, [lastEvent])
     } else {
-        console.log('protocraft legacy communications')
         useEffect(() => {
             const flowData = topicData
             const action = flowData.action

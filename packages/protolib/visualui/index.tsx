@@ -115,7 +115,7 @@ export const layoutPalette = {
   ...cw(HStack, 'ArrowRightSquare', 'HStack', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Spacer, 'Maximize2', 'Spacer', { size: '$8' }),
-  ...cw(ProtoView, 'SquareAsterisk', 'ProtoView', { viewId: "default" }, {}, { placeholder: <BasicPlaceHolder /> }),
+  ...cw(ProtoView, 'SquareAsterisk', 'ProtoView', { viewId: "default", currentView: { value: "currentView", kind: 'Identifier' } }, {}, { placeholder: <BasicPlaceHolder /> }),
 }
 
 export const basicPalette = {

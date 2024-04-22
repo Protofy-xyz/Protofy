@@ -16,7 +16,6 @@ export const VisualUiFlows = (props) => {
     // flows comms custom hook
     function useFlowsComms({ edges, nodeData, nodes, setEdges, setNodesData, deleteNodes, setNodes, createNode, setNodeData, _customComponents, onSaveNodes, flowId, data }) {
         if (experimentalComms()) {
-            console.log('flows: experimental communications')
             const {lastEvent} = useVisualUi(props.contextAtom)
             useEffect(() => {
                 console.log('lastEvent: ', lastEvent)
@@ -61,7 +60,6 @@ export const VisualUiFlows = (props) => {
                 }
             }, [lastEvent])
         } else {
-            console.log('flows: legacy communications')
             // TODO: JOIN DATA TOPIC USE EFFECTS
             useEffect(() => {
                 const uiData = data[flowId + '/ui']
@@ -88,7 +86,7 @@ export const VisualUiFlows = (props) => {
                         const addedNodeData = Object.keys(initialNodeData).reduce((total, key) => {
                             var value: any = initialNodeData[key]
                             var keyName = `prop-${key}`
-                            const valueKind = getKindName(value)
+                            const valueKind = _data?.kinds[value] ?? getKindName(value)
 
                             var propValue = { key, value, kind: valueKind }
 

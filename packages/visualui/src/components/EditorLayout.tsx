@@ -148,16 +148,6 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
     let newNodes = prevNodes;
     return newNodes
   }
-  useEffect(() => {
-    if (selectedNodeId) publish("zoomToNode", { id: selectedNodeId })
-  }, [selectedNodeId])
-
-  // udpate state based on topics
-  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'], contextAtom, metadata.context)
-
-  useEffect(() => {
-    actions.setOptions(options => options['skipTopic'] = false)
-  }, [previousNodes])
 
   const loadEditorNodes = async (cnt) => {
     const source: Source = Source.parse(cnt, metadata)
@@ -189,6 +179,34 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
     }
   }
 
+  const updatesPropsWithContext = () => {
+    const currNodes = JSON.parse(query.serialize())
+    const nodesArr = Object.keys(currNodes)
+    const ndsWithContext = nodesArr.filter(n => currNodes[n].custom?.context && Object.keys(currNodes[n].custom?.context).length > 0)
+    if (ndsWithContext.length == 0) return
+
+    //updates identifiers values from context
+    actions.setOptions(options => options['skipTopic'] = true)
+    ndsWithContext.forEach(nd => {
+      var ctx = currNodes[nd].custom?.context ?? {}
+      Object.keys(ctx).forEach(prop => {
+        actions.setProp(nd, (props) => props[prop] = metadata.context[prop])
+      })
+    })
+    setPreviousNodes(JSON.parse(query.serialize()))
+  }
+
+  useEffect(() => {
+    if (selectedNodeId) publish("zoomToNode", { id: selectedNodeId })
+  }, [selectedNodeId])
+
+  // udpate state based on topics
+  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'], contextAtom, metadata.context)
+
+  useEffect(() => {
+    actions.setOptions(options => options['skipTopic'] = false)
+  }, [previousNodes])
+
   useKeypress(['z', 'Z', 's', 'S', 'c', 'C', 'Delete', 'Backspace'], (event) => {
     const isEditorVisible = paper.current?.getBoundingClientRect()?.height > 0
     if (!isEditorVisible) return
@@ -204,8 +222,6 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
       return
     }
   });
-
-
 
   useEffect(() => {
     const reload = async (retry: number) => {
@@ -228,20 +244,7 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
   }, [currentPageContent])
 
   useUpdateEffect(() => {
-    const currNodes = JSON.parse(query.serialize())
-    const nodesArr = Object.keys(currNodes)
-    const ndsWithContext = nodesArr.filter(n => currNodes[n].custom?.context)
-    if (ndsWithContext.length == 0) return
-    
-    //updates identifiers values from context
-    actions.setOptions(options => options['skipTopic'] = true)
-    ndsWithContext.forEach(nd => {
-      var ctx = currNodes[nd].custom?.context
-      Object.keys(ctx).forEach(prop => {
-        actions.setProp(nd, (props) => props[prop] = metadata.context[prop])
-      })
-    })
-    setPreviousNodes(JSON.parse(query.serialize()));
+    updatesPropsWithContext()
   }, [metadata.context])
 
   return (

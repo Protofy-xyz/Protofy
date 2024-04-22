@@ -88,7 +88,6 @@ export const VariableDeclarationListNodeFactory = (declarationType) => {
             let typeKey = `type${i + 1}`
             let opTriviaKey = `opTrivia${i+1}`
             let value = dumpConnection(node, "target", valkey, PORT_TYPES.data, getValueTrivia(data, valkey), edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-            console.log('value in vardec: ['+value+']')
             return total + 
                     data[param] + 
                     getTsType(data[typeKey]) + 

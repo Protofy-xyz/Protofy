@@ -59,15 +59,29 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
         }
     }
 
+    var data = { context: {}, kinds: {}, props: {} }
+
+    Object.keys(defaultProps).forEach(prop => {
+        var value = defaultProps[prop].value
+        if (defaultProps[prop].kind && value) {
+            data.kinds[value] = defaultProps[prop].kind
+            data.context[value] = value
+            data.props[value] = value
+        } else {
+            data.props[prop] = defaultProps[prop]
+        }
+    }, {})
+
     UiComponent.craft = {
-        related: {
-        },
+        related: {},
         custom: {
             icon,
             ...importInfo,
-            ...uiData['custom']
+            context: data.context,
+            kinds: data.kinds,
+            ...uiData['custom'],
         },
-        props: defaultProps,
+        props: data.props,
         displayName: name,
         rules: {
             ...defaultRules,
