@@ -4,8 +4,7 @@ import { Reply } from 'lucide-react';
 const ApiResponse = ({ node = {}, nodeData = {}, children }: any) => {
 
     const nodeParams: Field[] = [
-        { label: 'Response text', field: 'param-1', type: 'input', static: true },
-
+        { label: 'Response', field: 'param-1', type: 'input'}
     ] as Field[]
 
     return (
