@@ -169,11 +169,41 @@ if (value > 0){
                     lambda:
 `int value = atoi(x.c_str());
 id(${this.name}).report_position(value);
+id(${this.name}).set_target(value);
 ESP_LOGD("Report position", "${this.name} stepper report position set to: %d",  value);
 `,
                   }
                 }
               ]
+            }
+          },
+          {
+            name: 'mqtt',
+            config: {
+              on_message: [
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/move_steps`,
+                  then: {
+                    lambda:
+`int value = atoi(x.c_str());
+id(${this.name}).report_position(0);
+id(${this.name}).set_target(value);
+ESP_LOGD("Report position", "${this.name} stepper move X steps set to: %d",  value);
+`,
+                  }
+                }
+              ]
+            }
+          },
+          {
+            name: 'binary_sensor',
+            config: { 
+              platform: "template",
+              name: `${this.name}_has_reached_target`,
+              id: `${this.name}_has_reached_target`,
+              lambda:
+`return id(${this.name}).has_reached_target();
+`,
             }
           },
         ]
@@ -239,6 +269,16 @@ ESP_LOGD("Report position", "${this.name} stepper report position set to: %d",  
               },
             },
             {
+              name: 'move_steps',
+              label: 'Move X steps',
+              description: 'Move stepper X steps',
+              endpoint: "/"+this.type+"/"+this.name+"/move_steps",
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str'
+              },
+            },
+            {
               name: 'hold_motor',
               label: 'Hold motor',
               description: "Holds the motor power, so it doesn't move",
@@ -260,7 +300,16 @@ ESP_LOGD("Report position", "${this.name} stepper report position set to: %d",  
                 value: 'ON',
               },
             },
-          ]
+          ],
+          monitors:[
+            {
+                name: "has_reached_target",
+                label: "Has reached target",
+                description: "Has reached target",
+                endpoint: "/binary_sensor/"+`${this.name}_has_reached_target`+"/state",
+                connectionType: "mqtt",
+            }
+        ]
         }
       }
 }
