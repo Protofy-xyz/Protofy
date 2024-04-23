@@ -4,7 +4,7 @@ import { DataCard } from '../../components/DataCard'
 import AsyncView from '../../components/AsyncView'
 import { useFileFromAPI } from '../../lib/useFileFromAPI'
 import { IconContainer } from '../../components/IconContainer'
-import { Save, Workflow, Code } from '@tamagui/lucide-icons';
+import { Save, Workflow, Code, Ban } from '@tamagui/lucide-icons';
 import { useThemeSetting } from '@tamagui/next-theme'
 // import GLTFViewer from '../../adminpanel/features/components/ModelViewer'
 import { Monaco } from '../../components/Monaco'
@@ -54,7 +54,7 @@ const JSONViewer = ({ extraIcons, name, path }) => {
   </AsyncView>
 }
 
-type SaveButtonStates = "available" | "unavailable" | "loading"
+type SaveButtonStates = "available" | "unavailable" | "loading" | "error"
 
 const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path, getContent, positionStyle, onSave = () => { } }) => {
   const [state, setState] = useState(defaultState)
@@ -64,7 +64,12 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
     onSave()
   }
 
+  const onEventCrash = () => {
+    setState("error")
+  }
+
   useEventEffect(onEvent, { path: 'services/api/start' })
+  useEventEffect(onEventCrash, { path: 'services/api/crash' })
 
   useInterval(() => {
     if (checkStatus() && state == 'unavailable') setState('available')
@@ -82,10 +87,11 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
 
   return (
     <XStack position="absolute" {...positionStyle}>
-      {state != "loading" && <IconContainer disabled={state == 'unavailable'} onPress={_onSave}>
-        <Save color="var(--color)" size={"$1"} />
+      {<IconContainer disabled={state == 'unavailable'} onPress={_onSave}>
+        {state != 'error' && state !== 'loading' && <Save color="var(--color)" size={"$1"} />}
+        {state == 'error' && <Ban color="var(--red10)" size={"$1"} />}
+        {state == "loading" && <Spinner color={"$color"} opacity={0.5} size={17} />}
       </IconContainer>}
-      {state == "loading" && <Spinner color={"$color"} opacity={0.5} size={17} />}
     </XStack>
   );
 };
