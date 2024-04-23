@@ -85,6 +85,7 @@ export * from "./lib/analytics";
 export * from "./components/Popover"
 export * from "./lib/usePendingEffect";
 export * from "./lib/useOnIntersecting";
+export * from "./lib/useComposedState";
 export { default as Center } from './components/Center';
 export * from './components/LogoIcon';
 export * from './components/PanelMenuItem'
