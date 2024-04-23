@@ -14,15 +14,16 @@ type OptionProps = {
 type MyInputProps = {
     options: string[],
     children?: any,
-    listProps?: any
+    listProps?: any,
+    state?: any
 }
 
 const MyOption = ({ value }: OptionProps) => <option value={value} />
 
-const MyInput = ({ children, listProps = {}, options = [], ...props }: MyInputProps & any) => {
+const MyInput = ({ children, listProps = {}, options = [], state, ...props }: MyInputProps & any) => {
     const inputListId = 'input-select-' + uuidv4()
     return <>
-        <input list={inputListId} {...props} style={{ fontSize: props.fontSize, ...props.style }} />
+        <input value={state?.value} onChange={e => state?.set(e.target.value)} list={inputListId} {...props} style={{ fontSize: props.fontSize, ...props.style }} />
         <div {...listProps} style={{maxHeight: '40px'}}>
             <datalist className='datalist' id={inputListId}>
                 {children}
