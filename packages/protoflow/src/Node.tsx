@@ -174,7 +174,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
             return myVar;
     }
 
-    const [checked, setChecked] = React.useState(stringToBolean(nodeData[param.field]));
+    const [checked, setChecked] = React.useState(stringToBolean(getFieldValue(param.field, nodeData)));
     //end of boolean
 
     //range
@@ -293,7 +293,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                     <input type='checkbox'
                         onChange={() => {
                             dataNotify({ id: id, paramField: param.field, newValue: !checked });
-                            setNodeData(id, { ...nodeData, [param.field]: getDataFromField(!checked, param.field, nodeData) })
+                            setNodeData(id, { ...nodeData, [param.field]: getDataFromField(!checked, param.field, nodeData, {}, 'FalseKeyword') })
                             setChecked(!checked)
                         }}
                         checked={checked ? true : false}

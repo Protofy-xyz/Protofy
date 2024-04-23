@@ -4,13 +4,29 @@ import {getLogger } from 'protolib/base';
 
 const logger = getLogger()
 
-export const automation = (app, cb, name)=>{
+export const automationResponse = (res, data) => {
+    res.send({result: data})
+}
+
+export const automation = (app, cb, name, disableAutoResponse?)=>{
+    if(!name) {
+        console.error("Automation name is required, doing nothing")
+        return
+    }
+
+    if(!cb) {
+        console.error("Automation callback is required, doing nothing")
+        return
+    }
+
     const url = "/api/v1/automations/"+name;
 
-    app.get(url,(req,res)=>{
+    app.get(url, async (req,res)=>{
         logger.info({name, params: req.query}, "Automation executed: "+name)
-        cb(req.query)
-        res.send('"OK"');
+        await cb(req.query, res)
+        if(!disableAutoResponse) {
+            automationResponse(res, "Automation executed")
+        }
     })
 }
 

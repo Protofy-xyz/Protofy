@@ -15,13 +15,14 @@ export const getFieldType = (field): 'detailed' | 'literal' => {
     return type
 }
 
-export const getDataFromField = (fieldValue, field = undefined, nodeData = undefined, metadata = {}) => {
+export const getDataFromField = (fieldValue, field = undefined, nodeData = undefined, metadata = {}, forceKind?) => {
     if (!field) return fieldValue
 
     const prefix = field.split('-')[0]
     const type = getFieldType(prefix)
+
     var data = nodeData[field]
-    const kind = data?.kind ?? metadata['kind'] ?? "StringLiteral"
+    const kind = forceKind ?? data?.kind ?? metadata['kind'] ?? "StringLiteral"
 
     var nodeDataField
 
