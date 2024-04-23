@@ -2,9 +2,9 @@ import { getLogger } from 'protolib/base/logger';
 
 const logger = getLogger()
 
-type operationType = 'equals' | 'strict equals' | 'greater' | 'greater or equals' | 'lesser' | 'lesser or equals'
+type operationType = 'equals' | 'strict equals' | 'greater' | 'greater or equals' | 'lesser' | 'lesser or equals' | 'includes'
 
-export const operations = ['equals', 'greater', 'greater or equals', 'lesser', 'lesser or equals', 'strict equals']
+export const operations = ['equals', 'greater', 'greater or equals', 'lesser', 'lesser or equals', 'strict equals', 'includes']
 export async function flowSwitch(operator1, operator2, operation:operationType, thenCb, elseCb, errorCb) {
     const _thenCb = thenCb ? thenCb : () => {}
     const _elseCb = elseCb ? elseCb : () => {}
@@ -49,6 +49,12 @@ export async function flowSwitch(operator1, operator2, operation:operationType, 
     
             case 'lesser or equals':
                 if(operator1 <= operator2) {
+                    return _thenCb()
+                } else {
+                    return _elseCb()
+                }
+            case 'includes':
+                if(operator1.includes && operator1.includes(operator2)) {
                     return _thenCb()
                 } else {
                     return _elseCb()
