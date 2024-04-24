@@ -163,6 +163,7 @@ export const basicPalette = {
       ]
     }
   }, {}, true),
+  ...cw(Input, 'TextCursorInput', 'Input', { state: { value: "cs.inputValue", kind: "PropertyAccessExpression" } }),
 }
 
 export const miscellanyPalette = {
@@ -229,7 +230,6 @@ export const miscellanyPalette = {
   ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HR, 'MinusSquare', 'HR'),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
-  ...cw(Input, 'Type', 'Input'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }, {}, {}, true),
   ...cw(Link, 'Link', 'Link', { href: "/hello", children: "hello" }),
   ...cw(LinkGroup, 'Group', 'LinkGroup', { href: "/hello", children: "hello" }),

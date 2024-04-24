@@ -64,9 +64,9 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
     Object.keys(defaultProps).forEach(prop => {
         var value = defaultProps[prop].value
         if (defaultProps[prop].kind && value) {
-            data.kinds[value] = defaultProps[prop].kind
-            data.context[value] = value
-            data.props[value] = value
+            data.kinds[prop] = defaultProps[prop].kind
+            data.context[prop] = value
+            data.props[prop] = value
         } else {
             data.props[prop] = defaultProps[prop]
         }
