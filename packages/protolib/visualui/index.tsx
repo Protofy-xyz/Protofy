@@ -38,6 +38,7 @@ import HorizontalBox from '../components/HorizontalBox'
 import HoveredGroup from '../components/HoveredGroup'
 import { HR } from '../components/HR'
 import { IconStack } from '../components/IconStack'
+import { Input } from '../components/Input'
 import Image from '../components/Image'
 import { ItemCard } from '../components/ItemCard'
 import { ButtonLink, Link, ParagraphLink } from '../components/Link'
@@ -228,6 +229,7 @@ export const miscellanyPalette = {
   ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HR, 'MinusSquare', 'HR'),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
+  ...cw(Input, 'Type', 'Input'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }, {}, {}, true),
   ...cw(Link, 'Link', 'Link', { href: "/hello", children: "hello" }),
   ...cw(LinkGroup, 'Group', 'LinkGroup', { href: "/hello", children: "hello" }),
