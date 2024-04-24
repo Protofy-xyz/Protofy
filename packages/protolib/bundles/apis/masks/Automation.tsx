@@ -1,7 +1,6 @@
-import { Node, getFieldValue, FlowPort, NodeParams, FallbackPort, Button } from 'protoflow';
+import { Node, getFieldValue, FlowPort, NodeParams, FallbackPort, Button, filterCallback, restoreCallback } from 'protoflow';
 import { API } from 'protolib'
 import { Plug } from 'lucide-react';
-import { filterCallback, restoreCallback } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 
 const Automation = (node: any = {}, nodeData = {}) => {
