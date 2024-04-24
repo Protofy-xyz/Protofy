@@ -10,17 +10,15 @@ export const useComposedState = (initialStates = {}) => {
       }));
   };
 
-  const composedState : any = new Proxy({}, {
-      get: function(target, prop) {
-          if (statesObj[prop]) {
-              return statesObj[prop];
-          } else {
-              const newState = { value: '', set: (val) => updateState(prop, val) };
-              updateState(prop, newState.value);
-              return newState;
-          }
-      }
-  });
+  const composedState = (key) => {
+    if (statesObj[key]) {
+      return statesObj[key];
+    } else {
+      const newState = { value: '', set: (val) => updateState(key, val) };
+      updateState(key, newState.value);
+      return newState;
+    }
+  };
 
   var states : any = Object.keys(statesObj).reduce((acc, key) => {
       return { ...acc, [key]: statesObj[key].value };
