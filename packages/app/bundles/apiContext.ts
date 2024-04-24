@@ -6,6 +6,7 @@ import { sendMailWithResend } from 'protolib/bundles/resend/context'
 import object from 'protolib/bundles/objects/context'
 import flow from 'protolib/bundles/flow/context'
 import os from 'protolib/bundles/os/context'
+import utils from 'protolib/bundles/utils/context'
 export default {
     onEvent,
     emitEvent,
@@ -19,5 +20,6 @@ export default {
     sendMailWithResend,
     flow,
     object,
-    os
+    os,
+    utils
 }
