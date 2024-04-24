@@ -160,7 +160,20 @@ export function getKindName(value) {
 
 function dumpAttributeData(attrData: { kind: string, value: any }): any {
     if (!attrData) return
-    var value = dumpArgumentsData(attrData)
+    const expressionKind = attrData.kind
+    var value = attrData.value
+    switch (expressionKind) {
+        case 'StringLiteral':
+            return '"' + value + '"'
+        case 'NumericLiteral':
+        case 'TrueKeyword':
+        case 'FalseKeyword':
+        case 'Identifier':
+        case 'PropertyAccessExpression':
+            break
+        default:
+            return
+    }
     return "{" + value + "}"
 }
 
