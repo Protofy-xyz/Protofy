@@ -1,4 +1,5 @@
 import ApiResponse from './ApiResponse';
+import ApiResponseFile from './ApiResponseFile'
 import ApiMask from './ApiMask';
 import Fetch from './Fetch'
 import Logger from './Logger';
@@ -13,6 +14,7 @@ const apiMasks = [
     Fetch,
     Logger,
     ApiResponse,
+    ApiResponseFile,
     AutomationResponse,
     DeviceAction,
     DeviceMonitor

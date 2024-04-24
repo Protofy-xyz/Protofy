@@ -19,7 +19,7 @@ export default {
     type: 'CallExpression',
     category: "api",
     keywords: ["api", "rest", "http", "trigger", "automation", 'response'],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('res.send'), //TODO: Change output function name
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to == 'res.send', //TODO: Change output function name
     getComponent: (node, nodeData, children) => <ApiResponse node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'res.send', "param-1": { value: "Response", kind: "StringLiteral" } } }
 }
