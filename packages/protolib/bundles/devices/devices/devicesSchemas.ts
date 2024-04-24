@@ -4,7 +4,7 @@ import { AutoModel, ProtoModel, SessionDataType } from 'protolib/base'
 import path from 'path'
 
 export const DevicesSchema = Schema.object({
-  name: z.string().hint("Device name").static().regex(/^[a-z0-9]+$/, "Only lower case chars or numbers").id().search(),
+  name: z.string().hint("Device name").static().regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").id().search(),
   deviceDefinition: z.string().hidden(),
   substitutions: z.record(z.string().optional(), z.any().optional()).optional().hidden(),
   subsystem: z.record(z.string(), z.any()).optional().hidden(),
