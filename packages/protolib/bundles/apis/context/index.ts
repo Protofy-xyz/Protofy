@@ -52,6 +52,10 @@ export const fetch = async (method, url, data={}, cb, errorCb, hasSarviceToken=f
     return result.data
 }
 
+export const executeAutomation = async (automation, cb, errorCb, hasSarviceToken=false)=>{
+    return fetch("get", '/api/v1/automations/'+automation, {}, cb, errorCb, hasSarviceToken)
+}
+
 export const deviceMonitor = async (device, subsystem, monitor) => {
     const url = `/adminapi/v1/devices/${device}/subsystems/${subsystem}/monitors/${monitor}?token=${getServiceToken()}`
     let result = await API.get(url)
