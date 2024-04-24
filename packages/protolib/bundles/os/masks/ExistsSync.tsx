@@ -11,7 +11,7 @@ const PathExists = ({ node = {}, nodeData = {}, children }: any) => {
         {
             "label": "path",
             "field": "param-1",
-            "type": "output"
+            "type": "input"
         }
     ]
 
