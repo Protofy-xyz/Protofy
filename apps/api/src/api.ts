@@ -64,7 +64,7 @@ const mqtt = getMQTTClient('api', getServiceToken(), async () => {
         })
     }
 
-    const devicePub = async (deviceName, component, componentName, payload?) => {
+    const devicePub = async (deviceName, component, componentName, payload?, cb?, errorCb?) => {
         var data = null;
         const SERVER = getApiUrl()
         try {
@@ -72,6 +72,7 @@ const mqtt = getMQTTClient('api', getServiceToken(), async () => {
             const res = await fetch(urlDevices);
             data = await res.json();
         } catch (err) {
+            errorCb && errorCb(err)
             return;
         }
         const devices = data.items
@@ -85,14 +86,21 @@ const mqtt = getMQTTClient('api', getServiceToken(), async () => {
             const actions = subsystem.actions
             const action = actions.filter((e) => { return e.name == componentName })[0]
             // console.log("action: ", action)
-            if (!action) return
+            if (!action) {
+                errorCb && errorCb("Action not found")
+                return;
+            }
             endpoint = action.endpoint
             type = action.payload.type;
             value = action.payload.value
         } else {
+            errorCb && errorCb("Subsystem not found")
             return;
         }
-        if (!endpoint) return
+        if (!endpoint) {
+            errorCb && errorCb("Endpoint not found")
+            return;
+        }
         if (payload) {
             topicPub(getPeripheralTopic(deviceName, endpoint), String(payload))
         } else {
@@ -103,6 +111,7 @@ const mqtt = getMQTTClient('api', getServiceToken(), async () => {
                 topicPub(getPeripheralTopic(deviceName, endpoint), JSON.stringify(value))
             }
         }
+        if (cb) cb()
     }
 
     try {
