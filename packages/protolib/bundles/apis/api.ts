@@ -107,7 +107,7 @@ const getDB = (path, req, session) => {
       }
       //link in index.ts
       const sourceFile = getSourceFile(indexFile(getRoot(req)))
-      addImportToSourceFile(sourceFile, codeName + 'Api', ImportType.DEFAULT, './' + codeName)
+      addImportToSourceFile(sourceFile, codeName + 'Api', ImportType.DEFAULT, './' + codeNameLowerCase)
 
       const arg = getDefinition(sourceFile, '"apis"')
       if (!arg) {

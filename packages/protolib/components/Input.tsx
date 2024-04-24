@@ -7,6 +7,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { inputSizeVariant } from '../helpers/InputHelpers'
 import '../styles/styles.css'
+import { forwardRef } from 'react';
 
 type OptionProps = {
     value: string
@@ -20,10 +21,10 @@ type MyInputProps = {
 
 const MyOption = ({ value }: OptionProps) => <option value={value} />
 
-const MyInput = ({ children, listProps = {}, options = [], state, ...props }: MyInputProps & any) => {
+const MyInput = forwardRef(({ children, listProps = {}, options = [], state, ...props }: MyInputProps & any, ref) => {
     const inputListId = 'input-select-' + uuidv4()
     return <>
-        <input value={state?.value} onChange={e => state?.set(e.target.value)} list={inputListId} {...props} style={{ fontSize: props.fontSize, ...props.style }} />
+        <input ref={ref} value={state?.value} onChange={e => state?.set(e.target.value)} list={inputListId} {...props} style={{ fontSize: props.fontSize, ...props.style }} />
         <div {...listProps} style={{maxHeight: '40px'}}>
             <datalist className='datalist' id={inputListId}>
                 {children}
@@ -31,7 +32,7 @@ const MyInput = ({ children, listProps = {}, options = [], state, ...props }: My
             </datalist>
         </div>
     </>
-}
+})
 
 export const defaultStyles = {
     size: '$true',

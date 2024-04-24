@@ -7,7 +7,7 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 
 import React, { useState } from 'react'
 import { Theme, YStack, Text, XStack, Paragraph } from "@my/ui"
-import { UIWrapLib, UIWrap, withSession, Page, useEditor, API, SSR } from "protolib"
+import { UIWrapLib, UIWrap, withSession, Page, useEditor, API, SSR, useComposedState } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 import { context } from "app/bundles/uiContext";
@@ -16,6 +16,8 @@ import { useRouter } from "next/router";
 const isProtected = Protofy("protected", {{protected}})
 
 const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
+    const { cs, states } = useComposedState();
+
     const router = useRouter();
     context.onRender(() => {
 
