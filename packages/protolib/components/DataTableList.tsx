@@ -98,6 +98,7 @@ export const DataTableList = ({
                     </Theme>, () => "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
                         <Stack mt={"$2"}>
                             <Checkbox
+                                id={`select-checkbox-${model.load(row).getId()}`}
                                 focusStyle={{ outlineWidth: 0 }}
                                 onPress={() => {
                                     const getCurrentId = (item) => model.load(item).getId();
