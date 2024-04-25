@@ -11,7 +11,7 @@ const Automation = (node: any = {}, nodeData = {}) => {
             <NodeParams id={node.id} params={[{ label: 'Manual response', field: 'param-4', type: 'boolean', static: true }]} />
             <div style={{marginTop: '20px'}}>
                 <FlowPort id={node.id} type='input' label='On run (params)' style={{ top: '200px' }} handleId={'request'} />
-                <FallbackPort node={node} port={'param-2'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (params, res) => " postText="" />
+                <FallbackPort node={node} fallbackText={'null'} port={'param-2'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (params, res) => " postText="" />
             </div>
 
             <Button style={{ marginTop: '60px' }} label="Run" onPress={() => {
