@@ -119,49 +119,15 @@ export default {
     const [compileSessionId, setCompileSessionId] = useState('')
     // const { message } = useSubscription(['device/compile']);
 
-    const flashDevice = async (deviceName, deviceDefinitionId) => {
-      setTargetDevice(deviceName)
-      console.log("Flash device: ", { deviceName, deviceDefinitionId });
-
-      const response = await API.get('/adminapi/v1/deviceDefinitions/' + deviceDefinitionId);
-      if (response.isError) {
-        alert(response.error)
-        return;
-      }
-      const deviceDefinition = response.data
-      const response1 = await API.get('/adminapi/v1/deviceBoards/' + deviceDefinition.board);
-      if (response1.isError) {
-        alert(response1.error)
-        return;
-      }
-      console.log("---------deviceDefinition----------", deviceDefinition)
-      deviceDefinition.board = response1.data
-      const jsCode = deviceDefinition.config.components;
-      const deviceCode = 'device(' + jsCode.replace(/;/g, "") + ')';
-      console.log("-------DEVICE CODE------------", deviceCode)
-      const deviceObj = eval(deviceCode)
-      const componentsTree = deviceObj.getComponentsTree(deviceName, deviceDefinition)
-      const yaml = deviceObj.dump("yaml").replace(/'@/g,"").replace(/@'/g,"")
-
-      const subsystems = deviceObj.getSubsystemsTree(deviceName, deviceDefinition)
-      const deviceObject = await API.get("/adminapi/v1/devices/" + deviceName)
-      await API.post("/adminapi/v1/devices/" + deviceName + "/yamls", { yaml })
-      if (deviceObject.isError) {
-        alert(deviceObject.error)
-        return;
-      }
-      deviceObject.data.subsystem = subsystems
-      API.post("/adminapi/v1/devices/" + deviceName, deviceObject.data)
-      console.log("ComponentsTree: ", componentsTree)
-      console.log("Subsystems: ", subsystems)
-      yamlRef.current = yaml
+    const flashDevice = async (device) => {
+      setTargetDevice(device.name)
+      yamlRef.current = await device.getYaml()
       setShowModal(true)
       try {
         setStage('yaml')
       } catch (e) {
         console.error('error writting firmware: ', e)
       }
-      //const deviceObj = eval(deviceCode)
     }
     const sendMessage = async () => {
       const response = await fetch(compileActionUrl(targetDevice, compileSessionId))
@@ -260,7 +226,7 @@ export default {
       {
         text: "Upload",
         icon: UploadCloud,
-        action: (element) => {flashDevice(element.data.name, element.data.deviceDefinition) },
+        action: (element) => {flashDevice( element ) },
         isVisible: (element) => true
       }
     ]
@@ -281,7 +247,7 @@ export default {
         columns={DataTable2.columns(
           DataTable2.column("name", row => row.name, "name"),
           DataTable2.column("device definition", row => row.deviceDefinition, "deviceDefinition"),
-          DataTable2.column("config", row => row.config, false, (row) => <ButtonSimple onPress={(e) => { flashDevice(row.name, row.deviceDefinition); }}>Upload</ButtonSimple>)
+          DataTable2.column("config", row => row.config, false, (row) => <ButtonSimple onPress={(e) => { flashDevice(DevicesModel.load(row)) }}>Upload</ButtonSimple>)
         )}
         extraFieldsForms={{
           deviceDefinition: z.union(deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => z.literal(DeviceDefinitionModel.load(i).getId())) : []).after('name'),
@@ -304,7 +270,7 @@ export default {
                 : (
                   <>
                     <Paragraph mt="20px" ml="20px" size={20}>{'You need to upload the device'}</Paragraph>
-                    <ButtonSimple mt="20px" ml="20px" width={100} onPress={() => { flashDevice(data.name, data.deviceDefinition); }}>Upload</ButtonSimple>
+                    <ButtonSimple mt="20px" ml="20px" width={100} onPress={() => { flashDevice(DevicesModel.load(data)); }}>Upload</ButtonSimple>
                   </>
                 )
               }

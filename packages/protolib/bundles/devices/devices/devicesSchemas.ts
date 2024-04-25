@@ -1,6 +1,6 @@
 import { z } from "protolib/base";
 import { Schema } from 'protolib/base'
-import { AutoModel, ProtoModel, SessionDataType } from 'protolib/base'
+import { AutoModel, ProtoModel, SessionDataType, API } from 'protolib/base'
 import path from 'path'
 
 export const DevicesSchema = Schema.object({
@@ -130,6 +130,46 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
     if(subsystemData) {
       return new DeviceSubsystem(this.data.name, subsystemData)
     }
+  }
+
+  async getYaml(){
+    let yaml = undefined
+    try {
+      const response = await API.get('/adminapi/v1/deviceDefinitions/' + this.data.deviceDefinition);
+      if (response.isError) {
+        console.log(response.error)
+        return;
+      }
+      const deviceDefinition = response.data
+      const response1 = await API.get('/adminapi/v1/deviceBoards/' + deviceDefinition.board);
+        if (response1.isError) {
+          console.log(response1.error)
+          return;
+        }
+      console.log("---------deviceDefinition----------", deviceDefinition)
+      deviceDefinition.board = response1.data
+      const jsCode = deviceDefinition.config.components;
+      const deviceCode = 'device(' + jsCode.replace(/;/g, "") + ')';
+      console.log("-------DEVICE CODE------------", deviceCode)
+      const deviceObj = eval(deviceCode)
+      const componentsTree = deviceObj.getComponentsTree(this.data.name, deviceDefinition)
+      yaml = deviceObj.dump("yaml").replace(/'@/g,"").replace(/@'/g,"")
+
+      const subsystems = deviceObj.getSubsystemsTree(this.data.name, deviceDefinition)
+      const deviceObject = await API.get("/adminapi/v1/devices/" + this.data.name)
+      await API.post("/adminapi/v1/devices/" + this.data.name + "/yamls", { yaml })
+      if (deviceObject.isError) {
+        console.error(deviceObject.error)
+        return;
+      }
+      deviceObject.data.subsystem = subsystems
+      API.post("/adminapi/v1/devices/" + this.data.name, deviceObject.data)
+      console.log("ComponentsTree: ", componentsTree)
+      console.log("Subsystems: ", subsystems)
+    } catch (error) {
+      console.log("Cant get device, error: ", error)
+    }
+    return yaml
   }
 
   create(data?):DevicesModel {
