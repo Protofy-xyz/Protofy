@@ -163,7 +163,46 @@ describe("Test admin capabilities", () => {
                     await protoBrowser.waitForElement('#admin-dataview-add-btn');
                     await protoBrowser.clickElement(`#more-btn-${pageName}`)
                     await protoBrowser.clickElement(`#more-btn-${pageName}-delete`)
-                    protoBrowser.waitForElement(`#pages-datatable-${pageName}`, 1000).then().catch(e => expect(e).toBeTruthy());
+                    await protoBrowser.clickElement(`#alert-dlg-accept`)
+                    await protoBrowser.navigateToAdminSection('pages')
+                    expect(await protoBrowser.waitDeletedElement(`#pages-datatable-${pageName}`, 4000)).toBe(true)
+                }, 60000)
+            })
+            describe("test multiple page delete using top row delete button", () => {
+                beforeEach(async () => {
+                    await protoBrowser.navigateToAdminSection('pages')
+                    await protoBrowser.getEditableObjectCreate()
+                }, 60000)
+                it("should be able to create a blank page", async () => {
+                    // Select template
+                    await protoBrowser.clickElement(`#pages-template-${PAGE_TEMPLATES.BLANK}`)
+                    await protoBrowser.clickElement(`#admin-pages-add-btn`)
+                    // Configure page
+                    await protoBrowser.fillEditableObjectInput('name', "testpagemultipledelete1")
+                    await protoBrowser.fillEditableObjectInput('route', "testpagemultipledelete1")
+                    await protoBrowser.clickElement(`#admin-pages-add-btn`)
+                    expect(await protoBrowser.getElementText(`#pages-datatable-testpagemultipledelete1`)).toBe("testpagemultipledelete1");
+                }, 60000)
+                it("should be able to create a blank page", async () => {
+                    // Select template
+                    await protoBrowser.clickElement(`#pages-template-${PAGE_TEMPLATES.BLANK}`)
+                    await protoBrowser.clickElement(`#admin-pages-add-btn`)
+                    // Configure page
+                    await protoBrowser.fillEditableObjectInput('name', "testpagemultipledelete2")
+                    await protoBrowser.fillEditableObjectInput('route', "testpagemultipledelete2")
+                    await protoBrowser.clickElement(`#admin-pages-add-btn`)
+                    expect(await protoBrowser.getElementText(`#pages-datatable-testpagemultipledelete2`)).toBe("testpagemultipledelete2");
+                }, 60000)
+                it("should be able to delete 2 pages from top menu", async () => {
+                    await protoBrowser.navigateToAdminSection('pages')
+                    await protoBrowser.waitForElement('#admin-dataview-add-btn');
+                    await protoBrowser.clickElement(`#select-checkbox-testpagemultipledelete1`)
+                    await protoBrowser.clickElement(`#select-checkbox-testpagemultipledelete2`)
+                    await protoBrowser.clickElement(`#more-btn-pages`)
+                    await protoBrowser.clickElement(`#more-btn-pages-delete`)
+                    await protoBrowser.clickElement(`#alert-dlg-accept`)
+                    await protoBrowser.navigateToAdminSection('pages')
+                    expect(await protoBrowser.waitDeletedElement(`#pages-datatable-testpagemultipledelete1`, 4000) && await protoBrowser.waitDeletedElement(`#pages-datatable-testpagemultipledelete2`, 4000)).toBe(true)
                 }, 60000)
             })
         })
