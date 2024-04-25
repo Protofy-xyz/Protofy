@@ -65,6 +65,15 @@ export class ProtoBrowser {
         return page.$(locator)
     }
 
+    async waitDeletedElement(locator: string, timeout: number= 60000, options: Object = {}){
+        try{
+            await this.waitForElement(locator, timeout, options)
+            return false;
+        }catch(e){
+            return true;
+        }
+    }
+
     async clickElement(locator: any, timeout?: number): Promise<any> {
         await this.waitForElement(locator, timeout)
         await this.getPage().click(locator, { timeout })
