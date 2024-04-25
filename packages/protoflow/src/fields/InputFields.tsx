@@ -13,16 +13,19 @@ export default ({ nodeData = {}, item, node }) => {
     const setNodeData = useFlowsStore(state => state.setNodeData)
 
     const { field, label, type, menuActions } = item
+    
+    const pre = item.pre ? item.pre : (str) => str
+    const post = item.post ? item.post : (str) => str
 
     const data = nodeData[field]
     const value = getFieldValue(field, nodeData)
 
-    const [tmpValue, setTmpValue] = useState(value)
+    const [tmpValue, setTmpValue] = useState(pre(value))
 
     const kindValue = data?.kind ?? "StringLiteral"
 
     const onValueChange = (val) => {
-        setNodeData(node.id, { ...nodeData, [field]: getDataFromField(val, field, nodeData) })
+        setNodeData(node.id, { ...nodeData, [field]: getDataFromField(post(val), field, nodeData) })
     }
 
     const onToggleType = () => {
