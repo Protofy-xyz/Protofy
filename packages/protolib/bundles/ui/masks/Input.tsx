@@ -15,7 +15,8 @@ const InputMask = ({ node = {}, nodeData = {}, children }: any) => {
             "type": "input",
             "section": "logic",
             "pre": str => str.replace('cs.', ''),
-            "post": str => 'cs.' + str
+            "post": str => 'cs.' + str,
+            "disableToggle": true
         },
         {
             "label": "theme",

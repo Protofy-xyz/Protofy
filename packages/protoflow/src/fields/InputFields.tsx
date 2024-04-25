@@ -16,6 +16,7 @@ export default ({ nodeData = {}, item, node }) => {
     
     const pre = item.pre ? item.pre : (str) => str
     const post = item.post ? item.post : (str) => str
+    const disableToggle = item.disableToggle
 
     const data = nodeData[field]
     const value = getFieldValue(field, nodeData)
@@ -49,9 +50,9 @@ export default ({ nodeData = {}, item, node }) => {
                     {getTypeByKind(kindValue) && isDetailedType
                         ? <div
                             style={{ padding: '8px', justifyContent: 'center', position: 'absolute', zIndex: 100, cursor: 'pointer' }}
-                            onClick={onToggleType}
+                            onClick={disableToggle ? null : onToggleType}
                         >
-                            {React.createElement(getKindIcon(kindValue), { size: 16, color: useTheme('interactiveColor') })}
+                            {React.createElement(getKindIcon(kindValue), { size: 16, color: disableToggle ? useTheme('disableTextColor') : useTheme('interactiveColor') })}
                         </div>
                         : <></>}
                     <Input
