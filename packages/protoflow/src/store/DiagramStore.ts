@@ -3,7 +3,8 @@ import {
     useReactFlow, Node, Edge, useNodesState,
     useEdgesState, EdgeChange, NodeChange,
     addEdge as addReactFlowEdge, Connection,
-    useEdges
+    useEdges,
+    useNodes
 } from 'reactflow';
 
 type OnChange<ChangesType> = (changes: ChangesType[]) => void;
@@ -98,7 +99,10 @@ export const useProtoEdgesState = (initialItems: Edge<any>[], extraData: Diagram
 }
 
 export const useProtoEdges = (): Edge<unknown>[] => {
-    return useEdges()
+    const nodes = useNodes()
+    const edges = useEdges()
+
+    return edges.filter(e => nodes.find(n => n.id === e.source) && nodes.find(n => n.id === e.target))
 }
 
 export const addProtoEdge = (edgeParams: Edge | Connection, edges: Edge[]) => {
