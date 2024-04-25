@@ -1,4 +1,4 @@
-export {default as Node, FlowPort, NodeParams, HandleOutput} from './Node'
+export {default as Node, FlowPort, NodeParams, HandleOutput, NodeOutput} from './Node'
 import {Field as IField} from './Node'
 export type Field = IField
 export {default as FlowFactory} from './Flow'
