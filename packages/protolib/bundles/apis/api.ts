@@ -97,7 +97,7 @@ const getDB = (path, req, session) => {
       })
 
       if (result.isError) {
-        throw result.error
+        throw result.error?.error ?? result.error
       }
 
       //add autoapi feature in object if needed

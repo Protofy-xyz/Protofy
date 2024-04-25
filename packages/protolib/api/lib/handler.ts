@@ -45,12 +45,12 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
         if (e instanceof ZodError) {
             const err = e.flatten()
             res.status(500).send(err)
-            return;
-        }
-        if(e.toString() == 'E_PERM') {
+        } else if(e.toString() == 'E_PERM') {
             res.status(403).send({error: e.toString()})
         } else if(e.toString() == 'E_AUTH') {
             res.status(401).send({error: e.toString()})
+        } else if(e.toString() == 'File already exists') {
+            res.status(409).send({error: e.toString()})
         } else {
             res.status(500).send({error: e.toString()})
         }
