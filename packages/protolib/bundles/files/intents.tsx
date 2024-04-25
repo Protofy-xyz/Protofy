@@ -261,5 +261,9 @@ export const processFilesIntent = ({ action, domain, data }: IntentType) => {
     }
   } else if (type == 'image') {
     return { component: <img src={url} />, widget: 'image' }
+  } else if( type == 'video') {
+    return { component: <video src={url} controls />, widget: 'video' }
+  } else if( type == 'audio') {
+    return { component: <audio src={url} controls />, widget: 'audio' }
   }
 }
