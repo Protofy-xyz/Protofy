@@ -48,7 +48,7 @@ class RelayComponent {
               then: [
                 {"switch.turn_on": this.name},
                 //{delay: `!lambda "return atoi(x.c_str());"`},
-                {delay: "@!lambda "+ `"return atoi(x.c_str());"@`},
+                {delay: '@!lambda return atoi(x.c_str());@'},
                 {"switch.turn_off": this.name},
               ],
 //               then: {

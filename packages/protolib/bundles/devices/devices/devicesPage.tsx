@@ -120,7 +120,7 @@ export default {
     // const { message } = useSubscription(['device/compile']);
 
     const flashDevice = async (device) => {
-      setTargetDevice(device.name)
+      setTargetDevice(device.data.name)
       yamlRef.current = await device.getYaml()
       setShowModal(true)
       try {

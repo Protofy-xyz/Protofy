@@ -25,31 +25,33 @@ export const Sidebar = ({
         }
         return s;
     };
+    
+    const atoms = palettes.atoms;
 
-    const allDropableCraftComponents = Object.keys(palettes).reduce((total, paletteName) => {
-        const paletteElements = palettes[paletteName] ? Object.keys(palettes[paletteName]).filter(e => !palettes[paletteName][e].craft?.custom?.hidden).reduce((totalComp, componentName) => (
-            { ...totalComp, [componentName]: { dropable: true, element: palettes[paletteName][componentName], icon: getIcon(palettes[paletteName][componentName]) } }
+    const allDropableAtoms = Object.keys(atoms).reduce((total, paletteName) => {
+        const paletteAtoms = atoms[paletteName] ? Object.keys(atoms[paletteName]).filter(e => !atoms[paletteName][e].craft?.custom?.hidden).reduce((totalComp, componentName) => (
+            { ...totalComp, [componentName]: { dropable: true, element: atoms[paletteName][componentName], icon: getIcon(atoms[paletteName][componentName]) } }
         ), {}) : { ...total }
-        return { ...total, [paletteName]: paletteElements }
+        return { ...total, [paletteName]: paletteAtoms }
     }, {})
 
-    const filteredDropableComponents = searchValue ? Object.keys(allDropableCraftComponents).reduce((total, paletteName) => {
-        const paletteElements = allDropableCraftComponents[paletteName]
-        const paletteElementsName = Object.keys(paletteElements)
-        const filteredPaletteElements = paletteElementsName.filter(c => c.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+    const filteredDropableComponents = searchValue ? Object.keys(allDropableAtoms).reduce((total, paletteName) => {
+        const paletteAtoms = allDropableAtoms[paletteName]
+        const paletteAtomsName = Object.keys(paletteAtoms)
+        const filteredPaletteAtoms = paletteAtomsName.filter(c => c.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
             .reduce((result, key) => {
-                return { ...result, [key]: paletteElements[key] }
+                return { ...result, [key]: paletteAtoms[key] }
             }, {})
         var palette = {}
-        if (Object.keys(filteredPaletteElements).length) {
+        if (Object.keys(filteredPaletteAtoms).length) {
             palette = {
-                [paletteName]: filteredPaletteElements
+                [paletteName]: filteredPaletteAtoms
             }
         }
         return { ...total, ...palette }
-    }, {}) : allDropableCraftComponents
+    }, {}) : allDropableAtoms
 
-    const palettesArr = Object.keys(filteredDropableComponents).filter(p => p != "craft");
+    const atomsPalettesArr = Object.keys(filteredDropableComponents).filter(p => p != "craft");
 
     function handleResize(e = {} as any) {
         const viewportHeight = window.innerHeight * 0.95;
@@ -93,7 +95,7 @@ export const Sidebar = ({
                     </div>
                     <div className={'visualui-sidebar-list'} style={{ overflow: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }} >
                         {
-                            palettesArr.map((palette, i) => {
+                            atomsPalettesArr.map((palette, i) => {
                                 return (
                                     <div key={i} style={{ flexDirection: 'column', display: 'flex', marginBottom: '25px' }}>
                                         <p style={{ paddingLeft: '16px', marginBottom: '10px', fontSize: '12px', color: 'grey' }}>{palette.toUpperCase()}</p>

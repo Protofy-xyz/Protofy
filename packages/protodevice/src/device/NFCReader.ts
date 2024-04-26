@@ -56,7 +56,7 @@ class NFCReader {
                             then: [
                                 {'mqtt.publish': {
                                 topic: `devices/${deviceComponents.esphome.name}/sensor/${this.name}/state`,
-                                payload: "@!lambda "+ `return x;@`,
+                                payload: '@!lambda return x;@',
                                 },
                             },
                         ]
@@ -65,7 +65,7 @@ class NFCReader {
                             then: [
                                 {'mqtt.publish': {
                                 topic: `devices/${deviceComponents.esphome.name}/sensor/${this.name}/state`,
-                                payload: "@!lambda "+ `return "none";@`,
+                                payload: '@!lambda return "none";@',
                                 },
                             },
                         ]

@@ -58,14 +58,17 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         }
     }, [])
 
-    const allPalettes = { ...paletteComponents, ...userPalettes }
+    const allPalettes = {
+        atoms: { ...paletteComponents.atoms, ...userPalettes?.atoms }
+    }
+    const allPalettesAtoms = allPalettes.atoms
 
     const getCraftComponents = (enableDropable?: boolean) => { // FIX: If components of diferent palette has the same name will overwrite
-        let filteredPalettes = Object.keys(allPalettes)
+        let filteredPalettes = Object.keys(allPalettesAtoms)
         if (enableDropable) {
             filteredPalettes = filteredPalettes.filter(key => key != 'craft')
         }
-        return filteredPalettes.reduce((total, paletteName) => total = { ...total, ...allPalettes[paletteName] }, {})
+        return filteredPalettes.reduce((total, paletteName) => total = { ...total, ...allPalettesAtoms[paletteName] }, {})
     }
     const availableCraftComponents = getCraftComponents()
 
