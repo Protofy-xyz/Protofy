@@ -10,7 +10,7 @@ export {default as Diagram} from './diagram/Diagram'
 export { isHandleConnected } from './diagram/Node';
 export {useFlowsStore, FlowStoreContext} from './store/FlowsStore'
 export { default as layouts } from './diagram/layouts';
-export { filterCallback, restoreCallback, filterCallbackNodes, restoreCallbackNodes, filterCallbackProp, restoreCallbackProp, filterConnection } from './lib/Mask';
+export { filterCallback, restoreCallback, filterCallbackNodes, restoreCallbackNodes, filterCallbackProp, restoreCallbackProp, filterConnection, filterObject } from './lib/Mask';
 export { default as FallbackPort } from './FallbackPort';
 export { generateId } from './lib/IdGenerator';
 export { connectNodes } from './lib/Edge';

@@ -1,4 +1,4 @@
-import { Node, NodeOutput, FallbackPort, NodeParams, filterConnection, getId, connectNodes} from 'protoflow';
+import { Node, NodeOutput, FallbackPort, NodeParams, filterConnection, getId, connectNodes, filterObject} from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Cable } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
@@ -12,8 +12,8 @@ const FlowSwitch = ({ node = {}, nodeData = {}, children }: any) => {
             <div style={{height: '50px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Then'} handleId={'mask-then'} />
             <NodeOutput id={node.id} type={'input'} label={'Else'} handleId={'mask-otherwise'} />
-            <NodeOutput id={node.id} type={'input'} label={'Error'} handleId={'mask-error'} />
             <NodeOutput id={node.id} type={'input'} label={'Finally'} handleId={'mask-after'} />
+            <NodeOutput id={node.id} type={'input'} label={'Error'} handleId={'mask-error'} />
         </Node>
     )
 }
@@ -26,35 +26,13 @@ export default {
         return node.type == "CallExpression" && nodeData.to?.startsWith('context.flow2.switch')
     },
     getComponent: (node, nodeData, children) => <FlowSwitch node={node} nodeData={nodeData} children={children} />,
-    filterChildren: (node, childScope, edges, nodeData, setNodeData) => {
-        childScope = filterConnection("param-1", (id, nodeData, setNodeData) => {
-            const objData = nodeData[id]
-            if(objData) {
-                Object.keys(objData).forEach(key => {
-                    if(key.startsWith('param-')) {
-                        setNodeData(getId(node), {
-                            ...nodeData[getId(node)],
-                            ['mask-'+objData[key].key]: { value: objData[key].value, kind: objData[key].kind ?? 'Identifier'}
-                        })
-                        //get the edges that are connected to the node at the port in objData[key]
-                        let edge = edges.find(e => e.targetHandle == id+'-'+key)
-                        if(edge) {
-                            if(edge.source.startsWith('ArrowFunction_')) {
-                                edge = edges.find(e => e.targetHandle == edge.source+'_call')
-                                if(edge) {
-                                    edge.target = getId(node)
-                                    edge.targetHandle = getId(node) + (objData[key].key == 'condition' ? "-" : '_') + 'mask-'+objData[key].key
-                                }
-                            }
-                            edges.push(connectNodes(edge.source, edge.sourceHandle, getId(node), getId(node) + (objData[key].key == 'condition' ? "-" : '_') + 'mask-'+objData[key].key))
-                        }
-                    }
-
-                })
-            }
-        })(node, childScope, edges, nodeData, setNodeData)
-        return childScope
-    },
+    filterChildren: filterObject({keys: {
+            'then': 'output',
+            'otherwise': 'output',
+            'error': 'output',
+            'after': 'output',
+            'condition': 'input'
+    }}),
     getInitialData: () => {
         return {
             to: 'context.flow2.switch',

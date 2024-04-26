@@ -20,6 +20,43 @@ export const filterConnection = (portId, cb?) => {
     }
 }
 
+export const filterObject = ({port, keys, skipArrow}) => {
+    port = port ?? 'param-1'
+    skipArrow = skipArrow ?? true
+    return (node, childScope, edges, nodeData, setNodeData) => {
+        return filterConnection(port, (id, nodeData, setNodeData) => {
+            const objData = nodeData[id]
+            if(objData) {
+                Object.keys(objData).forEach(key => {
+                    const objEntry = objData[key]
+                    const suffix = keys && keys[objEntry.key] && keys[objEntry.key] == 'output' ? '_' : '-'
+
+                    if(key.startsWith('param-')) {
+                        //get the edges that are connected to the node at the port in objEntry
+                        let edge = edges.find(e => e.targetHandle == id+'-'+key)
+                        if(edge) {
+                            if(edge.source.startsWith('ArrowFunction_') && skipArrow) {
+                                edge = edges.find(e => e.targetHandle == edge.source+'_call')
+                                if(edge) {
+                                    edge.target = getId(node)
+                                    edge.targetHandle = getId(node) + suffix + 'mask-'+objEntry.key
+                                }
+                            }
+                            edges.push(connectNodes(edge.source, edge.sourceHandle, getId(node), getId(node) + suffix + 'mask-'+objEntry.key))
+                        } else {
+                            setNodeData(getId(node), {
+                                ...nodeData[getId(node)],
+                                ['mask-'+objEntry.key]: { value: objEntry.value, kind: objEntry.kind ?? 'Identifier'}
+                            })
+                        }
+                    }
+
+                })
+            }
+        })(node, childScope, edges, nodeData, setNodeData)
+    }
+}
+
 export const filterCallback = (numParam = "2", handleId = "request") => {
     return filterCallbackNodes(numParam, 'param', handleId)
 }
