@@ -280,8 +280,10 @@ export const miscellanyPalette = {
 }
 
 export default {
-  basic: basicPalette,
-  text: textPalette,
-  layout: layoutPalette,
-  miscellany: miscellanyPalette,
+  atoms: {
+    basic: basicPalette,
+    text: textPalette,
+    layout: layoutPalette,
+    miscellany: miscellanyPalette,
+  }
 }

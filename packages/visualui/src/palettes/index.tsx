@@ -2,5 +2,5 @@
 import craft from "./craft";
 
 export default {
-	craft
+	atoms: { craft }
 }
