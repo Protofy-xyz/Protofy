@@ -95,13 +95,13 @@ export const ObjectFactory = (objectType) => {
         const data = nodesData[node.id] ?? {};
         const space = data._astNode ? "" : " "
         const fromFile = data._astNode ? true : false
-
         const params = Object.keys(data).filter(key => key.startsWith('param')).map((param) => {
             let key = data[param]?.key ?? "";
             const triviaInfo: any = {}
-            var objValue = dumpArgumentsData(data[param])
+            objValue = dumpConnection(node, "target", param, PORT_TYPES.data, data[param]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level + 1, triviaInfo)
+            
             if (!objValue) {
-                objValue = dumpConnection(node, "target", param, PORT_TYPES.data, data[param]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level + 1, triviaInfo)
+                var objValue = dumpArgumentsData(data[param])
             }
             const objParam = key + (!objValue ? "" : (":" + space + objValue))
             return { code: objParam, trivia: triviaInfo['content'], paramTrivia: data['trivia-' + param] }
