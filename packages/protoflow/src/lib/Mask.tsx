@@ -59,6 +59,7 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
     port = port ?? 'param-1'
     skipArrow = skipArrow ?? true
     return (node, nodes, originalNodes, edges, originalEdges, nodeData) => {
+
         nodeData = { ...nodeData }
         const objEdge = originalEdges.find(e => e.targetHandle == node.id + '-' + port)
         let recoveredEdges = []
@@ -86,12 +87,13 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
             .forEach(n => recoveredNodes.push(n))
 
         const objNode = recoveredNodes.find(n => n.id.startsWith('ObjectLiteralExpression_'))
-        const originalObjData = {...nodeData[objNode.id]}
+        const objNodeId = objNode?.id
+        const originalObjData = {...nodeData[objNodeId]}
         
         Object.keys(originalObjData).forEach(k => {
             if(k.startsWith('param-')) {
-                const { [k]: _, ...rest } = nodeData[objNode.id];
-                nodeData[objNode.id] = rest;
+                const { [k]: _, ...rest } = nodeData[objNodeId];
+                nodeData[objNodeId] = rest;
             }
         })
 
@@ -99,20 +101,20 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
             const params = Object.keys(nodeData[node.id]).filter(k => k.startsWith('mask-')).map(k => ({key: k, value: nodeData[node.id][k]}))
 
             params.forEach(param => {
-                //look for param in nodeData[objNode.id]
+                //look for param in nodeData[objNodeId]
                 //it has the following shape: {'param-xxx': {key: xxx, value: 'value', kind: 'Identifier'}, 'param-yyy': ...}
                 //param is xxx
                 const objParam = Object.keys(originalObjData).find(k => originalObjData[k].key == param.key.split('-').slice(1).join('-')) ?? 'param-'+param.key.split('-').slice(1).join('-')
                 nodeData = {
                     ...nodeData,
-                    [objNode.id]: {
-                        ...nodeData[objNode.id],
+                    [objNodeId]: {
+                        ...nodeData[objNodeId],
                         [objParam]: param.value?.value !== undefined ? { value: param.value.value, key: param.key.split('-').slice(1).join('-'), kind: param.value.kind } : {value: param.value, key: param.key.split('-').slice(1).join('-'), kind: 'Identifier'}
                     }
                 }
                 
                 console.log('deleting node for: ', param.key)
-                finalEdges = finalEdges.filter(e => e.targetHandle != objNode.id + '-'+objParam)
+                finalEdges = finalEdges.filter(e => e.targetHandle != objNodeId + '-'+objParam)
             })
 
         
@@ -122,20 +124,30 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
                 let parts = edge.targetHandle.split('_mask-')
                 const objData = originalObjData
                 if(key.startsWith('mask-')) {
+                    
                     key = key.split('-').slice(1).join('-')
-                    const objParam = Object.keys(objData).find(k => objData[k] && objData[k].key == key)
-                    finalEdges = finalEdges.filter(e => e.targetHandle != objNode.id + '-'+objParam)
-                    finalEdges.push(connectNodes(edge.source, edge.sourceHandle, objNode.id, objNode.id + '-' + objParam))
+                    let objParam = Object.keys(objData).find(k => objData[k] && objData[k].key == key)
+                    if(!objParam) {
+                        nodeData[objNodeId]['param-'+key] = {
+                            key: key,
+                            value: '',
+                            kind: 'Identifier'
+                        }
+                        objParam = 'param-'+key
+                    }
+                    
+                    finalEdges = finalEdges.filter(e => e.targetHandle != objNodeId + '-'+objParam)
+                    finalEdges.push(connectNodes(edge.source, edge.sourceHandle, objNodeId, objNodeId + '-' + objParam))
                 } else if(parts.length > 1) {
                     key = parts[1]
                     const objParam = Object.keys(objData).find(k => objData[k] && objData[k].key == key)
 
                     if(!skipArrow) {
-                        finalEdges = finalEdges.filter(e => e.targetHandle != objNode.id + '-'+objParam)
-                        finalEdges.push(connectNodes(edge.source, edge.sourceHandle, objNode.id, objNode.id + '-' + objParam))
+                        finalEdges = finalEdges.filter(e => e.targetHandle != objNodeId + '-'+objParam)
+                        finalEdges.push(connectNodes(edge.source, edge.sourceHandle, objNodeId, objNodeId + '-' + objParam))
                     } else {
-                        finalEdges = finalEdges.filter(e => e.targetHandle != objNode.id + '-'+objParam)
-                        const arrowId = 'ArrowFunction_'+objNode.id+'_'+key
+                        finalEdges = finalEdges.filter(e => e.targetHandle != objNodeId + '-'+objParam)
+                        const arrowId = 'ArrowFunction_'+objNodeId+'_'+key
                         if(!recoveredNodes.find(n => n.id == arrowId)) {
                             recoveredNodes.push({
                                 id: arrowId,
@@ -156,12 +168,12 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
                         }
                         const objParamId = objParam && objParam != "undefined" ? objParam : ('param-'+key)
 
-                        if(nodeData[objNode.id]) {
-                            nodeData[objNode.id][objParamId] = { key: key, value: '', kind: 'Identifier' }
+                        if(nodeData[objNodeId]) {
+                            nodeData[objNodeId][objParamId] = { key: key, value: '', kind: 'Identifier' }
                         }
 
                         finalEdges.push(connectNodes(edge.source, edge.sourceHandle, arrowId, arrowId + '_call'))
-                        finalEdges.push(connectNodes(arrowId, arrowId + '_call', objNode.id, objNode.id + '-' + (objParamId)))
+                        finalEdges.push(connectNodes(arrowId, arrowId + '_call', objNodeId, objNodeId + '-' + (objParamId)))
                     }
                 }
             })
