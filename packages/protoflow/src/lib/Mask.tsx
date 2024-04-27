@@ -56,6 +56,24 @@ export const filterObject = ({ port = 'param-1', keys, skipArrow = true }) => {
 export const restoreObject = ({ port = 'param-1', skipArrow = true, keys = undefined }) => {
     return (node, nodes, originalNodes, edges, originalEdges, nodeData) => {
         nodeData = { ...nodeData }
+       
+        if(!nodeData[node.id]) {
+            nodeData = {
+                ...nodeData,
+                [node.id]: {}
+            }
+        }
+
+        if(!nodeData[node.id][port]) {
+            nodeData = {
+                ...nodeData,
+                [node.id]: {
+                    ...nodeData[node.id],
+                    [port]: { value: '', kind: 'Identifier' }
+                }
+            }
+        }
+        
         const objEdge = originalEdges.find(e => e.targetHandle == node.id + '-' + port)
         let recoveredEdges = []
         let recoveredNodes: any = []
@@ -74,6 +92,7 @@ export const restoreObject = ({ port = 'param-1', skipArrow = true, keys = undef
                 t.id === edge.id
             ))
         )
+
         //check for removed nodes in the edges
         finalEdges
             .filter(e => !nodes.find(n => n.id === e.source) && !recoveredNodes.find(n => n.id === e.source))
@@ -81,10 +100,11 @@ export const restoreObject = ({ port = 'param-1', skipArrow = true, keys = undef
             .filter(n => n)
             .forEach(n => recoveredNodes.push(n))
 
+   
         let objNode = recoveredNodes.find(n => n.id.startsWith('ObjectLiteralExpression_'))
         let objNodeId = objNode?.id
         if (!objNodeId) {
-            objNodeId = 'ObjectLiteralExpression_' + getId(node)
+            objNodeId = 'ObjectLiteralExpression_' + node.id
             objNode = {
                 id: objNodeId,
                 type: 'ObjectLiteralExpression',
@@ -114,7 +134,6 @@ export const restoreObject = ({ port = 'param-1', skipArrow = true, keys = undef
             //it has the following shape: {'param-xxx': {key: xxx, value: 'value', kind: 'Identifier'}, 'param-yyy': ...}
             //param is xxx
             const objParam = Object.keys(originalObjData).find(k => originalObjData[k].key == param.key.split('-').slice(1).join('-')) ?? 'param-' + param.key.split('-').slice(1).join('-')
-
             nodeData = {
                 ...nodeData,
                 [objNodeId]: {
@@ -133,7 +152,6 @@ export const restoreObject = ({ port = 'param-1', skipArrow = true, keys = undef
             let parts = edge.targetHandle.split('_mask-')
             const objData = originalObjData
             if (key.startsWith('mask-')) {
-
                 key = key.split('-').slice(1).join('-')
                 let objParam = Object.keys(objData).find(k => objData[k] && objData[k].key == key)
                 if (!objParam) {
@@ -149,8 +167,15 @@ export const restoreObject = ({ port = 'param-1', skipArrow = true, keys = undef
                 finalEdges.push(connectNodes(edge.source, edge.sourceHandle, objNodeId, objNodeId + '-' + objParam))
             } else if (parts.length > 1) {
                 key = parts[1]
-                const objParam = Object.keys(objData).find(k => objData[k] && objData[k].key == key)
-
+                let objParam = Object.keys(objData).find(k => objData[k] && objData[k].key == key)
+                if (!objParam) {
+                    nodeData[objNodeId]['param-' + key] = {
+                        key: key,
+                        value: '',
+                        kind: 'Identifier'
+                    }
+                    objParam = 'param-' + key
+                }
                 if (!skipArrow) {
                     finalEdges = finalEdges.filter(e => e.targetHandle != objNodeId + '-' + objParam)
                     finalEdges.push(connectNodes(edge.source, edge.sourceHandle, objNodeId, objNodeId + '-' + objParam))
@@ -190,27 +215,28 @@ export const restoreObject = ({ port = 'param-1', skipArrow = true, keys = undef
 
 
         const objData = nodeData[objNodeId]
-        //this code iterates the keys in objData and removes the ones that are not connected
-        //however, it should also reorder the keys in the object, to match the order as they appear in the parameter 'keys' recieved in the function restoreObject
-        Object.keys(objData).forEach(key => {
-            if (key.startsWith('param-') && (nodeData[objNodeId][key].value == '' || nodeData[objNodeId][key].value == undefined)) {
-                const edge = finalEdges.find(e => e.targetHandle == objNodeId + '-' + key)
-                if (!edge) {
-                    delete nodeData[objNodeId][key]
+        if(objData) {
+            //this code iterates the keys in objData and removes the ones that are not connected
+            //however, it should also reorder the keys in the object, to match the order as they appear in the parameter 'keys' recieved in the function restoreObject
+            Object.keys(objData).forEach(key => {
+                if (key.startsWith('param-') && (nodeData[objNodeId][key].value == '' || nodeData[objNodeId][key].value == undefined)) {
+                    const edge = finalEdges.find(e => e.targetHandle == objNodeId + '-' + key)
+                    if (!edge) {
+                        delete nodeData[objNodeId][key]
+                    }
                 }
-            }
-        })
+            })
 
-        //reorder keys as defined in mask
-        Object.keys(keys).forEach((key, index) => {
-            const objKey = Object.keys(objData).find(k => objData[k].key == key)
-            if (objKey) {
-                const value = objData[objKey]
-                delete objData[objKey]
-                objData[objKey] = value
-            }
-        })
-
+            //reorder keys as defined in mask
+            Object.keys(keys).forEach((key, index) => {
+                const objKey = Object.keys(objData).find(k => objData[k].key == key)
+                if (objKey) {
+                    const value = objData[objKey]
+                    delete objData[objKey]
+                    objData[objKey] = value
+                }
+            })
+        }
 
         return { nodes: [...recoveredNodes, ...nodes], edges: finalEdges, nodeData: nodeData }
     }
