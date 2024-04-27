@@ -8,6 +8,7 @@ import flow from 'protolib/bundles/flow/context'
 import flow2 from 'protolib/bundles/flow/contextV2'
 import os from 'protolib/bundles/os/context'
 import utils from 'protolib/bundles/utils/context'
+import keys from 'protolib/bundles/keys/context'
 export default {
     onEvent,
     emitEvent,
@@ -20,6 +21,7 @@ export default {
     createPeriodicSchedule,
     sendMailWithResend,
     executeAutomation,
+    keys,
     flow,
     flow2,
     object,
