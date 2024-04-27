@@ -332,6 +332,7 @@ const FlowsBase = ({
         try {
             //restore components before dump
             content = saveNodes(tree.nodes, tree.edges, tree.nodeData, _getFirstNode, mode)
+            console.log('CONTENT: ', content)
             setInitialEdges(tree.edges)
             setInitialNodes(tree.nodes)
             const positions = nodes.map((node) => ({ id: node.id, position: node.position }))

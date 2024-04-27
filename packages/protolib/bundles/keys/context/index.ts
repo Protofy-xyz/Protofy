@@ -15,8 +15,8 @@ const getKey = async ({ key = '', done = (key) => {}, error = (err) => {}, token
     const result = await API.get(urlEnch)
 
     if (result.isError) {
-        if (error) error(result.error)
-        throw result.error
+        if (error) error(result.error?.error ?? result.error)
+        return
     }
 
     if (done) done(result.data?.value)
