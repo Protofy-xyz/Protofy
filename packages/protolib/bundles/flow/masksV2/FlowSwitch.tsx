@@ -7,7 +7,7 @@ import {operations} from '../context/flowSwitch'
 const FlowSwitch = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(10)
     return (
-        <Node icon={Cable} node={node} isPreview={!node.id} title='Flow Switch (2)' color={color} id={node.id} skipCustom={true}>
+        <Node icon={Cable} node={node} isPreview={!node.id} title='Flow Switch' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Condition', field: 'mask-condition', type: 'input' }]} />
             <div style={{height: '50px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Then'} handleId={'mask-then'} />
