@@ -41,12 +41,12 @@ export const filterObject = ({ port, keys, skipArrow }) => {
                             edge = edges.find(e => e.targetHandle == edge.source + '_call')
                         }
                         edges.push(connectNodes(edge.source, edge.sourceHandle, getId(node), getId(node) + suffix + 'mask-' + objEntry.key))
-                    } else {
-                        setNodeData(getId(node), {
-                            ...nodeData[getId(node)],
-                            ['mask-' + objEntry.key]: { value: objEntry.value, kind: objEntry.kind ?? 'Identifier' }
-                        })
                     }
+
+                    setNodeData(getId(node), {
+                        ...nodeData[getId(node)],
+                        ['mask-' + objEntry.key]: { value: objEntry.value, kind: objEntry.kind ?? 'Identifier' }
+                    })
                 }
 
             })
@@ -97,16 +97,17 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
 
         if(objNode) {
             const params = Object.keys(nodeData[node.id]).filter(k => k.startsWith('mask-')).map(k => ({key: k, value: nodeData[node.id][k]}))
+
             params.forEach(param => {
                 //look for param in nodeData[objNode.id]
                 //it has the following shape: {'param-xxx': {key: xxx, value: 'value', kind: 'Identifier'}, 'param-yyy': ...}
                 //param is xxx
-                const objParam = Object.keys(originalObjData).find(k => originalObjData[k].key == param.key.split('-')[1])
+                const objParam = Object.keys(originalObjData).find(k => originalObjData[k].key == param.key.split('-').slice(1).join('-')) ?? 'param-'+param.key.split('-').slice(1).join('-')
                 nodeData = {
                     ...nodeData,
                     [objNode.id]: {
                         ...nodeData[objNode.id],
-                        [objParam]: param.value?.value !== undefined ? { value: param.value.value, key: param.key.split('-')[1], kind: param.value.kind } : {value: param.value, key: param.key.split('-')[1], kind: 'Identifier'}
+                        [objParam]: param.value?.value !== undefined ? { value: param.value.value, key: param.key.split('-').slice(1).join('-'), kind: param.value.kind } : {value: param.value, key: param.key.split('-').slice(1).join('-'), kind: 'Identifier'}
                     }
                 }
                 
@@ -114,6 +115,7 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
                 finalEdges = finalEdges.filter(e => e.targetHandle != objNode.id + '-'+objParam)
             })
 
+        
             //rewire connections
             nodeEdges.forEach(edge => {
                 let key = edge.targetHandle.split('-').slice(1).join('-')
@@ -153,6 +155,7 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
                             }
                         }
                         const objParamId = objParam && objParam != "undefined" ? objParam : ('param-'+key)
+
                         if(nodeData[objNode.id]) {
                             nodeData[objNode.id][objParamId] = { key: key, value: '', kind: 'Identifier' }
                         }
@@ -164,16 +167,21 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
             })
         }
 
-        /*
-                //rewire connections
-                const currentEdge = nodeEdges.find(e => e.targetHandle == node.id+'-'+param.key)
-                finalEdges = finalEdges.filter(e => e.targetHandle != objNode.id + '-'+objParam)
-                if(currentEdge) {
-                    finalEdges.push(connectNodes(currentEdge.source, currentEdge.sourceHandle, objNode.id, objNode.id + '-' + objParam))
-                }
-        */
+        //look for unconnected nodeDatas and remove them
+        Object.keys(nodeData).forEach(k => {
+            if(k.startsWith('ObjectLiteralExpression_')) {
+                const objData = nodeData[k]
+                Object.keys(objData).forEach(key => {
+                    if(key.startsWith('param-') && (nodeData[k][key].value == '' || nodeData[k][key].value == undefined)) {
+                        const edge = finalEdges.find(e => e.targetHandle == k + '-' + key)
+                        if(!edge) {
+                            delete nodeData[k][key]
+                        }
+                    }
+                })
+            }
+        })
         
-        debugger
         return { nodes: [...recoveredNodes, ...nodes], edges: finalEdges, nodeData: nodeData }
     }
 }
