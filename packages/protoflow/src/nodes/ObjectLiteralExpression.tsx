@@ -43,6 +43,7 @@ export const ObjectFactory = (objectType) => {
                 } else {
                     sourceKey = prop.getName()
                     const initializer = prop.getInitializer()
+
                     if (objectType == 'typeLiteral') {
                         sourceValue = prop.getType().getText()
                     } else if (initializer) {
@@ -98,18 +99,14 @@ export const ObjectFactory = (objectType) => {
         const params = Object.keys(data).filter(key => key.startsWith('param')).map((param) => {
             let key = data[param]?.key ?? "";
             const triviaInfo: any = {}
-            objValue = dumpConnection(node, "target", param, PORT_TYPES.data, data[param]?.value ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level + 1, triviaInfo)
-            
-            if (!objValue) {
-                var objValue = dumpArgumentsData(data[param])
-            }
+            let objValue = dumpConnection(node, "target", param, PORT_TYPES.data, dumpArgumentsData(data[param]) ?? "", edges, nodes, nodesData, metadata, enableMarkers, dumpType, level + 1, triviaInfo)
             const objParam = key + (!objValue ? "" : (":" + space + objValue))
-            return { code: objParam, trivia: triviaInfo['content'], paramTrivia: data['trivia-' + param] }
+            return { isEmpty: !objValue, param: data[param], code: objParam, trivia: triviaInfo['content'], paramTrivia: data['trivia-' + param] }
         })
 
         const ending = dumpType == 'partial' ? '' : fromFile ? getTriviaBeforeCloseBrace(data._astNode) : "\n" + "\t".repeat(level - 1)
 
-        return "{"
+        const result = "{"
             + params.reduce((total, p, i) => {
                 const triviaCode = dumpType == 'partial' ? '' : (p.paramTrivia !== undefined ? p.paramTrivia : "\n" + "\t".repeat(level))
                 return total + triviaCode + p.code + (i < params.length - 1 ? ',' : '')
@@ -117,6 +114,8 @@ export const ObjectFactory = (objectType) => {
             + ending
             + "}"
             + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
+
+        return result
     }
 
     return component
