@@ -1,4 +1,4 @@
-import { Node, NodeOutput, FallbackPort, NodeParams, filterConnection, getId, connectNodes, filterObject} from 'protoflow';
+import { Node, NodeOutput, FallbackPort, NodeParams, filterConnection, getId, connectNodes, filterObject, restoreObject} from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Cable } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
@@ -17,6 +17,7 @@ const FlowSwitch = ({ node = {}, nodeData = {}, children }: any) => {
         </Node>
     )
 }
+
 export default {
     id: 'flowSwitchV2',
     type: 'CallExpression',
@@ -33,8 +34,19 @@ export default {
             'after': 'output',
             'condition': 'input'
     }}),
+    restoreChildren: restoreObject({keys: {
+        'then': {
+            'param-a': {
+                key: "a"
+            },
+            'param-b': {
+                key: "b"
+            }
+        },
+    }}),
     getInitialData: () => {
         return {
+            await: true,
             to: 'context.flow2.switch',
             "param-1": {
                 value: "{}",

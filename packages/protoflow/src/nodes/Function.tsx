@@ -95,11 +95,7 @@ Function.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers =
         }
         else {
             let paramName = dumpConnection(node, "target", param + '-key', PORT_TYPES.data, data[param].key, edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-            var paramValue = dumpArgumentsData(data[param])
-
-            if (!paramValue) {
-                paramValue = dumpConnection(node, "target", param, PORT_TYPES.data, data[param].value, edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-            }
+            let paramValue = dumpConnection(node, "target", param, PORT_TYPES.data, data[param].value, edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
             objParam = paramName + (data[param].type ? `:${data[param].type}` : "") + (paramValue ? ("=" + paramValue) : "")
         }
         return objParam
