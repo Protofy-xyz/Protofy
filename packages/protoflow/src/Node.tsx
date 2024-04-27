@@ -502,13 +502,13 @@ export const NodeParams = ({ mode = 'column', id, params, boxStyle = {}, childre
     </div>
 }
 
-export const NodeOutput = (props: NodePortProps) => {
+export const NodeOutput = ({vars, ...props}: NodePortProps & {vars: string[]}) => {
     return  <div style={{height: '50px', alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column"}}>
-        <FlowPort {...props} />
+        <FlowPort {...props} sublabel={(vars??[]).reduce((total, current, i) => total + (i > 0? ', ':'') + current, '')} />
     </div>
 }
 
-export const FlowPort = ({ id, type, style, handleId, label, isConnected = false, position = null, allowedTypes = ["block", "data", "flow"] }: NodePortProps) => {
+export const FlowPort = ({ id, type, style, handleId, label, sublabel, isConnected = false, position = null, allowedTypes = ["block", "data", "flow"] }: NodePortProps) => {
     const _position = position ?? (flowDirection == 'RIGHT' ? Position.Left : Position.Right)
     return (<NodePort
         position={_position}
@@ -516,6 +516,7 @@ export const FlowPort = ({ id, type, style, handleId, label, isConnected = false
         type={type}
         style={{ ...style, marginLeft: _position == Position.Left ? -4 : 0 }}
         label={label}
+        sublabel={sublabel}
         isConnected={isConnected}
         nodeId={id}
         allowedTypes={allowedTypes}

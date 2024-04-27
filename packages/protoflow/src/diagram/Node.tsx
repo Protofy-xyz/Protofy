@@ -91,6 +91,7 @@ export interface NodePortProps {
     style?: any,
     handleId?: string,
     label?: string,
+    sublabel?: string,
     isConnected?: boolean,
     nodeId?: string,
     position?: any,
@@ -98,7 +99,7 @@ export interface NodePortProps {
 }
 
 //{`${id}${PORT_TYPES.flow}${handleId ?? type}`}
-export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, position = Position.Right, allowedTypes }: NodePortProps) => {
+export const NodePort = ({ id, type, style, label, sublabel, isConnected = false, nodeId, position = Position.Right, allowedTypes }: NodePortProps) => {
     const textRef: any = useRef()
     const handleRef: any = useRef()
     const useFlowsStore = useContext(FlowStoreContext)
@@ -160,8 +161,9 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                     return !sourceConnected
                 }}
             >
-                {label ? <div style={{ display: 'flex', width: `${labelWidth}px`, marginLeft: ml, zIndex: -1, justifyContent: 'flex-end' }}>
-                    <Text ref={textRef} style={{ marginRight: '5px', textAlign: position == Position.Right ? 'right' : 'left' }}>{label}</Text>
+                {label || sublabel ? <div style={{ display: 'flex', width: `${labelWidth}px`, marginLeft: ml, zIndex: -1, justifyContent: 'flex-end' }}>
+                    {sublabel && <Text style={{ marginRight: '5px', opacity: 0.7, textAlign: position == Position.Right ? 'right' : 'left' }}>{sublabel}</Text>}
+                    {label && <Text ref={textRef} style={{ textAlign: position == Position.Right ? 'right' : 'left' }}>{label}</Text>}
                 </div> : null}
                 {
                     !connected ?

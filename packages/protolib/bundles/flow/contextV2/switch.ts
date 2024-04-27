@@ -10,14 +10,14 @@ export const flowSwitch = async ({condition, then, otherwise, error, after}) => 
 
     try {
         if(condition) {
-            return _then()
+            return _then(condition)
         } else {
-            return _otherwise()
+            return _otherwise(condition)
         }
     } catch(e) {
         logger.error({error: e}, "Error processing flow switch")
-        _error()
+        _error(e, condition)
     } finally {
-        _after()
+        _after(condition)
     }
 }
