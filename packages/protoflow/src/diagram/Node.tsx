@@ -1,11 +1,11 @@
-import React, { memo, useContext, useRef } from 'react';
+import React, { memo, use, useContext, useRef } from 'react';
 import Text from "./NodeText"
 import { Handle, Position } from 'reactflow';
 import chroma from "chroma-js";
 import { FlowStoreContext } from '../store/FlowsStore'
 import { DEVMODE, flowDirection } from '../toggles'
 import { useProtoEdges } from '../store/DiagramStore';
-import useTheme from './Theme';
+import useTheme, { usePrimaryColor } from './Theme';
 import { NodeTypes } from './../nodes';
 import { write } from '../lib/memory';
 import { Plus } from 'lucide-react';
@@ -34,6 +34,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     const isHover = useHover(flexRef)
     const titleSize = (useTheme('nodeFontSize') / 100) * 100
     const selectedColor = useTheme('selectedColor')
+    const fontSize = useTheme('nodeFontSize')
 
     const innerRadius = '12px '
     const innerBorderRadius = (mode == 'column' ? innerRadius + innerRadius + ' 0px 0px' : innerRadius + '0px 0px ' + innerRadius)
@@ -62,7 +63,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
                 display: 'flex', minHeight: !isPreview ? "80px" : "30px", flexDirection: mode,
                 borderRadius: 13,
                 textAlign: "center",
-                fontSize: useTheme('nodeFontSize'),
+                fontSize: fontSize,
                 boxShadow: getNodeShadow(),
                 cursor: isNodePreviewMode ? 'default' : undefined,
                 ...style,
@@ -91,6 +92,7 @@ export interface NodePortProps {
     style?: any,
     handleId?: string,
     label?: string,
+    sublabel?: string,
     isConnected?: boolean,
     nodeId?: string,
     position?: any,
@@ -98,7 +100,7 @@ export interface NodePortProps {
 }
 
 //{`${id}${PORT_TYPES.flow}${handleId ?? type}`}
-export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, position = Position.Right, allowedTypes }: NodePortProps) => {
+export const NodePort = ({ id, type, style, label, sublabel, isConnected = false, nodeId, position = Position.Right, allowedTypes }: NodePortProps) => {
     const textRef: any = useRef()
     const handleRef: any = useRef()
     const useFlowsStore = useContext(FlowStoreContext)
@@ -114,6 +116,9 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
     const plusColor = useTheme('plusColor')
     const borderColor = useTheme('nodeBorderColor')
     const borderWidth = useTheme('nodeBorderWidth')
+    const blockPortColor = useTheme('blockPort')
+    const flowPortColor = useTheme('flowPort')
+    const dataPorColor = useTheme('dataPort')
     const isNodePreviewMode = edges[0]?.data && edges[0]?.data['preview'] == 'node'
     const onOpenMenu = () => {
         setMenu("open", [handleRef?.current.getBoundingClientRect().right + 200, handleRef?.current.getBoundingClientRect().top - 30], {
@@ -121,8 +126,8 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
             target: nodeId
         })
     }
-    let backgroundColor = allowedTypes ? allowedTypes.includes("block") ? useTheme('blockPort') : useTheme('flowPort') : null
-    if (allowedTypes.length == 1 && allowedTypes.includes("data")) backgroundColor = useTheme('dataPort')
+    let backgroundColor = allowedTypes ? allowedTypes.includes("block") ? blockPortColor : flowPortColor : null
+    if (allowedTypes.length == 1 && allowedTypes.includes("data")) backgroundColor = dataPorColor
 
     React.useEffect(() => {
         write(instanceId, id, allowedTypes)
@@ -160,23 +165,11 @@ export const NodePort = ({ id, type, style, label, isConnected = false, nodeId, 
                     return !sourceConnected
                 }}
             >
-                {label ? <div style={{ display: 'flex', width: `${labelWidth}px`, marginLeft: ml, zIndex: -1, justifyContent: 'flex-end' }}>
-                    <Text ref={textRef} style={{ marginRight: '5px', textAlign: position == Position.Right ? 'right' : 'left' }}>{label}</Text>
+                {label || sublabel ? <div style={{ display: 'flex', width: `${labelWidth}px`, marginLeft: ml, zIndex: -1, justifyContent: 'flex-end' }}>
+                    {sublabel && <Text style={{opacity: 0.7, textAlign: position == Position.Right ? 'right' : 'left' }}>{sublabel}</Text>}
+                    {label && <Text ref={textRef} style={{ marginRight: '5px', textAlign: position == Position.Right ? 'right' : 'left' }}>{label}</Text>}
+                    
                 </div> : null}
-                {
-                    !connected ?
-                        <div style={{
-                            pointerEvents: 'none',
-                            width: portSize + "px",
-                            height: portSize + "px",
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <Plus color={plusColor} size={10} strokeWidth={5} />
-                        </div>
-                        : null
-                }
             </Handle>
         </>
     )

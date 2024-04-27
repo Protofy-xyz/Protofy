@@ -177,7 +177,7 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
                                 export: false,
                                 isDefault: false,
                                 name: "",
-                                ...(keys && keys[key] ? {...keys[key]} : {})
+                                ...(keys && keys[key] && keys[key].params ? {...keys[key].params} : {})
                             }
                         }
                         const objParamId = objParam && objParam != "undefined" ? objParam : ('param-'+key)
@@ -197,6 +197,8 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
         Object.keys(nodeData).forEach(k => {
             if(k.startsWith('ObjectLiteralExpression_')) {
                 const objData = nodeData[k]
+                //this code iteratres the keys in objData and removes the ones that are not connected
+                //however, it should also reorder the keys in the object, to match the order as they appear in the parameter 'keys' recieved in the function restoreObject
                 Object.keys(objData).forEach(key => {
                     if(key.startsWith('param-') && (nodeData[k][key].value == '' || nodeData[k][key].value == undefined)) {
                         const edge = finalEdges.find(e => e.targetHandle == k + '-' + key)
@@ -205,8 +207,18 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
                         }
                     }
                 })
+
+                Object.keys(keys).forEach((key, index) => {
+                    const objKey = Object.keys(objData).find(k => objData[k].key == key)
+                    if(objKey) {
+                        const value = objData[objKey]
+                        delete objData[objKey]
+                        objData[objKey] = value
+                    }
+                })
             }
         })
+
         
         return { nodes: [...recoveredNodes, ...nodes], edges: finalEdges, nodeData: nodeData }
     }

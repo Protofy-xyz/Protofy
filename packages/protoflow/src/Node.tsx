@@ -11,7 +11,7 @@ import { withTopics } from "react-topics";
 import { FlowStoreContext } from "./store/FlowsStore";
 import { DEVMODE, flowDirection } from './toggles';
 import { SketchPicker } from "react-color";
-import useTheme from './diagram/Theme';
+import useTheme, { usePrimaryColor } from './diagram/Theme';
 import { DataOutput } from './lib/types';
 import { read } from './lib/memory';
 import NodeSelect from './diagram/NodeSelect';
@@ -50,12 +50,14 @@ export const headerSize = 55;
 export const DeleteButton = ({ id, left = false, field }) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const deletePropNodeData = useFlowsStore(state => state.deletePropNodeData)
+    const nodeFontSize = useTheme('nodeFontSize')
+    const colorError = useTheme('colorError')
     const onDeleteParam = () => {
         deletePropNodeData(id, field);
     }
 
     return <div id={'deleteButton-' + id + field} style={{ display: 'flex', alignSelf: 'center', cursor: 'pointer' }} onClick={onDeleteParam}>
-        <X size={useTheme('nodeFontSize')} color={useTheme("colorError")} style={{ marginRight: left ? '7px' : '2px' }} />
+        <X size={nodeFontSize} color={colorError} style={{ marginRight: left ? '7px' : '2px' }} />
     </div>
 }
 
@@ -451,7 +453,10 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
 export const HandleOutput = ({ id, param, position = null, style = {}, isConnected = false, dataOutput = DataOutput.data }) => {
     const { getEdges } = useProtoflow();
     const connected = isHandleConnected(getEdges(), `${id}${PORT_TYPES.data}output`)
-    const backgroundColor = (dataOutput == DataOutput.data) ? useTheme('dataPort') : (dataOutput == DataOutput.block) ? useTheme('blockPort') : useTheme('flowPort')
+    const dataPortColor = useTheme('dataPort')
+    const blockPortColor = useTheme('blockPort')
+    const flowPortColor = useTheme('flowPort')
+    const backgroundColor = (dataOutput == DataOutput.data) ? dataPortColor : (dataOutput == DataOutput.block) ? blockPortColor : flowPortColor
     const useFlowsStore = useContext(FlowStoreContext)
     const instanceId = useFlowsStore(state => state.flowInstance)
     const portSize = useTheme('portSize')
@@ -502,13 +507,14 @@ export const NodeParams = ({ mode = 'column', id, params, boxStyle = {}, childre
     </div>
 }
 
-export const NodeOutput = (props: NodePortProps) => {
+export const NodeOutput = ({vars, ...props}: NodePortProps & {vars: string[]}) => {
+    const sublabel = vars && vars.length ? vars.reduce((total, current, i) => total + (i > 0? ', ':'') + current, '[')+']' : ''
     return  <div style={{height: '50px', alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column"}}>
-        <FlowPort {...props} />
+        <FlowPort {...props} sublabel={sublabel} />
     </div>
 }
 
-export const FlowPort = ({ id, type, style, handleId, label, isConnected = false, position = null, allowedTypes = ["block", "data", "flow"] }: NodePortProps) => {
+export const FlowPort = ({ id, type, style, handleId, label, sublabel, isConnected = false, position = null, allowedTypes = ["block", "data", "flow"] }: NodePortProps) => {
     const _position = position ?? (flowDirection == 'RIGHT' ? Position.Left : Position.Right)
     return (<NodePort
         position={_position}
@@ -516,6 +522,7 @@ export const FlowPort = ({ id, type, style, handleId, label, isConnected = false
         type={type}
         style={{ ...style, marginLeft: _position == Position.Left ? -4 : 0 }}
         label={label}
+        sublabel={sublabel}
         isConnected={isConnected}
         nodeId={id}
         allowedTypes={allowedTypes}
