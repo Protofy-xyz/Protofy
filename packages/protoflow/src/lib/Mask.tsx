@@ -86,8 +86,22 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
             .filter(n => n)
             .forEach(n => recoveredNodes.push(n))
 
-        const objNode = recoveredNodes.find(n => n.id.startsWith('ObjectLiteralExpression_'))
-        const objNodeId = objNode?.id
+        let objNode = recoveredNodes.find(n => n.id.startsWith('ObjectLiteralExpression_'))
+        let objNodeId = objNode?.id
+        if(!objNodeId) {
+            objNodeId = 'ObjectLiteralExpression_'+getId(node)
+            objNode = {
+                id: objNodeId,
+                type: 'ObjectLiteralExpression',
+                data: {},
+                draggable: false,
+                deletable: true,
+                selectable: true,
+                position: { x: 0, y: 0 }
+            }
+            recoveredNodes.push(objNode)
+            finalEdges.push(connectNodes(objNode.id, 'output', node.id, node.id + '-' + port))
+        }
         const originalObjData = {...nodeData[objNodeId]}
         
         Object.keys(originalObjData).forEach(k => {
