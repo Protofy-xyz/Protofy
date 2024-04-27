@@ -146,7 +146,7 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
                         }
                         const objParamId = objParam && objParam != "undefined" ? objParam : ('param-'+key)
                         if(nodeData[objNode.id]) {
-                            nodeData[objNode.id][objParamId] = { key: key, value: '', kind: 'Identifier', removeIfNotConnected: true }
+                            nodeData[objNode.id][objParamId] = { key: key, value: '', kind: 'Identifier' }
                         }
 
                         finalEdges.push(connectNodes(edge.source, edge.sourceHandle, arrowId, arrowId + '_call'))
