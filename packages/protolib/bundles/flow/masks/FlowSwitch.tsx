@@ -28,6 +28,7 @@ export default {
     type: 'CallExpression',
     category: "Flow",
     keywords: ["control", "filter", "switch", "flow", "conditional"],
+    hidden: true,
     check: (node, nodeData) => {
         return node.type == "CallExpression" && nodeData.to?.startsWith('context.flow.switch')
     },
