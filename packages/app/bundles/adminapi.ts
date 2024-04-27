@@ -3,6 +3,7 @@ import { EventsAPI } from 'protolib/bundles/events/eventsAPI'
 import { GroupsAPI } from 'protolib/bundles/groups/groupsAPI'
 import { ObjectsAPI } from 'protolib/bundles/objects/objectsAPI'
 import { PagesAPI } from 'protolib/bundles/pages/pagesAPI'
+import { KeysAPI } from 'protolib/bundles/keys/keysAPI'
 import { APIsAPI } from 'protolib/bundles/apis/api'
 import { DevicesAPI } from 'protolib/bundles/devices/devices/devicesAPI'
 import { DeviceSdksAPI } from 'protolib/bundles/devices/deviceSdks/deviceSdksAPI'
@@ -22,6 +23,7 @@ export default (app, context) => {
   GroupsAPI(app, context)
   EventsAPI(app, context)
   ObjectsAPI(app, context)
+  KeysAPI(app, context)
   PagesAPI(app, context)
   APIsAPI(app, context)
   DevicesAPI(app, context)

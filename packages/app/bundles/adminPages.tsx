@@ -9,6 +9,7 @@ import pagesPages from 'protolib/bundles/pages/adminPages'
 import apisPages from 'protolib/bundles/apis/adminPages'
 import databasesPages from 'protolib/bundles/databases/adminPages'
 import resourcesPages from 'protolib/bundles/resources/adminPages'
+import keysPages from 'protolib/bundles/keys/adminPages'
 
 export default {
     ...devicePages,
@@ -21,5 +22,6 @@ export default {
     ...pagesPages,
     ...apisPages,
     ...messagesPages,
-    ...resourcesPages
+    ...resourcesPages,
+    ...keysPages
 }
