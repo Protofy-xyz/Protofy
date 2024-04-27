@@ -1,13 +1,13 @@
 import { Node, NodeOutput, FallbackPort, NodeParams, filterConnection, getId, connectNodes, filterObject, restoreObject} from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Cable } from 'lucide-react';
+import { Split } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
 import {operations} from '../context/flowSwitch'
 
 const FlowSwitch = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(10)
     return (
-        <Node icon={Cable} node={node} isPreview={!node.id} title='Flow Switch' color={color} id={node.id} skipCustom={true}>
+        <Node icon={Split} node={node} isPreview={!node.id} title='Flow Switch' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Condition', field: 'mask-condition', type: 'input' }]} />
             <div style={{height: '50px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Then'} handleId={'mask-then'} />
@@ -28,21 +28,27 @@ export default {
     },
     getComponent: (node, nodeData, children) => <FlowSwitch node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
-            'then': 'output',
-            'otherwise': 'output',
-            'error': 'output',
-            'after': 'output',
-            'condition': 'input'
+            condition: 'input',
+            then: 'output',
+            otherwise: 'output',
+            after: 'output',
+            error: 'output'
     }}),
     restoreChildren: restoreObject({keys: {
-        'then': {
-            'param-a': {
-                key: "a"
-            },
-            'param-b': {
-                key: "b"
+        condition: 'input',
+        then: {
+            params: {
+                'param-a': {
+                    key: "a"
+                },
+                'param-b': {
+                    key: "b"
+                }
             }
         },
+        otherwise: 'output',
+        after: 'output',
+        error: 'output'
     }}),
     getInitialData: () => {
         return {
