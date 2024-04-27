@@ -7,5 +7,5 @@ export const KeysAPI = AutoAPI({
     modelType: KeyModel, 
     prefix: '/adminapi/v1/',
     dbName: 'keys',
-    requiresAdmin: ['create', 'update']
+    requiresAdmin: ['*']
 })

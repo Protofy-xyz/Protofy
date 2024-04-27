@@ -15,6 +15,7 @@ import flowMasks2 from 'protolib/bundles/flow/masksV2';
 import objectMasks from 'protolib/bundles/objects/masks';
 import osMasks from 'protolib/bundles/os/masks'
 import utilsMasks from 'protolib/bundles/utils/masks'
+import keyMasks from 'protolib/bundles/keys/masks'
 
 const paths = {
     devices: [
@@ -45,6 +46,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...devicesUIMasks,
         ...objectMasks,
         ...baseMasks.api,
+        ...keyMasks,
         deviceAction
     ]
     if (paths.apis.includes(segment)) return [
@@ -59,6 +61,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...resendMasks,
         ...objectMasks,
         ...osMasks,
+        ...keyMasks,
         ...utilsMasks
     ]
     return []

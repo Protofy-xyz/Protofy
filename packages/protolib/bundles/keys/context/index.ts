@@ -1,11 +1,15 @@
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import { API } from "protolib/base";
 
-const getKey = async ({ key, done, error, hasSarviceToken = false }) => {
+const getKey = async ({ key = '', done = (key) => {}, error = (err) => {}, token = '' }) => {
+    if(!key) {
+        error("No key provided")
+        return
+    }
     var urlEnch = '/adminapi/v1/keys/' + key
 
-    if (hasSarviceToken) {
-        urlEnch = `${urlEnch}?token=${getServiceToken()}`
+    if (token) {
+        urlEnch = urlEnch + "?token=" + token
     }
 
     const result = await API.get(urlEnch)

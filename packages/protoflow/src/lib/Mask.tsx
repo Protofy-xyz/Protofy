@@ -20,9 +20,7 @@ export const filterConnection = (portId, cb?) => {
     }
 }
 
-export const filterObject = ({ port, keys, skipArrow }) => {
-    port = port ?? 'param-1'
-    skipArrow = skipArrow ?? true
+export const filterObject = ({ port = 'param-1', keys, skipArrow = true }) => {
     let toRemove = []
     return (node, childScope, edges, nodeData, setNodeData) => {
         const id = edges.find(e => e.targetHandle == getId(node) + '-' + port)?.source
@@ -55,11 +53,9 @@ export const filterObject = ({ port, keys, skipArrow }) => {
     }
 }
 
-export const restoreObject = ({ port, skipArrow, keys }) => {
-    port = port ?? 'param-1'
-    skipArrow = skipArrow ?? true
+export const restoreObject = ({ port='param-1', skipArrow = true, keys = undefined }) => {
     return (node, nodes, originalNodes, edges, originalEdges, nodeData) => {
-
+        debugger
         nodeData = { ...nodeData }
         const objEdge = originalEdges.find(e => e.targetHandle == node.id + '-' + port)
         let recoveredEdges = []
