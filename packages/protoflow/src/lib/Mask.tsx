@@ -86,13 +86,22 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
             .forEach(n => recoveredNodes.push(n))
 
         const objNode = recoveredNodes.find(n => n.id.startsWith('ObjectLiteralExpression_'))
+        const originalObjData = {...nodeData[objNode.id]}
+        
+        Object.keys(originalObjData).forEach(k => {
+            if(k.startsWith('param-')) {
+                const { [k]: _, ...rest } = nodeData[objNode.id];
+                nodeData[objNode.id] = rest;
+            }
+        })
+
         if(objNode) {
             const params = Object.keys(nodeData[node.id]).filter(k => k.startsWith('mask-')).map(k => ({key: k, value: nodeData[node.id][k]}))
             params.forEach(param => {
                 //look for param in nodeData[objNode.id]
                 //it has the following shape: {'param-xxx': {key: xxx, value: 'value', kind: 'Identifier'}, 'param-yyy': ...}
                 //param is xxx
-                const objParam = Object.keys(nodeData[objNode.id]).find(k => nodeData[objNode.id][k].key == param.key.split('-')[1])
+                const objParam = Object.keys(originalObjData).find(k => originalObjData[k].key == param.key.split('-')[1])
                 nodeData = {
                     ...nodeData,
                     [objNode.id]: {
@@ -109,15 +118,14 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
             nodeEdges.forEach(edge => {
                 let key = edge.targetHandle.split('-').slice(1).join('-')
                 let parts = edge.targetHandle.split('_mask-')
+                const objData = originalObjData
                 if(key.startsWith('mask-')) {
                     key = key.split('-').slice(1).join('-')
-                    const objData = nodeData[objNode.id]
-                    const objParam = Object.keys(objData).find(k => objData[k].key == key)
+                    const objParam = Object.keys(objData).find(k => objData[k] && objData[k].key == key)
                     finalEdges = finalEdges.filter(e => e.targetHandle != objNode.id + '-'+objParam)
                     finalEdges.push(connectNodes(edge.source, edge.sourceHandle, objNode.id, objNode.id + '-' + objParam))
                 } else if(parts.length > 1) {
                     key = parts[1]
-                    const objData = nodeData[objNode.id]
                     const objParam = Object.keys(objData).find(k => objData[k] && objData[k].key == key)
 
                     if(!skipArrow) {
@@ -165,7 +173,7 @@ export const restoreObject = ({ port, skipArrow, keys }) => {
                 }
         */
         
-
+        debugger
         return { nodes: [...recoveredNodes, ...nodes], edges: finalEdges, nodeData: nodeData }
     }
 }
