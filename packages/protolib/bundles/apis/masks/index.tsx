@@ -3,6 +3,7 @@ import ApiResponseFile from './ApiResponseFile'
 import ApiMask from './ApiMask';
 import Fetch from './Fetch'
 import ExecuteAutomation from './ExecuteAutomation';
+import GetServiceToken from './GetServiceToken';
 import Logger from './Logger';
 import Automation from './Automation';
 import DeviceAction from './DeviceAction';
@@ -19,7 +20,8 @@ const apiMasks = [
     AutomationResponse,
     DeviceAction,
     ExecuteAutomation,
-    DeviceMonitor
+    DeviceMonitor,
+    GetServiceToken
 ]
 
 export default apiMasks;

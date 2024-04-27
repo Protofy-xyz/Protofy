@@ -1,4 +1,4 @@
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import { getServiceToken as getServiceToken_} from 'protolib/api/lib/serviceToken'
 import { API } from "protolib/base";
 import {getLogger } from 'protolib/base';
 
@@ -6,6 +6,12 @@ const logger = getLogger()
 
 export const automationResponse = (res, data) => {
     res.send({result: data})
+}
+
+export const getServiceToken = ({done})=> {
+    const token = getServiceToken_()
+    done(token)
+    return token
 }
 
 export const automation = (app, cb, name, disableAutoResponse?)=>{
@@ -33,7 +39,7 @@ export const automation = (app, cb, name, disableAutoResponse?)=>{
 export const fetch = async (method, url, data={}, cb, errorCb, hasSarviceToken=false)=>{
     var urlEnch = url
     if(hasSarviceToken) {
-        urlEnch = url.includes("?")? `${url}&token=${getServiceToken()}`: `${url}?token=${getServiceToken()}`
+        urlEnch = url.includes("?")? `${url}&token=${getServiceToken_()}`: `${url}?token=${getServiceToken_()}`
     }
     
     let result
@@ -57,7 +63,7 @@ export const executeAutomation = async (automation, cb, errorCb, hasSarviceToken
 }
 
 export const deviceMonitor = async (device, subsystem, monitor) => {
-    const url = `/adminapi/v1/devices/${device}/subsystems/${subsystem}/monitors/${monitor}?token=${getServiceToken()}`
+    const url = `/adminapi/v1/devices/${device}/subsystems/${subsystem}/monitors/${monitor}?token=${getServiceToken_()}`
     let result = await API.get(url)
     if (result.isError) {
         throw result.error
