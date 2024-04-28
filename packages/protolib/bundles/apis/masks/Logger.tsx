@@ -17,6 +17,7 @@ const Logger = ({ node = {}, nodeData = {}, children }: any) => {
 
 export default {
     id: 'logger',
+    hidden: true,
     type: 'CallExpression',
     category: "common",
     keywords: ["logger", 'log', 'console', 'debug'],
