@@ -4,6 +4,7 @@ import { runCommand } from './RunCommand'
 import {listDir} from './listDir'
 import { makeDir } from './makeDir'
 import { fileExists } from './fileExists'
+import { deleteFile } from './deleteFile'
 
 export default {
     readFile,
@@ -11,5 +12,6 @@ export default {
     listDir,
     runCommand,
     makeDir,
-    fileExists
+    fileExists,
+    deleteFile
 }
