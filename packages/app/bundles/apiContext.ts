@@ -10,6 +10,7 @@ import os from 'protolib/bundles/os/context'
 import os2 from 'protolib/bundles/os/context2'
 import utils from 'protolib/bundles/utils/context'
 import keys from 'protolib/bundles/keys/context'
+import chatGPT from 'protolib/bundles/chatgpt/context'
 export default {
     onEvent,
     emitEvent,
@@ -25,6 +26,7 @@ export default {
     sendMailWithResend,
     executeAutomation,
     keys,
+    chatGPT,
     flow,
     flow2,
     object,
