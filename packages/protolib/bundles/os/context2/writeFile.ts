@@ -1,21 +1,23 @@
 import fs from 'fs/promises'
 import {join} from 'path'
 
-export const readFile = async(options:{
-    mode?: 'text' | 'raw', 
+export const writeFile = async(options:{
     path: string, 
-    done?: (content) => {}, 
+    content: string | Buffer,
+    mode?: 'text' | 'raw', 
+    done?: () => {}, 
     error?: (err) => {}
 }) => {
     const path = options.path
+    const content = options.content
+    const mode = options.mode || 'text'
     const done = options.done || (() => {})
     const error = options.error
-    const mode = options.mode || 'text'
 
     try {
-        const content = await fs.readFile(join('../../', path), mode === 'text' ? 'utf-8' : undefined)
-        done(content)
-        return content
+        const result = await fs.writeFile(join('../../', path), content)
+        done()
+        return result
     } catch(err) {
         if(error) {
             error(err)

@@ -507,7 +507,7 @@ export const NodeParams = ({ mode = 'column', id, params, boxStyle = {}, childre
     </div>
 }
 
-export const NodeOutput = ({vars, ...props}: NodePortProps & {vars: string[]}) => {
+export const NodeOutput = ({vars, ...props}: NodePortProps & {vars?: string[]}) => {
     const sublabel = vars && vars.length ? vars.reduce((total, current, i) => total + (i > 0? ', ':'') + current, '[')+']' : ''
     return  <div style={{height: '50px', alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column"}}>
         <FlowPort {...props} sublabel={sublabel} />

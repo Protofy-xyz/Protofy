@@ -47,6 +47,7 @@ export default {
     id: 'WriteFile',
     type: 'CallExpression',
     category: 'OS',
+    hidden: true,
     keywords: ['fs', 'os', 'write', 'file'],
     check: (node, nodeData) => {
         return node.type == "CallExpression" && nodeData.to?.startsWith('context.os.fileWriter')
