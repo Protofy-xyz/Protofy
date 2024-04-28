@@ -7,6 +7,7 @@ import object from 'protolib/bundles/objects/context'
 import flow from 'protolib/bundles/flow/context'
 import flow2 from 'protolib/bundles/flow/contextV2'
 import os from 'protolib/bundles/os/context'
+import os2 from 'protolib/bundles/os/context2'
 import utils from 'protolib/bundles/utils/context'
 import keys from 'protolib/bundles/keys/context'
 export default {
@@ -28,5 +29,6 @@ export default {
     flow2,
     object,
     os,
+    os2,
     utils
 }

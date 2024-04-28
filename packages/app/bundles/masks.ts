@@ -14,6 +14,7 @@ import flowMasks from 'protolib/bundles/flow/masks';
 import flowMasks2 from 'protolib/bundles/flow/masksV2';
 import objectMasks from 'protolib/bundles/objects/masks';
 import osMasks from 'protolib/bundles/os/masks'
+import osMasks2 from 'protolib/bundles/os/masks2'
 import utilsMasks from 'protolib/bundles/utils/masks'
 import keyMasks from 'protolib/bundles/keys/masks'
 
@@ -61,6 +62,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...resendMasks,
         ...objectMasks,
         ...osMasks,
+        ...osMasks2,
         ...keyMasks,
         ...utilsMasks
     ]
