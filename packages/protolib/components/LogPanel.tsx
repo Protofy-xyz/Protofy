@@ -4,12 +4,13 @@ import { JSONViewer, useTint, GroupButton, ButtonGroup } from 'protolib'
 import { InteractiveIcon } from './InteractiveIcon'
 import { Ban, Microscope, Bug, Info, AlertCircle, XCircle, Bomb, Filter } from '@tamagui/lucide-icons'
 import { Tinted } from './Tinted'
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react'
 import { useSubscription } from 'mqtt-react-hooks'
 import { useUpdateEffect } from 'usehooks-ts'
 import React from 'react'
 import mqtt from 'mqtt'
+import { LogMessages, useLogMessages } from '../lib/Logs'
 
 const brokerUrl = typeof document !== "undefined" ? (document.location.protocol === "https:" ? "wss" : "ws") + "://" + document.location.host + '/websocket' : '';
 
@@ -21,7 +22,7 @@ const types = {
     50: { name: "ERROR", color: "$red7", icon: XCircle },
     60: { name: "FATAL", color: "$red10", icon: Bomb }
 }
-export const BusMessages = atom([])
+
 const MessageList = React.memo(({ data, topic }) => {
     const from = topic.split("/")[1]
     const type = topic.split("/")[2]
@@ -61,7 +62,7 @@ export const LogPanel = ({AppState}) => {
     const [appState, setAppState] = useAtom(AppState)
     const maxLog = 1000
     // const { topic, client, message } = useSubscription('logs/#');
-    const [messages, setMessages] = useAtom(BusMessages)
+    const [messages, setMessages] = useLogMessages()
     const [filteredMessages, setFilteredMessages] = useState([])
     const [search, setSearch] = useState('')
 
