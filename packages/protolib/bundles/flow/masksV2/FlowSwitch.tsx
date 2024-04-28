@@ -45,10 +45,6 @@ export default {
         return {
             await: true,
             to: 'context.flow2.switch',
-            "param-1": {
-                value: "{}",
-                kind: "Identifier"
-            },
             "mask-condition": {
                 value: "",
                 kind: "Identifier"

@@ -315,16 +315,16 @@ const FlowsBase = ({
     const getTree = (nodeData) => {
         //@ts-ignore
         return nodes.reduce((total, node) => {
-            const customComponent = getCustomComponent(node, nodeData[node.id] ?? {}, _customComponents);
+            const customComponent = getCustomComponent(node, total.nodeData[node.id] ?? {}, _customComponents);
             if (customComponent && customComponent.restoreChildren) {
-                const restored = customComponent.restoreChildren(node, total.nodes, nodeData[node.id]._initialNodes, total.edges, initialEdges, nodeData)
+                const restored = customComponent.restoreChildren(node, total.nodes, total.nodeData[node.id]._initialNodes, total.edges, initialEdges, total.nodeData)
                 if (!restored.nodeData) restored.nodeData = total.nodeData
                 return restored
             }
             return total
         }, { nodes: nodes, edges: edges, nodeData: nodeData })
-
     }
+    
     const onSaveNodes = async (preview?) => {
         const tree = getTree(Object.assign({}, nodeData));
         var content
