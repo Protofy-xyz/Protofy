@@ -6,6 +6,8 @@ import MakeDir from "./MakeDir";
 import FileExists from "./FileExists";
 import DeleteFile from "./DeleteFile";
 import DeleteDirectory from "./DeleteDirectory";
+import RenameFile from "./RenameFile";
+
 
 export default [
     ReadFile,
@@ -15,5 +17,6 @@ export default [
     MakeDir,
     FileExists,
     DeleteFile,
-    DeleteDirectory
+    DeleteDirectory,
+    RenameFile
 ]

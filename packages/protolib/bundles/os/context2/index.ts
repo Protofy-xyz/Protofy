@@ -6,6 +6,7 @@ import { makeDir } from './makeDir'
 import { fileExists } from './fileExists'
 import { deleteFile } from './deleteFile'
 import { deleteDirectory } from './deleteDirectory'
+import { renameFile } from './renameFile'
 
 export default {
     readFile,
@@ -15,5 +16,6 @@ export default {
     makeDir,
     fileExists,
     deleteFile,
-    deleteDirectory
+    deleteDirectory,
+    renameFile
 }
