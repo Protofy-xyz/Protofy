@@ -9,6 +9,9 @@ import { useEffect, useState } from 'react'
 import { useSubscription } from 'mqtt-react-hooks'
 import { useUpdateEffect } from 'usehooks-ts'
 import React from 'react'
+import mqtt from 'mqtt'
+
+const brokerUrl = typeof document !== "undefined" ? (document.location.protocol === "https:" ? "wss" : "ws") + "://" + document.location.host + '/websocket' : '';
 
 const types = {
     10: { name: "TRACE", color: "$green3", icon: Microscope },
@@ -57,16 +60,38 @@ const MessageList = React.memo(({ data, topic }) => {
 export const LogPanel = ({AppState}) => {
     const [appState, setAppState] = useAtom(AppState)
     const maxLog = 1000
-    const { topic, client, message } = useSubscription('logs/#');
+    // const { topic, client, message } = useSubscription('logs/#');
     const [messages, setMessages] = useAtom(BusMessages)
     const [filteredMessages, setFilteredMessages] = useState([])
     const [search, setSearch] = useState('')
 
-    useUpdateEffect(() => {
-        if (message) {
-            setMessages(prevMessages => [message, ...prevMessages.slice(0, maxLog)]);
+    useEffect(() => {
+        if (typeof window === "undefined") {
+            return null
         }
-    }, [message]);
+
+        const client = mqtt.connect(brokerUrl);
+        client.on('connect', function () {
+            client.subscribe('logs/#', function (err) {
+                if (!err) {
+                    console.log('connected to logs')
+                }
+            })
+        })
+        client.on('message', function (topic, message) {
+            // message is Buffer
+            const msg = message.toString()
+            setMessages(prevMessages => [{topic: topic, message: JSON.parse(msg)}, ...prevMessages.slice(0, maxLog)]);
+        })
+        return () => {
+            client.end()
+        }
+    }, [])
+    // useUpdateEffect(() => {
+    //     if (message) {
+    //         setMessages(prevMessages => [message, ...prevMessages.slice(0, maxLog)]);
+    //     }
+    // }, [message]);
 
     useEffect(() => {
         setFilteredMessages(messages.filter((m: any) => {
@@ -165,10 +190,9 @@ export const LogPanel = ({AppState}) => {
 
         <ScrollView bc="transparent" f={1} height={"calc( 100vh - 130px )"}>
             {filteredMessages.map((m, i) => {
-                const data = parseMessage(m.message)
                 return <XStack bc="transparent" hoverStyle={hoverStyle} key={i} btw={0} bbw={1} boc={"$color4"}>
                     <Tinted>
-                        <MessageList data={data} topic={m.topic} />
+                        <MessageList data={m.message} topic={m.topic} />
                     </Tinted>
                 </XStack>
             })}
