@@ -79,6 +79,7 @@ export default {
     id: 'ChildProcessSpawn',
     type: 'CallExpression',
     category: 'OS',
+    hidden: true,
     keywords: ['executor', 'os', 'command', 'spawn', 'process'],
     check: (node, nodeData) => {
         return node.type == "CallExpression" && nodeData.to?.startsWith('context.os.spawn')
