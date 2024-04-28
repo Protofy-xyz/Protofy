@@ -8,11 +8,14 @@ export const automationResponse = (res, data) => {
     res.send({result: data})
 }
 
-export const getServiceToken = ({done})=> {
+export const getServiceToken = (options?)=> {
+    const done = options?.done || (()=>{})
     const token = getServiceToken_()
     done(token)
     return token
 }
+
+export const serviceToken = getServiceToken()
 
 export const automation = (app, cb, name, disableAutoResponse?)=>{
     if(!name) {
