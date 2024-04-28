@@ -3,10 +3,15 @@ import WriteFile from './WriteFile';
 import RunCommand from "./RunCommand";
 import ListDir from "./ListDir";
 import MakeDir from "./MakeDir";
+import FileExists from "./FileExists";
+import DeleteFile from "../masks/DeleteFile";
+
 export default [
     ReadFile,
     WriteFile,
     ListDir,
     RunCommand,
-    MakeDir
+    MakeDir,
+    FileExists,
+    DeleteFile
 ]
