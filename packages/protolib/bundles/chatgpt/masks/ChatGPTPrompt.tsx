@@ -9,10 +9,10 @@ const ChatGPTPrompt = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[{ label: 'message', field: 'mask-message', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'model', field: 'mask-model', type: 'select', data: ["gpt-4-1106-preview", "gpt-4-vision-preview", "gpt-4", "gpt-4-32k", "gpt-4-0613", "gpt-4-32k-0613", "gpt-4-0314", "gpt-4-32k-0314"] }]} />
             <NodeParams id={node.id} params={[{ label: 'max tokens', field: 'mask-max_tokens', type: 'input' }]} />
-            <NodeParams id={node.id} params={[{ label: 'api key', field: 'mask-apikey', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'api key', field: 'mask-apiKey', type: 'input' }]} />
             <div style={{ height: '30px' }} />
-            <NodeOutput id={node.id} type={'input'} label={'On Read'} vars={['message']} handleId={'mask-done'} />
-            <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-error'} />
+            <NodeOutput id={node.id} type={'input'} label={'On Response'} vars={['message']} handleId={'mask-done'} />
+            <NodeOutput id={node.id} type={'input'} label={'On Error'} vars={['err']} handleId={'mask-error'} />
         </Node>
     )
 }
@@ -54,16 +54,16 @@ export default {
                 value: "{}",
                 kind: "Identifier"
             },
-            "mask-apikey": {
+            "mask-message": {
+                value: "",
+                kind: "StringLiteral"
+            },
+            "mask-apiKey": {
                 value: "",
                 kind: "StringLiteral"
             },
             "mask-model": {
                 value: "gpt-4-1106-preview",
-                kind: "StringLiteral"
-            },
-            "mask-message": {
-                value: "",
                 kind: "StringLiteral"
             },
             "mask-max_tokens": {
