@@ -38,7 +38,7 @@ export default {
             await: true,
             to: 'context.os2.listDir',
             "mask-path": {
-                value: "",
+                value: "/",
                 kind: "StringLiteral"
             }
         }

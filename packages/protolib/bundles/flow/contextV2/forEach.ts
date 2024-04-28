@@ -5,7 +5,7 @@ const logger = getLogger();
 export const forEach = async (options: {
     list?: any[],
     mode?: 'parallel' | 'series' | 'manual',
-    onEach?: (item, done?, next?) => Promise<void>,
+    onEach?: (item, stop?, next?) => Promise<void>,
     onDone?: () => void,
     onError?: (err) => void
 }) => {
@@ -46,7 +46,7 @@ export const forEach = async (options: {
                 const item = list[i];
                 await onEach(item, () => {
                     stopLoop = true; // Set the flag to stop the loops
-                });
+                }, () => {});
             }
         }
 
