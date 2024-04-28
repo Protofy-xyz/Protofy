@@ -1,50 +1,50 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Scissors } from 'lucide-react';
+import { Link } from 'lucide-react';
 
-const SplitNode = ({ node = {}, nodeData = {}, children }: any) => {
+const JoinNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(18)
     return (
-        <Node icon={Scissors} node={node} isPreview={!node.id} title='Split Text' color={color} id={node.id} skipCustom={true}>
+        <Node icon={Link} node={node} isPreview={!node.id} title='Join List' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
-                { label: 'Text', field: 'mask-text', type: 'input' },
+                { label: 'List', field: 'mask-list', type: 'input' },
                 { label: 'Separator', field: 'mask-separator', type: 'input' }
             ]} />
             <div style={{height: '30px'}} />
-            <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['list']} handleId={'mask-onDone'} />
+            <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['result']} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
         </Node>
     )
 }
 
 export default {
-    id: 'os2.split',
+    id: 'os2.join',
     type: 'CallExpression',
     category: "Flow",
-    keywords: ['split', 'string', 'text'],
+    keywords: ['join', 'list', 'string'],
     check: (node, nodeData) => {
-        return node.type == "CallExpression" && nodeData.to?.startsWith('context.flow2.split')
+        return node.type == "CallExpression" && nodeData.to?.startsWith('context.flow2.join')
     },
-    getComponent: (node, nodeData, children) => <SplitNode node={node} nodeData={nodeData} children={children} />,
+    getComponent: (node, nodeData, children) => <JoinNode node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
-            text: 'input',
+            list: 'input',
             separator: 'input',
             onDone: 'output',
             onError: 'output'
     }}),
     restoreChildren: restoreObject({keys: {
-        text: 'input',
+        list: 'input',
         separator: 'input',
-        onDone: { params: {'param-list': { key: "list"}}},
+        onDone: { params: {'param-result': { key: "result"}}},
         onError: { params: { 'param-err': { key: "err"}}}
     }}),
     getInitialData: () => {
         return {
             await: true,
-            to: 'context.flow2.split',
-            "mask-text": {
+            to: 'context.flow2.join',
+            "mask-list": {
                 value: "",
-                kind: "StringLiteral"
+                kind: "Identifier"
             },
             "mask-separator": {
                 value: "\\n",
