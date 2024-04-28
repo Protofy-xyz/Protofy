@@ -32,7 +32,13 @@ export const automation = (app, cb, name, disableAutoResponse?)=>{
 
     app.get(url, async (req,res)=>{
         logger.info({name, params: req.query}, "Automation executed: "+name)
-        await cb(req.query, res)
+        try {
+            await cb(req.query, res)
+        } catch(err) {
+            logger.error({name, params: req.query, error: err}, "Automation error: "+name)
+            res.status(424).send({error: err.message})
+        }
+
         if(!disableAutoResponse) {
             automationResponse(res, "Automation executed")
         }
