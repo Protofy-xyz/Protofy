@@ -4,7 +4,8 @@ import RunCommand from "./RunCommand";
 import ListDir from "./ListDir";
 import MakeDir from "./MakeDir";
 import FileExists from "./FileExists";
-import DeleteFile from "../masks/DeleteFile";
+import DeleteFile from "./DeleteFile";
+import DeleteDirectory from "./DeleteDirectory";
 
 export default [
     ReadFile,
@@ -13,5 +14,6 @@ export default [
     RunCommand,
     MakeDir,
     FileExists,
-    DeleteFile
+    DeleteFile,
+    DeleteDirectory
 ]
