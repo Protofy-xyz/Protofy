@@ -11,7 +11,7 @@ const ChatGPTPrompt = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[{ label: 'max tokens', field: 'mask-max_tokens', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'api key', field: 'mask-apiKey', type: 'input' }]} />
             <div style={{ height: '30px' }} />
-            <NodeOutput id={node.id} type={'input'} label={'On Response'} vars={['message']} handleId={'mask-done'} />
+            <NodeOutput id={node.id} type={'input'} label={'On Response'} vars={['response', 'message']} handleId={'mask-done'} />
             <NodeOutput id={node.id} type={'input'} label={'On Error'} vars={['err']} handleId={'mask-error'} />
         </Node>
     )
@@ -42,7 +42,16 @@ export default {
             apiKey: 'input',
             model: 'input',
             max_tokens: 'input',
-            done: { params: { 'param-done': { key: "message" } } },
+            done: { 
+                params: { 
+                    'param-response': { 
+                        key: "response" 
+                    },
+                    'param-message': { 
+                        key: "message" 
+                    }  
+                },
+            },
             error: { params: { 'param-error': { key: "err" } } }
         }
     }),

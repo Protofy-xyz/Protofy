@@ -1,7 +1,7 @@
 
 const chatGPTSession = async ({
     apiKey = process.env.OPENAI_API_KEY,
-    done = (message) => { },
+    done = (response, message) => { },
     error = (error) => { },
     ...props
 }: ChatGPTRequest) => {
@@ -52,18 +52,16 @@ const chatGPTPrompt = async ({
             if(response.choices && response.choices.length){
                 message = response.choices[0].message.content
             }
-            if(props.done) props.done(message)
+            if(props.done) props.done(response, message)
         }
     })
 
-    if(!response.choices || !response.choices.length){ return "" }
-
-    return response.choices[0].message.content
+    return response
 }
 
 type ChatGPTRequest = {
     apiKey?: string;
-    done?: (message: any) => any;
+    done?: any;
     error?: (error: any) => any;
 } & GPT4VCompletionRequest
 
