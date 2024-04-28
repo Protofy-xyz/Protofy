@@ -5,6 +5,7 @@ import Map from "./Map";
 import Split from "./Split";
 import Join from "./Join";
 import Rewire from "./Rewire";
+import Push from "./Push";
 
 export default [
     FlowSwitch,
@@ -13,5 +14,6 @@ export default [
     Map,
     Split,
     Join,
-    Rewire
+    Rewire,
+    Push
 ]
