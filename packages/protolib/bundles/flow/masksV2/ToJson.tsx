@@ -17,7 +17,7 @@ const ToJSON = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'os2.toJson',
+    id: 'flow2.toJson',
     type: 'CallExpression',
     category: "Flow",
     keywords: ['json', 'dump', 'data'],

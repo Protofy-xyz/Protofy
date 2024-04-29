@@ -18,7 +18,7 @@ const JoinNode = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'os2.join',
+    id: 'flow2.join',
     type: 'CallExpression',
     category: "Flow",
     keywords: ['join', 'list', 'string'],

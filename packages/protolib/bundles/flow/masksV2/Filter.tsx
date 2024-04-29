@@ -19,7 +19,7 @@ const FilterNode = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'os2.filter',
+    id: 'flow2.filter',
     type: 'CallExpression',
     category: "Flow",
     keywords: ['filter', 'array', 'functional', 'flow', 'loop'],

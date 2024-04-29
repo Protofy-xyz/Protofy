@@ -8,6 +8,7 @@ import {rewire} from "./rewire";
 import { push } from "./push";
 import { jsonParse } from "./jsonParse";
 import { toJson } from "./toJson";
+import { addObjectKey } from "./addObjectKey";
 
 export default {
     "switch": flowSwitch,
@@ -19,5 +20,6 @@ export default {
     rewire,
     push,
     jsonParse,
-    toJson
+    toJson,
+    addObjectKey
 }

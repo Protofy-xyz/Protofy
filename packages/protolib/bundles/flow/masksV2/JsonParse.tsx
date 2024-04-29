@@ -17,7 +17,7 @@ const JsonParseNode = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'os2.jsonParse',
+    id: 'flow2.jsonParse',
     type: 'CallExpression',
     category: "Flow",
     keywords: ['json', 'parse', 'data'],

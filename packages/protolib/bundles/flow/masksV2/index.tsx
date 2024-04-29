@@ -8,7 +8,7 @@ import Rewire from "./Rewire";
 import Push from "./Push";
 import JsonParse from "./JsonParse";
 import ToJson from "./ToJson";
-
+import AddObjectKey from "./AddObjectKey";
 export default [
     FlowSwitch,
     ForEach,
@@ -19,5 +19,6 @@ export default [
     Rewire,
     Push,
     JsonParse,
-    ToJson
+    ToJson,
+    AddObjectKey
 ]
