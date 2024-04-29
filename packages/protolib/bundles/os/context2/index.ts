@@ -9,6 +9,7 @@ import { deleteDirectory } from './deleteDirectory'
 import { renameFile } from './renameFile'
 import { copyFile } from './copyFile'
 import { moveFile } from './moveFile'
+import { copyDirectory } from './copyDirectory'
 
 export default {
     readFile,
@@ -21,5 +22,6 @@ export default {
     deleteDirectory,
     renameFile,
     copyFile,
-    moveFile
+    moveFile,
+    copyDirectory
 }
