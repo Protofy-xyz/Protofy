@@ -15,6 +15,7 @@ import { compressDirectory } from './compressDirectory'
 import { getFileMetadata } from './getFileMetadata'
 import { getFreeMemory } from './getFreeMemory'
 import { getCPUs } from './getCPUs'
+import {getTotalMemory} from './getTotalMemory'
 
 
 export default {
@@ -35,4 +36,5 @@ export default {
     getFileMetadata,
     getFreeMemory,
     getCPUs,
+    getTotalMemory
 }
