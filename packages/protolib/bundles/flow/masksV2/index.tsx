@@ -6,7 +6,7 @@ import Split from "./Split";
 import Join from "./Join";
 import Rewire from "./Rewire";
 import Push from "./Push";
-
+import JsonParse from "./JsonParse";
 export default [
     FlowSwitch,
     ForEach,
@@ -15,5 +15,6 @@ export default [
     Split,
     Join,
     Rewire,
-    Push
+    Push,
+    JsonParse
 ]

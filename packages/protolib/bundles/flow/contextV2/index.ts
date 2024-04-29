@@ -6,6 +6,7 @@ import {split} from "./split";
 import {join} from "./join";
 import {rewire} from "./rewire";
 import { push } from "./push";
+import { jsonParse } from "./jsonParse";
 
 export default {
     "switch": flowSwitch,
@@ -15,5 +16,6 @@ export default {
     split,
     join,
     rewire,
-    push
+    push,
+    jsonParse
 }
