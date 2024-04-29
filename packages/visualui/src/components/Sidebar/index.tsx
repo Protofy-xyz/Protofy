@@ -3,6 +3,8 @@ import { Element, useEditor } from "@protocraft/core";
 import { getIcon } from "../../utils/craftComponent";
 import Icon from '../Icon';
 import { Search, X } from 'lucide-react';
+import { useUITheme } from "../Theme";
+import { useThemeSetting } from '@tamagui/next-theme'
 
 export type SidebarProps = {
     palettes: any,
@@ -15,6 +17,12 @@ export const Sidebar = ({
 }: SidebarProps) => {
     const [searchValue, setSearchValue] = React.useState('')
     const { connectors, query } = useEditor();
+    const { resolvedTheme } = useThemeSetting();
+
+    const nodeBackgroundColor = useUITheme('nodeBackgroundColor')
+    const interactiveHoverColor = useUITheme('interactiveHoverColor')
+    const textColor = useUITheme('textColor')
+
     function truncate_with_ellipsis(s, maxLength) {
         if (s.length > maxLength) {
             return s.substring(0, maxLength - 3) + '...';
@@ -50,8 +58,8 @@ export const Sidebar = ({
     const atomsPalettesArr = Object.keys(filteredDropableComponents).filter(p => p != "craft");
 
     return (
-        <div className={'visualui-sidebar'} style={{ padding: '8px', display: 'flex', flexDirection: "column", flex: 1, backgroundColor: 'rgb(37, 37, 38, 0.97)' }}>
-            <p style={{ padding: '18px 0px 0px 14px', fontSize: '18px', color: 'white', fontWeight: '400', display: 'flex' }}>Components</p>
+        <div className={'visualui-sidebar'} style={{ padding: '8px', display: 'flex', flexDirection: "column", flex: 1, backgroundColor: nodeBackgroundColor }}>
+            <p style={{ padding: '18px 0px 0px 14px', fontSize: '18px', color: textColor, fontWeight: '400', display: 'flex' }}>Components</p>
             <div style={{ display: 'flex', margin: '18px 12px 18px 2px', position: 'relative' }}>
                 <input
                     style={{
@@ -60,18 +68,18 @@ export const Sidebar = ({
                         display: 'flex',
                         boxSizing: 'border-box',
                         fontSize: '14px',
-                        backgroundColor: '#323232',
+                        backgroundColor: resolvedTheme == 'light' ? '#E1E1E1' : "#323232",
                         borderRadius: '10px',
                         borderWidth: '0px',
                         outline: 'none',
-                        color: 'white',
+                        color: textColor,
                         flex: 1
                     }}
                     value={searchValue}
                     onChange={t => setSearchValue(t.target.value)}
                     placeholder="Search..."
                 />
-                <Search color='grey' size={20} style={{ position: 'absolute', top: '8px', left: '10px' }} />
+                <Search color={'grey'} size={20} style={{ position: 'absolute', top: '8px', left: '10px' }} />
                 {searchValue ? <X onClick={() => setSearchValue('')} color='white' size={20} style={{ position: 'absolute', top: '8px', right: '10px', cursor: 'pointer' }} /> : null}
             </div>
             <div className={'visualui-sidebar-list'} style={{ overflow: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }} >
@@ -79,20 +87,19 @@ export const Sidebar = ({
                     atomsPalettesArr.map((palette, i) => {
                         return (
                             <div key={i} style={{ flexDirection: 'column', display: 'flex', marginBottom: '25px' }}>
-                                <p style={{ paddingLeft: '16px', marginBottom: '10px', fontSize: '12px', color: 'grey' }}>{palette.toUpperCase()}</p>
+                                <p style={{ paddingLeft: '16px', marginBottom: '10px', fontSize: '12px', color: "gray" }}>{palette.toUpperCase()}</p>
                                 <div className={'visualui-sidebar-list'} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start', gap: '8px' }}>
                                     {
                                         Object.keys(filteredDropableComponents[palette]).map((componentName, i) => {
                                             const data = filteredDropableComponents[palette][componentName]
-
                                             return (data?.nonDeletable ?
                                                 null
                                                 : <div key={i}
                                                     onMouseEnter={(e) => {
-                                                        e.currentTarget.style.backgroundColor = '#FFFFFF10'
+                                                        e.currentTarget.style.backgroundColor = interactiveHoverColor
                                                     }}
                                                     onMouseLeave={(e) => {
-                                                        e.currentTarget.style.backgroundColor = ''
+                                                        e.currentTarget.style.backgroundColor = nodeBackgroundColor
                                                     }}
                                                     title={componentName}
                                                     id={"drag-element-" + componentName}
@@ -105,14 +112,18 @@ export const Sidebar = ({
                                                             ></Element>
                                                             : React.createElement(data.element)
                                                     })}
-                                                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'grab', borderRadius: '6px', padding: '10px 0px', width: '100px' }}>
+                                                    style={{
+                                                        display: 'flex', flexDirection: 'column', alignItems: 'center',
+                                                        textAlign: 'center', cursor: 'grab', borderRadius: '6px',
+                                                        padding: '10px 0px', width: '100px', backgroundColor: nodeBackgroundColor
+                                                    }}>
                                                     <Icon
                                                         name={data.icon}
-                                                        color={"#a8a29e"}
+                                                        color={textColor}
                                                         size={32}
                                                     />
                                                     <div style={{ marginTop: '14px' }}>
-                                                        <p style={{ fontSize: '12px', width: '100%', color: 'white', padding: '5px' }}>
+                                                        <p style={{ fontSize: '12px', width: '100%', color: textColor, padding: '5px' }}>
                                                             {truncate_with_ellipsis(componentName, 12)}
                                                         </p>
                                                     </div>
@@ -126,6 +137,6 @@ export const Sidebar = ({
                     })
                 }
             </div>
-        </div>
+        </div >
     );
 };
