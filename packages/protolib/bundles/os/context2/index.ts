@@ -16,6 +16,7 @@ import { getFileMetadata } from './getFileMetadata'
 import { getFreeMemory } from './getFreeMemory'
 import { getCPUs } from './getCPUs'
 import {getTotalMemory} from './getTotalMemory'
+import { getNetworkInterfaces } from './getNetworkInterfaces'
 
 
 export default {
@@ -36,5 +37,6 @@ export default {
     getFileMetadata,
     getFreeMemory,
     getCPUs,
-    getTotalMemory
+    getTotalMemory,
+    getNetworkInterfaces
 }
