@@ -21,7 +21,7 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
             <Button label={<XStack minHeight='30px' ai="center" jc="center">{loading?<Spinner color={color} />:'Run'}</XStack>} onPress={async () => {
                 const params = getFieldValue('testparams', nodeData)
                 setLoading(true)
-                await API.get('/api/v1/automations/' + getFieldValue('param-3', nodeData)+(params ? '?'+params : ''))
+                await API.get('/api/v1/automations/' + getFieldValue('mask-name', nodeData)+(params ? '?'+params : ''))
                 setLoading(false)
             }}>
             </Button>
