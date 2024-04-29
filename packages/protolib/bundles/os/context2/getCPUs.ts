@@ -1,16 +1,16 @@
 import os from 'os';
 
-export const getCPUsCount = async(options: {
-    done?: (cpus) => {},
+export const getCPUs = async(options: {
+    done?: (cpus, cpusCount) => {},
     error?: (err) => {}
 }) => {
     const done = options.done || (() => {});
     const error = options.error;
 
     try {
-        const cpusArray = os.cpus();
-        const cpus = cpusArray.length;
-        done(cpus);  // Return the count of CPUs
+        const cpus = os.cpus();
+        const cpusCount = cpus.length;
+        done(cpus, cpusCount);  // Return the count of CPUs
         return cpus;
     } catch (err) {
         if (error) {
