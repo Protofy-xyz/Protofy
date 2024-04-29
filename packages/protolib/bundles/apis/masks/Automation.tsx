@@ -35,6 +35,7 @@ const Automation = (node: any = {}, nodeData = {}) => {
 export default {
     id: 'Automation',
     type: 'CallExpression',
+    hidden: true,
     check: (node, nodeData) => {
         var param2Val = getFieldValue('param-2', nodeData)
         return (
