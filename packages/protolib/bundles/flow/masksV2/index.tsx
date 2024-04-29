@@ -7,6 +7,8 @@ import Join from "./Join";
 import Rewire from "./Rewire";
 import Push from "./Push";
 import JsonParse from "./JsonParse";
+import ToJson from "./ToJson";
+
 export default [
     FlowSwitch,
     ForEach,
@@ -16,5 +18,6 @@ export default [
     Join,
     Rewire,
     Push,
-    JsonParse
+    JsonParse,
+    ToJson
 ]
