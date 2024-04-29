@@ -39,7 +39,7 @@ export default Protofy("code", async (app:Application, context) => {
     context.automations.automation({
         name: '{{codeNameLowerCase}}',
         responseMode: 'wait',
-        app
+        app: app
     })
 })
 
