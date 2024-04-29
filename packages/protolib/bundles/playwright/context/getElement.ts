@@ -26,13 +26,13 @@ export const getElement = async (options: {
 
     try {
         if (all) {
-            await page.$$eval(selector, (elements) => {
-                onDone(elements)
-            });
+            const elements = await page.locator(selector).elementHandles()
+            onDone(elements)
+            return elements
         } else {
-            await page.$eval(selector, (element) => {
-                onDone(element)
-            });
+            const elements = await page.locator(selector).first()
+            onDone(elements)
+            return elements
         }
     } catch (err) {
         onError(err);
