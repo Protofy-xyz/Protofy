@@ -1,11 +1,11 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Search } from 'lucide-react';
+import { TextSelect } from 'lucide-react';
 
 const GetAttributeNode = ({ node = {}, nodeData = {}, children }: any) => {
-    const color = useColorFromPalette(12)
+    const color = useColorFromPalette(60)
     return (
-        <Node icon={Search} node={node} isPreview={!node.id} title='Get Attribute' color={color} id={node.id} skipCustom={true}>
+        <Node icon={TextSelect} node={node} isPreview={!node.id} title='Get Attribute' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
                 { label: 'Element', field: 'mask-element', type: 'input' },
                 { label: 'Attribute', field: 'mask-attribute', type: 'input' }

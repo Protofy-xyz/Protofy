@@ -1,11 +1,11 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Camera } from 'lucide-react';
+import { FileBoxIcon } from 'lucide-react';
 
 const GetElementNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(60)
     return (
-        <Node icon={Camera} node={node} isPreview={!node.id} title={'Get Element'+(nodeData['mask-all']?.value ? 's':'')} color={color} id={node.id} skipCustom={true}>
+        <Node icon={FileBoxIcon} node={node} isPreview={!node.id} title={'Get Element'+(nodeData['mask-all']?.value ? 's':'')} color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
                 { label: 'Selector', field: 'mask-selector', type: 'input' },
                 { label: 'All', field: 'mask-all', type: 'boolean' },
