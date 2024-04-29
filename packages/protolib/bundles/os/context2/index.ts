@@ -14,6 +14,9 @@ import { appendToFile } from './appendToFile'
 import { compressDirectory } from './compressDirectory'
 import { getFileMetadata } from './getFileMetadata'
 import { getFreeMemory } from './getFreeMemory'
+import { getCPUs } from './getCPUs'
+import {getTotalMemory} from './getTotalMemory'
+
 
 export default {
     readFile,
@@ -31,5 +34,7 @@ export default {
     appendToFile,
     compressDirectory,
     getFileMetadata,
-    getFreeMemory
+    getFreeMemory,
+    getCPUs,
+    getTotalMemory
 }

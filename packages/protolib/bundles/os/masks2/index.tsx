@@ -14,6 +14,8 @@ import AppendToFile from "./AppendToFile";
 import CompressDirectory from "./CompressDirectory";
 import GetFileMetadata from "./GetFileMetadata";
 import GetFreeMemory from "./GetFreeMemory";
+import GetCPUs from "./GetCPUs";
+import GetTotalMemory from "./GetTotalMemory";
 
 export default [
     ReadFile,
@@ -31,5 +33,7 @@ export default [
     AppendToFile,
     CompressDirectory,
     GetFileMetadata,
-    GetFreeMemory
+    GetFreeMemory,
+    GetCPUs,
+    GetTotalMemory
 ]
