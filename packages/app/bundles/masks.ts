@@ -19,6 +19,7 @@ import utilsMasks from 'protolib/bundles/utils/masks'
 import keyMasks from 'protolib/bundles/keys/masks'
 import chatGPTMasks from 'protolib/bundles/chatgpt/masks'
 import logsMasks from 'protolib/bundles/logs/masks'
+import playwrightMasks from 'protolib/bundles/playwright/masks'
 
 const paths = {
     devices: [
@@ -68,7 +69,8 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...keyMasks,
         ...utilsMasks,
         ...chatGPTMasks,
-        ...logsMasks
+        ...logsMasks,
+        ...playwrightMasks
     ]
     return []
 }
