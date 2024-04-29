@@ -7,6 +7,7 @@ import { fileExists } from './fileExists'
 import { deleteFile } from './deleteFile'
 import { deleteDirectory } from './deleteDirectory'
 import { renameFile } from './renameFile'
+import { copyFile } from './copyFile'
 
 export default {
     readFile,
@@ -17,5 +18,6 @@ export default {
     fileExists,
     deleteFile,
     deleteDirectory,
-    renameFile
+    renameFile,
+    copyFile
 }

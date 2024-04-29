@@ -4,7 +4,7 @@ import { join } from 'path';
 export const renameFile = async(options: {
     oldPath: string, 
     newPath: string, 
-    done?: () => {}, 
+    done?: (path) => {}, 
     error?: (err) => {}
 }) => {
     const oldPath = options.oldPath;
@@ -14,7 +14,8 @@ export const renameFile = async(options: {
 
     try {
         await fs.rename(join('../../', oldPath), join('../../', newPath));
-        done();  // File successfully renamed
+        done(newPath);  // File successfully renamed
+        return newPath
     } catch (err) {
         if (error) {
             error(err);

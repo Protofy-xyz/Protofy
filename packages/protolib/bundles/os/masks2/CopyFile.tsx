@@ -1,14 +1,14 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Edit2 } from 'lucide-react';
+import { Copy } from 'lucide-react';
 
-const RenameFile = ({ node = {}, nodeData = {}, children }: any) => {
-    const color = useColorFromPalette(6);  // Un color neutral
+const CopyFile = ({ node = {}, nodeData = {}, children }: any) => {
+    const color = useColorFromPalette(4)
     return (
-        <Node icon={Edit2} node={node} isPreview={!node.id} title='Rename File' color={color} id={node.id} skipCustom={true}>
+        <Node icon={Copy} node={node} isPreview={!node.id} title='Copy File' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
-                { label: 'Old Path', field: 'mask-oldPath', type: 'input' },
-                { label: 'New Path', field: 'mask-newPath', type: 'input' }
+                { label: 'Source Path', field: 'mask-sourcePath', type: 'input' },
+                { label: 'Destination Path', field: 'mask-destinationPath', type: 'input' }
             ]} />
             <div style={{height: '30px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['path']} handleId={'mask-done'} />
@@ -18,35 +18,35 @@ const RenameFile = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'os2.renameFile',
+    id: 'os2.copyFile',
     type: 'CallExpression',
     category: "OS",
-    keywords: ['fs', 'os', 'file', 'rename', 'move'],
+    keywords: ['fs', 'os', 'file', 'copy'],
     check: (node, nodeData) => {
-        return node.type == "CallExpression" && nodeData.to?.startsWith('context.os2.renameFile')
+        return node.type == "CallExpression" && nodeData.to?.startsWith('context.os2.copyFile')
     },
-    getComponent: (node, nodeData, children) => <RenameFile node={node} nodeData={nodeData} children={children} />,
+    getComponent: (node, nodeData, children) => <CopyFile node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
-            'oldPath': 'input',
-            'newPath': 'input',
+            'sourcePath': 'input',
+            'destinationPath': 'input',
             done: 'output',
             error: 'output'
     }}),
     restoreChildren: restoreObject({keys: {
-        'oldPath': 'input',
-        'newPath': 'input',
+        'sourcePath': 'input',
+        'destinationPath': 'input',
         done: { params: {'param-done': { key: "path"}}},
         error: { params: { 'param-error': { key: "err"}}}
     }}),
     getInitialData: () => {
         return {
             await: true,
-            to: 'context.os2.renameFile',
-            "mask-oldPath": {
+            to: 'context.os2.copyFile',
+            "mask-sourcePath": {
                 value: "",
                 kind: "StringLiteral"
             },
-            "mask-newPath": {
+            "mask-destinationPath": {
                 value: "",
                 kind: "StringLiteral"
             }
