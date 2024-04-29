@@ -7,7 +7,7 @@ import FileExists from "./FileExists";
 import DeleteFile from "./DeleteFile";
 import DeleteDirectory from "./DeleteDirectory";
 import RenameFile from "./RenameFile";
-
+import CopyFile from "./CopyFile";
 
 export default [
     ReadFile,
@@ -18,5 +18,6 @@ export default [
     FileExists,
     DeleteFile,
     DeleteDirectory,
-    RenameFile
+    RenameFile,
+    CopyFile
 ]
