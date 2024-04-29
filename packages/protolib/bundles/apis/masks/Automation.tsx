@@ -2,9 +2,13 @@ import { Node, getFieldValue, FlowPort, NodeParams, FallbackPort, Button, filter
 import { API } from 'protolib'
 import { Plug } from 'lucide-react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import React from 'react';
+import { Spinner, XStack } from 'tamagui';
 
 const Automation = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(9)
+    const [loading, setLoading] = React.useState(false)
+    
     return (
         <Node icon={Plug} node={node} isPreview={!node?.id} title='Automation' id={node.id} color={color} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Name', static: true, field: 'param-3', type: 'input' }]} />
@@ -13,10 +17,17 @@ const Automation = (node: any = {}, nodeData = {}) => {
                 <FlowPort id={node.id} type='input' label='On run (params)' style={{ top: '200px' }} handleId={'request'} />
                 <FallbackPort node={node} fallbackText={'null'} port={'param-2'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (params, res) => " postText="" />
             </div>
-
-            <Button style={{ marginTop: '60px' }} label="Run" onPress={() => {
-                API.get('/api/v1/automations/' + getFieldValue('param-3', nodeData))
-            }} />
+            <div style={{height: '80px'}} />
+            <Button label={<XStack minHeight='30px' ai="center" jc="center">{loading?<Spinner color={color} />:'Run'}</XStack>} onPress={async () => {
+                const params = getFieldValue('testparams', nodeData)
+                setLoading(true)
+                await API.get('/api/v1/automations/' + getFieldValue('param-3', nodeData)+(params ? '?'+params : ''))
+                setLoading(false)
+            }}>
+            </Button>
+            <div style={{height: '0px'}} />
+            <NodeParams id={node.id} params={[{ label: 'Params', static: true, field: 'testparams', type: 'input' }]} />
+            <div style={{height: '20px'}} />
         </Node>
     )
 }
