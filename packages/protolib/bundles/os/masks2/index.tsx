@@ -11,6 +11,7 @@ import CopyFile from "./CopyFile";
 import MoveFile from "./MoveFile";
 import CopyDirectory from "./CopyDirectory";
 import AppendToFile from "./AppendToFile";
+import CompressDirectory from "./CompressDirectory";
 
 export default [
     ReadFile,
@@ -25,5 +26,6 @@ export default [
     CopyFile,
     MoveFile,
     CopyDirectory,
-    AppendToFile
+    AppendToFile,
+    CompressDirectory
 ]
