@@ -118,5 +118,15 @@ const VisualUILoader = ({ userComponents, path, metadata, visualUiContext }: { u
       setFileContent(res.data)
     }
   }, [res])
-  return <UiManager metadata={metadata} userPalettes={{ atoms: { ...palettes.atoms, user: userComponents } }} _sourceCode={fileContent} onSave={onSave} contextAtom={visualUiContext} />
+  return (
+    <UiManager
+      metadata={metadata}
+      userPalettes={{
+        atoms: { ...palettes.atoms, user: userComponents },
+        molecules: { ...palettes.molecules }
+      }}
+      _sourceCode={fileContent}
+      onSave={onSave}
+      contextAtom={visualUiContext}
+    />)
 }

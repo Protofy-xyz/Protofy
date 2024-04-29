@@ -14,5 +14,10 @@ export const palettes = {
         miscellany: {
             ...protolibPalette.atoms.miscellany
         },
+    },
+    molecules: {
+        basic: {
+            ...protolibPalette.molecules.basic
+        },
     }
 }

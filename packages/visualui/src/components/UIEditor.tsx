@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { Editor } from "@protocraft/core";
 import { Layers } from "@protocraft/layers";
 import { RenderNode } from './RenderNode';
-import paletteComponents from '../palettes';
+import systemPalette from '../palettes';
 import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
 import { MainPanel } from "protolib";
@@ -59,7 +59,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     }, [])
 
     const allPalettes = {
-        atoms: { ...paletteComponents.atoms, ...userPalettes?.atoms }
+        atoms: { ...systemPalette.atoms, ...userPalettes?.atoms },
+        molecules: { ...userPalettes?.molecules },
     }
     const allPalettesAtoms = allPalettes.atoms
 

@@ -86,6 +86,7 @@ import Spacer from '../components/Spacer'
 import { AdminPage } from '../components/AdminPage'
 import { alignSelf, fontStyle, textAlign, fontWeight, flexDirection, justifyContent, resizeMode } from './shortcuts'
 import { ProtoView } from '../components/ProtoView'
+import molecules from './molecules'
 
 const cw = getComponentWrapper('protolib')
 
@@ -285,5 +286,6 @@ export default {
     text: textPalette,
     layout: layoutPalette,
     miscellany: miscellanyPalette,
-  }
+  },
+  molecules,
 }
