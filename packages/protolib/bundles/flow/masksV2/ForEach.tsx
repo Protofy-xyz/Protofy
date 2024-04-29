@@ -1,11 +1,11 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject} from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Split } from 'lucide-react';
+import { IterationCcw } from 'lucide-react';
 
 const ForEach = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(10)
     return (
-        <Node icon={Split} node={node} isPreview={!node.id} title='for Each' color={color} id={node.id} skipCustom={true}>
+        <Node icon={IterationCcw} node={node} isPreview={!node.id} title='for Each' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'List', field: 'mask-list', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Mode', field: 'mask-mode', type: 'select', data: ["series", "parallel", "manual"] }]} />
             <div style={{height: '30px'}} />
