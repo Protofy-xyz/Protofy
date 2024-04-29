@@ -13,6 +13,7 @@ import keys from 'protolib/bundles/keys/context'
 import chatGPT from 'protolib/bundles/chatgpt/context'
 import logs from 'protolib/bundles/logs/context'
 import playwright from 'protolib/bundles/playwright/context'
+import automations from 'protolib/bundles/automations/context'
 export default {
     onEvent,
     emitEvent,
@@ -36,5 +37,6 @@ export default {
     os2,
     utils,
     logs,
-    playwright
+    playwright,
+    automations
 }

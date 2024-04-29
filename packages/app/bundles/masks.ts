@@ -8,7 +8,7 @@ import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
 import baseMasks from 'protolib/bundles/basemasks';
 import customEventMasks from 'protolib/bundles/events/masks'
 import customMasks from 'app/bundles/custom/masks'
-import scheduleMasks from 'protolib/bundles/automations/masks';
+import automationMasks from 'protolib/bundles/automations/masks';
 import resendMasks from 'protolib/bundles/resend/masks';
 import flowMasks from 'protolib/bundles/flow/masks';
 import flowMasks2 from 'protolib/bundles/flow/masksV2';
@@ -61,7 +61,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...apiMasks,
         ...devicesMasks.api,
         ...baseMasks.api,
-        ...scheduleMasks,
+        ...automationMasks,
         ...resendMasks,
         ...objectMasks,
         ...osMasks,
