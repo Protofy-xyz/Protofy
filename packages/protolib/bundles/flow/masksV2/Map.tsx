@@ -19,7 +19,7 @@ const MapNode = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'os2.map',
+    id: 'flow2.map',
     type: 'CallExpression',
     category: "Flow",
     keywords: ['map', 'array', 'functional', 'flow', 'loop'],

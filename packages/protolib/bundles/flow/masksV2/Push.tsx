@@ -18,7 +18,7 @@ const PushNode = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'os2.push',
+    id: 'flow2.push',
     type: 'CallExpression',
     category: "Flow",
     keywords: ['push', 'list', 'add', 'array'],

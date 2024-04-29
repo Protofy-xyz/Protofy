@@ -19,7 +19,7 @@ const FlowSwitch = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'flowSwitchV2',
+    id: 'flow2.flowSwitch',
     type: 'CallExpression',
     category: "Flow",
     keywords: ["control", "filter", "switch", "flow", "conditional"],

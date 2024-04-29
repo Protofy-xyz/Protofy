@@ -6,10 +6,10 @@ const Rewire = ({ node = {}, nodeData = {}, children }: any) => {
 
     const color = useColorFromPalette(34)
     return (
-        <Node icon={CableIcon} node={node} isPreview={!node.id} title='Rewire' color={color} id={node.id} skipCustom={true}>
+        <Node icon={CableIcon} node={node} isPreview={!node.id} title='Flow Variable' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
-                { label: 'Value', field: 'mask-value', type: 'input' },
                 { label: 'Name', field: 'mask-name', type: 'input' },
+                { label: 'Value', field: 'mask-value', type: 'input' },
             ]} />
             <div style={{height: '30px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={[nodeData['mask-name']?.value]} handleId={'mask-onDone'} />
@@ -19,7 +19,7 @@ const Rewire = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'os2.rewire',
+    id: 'flow2.rewire',
     type: 'CallExpression',
     category: "Flow",
     keywords: ['rewire', 'variable', 'value', 'declare', 'assign', 'set', 'change'],
@@ -28,16 +28,16 @@ export default {
     },
     getComponent: (node, nodeData, children) => <Rewire node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
-            value: 'input',
             name: 'input',
+            value: 'input',
             onDone: 'output',
             onError: 'output'
     }}),
     restoreChildren: (node, nodes, originalNodes, edges, originalEdges, nodeData) => {
         const name = nodeData[node.id]['mask-name'].value
         return restoreObject({keys: {
-        text: 'input',
         name: 'input',
+        value: 'input',
         onDone: { params: {'param-x': { key: name}}},
         onError: { params: { 'param-err': { key: "err"}}}
         }})(node, nodes, originalNodes, edges, originalEdges, nodeData)

@@ -18,7 +18,7 @@ const SplitNode = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'os2.split',
+    id: 'flow2.split',
     type: 'CallExpression',
     category: "Flow",
     keywords: ['split', 'string', 'text'],

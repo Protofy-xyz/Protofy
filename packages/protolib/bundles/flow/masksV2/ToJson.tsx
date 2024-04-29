@@ -2,44 +2,44 @@ import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'proto
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
 import { FileText } from 'lucide-react';
 
-const JsonParseNode = ({ node = {}, nodeData = {}, children }: any) => {
+const ToJSON = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(40)
     return (
-        <Node icon={FileText} node={node} isPreview={!node.id} title='JSON Parse' color={color} id={node.id} skipCustom={true}>
+        <Node icon={FileText} node={node} isPreview={!node.id} title='Convert to JSON' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
-                { label: 'JSON Data', field: 'mask-data', type: 'input' }
+                { label: 'Value', field: 'mask-value', type: 'input' }
             ]} />
             <div style={{height: '30px'}} />
-            <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['result']} handleId={'mask-onDone'} />
+            <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['json']} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
         </Node>
     )
 }
 
 export default {
-    id: 'flow2.jsonParse',
+    id: 'flow2.toJson',
     type: 'CallExpression',
     category: "Flow",
-    keywords: ['json', 'parse', 'data'],
+    keywords: ['json', 'dump', 'data'],
     check: (node, nodeData) => {
-        return node.type == "CallExpression" && nodeData.to?.startsWith('context.flow2.jsonParse')
+        return node.type == "CallExpression" && nodeData.to =='context.flow2.toJson'
     },
-    getComponent: (node, nodeData, children) => <JsonParseNode node={node} nodeData={nodeData} children={children} />,
+    getComponent: (node, nodeData, children) => <ToJSON node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
-            data: 'input',
+            value: 'input',
             onDone: 'output',
             onError: 'output'
     }}),
     restoreChildren: restoreObject({keys: {
-        data: 'input',
-        onDone: { params: {'param-result': { key: "result"}}},
+        value: 'input',
+        onDone: { params: {'param-json': { key: "json"}}},
         onError: { params: { 'param-err': { key: "err"}}}
     }}),
     getInitialData: () => {
         return {
             await: true,
-            to: 'context.flow2.jsonParse',
-            "mask-data": {
+            to: 'context.flow2.toJson',
+            "mask-value": {
                 value: "",
                 kind: "Identifier"
             },
