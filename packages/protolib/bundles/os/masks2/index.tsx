@@ -8,6 +8,7 @@ import DeleteFile from "./DeleteFile";
 import DeleteDirectory from "./DeleteDirectory";
 import RenameFile from "./RenameFile";
 import CopyFile from "./CopyFile";
+import MoveFile from "./MoveFile";
 
 export default [
     ReadFile,
@@ -19,5 +20,6 @@ export default [
     DeleteFile,
     DeleteDirectory,
     RenameFile,
-    CopyFile
+    CopyFile,
+    MoveFile
 ]
