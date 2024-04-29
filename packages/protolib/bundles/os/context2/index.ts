@@ -10,6 +10,8 @@ import { renameFile } from './renameFile'
 import { copyFile } from './copyFile'
 import { moveFile } from './moveFile'
 import { copyDirectory } from './copyDirectory'
+import { appendToFile } from './appendToFile'
+import { compressDirectory } from './compressDirectory'
 
 export default {
     readFile,
@@ -23,5 +25,7 @@ export default {
     renameFile,
     copyFile,
     moveFile,
-    copyDirectory
+    copyDirectory,
+    appendToFile,
+    compressDirectory
 }

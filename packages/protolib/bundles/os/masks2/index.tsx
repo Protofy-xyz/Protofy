@@ -10,6 +10,8 @@ import RenameFile from "./RenameFile";
 import CopyFile from "./CopyFile";
 import MoveFile from "./MoveFile";
 import CopyDirectory from "./CopyDirectory";
+import AppendToFile from "./AppendToFile";
+import CompressDirectory from "./CompressDirectory";
 
 export default [
     ReadFile,
@@ -23,5 +25,7 @@ export default [
     RenameFile,
     CopyFile,
     MoveFile,
-    CopyDirectory
+    CopyDirectory,
+    AppendToFile,
+    CompressDirectory
 ]
