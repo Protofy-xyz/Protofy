@@ -23,12 +23,10 @@ export default {
     },
     getComponent: (node, nodeData, children) => <GetNetworkInterfaces node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
-            networkInterfaces: 'output',
             done: 'output',
             error: 'output'
     }}),
     restoreChildren: restoreObject({keys: {
-        networkInterfaces: { params: {'param-networkInterfaces': { key: "networkInterfaces"}}},
         done: { params: {'param-done': { key: "interfaces"}}},
         error: { params: { 'param-error': { key: "err"}}}
     }}),

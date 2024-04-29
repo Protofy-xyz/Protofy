@@ -17,6 +17,7 @@ import { getFreeMemory } from './getFreeMemory'
 import { getCPUs } from './getCPUs'
 import {getTotalMemory} from './getTotalMemory'
 import { getNetworkInterfaces } from './getNetworkInterfaces'
+import { getSystemArchitecture } from './getSystemArchitecture'
 
 
 export default {
@@ -38,5 +39,6 @@ export default {
     getFreeMemory,
     getCPUs,
     getTotalMemory,
-    getNetworkInterfaces
+    getNetworkInterfaces,
+    getSystemArchitecture
 }

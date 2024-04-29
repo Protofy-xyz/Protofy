@@ -17,6 +17,7 @@ import GetFreeMemory from "./GetFreeMemory";
 import GetCPUs from "./GetCPUs";
 import GetTotalMemory from "./GetTotalMemory";
 import GetNetworkInterfaces from "./GetNetworkInterfaces";
+import GetSystemArchitecture from "./GetSystemArchitecture";
 
 export default [
     ReadFile,
@@ -37,5 +38,6 @@ export default [
     GetFreeMemory,
     GetCPUs,
     GetTotalMemory,
-    GetNetworkInterfaces
+    GetNetworkInterfaces,
+    GetSystemArchitecture
 ]
