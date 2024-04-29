@@ -17,7 +17,7 @@ export const getFileMetadata = async(options: {
             created: stats.birthtime,
             modified: stats.mtime
         };
-        console.log("****************************",metadata);
+
         done(metadata);  // Return file metadata
         return metadata;
     } catch (err) {
