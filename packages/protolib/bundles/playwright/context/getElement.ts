@@ -26,6 +26,7 @@ export const getElement = async (options: {
 
     try {
         if (all) {
+            console.log('SELECTING with: ', selector)
             const elements = await page.locator(selector).elementHandles()
             onDone(elements)
             return elements

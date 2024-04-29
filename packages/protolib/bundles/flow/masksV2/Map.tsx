@@ -43,6 +43,10 @@ export default {
         return {
             await: true,
             to: 'context.flow2.map',
+            "param-1": {
+                value: "{}",
+                kind: "Identifier"
+            },
             "mask-list": {
                 value: "",
                 kind: "Identifier"
