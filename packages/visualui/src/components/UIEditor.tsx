@@ -253,7 +253,6 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             <Sidebar
                 palettes={allPalettes}
                 sendMessage={sendMessage}
-                currentPage={currentPage}
             />
         </div>
     );
