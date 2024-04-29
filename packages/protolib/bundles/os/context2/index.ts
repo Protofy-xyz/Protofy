@@ -13,6 +13,7 @@ import { copyDirectory } from './copyDirectory'
 import { appendToFile } from './appendToFile'
 import { compressDirectory } from './compressDirectory'
 import { getFileMetadata } from './getFileMetadata'
+import { getFreeMemory } from './getFreeMemory'
 
 export default {
     readFile,
@@ -29,5 +30,6 @@ export default {
     copyDirectory,
     appendToFile,
     compressDirectory,
-    getFileMetadata
+    getFileMetadata,
+    getFreeMemory
 }

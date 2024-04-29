@@ -13,6 +13,7 @@ import CopyDirectory from "./CopyDirectory";
 import AppendToFile from "./AppendToFile";
 import CompressDirectory from "./CompressDirectory";
 import GetFileMetadata from "./GetFileMetadata";
+import GetFreeMemory from "./GetFreeMemory";
 
 export default [
     ReadFile,
@@ -29,5 +30,6 @@ export default [
     CopyDirectory,
     AppendToFile,
     CompressDirectory,
-    GetFileMetadata
+    GetFileMetadata,
+    GetFreeMemory
 ]
