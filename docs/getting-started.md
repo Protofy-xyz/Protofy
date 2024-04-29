@@ -35,7 +35,7 @@ npm i -g yarn
 Start protofy in development mode (hot reload)
 
 ```sh
-yarn && yarn start-dev
+yarn && yarn dev
 ```
 
 ## Access the system
