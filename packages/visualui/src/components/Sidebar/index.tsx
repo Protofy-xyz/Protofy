@@ -1,10 +1,11 @@
 import React from "react";
-import { Element, useEditor } from "@protocraft/core";
+import { useEditor } from "@protocraft/core";
 import { getIcon } from "../../utils/craftComponent";
-import Icon from '../Icon';
 import { Search, X } from 'lucide-react';
 import { useUITheme } from "../Theme";
 import { useThemeSetting } from '@tamagui/next-theme'
+import { ElementCard } from "./ElementCard";
+import { Element } from "@protocraft/core";
 
 export type SidebarProps = {
     palettes: any,
@@ -16,46 +17,49 @@ export const Sidebar = ({
     sendMessage,
 }: SidebarProps) => {
     const [searchValue, setSearchValue] = React.useState('')
-    const { connectors, query } = useEditor();
+    const { connectors } = useEditor();
     const { resolvedTheme } = useThemeSetting();
 
     const nodeBackgroundColor = useUITheme('nodeBackgroundColor')
-    const interactiveHoverColor = useUITheme('interactiveHoverColor')
     const textColor = useUITheme('textColor')
 
-    function truncate_with_ellipsis(s, maxLength) {
-        if (s.length > maxLength) {
-            return s.substring(0, maxLength - 3) + '...';
-        }
-        return s;
-    };
-
     const atoms = palettes.atoms;
+    const molecules = palettes.molecules;
 
-    const allDropableAtoms = Object.keys(atoms).reduce((total, paletteName) => {
-        const paletteAtoms = atoms[paletteName] ? Object.keys(atoms[paletteName]).filter(e => !atoms[paletteName][e].craft?.custom?.hidden).reduce((totalComp, componentName) => (
-            { ...totalComp, [componentName]: { dropable: true, element: atoms[paletteName][componentName], icon: getIcon(atoms[paletteName][componentName]) } }
-        ), {}) : { ...total }
-        return { ...total, [paletteName]: paletteAtoms }
-    }, {})
+    const getDropableElements = (palette) => {
+        return Object.keys(palette).reduce((total, paletteName) => {
+            const paletteAtoms = palette[paletteName] ? Object.keys(palette[paletteName]).filter(e => !palette[paletteName][e].craft?.custom?.hidden).reduce((totalComp, componentName) => (
+                { ...totalComp, [componentName]: { dropable: true, element: palette[paletteName][componentName], icon: getIcon(palette[paletteName][componentName]) } }
+            ), {}) : { ...total }
+            return { ...total, [paletteName]: paletteAtoms }
+        }, {})
+    }
 
-    const filteredDropableComponents = searchValue ? Object.keys(allDropableAtoms).reduce((total, paletteName) => {
-        const paletteAtoms = allDropableAtoms[paletteName]
-        const paletteAtomsName = Object.keys(paletteAtoms)
-        const filteredPaletteAtoms = paletteAtomsName.filter(c => c.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
-            .reduce((result, key) => {
-                return { ...result, [key]: paletteAtoms[key] }
-            }, {})
-        var palette = {}
-        if (Object.keys(filteredPaletteAtoms).length) {
-            palette = {
-                [paletteName]: filteredPaletteAtoms
+    const getFilteredElements = (list) => {
+        return searchValue ? Object.keys(list).reduce((total, paletteName) => {
+            const paletteElements = list[paletteName]
+            const paletteElementsName = Object.keys(paletteElements)
+            const filteredPaletteAtoms = paletteElementsName.filter(c => c.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+                .reduce((result, key) => {
+                    return { ...result, [key]: paletteElements[key] }
+                }, {})
+            var palette = {}
+            if (Object.keys(filteredPaletteAtoms).length) {
+                palette = {
+                    [paletteName]: filteredPaletteAtoms
+                }
             }
-        }
-        return { ...total, ...palette }
-    }, {}) : allDropableAtoms
+            return { ...total, ...palette }
+        }, {}) : list
+    }
 
-    const atomsPalettesArr = Object.keys(filteredDropableComponents).filter(p => p != "craft");
+    const allDropableAtoms = getDropableElements(atoms)
+    const allDropableMolecules = getDropableElements(molecules)
+
+    const filteredDropableAtoms = getFilteredElements(allDropableAtoms)
+    const filteredDropableMolecules = getFilteredElements(allDropableMolecules)
+
+    const atomsPalettesArr = Object.keys(filteredDropableAtoms).filter(p => p != "craft");
 
     return (
         <div className={'visualui-sidebar'} style={{ padding: '8px', display: 'flex', flexDirection: "column", flex: 1, backgroundColor: nodeBackgroundColor }}>
@@ -90,44 +94,17 @@ export const Sidebar = ({
                                 <p style={{ paddingLeft: '16px', marginBottom: '10px', fontSize: '12px', color: "gray" }}>{palette.toUpperCase()}</p>
                                 <div className={'visualui-sidebar-list'} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start', gap: '8px' }}>
                                     {
-                                        Object.keys(filteredDropableComponents[palette]).map((componentName, i) => {
-                                            const data = filteredDropableComponents[palette][componentName]
-                                            return (data?.nonDeletable ?
-                                                null
-                                                : <div key={i}
-                                                    onMouseEnter={(e) => {
-                                                        e.currentTarget.style.backgroundColor = interactiveHoverColor
-                                                    }}
-                                                    onMouseLeave={(e) => {
-                                                        e.currentTarget.style.backgroundColor = nodeBackgroundColor
-                                                    }}
-                                                    title={componentName}
-                                                    id={"drag-element-" + componentName}
-                                                    className={"draggable-element"}
-                                                    ref={ref => connectors.create(ref, () => {
-                                                        return (data.dropable) ?
-                                                            <Element
-                                                                is={data.element}
-                                                                canvas
-                                                            ></Element>
-                                                            : React.createElement(data.element)
-                                                    })}
-                                                    style={{
-                                                        display: 'flex', flexDirection: 'column', alignItems: 'center',
-                                                        textAlign: 'center', cursor: 'grab', borderRadius: '6px',
-                                                        padding: '10px 0px', width: '100px', backgroundColor: nodeBackgroundColor
-                                                    }}>
-                                                    <Icon
-                                                        name={data.icon}
-                                                        color={textColor}
-                                                        size={32}
-                                                    />
-                                                    <div style={{ marginTop: '14px' }}>
-                                                        <p style={{ fontSize: '12px', width: '100%', color: textColor, padding: '5px' }}>
-                                                            {truncate_with_ellipsis(componentName, 12)}
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                        Object.keys(filteredDropableAtoms[palette]).map((componentName, i) => {
+                                            const data = filteredDropableAtoms[palette][componentName]
+                                            return (data?.nonDeletable
+                                                ? null
+                                                : <ElementCard
+                                                    key={i}
+                                                    element={<Element is={data.element} canvas />}
+                                                    componentName={componentName}
+                                                    connectors={connectors}
+                                                    data={data}
+                                                />
                                             )
                                         })
                                     }
