@@ -12,6 +12,7 @@ import MoveFile from "./MoveFile";
 import CopyDirectory from "./CopyDirectory";
 import AppendToFile from "./AppendToFile";
 import CompressDirectory from "./CompressDirectory";
+import GetFileMetadata from "./GetFileMetadata";
 
 export default [
     ReadFile,
@@ -27,5 +28,6 @@ export default [
     MoveFile,
     CopyDirectory,
     AppendToFile,
-    CompressDirectory
+    CompressDirectory,
+    GetFileMetadata
 ]
