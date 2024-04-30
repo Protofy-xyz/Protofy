@@ -1,9 +1,10 @@
 import { DefaultLayout } from 'app/layout/DefaultLayout'
 import { AlertTriangle } from '@tamagui/lucide-icons'
-import {Page, useEdit} from 'protolib'
+import {Page} from 'protolib'
 import { Protofy } from 'protolib/base'
-import { Theme, YStack, Text, Spacer, XStack, Paragraph,H2 } from "@my/ui"
-
+import { Theme, YStack, Text, XStack, Paragraph,H2 } from "@my/ui"
+import React, { useState } from 'react'
+import { UIWrapLib, UIWrap, withSession, useEditor, SSR } from "protolib"
 
 const isProtected = Protofy("protected", false)
 
@@ -20,17 +21,10 @@ const NotFound = () => {
   )
 }
 
+const cw = UIWrapLib('@my/ui')
+
 export default {
     route: Protofy("route", "/404"),
-    component: () => useEdit(NotFound, {
-		DefaultLayout,
-		YStack,
-		Spacer,
-		Text,
-		XStack,
-		Paragraph,
-		Theme, 
-        H2,
-        AlertTriangle
-	}, "/packages/app/bundles/custom/pages/notFound.tsx")
+    component: NotFound,
+    getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", []):undefined))
 }
