@@ -1,3 +1,9 @@
+import FeaturedCategory from "./FeaturedCategory";
+import Introduction from "./Introduction";
+
 export default {
-    basic: {}
+    basic: {
+        Introduction,
+        FeaturedCategory
+    }
 }

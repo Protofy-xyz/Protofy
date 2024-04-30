@@ -113,6 +113,32 @@ export const Sidebar = ({
                         )
                     })
                 }
+                {
+                    Object.keys(filteredDropableMolecules).map((palette, i) => {
+                        return (
+                            <div key={i} style={{ flexDirection: 'column', display: 'flex', marginBottom: '25px' }}>
+                                <p style={{ paddingLeft: '16px', marginBottom: '10px', fontSize: '12px', color: "gray" }}>{"MOLECULES " + palette.toUpperCase()}</p>
+                                <div className={'visualui-sidebar-list'} style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start', gap: '8px' }}>
+                                    {
+                                        Object.keys(filteredDropableMolecules[palette]).map((componentName, i) => {
+                                            const data = filteredDropableMolecules[palette][componentName]
+                                            return (data?.nonDeletable
+                                                ? null
+                                                : <ElementCard
+                                                    key={i}
+                                                    element={palettes.molecules[palette][componentName](palettes.atoms)}
+                                                    componentName={componentName}
+                                                    connectors={connectors}
+                                                    data={data}
+                                                />
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        )
+                    })
+                }
             </div>
         </div >
     );
