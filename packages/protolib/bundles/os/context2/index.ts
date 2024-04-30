@@ -19,6 +19,7 @@ import {getTotalMemory} from './getTotalMemory'
 import { getNetworkInterfaces } from './getNetworkInterfaces'
 import { getSystemArchitecture } from './getSystemArchitecture'
 import { getSystemPlatform } from './getSystemPlatform'
+import { getSystemUptime } from './getSystemUptime'
 
 
 export default {
@@ -42,5 +43,6 @@ export default {
     getTotalMemory,
     getNetworkInterfaces,
     getSystemArchitecture,
-    getSystemPlatform
+    getSystemPlatform,
+    getSystemUptime
 }

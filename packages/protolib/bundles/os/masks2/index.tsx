@@ -19,6 +19,7 @@ import GetTotalMemory from "./GetTotalMemory";
 import GetNetworkInterfaces from "./GetNetworkInterfaces";
 import GetSystemArchitecture from "./GetSystemArchitecture";
 import GetSystemPlatform from "./GetSystemPlatform";
+import GetSystemUptime from "./GetSystemUptime";
 
 export default [
     ReadFile,
@@ -41,5 +42,6 @@ export default [
     GetTotalMemory,
     GetNetworkInterfaces,
     GetSystemArchitecture,
-    GetSystemPlatform
+    GetSystemPlatform,
+    GetSystemUptime
 ]
