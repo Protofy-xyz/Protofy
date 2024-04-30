@@ -47,6 +47,15 @@ class Device {
                 }
             }
         })
+        this.subsystemsTree = this.subsystemsTree.sort((a,b)=>{
+            if(a.type=="mqtt"){
+                return -1
+            }else if(b.type == "mqtt"){
+                return 1
+            }else{
+                return 0
+            }
+        })
     }
 
     getComponentsTree(deviceName?, deviceDefinition?) {
