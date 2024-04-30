@@ -2,7 +2,7 @@ import { Node, NodeOutput, NodeParams, filterObject, restoreObject, getFieldValu
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
 import { Plug } from 'lucide-react';
 import React from 'react';
-import { Spinner, XStack } from 'tamagui';
+import { SizableText, Spinner, XStack } from 'tamagui';
 import { API } from 'protolib'
 
 const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
@@ -18,7 +18,7 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeOutput id={node.id} type={'input'} label={'Run'} vars={['params']} handleId={'mask-onRun'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
             <div style={{height: '0px'}} />
-            <Button label={<XStack minHeight='30px' ai="center" jc="center">{loading?<Spinner color={color} />:'Run'}</XStack>} onPress={async () => {
+            <Button label={loading?<Spinner color={color} />:"Run"} onPress={async () => {
                 const params = getFieldValue('testparams', nodeData)
                 setLoading(true)
                 await API.get('/api/v1/automations/' + getFieldValue('mask-name', nodeData)+(params ? '?'+params : ''))
