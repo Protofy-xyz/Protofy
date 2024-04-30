@@ -1,4 +1,4 @@
-import { handler, AutoAPI, getRoot, connectDB, getDB, closeDBS} from 'protolib/api'
+import { handler, AutoAPI, getRoot, connectDB, getDB, closeDBS} from '../../api'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as fspath from 'path'

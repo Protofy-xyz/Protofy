@@ -67,7 +67,7 @@ export const getBaseConfig = (name, process, token?, config?) => {
           //adds log to mqtt if in server-side and a serviceToken is available
           ...(process && typeof window === "undefined" && token ? [
             {
-              target: 'protolib/lib/RemoteTransport.ts',
+              target: __dirname+'/../protolib/lib/RemoteTransport.ts',
               level: 'trace',
               options: {
                 username: name,

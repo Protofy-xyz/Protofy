@@ -3,9 +3,9 @@ import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralPrope
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
-import { API } from 'protolib/base'
+import { API } from '../../base'
 import { getServiceToken } from "../../api/lib/serviceToken";
-import { Objects } from "app/bundles/objects";
+import { ObjectModel } from '../objects/objectsSchemas'
 
 const APIDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
 const indexFile = (root) => APIDir(root) + "index.ts"
@@ -26,7 +26,7 @@ const deleteAPI = (req, value) => {
   const api = getAPI(fspath.basename(value.name) + '.ts', req)
   removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req, fs);
   if (api.type === "AutoAPI") {
-    const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(api.object))
+    const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(api.object))
     let sourceFile = getSourceFile(objectPath)
     removeFeature(sourceFile, '"AutoAPI"')
   }
@@ -70,7 +70,7 @@ const getDB = (path, req, session) => {
       exists = await checkFileExists(filePath);
 
       if (template.startsWith("automatic-crud")) {
-        const objectPath = fspath.join(getRoot(), Objects.object.getDefaultSchemaFilePath(value.object))
+        const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(value.object))
         ObjectSourceFile = getSourceFile(objectPath)
         exists = hasFeature(ObjectSourceFile, '"AutoAPI"')
 

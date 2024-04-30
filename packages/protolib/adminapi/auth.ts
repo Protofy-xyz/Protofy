@@ -1,5 +1,5 @@
 
-import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'app/schema';
+import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from '../schema';
 import { getInitialData } from 'app/initialData'
 import { connectDB, getDB, handler, checkPassword, hash, genToken, app, getSessionContext } from 'protolib/api'
 import { getServiceToken } from 'protolib/api/lib/serviceToken'

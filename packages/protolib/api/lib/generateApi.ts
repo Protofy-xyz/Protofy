@@ -1,5 +1,5 @@
 import { generateEvent } from "../../bundles/events/eventsLibrary";
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import { getServiceToken } from './serviceToken'
 import { connectDB as _connectDB, getDB as _getDB } from "./db";
 import { handler } from './handler'
 import fs from 'fs';

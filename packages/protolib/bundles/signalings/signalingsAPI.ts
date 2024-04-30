@@ -1,9 +1,9 @@
-import { API } from 'protolib/base'
+import { API } from '../../base'
 import { Application } from 'express';
-import { getServiceToken } from "protolib/api/lib/serviceToken";
+import { getServiceToken } from "../../api/lib/serviceToken";
 import { SignalingCollection, SignalingModel } from "./SignalingModel";
-import { generateEvent } from "protolib/bundles/events/eventsLibrary";
-import { EventType } from "protolib/bundles/events";
+import { generateEvent } from "../events/eventsLibrary";
+import { EventType } from "../events";
 
 export const SignalingAPI = (app: Application, context) => {
     const { topicSub, topicPub } = context;

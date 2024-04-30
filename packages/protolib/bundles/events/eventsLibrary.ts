@@ -1,5 +1,5 @@
 import { EventType } from "./eventsSchemas"
-import {API} from 'protolib/base'
+import {API} from '../../base'
 
 export const generateEvent = async (event: EventType, token='') => {
     try {

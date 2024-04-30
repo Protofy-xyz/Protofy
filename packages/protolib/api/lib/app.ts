@@ -2,8 +2,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import httpLogger from "pino-http";
-import { getConfig } from 'protolib/base/Config';
-import { getLogger } from 'protolib/base/logger';
+import { getConfig } from '../../base/Config';
+import { getLogger } from '../../base/logger';
 import { handler } from './handler'
 import listEndpoints from "express-list-endpoints";
 import { hasPermission } from '../../base/lib/perms';

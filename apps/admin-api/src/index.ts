@@ -1,6 +1,15 @@
+if(process.env.NODE_ENV == 'production') {
+  const moduleAlias = require('module-alias')
+
+  moduleAlias.addAliases({
+    "app": "../../../packages/app",
+    "protolib": "../../../packages/protolib"
+  })
+}
+
 import dotenv from 'dotenv'
 import { setConfig, getConfig } from 'protolib/base/Config';
-import { getBaseConfig, getConfigWithoutSecrets } from 'app/BaseConfig'
+import { getBaseConfig, getConfigWithoutSecrets } from '../../../packages/app/BaseConfig'
 // get config vars
 dotenv.config({ path: '../../.env' });
 global.defaultRoute = '/adminapi/v1'
@@ -8,16 +17,24 @@ import { getServiceToken } from 'protolib/api/lib/serviceToken'
 setConfig(getBaseConfig("admin-api", process, getServiceToken()))
 import { getLogger } from 'protolib/base/logger';
 import { app, getMQTTClient } from 'protolib/api'
-import BundleAPI from 'app/bundles/adminapi'
+import BundleAPI from '../../../packages/app/bundles/adminapi'
 import adminModules from 'protolib/adminapi'
 require('events').EventEmitter.defaultMaxListeners = 100;
 import aedes from 'aedes';
 import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
-import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
-import BundleContext from 'app/bundles/apiContext'
+import BundleContext from '../../../packages/app/bundles/apiContext'
+import {API} from 'protolib/base'
+
+const generateEvent = async (event, token='') => {
+  try {
+      await API.post('/adminapi/v1/events?token='+token, event)
+  } catch(e) {
+      //console.error("Failed to send event: ", e)
+  }
+}
 
 const logger = getLogger()
 const config = getConfig()

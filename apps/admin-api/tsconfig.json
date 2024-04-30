@@ -1,31 +1,54 @@
 {
-    "compilerOptions": {
-      "target": "ES2019",                 // Define ECMAScript target version
-      "module": "commonjs",              // Specify module code generation: 'commonjs' for Node.js apps
-      "strict": false,                    // Enable all strict type-checking options
-      "esModuleInterop": true,           // Allows default imports from modules with no default export
-      "skipLibCheck": true,              // Skip type checking of declaration files
-      "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file
-      "resolveJsonModule": true,         // Allows importing .json files
-      "outDir": "./dist",                // Redirect output structure to the directory
-      "rootDir": "./src",                // Specify the root directory of input files
-      "removeComments": true,            // Remove comments from the output files
-      // "moduleResolution": "node",
-      "typeRoots": [                     // Specifies a list of directories for type definitions
-        "./node_modules/@types",
-        "../../node_modules/@types"
-      ],
-      "lib": [                           // List of library files to be included in the compilation
-        "es6",
-        "dom",
-        "esnext.asynciterable"
-      ],
-    },
-    "include": [
-      "src/**/*.ts",
-      "../../.types/*.ts"
+  "compilerOptions": {
+    "target": "ES2019",                 // Define ECMAScript target version
+    "module": "commonjs",              // Specify module code generation: 'commonjs' for Node.js apps
+    "strict": false,                    // Enable all strict type-checking options
+    "esModuleInterop": true,           // Allows default imports from modules with no default export
+    "skipLibCheck": true,              // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file
+    "resolveJsonModule": true,         // Allows importing .json files
+    "outDir": "./dist",                // Redirect output structure to the directory
+    "baseUrl": "../../packages",
+    "removeComments": true,            // Remove comments from the output files
+    // "moduleResolution": "node",
+    "typeRoots": [                     // Specifies a list of directories for type definitions
+      "./node_modules/@types",
+      "../../node_modules/@types"
     ],
-    "exclude": [
-      "node_modules"
-    ]
-  }
+    "lib": [                           // List of library files to be included in the compilation
+      "es6",
+      "dom",
+      "esnext.asynciterable"
+    ],
+
+    "paths": {
+      "protolib/*": ["packages/protolib/*"], // Ajusta el path según tu estructura
+      "app/*": ["packages/app/*"] // Ajusta el path según tu estructura
+    }
+  },
+  "include": [
+    "./src/**/*.ts",
+    "../../.types/*.ts",
+    "../../packages/protolib/adminapi/**/*",
+    "../../packages/protolib/api/**/*",
+    "../../packages/protolib/base/**/*",
+    "../../packages/protolib/schema/**/*",
+    "../../packages/app/bundles/apiContext.ts",
+    "../../packages/app/bundles/adminapi.ts",
+    "../../packages/app/bundles/objects.ts",
+    "../../packages/app/bundles/library.ts",
+    "../../packages/app/bundles/objects.ts",
+    "../../packages/app/BaseConfig.ts",
+    "../../packages/app/initialData.ts",
+    "../../packages/app/templates/**/*",
+    "../../packages/app/schema/**/*",
+    "../../packages/protolib/bundles/adminapi.ts",
+    "../../packages/protolib/bundles/library.ts",
+    "../../packages/protolib/bundles/apiContext.ts",
+    "../../packages/protolib/bundles/objects.ts",
+  ],
+  "exclude": [
+    "node_modules",
+    "../../packages/protolib/base/components/*",
+  ]
+}

@@ -1,5 +1,5 @@
-import {generateEvent} from 'app/bundles/library'
-import {getServiceToken} from 'protolib/api/lib/serviceToken'
+import {generateEvent} from '../../events/eventsLibrary'
+import {getServiceToken} from '../../../api/lib/serviceToken'
 
 export const DeviceMessageRouter = (app, context) => {
     context.mqtt.subscribe("test", (err) => {

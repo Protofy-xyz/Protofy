@@ -3,6 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "paths": {
+      "protolib/*": ["./*"],
       "@components/*": ["./components/*"],
       "@lib/*": ["./lib/*"],
       "@data/*": ["./data/*"],

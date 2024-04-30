@@ -4,8 +4,8 @@ import { promises as fs } from 'fs';
 import * as syncFs from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
-import { API } from 'protolib/base'
+import { getServiceToken } from '../../api/lib/serviceToken'
+import { API } from '../../base'
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")

@@ -1,6 +1,6 @@
 
 import type {Request, RequestHandler, Response} from 'express';
-import {ZodError} from "protolib/base";
+import {ZodError} from "../../base";
 import {createSession, SessionDataType} from './session';
 import {verifyToken} from './crypt';
 import { getLogger } from '../../base';

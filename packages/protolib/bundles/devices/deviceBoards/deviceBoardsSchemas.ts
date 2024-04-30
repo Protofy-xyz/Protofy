@@ -1,6 +1,4 @@
-import { z } from "protolib/base";
-import { Schema } from 'protolib/base'
-import { AutoModel } from 'protolib/base'
+import { AutoModel, Schema, z } from '../../../base'
 
 export const DeviceBoardSchema = Schema.object({
   name: z.string().hint("ESP32S3, CHUWI, Arduino UNO...").static().id(),

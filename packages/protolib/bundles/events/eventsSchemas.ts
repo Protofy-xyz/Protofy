@@ -1,9 +1,6 @@
-import { z } from "protolib/base";
-import { Protofy } from 'protolib/base'
-import { BaseSchema } from 'protolib/base'
 import moment from "moment";
 import { SessionDataType } from "../../api";
-import { ProtoModel } from "../../base";
+import { ProtoModel, z, Protofy, BaseSchema} from "../../base";
 
 export const BaseEventSchema = z.object(Protofy("schema", {
     path: z.string().search(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online

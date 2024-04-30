@@ -1,7 +1,4 @@
-import { z } from "protolib/base";
-import { Protofy, AutoModel, Schema } from 'protolib/base'
-import moment from "moment";
-import { ProtoModel } from "../../base";
+import { ProtoModel, Protofy, AutoModel, Schema, z } from "../../base";
 import { SessionDataType } from "../../api";
 
 export const DatabaseEntrySchema = Schema.object({

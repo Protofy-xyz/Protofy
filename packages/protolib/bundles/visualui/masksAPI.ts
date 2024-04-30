@@ -1,4 +1,4 @@
-import { handler } from 'protolib/api'
+import { handler } from '../../api'
 import { Protofy, getLogger, API } from '../../base'
 import { getServiceToken } from '../../api/lib/serviceToken'
 

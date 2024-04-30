@@ -1,5 +1,5 @@
-import { SessionDataType } from 'protolib/api/lib/session'
-import { ProtoModel } from 'protolib/base'
+import { SessionDataType } from '../../api/lib/session'
+import { ProtoModel } from '../../base'
 import { SignalingType, SignalingSchema } from "./signalingsSchema";
 
 export class SignalingModel extends ProtoModel<SignalingModel>{

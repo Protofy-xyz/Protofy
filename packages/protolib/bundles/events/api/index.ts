@@ -1,4 +1,4 @@
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import { getServiceToken } from '../../../api/lib/serviceToken'
 import { generateEvent } from "../eventsLibrary"
 
 export const onEvent = (context, cb, path?, from?) => {

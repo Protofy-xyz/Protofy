@@ -1,6 +1,6 @@
 import { DeviceDefinitionModel } from ".";
 import { AutoAPI } from '../../../api'
-import { API } from 'protolib/base'
+import { API } from '../../../base'
 import { DevicesModel } from "../devices";
 
 const initialData = {

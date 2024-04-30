@@ -1,6 +1,4 @@
-import { z } from "protolib/base";
-import { Schema } from 'protolib/base'
-import { AutoModel } from 'protolib/base'
+import { z, Schema, AutoModel } from "../../base";
 
 export const KeySchema = Schema.object({
 	name: z.string().id().search(),

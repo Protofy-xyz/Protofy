@@ -1,8 +1,4 @@
-import { z } from "protolib/base";
-import {Schema} from 'protolib/base'
-import moment from "moment";
-import { ProtoModel } from 'protolib/base'
-import {BaseSchema} from 'protolib/base'
+import { Schema, z, ProtoModel, BaseSchema } from '../../base'
 import { SessionDataType } from 'protolib/api/lib/session'
 
 export const BaseResourceSchema = Schema.object({

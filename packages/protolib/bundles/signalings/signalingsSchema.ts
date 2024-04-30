@@ -1,5 +1,4 @@
-import { z } from "protolib/base";
-import { Protofy, Schema, BaseSchema } from 'protolib/base'
+import { Protofy, Schema, BaseSchema, z } from '../../base'
 
 Protofy("features", {})
 

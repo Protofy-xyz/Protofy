@@ -1,7 +1,5 @@
-import { z } from "protolib/base";
-import {Schema} from 'protolib/base'
+import { z, Schema, AutoModel} from "../../base";
 import moment from "moment";
-import { AutoModel } from 'protolib/base'
 
 export const UserSchema = Schema.object({
     username: z.string().email().label('email').hint('user@example.com').static().id().search(),

@@ -1,9 +1,9 @@
-import { API } from "protolib/base";
+import { API } from "../../../base";
 import { DevicesModel } from ".";
 import { getDB, AutoAPI, handler } from '../../../api'
-import { getServiceToken } from "protolib/api/lib/serviceToken";
-import { generateEvent } from "protolib/bundles/events/eventsLibrary";
-import { getLogger } from 'protolib/base/logger';
+import { getServiceToken } from "../../../api/lib/serviceToken";
+import { generateEvent } from "../../events/eventsLibrary";
+import { getLogger } from '../../../base/logger';
 import moment from 'moment';
 import fs from 'fs';
 import path from 'path';

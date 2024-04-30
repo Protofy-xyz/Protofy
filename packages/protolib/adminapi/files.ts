@@ -8,7 +8,7 @@ import multer from 'multer';
 import fsExtra from 'fs-extra';
 import syncFs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
-import {generateEvent} from 'app/bundles/library'
+import {generateEvent} from '../bundles/events/eventsLibrary'
 import { getRoot, handler } from '../api';
 import { getLogger } from '../base';
 

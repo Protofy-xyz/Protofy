@@ -1,6 +1,4 @@
-import { z } from "protolib/base";
-import { Schema } from 'protolib/base'
-import { AutoModel, ProtoModel, SessionDataType, API } from 'protolib/base'
+import { ProtoModel, SessionDataType, API, Schema, z } from '../../../base'
 import path from 'path'
 
 export const DevicesSchema = Schema.object({

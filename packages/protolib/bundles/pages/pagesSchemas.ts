@@ -1,5 +1,4 @@
-import { z } from "protolib/base";
-import { Schema, ProtoModel } from 'protolib/base'
+import { ProtoModel, Schema, z } from '../../base'
 import { SessionDataType } from "../../api";
 
 export const PageSchema = Schema.object({

@@ -1,6 +1,4 @@
-import { z } from "protolib/base";
-import { Schema } from 'protolib/base'
-import { AutoModel } from 'protolib/base'
+import { AutoModel, Schema, z } from '../../../base'
 
 export const DeviceDefinitionSchema = Schema.object({
   name: z.string().hint("Protofy screen controller...").static().id(),

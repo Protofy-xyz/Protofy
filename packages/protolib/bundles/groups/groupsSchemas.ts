@@ -1,6 +1,4 @@
-import { z } from "protolib/base";
-import { Schema } from 'protolib/base'
-import { AutoModel } from 'protolib/base'
+import { z, Schema, AutoModel } from "../../base";
 
 export const GroupSchema = Schema.object({
   name: z.string().label('name').hint('user, admin, ...').static().id().search(),

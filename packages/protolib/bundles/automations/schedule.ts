@@ -1,4 +1,4 @@
-import {getLogger } from 'protolib/base';
+import {getLogger } from '../../base';
 
 // fix: when callback y the last argument doesn't disconnects from
 // the scheduleMask and converts into an anonym func

@@ -1,21 +1,7 @@
-import { UserModel } from 'protolib/bundles/users/usersSchemas'
-import { GroupModel } from 'protolib/bundles/groups/groupsSchemas'
-import { KeyModel} from 'protolib/bundles/keys/keysSchemas'
-import { EventModel } from 'protolib/bundles/events/eventsSchemas'
-import { ObjectModel } from 'protolib/bundles/objects/objectsSchemas'
-import { WorkspaceModel } from 'protolib/bundles/workspaces/WorkspaceModel'
-import { APIModel } from 'protolib/bundles/apis/APISchemas'
-import { PageModel } from 'protolib/bundles/pages/pagesSchemas'
+import ProtolibObjects from 'protolib/bundles/objects'
 import LocalObjects from './custom/objects'
 
 export const Objects = {
-    event: EventModel,
-    user: UserModel,
-    group: GroupModel,
-    object: ObjectModel,
-    key: KeyModel,
-    workspace: WorkspaceModel,
-    api: APIModel,
-    page: PageModel,
+    ...ProtolibObjects,
     ...LocalObjects,
 }
