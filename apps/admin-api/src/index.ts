@@ -1,11 +1,10 @@
-if(process.env.NODE_ENV == 'production') {
-  const moduleAlias = require('module-alias')
 
-  moduleAlias.addAliases({
-    "app": "../../../packages/app",
-    "protolib": "../../../packages/protolib"
-  })
-}
+const moduleAlias = require('module-alias')
+
+moduleAlias.addAliases({
+  "app": "../../../packages/app",
+  "protolib": "../../../packages/protolib"
+})
 
 import dotenv from 'dotenv'
 import { setConfig, getConfig } from 'protolib/base/Config';
@@ -125,8 +124,8 @@ mqttServer.listen(mqttPort, () => {
   }, getServiceToken())
 });
 
-
-if(process.env.NODE_ENV != 'production') {
+const isFullDev = process.env.DEV_ADMIN_API === '1';
+if(isFullDev) {
   const pathsToWatch = [
     'src/**',
     '../../packages/protolib/**',

@@ -12,10 +12,13 @@
     "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
     "dev-service": "NODE_ENV=development pm2 start pm2.config.js",
-    "dev-standalone": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
+    "dev-full": "DEV_ADMIN_API=1 NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
+    "dev-standalone": "NODE_ENV=development node -r module-alias/register dist/apps/admin-api/src/index.js",
     "prod-standalone": "NODE_ENV=production node -r module-alias/register dist/apps/admin-api/src/index.js",
-    "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts",
+    "package": "echo nothing to package",
+    "build": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts",
     "prepare-dev": "node prepare.js"
+
   },
   "dependencies": {
     "app": "*",

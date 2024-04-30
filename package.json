@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "yarn prepare-dev && yarn dev-fast",
     "dev-fast": "pm2 start ecosystem.config.js --no-daemon",
+    "dev-adminapi": "DEV_ADMIN_API=1 yarn prepare-dev && yarn dev-fast",
+    "dev-adminapi-fast": "DEV_ADMIN_API=1 pm2 start ecosystem.config.js --no-daemon",
     "dev-service": "yarn prepare-dev && yarn dev-service-fast",
     "dev-service-fast": "pm2 start ecosystem.config.js && yarn monit",
     "dev-standalone": "yarn prepare-dev && yarn dev-standalone-fast",
