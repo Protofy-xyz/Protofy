@@ -1,8 +1,7 @@
-import {Objects} from 'app/bundles/objects'
 import {API} from 'protolib/base'
 
-export const read = async (objectName: string, id: string, options, cb?, errorCb?) => {
-    const endPoint = Objects[objectName].getApiEndPoint()
+export const read = async (objectName: string, id: string, objects, options, cb?, errorCb?) => {
+    const endPoint = objects[objectName].getApiEndPoint()
     const result = await API.get(endPoint+'/'+id)
     if(result.isError) {
         if(errorCb) errorCb(result.error)

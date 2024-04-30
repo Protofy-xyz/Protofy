@@ -28,14 +28,14 @@ const objectList = (node: any = {}, nodeData = {}) => {
                 fallbacks={[{
                     "name": "onlist",
                     "label": "OnList (items, numPages, totalItems)",
-                    "field": "param-5",
+                    "field": "param-6",
                     "preText": "async (items, numPages, totalItems) => ",
                     "postText": "",
                     "fallbackText": "null"
                 }, {
                     "name": "onerror",
                     "label": "OnError (error)",
-                    "field": "param-6",
+                    "field": "param-7",
                     "preText": "async (error) => ",
                     "fallbackText": "null",
                     "postText": ""
@@ -59,13 +59,13 @@ export default {
     category: "Objects (CMS)",
     keywords: ["list", "cms", "object"],
     filterChildren: (node, childScope, edges) => {
-        childScope = filterCallback("5", "onlist")(node, childScope, edges)
-        childScope = filterCallback("6", "onerror")(node, childScope, edges)
+        childScope = filterCallback("6", "onlist")(node, childScope, edges)
+        childScope = filterCallback("7", "onerror")(node, childScope, edges)
         return childScope
     },
     restoreChildren: (node, nodes, originalNodes, edges, originalEdges) => {
-        let result = restoreCallback("5")(node, nodes, originalNodes, edges, originalEdges)
-        result = restoreCallback("6")(node, result.nodes, originalNodes, result.edges, originalEdges)
+        let result = restoreCallback("6")(node, nodes, originalNodes, edges, originalEdges)
+        result = restoreCallback("7")(node, result.nodes, originalNodes, result.edges, originalEdges)
         return result
     },
     getInitialData: () => {
@@ -74,9 +74,10 @@ export default {
             "param-1": { value: "", kind: "StringLiteral" },
             "param-2": { value: "0", kind: "NumericLiteral" },
             "param-3": { value: "50", kind: "NumericLiteral" },
-            "param-4": { value: "null", kind: "Identifier" },
+            "param-4": { value: "context.objects", kind: "Identifier" },
             "param-5": { value: "null", kind: "Identifier" },
-            "param-6": { value: "null", kind: "Identifier" }
+            "param-6": { value: "null", kind: "Identifier" },
+            "param-7": { value: "null", kind: "Identifier" }
         }
     }
 }

@@ -1,5 +1,5 @@
 
-import { ObjectModel } from '.'
+import { ObjectModel } from './objectsSchemas'
 import { DataView, DataTable2, Chip, API, AdminPage, PaginatedDataSSR } from 'protolib'
 import { Pencil, Box } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';

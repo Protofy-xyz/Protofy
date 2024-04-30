@@ -3,9 +3,10 @@ import { getImport, getSourceFile, extractChainCalls, addImportToSourceFile, Imp
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
-import { API } from 'protolib/base'
-import { Objects } from "app/bundles/objects";
+import { getServiceToken } from '../../api/lib/serviceToken'
+import { API } from '../../base'
+import { APIModel } from '../apis/APISchemas'
+import { PageModel } from '../pages/pagesSchemas'
 
 const indexFile = "/packages/app/bundles/custom/objects/index.ts"
 
@@ -144,14 +145,14 @@ const getDB = (path, req, session) => {
       await setSchema(filePath, result, value, req)
       //if api is selected, create an autoapi for the object
       if (value.api && session) {
-        const objectApi = Objects.api.load({
+        const objectApi = APIModel.load({
           name: value.name,
           object: value.name,
           template: "automatic-crud"
         })
         await API.post("/adminapi/v1/apis?token=" + session.token, objectApi.create().getData())
         if (value.adminPage) {
-          const objectApi = Objects.page.load({
+          const objectApi = PageModel.load({
             name: value.name,
             route: "workspace/" + value.name,
             permissions: ["admin"],

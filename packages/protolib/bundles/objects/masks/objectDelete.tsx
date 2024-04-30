@@ -27,14 +27,14 @@ const objectDelete = (node: any = {}, nodeData = {}) => {
                 fallbacks={[{
                     "name": "ondelete",
                     "label": "onDelete",
-                    "field": "param-4",
+                    "field": "param-5",
                     "preText": "async () => ",
                     "postText": "",
                     "fallbackText": "null"
                 }, {
                     "name": "onerror",
                     "label": "OnError (error)",
-                    "field": "param-5",
+                    "field": "param-6",
                     "preText": "async (error) => ",
                     "fallbackText": "null",
                     "postText": ""
@@ -58,13 +58,13 @@ export default {
     category: "Objects (CMS)",
     keywords: ["delete", "cms", "object"],
     filterChildren: (node, childScope, edges) => {
-        childScope = filterCallback("4", "ondelete")(node, childScope, edges)
-        childScope = filterCallback("5", "onerror")(node, childScope, edges)
+        childScope = filterCallback("5", "ondelete")(node, childScope, edges)
+        childScope = filterCallback("6", "onerror")(node, childScope, edges)
         return childScope
     },
     restoreChildren: (node, nodes, originalNodes, edges, originalEdges) => {
-        let result = restoreCallback("4")(node, nodes, originalNodes, edges, originalEdges)
-        result = restoreCallback("5")(node, result.nodes, originalNodes, result.edges, originalEdges)
+        let result = restoreCallback("5")(node, nodes, originalNodes, edges, originalEdges)
+        result = restoreCallback("6")(node, result.nodes, originalNodes, result.edges, originalEdges)
         return result
     },
     getInitialData: () => {
@@ -72,9 +72,10 @@ export default {
             to: 'context.object.deleteObject',
             "param-1": { value: "", kind: "StringLiteral" },
             "param-2": { value: "", kind: "StringLiteral" },
-            "param-3": { value: "null", kind: "Identifier" },
+            "param-3": { value: "context.objects", kind: "Identifier" },
             "param-4": { value: "null", kind: "Identifier" },
-            "param-5": { value: "null", kind: "Identifier" }
+            "param-5": { value: "null", kind: "Identifier" },
+            "param-6": { value: "null", kind: "Identifier" }
         }
     }
 }

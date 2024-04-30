@@ -93,14 +93,14 @@ const objectCreate = (node: any = {}, nodeData = {}) => {
                 fallbacks={[{
                     "name": "oncreate",
                     "label": "onCreate(item)",
-                    "field": "param-4",
+                    "field": "param-5",
                     "preText": "async (item) => ",
                     "postText": "",
                     "fallbackText": "null"
                 }, {
                     "name": "onerror",
                     "label": "OnError (error)",
-                    "field": "param-5",
+                    "field": "param-6",
                     "preText": "async (error) => ",
                     "fallbackText": "null",
                     "postText": ""
@@ -127,8 +127,8 @@ export default {
     category: "Objects (CMS)",
     keywords: ["create", "cms", "object"],
     filterChildren: (node, childScope, edges, nodeData, setNodeData) => {
-        childScope = filterCallback("4", "oncreate")(node, childScope, edges)
-        childScope = filterCallback("5", "onerror")(node, childScope, edges)
+        childScope = filterCallback("5", "oncreate")(node, childScope, edges)
+        childScope = filterCallback("6", "onerror")(node, childScope, edges)
         childScope = filterConnection("param-2", (id, nodeData, setNodeData) => {
             const objData = nodeData[id]
             if(objData) {
@@ -146,8 +146,8 @@ export default {
         return childScope
     },
     restoreChildren: (node, nodes, originalNodes, edges, originalEdges) => {
-        let result = restoreCallback("4")(node, nodes, originalNodes, edges, originalEdges)
-        result = restoreCallback("5")(node, result.nodes, originalNodes, result.edges, originalEdges)
+        let result = restoreCallback("5")(node, nodes, originalNodes, edges, originalEdges)
+        result = restoreCallback("6")(node, result.nodes, originalNodes, result.edges, originalEdges)
         return result
     },
     getInitialData: () => {
@@ -155,9 +155,10 @@ export default {
             to: 'context.object.create',
             "param-1": { value: "", kind: "StringLiteral" },
             "param-2": { value: "{}", kind: "Identifier" },
-            "param-3": { value: "null", kind: "Identifier" },
+            "param-3": { value: "context.objects", kind: "Identifier" },
             "param-4": { value: "null", kind: "Identifier" },
-            "param-5": { value: "null", kind: "Identifier" }
+            "param-5": { value: "null", kind: "Identifier" },
+            "param-6": { value: "null", kind: "Identifier" }
         }
     }
 }
