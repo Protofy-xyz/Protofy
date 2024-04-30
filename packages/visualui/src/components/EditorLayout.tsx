@@ -36,14 +36,14 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
   var previousDiffs
   const { actions, query, connectors } = useEditor((state, query) => {
     const currentEditorNodes: any = JSON.parse(query.serialize())
-    const diffs = Diff.diff(currentPageInitialJson, JSON.parse(query.serialize()))
+    const diffs = Diff.diff(currentPageInitialJson, currentEditorNodes)
     setSelectedNodeId(state.events.selected?.keys().next().value) // state.events.selected returns a Set{}, keys() reutnrs an iterator, and then we get the first element of iterator doing next()
     const hasChanges = diffs?.length > 0
     const nodesChanges = Diff.diff(previousNodes, currentEditorNodes)
     var skip = (query.getOptions() as any).skipTopic
     if (!skip && nodesChanges?.length && JSON.stringify(nodesChanges) != previousDiffs) {
       var topicParams = {}
-      if (nodesChanges.filter(d => d.kind == 'N').length == 1) { //case add
+      if (nodesChanges.filter(d => d.kind == 'N').length > 0 && nodesChanges.find(d => d.kind == 'A')) { // case add multiple nodes (molecule)
         const newChange = nodesChanges.find(d => d.kind == 'N')
         const isProp = newChange.path[1] == 'props'
         const newNodeId = newChange.path[0]
@@ -57,22 +57,38 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
             field: newChange.path[2]
           }
 
-        } else { // case new node
-          const parentId = currentEditorNodes[newNodeId]['parent']
-          const childrenPos = currentEditorNodes[parentId].nodes.findIndex(n => n == newNodeId)
-          const _data = currentEditorNodes[newNodeId].custom
-          topicParams = {
-            action: 'add-node',
-            nodeId: newNodeId,
-            nodeName: currentEditorNodes[newNodeId]['displayName'],
-            parent: parentId,
-            childrenPos: childrenPos,
-            data: _data,
-            nodeProps: currentEditorNodes[newNodeId]['props']
-          }
-        }
+        } else { // case new nodes
+          const parentDiff = nodesChanges.find(d => d.kind == 'A')
+          const parentId = parentDiff.path[0]
+          var childDiff = nodesChanges.find(d => d.kind == 'N' && d.rhs.parent == parentId)
+          var childrenPos = currentEditorNodes[parentId].nodes?.findIndex(n => n == childDiff.path[0])
 
-        notify(topicParams, publish)
+          const parentData = {
+            id: parentId,
+            childrenPos: childrenPos,
+            nodeId: parentDiff.item.rhs,
+            name: currentEditorNodes[parentId]['displayName']
+          }
+
+          const newNodesData = nodesChanges.filter(d => d.kind == 'N').map(n => {
+            var currId = n.path[0]
+            return {
+              id: currId,
+              name: currentEditorNodes[currId]['displayName'],
+              parent: n.rhs.parent,
+              props: n.rhs.props,
+              data: n.rhs.custom,
+              childrens: n.rhs?.nodes
+            }
+          })
+
+          topicParams = {
+            action: 'add-nodes',
+            parentData: parentData,
+            newNodesData: newNodesData
+          }
+          notify(topicParams, publish)
+        }
       } else if (nodesChanges.find(d => d.kind == 'D')) { //case delete
         const deletedNodes = nodesChanges.filter(d => d.kind == 'D').map(n => n.path[0])
         const parentId = nodesChanges.find(d => d.kind == 'A').path[0]
