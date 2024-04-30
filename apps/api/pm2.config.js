@@ -9,6 +9,7 @@ module.exports = {
             script: path.join(currentDir, '../../node_modules/ts-node/dist/bin.js'),
             args: '--files --project tsconfig.json src/index.ts',
             watch: false,
+            windowsHide: true,
             autorestart: !isProduction,
             env: {
                 NODE_ENV: isProduction ? 'production' : 'development'

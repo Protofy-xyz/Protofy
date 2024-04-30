@@ -7,7 +7,6 @@ import { parse } from 'cookie';
 import { getLogger } from "protolib/base"
 
 const logger = getLogger()
-import { environments } from 'app/bundles/environments'
 
 
 export const SessionData = atomWithStorage("session", createSession(), undefined, {
@@ -145,13 +144,6 @@ export const useUserSettings = () => {
 export const getURLWithToken = (url, context: NextPageContext) => {
     const { req } = context;
     const cookies = req.headers.cookie;
-    const host = req.headers.host || '';
-    const prefix = host.split('.')[0] //get prefix from url for example: test.protofy.xyz:8080 -> test
-    if (!url.startsWith('http') && !url.startsWith('https') && environments[prefix]) {
-        //no url has been provided, and there is an environment for this host
-        //so, use the url in hosts
-        url = environments[prefix].api + url
-    }
 
     let session;
     let __env = ''
