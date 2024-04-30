@@ -13,19 +13,37 @@ export const UIFLOWID = "flows-ui"
 const Flow = FlowConstructor(UIFLOWID)
 
 export const VisualUiFlows = (props) => {
+
+    const getNodePropsData = (nodeName, propsData, data) => Object.keys(propsData).reduce((total, key) => {
+        var value: any = propsData[key]
+        var keyName = `prop-${key}`
+        const valueKind = data?.kinds[key] ?? getKindName(value)
+
+        var propValue = { key, value, kind: valueKind }
+
+        if (key == 'children') {
+            keyName = 'child-1'
+            propValue = value
+        }
+        return {
+            ...total,
+            [keyName]: propValue
+        }
+    }, {
+        name: nodeName
+    })
+
     // flows comms custom hook
     function useFlowsComms({ edges, nodeData, nodes, setEdges, setNodesData, deleteNodes, setNodes, createNode, setNodeData, _customComponents, onSaveNodes, flowId, data }) {
         if (experimentalComms()) {
-            const {lastEvent} = useVisualUi(props.contextAtom)
+            const { lastEvent } = useVisualUi(props.contextAtom)
             useEffect(() => {
-                console.log('lastEvent: ', lastEvent)
                 if (lastEvent) {
                     switch (lastEvent.action) {
-                        case "add-node": {
-                            break; 
-                        }; 
+                        case "add-nodes": {
+                            break;
+                        };
                         case "edit-node": {
-                            console.log("visual event: edit-node"); 
                             var editedNodeData
                             const field = lastEvent.field
                             const newValue = lastEvent.value
@@ -49,14 +67,14 @@ export const VisualUiFlows = (props) => {
 
                             setNodesData(newNodesData)
                             break;
-                        }; 
+                        };
                         case "delete-node": {
-                            break; 
+                            break;
                         }
                         default: {
-                            throw new Error("useVisualUi(...): Unhandled event type"); 
+                            throw new Error("useVisualUi(...): Unhandled event type");
                         }
-                    } 
+                    }
                 }
             }, [lastEvent])
         } else {
@@ -75,48 +93,41 @@ export const VisualUiFlows = (props) => {
                         setNodesData(newNodeData)
                         setNodes(nds => nds.filter(n => !nodesToDelete.includes(n.id)))
                         break;
-                    case 'add-node':
-                        var nodeName = uiData.nodeName
-                        var parent = uiData.parent
-                        var _data = uiData?.data ?? {};
-                        var parentPos = nodes.find(n => n.id == uiData.parent)?.position
-                        if (!parentPos) return
-                        var newChildrenPos = uiData.childrenPos + 1;
-                        var initialNodeData = uiData.nodeProps
-                        const addedNodeData = Object.keys(initialNodeData).reduce((total, key) => {
-                            var value: any = initialNodeData[key]
-                            var keyName = `prop-${key}`
-                            const valueKind = _data?.kinds[key] ?? getKindName(value)
+                    case 'add-nodes':
+                        const parentData = uiData.parentData
+                        var newNodesData = uiData.newNodesData
 
-                            var propValue = { key, value, kind: valueKind }
+                        const newNodes = newNodesData.map(nd => createNode([0, 0], "JsxElement", nd.id, nd.data, true, {}, {})).flat()
+                        setNodes(nd => nd.concat(newNodes));
 
-                            if (key == 'children') {
-                                keyName = 'child-1'
-                                propValue = value
-                            }
+                        var newData = newNodesData?.reduce((ndData, node) => {
+                            const childs = node.childrens.reduce((total, child, index) => {
+                                return {
+                                    ...total,
+                                    ["child-" + (index + 1)]: ""
+                                }
+                            }, {})
                             return {
-                                ...total,
-                                [keyName]: propValue
+                                ...ndData,
+                                [node.id]: {
+                                    ...getNodePropsData(node.name, node.props, node.data),
+                                    ...childs
+                                }
                             }
                         }, {
-                            name: nodeName
+                            ...nodeData,
+                            [parentData.id]: { ...addChildNodeDataAndReorder(nodeData[parentData.id], parentData.childrenPos + 1, '') }
                         })
-                        var newNodesData = { ...nodeData, [nodeId]: addedNodeData }
-                        var customNode = _customComponents.find((n: any) => n.id == nodeName)
-                        if (customNode) { //Check if node has mask
-                            var initialData = {}
-                            newNodesData = { ...newNodesData, [nodeId]: { ...newNodesData[nodeId] } }
-                        }
-                        const newNode = createNode([parentPos.x + 500, parentPos.y], "JsxElement", uiData.nodeId, _data, true, {}, initialData)
-                        setNodes((nds) => nds.concat(newNode));
-                        // Add child to parent
-                        const dumpCode = dumpContent(nodes, edges, newNodesData, nodeId, 'JsxElement')
-                        newNodesData = { ...newNodesData, [parent]: { ...addChildNodeDataAndReorder(newNodesData[parent], newChildrenPos, dumpCode ?? '"children"') } }
-                        setNodesData(newNodesData)
-                        //Add child edges from parent
-                        newEdges = addEdgeChildAndReorder(edges, nodeId, parent, newChildrenPos)
+                        
+                        setNodesData(newData)
+
+                        newEdges = newNodesData.reduce((total, curr) => {
+                            var childPos = (newNodesData.find(n => n.childrens.includes(curr.id))?.childrens?.findIndex(c => c == curr.id) ?? parentData.childrenPos) + 1
+                            return addEdgeChildAndReorder(total, curr.id, curr.parent, childPos)
+                        }, edges)
+
                         setEdges(newEdges)
-                        break;
+                        break
                     case 'edit-node':
                         var editedNodeData
                         const field = uiData.field
