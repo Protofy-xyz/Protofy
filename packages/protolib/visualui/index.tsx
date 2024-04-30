@@ -118,6 +118,7 @@ export const layoutPalette = {
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Spacer, 'Maximize2', 'Spacer', { size: '$8' }),
   ...cw(ProtoView, 'SquareAsterisk', 'ProtoView', { viewId: "default", currentView: { value: "currentView", kind: 'Identifier' } }, {}, { placeholder: <BasicPlaceHolder /> }),
+  ...cw(Section, 'EyeOff', 'Section', {}, {}, { children: <BasicPlaceHolder /> })
 }
 
 export const basicPalette = {
@@ -254,7 +255,6 @@ export const miscellanyPalette = {
   ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem', { text: "hello world" }),
   ...cw(Pre, 'EyeOff', 'Pre', {}, nonDraggable),
   ...cw(Search, 'Search', 'Search'),
-  ...cw(Section, 'EyeOff', 'Section', {}, nonDraggable),
   ...cw(SectionBox, 'RectangleHorizontal', 'SectionBox', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(SectionBlock, 'BoxSelect', 'SectionBlock'),
   ...cw(TitleLink, 'Link', 'TitleLink', { href: "/hello", children: "hello" }),
