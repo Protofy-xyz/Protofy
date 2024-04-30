@@ -14,7 +14,7 @@
     "dev-service": "NODE_ENV=development pm2 start pm2.config.js",
     "dev-standalone": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
     "prod-standalone": "NODE_ENV=production node -r module-alias/register dist/apps/admin-api/src/index.js",
-    "package": "tsc",
+    "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts",
     "prepare-dev": "node prepare.js"
   },
   "dependencies": {
@@ -43,6 +43,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.17",
-    "@types/node": "20.6.0"
+    "@types/node": "20.6.0",
+    "shx": "^0.3.4"
   }
 }
