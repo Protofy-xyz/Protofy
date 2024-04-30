@@ -16,7 +16,12 @@ const FeaturedCategory = (atoms) => {
                 Start the Adventure!
             </Element>
         </Element>
-        <Element is={atoms.basic.Image} width={400}>
+        <Element
+            is={atoms.basic.Image}
+            width={400}
+            height={400}
+            url="https://fastly.picsum.photos/id/852/3212/2409.jpg?hmac=9Dl4bKeO56pailgEulSkve2oLtehgdPwfcx8JQzpMro"
+        >
         </Element>
     </Element>
 }
