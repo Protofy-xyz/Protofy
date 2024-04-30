@@ -3,8 +3,8 @@ import { Type, Hash, ToggleLeft, Braces, Code } from 'lucide-react'
 const types = {
     "string": {
         "StringLiteral": {
-            get: node => node?.getLiteralValue(),
-            dump: value => '"' + value + '"'
+            get: node => node?.getLiteralValue().replace(/\\/g, '\\\\').replace(/"/g, '\\"'),
+            dump: value => '"' + value.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'
         }
     },
     "number": {
