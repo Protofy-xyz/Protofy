@@ -18,6 +18,7 @@ import { getCPUs } from './getCPUs'
 import {getTotalMemory} from './getTotalMemory'
 import { getNetworkInterfaces } from './getNetworkInterfaces'
 import { getSystemArchitecture } from './getSystemArchitecture'
+import { getSystemPlatform } from './getSystemPlatform'
 
 
 export default {
@@ -40,5 +41,6 @@ export default {
     getCPUs,
     getTotalMemory,
     getNetworkInterfaces,
-    getSystemArchitecture
+    getSystemArchitecture,
+    getSystemPlatform
 }
