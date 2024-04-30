@@ -1,4 +1,4 @@
-import {API} from 'protolib/base'
+import {API} from '../../../base'
 
 export const update = async (objectName: string, id, data: any, objects, options, cb?, errorCb?) => {
     const endPoint = objects[objectName].getApiEndPoint()

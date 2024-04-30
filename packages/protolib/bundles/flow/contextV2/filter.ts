@@ -1,4 +1,4 @@
-import { getLogger } from 'protolib/base/logger';
+import { getLogger } from '../../../base/logger';
 import { forEach } from './forEach';
 
 const logger = getLogger();

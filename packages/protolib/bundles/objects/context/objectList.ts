@@ -1,4 +1,4 @@
-import {API} from 'protolib/base'
+import {API} from '../../../base'
 
 export const list = async (objectName: string, page, itemsPerPage, objects, options, cb?, errorCb?) => {
     const endPoint = objects[objectName].getApiEndPoint()

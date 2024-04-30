@@ -1,5 +1,4 @@
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
-import { API } from "protolib/base";
+import { API } from "../../../base";
 
 const getKey = async ({ key = '', done = (key) => {}, error = (err) => {}, token = '' }) => {
     if(!key) {

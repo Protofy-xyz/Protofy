@@ -1,4 +1,4 @@
-import {API} from 'protolib/base'
+import {API} from '../../../base'
 
 export const deleteObject = async (objectName: string, id: string, objects, options, cb?, errorCb?) => {
     const endPoint = objects[objectName].getApiEndPoint()

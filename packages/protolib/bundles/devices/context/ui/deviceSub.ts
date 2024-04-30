@@ -1,6 +1,5 @@
-import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
-import { useMqttState, useSubscription } from 'mqtt-react-hooks';
-import { API } from 'protolib/base';
+import { DeviceSubsystemMonitor } from '../../../devices/devices/devicesSchemas';
+import { API } from '../../../../base';
 import mqtt from 'mqtt'
 import { useEffect, useRef } from 'react';
 import { useIsomorphicLayoutEffect } from 'usehooks-ts'

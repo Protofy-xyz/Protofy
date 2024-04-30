@@ -25,7 +25,7 @@ import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
 import chokidar from 'chokidar';
-import BundleContext from '../../../packages/app/bundles/apiContext'
+import BundleContext from '../../../packages/app/bundles/adminApiContext'
 import {API} from 'protolib/base'
 
 const generateEvent = async (event, token='') => {
