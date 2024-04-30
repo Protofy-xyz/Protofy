@@ -1,6 +1,6 @@
 import { useMqttState, useSubscription } from 'mqtt-react-hooks';
 import React, { useState } from "react";
-import { XStack, YStack, Text, Paragraph, Button, Input, Spinner } from '@my/ui';
+import { XStack, YStack, Text, Paragraph, Button, Input, Spinner, Separator } from '@my/ui';
 import { ElevatedArea, ContainerLarge, Tinted, Chip, useFetch } from 'protolib';
 import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 
@@ -88,11 +88,11 @@ const subsystem = ({subsystem, deviceName}) => {
             <Tinted>
                 <Paragraph textAlign='left' color={'$color10'}>{subsystem.name}</Paragraph>
                 <YStack mb="10px" mt="10px" alignSelf='flex-start'>
-                    <XStack gap="$2" flexWrap='wrap'>
+                    <XStack gap="$2" flexWrap='wrap' mb="10px">
                         {actionButtons}
                     </XStack>
-
-                    <XStack gap="$3" flexWrap='wrap'>
+                    {monitorLabels && actionButtons && monitorLabels.lenght > 0 && actionButtons.lenght > 0 && <Separator />}
+                    <XStack gap="$3" flexWrap='wrap' mt="10px">
                         {monitorLabels}
                     </XStack>
                 </YStack>
