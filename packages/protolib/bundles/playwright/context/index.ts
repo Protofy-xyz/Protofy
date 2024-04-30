@@ -5,6 +5,9 @@ import { getElement } from './getElement';
 import {close} from './close'
 import { getAttribute } from './getAttribute';
 import { clickElement } from './clickElement';
+import { innerHTML } from './innerHTML';
+import {getText} from './getText';
+
 export default {
     getBrowser,
     navigate,
@@ -12,5 +15,7 @@ export default {
     getElement,
     close,
     getAttribute,
-    clickElement
+    clickElement,
+    innerHTML,
+    getText
 }
