@@ -18,7 +18,6 @@
     "package": "echo nothing to package",
     "build": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts",
     "prepare-dev": "node prepare.js"
-
   },
   "dependencies": {
     "app": "*",
