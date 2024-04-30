@@ -58,7 +58,7 @@ var customResolver2 = function (host, url, req) {
     if (/^\/adminapi\//.test(url)) {
         return getEnvironment('adminApi', host, req);
     } else if (url === '/websocket') {
-        return getEnvironment('websocket', host, req);
+        return getEnvironment('adminApi', host, req);
     }
 };
 
