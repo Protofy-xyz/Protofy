@@ -37,7 +37,7 @@ export default {
         }
     }),
     restoreChildren: (node, nodes, originalNodes, edges, originalEdges, nodeData) => {
-        const name = nodeData[node.id]['mask-all'].value ? 'elements' : 'element'
+        const name = nodeData && nodeData[node.id] && nodeData[node.id]['mask-all'] && nodeData[node.id]['mask-all'].value ? 'elements' : 'element'
         return restoreObject({
             keys: {
                 selector: 'input',

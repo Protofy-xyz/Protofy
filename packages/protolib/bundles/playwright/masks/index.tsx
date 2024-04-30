@@ -4,11 +4,14 @@ import Screenshot from './Screenshot';
 import GetElement from './GetElement';
 import Close from './Close'
 import GetAttribute from './GetAttribute';
+import ClickElement from './ClickElement';
+
 export default [
     GetBrowser,
     Navigate,
     Screenshot,
     GetElement,
     Close,
-    GetAttribute
+    GetAttribute,
+    ClickElement
 ]
