@@ -24,7 +24,7 @@ export default {
     keywords: ['timers', 'event', 'trigger', 'setTimeout', 'wait', 'sleep'],
     check: (node, nodeData) => {
         var param1Val = getFieldValue('param-1', nodeData)
-        return node.type == "CallExpression" && nodeData.to == 'setTimeout' && (param1Val?.startsWith('async () =>') || param1Val?.startsWith('() =>'))
+        return node.type == "CallExpression" && nodeData.to == 'setTimeout' && (param1Val?.startsWith('async () =>') || param1Val?.startsWith('() =>') || param1Val == "null")
     },
     getComponent: (node, nodeData, children) => <SetTimeoutMask node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'setTimeout', "param-1": { value: 'async () =>', kind: "Identifier" }, "param-2": { value: 1000, kind: 'NumericLiteral' } } },
