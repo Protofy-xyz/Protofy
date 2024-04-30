@@ -14,9 +14,7 @@ export const automation = async (options: {
     const app = options.app
     const responseMode = options.responseMode || 'wait'
     const onRun = options.onRun || (() => {})
-    const onError = options.onError || ((err) => {
-        logger.error({ error: err }, "Error in automation");
-    })
+    const onError = options.onError
 
     if(!name) {
         logger.error({}, "Automation name is required");
@@ -36,13 +34,17 @@ export const automation = async (options: {
                 if(responseMode == 'instant') {
                     res.send({result: "started"})
                 }
-                const result = await onRun(req.query, res)
+                await onRun(req.query, res)
                 if(responseMode == 'wait') {
-                    res.send({result: result})
+                    res.send({result: "done"})
                 }
             } catch(err) {
-                logger.error({name, params: req.query, error: err}, "Automation error: "+name)
-                res.status(424).send({error: err.message})
+                if(onError) {
+                    onError(err)
+                } else {
+                    logger.error({name, params: req.query, error: err}, "Automation error: "+name)
+                    res.status(424).send({error: err.message})
+                }
             }
         })
     } catch (err) {
