@@ -8,7 +8,7 @@ import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
 import baseMasks from 'protolib/bundles/basemasks';
 import customEventMasks from 'protolib/bundles/events/masks'
 import customMasks from 'app/bundles/custom/masks'
-import scheduleMasks from 'protolib/bundles/automations/masks';
+import automationMasks from 'protolib/bundles/automations/masks';
 import resendMasks from 'protolib/bundles/resend/masks';
 import flowMasks from 'protolib/bundles/flow/masks';
 import flowMasks2 from 'protolib/bundles/flow/masksV2';
@@ -20,6 +20,7 @@ import keyMasks from 'protolib/bundles/keys/masks'
 import chatGPTMasks from 'protolib/bundles/chatgpt/masks'
 import logsMasks from 'protolib/bundles/logs/masks'
 import playwrightMasks from 'protolib/bundles/playwright/masks'
+import networkMasks from 'protolib/bundles/network/masks'
 
 const paths = {
     devices: [
@@ -61,7 +62,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...apiMasks,
         ...devicesMasks.api,
         ...baseMasks.api,
-        ...scheduleMasks,
+        ...automationMasks,
         ...resendMasks,
         ...objectMasks,
         ...osMasks,
@@ -70,7 +71,8 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...utilsMasks,
         ...chatGPTMasks,
         ...logsMasks,
-        ...playwrightMasks
+        ...playwrightMasks,
+        ...networkMasks
     ]
     return []
 }

@@ -13,6 +13,14 @@ import { copyDirectory } from './copyDirectory'
 import { appendToFile } from './appendToFile'
 import { compressDirectory } from './compressDirectory'
 import { getFileMetadata } from './getFileMetadata'
+import { getFreeMemory } from './getFreeMemory'
+import { getCPUs } from './getCPUs'
+import {getTotalMemory} from './getTotalMemory'
+import { getNetworkInterfaces } from './getNetworkInterfaces'
+import { getSystemArchitecture } from './getSystemArchitecture'
+import { getSystemPlatform } from './getSystemPlatform'
+import { getSystemUptime } from './getSystemUptime'
+
 
 export default {
     readFile,
@@ -29,5 +37,12 @@ export default {
     copyDirectory,
     appendToFile,
     compressDirectory,
-    getFileMetadata
+    getFileMetadata,
+    getFreeMemory,
+    getCPUs,
+    getTotalMemory,
+    getNetworkInterfaces,
+    getSystemArchitecture,
+    getSystemPlatform,
+    getSystemUptime
 }

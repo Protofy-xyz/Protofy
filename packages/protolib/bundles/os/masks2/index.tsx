@@ -13,6 +13,13 @@ import CopyDirectory from "./CopyDirectory";
 import AppendToFile from "./AppendToFile";
 import CompressDirectory from "./CompressDirectory";
 import GetFileMetadata from "./GetFileMetadata";
+import GetFreeMemory from "./GetFreeMemory";
+import GetCPUs from "./GetCPUs";
+import GetTotalMemory from "./GetTotalMemory";
+import GetNetworkInterfaces from "./GetNetworkInterfaces";
+import GetSystemArchitecture from "./GetSystemArchitecture";
+import GetSystemPlatform from "./GetSystemPlatform";
+import GetSystemUptime from "./GetSystemUptime";
 
 export default [
     ReadFile,
@@ -29,5 +36,12 @@ export default [
     CopyDirectory,
     AppendToFile,
     CompressDirectory,
-    GetFileMetadata
+    GetFileMetadata,
+    GetFreeMemory,
+    GetCPUs,
+    GetTotalMemory,
+    GetNetworkInterfaces,
+    GetSystemArchitecture,
+    GetSystemPlatform,
+    GetSystemUptime
 ]

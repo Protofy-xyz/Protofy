@@ -22,7 +22,7 @@ export const navigate = async (options: {
 
     try {
         await page.goto(url);
-        onDone();
+        return onDone();
     } catch (err) {
         logger.error({ error: err }, "Error in navigate");
         onError(err);

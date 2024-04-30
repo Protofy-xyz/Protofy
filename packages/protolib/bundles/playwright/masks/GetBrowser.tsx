@@ -7,7 +7,7 @@ const GetBrowserNode = ({ node = {}, nodeData = {}, children }: any) => {
     return (
         <Node icon={NavigationIcon} node={node} isPreview={!node.id} title='Get Browser' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Browser type', field: 'mask-browserType', type: 'select', data: ["chromium", "firefox", "webkit"] }]} />
-
+            <NodeParams id={node.id} params={[{ label: 'Visible', field: 'mask-visible', type: 'boolean' }]} />
             <div style={{height: '30px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['browser', 'page']} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
@@ -26,11 +26,13 @@ export default {
     getComponent: (node, nodeData, children) => <GetBrowserNode node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
             browserType: 'input',
+            visible: 'input',
             onDone: 'output',
             onError: 'output'
     }}),
     restoreChildren: restoreObject({keys: {
         browserType: 'input',
+        visible: 'input',
         onDone: { params: {'param-browser': { key: "browser"}, 'param-page': { key: "page"}}},
         onError: { params: { 'param-err': { key: "err"}}}
     }}),
@@ -41,6 +43,10 @@ export default {
             "param-1": {
                 value: "{}",
                 kind: "Identifier"
+            },
+            "mask-visible": { 
+                value: "true", 
+                kind: "FalseKeyword"
             },
             "mask-browserType": {
                 value: "chromium",

@@ -36,7 +36,11 @@ export default Protofy("code", async (app:Application, context) => {
     //context.deviceSub allows to receive notifications from devices via mqtt
     //app is a normal expressjs object
     //context.mqtt is a mqttclient connection
-    context.automation(app, async (params) => {}, "{{codeNameLowerCase}}");
+    context.automations.automation({
+        name: '{{codeNameLowerCase}}',
+        responseMode: 'wait',
+        app: app
+    })
 })
 
 

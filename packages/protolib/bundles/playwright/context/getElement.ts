@@ -13,7 +13,7 @@ export const getElement = async (options: {
 }) => {
     const selector = options.selector ?? ''
     const page = options.page
-    const all = options.all ?? true
+    const all = options.all ?? false
 
     if (!page) {
         throw new Error("getElement: page is required");
@@ -26,14 +26,14 @@ export const getElement = async (options: {
 
     try {
         if (all) {
-            console.log('SELECTING with: ', selector)
-            const elements = await page.locator(selector).elementHandles()
-            onDone(elements)
-            return elements
+            const handles = await page.locator(selector).elementHandles()
+            onDone(handles)
+            return handles
         } else {
-            const elements = await page.locator(selector).first()
-            onDone(elements)
-            return elements
+            const element = await page.locator(selector).first()
+            const handle = await element.elementHandle()
+            onDone(handle)
+            return handle
         }
     } catch (err) {
         onError(err);
