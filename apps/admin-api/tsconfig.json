@@ -38,6 +38,7 @@
     "../../packages/app/bundles/objects.ts",
     "../../packages/app/bundles/library.ts",
     "../../packages/app/bundles/objects.ts",
+    "../../packages/app/bundles/environments.ts",
     "../../packages/app/BaseConfig.ts",
     "../../packages/app/initialData.ts",
     "../../packages/app/templates/**/*",

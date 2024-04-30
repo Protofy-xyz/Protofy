@@ -26,6 +26,7 @@ import net from 'net';
 import chokidar from 'chokidar';
 import BundleContext from '../../../packages/app/bundles/adminApiContext'
 import {API} from 'protolib/base'
+import { startProxy } from './proxy';
 
 const generateEvent = async (event, token='') => {
   try {
@@ -37,6 +38,8 @@ const generateEvent = async (event, token='') => {
 
 const logger = getLogger()
 const config = getConfig()
+
+startProxy()
 
 logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: admin-api")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))

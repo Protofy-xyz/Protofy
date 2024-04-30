@@ -8,5 +8,10 @@ services:
     entrypoint: "yarn prod-standalone"
     environment:
       - MQTT_URL=mqtt://localhost:8883
-      - API_URL=http://proxy:8000
+      - PROXY_API_URL=http://admin-api:8000
+      - ADMIN_API_URL=http://admin-api:4002
+      - API_URL=http://api:4001
+      - SITE_URL=http://site:4000
+      - ADMIN_SITE_URL=http://admin:4003 
+      - DOCS_SITE_URL=http://docs:7700
       - NODE_ENV=production

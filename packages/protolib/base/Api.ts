@@ -6,7 +6,7 @@ import { getLogger } from "./logger"
 const logger = getLogger()
 let APIURL = devMode?'http://localhost:8080':'http://localhost:8000'
 export const setApiUrl = (apiurl) => APIURL = apiurl 
-export const getApiUrl = () => process?.env?.API_URL ?? APIURL
+export const getApiUrl = () => process?.env?.PROXY_API_URL ?? APIURL
 
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 

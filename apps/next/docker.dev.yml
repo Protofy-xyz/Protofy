@@ -7,7 +7,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - API_URL=http://proxy:8080
+      - PROXY_API_URL=http://admin-api:8080
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true

@@ -7,5 +7,5 @@ services:
       dockerfile: apps/admin/Dockerfile 
     entrypoint: "yarn prod-standalone"
     environment:
-      - API_URL=http://proxy:8000
+      - PROXY_API_URL=http://admin-api:8000
       - NODE_ENV=production
