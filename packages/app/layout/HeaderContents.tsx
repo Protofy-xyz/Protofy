@@ -4,6 +4,7 @@ import { useAtom } from 'jotai'
 import { Paragraph, Theme, XStack } from '@my/ui';
 import { Cloud, CloudOff } from '@tamagui/lucide-icons';
 import dynamic from 'next/dynamic';
+import { SiteConfig } from '../conf';
 
 export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: string }) => {
   //@ts-ignore
@@ -15,7 +16,7 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
       {props.topBar}
       <XStack $xs={{ display: 'none' }}>
         <Tinted>
-          <HeaderLink id="header-session-doc" href="/documentation">Docs</HeaderLink>
+          <HeaderLink id="header-session-doc" href={SiteConfig.useLocalDocumentation ? "/documentation":"https://protofy.xyz/documentation"}>Docs</HeaderLink>
           {
             <SessionInfo />
           }

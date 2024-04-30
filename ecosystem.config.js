@@ -1,9 +1,7 @@
+const system = require('./system.js')
 module.exports = {
-    apps: [
-      ...require('./apps/admin-api/pm2.config.js').apps,
-      ...require('./apps/api/pm2.config.js').apps,
-      ...require('./apps/next/pm2.config.js').apps,
-      ...require('./apps/admin/pm2.config.js').apps,
-      ...require('./apps/nextra/pm2.config.js').apps
-    ]
+    apps: system.services.reduce((total, service) => {
+      if(service.disabled) return total
+      return [...total, ...require('./apps/'+service.name+'/pm2.config.js').apps]
+    }, [])
 };
