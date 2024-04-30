@@ -9,7 +9,7 @@ const SetTimeoutMask = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[{ label: 'Wait time (ms)', field: 'param-2', type: 'input' }]} />
             <div style={{ paddingBottom: "80px" }}>
                 <FlowPort id={node.id} type='input' label='On Timer' style={{ top: '140px' }} handleId={'request'} />
-                <FallbackPort node={node} port={'param-1'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async () => " postText="" />
+                <FallbackPort node={node} fallbackText="null" port={'param-1'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async () => " postText="" />
             </div>
         </Node>
     )
