@@ -230,6 +230,114 @@
         ]
     },
     {
+        "id": "Section",
+        "title": "Section",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Section"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "bgColor",
+                        "field": "prop-backgroundColor",
+                        "staticLabel": true,
+                        "type": "color",
+                        "section": "color"
+                    },
+                    {
+                        "label": "flexDirection",
+                        "field": "prop-flexDirection",
+                        "type": "alignment-flex",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "justifyContent",
+                        "field": "prop-justifyContent",
+                        "type": "alignment-content",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignItems",
+                        "field": "prop-alignItems",
+                        "type": "alignment-items",
+                        "staticLabel": true,
+                        "section": "layout"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "border",
+                        "field": "prop-border",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "borderRadius",
+                        "field": "prop-borderRadius",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "elevation",
+                        "field": "prop-elevation",
+                        "staticLabel": true,
+                        "type": "toggle-boolean",
+                        "section": "decoration"
+                    },
+                    {
+                        "label": "gap",
+                        "field": "prop-gap",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "decoration"
+                    }
+                ]
+            },
+            {
+                "type": "custom-field",
+                "data": []
+            },
+            {
+                "type": "child",
+                "data": []
+            }
+        ]
+    },
+    {
         "id": "Center",
         "title": "Center",
         "path": "*",
