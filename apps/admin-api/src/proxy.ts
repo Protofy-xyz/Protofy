@@ -39,13 +39,16 @@ export const startProxy = () => {
             const data = chunk.toString();
             const content = JSON.parse(data)
             
+            if(content.processed) return
             //rewire proxy logs to 
             if(content.name == 'proxy' && content.level < 50) {
                 const {level, ...rest} = content
-                logger.trace({...rest})
+                logger.trace({...rest, processed: true})
             } else {
-                logger.info({content})
-                originalStdoutWrite(chunk, encoding, callback);
+                logger.info({...content, processed: true})
+                if(content.name != 'proxy' || (content.name == 'proxy' && content.code != 'ECONNREFUSED' && content.code != 'ECONNRESET')) {
+                    originalStdoutWrite(chunk, encoding, callback);
+                }
             }
         } catch(e) {}
     };
