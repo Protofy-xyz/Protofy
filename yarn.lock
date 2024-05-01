@@ -10516,9 +10516,12 @@ __metadata:
     module-alias: ^2.2.3
     moment: 2.29.4
     multer: 1.4.5-lts.1
+    pino: 8.17.2
     pino-http: 9.0.0
+    pino-pretty: 10.3.1
     pm2: ^5.3.0
     protolib: "*"
+    redbird-no-etcd: 0.10.0-0
     shx: ^0.3.4
     subleveldown: ^6.0.1
     ts-morph: 20.0.0
@@ -26054,6 +26057,7 @@ __metadata:
     "@jest/globals": ~29.7.0
     "@monaco-editor/react": 4.4.6
     "@my/ui": 0.0.1
+    "@protocraft/core": 0.2.4-2
     "@rehookify/datepicker": 6.6.1
     "@tamagui/font-cherry-bomb": latest
     "@tamagui/font-dm-sans": latest
@@ -26126,19 +26130,6 @@ __metadata:
   checksum: ed7fcc2ba0a33404958e34d95d18638249a68c430e30fcb6c478497d72739ba64ce9810a24f53a7d921d0c065e5b78e3822759800698167256b04659366ca4d4
   languageName: node
   linkType: hard
-
-"proxy@workspace:apps/proxy":
-  version: 0.0.0-use.local
-  resolution: "proxy@workspace:apps/proxy"
-  dependencies:
-    dotenv: ^16.3.1
-    pino: 8.17.2
-    pino-pretty: 10.3.1
-    pm2: ^5.3.0
-    redbird-no-etcd: 0.10.0-0
-    ts-node: 10.9.1
-  languageName: unknown
-  linkType: soft
 
 "pseudomap@npm:^1.0.2":
   version: 1.0.2
