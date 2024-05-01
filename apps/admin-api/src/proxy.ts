@@ -1,6 +1,9 @@
 
 const Redbird = require('redbird-no-etcd');
 import { getLogger } from 'protolib/base/logger';
+import { getBaseConfig } from '../../../packages/app/BaseConfig'
+import { getServiceToken } from 'protolib/api/lib/serviceToken'
+
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isFullDev = process.env.DEV_ADMIN_API === '1';
@@ -8,7 +11,7 @@ const isFullDev = process.env.DEV_ADMIN_API === '1';
 const system = require(isFullDev?'../../../system.js':'../../../../../../system.js')
 
 export const startProxy = () => {
-    const logger = getLogger()
+    const logger = getLogger('proxy', getBaseConfig("proxy", process, getServiceToken()))
 
     const Port = process.env.PORT ?? (isProduction ? 8000 : 8080);
     
@@ -28,23 +31,28 @@ export const startProxy = () => {
         return fn
     })
     
-    if(!isFullDev) {
-        const originalStdoutWrite = process.stdout.write.bind(process.stdout);
-        //@ts-ignore
-        process.stdout.write = (chunk, encoding, callback) => {
+    // if(!isFullDev) {
+    const originalStdoutWrite = process.stdout.write.bind(process.stdout);
+    //@ts-ignore
+    process.stdout.write = (chunk, encoding, callback) => {
+        try {
             const data = chunk.toString();
             const content = JSON.parse(data)
-            logger.debug({...content, level: 20});
-            if(content.level == 50 && content.code != 'ECONNREFUSED' && content.code != 'ECONNRESET') {
-                originalStdoutWrite(chunk, encoding, callback); //display critical errors in console
+            
+            //rewire proxy logs to 
+            if(content.name == 'proxy' && content.level < 50) {
+                const {level, ...rest} = content
+                logger.trace({...rest})
+            } else {
+                logger.info({content})
+                originalStdoutWrite(chunk, encoding, callback);
             }
-        
-        };
-        
-        process.on('uncaughtException', (err) => {
-            originalStdoutWrite('whoops! there was an error');
-        });
-    }
+        } catch(e) {}
+    };
+    
+    process.on('uncaughtException', (err) => {
+        originalStdoutWrite('Uncaught exception in admin-api: ' + JSON.stringify(err, null, 4) + '\n');
+    });
 
     
     var proxy = new Redbird({

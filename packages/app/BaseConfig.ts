@@ -49,7 +49,7 @@ export const getBaseConfig = (name, process, token?, config?) => {
           //prettify logs if in server-side, and only in development mode
           ...(process && process.env.NODE_ENV === 'development' && typeof window === "undefined" ? [{
             target: 'pino-pretty',
-            level: 'info',
+            level: 'debug',
             options: {
               colorize: true
             }
@@ -58,7 +58,7 @@ export const getBaseConfig = (name, process, token?, config?) => {
           ...(process && typeof window === "undefined" ? [
             {
               target: 'pino/file',
-              level: 'debug',
+              level: 'trace',
               options: {
                 destination: "../../logs/" + name + '.log'
               }
@@ -68,7 +68,7 @@ export const getBaseConfig = (name, process, token?, config?) => {
           ...(process && typeof window === "undefined" && token ? [
             {
               target: __dirname+'/../protolib/lib/RemoteTransport.ts',
-              level: 'trace',
+              level: 'debug',
               options: {
                 username: name,
                 password: token
@@ -78,7 +78,7 @@ export const getBaseConfig = (name, process, token?, config?) => {
         ]
       },
       name: name ?? 'default',
-      level: 'debug'
+      level: 'trace'
     }
   }
 
