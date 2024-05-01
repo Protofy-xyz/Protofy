@@ -20,7 +20,7 @@ const FeaturedCategory = (atoms) => {
             is={atoms.basic.Image}
             width={400}
             height={400}
-            url="https://fastly.picsum.photos/id/852/3212/2409.jpg?hmac=9Dl4bKeO56pailgEulSkve2oLtehgdPwfcx8JQzpMro"
+            url="/images/patterns/pattern-1.png"
         >
         </Element>
     </Element>
@@ -28,8 +28,8 @@ const FeaturedCategory = (atoms) => {
 
 FeaturedCategory.craft = {
     custom: {
-        molecule: true,
-        icon: "LayoutTemplate"
+        light: "/images/molecules/featured-category-light.png",
+        dark: "/images/molecules/featured-category-dark.png"
     },
     displayName: "FeaturedCategory",
 }
