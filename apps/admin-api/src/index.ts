@@ -24,7 +24,7 @@ import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
 import chokidar from 'chokidar';
-import BundleContext from '../../../packages/app/bundles/adminApiContext'
+import BundleContext from '../../../packages/app/bundles/adminapiContext'
 import {API} from 'protolib/base'
 import { startProxy } from './proxy';
 
