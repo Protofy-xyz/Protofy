@@ -24,15 +24,16 @@ import http from 'http';
 import WebSocket, { Server } from 'ws';
 import net from 'net';
 import chokidar from 'chokidar';
-import BundleContext from '../../../packages/app/bundles/adminapiContext'
-import {API} from 'protolib/base'
+import BundleContext from '../../../packages/app/bundles/adminApiContext'
+import { API } from 'protolib/base'
 import { startProxy } from './proxy';
 
-const generateEvent = async (event, token='') => {
+
+const generateEvent = async (event, token = '') => {
   try {
-      await API.post('/adminapi/v1/events?token='+token, event)
-  } catch(e) {
-      //console.error("Failed to send event: ", e)
+    await API.post('/adminapi/v1/events?token=' + token, event)
+  } catch (e) {
+    //console.error("Failed to send event: ", e)
   }
 }
 
@@ -49,17 +50,17 @@ aedesInstance.authenticate = function (client, username, password, callback) {
   if (!username) {
     logger.debug({}, "MQTT anonymous login request")
   } else {
-    logger.debug({username}, "MQTT user login request: "+username)
+    logger.debug({ username }, "MQTT user login request: " + username)
   }
 
-  if(config.mqtt.auth){
+  if (config.mqtt.auth) {
     if (!username || !password) {
       logger.error({}, "MQTT anonymous login refused: mqtt requires auth")
     } else {
       //TODO: auth
       callback(null, true)
     }
-  } else{
+  } else {
     callback(null, true)
   }
 }
@@ -85,7 +86,7 @@ const topicPub = (topic, data) => {
   mqtt.publish(topic, data)
 }
 
-BundleAPI(app, { mqtt, topicSub, topicPub, ...BundleContext  })
+BundleAPI(app, { mqtt, topicSub, topicPub, ...BundleContext })
 const server = http.createServer(app);
 
 const wss = new Server({ noServer: true });
@@ -128,18 +129,18 @@ mqttServer.listen(mqttPort, () => {
 });
 
 const isFullDev = process.env.DEV_ADMIN_API === '1';
-if(isFullDev) {
+if (isFullDev) {
   const pathsToWatch = [
     'src/**',
     '../../packages/protolib/**',
     '../../packages/app/bundles/adminapi.tsx'
   ];
-  
+
   const watcher = chokidar.watch(pathsToWatch, {
     ignored: /^([.][^.\/\\])|([\/\\]+[.][^.])/,
     persistent: true
   });
-  
+
   watcher.on('change', async (path) => {
     console.log(`File ${path} has been changed.`);
     await generateEvent({

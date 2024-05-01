@@ -41,7 +41,7 @@ app.use(httpLogger({
     },
 
     ...config.logger,
-    useLevel: 'debug'
+    useLevel: 'trace'
 }))
 
 app.get(global.defaultRoute+'/endpoints', handler(async (req, res, session, next) => {

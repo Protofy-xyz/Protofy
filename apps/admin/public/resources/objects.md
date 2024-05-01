@@ -12,7 +12,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 - Protofy Admin Panel
 - Express API system
 - Aedes mqtt server
-- Redbird http reverse proxy
 - [Tamagui](https://tamagui.dev) 🪄
 - [solito](https://solito.dev) for cross-platform navigation
 - Expo SDK

@@ -21,7 +21,7 @@
 Protofy is a Full-Stack, batteries included Low-Code enabled web/app and IoT system with an API system and real time messaging.
 
 You can use this as a base to fast prototype Apps, webs, IoT systems, automations or APIs.
-Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Redbird + Many other amazing packages
+Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Many other amazing packages
 
 You can think of **Protofy** as a Wordpress but based in **react** and **javascript** and some features from supabase, plus visual widget editors to edit source code inside the admin panel itself and a a visual editor for react pages (wysiwyg).
 
@@ -58,7 +58,6 @@ Program, deploy and manage connected devices and IoT networks visually, in minut
 - `Protolib` Protofy Framework on top of react, express and tamagui
 - `Express` API system based on NodeJS (With automatic CRUD creation)
 - `Aedes` mqtt server
-- `Redbird` http reverse proxy
 - [Tamagui](https://tamagui.dev) 🪄
 - [Solito](https://solito.dev) for cross-platform navigation
 - `Expo SDK`
@@ -74,7 +73,6 @@ The project has two main folders:
   - `next` (web)
   - `api` (express API to create the web or app)
   - `admin-api` (express API with the admin API)
-  - `proxy` (redbird reverse proxy)
 
 - `packages` shared packages across apps
   - `ui` includes your custom UI kit that will be optimized by Tamagui

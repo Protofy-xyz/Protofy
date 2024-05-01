@@ -29,11 +29,11 @@ export const PromptAtom = atom<PromptContext[]>([{
         
         There is an automatic api system to create list, create, read, update, delete Rest apis wrapping an 'object'. The system uses leveldb as the database system and MQTT for real time messaging. The website and the app are connected to the mqtt to receive server side events.
         
-        There is a redbird reverse proxy on port 8080, with all the needed routing configured to proxy requests to /api to :3001, /adminapi to :3002 and all other router to :3000  (nextjs).
+        There is a reverse proxy on port 8080, with all the needed routing configured to proxy requests to /api to :3001, /adminapi to :3002 and all other router to :3000  (nextjs).
         
         The mqtt server is based on aedes. 
         
-        Since aedes, redbird, nextjs, express, expo and level are all npm-based packages the system can be run just with yarn commands.
+        Since aedes, nextjs, express, expo and level are all npm-based packages the system can be run just with yarn commands.
         
         The system is a special CMS, where the user uses visual programming, the monaco editor, an AI assistant (you) and some forms and UIs to modify the source code. Hot reload is used to view the results of the modifications in real time. 
         
