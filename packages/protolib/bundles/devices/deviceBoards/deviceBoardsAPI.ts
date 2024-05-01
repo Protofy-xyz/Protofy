@@ -46,8 +46,30 @@ const initialData = {
             { "number": 18, "side": "right", "name": "7", "type": "IO", "analog": false, "description": "GPIO7, D0", "maxVoltage": 3.3, "rtc": false },
             { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
         ],
-        "config": {}
-    }
+        "config": {
+            "esphome-arduino":{
+                "esphome":{},
+                "esp32":{
+                    "board": "esp32dev",
+                    "variant": "esp32",
+                    "framework": { 
+                        "type": "arduino"
+                    }
+                }
+            },
+            "esphome-idf":{
+                "esphome":{},
+                "esp32":{
+                    "board": "esp32dev",
+                    "variant": "esp32", 
+                    "framework": { 
+                        "type": "esp-idf"
+                    }
+                }
+            }
+        }
+    },
+
 }
 
 export const DeviceBoardsAPI = AutoAPI({
