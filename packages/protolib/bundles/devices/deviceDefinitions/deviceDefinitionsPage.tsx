@@ -70,7 +70,7 @@ export default {
                 //mqttPub('datanotify/' + data.notifyId, JSON.stringify(data))
               }
             }}
-            onEdit={(code) => editedObjectData.setData({ components: code, sdkConfig: { board: "esp32dev", framework: { type: "arduino" } } })}
+            onEdit={(code) => editedObjectData.setData({ components: code })}
             positions={[]}
             disableSideBar={true}
             // store={uiStore}

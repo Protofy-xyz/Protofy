@@ -5,7 +5,7 @@ export const DeviceDefinitionSchema = Schema.object({
   board: z.string().hidden(),
   sdk: z.string().hidden(),
   subsystems: z.record(z.string(), z.any()).optional().hidden(),
-  config: z.record(z.string(), z.any()),
+  config: z.record(z.string(), z.any()).onCreate('getConfig').onUpdate('getConfig'),
 })
 export type DeviceDefinitionType = z.infer<typeof DeviceDefinitionSchema>;
 export const DeviceDefinitionModel = AutoModel.createDerived<DeviceDefinitionType>("DeviceDefinitionModel", DeviceDefinitionSchema); 

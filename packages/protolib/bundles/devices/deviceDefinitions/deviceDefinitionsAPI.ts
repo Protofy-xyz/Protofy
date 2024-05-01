@@ -3,24 +3,7 @@ import { AutoAPI } from '../../../api'
 import { API } from '../../../base'
 import { DevicesModel } from "../devices";
 
-const initialData = {
-    "Empty device": {
-        "id": "1",
-        "name": "Empty device",
-        "board": "Protofy ESP32 devBoard",
-        "sdk": "esphome",
-        "subsystems": {},
-        "config": {
-            "components": "[\n \"mydevice\",\n \"esp32dev\", \n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null,\n  null\n]",
-            "sdkConfig": {
-                "board": "esp32dev",
-                "framework": {
-                    "type": "arduino"
-                }
-            }
-        }
-    }
-}
+const initialData = {}
 
 const onAfterCreate = async (data, session?, req?) => {
     if (data.device && session) {
@@ -40,5 +23,13 @@ export const DeviceDefinitionsAPI = AutoAPI({
     initialData,
     onAfterCreate: onAfterCreate,
     skipDatabaseIndexes: true,
-    prefix: '/adminapi/v1/'
+    prefix: '/adminapi/v1/',
+    transformers: {
+        getConfig: async (field, e, data) => {
+            //get config from deviceBoard
+            const deviceBoard = await API.get("/adminapi/v1/deviceboards/" +encodeURI(data.board))
+            data.config.sdkConfig = deviceBoard.data.config[data.sdk]
+            return data
+        }
+    }
 })
