@@ -13,8 +13,8 @@ const Introduction = (atoms) => {
 
 Introduction.craft = {
     custom: {
-        molecule: true,
-        icon: "LayoutTemplate"
+        light: "/images/molecules/introduction-light.png",
+        dark: "/images/molecules/introduction-dark.png"
     },
     displayName: "Introduction",
 }

@@ -29,7 +29,7 @@ const ProductColumns = (atoms) => {
                     is={atoms.basic.Image}
                     width={300}
                     height={350}
-                    url="/images/patterns/pattern-1.png"
+                    url="/images/patterns/pattern-2.png"
                 >
                 </Element>
                 <Element is={atoms.text.Text} color="$color8" fontWeight="bold" padding="$0" alignSelf="flex-start">
@@ -47,7 +47,7 @@ const ProductColumns = (atoms) => {
                     is={atoms.basic.Image}
                     width={300}
                     height={350}
-                    url="/images/patterns/pattern-1.png"
+                    url="/images/patterns/pattern-3.png"
                 >
                 </Element>
                 <Element is={atoms.text.Text} color="$color8" fontWeight="bold" padding="$0" alignSelf="flex-start">
@@ -66,8 +66,8 @@ const ProductColumns = (atoms) => {
 
 ProductColumns.craft = {
     custom: {
-        molecule: true,
-        icon: "LayoutTemplate"
+        light: "/images/molecules/product-columns-light.png",
+        dark: "/images/molecules/product-columns-dark.png"
     },
     displayName: "ProductColumns",
 }
