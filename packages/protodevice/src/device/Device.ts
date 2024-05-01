@@ -14,12 +14,10 @@ class Device {
     
     createComponentsTree(deviceName, deviceDefinition){
         var deviceComponents = {
-            esphome: {
-                name: deviceName,
-            },
-            [deviceDefinition.board.core]: deviceDefinition.config.sdkConfig,
+            ...deviceDefinition.config.sdkConfig,
             logger: {}
         }
+        deviceComponents.esphome.name = deviceName
 
         this.components?.forEach((component, i) => {
             console.log("🚀 ~ file: Device.ts:62 ~ Device ~ this.components?.forEach ~ component:", component)
