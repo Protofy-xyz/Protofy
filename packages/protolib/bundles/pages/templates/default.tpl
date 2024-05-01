@@ -9,8 +9,8 @@ Don't modify export default object
 */
 
 import React, { useState } from 'react'
-import { Theme, YStack, Text, XStack, Paragraph, } from "@my/ui"
-import { UIWrapLib, UIWrap, BigTitle, withSession, Page, useEditor, API, SSR, VStack, useComposedState } from "protolib"
+import { Theme } from "@my/ui"
+import { UIWrapLib, UIWrap, BigTitle, withSession, Page, useEditor, API, SSR, VStack, useComposedState, Text } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 import { context } from "app/bundles/uiContext";
@@ -54,10 +54,6 @@ export default {
                 },
                 components: {
                     ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-                    ...cw("YStack", YStack),
-                    ...cw("Text", Text),
-                    ...cw("XStack", XStack),
-                    ...cw("Paragraph", Paragraph),
                     ...cw("Theme", Theme)
                 }
             },
