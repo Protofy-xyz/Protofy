@@ -14,8 +14,6 @@ export const startProxy = () => {
     const logger = getLogger('proxy', getBaseConfig("proxy", process, getServiceToken()))
 
     const Port = process.env.PORT ?? (isProduction ? 8000 : 8080);
-
-
     var proxy = httpProxy.createProxyServer({
         ws: true,
         xfwd: true
@@ -29,7 +27,12 @@ export const startProxy = () => {
             res.end('Not Found');
             return
         }
-
+        logger.trace({
+            url: req.url,
+            target: resolver.endpoint,
+            ip: req.connection.remoteAddress,
+            method: req.method
+        }, "Proxying request for: "+ req.url + " to: " + resolver.endpoint + " from: " + req.connection.remoteAddress + " method: " + req.method)
         proxy.web(req, res, { target: resolver.endpoint });
     });
 

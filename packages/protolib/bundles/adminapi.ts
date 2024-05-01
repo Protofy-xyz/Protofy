@@ -17,6 +17,7 @@ import { ResourcesAPI } from './resources/resourcesAPI'
 import { AiAssistantsAPI } from './aiAssistants/aiAssistantsAPI';
 import { MasksAPI } from './visualui/masksAPI';
 import { SignalingAPI } from './signalings/signalingsAPI';
+import { LogsAPI } from './logs/logsAPI'
 
 export default (app, context) => {
   UsersAPI(app, context)
@@ -38,4 +39,5 @@ export default (app, context) => {
   AiAssistantsAPI(app, context)
   MasksAPI(app, context)
   SignalingAPI(app, context)
+  LogsAPI(app, context)
 }
