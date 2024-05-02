@@ -26,7 +26,7 @@ const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
       <DefaultLayout title="Protofy" description="Made with love from Barcelona">
         <Center height="90vh" width="100%" paddingHorizontal="20px">
           <VStack height="100%" gap="20px" width="100%" maxWidth="900px" ai="center" jc="center">
-            <Image height={120} width={120} resizeMode='contain' url='https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/icon-protofy.png' />
+            <Image height={120} width={150} resizeMode='cover' url='/logo.png' />
             <Text
               fontFamily="$heading"
               fontSize="$12"

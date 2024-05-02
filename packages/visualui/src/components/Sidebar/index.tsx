@@ -217,7 +217,7 @@ export const Sidebar = ({
                                                             ref={ref => connectors.create(ref, () => palettes.molecules[palette][componentName](palettes.atoms))}
                                                             src={data.custom[resolvedTheme] ?? data.custom.image ?? "/images/molecules/no-molecule-image.png"}
                                                             title={componentName}
-                                                            width={"100%"}
+                                                            width={300}
                                                             onMouseEnter={(e) => {
                                                                 e.currentTarget.style.boxShadow = "0px 0px 0px 2px " + interactiveColor
                                                             }}

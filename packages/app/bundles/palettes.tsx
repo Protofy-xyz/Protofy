@@ -19,5 +19,8 @@ export const palettes = {
         basic: {
             ...protolibPalette.molecules.basic
         },
+        pages: {
+            ...protolibPalette.molecules.pages
+        },
     }
 }
