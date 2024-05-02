@@ -620,6 +620,7 @@ const FlowsBase = ({
                 let ancestorJsxId = ancestorJsxElementPort.split('-')[0]
                 const ancestorNodeType = ancestorJsxElementPort.split('_')[0];
                 const ancestorJsxNodeData = nodeData[ancestorJsxId]
+                if (!ancestorJsxNodeData) return
                 const modifiedPropName = ancestorJsxNodeData[ancestorParam]?.key
                 const value = findJsxElementDumpedPropValue(nodes, edges, nodeData, ancestorJsxId, ancestorNodeType, modifiedPropName)
                 payload = {
