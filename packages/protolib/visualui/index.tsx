@@ -157,7 +157,7 @@ export const basicPalette = {
       ]
     }
   }, { children: <BasicPlaceHolder /> }),
-  ...cw(Image, 'Image', 'Image', { url: "https://picsum.photos/200" }, {
+  ...cw(Image, 'Image', 'Image', { url: "/images/patterns/pattern-1.png" }, {
     custom: {
       shortcuts: [
         alignSelf,
