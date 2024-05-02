@@ -12,7 +12,10 @@ module.exports = {
         env: {
             NODE_ENV: isProduction ? 'production' : 'development'
         },
-        cwd: currentDir
+        cwd: currentDir,
+        log_date_format: "YYYY-MM-DD HH:mm Z",
+        out_file: '../../logs/raw/admin.stdout.log',
+        error_file: '../../logs/raw/admin.stderr.log'
       }
     ]
   };
