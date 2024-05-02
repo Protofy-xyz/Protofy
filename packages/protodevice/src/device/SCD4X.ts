@@ -21,8 +21,10 @@ class SCD4X {
                 {
                     name: this.type,
                     config: {
+                        platform: this.platform,
                         id: this.name,
                         i2c_id: this.i2cBusId,
+                        update_interval: this.updateInterval,
                         co2:{
                             name: this.name+"-co2"
                         },
@@ -58,23 +60,26 @@ class SCD4X {
                 monitors: [
                     {
                         name: 'co2',
-                        labels: 'Co2',
+                        label: 'CO2',
+                        units: 'ppm',
                         description: 'Get co2 value in ppm',
-                        endpoint:  `/sensor/${this.name}/state`,
+                        endpoint:  `/sensor/${this.name}-co2/state`,
                         connectionType: 'mqtt',
                     },
                     {
                         name: 'temperature',
-                        labels: 'Read tag',
+                        label: 'Temperature',
+                        units: 'ºC',
                         description: 'Get temperature in ºC',
-                        endpoint:  `/sensor/${this.name}/state`,
+                        endpoint:  `/sensor/${this.name}-temperature/state`,
                         connectionType: 'mqtt',
                     },
                     {
                         name: 'humidity',
-                        labels: 'Read tag',
+                        label: 'Humidity',
+                        units: '%',
                         description: 'Get humidity in %',
-                        endpoint:  `/sensor/${this.name}/state`,
+                        endpoint:  `/sensor/${this.name}-humidity/state`,
                         connectionType: 'mqtt',
                     },
                 ]
