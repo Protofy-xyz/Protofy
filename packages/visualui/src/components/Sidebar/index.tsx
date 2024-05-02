@@ -208,7 +208,7 @@ export const Sidebar = ({
                                 return (
                                     <div key={i} style={{ flexDirection: 'column', display: 'flex', marginBottom: '25px' }}>
                                         <p style={{ paddingLeft: '16px', marginBottom: '10px', fontSize: '12px', color: "gray" }}>{palette.toUpperCase()}</p>
-                                        <div style={{ flex: 1, padding: "10px", gap: "20px", display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start', gap: '8px' }}>
+                                        <div style={{ flex: 1, padding: "10px", display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', alignContent: 'flex-start', gap: '16px' }}>
                                             {
                                                 Object.keys(filteredDropableMolecules[palette]).map((componentName, i) => {
                                                     const data = filteredDropableMolecules[palette][componentName]
@@ -222,9 +222,9 @@ export const Sidebar = ({
                                                                 e.currentTarget.style.boxShadow = "0px 0px 0px 2px " + interactiveColor
                                                             }}
                                                             onMouseLeave={(e) => {
-                                                                e.currentTarget.style.boxShadow = "0px 0px 10px 0px rgba(0,0,0,0.1)"
+                                                                e.currentTarget.style.boxShadow = "0px 0px 8px 0px rgba(0,0,0,0.1)"
                                                             }}
-                                                            style={{ objectFit: 'contain', boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)" }}
+                                                            style={{ objectFit: 'contain', boxShadow: "0px 0px 8px 0px rgba(0,0,0,0.1)" }}
                                                         />
                                                     )
                                                 })
