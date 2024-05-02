@@ -1,59 +1,113 @@
 import { handler } from '../../api'
 import fs from 'fs';
 import pm2 from 'pm2';
+import { getSourceFile, getDefinition, AutoAPI, getRoot } from '../../api'
+import { ServiceModel } from './servicesSchema';
 
-
-export const ServicesAPI = (app, context) => {
-  app.get('/adminapi/v1/services', handler(async (req, res, session) => {
-    if (!session || !session.user.admin) {
-      res.status(401).send({ error: "Unauthorized" })
-      return
+const readService = async (name, cb) => {
+  pm2.connect(err => {
+    if (err) {
+      throw new Error(`Error connecting to pm2: ${err}`);
     }
 
+    pm2.describe(name, (err, desc) => {
+      pm2.disconnect()
+      if (err) {
+        throw new Error(`Error getting service description: ${err}`);
+      }
+      const service = desc[0];
+      cb({
+        name: service.name,
+        status: service.pm2_env.status,
+        uptime: service.pm2_env.pm_uptime,
+        restarts: service.pm2_env.restart_time,
+        memory: service.monit.memory,
+        cpu: service.monit.cpu
+      })
+    });
+  });
+}
+
+const listServices = () => {
+  return new Promise((resolve, reject) => {
     pm2.connect(err => {
       if (err) {
-        console.error('Error connecting to pm2:', err);
-        res.status(500).send({ error: "Error connecting to pm2" })
-        return
+        reject(new Error(`Error connecting to PM2: ${err}`));
+        return;
       }
 
       pm2.list((err, list) => {
+        pm2.disconnect();
         if (err) {
-          res.status(500).send({ error: "Error getting list of services" })
-          pm2.disconnect();
+          reject(new Error(`Error getting service list: ${err}`));
           return;
         }
-        res.send(list)
-        pm2.disconnect();
+
+        const serviceList = list.map(service => ({
+          name: service.name,
+          status: service.pm2_env.status,
+          uptime: service.pm2_env.pm_uptime,
+          restarts: service.pm2_env.restart_time,
+          memory: service.monit.memory,
+          cpu: service.monit.cpu
+        }));
+
+        resolve(serviceList);
       });
     });
-  }))
+  });
+};
 
-  app.get('/adminapi/v1/services/:service', handler(async (req, res, session) => {
-    if (!session || !session.user.admin) {
-      res.status(401).send({ error: "Unauthorized" })
-      return
-    }
 
-    pm2.connect(err => {
-      if (err) {
-        console.error('Error connecting to pm2:', err);
-        res.status(500).send({ error: "Error connecting to pm2" })
-        return
+const getDB = (path, req, session) => {
+  const db = {
+    async *iterator() {
+      try {
+        // Esperamos los servicios de forma asíncrona
+        const services:any = await listServices();
+        for (const service of services) {
+          // Podemos usar 'yield' aquí porque estamos en una función generadora asíncrona
+          yield [service.name, JSON.stringify(service)];
+        }
+      } catch (error) {
+        console.error("Error retrieving services:", error);
       }
+    },
 
-      pm2.describe(req.params.service, (err, desc) => {
-        if (err) {
-          res.status(500).send({ error: "Error getting service" })
-          pm2.disconnect();
-          return;
-        }
-        res.send(desc)
-        pm2.disconnect();
+    async del (key, value) {
+
+    },
+
+    async put(key, value) {
+
+    },
+
+    async get(key) {
+      const name = key;
+      return new Promise((resolve, reject) => {
+        readService(name, (service) => {
+          resolve(JSON.stringify(service));
+        });
       });
-    });
-  }))
+    }
+  };
 
+  return db;
+}
+
+const serviceAutoAPI = AutoAPI({
+  modelName: 'services',
+  modelType: ServiceModel,
+  prefix: '/adminapi/v1/',
+  getDB: getDB,
+  connectDB: () => new Promise(resolve => resolve(null)),
+  requiresAdmin: ['*']
+})
+
+
+export const ServicesAPI = (app, context) => {
+
+  serviceAutoAPI(app, context)
   app.get('/adminapi/v1/services/:service/logs', handler(async (req, res, session) => {
     if (!session || !session.user.admin) {
       res.status(401).send({ error: "Unauthorized" });
