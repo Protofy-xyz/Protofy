@@ -1,15 +1,15 @@
 import { Element } from "@protocraft/core";
 
 const FeaturedCategory = (atoms) => {
-    return <Element is={atoms.layout.Section} flexDirection="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="center" gap="$8">
+    return <Element is={atoms.layout.HStack} flexDirection="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="center" gap="$8">
         <Element is={atoms.layout.VStack} alignItems="center" gap="$4" width={400}>
             <Element is={atoms.text.Text}>
                 Discover Our Featured Category
             </Element>
-            <Element is={atoms.text.Head1} color="$color8" textAlign="center">
+            <Element is={atoms.text.Head1} textAlign="center">
                 Find What You Need Here!
             </Element>
-            <Element is={atoms.text.Text} color="$color11" textAlign="center">
+            <Element is={atoms.text.Text} textAlign="center">
                 Discover Our Featured Category
             </Element>
             <Element is={atoms.basic.ButtonSimple}>
