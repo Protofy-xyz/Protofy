@@ -6090,6 +6090,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pm2/js-api@npm:~0.8.0":
+  version: 0.8.0
+  resolution: "@pm2/js-api@npm:0.8.0"
+  dependencies:
+    async: ^2.6.3
+    debug: ~4.3.1
+    eventemitter2: ^6.3.1
+    extrareqp2: ^1.0.0
+    ws: ^7.0.0
+  checksum: c17b01d2a5efe8db370b21a7a0452e144d14066632d35a423cc025b812630563f195440dea842281cce614ae5dc3509fce33e27f68318aa024d815332d28edbd
+  languageName: node
+  linkType: hard
+
 "@pm2/pm2-version-check@npm:latest":
   version: 1.0.4
   resolution: "@pm2/pm2-version-check@npm:1.0.4"
@@ -16647,6 +16660,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"extrareqp2@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "extrareqp2@npm:1.0.0"
+  dependencies:
+    follow-redirects: ^1.14.0
+  checksum: 1c64c2669715a8dbb07c88ba81a3aa1dd1fe29a794b27db5bece17994de32d3f21ca686af265f56174a748203b57eebdf8ae22afda05f361fc29420059ed14ae
+  languageName: node
+  linkType: hard
+
 "extsprintf@npm:^1.2.0":
   version: 1.4.1
   resolution: "extsprintf@npm:1.4.1"
@@ -25197,6 +25219,52 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pm2@npm:5.3.1":
+  version: 5.3.1
+  resolution: "pm2@npm:5.3.1"
+  dependencies:
+    "@pm2/agent": ~2.0.0
+    "@pm2/io": ~5.0.0
+    "@pm2/js-api": ~0.8.0
+    "@pm2/pm2-version-check": latest
+    async: ~3.2.0
+    blessed: 0.1.81
+    chalk: 3.0.0
+    chokidar: ^3.5.3
+    cli-tableau: ^2.0.0
+    commander: 2.15.1
+    croner: ~4.1.92
+    dayjs: ~1.11.5
+    debug: ^4.3.1
+    enquirer: 2.3.6
+    eventemitter2: 5.0.1
+    fclone: 1.0.11
+    mkdirp: 1.0.4
+    needle: 2.4.0
+    pidusage: ~3.0
+    pm2-axon: ~4.0.1
+    pm2-axon-rpc: ~0.7.1
+    pm2-deploy: ~1.0.2
+    pm2-multimeter: ^0.1.2
+    pm2-sysmonit: ^1.2.8
+    promptly: ^2
+    semver: ^7.2
+    source-map-support: 0.5.21
+    sprintf-js: 1.1.2
+    vizion: ~2.2.1
+    yamljs: 0.3.0
+  dependenciesMeta:
+    pm2-sysmonit:
+      optional: true
+  bin:
+    pm2: bin/pm2
+    pm2-dev: bin/pm2-dev
+    pm2-docker: bin/pm2-docker
+    pm2-runtime: bin/pm2-runtime
+  checksum: 7d82fd70393432abb34218fb82a2ae31e499db13259da6746a371fbf242758c3859a309fd93c836a4cb318721315a95e69126cc16a1843a2f5df931581c47d0e
+  languageName: node
+  linkType: hard
+
 "pm2@npm:^5.3.0":
   version: 5.3.0
   resolution: "pm2@npm:5.3.0"
@@ -25690,6 +25758,7 @@ __metadata:
     pino: 8.17.2
     pino-pretty: 10.3.1
     playwright: 1.41.0
+    pm2: 5.3.1
     react-chat-widget: ^3.1.4
     react-contenteditable: 3.3.7
     react-data-table-component: ^7.5.4
