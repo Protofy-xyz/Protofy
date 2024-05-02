@@ -24,7 +24,7 @@ const config = {
             "name": "nextra",
             "disabled": true,
             "description": "Documentation services for protofy, providing the documentation based on nextra",
-            "route": (req) => req.url.startsWith('/documentation/' || req.url == '/documentation'),
+            "route": (req) => req.url.startsWith('/documentation/') || req.url == '/documentation',
             "endpoint": process.env.DOCS_SITE_URL ?? 'http://localhost:'+(isProduction ? 7700 : 7600),
         },
         {
