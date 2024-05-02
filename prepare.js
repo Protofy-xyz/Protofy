@@ -12,6 +12,10 @@ if (!fs.existsSync("./data")) {
     fs.mkdirSync('./data')
 }
 
+if (!fs.existsSync("./logs/raw")) {
+    fs.mkdirSync('./logs/raw')
+}
+
 if (!fs.existsSync("./data/databases")) {
     fs.mkdirSync('./data/databases')
 }
