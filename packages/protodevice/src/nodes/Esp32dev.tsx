@@ -1,11 +1,7 @@
-import React, { useContext } from "react";
-import { AddPropButton, PORT_TYPES, Node, NodeParams, FlowStoreContext } from 'protoflow';
+import { useContext } from "react";
+import { PORT_TYPES, Node, FlowStoreContext } from 'protoflow';
 import { Handle, Position, useEdges } from "reactflow";
-// import { useAppStore } from "../../../../../context/appStore";
-import { useDeviceStore } from "../oldThings/DeviceStore";
-// import { MaterialCommunityIcons } from '@expo/vector-icons';
 import esp32c4 from '../assets/esp32c4.png';
-import { useSubscription } from 'mqtt-react-hooks';
 import { getColor } from ".";
 
 const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId))
@@ -51,72 +47,14 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const Device = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
-    const { publish, data } = topics;
-    const { id, type } = node
+const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
+    const { id } = node
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
-    const currentDevice = useDeviceStore(state => state.electronicDevice);
     const offsetY = 257 //This value is for setting the initial point where the available pins start to draw
     const spacing = 27.8
     const edges = useEdges();
 
-    // const changeDeviceName = () => {
-    //     const isValidDevice = () => !(!(nodeData['element-0'] == '') || nodeData['element-0'].includes(' ') || nodeData['element-0'].includes('.'))
-    //     if (isValidDevice()) {
-    //         if (nodeData['element-0'] == currentDevice) return
-    //         publish('device/changedDeviceName', { deviceName: nodeData['element-0'], oldDeviceName: currentDevice, ts: Date.now() })
-    //     }
-    // }
-
-    const params = [
-        // { label: 'Name', onBlur:()=>changeDeviceName(), field: 'element-0', type: 'input', static: true, pre: (str) => str.replace(/['"]+/g, ''), post: (str) => '"' + str.toLowerCase() + '"'},
-        { label: 'Name', isDisabled: true, field: 'element-0', type: 'input', static: true },
-        // { label: 'WiFi SSID', field: 'element-2', type: 'input', static: true },
-        // { label: 'WiFi Password', field: 'element-3', type: 'input', static: true },
-        // {
-        //     label: 'WiFi Power mode', field: 'element-4', type: 'select', static: true,
-        //     data: ['"none"', '"light"', '"high"'],
-        // },
-        // { label: 'MQTT Address', field: 'element-5', type: 'input', static: true },
-        // { label: 'Enable Deep-Sleep', static: true, field: 'element-6', type: 'boolean' },
-        // { label: 'Deep-Sleep run duration', field: 'element-7', type: 'input', static: true},
-        // { label: 'Deep-Sleep sleep duration', field: 'element-8', type: 'input', static: true },
-        // {
-        //     label: 'Wakeup Pin', static: true, field: 'element-9', type: 'select',
-        //     data: ports.filter(port => port.type.includes('I') && !['EN', '36', '39', 'CLK'].includes(port.name) && port.rtc == true).map(port => port.name)
-        // }
-
-    ]
-    // const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME
-    // const mqttTopic = `${projectName}/${currentDevice}/status`
-    // const { message } = useSubscription(['newplatform/mydevice/status']);
-    // const addChannel = useAppStore(state => state.addChannel)
-    // const lastMessage = useAppStore(state => state.lastMessageByTopic[mqttTopic]) ?? []
-    // addChannel(mqttTopic);
-    // TODO: Replace mqtt connectivity
-    // const [lastMessage, setLastMessage] = React.useState({ message: "offline" })
-    // END-TODO
-    // const [connected, setConnected] = React.useState("offline");
-
-    const onCompile = () => {
-        publish('flows-editor/play', { ts: Date.now() })
-    }
-    // React.useEffect(() => {
-    //     if (lastMessage.message == 'online') {
-    //         setConnected("online");
-    //     } else {
-    //         setConnected("offline")
-    //     }
-    // }, [lastMessage])
-
-    // React.useEffect(() => {
-    //     if (message?.message == 'online') {
-    //         setConnected("online");
-    //     } else {
-    //         setConnected("offline")
-    //     }
-    // }, [message])
     const devicePositioning = Array(34).fill(1).map((x, i) => {
         if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
             return `${i + 2}-${i > 14 ? 'l' : 'r'}-${i}`
@@ -132,12 +70,6 @@ const Device = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
     console.log("Boolean value: ", Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")).length > 35)
     return (
         <Node output={false} skipCustom={true} node={node} color={color} isPreview={!id} title='ESP32' id={id} margin='200px' >
-            {/* <Button onPress={onCompile} w="40%" alignSelf={'center'} endIcon={<Icon as={MaterialCommunityIcons} name={'upload'} />} m="14px">Upload</Button> */}
-            {/* <button onClick={onCompile} style={{ width: "40%", alignSelf: 'center', margin: "14px", border:"1px solid #cccccc", borderRadius:"5px", padding:"10px"}}>Upload</button> */}
-            {/* <div style={{ alignItems: 'center', justifyContent: 'flex-end', paddingLeft: "14px", paddingRight: "14px", paddingTop: "10px",paddingBottom: "10px" }}>
-                <p style={{ marginRight: '5px' }}>{connected}<span style={{backgroundColor: connected=="online"?"green":"red",display:"inline-block", width: "12px", height: "12px", borderRadius: "40px", marginLeft: "15px"}}></span></p>
-            </div> */}
-            {/* {<NodeParams id={id} params={params} />} */}
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>
                 <img src={esp32c4.src} style={{ width: "100%" }} />
             </div>
@@ -167,31 +99,6 @@ const Device = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
                     />
                 }
             })}
-            {/* {Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")).length >35?
-            <Handle
-                key={36}
-                isConnectable={!isHandleConnected(edges, `${id}${PORT_TYPES.data}element-${36}`)}
-                isValidConnection={(c) => {
-                    const sourceConnected = isHandleConnected(edges, c.sourceHandle)
-                    return !sourceConnected
-                }}
-                type={"target"}
-                style={{
-                    position: 'absolute',
-                    top:'718px',
-                    width: "17px",
-                    height: "17px",
-                    backgroundColor: isHandleConnected(edges, `${id}${PORT_TYPES.data}element-${36}`) ? "#BA68C8" : "white",
-                    marginLeft: '0px',
-                    marginRight: '9px',
-                    border: isHandleConnected(edges, `${id}${PORT_TYPES.data}element-${36}`) ? "2px solid #BA68C8" : "2px solid white"
-                }}
-                position={Position.Right}
-                id={`${id}${PORT_TYPES.data}element-${36}`}
-            ></Handle>
-            :<></>} */}
-            {/* {Object.keys(nodeData).filter(e => e.includes("element-"))} */}
-            {/* <AddPropButton id={id} nodeData={nodeData} type={"Component"} style={{ marginBottom: '20px' }} /> */}
         </Node>
     );
 }
@@ -200,7 +107,7 @@ export default {
     id: 'esp32dev',
     type: 'ArrayLiteralExpression',
     check: (node, nodeData) => node.type == "ArrayLiteralExpression" && nodeData['element-1'] == '"esp32dev"',
-    getComponent: (node, nodeData, children) => <Device color={getColor('esp32dev')} node={node} nodeData={nodeData} children={children} />,
+    getComponent: (node, nodeData, children) => <Esp32dev color={getColor('esp32dev')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: '"esp32dev"' } },
     hidden: true,
     nonDeletable: true
