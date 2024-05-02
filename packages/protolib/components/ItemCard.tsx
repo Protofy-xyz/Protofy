@@ -89,7 +89,7 @@ export const ItemCard = memo(React.forwardRef(
           borderWidth: 1,
           borderColor: "$borderColor",
           backgroundColor: "$color1",
-          br: "$7",
+          br: "$5",
           p: 0,
           ai: "stretch",
           elevation: "$2",
