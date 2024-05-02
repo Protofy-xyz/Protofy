@@ -10,6 +10,8 @@ const isFullDev = process.env.DEV_ADMIN_API === '1';
 
 const system = require(isFullDev ? '../../../system.js' : '../../../../../../system.js')
 
+const startTime = new Date().getTime();
+
 export const startProxy = () => {
     const logger = getLogger('proxy', getBaseConfig("proxy", process, getServiceToken()))
 
@@ -18,6 +20,19 @@ export const startProxy = () => {
         ws: true,
         xfwd: true
     });
+    proxy.on('error', (err, req, res) => {
+        if(startTime + 10000 > new Date().getTime()) {
+            // Ignore errors that occur within the first 10 seconds of starting the service
+            return;
+        }
+        logger.error({ err, url: req.url }, 'Proxy error occurred');
+
+        if (res.writeHead) {
+            res.writeHead(502, { 'Content-Type': 'text/plain' });
+        }
+        res.end('Bad Gateway: Unable to connect to upstream service');
+    });
+
     var server = http.createServer(function(req, res) {
         // You can define here your custom logic to handle the request
         // and then proxy the request.

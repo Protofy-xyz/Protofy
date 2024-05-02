@@ -26,7 +26,7 @@ module.exports = {
                 NODE_ENV: isProduction ? 'production' : 'development'
             },
             cwd: currentDir,
-            log_date_format: "YYYY-MM-DD HH:mm Z",
+            log_date_format: "YYYY-MM-DD HH:mm:ss",
             out_file: '../../logs/raw/admin-api.stdout.log',
             error_file: '../../logs/raw/admin-api.stderr.log'
         }

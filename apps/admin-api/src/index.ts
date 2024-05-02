@@ -28,6 +28,12 @@ import BundleContext from '../../../packages/app/bundles/adminApiContext'
 import { API } from 'protolib/base'
 import { startProxy } from './proxy';
 
+const config = getConfig()
+const logger = getLogger()
+
+process.on('uncaughtException', function (err) {
+  logger.error({ err }, 'Uncaught Exception: ', err.message)
+});
 
 const generateEvent = async (event, token = '') => {
   try {
@@ -36,9 +42,6 @@ const generateEvent = async (event, token = '') => {
     //console.error("Failed to send event: ", e)
   }
 }
-
-const logger = getLogger()
-const config = getConfig()
 
 startProxy()
 

@@ -51,7 +51,8 @@ export const getBaseConfig = (name, process, token?, config?) => {
             target: 'pino-pretty',
             level: 'debug',
             options: {
-              colorize: true
+              colorize: true,
+              ignore: 'pid,hostname,time'
             }
           }] : []),
           //adds log to file if in server-side
