@@ -24,7 +24,7 @@ const MyOption = ({ value }: OptionProps) => <option value={value} />
 const MyInput = forwardRef(({ children, listProps = {}, options = [], state, ...props }: MyInputProps & any, ref) => {
     const inputListId = 'input-select-' + uuidv4()
     return <>
-        <input ref={ref} value={state?.value} onChange={e => state?.set(e.target.value)} list={inputListId} {...props} style={{ fontSize: props.fontSize, ...props.style }} />
+        <input ref={ref} value={state?.value} onChange={e => state && state.set ? state?.set(e.target.value) : null} list={inputListId} {...props} style={{ fontSize: props.fontSize, ...props.style }} />
         <div {...listProps} style={{maxHeight: '40px'}}>
             <datalist className='datalist' id={inputListId}>
                 {children}
