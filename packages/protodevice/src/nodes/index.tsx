@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import { generateColorbyIndex } from 'protoflow/src/diagram/Theme';
 import Wifi from './Wifi';
 import Esp32dev from './Esp32dev';
+import Seeed_xiao_esp32s3 from './Seeed_xiao_esp32s3';
 import Mqtt from './Mqtt';
 import Relay from './Relay';
 import GPIOSwitch from './GPIOSwitch';
@@ -26,6 +27,7 @@ import SCD4X from './SCD4X';
 const deviceMasks = [
   Wifi,
   Esp32dev,
+  Seeed_xiao_esp32s3,
   Mqtt,
   Relay,
   GPIOSwitch,
