@@ -59,13 +59,7 @@ class Device {
 
     getComponentsTree(deviceName?, deviceDefinition?) {
         const ports = deviceDefinition.board.ports
-        if(deviceDefinition.board.name == "Seeed Studio XIAO ESP32S3"){
-            this.pinTable = ports.map(port => port.name)
-        } else {
-            ports.forEach(port => {
-                if(!['3V3', 'EN', '36', '39', 'CLK'].includes(port.name)) this.pinTable.push(port.name)
-                });
-        }
+        this.pinTable = ports.map(port => port.name)
         
         this.createComponentsTree(deviceName, deviceDefinition)
         //console.log("🚀 ~ file: Device.ts:275 ~ Device ~ create ~ jsYaml.dump(components):", jsYaml.dump(components, {lineWidth: -1}))

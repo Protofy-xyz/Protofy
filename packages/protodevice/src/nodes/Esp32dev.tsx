@@ -51,13 +51,13 @@ const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
     const { id } = node
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
-    const offsetY = 257 //This value is for setting the initial point where the available pins start to draw
+    const offsetY = 145.8 //This value is for setting the initial point where the available pins start to draw
     const spacing = 27.8
     const edges = useEdges();
 
-    const devicePositioning = Array(34).fill(1).map((x, i) => {
-        if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
-            return `${i + 2}-${i > 14 ? 'l' : 'r'}-${i}`
+    const devicePositioning = Array(ports.length).fill(1).map((x, i) => {
+        if (true) {
+            return `${i + 2}-${i > ports.length/2-1 ? 'l' : 'r'}-${i}`
         }
     })
     console.log("DevicePositioning: ", devicePositioning)
@@ -73,8 +73,8 @@ const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>
                 <img src={esp32c4.src} style={{ width: "100%" }} />
             </div>
-            {Array(34).fill(1).map((x, i) => {
-                if (i != 9 && i != 14 && i != 13 && i != 15 && i != 21 && i != 33 && i != 28) {
+            {Array(ports.length).fill(1).map((x, i) => {
+                if (["I", "O", "IO"].includes(ports[i].type)) {                    
                     const idString = `${id}${PORT_TYPES.data}element-${i + 2}`;//${i>14?'l':'r'}
                     return <Handle
                         key={i}
@@ -86,15 +86,15 @@ const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
                         type={"target"}
                         style={{
                             position: 'absolute',
-                            top: i > 14 ? (spacing * (i - 15)) + (offsetY - (spacing * 4)) + 'px' : (spacing * i) + offsetY + 'px',
+                            top: i > ports.length/2-1 ? (spacing * (i - ports.length/2)) + (offsetY) + 'px' : (spacing * i) + offsetY + 'px',
                             width: "17px",
                             height: "17px",
                             backgroundColor: isHandleConnected(edges, idString) ? "#BA68C8" : "white",
-                            marginLeft: i > 14 ? '0px' : '9px',
-                            marginRight: i > 14 ? '9px' : '0px',
+                            marginLeft: i > ports.length/2-1 ? '0px' : '9px',
+                            marginRight: i > ports.length/2-1 ? '9px' : '0px',
                             border: isHandleConnected(edges, idString) ? "2px solid #BA68C8" : "2px solid white"
                         }}
-                        position={i > 14 ? Position.Right : Position.Left}
+                        position={i > ports.length/2-1 ? Position.Right : Position.Left}
                         id={idString}
                     />
                 }
