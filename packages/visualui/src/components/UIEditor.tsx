@@ -170,11 +170,11 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: mainPanelHeight }}>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 999999, backgroundColor: useUITheme('nodeBackgroundColor'), borderBottom: '1px solid ' + separatorColor }}>
                     <XStack padding="10px" display={monacoHasChanges && codeEditorVisible ? 'flex' : 'none'} theme={"dark"} marginVertical="$1">
-                        <Button size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
-                            <X />
+                        <Button hoverStyle={{ backgroundColor: useUITheme('secondaryBackground') }} size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
+                            <X color={useUITheme('textColor')} />
                         </Button>
-                        <Button size="$3" chromeless circular onPress={() => onEditorSave("monaco", monacoSourceCode)}>
-                            <Save fillOpacity={0} />
+                        <Button hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }} size="$3" chromeless circular onPress={() => onEditorSave("monaco", monacoSourceCode)}>
+                            <Save color={useUITheme('textColor')} fillOpacity={0} />
                         </Button>
                     </XStack>
                     <XStack padding="10px" display={['flow-preview', 'preview'].includes(flowViewMode) ? 'flex' : 'none'} >
