@@ -74,7 +74,7 @@ export const DevicesAPI = (app, context) => {
             return
         }
         
-        const urlLastDeviceEvent = `/adminapi/v1/events?from=device&user=${req.params.device}&path=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
+        const urlLastDeviceEvent = `/adminapi/v1/events?filter[from]=device&filter[user]=${req.params.device}&filter[path]=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
         const data = await API.get(urlLastDeviceEvent)
 
         if(!data || !data.data ||  !data.data['items'] || !data.data['items'].length) {
