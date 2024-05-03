@@ -44,9 +44,9 @@ const Seeed_xiao_esp32s3 = ({ node = {}, nodeData = {}, topics = {}, color }: an
     const spacing = 30.4
     const edges = useEdges();
 
-    const devicePositioning = Array(14).fill(1).map((x, i) => {
+    const devicePositioning = Array(ports.length).fill(1).map((x, i) => {
         if (true) {
-            return `${i + 2}-${i > 6 ? 'l' : 'r'}-${i}`
+            return `${i + 2}-${i > ports.length/2-1 ? 'l' : 'r'}-${i}`
         }
     })
     console.log("DevicePositioning: ", devicePositioning)
@@ -63,8 +63,8 @@ const Seeed_xiao_esp32s3 = ({ node = {}, nodeData = {}, topics = {}, color }: an
                 <img src={seeed_xiao_esp32s3.src} style={{ width: "100%" }} />
             </div>
             {/* //TODO Get ports from device definition */}
-            {Array(14).fill(1).map((x, i) => {
-                if (i != 4 && i != 5 && i != 6) {
+            {Array(ports.length).fill(1).map((x, i) => {
+                if (["I", "O", "IO"].includes(ports[i].type)) {
                     const idString = `${id}${PORT_TYPES.data}element-${i + 2}`;//${i>14?'l':'r'}
                     return <Handle
                         key={i}
@@ -78,15 +78,15 @@ const Seeed_xiao_esp32s3 = ({ node = {}, nodeData = {}, topics = {}, color }: an
                         title={JSON.stringify(portsDescriptions[i], null, 2)}
                         style={{
                             position: 'absolute',
-                            top: i > 6 ? (spacing * (i - 7)) + (offsetY) + 'px' : (spacing * i) + offsetY + 'px',
+                            top: i > ports.length/2-1 ? (spacing * (i - ports.length/2)) + (offsetY) + 'px' : (spacing * i) + offsetY + 'px',
                             width: "17px",
                             height: "17px",
                             backgroundColor: isHandleConnected(edges, idString) ? "#BA68C8" : "white",
-                            marginLeft: i > 6 ? '0px' : '15px',
-                            marginRight: i > 6 ? '15px' : '0px',
+                            marginLeft: i > ports.length/2-1 ? '0px' : '15px',
+                            marginRight: i > ports.length/2-1 ? '15px' : '0px',
                             border: isHandleConnected(edges, idString) ? "2px solid #BA68C8" : "2px solid white"
                         }}
-                        position={i > 6 ? Position.Right : Position.Left}
+                        position={i > ports.length/2-1 ? Position.Right : Position.Left}
                         id={idString}
                     />
                 }
