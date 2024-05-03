@@ -24,8 +24,8 @@ class TempHumidity {
                     model: this.model,
                     id: this.name,
                     update_interval: this.updateInterval,
-                    temperature: { name: "temperature" },
-                    humidity: { name: "humidity" }
+                    temperature: { name: this.name+"-temperature" },
+                    humidity: { name: this.name+"-humidity" }
                 },
                 subsystem: this.getSubsystem()
 
@@ -51,17 +51,17 @@ class TempHumidity {
             type: this.type,
             monitors: [
                 {
-                    name: "Temperature",
-                    label: "temperature",
+                    name: "temperature",
+                    label: "Temperature",
                     description: "Get sensor status",
-                    endpoint: "/" + this.type + "/" + 'temperature' + "/state",
+                    endpoint: "/" + this.type + "/" + this.name + '-temperature' + "/state",
                     connectionType: "mqtt",
                 },
                 {
-                    name: "Humidity",
-                    label: "humidity",
+                    name: "humidity",
+                    label: "Humidity",
                     description: "Get sensor status",
-                    endpoint: "/" + this.type + "/" + 'humidity' + "/state",
+                    endpoint: "/" + this.type + "/" + this.name + '-humidity' + "/state",
                     connectionType: "mqtt",
                 }
             ]
