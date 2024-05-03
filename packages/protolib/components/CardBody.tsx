@@ -1,14 +1,22 @@
-import { YStack, Paragraph, YStackProps } from "@my/ui"
+import { YStack, Paragraph, YStackProps, Separator } from "@my/ui"
 import { Tinted } from "./Tinted"
 
 type CardBodyProps = {
     title: any,
+    subtitle?: any,
     children: any
 }
-export const CardBody = ({ title, children, ...props }: CardBodyProps & YStackProps) => {
+export const CardBody = ({ title, subtitle, children, ...props }: CardBodyProps & YStackProps) => {
     return <YStack px={"$2"} pb="$5" f={1} {...props}>
         <Tinted>
-            <Paragraph mt="20px" ml="20px" fontWeight="700" size="$7">{title}</Paragraph>
+            <YStack ml="10px">
+                <Paragraph mt="20px" fontWeight="900" size="$5">{title}</Paragraph>
+                {subtitle}
+            </YStack>
+
+        </Tinted>
+        <Separator  marginVertical={15} />
+        <Tinted>
             {children}
         </Tinted>
     </YStack>
