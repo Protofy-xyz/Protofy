@@ -48,9 +48,9 @@ class Device {
         })
         this.subsystemsTree = this.subsystemsTree.sort((a,b)=>{
             if(a.name=="mqtt"){
-                return 1
-            }else if(b.name == "mqtt"){
                 return -1
+            }else if(b.name == "mqtt"){
+                return 1
             }else{
                 return 0
             }
