@@ -99,6 +99,8 @@ const callText = async (url: string, method: string, params?: any, token?: strin
   return fetch(defUrl, fetchParams)
     .then(function (response) {
       return response;
+    }).catch((error)=>{
+      console.log("Error fetching url: ",error)
     })
 }
 
@@ -119,9 +121,11 @@ export default {
     const [compileSessionId, setCompileSessionId] = useState('')
     // const { message } = useSubscription(['device/compile']);
 
-    const flashDevice = async (device) => {
+    const flashDevice = async (device, yaml?) => {
       setTargetDevice(device.data.name)
-      yamlRef.current = await device.getYaml()
+      
+      yamlRef.current = yaml??await device.getYaml()
+      console.log("TURBO YAML PARAMETER: ", yaml)
       setShowModal(true)
       try {
         setStage('yaml')
@@ -218,16 +222,30 @@ export default {
 
     const extraMenuActions = [
       {
+        text: "Upload definition",
+        icon: UploadCloud,
+        action: (element) => {flashDevice( element ) },
+        isVisible: (element) => true
+      },
+      {
         text: "Edit config file",
         icon: Pencil,
         action: (element) => { replace('editFile', element.getConfigFile()) },
         isVisible: (element) => element.isInitialized() && element.getConfigFile()
       },
       {
-        text: "Upload",
+        text: "Upload config file",
         icon: UploadCloud,
-        action: (element) => {flashDevice( element ) },
-        isVisible: (element) => true
+        action: async (element) => {
+          try{
+            var result = await API.get("/adminapi/v1/devices/"+element.data.name+"/yaml")
+            flashDevice( element, result.data.yaml ) 
+          }catch(err){
+            console.error(err)
+          }
+          
+        },
+        isVisible: (element) => element.isInitialized() && element.getConfigFile()
       }
     ]
 

@@ -17,7 +17,9 @@ export const DevicesAutoAPI = AutoAPI({
 
 const logger = getLogger()
 
+
 export const DevicesAPI = (app, context) => {
+    const devicesPath = '../../data/devices/'
     const { topicSub, topicPub } = context;
     DevicesAutoAPI(app, context)
     // Device topics: devices/[deviceName]/[endpoint], en caso de no tener endpoint: devices/[deviceName]
@@ -84,6 +86,20 @@ export const DevicesAPI = (app, context) => {
         res.send({value: data.data['items'][0]?.payload?.message})
     }))
 
+    app.get('/adminapi/v1/devices/:device/yaml', handler(async (req, res, session) => {
+        if(!session || !session.user.admin) {
+            res.status(401).send({error: "Unauthorized"})
+            return
+        }
+        const devicePath = path.join(devicesPath, req.params.device)
+        if(!fs.existsSync(devicePath)){
+            res.status(404).send({error: "Not Found"})
+            return
+        }
+        const yaml = fs.readFileSync(path.join(devicePath,"config.yaml"),'utf8')
+        res.send({yaml})
+    }))
+
     app.post('/adminapi/v1/devices/:device/yamls', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
@@ -92,7 +108,7 @@ export const DevicesAPI = (app, context) => {
 
         const {yaml} = req.body
 
-        const devicesPath = '../../data/devices/'
+        
         if(!fs.existsSync(devicesPath)) fs.mkdirSync(devicesPath)
         const devicePath = path.join(devicesPath, req.params.device)
         if(!fs.existsSync(devicePath)) fs.mkdirSync(devicePath)
