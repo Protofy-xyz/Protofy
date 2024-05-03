@@ -37,7 +37,7 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
               });
             }else{
               onSetModalFeedback({
-                message: `Compiling..................`,
+                message: `Compiling...`,
                 details: { error: false }
               });
               isDoneCompiling = true
