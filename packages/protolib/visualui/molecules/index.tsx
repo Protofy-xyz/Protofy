@@ -4,6 +4,7 @@ import Introduction from "./Introduction";
 import Subscribe from "./Subscribe";
 import AboutUs from "./AboutUs";
 import Buttons from "./Buttons";
+import StateText from "./StateText";
 
 export default {
     basic: {
@@ -11,7 +12,8 @@ export default {
         Buttons,
         FeaturedCategory,
         ProductColumns,
-        Subscribe
+        Subscribe,
+        StateText
     },
     pages: {
         AboutUs

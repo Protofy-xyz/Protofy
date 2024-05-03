@@ -7,7 +7,7 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 
 import React, { useState } from 'react'
 import { Theme } from "@my/ui"
-import { UIWrapLib, UIWrap, withSession, Page, useEditor, API, SSR, useComposedState, Text } from "protolib"
+import { UIWrapLib, UIWrap, withSession, Page, useEditor, API, SSR, useComposedState, Text, Center } from "protolib"
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 import { context } from "app/bundles/uiContext";
@@ -24,7 +24,8 @@ const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
     });
     return (
         <Page height="99vh">
-
+            <Center>
+            </Center>
         </Page>
     )
 }

@@ -118,7 +118,7 @@ export const layoutPalette = {
   ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Spacer, 'Maximize2', 'Spacer', { size: '$8' }),
   ...cw(ProtoView, 'SquareAsterisk', 'ProtoView', { viewId: "default", currentView: { value: "currentView", kind: 'Identifier' } }, {}, { placeholder: <BasicPlaceHolder /> }),
-  ...cw(Section, 'EyeOff', 'Section', {}, {}, { children: <BasicPlaceHolder /> })
+  ...cw(Section, 'BoxSelect', 'Section', {}, {}, { children: <BasicPlaceHolder /> })
 }
 
 export const basicPalette = {

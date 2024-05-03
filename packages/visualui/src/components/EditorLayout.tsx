@@ -88,6 +88,13 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
             newNodesData: newNodesData
           }
           notify(topicParams, publish)
+
+          var hasContext = Object.keys(metadata.context).find(k => newNodesData.find(n => n.props[k]))
+          if (hasContext) {
+            setTimeout(() => {
+              updatesPropsWithContext()
+            }, 500)
+          }
         }
       } else if (nodesChanges.find(d => d.kind == 'D')) { //case delete
         const deletedNodes = nodesChanges.filter(d => d.kind == 'D').map(n => n.path[0])
