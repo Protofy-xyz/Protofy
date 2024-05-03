@@ -36,6 +36,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [layerVisible, setLayerVisible] = useState(false);
     const [selectedFrame, setSelectedFrame] = useState('desktop');
 
+    const isCodeActive = codeEditorVisible && isSideBarVisible
+
     const router = useRouter();
     const { resolvedTheme, toggle: themeToggle, current: currentTheme } = useThemeSetting();
 
@@ -169,10 +171,10 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         >
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: mainPanelHeight }}>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 999999, backgroundColor: useUITheme('nodeBackgroundColor'), borderBottom: '1px solid ' + separatorColor }}>
-                    <XStack padding="10px" display={monacoHasChanges && codeEditorVisible ? 'flex' : 'none'} theme={"dark"} marginVertical="$1">
-                        <Button hoverStyle={{ backgroundColor: useUITheme('secondaryBackground') }} size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
+                    <XStack padding="10px" display={codeEditorVisible ? 'flex' : 'none'} theme={"dark"} marginVertical="$1">
+                        {/* <Button hoverStyle={{ backgroundColor: useUITheme('secondaryBackground') }} size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
                             <X color={useUITheme('textColor')} />
-                        </Button>
+                        </Button> */}
                         <Button hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }} size="$3" chromeless circular onPress={() => onEditorSave("monaco", monacoSourceCode)}>
                             <Save color={useUITheme('textColor')} fillOpacity={0} />
                         </Button>
@@ -304,6 +306,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     return <div ref={editorRef} style={{ display: 'flex', flex: 1, width: '100%', flexDirection: 'column' }}>
         <Editor
             {...options}
+            enabled={!isCodeActive}
             parentContext={context}
         >
             <EditorBar
@@ -356,7 +359,12 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     // },
                     {
                         icon: Code,
-                        onPress: () => onToggleAppBar('code')
+                        onPress: () => {
+                            if (!codeEditorVisible) {
+                                setMonacoSourceCode(codeRef.current)
+                            }
+                            onToggleAppBar('code')
+                        }
                     },
                     {
                         icon: Network,
@@ -367,6 +375,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         icon: Save,
                         text: 'Save',
                         buttonProps: {
+                            disabled: isCodeActive,
+                            opacity: isCodeActive ? 0.2 : 1,
                             chromeless: false, color: 'white', backgroundColor: useUITheme('interactiveColor'), paddingHorizontal: "$4",
                             hoverStyle: { backgroundColor: useUITheme('interactiveHoverColorDarken') }
                         },
