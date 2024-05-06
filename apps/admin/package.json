@@ -12,9 +12,7 @@
     "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "dev-full": "FULLDEV=1 yarn dev",
     "dev-full-standalone": "FULLDEV=1 yarn dev-standalone",
-    "build": "next build",
-    "export": "next export",
-    "package": "yarn build && yarn export",
+    "package": "next build && next export",
     "lint": "next lint"
   },
   "dependencies": {

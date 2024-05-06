@@ -10,7 +10,6 @@
     "dev-service": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js",
     "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
     "dev": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
-    "build": "next build",
     "package": "yarn build",
     "lint": "next lint",
     "test": "yarn test:deps && jest",

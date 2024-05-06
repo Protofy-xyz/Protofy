@@ -21,7 +21,7 @@
     "prod-standalone": "NODE_ENV=production concurrently -n \"admin-api,admin,api,next,nextra\" \"yarn workspace admin-api prod-standalone\" \"yarn workspace admin prod-standalone\" \"yarn workspace api prod-standalone\" \"yarn workspace next-app prod-standalone\" \"yarn workspace nextra prod-standalone\"",
     "prepare-dev": "node prepare.js && yarn workspace api prepare-dev && yarn workspaces foreach --exclude api run prepare-dev && yarn build",
     "add-user": "yarn workspace api add-user",
-    "build": "yarn workspaces foreach --exclude next-app --exclude electron-app --exclude nextra --exclude admin run build",
+    "build": "yarn workspaces foreach run build",
     "package": "yarn prepare-dev && yarn workspaces foreach --exclude electron-app run package",
     "status": "pm2 status",
     "monit": "pm2 monit",
