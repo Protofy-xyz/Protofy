@@ -55,11 +55,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
     return false;
   }
   const brokerUrl = typeof document !== "undefined" ? (document.location.protocol === "https:" ? "wss" : "ws") + "://" + document.location.host + '/websocket' : '';
-  if (typeof document !== "undefined" && !isElectron && document.location.port == "3000") {
-    //TODO: improve this hack. This is to prevent people from incorrenctly entering the 3000 port directly into next, and getting errors. 
-    document.location.href = document.location.protocol + '//' + document.location.hostname + ':8080'
-    return <>This is an internal port for diagnostic purposes. Redirecting to default development port...</>
-  }
+  
   return (
     <>
       <Head>
