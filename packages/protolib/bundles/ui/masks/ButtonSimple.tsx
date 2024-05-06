@@ -126,7 +126,9 @@ const ButtonSimpleMask = ({ node = {}, nodeData = {}, children }: any) => {
                 <CustomFieldsList node={node} nodeData={nodeData} fields={propsList} />
             </div>
             <div>
-                <FallbackPortList node={node} fallbacks={fallbacks} startPosX={paramsRef?.current?.clientHeight} />
+                {
+                    paramsRef?.current?.clientHeight ? <FallbackPortList node={node} fallbacks={fallbacks} startPosX={paramsRef?.current?.clientHeight} /> : null
+                }
             </div>
         </Node >
     )
