@@ -1,13 +1,12 @@
 const isProduction = process.env.NODE_ENV === 'production';
 const isFullDev = process.env.DEV_ADMIN_API === '1';
-
 const path = require('path');
 const currentDir = path.dirname(__filename);
 
 module.exports = {
     apps: [
-        isFullDev ?{
-            name: 'admin-api-dev',
+        isFullDev ? {
+            name: 'admin-api-dev-fulldev',
             script: path.join(currentDir, '../../node_modules/ts-node/dist/bin.js'),
             args: '--files --project tsconfig.json src/index.ts',
             watch: false,
