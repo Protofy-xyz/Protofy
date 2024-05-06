@@ -132,11 +132,13 @@ mqttServer.listen(mqttPort, () => {
 });
 
 const isFullDev = process.env.DEV_ADMIN_API === '1';
+
 if (isFullDev) {
   const pathsToWatch = [
     'src/**',
     '../../packages/protolib/**',
-    '../../packages/app/bundles/adminapi.tsx'
+    '../../packages/app/bundles/adminapi.tsx',
+    '../../system.js'
   ];
 
   const watcher = chokidar.watch(pathsToWatch, {
