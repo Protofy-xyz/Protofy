@@ -5,7 +5,6 @@ import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import http from 'http';
 import httpProxy from 'http-proxy';
 
-const isProduction = process.env.NODE_ENV === 'production';
 const isFullDev = process.env.DEV_ADMIN_API === '1';
 
 const system = require(isFullDev ? '../../../system.js' : '../../../../../../system.js')
@@ -13,9 +12,13 @@ const system = require(isFullDev ? '../../../system.js' : '../../../../../../sys
 const startTime = new Date().getTime();
 
 export const startProxy = () => {
+    _startProxy(8080, "production") //production proxy on port 8080
+    _startProxy(8000, "development") //development proxy on port 8000
+}
+
+export const _startProxy = (Port, mode) => {
     const logger = getLogger('proxy', getBaseConfig("proxy", process, getServiceToken()))
 
-    const Port = process.env.PORT ?? (isProduction ? 8000 : 8080);
     var proxy = httpProxy.createProxyServer({
         ws: true,
         xfwd: true
@@ -36,7 +39,7 @@ export const startProxy = () => {
     var server = http.createServer(function(req, res) {
         // You can define here your custom logic to handle the request
         // and then proxy the request.
-        const resolver = system.services.find((resolver) => resolver.route(req))
+        const resolver = system.services.find((resolver) => resolver.route(req, mode))
         if(!resolver) {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.end('Not Found');
@@ -52,7 +55,7 @@ export const startProxy = () => {
     });
 
     server.on('upgrade', (req, socket, head) => {
-        const resolver = system.services.find((resolver) => resolver.route(req));
+        const resolver = system.services.find((resolver) => resolver.route(req, mode))
         if (!resolver) {
             socket.write('HTTP/1.1 404 Not Found\r\n\r\n');
             socket.destroy();

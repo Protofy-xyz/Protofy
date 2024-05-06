@@ -16,6 +16,7 @@ import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
 import { TemplatePreview } from './TemplatePreview'
 import { pageTemplates } from 'app/bundles/templates'
+import {SiteConfig} from 'app/conf'
 
 const PageIcons = {}
 const sourceUrl = '/adminapi/v1/pages'
@@ -81,7 +82,8 @@ export default {
             }, [addOpen])
 
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
-
+            const host = typeof window !== 'undefined' ? window.location.hostname : ''
+            const protocol = typeof window !== 'undefined' ? window.location.protocol : ''
 
             return (<AdminPage title="Pages" pageSession={pageSession}>
                 <AlertDialog
@@ -151,7 +153,7 @@ export default {
                     rowIcon={() => <></>}
                     objectProps={{ columnWidth: 500 }}
                     columns={DataTable2.columns(
-                        DataTable2.column("", ()=>"", false, (row) => <a href={row.route.startsWith('/') ? row.route : '/' + row.route} target='_blank'>
+                        DataTable2.column("", ()=>"", false, (row) => <a href={SiteConfig.getDevelopmentURL(row.route.startsWith('/') ? row.route : '/' + row.route, protocol, host)} target='_blank'>
                             <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
                         </a>, true, '50px'),
                         DataTable2.column("name", row => row.name, "name", (row) => <XStack id={"pages-datatable-" + row.name}><Text>{row.name}</Text></XStack>),

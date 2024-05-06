@@ -128,8 +128,8 @@ export class ProtoBrowser {
         // legacy - stay here if needed 
         /// await this.clickElement('#layout-menu-btn')
         // await this.clickElement('#pop-over-workspace-link', 70000)
-        await this.getPage().goto(HOST_URL + `admin/pages`);
-        await this.getPage().waitForURL('**/admin/*', { timeout: 60000 });
+        await this.getPage().goto(HOST_URL + `workspace/pages`);
+        await this.getPage().waitForURL('**/workspace/*', { timeout: 60000 });
     }
 
     async signInSubmit(email: string, password: string) {
@@ -155,8 +155,8 @@ export class ProtoBrowser {
     }
 
     async navigateToAdminSection(entity: string) {
-        await this.getPage().goto(HOST_URL + `admin/${entity}`);
-        await this.getPage().waitForURL(`**/admin/${entity}`, { timeout: 60000 });
+        await this.getPage().goto(HOST_URL + `workspace/${entity}`);
+        await this.getPage().waitForURL(`**/workspace/${entity}`, { timeout: 60000 });
     }
 
     async navigateToDocumentation() {

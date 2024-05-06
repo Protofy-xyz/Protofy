@@ -3,12 +3,6 @@ const isProduction = process.env.NODE_ENV === 'production';
 const config = {
     "services": [
         {
-            "name": "admin",
-            "description": "Admin panel to extend, customize and manage protofy",
-            "route": (req) => req.url.startsWith('/admin/') || req.url == '/admin',
-            "endpoint": process.env.ADMIN_SITE_URL ?? 'http://localhost:'+(isProduction ? 4003 : 3003),
-        },
-        {
             "name": "admin-api",
             "description": "Administration API services for protofy admin panel",
             "route": (req) => req.url.startsWith('/adminapi/') || req.url == '/websocket' || req.url == '/adminapi',
@@ -29,9 +23,15 @@ const config = {
         },
         {
             "name": "next",
-            "description": "Frontend services for protofy, providing the web user interface based on nextjs",
-            "route": (req) => true,
-            "endpoint": process.env.SITE_URL ?? 'http://localhost:'+(isProduction ? 4000 : 3000),
+            "description": "Development Frontend services for protofy, providing the web user interface based on nextjs",
+            "route": (req, mode) => mode === 'development',
+            "endpoint": process.env.SITE_URL ?? 'http://localhost:3000',
+        },
+        {
+            "name": "next-compiled",
+            "description": "Compiled Frontend services for protofy, providing the web user interface based on nextjs",
+            "route": (req, mode) => mode === 'production',
+            "endpoint": process.env.SITE_URL ?? 'http://localhost:4000',
         }
     ]
 }

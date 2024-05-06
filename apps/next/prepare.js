@@ -14,3 +14,16 @@ if(!fs.existsSync('./../../.env')) {
         fs.appendFileSync('./../../.env', content)
     }
 }
+
+if(!fs.existsSync('./../next-compiled/.next')) {
+    //run yarn package
+    const { exec } = require('child_process');
+    console.log("Compiling nextjs app...")
+    exec('yarn package', (err, stdout, stderr) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        console.log(stdout);
+    });
+}

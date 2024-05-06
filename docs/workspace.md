@@ -1,6 +1,6 @@
 # 💼 Workspace
 ![workspace-sections](https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/events/events-1.png)
-The workspace (or admin panel) is the place where you can create and manage your pages, apis, devices, etc. This panel is a Next.js app that runs on port `3000` by default, but should be accessed through the proxied `8080` port.
+The workspace (or admin panel) is the place where you can create and manage your pages, apis, devices, etc. This panel is a Next.js app that runs compiled on port `4000` by default, and port `3000` for development mode. But should be accessed through the proxied `8080` port for compiled mode, and 8000 for development mode.
 
 > Remeber that you need to have a user with `admin` type to be able to access the workspace.
 

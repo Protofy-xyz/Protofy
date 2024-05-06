@@ -9,7 +9,7 @@ To add new section you must add new key to menu, key is going to be the name of 
 Previous state:
 ```typescript filename="packages/app/boundles/custom/workspaces/admin.tsx"
 export default {
-    "default": "/admin/pages",
+    "default": "/workspace/pages",
     "label": "Workspace",
     "menu": {
         "System": [
@@ -23,7 +23,7 @@ export default {
 New state:
 ```typescript {9} filename="packages/app/boundles/custom/workspaces/admin.tsx"
 export default {
-    "default": "/admin/pages",
+    "default": "/workspace/pages",
     "label": "Workspace",
     "menu": {
         "System": [
@@ -65,7 +65,7 @@ Here is an explaination of each of the properties that accepts the object that c
 Here is an example of how to add subsection to "New Section" section:
 ```typescript {9-11} filename="packages/app/boundles/custom/workspaces/admin.tsx"
 export default {
-    "default": "/admin/pages",
+    "default": "/workspace/pages",
     "label": "Workspace",
     "menu": {
         "System": [

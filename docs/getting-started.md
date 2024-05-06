@@ -40,7 +40,7 @@ yarn && yarn dev
 
 ## Access the system
 
-By default there is a proxy running on port `8080` that redirects to the **next.js** app on port `3000` and the **api** on port `3001` and the **admin-api** on port `3002`. You can go to `apps/admin-api/src/index.ts` to change defaults or add more services like the expo app.
+By default there is a webserver at port `8080` that redirects to the compiled **next.js** app on port `4000` and the compiled **api** on port `4001` and the compiled **admin-api** on port `4002`. You can go to `apps/admin-api/src/proxy.ts` to change defaults or add more services like the expo app.
 
 Once the Next.js app is running you can go to `http://localhost:8080` to see the web app. 
 
