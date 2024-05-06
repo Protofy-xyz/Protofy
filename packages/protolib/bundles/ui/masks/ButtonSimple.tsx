@@ -66,6 +66,13 @@ const ButtonSimpleMask = ({ node = {}, nodeData = {}, children }: any) => {
             "section": "decoration"
         },
         {
+            "label": "themeInverse",
+            "field": "prop-themeInverse",
+            "staticLabel": true,
+            "type": "toggle-boolean",
+            "section": "decoration"
+        },
+        {
             "label": "alignSelf",
             "field": "prop-alignSelf",
             "staticLabel": true,
