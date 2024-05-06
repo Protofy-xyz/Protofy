@@ -125,7 +125,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         if (val == 'code') {
             codeEditorVisible ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
             setFlowViewMode(undefined);
-            setCodeEditorVisible(true);
+            setCodeEditorVisible(!codeEditorVisible);
         } else if (val == 'flow') {
             flowViewMode == val ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
             setFlowViewMode(val)
@@ -157,6 +157,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
 
     useEffect(() => {
         if (data['zoomToNode']?.id && !isSideBarVisible) {
+            if (!flowViewMode) {
+                setFlowViewMode('preview')
+            }
             setIsSideBarVisible(true)
         }
     }, [data['zoomToNode']])
