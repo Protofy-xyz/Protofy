@@ -1,4 +1,4 @@
-import { YStack, Paragraph, YStackProps, Separator } from "@my/ui"
+import { YStack, Paragraph, YStackProps, Separator, ParagraphProps, SizableText, SizableTextProps } from "@my/ui"
 import { Tinted } from "./Tinted"
 
 type CardBodyProps = {
@@ -6,11 +6,12 @@ type CardBodyProps = {
     subtitle?: any,
     children: any
 }
-export const CardBody = ({ title, subtitle, children, ...props }: CardBodyProps & YStackProps) => {
+export const CardBody = ({ title, subtitle, children, titleProps, ...props }: CardBodyProps & YStackProps) => {
+    const titleComp = typeof title === 'string' ? <SizableText o={0.8} mt="20px" size="$6" fontWeight="600">{title}</SizableText> : title
     return <YStack px={"$2"} pb="$5" f={1} {...props}>
         <Tinted>
             <YStack ml="10px">
-                <Paragraph mt="20px" fontWeight="900" size="$5">{title}</Paragraph>
+                {titleComp}
                 {subtitle}
             </YStack>
 

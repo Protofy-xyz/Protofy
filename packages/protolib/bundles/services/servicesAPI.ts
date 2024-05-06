@@ -19,7 +19,7 @@ const readService = async (name, cb) => {
       cb({
         name: service.name,
         status: service.pm2_env.status,
-        uptime: service.pm2_env.pm_uptime,
+        uptime: Date.now() -  service.pm2_env.pm_uptime,
         restarts: service.pm2_env.restart_time,
         memory: service.monit.memory,
         cpu: service.monit.cpu
@@ -46,7 +46,7 @@ const listServices = () => {
         const serviceList = list.map(service => ({
           name: service.name,
           status: service.pm2_env.status,
-          uptime: service.pm2_env.pm_uptime,
+          uptime: Date.now() - service.pm2_env.pm_uptime ,
           restarts: service.pm2_env.restart_time,
           memory: service.monit.memory,
           cpu: service.monit.cpu
