@@ -23,6 +23,7 @@ import MHZ19 from './MHZ19';
 import NFCReader from './NFCReader';
 import R503 from './R503';
 import SCD4X from './SCD4X';
+import DS18B20 from './DS18B20';
 
 const deviceMasks = [
   Wifi,
@@ -47,7 +48,8 @@ const deviceMasks = [
   MHZ19,
   NFCReader,
   R503,
-  SCD4X
+  SCD4X,
+  DS18B20
 ]
 
 const masksLength = deviceMasks.length
