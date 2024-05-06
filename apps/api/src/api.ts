@@ -2,8 +2,8 @@ import { app, getMQTTClient } from 'protolib/api'
 import { getLogger, getApiUrl } from 'protolib/base';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import { getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
-import { getBaseConfig, getConfigWithoutSecrets } from 'app/BaseConfig'
-import { setConfig, getConfig } from 'protolib/base/Config';
+import { getConfigWithoutSecrets } from 'app/BaseConfig'
+import { getConfig } from 'protolib/base/Config';
 import BundleContext from 'app/bundles/apiContext'
 import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
 

@@ -10,8 +10,8 @@
   "scripts": {
     "add-user": "ts-node src/cmd/addUser.ts",
     "dev-standalone": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
-    "prod-standalone": "NODE_ENV=production ts-node --files --project tsconfig.json src/index.ts",
-    "package": "echo api has nothing to package",
+    "prod-standalone": "NODE_ENV=production node -r module-alias/register dist/apps/api/src/index.js",
+    "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts",
     "prepare-dev": "node prepare.js",
     "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
     "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
@@ -30,6 +30,7 @@
     "level": "8.0.0",
     "level-party": "^5.1.1",
     "mime-types": "^2.1.35",
+    "module-alias": "^2.2.3",
     "moment": "2.29.4",
     "pino-http": "9.0.0",
     "pm2": "^5.3.0",
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.17",
-    "@types/node": "20.6.0"
+    "@types/node": "20.6.0",
+    "shx": "^0.3.4"
   }
 }

@@ -1,3 +1,11 @@
+const moduleAlias = require('module-alias')
+import path from 'path';
+
+moduleAlias.addAliases({
+  "app": path.resolve(__dirname, '../../../packages/app'),
+  "protolib": path.resolve(__dirname, '../../../packages/protolib')
+});
+
 import dotenv from 'dotenv'
 dotenv.config({ path: '../../.env' });
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
@@ -7,12 +15,12 @@ setConfig(getBaseConfig('api', process, getServiceToken()))
 import { getLogger } from 'protolib/base/logger';
 require('events').EventEmitter.defaultMaxListeners = 100;
 const logger = getLogger()
-const config = getConfig()
 import http from 'http';
 global.defaultRoute = '/api/v1'
 import app from './api'
 import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
+
 
 const isProduction = process.env.NODE_ENV === 'production';
 
