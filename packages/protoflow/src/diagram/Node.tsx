@@ -5,14 +5,14 @@ import chroma from "chroma-js";
 import { FlowStoreContext } from '../store/FlowsStore'
 import { DEVMODE, flowDirection } from '../toggles'
 import { useProtoEdges } from '../store/DiagramStore';
-import useTheme, { usePrimaryColor } from './Theme';
+import useTheme, { useNodeColor } from './Theme';
 import { NodeTypes } from './../nodes';
 import { write } from '../lib/memory';
 import { Plus } from 'lucide-react';
 import { generateBoxShadow } from '../lib/shadow';
 import { useHover } from 'usehooks-ts'
 
-const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, icon = null, container = false, title = '', children, isPreview = false, id, color = 'white', node, headerContent = null, style = {}, contentStyle = {} }) => {
+const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, icon = null, container = false, title = '', children, isPreview = false, id, color, node, headerContent = null, style = {}, contentStyle = {} }) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const errorData = useFlowsStore(state => state.errorData)
     const flexRef = useRef()
@@ -24,6 +24,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     const isError = id && id == errorData.id
     const isFloating = !id || id.indexOf('_') == -1
     const colorError = useTheme('colorError')
+    color = color ?? useNodeColor(node.type)
     color = isError ? colorError : (!isPreview && isFloating ? (chroma.scale([color, 'white']))(0.5).hex() : color)
     const hColor = (chroma.scale([color, 'black']))(0.6).hex()
     const tColor = useTheme('titleColor')
@@ -166,9 +167,9 @@ export const NodePort = ({ id, type, style, label, sublabel, isConnected = false
                 }}
             >
                 {label || sublabel ? <div style={{ display: 'flex', width: `${labelWidth}px`, marginLeft: ml, zIndex: -1, justifyContent: 'flex-end' }}>
-                    {sublabel && <Text style={{opacity: 0.7, textAlign: position == Position.Right ? 'right' : 'left' }}>{sublabel}</Text>}
+                    {sublabel && <Text style={{ opacity: 0.7, textAlign: position == Position.Right ? 'right' : 'left' }}>{sublabel}</Text>}
                     {label && <Text ref={textRef} style={{ marginRight: '5px', textAlign: position == Position.Right ? 'right' : 'left' }}>{label}</Text>}
-                    
+
                 </div> : null}
             </Handle>
         </>

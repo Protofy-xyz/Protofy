@@ -24,11 +24,12 @@ import { useThemeSetting } from '@tamagui/next-theme'
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, contextAtom = null }) {
     const [_, setContext] = useVisualUiAtom(contextAtom)
     const editorRef = useRef<any>()
+    const monacoRef = useRef(null);
+
     const codeRef = useRef("")
     const enableClickEventsRef = useRef();
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const [currentPageContent, setCurrentPageContent] = useState("")
-    const [monacoSourceCode, setMonacoSourceCode] = useState(currentPageContent)
     const [monacoHasChanges, setMonacoHasChanges] = useState(false)
     const [flowViewMode, setFlowViewMode] = useState('preview')
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
@@ -83,8 +84,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         var content = code
         switch (triggerer) {
             case "monaco":
-                content = monacoSourceCode
+                content = monacoRef.current?.getValue()
                 sendMessage({ type: 'save', data: { content } })
+                setCurrentPageContent(content)
                 break;
             case "flows":
                 if (!data) break
@@ -137,22 +139,17 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     }
 
     const onMonacoChange = (code) => {
-        setMonacoSourceCode(code)
-        if (currentPageContent != code) setMonacoHasChanges(true)
-        else setMonacoHasChanges(false)
+        monacoRef.current = code;
     }
+
     const onCancelMonaco = () => {
-        setMonacoSourceCode(currentPageContent)
+        monacoRef.current = currentPageContent;
         setMonacoHasChanges(false)
     }
 
     const onCancelEdit = () => {
         document.location.href = document.location.href.split('?')[0]
     }
-
-    useEffect(() => {
-        setMonacoSourceCode(currentPageContent)
-    }, [currentPageContent])
 
     useEffect(() => {
         loadPage()
@@ -163,6 +160,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             setIsSideBarVisible(true)
         }
     }, [data['zoomToNode']])
+
     const FlowPanel = (
         <div
             key="auxiliarySidebar"
@@ -175,7 +173,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         {/* <Button hoverStyle={{ backgroundColor: useUITheme('secondaryBackground') }} size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
                             <X color={useUITheme('textColor')} />
                         </Button> */}
-                        <Button hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }} size="$3" chromeless circular onPress={() => onEditorSave("monaco", monacoSourceCode)}>
+                        <Button chromeless backgroundColor={useUITheme('interactiveColor')} hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }} size="$3" onPress={() => onEditorSave("monaco")}>
                             <Save color={useUITheme('textColor')} fillOpacity={0} />
                         </Button>
                     </XStack>
@@ -205,7 +203,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 <div style={{ display: codeEditorVisible ? 'flex' : 'none', flex: 1 }}>
                     <Monaco
                         onChange={onMonacoChange}
-                        sourceCode={monacoSourceCode}
+                        sourceCode={codeRef.current}
                     />
                 </div>
                 <div style={{ opacity: 1, marginRight: 0, flex: 1, display: codeEditorVisible ? 'none' : 'flex', flexDirection: 'column', backgroundColor: useUITheme('nodeBackgroundColor') }}>
@@ -359,12 +357,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     // },
                     {
                         icon: Code,
-                        onPress: () => {
-                            if (!codeEditorVisible) {
-                                setMonacoSourceCode(codeRef.current)
-                            }
-                            onToggleAppBar('code')
-                        }
+                        onPress: () => onToggleAppBar('code')
                     },
                     {
                         icon: Network,
