@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import Button from '../Button';
@@ -6,9 +6,8 @@ import Link from '../Link';
 import { MessageSquare, Code } from 'lucide-react'
 import { getCustomFields } from '../fields';
 import AddPropButton from '../AddPropButton';
-import { useNodeColor } from '../diagram/Theme';
-import InputFields from '../fields/InputFields';
 import { CustomFieldsList } from '../fields/CustomFieldsList';
+import { ApiType } from './dynamicTypes/ApiType';
 
 const Icons = {
     "CallExpression": MessageSquare,
@@ -17,23 +16,9 @@ const Icons = {
 }
 
 const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
-    const [result, setResult] = React.useState("")
-    const [apiRes, setApiRes] = React.useState()
-    const color = useNodeColor(node.type)
-    // TODO: Refactor api case
-    const apiType = mask.data.body.find(e => e.type == 'api')
-    if (apiType) {
-        useEffect(() => {
-            const apiUrl = apiType.data.apiUrl
-            fetch(apiUrl).then(response => response.json())
-                .then(data => {
-                    setApiRes(data)
-                })
-        }, [])
-    }
 
     return (
-        <Node icon={Icons[node.type]} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} color={color} skipCustom={true}>
+        <Node icon={Icons[node.type]} node={node} isPreview={!node.id} title={mask.data.title} id={node.id} skipCustom={true}>
             {
                 mask.data.body.map(element => {
                     switch (element.type) {
@@ -50,50 +35,30 @@ const DynamicMask = (node: any = {}, nodeData = {}, topics, mask) => {
                             return <FallbackPort node={node} port={element.params.port} type={"target"} fallbackPort={element.params.fallbackPort} portType={"_"} preText={element.params.preText} postText={element.params.postText} />
                         }
                         case 'api': { // TODO: Refactor this type and make it generic
-                            const resListFunction = new Function('res', element.data?.list)
-                            const selectorListFunction = new Function('data', "return data?." + element.data?.selector)
-                            const tmpApiRes = element?.data?.selector && apiRes ? selectorListFunction(apiRes) : apiRes
-
-                            const apiList = tmpApiRes?.map(resListFunction)?.filter(e => e) ?? []
-                            const field = element.data.field
-
-                            return <>
-                                <InputFields
-                                    node={node}
-                                    nodeData={nodeData}
-                                    item={{
-                                        field,
-                                        label: element.data.label,
-                                        type: 'input',
-                                        data: {
-                                            options: apiList
-                                        }
-                                    }}
-                                />
-                            </>
+                            return <ApiType element={element} mask={mask} node={node} nodeData={nodeData} />
                         }
                         case 'link': {
                             return <>
                                 <Link target="_blank" href={element.data.url}>{element.data.text}</Link>
                             </>
                         }
-                        case 'button': {
-                            return <>
-                                <Button onPress={async () => {
-                                    const func = new Function('data', `
-                                    return (async () => {
-                                        ${element.params.onPress}
-                                    })();
-                                `);
-                                    const result = await func(nodeData)
-                                    setResult(result)
-                                    console.log("result: ", result)
-                                }} label={element.params.label}></Button>
-                                {result && element.params.displayResult ? <>
-                                    <textarea style={{ width: "100%", height: "150px", fontSize: "20px" }}>{JSON.stringify(result)}</textarea>
-                                </> : null}
-                            </>
-                        }
+                        // case 'button': {
+                        //     return <>
+                        //         <Button onPress={async () => {
+                        //             const func = new Function('data', `
+                        //             return (async () => {
+                        //                 ${element.params.onPress}
+                        //             })();
+                        //         `);
+                        //             const result = await func(nodeData)
+                        //             setResult(result)
+                        //             console.log("result: ", result)
+                        //         }} label={element.params.label}></Button>
+                        //         {result && element.params.displayResult ? <>
+                        //             <textarea style={{ width: "100%", height: "150px", fontSize: "20px" }}>{JSON.stringify(result)}</textarea>
+                        //         </> : null}
+                        //     </>
+                        // }
                         case 'child': {
                             const childs: Field[] = Object.keys(nodeData).filter((p) => p.startsWith('child-')).map((prop: any, i) => {
                                 const dynamicMask = element.data?.find(c => c.field === prop)
