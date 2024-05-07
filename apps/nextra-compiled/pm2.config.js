@@ -5,17 +5,17 @@ const currentDir = path.dirname(__filename);
 module.exports = {
     apps: [
       {
-        name: "nextra-dev",
+        name: "nextra-compiled",
         script: path.join(currentDir, './entrypoint.js'),
         windowsHide: true,
         watch: false,
         env: {
-            NODE_ENV: 'development'
+            NODE_ENV: 'production'
         },
         cwd: currentDir,
         log_date_format: "YYYY-MM-DD HH:mm:ss",
-        out_file: '../../logs/raw/nextra-dev.stdout.log',
-        error_file: '../../logs/raw/nextra-dev.stderr.log'
+        out_file: '../../logs/raw/nextra.stdout.log',
+        error_file: '../../logs/raw/nextra.stderr.log'
       }
     ]
   };

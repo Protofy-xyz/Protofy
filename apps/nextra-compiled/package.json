@@ -1,0 +1,16 @@
+{
+  "name": "nextra-compiled",
+  "version": "1.0.0",
+  "description": "Documentation service",
+  "scripts": {
+    "prod-standalone": "NODE_ENV=production node entrypoint.js",
+    "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
+    "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon"
+  },
+  "dependencies": {
+    "next": "^13.5.2",
+    "nextra": "^2.13.3",
+    "nextra-theme-docs": "^2.13.3",
+    "pm2": "^5.3.0"
+  }
+}

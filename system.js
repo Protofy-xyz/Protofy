@@ -25,8 +25,18 @@ const config = {
             "disabled": true,
             "description": "Documentation services for protofy, providing the documentation based on nextra",
             "route": (req, mode) => {
-                if(req.url.startsWith('/documentation/') || req.url == '/documentation') {
-                    return process.env.DOCS_SITE_URL ?? 'http://localhost:'+(mode == 'production' ? 7700 : 7600)
+                if(mode == 'development' && (req.url.startsWith('/documentation/') || req.url == '/documentation')) {
+                    return process.env.DOCS_SITE_URL ?? 'http://localhost:7600'
+                }
+            }
+        },
+        {
+            "name": "nextra-compiled",
+            "disabled": true,
+            "description": "Compiled documentation services for protofy, providing the documentation based on nextra",
+            "route": (req, mode) => {
+                if(mode == 'production' && (req.url.startsWith('/documentation/') || req.url == '/documentation')) {
+                    return process.env.DOCS_SITE_URL ?? 'http://localhost:7700'
                 }
             }
         },

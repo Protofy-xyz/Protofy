@@ -1,6 +1,6 @@
 const next = require('next');
 
-const dev = true;
+const dev = false;
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -12,7 +12,7 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  const PORT = 7600;
+  const PORT = 7700;
   server.listen(PORT, (err) => {
     if (err) throw err;
     console.log(`> Ready on http://localhost:${PORT}`);
