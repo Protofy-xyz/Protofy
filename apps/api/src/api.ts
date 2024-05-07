@@ -9,8 +9,9 @@ import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
 
 const logger = getLogger()
 const subscriptions = {}
+const isProduction = process.env.NODE_ENV === 'production';
 //wait for mqtt before starting api server
-const mqtt = getMQTTClient('api', getServiceToken(), async () => {
+const mqtt = getMQTTClient(isProduction?'api':'api-dev', getServiceToken(), async () => {
     logger.debug({ config: getConfigWithoutSecrets(getConfig()) }, "Service Started: api")
 
     const topicSub = (topic, cb) => { //all = continuous, single = just one, change = first change

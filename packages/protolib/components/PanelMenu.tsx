@@ -142,12 +142,15 @@ const CreateDialog = ({subtab}) => {
 const Subtabs = ({ subtabs }: any) => {
     const router = useRouter()
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
+    const host = typeof window !== 'undefined' ? window.location.hostname : ''
+    const protocol = typeof window !== 'undefined' ? window.location.protocol : ''
+
     return (
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
                 const href = (SiteConfig.workspaceRoot == '/' ? '' : SiteConfig.workspaceRoot) + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
-                return <Link href={href} key={index}>
+                return <Link href={SiteConfig.getProductionURL(href)} key={index}>
                     <Tinted>
                         <PanelMenuItem
                             selected={router.asPath.startsWith(href.replace(/\/$/, ''))}

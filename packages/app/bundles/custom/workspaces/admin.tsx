@@ -1,7 +1,7 @@
 import { Router, Inbox, Library, ToyBrick, Key } from '@tamagui/lucide-icons'
 
 export default {
-    "default": "/admin/pages",
+    "default": "/workspace/pages",
     "label": "Workspace",
     "menu": {
         "System": [

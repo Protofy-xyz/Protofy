@@ -29,7 +29,7 @@ jobs:
     - name: Start project
       run: |
         echo 'Started project'
-        yarn dev > /dev/null &
+        yarn start > /dev/null &
 
     - name: Healthcheck services start
       run: node .github/scripts/healthcheck-start.js

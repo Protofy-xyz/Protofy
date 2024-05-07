@@ -1,10 +1,11 @@
 
+import path from 'path'
 const moduleAlias = require('module-alias')
 
 moduleAlias.addAliases({
-  "app": "../../../packages/app",
-  "protolib": "../../../packages/protolib"
-})
+  "app": path.resolve(__dirname, '../../../packages/app'),
+  "protolib": path.resolve(__dirname, '../../../packages/protolib')
+});
 
 import dotenv from 'dotenv'
 import { setConfig, getConfig } from 'protolib/base/Config';
@@ -47,7 +48,7 @@ startProxy()
 
 logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: admin-api")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
-const isProduction = process.env.NODE_ENV === 'production';
+
 const aedesInstance = new aedes();
 aedesInstance.authenticate = function (client, username, password, callback) {
   if (!username) {
@@ -110,7 +111,7 @@ server.on('upgrade', (request, socket, head) => {
   }
 });
 
-const PORT = isProduction ? 4002 : 3002
+const PORT = 3002
 
 server.listen(PORT, () => {
   logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
@@ -120,7 +121,7 @@ const mqttServer = net.createServer((socket) => {
   aedesInstance.handle(socket);
 });
 
-const mqttPort = isProduction ? 8883 : 1883
+const mqttPort = 1883
 mqttServer.listen(mqttPort, () => {
   logger.debug({ service: { protocol: "mqtt", port: mqttPort } }, "Service started: MQTT")
   generateEvent({

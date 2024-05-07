@@ -45,13 +45,14 @@ export const _startProxy = (Port, mode) => {
             res.end('Not Found');
             return
         }
+        
         logger.trace({
             url: req.url,
-            target: resolver.endpoint,
+            target: resolver.route(req, mode),
             ip: req.connection.remoteAddress,
             method: req.method
-        }, "Proxying request for: "+ req.url + " to: " + resolver.endpoint + " from: " + req.connection.remoteAddress + " method: " + req.method)
-        proxy.web(req, res, { target: resolver.endpoint });
+        }, "Proxying request for: "+ req.url + " to: " + resolver.route(req, mode) + " from: " + req.connection.remoteAddress + " method: " + req.method)
+        proxy.web(req, res, { target: resolver.route(req, mode)});
     });
 
     server.on('upgrade', (req, socket, head) => {
@@ -61,7 +62,7 @@ export const _startProxy = (Port, mode) => {
             socket.destroy();
             return;
         }
-        proxy.ws(req, socket, head, { target: resolver.endpoint });
+        proxy.ws(req, socket, head, { target: resolver.route(req, mode)});
     });
     server.listen(Port);
     logger.debug({ service: { protocol: "http", port: Port } }, "Service started: HTTP")

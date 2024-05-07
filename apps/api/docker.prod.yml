@@ -7,6 +7,6 @@ services:
       dockerfile: apps/api/Dockerfile  # Adjust the path to where your Dockerfile is located relative to the context.
     entrypoint: "yarn prod-standalone"
     environment:
-      - MQTT_URL=mqtt://admin-api:8883
+      - MQTT_URL=mqtt://admin-api:1883
       - PROXY_API_URL=http://admin-api:8000
       - NODE_ENV=production

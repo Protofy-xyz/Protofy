@@ -32,17 +32,16 @@ If you don't have yarn installed globally, you may need to do (first time only):
 npm i -g yarn
 ```
 
-Start protofy in development mode (hot reload)
+Start protofy:
 
 ```sh
-yarn && yarn dev
+yarn && yarn start
 ```
 
 ## Access the system
 
-By default there is a webserver at port `8080` that redirects to the compiled **next.js** app on port `4000` and the compiled **api** on port `4001` and the compiled **admin-api** on port `4002`. You can go to `apps/admin-api/src/proxy.ts` to change defaults or add more services like the expo app.
+Once the system is running you can go to `http://localhost:8080` to see the web app. The first run can take some time (1-2 minutes), because it compiles the site for the first time.
 
-Once the Next.js app is running you can go to `http://localhost:8080` to see the web app. 
 
 *Reminder: If you have problems accessing the services, remember to check your firewall configuration.*
 

@@ -2,9 +2,7 @@ import * as mqtt from 'mqtt';
 import { getLogger } from '../../base';
 
 const logger = getLogger()
-
-const isProduction = process.env.NODE_ENV === 'production';
-const mqttServer = process.env.MQTT_URL ?? ('mqtt://localhost:' + (isProduction ? '8883' : '1883'))
+const mqttServer = process.env.MQTT_URL ?? 'mqtt://localhost:1883'
 var mqttClient = null;
 
 export const getMQTTClient = (username, password?, onConnect?) => {
@@ -16,6 +14,11 @@ export const getMQTTClient = (username, password?, onConnect?) => {
         });
         mqttClient.hasConnected = false
         mqttClient.retries = 0
+
+        logger.debug({
+            mqttServer: mqttServer,
+            username: username
+        },"Connecting to MQTT")
 
         mqttClient.on('connect', function () {
             if(!mqttClient.hasConnected && onConnect) {

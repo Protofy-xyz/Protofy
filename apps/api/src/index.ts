@@ -21,7 +21,6 @@ import app from './api'
 import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
 
-
 const isProduction = process.env.NODE_ENV === 'production';
 
 const server = http.createServer(app);

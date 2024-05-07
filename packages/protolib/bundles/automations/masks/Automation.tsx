@@ -4,10 +4,14 @@ import { Plug } from 'lucide-react';
 import React from 'react';
 import { SizableText, Spinner, XStack } from 'tamagui';
 import { API } from 'protolib'
+import { SiteConfig} from 'app/conf'
 
 const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(9)
     const [loading, setLoading] = React.useState(false)
+    const host = typeof window !== 'undefined' ? window.location.hostname : ''
+    const protocol = typeof window !== 'undefined' ? window.location.protocol : ''
+
     return (
         <Node icon={Plug} node={node} isPreview={!node.id} title='Automation' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
@@ -21,7 +25,7 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
             <Button label={loading?<Spinner color={color} />:"Run"} onPress={async () => {
                 const params = getFieldValue('testparams', nodeData)
                 setLoading(true)
-                await API.get('/api/v1/automations/' + getFieldValue('mask-name', nodeData)+(params ? '?'+params : ''))
+                await API.get(SiteConfig.getDevelopmentURL('/api/v1/automations/' + getFieldValue('mask-name', nodeData)+(params ? '?'+params : ''), protocol, host))
                 setLoading(false)
             }}>
             </Button>

@@ -7,9 +7,9 @@ services:
       dockerfile: apps/admin-api/Dockerfile
     entrypoint: "yarn prod-standalone"
     environment:
-      - MQTT_URL=mqtt://localhost:8883
+      - MQTT_URL=mqtt://localhost:1883
       - PROXY_API_URL=http://admin-api:8000
-      - ADMIN_API_URL=http://admin-api:4002
+      - ADMIN_API_URL=http://admin-api:3002
       - API_URL=http://api:4001
       - SITE_URL=http://site:4000
       - ADMIN_SITE_URL=http://admin:4003 

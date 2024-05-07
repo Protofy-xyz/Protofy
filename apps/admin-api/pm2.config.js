@@ -14,15 +14,18 @@ module.exports = {
             env: {
                 NODE_ENV: 'development'
             },
-            cwd: currentDir
+            cwd: currentDir,
+            log_date_format: "YYYY-MM-DD HH:mm:ss",
+            out_file: '../../logs/raw/admin-api-dev.stdout.log',
+            error_file: '../../logs/raw/admin-api-dev.stderr.log'
         } : {
-            name: isProduction ? 'admin-api' : 'admin-api-dev',
+            name: 'admin-api',
             script: path.join(currentDir, 'dist/apps/admin-api/src/index.js'),
             node_args: "-r module-alias/register",
             watch: false,
-            autorestart: !isProduction,
+            autorestart: true,
             env: {
-                NODE_ENV: isProduction ? 'production' : 'development'
+                NODE_ENV: 'production'
             },
             cwd: currentDir,
             log_date_format: "YYYY-MM-DD HH:mm:ss",

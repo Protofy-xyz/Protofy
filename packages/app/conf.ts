@@ -3,6 +3,7 @@ const SiteConfig = {
     SSR: true, //Server-side rendering
     workspaceRoot: '/workspace',
     getDevelopmentURL: (path, protocol='http:', host='localhost') => protocol+`//${host}:8000${path}`,
+    getProductionURL: (path, protocol='http:', host='localhost') => protocol+`//${host}:8080${path}`,
     useLocalDocumentation: false
 }
 export {SiteConfig}

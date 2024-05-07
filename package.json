@@ -8,6 +8,8 @@
     "./tests"
   ],
   "scripts": {
+    "start": "yarn prepare-dev && yarn start-fast",
+    "start-fast": "START_ALL=1 pm2 start ecosystem.config.js --no-daemon",
     "dev": "yarn prepare-dev && yarn dev-fast",
     "dev-fast": "pm2 start ecosystem.config.js --no-daemon",
     "dev-adminapi": "DEV_ADMIN_API=1 yarn prepare-dev && yarn dev-fast",
