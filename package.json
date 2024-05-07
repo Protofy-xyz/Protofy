@@ -12,6 +12,8 @@
     "start-fast": "START_ALL=1 pm2 start ecosystem.config.js --no-daemon",
     "start-service": "yarn prepare-dev && yarn start-service-fast",
     "start-service-fast": "START_ALL=1 pm2 start ecosystem.config.js && yarn monit",
+    "start-dev-adminapi": "yarn prepare-dev && yarn start-dev-adminapi-fast",
+    "start-dev-adminapi-fast": "DEV_ADMIN_API=1 && yarn start-fast",
     "dev": "yarn prepare-dev && yarn dev-fast",
     "dev-fast": "pm2 start ecosystem.config.js --no-daemon",
     "dev-adminapi": "DEV_ADMIN_API=1 yarn prepare-dev && yarn dev-fast",
