@@ -4,12 +4,12 @@ const StateText = (atoms) => {
     return <Element canvas is={atoms.layout.HStack} justifyContent="center" padding="$4">
         <Element canvas is={atoms.layout.ProtoView}>
             <Element canvas is={atoms.text.Head1}>
-                ON
+                Default view
             </Element>
         </Element>
-        <Element canvas is={atoms.layout.ProtoView} viewId={"OFF"}>
+        <Element canvas is={atoms.layout.ProtoView} viewId={"view1"}>
             <Element canvas is={atoms.text.Head1}>
-                OFF
+                Custom view 1
             </Element>
         </Element>
     </Element>
