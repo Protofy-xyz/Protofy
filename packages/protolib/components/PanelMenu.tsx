@@ -37,9 +37,9 @@ import {
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getPendingResult, API } from 'protolib/base';
-import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType} from 'protolib';
+import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType } from 'protolib';
 
 const opacity = 1
 const strokeWidth = 2
@@ -83,7 +83,7 @@ const iconTable = {
 }
 
 const getIcon = (Icon) => {
-    if(typeof Icon === "string") {
+    if (typeof Icon === "string") {
         if (!iconTable[Icon]) {
             return <Folder color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
         } else {
@@ -94,19 +94,19 @@ const getIcon = (Icon) => {
     }
 }
 
-const CreateDialog = ({subtab}) => {
+const CreateDialog = ({ subtab }) => {
     const [name, setName] = useState('')
     const [result, setResult] = useState(getPendingResult("pending"))
     const template = subtab.options.templates[0]
 
-    if(!template) {
-        throw "Invalid template specified in workspace file: "+ subtab.options.templates[0]
+    if (!template) {
+        throw "Invalid template specified in workspace file: " + subtab.options.templates[0]
     }
 
     return <XStack onPress={() => { }}>
         <AlertDialog
             onAccept={async (setOpen) => {
-                const response = await API.post('/adminapi/v1/templates/'+subtab.options.templates[0].options.type, {
+                const response = await API.post('/adminapi/v1/templates/' + subtab.options.templates[0].options.type, {
                     name: name,
                     data: {
                         options: subtab.options.templates[0].options,
@@ -114,7 +114,7 @@ const CreateDialog = ({subtab}) => {
                     }
                 })
                 //@ts-ignore
-                if(response.isLoaded) {
+                if (response.isLoaded) {
                     setName('')
                     setOpen(false)
                     setResult(getPendingResult("pending"))
@@ -122,16 +122,16 @@ const CreateDialog = ({subtab}) => {
                     setResult(response)
                 }
             }}
-            title={template.title??"Create a new "+subtab.options.templates[0]}
+            title={template.title ?? "Create a new " + subtab.options.templates[0]}
             trigger={<PanelMenuItem
                 icon={getIcon(subtab.icon)}
                 text={subtab.name}
                 mb={'$4'}
             />}
-            description={template.description ?? ("Use a simple name for your "+subtab.options.templates[0]+", related to what your "+subtab.options.templates[0]+" does.")}
+            description={template.description ?? ("Use a simple name for your " + subtab.options.templates[0] + ", related to what your " + subtab.options.templates[0] + " does.")}
         >
             <YStack f={1} jc="center" ai="center">
-                {result.isError?<Paragraph mb={"$5"} color="$red10">Error: {result.error?.error}</Paragraph>:null}
+                {result.isError ? <Paragraph mb={"$5"} color="$red10">Error: {result.error?.error}</Paragraph> : null}
                 <Input value={name} onChangeText={(text) => setName(text)} f={1} mx={"$8"} textAlign='center' id="name" placeholder={template.placeholder ?? 'name...'} />
             </YStack>
 
@@ -142,13 +142,39 @@ const CreateDialog = ({subtab}) => {
 const Subtabs = ({ subtabs }: any) => {
     const router = useRouter()
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
+    const isDev = process.env.NODE_ENV === 'development';
+    //fix component not rendering correctly on the first render on client
+    const [hrefProtocol, setHrefProtocol] = useState(undefined)
+    const [hrefHost, setHrefHost] = useState(undefined)
+
+    useEffect(() => {
+        if(isDev) {
+            setHrefProtocol(window.location.protocol)
+            setHrefHost(window.location.hostname)
+        }
+    }, [])
 
     return (
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                const href = (SiteConfig.workspaceRoot == '/' ? '' : SiteConfig.workspaceRoot) + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
-                return <Link href={SiteConfig.getProductionURL(href)} key={index}>
+                let href = (SiteConfig.workspaceRoot == '/' ? '' : SiteConfig.workspaceRoot) + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
+
+                href = SiteConfig.getProductionURL(href, hrefProtocol, hrefHost)
+                // if(typeof window !== 'undefined' && (hrefPort !== undefined && window.location.port !== hrefPort)) {
+                if (isDev) {
+                    return hrefProtocol && hrefHost && <a href={href} key={index}>
+                        <Tinted>
+                            <PanelMenuItem
+                                selected={router.asPath.startsWith(href.replace(/\/$/, ''))}
+                                icon={getIcon(subtab.icon)}
+                                text={subtab.name}
+                            />
+                        </Tinted>
+                    </a>
+                } 
+
+                return <Link href={href} key={index}>
                     <Tinted>
                         <PanelMenuItem
                             selected={router.asPath.startsWith(href.replace(/\/$/, ''))}
@@ -156,7 +182,6 @@ const Subtabs = ({ subtabs }: any) => {
                             text={subtab.name}
                         />
                     </Tinted>
-
                 </Link>
             })}
         </>)
@@ -166,16 +191,16 @@ const Tabs = ({ tabs }: any) => {
     return (tabs ?
         <>
             {Object.keys(tabs).map((tab, index) => {
-                if(tabs[tab].length === undefined){
+                if (tabs[tab].length === undefined) {
                     return <Subtabs subtabs={[tabs[tab]]} />
                 }
                 return (
-                    <Accordion defaultValue={["a"+index]} br={"$6"} overflow="hidden" type="multiple" key={index}>
+                    <Accordion defaultValue={["a" + index]} br={"$6"} overflow="hidden" type="multiple" key={index}>
                         <Accordion.Item value={"a" + index}>
                             <Accordion.Trigger
                                 backgroundColor={"$backgroundTransparent"}
                                 focusStyle={{ backgroundColor: "$backgroundTransparent" }}
-                                hoverStyle={{ backgroundColor: '$backgroundTransparent'}}
+                                hoverStyle={{ backgroundColor: '$backgroundTransparent' }}
                                 bw={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
                                     <XStack f={1}>
@@ -198,7 +223,7 @@ const Tabs = ({ tabs }: any) => {
     );
 };
 
-export const PanelMenu = ({workspace}) => {
+export const PanelMenu = ({ workspace }) => {
     return (<YStack pt="$8">
         <Tabs tabs={workspace.menu} />
     </YStack>)
