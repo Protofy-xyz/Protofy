@@ -13,7 +13,7 @@
     "prod-standalone": "NODE_ENV=production node -r module-alias/register dist/apps/api/src/index.js",
     "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts",
     "prepare-dev": "node prepare.js",
-    "start": "START_ALL=1 pm2 start pm2.config.js --no-daemon", 
+    "start": "START_ALL=1 pm2 start pm2.config.js --no-daemon",
     "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
     "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
