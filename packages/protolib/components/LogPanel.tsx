@@ -80,16 +80,6 @@ export const LogPanel = ({AppState}) => {
 
     const { tint } = useTint()
 
-    const parseMessage = (msg: any) => {
-        let parsed;
-        try {
-            parsed = JSON.parse(msg)
-        } catch (e) {
-            parsed = msg + ""
-        }
-        return parsed
-    }
-
     const toggleLevel = (level: string) => {
         const { levels } = appState;
 
