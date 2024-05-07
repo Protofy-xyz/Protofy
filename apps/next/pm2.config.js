@@ -3,7 +3,7 @@ const path = require('path');
 const currentDir = path.dirname(__filename);
 
 module.exports = {
-    apps: [
+    apps: isProduction? [] : [
       {
         name: "next-dev",
         script: path.join(currentDir, './entrypoint.js'),
