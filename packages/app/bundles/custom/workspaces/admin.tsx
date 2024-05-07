@@ -1,4 +1,4 @@
-import { Router, Inbox, Library, ToyBrick, Key } from '@tamagui/lucide-icons'
+import { Router, Inbox, Library, ToyBrick, Key, Cog } from '@tamagui/lucide-icons'
 
 export default {
     "default": "/workspace/pages",
@@ -10,6 +10,7 @@ export default {
             { "name": "Keys", "icon": Key, "type": "keys", "path": "/" },
             { "name": "Events", "icon": "activity", "type": "events", "path": "?page=0&orderBy=created&orderDirection=desc" },
             { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
+            { "name": "Services", "icon": Cog, "type": "services", "path": "/"},
         ],
         "Development": [
             { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },

@@ -58,6 +58,39 @@ const listServices = () => {
   });
 };
 
+const monitorServices = (context) => {
+  pm2.connect(err => {
+    if (err) {
+      console.error(`Error connecting to PM2: ${err}`);
+      return;
+    }
+
+    setInterval(() => {
+      pm2.list((err, list) => {
+        if (err) {
+          console.error(`Error getting service list: ${err}`);
+          pm2.disconnect();
+          return;
+        }
+
+        list.forEach(service => {
+          const serviceData = {
+            name: service.name,
+            status: service.pm2_env.status,
+            uptime: Date.now() - service.pm2_env.pm_uptime,
+            restarts: service.pm2_env.restart_time,
+            memory: service.monit.memory,
+            cpu: service.monit.cpu
+          };
+
+          const entityModel = ServiceModel.load(serviceData)
+          context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
+        });
+      });
+    }, 1000); 
+  });
+};
+
 
 const getDB = (path, req, session) => {
   const db = {
@@ -106,7 +139,7 @@ const serviceAutoAPI = AutoAPI({
 
 
 export const ServicesAPI = (app, context) => {
-
+  monitorServices(context)
   serviceAutoAPI(app, context)
   app.get('/adminapi/v1/services/:service/logs', handler(async (req, res, session) => {
     if (!session || !session.user.admin) {

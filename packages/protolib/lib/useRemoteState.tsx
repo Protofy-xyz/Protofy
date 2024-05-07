@@ -19,7 +19,7 @@ export const useRemoteStateList = (items, fetch, topic, model, quickRefresh=fals
             // console.log('action: ', action)
             if(quickRefresh) {
                 setDataState((prev) => {
-                    const currentData = prev.data || {};
+                    const currentData = prev?.data || {};
                     const items = currentData.items || [];
             
                     switch (action) {

@@ -1,5 +1,5 @@
 import { DataView, AdminPage, CardBody, ItemMenu } from 'protolib'
-import { Cog, Pencil, UploadCloud, LineChart, RotateCw, Cpu, Activity} from '@tamagui/lucide-icons';
+import { Cog, ScrollText, UploadCloud, LineChart, RotateCw, Cpu, Activity} from '@tamagui/lucide-icons';
 import { ServiceModel } from './servicesSchema';
 import { YStack, Stack, SizableText, XStack } from '@my/ui'
 import { DataCard } from '../../components/DataCard'
@@ -39,8 +39,8 @@ export default {
       const { replace } = usePageParams(pageState)
       const extraMenuActions = [
         {
-          text: "Edit config file",
-          icon: Pencil,
+          text: "Service Logs",
+          icon: ScrollText,
           action: (element) => { replace('editFile', element.getConfigFile()) },
           isVisible: (element) => true
         },
@@ -56,6 +56,7 @@ export default {
 
       return (<AdminPage title="Services" pageSession={pageSession}>
         <DataView
+          quickRefresh={true}
           hideAdd
           integratedChat
           enableAddToInitialData
@@ -80,9 +81,13 @@ export default {
                 title={data.name}
               >
                 <Stack right={20} top={20} position={"absolute"}>
-                  <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?: string) => {
-
-                  }} deleteable={() => true} element={ServiceModel.load(data)} extraMenuActions={extraMenuActions} />
+                  {/* <ItemMenu 
+                    type="item" 
+                    sourceUrl={sourceUrl} 
+                    deleteable={() => false} 
+                    element={ServiceModel.load(data)} 
+                    extraMenuActions={extraMenuActions}
+                  /> */}
                 </Stack>
                 <YStack f={1} p="$2">
                   <ReportCard Icon={Cpu} value={cpu} description="CPU" />
