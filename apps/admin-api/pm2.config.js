@@ -20,7 +20,7 @@ module.exports = {
             error_file: '../../logs/raw/admin-api-dev.stderr.log'
         } : {
             name: 'admin-api',
-            script: path.join(currentDir, 'dist/apps/admin-api/src/index.js'),
+            script: path.join(currentDir, 'dist', 'apps', 'admin-api', 'src', 'index.js'),
             node_args: "-r module-alias/register",
             watch: false,
             autorestart: true,
