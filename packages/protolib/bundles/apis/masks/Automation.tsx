@@ -4,6 +4,7 @@ import { Plug } from 'lucide-react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import React from 'react';
 import { Spinner, XStack } from 'tamagui';
+import { SiteConfig} from 'app/conf'
 
 const Automation = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(9)
@@ -21,7 +22,7 @@ const Automation = (node: any = {}, nodeData = {}) => {
             <Button label={<XStack minHeight='30px' ai="center" jc="center">{loading?<Spinner color={color} />:'Run'}</XStack>} onPress={async () => {
                 const params = getFieldValue('testparams', nodeData)
                 setLoading(true)
-                await API.get('/api/v1/automations/' + getFieldValue('param-3', nodeData)+(params ? '?'+params : ''))
+                await API.get(SiteConfig.getDevelopmentURL('/api/v1/automations/' + getFieldValue('param-3', nodeData)+(params ? '?'+params : '')))
                 setLoading(false)
             }}>
             </Button>

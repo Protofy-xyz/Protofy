@@ -2,6 +2,7 @@ import { Node, Field, FlowPort, NodeParams, FallbackPort, Button, getFieldValue 
 import { API } from 'protolib'
 import { Plug } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
+import { SiteConfig} from 'app/conf'
 
 const ApiMask = (node: any = {}, nodeData = {}) => {
   const nodeParams: Field[] = [{ label: 'Type', field: 'to', type: 'select', data: ['app.get', 'app.post'], static: true }]
@@ -15,7 +16,7 @@ const ApiMask = (node: any = {}, nodeData = {}) => {
       </div>
 
       {nodeData && nodeData['to'] == 'app.get' && <Button label="Make request" onPress={() => {
-        API.get(nodeData['param-1']?.value)
+        API.get(SiteConfig.getDevelopmentURL(nodeData['param-1']?.value))
       }} />}
     </Node>
   )

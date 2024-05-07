@@ -142,8 +142,6 @@ const CreateDialog = ({subtab}) => {
 const Subtabs = ({ subtabs }: any) => {
     const router = useRouter()
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
-    const host = typeof window !== 'undefined' ? window.location.hostname : ''
-    const protocol = typeof window !== 'undefined' ? window.location.protocol : ''
 
     return (
         <>
