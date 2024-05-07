@@ -7,7 +7,7 @@ module.exports = {
     apps: [
         isFullDev ? {
             name: 'admin-api-dev-fulldev',
-            script: path.join(currentDir, '../../node_modules/ts-node/dist/bin.js'),
+            script: path.join(currentDir, '..', '..', 'node_modules', 'ts-node', 'dist', 'bin.js'),
             args: '--files --project tsconfig.json src/index.ts',
             watch: false,
             autorestart: true,

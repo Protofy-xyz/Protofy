@@ -6,7 +6,7 @@ module.exports = {
     apps: [
       {
         name: "nextra-compiled",
-        script: path.join(currentDir, './entrypoint.js'),
+        script: path.join(currentDir, 'entrypoint.js'),
         windowsHide: true,
         watch: false,
         env: {
