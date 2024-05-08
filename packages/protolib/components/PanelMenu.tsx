@@ -35,7 +35,7 @@ import {
     ClipboardList,
     AlertTriangle
 } from '@tamagui/lucide-icons'
-import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
+import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { getPendingResult, API } from 'protolib/base';
@@ -189,39 +189,41 @@ const Subtabs = ({ subtabs }: any) => {
         </>)
 }
 
-const Tabs = ({ tabs, align}: any) => {
+const Tabs = ({ tabs }: any) => {
     return (tabs ?
-        <>
+        <YStack f={1}>
             {Object.keys(tabs).map((tab, index) => {
                 if (tabs[tab].length === undefined) {
                     return <Subtabs subtabs={[tabs[tab]]} />
                 }
+                
                 return (
                     <Accordion defaultValue={["a" + index]} br={"$6"} overflow="hidden" type="multiple" key={index}>
                         <Accordion.Item value={"a" + index}>
                             <Accordion.Trigger
+                                p={"$2"}
                                 backgroundColor={"$backgroundTransparent"}
                                 focusStyle={{ backgroundColor: "$backgroundTransparent" }}
                                 hoverStyle={{ backgroundColor: '$backgroundTransparent' }}
                                 bw={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
-                                    <XStack f={1}>
+                                    <XStack f={1} jc="center">
                                         <Square animation="quick" rotate={open ? '0deg' : '-90deg'}>
-                                            <ChevronDown size="$1" />
+                                            <ChevronDown size={20} />
                                         </Square>
-                                        <SizableText f={1} ml={"$4"} fontWeight="bold" size={"$5"}>{tab}</SizableText>
+                                        <SizableText f={1} ml={"$2.5"} fontWeight="bold" size={"$5"}>{tab}</SizableText>
 
                                     </XStack>
                                 )}
                             </Accordion.Trigger>
-                            <Accordion.Content pl="$0" backgroundColor={"$backgroundTransparent"} pt={'$0'}>
+                            <Accordion.Content position="relative" left={-10} pl="$0" backgroundColor={"$backgroundTransparent"} pt={'$0'} pb={"$2"} >
                                 <Subtabs subtabs={tabs[tab]} />
                             </Accordion.Content>
                         </Accordion.Item>
                     </Accordion>
                 )
             })}
-        </> : <></>
+        </YStack> : <></>
     );
 };
 
@@ -234,8 +236,8 @@ export const PanelMenu = ({ workspace }) => {
             }}
             tabs={["PLAYGROUND", "PUBLISHED"]}
         > */}
-            <Tabs tabs={workspace.menu} />
-            {/* <Tabs tabs={workspace.menu} /> */}
+            <ScrollView pl={"$2"} pt={"$4"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>
+            {/* <ScrollView mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView> */}
         {/* </TabGroup> */}
     </YStack>)
 }
