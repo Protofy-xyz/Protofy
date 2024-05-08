@@ -138,32 +138,30 @@ mqtt.on("message", (messageTopic, message) => {
         parsedMessage = JSON.parse(parsedMessage);
     } catch (err) { }
 
-    if(subscriptions[topic]) {
-        // Handle wildcard subscriptions
-        const validSubscriptions = Object.keys(subscriptions).filter(subscription => {
-            const subscriptionParts = subscription.split('/');
-            const topicParts = topic.split('/');
+    // Handle wildcard subscriptions
+    const validSubscriptions = Object.keys(subscriptions).filter(subscription => {
+        const subscriptionParts = subscription.split('/');
+        const topicParts = topic.split('/');
 
-            for (let i = 0; i < subscriptionParts.length; i++) {
-                if (subscriptionParts[i] === '#') {
-                    return true;
-                }
-
-                if (subscriptionParts[i] !== '+' && subscriptionParts[i] !== topicParts[i]) {
-                    return false;
-                }
+        for (let i = 0; i < subscriptionParts.length; i++) {
+            if (subscriptionParts[i] === '#') {
+                return true;
             }
-            return true;
-        });
 
-        validSubscriptions.forEach(subscription => {
-            
-            // console.log('SUUUUUUUUUUUUUUUUUUUUUB: ', subscriptions[subscription])
-            Object.keys(subscriptions[subscription]).forEach(subscriptionId => {
-                subscriptions[subscription][subscriptionId](parsedMessage, topic);
-            });
+            if (subscriptionParts[i] !== '+' && subscriptionParts[i] !== topicParts[i]) {
+                return false;
+            }
+        }
+        return true;
+    });
+
+    validSubscriptions.forEach(subscription => {
+        
+        // console.log('SUUUUUUUUUUUUUUUUUUUUUB: ', subscriptions[subscription])
+        Object.keys(subscriptions[subscription]).forEach(subscriptionId => {
+            subscriptions[subscription][subscriptionId](parsedMessage, topic);
         });
-    }
+    });
 });
 
 export default app
