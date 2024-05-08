@@ -78,58 +78,7 @@ export abstract class ProtoDB {
     }
 
     static async initDB(dbPath: string, initialData = {}, options?) {
-        if (!fs.existsSync(dbPath)) {
-            fs.mkdirSync(dbPath);
-        }
-
-        const setupDatabase = async () => {
-            logger.debug(`connecting to database: ${dbPath}`);
-            const db = this.connect(dbPath);
-
-            if (db.status !== 'open') {
-                await new Promise((resolve, reject) => {
-                    db.on('open', resolve);
-                    db.on('error', reject);
-                });
-            }
-
-            logger.debug(`connected to database on: ${dbPath}`);
-            //check for database version, if it doesnt exists, assume v1
-            if (!fs.existsSync(path.join(dbPath, 'version'))) {
-                console.log('Converting from v1 to v2: Detected database version v1 for database: ', dbPath)
-                for await (const [key, value] of db.rootDb.iterator()) {
-                    if (!key.includes('!')) {
-                        if (key != 'initialized') {
-                            console.log('Moving item: ', key, 'from root level to values sublevel')
-                            await db.put(key, value);
-                            console.log('will store in sublevel: ', key, value)
-                        }
-
-                        await db.rootDb.del(key);
-                    }
-                }
-                fs.writeFileSync(path.join(dbPath, 'version'), '2')
-            }
-            if (!fs.existsSync(path.join(dbPath, "initialized"))) {
-                logger.info('database ' + dbPath + ' not initialized, loading initialData...');
-
-                const keys = Object.keys(initialData);
-
-                for (let key of keys) {
-                    await db.put(key, JSON.stringify(initialData[key]));
-                    logger.debug({ key: key, value: initialData[key] }, `Added: ${key} -> ${JSON.stringify(initialData[key])}`);
-                }
-
-                fs.writeFileSync(path.join(dbPath, "initialized"), JSON.stringify(initialData, null, 4));
-            }
-        }
-
-        try {
-            await setupDatabase();
-        } catch (error) {
-            logger.error({ error }, "Error initializing the database");
-            throw error;
-        }
+        throw new Error('Static method initDB must be implemented');
     }
 }
 
@@ -148,7 +97,7 @@ export class ProtoLevelDB extends ProtoDB {
         this.db = sublevel(this.rootDb, 'values')
         const dbOptions = optionsTable[location] ?? {}
         this.batch = dbOptions.batch ?? false
-        this.batchLimit =  dbOptions.batchLimit ?? 5
+        this.batchLimit = dbOptions.batchLimit ?? 5
         this.batchTimeout = dbOptions.batchTimeout ?? 10000
         this.batchCounter = 0
         this.batchTimer = null
@@ -202,7 +151,7 @@ export class ProtoLevelDB extends ProtoDB {
     async put(key: string, value: string, options?) {
         const { keyEncoding, valueEncoding, ...internalOptions } = options ?? {};
         if (this.batch) {
-            if(this.batchCounter === this.batchLimit) {
+            if (this.batchCounter === this.batchLimit) {
                 this.batchIndexes()
             } else {
                 this.batchCounter++
@@ -245,7 +194,7 @@ export class ProtoLevelDB extends ProtoDB {
             for await (const [itemKey, itemValue] of db.iterator()) {
                 allItems.push(JSON.parse(itemValue));
             }
-            
+
             if (Array.isArray(value)) {
                 value.forEach(newItemJson => {
                     const newItem = JSON.parse(newItemJson);
@@ -257,7 +206,7 @@ export class ProtoLevelDB extends ProtoDB {
                 allItems = allItems.filter(listItem => listItem[indexData.primary] !== newItem[indexData.primary]);
                 allItems.push(newItem);
             }
-            
+
             const counter = sublevel(rootDb, 'counter');
             await counter.put('total', JSON.stringify(allItems.length));
 
@@ -299,13 +248,64 @@ export class ProtoLevelDB extends ProtoDB {
     }
 
     static async initDB(dbPath: string, initialData = {}, options?) {
-        const {indexes, dbOptions, ...levelOptions} = options
+        const { indexes, dbOptions, ...levelOptions } = options
         optionsTable[dbPath] = dbOptions
-        await super.initDB(dbPath, initialData, levelOptions)
+        if (!fs.existsSync(dbPath)) {
+            fs.mkdirSync(dbPath);
+        }
+
+        const setupDatabase = async () => {
+            logger.debug(`connecting to database: ${dbPath}`);
+            const db = this.connect(dbPath);
+
+            if (db.status !== 'open') {
+                await new Promise((resolve, reject) => {
+                    db.on('open', resolve);
+                    db.on('error', reject);
+                });
+            }
+
+            logger.debug(`connected to database on: ${dbPath}`);
+            //check for database version, if it doesnt exists, assume v1
+            if (!fs.existsSync(path.join(dbPath, 'version'))) {
+                console.log('Converting from v1 to v2: Detected database version v1 for database: ', dbPath)
+                for await (const [key, value] of db.rootDb.iterator()) {
+                    if (!key.includes('!')) {
+                        if (key != 'initialized') {
+                            console.log('Moving item: ', key, 'from root level to values sublevel')
+                            await db.put(key, value);
+                            console.log('will store in sublevel: ', key, value)
+                        }
+
+                        await db.rootDb.del(key);
+                    }
+                }
+                fs.writeFileSync(path.join(dbPath, 'version'), '2')
+            }
+            if (!fs.existsSync(path.join(dbPath, "initialized"))) {
+                logger.info('database ' + dbPath + ' not initialized, loading initialData...');
+
+                const keys = Object.keys(initialData);
+
+                for (let key of keys) {
+                    await db.put(key, JSON.stringify(initialData[key]));
+                    logger.debug({ key: key, value: initialData[key] }, `Added: ${key} -> ${JSON.stringify(initialData[key])}`);
+                }
+
+                fs.writeFileSync(path.join(dbPath, "initialized"), JSON.stringify(initialData, null, 4));
+            }
+        }
+
+        try {
+            await setupDatabase();
+        } catch (error) {
+            logger.error({ error }, "Error initializing the database");
+            throw error;
+        }
         const rootDb = level(dbPath, levelOptions);
         const db = sublevel(rootDb, 'values')
-        
-        if(indexes) {
+
+        if (indexes) {
             const indexTable = sublevel(rootDb, 'indexTable')
             await indexTable.put('indexes', JSON.stringify(indexes))
             this.regenerateIndexes(rootDb, db, dbPath)
