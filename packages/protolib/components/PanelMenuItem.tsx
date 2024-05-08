@@ -1,5 +1,6 @@
 import { XStack, Text, SizableText, StackProps, Paragraph, Stack } from 'tamagui'
 import React from 'react'
+import { useThemeSetting } from '@tamagui/next-theme'
 
 export type PanelMenuItemProps = {
   icon?: React.ReactNode,
@@ -10,6 +11,7 @@ export type PanelMenuItemProps = {
 }
 
 export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, icon, text, ...props } : PanelMenuItemProps & StackProps, ref: any) => {
+  const {resolvedTheme} = useThemeSetting()
   return (
     <XStack
       ref={ref}
@@ -25,7 +27,7 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
       onPress={onPress}
       cursor='pointer'
       {...(selected ? {
-        backgroundColor: "$color4"
+        backgroundColor: resolvedTheme == 'dark'? '$color2': "$color4"
       } : {})}
       {...props}
     >
