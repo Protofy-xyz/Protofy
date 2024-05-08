@@ -32,7 +32,7 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
       {icon ? <Stack marginRight={text?"$4":"$0"}>
         {icon}
       </Stack> : null}
-      {text ? <SizableText selectable={false}  pointerEvents="none" color="$color11" o={1} size="$4" fontWeight={selected?"600":"500"}>
+      {text ? <SizableText selectable={false}  pointerEvents="none" color="$color" o={1} size="$4" fontWeight={selected?"600":"500"}>
         {text}
       </SizableText> : null}
       {children}

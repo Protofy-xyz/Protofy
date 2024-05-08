@@ -162,7 +162,6 @@ const Subtabs = ({ subtabs }: any) => {
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
                 let href = (SiteConfig.workspaceRoot == '/' ? '' : SiteConfig.workspaceRoot) + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
-
                 href = SiteConfig.getProductionURL(href, hrefProtocol, hrefHost)
                 // if(typeof window !== 'undefined' && (hrefPort !== undefined && window.location.port !== hrefPort)) {
                 if (isDev) {
