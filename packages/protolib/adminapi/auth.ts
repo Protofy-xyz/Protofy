@@ -7,6 +7,7 @@ import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";
 import { getLogger } from '../base';
 import { UserModel } from '../bundles/users';
+import {SiteConfig} from 'app/conf'
 
 const logger = getLogger()
 
@@ -92,6 +93,11 @@ app.get('/adminapi/v1/auth/validate', handler(async (req: any, res: any, session
 }));
 
 app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
+    if(!SiteConfig.signupEnabled) {
+        res.status(403).send('Signup is disabled');
+        return
+    }
+
     const request: RegisterRequest = req.body
     const defaultGroup = "user"
     RegisterSchema.parse(request)

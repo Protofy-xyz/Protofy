@@ -1,11 +1,12 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
-import { hasSessionCookie, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, Page} from 'protolib'
+import { hasSessionCookie, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, Page } from 'protolib'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG } from '@my/ui'
 import { useRouter } from 'next/router';
 import { getErrorMessage } from "@my/ui";
+import { SiteConfig } from '../../conf'
 
 export function SignInPage(props) {
   return (
@@ -51,14 +52,14 @@ function SignIn() {
   }, [])
 
   useEffect(() => {
-    if(authState.isLoaded && authState.data) {
+    if (authState.isLoaded && authState.data) {
       setSession(createSession(authState.data.session.user, authState.data.session.token))
       setSessionContext(authState.data.context)
     }
   }, [authState])
 
   useEffect(() => {
-    if(session.loggedIn) {
+    if (session.loggedIn) {
       //@ts-ignore
       router.push(router.query.return ?? '/')
     }
@@ -76,8 +77,8 @@ function SignIn() {
           <LogoIcon o={0.9}>
             <ProtofyLogoSVG
               className="tamagui-icon"
-              width={600/5}
-              height={652/5}
+              width={600 / 5}
+              height={652 / 5}
             />
           </LogoIcon>
         </YStack>
@@ -127,21 +128,22 @@ function SignIn() {
                   }
                   mt={"$5"}
                 >
-                  {session.loggedIn || authState.isLoading?<Spinner /> : "Sign in"}
+                  {session.loggedIn || authState.isLoading ? <Spinner /> : "Sign in"}
                 </Button>
               </YStack>
             </form>
           </YStack>
         </>
-        <YStack space="$2" >
-          <Paragraph theme="alt2" ta="center" size="$2">
-            Don't have an account?
-            {` `}
-            <Link id="sign-up-link" href={"/auth/register"+(router.query.return?"?return="+router.query.return:'')} style={{ fontWeight: '800' }}>
-              Sign up.
-            </Link>
-          </Paragraph>
-        </YStack>
+        {SiteConfig.signupEnabled && (
+          <YStack space="$2" >
+            <Paragraph theme="alt2" ta="center" size="$2">
+              Don't have an account?
+              {` `}
+              <Link id="sign-up-link" href={"/auth/register" + (router.query.return ? "?return=" + router.query.return : '')} style={{ fontWeight: '800' }}>
+                Sign up.
+              </Link>
+            </Paragraph>
+          </YStack>)}
       </YStack>
     </YStack>
   )

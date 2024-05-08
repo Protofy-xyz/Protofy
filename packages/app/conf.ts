@@ -7,6 +7,7 @@ const SiteConfig = {
     workspaceRoot: '/workspace',
     getDevelopmentURL: (path, protocol?, host?) => _host && _protocol ? (protocol??_protocol)+`//${(host??_host)}:8000${path}`: path,
     getProductionURL: (path, protocol?, host?) => _host && _protocol ? (protocol??_protocol)+`//${(host??_host)}:8080${path}` : path,
-    useLocalDocumentation: false
+    useLocalDocumentation: false,
+    signupEnabled: false
 }
 export {SiteConfig}

@@ -137,6 +137,7 @@ const isFullDev = process.env.DEV_ADMIN_API === '1';
 if (isFullDev) {
   const pathsToWatch = [
     'src/**',
+    '../../packages/app/conf.ts',
     '../../packages/protolib/**',
     '../../packages/app/bundles/adminapi.tsx',
     '../../system.js'
