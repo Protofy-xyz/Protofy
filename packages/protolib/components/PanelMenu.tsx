@@ -42,7 +42,7 @@ import { getPendingResult, API } from 'protolib/base';
 import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType, TabGroup } from 'protolib';
 import { useThemeSetting } from '@tamagui/next-theme'
 
-const opacity = 1
+const opacity = 0.8
 const strokeWidth = 2
 const color = '$color8'
 const size = 20
