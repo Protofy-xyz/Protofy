@@ -29,7 +29,7 @@ export const PanelLayout = ({panelBgColor=undefined, menuContent, children, Side
           // </AppBar>
         }>
         {/* <Theme name={tint as any}> */}
-        <XStack f={1} p="$3" bc={bgPanels}>
+        <XStack f={1} p="$3" pl={0} bc={bgPanels}>
           <XStack bc={bgPanels} elevation={3} br={"$6"} mt={appBarHeight} f={1} height={'calc(100vh - '+(appBarHeight+30)+'px)'}>
             <ScrollView $sm={{br:"$0"}} height={'calc(100vh - '+(appBarHeight+30)+'px)'}>
               {/* <Tinted> */}
