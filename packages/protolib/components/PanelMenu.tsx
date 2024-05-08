@@ -44,8 +44,9 @@ import { useThemeSetting } from '@tamagui/next-theme'
 
 const opacity = 1
 const strokeWidth = 2
-const color = '$color7'
+const color = '$color8'
 const size = 20
+const disableTabsInSideBar = true
 
 const iconTable = {
     database: <Server color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
@@ -229,15 +230,18 @@ const Tabs = ({ tabs }: any) => {
 
 export const PanelMenu = ({ workspace }) => {
     return (<YStack pt="$5">
-        {/* <TabGroup 
+        {!disableTabsInSideBar && <TabGroup 
             containerProps={{
                 borderWidth: 0,
                 backgroundColor: "$backgroundTransparent"
             }}
             tabs={["PLAYGROUND", "PUBLISHED"]}
-        > */}
+        >
             <ScrollView pl={"$2"} pt={"$4"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>
-            {/* <ScrollView mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView> */}
-        {/* </TabGroup> */}
+            <ScrollView pl={"$2"} pt={"$4"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>
+         </TabGroup> }
+
+         {disableTabsInSideBar && <ScrollView pl={"$2"} pt={"$4"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>}
+        
     </YStack>)
 }
