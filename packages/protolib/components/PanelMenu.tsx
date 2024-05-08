@@ -39,7 +39,8 @@ import { Accordion, Input, Paragraph, SizableText, Square } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { getPendingResult, API } from 'protolib/base';
-import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType } from 'protolib';
+import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType, TabGroup } from 'protolib';
+import { useThemeSetting } from '@tamagui/next-theme'
 
 const opacity = 1
 const strokeWidth = 2
@@ -146,6 +147,7 @@ const Subtabs = ({ subtabs }: any) => {
     //fix component not rendering correctly on the first render on client
     const [hrefProtocol, setHrefProtocol] = useState(undefined)
     const [hrefHost, setHrefHost] = useState(undefined)
+    const { resolvedTheme } = useThemeSetting()
 
     useEffect(() => {
         if(isDev) {
@@ -187,7 +189,7 @@ const Subtabs = ({ subtabs }: any) => {
         </>)
 }
 
-const Tabs = ({ tabs }: any) => {
+const Tabs = ({ tabs, align}: any) => {
     return (tabs ?
         <>
             {Object.keys(tabs).map((tab, index) => {
@@ -224,7 +226,16 @@ const Tabs = ({ tabs }: any) => {
 };
 
 export const PanelMenu = ({ workspace }) => {
-    return (<YStack pt="$8">
-        <Tabs tabs={workspace.menu} />
+    return (<YStack pt="$5">
+        {/* <TabGroup 
+            containerProps={{
+                borderWidth: 0,
+                backgroundColor: "$backgroundTransparent"
+            }}
+            tabs={["PLAYGROUND", "PUBLISHED"]}
+        > */}
+            <Tabs tabs={workspace.menu} />
+            {/* <Tabs tabs={workspace.menu} /> */}
+        {/* </TabGroup> */}
     </YStack>)
 }

@@ -23,10 +23,10 @@ const tooltipDelay = { open: 500, close: 150 }
 
 export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo, logoHref="/", themeSwitcher=true, tintSwitcher=true, logoSize=30, menu}: HeaderContentsProps) => {
   return (
-    <>
+    <XStack f={1} pt="$3" >
       <XStack ai="center" space="$4">
         {(logo || themeSwitcher || tintSwitcher) &&
-          <XStack f={1} minWidth={210}>
+          <XStack f={1} minWidth={235}>
             {logo && <NextLink href={logoHref}>
               <XStack py={logoSize/4} ai="center" px="$3" cur="pointer" my={-20}>
                 {logo}
@@ -63,8 +63,9 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
       </XStack>}
 
       <XStack
+        marginLeft="auto"
+        jc="center"
         h={40}
-        jc="flex-end"
         miw={160}
         $xs={{ miw: 130 }}
         pointerEvents="auto"
@@ -76,6 +77,6 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
           {menu}
         </XStack>
       </XStack>
-    </>
+    </XStack>
   )
 })

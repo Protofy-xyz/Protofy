@@ -1,88 +1,70 @@
 import { useTint } from '../lib/Tints'
 import React, { memo, useState } from 'react'
-import { Button, ScrollView, XGroup, XStack, YStack, YStackProps } from 'tamagui'
+import { Button, ScrollView, SizableText, XGroup, XStack, YStack, YStackProps } from 'tamagui'
+import { useThemeSetting } from '@tamagui/next-theme'
 
 type TabGroupProps = {
-    title: any,
     tabs: string[],
     children: any,
     containerProps?: YStackProps
 }
-const TabGroup = memo(React.forwardRef(({ title, tabs, children, containerProps = {} }: TabGroupProps, ref:any) => {
+const TabGroup = memo(React.forwardRef(({ tabs, children, containerProps = {} }: TabGroupProps, ref: any) => {
     const [activeIndex, setActiveIndex] = useState(0)
     const { tint } = useTint()
     const childArray = React.Children.toArray(children);
+    const { resolvedTheme } = useThemeSetting()
+
     return (
         <YStack ref={ref} overflow="hidden" flex={1}>
-            <>
-                <ScrollView
-                    alignSelf="center"
-                    alignItems="center"
-                    zIndex={10}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    marginBottom="$-2"
-                    maxWidth="100%"
-                >
-                    <XStack paddingHorizontal="$4" flexShrink={0} space>
-                        <XGroup size="$2" bordered>
-                            <XGroup.Item>
-                                <Button disabled size="$2" fontSize="$4" paddingHorizontal="$4">
-                                    {title}
-                                </Button>
-                            </XGroup.Item>
-                        </XGroup>
-                        <XGroup size="$2" bordered>
-                            {tabs? tabs.map((tab, i) => (
-                                <XGroup.Item key={i}>
-                                    <Button
-                                        accessibilityLabel={tab}
-                                        onPress={() => setActiveIndex(i)}
-                                        theme={i === activeIndex ? (tint as any) : 'alt1'}
-                                        size="$2"
-                                        borderRadius="$0"
-                                    >
-                                        {tab}
-                                    </Button>
-                                </XGroup.Item>
-                            )):null}
-                        </XGroup>
-                    </XStack>
-                </ScrollView>
-            </>
+            <XStack f={1} borderBottomColor={"$gray5"} borderBottomWidth={2} paddingHorizontal="$4" flexShrink={0} space>
+                <XGroup size="$2" f={1} br={0} position="relative" top={2}>
+                    {tabs ? tabs.map((tab, i) => (
+                        <XGroup.Item key={i}>
+                            <XStack
+                                paddingTop="$3"
+                                paddingBottom="$3"
+                                borderWidth={0}
+                                borderBottomWidth={4}
+                                borderBottomColor={i === activeIndex ? '$color7' : 'transparent'}
+                                hoverStyle={{ backgroundColor: resolvedTheme == 'dark' ? '$gray1': '$gray4' }}
+                                borderTopRightRadius="$3"
+                                borderTopLeftRadius="$3"
+                                br={"$3"}
+                                theme={tint as any}
+                                cursor='pointer'
+                                onPress={() => setActiveIndex(i)}
+                                f={1}
+                            >
+                                <SizableText
+                                    userSelect='none'
+                                    textAlign='center'
+                                    accessibilityLabel={tab}
+                                    o={i === activeIndex ? 1 : 0.7}
+                                    color={i === activeIndex ? '$color8' : '$color'}
+                                    theme={i === activeIndex ? (tint as any) : 'alt1'}
+                                    size="$2"
+                                    f={1}
+                                    fontWeight={i === activeIndex ? '600' : '600'}
+                                >
+                                    {tab}
+                                </SizableText>
+                            </XStack>
+
+                        </XGroup.Item>
+                    )) : null}
+                </XGroup>
+            </XStack>
             <XStack maxWidth="100%" flex={1}>
                 <YStack flex={1} maxWidth="100%" opacity={0.9} hoverStyle={{ opacity: 1 }}>
                     <YStack
-                        borderRadius="$4"
                         backgroundColor="$backgroundHover"
                         borderColor="$borderColor"
                         overflow="hidden"
                         borderWidth={1}
                         flex={1}
-                        height={325}
-                        maxHeight={325}
                         {...containerProps}
                     >
-                        <ScrollView
-                            contentContainerStyle={{
-                                flex: 1,
-                            }}
-                            showsHorizontalScrollIndicator={false}
-                            showsVerticalScrollIndicator={false}
-                        >
-                            <ScrollView
-                                horizontal
-                                contentContainerStyle={{
-                                    flex: 1,
-                                }}
-                                showsHorizontalScrollIndicator={false}
-                                showsVerticalScrollIndicator={false}
-                            >
-                                {
-                                    childArray[activeIndex]
-                                }
-                            </ScrollView>
-                        </ScrollView>
+                        {childArray[activeIndex]}
                     </YStack>
                 </YStack>
             </XStack>
