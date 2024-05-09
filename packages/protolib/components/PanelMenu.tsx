@@ -168,8 +168,11 @@ const Subtabs = ({ subtabs }: any) => {
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
                 
-                let href = "/" + workspaceRoot + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
+                const segment = typeof window !== 'undefined' ? window.location.pathname.split('/')[2] || SiteConfig.defaultWorkspace : SiteConfig.defaultWorkspace;
+
+                let href = "/" + workspaceRoot + '/' + segment + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
                 const originalHref = href
+                
                 href = SiteConfig.getProductionURL(href, hrefProtocol, hrefHost)
 
                 // if(typeof window !== 'undefined' && (hrefPort !== undefined && window.location.port !== hrefPort)) {
