@@ -1,4 +1,4 @@
-import { YStack, XStack } from 'tamagui'
+import { YStack, XStack, Separator } from 'tamagui'
 import {
     Server,
     Box,
@@ -33,7 +33,9 @@ import {
     BookOpen,
     ServerCog,
     ClipboardList,
-    AlertTriangle
+    AlertTriangle,
+    Cog,
+    Layers
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@my/ui'
 import { useRouter } from 'next/router';
@@ -41,12 +43,15 @@ import { useContext, useEffect, useState } from 'react';
 import { getPendingResult, API } from 'protolib/base';
 import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType, TabGroup } from 'protolib';
 import { useThemeSetting } from '@tamagui/next-theme'
+import { SelectList } from './SelectList';
+import { usePageParams, useQueryState } from 'protolib/next'
+import { useUpdateEffect } from 'usehooks-ts';
 
 const opacity = 0.8
 const strokeWidth = 2
 const color = '$color8'
 const size = 20
-const disableTabsInSideBar = true
+
 
 const iconTable = {
     database: <Server color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
@@ -151,7 +156,7 @@ const Subtabs = ({ subtabs }: any) => {
     const { resolvedTheme } = useThemeSetting()
 
     useEffect(() => {
-        if(isDev) {
+        if (isDev) {
             setHrefProtocol(window.location.protocol)
             setHrefHost(window.location.hostname)
         }
@@ -175,7 +180,7 @@ const Subtabs = ({ subtabs }: any) => {
                             />
                         </Tinted>
                     </a>
-                } 
+                }
 
                 return <Link href={href} key={index}>
                     <Tinted>
@@ -190,14 +195,15 @@ const Subtabs = ({ subtabs }: any) => {
         </>)
 }
 
-const Tabs = ({ tabs }: any) => {
+const Tabs = ({ tabs, environ }: any) => {
     return (tabs ?
         <YStack f={1}>
             {Object.keys(tabs).map((tab, index) => {
                 if (tabs[tab].length === undefined) {
                     return <Subtabs subtabs={[tabs[tab]]} />
                 }
-                
+                const tabContent = tabs[tab].filter(t => !t.visibility || t.visibility.includes(environ))
+                if (!tabContent.length) return <></>
                 return (
                     <Accordion defaultValue={["a" + index]} br={"$6"} overflow="hidden" type="multiple" key={index}>
                         <Accordion.Item value={"a" + index}>
@@ -218,7 +224,7 @@ const Tabs = ({ tabs }: any) => {
                                 )}
                             </Accordion.Trigger>
                             <Accordion.Content position="relative" left={-10} pl="$0" backgroundColor={"$backgroundTransparent"} pt={'$0'} pb={"$2"} >
-                                <Subtabs subtabs={tabs[tab]} />
+                                <Subtabs subtabs={tabContent} />
                             </Accordion.Content>
                         </Accordion.Item>
                     </Accordion>
@@ -227,21 +233,65 @@ const Tabs = ({ tabs }: any) => {
         </YStack> : <></>
     );
 };
-
+const disableEnvSelector = true
 export const PanelMenu = ({ workspace }) => {
-    return (<YStack pt="$5">
-        {!disableTabsInSideBar && <TabGroup 
-            containerProps={{
-                borderWidth: 0,
-                backgroundColor: "$backgroundTransparent"
-            }}
-            tabs={["PLAYGROUND", "PUBLISHED"]}
-        >
-            <ScrollView pl={"$2"} pt={"$4"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>
-            <ScrollView pl={"$2"} pt={"$4"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>
-         </TabGroup> }
+    const { resolvedTheme } = useThemeSetting()
+    const { query, isReady } = useRouter();
+    const [environ, setEnviron] = useState()
+    const [state, setState] = useState(query)
+    const { push, removePush } = usePageParams(state)
+    useQueryState(setState)
 
-         {disableTabsInSideBar && <ScrollView pl={"$2"} pt={"$4"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>}
+    if(isReady) {
+        console.log('ready query: ', query)
+    }
+
+    useUpdateEffect(() => {
+        if(!environ) return
+        if(environ == 'development') {
+            removePush('env')
+            return
+        }
+
+        push('env', environ)
         
+    }, [environ])
+
+    return (<YStack pt="$3">
+        <Tinted>
+            <YStack ai="center" mt={"$2"} ml={"$5"} mr={"$5"}>
+                {isReady && !disableEnvSelector && <SelectList
+                    value={environ ?? query.env}
+                    setValue={setEnviron}
+                    rawDisplay={true}
+                    triggerProps={{
+                        bc: "transparent",
+                        borderWidth: 0,
+                        outlineWidth: 1,
+                        borderBottomWidth: 2,
+                        borderBottomLeftRadius: 0,
+                        borderBottomRightRadius: 0,
+                        chromeless: false
+                    }}
+                    title="Environment"
+                    elements={[
+                        {
+                            value: "development", caption: <XStack space="$3">
+                                <Boxes opacity={0.7} size={20} />
+                                <SizableText size="$3">Development</SizableText>
+                            </XStack>
+                        }, {
+                            value: "production", caption: <XStack space="$3">
+                                <Layers opacity={0.7} size={20} />
+                                <SizableText size="$3">Production</SizableText>
+                            </XStack>
+                        }]}
+                />}
+            </YStack>
+            {/* <Separator f={1} borderBottomWidth={4} /> */}
+        </Tinted>
+
+        <ScrollView pl={"$2"} pt={"$3"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>
+
     </YStack>)
 }

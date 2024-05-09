@@ -13,12 +13,12 @@ export default {
             { "name": "Services", "icon": Cog, "type": "services", "path": "/"},
         ],
         "Development": [
-            { "name": "Objects", "icon": "box", "type": "objects", "path": "/", "visibility": ["playground"] },
-            { "name": "Pages", "icon": "layout", "type": "pages", "path": "/", "visibility": ["playground"] },
-            { "name": "Automations", "icon": ToyBrick, "type": "apis", "path": "/", "visibility": ["playground"] },
+            { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },
+            { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
+            { "name": "Automations", "icon": ToyBrick, "type": "apis", "path": "/" }, //"visibility": ["development"]
         ],
         "Content": [
-            { "name": "Files", "icon": "folder", "type": "files", "path": "?path=packages/app/bundles/custom" },
+            { "name": "Files", "icon": "folder", "type": "files", "path": "?path=/" },
             { "name": "Databases", "icon": "database", "type": "databases", "path": "/"},
             { "name": "Resources", "icon": Library, "type": "resources", "path": "/"},
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "?path=/apps/next/public" },

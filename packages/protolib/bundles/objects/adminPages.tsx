@@ -1,6 +1,6 @@
 
 import { ObjectModel } from './objectsSchemas'
-import { DataView, DataTable2, Chip, API, AdminPage, PaginatedDataSSR } from 'protolib'
+import { DataView, DataTable2, Chip, API, AdminPage, PaginatedDataSSR, useEnv } from 'protolib'
 import { Pencil, Box } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 import { XStack, Text } from "@my/ui";
@@ -17,9 +17,12 @@ export default {
     'objects': {
         component: ({ pageState, initialItems, pageSession }: any) => {
             const { replace } = usePageParams(pageState)
-
+            const env = useEnv()
             return (<AdminPage title="Objects" pageSession={pageSession}>
                 <DataView
+                    openMode={env === 'development' ? 'edit' : 'view'}
+                    hideAdd={env !== 'development'}
+                    disableItemSelection={ env !== 'development'}
                     integratedChat
                     rowIcon={Box}
                     sourceUrl={sourceUrl}
@@ -52,14 +55,14 @@ export default {
                     }
                     }
 
-                    extraMenuActions={[
+                    extraMenuActions={env == "development" ? [
                         {
                             text: "Edit Object file",
                             icon: Pencil,
                             action: (element) => { replace('editFile', element.getDefaultSchemaFilePath()) },
                             isVisible: (data) => true
                         }
-                    ]}
+                    ]: []}
                 />
             </AdminPage>)
         },
