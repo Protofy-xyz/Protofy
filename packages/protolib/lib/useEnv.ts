@@ -1,15 +1,7 @@
 import { useRouter } from 'next/router';
+import { useWorkspaceRoot } from './useWorkspaceRoot';
 
 export const useEnv = () => {
-    const { query } = useRouter();
-    const env = query.env;
-    if(!env) {
-        return "development"
-    } else if(env == 'development') {
-        return "development"
-    } else if(env == 'production') {
-        return "production"
-    } else {
-        return "development"
-    }
+    const workspaceRoot = useWorkspaceRoot();
+    return workspaceRoot === 'workspace' ? 'development' : 'admin';
 }

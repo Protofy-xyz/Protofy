@@ -41,7 +41,7 @@ import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@m
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { getPendingResult, API } from 'protolib/base';
-import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType, TabGroup } from 'protolib';
+import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType, TabGroup, useWorkspaceRoot } from 'protolib';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { SelectList } from './SelectList';
 import { usePageParams, useQueryState } from 'protolib/next'
@@ -154,6 +154,7 @@ const Subtabs = ({ subtabs }: any) => {
     const [hrefProtocol, setHrefProtocol] = useState(undefined)
     const [hrefHost, setHrefHost] = useState(undefined)
     const { resolvedTheme } = useThemeSetting()
+    const workspaceRoot = useWorkspaceRoot()
 
     useEffect(() => {
         if (isDev) {
@@ -166,21 +167,22 @@ const Subtabs = ({ subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                let href = (SiteConfig.workspaceRoot == '/' ? '' : SiteConfig.workspaceRoot) + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
+                
+                let href = "/" + workspaceRoot + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
                 const originalHref = href
-                href = SiteConfig.getProductionURL(href, hrefProtocol, hrefHost)
+                //href = SiteConfig.getProductionURL(href, hrefProtocol, hrefHost)
                 // if(typeof window !== 'undefined' && (hrefPort !== undefined && window.location.port !== hrefPort)) {
-                if (isDev) {
-                    return hrefProtocol && hrefHost && <a href={href} key={index}>
-                        <Tinted>
-                            <PanelMenuItem
-                                selected={router.asPath.startsWith(originalHref.replace(/\/$/, ''))}
-                                icon={getIcon(subtab.icon)}
-                                text={subtab.name}
-                            />
-                        </Tinted>
-                    </a>
-                }
+                // if (isDev) {
+                //     return hrefProtocol && hrefHost && <a href={href} key={index}>
+                //         <Tinted>
+                //             <PanelMenuItem
+                //                 selected={router.asPath.startsWith(originalHref.replace(/\/$/, ''))}
+                //                 icon={getIcon(subtab.icon)}
+                //                 text={subtab.name}
+                //             />
+                //         </Tinted>
+                //     </a>
+                // }
 
                 return <Link href={href} key={index}>
                     <Tinted>
@@ -242,20 +244,20 @@ export const PanelMenu = ({ workspace }) => {
     const { push, removePush } = usePageParams(state)
     useQueryState(setState)
 
-    if(isReady) {
-        console.log('ready query: ', query)
-    }
+    // if(isReady) {
+    //     console.log('ready query: ', query)
+    // }
 
-    useUpdateEffect(() => {
-        if(!environ) return
-        if(environ == 'development') {
-            removePush('env')
-            return
-        }
+    // useUpdateEffect(() => {
+    //     if(!environ) return
+    //     if(environ == 'development') {
+    //         removePush('env')
+    //         return
+    //     }
 
-        push('env', environ)
+    //     push('env', environ)
         
-    }, [environ])
+    // }, [environ])
 
     return (<YStack pt="$3">
         <Tinted>
