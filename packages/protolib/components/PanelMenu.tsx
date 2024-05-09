@@ -170,7 +170,7 @@ const Subtabs = ({ subtabs }: any) => {
                 
                 let href = "/" + workspaceRoot + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
                 const originalHref = href
-                //href = SiteConfig.getProductionURL(href, hrefProtocol, hrefHost)
+                href = SiteConfig.getProductionURL(href, hrefProtocol, hrefHost)
                 // if(typeof window !== 'undefined' && (hrefPort !== undefined && window.location.port !== hrefPort)) {
                 // if (isDev) {
                 //     return hrefProtocol && hrefHost && <a href={href} key={index}>
