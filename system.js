@@ -16,7 +16,7 @@ const config = {
             "description": "API services for protofy",
             "route": (req, mode) => {
                 if(req.url.startsWith('/api/') || req.url == '/api') {
-                    return process.env.API_URL ?? 'http://localhost:'+(mode == 'production' ? 4001 : 3001)
+                    return process.env.API_URL ?? 'http://localhost:'+(mode == 'production' ? 3001 : 3001)
                 }
             }
         },

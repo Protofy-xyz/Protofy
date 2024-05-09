@@ -1,6 +1,6 @@
 import { PageModel } from '.'
 import { DataView } from 'protolib'
-import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR } from 'protolib'
+import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR, useEnv} from 'protolib'
 import { z } from 'protolib/base'
 import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
@@ -66,6 +66,7 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
 export default {
     'pages': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
+            const env = useEnv()
             const defaultData = { data: { web: true, electron: false, protected: false, template: 'blank' } }
             const router = useRouter();
             const { replace } = usePageParams(pageState)
@@ -145,6 +146,9 @@ export default {
                 </AlertDialog>
 
                 <DataView
+                    openMode={env === 'development' ? 'edit' : 'view'}
+                    hideAdd={env !== 'development'}
+                    disableItemSelection={ env !== 'development'}
                     integratedChat
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
@@ -162,14 +166,14 @@ export default {
                         DataTable2.column("permissions", row => row.permissions, "permissions", row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
                     )}
                     onAddButton={() => { setAddOpen(true) }}
-                    extraMenuActions={[
+                    extraMenuActions={env == 'development' ? [
                         {
                             text: "Edit Page file",
                             icon: Pencil,
                             action: (element) => { replace('editFile', element.getDefaultFilePath()) },
                             isVisible: (data) => true
                         }
-                    ]}
+                    ]:[]}
                     model={PageModel}
                     pageState={pageState}
                     icons={PageIcons}

@@ -1,8 +1,16 @@
-import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize } from "tamagui";
+import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize, SelectTriggerProps } from "tamagui";
 import { ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
 import { useEffect, useMemo, useState } from "react";
 
-export function SelectList({ title, value, elements, setValue, triggerProps, valueProps, ...props }: SelectProps & { triggerProps?: any, valueProps?: any, title: any, elements: any[], value: any, setValue: any }) {
+export function SelectList({ title, value, elements, setValue, triggerProps, valueProps, rawDisplay, ...props }: SelectProps & { triggerProps?: SelectTriggerProps, rawDisplay?:boolean, title: any, elements: any[], value: any, setValue: any }) {
+
+  let displaySelected = elements.find((element) => element.value && element.value === value)
+  if(displaySelected) {
+    displaySelected = displaySelected.caption
+  } else {
+    displaySelected = value
+  }
+  
   return (
     <Select
       id="select"
@@ -12,8 +20,9 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
       {...props}
     >
       <YStack id={"eo-select-list-" + title} />
-      <Select.Trigger f={21} iconAfter={ChevronDown} {...triggerProps}>
-        <Select.Value placeholder="choose an option">{value}</Select.Value> {/* this could change in the future */}
+      <Select.Trigger f={1} iconAfter={ChevronDown} {...triggerProps}>
+        {!rawDisplay && <Select.Value {...valueProps} placeholder="choose an option">{displaySelected}</Select.Value>}
+        {rawDisplay && displaySelected}
       </Select.Trigger>
 
       <Adapt when="sm" platform="touch">
@@ -73,12 +82,12 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
                     <Select.Item
                       debug="verbose"
                       index={i}
-                      key={item}
-                      value={item}
+                      key={item.value ?? item}
+                      value={item.value ?? item}
                       style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}
                     >
                       <YStack id={"eo-select-list-"+title+"-item-" + i}></YStack>
-                      <Select.ItemText>{item}</Select.ItemText>
+                      <Select.ItemText>{item.caption ?? item}</Select.ItemText>
                       <Select.ItemIndicator marginLeft="auto">
                         <Check size={16} />
                       </Select.ItemIndicator>

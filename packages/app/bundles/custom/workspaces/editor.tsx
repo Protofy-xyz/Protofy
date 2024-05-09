@@ -11,8 +11,8 @@ export default {
             { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
             { "name": "Services", "icon": Cog, "type": "services", "path": "/"},
         ],
-        "CMS": [
-            { "name": "Files", "icon": "folder", "type": "files", "path": "?path=packages/app/bundles/custom" },
+        "Content": [
+            { "name": "Files", "icon": "folder", "type": "files", "path": "?path=/" },
             { "name": "Databases", "icon": "database", "type": "databases", "path": "/"},
             { "name": "Resources", "icon": Library, "type": "resources", "path": "/"},
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "?path=/apps/next/public" },
