@@ -9,7 +9,7 @@ export const useRedirectToEnviron = () => {
   
     useEffect(() => {
       if(!router.isReady) return;
-      if(router.asPath.startsWith('/workspace/') && !router.asPath.includes('dev') && !router.asPath.includes('prod')) {
+      if(router.asPath.startsWith('/workspace/') && !router.asPath.startsWith('/workspace/dev/') && !router.asPath.startsWith('/workspace/prod/')) {
         router.replace('/workspace/'+(SiteConfig.defaultWorkspace??'dev')+'/'+router.asPath.split('/').slice(2).join('/'));
       }
     }, [router.isReady]);
