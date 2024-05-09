@@ -11,6 +11,7 @@ import {DataView, API, AdminPage, PaginatedDataSSR } from 'protolib'
 import { Tag } from '@tamagui/lucide-icons'
 import { context } from "app/bundles/uiContext";
 import { useRouter } from "next/router";
+import { useRedirectToEnviron } from 'protolib'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
@@ -20,6 +21,8 @@ const sourceUrl = prefix + name
 export default {
     route: Protofy("route", "{{route}}"),
     component: ({pageState, initialItems, pageSession, extraData}:any) => {
+        useRedirectToEnviron()
+        
         return (<AdminPage title="{{object}}" pageSession={pageSession}>
             <DataView
                 rowIcon={Tag}

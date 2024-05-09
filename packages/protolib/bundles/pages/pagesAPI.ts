@@ -58,12 +58,24 @@ const getDB = (path, req, session) => {
         if (page) yield [page.name, JSON.stringify(page)];
       }
     },
-    async del (key, value) {
+    async del (key, value:any) {
       value = JSON.parse(value)
+      const route = value.route.startsWith('/') ? value.route : '/' + value.route
       const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
-      await deleteFile(fspath.join(getRoot(req), "apps/next/pages", value.route + '.tsx'))
-      await deleteFile(fspath.join(getRoot(req), "apps/electron/pages", value.route + '.tsx'))
+      await deleteFile(fspath.join(getRoot(req), "apps/next/pages", route + '.tsx'))
+      const pagePath = "apps/electron/pages" + route + '.tsx'
+      await deleteFile(fspath.join(getRoot(req), pagePath))
+
+      if(route.startsWith('/workspace/')) {
+        const devPath = fspath.join(getRoot(req), "apps/next/pages", route.replace('/workspace/', '/workspace/dev/') + '.tsx')
+        const prodPath = fspath.join(getRoot(req), "apps/next/pages", route.replace('/workspace/', '/workspace/prod/') + '.tsx')
+        
+        try { await deleteFile(devPath) } catch(e) {console.error('Delete dev workspace page failed: ', e)}
+        try { await deleteFile(prodPath) } catch(e) {console.error('Delete prod workspace page failed: ', e)}
+      }
+
       await deleteFile(filePath)
+      
     },
 
     async put(key, value) {
@@ -72,6 +84,7 @@ const getDB = (path, req, session) => {
       const prevPage = getPage(filePath, req)
       const template = fspath.basename(value.template ?? 'default')
       const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
+      const route = value.route.startsWith('/') ? value.route : '/' + value.route
       try {
         await fs.access(filePath, fs.constants.F_OK)
         // console.log('File: ' + filePath + ' already exists, not executing template')
@@ -85,7 +98,7 @@ const getDB = (path, req, session) => {
               template: `/packages/protolib/bundles/pages/templates/${template}.tpl`,
               variables: {
                 ...value,
-                route: value.route.startsWith('/') ? value.route : '/' + value.route,
+                route: route,
                 permissions: value.permissions ? JSON.stringify(value.permissions) : '[]',
                 object: object,
                 _object: object.toLowerCase(),
@@ -114,22 +127,34 @@ const getDB = (path, req, session) => {
       arg.replaceWithText(value.permissions ? JSON.stringify(value.permissions) : '[]')
 
       arg = getDefinition(sourceFile, '"route"')
-      arg.replaceWithText(value.route ? JSON.stringify(value.route) : '""')
+      arg.replaceWithText(route ? JSON.stringify(route) : '""')
       sourceFile.save()
 
-      if (prevPage && prevPage.route != value.route) {
+      const pagesAppDir = nextPagesDir(getRoot(req))
+      if (prevPage && prevPage.route != route) {
         //delete previous route if changed
-        const prevFile = fspath.join(nextPagesDir(getRoot(req)), prevPage.route + '.tsx')
+        const prevRoute = prevPage.route.startsWith('/') ? prevPage.route : '/' + prevPage.route
+        const prevFile = fspath.join(pagesAppDir, prevRoute + '.tsx')
         console.log('Deleting prev page', prevFile)
         await fs.unlink(prevFile)
+
+        if(prevRoute.startsWith('/workspace/')) {
+          const devPath = fspath.join(pagesAppDir, prevRoute.replace('/workspace/', '/workspace/dev/') + '.tsx')
+          const prodPath = fspath.join(pagesAppDir, prevRoute.replace('/workspace/', '/workspace/prod/') + '.tsx')
+          try {await fs.unlink(devPath)} catch (e) {console.error('Delete dev workspace page failed: ', e)}
+          try {await fs.unlink(prodPath)} catch (e) {console.error('Delete prod workspace page failed: ', e)}
+        }
+
         console.log('Deleted')
       }
 
       //link in nextPages
-      const pagesAppDir = nextPagesDir(getRoot(req))
+      const appFilePath = fspath.join(pagesAppDir, route + '.tsx')
+      const devPath = fspath.join(pagesAppDir, route.replace('/workspace/', '/workspace/dev/') + '.tsx')
+      const prodPath = fspath.join(pagesAppDir, route.replace('/workspace/', '/workspace/prod/') + '.tsx')
+
       try {
         //TODO: routes with subdirectories
-        const appFilePath = fspath.join(pagesAppDir, value.route + '.tsx')
         await fs.access(appFilePath, fs.constants.F_OK)
         if (!value.web) {
           await fs.unlink(appFilePath)
@@ -139,7 +164,7 @@ const getDB = (path, req, session) => {
         if (value.web) {
           //page does not exist, create it
           const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-            name: value.route + '.tsx',
+            name: route + '.tsx',
             data: {
               options: {
                 template: `/packages/protolib/bundles/pages/templates/nextPage.tpl`,
@@ -153,6 +178,14 @@ const getDB = (path, req, session) => {
           })
           if (result.isError) {
             throw result.error
+          }
+
+          console.log('---------------------------------------------')
+          console.log('checking if route is workspace route: ', route, route.startsWith('/workspace/'))
+          if(route.startsWith('/workspace/')) {
+            console.log('is a workspace route, creating: ', devPath, prodPath)
+            await fs.copyFile(appFilePath, devPath)
+            await fs.copyFile(appFilePath, prodPath)
           }
         }
       }

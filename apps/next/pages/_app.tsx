@@ -20,13 +20,14 @@ import {getBaseConfig} from 'app/BaseConfig'
 setConfig(getBaseConfig("next", process))
 import { Provider } from 'app/provider'
 import Head from 'next/head'
-import React, { createContext } from 'react'
+import React from 'react'
 import type { SolitoAppProps } from 'solito'
 import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
-import {useSession, AppConfContext} from 'protolib'
+import { useSession, AppConfContext } from 'protolib'
+
 initSchemaSystem()
 
 if (process.env.NODE_ENV === 'production') {

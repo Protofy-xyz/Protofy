@@ -1,16 +1,15 @@
-import Head from 'next/head'
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { SiteConfig } from 'app/conf';
 
-export default function Page(props: any) {
-    const { replace } = useRouter();
-    useEffect(() => replace('/'), [])
-    
-    return (
-        <>
-            <Head>
-                <title>Protofy</title>
-            </Head>
-        </>
-    )
-}
+const Home: React.FC = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+      router.replace('/workspace/'+SiteConfig.defaultWorkspace+'/'+SiteConfig.defaultWorkspacePage);
+  }, [router]);
+
+  return null;
+};
+
+export default Home;
