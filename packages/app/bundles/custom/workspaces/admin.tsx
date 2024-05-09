@@ -15,9 +15,9 @@ export default {
             { "name": "Services", "icon": Cog, "type": "services", "path": "/"},
         ],
         "Development": [
-            { "name": "Objects", "icon": "box", "type": "objects", "path": "/", "visibility": ["development"] },
-            { "name": "Pages", "icon": "layout", "type": "pages", "path": "/", "visibility": ["development"] },
-            { "name": "Automations", "icon": ToyBrick, "type": "apis", "path": "/", "visibility": ["development"]},
+            { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },//"visibility": ["development"]
+            { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
+            { "name": "Automations", "icon": ToyBrick, "type": "apis", "path": "/" },
         ],
         "Content": [
             { "name": "Files", "icon": "folder", "type": "files", "path": "?path=/" },
