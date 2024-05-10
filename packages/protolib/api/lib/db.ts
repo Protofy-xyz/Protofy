@@ -325,12 +325,12 @@ export class ProtoLevelDB extends ProtoDB {
 }
 
 export const connectDB = (dbPath: string, initialData?: Object, options?) => {
-    const _dbPath = dbPath.includes('\\') || dbPath.includes('/') ? dbPath : ('../../data/databases/' + dbPath);
+    const _dbPath = ('../../data/databases/' + dbPath);
     return ProtoLevelDB.initDB(_dbPath, initialData, options)
 }
 
 export const getDB = (dbPath: string, req?, session?): ProtoDB => {
-    const _dbPath = dbPath.includes('\\') || dbPath.includes('/') ? dbPath : ('../../data/databases/' + dbPath);
+    const _dbPath = ('../../data/databases/' + dbPath);
     return ProtoLevelDB.connect(_dbPath)
 }
 
