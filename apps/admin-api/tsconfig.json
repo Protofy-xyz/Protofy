@@ -37,7 +37,7 @@
     "../../packages/app/bundles/adminapi.ts",
     "../../packages/app/bundles/objects.ts",
     "../../packages/app/bundles/library.ts",
-    "../../packages/app/bundles/objects.ts",
+    "../../packages/app/bundles/storageProviders.ts",
     "../../packages/app/BaseConfig.ts",
     "../../packages/app/conf.ts",
     "../../packages/app/initialData.ts",

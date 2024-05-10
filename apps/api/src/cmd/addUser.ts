@@ -1,5 +1,6 @@
 
-import { getDB, hash } from 'protolib/api';
+import { hash } from 'protolib/api';
+import { getDB } from 'app/bundles/storageProviders'
 import { CmdRegisterSchema} from 'protolib/schema';
 import moment from 'moment';
 import { UserModel } from 'protolib/bundles/users/usersSchemas';

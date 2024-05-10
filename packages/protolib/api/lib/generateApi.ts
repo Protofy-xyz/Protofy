@@ -1,10 +1,8 @@
 import { generateEvent } from "../../bundles/events/eventsLibrary";
 import { getServiceToken } from './serviceToken'
-import { connectDB as _connectDB, getDB as _getDB } from "./db";
 import { handler } from './handler'
-import fs from 'fs';
-import path from 'path';
 import { getLogger } from '../../base';
+import { connectDB as _connectDB, getDB as _getDB } from "app/bundles/storageProviders";
 
 const logger = getLogger()
 
@@ -87,7 +85,7 @@ export const AutoAPI = ({
     skipDatabaseIndexes,
     dbOptions = {}
 }: AutoAPIOptions) => (app, context) => {
-    const dbPath = '../../data/databases/' + (dbName ? dbName : modelName)
+    const dbPath =(dbName ? dbName : modelName)
     connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {
         indexes: modelType.getIndexes(),
         dbOptions: {
