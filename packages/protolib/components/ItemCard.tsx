@@ -74,8 +74,8 @@ export const ItemCard = memo(React.forwardRef(
               zi={1000}
               w="100%"
               bc="$backgroundHover"
-              btrr={18}
-              btlr={18}
+              btrr={10}
+              btlr={10}
               jc="center"
               {...topBarProps}
             >
@@ -105,8 +105,8 @@ export const ItemCard = memo(React.forwardRef(
                 px="$2"
                 py="$2"
                 bc="$backgroundHover"
-                btrr={18}
-                btlr={18}
+                btrr={10}
+                btlr={10}
                 space="$5"
                 jc="center"
                 {...topBarProps}
