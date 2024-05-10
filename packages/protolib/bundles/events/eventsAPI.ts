@@ -1,12 +1,13 @@
 import { EventModel, EventType } from ".";
-import { AutoAPI, getDB, handler } from '../../api'
+import { AutoAPI, handler } from '../../api'
+import { getDB } from 'app/bundles/storageProviders'
 import { getServiceToken } from "../../api/lib/serviceToken";
 import { API } from "../../base";
 
-const dbPaths = '../../data/databases/events_paths'
-const dbFroms = '../../data/databases/events_froms'
-const dbUsers = '../../data/databases/events_users'
-const dbEvents = '../../data/databases/events'
+const dbPaths = 'events_paths'
+const dbFroms = 'events_froms'
+const dbUsers = 'events_users'
+const dbEvents = 'events'
 
 const registerEventMeta = async (data) => {
     if(!await getDB(dbPaths).exists(data.path)) {

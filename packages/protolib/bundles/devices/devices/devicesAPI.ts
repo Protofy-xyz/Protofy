@@ -1,6 +1,7 @@
 import { API } from "../../../base";
 import { DevicesModel } from ".";
-import { getDB, AutoAPI, handler } from '../../../api'
+import { AutoAPI, handler } from '../../../api'
+import { getDB } from 'app/bundles/storageProviders'
 import { getServiceToken } from "../../../api/lib/serviceToken";
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from '../../../base/logger';
@@ -34,7 +35,7 @@ export const DevicesAPI = (app, context) => {
             return
         }
 
-        const db = getDB('../../data/databases/devices')
+        const db = getDB('devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
         const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
         if(!subsystem) {
@@ -62,7 +63,7 @@ export const DevicesAPI = (app, context) => {
             return
         }
 
-        const db = getDB('../../data/databases/devices')
+        const db = getDB('devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
         const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
         if(!subsystem) {

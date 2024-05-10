@@ -10,7 +10,7 @@ const dbHandlers: any = {}
 
 const optionsTable = {}
 
-type ProtoDBConfig = {
+export type ProtoDBConfig = {
     context?: any,
     name?: string
 }
@@ -325,11 +325,18 @@ export class ProtoLevelDB extends ProtoDB {
 }
 
 export const connectDB = (dbPath: string, initialData?: Object, options?) => {
-    return ProtoLevelDB.initDB(dbPath, initialData, options)
+    const _dbPath = ('../../data/databases/' + dbPath);
+    return ProtoLevelDB.initDB(_dbPath, initialData, options)
 }
 
 export const getDB = (dbPath: string, req?, session?): ProtoDB => {
-    return ProtoLevelDB.connect(dbPath)
+    const _dbPath = ('../../data/databases/' + dbPath);
+    return ProtoLevelDB.connect(_dbPath)
+}
+
+export const leveldbProvider = {
+    connectDB,
+    getDB
 }
 
 export const closeDBS = async () => {
