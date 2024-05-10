@@ -1,7 +1,7 @@
 import { DatabaseEntryModel, DatabaseModel } from '.'
-import { DataView, API, AdminPage, PaginatedDataSSR, AlertDialog } from 'protolib'
+import { DataView, API, AdminPage, PaginatedDataSSR, AlertDialog, Tinted, Center } from 'protolib'
 import { useRouter } from "next/router"
-import { YStack } from '@my/ui'
+import { Spinner, YStack } from '@my/ui'
 import { DataCard } from '../../components/DataCard'
 import { useState } from 'react'
 import { Server, DatabaseBackup } from '@tamagui/lucide-icons'
@@ -129,6 +129,7 @@ export default {
             const emptyItemValue = { exapmle: "exampleValue" }
             const [isPopoverOpen, setIsPopoverOpen] = useState(false)
             const currentDB = router.query.database ?? ''
+
             const fetch = async () => {
                 setContent(await API.fetch('/adminapi/v1/databases/' + currentDB))
             }
@@ -163,8 +164,10 @@ export default {
                 setTmpItem(null)
                 return result
             }
+
+            
             return (<AdminPage title={currentDB} workspace={workspace} pageSession={pageSession}>
-                <DataView
+                {router.isReady ? <DataView
                     integratedChat
                     key={renew}
                     sourceUrl={'/adminapi/v1/databases/' + currentDB}
@@ -202,7 +205,7 @@ export default {
                             </YStack>
                         }
                     }}
-                />
+                /> : <Tinted><Center><Spinner size='large' color="$color7" scale={2} /></Center></Tinted>}
             </AdminPage>)
         },
         getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.database, ['admin'])
