@@ -51,11 +51,13 @@ const _fetch = async (urlOrData, data?, update?, plain?, retryNum=0):Promise<Pen
             }
 
             if (!res.ok) {
-                console.error('API retry: ', res.status, realUrl)
-                if(retryNum < 10 && (res.status < 400 || res.status > 499)) {
+
+                if(retryNum < 10 && (res.status < 400 || res.status > 499) && res.status !== 500) {
+                    console.error('API retry: ', res.status, realUrl)
                     await wait(1000);
                     return _fetch(urlOrData, data, update, plain, retryNum + 1)
                 }
+                
                 const err = getPendingResult('error', null, resData)
                 if (update) {
                     update(err)
