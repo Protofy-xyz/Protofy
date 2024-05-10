@@ -14,8 +14,8 @@ const logger = getLogger()
 
 logger.debug(`API Module loaded: ${__filename.split('.')[0]}`);
 
-const dbPath = '../../data/databases/auth'
-const groupDBPath = '../../data/databases/auth_groups'
+const dbPath = 'auth'
+const groupDBPath = 'auth_groups'
 
 connectDB(dbPath, getInitialData(dbPath), {indexes: UserModel.getIndexes()}) //preconnect database
 

@@ -35,7 +35,7 @@ export const DevicesAPI = (app, context) => {
             return
         }
 
-        const db = getDB('../../data/databases/devices')
+        const db = getDB('devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
         const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
         if(!subsystem) {
@@ -63,7 +63,7 @@ export const DevicesAPI = (app, context) => {
             return
         }
 
-        const db = getDB('../../data/databases/devices')
+        const db = getDB('devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
         const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
         if(!subsystem) {

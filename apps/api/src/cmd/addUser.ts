@@ -13,7 +13,7 @@ if (process.argv.length !== 5) {
 const username = process.argv[2]
 const password = process.argv[3]
 const type = process.argv[4]
-const dbPath = '../../data/databases/auth'
+const dbPath = 'auth'
 
 const addUser = async () => {
     console.log('Adding user: ', username, 'type: ', type)
