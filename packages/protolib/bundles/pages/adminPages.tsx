@@ -146,9 +146,9 @@ export default {
                 </AlertDialog>
 
                 <DataView
-                    openMode={env === 'development' ? 'edit' : 'view'}
-                    hideAdd={env !== 'development'}
-                    disableItemSelection={ env !== 'development'}
+                    openMode={env === 'dev' ? 'edit' : 'view'}
+                    hideAdd={env !== 'dev'}
+                    disableItemSelection={ env !== 'dev'}
                     integratedChat
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
@@ -166,7 +166,7 @@ export default {
                         DataTable2.column("permissions", row => row.permissions, "permissions", row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
                     )}
                     onAddButton={() => { setAddOpen(true) }}
-                    extraMenuActions={env == 'development' ? [
+                    extraMenuActions={env == 'dev' ? [
                         {
                             text: "Edit Page file",
                             icon: Pencil,
