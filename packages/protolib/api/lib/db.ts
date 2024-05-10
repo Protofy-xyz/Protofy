@@ -248,7 +248,7 @@ export class ProtoLevelDB extends ProtoDB {
     }
 
     static async initDB(dbPath: string, initialData = {}, options?) {
-        const { indexes, dbOptions, ...levelOptions } = options
+        const { indexes, dbOptions, ...levelOptions } = options ?? {}
         optionsTable[dbPath] = dbOptions
         if (!fs.existsSync(dbPath)) {
             fs.mkdirSync(dbPath);
