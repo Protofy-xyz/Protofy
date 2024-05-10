@@ -5,5 +5,5 @@ export const useEnv = () => {
     const router = useRouter();
     const path = router.pathname;  
     const env = path.split('/')[2];
-    return env === 'dev' ? 'development' : 'production';
+    return env
 }

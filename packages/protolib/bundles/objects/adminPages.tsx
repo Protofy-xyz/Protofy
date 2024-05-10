@@ -20,9 +20,9 @@ export default {
             const env = useEnv()
             return (<AdminPage title="Objects" pageSession={pageSession}>
                 <DataView
-                    openMode={env === 'development' ? 'edit' : 'view'}
-                    hideAdd={env !== 'development'}
-                    disableItemSelection={ env !== 'development'}
+                    openMode={env === 'dev' ? 'edit' : 'view'}
+                    hideAdd={env !== 'dev'}
+                    disableItemSelection={ env !== 'dev'}
                     integratedChat
                     rowIcon={Box}
                     sourceUrl={sourceUrl}
@@ -55,7 +55,7 @@ export default {
                     }
                     }
 
-                    extraMenuActions={env == "development" ? [
+                    extraMenuActions={env == "dev" ? [
                         {
                             text: "Edit Object file",
                             icon: Pencil,

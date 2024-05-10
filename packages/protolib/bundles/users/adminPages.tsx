@@ -1,6 +1,6 @@
 import { UserModel } from '.'
 import { z } from 'protolib/base'
-import { DataTable2, Chip, DataView, usePrompt, AdminPage, PaginatedDataSSR  } from 'protolib'
+import { DataTable2, Chip, DataView, usePrompt, AdminPage, PaginatedDataSSR, useEnv } from 'protolib'
 import moment from 'moment'
 import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
 import { API } from '../../base/Api'
@@ -19,6 +19,7 @@ export default {
     'users': {
         component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
             const [groups, setGroups] = useState(extraData?.groups ?? getPendingResult("pending"))
+            const env = useEnv()
 
             usePendingEffect((s) => {API.get(groupsSourceUrl, s)}, setGroups, extraData?.objects)
 
@@ -64,14 +65,13 @@ export default {
                             throw "Passwords do not match"
                         }
                         const { repassword, ...finalData } = data
-                        return finalData
+                        return {...finalData, environments: [env]}
                     }}
                     onEdit={data => {
                         if (data.password != data.repassword) {
                             throw "Passwords do not match"
                         }
                         const { repassword, ...finalData } = data
-                        return finalData
                     }}
                     customFields={{
                         type: {
