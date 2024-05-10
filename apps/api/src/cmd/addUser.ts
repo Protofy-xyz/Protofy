@@ -5,7 +5,7 @@ import { CmdRegisterSchema} from 'protolib/schema';
 import moment from 'moment';
 import { UserModel } from 'protolib/bundles/users/usersSchemas';
 
-if (process.argv.length !== 5) {
+if (process.argv.length < 5) {
     console.error('Usage: yarn add-user email password type',process.argv.length)
     process.exit(1)
 }
@@ -13,7 +13,9 @@ if (process.argv.length !== 5) {
 const username = process.argv[2]
 const password = process.argv[3]
 const type = process.argv[4]
+const environments = process.argv.length > 5 ? process.argv.slice(5) : ['*']
 const dbPath = 'auth'
+
 
 const addUser = async () => {
     console.log('Adding user: ', username, 'type: ', type)
@@ -35,7 +37,8 @@ const addUser = async () => {
             password: await hash(password),
             createdAt: currentDateISO,
             from: 'cmd',
-            type: type
+            type: type,
+            environments: environments
         }
         const entityModel = UserModel.load(userData)
         await getDB(dbPath).put(username, JSON.stringify(userData))
