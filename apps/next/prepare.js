@@ -29,7 +29,7 @@ if (!fs.existsSync('./../next-compiled/.next')) {
     });
 }
 
-function copyFiles(source, target, skip=['prod', 'dev', '[...page].tsx', 'index.tsx']) {
+function copyFiles(source, target, skip=[]) {
     const files = fs.readdirSync(source);
     files.forEach((file) => {
         if(skip.includes(file)) return
@@ -53,7 +53,7 @@ try {
 } catch(e) {}
 
 fs.mkdirSync('./pages/workspace/dev', { recursive: true })
-copyFiles('./pages/workspace', './pages/workspace/dev')
+copyFiles('./pages/workspace', './pages/workspace/dev', ['prod', 'dev', '[...page].tsx', 'index.tsx'])
 
 //prod
 try {
@@ -61,4 +61,4 @@ try {
 } catch(e) {}
 
 fs.mkdirSync('./pages/workspace/prod', { recursive: true })
-copyFiles('./pages/workspace', './pages/workspace/prod')
+copyFiles('./pages/workspace', './pages/workspace/prod', ['prod', 'dev', '[...page].tsx', 'index.tsx'])
