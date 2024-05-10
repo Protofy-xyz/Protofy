@@ -7,15 +7,14 @@ if (!semver.satisfies(process.version, requiredVersion)) {
     console.error('If you need help, join our discord: https://discord.gg/VpeZxMFfYW')
     process.exit(1);
 }
+const directories = [
+    "./data",
+    "./logs/raw",
+    "./data/databases"
+];
 
-if (!fs.existsSync("./data")) {
-    fs.mkdirSync('./data')
-}
-
-if (!fs.existsSync("./logs/raw")) {
-    fs.mkdirSync('./logs/raw')
-}
-
-if (!fs.existsSync("./data/databases")) {
-    fs.mkdirSync('./data/databases')
-}
+directories.forEach(directory => {
+    if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory);
+    }
+});
