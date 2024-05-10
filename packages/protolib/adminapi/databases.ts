@@ -28,7 +28,6 @@ const requireAdmin = () => handler(async (req, res, session, next) => {
 
 app.post('/adminapi/v1/databases/:dbname/:key', requireAdmin(), handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)
     await db.put(req.params.key, JSON.stringify(req.body))
     res.send(req.body)
@@ -37,7 +36,6 @@ app.post('/adminapi/v1/databases/:dbname/:key', requireAdmin(), handler(async (r
 
 app.get('/adminapi/v1/databases/:dbname/:key/delete', requireAdmin(), handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)
     await db.del(req.params.key)
     res.send({"result": "deleted"})
@@ -46,7 +44,6 @@ app.get('/adminapi/v1/databases/:dbname/:key/delete', requireAdmin(), handler(as
 
 app.post('/adminapi/v1/dbsearch/:dbname', requireAdmin(), handler(async (req, res) => {
     const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    await connectDB(dbname, getInitialData(dbname))
     const db = getDB(dbname)
     const total = []
     for await (const [key, value] of db.iterator()) {
