@@ -1,5 +1,6 @@
 import { EventModel, EventType } from ".";
-import { AutoAPI, getDB, handler } from '../../api'
+import { AutoAPI, handler } from '../../api'
+import { getDB } from 'app/bundles/storageProviders'
 import { getServiceToken } from "../../api/lib/serviceToken";
 import { API } from "../../base";
 

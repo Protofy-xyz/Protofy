@@ -1,7 +1,8 @@
 
 import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from '../schema';
 import { getInitialData } from 'app/initialData'
-import { connectDB, getDB, handler, checkPassword, hash, genToken, app, getSessionContext } from 'protolib/api'
+import { handler, checkPassword, hash, genToken, app, getSessionContext } from 'protolib/api'
+import { connectDB, getDB } from 'app/bundles/storageProviders';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";

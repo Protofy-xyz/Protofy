@@ -1,4 +1,5 @@
-import { handler, AutoAPI, getRoot, connectDB, getDB, closeDBS} from '../../api'
+import { handler, AutoAPI, getRoot, closeDBS} from '../../api'
+import { connectDB, getDB } from 'app/bundles/storageProviders';
 import * as fs from 'fs'
 import * as path from 'path'
 import * as fspath from 'path'

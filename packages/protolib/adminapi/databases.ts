@@ -1,7 +1,8 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
-import {connectDB, getDB, handler, app} from 'protolib/api'
+import { handler, app} from 'protolib/api'
+import { connectDB, getDB } from 'app/bundles/storageProviders'
 import { getInitialData } from 'app/initialData';
 import { getLogger } from '../base';
 
