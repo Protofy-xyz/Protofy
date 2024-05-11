@@ -1,6 +1,6 @@
 import { PageModel } from '.'
 import { DataView } from 'protolib'
-import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR, useEnv} from 'protolib'
+import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR, useWorkspaceEnv} from 'protolib'
 import { z } from 'protolib/base'
 import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
@@ -66,7 +66,7 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
 export default {
     'pages': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
-            const env = useEnv()
+            const env = useWorkspaceEnv()
             const defaultData = { data: { web: true, electron: false, protected: false, template: 'blank' } }
             const router = useRouter();
             const { replace } = usePageParams(pageState)

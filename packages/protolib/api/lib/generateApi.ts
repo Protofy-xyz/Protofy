@@ -86,6 +86,7 @@ export const AutoAPI = ({
     dbOptions = {}
 }: AutoAPIOptions) => (app, context) => {
     const dbPath =(dbName ? dbName : modelName)
+    const groupIndexes = modelType.getGroupIndexes()
     connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {
         indexes: modelType.getIndexes(),
         groupIndexes: modelType.getGroupIndexes(),
@@ -96,6 +97,18 @@ export const AutoAPI = ({
             ...dbOptions
         }     
     }) //preconnect database
+
+    const _onBeforeList = async (data, session, req) => {
+        groupIndexes.forEach((val) => {
+            if(data[val.name] === undefined) return
+            if(data.filter === undefined) {
+                data.filter = {}
+            }
+            data.filter[val.key] = data[val.name]
+        })
+        return await onBeforeList(data, session, req)
+    }
+
     const _list = (req, allResults, _itemsPerPage) => {
         const page = Number(req.query.page) || 0;
         const orderBy: string = req.query.orderBy as string;
@@ -155,7 +168,7 @@ export const AutoAPI = ({
         const parseResult = async (value) => {
             const model = modelType.unserialize(value, session);
             const extraListData = typeof extraData?.list == 'function' ? await extraData.list(session, model, req) : (extraData?.list ?? {})
-            const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, await onBeforeList(req.query, session, req));
+            const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, await _onBeforeList(req.query, session, req));
             return listItem
         }
         const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);

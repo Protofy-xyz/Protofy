@@ -30,25 +30,31 @@ const genNewSession = (data: any) => {
 }
 
 app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
-    const fail = (request, res) => {
-        res.status(401).send('"Incorrect user or password"')
+
+    const request: LoginRequest = req.body
+    const fail = (msg) => {
+        res.status(401).send('"'+msg+'"')
         generateEvent({
             path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
             from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
             user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-            payload: {username: request.username, clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
+            payload: {reason: msg, username: request.username, clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
         }, getServiceToken())
     }
-    const request: LoginRequest = req.body
     try {
         LoginSchema.parse(request)
         const db = getDB(dbPath, req)
         if(!await db.exists(request.username)) {
-            return fail(request, res)
+            return fail('Incorrect user or password')
         }
 
         const storedUser = JSON.parse(await db.get(request.username))
         const entityModel = UserModel.load(storedUser)
+
+        if(!entityModel.hasEnvironment(req.query.env ?? 'prod')) {
+            return fail("This user is not registered for this environment")
+        }
+
         if (await checkPassword(request.password, storedUser.password)) {
             //update lastLogin
             await db.put(storedUser.username, JSON.stringify({ ...storedUser, lastLogin: moment().toISOString() }))
@@ -78,11 +84,11 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
             logger.info({ newSession }, "Session created: " + request.username)
             return
         } else {
-            return fail(request, res)
+            return fail('Incorrect user or password')
         }
     } catch (error) {
         if(error.name == 'ZodError') {
-            return fail(request, res)
+            return fail('Incorrect user or password')
         } else {
             res.status(500).send('"Server error"')
         }
@@ -113,10 +119,13 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
         const newUser = {
             ...newUserData,
             createdAt: moment().toISOString(),
-            from: 'api'
+            from: 'api',
+            environments: [req.query.env ?? 'prod']
         }
         const entityModel = UserModel.load(newUser)
-        await db.put(request.username, JSON.stringify({...newUser, password: await hash(password)}))
+        const userData = JSON.stringify({...newUser, password: await hash(password)})
+
+        await db.put(request.username, userData)
 
         let group = {
             admin: false,
@@ -133,7 +142,7 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
             path: 'auth/register/user', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
             from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
             user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
-            payload: {} // event payload, event-specific data
+            payload: {environments: [req.query.env ?? 'prod']} // event payload, event-specific data
         }, getServiceToken())
         logger.info({ newUserData }, "User created: " + newUserData.username)
 
@@ -142,7 +151,8 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
             id: request.username,
             type: defaultGroup,
             admin: group.admin ? true : false,
-            permissions: [...(group.admin ? ["*"] : []), defaultGroup, ...(group.permissions ?? [])]
+            permissions: [...(group.admin ? ["*"] : []), defaultGroup, ...(group.permissions ?? [])],
+            environments: [req.query.env ?? 'prod']
         }
         res.send({
             session: genNewSession(newSession),
