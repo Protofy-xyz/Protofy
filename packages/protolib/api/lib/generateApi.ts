@@ -128,7 +128,29 @@ export const AutoAPI = ({
         const allResults: any[] = [];
 
         const search = req.query.search;
-        const filter = req.query.filter;
+        const groupIndexes = modelType.getGroupIndexes().reduce((acc, val) => { 
+            if(req.query[val.name] === undefined) return acc
+            if(acc) {
+                acc[val.key] = req.query[val.name]; 
+                return acc 
+            } else {
+                return {
+                    [val.key]: req.query[val.name]
+                }
+            }
+        }, null)
+
+
+        let filter = req.query.filter
+
+        if(groupIndexes) {
+            if(filter) {
+                filter = {...(filter as object), ...groupIndexes}
+            } else {
+                filter = groupIndexes
+            }
+        }
+
         const preListData = typeof extraData?.prelist == 'function' ? await extraData.prelist(session, req) : (extraData?.prelist ?? {})
         const parseResult = async (value) => {
             const model = modelType.unserialize(value, session);
