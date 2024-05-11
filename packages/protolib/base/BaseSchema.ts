@@ -6,7 +6,7 @@ initSchemaSystem()
 
 interface ZodExtensions {
     indexed(indexFn?: Function): this;
-    groupIndex(groupCode: string): this;
+    groupIndex(groupName?: string, groupCode?: string): this;
     label(caption: string): this;
     hint(hintText: string): this;
     display(views?: string[] | undefined): this;
@@ -79,8 +79,9 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.groupIndex = function (groupCode?: string) {
+    type.prototype.groupIndex = function (groupName?: string, groupCode?: string) {
         this._def.groupIndex = true;
+        this._def.groupName = groupName;
         this._def.groupCode = groupCode;
         return this;
     };

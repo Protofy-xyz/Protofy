@@ -48,7 +48,13 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }
         const groupIndexesSchema = this.objectSchema.is('groupIndex')
         const groupIndexes = groupIndexesSchema.getFields()
-        this.groupIndexes = groupIndexes.map((field) => {return {key: field, fn: groupIndexesSchema.getFieldKeyDefinition(field, 'groupCode')}})
+        this.groupIndexes = groupIndexes.map((field) => {
+            return {
+                key: field, 
+                name: groupIndexesSchema.getFieldKeyDefinition(field, 'groupName') ?? field, 
+                fn: groupIndexesSchema.getFieldKeyDefinition(field, 'groupCode')
+            }
+        })
     }
 
     get(key: string, defaultValue?) {

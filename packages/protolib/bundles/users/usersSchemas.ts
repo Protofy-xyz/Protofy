@@ -8,7 +8,7 @@ export const UserSchema = Schema.object({
     permissions: z.array(z.string()).optional().label("additional permissions"),
     createdAt: z.string().min(1).generate((obj) => moment().toISOString()).search().hidden().indexed(),
     lastLogin: z.string().optional().search().hidden().indexed(),
-    environments: z.array(z.string()).optional().help("The environments the user has access to. '*' means all environments").hidden().groupIndex("return !data.environments || data.environments.includes('*') ? ['dev', 'prod'] : data.environments"),
+    environments: z.array(z.string()).optional().help("The environments the user has access to. '*' means all environments").hidden().groupIndex("env", "return !data.environments || data.environments.includes('*') ? ['dev', 'prod'] : data.environments"),
     from: z.string().min(1).search().generate((obj) => 'admin').help("Interface used to create the user. Users can be created from command line or from the admin panel").hidden()
 })
 export type UserType = z.infer<typeof UserSchema>;
