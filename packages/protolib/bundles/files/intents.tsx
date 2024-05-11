@@ -219,6 +219,7 @@ const MonacoViewer = ({ path }) => {
     }
   }, [fileContent]);
 
+  
   return (
     <AsyncView waitForLoading={1000} key={path} atom={fileContent}>
       <XStack mt={30} f={1} width={"100%"}>
