@@ -27,6 +27,7 @@ export const DataView = forwardRef(({
     disableItemSelection = false,
     initialItems,
     sourceUrl,
+    sourceUrlParams = {},
     numColumnsForm = 1,
     name,
     pluralName,
@@ -68,7 +69,7 @@ export const DataView = forwardRef(({
     const { query } = useRouter();
     const [state, setState] = useState(pageState ?? query)
     const fetch = async (fn) => {
-        const data = await API.get({ url: sourceUrl, ...state })
+        const data = await API.get({ url: sourceUrl, ...sourceUrlParams, ...state })
         fn(data)
     }
 
@@ -249,6 +250,7 @@ export const DataView = forwardRef(({
             Error: {items.error && items.error.error ? items.error.error : items.error}
         </Center>
     }
+
 
     return (<AsyncView atom={currentItems}>
         <YStack ref={ref} height="100%" f={1}>

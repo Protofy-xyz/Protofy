@@ -34,6 +34,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     objectSchema: ProtoSchema
     modelName: string
     indexes: {keys: string[], primary: string}
+    groupIndexes: {key: string, fn: Function}[] | []
     constructor(data: any, schema: ZodObject<any>, session?: SessionDataType, modelName?:string) {
         this.data = data;
         this.session = session ?? createSession();
@@ -45,6 +46,9 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
             primary: this.idField,
             keys: this.objectSchema.is('indexed').getFields()
         }
+        const groupIndexesSchema = this.objectSchema.is('groupIndex')
+        const groupIndexes = groupIndexesSchema.getFields()
+        this.groupIndexes = groupIndexes.map((field) => {return {key: field, fn: groupIndexesSchema.getFieldKeyDefinition(field, 'groupCode')}})
     }
 
     get(key: string, defaultValue?) {
@@ -57,6 +61,14 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     getObjectSchema() {
         return this.objectSchema
+    }
+
+    static getGroupIndexes() {
+        return this._newInstance({}).getGroupIndexes()
+    }
+
+    getGroupIndexes() {
+        return this.groupIndexes
     }
 
     static getIndexes() {

@@ -92,7 +92,7 @@ export class ProtoLevelDB extends ProtoDB {
     private batch
     constructor(location, options?, config?: ProtoDBConfig) {
         super(location, options, config);
-        this.capabilities = ['pagination']
+        this.capabilities = ['pagination', 'groupBySingle']
         this.rootDb = level(location, options);
         this.db = sublevel(this.rootDb, 'values')
         const dbOptions = optionsTable[location] ?? {}
@@ -122,7 +122,14 @@ export class ProtoLevelDB extends ProtoDB {
         return result
     }
 
-    async count() {
+    async count(filter?) {
+        if(filter) {
+            const groupDb = sublevel(this.rootDb, 'group_' + filter.key)
+            const groupCollection = sublevel(groupDb, filter.value)
+            const counter = sublevel(groupCollection, 'counter')
+            return await counter.get('total')
+        }
+        
         const counter = sublevel(this.rootDb, 'counter')
         return await counter.get('total')
     }
@@ -138,8 +145,22 @@ export class ProtoLevelDB extends ProtoDB {
         return []
     }
 
-    async getPageItems(total, key, pageNumber, itemsPerPage, direction = 'asc') {
-        const ordered = sublevel(this.rootDb, 'order_' + key)
+    async hasGroupIndexes(groupIndexes) {
+        const storedGroupIndexes = await this.getGroupIndexes()
+        return groupIndexes.every(gi => storedGroupIndexes.find(sgi => sgi.key == gi))
+    }
+
+    async getPageItems(total, key, pageNumber, itemsPerPage, direction, filter) {
+        //filter is like {key: 'type', value: 'admin'}
+        let ordered
+        if(filter) {
+            const group = sublevel(this.rootDb, 'group_' + filter.key)
+            const groupCollection = sublevel(group, filter.value)
+            ordered = sublevel(groupCollection, 'list')
+        } else {
+            ordered = sublevel(this.rootDb, 'order_' + key)
+        }
+
         const allItems = []
         const maxLength = String(total - 1).length;
         for await (const [itemKey] of ordered.iterator({ values: false, gt: String(pageNumber * itemsPerPage).padStart(maxLength, '0'), limit: itemsPerPage, reverse: direction == 'desc' })) {
@@ -178,6 +199,17 @@ export class ProtoLevelDB extends ProtoDB {
         return await ProtoLevelDB.regenerateIndexes(this.rootDb, this.db, this.location, value);
     }
 
+    async getGroupIndexes() {
+        try {
+            const indexTable = sublevel(this.rootDb, 'indexTable')
+            return JSON.parse(await indexTable.get('groupIndexes'))
+        } catch (e) {
+            logger.error({ db: this.location }, 'Error reading group indexes for database: ' + this.location)
+        }
+
+        return []
+    }
+
     static async regenerateIndexes(rootDb, db, location, value?) {
         let indexData;
         let groupIndexData;
@@ -212,9 +244,55 @@ export class ProtoLevelDB extends ProtoDB {
             const counter = sublevel(rootDb, 'counter');
             await counter.put('total', JSON.stringify(allItems.length));
 
-            // if(groupIndexData && groupIndexData.length) {
+            if(groupIndexData && groupIndexData.length) {
+                for (var i = 0; i < groupIndexData.length; i++) {
+                    const currentIndex = groupIndexData[i];
+                    const groupSubLevel = sublevel(rootDb, 'group_' + currentIndex.key);
+                    // const grouped = sublevel(rootDb, 'group_' + currentIndex);
+                    const groupItems = allItems.reduce((acc, item) => {
+                        if(currentIndex.fn) {
+                            //fn is a string with a small js like  "(data) => data.x > 10"
+                            //TODO: use new function to evaluate the expression
+                            const fn = new Function('data', currentIndex.fn);
+                            const itemKeys = fn(item)
+                            itemKeys.forEach(ckey => {
+                                if (!acc[ckey]) {
+                                    acc[ckey] = []
+                                }
+                                acc[ckey].push(item[indexData.primary])
+                            })
+                            return acc
+                        } else {
+                            if(!acc[item[currentIndex.key]]) {
+                                acc[item[currentIndex.key]] = []
+                            }
+                            acc[item[currentIndex.key]].push(item[indexData.primary])
+                        }
+                    }, {})
 
-            // }
+                    //at this point, groupItems is an object like: { 'group1': [1,2,3], 'group2': [4,5,6] }
+                    //where the numbers are the primary keys of the items that belong to that group
+                    //we need to create a sublevel for each group, and store the items in the order they are in the group
+                    //using batch
+
+                    for (const groupKey of Object.keys(groupItems)) {
+                        const subLevelGroupCollection = sublevel(groupSubLevel, groupKey);
+                        await subLevelGroupCollection.clear();
+                        
+                        const list = sublevel(subLevelGroupCollection, 'list');
+                        const total = sublevel(subLevelGroupCollection, 'counter');
+                        total.put('total', JSON.stringify(groupItems[groupKey].length));
+                        await list.clear();
+                        await list.batch(groupItems[groupKey].map((item, i) => {
+                            return String(i).padStart(String(groupItems[groupKey].length - 1).length, '0') + '_' + item
+                        }).map(k => ({
+                            type: 'put',
+                            key: k,
+                            value: ''
+                        })));
+                    }
+                }
+            }
 
             if(indexData && indexData.keys.length) {    
                 const maxLength = String(allItems.length - 1).length;

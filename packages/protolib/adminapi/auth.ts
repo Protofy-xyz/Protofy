@@ -17,7 +17,10 @@ logger.debug(`API Module loaded: ${__filename.split('.')[0]}`);
 const dbPath = 'auth'
 const groupDBPath = 'auth_groups'
 
-connectDB(dbPath, getInitialData(dbPath), {indexes: UserModel.getIndexes()}) //preconnect database
+connectDB(dbPath, getInitialData(dbPath), {
+    indexes: UserModel.getIndexes(),
+    groupIndexes: UserModel.getGroupIndexes()
+}) //preconnect database
 
 const genNewSession = (data: any) => {
     return {

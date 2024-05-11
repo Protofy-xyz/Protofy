@@ -88,6 +88,7 @@ export const AutoAPI = ({
     const dbPath =(dbName ? dbName : modelName)
     connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {
         indexes: modelType.getIndexes(),
+        groupIndexes: modelType.getGroupIndexes(),
         dbOptions: {
             batch: false,
             batchLimit: 100,
@@ -136,16 +137,20 @@ export const AutoAPI = ({
             return listItem
         }
         const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);
-        if(!search && !filter && !skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
+
+        const filterKeys = Object.keys(filter || {})
+        if(!search && (!filter || ((!req.query.orderBy || req.query.orderBy == modelType.getIdField()) && filterKeys.length == 1 && db.hasCapability('groupBySingle') && await db.hasGroupIndexes(filterKeys))) && !skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
+            // console.log('Using indexed retrieval: ', modelName, 'filters: ', filter)
             const indexedKeys = await db.getIndexedKeys()
-            const total = parseInt(await db.count(), 10)
+            const filterData = filter ? {key: filterKeys[0], value: filter[filterKeys[0]]} : null
+            const total = parseInt(await db.count(filterData), 10)
             const page = Number(req.query.page) || 0;
             const orderBy: string = req.query.orderBy ? req.query.orderBy as string : modelType.getIdField()
             const orderDirection = req.query.orderDirection || 'asc';
             if(indexedKeys.length && indexedKeys.includes(orderBy)) {
                 const result = {
                     itemsPerPage:_itemsPerPage,
-                    items: await Promise.all((await db.getPageItems(total, orderBy, page, _itemsPerPage, orderDirection)).map(async x => await parseResult(x))),
+                    items: await Promise.all((await db.getPageItems(total, orderBy, page, _itemsPerPage, orderDirection, filterData)).map(async x => await parseResult(x))),
                     total: total,
                     page: req.query.all ? 0 : page,
                     pages: req.query.all ? 1 : Math.ceil(total / _itemsPerPage)
@@ -155,7 +160,7 @@ export const AutoAPI = ({
             }
         }
 
-        console.log("Using basic retrieval without indexes: ", modelName)
+        console.log("Using basic retrieval without indexes: ", modelName, 'filters: ', filter)
 
         for await (const [key, value] of db.iterator()) {
             //console.log("***********************key", key, "value ", value)
