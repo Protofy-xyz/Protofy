@@ -1,12 +1,13 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
-import { hasSessionCookie, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, Page } from 'protolib'
+import { hasSessionCookie, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, Page, useEnv} from 'protolib'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG } from '@my/ui'
 import { useRouter } from 'next/router';
 import { getErrorMessage } from "@my/ui";
 import { SiteConfig } from '../../conf'
+
 
 export function SignInPage(props) {
   return (
@@ -43,7 +44,7 @@ function SignIn() {
   const [authState, setAuthState] = useState<PendingResult>(getPendingResult('pending'))
   const [session, setSession] = useSession()
   const [sessionContext, setSessionContext] = useSessionContext()
-
+  const env = useEnv()
   const router = useRouter()
 
   useEffect(() => {
@@ -67,7 +68,7 @@ function SignIn() {
 
   const handleSignin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    Auth.login(email, password, setAuthState)
+    Auth.login(email, password, env, setAuthState)
   }
 
   return (

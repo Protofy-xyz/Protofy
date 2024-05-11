@@ -1,5 +1,5 @@
 import { APIModel } from '.'
-import { DataTable2, API, DataView, AlertDialog, AdminPage, useEnv } from 'protolib'
+import { DataTable2, API, DataView, AlertDialog, AdminPage, useWorkspaceEnv } from 'protolib'
 import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView, useToastController } from "@my/ui";
 import { ToyBrick, Eye, ChevronDown } from '@tamagui/lucide-icons'
 import { z } from 'protolib/base'
@@ -139,7 +139,7 @@ const objectsSourceUrl = '/adminapi/v1/objects?all=1'
 export default {
     'apis': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
-            const env = useEnv()
+            const env = useWorkspaceEnv()
             const { replace } = usePageParams(pageState ?? {})
             usePrompt(() => `At this moment the user is browsing the Rest API management page. The Rest API management page allows to list, create, read, update and delete API definitions. API definitions are typescript files using express.
             The system allows to create APIs either from an empty template, or from an AutoCRUD template. The automatic crud template creates an automatic CRUD API for a given object. 

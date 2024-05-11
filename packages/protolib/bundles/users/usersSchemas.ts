@@ -17,10 +17,29 @@ export class UserModel extends ProtoModel<UserModel> {
         super(data, UserSchema, session, "User");
     }
 
+    hasEnvironment(env: string) {
+        return !this.data.environments || this.data.environments.includes('*') || this.data.environments.includes(env)
+    }
+
+    static load(data: any, session?: SessionDataType): UserModel {
+        return this._newInstance(data, session);
+    }
+
     list(search?, session?, extraData?, params?): any {
-        if(params && params.filter && Object.keys(params.filter).length == 1 && params.filter.environments) {
-            return this.read()
+        if(params && params.filter && params.filter.environments) {
+            const {environments, ...filter} = params.filter
+            if(!this.hasEnvironment(environments)) { 
+                return
+            }
+            params = {
+                ...params,
+                filter: {
+                    ...filter,
+                }
+            }
         }
+        
+        //pass params with params.filter.environments removed
 
         return super.list(search, session, extraData, params)
     }
