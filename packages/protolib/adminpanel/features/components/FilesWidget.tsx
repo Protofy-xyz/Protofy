@@ -33,7 +33,7 @@ export const FileWidget = ({
     ...props
 }: FilesWidget & YStackProps) => {
     const mime = lookup(currentFile)
-
+    if(currentFile === '') return <></>
     const resolved = useIntent(getIntent('open', 'files', { isModified, extraIcons: icons, name: currentFileName, path: currentFile, mime }))
 
     return <>
