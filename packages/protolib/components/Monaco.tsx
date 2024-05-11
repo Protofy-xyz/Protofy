@@ -3,7 +3,7 @@ import Editor, { EditorProps, useMonaco, loader } from '@monaco-editor/react';
 import useKeypress from 'react-use-keypress';
 import { useThemeSetting } from '@tamagui/next-theme';
 import { useTheme } from '@my/ui';
-import {Tinted, useTint} from 'protolib'
+import { Tinted, useTint } from 'protolib'
 
 type Props = {
     sourceCode: string,
@@ -53,9 +53,9 @@ function hslStringToHex(hslStr) {
 export const Monaco = ({
     path = '',
     sourceCode,
-    onChange = () => {},
-    onSave = () => {},
-    onEscape = () => {},
+    onChange = () => { },
+    onSave = () => { },
+    onEscape = () => { },
     ...props
 }: Props & EditorProps) => {
     const { resolvedTheme } = useThemeSetting();
@@ -64,8 +64,11 @@ export const Monaco = ({
 
     const theme = useTheme()
     const { tint } = useTint()
-    let tokenColor = theme[tint+'10'].val
+    let tokenColor = theme[tint + '10'].val
     tokenColor = tokenColor.startsWith('hsl') ? hslStringToHex(tokenColor) : tokenColor
+
+    let lightTokenColor = theme[tint + '7'].val
+    lightTokenColor = lightTokenColor.startsWith('hsl') ? hslStringToHex(lightTokenColor) : lightTokenColor
     // console.log('token color: ', theme[tint+'10'].val, tokenColor)
     if (monaco) {
         monaco.editor.defineTheme(customThemeName, {
@@ -73,10 +76,24 @@ export const Monaco = ({
             inherit: true,
             rules: [
                 { token: 'keyword', foreground: tokenColor },
+                { token: 'inKeyword', foreground: lightTokenColor },
                 { token: 'punctuation', foreground: tokenColor },
             ],
             colors: {
                 'editor.background': resolvedTheme === 'dark' ? '#151515' : '#FFFFFF',
+            }
+        });
+
+        monaco.languages.register({ id: 'gherkin' });
+
+        monaco.languages.setMonarchTokensProvider('gherkin', {
+            tokenizer: {
+                root: [
+                    [/(Feature:|Scenario:|Rule:|Example:)/, 'comment'],
+                    [/(Given|When|Then|And|But)/, 'keyword'],
+                    [/"[^"]*"/, 'string'],
+                    [/#.*/, 'comment'],
+                ]
             }
         });
     }
@@ -87,7 +104,7 @@ export const Monaco = ({
             noSemanticValidation: true,
             noSyntaxValidation: true
         });
-    
+
         monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
             noSemanticValidation: true,
             noSyntaxValidation: true
@@ -110,7 +127,10 @@ export const Monaco = ({
             }
         });
     }
-
+    const extensionToLang = {
+        'feature': 'gherkin'
+    }
+    const ext = path.split('.').pop()
     return (
         <Tinted><Editor
             onMount={handleEditorDidMount}
@@ -118,6 +138,7 @@ export const Monaco = ({
             theme={monaco ? customThemeName : undefined}
             value={sourceCode}
             onChange={onChange}
+            defaultLanguage={extensionToLang[ext]}
             {...props}
         /></Tinted>
     );
