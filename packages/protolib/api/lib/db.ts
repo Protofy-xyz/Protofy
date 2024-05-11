@@ -180,14 +180,16 @@ export class ProtoLevelDB extends ProtoDB {
 
     static async regenerateIndexes(rootDb, db, location, value?) {
         let indexData;
+        let groupIndexData;
         try {
             const indexTable = sublevel(rootDb, 'indexTable')
             indexData = JSON.parse(await indexTable.get('indexes'))
+            groupIndexData = JSON.parse(await indexTable.get('groupIndexes'))
         } catch (e) {
             logger.debug('Table has no indexes: ', location)
         }
 
-        if (indexData && indexData.keys.length) {
+        if ((indexData && indexData.keys.length) || groupIndexData && groupIndexData.length) {
             const indexes = indexData.keys
             let allItems = []
 
@@ -210,18 +212,32 @@ export class ProtoLevelDB extends ProtoDB {
             const counter = sublevel(rootDb, 'counter');
             await counter.put('total', JSON.stringify(allItems.length));
 
-            const maxLength = String(allItems.length - 1).length;
-            for (var i = 0; i < indexes.length; i++) {
-                const currentIndex = indexes[i];
-                const ordered = sublevel(rootDb, 'order_' + currentIndex);
-                await ordered.clear();
-                await ordered.batch(allItems.map((item, i) => {
-                    return String(i).padStart(maxLength, '0') + '_' + item[indexData.primary]
-                }).sort().map(k => ({
-                    type: 'put',
-                    key: k,
-                    value: ''
-                })));
+            // if(groupIndexData && groupIndexData.length) {
+
+            // }
+
+            if(indexData && indexData.keys.length) {    
+                const maxLength = String(allItems.length - 1).length;
+                for (var i = 0; i < indexes.length; i++) {
+                    const currentIndex = indexes[i];
+                    const ordered = sublevel(rootDb, 'order_' + currentIndex);
+                    await ordered.clear();
+                    await ordered.batch(allItems.sort((a, b) => {
+                        if (a[currentIndex] < b[currentIndex]) {
+                            return -1;
+                        }
+                        if (a[currentIndex] > b[currentIndex]) {
+                            return 1;
+                        }
+                        return 0;
+                    }).map((item, i) => {
+                        return String(i).padStart(maxLength, '0') + '_' + item[indexData.primary]
+                    }).map(k => ({
+                        type: 'put',
+                        key: k,
+                        value: ''
+                    })));
+                }
             }
         }
     }
@@ -248,7 +264,7 @@ export class ProtoLevelDB extends ProtoDB {
     }
 
     static async initDB(dbPath: string, initialData = {}, options?) {
-        const { indexes, dbOptions, ...levelOptions } = options ?? {}
+        const { indexes, groupIndexes, dbOptions, ...levelOptions } = options ?? {}
         optionsTable[dbPath] = dbOptions
         if (!fs.existsSync(dbPath)) {
             fs.mkdirSync(dbPath);
@@ -305,12 +321,12 @@ export class ProtoLevelDB extends ProtoDB {
         const rootDb = level(dbPath, levelOptions);
         const db = sublevel(rootDb, 'values')
 
-        if (indexes) {
+        if (indexes || groupIndexes) {
             const indexTable = sublevel(rootDb, 'indexTable')
-            await indexTable.put('indexes', JSON.stringify(indexes))
+            if(indexes) await indexTable.put('indexes', JSON.stringify(indexes))
+            if(groupIndexes) await indexTable.put('groupIndexes', JSON.stringify(groupIndexes))
             this.regenerateIndexes(rootDb, db, dbPath)
         }
-
     }
 
     static connect(location, options?, config?): ProtoLevelDB {
