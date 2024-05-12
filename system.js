@@ -1,4 +1,5 @@
 const isProduction = process.env.NODE_ENV === 'production';
+const disableProdApi = true
 
 const config = {
     "services": [
@@ -16,7 +17,12 @@ const config = {
             "description": "API services for protofy",
             "route": (req, mode) => {
                 if(req.url.startsWith('/api/') || req.url == '/api') {
-                    return process.env.API_URL ?? 'http://localhost:'+(mode == 'production' ? 3001 : 3001)
+                    return process.env.API_URL ?? 'http://localhost:'+(mode == 'production' && !disableProdApi? 4001 : 3001)
+                }
+
+                if(req.url.startsWith('/_dev/api/') || req.url == '/_dev/api') {
+                    var target = process.env.API_URL ?? 'http://localhost:3001'
+                    return target
                 }
             }
         },
