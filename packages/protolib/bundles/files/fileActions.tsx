@@ -91,7 +91,6 @@ const fileActions = [
     }, 
     {
         getComponent: (selected, path, setCustomAction, setFiles) => {
-            console.log("PSEEEEEEEEEL", selected)
             return <CreateComponent 
             buttonText={"Rename"}
             defaultInput={selected[0].name}
