@@ -10,7 +10,11 @@ if (!semver.satisfies(process.version, requiredVersion)) {
 const directories = [
     "./data",
     "./logs/raw",
-    "./data/databases"
+    "./data/databases",
+    "./data/pre",
+    "./data/pre/databases",
+    "./data/prod",
+    "./data/prod/databases"
 ];
 
 directories.forEach(directory => {

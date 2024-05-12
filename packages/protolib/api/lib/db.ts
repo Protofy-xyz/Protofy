@@ -418,14 +418,17 @@ export class ProtoLevelDB extends ProtoDB {
     }
 }
 
+const getDBPath = (dbPath) => {
+    const [dbName, env] = dbPath.split('/').reverse()
+    return '../../data/' + (env ? env + '/databases/' : 'databases/') + dbName
+}
+
 export const connectDB = (dbPath: string, initialData?: Object, options?) => {
-    const _dbPath = ('../../data/databases/' + dbPath);
-    return ProtoLevelDB.initDB(_dbPath, initialData, options)
+    return ProtoLevelDB.initDB(getDBPath(dbPath), initialData, options)
 }
 
 export const getDB = (dbPath: string, req?, session?): ProtoDB => {
-    const _dbPath = ('../../data/databases/' + dbPath);
-    return ProtoLevelDB.connect(_dbPath)
+    return ProtoLevelDB.connect(getDBPath(dbPath))
 }
 
 export const leveldbProvider = {
