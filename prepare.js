@@ -11,8 +11,8 @@ const directories = [
     "./data",
     "./logs/raw",
     "./data/databases",
-    "./data/pre",
-    "./data/pre/databases",
+    "./data/dev",
+    "./data/dev/databases",
     "./data/prod",
     "./data/prod/databases"
 ];
