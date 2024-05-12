@@ -23,5 +23,6 @@ export const DeviceSdksAPI = AutoAPI({
     modelType: DeviceSdkModel,
     initialData,
     skipDatabaseIndexes: true,
-    prefix: '/adminapi/v1/'
+    prefix: '/adminapi/v1/',
+    useDatabaseEnvironment: false
 })

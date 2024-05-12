@@ -1,7 +1,7 @@
 import { generateEvent } from "../../bundles/events/eventsLibrary";
 import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
-import { getLogger } from '../../base';
+import { getEnv, getLogger } from '../../base';
 import { connectDB as _connectDB, getDB as _getDB } from "app/bundles/storageProviders";
 
 const logger = getLogger()
@@ -53,6 +53,7 @@ type AutoAPIOptions = {
         batchLimit?: number,
         batchTimeout?: number
     }
+    useDatabaseEnvironment?: boolean
 }
 
 export const AutoAPI = ({
@@ -83,9 +84,11 @@ export const AutoAPI = ({
     onBeforeDelete = async (data, session?, req?) => data,
     onAfterDelete = async (data, session?, req?) => data,
     skipDatabaseIndexes,
-    dbOptions = {}
+    dbOptions = {},
+    useDatabaseEnvironment = false
 }: AutoAPIOptions) => (app, context) => {
-    const dbPath =(dbName ? dbName : modelName)
+    const env = useDatabaseEnvironment ? getEnv() + '/' : ''
+    const dbPath =(env + (dbName ? dbName : modelName))
     const groupIndexes = modelType.getGroupIndexes()
     connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {
         indexes: modelType.getIndexes(),

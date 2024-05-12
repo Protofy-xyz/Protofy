@@ -31,5 +31,6 @@ export const DeviceDefinitionsAPI = AutoAPI({
             data.config.sdkConfig = deviceBoard.data.config[data.sdk]
             return data
         }
-    }
+    },
+    useDatabaseEnvironment: false
 })

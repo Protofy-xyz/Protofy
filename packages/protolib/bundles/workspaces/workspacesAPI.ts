@@ -34,7 +34,8 @@ export const WorkspacesAPI = AutoAPI({
   requiresAdmin: ['*'],
   connectDB: () => { },
   getDB: customGetDB,
-  operations: ['list']
+  operations: ['list'],
+  useDatabaseEnvironment: false
 })
 
 export default WorkspacesAPI
