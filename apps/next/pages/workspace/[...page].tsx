@@ -1,16 +1,27 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { SiteConfig } from 'app/conf';
+import { getWorkspaceEnv } from 'protolib';
+import { getEnv } from 'protolib/base';
+
+const serviceEnv = getEnv()
 
 const Home: React.FC = () => {
   const router = useRouter();
   const page = router.query.page
+
+
   useEffect(() => {
+    const workspaceEnv = getWorkspaceEnv(document.location.pathname)
+    const defaultWorkspace = workspaceEnv == 'dev'? 'dev' : (SiteConfig.defaultWorkspace??'dev')
+
     if(!page) return
-    if(page[1] != 'dev' && page[1] != 'prod') {
-      router.replace('/workspace/'+(SiteConfig.defaultWorkspace??'dev')+'/'+(page?.join('/')??''));
+    if(workspaceEnv == 'prod' && serviceEnv == 'dev') { 
+      router.replace('/workspace/dev/'+(page?.slice(2).join('/')??''));  
+    } else if(workspaceEnv == 'dev' || workspaceEnv == 'prod') {
+      router.replace('/workspace/'+workspaceEnv+'/'+SiteConfig.defaultWorkspacePage)
     } else {
-      router.replace('/workspace/'+page[1]+'/'+SiteConfig.defaultWorkspacePage);
+      router.replace('/workspace/'+defaultWorkspace+'/'+SiteConfig.defaultWorkspacePage);
     }
   }, [router, page]);
 
