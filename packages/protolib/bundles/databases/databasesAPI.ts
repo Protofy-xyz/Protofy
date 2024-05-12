@@ -87,6 +87,7 @@ const EventAPI = AutoAPI({
   connectDB: () => { },
   getDB: customGetDB,
   operations: ['list', 'create', 'read', 'delete'],
+  useDatabaseEnvironment: false,
   paginatedRead: { model: DatabaseEntryModel }
 })
 

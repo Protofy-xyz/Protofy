@@ -73,6 +73,6 @@ export const DeviceCoresAPI = AutoAPI({
             })
             return data
         }
-    }
-
+    },
+    useDatabaseEnvironment: false
 })

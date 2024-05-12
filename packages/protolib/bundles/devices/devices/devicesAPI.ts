@@ -14,6 +14,7 @@ export const DevicesAutoAPI = AutoAPI({
     modelType: DevicesModel,
     prefix: '/adminapi/v1/',
     skipDatabaseIndexes: true,
+    useDatabaseEnvironment: false
 })
 
 const logger = getLogger()

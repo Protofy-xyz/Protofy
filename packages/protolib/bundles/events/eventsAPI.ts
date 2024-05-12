@@ -35,7 +35,8 @@ const EventAPI = AutoAPI({
     logLevel: "debug",
     dbOptions: {
         batch: true
-    }
+    },
+    useDatabaseEnvironment: false
 })
 
 export const EventsAPI = async (app, context) => {
