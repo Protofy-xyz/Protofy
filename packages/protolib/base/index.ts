@@ -7,5 +7,6 @@ export * from './env'
 export * from './Api'
 export * from './lib/isElectron'
 export * from './lib/perms'
+export * from './lib/getEnv'
 export * from './logger'
 export const Protofy = (type, x)=> x;

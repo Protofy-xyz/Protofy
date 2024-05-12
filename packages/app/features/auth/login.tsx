@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
-import { hasSessionCookie, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, Page, useEnv} from 'protolib'
+import { hasSessionCookie, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, Page} from 'protolib'
+import { getEnv } from 'protolib/base'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG } from '@my/ui'
@@ -44,7 +45,7 @@ function SignIn() {
   const [authState, setAuthState] = useState<PendingResult>(getPendingResult('pending'))
   const [session, setSession] = useSession()
   const [sessionContext, setSessionContext] = useSessionContext()
-  const env = useEnv()
+  const env = getEnv()
   const router = useRouter()
 
   useEffect(() => {

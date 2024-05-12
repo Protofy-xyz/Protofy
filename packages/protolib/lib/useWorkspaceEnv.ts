@@ -8,7 +8,3 @@ export const useWorkspaceEnv = () => {
     const env = path.split('/')[2];
     return env
 }
-
-export const useEnv = () => {
-    return process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
-}
