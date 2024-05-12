@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Text, Paragraph, Separator, Spinner, Stack, XStack, YStack, Spacer } from 'tamagui'
-import { Page, hasSessionCookie, Session, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, useEnv } from 'protolib'
+import { Page, hasSessionCookie, Session, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult } from 'protolib'
+import { getEnv } from 'protolib/base'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG, getErrorMessage, getValidation } from '@my/ui'
@@ -46,7 +47,7 @@ function SignUp() {
   const [session, setSession] = useSession()
   const [sessionContext, setSessionContext] = useSessionContext()
   const router = useRouter()
-  const env = useEnv()
+  const env = getEnv()
   
   useEffect(() => {
     // @ts-ignore
