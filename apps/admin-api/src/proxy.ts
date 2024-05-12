@@ -23,8 +23,13 @@ export const _startProxy = (Port, mode) => {
         ws: true,
         xfwd: true
     });
+
+    proxy.on('proxyReq', function (proxyReq, req, res, options) {
+        proxyReq.path = req.url.replace('/_dev/api/', '/api/')
+    });
+
     proxy.on('error', (err, req, res) => {
-        if(startTime + 10000 > new Date().getTime()) {
+        if (startTime + 10000 > new Date().getTime()) {
             // Ignore errors that occur within the first 10 seconds of starting the service
             return;
         }
@@ -36,23 +41,23 @@ export const _startProxy = (Port, mode) => {
         res.end('Bad Gateway: Unable to connect to upstream service');
     });
 
-    var server = http.createServer(function(req, res) {
+    var server = http.createServer(function (req, res) {
         // You can define here your custom logic to handle the request
         // and then proxy the request.
         const resolver = system.services.find((resolver) => resolver.route(req, mode))
-        if(!resolver) {
+        if (!resolver) {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.end('Not Found');
             return
         }
-        
+
         logger.trace({
             url: req.url,
             target: resolver.route(req, mode),
             ip: req.connection.remoteAddress,
             method: req.method
-        }, "Proxying request for: "+ req.url + " to: " + resolver.route(req, mode) + " from: " + req.connection.remoteAddress + " method: " + req.method)
-        proxy.web(req, res, { target: resolver.route(req, mode)});
+        }, "Proxying request for: " + req.url + " to: " + resolver.route(req, mode) + " from: " + req.connection.remoteAddress + " method: " + req.method)
+        proxy.web(req, res, { target: resolver.route(req, mode) });
     });
 
     server.on('upgrade', (req, socket, head) => {
@@ -62,7 +67,7 @@ export const _startProxy = (Port, mode) => {
             socket.destroy();
             return;
         }
-        proxy.ws(req, socket, head, { target: resolver.route(req, mode)});
+        proxy.ws(req, socket, head, { target: resolver.route(req, mode) });
     });
     server.listen(Port);
     logger.debug({ service: { protocol: "http", port: Port } }, "Service started: HTTP")
