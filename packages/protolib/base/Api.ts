@@ -12,7 +12,6 @@ const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const _fetch = async (urlOrData, data?, update?, plain?, retryNum=0):Promise<PendingResult | undefined> => {
     const SERVER = getApiUrl()
-    logger.debug(`SERVER: ${SERVER}`);
     let realUrl;
 
     if (typeof urlOrData === 'string') {
