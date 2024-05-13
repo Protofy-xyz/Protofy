@@ -9,6 +9,7 @@ import { useUpdateEffect } from "usehooks-ts";
 import { useTint } from 'protolib'
 import { ItemMenu } from "./ItemMenu";
 import { MultiSelectList } from "./MultiSelectList";
+import { InputColor } from "./InputColor";
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 const iconStyle = { color: "var(--color9)", size: "$1", strokeWidth: 1 }
@@ -433,6 +434,14 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
           ? <DatePicker mode={dateMode} offsetDate={getFormData(ele.name) ? new Date(getFormData(ele.name)) : null} onOffsetChange={isStringDateType ? d => setFormData(ele.name, d.toISOString()) : null} />
           : <DatePicker mode={dateMode} selectedDates={getFormData(ele.name) ? [new Date(getFormData(ele.name))] : null} onDatesChange={!isStringDateType ? d => setFormData(ele.name, d[0]?.toISOString()) : null} />
         }
+      </Stack>
+    </FormElement>
+  }
+
+  if (elementType == "ZodString" && elementDef.color) {
+    return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+      <Stack f={1}>
+        <InputColor color={getFormData(ele.name)} onChange={color => setFormData(ele.name, color.hex)} />
       </Stack>
     </FormElement>
   }

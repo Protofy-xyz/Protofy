@@ -11,6 +11,7 @@ interface ZodExtensions {
     hint(hintText: string): this;
     display(views?: string[] | undefined): this;
     hidden(): this;
+    color(): this;
     generate(val: any, force?: boolean): this;
     before(field: string): this;
     after(field: string): this;
@@ -181,6 +182,11 @@ function extendZodTypePrototype(type: any) {
 
     type.prototype.size = function (size) {
         this._def.size = size;
+        return this;
+    };
+
+    type.prototype.color = function () {
+        this._def.color = true;
         return this;
     };
 
