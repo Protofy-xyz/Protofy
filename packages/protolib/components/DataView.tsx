@@ -61,12 +61,18 @@ interface DataViewProps {
     onAddButton?: any;
     extraMenuActions?: any[];
     deleteable?: () => boolean;
-    objectProps?: EditableObjectProps;
+    objectProps?: EditableObjectProps | {};
     refreshOnHotReload?: boolean;
     quickRefresh?: boolean;
 }
+ 
+export const DataView = (props: DataViewProps & {ready: boolean}) => {
+    return <AsyncView ready={props.ready??true}>
+            <DataViewInternal {...props} />
+    </AsyncView>
+}
 
-export const DataView = forwardRef(({
+const DataViewInternal = forwardRef(({
     onSelectItem,
     itemData,
     rowIcon,
