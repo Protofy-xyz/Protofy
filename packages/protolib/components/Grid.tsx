@@ -1,12 +1,8 @@
 import { isWeb } from '@tamagui/core'
 import { XStack } from '@tamagui/stacks'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import dynamic from 'next/dynamic'
-import Center from './Center'
-import { Spinner, Stack } from 'tamagui'
-import { useContainerPosition, useMasonry, usePositioner, useResizeObserver } from 'masonic'
-import { useTimeout, useWindowSize } from 'usehooks-ts'
-import { Masonry } from 'masonic'
+import React, { useLayoutEffect, useState } from 'react'
+import { Stack } from 'tamagui'
+import { useMasonry, usePositioner, useResizeObserver } from 'masonic'
 // const Masonry = dynamic(() => import('masonic').then(mod => mod.Masonry), {
 //   ssr: false,
 //   loading: () => <Center><Spinner /></Center>, 
@@ -109,6 +105,7 @@ export const useScroller = <T extends HTMLElement = HTMLElement>(
 
 
 export const Grid = React.forwardRef(({overScanBy=5,masonry=true, containerRef, rightGap=0, spacing, children, data, card, columns, itemMinWidth = 200, gap }: GridProps, ref:any)  => {  
+  
   if (isWeb && data && card) {
     if(masonry && containerRef) {
       const container = {current: containerRef.current?.container? containerRef?.current?.container.firstChild: containerRef.current}
