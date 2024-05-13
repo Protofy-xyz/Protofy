@@ -25750,6 +25750,7 @@ __metadata:
     playwright: 1.41.0
     pm2: 5.3.1
     react-chat-widget: ^3.1.4
+    react-color: 2.19.3
     react-contenteditable: 3.3.7
     react-data-table-component: ^7.5.4
     react-data-table-component-extensions: ^1.6.0
