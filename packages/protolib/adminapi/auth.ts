@@ -118,12 +118,12 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
         const { rePassword, password, ...newUserData } = request
         const newUser = {
             ...newUserData,
-            createdAt: moment().toISOString(),
-            from: 'api',
-            environments: [req.query.env ?? 'prod']
+            from: 'signup',
+            environments: [req.query.env ?? 'prod'], 
+            password: await hash(password)
         }
-        const entityModel = UserModel.load(newUser)
-        const userData = JSON.stringify({...newUser, password: await hash(password)})
+        const entityModel = UserModel.load(newUser).create()
+        const userData = JSON.stringify({...entityModel.getData(), password: await hash(password)})
 
         await db.put(request.username, userData)
 
