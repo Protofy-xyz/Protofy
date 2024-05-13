@@ -21,7 +21,7 @@ export class {{name}}Model extends ProtoModel<{{name}}Model> {
 
     public static getApiOptions() {
         return {
-            name: '{{pluralName}}',
+            name: '{{lowername}}',
             prefix: '/api/v1/'
         }
     }

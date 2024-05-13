@@ -174,7 +174,6 @@ export default {
                     initialItems={content}
                     numColumnsForm={1}
                     name={currentDB}
-                    pluralName={currentDB}
                     // hideAdd={true}
                     model={DatabaseEntryModel}
                     pageState={pageState}

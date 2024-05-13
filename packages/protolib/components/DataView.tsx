@@ -30,8 +30,8 @@ export const DataView = forwardRef(({
     sourceUrlParams = {},
     numColumnsForm = 1,
     name,
-    pluralName,
     entityName,
+    pluralName,
     hideAdd = false,
     enableAddToInitialData = false,
     pageState,
@@ -65,7 +65,7 @@ export const DataView = forwardRef(({
     refreshOnHotReload = false,
     quickRefresh = false
 }: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any, ref) => {
-    const _plural = (entityName ?? pluralName) ?? name + 's'
+    const displayName = (entityName ?? pluralName) ?? name
     const { query } = useRouter();
     const [state, setState] = useState(pageState ?? query)
     const fetch = async (fn) => {
@@ -109,7 +109,7 @@ export const DataView = forwardRef(({
     }, [search])
 
     useEffect(() => {
-        setSearchName(_plural)
+        setSearchName(displayName)
     })
 
     useUpdateEffect(() => {
@@ -174,7 +174,7 @@ export const DataView = forwardRef(({
                 itemMinWidth: 320,
                 emptyMessage: <ErrorMessage
                     icon={RowIcon}
-                    msg={`Empty ${_plural} list`}
+                    msg={`Empty ${displayName} list`}
                     detailsColor='$color'
                     containerProps={{ mt: '-30%', o:0.1 }}
                     iconProps={{}}
@@ -382,7 +382,7 @@ export const DataView = forwardRef(({
                         <XStack ml="$2" f={1} ai="center">
                             {rowIcon && <Stack mr="$3"><Tinted><RowIcon color='var(--color7)' /></Tinted></Stack>}
                             <Paragraph>
-                                <Text fontSize="$5" color="$color11">{pluralName ? pluralName.charAt(0).toUpperCase() + pluralName.slice(1) : name.charAt(0).toUpperCase() + name.slice(1) + 's'}</Text>
+                                <Text fontSize="$5" color="$color11">{displayName.charAt(0).toUpperCase() + displayName.slice(1)}</Text>
                             </Paragraph>
                             {hasGlobalMenu ? <Tinted><ItemMenu type={"global"} sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraMenuActions}></ItemMenu></Tinted> : <></>}
                             {toolBarContent}

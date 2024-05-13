@@ -90,8 +90,8 @@ const getDB = (path, req, session) => {
             codeName: codeName,
             name: computedName, 
             codeNameLowerCase: codeNameLowerCase,
-            pluralName: value.name.endsWith('s') ? value.name : value.name + 's', object: value.object } 
-          },
+            object: value.object
+          }},
           path: '/packages/app/bundles/custom/apis'
         }
       })
