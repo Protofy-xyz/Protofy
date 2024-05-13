@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CircuitBoard, Tag, BookOpen, Eye } from '@tamagui/lucide-icons';
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas';
-import { API, Chip, DataTable2, DataView, ButtonSimple, AlertDialog, AdminPage, PaginatedDataSSR, InteractiveIcon } from 'protolib'
+import { API, Chip, DataTable2, DataView, ButtonSimple, AlertDialog, AdminPage, PaginatedData, InteractiveIcon } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceBoardModel } from '../deviceBoards';
 import { DeviceCoreModel } from '../devicecores';
@@ -33,7 +33,7 @@ export default {
     const router = useRouter()
 
     const [boardList, setBoardList] = useState(extraData?.boards ?? getPendingResult('pending'))
-    usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardList, extraData?.deviceDefinitions)
+    usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardList, extraData?.boards)
     const boards = boardList.isLoaded ? boardList.data.items.map(i => DeviceBoardModel.load(i).getData()) : []
 
     const [coresList, setCoresList] = useState(extraData?.cores ?? getPendingResult('pending'))
@@ -139,10 +139,8 @@ export default {
       />
     </AdminPage>)
   },
-  getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async () => {
-    return {
-      boards: await API.get(boardsSourceUrl),
-      cores: await API.get(coresSourceUrl)
-    }
+  getServerSideProps: PaginatedData(sourceUrl, ['admin'], {
+    boards: boardsSourceUrl,
+    cores: coresSourceUrl
   })
 }
