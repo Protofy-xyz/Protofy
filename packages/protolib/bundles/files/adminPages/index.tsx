@@ -1,5 +1,4 @@
-import { NextPageContext } from 'next'
-import { API, withSession, Tinted, Center, getURLWithToken, SSR, usePrompt, AdminPage } from 'protolib'
+import { API, withSession, Tinted, Center, SSR, usePrompt, AdminPage } from 'protolib'
 import dynamic from 'next/dynamic'
 import { Spinner } from 'tamagui'
 import { useRouter } from 'next/router';
@@ -42,5 +41,5 @@ function FilesPage({initialFilesState, pageSession}:any) {
 }
 
 export default {
-    'files': {component: FilesPage }
+    'files': {component: FilesPage, getServerSideProps: SSR(async (context) => withSession(context, ['admin'])) }
 }

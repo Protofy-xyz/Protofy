@@ -1,10 +1,11 @@
 
 import { ObjectModel } from './objectsSchemas'
-import { DataView, DataTable2, Chip, API, AdminPage, PaginatedDataSSR, useWorkspaceEnv } from 'protolib'
+import { DataView, DataTable2, Chip, AdminPage, useWorkspaceEnv } from 'protolib'
 import { Pencil, Box } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 import { XStack, Text } from "@my/ui";
 import { z } from 'protolib/base'
+import { PaginatedData } from '../../lib/SSR';
 
 
 const format = 'YYYY-MM-DD HH:mm:ss'
@@ -66,8 +67,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/objects', ['admin'], {
-            orderBy: 'name'
-        })
+        getServerSideProps: PaginatedData(sourceUrl, ['admin'])
     }
 }

@@ -13,3 +13,5 @@ export default function Page(props:any) {
     </>
   )
 }
+
+export const getServerSideProps = ResourcesPage.resources.getServerSideProps
