@@ -120,7 +120,7 @@ const DataViewInternal = forwardRef(({
 }: DataViewProps, ref) => {
     const displayName = (entityName ?? pluralName) ?? name
     const { query } = useRouter();
-    const [state, setState] = useState(pageState ?? query)
+    const [state, setState] = useState(pageState ?? {})
     const fetch = async (fn) => {
         const data = await API.get({ url: sourceUrl, ...sourceUrlParams, ...state })
         fn(data)

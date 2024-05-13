@@ -9,6 +9,7 @@ import { API, getPendingResult } from '../../base';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { Paragraph, XStack } from 'tamagui';
 import { Tinted } from '../../components/Tinted';
+import { PaginatedData } from '../../lib/SSR';
 
 
 const format = 'HH:mm:ss DD-MM-YYYY'
@@ -29,8 +30,8 @@ export default {
                     initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
 
-            const [options, setOptions] = useState(getPendingResult('pending'))
-            usePendingEffect((s) => { API.get({ url: '/adminapi/v1/events/options/all' }, s) }, setOptions, options)
+            // const [options, setOptions] = useState(getPendingResult('pending'))
+            // usePendingEffect((s) => { API.get({ url: '/adminapi/v1/events/options/all' }, s) }, setOptions, options)
 
             return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
@@ -83,6 +84,7 @@ export default {
                     icons={EventIcons}
                 />
             </AdminPage>)
-        }
+        },
+        getServerSideProps: PaginatedData(sourceUrl, ['admin'])
     }
 }
