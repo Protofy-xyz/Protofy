@@ -4,10 +4,8 @@ import { EditableObject } from "./EditableObject";
 import { getPendingResult } from '../base/PendingResult'
 import { ItemCard } from "./ItemCard";
 import { useTint } from "protolib";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tinted } from "./Tinted";
-import {Tag} from '@tamagui/lucide-icons';
-import ErrorMessage from "./ErrorMessage";
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element.data
@@ -114,10 +112,15 @@ export const ObjectGrid = ({
         }
     })
 
-    return <Stack f={1} ref={containerRef} {...props}>
+    const [ready, setReady] = useState(0)
+    useEffect(() => {
+        setReady(1)
+    }, [])
+
+    return <Stack f={1} o={ready?1:0} ref={containerRef} {...props}>
         {data && data.length > 0 ? <Grid
             overScanBy={overScanBy} 
-            key={data.length} 
+            key={data.length + ready} 
             rightGap={rightGap}
             containerRef={containerRef}
             spacing={spacing}
