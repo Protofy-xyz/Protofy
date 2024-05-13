@@ -4,7 +4,6 @@ import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView, use
 import { ToyBrick, Eye, ChevronDown } from '@tamagui/lucide-icons'
 import { z } from 'protolib/base'
 import { usePageParams } from '../../next'
-import { withSession } from '../../lib/Session'
 import { usePrompt } from '../../context/PromptAtom'
 import { Chip } from '../../components/Chip'
 import { useState } from 'react'
@@ -13,7 +12,7 @@ import { Objects } from "app/bundles/objects";
 import { Tinted } from '../../components/Tinted';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { getPendingResult } from '../../base';
-import { SSR } from '../../lib/SSR';
+import { PaginatedData } from '../../lib/SSR';
 import { Slides } from '../../components/Slides';
 import { apiTemplates } from 'app/bundles/templates'
 import { TemplateCard } from './TemplateCard';
@@ -328,6 +327,7 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
+
+        getServerSideProps: PaginatedData(sourceUrl, ['admin'], {objects: objectsSourceUrl})
     }
 }

@@ -1,8 +1,8 @@
-import ResourcesPage from 'protolib/bundles/databases/adminPages'
+import DatabasesPage from 'protolib/bundles/databases/adminPages'
 import Head from 'next/head'
 
 export default function Page(props:any) {
-  const PageComponent = ResourcesPage['databases'].component
+  const PageComponent = DatabasesPage['databases'].component
   return (
     <>
       <Head>
@@ -12,3 +12,5 @@ export default function Page(props:any) {
     </>
   )
 }
+
+export const getServerSideProps = DatabasesPage['databases'].getServerSideProps

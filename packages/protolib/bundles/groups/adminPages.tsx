@@ -1,12 +1,13 @@
 import { GroupModel } from '.'
 import { z } from 'protolib/base'
-import { DataTable2, Chip, DataView, AdminPage, PaginatedDataSSR } from 'protolib'
+import { DataTable2, Chip, DataView, AdminPage } from 'protolib'
 import { Users } from '@tamagui/lucide-icons';
 import { API } from '../../base/Api'
 import { usePrompt } from '../../context/PromptAtom'
 import { useState } from 'react';
 import { getPendingResult } from '../../base';
 import { usePendingEffect } from '../../lib/usePendingEffect';
+import { PaginatedData } from '../../lib/SSR';
 
 const GroupIcons = {}
 const sourceUrl = '/adminapi/v1/groups'
@@ -57,10 +58,6 @@ export default {
         />
       </AdminPage>)
     },
-    getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async () => {
-      return {
-        workspaces: await API.get(workspacesSourceUrl),
-      }
-    })
+    getServerSideProps: PaginatedData(sourceUrl, ['admin'], {workspaces: workspacesSourceUrl})
   }
 }
