@@ -6,7 +6,10 @@ import * as fspath from 'path'
 import fse from 'fs-extra'
 import { DatabaseEntryModel, DatabaseModel } from './databasesSchemas'
 
-const dbDir = (root) => fspath.join(root, "/data/databases/")
+const dbDir = (req) => {
+  const env = req.query.env ? fspath.basename(req.query.env) : null
+  return fspath.join(getRoot(req), env ? "data/"+env+"/databases" : "/data/databases/")
+}
 
 function getTimestamp() {
   const now = new Date()
@@ -44,24 +47,25 @@ async function createBackupFolderIfNeeded(backupPath) {
 const customGetDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const databases = await getDatabases()
+      const env = req.query.env
+      const databases = await getDatabases(env)
       for (const db of databases) {
         yield [db.name, JSON.stringify(db)]
       }
     },
 
     async del (key, value) {
-      const origin = fspath.join(dbDir(getRoot(req)), key)
+      const origin = fspath.join(dbDir(req), key)
       const dest = fspath.join(getRoot(req), 'data', 'deleted_databases', key)
       moveFolder(origin, dest)
     },
 
     async put(key, value) {
-      await connectDB(fspath.join(dbDir(getRoot(req)), fspath.basename(key)))
+      await connectDB(fspath.join(dbDir(req), fspath.basename(key)))
     },
 
     async *get(key) {
-      const dbPath = fspath.join(dbDir(getRoot(req)), fspath.basename(key))
+      const dbPath = fspath.join(dbDir(req), fspath.basename(key))
       const db = getDB(dbPath, req, session)
       yield* db.iterator()
     }
@@ -70,8 +74,11 @@ const customGetDB = (path, req, session) => {
   return db
 }
 
-export const getDatabases = async () => {
-  return (await fs.promises.readdir('../../' + path.join('data', 'databases'))).map((name) => {
+export const getDatabases = async (env?) => {
+  const environ = env ? fspath.basename(env) : null
+  const path = '../../' + (environ ? fspath.join('data', environ, 'databases') : fspath.join('data', 'databases'))
+
+  return (await fs.promises.readdir(path)).map((name) => {
     return {
       name: name
     }
@@ -119,7 +126,7 @@ export const DatabasesAPI = (app, context) => {
 
     for (const id of ids) {
       try {
-        const originalPath = path.join(dbDir(getRoot(req)), id)
+        const originalPath = path.join(dbDir(req), id)
         const backupPath = path.join(getRoot(req), "data","backups", id + "_" + getTimestamp())
 
         if (!await createBackupFolderIfNeeded(backupPath)) {
