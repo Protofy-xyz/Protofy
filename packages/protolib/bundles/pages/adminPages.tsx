@@ -1,11 +1,10 @@
 import { PageModel } from '.'
 import { DataView } from 'protolib'
-import { DataTable2, Chip, API, InteractiveIcon, AdminPage, PaginatedDataSSR, useWorkspaceEnv} from 'protolib'
+import { DataTable2, Chip, API, InteractiveIcon, AdminPage, useWorkspaceEnv} from 'protolib'
 import { z } from 'protolib/base'
 import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
-import { getURLWithToken } from '../../lib/Session'
 import { useState } from 'react'
 import { getPendingResult } from '../../base'
 import { usePendingEffect } from '../../lib/usePendingEffect'
@@ -17,6 +16,7 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { TemplatePreview } from './TemplatePreview'
 import { pageTemplates } from 'app/bundles/templates'
 import {SiteConfig} from 'app/conf'
+import { PaginatedData } from '../../lib/SSR'
 
 const PageIcons = {}
 const sourceUrl = '/adminapi/v1/pages'
@@ -180,10 +180,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async (context) => {
-            return {
-                objects: await API.get(getURLWithToken(objectsSourceUrl, context))
-            }
-        })
+        getServerSideProps: PaginatedData(sourceUrl, ['admin'], {objects: objectsSourceUrl})
     }
 }

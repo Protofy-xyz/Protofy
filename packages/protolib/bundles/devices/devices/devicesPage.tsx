@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple, Tinted, AdminPage, PaginatedDataSSR, usePendingEffect, CardBody, ItemMenu } from 'protolib'
+import { API, DataTable2, DataView, ButtonSimple, AdminPage, PaginatedData, usePendingEffect, CardBody, ItemMenu } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
-import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
+import { Connector, useSubscription } from 'mqtt-react-hooks';
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
 import Subsystem from 'protodevice/src/Subsystem'
-import { Paragraph, Stack, TextArea, XStack, YStack } from '@my/ui';
+import { Paragraph, Stack, TextArea, YStack } from '@my/ui';
 import { getPendingResult } from "protolib/base";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
@@ -298,5 +298,8 @@ export default {
         extraMenuActions={extraMenuActions}
       />
     </AdminPage>)
-  }
+  },
+  getServerSideProps: PaginatedData(sourceUrl, ['admin'], {
+    deviceDefinitions: definitionsSourceUrl
+  })
 }

@@ -18,6 +18,21 @@ export function DataSSR(sourceUrl, permissions?:string[]|any[]|null, props={}) {
     })
 }
 
+export function PaginatedData(sourceUrl: string|Function, permissions?:string[]|any[]|null, extraData?:{[key: string]: string}) {
+  return PaginatedDataSSR(sourceUrl, permissions, {}, async (context) => {
+    // const objects = await API.get(getURLWithToken(objectsSourceUrl, context))
+    // return {
+    //   objects: objects.isLoaded ? objects.data.items : []
+    // }
+    if(!extraData) return {}
+    const result = {}
+    for (const key of Object.keys(extraData)) {
+      result[key] = await API.get(getURLWithToken(extraData[key], context))
+    }
+    return result
+  })
+}
+
 export function PaginatedDataSSR(sourceUrl: string|Function, permissions?:string[]|any[]|null, dataProps:any={}, extraData:any={}) {
   return SSR(async (context:NextPageContext) => {
     const _dataProps = {

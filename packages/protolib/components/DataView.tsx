@@ -19,7 +19,60 @@ import { ItemMenu } from './ItemMenu';
 import { useRouter } from 'next/router';
 import ErrorMessage from './ErrorMessage';
 
-export const DataView = forwardRef(({
+interface DataViewProps {
+    onSelectItem?: (item: any) => void;
+    itemData?: any;
+    rowIcon?: any;
+    disableViewSelector?: boolean;
+    disableItemSelection?: boolean;
+    initialItems?: any;
+    sourceUrl?: string;
+    sourceUrlParams?: any;
+    numColumnsForm?: number;
+    name?: string;
+    entityName?: string;
+    pluralName?: string;
+    hideAdd?: boolean;
+    enableAddToInitialData?: boolean;
+    pageState?: any;
+    icons?: any;
+    model?: any;
+    extraFields?: any;
+    columns?: any;
+    onEdit?: (data: any) => any;
+    onDelete?: (data: any) => any;
+    onAdd?: (data: any) => any;
+    views?: any;
+    extraViews?: any[];
+    openMode?: 'edit' | 'view';
+    disableToggleMode?: any;
+    customFields?: any;
+    dataTableRawProps?: any;
+    dataTableListProps?: any;
+    dataTableGridProps?: any;
+    dataMapProps?: any;
+    extraFieldsForms?: any;
+    extraFieldsFormsEdit?: any;
+    extraFieldsFormsAdd?: any;
+    customFieldsForms?: any;
+    defaultView?: string;
+    disableViews?: string[];
+    toolBarContent?: any;
+    onAddButton?: any;
+    extraMenuActions?: any[];
+    deleteable?: () => boolean;
+    objectProps?: EditableObjectProps | {};
+    refreshOnHotReload?: boolean;
+    quickRefresh?: boolean;
+}
+ 
+export const DataView = (props: DataViewProps & {ready: boolean}) => {
+    return <AsyncView ready={props.ready??true}>
+            <DataViewInternal {...props} />
+    </AsyncView>
+}
+
+const DataViewInternal = forwardRef(({
     onSelectItem,
     itemData,
     rowIcon,
@@ -64,10 +117,10 @@ export const DataView = forwardRef(({
     objectProps = {},
     refreshOnHotReload = false,
     quickRefresh = false
-}: { objectProps?: EditableObjectProps, openMode: 'edit' | 'view' } & any, ref) => {
+}: DataViewProps, ref) => {
     const displayName = (entityName ?? pluralName) ?? name
     const { query } = useRouter();
-    const [state, setState] = useState(pageState ?? query)
+    const [state, setState] = useState(pageState ?? {})
     const fetch = async (fn) => {
         const data = await API.get({ url: sourceUrl, ...sourceUrlParams, ...state })
         fn(data)

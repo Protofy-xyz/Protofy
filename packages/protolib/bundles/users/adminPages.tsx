@@ -1,6 +1,6 @@
 import { UserModel } from '.'
 import { z } from 'protolib/base'
-import { DataTable2, Chip, DataView, usePrompt, AdminPage, PaginatedDataSSR, useWorkspaceEnv } from 'protolib'
+import { DataTable2, Chip, DataView, usePrompt, AdminPage, useWorkspaceEnv } from 'protolib'
 import moment from 'moment'
 import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
 import { API } from '../../base/Api'
@@ -8,8 +8,9 @@ import { SelectList } from '../../components/SelectList'
 import { useState } from 'react';
 import { getPendingResult } from '../../base';
 import { usePendingEffect } from '../../lib/usePendingEffect';
-import { H1, Separator, SizableText, Switch, XStack, Text } from 'tamagui';
+import { Switch, XStack, Text } from 'tamagui';
 import { Tinted } from '../../components/Tinted';
+import { PaginatedData } from '../../lib/SSR';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const UserIcons = { username: Mail, type: Tag, passwod: Key, repassword: Key }
@@ -24,7 +25,7 @@ export default {
             const [groups, setGroups] = useState(extraData?.groups ?? getPendingResult("pending"))
             const env = useWorkspaceEnv()
 
-            usePendingEffect((s) => { API.get(groupsSourceUrl, s) }, setGroups, extraData?.objects)
+            usePendingEffect((s) => { API.get(groupsSourceUrl, s) }, setGroups, extraData?.groups)
 
             const getValue = (data) => {
                 const item = groups.data.items.map(obj => obj.name).find(item => item == data)
@@ -125,10 +126,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'], {}, async () => {
-            return {
-                groups: await API.get(groupsSourceUrl),
-            }
-        })
+        getServerSideProps: PaginatedData(sourceUrl, ['admin'], {groups: groupsSourceUrl})
     }
 }
