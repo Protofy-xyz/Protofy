@@ -72,7 +72,7 @@ export default {
     id: 'RotaryEncoder',
     type: 'CallExpression',
     category: "sensors",
-    keywords: ["rotary encoder", "encoder", "cui", "rotary", "offset"],
+    keywords: ["rotary encoder", "encoder", "cui", "rotary", "offset", "device"],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('rotaryEncoder'),
     getComponent: (node, nodeData, children) => <RotaryEncoder color={getColor('RotaryEncoder')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { 
