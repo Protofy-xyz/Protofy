@@ -19,7 +19,7 @@
     "prod-service": "NODE_ENV=production pm2 start ecosystem.config.js && yarn monit",
     "add-user": "yarn workspace api add-user",
     "build": "yarn workspaces foreach run build",
-    "package": "yarn workspaces foreach run clean && yarn prepare-dev && yarn package-fast",
+    "package": "yarn workspaces foreach run clean && yarn prepare-dev",
     "package-fast": "yarn workspaces foreach --exclude electron-app run package",
     "status": "pm2 status",
     "monit": "pm2 monit",
@@ -36,7 +36,7 @@
     "create-environment": "node copy.js",
     "fix": "manypkg fix",
     "check-deps": "check-dependency-version-consistency .",
-    "clean": "yarn prepare-dev && yarn workspaces foreach run clean"
+    "clean": "yarn workspaces foreach run clean"
   },
   "resolutions": {
     "react": "^18.2.0",

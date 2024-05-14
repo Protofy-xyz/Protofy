@@ -11,7 +11,7 @@
     "clean": "shx rm -rf .next"
   },
   "dependencies": {
-    "next": "^13.5.2",
+    "next": "^14.2.3",
     "nextra": "^2.13.3",
     "nextra-theme-docs": "^2.13.3",
     "pm2": "^5.3.0",
