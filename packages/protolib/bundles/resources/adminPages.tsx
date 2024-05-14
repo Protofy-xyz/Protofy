@@ -1,8 +1,9 @@
 
 import { ResourceModel } from '.'
-import { DataTable2, Chip, DataView, AdminPage, PaginatedDataSSR  } from 'protolib'
+import { DataTable2, Chip, DataView, AdminPage } from 'protolib'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
 import { ExternalLink, Link } from '@tamagui/lucide-icons'
+import { PaginatedData } from '../../lib/SSR'
 
 const ResourceIcons = {}
 const sourceUrl = '/adminapi/v1/resources'
@@ -33,6 +34,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR('/adminapi/v1/resources', ['admin'], {})
+        getServerSideProps: PaginatedData('/adminapi/v1/resources', ['admin'])
     }
 }

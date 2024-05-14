@@ -1,11 +1,10 @@
-import { DataView, AdminPage, CardBody, ItemMenu } from 'protolib'
-import { Cog, ScrollText, UploadCloud, LineChart, RotateCw, Cpu, Activity} from '@tamagui/lucide-icons';
+import { DataView, AdminPage, CardBody } from 'protolib'
+import { Cog, ScrollText, LineChart, RotateCw, Cpu, Activity} from '@tamagui/lucide-icons';
 import { ServiceModel } from './servicesSchema';
 import { YStack, Stack, SizableText, XStack } from '@my/ui'
-import { DataCard } from '../../components/DataCard'
-import { API } from '../../base';
 import { usePageParams } from '../../next';
 import moment from 'moment';
+import { PaginatedData } from '../../lib/SSR';
 
 const sourceUrl = '/adminapi/v1/services'
 
@@ -100,6 +99,7 @@ export default {
           }}
         />
       </AdminPage>)
-    }
+    },
+    getServerSideProps: PaginatedData(sourceUrl, ['admin'])
   }
 }
