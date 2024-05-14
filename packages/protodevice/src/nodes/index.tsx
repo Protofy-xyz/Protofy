@@ -25,6 +25,7 @@ import R503 from './R503';
 import SCD4X from './SCD4X';
 import DS18B20 from './DS18B20';
 import RotaryEncoder from './RotaryEncoder';
+import I2cADC_ADS1115 from './I2cADC_ADS1115';
 
 const deviceMasks = [
   Wifi,
@@ -51,7 +52,8 @@ const deviceMasks = [
   R503,
   SCD4X,
   DS18B20,
-  RotaryEncoder
+  RotaryEncoder,
+  I2cADC_ADS1115
 ]
 
 const masksLength = deviceMasks.length
