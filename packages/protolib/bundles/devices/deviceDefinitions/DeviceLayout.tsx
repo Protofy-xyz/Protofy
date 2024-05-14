@@ -45,9 +45,9 @@ const getNodePositionReference = (node, nodeData, edges, defaultValue) => {
         const edge = getEdgeFromSource(edges,node.id)
         nodePositionReference = parentNode._devicePositioning.filter((positionTag: string|undefined)=>{
             if(positionTag){
-                return positionTag.includes(edge.targetHandle.split('element-')[1])
+                return positionTag.includes(edge?.targetHandle.split('element-')[1])
             }
-        })[0].split('-')[1]
+        })[0]?.split('-')[1]
     }
     return nodePositionReference
 }
