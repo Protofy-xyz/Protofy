@@ -18,7 +18,8 @@
     "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
     "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
-    "dev-service": "NODE_ENV=development pm2 start pm2.config.js"
+    "dev-service": "NODE_ENV=development pm2 start pm2.config.js",
+    "clean": "shx rm -rf dist"
   },
   "dependencies": {
     "aedes": "^0.50.0",

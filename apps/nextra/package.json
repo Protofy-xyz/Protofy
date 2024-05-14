@@ -7,7 +7,8 @@
     "dev-standalone": "FULLDEV=1 NODE_ENV=development node entrypoint.js",
     "dev-service": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js",
     "dev": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
-    "package": "next build && shx cp -r .next/ ../nextra-compiled && shx cp -r pages/ ../nextra-compiled && shx cp -r public/ ../nextra-compiled && shx cp theme.config.jsx ../nextra-compiled/theme.config.jsx"
+    "package": "next build && shx cp -r .next/ ../nextra-compiled && shx cp -r pages/ ../nextra-compiled && shx cp -r public/ ../nextra-compiled && shx cp theme.config.jsx ../nextra-compiled/theme.config.jsx",
+    "clean": "shx rm -rf .next"
   },
   "dependencies": {
     "next": "^13.5.2",

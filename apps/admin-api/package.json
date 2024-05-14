@@ -17,7 +17,8 @@
     "prod-standalone": "NODE_ENV=production node -r module-alias/register dist/apps/admin-api/src/index.js",
     "package": "echo nothing to package",
     "build": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts",
-    "prepare-dev": "node prepare.js"
+    "prepare-dev": "node prepare.js",
+    "clean": "shx rm -rf dist"
   },
   "dependencies": {
     "app": "*",
