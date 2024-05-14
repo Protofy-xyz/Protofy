@@ -56,9 +56,9 @@ class Servo {
                     then: [
                       {
                         lambda: `float value = atoi(x.c_str());
-if(value >= -100 && value <= 100) id(${this.name}).write(value/100);
-if(value > 100) id(${this.name}).write(1.0);
-if(value < -100) id(${this.name}).write(-1.0);`
+if(value >= 0 && value <= 180) id(${this.name}).write(-(90-value)/90);
+if(value > 180) id(${this.name}).write(1.0);
+if(value < 0) id(${this.name}).write(-1.0);`
                     },
                     ]
                   }
@@ -82,7 +82,7 @@ if(value < -100) id(${this.name}).write(-1.0);`
             {
               name: 'set_position',
               label: 'Set position',
-              description: 'Moves the servo to desired position -100 to 100',
+              description: 'Moves the servo to desired position -180 to 180',
               endpoint: "/"+this.type+"/"+this.name+"/command",
               connectionType: 'mqtt',
               payload: {
