@@ -56,9 +56,9 @@ class Servo {
                     then: [
                       {
                         lambda: `float value = atoi(x.c_str());
-if(value >= 0 && value <= 180) id(${this.name}).write(value/180);
-if(value > 180) id(${this.name}).write(180);
-if(value < 0) id(${this.name}).write(0);`
+if(value >= -100 && value <= 100) id(${this.name}).write(value/100);
+if(value > 100) id(${this.name}).write(1.0);
+if(value < -100) id(${this.name}).write(-1.0);`
                     },
                     ]
                   }
@@ -82,7 +82,7 @@ if(value < 0) id(${this.name}).write(0);`
             {
               name: 'set_position',
               label: 'Set position',
-              description: 'Emmits a PWM signal that moves the servo to desired position 0 to 180',
+              description: 'Moves the servo to desired position -100 to 100',
               endpoint: "/"+this.type+"/"+this.name+"/command",
               connectionType: 'mqtt',
               payload: {
