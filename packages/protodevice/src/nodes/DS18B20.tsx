@@ -11,7 +11,10 @@ const DS18B20 = ({ node = {}, nodeData = {}, children, color }: any) => {
             error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'dallas' ? nameErrorMsg : null
         },
         {
-            label: 'Address', static: true, field: 'param-2', type: 'input'
+            label: 'Dallas Bus Name', static: true, field: 'param-2', type: 'input'
+        },
+        {
+            label: 'Address', static: true, field: 'param-3', type: 'input'
         }
     ] as Field[]
 
@@ -33,7 +36,8 @@ export default {
         return { 
             to: 'ds18b20', 
             "param-1": { value: "tempsensor", kind: "StringLiteral" },
-            "param-2": { value: "0xA40000031F055028", kind: "StringLiteral" } 
+            "param-2": { value: "mydallasbus", kind: "StringLiteral" },
+            "param-3": { value: "0xA40000031F055028", kind: "StringLiteral" } 
         } 
     }
 }

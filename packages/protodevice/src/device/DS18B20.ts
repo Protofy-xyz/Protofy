@@ -13,11 +13,13 @@ sensor:
 class DS18B20 {
   name;
   platform;
+  dallasBusId
   address;
   type;
-  constructor(name, platform, address) {
+  constructor(name, platform, dallasBusId, address) {
       this.name = name
       this.platform = platform
+      this.dallasBusId = dallasBusId
       this.type = "sensor"
       this.address = address
   }
@@ -29,16 +31,12 @@ class DS18B20 {
               name: this.type,
               config: {
                   platform: this.platform,
+                  dallas_id: this.dallasBusId,
                   name: this.name,
                   id: this.name,
                   address: this.address
               },
               subsystem: this.getSubsystem()
-          },{
-            name: this.platform,
-            config:{
-                pin: pin
-            }
           }
       ]
 
@@ -72,6 +70,6 @@ class DS18B20 {
   }
 }
 
-export function ds18b20(name,address) { 
-  return new DS18B20(name, 'dallas',address);
+export function ds18b20(name,dallasBusId, address) { 
+  return new DS18B20(name, 'dallas',dallasBusId, address);
 }

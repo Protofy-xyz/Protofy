@@ -27,6 +27,7 @@ import DS18B20 from './DS18B20';
 import RotaryEncoder from './RotaryEncoder';
 import I2cADC_ADS1115 from './I2cADC_ADS1115';
 import Servo from './Servo';
+import DallasBus from './DallasBus';
 
 const deviceMasks = [
   Wifi,
@@ -55,7 +56,8 @@ const deviceMasks = [
   DS18B20,
   RotaryEncoder,
   I2cADC_ADS1115,
-  Servo
+  Servo,
+  DallasBus
 ]
 
 const masksLength = deviceMasks.length
