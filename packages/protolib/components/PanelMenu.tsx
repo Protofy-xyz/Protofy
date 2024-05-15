@@ -189,10 +189,20 @@ const Subtabs = ({ subtabs }: any) => {
                 //     </a>
                 // }
 
+                //TODO: this this, this is buggy, since /page/a and /page/a/b will both be selected
+                const selectedLength = subtabs.reduce((acc, tab) => {
+                    const segment = typeof window !== 'undefined' ? window.location.pathname.split('/')[2] || SiteConfig.defaultWorkspace : SiteConfig.defaultWorkspace;
+                    let href = "/" + workspaceRoot + '/' + segment + '/' + (tab.type + tab.path).replace(/\/+/g, '/')
+                    if (router.asPath.startsWith(href.replace(/\/$/, ''))) {
+                        return href.length > acc ? href.length : acc
+                    }
+                    return acc
+                }, 0)
+
                 return <Link href={href} key={index}>
                     <Tinted>
                         <PanelMenuItem
-                            selected={router.asPath.startsWith(originalHref.replace(/\/$/, ''))}
+                            selected={router.asPath.startsWith(originalHref.replace(/\/$/, '')) && originalHref.length == selectedLength}
                             icon={getIcon(subtab.icon)}
                             text={subtab.name}
                         />
