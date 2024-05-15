@@ -2,7 +2,7 @@
 import { promises as fs } from 'fs';
 import { constants } from 'fs';
 import path from 'path';
-import { app } from 'protolib/api';
+import { getApp } from 'protolib/api';
 import {getServiceToken} from 'protolib/api/lib/serviceToken'
 import multer from 'multer';
 import fsExtra from 'fs-extra';
@@ -13,6 +13,7 @@ import { getRoot, handler } from '../api';
 import { getLogger } from '../base';
 
 const logger = getLogger()
+const app = getApp()
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {

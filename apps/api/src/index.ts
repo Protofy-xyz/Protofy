@@ -42,7 +42,9 @@ if (process.env.NODE_ENV != 'production') {
   const pathsToWatch = [
     'src/**',
     '../../packages/app/bundles/**',
-    '../../packages/protolib/**'
+    '../../packages/protolib/**',
+    '../../system.js',
+    '../../packages/app/conf.ts'
   ];
 
   const watcher = chokidar.watch(pathsToWatch, {

@@ -1,4 +1,4 @@
-import { app, getMQTTClient } from 'protolib/api'
+import { getApp, getMQTTClient } from 'protolib/api'
 import { getLogger, getApiUrl } from 'protolib/base';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import { getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
@@ -10,6 +10,8 @@ import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
 const logger = getLogger()
 const subscriptions = {}
 const isProduction = process.env.NODE_ENV === 'production';
+const app = getApp()
+
 //wait for mqtt before starting api server
 const mqtt = getMQTTClient(isProduction?'api':'api-dev', getServiceToken(), async () => {
     logger.debug({ config: getConfigWithoutSecrets(getConfig()) }, "Service Started: api")
