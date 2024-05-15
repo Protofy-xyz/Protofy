@@ -27,24 +27,27 @@ const requireAdmin = () => handler(async (req, res, session, next) => {
 })
 
 app.post('/adminapi/v1/databases/:dbname/:key', requireAdmin(), handler(async (req, res) => {
-    const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    const db = getDB(dbname)
+    const env = req.query.env ? path.basename(req.query.env as string) + '/' : ''
+    
+    const db = getDB(env+req.params.dbname, req)
     await db.put(req.params.key, JSON.stringify(req.body))
     res.send(req.body)
     return
 }));
 
 app.get('/adminapi/v1/databases/:dbname/:key/delete', requireAdmin(), handler(async (req, res) => {
-    const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    const db = getDB(dbname)
+    const env = req.query.env ? path.basename(req.query.env as string)+'/' : ''
+
+    const db = getDB(env+req.params.dbname) 
     await db.del(req.params.key)
     res.send({"result": "deleted"})
     return
 }));
 
 app.post('/adminapi/v1/dbsearch/:dbname', requireAdmin(), handler(async (req, res) => {
-    const dbname = '../../' + path.join('data','databases', req.params.dbname)
-    const db = getDB(dbname)
+    const env = req.query.env ? path.basename(req.query.env as string)+'/' : ''
+
+    const db = getDB(env+req.params.dbname) 
     const total = []
     for await (const [key, value] of db.iterator()) {
         if(key != 'initialized') {

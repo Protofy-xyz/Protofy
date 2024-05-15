@@ -1,4 +1,4 @@
-import { Router, Inbox, Library, ToyBrick, Key, Cog } from '@tamagui/lucide-icons'
+import { Router, Inbox, Library, ToyBrick, Key, Cog, Database, DatabaseBackup } from '@tamagui/lucide-icons'
 
 export default {
     "default": "/workspace/pages",
@@ -21,9 +21,12 @@ export default {
         ],
         "Content": [
             { "name": "Files", "icon": "folder", "type": "files", "path": "?path=/" },
-            { "name": "Databases", "icon": "database", "type": "databases", "path": "/"},
             { "name": "Resources", "icon": Library, "type": "resources", "path": "/"},
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "?path=/apps/next/public" },
+        ],
+        "Databases": [
+            { "name": "System", "icon": Database, "type": "databases", "path": "/system"},
+            // { "name": "Content", "icon": Database, "type": "databases", "path": "/"},
         ],
         "IoT Devices":[
             { "name": "Devices", "icon": Router, "type":"devices", "path": "/"},

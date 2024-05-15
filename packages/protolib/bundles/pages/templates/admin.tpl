@@ -7,11 +7,10 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 
 import {Protofy} from 'protolib/base'
 import {Objects} from 'app/bundles/objects'
-import {DataView, API, AdminPage, PaginatedDataSSR, useWorkspaceApiUrl, getWorkspaceApiUrl } from 'protolib'
+import {DataView, API, AdminPage, PaginatedDataSSR, useWorkspaceApiUrl, getWorkspaceApiUrl, useRedirectToEnviron } from 'protolib'
 import { Tag } from '@tamagui/lucide-icons'
 import { context } from "app/bundles/uiContext";
 import { useRouter } from "next/router";
-import { useRedirectToEnviron } from 'protolib'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})

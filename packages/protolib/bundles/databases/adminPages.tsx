@@ -1,11 +1,13 @@
 import { DatabaseEntryModel, DatabaseModel } from '.'
-import { DataView, API, AdminPage, PaginatedDataSSR, AlertDialog, Tinted, Center } from 'protolib'
+import { DataView, API, AdminPage, PaginatedDataSSR, AlertDialog, Tinted, Center, useWorkspaceEnv } from 'protolib'
 import { useRouter } from "next/router"
 import { Spinner, YStack } from '@my/ui'
 import { DataCard } from '../../components/DataCard'
 import { useState } from 'react'
-import { Server, DatabaseBackup } from '@tamagui/lucide-icons'
+import { Database, DatabaseBackup } from '@tamagui/lucide-icons'
 import { usePrompt } from '../../context/PromptAtom'
+import { SSR } from '../../lib/SSR'
+import { withSession } from '../../lib/Session'
 
 const DatabaseIcons = {}
 const databasesSourceUrl = '/adminapi/v1/databases'
@@ -26,8 +28,12 @@ const generateBackup = async (element) => {
 
 export default {
     'databases': {
-        component: ({ workspace, pageState, initialItems, pageSession }: any) => {
+        component: ({ workspace, pageState, initialItems, pageSession, env}: any) => {
+            const workspaceEnv = useWorkspaceEnv()
             const router = useRouter()
+            const subpath = env == 'system' ? './system/' : './databases/'
+            env = env == 'system' ? undefined : workspaceEnv
+
             const [open, setOpen] = useState(false)
             const [backupId, setBackupId] = useState("")
             const [currentType, setCurrentType] = useState("")
@@ -80,14 +86,13 @@ export default {
                 </AlertDialog>
                 <DataView
                     integratedChat
-                    rowIcon={Server}
-                    sourceUrl={databasesSourceUrl}
+                    rowIcon={Database}
+                    sourceUrl={databasesSourceUrl+(env?'?env='+env: '')}
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="database"
                     onSelectItem={(item) => {
-                        //console.log("ITEMMM", item, item.getId())
-                        router.push('databases/view?database=' + item.getId())
+                        router.push(subpath+'view?database=' + item.getId()+(env?'&env='+env: ''))
                     }}
                     // hideAdd={true}
                     model={DatabaseModel}
@@ -116,10 +121,10 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR(databasesSourceUrl)
+        getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
     },
     'databases/view': {
-        component: ({ workspace, pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
+        component: ({ workspace, pageState, sourceUrl, initialItems, pageSession, extraData, env }: any) => {
             const router = useRouter()
             const [tmpItem, setTmpItem] = useState<string | null>(null)
             const [content, setContent] = useState(initialItems)
@@ -130,15 +135,18 @@ export default {
             const [isPopoverOpen, setIsPopoverOpen] = useState(false)
             const currentDB = router.query.database ?? ''
 
+            const workspaceEnv = useWorkspaceEnv()
+            env = env == 'system' ? undefined : workspaceEnv
+
             const fetch = async () => {
-                setContent(await API.fetch('/adminapi/v1/databases/' + currentDB))
+                setContent(await API.fetch('/adminapi/v1/databases/' + currentDB+(env?'?env='+env: '')))
             }
             const onDelete = async (key, isTemplate) => {
                 if (isTemplate) {
                     setTmpItem(null)
                     content.data.shift()
                 } else {
-                    const result = await API.get('/adminapi/v1/databases/' + currentDB + '/' + key + '/delete')
+                    const result = await API.get('/adminapi/v1/databases/' + currentDB + '/' + key + '/delete'+(env?'?env='+env: ''))
                     if (result?.isLoaded && result.data.result == 'deleted') {
                         await fetch()
                         setRenew(renew + 1)
@@ -156,7 +164,7 @@ export default {
                 setNewKey("")
             }
             const onSave = async (newContent, key) => {
-                const result = await API.post('/adminapi/v1/databases/' + currentDB + '/' + key, newContent)
+                const result = await API.post('/adminapi/v1/databases/' + currentDB + '/' + key+(env?'?env='+env: ''), newContent)
                 if (result?.isLoaded) {
                     await fetch()
                     setRenew(renew + 1)
@@ -170,7 +178,7 @@ export default {
                 {router.isReady ? <DataView
                     integratedChat
                     key={renew}
-                    sourceUrl={'/adminapi/v1/databases/' + currentDB}
+                    sourceUrl={'/adminapi/v1/databases/' + currentDB+(env?'?env='+env: '') }
                     initialItems={content}
                     numColumnsForm={1}
                     name={currentDB}
@@ -207,6 +215,6 @@ export default {
                 /> : <Tinted><Center><Spinner size='large' color="$color7" scale={2} /></Center></Tinted>}
             </AdminPage>)
         },
-        getServerSideProps: PaginatedDataSSR((context) => '/adminapi/v1/databases/' + context.query.database, ['admin'])
+        getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
     }
 }
