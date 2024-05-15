@@ -6,9 +6,9 @@ export default function Page(props:any) {
   return (
     <>
       <Head>
-        <title>Protofy - View Database</title>
+        <title>Protofy - View System Database</title>
       </Head>
-      <PageComponent env="current" {...props} />
+      <PageComponent env="system" {...props} />
     </>
   )
 }

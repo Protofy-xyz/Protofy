@@ -8,7 +8,7 @@ export default function Page(props:any) {
       <Head>
         <title>Protofy - Databases</title>
       </Head>
-      <PageComponent env="current" {...props} />
+      <PageComponent env="system" {...props} />
     </>
   )
 }
