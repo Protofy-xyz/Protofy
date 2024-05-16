@@ -4,7 +4,7 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import { FileNavbar, FileBrowser, FileToolbar, FileList, ChonkyActions } from 'chonky';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Dialog, Paragraph, useTheme, Text, SizableText, Stack, XStack } from '@my/ui';
 import { Uploader } from './Uploader';
 import { Download } from '@tamagui/lucide-icons'
@@ -95,6 +95,12 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
             setOpenDownloadDialog(true)
         }
     }
+
+    useEffect(() => {
+        if (filesState.isLoaded) {
+            setFiles(filesState)
+        }
+    }, [filesState])
 
     return (
         <Dropzone
