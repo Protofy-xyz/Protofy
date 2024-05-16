@@ -2,7 +2,7 @@
 import { promises as fs } from 'fs';
 import { constants } from 'fs';
 import path from 'path';
-import { app } from 'protolib/api';
+import { getApp } from 'protolib/api';
 import {getServiceToken} from 'protolib/api/lib/serviceToken'
 import multer from 'multer';
 import fsExtra from 'fs-extra';
@@ -11,8 +11,10 @@ import { v4 as uuidv4 } from 'uuid';
 import {generateEvent} from '../bundles/events/eventsLibrary'
 import { getRoot, handler } from '../api';
 import { getLogger } from '../base';
+import archiver from 'archiver';
 
 const logger = getLogger()
+const app = getApp()
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
@@ -48,6 +50,26 @@ const handleFilesRequest = async (req, res) => {
         return
     }
     if (((await fs.stat(filepath)).isDirectory())) {
+        if (isDownload) {
+            try {
+                // TODO compressDirectory is not working, it should be fixed
+                // compressDirectory({ sourcePath: filepath, outputPath: path.basename(filepath) })
+
+                const archive = archiver('zip', {
+                    zlib: { level: 9 }
+                });
+                res.setHeader('Content-Disposition', 'attachment; filename=' + path.basename(filepath) + '.zip');
+                res.setHeader('Content-Type', 'application/zip');
+                archive.on('error', (err) => {
+                    throw err;
+                });
+                await archive.pipe(res);
+                await archive.directory(filepath, false);
+                await archive.finalize();
+
+            } catch (e) { console.error('Error, could not ZIP file', e) }
+        }
+
         try {
             const fileList = await fs.readdir(filepath);
 

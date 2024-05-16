@@ -86,11 +86,11 @@ export const AutoAPI = ({
     skipDatabaseIndexes,
     dbOptions = {},
     useDatabaseEnvironment = false
-}: AutoAPIOptions) => (app, context) => {
+}: AutoAPIOptions) => async (app, context) => {
     const env = useDatabaseEnvironment ? getEnv() + '/' : ''
     const dbPath =(env + (dbName ? dbName : modelName))
     const groupIndexes = modelType.getGroupIndexes()
-    connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {
+    await connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {
         indexes: modelType.getIndexes(),
         groupIndexes: modelType.getGroupIndexes(),
         dbOptions: {

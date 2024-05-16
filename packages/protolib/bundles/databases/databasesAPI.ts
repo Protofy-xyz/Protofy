@@ -91,7 +91,7 @@ const EventAPI = AutoAPI({
   prefix: '/adminapi/v1/',
   dbName: '',
   requiresAdmin: ['*'],
-  connectDB: () => { },
+  connectDB: () => new Promise(resolve => resolve(null)),
   getDB: customGetDB,
   operations: ['list', 'create', 'read', 'delete'],
   useDatabaseEnvironment: false,

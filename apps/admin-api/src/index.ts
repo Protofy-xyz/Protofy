@@ -16,7 +16,7 @@ global.defaultRoute = '/adminapi/v1'
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 setConfig(getBaseConfig("admin-api", process, getServiceToken()))
 import { getLogger } from 'protolib/base/logger';
-import { app, getMQTTClient } from 'protolib/api'
+import { getApp, getMQTTClient } from 'protolib/api'
 import BundleAPI from '../../../packages/app/bundles/adminapi'
 import adminModules from 'protolib/adminapi'
 require('events').EventEmitter.defaultMaxListeners = 100;
@@ -31,6 +31,8 @@ import { startProxy } from './proxy';
 
 const config = getConfig()
 const logger = getLogger()
+
+const app = getApp()
 
 process.on('uncaughtException', function (err) {
   logger.error({ err }, 'Uncaught Exception: ', err.message)

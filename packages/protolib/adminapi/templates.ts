@@ -1,10 +1,12 @@
 import * as fs from 'fs';
 import {templates} from 'app/templates'
-import { handler, app} from 'protolib/api'
+import { handler, getApp} from 'protolib/api'
 import { connectDB } from 'app/bundles/storageProviders'
 import { getLogger } from '../base';
 
 const logger = getLogger()
+
+const app = getApp()
 
 logger.debug(`API Module loaded: ${__filename.split('.')[0]}`)
 

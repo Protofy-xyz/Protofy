@@ -32,7 +32,7 @@ export const WorkspacesAPI = AutoAPI({
   prefix: '/adminapi/v1/',
   dbName: '',
   requiresAdmin: ['*'],
-  connectDB: () => { },
+  connectDB: () => new Promise(resolve => resolve(null)),
   getDB: customGetDB,
   operations: ['list'],
   useDatabaseEnvironment: false
