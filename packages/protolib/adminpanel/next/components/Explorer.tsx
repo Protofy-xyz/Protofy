@@ -109,6 +109,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                 <YStack flex={1} {...getRootProps()} >
                     <AlertDialog
                         p="$5"
+                        maxHeight={'80vh'}
                         acceptCaption="Close"
                         setOpen={setOpenDownloadDialog}
                         open={openDownloadDialog}
@@ -116,7 +117,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         title={<Tinted><Text color="$color7">Download</Text></Tinted>}
                         description="Use those links to download:"
                     >
-                        <YStack f={1}>
+                        <YStack f={1} overflow={'scroll'} overflowX={'hidden'} >
                             {selectedFiles.map((f,id) => <a key={id} href={"/adminapi/v1/files/" + currentPath + '/' + f + '?download=1'} target="_new">
                                 <XStack mb="$2" br="$radius.12" p="$2" px="$4" backgroundColor={"$color4"} hoverStyle={{ backgroundColor: "$color6", o: 1 }} o={0.7} ai="center" jc="center">
                                     <Download />
