@@ -467,7 +467,7 @@
                 "type": "link",
                 "data": {
                     "text": "Need to upload a file?",
-                    "url": "admin/files?path=/apps/next/public"
+                    "url": "/workspace/dev/files?path=%2F%2Fapps%2Fnext%2Fpublic"
                 }
             },
             {
