@@ -10,7 +10,8 @@ import { getPendingResult } from '../../base';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { Switch, XStack, Text } from 'tamagui';
 import { Tinted } from '../../components/Tinted';
-import { PaginatedData } from '../../lib/SSR';
+import { SSR } from '../../lib/SSR'
+import { withSession } from '../../lib/Session'
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const UserIcons = { username: Mail, type: Tag, passwod: Key, repassword: Key }
@@ -126,6 +127,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedData(sourceUrl, ['admin'], {groups: groupsSourceUrl})
+        getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
     }
 }
