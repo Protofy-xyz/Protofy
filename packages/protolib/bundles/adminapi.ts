@@ -10,7 +10,6 @@ import { DeviceSdksAPI } from './devices/deviceSdks/deviceSdksAPI'
 import { DeviceCoresAPI } from './devices/devicecores/devicecoresAPI'
 import { DeviceBoardsAPI } from './devices/deviceBoards/deviceBoardsAPI'
 import { DeviceDefinitionsAPI } from './devices/deviceDefinitions/deviceDefinitionsAPI'
-import { DeviceMessageRouter } from './devices/router/api'
 import { DatabasesAPI } from './databases/databasesAPI'
 import { WorkspacesAPI } from './workspaces/workspacesAPI'
 import { ResourcesAPI } from './resources/resourcesAPI'
@@ -33,7 +32,6 @@ export default (app, context) => {
   DeviceCoresAPI(app, context)
   DeviceBoardsAPI(app, context)
   DeviceDefinitionsAPI(app, context)
-  DeviceMessageRouter(app, context)
   DatabasesAPI(app, context)
   WorkspacesAPI(app, context)
   ResourcesAPI(app, context)
