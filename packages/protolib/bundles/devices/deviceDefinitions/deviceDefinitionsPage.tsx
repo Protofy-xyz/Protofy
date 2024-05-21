@@ -83,7 +83,7 @@ export default {
 
       <DataView
         integratedChat
-        entityName={"devicedefinitions"}
+        entityName={"device definitions"}
         itemData={itemData}
         rowIcon={BookOpen}
         sourceUrl={sourceUrl}

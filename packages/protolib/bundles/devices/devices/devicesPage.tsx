@@ -260,6 +260,7 @@ export default {
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} compileSessionId={compileSessionId} stage={stage} />
       </Connector>
       <DataView
+        entityName="devices"
         onAdd={data => {
           return { ...data, environments: [env] }
         }}
