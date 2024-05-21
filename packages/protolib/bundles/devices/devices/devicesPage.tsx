@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple, AdminPage, PaginatedData, usePendingEffect, CardBody, ItemMenu } from 'protolib'
+import { API, DataTable2, DataView, ButtonSimple, AdminPage, usePendingEffect, CardBody, ItemMenu, useWorkspaceEnv, Tinted} from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
@@ -9,11 +9,13 @@ import { Connector, useSubscription } from 'mqtt-react-hooks';
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
 import Subsystem from 'protodevice/src/Subsystem'
-import { Paragraph, Stack, TextArea, YStack } from '@my/ui';
+import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text } from '@my/ui';
 import { getPendingResult } from "protolib/base";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
 import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic } from "../devicesUtils";
+import { SSR } from '../../../lib/SSR'
+import { withSession } from '../../../lib/Session'
 
 const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
   const { message } = useSubscription([compileMessagesTopic(compileSessionId)]);
@@ -23,19 +25,19 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
   const [messages, setMessages] = useState([])
   var isDoneCompiling = false
   useEffect(() => {
-    if(stage == "compile"){
+    if (stage == "compile") {
       console.log("Compile Message: ", message);
       try {
         if (message?.message) {
           const data = JSON.parse(message?.message.toString());
-          if(data.position!="undefined"){
+          if (data.position != "undefined") {
             console.log("DEV: ", data)
-            if(data.position && !isDoneCompiling){
+            if (data.position && !isDoneCompiling) {
               onSetModalFeedback({
                 message: `Current position in queue: ${data.position}. Status: ${data.status}`,
                 details: { error: false }
               });
-            }else{
+            } else {
               onSetModalFeedback({
                 message: `Compiling...`,
                 details: { error: false }
@@ -43,7 +45,7 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
               isDoneCompiling = true
             }
           }
-          
+
           if (data.event == 'exit' && data.code == 0) {
             isDoneCompiling = true
             setMessages([])
@@ -59,7 +61,7 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
                 <TextArea textAlign="left" f={1} mt="$2" mb={"$5"} minHeight={"200px"} value={
                   messages.map((ele) => ele.message).join('')
                 }>
-                  
+
                 </TextArea>
               </YStack>, details: { error: true }
             })
@@ -99,8 +101,8 @@ const callText = async (url: string, method: string, params?: any, token?: strin
   return fetch(defUrl, fetchParams)
     .then(function (response) {
       return response;
-    }).catch((error)=>{
-      console.log("Error fetching url: ",error)
+    }).catch((error) => {
+      console.log("Error fetching url: ", error)
     })
 }
 
@@ -119,12 +121,15 @@ export default {
     const yamlRef = React.useRef()
     const [targetDevice, setTargetDevice] = useState('')
     const [compileSessionId, setCompileSessionId] = useState('')
+    const [all, setAll] = useState(false)
+    const env = useWorkspaceEnv()
+
     // const { message } = useSubscription(['device/compile']);
 
     const flashDevice = async (device, yaml?) => {
       setTargetDevice(device.data.name)
-      
-      yamlRef.current = yaml??await device.getYaml()
+
+      yamlRef.current = yaml ?? await device.getYaml()
       console.log("TURBO YAML PARAMETER: ", yaml)
       setShowModal(true)
       try {
@@ -157,7 +162,7 @@ export default {
     }
 
     const saveYaml = async (yaml) => {
-      const response = await callText(postYamlApiEndpoint(targetDevice), 'POST', {"yaml": yaml})
+      const response = await callText(postYamlApiEndpoint(targetDevice), 'POST', { "yaml": yaml })
       const data = await response.json()
       console.log("Save Yaml, compileSessionId: ", data.compileSessionId);
       setCompileSessionId(data.compileSessionId)
@@ -168,8 +173,8 @@ export default {
         if (stage == 'yaml') {
           await saveYaml(yamlRef.current)
           setTimeout(() => {
-            setStage('compile')            
-          }, 1*1000);//Todo remove setTimeout
+            setStage('compile')
+          }, 1 * 1000);//Todo remove setTimeout
         } else if (stage == 'compile') {
           console.log("stage - compile")
           await compile()
@@ -224,7 +229,7 @@ export default {
       {
         text: "Upload definition",
         icon: UploadCloud,
-        action: (element) => {flashDevice( element ) },
+        action: (element) => { flashDevice(element) },
         isVisible: (element) => true
       },
       {
@@ -237,29 +242,52 @@ export default {
         text: "Upload config file",
         icon: UploadCloud,
         action: async (element) => {
-          try{
-            var result = await API.get("/adminapi/v1/devices/"+element.data.name+"/yaml")
-            flashDevice( element, result.data.yaml ) 
-          }catch(err){
+          try {
+            var result = await API.get("/adminapi/v1/devices/" + element.data.name + "/yaml")
+            flashDevice(element, result.data.yaml)
+          } catch (err) {
             console.error(err)
           }
-          
+
         },
         isVisible: (element) => element.isInitialized() && element.getConfigFile()
       }
     ]
 
     return (<AdminPage title="Devices" pageSession={pageSession}>
-      <Connector brokerUrl= {onlineCompilerSecureWebSocketUrl()}>
+      <Connector brokerUrl={onlineCompilerSecureWebSocketUrl()}>
         <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} compileSessionId={compileSessionId} stage={stage} />
       </Connector>
       <DataView
+        onAdd={data => {
+          return { ...data, environments: [env] }
+        }}
         defaultView={"grid"}
         integratedChat
+        key={all ? 'all' : 'filtered'}
+        toolBarContent={
+          <XStack mr={"$2"} f={1} space="$1.5" ai="center" jc='flex-end'>
+            <Text fontSize={14} color="$color11">
+              View all
+            </Text>
+            <Tinted>
+              <Switch
+                forceStyle='hover'
+                checked={all}
+                onCheckedChange={v => setAll(v)} size="$1"
+              >
+                <Switch.Thumb animation="quick" backgroundColor={"$color9"} />
+              </Switch>
+            </Tinted>
+
+
+          </XStack>
+        }
         itemData={itemData}
         rowIcon={Router}
         sourceUrl={sourceUrl}
+        sourceUrlParams={all ? undefined : { env }}
         initialItems={initialItems}
         name="device"
         columns={DataTable2.columns(
@@ -278,13 +306,13 @@ export default {
           onSelectItem: (item) => { },
           getBody: (data) => <CardBody title={data.name}>
             <Stack right={20} top={20} position={"absolute"}>
-              <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?:string) => {
+              <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?: string) => {
                 await API.get(`${sourceUrl}/${deviceId}/delete`)
               }} deleteable={() => true} element={DevicesModel.load(data)} extraMenuActions={extraMenuActions} />
             </Stack>
             <YStack f={1}>
-              {data?.subsystem 
-                ? data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />) 
+              {data?.subsystem
+                ? data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)
                 : (
                   <>
                     <Paragraph mt="20px" ml="20px" size={20}>{'You need to upload the device'}</Paragraph>
@@ -299,7 +327,5 @@ export default {
       />
     </AdminPage>)
   },
-  getServerSideProps: PaginatedData(sourceUrl, ['admin'], {
-    deviceDefinitions: definitionsSourceUrl
-  })
+  getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
 }

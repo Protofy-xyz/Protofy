@@ -16,9 +16,7 @@ const Home: React.FC = () => {
     const defaultWorkspace = workspaceEnv == 'dev'? 'dev' : (SiteConfig.defaultWorkspace??'dev')
 
     if(!page) return
-    if(workspaceEnv == 'prod' && serviceEnv == 'dev') { 
-      router.replace('/workspace/dev/'+(page?.slice(2).join('/')??''));  
-    } else if(workspaceEnv == 'dev' || workspaceEnv == 'prod') {
+    if(workspaceEnv == 'dev' || workspaceEnv == 'prod') {
       router.replace('/workspace/'+workspaceEnv+'/'+SiteConfig.defaultWorkspacePage)
     } else {
       router.replace('/workspace/'+defaultWorkspace+'/'+SiteConfig.defaultWorkspacePage);

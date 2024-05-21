@@ -8,6 +8,7 @@ export const DevicesSchema = Schema.object({
   subsystem: z.record(z.string(), z.any()).optional().hidden(),
   data: z.array(z.record(z.string(), z.any())).optional().hidden(),
   currentSdk: z.string().hidden().generate("esphome"),
+  environments: z.array(z.string()).optional().help("The environments the device has access to. '*' means all environments").hidden().groupIndex("env", "return !data.environments || data.environments.includes('*') ? ['dev', 'prod'] : data.environments"),
   location: z.object({
     lat: z.string(),
     long: z.string()
@@ -100,6 +101,10 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       super(data, DevicesSchema, session, "Test");
   }
 
+  hasEnvironment(env: string) {
+    return !this.data.environments || this.data.environments.includes('*') || this.data.environments.includes(env)
+  }
+
   public static getApiOptions() {
       return {
           name: 'devices',
@@ -185,10 +190,24 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       return result
   }
 
-  list(search?, session?, extraData?, params?): DevicesType[] {
-      const result = super.list(search, session, extraData, params)
-      return result
-  }
+
+  list(search?, session?, extraData?, params?): any {
+    if(params && params.filter && params.filter.environments) {
+        const {environments, ...filter} = params.filter
+        if(!this.hasEnvironment(environments)) { 
+            return
+        }
+        params = {
+            ...params,
+            filter: {
+                ...filter,
+            }
+        }
+    }
+    
+    //pass params with params.filter.environments removed
+    return super.list(search, session, extraData, params)
+}
 
   delete(data?): DevicesModel {
       const result = super.delete(data)

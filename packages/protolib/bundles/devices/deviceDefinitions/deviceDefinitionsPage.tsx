@@ -8,7 +8,7 @@ import { DeviceCoreModel } from '../devicecores';
 import { Button, XStack } from "tamagui";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { getPendingResult } from "protolib/base";
-import { usePendingEffect } from "protolib";
+import { usePendingEffect, useWorkspaceEnv } from "protolib";
 import { Flows } from "protolib";
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
 import { useRouter } from 'next/router'
@@ -31,6 +31,7 @@ export default {
     const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
     const [editedObjectData, setEditedObjectData] = React.useState<any>({})
     const router = useRouter()
+    const env = useWorkspaceEnv()
 
     const [boardList, setBoardList] = useState(extraData?.boards ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardList, extraData?.boards)
@@ -89,7 +90,9 @@ export default {
         initialItems={initialItems}
         numColumnsForm={1}
         name="Definition"
-        onAdd={data => { console.log("DATA (onAdd): ", data); return data }}
+        onAdd={data => {
+          return { ...data, environments: [env] }
+        }}
         onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
         columns={DataTable2.columns(
           DataTable2.column("", () => "", false, (row) => <InteractiveIcon onPress={async (e) => {
