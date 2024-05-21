@@ -26,7 +26,7 @@ import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
 import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
-import { useSession, AppConfContext } from 'protolib'
+import { useSession, AppConfContext, getBrokerUrl } from 'protolib'
 
 initSchemaSystem()
 
@@ -56,9 +56,10 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
 
     return false;
   }
-  const brokerUrl = typeof document !== "undefined" ? (document.location.protocol === "https:" ? "wss" : "ws") + "://" + document.location.host + '/websocket' : '';
 
+  const brokerUrl = getBrokerUrl()
 
+  console.log('brokerUrl', brokerUrl)
   return (
     <>
       <Head>

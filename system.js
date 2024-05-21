@@ -6,11 +6,20 @@ const config = {
         {
             "name": "admin-api",
             "description": "Administration API services for protofy admin panel",
-            "route": (req) => {
-                if(req.url.startsWith('/adminapi/') || req.url == '/adminapi') {
+            "route": (req, mode) => {
+                const url = req.url.split('?')[0]
+                const queryString = req.url.split('?')[1]
+                const query = queryString ? queryString.split('&').reduce((acc, val) => {
+                    const [key, value] = val.split('=')
+                    acc[key] = value
+                    return acc
+                }, {}) : {}
+
+                if(url.startsWith('/adminapi/') || url == '/adminapi') {
                     return process.env.ADMIN_API_URL ?? 'http://localhost:3002'
-                } else if(req.url == '/websocket' ) {
-                    return process.env.WEBSOCKET_URL ?? 'http://localhost:3003'
+                } else if(url == '/websocket' ) {
+                    const forceDev = query.env == 'dev'
+                    return process.env.WEBSOCKET_URL ?? 'http://localhost:' + (!forceDev && mode == 'production' && !disableProdApi ? 4003 : 3003)
                 }
             }
         },

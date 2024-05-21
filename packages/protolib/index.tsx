@@ -93,6 +93,7 @@ export * from './lib/Auth';
 export * from './lib/Session';
 export * from './lib/Redirect'
 export * from './lib/Atom'
+export * from './lib/Broker'
 export * from './lib/Sensors'
 export * from './components/jsonui'
 export * from './components/DataCard'

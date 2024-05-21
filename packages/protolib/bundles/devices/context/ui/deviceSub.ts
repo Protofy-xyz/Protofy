@@ -3,6 +3,7 @@ import { API } from '../../../../base';
 import mqtt from 'mqtt'
 import { useEffect, useRef } from 'react';
 import { useIsomorphicLayoutEffect } from 'usehooks-ts'
+import {getBrokerUrl} from '../../../../lib/Broker'
 
 export const deviceSub = async (deviceName: string, subsystemName: string, monitorName: string, cb?) => {
     const savedCallback = useRef(cb)
@@ -14,7 +15,7 @@ export const deviceSub = async (deviceName: string, subsystemName: string, monit
         savedCallback.current = cb
     }, [cb])
 
-    const brokerUrl = (document.location.protocol === "https:" ? "wss" : "ws") + "://" + document.location.host + '/websocket'
+    const brokerUrl = getBrokerUrl()
     const client = mqtt.connect(brokerUrl);
 
     useEffect(() => {

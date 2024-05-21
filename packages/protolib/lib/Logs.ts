@@ -1,10 +1,11 @@
 import { SetStateAction, atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
 import mqtt from 'mqtt'
+import { getBrokerUrl } from './Broker';
 
 let client;
 
-const brokerUrl = typeof document !== "undefined" ? (document.location.protocol === "https:" ? "wss" : "ws") + "://" + document.location.host + '/websocket' : '';
+const brokerUrl = getBrokerUrl()
 export const LogMessages = atom([])
 
 export const useLogMessages = () => {

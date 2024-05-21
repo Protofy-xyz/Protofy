@@ -24,7 +24,7 @@ import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
 import { setConfig } from 'protolib/base/Config';
 import {getBaseConfig} from 'app/BaseConfig'
-import { useSession, AppConfContext } from 'protolib'
+import { useSession, AppConfContext, getBrokerUrl } from 'protolib'
 setConfig(getBaseConfig("electron", process))
 initSchemaSystem()
 
@@ -54,7 +54,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
 
     return false;
   }
-  const brokerUrl = typeof document !== "undefined" ? (document.location.protocol === "https:" ? "wss" : "ws") + "://" + document.location.host + '/websocket' : '';
+  const brokerUrl = getBrokerUrl()
   
   return (
     <>

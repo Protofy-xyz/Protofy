@@ -3,9 +3,10 @@ import { useMqttState } from 'mqtt-react-hooks';
 import { Connector } from 'mqtt-react-hooks';
 import { SignalingModel } from 'protolib/bundles/signalings';
 import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
+import {getBrokerUrl} from '../../lib/Broker'
 
 export const MqttSignaling = ({ clientId, children }: any) => {
-    const brokerUrl = typeof document !== "undefined" ? (document.location.protocol === "https:" ? "wss" : "ws") + "://" + document.location.host + '/websocket' : '';
+    const brokerUrl = getBrokerUrl()
     const { connectionStatus } = useMqttState();
 
     const mqttSignaling = async () => {
