@@ -7,8 +7,10 @@ const config = {
             "name": "admin-api",
             "description": "Administration API services for protofy admin panel",
             "route": (req) => {
-                if(req.url.startsWith('/adminapi/') || req.url == '/websocket' || req.url == '/adminapi') {
+                if(req.url.startsWith('/adminapi/') || req.url == '/adminapi') {
                     return process.env.ADMIN_API_URL ?? 'http://localhost:3002'
+                } else if(req.url == '/websocket' ) {
+                    return process.env.WEBSOCKET_URL ?? 'http://localhost:3003'
                 }
             }
         },

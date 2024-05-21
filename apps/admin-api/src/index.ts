@@ -20,14 +20,14 @@ import { getApp, getMQTTClient } from 'protolib/api'
 import BundleAPI from '../../../packages/app/bundles/adminapi'
 import adminModules from 'protolib/adminapi'
 require('events').EventEmitter.defaultMaxListeners = 100;
-import aedes from 'aedes';
+
 import http from 'http';
-import WebSocket, { Server } from 'ws';
-import net from 'net';
+
 import chokidar from 'chokidar';
 import BundleContext from '../../../packages/app/bundles/adminApiContext'
 import { API } from 'protolib/base'
 import { startProxy } from './proxy';
+import { startMqtt } from './mqtt';
 
 const config = getConfig()
 const logger = getLogger()
@@ -47,29 +47,10 @@ const generateEvent = async (event, token = '') => {
 }
 
 startProxy()
+startMqtt(config)
 
 logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: admin-api")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
-
-const aedesInstance = new aedes();
-aedesInstance.authenticate = function (client, username, password, callback) {
-  if (!username) {
-    logger.debug({}, "MQTT anonymous login request")
-  } else {
-    logger.debug({ username }, "MQTT user login request: " + username)
-  }
-
-  if (config.mqtt.auth) {
-    if (!username || !password) {
-      logger.error({}, "MQTT anonymous login refused: mqtt requires auth")
-    } else {
-      //TODO: auth
-      callback(null, true)
-    }
-  } else {
-    callback(null, true)
-  }
-}
 
 const mqtt = getMQTTClient('admin-api', getServiceToken())
 
@@ -94,38 +75,10 @@ const topicPub = (topic, data) => {
 
 BundleAPI(app, { mqtt, topicSub, topicPub, ...BundleContext })
 const server = http.createServer(app);
-
-const wss = new Server({ noServer: true });
-
-
-wss.on('connection', (ws: WebSocket) => {
-  const stream = WebSocket.createWebSocketStream(ws, { decodeStrings: false });
-  aedesInstance.handle(stream as any);
-});
-
-server.on('upgrade', (request, socket, head) => {
-  if (request.url === '/websocket') {
-    wss.handleUpgrade(request, socket, head, (ws) => {
-      wss.emit('connection', ws, request);
-    });
-  } else {
-    socket.destroy();
-  }
-});
-
 const PORT = 3002
 
 server.listen(PORT, () => {
   logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
-});
-
-const mqttServer = net.createServer((socket) => {
-  aedesInstance.handle(socket);
-});
-
-const mqttPort = 1883
-mqttServer.listen(mqttPort, () => {
-  logger.debug({ service: { protocol: "mqtt", port: mqttPort } }, "Service started: MQTT")
   generateEvent({
     path: 'services/adminapi/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
     from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
