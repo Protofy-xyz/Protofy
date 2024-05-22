@@ -9,6 +9,7 @@ import { generateEvent } from "../bundles/events/eventsLibrary";
 import { getLogger } from '../base';
 import { UserModel } from '../bundles/users';
 import {SiteConfig} from 'app/conf'
+import { getDBOptions } from '../api';
 
 const logger = getLogger()
 
@@ -19,10 +20,7 @@ logger.debug(`API Module loaded: ${__filename.split('.')[0]}`);
 const dbPath = 'auth'
 const groupDBPath = 'auth_groups'
 
-connectDB(dbPath, getInitialData(dbPath), {
-    indexes: UserModel.getIndexes(),
-    groupIndexes: UserModel.getGroupIndexes()
-}) //preconnect database
+connectDB(dbPath, getInitialData(dbPath), getDBOptions(UserModel)) //preconnect database
 
 const genNewSession = (data: any) => {
     return {

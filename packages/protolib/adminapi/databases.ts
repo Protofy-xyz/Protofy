@@ -2,8 +2,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import { handler, getApp} from 'protolib/api'
-import { connectDB, getDB } from 'app/bundles/storageProviders'
-import { getInitialData } from 'app/initialData';
+import { getDB } from 'app/bundles/storageProviders'
 import { getLogger } from '../base';
 
 const logger = getLogger()

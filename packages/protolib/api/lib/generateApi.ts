@@ -3,7 +3,7 @@ import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
 import { getEnv, getLogger } from '../../base';
 import { connectDB as _connectDB, getDB as _getDB } from "app/bundles/storageProviders";
-import { useEvent } from "tamagui";
+import { getDBOptions } from "./db";
 
 const logger = getLogger()
 
@@ -51,6 +51,7 @@ type AutoAPIOptions = {
     onBeforeDelete?: Function,
     onAfterDelete?: Function,
     skipDatabaseIndexes?: boolean,
+    skipDatabaseInitialization?: boolean,
     dbOptions?: {
         batch?: boolean,
         batchLimit?: number,
@@ -92,22 +93,16 @@ export const AutoAPI = ({
     useDatabaseEnvironment = false,
     useEventEnvironment = true,
     defaultOrderBy = undefined,
-    defaultOrderDirection = 'asc'
+    defaultOrderDirection = 'asc',
+    skipDatabaseInitialization = false
 }: AutoAPIOptions) => async (app, context) => {
     const env = useEventEnvironment ? getEnv() : undefined
     const dbPath =((useDatabaseEnvironment ? getEnv() + '/' : '') + (dbName ? dbName : modelName))
     const groupIndexes = modelType.getGroupIndexes()
 
-    await connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {
-        indexes: modelType.getIndexes(),
-        groupIndexes: modelType.getGroupIndexes(),
-        dbOptions: {
-            batch: false,
-            batchLimit: 100,
-            batchTimeout: 5000,
-            ...dbOptions
-        }     
-    }) //preconnect database
+    if(!skipDatabaseInitialization) {
+        await connectDB(dbPath, initialData, skipDatabaseIndexes? {} : getDBOptions(modelType, dbOptions))
+    }
 
     const _onBeforeList = async (data, session, req) => {
         groupIndexes.forEach((val) => {

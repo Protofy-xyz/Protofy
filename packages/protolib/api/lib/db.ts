@@ -465,3 +465,16 @@ export const closeDBS = async () => {
         await dbHandlers[key].close()
     }
 }
+
+export const getDBOptions = (modelType, dbOptions?) => {
+    return {
+        indexes: modelType.getIndexes(),
+        groupIndexes: modelType.getGroupIndexes(),
+        dbOptions: {
+            batch: false,
+            batchLimit: 100,
+            batchTimeout: 5000,
+            ...dbOptions
+        }     
+    }
+}
