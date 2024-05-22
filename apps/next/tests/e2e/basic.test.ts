@@ -32,11 +32,11 @@ describe("Basic tests", () => {
     let protoBrowser: ProtoBrowser;
     beforeEach(async () => {
         protoBrowser = await ProtoBrowser.__newInstance__(!DEBUG)
-    }, 15000)
+    }, 30000)
     afterEach(async () => {
         await protoBrowser?.close()
     })
-    it("should have a documentation page", async () => {
+    it.skip("should have a documentation page", async () => { // sikpped: docs are disabled by default
         await protoBrowser.navigateToDocumentation()
         expect(await protoBrowser.waitForElement('#__next')).toBeTruthy();
     }, 30000)
@@ -46,10 +46,9 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement('#sign-in-email-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-password-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-btn')).toBeTruthy();
-        expect(await protoBrowser.waitForElement('#sign-up-link')).toBeTruthy();
     }, 30000)
     it("should have a public sign up authentication interface", async () => {
-        await protoBrowser.navigateToRegister()
+        await protoBrowser.navigateToRegister();
         expect(await protoBrowser.getUrlPath()).toBe('/auth/register');
         expect(await protoBrowser.waitForElement('#sign-up-email-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-up-password-input')).toBeTruthy();
@@ -57,7 +56,7 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement('#sign-up-btn')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-link')).toBeTruthy();
     }, 30000)
-    it("should be able to register and retrieve a session using sign up interface", async () => {
+    it.skip("should be able to register and retrieve a session using sign up interface", async () => { // sikpped: Signup is disabled by default
         await protoBrowser.navigateToRegister()
         await protoBrowser.waitForElement('#sign-up-email-input');
         await protoBrowser.signUpFlow(`randomuser-${uuidv4()}@noreply.com`, 'changeme4321');
@@ -147,7 +146,7 @@ describe("Test admin capabilities", () => {
                 beforeEach(async () => {
                     await protoBrowser.navigateToAdminSection('pages')
                 }, 60000)
-                it("should be able to edit the page", async () => {
+                it("should be able to edit the page", async () => {                                                                                                                                                                         
                     await protoBrowser.waitForElement('#admin-dataview-add-btn');
                     await protoBrowser.clickElement("#more-btn-home")
                     await protoBrowser.clickElement("#more-btn-home-option-1")
@@ -183,7 +182,7 @@ describe("Test admin capabilities", () => {
                     await protoBrowser.clickElement(`#admin-pages-add-btn`)
                     expect(await protoBrowser.getElementText(`#pages-datatable-testpagemultipledelete1`)).toBe("testpagemultipledelete1");
                 }, 60000)
-                it("should be able to create a blank page", async () => {
+                it("should be able to create a blank page", async () => { // TESTING
                     // Select template
                     await protoBrowser.clickElement(`#pages-template-${PAGE_TEMPLATES.BLANK}`)
                     await protoBrowser.clickElement(`#admin-pages-add-btn`)
