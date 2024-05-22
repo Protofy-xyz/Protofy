@@ -38,6 +38,8 @@ type AutoAPIOptions = {
     extraData?: any,
     logLevel?: string,
     itemsPerPage?: number
+    defaultOrderBy?: string,
+    defaultOrderDirection?: string,
     onBeforeList?: Function,
     onAfterList?: Function,
     onBeforeCreate?: Function,
@@ -88,7 +90,9 @@ export const AutoAPI = ({
     skipDatabaseIndexes,
     dbOptions = {},
     useDatabaseEnvironment = false,
-    useEventEnvironment = true
+    useEventEnvironment = true,
+    defaultOrderBy = undefined,
+    defaultOrderDirection = 'asc'
 }: AutoAPIOptions) => async (app, context) => {
     const env = useEventEnvironment ? getEnv() : undefined
     const dbPath =((useDatabaseEnvironment ? getEnv() + '/' : '') + (dbName ? dbName : modelName))
@@ -118,8 +122,8 @@ export const AutoAPI = ({
 
     const _list = (req, allResults, _itemsPerPage) => {
         const page = Number(req.query.page) || 0;
-        const orderBy: string = req.query.orderBy as string;
-        const orderDirection = req.query.orderDirection || 'asc';
+        const orderBy: string = (req.query.orderBy ?? defaultOrderBy) as string;
+        const orderDirection = req.query.orderDirection ?? defaultOrderDirection;
         if (orderBy) {
             allResults = allResults.sort((a, b) => {
                 if (a[orderBy] > b[orderBy]) return orderDirection === 'asc' ? 1 : -1;
@@ -187,8 +191,8 @@ export const AutoAPI = ({
             const filterData = filter ? {key: filterKeys[0], value: filter[filterKeys[0]]} : null
             const total = parseInt(await db.count(filterData), 10)
             const page = Number(req.query.page) || 0;
-            const orderBy: string = req.query.orderBy ? req.query.orderBy as string : modelType.getIdField()
-            const orderDirection = req.query.orderDirection || 'asc';
+            const orderBy: string = req.query.orderBy ? req.query.orderBy as string : (defaultOrderBy ?? modelType.getIdField())
+            const orderDirection = req.query.orderDirection || defaultOrderDirection;
             if(indexedKeys.length && indexedKeys.includes(orderBy)) {
                 const result = {
                     itemsPerPage:_itemsPerPage,

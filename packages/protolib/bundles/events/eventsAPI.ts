@@ -35,7 +35,9 @@ const EventAPI = AutoAPI({
     logLevel: "debug",
     dbOptions: {
         batch: true
-    }
+    },
+    defaultOrderBy: 'created',
+    defaultOrderDirection: 'desc'
 })
 
 export const EventsAPI = async (app, context) => {
