@@ -25,7 +25,7 @@ import http from 'http';
 
 import chokidar from 'chokidar';
 import BundleContext from '../../../packages/app/bundles/adminApiContext'
-import { API } from 'protolib/base'
+import { generateEvent } from 'app/bundles/library'
 import { startProxy } from './proxy';
 import { startMqtt } from './mqtt';
 
@@ -37,14 +37,6 @@ const app = getApp()
 process.on('uncaughtException', function (err) {
   logger.error({ err }, 'Uncaught Exception: ', err.message)
 });
-
-const generateEvent = async (event, token = '') => {
-  try {
-    await API.post('/adminapi/v1/events?token=' + token, event)
-  } catch (e) {
-    //console.error("Failed to send event: ", e)
-  }
-}
 
 startProxy()
 startMqtt(config)
