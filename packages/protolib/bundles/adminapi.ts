@@ -15,7 +15,6 @@ import { WorkspacesAPI } from './workspaces/workspacesAPI'
 import { ResourcesAPI } from './resources/resourcesAPI'
 import { AiAssistantsAPI } from './aiAssistants/aiAssistantsAPI';
 import { MasksAPI } from './visualui/masksAPI';
-import { SignalingAPI } from './signalings/signalingsAPI';
 import { LogsAPI } from './logs/logsAPI'
 import { ServicesAPI } from './services/servicesAPI'
 
@@ -37,7 +36,6 @@ export default (app, context) => {
   ResourcesAPI(app, context)
   AiAssistantsAPI(app, context)
   MasksAPI(app, context)
-  SignalingAPI(app, context)
   LogsAPI(app, context),
   ServicesAPI(app, context)
 }

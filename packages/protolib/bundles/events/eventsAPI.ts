@@ -35,24 +35,11 @@ const EventAPI = AutoAPI({
     logLevel: "debug",
     dbOptions: {
         batch: true
-    },
-    useDatabaseEnvironment: false
+    }
 })
 
 export const EventsAPI = async (app, context) => {
     EventAPI(app, context)
-    //TODO: remove in favor of a filtered event list call
-    app.get('/adminapi/v1/events/signaling/list', async (req, res) => {
-        const { isError, data } = await API.get('/adminapi/v1/events?token=' + getServiceToken() + '&all=1'); // TODO: Change for event api call that search
-        if (isError) {
-            res.send("Error obtaining signaling events")
-            return;
-        }
-        const events = data?.items;
-        const signalingEventsData = events?.filter((event: EventType) => event.path === 'signaling'); // should be at endpoint for event model applying search filter (related with previous one "TODO")
-        res.send(signalingEventsData)
-    })
-
     app.get('/adminapi/v1/events/options/generate', handler(async (req: any, res: any, session) => {
         if (!session || !session.user.admin) {
             res.status(401).send({ error: "Unauthorized" })
