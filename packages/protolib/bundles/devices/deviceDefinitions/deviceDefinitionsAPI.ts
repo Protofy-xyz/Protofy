@@ -11,7 +11,7 @@ const onAfterCreate = async (data, session?, req?) => {
             name: data.name + "1",
             currentSdk: data.sdk,
             deviceDefinition: data.name,
-            environments: data.environments,
+            environment: data.environment,
         })
         await API.post("/adminapi/v1/devices?token=" + session.token, objectDevice.create().getData())
     }

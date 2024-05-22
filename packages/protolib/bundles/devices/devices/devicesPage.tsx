@@ -262,7 +262,7 @@ export default {
       <DataView
         entityName="devices"
         onAdd={data => {
-          return { ...data, environments: [env] }
+          return { ...data, environment: env }
         }}
         defaultView={"grid"}
         integratedChat

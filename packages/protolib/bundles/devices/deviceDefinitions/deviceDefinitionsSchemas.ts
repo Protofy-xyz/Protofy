@@ -5,6 +5,7 @@ export const DeviceDefinitionSchema = Schema.object({
   board: z.string().hidden(),
   sdk: z.string().hidden(),
   subsystems: z.record(z.string(), z.any()).optional().hidden(),
+  environment: z.string().optional().help("The environment where the definition was created").hidden().groupIndex("env"),
   config: z.record(z.string(), z.any()).onCreate('getConfig').onUpdate('getConfig'),
 })
 export type DeviceDefinitionType = z.infer<typeof DeviceDefinitionSchema>;

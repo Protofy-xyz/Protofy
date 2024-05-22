@@ -91,7 +91,7 @@ export default {
         numColumnsForm={1}
         name="Definition"
         onAdd={data => {
-          return { ...data, environments: [env] }
+          return { ...data, environment: env }
         }}
         onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
         columns={DataTable2.columns(
