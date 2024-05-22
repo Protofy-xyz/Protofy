@@ -32,7 +32,7 @@ describe("Basic tests", () => {
     let protoBrowser: ProtoBrowser;
     beforeEach(async () => {
         protoBrowser = await ProtoBrowser.__newInstance__(!DEBUG)
-    }, 15000)
+    }, 30000)
     afterEach(async () => {
         await protoBrowser?.close()
     })
