@@ -4,16 +4,15 @@ import { generateEvent } from "../eventsLibrary"
 export const onEvent = (context, cb, path?, from?) => {
     context.topicSub('notifications/event/create/#', (async (msg: string, topic: string) => {
         try {
-            const message = JSON.parse(msg)
-            if (message) {
-                if (path && message['path'] != path) {
+            if (msg) {
+                if (path && msg['path'] != path) {
                     return
                 }
-                if (from && message['from'] != from) {
+                if (from && msg['from'] != from) {
                     return
                 }
             }
-            cb(message)
+            cb(msg)
         } catch (e) {
             console.error('Error parsing message from mqtt: ', e)
         }
