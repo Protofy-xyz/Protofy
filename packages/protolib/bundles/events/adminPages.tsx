@@ -30,9 +30,6 @@ export default {
                     initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
 
-            // const [options, setOptions] = useState(getPendingResult('pending'))
-            // usePendingEffect((s) => { API.get({ url: '/adminapi/v1/events/options/all' }, s) }, setOptions, options)
-
             return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
                     integratedChat
@@ -46,24 +43,6 @@ export default {
                     defaultView={'list'}
                     rowIcon={ClipboardList}
                     quickRefresh={true}
-                    // toolBarContent={<XStack justifyContent="flex-end" ai="center" width={'100%'} f={1} ml={"$5"}>
-                    //     <XStack width={"250px"}>
-                    //         <Tinted>
-                    //             <InputSelect
-                    //                 menuStyle={{
-                    //                     width: '600px'
-                    //                 }}
-                    //                 placeholder="Path..."
-                    //                 controlStyle={{
-                    //                     width: '250px'
-                    //                 }}
-                    //                 options={options.isLoaded ? options.data.paths.map(p => {
-                    //                     return { value: p, label: p }
-                    //                 }) : []} />
-                    //         </Tinted>
-                    //     </XStack>
-
-                    // </XStack>}
                     columns={DataTable2.columns(
                         DataTable2.column("path", row => row.path, "path", undefined, true, '250px'),
                         DataTable2.column("user", row => row.user, "user", undefined, true, '200px'),
