@@ -131,5 +131,7 @@ export const APIsAPI = AutoAPI({
   prefix: '/adminapi/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
-  requiresAdmin: ['*']
+  requiresAdmin: ['*'],
+  useEventEnvironment: false,
+  useDatabaseEnvironment: false
 })

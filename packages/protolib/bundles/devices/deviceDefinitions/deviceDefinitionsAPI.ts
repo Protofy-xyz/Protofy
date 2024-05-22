@@ -33,5 +33,6 @@ export const DeviceDefinitionsAPI = AutoAPI({
             return data
         }
     },
-    useDatabaseEnvironment: false
+    useDatabaseEnvironment: false,
+    useEventEnvironment: false
 })

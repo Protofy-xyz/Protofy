@@ -30,5 +30,6 @@ export const UsersAPI = AutoAPI({
         }
     },
     requiresAdmin: ['*'],
-    useDatabaseEnvironment: false
+    useDatabaseEnvironment: false,
+    useEventEnvironment: false
 })

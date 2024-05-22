@@ -238,5 +238,6 @@ export const PagesAPI = AutoAPI({
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*'],
-  useDatabaseEnvironment: false
+  useDatabaseEnvironment: false,
+  useEventEnvironment: false
 })

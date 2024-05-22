@@ -6,6 +6,7 @@ export const BaseEventSchema = z.object(Protofy("schema", {
     path: z.string().search(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
     from: z.string().search(), // system entity where the event was generated (next, api, cmd...)
     user: z.string().generate((obj) => 'me').search(), // the original user that generates the action, 'system' if the event originated in the system itself
+    environment: z.enum(['dev', 'prod']).optional(), // the environment where the event was generated (dev, prod, ...
     payload: z.record(z.string(), z.any()).search(), // event payload, event-specific data
     created: z.string().generate((obj) => moment().toISOString()).search().indexed(), // event date (iso)
 }))

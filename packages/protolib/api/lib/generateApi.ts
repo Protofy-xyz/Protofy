@@ -3,6 +3,7 @@ import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
 import { getEnv, getLogger } from '../../base';
 import { connectDB as _connectDB, getDB as _getDB } from "app/bundles/storageProviders";
+import { useEvent } from "tamagui";
 
 const logger = getLogger()
 
@@ -53,7 +54,8 @@ type AutoAPIOptions = {
         batchLimit?: number,
         batchTimeout?: number
     }
-    useDatabaseEnvironment?: boolean
+    useDatabaseEnvironment?: boolean,
+    useEventEnvironment?: boolean
 }
 
 export const AutoAPI = ({
@@ -85,11 +87,13 @@ export const AutoAPI = ({
     onAfterDelete = async (data, session?, req?) => data,
     skipDatabaseIndexes,
     dbOptions = {},
-    useDatabaseEnvironment = false
+    useDatabaseEnvironment = false,
+    useEventEnvironment = true
 }: AutoAPIOptions) => async (app, context) => {
-    const env = useDatabaseEnvironment ? getEnv() + '/' : ''
-    const dbPath =(env + (dbName ? dbName : modelName))
+    const env = useEventEnvironment ? getEnv() : undefined
+    const dbPath =((useDatabaseEnvironment ? getEnv() + '/' : '') + (dbName ? dbName : modelName))
     const groupIndexes = modelType.getGroupIndexes()
+
     await connectDB(dbPath, initialData, skipDatabaseIndexes? {} : {
         indexes: modelType.getIndexes(),
         groupIndexes: modelType.getGroupIndexes(),
@@ -226,6 +230,7 @@ export const AutoAPI = ({
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('create'), entityModel.getNotificationsPayload())
         if (!disableEvents) {
             generateEvent({
+                ...(env?{environment: env}:{}),
                 path: modelName + '/create', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
@@ -289,6 +294,7 @@ export const AutoAPI = ({
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
         if (!disableEvents) {
             generateEvent({
+                ...(env?{environment: env}:{}),
                 path: modelName + '/update', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
@@ -324,6 +330,7 @@ export const AutoAPI = ({
             context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('delete'), entityModel.getNotificationsPayload())
             if (!disableEvents) {
                 generateEvent({
+                    ...(env?{environment: env}:{}),
                     path: modelName + '/delete', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                     from: 'api', // system entity where the event was generated (next, api, cmd...)
                     user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
