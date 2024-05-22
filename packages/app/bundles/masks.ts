@@ -2,7 +2,6 @@ import devicesEditorMasks from 'protodevice/src/nodes'
 import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks.json'
 import uiBundleMasks from 'protolib/bundles/ui/masks';
 import apiMasks from 'protolib/bundles/apis/masks';
-import deviceAction from 'protolib/bundles/apis/masks/DeviceAction';
 import devicesMasks from 'protolib/bundles/devices/devices/masks';
 import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
 import baseMasks from 'protolib/bundles/basemasks';
@@ -51,8 +50,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...devicesUIMasks,
         ...objectMasks,
         ...baseMasks.api,
-        ...keyMasks,
-        deviceAction
+        ...keyMasks
     ]
     if (paths.apis.includes(segment)) return [
         ...customMasks.api,
@@ -60,7 +58,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...flowMasks2,
         ...customEventMasks.api,
         ...apiMasks,
-        ...devicesMasks.api,
+        ...devicesMasks,
         ...baseMasks.api,
         ...automationMasks,
         ...resendMasks,

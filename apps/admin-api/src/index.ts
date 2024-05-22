@@ -46,7 +46,7 @@ logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
 
 const mqtt = getMQTTClient('admin-api', getServiceToken())
 
-const topicSub = (topic, cb) => {
+const topicSub = (mqtt, topic, cb) => {
   mqtt.subscribe(topic)
   mqtt.on("message", (messageTopic, message) => {
     const isWildcard = topic.endsWith("#");
@@ -61,7 +61,7 @@ const topicSub = (topic, cb) => {
   });
 };
 
-const topicPub = (topic, data) => {
+const topicPub = (mqtt, topic, data) => {
   mqtt.publish(topic, data)
 }
 

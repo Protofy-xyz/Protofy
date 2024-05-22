@@ -1,5 +1,5 @@
 import { onEvent, emitEvent } from './events/api'
-import { automation, fetch, deviceAction, deviceMonitor, automationResponse, executeAutomation, getServiceToken, serviceToken } from './apis/context/'
+import { automation, fetch, automationResponse, executeAutomation, getServiceToken, serviceToken } from './apis/context/'
 import {createSchedule} from './automations/schedule'
 import {createPeriodicSchedule} from './automations/periodicSchedule'
 import { sendMailWithResend } from './resend/context'
@@ -15,6 +15,7 @@ import logs from './logs/context'
 import playwright from './playwright/context'
 import automations from './automations/context'
 import network from './network/context'
+import deviceContext from './devices/devices/context'
 
 export default {
     onEvent,
@@ -24,12 +25,11 @@ export default {
     getServiceToken,
     serviceToken,
     fetch,
-    deviceAction,
-    deviceMonitor,
     createSchedule,
     createPeriodicSchedule,
     sendMailWithResend,
     executeAutomation,
+    ...deviceContext,
     keys,
     chatGPT,
     flow,

@@ -1,4 +1,4 @@
-import { DeviceSubsystemMonitor } from '../../../devices/devices/devicesSchemas';
+import { DeviceSubsystemMonitor } from '../devicesSchemas';
 import { API } from '../../../../base';
 import mqtt from 'mqtt'
 import { useEffect, useRef } from 'react';

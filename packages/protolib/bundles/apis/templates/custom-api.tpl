@@ -32,7 +32,7 @@ Protofy("type", "CustomAPI")
 
 export default Protofy("code", async (app:Application, context) => {
     //PUT YOUR API HERE
-    //context.devicePub function allows to communicate with devices via mqtt
+    //context.deviceAction function allows to communicate with devices via mqtt
     //context.deviceSub allows to receive notifications from devices via mqtt
     //app is a normal expressjs object
     //context.mqtt is a mqttclient connection

@@ -1,6 +1,4 @@
-import DeviceSub from "../masks/DeviceSub";
-import DevicePub from "../masks/DevicePub";
+import DeviceAction from "../masks/DeviceAction";
 export default [
-    DeviceSub,
-    DevicePub
+    DeviceAction
 ]

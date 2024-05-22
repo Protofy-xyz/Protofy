@@ -1,10 +1,9 @@
 import { getServiceToken } from '../../../api/lib/serviceToken'
 import { generateEvent } from "../eventsLibrary"
 
-export const onEvent = (context, cb, path?, from?) => {
-    context.topicSub('notifications/event/create/#', (async (msg: string, topic: string) => {
+export const onEvent = (mqtt, context, cb, path?, from?) => {
+    context.topicSub(mqtt, 'notifications/event/create/#', (async (message: string, topic: string) => {
         try {
-            const message = JSON.parse(msg)
             if (message) {
                 if (path && message['path'] != path) {
                     return

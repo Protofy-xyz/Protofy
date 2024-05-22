@@ -23,7 +23,7 @@ const logger = getLogger()
 
 export const DevicesAPI = (app, context) => {
     const devicesPath = '../../data/devices/'
-    const { topicSub, topicPub } = context;
+    const { topicSub, topicPub, mqtt } = context;
     DevicesAutoAPI(app, context)
     // Device topics: devices/[deviceName]/[endpoint], en caso de no tener endpoint: devices/[deviceName]
     /* examples
@@ -50,7 +50,7 @@ export const DevicesAPI = (app, context) => {
             res.status(404).send(`Action [${req.params.action}] not found in Subsytem [${req.params.subsystem}] for device [${req.params.device}]`)
             return
         }
-        topicPub(action.getEndpoint(), req.params.value == "undefined" ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : req.params.value)
+        topicPub(mqtt, action.getEndpoint(), req.params.value == "undefined" ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : req.params.value)
         res.send({
             subsystem: req.params.subsystem,
             action: req.params.action,
@@ -122,7 +122,7 @@ export const DevicesAPI = (app, context) => {
         res.send({value: yaml})
     }))
 
-    topicSub('devices/#', (async (message: string, topic: string) => {
+    topicSub(mqtt, 'devices/#', (async (message: string, topic: string) => {
         const splitted = topic.split("/");
         const device = splitted[0];
         const deviceName = splitted[1];

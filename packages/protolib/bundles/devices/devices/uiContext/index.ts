@@ -1,5 +1,5 @@
 import { deviceSub } from "./deviceSub";
-import {deviceAction} from './devicePub';
+import {deviceAction} from './deviceAction';
 
 export default {
     deviceSub,

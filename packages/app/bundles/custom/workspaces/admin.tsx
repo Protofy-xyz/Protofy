@@ -10,7 +10,7 @@ export default {
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
             { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
             { "name": "Keys", "icon": Key, "type": "keys", "path": "/" },
-            { "name": "Events", "icon": "activity", "type": "events", "path": "?page=0&orderBy=created&orderDirection=desc" },
+            { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
             { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
             { "name": "Services", "icon": Cog, "type": "services", "path": "/"},
         ],

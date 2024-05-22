@@ -2,10 +2,10 @@ import { Node, NodeParams, getFieldValue, FallbackPort, FlowPort, filterCallback
 import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Play } from 'lucide-react';
-import { DeviceRepository } from '../../devices/repositories/deviceRepository';
-import { DeviceCollection, DeviceModel } from '../../devices/models/DeviceModel';
-import { DeviceDataType, SubsystemType } from '../../devices/models/interfaces';
-import { SubsystemCollection, SubsystemModel } from '../../devices/models/SubsystemModel';
+import { DeviceRepository } from '../../repositories/deviceRepository';
+import { DeviceCollection, DeviceModel } from '../../models/DeviceModel';
+import { DeviceDataType, SubsystemType } from '../../models/interfaces';
+import { SubsystemCollection, SubsystemModel } from '../../models/SubsystemModel';
 
 const deviceRepository = new DeviceRepository()
 const DeviceAction = (node: any = {}, nodeData = {}) => {

@@ -2,10 +2,10 @@ import { Node, NodeParams, getFieldValue } from 'protoflow';
 import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Cable } from 'lucide-react';
-import { DeviceRepository } from '../../devices/repositories/deviceRepository';
-import { DeviceCollection, DeviceModel } from '../../devices/models/DeviceModel';
-import { DeviceDataType, SubsystemType } from '../../devices/models/interfaces';
-import { SubsystemCollection, SubsystemModel } from '../../devices/models/SubsystemModel';
+import { DeviceRepository } from '../../repositories/deviceRepository';
+import { DeviceCollection, DeviceModel } from '../../models/DeviceModel';
+import { DeviceDataType, SubsystemType } from '../../models/interfaces';
+import { SubsystemCollection, SubsystemModel } from '../../models/SubsystemModel';
 
 
 const deviceRepository = new DeviceRepository()

@@ -6,8 +6,6 @@ import ExecuteAutomation from './ExecuteAutomation';
 import GetServiceToken from './GetServiceToken';
 import Logger from './Logger';
 import Automation from './Automation';
-import DeviceAction from './DeviceAction';
-import DeviceMonitor from './DeviceMonitor';
 import AutomationResponse from './AutomationResponse';
 
 const apiMasks = [
@@ -18,9 +16,7 @@ const apiMasks = [
     ApiResponse,
     ApiResponseFile,
     AutomationResponse,
-    DeviceAction,
     ExecuteAutomation,
-    DeviceMonitor,
     GetServiceToken
 ]
 
