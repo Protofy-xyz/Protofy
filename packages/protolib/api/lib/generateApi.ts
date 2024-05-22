@@ -26,7 +26,7 @@ type AutoAPIOptions = {
     modelType: any,
     initialData?: Object,
     prefix?: string,
-    dbName?: string,
+    dbName?: string | Function,
     transformers?: any,
     connectDB?: any,
     getDB?: any,
@@ -97,11 +97,19 @@ export const AutoAPI = ({
     skipDatabaseInitialization = false
 }: AutoAPIOptions) => async (app, context) => {
     const env = useEventEnvironment ? getEnv() : undefined
-    const dbPath =((useDatabaseEnvironment ? getEnv() + '/' : '') + (dbName ? dbName : modelName))
+    const defaultName  = useDatabaseEnvironment ? getEnv() + '/' : (dbName ? dbName : modelName)
     const groupIndexes = modelType.getGroupIndexes()
 
+    const getDBPath = (action: "init" | "list" | "create" | "read" | "update" | "delete", req?, entityModel?) => {
+        if(dbName && typeof dbName == 'function') {
+            return dbName(action, req, entityModel)
+        }
+
+        return defaultName
+    }
+
     if(!skipDatabaseInitialization) {
-        await connectDB(dbPath, initialData, skipDatabaseIndexes? {} : getDBOptions(modelType, dbOptions))
+        await connectDB(getDBPath("init"), initialData, skipDatabaseIndexes? {} : getDBOptions(modelType, dbOptions))
     }
 
     const _onBeforeList = async (data, session, req) => {
@@ -143,7 +151,7 @@ export const AutoAPI = ({
             return
         }
 
-        const db = getDB(dbPath, req, session);
+        const db = getDB(getDBPath("list", req), req, session);
         const allResults: any[] = [];
 
         const search = req.query.search;
@@ -222,9 +230,23 @@ export const AutoAPI = ({
             return
         }
 
-        const db = getDB(dbPath, req, session)
+
         const entityModel = await (modelType.load(await onBeforeCreate(req.body, session, req), session).createTransformed(transformers))
-        await db.put(entityModel.getId(), entityModel.serialize())
+        let dbPath = getDBPath("create", req, entityModel)
+        if(!dbPath) {
+            res.status(404).send({ error: "Not found" })
+        }
+
+        if(!(dbPath instanceof Array)) {
+            dbPath = [dbPath]
+        }
+
+        if(dbPath instanceof Array) {
+            for(const path of dbPath) {
+                const db = getDB(path, req, session)
+                await db.put(entityModel.getId(), entityModel.serialize())
+            }
+        }
 
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('create'), entityModel.getNotificationsPayload())
         if (!disableEvents) {
@@ -250,7 +272,7 @@ export const AutoAPI = ({
             return
         }
 
-        const db = getDB(dbPath, req, session)
+        const db = getDB(getDBPath("read", req), req, session)
 
         try {
             if (paginatedRead) {
@@ -286,8 +308,9 @@ export const AutoAPI = ({
             return
         }
 
-        const db = getDB(dbPath, req, session)
-        const entityModel = await (modelType.unserialize(await db.get(req.params.key), session).updateTransformed(modelType.load(await onBeforeUpdate(req.body, req, session), session), transformers))
+        const requestModel = modelType.load(await onBeforeUpdate(req.body, req, session), session)
+        const db = getDB(getDBPath("update", req, requestModel), req, session)
+        const entityModel = await (modelType.unserialize(await db.get(req.params.key), session).updateTransformed(requestModel, transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
 
         context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
@@ -314,7 +337,7 @@ export const AutoAPI = ({
             return
         }
         
-        const db = getDB(dbPath, req, session)
+        const db = getDB(getDBPath("delete", req), req, session)
         const rawEntityData = await db.get(req.params.key)
         
         if (!paginatedRead) {

@@ -1,5 +1,5 @@
 import { EventModel } from '.'
-import { DataTable2, Chip, DataView, AdminPage, InputSelect } from 'protolib'
+import { DataTable2, Chip, DataView, AdminPage, InputSelect, useWorkspaceEnv } from 'protolib'
 import moment from 'moment'
 import { ClipboardList } from '@tamagui/lucide-icons';
 import { JSONViewer } from '../../components/jsonui'
@@ -9,7 +9,8 @@ import { API, getPendingResult } from '../../base';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { Paragraph, XStack } from 'tamagui';
 import { Tinted } from '../../components/Tinted';
-import { PaginatedData } from '../../lib/SSR';
+import { PaginatedData, SSR } from '../../lib/SSR';
+import { withSession } from '../../lib/Session';
 
 
 const format = 'HH:mm:ss DD-MM-YYYY'
@@ -19,6 +20,7 @@ const sourceUrl = '/adminapi/v1/events'
 export default {
     'events': {
         component: ({ pageState, initialItems, pageSession }: any) => {
+            const env = useWorkspaceEnv()
             usePrompt(() => `At this moment the user is browsing the events list page. The events list page allows to monitor system events. The list is updated automatically if any events occurs.
             An event can be a user created, invalid login attempt, successful login, file edit, file create, file update, and also system object modification events, like "product created", or "product updated".
             Events can be used to monitor the system, auditing pruposes, or to trigger API actions when a specific event happens.
@@ -36,6 +38,7 @@ export default {
                     hideAdd
                     openMode="view"
                     sourceUrl={sourceUrl}
+                    sourceUrlParams={{ env }}
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="event"
@@ -64,6 +67,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedData(sourceUrl, ['admin'])
+        getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
     }
 }

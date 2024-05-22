@@ -22,6 +22,14 @@ export class EventModel extends ProtoModel<EventModel> {
         super(data, EventSchema, session, "Event");
     }
 
+    getEnvironment() {
+        if(this.data.environment == 'dev' || this.data.environment == 'prod') {
+            return this.data.environment 
+        }
+
+        return '*'
+    }
+
     protected static _newInstance(data: any, session?: SessionDataType): EventModel {
         return new EventModel(data, session);
     }
