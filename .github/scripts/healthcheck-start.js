@@ -1,6 +1,6 @@
 const execSync = require('child_process').execSync;
 
-const DEV_SERVER_URL = "http://127.0.0.1:8080"
+const DEV_SERVER_URL = "http://127.0.0.1:8000"
 const args = process.argv.slice(2);
 const timeout = args[0] ?? 180000;// default 3 min
 const RETRY_TIME = 1000 // 1 sec

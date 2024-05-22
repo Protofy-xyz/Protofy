@@ -1,5 +1,5 @@
 const { chromium, firefox, webkit } = require('playwright');
-const HOST_URL = 'http://localhost:8080/'
+const HOST_URL = 'http://localhost:8000/'
 const height = 720
 const width = 1280
 export class ProtoBrowser {
@@ -118,8 +118,7 @@ export class ProtoBrowser {
     }
 
     async navigateToRegister() {
-        await this.navigateToLogin()
-        await this.clickElement('#sign-up-link')
+        await this.getPage().goto(HOST_URL + `auth/register`);
         await this.waitForElement('#sign-up-btn')
     }
 
@@ -128,8 +127,8 @@ export class ProtoBrowser {
         // legacy - stay here if needed 
         /// await this.clickElement('#layout-menu-btn')
         // await this.clickElement('#pop-over-workspace-link', 70000)
-        await this.getPage().goto(HOST_URL + `workspace/pages`);
-        await this.getPage().waitForURL('**/workspace/*', { timeout: 60000 });
+        await this.getPage().goto(HOST_URL + `workspace/dev/pages`);
+        await this.getPage().waitForURL('**/workspace/dev/*', { timeout: 60000 });
     }
 
     async signInSubmit(email: string, password: string) {
@@ -155,8 +154,8 @@ export class ProtoBrowser {
     }
 
     async navigateToAdminSection(entity: string) {
-        await this.getPage().goto(HOST_URL + `workspace/${entity}`);
-        await this.getPage().waitForURL(`**/workspace/${entity}`, { timeout: 60000 });
+        await this.getPage().goto(HOST_URL + `workspace/dev/${entity}`);
+        await this.getPage().waitForURL(`**/workspace/dev/${entity}`, { timeout: 60000 });
     }
 
     async navigateToDocumentation() {
