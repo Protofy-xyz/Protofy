@@ -22,7 +22,7 @@ import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
 
 const isProduction = process.env.NODE_ENV === 'production';
-
+const serviceName = isProduction?'api':'api-dev'
 const server = http.createServer(app);
 const PORT = isProduction ? 4001 : 3001
 
@@ -32,8 +32,8 @@ server.listen(PORT, () => {
 
 
 generateEvent({
-  path: 'services/api/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-  from: 'api', // system entity where the event was generated (next, api, cmd...)
+  path: 'services/'+serviceName+'/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+  from: serviceName, // system entity where the event was generated (next, api, cmd...)
   user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
   payload: {}, // event payload, event-specific data
 }, getServiceToken())
@@ -55,8 +55,8 @@ if (process.env.NODE_ENV != 'production') {
   watcher.on('change', async (path) => {
     console.log(`File ${path} has been changed.`);
     await generateEvent({
-      path: 'services/api/stop', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-      from: 'api', // system entity where the event was generated (next, api, cmd...)
+      path: 'services/'+serviceName+'/stop', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+      from: serviceName, // system entity where the event was generated (next, api, cmd...)
       user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
       payload: {}, // event payload, event-specific data
     }, getServiceToken())

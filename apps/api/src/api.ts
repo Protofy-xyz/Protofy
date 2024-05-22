@@ -10,10 +10,11 @@ import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
 const logger = getLogger()
 const subscriptions = {}
 const isProduction = process.env.NODE_ENV === 'production';
+const serviceName = isProduction?'api':'api-dev'
 const app = getApp()
 
 //wait for mqtt before starting api server
-const mqtt = getMQTTClient(isProduction?'api':'api-dev', getServiceToken(), async () => {
+const mqtt = getMQTTClient(serviceName, getServiceToken(), async () => {
     logger.debug({ config: getConfigWithoutSecrets(getConfig()) }, "Service Started: api")
 
     const topicSub = (topic, cb) => { //all = continuous, single = just one, change = first change
@@ -123,8 +124,8 @@ const mqtt = getMQTTClient(isProduction?'api':'api-dev', getServiceToken(), asyn
         BundleAPI.default(app, { mqtt, devicePub, deviceSub, topicPub, topicSub, ...BundleContext })
     } catch (error) {
         generateEvent({
-            path: 'services/api/crash', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-            from: 'api', // system entity where the event was generated (next, api, cmd...)
+            path: 'services/'+serviceName+'/crash', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+            from: serviceName, // system entity where the event was generated (next, api, cmd...)
             user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
             payload: {error: error.toString()}, // event payload, event-specific data
         }, getServiceToken())

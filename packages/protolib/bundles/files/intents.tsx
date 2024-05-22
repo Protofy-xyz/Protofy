@@ -68,8 +68,8 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
     setState("error")
   }
 
-  useEventEffect(onEvent, { path: 'services/api/start' })
-  useEventEffect(onEventCrash, { path: 'services/api/crash' })
+  useEventEffect(onEvent, { path: 'services/api-dev/start' })
+  useEventEffect(onEventCrash, { path: 'services/api-dev/crash' })
 
   useInterval(() => {
     if (checkStatus() && state == 'unavailable') setState('available')
