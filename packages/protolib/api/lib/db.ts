@@ -151,6 +151,7 @@ export class ProtoLevelDB extends ProtoDB {
     }
 
     async getPageItems(total, key, pageNumber, itemsPerPage, direction, filter) {
+
         //filter is like {key: 'type', value: 'admin'}
         let ordered
         if(filter) {
@@ -163,9 +164,31 @@ export class ProtoLevelDB extends ProtoDB {
 
         const allItems = []
         const maxLength = String(total - 1).length;
-        for await (const [itemKey] of ordered.iterator({ values: false, gt: String(pageNumber * itemsPerPage).padStart(maxLength, '0'), limit: itemsPerPage, reverse: direction == 'desc' })) {
-            allItems.push(itemKey.split('_')[1])
+
+        if (direction === 'desc') {
+            const startFrom = String((total - (pageNumber * itemsPerPage))).padStart(maxLength, '0');
+            const endAt = String((total - ((pageNumber + 1) * itemsPerPage))).padStart(maxLength, '0');
+        
+            for await (const [itemKey] of ordered.iterator({
+                values: false,
+                gte: endAt,       // greater than or equal to endAt
+                lt: startFrom,    // less than startFrom
+                limit: itemsPerPage,
+                reverse: true
+            })) {
+                allItems.push(itemKey.split('_')[1]);
+            }
+        } else {
+            const startFrom = String(pageNumber * itemsPerPage).padStart(maxLength, '0');
+            for await (const [itemKey] of ordered.iterator({
+                values: false,
+                gt: startFrom,
+                limit: itemsPerPage
+            })) {
+                allItems.push(itemKey.split('_')[1]);
+            }
         }
+
         return await this.db.getMany(allItems)
     }
 
