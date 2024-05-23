@@ -99,7 +99,7 @@ export const AutoAPI = ({
     skipDatabaseInitialization = false
 }: AutoAPIOptions) => async (app, context) => {
     const env = useEventEnvironment ? getEnv() : undefined
-    const defaultName  = useDatabaseEnvironment ? getEnv() + '/' : (dbName ? dbName : modelName)
+    const defaultName  = useDatabaseEnvironment ? getEnv() + '/' + (dbName ?? modelName) : (dbName ?? modelName)
     const groupIndexes = modelType.getGroupIndexes()
 
     const getDBPath = (action: "init" | "list" | "create" | "read" | "update" | "delete", req?, entityModel?) => {
