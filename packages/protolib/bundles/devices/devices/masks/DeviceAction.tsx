@@ -16,7 +16,7 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(6)
 
     const getDevices = async () => {
-        const { data } = await deviceRepository.list()
+        const { data } = await deviceRepository.list('dev')
         const { items: devices } = data;
         setDevicesData([...devices]);
     }
@@ -38,7 +38,7 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
     const actionValue = selectedAction?.payload?.value;
 
     useEffect(() => {
-        getDevices()
+        if(node.id) getDevices()
     }, [])
 
     const hasPayload = !actionValue && deviceAction && deviceAction !== ''

@@ -1,3 +1,5 @@
+
+
 export const getBrokerUrl = () => {
     const urlParts = typeof document !== "undefined" ? document.location.pathname.split('/') : []
     const isInWorkspace = typeof document !== "undefined" && document.location.pathname.startsWith('/workspace')

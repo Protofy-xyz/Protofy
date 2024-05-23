@@ -1,5 +1,4 @@
 import { Node, NodeParams, FlowPort, FallbackPort, getFieldValue } from 'protoflow';
-import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Cable } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';

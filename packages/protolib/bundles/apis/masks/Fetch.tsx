@@ -16,7 +16,7 @@ const Fetch = (node: any = {}, nodeData = {}) => {
                 setEndPoints(response.data.filter((endpoint: any) => endpoint.path !== '/api/v1/endpoints'))
             }
         }
-        fetchData()
+        if(node.id) fetchData()
     }, [])
 
     return (

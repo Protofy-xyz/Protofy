@@ -20,7 +20,7 @@ const ExecuteAutomation = (node: any = {}, nodeData = {}) => {
                   )
             }
         }
-        fetchData()
+        if(node.id) fetchData()
     }, [])
 
     return (

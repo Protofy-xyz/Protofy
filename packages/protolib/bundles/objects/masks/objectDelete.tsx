@@ -14,7 +14,7 @@ const objectDelete = (node: any = {}, nodeData = {}) => {
     }
 
     useEffect(() => {
-        getObjects()
+        if(node.id) getObjects()
     }, [])
 
     return (

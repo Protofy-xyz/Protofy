@@ -3,21 +3,24 @@ class Mqtt {
   topic_prefix
   name
   type
+  env
   port
-  constructor(broker, port) {
+  constructor(broker, env) {
     this.broker = broker
-    this.port = port
     this.name = this.type = 'mqtt'
+    this.env = env
+    this.port = env == 'dev' ? 1883 : 8883
   }
   attach(pin, deviceComponents) {
     this.topic_prefix = "devices/" + deviceComponents.esphome.name //Should have same shape as getPeripheralTopic() in deviceSchema.ts
+
     const componentObjects = [
       {
         name: this.type,
         config: {
           broker: this.broker,
-          topic_prefix: this.topic_prefix,
-          port: this.port
+          port: this.port,
+          topic_prefix: this.topic_prefix
         },
         subsystem: this.getSubsystem()
       }
@@ -55,6 +58,7 @@ class Mqtt {
   }
 }
 
-export function mqtt(broker, port) {
-  return new Mqtt(broker, port)
+export function mqtt(broker) {
+  const compileVars = window['deviceCompileVars'] || {}
+  return new Mqtt(broker, compileVars.env ?? 'dev')
 }

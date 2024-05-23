@@ -21,7 +21,7 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
     const [devicesData, setDevicesData] = useState<any[]>([]);
 
     const getDevices = async () => {
-        const { data } = await deviceRepository.list()
+        const { data } = await deviceRepository.list('dev')
         const { items: devices } = data;
         setDevicesData([...devices]);
     }
@@ -42,7 +42,7 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
     // const selectedMonitor = selectedSubsystemModel.getActionByName(deviceMonitor?.replaceAll('"', ''))
 
     useEffect(() => {
-        getDevices()
+        if(node.id) getDevices()
     }, [])
 
     return (

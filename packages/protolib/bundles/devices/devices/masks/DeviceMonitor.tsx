@@ -18,7 +18,7 @@ const DeviceMonitor = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(7)
 
     const getDevices = async () => {
-        const { data } = await deviceRepository.list()
+        const { data } = await deviceRepository.list('dev')
         const { items: devices } = data;
         setDevicesData([...devices]);
     }
@@ -39,7 +39,7 @@ const DeviceMonitor = ({ node = {}, nodeData = {}, children }: any) => {
     // const selectedMonitor = selectedSubsystemModel.getActionByName(deviceMonitor?.replaceAll('"', ''))
 
     useEffect(() => {
-        getDevices()
+        if(node.id) getDevices()
     }, [])
 
     return (

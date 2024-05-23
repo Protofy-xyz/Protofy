@@ -139,7 +139,7 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
     }
   }
 
-  async getYaml(){
+  async getYaml(env: string){
     let yaml = undefined
     try {
       const response = await API.get('/adminapi/v1/deviceDefinitions/' + this.data.deviceDefinition);
@@ -156,6 +156,10 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       console.log("---------deviceDefinition----------", deviceDefinition)
       deviceDefinition.board = response1.data
       const jsCode = deviceDefinition.config.components;
+      window['deviceCompileVars'] = {
+        env
+      }
+
       const deviceCode = 'device(' + jsCode.replace(/;/g, "") + ')';
       console.log("-------DEVICE CODE------------", deviceCode)
       const deviceObj = eval(deviceCode)
@@ -170,6 +174,8 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
         return;
       }
       deviceObject.data.subsystem = subsystems
+      deviceObject.data.environment = env
+      
       API.post("/adminapi/v1/devices/" + this.data.name, deviceObject.data)
       console.log("ComponentsTree: ", componentsTree)
       console.log("Subsystems: ", subsystems)

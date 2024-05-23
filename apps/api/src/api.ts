@@ -14,7 +14,7 @@ const serviceName = isProduction?'api':'api-dev'
 const app = getApp()
 
 //wait for mqtt before starting api server
-const mqtt = getMQTTClient(serviceName, getServiceToken(), async () => {
+const mqtt = getMQTTClient(isProduction?'prod':'dev', serviceName, getServiceToken(), async () => {
     logger.debug({ config: getConfigWithoutSecrets(getConfig()) }, "Service Started: api")
 
     const topicSub = (mqtt, topic, cb) => { //all = continuous, single = just one, change = first change

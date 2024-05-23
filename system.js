@@ -1,5 +1,5 @@
 const isProduction = process.env.NODE_ENV === 'production';
-const disableProdApi = true
+const disableProdApi = false
 
 const config = {
     "services": [
@@ -18,8 +18,10 @@ const config = {
                 if(url.startsWith('/adminapi/') || url == '/adminapi') {
                     return process.env.ADMIN_API_URL ?? 'http://localhost:3002'
                 } else if(url == '/websocket' ) {
-                    const forceDev = query.env == 'dev'
-                    return process.env.WEBSOCKET_URL ?? 'http://localhost:' + (!forceDev && mode == 'production' && !disableProdApi ? 4003 : 3003)
+                    if(query.env && (query.env == 'dev' || query.env == 'prod')) {
+                        mode = query.env == 'dev' ? 'development' : 'production'
+                    }
+                    return process.env.WEBSOCKET_URL ?? 'http://localhost:' + (mode == 'production' && !disableProdApi ? 4003 : 3003)
                 }
             }
         },

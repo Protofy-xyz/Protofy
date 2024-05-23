@@ -8,7 +8,7 @@ const logger = getLogger()
 
 export const startMqtt = (config) => {
     _startMqtt(config, 1883, 3003)
-    // _startMqtt(config, 8883, 4003)
+    _startMqtt(config, 8883, 4003)
 }
 
 const _startMqtt = (config, mqttPort, webSocketPort) => {

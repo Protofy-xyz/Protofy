@@ -27,6 +27,7 @@ type AutoAPIOptions = {
     initialData?: Object,
     prefix?: string,
     dbName?: string | Function,
+    notify?: Function,
     transformers?: any,
     connectDB?: any,
     getDB?: any,
@@ -70,6 +71,7 @@ export const AutoAPI = ({
     transformers = {},
     connectDB = _connectDB,
     getDB = _getDB,
+    notify,
     operations = ['create', 'read', 'update', 'delete', 'list'],
     single,
     disableEvents,
@@ -106,6 +108,20 @@ export const AutoAPI = ({
         }
 
         return defaultName
+    }
+
+    const _notify = (entityModel, action) => {
+        if(notify) return notify(entityModel, action)
+            
+        if(context) {
+            if(context.mqtts) {
+                Object.keys(context.mqtts).forEach((env) => {
+                    context.mqtts[env].publish(entityModel.getNotificationsTopic(action), entityModel.getNotificationsPayload())
+                })
+            } else if(context.mqtt) {
+                context.mqtt.publish(entityModel.getNotificationsTopic(action), entityModel.getNotificationsPayload())
+            }
+        }
     }
 
     if(!skipDatabaseInitialization) {
@@ -248,7 +264,8 @@ export const AutoAPI = ({
             }
         }
 
-        context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('create'), entityModel.getNotificationsPayload())
+        _notify(entityModel, 'create')
+
         if (!disableEvents) {
             generateEvent({
                 ...(env?{environment: env}:{}),
@@ -313,7 +330,8 @@ export const AutoAPI = ({
         const entityModel = await (modelType.unserialize(await db.get(req.params.key), session).updateTransformed(requestModel, transformers))
         await db.put(entityModel.getId(), entityModel.serialize())
 
-        context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
+        _notify(entityModel, 'update')
+
         if (!disableEvents) {
             generateEvent({
                 ...(env?{environment: env}:{}),
@@ -349,7 +367,7 @@ export const AutoAPI = ({
         }
         try {
             const entityModel = await modelType.unserialize(rawEntityData, session)
-            context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('delete'), entityModel.getNotificationsPayload())
+            _notify(entityModel, 'delete')
             if (!disableEvents) {
                 generateEvent({
                     ...(env?{environment: env}:{}),

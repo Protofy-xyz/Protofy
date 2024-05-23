@@ -44,7 +44,8 @@ startMqtt(config)
 logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: admin-api")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
 
-const mqtt = getMQTTClient('admin-api', getServiceToken())
+const devMqtt = getMQTTClient('dev', 'admin-api', getServiceToken())
+const prodMqtt = getMQTTClient('prod', 'admin-api', getServiceToken())
 
 const topicSub = (mqtt, topic, cb) => {
   mqtt.subscribe(topic)
@@ -65,7 +66,8 @@ const topicPub = (mqtt, topic, data) => {
   mqtt.publish(topic, data)
 }
 
-BundleAPI(app, { mqtt, topicSub, topicPub, ...BundleContext })
+BundleAPI(app, { mqtt: devMqtt, mqtts: {prod: prodMqtt, dev: devMqtt}, topicSub, topicPub, ...BundleContext })
+
 const server = http.createServer(app);
 const PORT = 3002
 

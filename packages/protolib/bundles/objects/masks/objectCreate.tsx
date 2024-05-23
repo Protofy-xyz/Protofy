@@ -18,7 +18,7 @@ const objectCreate = (node: any = {}, nodeData = {}) => {
     }
 
     useEffect(() => {
-        getObjects()
+        if(node.id) getObjects()
     }, [])
 
     const onSelectObject = async () => {
@@ -61,6 +61,7 @@ const objectCreate = (node: any = {}, nodeData = {}) => {
     }, [keys])
 
     useEffect(() => {
+        if(!node.id) return
         setNodeData(node.id, {
             ...nodeData,
             'param-2': {

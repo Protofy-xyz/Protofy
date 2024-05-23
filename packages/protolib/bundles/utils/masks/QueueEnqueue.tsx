@@ -1,8 +1,7 @@
-import { Node, NodeParams, CustomFieldsList, FallbackPortList, getFieldValue, filterCallback, FlowPort, FallbackPort, restoreCallback} from 'protoflow';
+import { Node, NodeParams} from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Cable } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { Text } from 'tamagui';
+import { useRef, useState } from 'react';
 
 const QueueEnqueue = ({ node = {}, nodeData = {}, children }: any) => {
     const paramsRef = useRef()

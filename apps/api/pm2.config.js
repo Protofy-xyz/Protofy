@@ -4,7 +4,7 @@ const startAll = process.env.START_ALL === '1';
 const path = require('path');
 const currentDir = path.dirname(__filename);
 
-const disableStartAll = true
+const disableStartAll = false
 
 const api = {
     name: 'api',

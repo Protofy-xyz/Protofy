@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple, AdminPage, usePendingEffect, CardBody, ItemMenu, useWorkspaceEnv, Tinted} from 'protolib'
+import { API, DataTable2, DataView, ButtonSimple, AdminPage, usePendingEffect, CardBody, ItemMenu, useWorkspaceEnv, Tinted, Chip} from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
@@ -129,7 +129,7 @@ export default {
     const flashDevice = async (device, yaml?) => {
       setTargetDevice(device.data.name)
 
-      yamlRef.current = yaml ?? await device.getYaml()
+      yamlRef.current = yaml ?? await device.getYaml(env)
       console.log("TURBO YAML PARAMETER: ", yaml)
       setShowModal(true)
       try {
@@ -306,11 +306,12 @@ export default {
           disableItemSelection: true,
           onSelectItem: (item) => { },
           getBody: (data) => <CardBody title={data.name}>
-            <Stack right={20} top={20} position={"absolute"}>
+            <XStack right={20} top={20} position={"absolute"}>
+              {data.environment && all && <Chip color={data.environment == 'dev' ? "$color5" : "$color7"} text={data.environment} />}
               <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?: string) => {
                 await API.get(`${sourceUrl}/${deviceId}/delete`)
               }} deleteable={() => true} element={DevicesModel.load(data)} extraMenuActions={extraMenuActions} />
-            </Stack>
+            </XStack>
             <YStack f={1}>
               {data?.subsystem
                 ? data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)

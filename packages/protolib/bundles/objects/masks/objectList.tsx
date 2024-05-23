@@ -14,7 +14,7 @@ const objectList = (node: any = {}, nodeData = {}) => {
     }
 
     useEffect(() => {
-        getObjects()
+        if(node.id) getObjects()
     }, [])
 
     return (

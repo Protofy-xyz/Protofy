@@ -227,7 +227,7 @@ export class ProtoLevelDB extends ProtoDB {
             const indexTable = sublevel(this.rootDb, 'indexTable')
             return JSON.parse(await indexTable.get('groupIndexes'))
         } catch (e) {
-            logger.error({ db: this.location }, 'Error reading group indexes for database: ' + this.location)
+            //logger.error({ db: this.location }, 'Error reading group indexes for database: ' + this.location)
         }
 
         return []
