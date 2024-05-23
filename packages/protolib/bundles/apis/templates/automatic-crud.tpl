@@ -18,7 +18,8 @@ const {{codeName}}API = AutoAPI({
     modelName: name,
     modelType: Objects.{{object}},
     initialData: {},
-    prefix: prefix
+    prefix: prefix,
+    useDatabaseEnvironment: true
 })
 
 export default Protofy("code", async (app:Application, context) => {
