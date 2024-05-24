@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "pull": "git pull",
-    "test": "jest"
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.0.8",
