@@ -146,7 +146,7 @@ const CreateDialog = ({ subtab }) => {
     </XStack>
 }
 
-const Subtabs = ({ subtabs }: any) => {
+const Subtabs = ({ tabs, subtabs }: any) => {
     const router = useRouter()
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
     const isDev = process.env.NODE_ENV === 'development';
@@ -189,8 +189,15 @@ const Subtabs = ({ subtabs }: any) => {
                 //     </a>
                 // }
 
-                //TODO: this this, this is buggy, since /page/a and /page/a/b will both be selected
-                const selectedLength = subtabs.reduce((acc, tab) => {
+
+                const allLinks = Object.keys(tabs).reduce((acc, tab) => {
+                    if (tabs[tab].length === undefined) {
+                        return acc
+                    }
+                    return acc.concat(tabs[tab])
+                }, [])
+
+                const maxSelectedLength = allLinks.reduce((acc, tab) => {
                     const segment = typeof window !== 'undefined' ? window.location.pathname.split('/')[2] || SiteConfig.defaultWorkspace : SiteConfig.defaultWorkspace;
                     let href = "/" + workspaceRoot + '/' + segment + '/' + (tab.type + tab.path).replace(/\/+/g, '/')
                     if (router.asPath.startsWith(href.replace(/\/$/, ''))) {
@@ -202,7 +209,7 @@ const Subtabs = ({ subtabs }: any) => {
                 return <Link href={href} key={index}>
                     <Tinted>
                         <PanelMenuItem
-                            selected={router.asPath.startsWith(originalHref.replace(/\/$/, '')) && originalHref.length == selectedLength}
+                            selected={router.asPath.startsWith(originalHref.replace(/\/$/, '')) && originalHref.length == maxSelectedLength}
                             icon={getIcon(subtab.icon)}
                             text={subtab.name}
                         />
@@ -217,7 +224,7 @@ const Tabs = ({ tabs, environ }: any) => {
         <YStack f={1}>
             {Object.keys(tabs).map((tab, index) => {
                 if (tabs[tab].length === undefined) {
-                    return <Subtabs subtabs={[tabs[tab]]} />
+                    return <Subtabs tabs={tabs} subtabs={[tabs[tab]]} />
                 }
                 const tabContent = tabs[tab].filter(t => !t.visibility || t.visibility.includes(environ))
                 if (!tabContent.length) return <></>
@@ -241,7 +248,7 @@ const Tabs = ({ tabs, environ }: any) => {
                                 )}
                             </Accordion.Trigger>
                             <Accordion.Content position="relative" left={-10} pl="$0" backgroundColor={"$backgroundTransparent"} pt={'$0'} pb={"$2"} >
-                                <Subtabs subtabs={tabContent} />
+                                <Subtabs tabs={tabs} subtabs={tabContent} />
                             </Accordion.Content>
                         </Accordion.Item>
                     </Accordion>

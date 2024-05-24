@@ -3,8 +3,6 @@ import { Router, Inbox, Library, ToyBrick, Key, Cog, Database, DatabaseBackup } 
 export default {
     "default": "/workspace/pages",
     "label": "Workspace",
-    // "adminLabel": "Management",
-    // "adminDefault": "/manage/users",
     "menu": {
         "System": [
             { "name": "Users", "icon": "users", "type": "users", "path": "/" },
@@ -13,6 +11,7 @@ export default {
             { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
             { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
             { "name": "Services", "icon": Cog, "type": "services", "path": "/"},
+            { "name": "Databases", "icon": Database, "type": "databases", "path": "/system"},
         ],
         "Development": [
             { "name": "Objects", "icon": "box", "type": "objects", "path": "/" },//"visibility": ["development"]
@@ -23,10 +22,7 @@ export default {
             { "name": "Files", "icon": "folder", "type": "files", "path": "?path=/" },
             { "name": "Resources", "icon": Library, "type": "resources", "path": "/"},
             { "name": "Public", "icon": "doorOpen", "type": "files", "path": "?path=/apps/next/public" },
-        ],
-        "Databases": [
-            { "name": "System", "icon": Database, "type": "databases", "path": "/system"},
-            // { "name": "Content", "icon": Database, "type": "databases", "path": "/"},
+            { "name": "Databases", "icon": DatabaseBackup, "type": "databases", "path": "/"},
         ],
         "IoT Devices":[
             { "name": "Devices", "icon": Router, "type":"devices", "path": "/"},

@@ -33,6 +33,7 @@ export default {
             const router = useRouter()
             const subpath = env == 'system' ? './system/' : './databases/'
             env = env == 'system' ? undefined : workspaceEnv
+            const entityName = !env ? 'System' : 'Application'
 
             const [open, setOpen] = useState(false)
             const [backupId, setBackupId] = useState("")
@@ -86,10 +87,11 @@ export default {
                 </AlertDialog>
                 <DataView
                     integratedChat
-                    rowIcon={Database}
+                    rowIcon={entityName == 'Application' ? DatabaseBackup : Database}
                     sourceUrl={databasesSourceUrl+(env?'?env='+env: '')}
                     initialItems={initialItems}
                     numColumnsForm={1}
+                    entityName={entityName + ' databases'+(entityName != 'System' && env == 'dev' ? ' (dev)' : '')}
                     name="database"
                     onSelectItem={(item) => {
                         router.push(subpath+'view?database=' + item.getId()+(env?'&env='+env: ''))
