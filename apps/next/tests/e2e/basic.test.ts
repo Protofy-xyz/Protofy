@@ -36,10 +36,7 @@ describe("Basic tests", () => {
     afterAll(async () => {
         await protoBrowser?.close()
     })
-    it.skip("should have a documentation page", async () => { // sikpped: docs are disabled by default
-        await protoBrowser.navigateToDocumentation()
-        expect(await protoBrowser.waitForElement('#__next')).toBeTruthy();
-    }, 30000)
+  
     it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
         expect(await protoBrowser.getUrlPath()).toBe('/auth/login');
@@ -47,6 +44,7 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement('#sign-in-password-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-btn')).toBeTruthy();
     }, 120000)
+    
     it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister();
         expect(await protoBrowser.getUrlPath()).toBe('/auth/register');
@@ -56,12 +54,17 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement('#sign-up-btn')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-link')).toBeTruthy();
     }, 30000)
-    it.skip("should be able to register and retrieve a session using sign up interface", async () => { // sikpped: Signup is disabled by default
-        await protoBrowser.navigateToRegister()
-        await protoBrowser.waitForElement('#sign-up-email-input');
-        await protoBrowser.signUpFlow(`randomuser-${uuidv4()}@noreply.com`, 'changeme4321');
-        expect(await protoBrowser.getUrlPath()).toBe('/')
-    }, 60000)
+
+    // it.skip("should be able to register and retrieve a session using sign up interface", async () => { // sikpped: Signup is disabled by default
+    //     await protoBrowser.navigateToRegister()
+    //     await protoBrowser.waitForElement('#sign-up-email-input');
+    //     await protoBrowser.signUpFlow(`randomuser-${uuidv4()}@noreply.com`, 'changeme4321');
+    //     expect(await protoBrowser.getUrlPath()).toBe('/')
+    // }, 60000)
+    // it.skip("should have a documentation page", async () => { // sikpped: docs are disabled by default
+    //     await protoBrowser.navigateToDocumentation()
+    //     expect(await protoBrowser.waitForElement('#__next')).toBeTruthy();
+    // }, 30000)
 })
 describe("Test admin capabilities", () => {
     let protoBrowser: ProtoBrowser;
