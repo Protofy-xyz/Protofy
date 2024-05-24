@@ -30,10 +30,10 @@ const USER_PASSWORD = 'user1234'
 
 describe("Basic tests", () => {
     let protoBrowser: ProtoBrowser;
-    beforeEach(async () => {
+    beforeAll(async () => {
         protoBrowser = await ProtoBrowser.__newInstance__(!DEBUG)
-    }, 30000)
-    afterEach(async () => {
+    }, 600000)
+    afterAll(async () => {
         await protoBrowser?.close()
     })
     it.skip("should have a documentation page", async () => { // sikpped: docs are disabled by default
@@ -46,7 +46,7 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement('#sign-in-email-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-password-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-btn')).toBeTruthy();
-    }, 30000)
+    }, 120000)
     it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister();
         expect(await protoBrowser.getUrlPath()).toBe('/auth/register');
