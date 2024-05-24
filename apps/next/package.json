@@ -10,7 +10,7 @@
     "dev": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "package": "next build && shx cp -r .next/ ../next-compiled && shx cp -r pages/ ../next-compiled && shx cp -r public/ ../next-compiled",
     "lint": "next lint",
-    "test": "yarn test:deps && jest",
+    "test": "yarn test:deps && jest --forceExit",
     "test:deps": "npx playwright install && npx playwright install-deps",
     "clean": "shx rm -rf .next"
   },
