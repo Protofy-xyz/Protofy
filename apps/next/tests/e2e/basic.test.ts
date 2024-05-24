@@ -40,14 +40,14 @@ describe("Basic tests", () => {
         await protoBrowser.navigateToDocumentation()
         expect(await protoBrowser.waitForElement('#__next')).toBeTruthy();
     }, 30000)
-    it.skip("should have a public sign in authentication interface", async () => {
+    it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
         expect(await protoBrowser.getUrlPath()).toBe('/auth/login');
         expect(await protoBrowser.waitForElement('#sign-in-email-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-password-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-btn')).toBeTruthy();
     }, 30000)
-    it.skip("should have a public sign up authentication interface", async () => {
+    it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister();
         expect(await protoBrowser.getUrlPath()).toBe('/auth/register');
         expect(await protoBrowser.waitForElement('#sign-up-email-input')).toBeTruthy();

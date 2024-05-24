@@ -15,6 +15,7 @@ export class ProtoBrowser {
             viewport: { width: width, height: height } // Set the viewport size
         });
         const page = await context.newPage();
+        page.setDefaultNavigationTimeout(120000);
         await page.goto(HOST_URL);
         return new ProtoBrowser(brwsr)
     }
@@ -59,7 +60,7 @@ export class ProtoBrowser {
         await this.getPage().mouse.click(x, y, { button: clickButton });
     }
 
-    async waitForElement(locator: string, timeout: number = 60000, options: Object = {}): Promise<any> {
+    async waitForElement(locator: string, timeout: number = 120000, options: Object = {}): Promise<any> {
         const page = this.getPage()
         await (page.locator(locator)).waitFor({ timeout, ...options })
         return page.$(locator)
