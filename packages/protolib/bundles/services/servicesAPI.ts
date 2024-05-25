@@ -139,10 +139,89 @@ const serviceAutoAPI = AutoAPI({
   useEventEnvironment: false
 })
 
+const getServicePath = async (service) => {
+  return new Promise((resolve, reject) => {
+    pm2.connect(err => {
+      if (err) {
+        reject(new Error(`Error connecting to PM2: ${err}`));
+        return;
+      }
+
+      pm2.describe(service, (err, desc) => {
+        pm2.disconnect();
+        if (err) {
+          reject(new Error(`Error getting service description: ${err}`));
+          return;
+        }
+
+        resolve(desc[0].pm2_env['PWD']);
+      });
+    });
+  });
+}
 
 export const ServicesAPI = (app, context) => {
   monitorServices(context)
   serviceAutoAPI(app, context)
+  app.get('/adminapi/v1/services/:service/restart', handler(async (req, res, session) => {
+    if (!session || !session.user.admin) {
+      res.status(401).send({ error: "Unauthorized" });
+      return;
+    }
+
+    const service = req.params.service;
+
+    pm2.connect(err => {
+      if (err) {
+        console.error(`Error connecting to pm2: ${err}`);
+        res.status(500).send({ error: "Error connecting to pm2" });
+        return;
+      }
+
+      pm2.restart(service, (err, proc) => {
+        pm2.disconnect();
+        if (err) {
+          console.error(`Error restarting service: ${err}`);
+          res.status(500).send({ error: "Error restarting service" });
+          return;
+        }
+
+        res.send({ success: true });
+      });
+    });
+  }));
+
+  app.get('/adminapi/v1/services/:service/package', handler(async (req, res, session) => {
+    if (!session || !session.user.admin) {
+      res.status(401).send({ error: "Unauthorized" });
+      return;
+    }
+
+    const service = req.params.service;
+    try {
+      const path = await getServicePath(service);
+      //check if the service has a package command in the package.json
+      const packageJson = JSON.parse(fs.readFileSync(`${path}/package.json`, 'utf8'));
+      if (!packageJson.scripts || !packageJson.scripts.package) {
+        res.status(400).send({ error: "Service does not have a package script" });
+        return;
+      }
+      //run the package command
+      const { exec } = require('child_process');
+      exec('npm run package', { cwd: path }, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error packaging service: ${error}`);
+          res.status(500).send({ error: "Error packaging service" });
+          return;
+        }
+        res.send({ success: true, stdout: stdout });
+      });
+    } catch(e) {
+      console.error(`Error getting service path: ${e}`);
+      res.status(500).send({ error: "Error getting service information" });
+    }
+  }));
+
   app.get('/adminapi/v1/services/:service/logs', handler(async (req, res, session) => {
     if (!session || !session.user.admin) {
       res.status(401).send({ error: "Unauthorized" });
