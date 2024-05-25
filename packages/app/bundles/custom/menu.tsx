@@ -9,16 +9,15 @@ export default [
     {
         label: (workspace, session) => workspace.label,
         path: (workspace, session) => workspace.default,
-        visibility: (session, workspace) => session.loggedIn && workspace && workspace.default,
-        id: 'pop-over-workspace-link'
+        visibility: (session, workspace) => session.loggedIn && workspace && workspace.default && session.user?.admin,
+        id: 'pop-over-admin-link'
     },
     {
-        label: (workspace, session) => workspace.adminLabel,
-        path: (workspace, session) => workspace.adminDefault,
-        visibility: (session, workspace) => session.loggedIn && workspace && workspace.adminDefault,
-        id: 'pop-over-admin-link'
+        label: (workspace, session) => workspace.dev?.label,
+        path: (workspace, session) => workspace.dev?.default,
+        visibility: (session, workspace) => session.loggedIn && workspace && workspace.dev?.default && session.user?.admin &&  (!session.user?.environments || session.user?.environments.includes('dev') || session.user?.environments.includes('*')),
+        id: 'pop-over-workspace-link'
     },
     { label: "Login", path: "/auth/login", visibility: session => !session.loggedIn },
     { label: "Logout", path: "/", visibility: session => session.loggedIn, onClick: logout },
-
 ]

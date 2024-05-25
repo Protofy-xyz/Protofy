@@ -8,7 +8,7 @@ const SiteConfig = {
     getProductionURL: (path, protocol?, host?) => _host && _protocol ? (protocol??_protocol)+`//${(host??_host)}:8080${path}` : path,
     useLocalDocumentation: false,
     signupEnabled: false,
-    defaultWorkspace: 'dev',
+    defaultWorkspace: 'prod',
     defaultWorkspacePage: 'pages',
 }
 export {SiteConfig}

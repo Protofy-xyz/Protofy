@@ -68,6 +68,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
             }
             const newSession = {
                 id: storedUser.username,
+                environments: storedUser.environments,
                 type: storedUser.type,
                 admin: group.admin ? true : false,
                 permissions: [...(group.admin ? ["*"] : []), storedUser.type, ...(group.permissions ?? []), ...(storedUser.permissions ?? [])]
@@ -155,7 +156,7 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
             type: defaultGroup,
             admin: group.admin ? true : false,
             permissions: [...(group.admin ? ["*"] : []), defaultGroup, ...(group.permissions ?? [])],
-            environments: [req.query.env ?? 'prod']
+            environments: [env]
         }
         res.send({
             session: genNewSession(newSession),

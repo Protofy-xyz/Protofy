@@ -15,7 +15,8 @@ export type userData = {
     id?: string,
     type?: string
     admin?: boolean,
-    permissions?: string[]
+    permissions?: string[],
+    environments?: string[]
 }
 
 export type validatedUserData = userData & {
@@ -24,7 +25,6 @@ export type validatedUserData = userData & {
 }
 
 export type SessionDataType = {
-    environment?: any;
     user: userData,
     loggedIn: boolean,
     token?: string    

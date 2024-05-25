@@ -90,7 +90,7 @@ export default {
                             throw "Passwords do not match"
                         }
                         const { repassword, ...finalData } = data
-                        return { ...finalData, environments: [env] }
+                        return { ...finalData, environments: data.environments && data.environments.length ? data.environments : [env] }
                     }}
                     onEdit={data => {
                         if (data.password != data.repassword) {
