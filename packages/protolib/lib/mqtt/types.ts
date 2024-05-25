@@ -25,6 +25,7 @@ export interface IMessageStructure {
 
 export interface IMessage {
   topic: string;
+  id: number;
   message?: string | IMessageStructure;
 }
 

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from 'react';
+import { useContext, useEffect, useCallback, useState, useRef } from 'react';
 
 import { IClientSubscribeOptions } from 'mqtt';
 import { matches } from 'mqtt-pattern';
@@ -20,6 +20,7 @@ export default function useSubscription(
 
   const [message, setMessage] = useState<IMessage | undefined>(undefined);
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const lastId = useRef(1)
   const {maxLog, ...options} = subscriptionOptions
 
   const subscribe = useCallback(async () => {
@@ -30,10 +31,12 @@ export default function useSubscription(
     (receivedTopic: string, receivedMessage: any) => {
       if ([topic].flat().some(rTopic => matches(rTopic, receivedTopic))) {
         const msg = parserMethod?.(receivedMessage) || receivedMessage.toString()
-        setMessages(prevMessges => [{topic: receivedTopic, message: msg}, ...prevMessges.slice(0, maxLog)]);
+        const cId = lastId.current++
+        setMessages(prevMessges => [{id: cId, topic: receivedTopic, message: msg}, ...prevMessges.slice(0, maxLog)]);
         setMessage({
           topic: receivedTopic,
           message: msg,
+          id: cId
         });
       }
     },
