@@ -3,6 +3,9 @@ import fs from 'fs';
 import pm2 from 'pm2';
 import { getSourceFile, getDefinition, AutoAPI, getRoot } from '../../api'
 import { ServiceModel } from './servicesSchema';
+import { generateEvent } from '../library';
+import { getServiceToken } from '../../api/lib/serviceToken';
+import { v4 as uuidv4 } from 'uuid';
 
 const readService = async (name, cb) => {
   pm2.connect(err => {
@@ -178,6 +181,13 @@ export const ServicesAPI = (app, context) => {
         return;
       }
 
+      generateEvent({
+        path: 'services/'+service+'/restart', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+        user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
+        payload: {service }
+      }, getServiceToken())
+
       pm2.restart(service, (err, proc) => {
         pm2.disconnect();
         if (err) {
@@ -196,7 +206,8 @@ export const ServicesAPI = (app, context) => {
       res.status(401).send({ error: "Unauthorized" });
       return;
     }
-
+    const packageId = uuidv4()
+    
     const service = req.params.service;
     try {
       const path = await getServicePath(service);
@@ -206,18 +217,43 @@ export const ServicesAPI = (app, context) => {
         res.status(400).send({ error: "Service does not have a package script" });
         return;
       }
+
+      generateEvent({
+        path: 'services/'+service+'/package/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+        user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
+        payload: {packageId}, // event payload, event-specific data
+      }, getServiceToken())
+      res.send({ packageId: packageId });
       //run the package command
       const { exec } = require('child_process');
       exec('npm run package', { cwd: path }, (error, stdout, stderr) => {
         if (error) {
           console.error(`Error packaging service: ${error}`);
+          generateEvent({
+            path: 'services/'+service+'/package/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+            from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+            user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
+            payload: {error, packageId}, // event payload, event-specific data
+          }, getServiceToken())
           res.status(500).send({ error: "Error packaging service" });
           return;
         }
-        res.send({ success: true, stdout: stdout });
+        generateEvent({
+          path: 'services/'+service+'/package/done', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+          from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+          user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
+          payload: { packageId }, // event payload, event-specific data
+        }, getServiceToken())
       });
     } catch(e) {
       console.error(`Error getting service path: ${e}`);
+      generateEvent({
+        path: 'services/'+service+'/package/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+        user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
+        payload: {error: e, packageId}, // event payload, event-specific data
+      }, getServiceToken())
       res.status(500).send({ error: "Error getting service information" });
     }
   }));
