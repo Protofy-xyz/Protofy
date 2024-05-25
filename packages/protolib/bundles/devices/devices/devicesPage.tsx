@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple, AdminPage, usePendingEffect, CardBody, ItemMenu, useWorkspaceEnv, Tinted, Chip} from 'protolib'
+import { API, DataTable2, DataView, ButtonSimple, AdminPage, usePendingEffect, CardBody, ItemMenu, useWorkspaceEnv, Tinted, Chip, Connector, useSubscription } from 'protolib'
 import { z } from 'protolib/base'
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
-import { Connector, useSubscription } from 'mqtt-react-hooks';
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
 import Subsystem from 'protodevice/src/Subsystem'

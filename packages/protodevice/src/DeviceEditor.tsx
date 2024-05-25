@@ -17,8 +17,7 @@ import { withTopics } from "react-topics";
 import { Spinner, XStack } from 'tamagui'
 import dynamic from 'next/dynamic'
 import { useThemeSetting } from '@tamagui/next-theme'
-import { Connector, useMqttState, useSubscription } from 'mqtt-react-hooks';
-import { Flows } from "protolib";
+import { Flows, useMqttState, useSubscription } from "protolib";
 
 // class ExternalApiConfig {
 //   config;

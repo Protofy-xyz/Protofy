@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSubscription } from 'mqtt-react-hooks';
-import { API, usePendingEffect } from 'protolib';
+import { API, usePendingEffect, useSubscription } from 'protolib';
 import { PendingResult } from '../base';
 
 export const useRemoteStateList = (items, fetch, topic, model, quickRefresh=false) => { // Quick refresh skips fetch when a change is detected
@@ -18,6 +17,7 @@ export const useRemoteStateList = (items, fetch, topic, model, quickRefresh=fals
             // console.log('data: ', mqttData)
             // console.log('action: ', action)
             if(quickRefresh) {
+                console.log('quick refresh with new data: ', message.message, message.topic)
                 setDataState((prev) => {
                     const currentData = prev?.data || {};
                     const items = currentData.items || [];
@@ -35,6 +35,7 @@ export const useRemoteStateList = (items, fetch, topic, model, quickRefresh=fals
                                 data: { ...currentData, items: newItemsDelete },
                             };
                         case 'update':
+                            console.log('its an update....')
                             const newItemsUpdate = items.map(item => model.load(item).getId() === model.load(mqttData).getId() ? mqttData : item);
                             return {
                                 ...prev,

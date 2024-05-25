@@ -13043,16 +13043,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commist@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "commist@npm:1.1.0"
-  dependencies:
-    leven: ^2.1.0
-    minimist: ^1.1.0
-  checksum: 4ad08c6e600f880834b2f9c3e2d3e38b12bb88f2d1a54b4be35caccf5ed567e71fc4d3770d010d004ed702cda9b43b56048ce52558e9eade66b684b529bbd906
-  languageName: node
-  linkType: hard
-
 "commist@npm:^3.2.0":
   version: 3.2.0
   resolution: "commist@npm:3.2.0"
@@ -18243,16 +18233,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"help-me@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "help-me@npm:3.0.0"
-  dependencies:
-    glob: ^7.1.6
-    readable-stream: ^3.6.0
-  checksum: 04b0cf1cc02c2710d09718811cdf3d4dc5e3210d65e3f74749c8fc0c8081736cb0309dc3513696cba5e97196254f3c99378dab25ac0c514037c8d238a0b8ce48
-  languageName: node
-  linkType: hard
-
 "help-me@npm:^4.2.0":
   version: 4.2.0
   resolution: "help-me@npm:4.2.0"
@@ -21025,13 +21005,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leven@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "leven@npm:2.1.0"
-  checksum: f7b4a01b15c0ee2f92a04c0367ea025d10992b044df6f0d4ee1a845d4a488b343e99799e2f31212d72a2b1dea67124f57c1bb1b4561540df45190e44b5b8b394
-  languageName: node
-  linkType: hard
-
 "leven@npm:^3.1.0":
   version: 3.1.0
   resolution: "leven@npm:3.1.0"
@@ -23055,7 +23028,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.1.0, minimist@npm:^1.2.0, minimist@npm:^1.2.3, minimist@npm:^1.2.5, minimist@npm:^1.2.6, minimist@npm:^1.2.8":
+"minimist@npm:^1.2.0, minimist@npm:^1.2.3, minimist@npm:^1.2.5, minimist@npm:^1.2.6, minimist@npm:^1.2.8":
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
   checksum: 75a6d645fb122dad29c06a7597bddea977258957ed88d7a6df59b5cd3fe4a527e253e9bbf2e783e4b73657f9098b96a5fe96ab8a113655d4109108577ecf85b0
@@ -23273,17 +23246,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mqtt-packet@npm:^6.8.0":
-  version: 6.10.0
-  resolution: "mqtt-packet@npm:6.10.0"
-  dependencies:
-    bl: ^4.0.2
-    debug: ^4.1.1
-    process-nextick-args: ^2.0.1
-  checksum: 73169696eeca9cdeae712fe497e6735bc25497596caecceb5cd349ce718089acd0ff4f8269b5cee9e3ac7b0579511f24371411580ed8a0a9275fcac73beb0521
-  languageName: node
-  linkType: hard
-
 "mqtt-packet@npm:^7.0.0":
   version: 7.1.2
   resolution: "mqtt-packet@npm:7.1.2"
@@ -23323,48 +23285,6 @@ __metadata:
   dependencies:
     mqtt-match: ^1.0.2
   checksum: 7d07f1b2e7d924ebac2e702495d97c820eef18addb85a65b053c385d05b58b0d733cf218c5fdff60a413693b2c05d1ccf44f6a6de60169c9d9821137fd21197c
-  languageName: node
-  linkType: hard
-
-"mqtt-react-hooks@npm:^3.0.0-alpha.2":
-  version: 3.0.0-alpha.2
-  resolution: "mqtt-react-hooks@npm:3.0.0-alpha.2"
-  dependencies:
-    mqtt: 4.3.7
-    mqtt-pattern: ^1.2.0
-  peerDependencies:
-    react: ">= 18.1.0"
-    react-dom: ">= 18.1.0"
-  checksum: c13d4ac0416f4b4f4be4ced6f08141894ae3d88fd034195b8f71ce93d27bb40c80e61debff9c77fdbcf5ecd4d8cd99db9e4c2294ae0693d74422ac2fd47949e0
-  languageName: node
-  linkType: hard
-
-"mqtt@npm:4.3.7":
-  version: 4.3.7
-  resolution: "mqtt@npm:4.3.7"
-  dependencies:
-    commist: ^1.0.0
-    concat-stream: ^2.0.0
-    debug: ^4.1.1
-    duplexify: ^4.1.1
-    help-me: ^3.0.0
-    inherits: ^2.0.3
-    lru-cache: ^6.0.0
-    minimist: ^1.2.5
-    mqtt-packet: ^6.8.0
-    number-allocator: ^1.0.9
-    pump: ^3.0.0
-    readable-stream: ^3.6.0
-    reinterval: ^1.1.0
-    rfdc: ^1.3.0
-    split2: ^3.1.0
-    ws: ^7.5.5
-    xtend: ^4.0.2
-  bin:
-    mqtt: bin/mqtt.js
-    mqtt_pub: bin/pub.js
-    mqtt_sub: bin/sub.js
-  checksum: 8d4b655d61c3259f6dee1d3b9d4b3bb99ca9006b497c927c14db64b2c6d9bfb59e73ee8b98d92c826ef6d7b75439b7810da7b65f5619054b554863b1f58e9a72
   languageName: node
   linkType: hard
 
@@ -24228,7 +24148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"number-allocator@npm:^1.0.14, number-allocator@npm:^1.0.9":
+"number-allocator@npm:^1.0.14":
   version: 1.0.14
   resolution: "number-allocator@npm:1.0.14"
   dependencies:
@@ -25680,7 +25600,6 @@ __metadata:
   dependencies:
     immer: 9.0.5
     json2yaml: ^1.1.0
-    mqtt-react-hooks: ^3.0.0-alpha.2
     react-topics: 0.1.7
     react-use-websocket: 4.5.0
     ts-node: 10.9.1
@@ -25755,7 +25674,7 @@ __metadata:
     masonic: ^3.7.0
     moment: 2.29.4
     mqtt: ^5.2.1
-    mqtt-react-hooks: ^3.0.0-alpha.2
+    mqtt-pattern: ^1.2.0
     multer: 1.4.5-lts.1
     pino: 8.17.2
     pino-pretty: 10.3.1
@@ -26920,7 +26839,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.0.0, readable-stream@npm:^3.0.2, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0":
+"readable-stream@npm:^3.0.2, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
   dependencies:
@@ -28745,15 +28664,6 @@ __metadata:
   dependencies:
     extend-shallow: ^3.0.0
   checksum: ae5af5c91bdc3633628821bde92fdf9492fa0e8a63cf6a0376ed6afde93c701422a1610916f59be61972717070119e848d10dfbbd5024b7729d6a71972d2a84c
-  languageName: node
-  linkType: hard
-
-"split2@npm:^3.1.0":
-  version: 3.2.2
-  resolution: "split2@npm:3.2.2"
-  dependencies:
-    readable-stream: ^3.0.0
-  checksum: 8127ddbedd0faf31f232c0e9192fede469913aa8982aa380752e0463b2e31c2359ef6962eb2d24c125bac59eeec76873678d723b1c7ff696216a1cd071e3994a
   languageName: node
   linkType: hard
 
@@ -31741,7 +31651,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^7, ws@npm:^7.0.0, ws@npm:^7.5.1, ws@npm:^7.5.5":
+"ws@npm:^7, ws@npm:^7.0.0, ws@npm:^7.5.1":
   version: 7.5.9
   resolution: "ws@npm:7.5.9"
   peerDependencies:

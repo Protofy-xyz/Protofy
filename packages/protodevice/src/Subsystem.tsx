@@ -1,7 +1,6 @@
-import { useMqttState, useSubscription } from 'mqtt-react-hooks';
 import React, { useState } from "react";
-import { XStack, YStack, Text, Paragraph, Button, Input, Spinner, Separator, Switch } from '@my/ui';
-import { ElevatedArea, ContainerLarge, Tinted, Chip, useFetch } from 'protolib';
+import { XStack, YStack, Text, Paragraph, Button, Input, Spinner, Switch } from '@my/ui';
+import { ContainerLarge, Tinted, Chip, useFetch, useMqttState, useSubscription } from 'protolib';
 import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 
 const Monitor = ({ deviceName, monitorData, subsystem }) => {

@@ -1,4 +1,4 @@
-import { useSubscription } from 'mqtt-react-hooks'
+import { useSubscription } from 'protolib'
 
 export const useEvent = (eventFilter) => {
     const { message } = useSubscription('notifications/event/create/#')

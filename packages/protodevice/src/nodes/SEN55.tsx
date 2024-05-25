@@ -4,7 +4,7 @@ import { getColor } from ".";
 // import { Text, Progress, XStack } from "tamagui";
 // import NodeBus, { cleanName, generateTopic } from "../NodeBus";
 // import { useDeviceStore } from "../oldThings/DeviceStore";
-// import { useSubscription } from "mqtt-react-hooks";
+// import { useSubscription } from "protolib";
 
 const SEN55 = ({ node = {}, nodeData = {}, children, color }: any) => {
     const [name, setName] = React.useState(nodeData['param-1'])

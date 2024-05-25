@@ -1,4 +1,4 @@
-import { useMqttState  } from 'mqtt-react-hooks';
+import { useMqttState  } from 'protolib';
 import { Cloud, CloudOff } from '@tamagui/lucide-icons';
 import { useInterval } from 'usehooks-ts';
 import { useState } from 'react';

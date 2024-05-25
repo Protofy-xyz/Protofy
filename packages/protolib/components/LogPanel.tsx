@@ -7,7 +7,7 @@ import { Tinted } from './Tinted'
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react'
 import React from 'react'
-import { useLogMessages } from '../lib/Logs'
+import { useSubscription } from '../lib/mqtt'
 
 
 const types = {
@@ -23,7 +23,8 @@ const MessageList = React.memo(({ data, topic }) => {
     const from = topic.split("/")[1]
     const type = topic.split("/")[2]
     const Icon = types[type]?.icon
-    const { level, time, pid, hostname, msg, name, ...cleanData } = data
+    const message = JSON.parse(data)
+    const { level, time, pid, hostname, msg, name, ...cleanData } = message
     return <XStack
         p="$3"
         ml={"$0"}
@@ -37,7 +38,7 @@ const MessageList = React.memo(({ data, topic }) => {
                     <XStack mr={"$2"}><Icon size={20} strokeWidth={2} color={types[type]?.color} /></XStack>
                     {/* <Chip text={types[type]?.name} color={types[type]?.color} h={25} /> */}
                     <Text o={0.7} fontSize={14} fontWeight={"500"}>[{from}]</Text>
-                    <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{data.msg}</Text>
+                    <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{msg}</Text>
                 </XStack>
             </XStack>
             <JSONViewer
@@ -58,7 +59,7 @@ export const LogPanel = ({AppState}) => {
     const [appState, setAppState] = useAtom(AppState)
     const maxLog = 1000
 
-    const [messages, setMessages] = useLogMessages()
+    const {messages, setMessages} = useSubscription('logs/#')
     const [filteredMessages, setFilteredMessages] = useState([])
     const [search, setSearch] = useState('')
 

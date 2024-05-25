@@ -24,9 +24,8 @@ import React from 'react'
 import type { SolitoAppProps } from 'solito'
 import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
-import { Connector } from 'mqtt-react-hooks'
 import { initSchemaSystem } from 'protolib/base'
-import { useSession, AppConfContext, getBrokerUrl } from 'protolib'
+import { useSession, AppConfContext, getBrokerUrl, Connector } from 'protolib'
 
 initSchemaSystem()
 
