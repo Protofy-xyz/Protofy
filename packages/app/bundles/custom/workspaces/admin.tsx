@@ -1,11 +1,11 @@
 import { Router, Inbox, Library, ToyBrick, Key, Cog, Database, DatabaseBackup } from '@tamagui/lucide-icons'
 
 export default {
-    "default": "/workspace/prod/pages",
-    "label": "Workspace",
+    "default": "/workspace/prod/services",
+    "label": "Admin panel",
     "dev": {
-        "default": "/workspace/dev/pages",
-        "label": "Workspace (Dev)"
+        "default": "/workspace/dev/services",
+        "label": "Dev panel"
     },
     "menu": {
         "System": [
