@@ -36,7 +36,6 @@ export const useRemoteStateList = (items, fetch, topic, model, quickRefresh=fals
                                     data: { ...currentData, items: newItemsDelete },
                                 };
                             case 'update':
-                                console.log('its an update....')
                                 const newItemsUpdate = items.map(item => model.load(item).getId() === model.load(mqttData).getId() ? mqttData : item);
                                 return {
                                     ...prev,
