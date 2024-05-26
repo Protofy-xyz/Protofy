@@ -81,7 +81,7 @@ server.listen(PORT, () => {
   }, getServiceToken())
 });
 
-const isFullDev = process.env.DEV_ADMIN_API === '1';
+const isFullDev = process.env.FULL_DEV === '1';
 
 if (isFullDev) {
   const pathsToWatch = [

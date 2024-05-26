@@ -12,7 +12,7 @@
     "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
     "dev-service": "NODE_ENV=development pm2 start pm2.config.js",
-    "dev-full": "DEV_ADMIN_API=1 NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
+    "dev-full": "FULL_DEV=1 NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
     "dev-standalone": "NODE_ENV=development node -r module-alias/register dist/apps/admin-api/src/index.js",
     "prod-standalone": "NODE_ENV=production node -r module-alias/register dist/apps/admin-api/src/index.js",
     "package": "echo nothing to package",

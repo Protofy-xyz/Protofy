@@ -5,7 +5,7 @@ import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import http from 'http';
 import httpProxy from 'http-proxy';
 
-const isFullDev = process.env.DEV_ADMIN_API === '1';
+const isFullDev = process.env.FULL_DEV === '1';
 
 const system = require(isFullDev ? '../../../system.js' : '../../../../../../system.js')
 
