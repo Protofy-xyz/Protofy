@@ -5,7 +5,7 @@ const currentDir = path.dirname(__filename);
 module.exports = {
     apps: [
       {
-        name: "next-compiled",
+        name: "next",
         script: path.join(currentDir, 'entrypoint.js'),
         windowsHide: true,
         watch: false,
@@ -14,8 +14,8 @@ module.exports = {
         },
         cwd: currentDir,
         log_date_format: "YYYY-MM-DD HH:mm:ss",
-        out_file: '../../logs/raw/next-compiled.stdout.log',
-        error_file: '../../logs/raw/next-compiled.stderr.log'
+        out_file: '../../logs/raw/next.stdout.log',
+        error_file: '../../logs/raw/next.stderr.log'
       }
     ]
   };

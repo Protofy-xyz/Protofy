@@ -40,9 +40,9 @@ const config = {
             }
         },
         {
-            "name": "nextra",
+            "name": "nextra-dev",
             "disabled": true,
-            "description": "Documentation services for protofy, providing the documentation based on nextra",
+            "description": "Development mode of the documentation service, providing the documentation based on nextra",
             "route": (req, mode) => {
                 if(mode == 'development' && (req.url.startsWith('/documentation/') || req.url == '/documentation')) {
                     return process.env.DOCS_SITE_URL ?? 'http://localhost:7600'
@@ -50,9 +50,9 @@ const config = {
             }
         },
         {
-            "name": "nextra-compiled",
+            "name": "nextra",
             "disabled": true,
-            "description": "Compiled documentation services for protofy, providing the documentation based on nextra",
+            "description": "Documentation service, providing the documentation based on nextra",
             "route": (req, mode) => {
                 if(mode == 'production' && (req.url.startsWith('/documentation/') || req.url == '/documentation')) {
                     return process.env.DOCS_SITE_URL ?? 'http://localhost:7700'
@@ -60,13 +60,15 @@ const config = {
             }
         },
         {
-            "name": "next",
-            "description": "Development Frontend services for protofy, providing the web user interface based on nextjs",
+            "name": "next-dev",
+            "dirname": "next",
+            "description": "Development mode of the frontend service, providing the web user interface based on nextjs",
             "route": (req, mode) => mode === 'development' ? (process.env.SITE_URL ?? 'http://localhost:3000') : undefined
         },
         {
-            "name": "next-compiled",
-            "description": "Compiled Frontend services for protofy, providing the web user interface based on nextjs",
+            "name": "next",
+            "dirname": "next-compiled",
+            "description": "Frontend services, providing the web user interface based on nextjs",
             "route": (req, mode) => mode === 'production' ? (process.env.SITE_URL ?? 'http://localhost:4000') : undefined
         }
     ]

@@ -1,17 +1,11 @@
 import { EventModel } from '.'
-import { DataTable2, Chip, DataView, AdminPage, InputSelect, useWorkspaceEnv } from 'protolib'
+import { DataTable2, Chip, DataView, AdminPage, useWorkspaceEnv } from 'protolib'
 import moment from 'moment'
 import { ClipboardList } from '@tamagui/lucide-icons';
 import { JSONViewer } from '../../components/jsonui'
 import { usePrompt } from '../../context/PromptAtom'
-import { useEffect, useState } from 'react';
-import { API, getPendingResult } from '../../base';
-import { usePendingEffect } from '../../lib/usePendingEffect';
-import { Paragraph, XStack } from 'tamagui';
-import { Tinted } from '../../components/Tinted';
-import { PaginatedData, SSR } from '../../lib/SSR';
+import { SSR } from '../../lib/SSR';
 import { withSession } from '../../lib/Session';
-
 
 const format = 'HH:mm:ss DD-MM-YYYY'
 const EventIcons = {}
@@ -34,7 +28,6 @@ export default {
 
             return (<AdminPage title="Events" pageSession={pageSession}>
                 <DataView
-                    integratedChat
                     hideAdd
                     openMode="view"
                     sourceUrl={sourceUrl}
