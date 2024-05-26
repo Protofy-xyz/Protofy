@@ -66,7 +66,7 @@ interface DataViewProps {
     quickRefresh?: boolean;
 }
  
-export const DataView = (props: DataViewProps & {ready: boolean}) => {
+export const DataView = (props: DataViewProps & {ready?: boolean}) => {
     return <AsyncView ready={props.ready??true}>
             <DataViewInternal {...props} />
     </AsyncView>
