@@ -234,7 +234,7 @@ export class ProtoLevelDB extends ProtoDB {
     }
 
     //given a groupkey, like 'city', return all possible values for that group
-    async getGroupIndexOptions(groupKey) {
+    async getGroupIndexOptions(groupKey, limit = 100) {
         try {
             const indexTable = sublevel(this.rootDb, 'indexTable')
             const groupIndexes = JSON.parse(await indexTable.get('groupIndexes'))
@@ -242,7 +242,7 @@ export class ProtoLevelDB extends ProtoDB {
             if(index) {
                 const groupSubLevelOptions = sublevel(this.rootDb, 'group_' + index.key + '_options')
                 const keys = []
-                for await (const [key] of groupSubLevelOptions.iterator()) {
+                for await (const [key] of groupSubLevelOptions.iterator({ limit })) {
                     keys.push(key.split('_').slice(1).join('_'))
                 }
                 return keys
