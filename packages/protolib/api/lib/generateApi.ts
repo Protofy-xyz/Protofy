@@ -195,15 +195,15 @@ export const AutoAPI = ({
         }
 
         const preListData = typeof extraData?.prelist == 'function' ? await extraData.prelist(session, req) : (extraData?.prelist ?? {})
-        const parseResult = async (value) => {
+        const parseResult = async (value, skipFilters?) => {
             const model = modelType.unserialize(value, session);
             const extraListData = typeof extraData?.list == 'function' ? await extraData.list(session, model, req) : (extraData?.list ?? {})
-            const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, await _onBeforeList(req.query, session, req));
+            const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, !skipFilters ? await _onBeforeList(req.query, session, req) : undefined);
             return listItem
         }
         const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);
 
-        const filterKeys = Object.keys(filter || {})
+        const filterKeys = Object.keys(filter || {})    
         if(!search && (!filter || ((!req.query.orderBy || req.query.orderBy == modelType.getIdField()) && filterKeys.length == 1 && db.hasCapability('groupBySingle') && await db.hasGroupIndexes(filterKeys))) && !skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
             // console.log('Using indexed retrieval: ', modelName, 'filters: ', filter)
             const indexedKeys = await db.getIndexedKeys()
@@ -215,7 +215,7 @@ export const AutoAPI = ({
             if(indexedKeys.length && indexedKeys.includes(orderBy)) {
                 const result = {
                     itemsPerPage:_itemsPerPage,
-                    items: await Promise.all((await db.getPageItems(total, orderBy, page, _itemsPerPage, orderDirection, filterData)).map(async x => await parseResult(x))),
+                    items: await Promise.all((await db.getPageItems(total, orderBy, page, _itemsPerPage, orderDirection, filterData)).map(async x => await parseResult(x, true))),
                     total: total,
                     page: req.query.all ? 0 : page,
                     pages: req.query.all ? 1 : Math.ceil(total / _itemsPerPage)
