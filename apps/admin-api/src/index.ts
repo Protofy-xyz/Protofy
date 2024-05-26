@@ -17,7 +17,6 @@ import { getServiceToken } from 'protolib/api/lib/serviceToken'
 setConfig(getBaseConfig("admin-api", process, getServiceToken()))
 import { getLogger } from 'protolib/base/logger';
 import { getApp, getMQTTClient } from 'protolib/api'
-import BundleAPI from '../../../packages/app/bundles/adminapi'
 import adminModules from 'protolib/adminapi'
 require('events').EventEmitter.defaultMaxListeners = 100;
 
@@ -66,7 +65,15 @@ const topicPub = (mqtt, topic, data) => {
   mqtt.publish(topic, data)
 }
 
-BundleAPI(app, { mqtt: devMqtt, mqtts: {prod: prodMqtt, dev: devMqtt}, topicSub, topicPub, ...BundleContext })
+try {
+  import('app/bundles/adminapi').then((BundleAPI) => {
+    BundleAPI.default(app, { mqtt: devMqtt, mqtts: {prod: prodMqtt, dev: devMqtt}, topicSub, topicPub, ...BundleContext })
+  })
+  
+} catch (error) {
+  logger.error({ error: error.toString() }, "Server error")
+}
+
 
 const server = http.createServer(app);
 const PORT = 3002
