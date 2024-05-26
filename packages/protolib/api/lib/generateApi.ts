@@ -168,6 +168,22 @@ export const AutoAPI = ({
         }
 
         const db = getDB(getDBPath("list", req), req, session);
+
+        if(req.query.group) {
+            let options = []
+            if(db.hasCapability && db.hasCapability('groupBySingle')) {
+                options = await db.getGroupIndexOptions(req.query.group)   
+            }
+            
+            if(req.query.search) {
+                const search = req.query.search as string
+                options = options.filter(x => x.toLowerCase().startsWith(search.toLowerCase()))
+            }
+
+            res.send(options)
+            return
+        }
+
         const allResults: any[] = [];
 
         const search = req.query.search;

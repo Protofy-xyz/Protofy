@@ -92,7 +92,7 @@ export class ProtoLevelDB extends ProtoDB {
     private batch
     constructor(location, options?, config?: ProtoDBConfig) {
         super(location, options, config);
-        this.capabilities = ['pagination', 'groupBySingle']
+        this.capabilities = ['pagination', 'groupBySingle', 'groupByOptions']
         this.rootDb = level(location, options);
         this.db = sublevel(this.rootDb, 'values')
         const dbOptions = optionsTable[location] ?? {}
@@ -233,6 +233,27 @@ export class ProtoLevelDB extends ProtoDB {
         return []
     }
 
+    //given a groupkey, like 'city', return all possible values for that group
+    async getGroupIndexOptions(groupKey) {
+        try {
+            const indexTable = sublevel(this.rootDb, 'indexTable')
+            const groupIndexes = JSON.parse(await indexTable.get('groupIndexes'))
+            const index = groupIndexes.find(gi => gi.key == groupKey)
+            if(index) {
+                const groupSubLevelOptions = sublevel(this.rootDb, 'group_' + index.key + '_options')
+                const keys = []
+                for await (const [key] of groupSubLevelOptions.iterator()) {
+                    keys.push(key.split('_').slice(1).join('_'))
+                }
+                return keys
+            } else {
+                return []
+            }
+        } catch (e) {
+            //logger.error({ db: this.location }, 'Error reading group indexes for database: ' + this.location)
+        }
+    }
+
     static async regenerateIndexes(rootDb, db, location, value?) {
         let indexData;
         let groupIndexData;
@@ -271,6 +292,8 @@ export class ProtoLevelDB extends ProtoDB {
                 for (var i = 0; i < groupIndexData.length; i++) {
                     const currentIndex = groupIndexData[i];
                     const groupSubLevel = sublevel(rootDb, 'group_' + currentIndex.key);
+                    const groupSubLevelOptions = sublevel(rootDb, 'group_' + currentIndex.key + '_options')
+                    await groupSubLevelOptions.clear();
                     // const grouped = sublevel(rootDb, 'group_' + currentIndex);
                     const groupItems = allItems.reduce((acc, item) => {
                         if(currentIndex.fn) {
@@ -297,8 +320,15 @@ export class ProtoLevelDB extends ProtoDB {
                     //where the numbers are the primary keys of the items that belong to that group
                     //we need to create a sublevel for each group, and store the items in the order they are in the group
                     //using batch
+                    
+
+                    const maxLength = Object.keys(groupItems).reduce((acc, curr) => curr.length > acc ? curr.length : acc, 0);
+
 
                     for (const groupKey of Object.keys(groupItems)) {
+                        //pad groupKey to have the same length as the longest key
+                        //with 0s
+                        groupSubLevelOptions.put(groupKey.length.toString().padStart(maxLength.toString().length, '0') +'_'+groupKey, '')
                         const subLevelGroupCollection = sublevel(groupSubLevel, groupKey);
                         await subLevelGroupCollection.clear();
                         
