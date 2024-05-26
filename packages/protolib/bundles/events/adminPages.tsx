@@ -47,7 +47,7 @@ export default {
                     rowIcon={ClipboardList}
                     quickRefresh={true}
                     columns={DataTable2.columns(
-                        DataTable2.column("path", row => row.path, "path", undefined, true, '250px'),
+                        DataTable2.column("path", row => row.path, "path", undefined, true, '400px'),
                         DataTable2.column("user", row => row.user, "user", undefined, true, '200px'),
                         DataTable2.column("from", row => row.from, "from", (row) => <Chip key={row.rowId} text={row.from} color={'$gray5'} />, true),
                         DataTable2.column("created", row => row.created, "created", (row) => moment(row.created).format(format), true, '200px'),

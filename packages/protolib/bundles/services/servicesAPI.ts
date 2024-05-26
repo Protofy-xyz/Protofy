@@ -1,11 +1,11 @@
 import { handler } from '../../api'
 import fs from 'fs';
 import pm2 from 'pm2';
-import { getSourceFile, getDefinition, AutoAPI, getRoot } from '../../api'
+import { AutoAPI } from '../../api'
 import { ServiceModel } from './servicesSchema';
 import { generateEvent } from '../library';
 import { getServiceToken } from '../../api/lib/serviceToken';
-import { v4 as uuidv4 } from 'uuid';
+import {generate as uuidv4} from 'short-uuid'
 
 const readService = async (name, cb) => {
   pm2.connect(err => {
@@ -87,7 +87,11 @@ const monitorServices = (context) => {
           };
 
           const entityModel = ServiceModel.load(serviceData)
-          context && context.mqtt && context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
+          if(context.mqtts) {
+            Object.keys(context.mqtts).forEach(env => {
+              context.mqtts[env].publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
+            })
+          }
         });
       });
     }, 1000); 
@@ -209,6 +213,15 @@ export const ServicesAPI = (app, context) => {
     const packageId = uuidv4()
     
     const service = req.params.service;
+
+    const _generateEvent = (type, payload?) => {
+      generateEvent({
+        path: 'services/'+service+'/package/'+packageId+'/'+type,
+        from: 'admin-api',
+        user: session.user.id,
+        payload: {packageId, ...payload}
+      }, getServiceToken())
+    }
     try {
       const path = await getServicePath(service);
       //check if the service has a package command in the package.json
@@ -218,42 +231,22 @@ export const ServicesAPI = (app, context) => {
         return;
       }
 
-      generateEvent({
-        path: 'services/'+service+'/package/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
-        user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
-        payload: {packageId}, // event payload, event-specific data
-      }, getServiceToken())
+      _generateEvent('start')
       res.send({ packageId: packageId });
       //run the package command
       const { exec } = require('child_process');
       exec('npm run package', { cwd: path }, (error, stdout, stderr) => {
         if (error) {
           console.error(`Error packaging service: ${error}`);
-          generateEvent({
-            path: 'services/'+service+'/package/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-            from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
-            user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
-            payload: {error, packageId}, // event payload, event-specific data
-          }, getServiceToken())
+          _generateEvent('error', { error })
           res.status(500).send({ error: "Error packaging service" });
           return;
         }
-        generateEvent({
-          path: 'services/'+service+'/package/done', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-          from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
-          user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
-          payload: { packageId }, // event payload, event-specific data
-        }, getServiceToken())
+        _generateEvent('done')
       });
     } catch(e) {
       console.error(`Error getting service path: ${e}`);
-      generateEvent({
-        path: 'services/'+service+'/package/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
-        user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
-        payload: {error: e, packageId}, // event payload, event-specific data
-      }, getServiceToken())
+      _generateEvent('error', { error: e })
       res.status(500).send({ error: "Error getting service information" });
     }
   }));

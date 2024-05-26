@@ -10759,6 +10759,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"any-base@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "any-base@npm:1.1.0"
+  checksum: c1fd040de52e710e2de7d9ae4df52bac589f35622adb24686c98ce21c7b824859a8db9614bc119ed8614f42fd08918b2612e6a6c385480462b3100a1af59289d
+  languageName: node
+  linkType: hard
+
 "any-promise@npm:^1.0.0":
   version: 1.3.0
   resolution: "any-promise@npm:1.3.0"
@@ -25689,6 +25696,7 @@ __metadata:
     react-select: 5.8.0
     react-use-keypress: 1.3.1
     resend: ~3.2.0
+    short-uuid: 5.2.0
     tamagui: latest
     ts-jest: ~29.1.1
     usehooks-ts: ^2.9.1
@@ -28206,6 +28214,16 @@ __metadata:
   version: 1.2.1
   resolution: "shimmer@npm:1.2.1"
   checksum: aa0d6252ad1c682a4fdfda69e541be987f7a265ac7b00b1208e5e48cc68dc55f293955346ea4c71a169b7324b82c70f8400b3d3d2d60b2a7519f0a3522423250
+  languageName: node
+  linkType: hard
+
+"short-uuid@npm:5.2.0":
+  version: 5.2.0
+  resolution: "short-uuid@npm:5.2.0"
+  dependencies:
+    any-base: ^1.1.0
+    uuid: ^9.0.1
+  checksum: 4b8ca0d9141226eea70aaa0c61a92e1bbe9508cd7cc2bbb05e698e55f392d4b365fa5617744b40e3c6f744a5c53f6a9b0462a34b7c244534de1ec1686e71f542
   languageName: node
   linkType: hard
 
@@ -31096,7 +31114,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^9.0.0":
+"uuid@npm:^9.0.0, uuid@npm:^9.0.1":
   version: 9.0.1
   resolution: "uuid@npm:9.0.1"
   bin:
