@@ -48,6 +48,11 @@ export class EventModel extends ProtoModel<EventModel> {
         return '*'
     }
 
+    getNotificationsTopic(action: string): string {
+        return `notifications/${this.getModelName()}/${action}/${this.data.path}`
+    }
+
+
     protected static _newInstance(data: any, session?: SessionDataType): EventModel {
         return new EventModel(data, session);
     }
