@@ -255,13 +255,36 @@ export const AutoAPI = ({
         
     }));
 
-    //create
-    operations.includes('create') && app.post(prefix + modelName, handler(async (req, res, session) => {
+    //this endpoint serves two purposes: create and batch read (read multiple items at once)
+    //post with ?action=read_multiple to read multiple items at once (body should a json array with the keys to read)
+    //post without ?action to create an item
+    (operations.includes('create') || operations.includes('read')) && app.post(prefix + modelName, handler(async (req, res, session) => {
         if (requiresAdmin && (requiresAdmin.includes('create') || requiresAdmin.includes('*')) && (!session || !session?.user?.admin)) {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
 
+        if(req.query.action == 'read_multiple') {
+            const ids = req.body
+            if(!ids || !ids.length) {
+                res.status(400).send({ error: "No ids provided" })
+                return
+            }
+            const db = getDB(getDBPath("read", req), req, session)
+            const allResults: any[] = []
+            for(const id of ids) {
+                const item = modelType.unserialize(await db.get(id), session)
+                const readData = typeof extraData?.read == 'function' ? await extraData.read(session, item, req) : (extraData?.read ?? {})
+                allResults.push(await onAfterRead(await item.readTransformed(transformers, readData), session, req))
+            }
+            res.send(allResults)
+            return
+        } else {
+            if (!operations.includes('create')) {
+                res.status(404).send({ error: "Not found" })
+                return
+            }
+        }
 
         const entityModel = await (modelType.load(await onBeforeCreate(req.body, session, req), session).createTransformed(transformers))
         let dbPath = getDBPath("create", req, entityModel)
