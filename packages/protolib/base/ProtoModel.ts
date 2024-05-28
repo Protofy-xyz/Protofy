@@ -46,6 +46,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
             primary: this.idField,
             keys: this.objectSchema.is('indexed').getFields()
         }
+
         const groupIndexesSchema = this.objectSchema.is('groupIndex')
         const groupIndexes = groupIndexesSchema.getFields()
         this.groupIndexes = groupIndexes.map((field) => {
@@ -83,6 +84,17 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     getIndexes() {
         return this.indexes
+    }
+
+    static getSchemaLinks() {
+        return this._newInstance({}).getSchemaLinks()
+    }
+
+    getSchemaLinks() {
+        return this.objectSchema.is('linkTo').getFields().map((field) => {
+            const {linkTo, displayKey, linkToOptions} = this.objectSchema.getFieldDefinition(field)
+            return {field, linkTo, displayKey, linkToOptions}
+        })
     }
 
     static getModelName() {
@@ -135,11 +147,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     isVisible(): boolean {
-        return !this.isDeleted();
-    }
-
-    isDeleted(): boolean {
-        return this.data._deleted ? true : false;
+        return true
     }
 
     list(search?, session?, extraData?, params?): any {
@@ -225,7 +233,6 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     delete(data?): T {
         return new (this.constructor as new (data: any, session?: SessionDataType, modelName?: string) => T)({
-            _deleted: true,
             ...(data ? data : this.data)
         }, this.session, this.modelName);
     }
@@ -242,6 +249,14 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     serialize(): string {
         return JSON.stringify(this.data);
+    }
+
+    static linkTo() {
+        return this._newInstance({}).linkTo()
+    }
+
+    linkTo() {
+        return this.schema.linkTo(this.constructor)
     }
 
     static getApiOptions(): any {

@@ -1,12 +1,14 @@
 import * as Zod from 'zod'
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
+import { ProtoModel } from './ProtoModel';
 
 initSchemaSystem()
 
 interface ZodExtensions {
     indexed(indexFn?: Function): this;
     groupIndex(groupName?: string, groupCode?: string): this;
+    linkTo(model: any, displayKey?: string | Function, options?:{deleteOnCascade: boolean}): this;
     label(caption: string): this;
     hint(hintText: string): this;
     display(views?: string[] | undefined): this;
@@ -84,6 +86,13 @@ function extendZodTypePrototype(type: any) {
         this._def.groupIndex = true;
         this._def.groupName = groupName;
         this._def.groupCode = groupCode;
+        return this;
+    };
+
+    type.prototype.linkTo = function (model: ProtoModel<any>, displayKey: string | Function, options?: { deleteOnCascade: boolean }) {
+        this._def.linkTo = model;
+        this._def.displayKey = displayKey;
+        this._def.linkToOptions = options ?? {};
         return this;
     };
 
@@ -240,5 +249,4 @@ export function initSchemaSystem() {
 
 export const BaseSchema = Schema.object({
     id: Schema.string().generate(() => moment().format('YYYYMM-DDHHmm-ssSSS') + '-' + uuidv4().split('-')[0]).hidden().id(),
-    _deleted: Schema.boolean().optional().hidden(),
 })
