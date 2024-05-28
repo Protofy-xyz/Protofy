@@ -1,7 +1,7 @@
 import { generateEvent } from "../../bundles/events/eventsLibrary";
 import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
-import { getEnv, getLogger } from '../../base';
+import { API, getEnv, getLogger } from '../../base';
 import { connectDB as _connectDB, getDB as _getDB } from "app/bundles/storageProviders";
 import { getDBOptions } from "./db";
 
@@ -139,7 +139,37 @@ export const AutoAPI = ({
         return await onBeforeList(data, session, req)
     }
 
-    const _list = (req, allResults, _itemsPerPage) => {
+    const recoverLinks = async (items) => {
+        const links = modelType.getSchemaLinks()
+        if(links) {
+            for(const link of links) {
+                const apiUrl = link.linkTo.getApiEndPoint()
+
+                let idsToRequest = items.map(x => x[link.field]).filter(x => x !== undefined)
+                idsToRequest = [...new Set(idsToRequest)]
+                const response = await API.post(apiUrl + '?action=read_multiple', idsToRequest)
+                if(response.data && response.data.length) {
+                    for(const item of items) {
+                        const linkId = item[link.field]
+                        const linkItem = response.data.find(x => x[link.linkTo.getIdField()] == linkId)
+                        if(linkItem) {
+                            // if(typeof link.displayKey == 'function') { 
+                            //     item[link.field] = link.displayKey(linkItem)
+                            // } else {
+                            //     item[link.field] = linkItem[link.displayKey]
+                            // }
+
+                            item[link.field] = linkItem
+                            
+                        }
+                    }
+                }
+            }
+        }
+        return items
+    }
+
+    const _list = async (req, allResults, _itemsPerPage) => {
         const page = Number(req.query.page) || 0;
         const orderBy: string = (req.query.orderBy ?? defaultOrderBy) as string;
         const orderDirection = req.query.orderDirection ?? defaultOrderDirection;
@@ -150,6 +180,9 @@ export const AutoAPI = ({
                 return 0;
             });
         }
+
+        allResults = await recoverLinks(allResults)
+
 
         const result = {
             itemsPerPage: _itemsPerPage,
@@ -229,9 +262,11 @@ export const AutoAPI = ({
             const orderBy: string = req.query.orderBy ? req.query.orderBy as string : (defaultOrderBy ?? modelType.getIdField())
             const orderDirection = req.query.orderDirection || defaultOrderDirection;
             if(indexedKeys.length && indexedKeys.includes(orderBy)) {
+                let allResults = await Promise.all((await db.getPageItems(total, orderBy, page, _itemsPerPage, orderDirection, filterData)).map(async x => await parseResult(x, true)))
+                allResults = await recoverLinks(allResults)
                 const result = {
                     itemsPerPage:_itemsPerPage,
-                    items: await Promise.all((await db.getPageItems(total, orderBy, page, _itemsPerPage, orderDirection, filterData)).map(async x => await parseResult(x, true))),
+                    items: allResults,
                     total: total,
                     page: req.query.all ? 0 : page,
                     pages: req.query.all ? 1 : Math.ceil(total / _itemsPerPage)
@@ -251,17 +286,40 @@ export const AutoAPI = ({
             }
         }
 
-        res.send(await onAfterList(_list(req, allResults, _itemsPerPage), session, req));
+        res.send(await onAfterList(await _list(req, allResults, _itemsPerPage), session, req));
         
     }));
 
-    //create
-    operations.includes('create') && app.post(prefix + modelName, handler(async (req, res, session) => {
+    //this endpoint serves two purposes: create and batch read (read multiple items at once)
+    //post with ?action=read_multiple to read multiple items at once (body should a json array with the keys to read)
+    //post without ?action to create an item
+    (operations.includes('create') || operations.includes('read')) && app.post(prefix + modelName, handler(async (req, res, session) => {
         if (requiresAdmin && (requiresAdmin.includes('create') || requiresAdmin.includes('*')) && (!session || !session?.user?.admin)) {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
 
+        if(req.query.action == 'read_multiple') {
+            const ids = req.body
+            if(!ids || !ids.length) {
+                res.status(400).send({ error: "No ids provided" })
+                return
+            }
+            const db = getDB(getDBPath("read", req), req, session)
+            const allResults: any[] = []
+            for(const id of ids) {
+                const item = modelType.unserialize(await db.get(id), session)
+                const readData = typeof extraData?.read == 'function' ? await extraData.read(session, item, req) : (extraData?.read ?? {})
+                allResults.push(await onAfterRead(await item.readTransformed(transformers, readData), session, req))
+            }
+            res.send(allResults)
+            return
+        } else {
+            if (!operations.includes('create')) {
+                res.status(404).send({ error: "Not found" })
+                return
+            }
+        }
 
         const entityModel = await (modelType.load(await onBeforeCreate(req.body, session, req), session).createTransformed(transformers))
         let dbPath = getDBPath("create", req, entityModel)
@@ -322,11 +380,12 @@ export const AutoAPI = ({
                         }
                     }
                 }
-                res.send(_list(req, await onAfterRead(allResults, session, req), Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1)))
+                res.send(await _list(req, await onAfterRead(allResults, session, req), Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1)))
             } else {
                 const item = modelType.unserialize(await onBeforeRead(await db.get(req.params.key), session, req), session)
                 const readData = typeof extraData?.read == 'function' ? await extraData.read(session, item, req) : (extraData?.read ?? {})
-                res.send(await onAfterRead(await item.readTransformed(transformers, readData), session, req))
+                const itemData = (await recoverLinks([await item.readTransformed(transformers, readData)]))[0]
+                res.send(await onAfterRead(itemData, session, req))
             }
         } catch (error) {
             logger.error({ error }, "Error reading from database")
