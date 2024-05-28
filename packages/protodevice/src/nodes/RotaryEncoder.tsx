@@ -3,6 +3,7 @@ import { Node, Field, NodeParams } from 'protoflow';
 import { getColor } from ".";
 
 const ports = [
+    { "number": 0, "side": "left", "name": "'NONE'", "type": "IO", "analog": false, "description": "NONE", "maxVoltage": 3.3, "rtc": false },
     { "number": 1, "side": "left", "name": "3V3", "type": "P", "analog": false, "description": "3V3 Power supply", "maxVoltage": 3.3, "rtc": false },
     { "number": 2, "side": "left", "name": "EN", "type": "I", "analog": false, "description": "CHIP_PU, RESET", "maxVoltage": 3.3, "rtc": false },
     { "number": 3, "side": "left", "name": "36", "type": "I", "analog": true, "description": "GPIO36, ADC1_CH0, S_VP", "maxVoltage": 3.3, "rtc": true },
@@ -59,7 +60,11 @@ const RotaryEncoder = ({ node = {}, nodeData = {}, children, color }: any) => {
         {
             label: 'Reset Pin', static: true, field: 'param-3', type: 'select',
             data: ports.filter(port => port.type.includes('IO') && !['EN', '36', '39', 'CLK', 'TX', 'RX'].includes(port.name)).map(port => port.name)
-        }
+        },
+        {
+            label: 'Motor name', static: true, field: 'param-4', type: 'input', onBlur: () => { setName(nodeData['param-4']) },
+            error: nodeData['param-4']?.value?.replace(/['"]+/g, '') == 'sensor' ? nameErrorMsg : null
+        },
     ] as Field[]
     return (
         <Node node={node} isPreview={!node.id} title='Rotary Encoder' color={color} id={node.id} skipCustom={true} disableOutput={false} output={true}> 
@@ -81,6 +86,7 @@ export default {
             "param-1": { value: "rotencoder", kind: "StringLiteral" }, 
             "param-2": { value: 23, kind: "NumericLiteral" },
             "param-3": { value: 18, kind: "NumericLiteral" },
+            "param-4": { value: "", kind: "StringLiteral" },
             // extra:  { 
             //     to: 'paparrupi', 
             //     "param-1": { value: "new-encoder", kind: "StringLiteral" }, 
