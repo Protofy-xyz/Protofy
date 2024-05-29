@@ -10,6 +10,7 @@ import { useTint } from 'protolib'
 import { ItemMenu } from "./ItemMenu";
 import { MultiSelectList } from "./MultiSelectList";
 import { InputColor } from "./InputColor";
+import { SearchAndSelect } from "./SearchAndSelect";
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 const iconStyle = { color: "var(--color9)", size: "$1", strokeWidth: 1 }
@@ -366,18 +367,55 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
       }
     }
   } else if (elementType == 'ZodObject') {
-    return <ObjectComp
-      ele={ele}
-      elementDef={elementDef}
-      icon={icon}
-      path={path}
-      data={data}
-      setData={setData}
-      mode={mode}
-      customFields={customFields}
-      inArray={inArray}
-      arrayName={arrayName}
-      getFormData={getFormData}></ObjectComp>
+    if (ele._def.linkTo) {
+      return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+        <Stack f={1}>
+          {/* <Input
+          id={"editable-object-link-input-" + ele?.name}
+          {...(mode != 'edit' && mode != 'add' ? { bw: 0, forceStyle: "hover" } : {})}
+          focusStyle={{ outlineWidth: 1 }}
+          disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static) || (ele._def.dependsOn && !data[ele._def.dependsOn]))}
+          secureTextEntry={ele._def.secret}
+          value={generatedOptions && !getFormData(ele.name) ? generatedOptions : getFormData(ele.name)}
+          onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
+          placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? (typeof ele.name == "number" ? "..." : ele.name)}
+          autoFocus={x == 0 && i == 0}
+          onBlur={() => {
+            if (ele._def.typeName == 'ZodNumber') {
+              const numericValue = parseFloat(getFormData(ele.name));
+              if (!isNaN(numericValue)) {
+                setFormData(ele.name, numericValue);
+              }
+            }
+          }}
+          bc="$backgroundTransparent"
+        >
+        </Input> */}
+          <SearchAndSelect
+            bc="$backgroundTransparent"
+            // options={["John", "Doe", "Jane", "Smith"]}
+            getDisplayField={ele._def.getDisplayField}
+            dataSource={ele._def.linkTo.getApiEndPoint()}
+            onSelectItem={(item) => setFormData(ele.name, item)}
+            selectedItem={getFormData(ele.name)}
+          />
+        </Stack>
+      </FormElement>
+    } else {
+      return <ObjectComp
+        ele={ele}
+        elementDef={elementDef}
+        icon={icon}
+        path={path}
+        data={data}
+        setData={setData}
+        mode={mode}
+        customFields={customFields}
+        inArray={inArray}
+        arrayName={arrayName}
+        getFormData={getFormData}></ObjectComp>
+    }
+
 
   } else if (elementType == 'ZodArray') {
     const formData = getFormData(ele.name) ? getFormData(ele.name) : []

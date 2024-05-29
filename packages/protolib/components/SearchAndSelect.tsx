@@ -76,7 +76,7 @@ export const SearchAndSelect = (props: InputProps & SearchAndSelectProps) => {
                 {...inputProps}
             />
             <YStack>
-                <YGroup pb={0} bc="$bgContent" zIndex={99999999} overflow="auto" left={open ? -width / 2 : -100000} maxHeight={300} width={width + 100} position="absolute" alignSelf="center" bordered size="$4">
+                {open && <YGroup pb={0} bc="$bgContent" zIndex={99999999} overflow="auto" maxHeight={300} width={width} position="absolute" alignSelf="center" bordered size="$4">
                     {results.length === 0 && <ListItem>No results</ListItem>}
                     {results.map((item, i) => <YGroup.Item key={i}>
                         <ListItem onPointerDown={() => isClickingInOption.current = true} pressTheme hoverTheme onPress={() => {
@@ -87,7 +87,7 @@ export const SearchAndSelect = (props: InputProps & SearchAndSelectProps) => {
                             {getDisplayField ? getDisplayField(item) : item}
                         </ListItem>
                     </YGroup.Item>)}
-                </YGroup>
+                </YGroup>}
 
             </YStack>
         </>

@@ -247,16 +247,16 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this;
     }
 
-    serialize(): string {
-        return JSON.stringify(this.data);
+    serialize(raw?): string {
+        return raw?this.data:JSON.stringify(this.data);
     }
 
-    static linkTo() {
-        return this._newInstance({}).linkTo()
+    static linkTo(displayKey?: string | Function, options?:{deleteOnCascade: boolean}) {
+        return this._newInstance({}).linkTo(displayKey, options)
     }
 
-    linkTo() {
-        return this.schema.linkTo(this.constructor)
+    linkTo(displayKey?: string | Function, options?:{deleteOnCascade: boolean}) {
+        return this.schema.linkTo(this.constructor, displayKey, options)
     }
 
     static getApiOptions(): any {

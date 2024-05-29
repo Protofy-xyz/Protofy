@@ -139,6 +139,21 @@ export const AutoAPI = ({
         return await onBeforeList(data, session, req)
     }
 
+    const processLinks = (item) => {
+        const links = modelType.getSchemaLinks()
+        if(links) {
+            for(const link of links) {
+                const apiUrl = link.linkTo.getApiEndPoint()
+
+                if(item[link.field] !== undefined) {
+                    const linkId = item[link.field][link.linkTo.getIdField()]
+                    item[link.field] = linkId
+                }
+            }
+        }
+        return item
+    }
+
     const recoverLinks = async (items) => {
         const links = modelType.getSchemaLinks()
         if(links) {
@@ -334,7 +349,7 @@ export const AutoAPI = ({
         if(dbPath instanceof Array) {
             for(const path of dbPath) {
                 const db = getDB(path, req, session)
-                await db.put(entityModel.getId(), entityModel.serialize())
+                await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
             }
         }
 
@@ -402,8 +417,9 @@ export const AutoAPI = ({
 
         const requestModel = modelType.load(await onBeforeUpdate(req.body, req, session), session)
         const db = getDB(getDBPath("update", req, requestModel), req, session)
-        const entityModel = await (modelType.unserialize(await db.get(req.params.key), session).updateTransformed(requestModel, transformers))
-        await db.put(entityModel.getId(), entityModel.serialize())
+        const modelData = (await recoverLinks([JSON.parse(await db.get(req.params.key))]))[0]
+        const entityModel = await (modelType.load(modelData, session).updateTransformed(requestModel, transformers))
+        await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
 
         _notify(entityModel, 'update')
 
