@@ -38,31 +38,49 @@ class RotaryEncoder {
             componentObjects[0]["config"]["pin_reset"]= this.pinReset
         }
         if(this.motorName != ""){
+            componentObjects[0]["config"]["on_value"]= {
+                then:{ "script.execute": `position_script_${this.name}` }
+            }
             componentObjects.push({
                 name: "globals",
-                config: {
+                config: [
+                    {        
                     initial_value: '0',
                     type: "int",
                     id: `target_position_${this.name}`
-                }
+                    },
+                    {        
+                        initial_value: '1',
+                        type: "int",
+                        id: `disable_control_${this.name}`
+                    },{
+                        id: `step_by_encoder_ratio_${this.name}`,
+                        initial_value: '1.56',
+                        type: "float"
+                    }
+                ]
             })
             componentObjects.push({
-                name: "interval",
+                name: "script",
                 config:{
-                    interval: "10ms",
+                    id: `position_script_${this.name}`,
                     then: {
                         lambda:
-`if(!id(${this.motorName}).has_reached_target()){
+`if(id(disable_control_${this.name})==0){
     return;
-  }
-  if((id(${this.name}).state > (id(target_position_${this.name})+2))||(id(rotencoder).state < (id(target_position_${this.name})-2))){
-    if (id(${this.name}).state < id(target_position_${this.name})) {
-        id(${this.motorName}).set_target(id(${this.motorName}).current_position + 9*(id(target_position_${this.name})-id(${this.name}).state));
-    } else {
-        id(${this.motorName}).set_target(id(${this.motorName}).current_position - 9*(id(${this.name}).state-id(target_position_${this.name})));
+    if(!id(${this.motorName}).has_reached_target()){
+        return;
+    }else{
+        if((id(${this.name}).state > (id(target_position_${this.name})+1))||(id(${this.name}).state < (id(target_position_${this.name})-1))){
+            if (id(${this.name}).state < id(target_position_${this.name})) {
+                id(${this.motorName}).set_target(id(${this.motorName}).current_position + id(step_by_encoder_ratio_${this.name})*(id(target_position_${this.name})-id(${this.name}).state));
+            } else {
+                id(${this.motorName}).set_target(id(${this.motorName}).current_position - id(step_by_encoder_ratio_${this.name})*(id(${this.name}).state-id(target_position_${this.name})));
+            }
+            ESP_LOGD("Current pos","Current position: %d",  id(${this.motorName}).current_position);
+            ESP_LOGD("Set target","Targeted position: %d",  id(${this.motorName}).target_position);
+        }
     }
-    ESP_LOGD("Current pos","Current position: %d",  id(${this.motorName}).current_position);
-    ESP_LOGD("Set target","Targeted position: %d",  id(${this.motorName}).target_position);
 }`                  }
                 }
             })
@@ -79,9 +97,30 @@ class RotaryEncoder {
 `
 int value = atoi(x.c_str());
 id(target_position_${this.name}) = value;
-ESP_LOGD("Report position", "${this.name} stepper move X steps set to: %d",  value);
+id(position_script_${this.name}).execute();
+ESP_LOGD("Position control", "${this.name} position control stepper steps set to: %d",  value);
 `,
                           }
+                        },{
+                            topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/disable_pos_control`,
+                            then: {
+                                lambda:
+`
+int value = atoi(x.c_str());
+id(disable_control_${this.name}) = value;
+ESP_LOGD("Position control", "${this.name} disable position control set to: %d",  value);
+`
+                            }
+                        },{
+                            topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/step_by_encoder_ratio`,
+                            then: {
+                                lambda:
+`
+float value = atof(x.c_str());
+id(step_by_encoder_ratio_${this.name}) = value;
+ESP_LOGD("Position control", "${this.name} Step by encoder ratio set to: %.2f",  value);
+`
+                            }
                         }
                       ]
                     }
@@ -129,7 +168,40 @@ ESP_LOGD("Report position", "${this.name} stepper move X steps set to: %d",  val
                 payload: {
                     type: 'str'
                 }
-            }]
+            },
+            {
+                name: "ratio",
+                label: "Step by encoder ratio",
+                description: "This float ratio defines the number of steps by encoder ratio",
+                endpoint: "/" + this.type + "/" + this.name + "/step_by_encoder_ratio",
+                connectionType: "mqtt",
+                payload: {
+                    type: 'float'
+                }
+            },
+            {
+                name: "enable",
+                label: "Enable pos control",
+                description: "Enable position control",
+                endpoint: "/" + this.type + "/" + this.name + "/disable_pos_control",
+                connectionType: "mqtt",
+                payload: {
+                    type: 'str',
+                    value: "0"
+                }
+            },
+            {
+                name: "disable",
+                label: "Disable pos control",
+                description: "Disable position control",
+                endpoint: "/" + this.type + "/" + this.name + "/disable_pos_control",
+                connectionType: "mqtt",
+                payload: {
+                    type: 'str',
+                    value: "1"
+                }
+            }
+            ]
         }
 
         return outSubsystem
