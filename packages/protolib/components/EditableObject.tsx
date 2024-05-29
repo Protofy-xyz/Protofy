@@ -78,7 +78,7 @@ const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormDa
             als="flex-start" cursor='pointer'
             {...elementDef.type._def.typeName != 'ZodObject' ? {} : {
               position: "absolute",
-              right: '$6',
+              right: '0',
               top: 6
             }}
             pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
@@ -227,12 +227,14 @@ const FormGroup = ({ ele, title, children, icon, simple = false, path }) => {
         <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes(name) ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
           {({ open }) => (
             <>
-              <Tinted>{simple ? React.createElement(icon, iconStyle) : <></>}</Tinted>
-              <Paragraph ml={"$2"}>{title}</Paragraph>
-              <Spacer flex={1} />
-              <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
+              <Square o={0.8} animation="quick" rotate={open ? '180deg' : '0deg'} mr={"$1.5"}>
                 <ChevronDown size="$1" />
               </Square>
+              <Tinted>{simple ? React.createElement(icon, iconStyle) : <></>}</Tinted>
+
+              <Paragraph ml={"$2"}>{title}</Paragraph>
+              <Spacer flex={1} />
+
             </>
           )}
         </Accordion.Trigger>
@@ -369,29 +371,9 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
   } else if (elementType == 'ZodObject') {
     if (ele._def.linkTo) {
       return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-        <Stack f={1}>
-          {/* <Input
-          id={"editable-object-link-input-" + ele?.name}
-          {...(mode != 'edit' && mode != 'add' ? { bw: 0, forceStyle: "hover" } : {})}
-          focusStyle={{ outlineWidth: 1 }}
-          disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static) || (ele._def.dependsOn && !data[ele._def.dependsOn]))}
-          secureTextEntry={ele._def.secret}
-          value={generatedOptions && !getFormData(ele.name) ? generatedOptions : getFormData(ele.name)}
-          onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
-          placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? (typeof ele.name == "number" ? "..." : ele.name)}
-          autoFocus={x == 0 && i == 0}
-          onBlur={() => {
-            if (ele._def.typeName == 'ZodNumber') {
-              const numericValue = parseFloat(getFormData(ele.name));
-              if (!isNaN(numericValue)) {
-                setFormData(ele.name, numericValue);
-              }
-            }
-          }}
-          bc="$backgroundTransparent"
-        >
-        </Input> */}
+        <Stack f={1} t={"$-2"} maxWidth={284}>
           <SearchAndSelect
+
             bc="$backgroundTransparent"
             // options={["John", "Doe", "Jane", "Smith"]}
             getDisplayField={ele._def.getDisplayField}
