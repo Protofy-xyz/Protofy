@@ -101,7 +101,7 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
           y={0}
           opacity={1}
           scale={1}
-          duration={26000}
+          duration={9999999999}
           animation="100ms"
         >
           <YStack>
