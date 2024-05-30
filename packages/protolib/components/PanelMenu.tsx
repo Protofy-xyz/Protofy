@@ -167,28 +167,11 @@ const Subtabs = ({ tabs, subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                
+
                 const segment = typeof window !== 'undefined' ? window.location.pathname.split('/')[2] || SiteConfig.defaultWorkspace : SiteConfig.defaultWorkspace;
 
                 let href = "/" + workspaceRoot + '/' + segment + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
                 const originalHref = href
-                
-            
-                //href = SiteConfig.getProductionURL(href, hrefProtocol, hrefHost)
-
-                // if(typeof window !== 'undefined' && (hrefPort !== undefined && window.location.port !== hrefPort)) {
-                // if (isDev) {
-                //     return hrefProtocol && hrefHost && <a href={href} key={index}>
-                //         <Tinted>
-                //             <PanelMenuItem
-                //                 selected={router.asPath.startsWith(originalHref.replace(/\/$/, ''))}
-                //                 icon={getIcon(subtab.icon)}
-                //                 text={subtab.name}
-                //             />
-                //         </Tinted>
-                //     </a>
-                // }
-
 
                 const allLinks = Object.keys(tabs).reduce((acc, tab) => {
                     if (tabs[tab].length === undefined) {
@@ -206,15 +189,23 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                     return acc
                 }, 0)
 
-                return <Link href={href} key={index}>
-                    <Tinted>
-                        <PanelMenuItem
-                            selected={router.asPath.startsWith(originalHref.replace(/\/$/, '')) && originalHref.length == maxSelectedLength}
-                            icon={getIcon(subtab.icon)}
-                            text={subtab.name}
-                        />
-                    </Tinted>
-                </Link>
+                const content = <Tinted>
+                    <PanelMenuItem
+                        selected={router.asPath.startsWith(originalHref.replace(/\/$/, '')) && originalHref.length == maxSelectedLength}
+                        icon={getIcon(subtab.icon)}
+                        text={subtab.name}
+                    />
+                </Tinted>
+
+                if (isDev) {
+                    return <a href={href} key={index}>
+                        {content}
+                    </a>
+                } else {
+                    return <Link href={href} key={index}>
+                        {content}
+                    </Link>
+                }
             })}
         </>)
 }
@@ -278,7 +269,7 @@ export const PanelMenu = ({ workspace }) => {
     //     }
 
     //     push('env', environ)
-        
+
     // }, [environ])
 
     return (<YStack pt="$3">

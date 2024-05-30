@@ -4,9 +4,9 @@
   "description": "Documentation service",
   "scripts": {
     "prepare-dev": "node prepare.js",
-    "dev-standalone": "FULLDEV=1 NODE_ENV=development node entrypoint.js",
-    "dev-service": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js",
-    "dev": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
+    "dev-standalone": "FULL_DEV=1 NODE_ENV=development node entrypoint.js",
+    "dev-service": "FULL_DEV=1 NODE_ENV=development pm2 start pm2.config.js",
+    "dev": "FULL_DEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "package": "next build && shx cp -r .next/ ../nextra-compiled && shx cp -r pages/ ../nextra-compiled && shx cp -r public/ ../nextra-compiled && shx cp theme.config.jsx ../nextra-compiled/theme.config.jsx",
     "clean": "shx rm -rf .next"
   },

@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "prepare-dev": "node prepare.js",
-    "dev-standalone": "FULLDEV=1 NODE_ENV=development node entrypoint.js",
-    "dev-service": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js",
+    "dev-standalone": "FULL_DEV=1 NODE_ENV=development node entrypoint.js",
+    "dev-service": "FULL_DEV=1 NODE_ENV=development pm2 start pm2.config.js",
     "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
-    "dev": "FULLDEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
+    "dev": "FULL_DEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "package": "next build && shx cp -r .next/ ../next-compiled && shx cp -r pages/ ../next-compiled && shx cp -r public/ ../next-compiled",
     "lint": "next lint",
     "test": "yarn test:deps && jest --forceExit",
