@@ -16,7 +16,7 @@ import 'react-dropzone-uploader/dist/styles.css'
 import 'react-chat-widget/lib/styles.css';
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { setConfig } from 'protolib/base/Config';
-import {getBaseConfig} from 'app/BaseConfig'
+import { getBaseConfig } from 'app/BaseConfig'
 setConfig(getBaseConfig("next", process))
 import { Provider } from 'app/provider'
 import Head from 'next/head'
@@ -26,6 +26,7 @@ import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
 import { initSchemaSystem } from 'protolib/base'
 import { useSession, AppConfContext, getBrokerUrl, Connector } from 'protolib'
+import { Toast, XStack, YStack } from '@my/ui'
 
 initSchemaSystem()
 
@@ -67,7 +68,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <JotaiProvider>
-        <Connector brokerUrl={brokerUrl} options={{username: session?.user?.id, password: session?.token}}>
+        <Connector brokerUrl={brokerUrl} options={{ username: session?.user?.id, password: session?.token }}>
           <ThemeProvider>
             <AppConfContext.Provider value={AppConfig}>
               <Component {...pageProps} />
@@ -82,6 +83,8 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useRootTheme()
 
+  const isDev = process.env.NODE_ENV === 'development'
+
   return (
     <NextThemeProvider
       onChangeTheme={(next) => {
@@ -90,6 +93,22 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
     >
       <Provider disableRootThemeClass defaultTheme={theme}>
         {children}
+
+        {isDev && <Toast
+          viewportName="warnings"
+          enterStyle={{ opacity: 0, scale: 0.5, y: -25 }}
+          exitStyle={{ opacity: 0, scale: 1, y: -20 }}
+          y={0}
+          opacity={1}
+          scale={1}
+          duration={26000}
+          animation="100ms"
+        >
+          <YStack>
+            <Toast.Title>Preview Mode</Toast.Title>
+              <Toast.Description>This page is in preview/development mode. This may affect your user experience and negatively impact the performance.</Toast.Description>
+          </YStack>
+        </Toast>}
       </Provider>
     </NextThemeProvider>
   )

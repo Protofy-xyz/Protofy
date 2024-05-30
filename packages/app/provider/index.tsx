@@ -1,4 +1,4 @@
-import { CustomToast, TamaguiProvider, TamaguiProviderProps, ToastProvider } from '@my/ui'
+import { CustomToast, TamaguiProvider, TamaguiProviderProps, ToastProvider, ToastViewport as ToastViewportOg } from '@my/ui'
 import { useColorScheme } from 'react-native'
 
 import { ToastViewport } from './ToastViewport'
@@ -26,7 +26,9 @@ export function Provider({ children, ...rest }: Omit<TamaguiProviderProps, 'conf
         {children}
 
         <CustomToast />
+
         <ToastViewport />
+        <ToastViewportOg name="warnings" flexDirection="column" bottom={50} left={0} right={0} />
       </ToastProvider>
     </TamaguiProvider>
   )
