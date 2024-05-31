@@ -88,8 +88,8 @@ export const AlertDialog = forwardRef(({
                                     <Button id="alert-dlg-accept" f={1} onPress={async () => {
                                         setLoading(true)
                                         try {
-                                            await onAccept(setOpen !== undefined ? setOpen : _setOpen)
-                                            seter(false)
+                                            const keepOpen = await onAccept(setOpen !== undefined ? setOpen : _setOpen)
+                                            if(keepOpen !== true) seter(false)
                                         } catch (e) {
                                             setError(e)
                                             console.log('e: ', e)

@@ -1,4 +1,4 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer } from 'tamagui'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonIcon, ButtonProps, Tooltip } from 'tamagui'
 import { Center, useRemoteStateList, ObjectGrid, DataTableCard, MapView, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { forwardRef, useContext, useEffect, useState } from 'react'
 import { PlusCircle, Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye } from '@tamagui/lucide-icons'
@@ -42,6 +42,7 @@ interface DataViewProps {
     onEdit?: (data: any) => any;
     onDelete?: (data: any) => any;
     onAdd?: (data: any) => any;
+    onDataAvailable?: (total, currentItems) => any,
     views?: any;
     extraViews?: any[];
     openMode?: 'edit' | 'view';
@@ -60,16 +61,56 @@ interface DataViewProps {
     toolBarContent?: any;
     onAddButton?: any;
     extraMenuActions?: any[];
+    extraActions?: [];
     deleteable?: () => boolean;
     objectProps?: EditableObjectProps | {};
     refreshOnHotReload?: boolean;
     quickRefresh?: boolean;
 }
- 
-export const DataView = (props: DataViewProps & {ready?: boolean}) => {
-    return <AsyncView ready={props.ready??true}>
-            <DataViewInternal {...props} />
+
+export const DataView = (props: DataViewProps & { ready?: boolean }) => {
+    return <AsyncView ready={props.ready ?? true}>
+        <DataViewInternal {...props} />
     </AsyncView>
+}
+
+type DataViewActionButtonProps = {
+    onPress?: () => void
+    icon: any
+    description?: string
+    id?: string
+}
+
+export const DataViewActionButton = ({ icon, description, id, ...props }: DataViewActionButtonProps & ButtonProps) => {
+    const Icon = icon
+    return <Tooltip {...props}>
+    <Tooltip.Trigger>
+        <Button id={id ?? ''} hoverStyle={{ o: 1 }} o={0.7} circular chromeless={true} {...props} >
+            <Icon color={"$color10"} />
+        </Button>
+    </Tooltip.Trigger>
+    <Tooltip.Content
+      enterStyle={{ x: 0, y: -5, opacity: 0, scale: 0.9 }}
+      exitStyle={{ x: 0, y: -5, opacity: 0, scale: 0.9 }}
+      scale={1}
+      x={0}
+      y={0}
+      opacity={1}
+      animation={[
+        'quick',
+        {
+          opacity: {
+            overshootClamping: true,
+          },
+        },
+      ]}
+    >
+      <Tooltip.Arrow />
+      <Paragraph size="$2" lineHeight="$1">
+        {description}
+      </Paragraph>
+    </Tooltip.Content>
+  </Tooltip>
 }
 
 const DataViewInternal = forwardRef(({
@@ -95,6 +136,7 @@ const DataViewInternal = forwardRef(({
     onEdit = (data) => data,
     onDelete = (data) => data,
     onAdd = (data) => data,
+    onDataAvailable = (total, currentItems) => {},
     views = undefined,
     extraViews = [],
     openMode = 'edit',
@@ -113,6 +155,7 @@ const DataViewInternal = forwardRef(({
     toolBarContent = null,
     onAddButton = undefined,
     extraMenuActions = [],
+    extraActions = [],
     deleteable = () => { return true },
     objectProps = {},
     refreshOnHotReload = false,
@@ -149,6 +192,7 @@ const DataViewInternal = forwardRef(({
 
     useEffect(() => {
         if (items && items.isLoaded) {
+            onDataAvailable(items.data?.total, items.data?.items)
             setCurrentItems(items)
         }
     }, [items])
@@ -229,7 +273,7 @@ const DataViewInternal = forwardRef(({
                     icon={RowIcon}
                     msg={`Empty ${displayName} list`}
                     detailsColor='$color'
-                    containerProps={{ mt: '-30%', o:0.1 }}
+                    containerProps={{ mt: '-30%', o: 0.1 }}
                     iconProps={{}}
                 >
                     {/* <XStack o={0.5} space="$1" ai="center">
@@ -473,7 +517,7 @@ const DataViewInternal = forwardRef(({
                                     </XStack>
                                 </XStack>}
                             </XStack>
-                            <XStack ai="center" marginLeft="$3">
+                            <XStack ai="center" marginLeft="$3" mb={"$1"}>
                                 {!disableViewSelector && <ButtonGroup marginRight="$3">
                                     {
                                         tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>
@@ -482,13 +526,16 @@ const DataViewInternal = forwardRef(({
                                     }
                                 </ButtonGroup>}
                                 {!hideAdd && <Tinted>
-                                    <Button id={"admin-dataview-add-btn"} hoverStyle={{ o: 1 }} o={0.7} circular onPress={() => {
-                                        onAddButton ? onAddButton() : setCreateOpen(true)
-                                    }} chromeless={true}>
-                                        <Plus color={"$color10"} />
-                                    </Button>
-                                </Tinted>
-                                }
+                                    <DataViewActionButton
+                                        id="admin-dataview-add-btn"
+                                        icon={Plus}
+                                        description={`Add ${name}`}
+                                        onPress={() => {
+                                            onAddButton ? onAddButton() : setCreateOpen(true)
+                                        }}
+                                    />
+                                </Tinted>}
+                                {extraActions && extraActions.map((action, index) => action)}
                             </XStack>
                         </XStack>
                     </XStack>
