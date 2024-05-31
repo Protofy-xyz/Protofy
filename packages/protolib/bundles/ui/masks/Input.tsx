@@ -101,7 +101,7 @@ const InputMask = ({ node = {}, nodeData = {}, children }: any) => {
 export default {
     id: 'InputMask',
     type: 'JsxElement',
-    category: 'UI Events',
+    category: 'UI Elements',
     keywords: ['input', 'ui'],
     check: (node, nodeData) => {
         return (

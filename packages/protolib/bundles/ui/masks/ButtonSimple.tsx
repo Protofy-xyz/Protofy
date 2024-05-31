@@ -137,7 +137,7 @@ const ButtonSimpleMask = ({ node = {}, nodeData = {}, children }: any) => {
 export default {
     id: 'ButtonSimpleMask',
     type: 'JsxElement',
-    category: 'UI Events',
+    category: 'UI Elements',
     keywords: ['button', 'ui', 'simple'],
     check: (node, nodeData) => {
         return (
