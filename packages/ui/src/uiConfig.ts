@@ -1,6 +1,7 @@
 export default {
     settings: {
-        defaultTint: 'green'
+        defaultTint: 'green',
+        assistant: true
     },
     // The keys of "themes" are the names of the themes. For example: "light", "light_yellow", ...
     // In case you are using a tint, for example "yellow", theme name will be 
