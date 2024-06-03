@@ -46,6 +46,7 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { SelectList } from './SelectList';
 import { usePageParams, useQueryState } from 'protolib/next'
 import { useUpdateEffect } from 'usehooks-ts';
+import { useWorkspaceEnv } from '../lib/useWorkspaceEnv';
 
 const opacity = 0.8
 const strokeWidth = 2
@@ -155,6 +156,7 @@ const Subtabs = ({ tabs, subtabs }: any) => {
     const [hrefHost, setHrefHost] = useState(undefined)
     const { resolvedTheme } = useThemeSetting()
     const workspaceRoot = useWorkspaceRoot()
+    const workspaceEnv = useWorkspaceEnv()
 
     useEffect(() => {
         if (isDev) {
@@ -167,10 +169,8 @@ const Subtabs = ({ tabs, subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
+                let href = "/" + workspaceRoot + '/' + workspaceEnv + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
 
-                const segment = typeof window !== 'undefined' ? window.location.pathname.split('/')[2] || SiteConfig.defaultWorkspace : SiteConfig.defaultWorkspace;
-
-                let href = "/" + workspaceRoot + '/' + segment + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
                 const originalHref = href
 
                 const allLinks = Object.keys(tabs).reduce((acc, tab) => {
