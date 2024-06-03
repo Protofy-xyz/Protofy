@@ -28,7 +28,7 @@ export const DeviceDefinitionsAPI = AutoAPI({
     transformers: {
         getConfig: async (field, e, data) => {
             //get config from deviceBoard
-            const deviceBoard = await API.get("/adminapi/v1/deviceboards/" +encodeURI(data.board))
+            const deviceBoard = await API.get("/adminapi/v1/deviceboards/" +encodeURI(data.board.name))
             data.config.sdkConfig = deviceBoard.data.config[data.sdk]
             return data
         }

@@ -148,7 +148,7 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
         return;
       }
       const deviceDefinition = response.data
-      const response1 = await API.get('/adminapi/v1/deviceBoards/' + deviceDefinition.board);
+      const response1 = await API.get('/adminapi/v1/deviceBoards/' + deviceDefinition.board.name);
         if (response1.isError) {
           console.log(response1.error)
           return;

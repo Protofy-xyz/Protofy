@@ -1,4 +1,4 @@
-import { Button, Fieldset, Input, Label, Stack, XStack, H3, YStack, Paragraph, Spinner, Text, StackProps, Accordion, Square, Spacer, Switch } from "tamagui";
+import { Button, Fieldset, Input, Label, Stack, XStack, H3, YStack, Paragraph, Spinner, Text, StackProps, Accordion, Square, Spacer, Switch, SizableText } from "tamagui";
 import { Pencil, Tag, ChevronDown, X, Tags, List, Layers } from '@tamagui/lucide-icons';
 import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, SelectList, SimpleSlider, AlertDialog, DatePicker } from 'protolib'
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -371,7 +371,7 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
   } else if (elementType == 'ZodObject') {
     if (ele._def.linkTo) {
       return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-        <Stack f={1} t={"$-2"} maxWidth={284}>
+        {mode != 'preview' && <Stack f={1} t={"$-2"} maxWidth={284}>
           <SearchAndSelect
             bc="$backgroundTransparent"
             // options={["John", "Doe", "Jane", "Smith"]}
@@ -383,8 +383,10 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
             }}
             onSelectItem={(item) => setFormData(ele.name, item)}
             selectedItem={getFormData(ele.name)}
-          />
-        </Stack>
+          /></Stack>}
+
+          {mode == 'preview' && <SizableText ml="$3.5" mt={"$2.5"} mb="$2">{ele._def.getDisplayField && ele._def.getDisplayField(getFormData(ele.name))}</SizableText>}
+        
       </FormElement>
     } else {
       return <ObjectComp

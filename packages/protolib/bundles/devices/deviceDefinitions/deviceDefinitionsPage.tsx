@@ -20,7 +20,6 @@ const DeviceDefitionIcons = {
 }
 
 const sourceUrl = '/adminapi/v1/devicedefinitions'
-const boardsSourceUrl = '/adminapi/v1/deviceboards?all=1'
 const coresSourceUrl = '/adminapi/v1/devicecores?all=1'
 
 export default {
@@ -32,10 +31,6 @@ export default {
     const [editedObjectData, setEditedObjectData] = React.useState<any>({})
     const router = useRouter()
     const env = useWorkspaceEnv()
-
-    const [boardList, setBoardList] = useState(extraData?.boards ?? getPendingResult('pending'))
-    usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardList, extraData?.boards)
-    const boards = boardList.isLoaded ? boardList.data.items.map(i => DeviceBoardModel.load(i).getData()) : []
 
     const [coresList, setCoresList] = useState(extraData?.cores ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: coresSourceUrl }, s) }, setCoresList, extraData?.cores)
@@ -82,7 +77,6 @@ export default {
       </AlertDialog>
 
       <DataView
-        integratedChat
         entityName={"device definitions"}
         itemData={itemData}
         rowIcon={BookOpen}
@@ -100,15 +94,13 @@ export default {
             setSourceCode(row.config.components)
           }} Icon={Eye}></InteractiveIcon>, true, '50px'),
           DataTable2.column("name", row => row.name, "name"),
-          DataTable2.column("board", row => row.board, "board", (row) => <Chip text={row.board} color={'$gray5'} />),
+          DataTable2.column("board", row => row.board, "board", (row) => <Chip text={row.board.name} color={'$gray5'} />),
           DataTable2.column("sdk", row => row.sdk, "sdk", (row) => <Chip text={row.sdk} color={'$gray5'} />),
         )}
         extraFieldsForms={{
-          board: z.union(boards.map(o => z.literal(o.name))).after('name'),
           sdk: z.union([z.any(), z.any()]).dependsOn("board").generateOptions((formData) => {
             if (formData.board) {
-              const board = boards.find(brd => brd.name === formData.board)
-              return cores.find(core => core.name === board.core).sdks
+              return cores.find(core => core.name === formData.board.core).sdks
             }
             return []
           }).after("name"),
@@ -143,7 +135,6 @@ export default {
     </AdminPage>)
   },
   getServerSideProps: PaginatedData(sourceUrl, ['admin'], {
-    boards: boardsSourceUrl,
     cores: coresSourceUrl
   })
 }
