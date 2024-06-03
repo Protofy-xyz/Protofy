@@ -373,11 +373,14 @@ const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, p
       return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
         <Stack f={1} t={"$-2"} maxWidth={284}>
           <SearchAndSelect
-
             bc="$backgroundTransparent"
             // options={["John", "Doe", "Jane", "Smith"]}
             getDisplayField={ele._def.getDisplayField}
-            dataSource={ele._def.linkTo.getApiEndPoint()}
+            options={async (search) => {
+              const url = ele._def.linkTo.getApiEndPoint() + (search ? '?search=' + search : '')
+              const result = await API.get(url)
+              return result.data?.items ?? []
+            }}
             onSelectItem={(item) => setFormData(ele.name, item)}
             selectedItem={getFormData(ele.name)}
           />

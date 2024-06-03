@@ -3,10 +3,9 @@ import { useEffect, useRef, useState } from "react"
 import { API } from 'protolib'
 
 type SearchAndSelectProps = {
-    dataSource?: string
     getDisplayField?: Function
     maxResults?: number
-    options?: string[]
+    options?: string[] | Function
     onSelectItem?: Function
     selectedItem?: any
 }
@@ -26,28 +25,25 @@ type SearchAndSelectProps = {
 */
 
 export const SearchAndSelect = (props: InputProps & SearchAndSelectProps) => {
-    const { dataSource, maxResults, options, getDisplayField, onSelectItem, selectedItem, ...inputProps } = props
+    const { maxResults, options, getDisplayField, onSelectItem, selectedItem, ...inputProps } = props
 
     const [search, setSearch] = useState('')
     const [open, setOpen] = useState(false)
-    const [results, setResults] = useState(options ?? [])
+    const [results, setResults] = useState(Array.isArray(options) ? options : [])
     const inputRef = useRef(null)
     const [width, setWidth] = useState(0)
     const [selected, setSelected] = useState<string | undefined>(selectedItem)
     const isClickingInOption = useRef(false)
 
-    const url = dataSource + (search ? '?search=' + search + (maxResults ? '&itemsPerPage=' + maxResults : '') : '')
+    //const url = dataSource + (search ? '?search=' + search + (maxResults ? '&itemsPerPage=' + maxResults : '') : '')
 
     const doSearch = async () => {
-        if (options) {
+        if (Array.isArray(options)) {
             setResults(options.filter(option => option.includes(search)))
-        } else {
-            const result = await API.get(url)
-            if (result.isLoaded) {
-                setResults(result.data.items)
-            }
+        } else if(typeof options === 'function') {
+            const results = await options(search)
+            setResults(results)   
         }
-
     }
 
     useEffect(() => { doSearch() }, [search])
