@@ -1,10 +1,11 @@
-import { Checkbox, Stack, Theme, XStack } from "tamagui"
+import { Checkbox, Stack, Theme, XStack, Circle, Spacer } from "tamagui"
 import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
 import { CheckCheck, Check, Pencil } from '@tamagui/lucide-icons'
 import { ItemMenu } from "./ItemMenu";
 import { usePageParams } from 'protolib/next'
 import { InteractiveIcon } from "./InteractiveIcon";
+import { Chip } from "./Chip";
 
 export const DataTableList = ({
     sourceUrl,
@@ -38,6 +39,21 @@ export const DataTableList = ({
 
     const fields = model.getObjectSchema().isDisplay('table')
 
+    const getFieldPreview = (key, row) => {
+        const field = fields.shape[key]
+        if (field._def?.color) {
+            return <Chip color={"$gray5"}>
+                <XStack ai="center" height={20}>
+                    <Circle size={12} backgroundColor={row[key]} />
+                    <Spacer size={5} />
+                    {row[key] && row[key].toUpperCase ? row[key].toUpperCase() : row[key]}
+                </XStack>
+
+            </Chip>
+        }
+        return row[key]
+    }
+
     const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean', 'ZodDate']
     const cols = columns ?? DataTable2.columns(
         ...(
@@ -46,7 +62,7 @@ export const DataTableList = ({
                 .map(key =>
                     DataTable2.column(
                         fields.shape[key]._def?.label ?? key,
-                        row => row[key],
+                        row => getFieldPreview(key, row),
                         fields.shape[key]._def?.indexed ? key : false
                     )
                 )
