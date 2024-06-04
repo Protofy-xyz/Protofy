@@ -1,39 +1,65 @@
 
 import { YStack } from '@tamagui/stacks';
 import { AlertDialog, Button, Dialog, XStack } from '@my/ui';
-import { AlertDialog as ProtoAlertDialog } from '../../../components/AlertDialog';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { FileWidget } from '../../features/components/FilesWidget';
 import { IconContainer } from '../../../components/IconContainer';
 import { X } from '@tamagui/lucide-icons';
 import { useUpdateEffect } from 'usehooks-ts'
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Explorer } from './Explorer';
-import { defineFileAction } from 'chonky';
 import FileActions from 'app/bundles/fileActions'
-import {Tinted} from '../../../components/Tinted'
+import { Tinted } from '../../../components/Tinted'
 import Chat from '../../../components/Chat'
+import { usePrompt, API } from "protolib"
 import { getLogger } from "protolib/base"
+import { getPendingResult } from 'protolib/base';
+import { usePendingEffect } from 'protolib/lib/usePendingEffect';
 
 const logger = getLogger()
 
+type FileBrowserProps = {
+    initialFilesState?: any
+}
 
-export const FileBrowser = ({ file, path, filesState }: any) => {
-    const [dialogOpen, setDialogOpen] = useState(file ? true : false)
-    const [currentPath, setCurrentPath] = useState(path)
-    const [currentFile, setCurrentFile] = useState(file ? file : '')
-    const currentFileName = currentFile.split('/')[currentFile.split('/').length - 1]
+export const FileBrowser = ({ initialFilesState }: FileBrowserProps) => {
+
     const router = useRouter()
+
+    const routePath = router.query.path ?? '/'
+    const routeFile = router.query.file ? routePath + '/' + router.query.file.split('/')[0] : null
+
+    const [filesState, setFilesState] = useState(initialFilesState ?? getPendingResult('pending'))
+    const [dialogOpen, setDialogOpen] = useState(routeFile ? true : false)
+    const [currentPath, setCurrentPath] = useState(routePath)
+    const [currentFile, setCurrentFile] = useState(routeFile ? routeFile : '')
+    const currentFileName = currentFile.split('/')[currentFile.split('/').length - 1]
     const [openAlert, setOpenAlert] = useState(false)
     const [isModified, setIsModified] = useState(false)
+
+    usePrompt(() => currentFile ? `` : `At this moment the user is using a web file manager. The file manager allows to view and manage the files and directories of the project.
+    The web file managers allow to create, view and edit files, has an integrated source code editor, an integrated visual programming editor and allows to upload and download files from the system.
+    Using the file manager you have full control of the system because you can directly edit any system file. Be careful when editing sensible files, like source code or system directories, you may break the system.
+    There are interesting directories:
+    - /data/databases contain the databases (leveldb files)
+    - /apps contain the system applications (next, expo, proxy and express apis)
+    - /apps/next/public publicly accesible directory. The files you upload here can be accessed from the public system url (its the public directory of the next app)
+    - /packages/app/bundles/custom the custom bundle. The system encourages extension through bundles, and the custom bundle is the bundle for your specific system. You can extend the system from this bundle, or create other bundles. bundles can add apis, pages, tasks, objects and more things 
+    
+    Currently the user is in the directory: ${currentPath}. 
+    ${currentFile ? 'The user is viewing the file' + currentFile : `The directory contents are: ${JSON.stringify(filesState)}`}
+    `)
+
+    useUpdateEffect(() => { API.get({ url: '/adminapi/v1/files/' + currentPath }, setFilesState) }, [currentPath])
+    usePendingEffect((s) => { API.get({ url: '/adminapi/v1/files/' + currentPath }, s) }, setFilesState, initialFilesState)
 
     useUpdateEffect(() => {
         logger.debug({ query: router.query.path, newpath: currentPath }, `query: ${router.query.path} newpath: ${currentPath}`)
         const path = (!currentPath.startsWith('/') ? '/' : '') + currentPath
-        if(router.query.path != currentPath) router.push({
+        if (router.query.path != currentPath) router.push({
             pathname: router.pathname,
-            query: {...router.query, path: path}
+            query: { ...router.query, path: path }
         }, undefined, { shallow: true })
     }, [currentPath])
 
@@ -75,7 +101,7 @@ export const FileBrowser = ({ file, path, filesState }: any) => {
     const { resolvedTheme } = useThemeSetting()
 
     const isFull = router.query?.file
-    
+
     const getWidget = () => <FileWidget
         hideCloseIcon={isFull ? true : false}
         isModified={isModified}
