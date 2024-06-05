@@ -22,9 +22,11 @@ const logger = getLogger()
 type FileBrowserProps = {
     initialFilesState?: any
     onOpenFile?: Function
+    onChangeSelection?: Function
+    selection?: Function
 }
 
-export const FileBrowser = ({ initialFilesState, onOpenFile }: FileBrowserProps) => {
+export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, selection }: FileBrowserProps) => {
 
     const router = useRouter()
 
@@ -128,7 +130,7 @@ export const FileBrowser = ({ initialFilesState, onOpenFile }: FileBrowserProps)
 
     return (
         isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
-            <Explorer currentPath={currentPath} filesState={filesState} customActions={FileActions} onOpen={onOpen} />
+            <Explorer currentPath={currentPath} filesState={filesState} customActions={FileActions} onOpen={onOpen} onChangeSelection={onChangeSelection} selection={selection}/>
             <Dialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}>
                 <Dialog.Portal>
                     <Dialog.Overlay />

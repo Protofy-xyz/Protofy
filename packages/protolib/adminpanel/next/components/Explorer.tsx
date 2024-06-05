@@ -21,18 +21,24 @@ const logger = getLogger()
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const filesAtom = createApiAtom([])
 
-export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesState }: any) => {
+export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection = () => { }, selection, filesState }: any) => {
     const theme = useTheme()
+    const fileBrowserRef = useRef()
     const borderColor = theme.color.val.replace(/^#/, '%23')
     const [files, setFiles] = useAtom(filesAtom, filesState)
     const [showDropMessage, setShowDropMessage] = useState(false)
     const [showUploadDialog, setShowUploadDialog] = useState(false)
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
     const [openDownloadDialog, setOpenDownloadDialog] = useState(false)
-    const [selectedFiles, setSelectedFiles] = useState([])
+    const [selected, setSelected] = useState([])
     const [customAction, setCustomAction] = useState(null)
-    const lastClickInfo = useRef({id: null, time: 0})
-    const normalizedCurrentPath = currentPath && currentPath.startsWith("/") ? currentPath : (currentPath ? "/" + currentPath: '/')
+    const lastClickInfo = useRef({ id: null, time: 0 })
+    const normalizedCurrentPath = currentPath && currentPath.startsWith("/") ? currentPath : (currentPath ? "/" + currentPath : '/')
+
+    const findSelected = () => files.data?.find(f => f.path == selection)
+
+    const selectedFiles = selection && findSelected() ? [findSelected()] : selected
+    const setSelectedFiles = onChangeSelection ?? setSelected
 
     const onUploadFiles = async () => {
         setFiles(await API.get('/adminapi/v1/files/' + normalizedCurrentPath) ?? { data: [] })
@@ -60,6 +66,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
             thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
         }
     }) : []
+
     const folderChain = [{ id: '/', name: "Files", isDir: true }].concat(
         ...normalizedCurrentPath.split('/').map((x: any, i: any, arr: any) => {
             return {
@@ -101,6 +108,17 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
             setFiles(filesState)
         }
     }, [filesState])
+
+    useEffect(() => {
+        // TODO: Refactor this to use a better way to set initial selection
+        if (files.isLoaded) {
+            const selectedInFolder = findSelected()
+
+            if (selectedInFolder && fileBrowserRef.current?.setFileSelection) {
+                fileBrowserRef.current.setFileSelection([selectedInFolder.id])
+            }
+        }
+    }, [files])
 
     return (
         <Dropzone
@@ -172,6 +190,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onUpload, filesSt
                         <input {...getInputProps()} />
                         <Tinted>
                             <FileBrowser
+                                ref={fileBrowserRef}
                                 onFileAction={(data) => {
                                     if (data.id == 'open_files') {
                                         onOpen(data.payload.targetFile)
