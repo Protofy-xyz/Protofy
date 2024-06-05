@@ -28,6 +28,7 @@ import RotaryEncoder from './RotaryEncoder';
 import I2cADC_ADS1115 from './I2cADC_ADS1115';
 import Servo from './Servo';
 import DallasBus from './DallasBus';
+import SPIBus from './SPIBus';
 
 const deviceMasks = [
   Wifi,
@@ -57,7 +58,8 @@ const deviceMasks = [
   RotaryEncoder,
   I2cADC_ADS1115,
   Servo,
-  DallasBus
+  DallasBus,
+  SPIBus
 ]
 
 const masksLength = deviceMasks.length
