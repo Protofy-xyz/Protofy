@@ -21,9 +21,10 @@ const logger = getLogger()
 
 type FileBrowserProps = {
     initialFilesState?: any
+    onOpenFile?: Function
 }
 
-export const FileBrowser = ({ initialFilesState }: FileBrowserProps) => {
+export const FileBrowser = ({ initialFilesState, onOpenFile }: FileBrowserProps) => {
 
     const router = useRouter()
 
@@ -95,6 +96,10 @@ export const FileBrowser = ({ initialFilesState }: FileBrowserProps) => {
     const onOpen = (file: any) => {
         logger.debug({ file }, `on open client: ${JSON.stringify(file)}`)
         if (file.isDir) return setCurrentPath(file.path ?? file.id)
+        if (onOpenFile) { 
+            onOpenFile(file)
+            return
+        }
         router.push('files?path=' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '&file=' + file.name)
     }
 
