@@ -233,9 +233,19 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
     }
 
     if (elementType == "ZodString" && elementDef.file) {
+        const extensions = elementDef.extensions
+        const fileFilter = f => {
+            const isValidExtension = extensions.some(ext => f.name.endsWith(ext) || ext == "*")
+            return f.isDir || isValidExtension
+        }
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <Stack f={1}>
-                <FilePicker file={getFormData(ele.name)} initialPath={elementDef.initialPath} onFileChange={filePath => setFormData(ele.name, filePath)}></FilePicker>
+                <FilePicker
+                    fileFilter={fileFilter}
+                    file={getFormData(ele.name)}
+                    initialPath={elementDef.initialPath}
+                    onFileChange={filePath => setFormData(ele.name, filePath)}
+                />
             </Stack>
         </FormElement>
     }

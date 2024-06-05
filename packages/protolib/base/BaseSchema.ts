@@ -14,7 +14,7 @@ interface ZodExtensions {
     display(views?: string[] | undefined): this;
     hidden(): this;
     color(): this;
-    file(initialPath?: string): this;
+    file({ initialPath, extensions }: { initialPath?: string, extensions?: string[] }): this;
     generate(val: any, force?: boolean): this;
     before(field: string): this;
     after(field: string): this;
@@ -200,9 +200,10 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.file = function (initialPath?: string) {
+    type.prototype.file = function ({ initialPath, extensions }) {
         this._def.file = true;
         this._def.initialPath = initialPath;
+        this._def.extensions = extensions ?? ['*'];
         return this;
     };
 
