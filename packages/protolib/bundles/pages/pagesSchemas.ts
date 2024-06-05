@@ -8,6 +8,7 @@ export const PageSchema = Schema.object({
     web: z.boolean().defaultValue(true),
     electron: z.boolean().defaultValue(false),
     protected: z.boolean().defaultValue(false).label("Require user"),
+    published: z.boolean().optional().hidden()
 }) 
 
 export type PageType = z.infer<typeof PageSchema>;

@@ -17,6 +17,12 @@ const getPage = (pagePath, req) => {
     const sourceFile = getSourceFile(pagePath)
     const route = getDefinition(sourceFile, '"route"')
     const routeValue = route.getText().replace(/^["']|["']$/g, '')
+    const pageType = getDefinition(sourceFile, '"pageType"')
+    let pageTypeValue = null
+    if(pageType) {
+      pageTypeValue = pageType.getText().replace(/^["']|["']$/g, '')
+    }
+
     const prot = getDefinition(sourceFile, '"protected"')
     let permissions = getDefinition(sourceFile, '"permissions"')
     const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
@@ -31,6 +37,7 @@ const getPage = (pagePath, req) => {
     return {
       name: fspath.basename(pagePath, fspath.extname(pagePath)),
       route: routeValue,
+      pageType: pageTypeValue,
       protected: prot.getText() == 'false' ? false : true,
       permissions: permissions,
       web: syncFs.existsSync(nextFilePath),
@@ -66,7 +73,7 @@ const getDB = (path, req, session) => {
       
       const apiSourceFile = getSourceFile(filePath)
       let arg = getDefinition(apiSourceFile, '"pageType"')
-      const pageType = arg.getText().replace(/^["']|["']$/g, '')
+      const pageType = arg ? arg.getText().replace(/^["']|["']$/g, '') : undefined
       if(pageType == 'admin') {
         let obj = getDefinition(apiSourceFile, '"object"')
         if(obj) {

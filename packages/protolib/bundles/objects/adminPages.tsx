@@ -1,7 +1,7 @@
 
 import { ObjectModel } from './objectsSchemas'
 import { DataView, DataTable2, Chip, AdminPage, useWorkspaceEnv } from 'protolib'
-import { Pencil, Box } from '@tamagui/lucide-icons';
+import { Pencil, Boxes } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 import { XStack, Text } from "@my/ui";
 import { z } from 'protolib/base'
@@ -24,12 +24,12 @@ export default {
                     openMode={env === 'dev' ? 'edit' : 'view'}
                     hideAdd={env !== 'dev'}
                     disableItemSelection={ env !== 'dev'}
-                    integratedChat
-                    rowIcon={Box}
+                    rowIcon={Boxes}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="object"
+                    entityName='Objects'
                     columns={DataTable2.columns(
                         DataTable2.column("name", row => row.name, "name", row => <XStack id={"objects-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
                         DataTable2.column("features", row => row.features, "features", row => Object.keys(row.features).map(f => <Chip mr={"$2"} text={f} color={'$gray5'} />)),

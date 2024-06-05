@@ -153,8 +153,8 @@ export const removeObjectLiteralProperty = (
 export const removeFileWithImports = async (
     root, value, type, indexFilePath, req, fs
 ) => {
-    const capitalizedName = value.name.charAt(0).toUpperCase() + value.name.slice(1)
-    const localPath = './' + fspath.basename(capitalizedName)
+    const name = value.name
+    const localPath = './' + fspath.basename(name)
 
     const sourceFile = getSourceFile(fspath.join(root, indexFilePath));
     const arg = getDefinition(sourceFile, type);
@@ -163,7 +163,7 @@ export const removeFileWithImports = async (
         throw "No link definition schema marker found for file: " + localPath;
     }
 
-    removeObjectLiteralProperty(arg, capitalizedName);
+    removeObjectLiteralProperty(arg, name);
     removeImportFromSourceFile(sourceFile, localPath);
     sourceFile.saveSync();
 

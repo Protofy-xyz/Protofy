@@ -80,7 +80,7 @@ const getDB = (path, req, session) => {
         }
       }
 
-      const computedName = value.name.charAt(0).toUpperCase() + value.name.slice(1)
+      const computedName = value.name
       const codeName = computedName.replace(/\s/g, "")
       const codeNameLowerCase = codeName.toLowerCase()
       const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
