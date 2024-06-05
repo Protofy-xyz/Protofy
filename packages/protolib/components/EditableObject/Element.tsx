@@ -7,6 +7,7 @@ import { ObjectComp } from "./ObjectComponent";
 import { ArrayComp } from "./ArrayComponent";
 import { UnionsArrayComp } from "./UnionsArrayComponent";
 import { RecordComp } from "./RecordComponent";
+import { FilePicker } from "../FilePicker";
 
 export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray = false, arrayName = "" }) => {
     let elementDef = ele._def?.innerType?._def ?? ele._def
@@ -227,6 +228,14 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <Stack f={1}>
                 <InputColor color={getFormData(ele.name)} onChange={color => setFormData(ele.name, color.hex)} />
+            </Stack>
+        </FormElement>
+    }
+
+    if (elementType == "ZodString" && elementDef.file) {
+        return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+            <Stack f={1}>
+                <FilePicker file={getFormData(ele.name)} initialPath={elementDef.initialPath} onFileChange={filePath => setFormData(ele.name, filePath)}></FilePicker>
             </Stack>
         </FormElement>
     }

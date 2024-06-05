@@ -8,12 +8,13 @@ initSchemaSystem()
 interface ZodExtensions {
     indexed(indexFn?: Function): this;
     groupIndex(groupName?: string, groupCode?: string): this;
-    linkTo(model: any, displayKey?: string | Function, options?:{deleteOnCascade: boolean}): this;
+    linkTo(model: any, displayKey?: string | Function, options?: { deleteOnCascade: boolean }): this;
     label(caption: string): this;
     hint(hintText: string): this;
     display(views?: string[] | undefined): this;
     hidden(): this;
     color(): this;
+    file(initialPath?: string): this;
     generate(val: any, force?: boolean): this;
     before(field: string): this;
     after(field: string): this;
@@ -196,6 +197,12 @@ function extendZodTypePrototype(type: any) {
 
     type.prototype.color = function () {
         this._def.color = true;
+        return this;
+    };
+
+    type.prototype.file = function (initialPath?: string) {
+        this._def.file = true;
+        this._def.initialPath = initialPath;
         return this;
     };
 

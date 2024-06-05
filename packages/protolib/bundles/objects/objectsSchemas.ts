@@ -28,6 +28,7 @@ export const BaseObjectSchema = z.object({
           z.literal("optional"),
           z.literal("email"),
           z.literal("color"),
+          z.literal("file"),
           z.literal("label"),
           z.literal("hint"),
           z.literal("static"),
