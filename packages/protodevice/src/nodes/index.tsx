@@ -29,6 +29,7 @@ import I2cADC_ADS1115 from './I2cADC_ADS1115';
 import Servo from './Servo';
 import DallasBus from './DallasBus';
 import SPIBus from './SPIBus';
+import CANBus from './CANBus';
 
 const deviceMasks = [
   Wifi,
@@ -59,7 +60,8 @@ const deviceMasks = [
   I2cADC_ADS1115,
   Servo,
   DallasBus,
-  SPIBus
+  SPIBus,
+  CANBus,
 ]
 
 const masksLength = deviceMasks.length
