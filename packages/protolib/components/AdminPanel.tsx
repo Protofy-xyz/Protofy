@@ -5,9 +5,11 @@ import Workspaces from 'app/bundles/workspaces'
 import { InteractiveIcon } from './InteractiveIcon'
 import { Activity } from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { atomWithStorage } from 'jotai/utils'
 import {LogPanel} from './LogPanel'
+import { API } from '../base'
+import useSubscription from '../lib/mqtt/useSubscription'
 
 const WorkspaceSelector = () => {
   const workspaces = useWorkspaces()
@@ -39,8 +41,24 @@ export const AdminPanel = ({ children }) => {
   const [settings] = useUserSettings()
   const userSpaces = useWorkspaces()
   const [appState, setAppState] = useAtom(AppState)
+
   const [rightPanelSize, setRightPanelSize] = useAtom(RightPanelAtom)
   const currentWorkspace = settings && settings.workspace ? settings.workspace : userSpaces[0]
+
+  const {message} = useSubscription('notifications/page/#')
+
+  const [pages, setPages] = useState()
+  
+  const getPages = async () => {
+    const pages = await API.get('/adminapi/v1/pages')
+    if(pages.isLoaded) {
+      setPages(pages.data.items)
+    }
+  }
+
+  useEffect(() => {
+    getPages()
+  }, [message])
 
   const getRightWidth = () => {
     const totalWidth = Math.max(400, window.innerWidth)
@@ -55,6 +73,9 @@ export const AdminPanel = ({ children }) => {
   }, [rightPanelSize])
 
 
+
+  const workspaceData = typeof Workspaces[currentWorkspace] === 'function' ? Workspaces[currentWorkspace]({pages: pages ?? []}) : Workspaces[currentWorkspace]
+
   // console.log('userSpaces: ', userSpaces, 'current Workspace: ', currentWorkspace)
   return rightPanelSize && <MainPanel borderLess={true} rightPanelSize={rightPanelSize} setRightPanelSize={setRightPanelSize} rightPanelStyle={{ marginRight: '20px', height: 'calc(100vh - 85px)', marginTop: '68px', backgroundColor: 'transparent' }} rightPanelVisible={appState.logsPanelOpened} rightPanelResizable={true} centerPanelContent={Workspaces[currentWorkspace]
     ? <PanelLayout
@@ -66,7 +87,7 @@ export const AdminPanel = ({ children }) => {
           </XStack>
         </>
       }
-      menuContent={<PanelMenu workspace={Workspaces[currentWorkspace]} />}
+      menuContent={pages ? <PanelMenu workspace={workspaceData} />:<></>}
     >
       <XStack f={1} px={"$0"} flexWrap='wrap'>
         {children}

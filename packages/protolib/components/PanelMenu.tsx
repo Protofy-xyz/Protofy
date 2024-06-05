@@ -1,10 +1,9 @@
-import { YStack, XStack, Separator } from 'tamagui'
+import { YStack, XStack } from 'tamagui'
 import {
     Server,
     Box,
     Boxes,
     ChevronDown,
-    Database,
     Folder,
     Plus,
     Workflow,
@@ -34,18 +33,16 @@ import {
     ServerCog,
     ClipboardList,
     AlertTriangle,
-    Cog,
     Layers
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@my/ui'
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { getPendingResult, API } from 'protolib/base';
-import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType, TabGroup, useWorkspaceRoot } from 'protolib';
+import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType, useWorkspaceRoot } from 'protolib';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { SelectList } from './SelectList';
-import { usePageParams, useQueryState } from 'protolib/next'
-import { useUpdateEffect } from 'usehooks-ts';
+import { useQueryState } from 'protolib/next'
 import { useWorkspaceEnv } from '../lib/useWorkspaceEnv';
 
 const opacity = 0.8
@@ -169,7 +166,12 @@ const Subtabs = ({ tabs, subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
+
                 let href = "/" + workspaceRoot + '/' + workspaceEnv + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
+                if(subtab.previewMode) {
+                    href = SiteConfig.getDevelopmentURL(href, document?.location?.protocol, document?.location?.hostname)
+                }
+
 
                 const originalHref = href
 
@@ -197,7 +199,7 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                     />
                 </Tinted>
 
-                if (isDev) {
+                if (isDev || subtab.previewMode) {
                     return <a href={href} key={index}>
                         {content}
                     </a>
@@ -250,11 +252,9 @@ const Tabs = ({ tabs, environ }: any) => {
 };
 const disableEnvSelector = true
 export const PanelMenu = ({ workspace }) => {
-    const { resolvedTheme } = useThemeSetting()
     const { query, isReady } = useRouter();
     const [environ, setEnviron] = useState()
     const [state, setState] = useState(query)
-    const { push, removePush } = usePageParams(state)
     useQueryState(setState)
 
     // if(isReady) {
