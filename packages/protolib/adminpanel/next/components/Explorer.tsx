@@ -21,7 +21,7 @@ const logger = getLogger()
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const filesAtom = createApiAtom([])
 
-export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection = () => { }, selection, filesState }: any) => {
+export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection, selection, filesState, fileFilter = () => true }: any) => {
     const theme = useTheme()
     const fileBrowserRef = useRef()
     const borderColor = theme.color.val.replace(/^#/, '%23')
@@ -60,7 +60,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
     ];
     const { resolvedTheme } = useThemeSetting()
 
-    const parsedFiles = files && files.data ? files.data.map((f: any) => {
+    const parsedFiles = files && files.data ? files.data.filter(fileFilter).map((f: any) => {
         return {
             ...f,
             thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
@@ -142,7 +142,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         description="Use those links to download:"
                     >
                         <YStack f={1} overflow={'scroll'} overflowX={'hidden'} >
-                            {selectedFiles.map((f,id) => <a key={id} href={"/adminapi/v1/files/" + currentPath + '/' + f + '?download=1'} target="_new">
+                            {selectedFiles.map((f, id) => <a key={id} href={"/adminapi/v1/files/" + currentPath + '/' + f + '?download=1'} target="_new">
                                 <XStack mb="$2" br="$radius.12" p="$2" px="$4" backgroundColor={"$color4"} hoverStyle={{ backgroundColor: "$color6", o: 1 }} o={0.7} ai="center" jc="center">
                                     <Download />
                                     <SizableText ml="$2">{f}</SizableText>
@@ -181,7 +181,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         description={customAction?.description}
                     >
                         <YStack minWidth={customAction?.size?.width} h={customAction?.size?.height} f={1}>
-                            {customAction && customAction.getComponent && customAction.getComponent(selectedFiles, normalizedCurrentPath, setCustomAction ,async()=>setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] }))}
+                            {customAction && customAction.getComponent && customAction.getComponent(selectedFiles, normalizedCurrentPath, setCustomAction, async () => setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] }))}
                         </YStack>
 
                     </AlertDialog>
@@ -202,12 +202,12 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                                         onDownloadFiles(data)
                                     } else if (data.id === "change_selection") {
                                         setSelectedFiles(data.state.selectedFiles)//.map(f => f.name))
-                                    } else if (data.id == 'mouse_click_file'){
+                                    } else if (data.id == 'mouse_click_file') {
                                         //this is a hack because rerenders clear the timer for double click in chonky
                                         //This produces a bug where folders can not be opened if a rerender is done while double click
                                         //We open files whit mouse click file and our own timer for double click
                                         if ((Math.abs(Date.now() - lastClickInfo.current.time) < 750) && data.payload.file.id == lastClickInfo.current.id) {
-                                            lastClickInfo.current = {id: null, time: 0}
+                                            lastClickInfo.current = { id: null, time: 0 }
                                             onOpen(data.payload.file)
                                         } else {
                                             lastClickInfo.current.time = Date.now()

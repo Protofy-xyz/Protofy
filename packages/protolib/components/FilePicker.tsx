@@ -15,10 +15,11 @@ type FilePickerProps = {
     file?: string,
     placeholder?: string
     initialPath?: string
+    fileFilter?: Function
 }
 
 
-export function FilePicker({ onFileChange, file, placeholder, initialPath = "" }: FilePickerProps) {
+export function FilePicker({ onFileChange, file, placeholder, initialPath = "", fileFilter }: FilePickerProps) {
     const router = useRouter()
 
     const [open, setOpen] = useState(false)
@@ -70,7 +71,7 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "" }
                 </Dialog.Trigger>
             </XStack>
             <Dialog.Portal>
-                <Dialog.Content height={"80vh"} width={"80vw"} padding="$6">
+                <Dialog.Content height={"80vh"} width={"80vw"} padding="$6" >
                     <Tinted>
                         <Text fontWeight="bold" fontSize={30} color={"$color8"}>File Browser</Text>
                         <Text marginBottom="$4"> Selected file: <Text color={"$color7"} fontStyle="italic">{tmpFile}</Text></Text>
@@ -86,6 +87,7 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "" }
                                 setTmpFile(pathFile)
                             }
                         }}
+                        fileFilter={fileFilter}
                         selection={tmpFile}
                     />
                     <XStack gap="$4" justifyContent="center" alignSelf="center" width={"100%"} maxWidth={"500px"}>
