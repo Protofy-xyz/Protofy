@@ -17,6 +17,9 @@ const isProtected = Protofy("protected", {{protected}})
 const {name, prefix} = Objects.{{_object}}.getApiOptions()
 const apiUrl = prefix + name
 
+Protofy("object", "{{_object}}")
+Protofy("pageType", "admin")
+
 export default {
     route: Protofy("route", "{{route}}"),
     component: ({pageState, initialItems, pageSession, extraData}:any) => {

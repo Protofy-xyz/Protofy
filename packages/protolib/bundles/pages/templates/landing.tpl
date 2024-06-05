@@ -8,6 +8,7 @@ import { context } from "app/bundles/uiContext";
 import { useRouter } from "next/router";
 
 const isProtected = Protofy("protected", {{protected}})
+Protofy("pageType", "landing")
 
 const PageComponent = (props) => {
   const router = useRouter();

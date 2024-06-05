@@ -1,11 +1,12 @@
 import { PageModel } from ".";
-import { getSourceFile, getDefinition, AutoAPI, getRoot } from '../../api'
+import { getSourceFile, getDefinition, AutoAPI, getRoot, addFeature, hasFeature, removeFeature } from '../../api'
 import { promises as fs } from 'fs';
 import * as syncFs from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
 import { getServiceToken } from '../../api/lib/serviceToken'
 import { API } from '../../base'
+import { ObjectModel } from "../objects/objectsSchemas";
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
@@ -62,6 +63,20 @@ const getDB = (path, req, session) => {
       value = JSON.parse(value)
       const route = value.route.startsWith('/') ? value.route : '/' + value.route
       const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
+      
+      const apiSourceFile = getSourceFile(filePath)
+      let arg = getDefinition(apiSourceFile, '"pageType"')
+      const pageType = arg.getText().replace(/^["']|["']$/g, '')
+      if(pageType == 'admin') {
+        let obj = getDefinition(apiSourceFile, '"object"')
+        if(obj) {
+          obj = obj.getText().replace(/^["']|["']$/g, '')
+          const objectPath = fspath.join(getRoot(req), ObjectModel.getDefaultSchemaFilePath(obj))
+          const ObjectSourceFile = getSourceFile(objectPath)
+          removeFeature(ObjectSourceFile, '"'+pageType+'Page"')
+        }
+      }
+
       await deleteFile(fspath.join(getRoot(req), "apps/next/pages", route + '.tsx'))
       const pagePath = "apps/electron/pages" + route + '.tsx'
       await deleteFile(fspath.join(getRoot(req), pagePath))
@@ -101,8 +116,7 @@ const getDB = (path, req, session) => {
                 route: route,
                 permissions: value.permissions ? JSON.stringify(value.permissions) : '[]',
                 object: object,
-                _object: object.toLowerCase(),
-                apiUrl: '/api/v1/' + value.object + 's'
+                _object: object.toLowerCase()
               }
             },
             path: pagesDir(getRoot(req))
@@ -112,6 +126,15 @@ const getDB = (path, req, session) => {
           console.error("Error executing template: ", result)
           throw result.error
         }
+      }
+
+      //add management page feature in object if needed
+      if (value.object) {
+        const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(value.object))
+        const ObjectSourceFile = getSourceFile(objectPath)
+        
+        console.log('Adding feature to object: ', value.object, value.template)
+        await addFeature(ObjectSourceFile, '"'+value.template+'Page"', '"'+route+'"')
       }
 
       let sourceFile = getSourceFile(filePath)

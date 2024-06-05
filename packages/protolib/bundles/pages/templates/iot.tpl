@@ -17,6 +17,8 @@ import { useRouter } from "next/router";
 const isProtected = Protofy("protected", {{protected}})
 const sourceUrl = '/adminapi/v1/devices'
 
+Protofy("pageType", "iot")
+
 export default {
     route: Protofy("route", "{{route}}"),
     component: ({pageState, initialItems, pageSession, extraData}:any) => {
