@@ -10,6 +10,7 @@ import { ObjectModel } from "../objects/objectsSchemas";
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
+const publishedNextPagesDir = (root) => fspath.join(root, "/apps/next-compiled/pages/")
 const electronPagesDir = (root) => fspath.join(root, "/apps/electron/pages/")
 
 const getPage = (pagePath, req) => {
@@ -26,12 +27,22 @@ const getPage = (pagePath, req) => {
     const prot = getDefinition(sourceFile, '"protected"')
     let permissions = getDefinition(sourceFile, '"permissions"')
     const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
+    const publishedNextFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
     const electronFilePath = fspath.join(electronPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
     if (!route || !permissions || !prot) return undefined
     if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
       permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
     } else {
       permissions = permissions.getText()
+    }
+
+    let objectName = null
+    //get object name if pageType is admin
+    if(pageTypeValue == 'admin') {
+      let obj = getDefinition(sourceFile, '"object"')
+      if(obj) {
+        objectName = obj.getText().replace(/^["']|["']$/g, '')
+      }
     }
 
     return {
@@ -41,7 +52,11 @@ const getPage = (pagePath, req) => {
       protected: prot.getText() == 'false' ? false : true,
       permissions: permissions,
       web: syncFs.existsSync(nextFilePath),
-      electron: syncFs.existsSync(electronFilePath)
+      electron: syncFs.existsSync(electronFilePath),
+      status: {
+        web: syncFs.existsSync(publishedNextFilePath) ? 'published' : 'unpublished',
+      },
+      ...(objectName ? {object: objectName}: {})
     }
   } catch (e) {
     return null

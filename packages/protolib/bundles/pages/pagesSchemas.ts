@@ -1,4 +1,4 @@
-import { ProtoModel, Schema, z } from '../../base'
+import { ProtoModel, Schema, optional, z } from '../../base'
 import { SessionDataType } from "../../api";
 
 export const PageSchema = Schema.object({
@@ -6,9 +6,15 @@ export const PageSchema = Schema.object({
     route: z.string().search(),
     permissions: z.array(z.string()).label("Permissions").generate(() => []),
     web: z.boolean().defaultValue(true),
-    electron: z.boolean().defaultValue(false),
+    electron: z.boolean().hidden().defaultValue(false),
+    mobile: z.boolean().optional().hidden().defaultValue(false),
     protected: z.boolean().defaultValue(false).label("Require user"),
-    published: z.boolean().optional().hidden()
+    object: z.string().optional().hidden(),
+    status: z.object({
+        web: z.string().optional(),
+        electron: z.string().optional(),
+        mobile: z.string().optional()
+    }).optional().hidden()
 }) 
 
 export type PageType = z.infer<typeof PageSchema>;
