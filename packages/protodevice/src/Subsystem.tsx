@@ -28,9 +28,18 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
 }
 
 const Action = ({ deviceName, action, buttonAction }) => {
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(
+        action.payload.type == "json-schema" ?
 
-    return (action.payload.value ?
+        action.payload.schema ? Object.keys(action.payload.schema).reduce((acc, key) => {
+            acc[key] = "";
+            return acc;
+        }
+        , {}) : {}
+
+        : "");
+
+        return (action.payload.value ?
 
         <Button
             key={action.name} // Make sure to provide a unique key for each Button
@@ -42,7 +51,9 @@ const Action = ({ deviceName, action, buttonAction }) => {
             {action.label ?? action.name}
         </Button>
 
-        : <XStack gap="$3">
+        : action.payload.type != "json-schema" ? 
+
+        <XStack gap="$3">
             <Input
                 value={value}
                 onChange={async (e) => setValue(e.target.value)}
@@ -60,7 +71,37 @@ const Action = ({ deviceName, action, buttonAction }) => {
             >
                 {action.label ?? action.name}
             </Button>
-        </XStack>);
+        </XStack>
+        : 
+        <YStack gap="$2" flexWrap='wrap' mt="10px" mb="10px">
+            <XStack gap="$3">
+            {
+                Object.keys(value).map((key, index) => {
+                    return <Input
+                        key={index}
+                        value={value[key]}
+                        onChange={async (e) => {
+                            setValue({ ...value, [key]: e.target.value })
+                        }}
+                        width={80}
+                        placeholder={key}
+                        mr={8}
+                        flex={1}
+                    />
+                })
+            }
+            </XStack>
+            <Button
+                key={action.name} // Make sure to provide a unique key for each Button
+                onPress={() => { buttonAction(action, value) }}
+                color="$color10"
+                title={"Description: " + action.description}
+                flex={1}
+            >
+                {action.label ?? action.name}
+            </Button>
+        </YStack>
+    )
 }
 const subsystem = ({ subsystem, deviceName }) => {
     const { client } = useMqttState();
@@ -70,7 +111,7 @@ const subsystem = ({ subsystem, deviceName }) => {
         const sendValue = value != undefined ? value : action.payload.value
         if (action.connectionType == "mqtt") {
             console.log("MQTT Dev: ", action.payload)
-            client.publish(getPeripheralTopic(deviceName, action.endpoint), action.payload.type == "json" ? JSON.stringify(sendValue) : sendValue.toString())
+            client.publish(getPeripheralTopic(deviceName, action.endpoint), (action.payload.type == "json" || action.payload.type == "json-schema") ? JSON.stringify(sendValue) : sendValue.toString())
         }
     }
 
