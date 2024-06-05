@@ -1,6 +1,6 @@
 import { PageModel } from '.'
 import { DataView } from 'protolib'
-import { DataTable2, Chip, API, InteractiveIcon, AdminPage, useWorkspaceEnv} from 'protolib'
+import { DataTable2, Chip, API, InteractiveIcon, AdminPage, useWorkspaceEnv } from 'protolib'
 import { z } from 'protolib/base'
 import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
@@ -15,7 +15,7 @@ import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
 import { TemplatePreview } from './TemplatePreview'
 import { pageTemplates } from 'app/bundles/templates'
-import {SiteConfig} from 'app/conf'
+import { SiteConfig } from 'app/conf'
 import { PaginatedData } from '../../lib/SSR'
 
 const PageIcons = {}
@@ -148,8 +148,7 @@ export default {
                 <DataView
                     openMode={env === 'dev' ? 'edit' : 'view'}
                     hideAdd={env !== 'dev'}
-                    disableItemSelection={ env !== 'dev'}
-                    integratedChat
+                    disableItemSelection={env !== 'dev'}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={2}
@@ -157,9 +156,16 @@ export default {
                     rowIcon={() => <></>}
                     objectProps={{ columnWidth: 500 }}
                     columns={DataTable2.columns(
-                        DataTable2.column("", ()=>"", false, (row) => <a href={SiteConfig.getDevelopmentURL(row.route.startsWith('/') ? row.route : '/' + row.route, protocol, host)} target='_blank'>
-                            <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
-                        </a>, true, '50px'),
+                        DataTable2.column("", () => "", false, (row) => {
+                            let route = row.route.startsWith('/') ? row.route : '/' + row.route
+                            const parts = route.split('/')
+                            if(parts.length > 2 && parts[1] == 'workspace') {
+                                route = '/workspace/'+env+'/'+parts.slice(2).join('/')
+                            }
+                            return <a href={route} target='_blank'>
+                                <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
+                            </a>
+                        }, true, '50px'),
                         DataTable2.column("name", row => row.name, "name", (row) => <XStack id={"pages-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
                         DataTable2.column("route", row => row.route, "route"),
                         DataTable2.column("visibility", row => row.protected, "protected", row => !row.protected ? <Chip text={'public'} color={'$color5'} /> : <Chip text={'protected'} color={'$gray5'} />),
@@ -173,13 +179,13 @@ export default {
                             action: (element) => { replace('editFile', element.getDefaultFilePath()) },
                             isVisible: (data) => true
                         }
-                    ]:[]}
+                    ] : []}
                     model={PageModel}
                     pageState={pageState}
                     icons={PageIcons}
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedData(sourceUrl, ['admin'], {objects: objectsSourceUrl})
+        getServerSideProps: PaginatedData(sourceUrl, ['admin'], { objects: objectsSourceUrl })
     }
 }
