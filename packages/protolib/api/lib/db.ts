@@ -315,7 +315,6 @@ export class ProtoLevelDB extends ProtoDB {
                     const currentIndex = groupIndexData[i];
                     const groupSubLevel = sublevel(rootDb, 'group_' + currentIndex.key+'_'+tableVersion);
                     const groupSubLevelOptions = sublevel(rootDb, 'group_' + currentIndex.key + '_options_'+tableVersion)
-
                     // const grouped = sublevel(rootDb, 'group_' + currentIndex);
                     const groupItems = allItems.reduce((acc, item) => {
                         if(currentIndex.fn) {
@@ -335,8 +334,11 @@ export class ProtoLevelDB extends ProtoDB {
                                 acc[item[currentIndex.key]] = []
                             }
                             acc[item[currentIndex.key]].push(item[indexData.primary])
+                            return acc
                         }
                     }, {})
+
+
 
                     //at this point, groupItems is an object like: { 'group1': [1,2,3], 'group2': [4,5,6] }
                     //where the numbers are the primary keys of the items that belong to that group
