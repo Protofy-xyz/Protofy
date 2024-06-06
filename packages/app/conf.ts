@@ -10,5 +10,6 @@ const SiteConfig = {
     signupEnabled: false,
     defaultWorkspace: 'prod',
     defaultWorkspacePage: 'pages',
+    assistant: true
 }
 export {SiteConfig}

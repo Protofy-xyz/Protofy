@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { forwardRef, useState } from 'react';
 import { AppState } from './AdminPanel'
 import { useAtom } from 'jotai';
-import { getConfig } from 'tamagui';
+import { SiteConfig } from 'app/conf'
 
 const Chat = dynamic(() => import('protolib/components/Chat'), { ssr: false })
 
@@ -13,7 +13,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   const [searchName, setSearchName] = useState('')
   const [appState] = useAtom(AppState)
 
-  const settingsAssistant = getConfig()?.settings['assistant']
+  const settingsAssistant = SiteConfig.assistant
   const settingsAssistantEnabled = settingsAssistant === undefined ? true : settingsAssistant
 
   usePrompt(() => `The user is browsing an admin page in the admin panel. The title of the admin page is: "${title}"`)
