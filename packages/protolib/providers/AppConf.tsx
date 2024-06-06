@@ -21,7 +21,8 @@ export type SiteConfigType = {
     useLocalDocumentation: boolean,
     signupEnabled: boolean,
     defaultWorkspace: string,
-    defaultWorkspacePage: string
+    defaultWorkspacePage: string,
+    assistant: boolean
 }
 
 export const AppConfContext = createContext<SiteConfigType>({
@@ -32,5 +33,6 @@ export const AppConfContext = createContext<SiteConfigType>({
     useLocalDocumentation: false,
     signupEnabled: false,
     defaultWorkspace: 'dev',
-    defaultWorkspacePage: 'events'
+    defaultWorkspacePage: 'events',
+    assistant: true
 });
