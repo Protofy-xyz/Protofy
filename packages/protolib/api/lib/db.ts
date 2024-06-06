@@ -92,6 +92,7 @@ export class ProtoLevelDB extends ProtoDB {
     private batch
     private regeneratingIndexes
     private tableVersion: "a" | "b"
+    private pendingIndex
 
     constructor(location, options?, config?: ProtoDBConfig) {
         super(location, options, config);
@@ -104,8 +105,10 @@ export class ProtoLevelDB extends ProtoDB {
         this.batchTimeout = dbOptions.batchTimeout ?? 10000
         this.batchCounter = 0
         this.batchTimer = null
-        this.regeneratingIndexes = false
+        this.regeneratingIndexes = false //flag to activate while regenerating indexes
         this.tableVersion = 'a'
+        this.pendingIndex = false //flag to activate when an index is pending generation, because the generation
+                                  //was skipper of an already regenerating indexes
     }
 
 
@@ -226,6 +229,7 @@ export class ProtoLevelDB extends ProtoDB {
 
     async regenerateIndexes() {
         if (this.regeneratingIndexes) {
+            this.pendingIndex = true
             //logger.info({ db: this.location }, 'Skip regenerate indexes: already regenerating indexes for database: ' + this.location)
             return
         }
@@ -237,12 +241,19 @@ export class ProtoLevelDB extends ProtoDB {
             const nextTableVersion = this.tableVersion == 'a' ? 'b' : 'a'
             await ProtoLevelDB.regenerateIndexes(this.rootDb, this.db, this.location, nextTableVersion);
             this.tableVersion = nextTableVersion
+
         } catch (e) {
             logger.error({ db: this.location }, 'Error regenerating indexes for database: ' + this.location)
             this.regeneratingIndexes = false
         }
         console.timeEnd('regenerateIndexes_'+id)
         this.regeneratingIndexes = false
+
+        if(this.pendingIndex) {
+            this.pendingIndex = false
+            logger.info({ db: this.location }, 'Regenerate indexes: run because of pending index generation for database: ' + this.location)
+            this.regenerateIndexes()
+        }
     }
 
     async getGroupIndexes() {
