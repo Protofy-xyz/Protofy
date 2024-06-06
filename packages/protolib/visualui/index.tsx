@@ -109,7 +109,7 @@ export const textPalette = {
   ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, uiDataText, {}, true),
   ...cw(Text, 'Type', 'Text', { children: "hello" }, uiDataText, {}, true),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { rules: { canMoveIn: () => false } }),
-  ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world" }, {}, {}, true),
+  ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world", fontWeight: "bold", fontSize:"$16", lineHeight:"$16" }, {}, {}, true),
 }
 
 export const layoutPalette = {
