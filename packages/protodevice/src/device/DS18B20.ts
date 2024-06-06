@@ -62,6 +62,7 @@ class DS18B20 {
                   name: "status",
                   label: "Get temperature",
                   description: "Get temperature status",
+                  units: 'ºC',
                   endpoint: "/"+this.type+"/"+this.name+"/state",
                   connectionType: "mqtt",
               }
