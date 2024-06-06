@@ -91,6 +91,8 @@ export class ProtoLevelDB extends ProtoDB {
     private batchTimeout
     private batch
     private regeneratingIndexes
+    private tableVersion: "a" | "b"
+
     constructor(location, options?, config?: ProtoDBConfig) {
         super(location, options, config);
         this.capabilities = ['pagination', 'groupBySingle', 'groupByOptions']
@@ -103,6 +105,7 @@ export class ProtoLevelDB extends ProtoDB {
         this.batchCounter = 0
         this.batchTimer = null
         this.regeneratingIndexes = false
+        this.tableVersion = 'a'
     }
 
 
@@ -126,13 +129,13 @@ export class ProtoLevelDB extends ProtoDB {
 
     async count(filter?) {
         if(filter) {
-            const groupDb = sublevel(this.rootDb, 'group_' + filter.key)
+            const groupDb = sublevel(this.rootDb, 'group_' + filter.key+'_'+this.tableVersion)
             const groupCollection = sublevel(groupDb, filter.value)
             const counter = sublevel(groupCollection, 'counter')
             return await counter.get('total')
         }
         
-        const counter = sublevel(this.rootDb, 'counter')
+        const counter = sublevel(this.rootDb, 'counter_'+this.tableVersion)
         return await counter.get('total')
     }
 
@@ -157,11 +160,11 @@ export class ProtoLevelDB extends ProtoDB {
         //filter is like {key: 'type', value: 'admin'}
         let ordered
         if(filter) {
-            const group = sublevel(this.rootDb, 'group_' + filter.key)
+            const group = sublevel(this.rootDb, 'group_' + filter.key+'_'+this.tableVersion)
             const groupCollection = sublevel(group, filter.value)
             ordered = sublevel(groupCollection, 'list')
         } else {
-            ordered = sublevel(this.rootDb, 'order_' + key)
+            ordered = sublevel(this.rootDb, 'order_' + key+'_'+this.tableVersion)
         }
 
         const allItems = []
@@ -231,7 +234,9 @@ export class ProtoLevelDB extends ProtoDB {
         const id = Math.random().toString(36).substring(7);
         console.time('regenerateIndexes_'+id)
         try {
-            await ProtoLevelDB.regenerateIndexes(this.rootDb, this.db, this.location);
+            const nextTableVersion = this.tableVersion == 'a' ? 'b' : 'a'
+            await ProtoLevelDB.regenerateIndexes(this.rootDb, this.db, this.location, nextTableVersion);
+            this.tableVersion = nextTableVersion
         } catch (e) {
             logger.error({ db: this.location }, 'Error regenerating indexes for database: ' + this.location)
             this.regeneratingIndexes = false
@@ -258,7 +263,7 @@ export class ProtoLevelDB extends ProtoDB {
             const groupIndexes = JSON.parse(await indexTable.get('groupIndexes'))
             const index = groupIndexes.find(gi => gi.key == groupKey)
             if(index) {
-                const groupSubLevelOptions = sublevel(this.rootDb, 'group_' + index.key + '_options')
+                const groupSubLevelOptions = sublevel(this.rootDb, 'group_' + index.key + '_options_'+this.tableVersion)
                 const keys = []
                 for await (const [key] of groupSubLevelOptions.iterator({ limit })) {
                     keys.push(key.split('_').slice(1).join('_'))
@@ -272,7 +277,7 @@ export class ProtoLevelDB extends ProtoDB {
         }
     }
 
-    static async regenerateIndexes(rootDb, db, location) {
+    static async regenerateIndexes(rootDb, db, location, tableVersion) {
         let indexData;
         let groupIndexData;
         try {
@@ -291,14 +296,14 @@ export class ProtoLevelDB extends ProtoDB {
                 allItems.push(JSON.parse(itemValue));
             }
 
-            const counter = sublevel(rootDb, 'counter');
+            const counter = sublevel(rootDb, 'counter_'+tableVersion);
             await counter.put('total', JSON.stringify(allItems.length));
 
             if(groupIndexData && groupIndexData.length) {
                 for (var i = 0; i < groupIndexData.length; i++) {
                     const currentIndex = groupIndexData[i];
-                    const groupSubLevel = sublevel(rootDb, 'group_' + currentIndex.key);
-                    const groupSubLevelOptions = sublevel(rootDb, 'group_' + currentIndex.key + '_options')
+                    const groupSubLevel = sublevel(rootDb, 'group_' + currentIndex.key+'_'+tableVersion);
+                    const groupSubLevelOptions = sublevel(rootDb, 'group_' + currentIndex.key + '_options_'+tableVersion)
 
                     // const grouped = sublevel(rootDb, 'group_' + currentIndex);
                     const groupItems = allItems.reduce((acc, item) => {
@@ -368,7 +373,7 @@ export class ProtoLevelDB extends ProtoDB {
         
                 for (let i = 0; i < indexes.length; i++) {
                     const currentIndex = indexes[i];
-                    const ordered = sublevel(rootDb, 'order_' + currentIndex);
+                    const ordered = sublevel(rootDb, 'order_' + currentIndex+'_'+tableVersion);
         
                     // Sort items based on the current index
                     let sortedItems = allItems //.slice();  // Create a shallow copy of allItems to sort
@@ -485,7 +490,8 @@ export class ProtoLevelDB extends ProtoDB {
             const indexTable = sublevel(rootDb, 'indexTable')
             if(indexes) await indexTable.put('indexes', JSON.stringify(indexes))
             if(groupIndexes) await indexTable.put('groupIndexes', JSON.stringify(groupIndexes))
-            this.regenerateIndexes(rootDb, db, dbPath)
+            this.regenerateIndexes(rootDb, db, dbPath, 'a')
+            this.regenerateIndexes(rootDb, db, dbPath, 'b')
         }
     }
 
