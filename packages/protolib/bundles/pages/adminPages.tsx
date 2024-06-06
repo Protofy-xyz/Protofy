@@ -162,6 +162,11 @@ export default {
                             if(parts.length > 2 && parts[1] == 'workspace') {
                                 route = '/workspace/'+env+'/'+parts.slice(2).join('/')
                             }
+                            
+                            if(env == 'dev') {
+                                route = SiteConfig.getDevelopmentURL(route, document?.location.protocol, document?.location.hostname)
+                            }
+
                             return <a href={route} target='_blank'>
                                 <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
                             </a>
