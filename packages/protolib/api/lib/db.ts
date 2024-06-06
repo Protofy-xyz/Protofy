@@ -252,7 +252,7 @@ export class ProtoLevelDB extends ProtoDB {
         if(this.pendingIndex) {
             this.pendingIndex = false
             logger.info({ db: this.location }, 'Regenerate indexes: run because of pending index generation for database: ' + this.location)
-            this.regenerateIndexes()
+            setTimeout(() => this.regenerateIndexes(), 1)
         }
     }
 
