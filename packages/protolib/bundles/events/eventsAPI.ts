@@ -41,10 +41,13 @@ export const EventsAPI = async (app, context) => {
         disableEvents: true,
         requiresAdmin: ['*'],
         itemsPerPage: 50,
-        logLevel: "debug",
+        logLevel: "trace",
         defaultOrderBy: 'created',
         defaultOrderDirection: 'desc',
-        skipDatabaseInitialization: true
+        skipDatabaseInitialization: true,
+        dbOptions: {
+            batch: true
+        }
     })
 
     await connectDB('dev/events', {}, getDBOptions(EventModel, { batch: true }))

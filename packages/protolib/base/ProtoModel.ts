@@ -203,7 +203,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     create(data?): T {
         const transformed = this.getData(data)
-        logger.debug({ transformed }, `Creating object: ${JSON.stringify(transformed)}`)
+        logger.trace({ transformed }, `Creating object: ${JSON.stringify(transformed)}`)
         return (new (this.constructor as new (data: any, session?: SessionDataType, modelName?: string) => T)(transformed, this.session, this.modelName)).validate();
     }
 

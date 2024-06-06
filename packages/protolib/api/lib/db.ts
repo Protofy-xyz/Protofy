@@ -90,6 +90,7 @@ export class ProtoLevelDB extends ProtoDB {
     private batchLimit
     private batchTimeout
     private batch
+    private regeneratingIndexes
     constructor(location, options?, config?: ProtoDBConfig) {
         super(location, options, config);
         this.capabilities = ['pagination', 'groupBySingle', 'groupByOptions']
@@ -101,6 +102,7 @@ export class ProtoLevelDB extends ProtoDB {
         this.batchTimeout = dbOptions.batchTimeout ?? 10000
         this.batchCounter = 0
         this.batchTimer = null
+        this.regeneratingIndexes = false
     }
 
 
@@ -194,6 +196,7 @@ export class ProtoLevelDB extends ProtoDB {
 
     async put(key: string, value: string, options?) {
         const { keyEncoding, valueEncoding, ...internalOptions } = options ?? {};
+        const result = await this.db.put(key, value, options)
         if (this.batch) {
             if (this.batchCounter === this.batchLimit) {
                 this.batchIndexes()
@@ -206,20 +209,35 @@ export class ProtoLevelDB extends ProtoDB {
                 }
             }
         } else {
-            await this.regenerateIndexes(value);
+            await this.regenerateIndexes();
         }
-        return await this.db.put(key, value, options)
+        return result
     }
 
     private batchIndexes() {
         this.regenerateIndexes();
         clearTimeout(this.batchTimer);
-        this.batchTimer = null;
+        this.batchTimer = null; //allows to create a new timer
         this.batchCounter = 0;
     }
 
-    async regenerateIndexes(value?) {
-        return await ProtoLevelDB.regenerateIndexes(this.rootDb, this.db, this.location, value);
+    async regenerateIndexes() {
+        if (this.regeneratingIndexes) {
+            //logger.info({ db: this.location }, 'Skip regenerate indexes: already regenerating indexes for database: ' + this.location)
+            return
+        }
+        this.regeneratingIndexes = true
+
+        const id = Math.random().toString(36).substring(7);
+        console.time('regenerateIndexes_'+id)
+        try {
+            await ProtoLevelDB.regenerateIndexes(this.rootDb, this.db, this.location);
+        } catch (e) {
+            logger.error({ db: this.location }, 'Error regenerating indexes for database: ' + this.location)
+            this.regeneratingIndexes = false
+        }
+        console.timeEnd('regenerateIndexes_'+id)
+        this.regeneratingIndexes = false
     }
 
     async getGroupIndexes() {
@@ -254,7 +272,7 @@ export class ProtoLevelDB extends ProtoDB {
         }
     }
 
-    static async regenerateIndexes(rootDb, db, location, value?) {
+    static async regenerateIndexes(rootDb, db, location) {
         let indexData;
         let groupIndexData;
         try {
@@ -273,18 +291,6 @@ export class ProtoLevelDB extends ProtoDB {
                 allItems.push(JSON.parse(itemValue));
             }
 
-            if (Array.isArray(value)) {
-                value.forEach(newItemJson => {
-                    const newItem = JSON.parse(newItemJson);
-                    allItems = allItems.filter(listItem => listItem[indexData.primary] !== newItem[indexData.primary]);
-                    allItems.push(newItem);
-                });
-            } else if (value) {
-                const newItem = JSON.parse(value);
-                allItems = allItems.filter(listItem => listItem[indexData.primary] !== newItem[indexData.primary]);
-                allItems.push(newItem);
-            }
-
             const counter = sublevel(rootDb, 'counter');
             await counter.put('total', JSON.stringify(allItems.length));
 
@@ -293,7 +299,7 @@ export class ProtoLevelDB extends ProtoDB {
                     const currentIndex = groupIndexData[i];
                     const groupSubLevel = sublevel(rootDb, 'group_' + currentIndex.key);
                     const groupSubLevelOptions = sublevel(rootDb, 'group_' + currentIndex.key + '_options')
-                    await groupSubLevelOptions.clear();
+
                     // const grouped = sublevel(rootDb, 'group_' + currentIndex);
                     const groupItems = allItems.reduce((acc, item) => {
                         if(currentIndex.fn) {
@@ -301,12 +307,12 @@ export class ProtoLevelDB extends ProtoDB {
                             //TODO: use new function to evaluate the expression
                             const fn = new Function('data', currentIndex.fn);
                             const itemKeys = fn(item)
-                            itemKeys.forEach(ckey => {
+                            for (const ckey of itemKeys) {
                                 if (!acc[ckey]) {
-                                    acc[ckey] = []
+                                    acc[ckey] = [];
                                 }
-                                acc[ckey].push(item[indexData.primary])
-                            })
+                                acc[ckey].push(item[indexData.primary]);
+                            }
                             return acc
                         } else {
                             if(!acc[item[currentIndex.key]]) {
@@ -321,39 +327,52 @@ export class ProtoLevelDB extends ProtoDB {
                     //we need to create a sublevel for each group, and store the items in the order they are in the group
                     //using batch
                     
+                    const objKeys = Object.keys(groupItems)
+                    const maxLength = objKeys.reduce((acc, curr) => curr.length > acc ? curr.length : acc, 0);
 
-                    const maxLength = Object.keys(groupItems).reduce((acc, curr) => curr.length > acc ? curr.length : acc, 0);
+                    await groupSubLevelOptions.clear();
 
-
-                    for (const groupKey of Object.keys(groupItems)) {
+                    const maxLen = maxLength.toString().length
+                    for (const groupKey of objKeys) {
                         //pad groupKey to have the same length as the longest key
                         //with 0s
-                        groupSubLevelOptions.put(groupKey.length.toString().padStart(maxLength.toString().length, '0') +'_'+groupKey, '')
+                        groupSubLevelOptions.put(groupKey.length.toString().padStart(maxLen, '0') +'_'+groupKey, '')
                         const subLevelGroupCollection = sublevel(groupSubLevel, groupKey);
-                        await subLevelGroupCollection.clear();
                         
                         const list = sublevel(subLevelGroupCollection, 'list');
                         const total = sublevel(subLevelGroupCollection, 'counter');
                         total.put('total', JSON.stringify(groupItems[groupKey].length));
+
+                        const items = groupItems[groupKey];
+                        const length = items.length;
+                        const paddedLength = String(length - 1).length;
+                    
+                        const batchArray = [];
+                        for (let i = 0; i < length; i++) {
+                            const paddedIndex = String(i).padStart(paddedLength, '0');
+                            const key = `${paddedIndex}_${items[i]}`;
+                            batchArray.push({
+                                type: 'put',
+                                key: key,
+                                value: ''
+                            });
+                        }
                         await list.clear();
-                        await list.batch(groupItems[groupKey].map((item, i) => {
-                            return String(i).padStart(String(groupItems[groupKey].length - 1).length, '0') + '_' + item
-                        }).map(k => ({
-                            type: 'put',
-                            key: k,
-                            value: ''
-                        })));
+                        await list.batch(batchArray);
                     }
                 }
             }
 
-            if(indexData && indexData.keys.length) {    
+            if (indexData && indexData.keys.length) {
                 const maxLength = String(allItems.length - 1).length;
-                for (var i = 0; i < indexes.length; i++) {
+        
+                for (let i = 0; i < indexes.length; i++) {
                     const currentIndex = indexes[i];
                     const ordered = sublevel(rootDb, 'order_' + currentIndex);
-                    await ordered.clear();
-                    await ordered.batch(allItems.sort((a, b) => {
+        
+                    // Sort items based on the current index
+                    let sortedItems = allItems //.slice();  // Create a shallow copy of allItems to sort
+                    sortedItems.sort((a, b) => {
                         if (a[currentIndex] < b[currentIndex]) {
                             return -1;
                         }
@@ -361,13 +380,23 @@ export class ProtoLevelDB extends ProtoDB {
                             return 1;
                         }
                         return 0;
-                    }).map((item, i) => {
-                        return String(i).padStart(maxLength, '0') + '_' + item[indexData.primary]
-                    }).map(k => ({
-                        type: 'put',
-                        key: k,
-                        value: ''
-                    })));
+                    });
+        
+                    // Create batch array
+                    let batchArray = [];
+                    for (let j = 0; j < sortedItems.length; j++) {
+                        const item = sortedItems[j];
+                        const paddedIndex = String(j).padStart(maxLength, '0');
+                        const key = `${paddedIndex}_${item[indexData.primary]}`;
+                        batchArray.push({
+                            type: 'put',
+                            key: key,
+                            value: ''
+                        });
+                    }
+
+                    await ordered.clear();
+                    await ordered.batch(batchArray);
                 }
             }
         }
@@ -503,7 +532,7 @@ export const getDBOptions = (modelType, dbOptions?) => {
         dbOptions: {
             batch: false,
             batchLimit: 100,
-            batchTimeout: 5000,
+            batchTimeout: 2000,
             ...dbOptions
         }     
     }
