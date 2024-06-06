@@ -184,7 +184,7 @@ export class ProtoLevelDB extends ProtoDB {
                 limit: itemsPerPage,
                 reverse: true
             })) {
-                allItems.push(itemKey.split('_')[1]);
+                allItems.push(itemKey.split('_').slice(1).join('_'));
             }
         } else {
             const startFrom = String(pageNumber * itemsPerPage).padStart(maxLength, '0');
@@ -193,7 +193,7 @@ export class ProtoLevelDB extends ProtoDB {
                 gt: startFrom,
                 limit: itemsPerPage
             })) {
-                allItems.push(itemKey.split('_')[1]);
+                allItems.push(itemKey.split('_').slice(1).join('_'));
             }
         }
 
@@ -404,6 +404,7 @@ export class ProtoLevelDB extends ProtoDB {
                         const item = sortedItems[j];
                         const paddedIndex = String(j).padStart(maxLength, '0');
                         const key = `${paddedIndex}_${item[indexData.primary]}`;
+                        
                         batchArray.push({
                             type: 'put',
                             key: key,
