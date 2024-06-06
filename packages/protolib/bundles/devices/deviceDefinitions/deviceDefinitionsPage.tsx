@@ -103,7 +103,7 @@ export default {
               return cores.find(core => core.name === formData.board.core).sdks
             }
             return []
-          }).after("name"),
+          }).after("board"),
         }}
         extraFieldsFormsAdd={{
           device: z.boolean().after("config").label("automatic device").defaultValue(true)
