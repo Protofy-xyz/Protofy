@@ -14,13 +14,16 @@ export const HeaderMenuContent = React.memo(function HeaderMenuContent() {
   const [settings] = useUserSettings()
   const currentWorkspace = settings && settings.workspace ? settings.workspace : userSpaces[0]
   //@ts-ignore
-  const workspace = workspaces[currentWorkspace]
+  const workspace = typeof workspaces[currentWorkspace] === 'function' ? workspaces[currentWorkspace]({pages: []}) : workspaces[currentWorkspace]
+
 
   // console.log('workspace:', workspace)
+  const currentMenuOptions = menuOptions.filter((menu, i) => !menu['visibility'] || menu['visibility'](session, workspace))
+
   return (
     <YStack miw={230} p="$3" ai="flex-end">
       <Tinted>
-        {menuOptions.filter((menu, i) => !menu['visibility'] || menu['visibility'](session, workspace)).map((menu, i) => {
+        {currentMenuOptions.map((menu, i) => {
           return <HeaderLink key={i} native={true} {...(menu['id']?{id:menu['id']}:{})} onClick={() => menu['onClick'] && menu['onClick'](setSession, setSessionContext)} href={typeof menu['path'] == 'function' ? menu['path'](workspace, session) : menu['path']}>
             {typeof menu['label'] == 'function' ? menu['label'](workspace, session) : menu['label']}
           </HeaderLink>
