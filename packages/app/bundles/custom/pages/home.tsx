@@ -18,8 +18,8 @@ const Home = (props) => {
             <BackgroundGradient height='100vh' direction="up" o="0.1" />
             <YStack f={1} ov="hidden" space="$3" position="relative" pt="$10" mb="$4">
               <YStack scaleX="1" ai="center" space="$2">
-                <BigTitle scale={1.4} my="$1" $gtLg={{ scale: 1.4 }}>
-                  <RainbowText rainbowType="rainbowSoft" lineHeight={150}>Protofy</RainbowText>
+                <BigTitle scale={1.4} mb="$1" mt={"$4"} $gtLg={{ scale: 1.4 }}>
+                  <RainbowText>Protofy</RainbowText>
                 </BigTitle>
                 <XStack alignItems="center" justifyContent="center">
                   <SizableText
