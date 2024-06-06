@@ -30,7 +30,7 @@ const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
         <Page minHeight="100vh">
             <DefaultLayout title="Protofy" description="Made with love from Barcelona">
                 {/* add your content here, this is just an example with a big text */}
-                <VStack mt="$10">
+                <VStack mt="$10" ai="center">
                     <BigTitle>{{name}}</BigTitle>
                 </VStack>
             </DefaultLayout>
