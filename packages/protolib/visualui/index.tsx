@@ -111,7 +111,7 @@ export const textPalette = {
   ...cw(Text, 'Type', 'Text', { children: "hello" }, uiDataText, {}, true),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { rules: { canMoveIn: () => false } }),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world", fontWeight: "bold", fontSize:"$16", lineHeight:"$16" }, {}, {}, true),
-  ...cw(SensorValue, 'Type', 'SensorValue', { }, uiDataText, {}),
+  ...cw(SensorValue, 'Radio', 'SensorValue', { }, uiDataText, {}),
 }
 
 export const layoutPalette = {
