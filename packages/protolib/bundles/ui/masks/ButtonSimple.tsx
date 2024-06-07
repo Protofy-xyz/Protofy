@@ -2,6 +2,7 @@ import { Node, NodeParams, FallbackPortList, filterCallbackProp, restoreCallback
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Timer } from 'lucide-react';
 import { useRef } from 'react'
+import { DecorationProps, DimensionProps, LayoutProps, ThemeProps } from './PropsLists';
 
 const ButtonSimpleMask = ({ node = {}, nodeData = {}, children }: any) => {
     const paramsRef = useRef()
@@ -16,13 +17,10 @@ const ButtonSimpleMask = ({ node = {}, nodeData = {}, children }: any) => {
     ]
 
     const propsList = [
-        {
-            "label": "theme",
-            "field": "prop-theme",
-            "staticLabel": true,
-            "type": "color-theme",
-            "section": "layout"
-        },
+        ...ThemeProps,
+        ...DimensionProps,
+        ...LayoutProps,
+        ...DecorationProps,
         {
             "label": "textColor",
             "field": "prop-textColor",
@@ -31,74 +29,11 @@ const ButtonSimpleMask = ({ node = {}, nodeData = {}, children }: any) => {
             "section": "layout"
         },
         {
-            "label": "margin",
-            "field": "prop-margin",
-            "staticLabel": true,
-            "type": "range-theme",
-            "section": "layout"
-        },
-        {
-            "label": "padding",
-            "field": "prop-padding",
-            "staticLabel": true,
-            "type": "range-theme",
-            "section": "layout"
-        },
-        {
             "label": "size",
             "field": "prop-size",
             "staticLabel": true,
             "type": "range-theme",
             "section": "dimensions"
-        },
-        {
-            "label": "circular",
-            "field": "prop-circular",
-            "staticLabel": true,
-            "type": "toggle-boolean",
-            "section": "decoration"
-        },
-        {
-            "label": "chromeless",
-            "field": "prop-chromeless",
-            "staticLabel": true,
-            "type": "toggle-boolean",
-            "section": "decoration"
-        },
-        {
-            "label": "themeInverse",
-            "field": "prop-themeInverse",
-            "staticLabel": true,
-            "type": "toggle-boolean",
-            "section": "decoration"
-        },
-        {
-            "label": "alignSelf",
-            "field": "prop-alignSelf",
-            "staticLabel": true,
-            "type": "alignment-items",
-            "section": "layout"
-        },
-        {
-            "label": "width",
-            "field": "prop-width",
-            "staticLabel": true,
-            "type": "input",
-            "section": "dimensions"
-        },
-        {
-            "label": "height",
-            "field": "prop-height",
-            "staticLabel": true,
-            "type": "input",
-            "section": "dimensions"
-        },
-        {
-            "label": "borderRadius",
-            "field": "prop-borderRadius",
-            "staticLabel": true,
-            "type": "range-theme",
-            "section": "decoration"
         }
     ]
 

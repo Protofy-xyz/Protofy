@@ -29,6 +29,36 @@ export const LayoutProps = [
     }
 ]
 
+export const DecorationProps = [
+    {
+        "label": "circular",
+        "field": "prop-circular",
+        "staticLabel": true,
+        "type": "toggle-boolean",
+        "section": "decoration"
+    },
+    {
+        "label": "chromeless",
+        "field": "prop-chromeless",
+        "staticLabel": true,
+        "type": "toggle-boolean",
+        "section": "decoration"
+    },
+    {
+        "label": "themeInverse",
+        "field": "prop-themeInverse",
+        "staticLabel": true,
+        "type": "toggle-boolean",
+        "section": "decoration"
+    },
+    {
+        "label": "borderRadius",
+        "field": "prop-borderRadius",
+        "staticLabel": true,
+        "type": "range-theme",
+        "section": "decoration"
+    }
+]
 export const DimensionProps = [
     {
         "label": "width",
@@ -93,4 +123,14 @@ export const TextProps = [
         "section": "basic"
     },
 
+]
+
+export const ThemeProps = [
+    {
+        "label": "theme",
+        "field": "prop-theme",
+        "staticLabel": true,
+        "type": "color-theme",
+        "section": "theme"
+    },
 ]
