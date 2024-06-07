@@ -56,7 +56,8 @@ type AutoAPIOptions = {
     dbOptions?: {
         batch?: boolean,
         batchLimit?: number,
-        batchTimeout?: number
+        batchTimeout?: number,
+        orderedInsert?: boolean
     }
     useDatabaseEnvironment?: boolean,
     useEventEnvironment?: boolean

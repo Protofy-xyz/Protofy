@@ -46,11 +46,11 @@ export const EventsAPI = async (app, context) => {
         defaultOrderDirection: 'desc',
         skipDatabaseInitialization: true,
         dbOptions: {
-            batch: true
+            orderedInsert: true
         }
     })
 
-    await connectDB('dev/events', {}, getDBOptions(EventModel, { batch: true }))
-    await connectDB('prod/events', {}, getDBOptions(EventModel, { batch: true }))
+    await connectDB('dev/events', {}, getDBOptions(EventModel, { orderedInsert: true }))
+    await connectDB('prod/events', {}, getDBOptions(EventModel, { orderedInsert: true }))
     EventAPI(app, context)
 }
