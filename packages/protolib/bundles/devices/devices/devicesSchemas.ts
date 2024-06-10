@@ -173,7 +173,7 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
         console.error(deviceObject.error)
         return;
       }
-      deviceObject.data.subsystem = subsystems
+      // deviceObject.data.subsystem = subsystems
       deviceObject.data.environment = env
       
       API.post("/adminapi/v1/devices/" + this.data.name, deviceObject.data)
@@ -184,6 +184,30 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
     }
     return yaml
   }
+  async setSubsystem(){
+    const response = await API.get('/adminapi/v1/deviceDefinitions/' + this.data.deviceDefinition);
+    if (response.isError) {
+      console.log(response.error)
+      return;
+    }
+    const deviceDefinition = response.data
+    const jsCode = deviceDefinition.config.components;
+    const deviceCode = 'device(' + jsCode.replace(/;/g, "") + ')';
+    const deviceObj = eval(deviceCode)
+    const subsystems = deviceObj.getSubsystemsTree(this.data.name, deviceDefinition)
+    const deviceObject = await API.get("/adminapi/v1/devices/" + this.data.name)
+    if (deviceObject.isError) {
+      console.error(deviceObject.error)
+      return;
+    }
+    deviceObject.data.subsystem = subsystems
+    API.post("/adminapi/v1/devices/" + this.data.name, deviceObject.data)
+  }
+  
+  async setUploaded(){
+    await this.setSubsystem()
+  }
+
 
   create(data?):DevicesModel {
       const result = super.create(data)

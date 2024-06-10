@@ -118,7 +118,8 @@ export default {
     const [modalFeedback, setModalFeedback] = useState<any>()
     const [stage, setStage] = useState('')
     const yamlRef = React.useRef()
-    const [targetDevice, setTargetDevice] = useState('')
+    const [targetDeviceName, setTargetDeviceName] = useState('')
+    const [targetDeviceModel, setTargetDeviceModel] = useState(DevicesModel.load({}))
     const [compileSessionId, setCompileSessionId] = useState('')
     const [all, setAll] = useState(false)
     const env = useWorkspaceEnv()
@@ -126,8 +127,8 @@ export default {
     // const { message } = useSubscription(['device/compile']);
 
     const flashDevice = async (device, yaml?) => {
-      setTargetDevice(device.data.name)
-
+      setTargetDeviceName(device.data.name)
+      setTargetDeviceModel(device)
       yamlRef.current = yaml ?? await device.getYaml(env)
       console.log("TURBO YAML PARAMETER: ", yaml)
       setShowModal(true)
@@ -138,7 +139,7 @@ export default {
       }
     }
     const sendMessage = async () => {
-      const response = await fetch(compileActionUrl(targetDevice, compileSessionId))
+      const response = await fetch(compileActionUrl(targetDeviceName, compileSessionId))
       const data = await response.json()
       console.log("🤖 ~ sendMessage ~ data:", data)
     }
@@ -161,7 +162,7 @@ export default {
     }
 
     const saveYaml = async (yaml) => {
-      const response = await callText(postYamlApiEndpoint(targetDevice), 'POST', { "yaml": yaml })
+      const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { "yaml": yaml })
       const data = await response.json()
       console.log("Save Yaml, compileSessionId: ", data.compileSessionId);
       setCompileSessionId(data.compileSessionId)
@@ -174,12 +175,15 @@ export default {
           setTimeout(() => {
             setStage('compile')
           }, 1 * 1000);//Todo remove setTimeout
+          targetDeviceModel ? await targetDeviceModel.setUploaded() : console.log("🤖 No targetDeviceModel")
+
         } else if (stage == 'compile') {
           console.log("stage - compile")
           await compile()
         } else if (stage == 'write') {
+
           try {
-            await flash(flashCb, targetDevice, compileSessionId)
+            await flash(flashCb, targetDeviceName, compileSessionId)
             setStage('idle')
           } catch (e) { flashCb({ message: 'Error writing the device. Check that the USB connection and serial port are correctly configured.', details: { error: true } }) }
         } else if (stage == 'upload') {
