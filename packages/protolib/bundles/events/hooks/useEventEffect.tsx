@@ -12,7 +12,7 @@ export const useEventEffect = (onEvent, eventFilter?: { path?: string, from?: st
         const userUrl = eventFilter.user? `&filter[user]=${eventFilter.user}`:""
         const pathUrl = eventFilter.path? `&filter[path]=${eventFilter.path}`: ""
         const from = eventFilter.from? `&filter[from]=${eventFilter.from}`: ""
-        const env = "dev"
+        const env = process.env.NODE_ENV == 'development' ? 'dev' : 'prod'
         const urlLastEvent = `/adminapi/v1/events?env=${env}${from}${userUrl}${pathUrl}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
 
         let result = await API.get(urlLastEvent)
