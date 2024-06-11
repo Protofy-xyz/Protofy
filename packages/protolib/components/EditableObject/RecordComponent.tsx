@@ -5,7 +5,7 @@ import { AlertDialog } from 'protolib'
 import { FormGroup, OpenedSectionsContext, getDefaultValue } from ".";
 import { getElement } from "./Element";
 
-export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData, mode, customFields, path, setFormData }) => {
+export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData, mode, customFields, path, setFormData, URLTransform }) => {
     const [menuOpened, setMenuOpened] = useState(false)
     const [name, setName] = useState("")
     const inputRef = useRef(null);
@@ -52,7 +52,8 @@ export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, s
                         setData: setData,
                         mode: mode,
                         customFields: customFields,
-                        path: [...path, ele.name]
+                        path: [...path, ele.name],
+                        URLTransform
                     }
                     )}
                 </XStack>

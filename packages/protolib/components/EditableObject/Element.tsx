@@ -9,7 +9,7 @@ import { UnionsArrayComp } from "./UnionsArrayComponent";
 import { RecordComp } from "./RecordComponent";
 import { FilePicker } from "../FilePicker";
 
-export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray = false, arrayName = "" }) => {
+export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray = false, arrayName = "", URLTransform = (url) => url}) => {
     let elementDef = ele._def?.innerType?._def ?? ele._def
     const setFormData = (key, value) => {
         const formData = data;
@@ -138,7 +138,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                         bc="$backgroundTransparent"
                         // options={["John", "Doe", "Jane", "Smith"]}
                         getDisplayField={ele._def.getDisplayField}
-                        options={ele._def.linkTo}
+                        options={(search) => ele._def.linkTo(search, URLTransform)}
                         onSelectItem={(item) => setFormData(ele.name, item)}
                         selectedItem={getFormData(ele.name)}
                         f={1}
@@ -160,7 +160,9 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                 customFields={customFields}
                 inArray={inArray}
                 arrayName={arrayName}
-                getFormData={getFormData}></ObjectComp>
+                getFormData={getFormData}
+                URLTransform={URLTransform}
+                ></ObjectComp>
         }
 
 
@@ -180,10 +182,10 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
             return <UnionsArrayComp ele={ele} icon={icon} i={i} inArray={inArray} eleArray={ele._def.type._def.options} formData={formData} generatedOptions={generatedOptions} setFormData={setFormData} />
         }
 
-        return <ArrayComp data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={formData ? formData : generatedOptions} getElement={getElement} setFormData={setFormData} />
+        return <ArrayComp URLTransform={URLTransform} data={data} setData={setData} mode={mode} ele={ele} elementDef={elementDef} icon={icon} customFields={customFields} path={path} arrData={formData ? formData : generatedOptions} getElement={getElement} setFormData={setFormData} />
     } else if (elementType == 'ZodRecord') {
         const recordData = getFormData(ele.name)
-        return <RecordComp ele={ele} inArray={inArray} recordData={recordData} elementDef={elementDef} icon={icon} data={data} setData={setData} mode={mode} customFields={customFields} path={path} setFormData={setFormData} />
+        return <RecordComp URLTransform={URLTransform} ele={ele} inArray={inArray} recordData={recordData} elementDef={elementDef} icon={icon} data={data} setData={setData} mode={mode} customFields={customFields} path={path} setFormData={setFormData} />
     } else if (elementType == 'ZodBoolean') {
         const recordData: any = getFormData(ele.name)
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>

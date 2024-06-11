@@ -3,7 +3,7 @@ import { Pencil, X, Tags, Layers } from '@tamagui/lucide-icons';
 import { Tinted } from 'protolib'
 import { FormGroup, getDefaultValue, iconStyle } from ".";
 
-export const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields }) => {
+export const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields, URLTransform}) => {
     return <FormGroup ele={ele} title={' (' + arrData.length + ')'} icon={Layers} path={path}>
         <Stack>
             {arrData.map((d, i) => {
@@ -24,7 +24,8 @@ export const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, se
                         customFields: customFields,
                         path: [...path, ele.name],
                         inArray: true,
-                        arrayName: ele.name
+                        arrayName: ele.name,
+                        URLTransform: URLTransform
                     })}
                     {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
                         top={13} br={"$5"} p={"$2"}

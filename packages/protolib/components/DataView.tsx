@@ -387,6 +387,7 @@ const DataViewInternal = forwardRef(({
                         <ScrollView maxHeight={"90vh"}>
                             <XStack mr="$4">
                                 <EditableObject
+                                    URLTransform={URLTransform}
                                     id={"admin-eo"}
                                     name={name}
                                     numColumns={numColumnsForm}

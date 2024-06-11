@@ -259,8 +259,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     linkTo(displayKey?: string | Function, options?:{deleteOnCascade: boolean}) {
         const apiEndPoint = (this.constructor as typeof ProtoModel).getApiEndPoint()
         return this.schema.linkTo(
-            async (search) => {
-                const url = apiEndPoint + (search ? '?search=' + search : '')
+            async (search, URLTransform) => {
+                const url = URLTransform(apiEndPoint + (search ? '?search=' + search : ''))
                 const result = await API.get(url)
                 return result.data?.items ?? []
             },

@@ -94,7 +94,8 @@ export const GridElement = ({ index, data, width }) => {
         data: data.data || data.defaultData,
         setData: data.setData,
         mode: data.mode,
-        customFields: data.customFields
+        customFields: data.customFields,
+        URLTransform: data.URLTransform
     })}
     </XStack>
 }
@@ -126,10 +127,11 @@ export type EditableObjectProps = {
     setData?: Function,
     error?: any,
     setError?: Function,
-    externalErrorHandling?: Boolean
+    externalErrorHandling?: Boolean,
+    URLTransform?: Function
 }
 
-export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, URLTransform = (url) => url, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [prevCurrentMode, setPrevCurrentMode] = useState('')
@@ -200,7 +202,8 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
                 numColumns: numColumns,
                 customFields,
                 columnMargin: columnMargin,
-                defaultData
+                defaultData,
+                URLTransform
             })
         }))
         return groups
