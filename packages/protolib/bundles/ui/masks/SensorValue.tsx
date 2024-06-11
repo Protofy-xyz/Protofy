@@ -2,9 +2,12 @@ import { Node, getFieldValue, CustomFieldsList } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Timer } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { DeviceCollection } from '../../devices/models/DeviceModel';
+import { DeviceCollection, DeviceModel } from '../../devices/models/DeviceModel';
+import { DeviceDataType } from '../../devices/models/interfaces';
+import { DeviceRepository } from '../../devices/repositories/deviceRepository';
 import { DimensionProps, LayoutProps, TextProps } from './PropsLists';
-import { getDevices } from '../../devices/devicesUtils';
+
+const deviceRepository = new DeviceRepository()
 
 const SensorValueMask = ({ node = {}, nodeData = {} }: any) => {
     const color = useColorFromPalette(55)
@@ -13,10 +16,19 @@ const SensorValueMask = ({ node = {}, nodeData = {} }: any) => {
 
     let deviceName = getFieldValue("prop-device", nodeData);;
 
-    const deviceCollection = new DeviceCollection(devicesData);
+    const getDevices = async () => {
+        const { data } = await deviceRepository.list('dev')
+        const { items: devices } = data;
+        setDevicesData(devices);
+    }
 
+    // Device
+    const deviceCollection = new DeviceCollection(devicesData);
     const deviceNames = deviceCollection?.getNames() ?? [];
-    const deviceSubsystemsNames = deviceCollection?.getSubsystemsNames(deviceName, "monitor") ?? [];
+    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName);
+    const selectedDeviceModel = new DeviceModel(selectedDevice)
+    // Subsystem
+    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames('monitor') ?? [];
 
     const propsList = [
         {
@@ -41,14 +53,7 @@ const SensorValueMask = ({ node = {}, nodeData = {} }: any) => {
     ]
 
     useEffect(() => {
-        const updateDevices = async () => {
-            const devices = await getDevices();
-            setDevicesData(devices);
-        }
-
-        if (node.id) {
-            updateDevices()
-        }
+        if (node.id) getDevices()
     }, [])
 
     return (

@@ -3,9 +3,13 @@ import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Cable } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
-import { DeviceCollection } from '../../models/DeviceModel';
-import { getDevices } from '../../devicesUtils';
+import { DeviceRepository } from '../../repositories/deviceRepository';
+import { DeviceCollection, DeviceModel } from '../../models/DeviceModel';
+import { DeviceDataType, SubsystemType } from '../../models/interfaces';
+import { SubsystemCollection, SubsystemModel } from '../../models/SubsystemModel';
 
+
+const deviceRepository = new DeviceRepository()
 const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
 
     // const [payloadVisibility, setPayloadVisibility] = useState(false);
@@ -16,21 +20,29 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(7)
     const [devicesData, setDevicesData] = useState<any[]>([]);
 
-    const deviceCollection = new DeviceCollection(devicesData);
+    const getDevices = async () => {
+        const { data } = await deviceRepository.list('dev')
+        const { items: devices } = data;
+        setDevicesData([...devices]);
+    }
 
+    // Device
+    const deviceCollection = new DeviceCollection(devicesData);
     const deviceNames = deviceCollection?.getNames() ?? [];
-    const deviceSubsystemsNames = deviceCollection?.getSubsystemsNames(deviceName, "monitor") ?? [];
-    const subsystemMonitorNames = deviceCollection.getSubsystemHandler(deviceName, deviceComponent, "monitor") ?? [];
+    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName);
+    const selectedDeviceModel = new DeviceModel(selectedDevice)
+    // Subsystem
+    const deviceSubsystems = selectedDeviceModel.getSubsystems()
+    const subsystemsCollection = new SubsystemCollection(deviceSubsystems);
+    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames('monitor') ?? [];
+    const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent);
+    const selectedSubsystemModel = new SubsystemModel(selectedSubsystem)
+    // Monitor
+    const subsystemMonitorNames = selectedSubsystemModel.getMonitorsNames() ?? [];
+    // const selectedMonitor = selectedSubsystemModel.getActionByName(deviceMonitor?.replaceAll('"', ''))
 
     useEffect(() => {
-        const updateDevices = async () => {
-            const devices = await getDevices();
-            setDevicesData(devices);
-        }
-
-        if (node.id) {
-            updateDevices()
-        }
+        if(node.id) getDevices()
     }, [])
 
     return (
