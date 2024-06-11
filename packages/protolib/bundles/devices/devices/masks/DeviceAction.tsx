@@ -27,13 +27,13 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
     const deviceSubsystemsNames = deviceCollection?.getSubsystemsNames(deviceName, "action") ?? [];
     const subsystemActionNames = deviceCollection.getSubsystemHandler(deviceName, deviceComponent, "action") ?? [];
 
-    const actionValue = deviceCollection.getSubsystemAction(deviceName, deviceComponent, deviceAction)
+    const actionValue = deviceCollection.getSubsystemAction(deviceName, deviceComponent, deviceAction)?.payload?.value
+    const hasPayload = !actionValue && deviceAction && deviceAction !== ''
 
     useEffect(() => {
         if (node.id) getDevices()
     }, [])
 
-    const hasPayload = !actionValue && deviceAction && deviceAction !== ''
     return (
         <Node icon={Play} node={node} isPreview={!node.id} title='Device Action' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param-1', type: 'select', data: deviceNames }]} />
