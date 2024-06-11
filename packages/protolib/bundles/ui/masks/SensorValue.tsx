@@ -4,6 +4,9 @@ import { Timer } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { DeviceCollection } from '../../devices/models/DeviceModel';
 import { DimensionProps, LayoutProps, TextProps } from './PropsLists';
+import { DeviceRepository } from '../../devices/repositories/deviceRepository';
+
+const deviceRepository = new DeviceRepository()
 
 const SensorValueMask = ({ node = {}, nodeData = {} }: any) => {
     const color = useColorFromPalette(55)

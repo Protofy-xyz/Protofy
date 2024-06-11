@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Play } from 'lucide-react';
 import { DeviceCollection } from '../../models/DeviceModel';
+import { DeviceRepository } from '../../repositories/deviceRepository';
+
+const deviceRepository = new DeviceRepository()
 
 const DeviceAction = (node: any = {}, nodeData = {}) => {
     let deviceName = getFieldValue("param-1", nodeData);
@@ -23,11 +26,11 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
     const deviceNames = deviceCollection?.getNames() ?? [];
     const deviceSubsystemsNames = deviceCollection?.getSubsystemsNames(deviceName, "action") ?? [];
     const subsystemActionNames = deviceCollection.getSubsystemHandler(deviceName, deviceComponent, "action") ?? [];
-    
+
     const actionValue = deviceCollection.getSubsystemAction(deviceName, deviceComponent, deviceAction)
 
     useEffect(() => {
-        if(node.id) getDevices()
+        if (node.id) getDevices()
     }, [])
 
     const hasPayload = !actionValue && deviceAction && deviceAction !== ''

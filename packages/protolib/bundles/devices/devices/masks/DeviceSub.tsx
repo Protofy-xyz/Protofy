@@ -4,6 +4,9 @@ import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Cable } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
 import { DeviceCollection } from '../../models/DeviceModel';
+import { DeviceRepository } from '../../repositories/deviceRepository';
+
+const deviceRepository = new DeviceRepository()
 
 const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
 
@@ -29,7 +32,7 @@ const DeviceSub = ({ node = {}, nodeData = {}, children }: any) => {
     const subsystemMonitorNames = deviceCollection.getSubsystemHandler(deviceName, deviceComponent, "monitor") ?? [];
 
     useEffect(() => {
-        if(node.id) getDevices()
+        if (node.id) getDevices()
     }, [])
 
     return (
