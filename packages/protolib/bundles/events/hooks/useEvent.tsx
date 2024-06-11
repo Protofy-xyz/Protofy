@@ -2,7 +2,7 @@ import { useSubscription } from 'protolib'
 
 export const useEvent = (eventFilter) => {
     const { message } = useSubscription('notifications/event/create/#')
-
+    
     if (message && message.message && eventFilter) {
         try {
             let content = JSON.parse(message.message as string)
@@ -10,6 +10,9 @@ export const useEvent = (eventFilter) => {
                 return
             }
             if (eventFilter.from && content['from'] != eventFilter.from) {
+                return
+            }
+            if (eventFilter.user && content['user'] != eventFilter.user) {
                 return
             }
             return message;
