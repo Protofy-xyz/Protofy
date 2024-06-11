@@ -1375,7 +1375,7 @@
                         "label": "fontSize",
                         "field": "prop-fontSize",
                         "staticLabel": true,
-                        "type": "range-theme",
+                        "type": "input",
                         "section": "basic"
                     },
                     {

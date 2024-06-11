@@ -4,10 +4,10 @@ import React from "react"
 const StyledHead1 = styled(H1, {
   className: 'word-break-keep-all',
   //@ts-ignore
-  size: '$9', mb: '$2',
+  size: '$12', mb: '$2',
   $gtSm: {
     //@ts-ignore
-    size: '$10',
+    size: '$11',
     maxWidth: '90%',
   },
 })
