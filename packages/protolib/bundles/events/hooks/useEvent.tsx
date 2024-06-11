@@ -15,6 +15,9 @@ export const useEvent = (eventFilter) => {
             if (eventFilter.user && content['user'] != eventFilter.user) {
                 return
             }
+            if (!eventFilter.path && !eventFilter.from && !eventFilter.user && !eventFilter.all) {
+                return
+            }
             return message;
         } catch (e) {
             console.error('Error parsing message from mqtt: ', e)
