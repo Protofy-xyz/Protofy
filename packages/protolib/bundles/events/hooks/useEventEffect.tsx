@@ -11,10 +11,11 @@ export const useEventEffect = (onEvent, eventFilter?: { path?: string, from?: st
     const readEvent = async()=>{
         const userUrl = eventFilter.user? `&filter[user]=${eventFilter.user}`:""
         const pathUrl = eventFilter.path? `&filter[path]=${eventFilter.path}`: ""
+        const from = eventFilter.from? `&filter[from]=${eventFilter.from}`: ""
         const env = "dev"
-        const urlLastDeviceEvent = `/adminapi/v1/events?env=${env}&filter[from]=device${userUrl}${pathUrl}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
+        const urlLastEvent = `/adminapi/v1/events?env=${env}${from}${userUrl}${pathUrl}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
 
-        let result = await API.get(urlLastDeviceEvent)
+        let result = await API.get(urlLastEvent)
         if (result.isError) {
             console.error(result.error)
             return
