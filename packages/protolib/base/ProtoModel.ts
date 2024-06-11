@@ -2,6 +2,7 @@ import { createSession, SessionDataType } from 'protolib/api/lib/session'
 import { ZodObject } from 'protolib/base'
 import { ProtoSchema } from './ProtoSchema';
 import { getLogger } from "./logger"
+import { API } from './Api';
 
 const logger = getLogger()
 
@@ -92,8 +93,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
     getSchemaLinks() {
         return this.objectSchema.is('linkTo').getFields().map((field) => {
-            const {linkTo, displayKey, linkToOptions} = this.objectSchema.getFieldDefinition(field)
-            return {field, linkTo, displayKey, linkToOptions}
+            const {linkTo, linkToId, linkToReadIds, displayKey, linkToOptions} = this.objectSchema.getFieldDefinition(field)
+            return {field, linkTo, linkToId, linkToReadIds, displayKey, linkToOptions}
         })
     }
 
@@ -256,7 +257,30 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     linkTo(displayKey?: string | Function, options?:{deleteOnCascade: boolean}) {
-        return this.schema.linkTo((search) => (this.constructor as typeof ProtoModel).getApiEndPoint() + (search ? '?search=' + search : ''), displayKey, options)
+        const apiEndPoint = (this.constructor as typeof ProtoModel).getApiEndPoint()
+        return this.schema.linkTo(
+            async (search) => {
+                const url = apiEndPoint + (search ? '?search=' + search : '')
+                const result = await API.get(url)
+                return result.data?.items ?? []
+            },
+            (data) => data[this.idField],
+            async (link, ids, items) => {
+                const response = await API.post(apiEndPoint + '?action=read_multiple', ids)
+                if(response.data && response.data.length) {
+                    for(const item of items) {
+                        const linkId = item[link.field]
+                        const linkItem = response.data.find(x => x[this.idField] == linkId)
+                        if(linkItem) {
+                            item[link.field] = linkItem
+                        }
+                    }
+                }
+                return items
+            },
+            displayKey, 
+            options
+        )
     }
 
     static getApiOptions(): any {

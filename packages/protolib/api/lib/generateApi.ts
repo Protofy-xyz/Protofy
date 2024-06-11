@@ -144,10 +144,8 @@ export const AutoAPI = ({
         const links = modelType.getSchemaLinks()
         if(links) {
             for(const link of links) {
-                const apiUrl = link.linkTo.getApiEndPoint()
-
                 if(item[link.field] !== undefined) {
-                    const linkId = item[link.field][link.linkTo.getIdField()]
+                    const linkId = link.linkToId(item[link.field])
                     item[link.field] = linkId
                 }
             }
@@ -159,27 +157,9 @@ export const AutoAPI = ({
         const links = modelType.getSchemaLinks()
         if(links) {
             for(const link of links) {
-                const apiUrl = link.linkTo.getApiEndPoint()
-
                 let idsToRequest = items.map(x => x[link.field]).filter(x => x !== undefined)
                 idsToRequest = [...new Set(idsToRequest)]
-                const response = await API.post(apiUrl + '?action=read_multiple', idsToRequest)
-                if(response.data && response.data.length) {
-                    for(const item of items) {
-                        const linkId = item[link.field]
-                        const linkItem = response.data.find(x => x[link.linkTo.getIdField()] == linkId)
-                        if(linkItem) {
-                            // if(typeof link.displayKey == 'function') { 
-                            //     item[link.field] = link.displayKey(linkItem)
-                            // } else {
-                            //     item[link.field] = linkItem[link.displayKey]
-                            // }
-
-                            item[link.field] = linkItem
-                            
-                        }
-                    }
-                }
+                items = await link.linkToReadIds(link, idsToRequest, items)
             }
         }
         return items
@@ -347,13 +327,11 @@ export const AutoAPI = ({
             dbPath = [dbPath]
         }
 
-        if(dbPath instanceof Array) {
-            for(const path of dbPath) {
-                const db = getDB(path, req, session)
-                await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
-            }
+        for(const path of dbPath) {
+            const db = getDB(path, req, session)
+            await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
         }
-
+        
         _notify(entityModel, 'create')
 
         if (!disableEvents) {

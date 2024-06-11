@@ -8,7 +8,7 @@ initSchemaSystem()
 interface ZodExtensions {
     indexed(indexFn?: Function): this;
     groupIndex(groupName?: string, groupCode?: string): this;
-    linkTo(model: any, displayKey?: string | Function, options?: { deleteOnCascade: boolean }): this;
+    linkTo(getElements: Function, getId: Function, readIds: Function, displayKey?: string | Function, options?: { deleteOnCascade: boolean }): this;
     label(caption: string): this;
     hint(hintText: string): this;
     display(views?: string[] | undefined): this;
@@ -90,8 +90,10 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.linkTo = function (getUrl, getDisplayField: Function, options?: { deleteOnCascade: boolean }) {
-        this._def.linkTo = getUrl;
+    type.prototype.linkTo = function (getElements, getId, readIds, getDisplayField: Function, options?: { deleteOnCascade: boolean }) {
+        this._def.linkTo = getElements;
+        this._def.linkToId = getId;
+        this._def.linkToReadIds = readIds;
         this._def.getDisplayField = getDisplayField;
         this._def.linkToOptions = options ?? {};
         return this;

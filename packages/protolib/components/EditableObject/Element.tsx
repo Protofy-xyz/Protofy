@@ -138,11 +138,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                         bc="$backgroundTransparent"
                         // options={["John", "Doe", "Jane", "Smith"]}
                         getDisplayField={ele._def.getDisplayField}
-                        options={async (search) => {
-                            const url = ele._def.linkTo(search)
-                            const result = await API.get(url)
-                            return result.data?.items ?? []
-                        }}
+                        options={ele._def.linkTo}
                         onSelectItem={(item) => setFormData(ele.name, item)}
                         selectedItem={getFormData(ele.name)}
                         f={1}
