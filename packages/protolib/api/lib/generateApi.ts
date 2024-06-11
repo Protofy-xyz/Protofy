@@ -304,9 +304,13 @@ export const AutoAPI = ({
             const db = getDB(getDBPath("read", req), req, session)
             const allResults: any[] = []
             for(const id of ids) {
-                const item = modelType.unserialize(await db.get(id), session)
-                const readData = typeof extraData?.read == 'function' ? await extraData.read(session, item, req) : (extraData?.read ?? {})
-                allResults.push(await onAfterRead(await item.readTransformed(transformers, readData), session, req))
+                try {
+                    const item = modelType.unserialize(await db.get(id), session)
+                    const readData = typeof extraData?.read == 'function' ? await extraData.read(session, item, req) : (extraData?.read ?? {})
+                    allResults.push(await onAfterRead(await item.readTransformed(transformers, readData), session, req))
+                } catch (e) {
+                    logger.error({error: e}, "Error reading item: " + id)
+                }
             }
             res.send(allResults)
             return
