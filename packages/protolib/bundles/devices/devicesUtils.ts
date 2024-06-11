@@ -2,6 +2,7 @@ import { Transport, ESPLoader } from "protodevice/src/device/esptool-js";
 import { sleep } from "protodevice/src/sleep";
 import { Build, FlashError } from "protodevice/src/const";
 import { manifest } from "protodevice/src/manifest";
+import { DeviceRepository } from "./repositories/deviceRepository";
 
 
 let port;
@@ -197,4 +198,12 @@ export const compileActionUrl = (targetDevice, compileSessionId) => {
 
 export const compileMessagesTopic = (targetDevice) => {
     return (`device/compile/${targetDevice}`);
+}
+
+const deviceRepository = new DeviceRepository()
+
+export const getDevices = async () => {
+    const { data } = await deviceRepository.list('dev')
+    const { items: devices } = data;
+    return devices;
 }

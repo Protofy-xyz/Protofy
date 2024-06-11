@@ -28,6 +28,15 @@ export class SubsystemModel extends ProtoModel<SubsystemModel> {
         return this.data?.monitors ?? [];
     }
 
+    getHandlersNames(type: "action" | "monitor"): string[] {
+        switch (type) {
+            case 'action':
+                return this.getActionsNames()
+            case 'monitor':
+                return this.getMonitorsNames()
+        }
+    }
+
     getActionsNames(): string[] {
         return this.getActions()?.map((action: ActionType) => action?.name) ?? []
     }

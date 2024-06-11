@@ -2,43 +2,33 @@ import { Node, NodeParams, getFieldValue, FallbackPort, FlowPort, filterCallback
 import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Play } from 'lucide-react';
-import { DeviceRepository } from '../../repositories/deviceRepository';
-import { DeviceCollection, DeviceModel } from '../../models/DeviceModel';
-import { DeviceDataType, SubsystemType } from '../../models/interfaces';
-import { SubsystemCollection, SubsystemModel } from '../../models/SubsystemModel';
+import { DeviceCollection } from '../../models/DeviceModel';
+import { getDevices } from '../../devicesUtils';
 
-const deviceRepository = new DeviceRepository()
 const DeviceAction = (node: any = {}, nodeData = {}) => {
     let deviceName = getFieldValue("param-1", nodeData);
     let deviceComponent = deviceName ? getFieldValue("param-2", nodeData) : "";
     let deviceAction = deviceName ? getFieldValue("param-3", nodeData) : "";
+
     const [devicesData, setDevicesData] = useState<any[]>([]);
     const color = useColorFromPalette(6)
 
-    const getDevices = async () => {
-        const { data } = await deviceRepository.list('dev')
-        const { items: devices } = data;
-        setDevicesData([...devices]);
-    }
-
-    // Device
     const deviceCollection = new DeviceCollection(devicesData);
     const deviceNames = deviceCollection?.getNames() ?? [];
-    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName);
-    const selectedDeviceModel = new DeviceModel(selectedDevice)
-    // Subsystem
-    const deviceSubsystems = selectedDeviceModel.getSubsystems()
-    const subsystemsCollection = new SubsystemCollection(deviceSubsystems);
-    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames('action') ?? [];
-    const selectedSubsystem: SubsystemType = subsystemsCollection.findByName(deviceComponent);
-    const selectedSubsystemModel = new SubsystemModel(selectedSubsystem)
-    // Action
-    const subsystemActionNames = selectedSubsystemModel.getActionsNames() ?? [];
-    const selectedAction = selectedSubsystemModel.getActionByName(deviceAction)
-    const actionValue = selectedAction?.payload?.value;
+    const deviceSubsystemsNames = deviceCollection?.getSubsystemsNames(deviceName, "action") ?? [];
+    const subsystemActionNames = deviceCollection.getSubsystemHandler(deviceName, deviceComponent, "action") ?? [];
+    
+    const actionValue = deviceCollection.getSubsystemAction(deviceName, deviceComponent, deviceAction)
 
     useEffect(() => {
-        if(node.id) getDevices()
+        const updateDevices = async () => {
+            const devices = await getDevices();
+            setDevicesData(devices);
+        }
+
+        if (node.id) {
+            updateDevices()
+        }
     }, [])
 
     const hasPayload = !actionValue && deviceAction && deviceAction !== ''
@@ -49,7 +39,7 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
             <NodeParams id={node.id} params={[{ label: 'Action', field: 'param-3', type: 'select', data: subsystemActionNames }]} />
             {hasPayload && <NodeParams id={node.id} params={[{ label: 'Action payload', field: 'param-4', type: 'input' }]} />}
 
-            <div style={{marginTop: '120px'}}>
+            <div style={{ marginTop: '120px' }}>
                 <FlowPort id={node.id} type='input' label='On done (data)' style={{ top: hasPayload ? '300px' : '250px' }} handleId={'param-5'} />
                 <FallbackPort fallbackText={"null"} node={node} port={'param-5'} type={"target"} fallbackPort={'param-5'} portType={"_"} preText="async () => " postText="" />
                 <FlowPort id={node.id} type='input' label='On error (error)' style={{ top: hasPayload ? '350px' : '300px' }} handleId={'param-6'} />
