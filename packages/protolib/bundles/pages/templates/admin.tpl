@@ -7,7 +7,7 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 
 import {Protofy} from 'protolib/base'
 import {Objects} from 'app/bundles/objects'
-import {DataView, API, AdminPage, PaginatedDataSSR, useWorkspaceApiUrl, getWorkspaceApiUrl, useRedirectToEnviron } from 'protolib'
+import {DataView, API, AdminPage, PaginatedDataSSR, useWorkspaceUrl, getWorkspaceApiUrl, useRedirectToEnviron } from 'protolib'
 import { Tag } from '@tamagui/lucide-icons'
 import { context } from "app/bundles/uiContext";
 import { useRouter } from "next/router";
@@ -24,12 +24,12 @@ export default {
     route: Protofy("route", "{{route}}"),
     component: ({pageState, initialItems, pageSession, extraData}:any) => {
         useRedirectToEnviron()
-        const sourceUrl = useWorkspaceApiUrl(apiUrl)
+        const getWorkspaceUrl = useWorkspaceUrl()
 
         return (<AdminPage title="{{object}}" pageSession={pageSession}>
             <DataView
                 rowIcon={Tag}
-                sourceUrl={sourceUrl}
+                sourceUrl={getWorkspaceUrl(apiUrl)}
                 initialItems={initialItems}
                 numColumnsForm={1}
                 name="{{object}}"

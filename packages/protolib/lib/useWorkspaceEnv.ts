@@ -15,12 +15,17 @@ export const getWorkspaceEnv = (path) => {
 }
 
 export const useWorkspaceApiUrl = (url) => {
-    const env = useWorkspaceEnv();
-    return (url.startsWith('/api/') && env == 'dev' ? '/_dev': '') + url;
+    const fn = useWorkspaceUrl()
+    return fn(url)
 }
 
 export const getWorkspaceApiUrl = (path, url) => {
     const env = getWorkspaceEnv(path);
     const result = (url.startsWith('/api/') && env == 'dev' ? '/_dev': '') + url;
     return result
+}
+
+export const useWorkspaceUrl = () => {
+    const env = useWorkspaceEnv();
+    return (url) => (url.startsWith('/api/') && env == 'dev' ? '/_dev': '') + url;
 }
