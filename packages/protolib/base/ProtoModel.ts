@@ -256,7 +256,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     linkTo(displayKey?: string | Function, options?:{deleteOnCascade: boolean}) {
-        return this.schema.linkTo(this.constructor, displayKey, options)
+        return this.schema.linkTo((search) => (this.constructor as typeof ProtoModel).getApiEndPoint() + (search ? '?search=' + search : ''), displayKey, options)
     }
 
     static getApiOptions(): any {

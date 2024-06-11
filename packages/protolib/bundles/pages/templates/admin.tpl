@@ -28,8 +28,9 @@ export default {
 
         return (<AdminPage title="{{object}}" pageSession={pageSession}>
             <DataView
+                URLTransform={getWorkspaceUrl}
                 rowIcon={Tag}
-                sourceUrl={getWorkspaceUrl(apiUrl)}
+                sourceUrl={apiUrl}
                 initialItems={initialItems}
                 numColumnsForm={1}
                 name="{{object}}"

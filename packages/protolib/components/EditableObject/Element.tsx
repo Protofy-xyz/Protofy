@@ -139,7 +139,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                         // options={["John", "Doe", "Jane", "Smith"]}
                         getDisplayField={ele._def.getDisplayField}
                         options={async (search) => {
-                            const url = ele._def.linkTo.getApiEndPoint() + (search ? '?search=' + search : '')
+                            const url = ele._def.linkTo(search)
                             const result = await API.get(url)
                             return result.data?.items ?? []
                         }}

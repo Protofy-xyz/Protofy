@@ -66,6 +66,7 @@ interface DataViewProps {
     objectProps?: EditableObjectProps | {};
     refreshOnHotReload?: boolean;
     quickRefresh?: boolean;
+    URLTransform?: (url: string) => string;
 }
 
 export const DataView = (props: DataViewProps & { ready?: boolean }) => {
@@ -159,11 +160,14 @@ const DataViewInternal = forwardRef(({
     deleteable = () => { return true },
     objectProps = {},
     refreshOnHotReload = false,
-    quickRefresh = false
+    quickRefresh = false,
+    URLTransform = (url) => url
 }: DataViewProps, ref) => {
     const displayName = (entityName ?? pluralName) ?? name
     const { query } = useRouter();
     const [state, setState] = useState(pageState ?? {})
+    sourceUrl = URLTransform(sourceUrl)
+    
     const fetch = async (fn) => {
         const data = await API.get({ url: sourceUrl, ...sourceUrlParams, ...state })
         fn(data)

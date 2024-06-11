@@ -90,8 +90,8 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.linkTo = function (model: ProtoModel<any>, getDisplayField: Function, options?: { deleteOnCascade: boolean }) {
-        this._def.linkTo = model;
+    type.prototype.linkTo = function (getUrl, getDisplayField: Function, options?: { deleteOnCascade: boolean }) {
+        this._def.linkTo = getUrl;
         this._def.getDisplayField = getDisplayField;
         this._def.linkToOptions = options ?? {};
         return this;
