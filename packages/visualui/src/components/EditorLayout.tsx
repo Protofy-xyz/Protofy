@@ -117,10 +117,17 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
           const nodeId = diff.path[0]
           const value = diff['rhs']
 
+          // Clean html is necessawy when copy & paste from other websites or apps (contains metadata).
+          const cleanHtml = (html) => {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            return tempDiv.textContent || tempDiv.innerText || '';
+          };
+
           topicParams = {
             action: 'edit-node',
             nodeId: nodeId,
-            value: value,
+            value: cleanHtml(value),
             type: type,
             field: diff.path[2],
             debounce: type == 'children'
