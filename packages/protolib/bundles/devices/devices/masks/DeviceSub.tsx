@@ -54,7 +54,7 @@ export default {
     id: 'deviceSub',
     type: 'CallExpression',
     category: "ioT",
-    keywords: ["automation", 'esp32', 'device', 'iot', 'trigger'],
+    keywords: ["automation", 'esp32', 'device', 'iot', 'trigger', 'subscribe'],
     check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.deviceSub'),
     getComponent: (node, nodeData, children) => (
         <DeviceSub node={node} nodeData={nodeData} children={children} />
