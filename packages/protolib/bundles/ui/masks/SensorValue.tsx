@@ -14,6 +14,7 @@ const SensorValueMask = ({ node = {}, nodeData = {} }: any) => {
     const [devicesData, setDevicesData] = useState<any[]>([]);
 
     let deviceName = getFieldValue("prop-device", nodeData);;
+    let deviceComponent = deviceName ? getFieldValue("prop-sensor", nodeData) : "";
 
     const getDevices = async () => {
         const { data } = await deviceRepository.list('dev')
@@ -26,6 +27,7 @@ const SensorValueMask = ({ node = {}, nodeData = {} }: any) => {
 
     const deviceNames = deviceCollection?.getNames() ?? [];
     const deviceSubsystemsNames = deviceCollection?.getSubsystemsNames(deviceName, "monitor") ?? [];
+    const subsystemMonitorNames = deviceCollection.getSubsystemHandler(deviceName, deviceComponent, "monitor") ?? [];
 
     const propsList = [
         {
@@ -42,6 +44,14 @@ const SensorValueMask = ({ node = {}, nodeData = {} }: any) => {
             "staticLabel": true,
             "type": "select",
             "data": deviceSubsystemsNames,
+            "section": "device"
+        },
+        {
+            "label": "monitor",
+            "field": "prop-monitor",
+            "staticLabel": true,
+            "type": "select",
+            "data": subsystemMonitorNames,
             "section": "device"
         },
         ...TextProps,
