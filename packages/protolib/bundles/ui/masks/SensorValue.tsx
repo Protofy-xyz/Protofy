@@ -2,12 +2,8 @@ import { Node, getFieldValue, CustomFieldsList } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Timer } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { DeviceCollection, DeviceModel } from '../../devices/models/DeviceModel';
-import { DeviceDataType } from '../../devices/models/interfaces';
-import { DeviceRepository } from '../../devices/repositories/deviceRepository';
+import { DeviceCollection } from '../../devices/models/DeviceModel';
 import { DimensionProps, LayoutProps, TextProps } from './PropsLists';
-
-const deviceRepository = new DeviceRepository()
 
 const SensorValueMask = ({ node = {}, nodeData = {} }: any) => {
     const color = useColorFromPalette(55)
@@ -24,11 +20,9 @@ const SensorValueMask = ({ node = {}, nodeData = {} }: any) => {
 
     // Device
     const deviceCollection = new DeviceCollection(devicesData);
+
     const deviceNames = deviceCollection?.getNames() ?? [];
-    const selectedDevice: DeviceDataType = deviceCollection.findByName(deviceName);
-    const selectedDeviceModel = new DeviceModel(selectedDevice)
-    // Subsystem
-    const deviceSubsystemsNames = selectedDeviceModel.getSubsystemNames('monitor') ?? [];
+    const deviceSubsystemsNames = deviceCollection?.getSubsystemsNames(deviceName, "monitor") ?? [];
 
     const propsList = [
         {
