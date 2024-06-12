@@ -5,10 +5,12 @@ import { useEdges } from 'reactflow';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { NODE_TREE } from '../toggles';
 import { DataOutput } from '../lib/types';
-import useTheme, { useNodeColor, usePrimaryColor } from '../diagram/Theme';
-import { ListOrdered, Square } from 'lucide-react';
+import useTheme, { usePrimaryColor } from '../diagram/Theme';
+import { ListOrdered, Square, ArrowDownUp } from 'lucide-react';
 import { generateBoxShadow } from '../lib/shadow';
 import { useThemeSetting } from '@tamagui/next-theme'
+import { useProtoflow } from '../store/DiagramStore';
+import { Button } from '@my/ui';
 
 const blockOffset = 200
 const _marginTop = 222
@@ -23,16 +25,19 @@ const Block = (node) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const primaryColor = usePrimaryColor()
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
-    const metaData = useFlowsStore(state => state.nodeData[id] && state.nodeData[id]['_metadata'] ? state.nodeData[id]['_metadata'] : {childWidth: 0, childHeight:0, childHeights:[]})
+    const metaData = useFlowsStore(state => state.nodeData[id] && state.nodeData[id]['_metadata'] ? state.nodeData[id]['_metadata'] : { childWidth: 0, childHeight: 0, childHeights: [] })
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const currentPath = useFlowsStore(state => state.currentPath)
+
     const nodeFontSize = useTheme('nodeFontSize')
-    const portColor = useTheme('blockPort')
+    const nodeBackgroundColor = useTheme('nodeBackgroundColor')
+
     const { resolvedTheme } = useThemeSetting()
-    
+    const { setEdges, getEdges } = useProtoflow()
+
+
     const isEmpty = !metaData.childHeight
-    const borderWidth = isEmpty? 0 : nodeFontSize / 3
-    const marginTop = _marginTop + (useTheme('nodeFontSize')/2)
+    const marginTop = _marginTop + (useTheme('nodeFontSize') / 2)
     //console.log('metadata in', node.id, metaData)
     const getBlockHeight = () => {
         if(!metaData.childHeight) return minBlockHeight
@@ -49,10 +54,24 @@ const Block = (node) => {
         })
     }
 
+    const onSwitchConnection = (index) => {
+        const prevIndex = index - 1
+        const prevBlock = 'block' + prevIndex
+        const currBlock = 'block' + index
+
+        const switchEdge = (targetHandle: string) => {
+            if (targetHandle.endsWith(prevBlock)) return targetHandle.replace(prevBlock, currBlock)
+            else if (targetHandle.endsWith(currBlock)) return targetHandle.replace(currBlock, prevBlock)
+            else return targetHandle
+        }
+
+        setEdges(edgs => edgs.map(e => ({ ...e, targetHandle: e.target == id ? switchEdge(e.targetHandle) : e.targetHandle })))
+    }
+
     let extraStyle: any = {}
     extraStyle.minHeight = height + 'px'
     extraStyle.border = 0
-    extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px':'200px'
+    extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px' : '200px'
 
     const containerColor = useTheme('containerColor')
     const typeConf = {
@@ -137,9 +156,28 @@ const Block = (node) => {
                     let pos = i && metaData && metaData && metaData.childHeight && metaData.childHeights && metaData.childHeights[i-1]? metaData.childHeights[i-1].height : 0
                     pos = pos + (nodeData.connections.length == 1 ? singleNodeOffset : marginTop)-10
                     //pos = 60 + (i * 60)
+                    const isSwitchVisible = i < nodeData.connections.length - 1 && i > 0
+                    const previousPos = i - 2 >= 0 ? (metaData.childHeights[i - 2]?.height + marginTop - 10) : (singleNodeOffset * 2)
+                    const switchPos = (pos + previousPos) / 2
+
                     return <>
-                        {connectedEdges.length > 0 && <div style={{left: (nodeFontSize/2-1)+'px', position: 'absolute', top: (pos-(nodeFontSize/4)) + 'px', width: nodeFontSize+'px', height: (nodeFontSize/2)+'px', backgroundColor: typeConf[type].color}} />}
-                        <FlowPort key={i} id={id} type='input' label='' style={{ left:isEmpty?'':(nodeFontSize)+'px',top: pos + 'px' }} handleId={'block' + i} allowedTypes={["data", "flow"]}/>
+                        {connectedEdges.length > 0 && <div style={{ left: (nodeFontSize / 2 - 1) + 'px', position: 'absolute', top: (pos - (nodeFontSize / 4)) + 'px', width: nodeFontSize + 'px', height: (nodeFontSize / 2) + 'px', backgroundColor: typeConf[type].color }} />}
+                        <FlowPort key={i} id={id} type='input' label='' style={{ left: isEmpty ? '' : (nodeFontSize) + 'px', top: pos + 'px' }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
+                        {isSwitchVisible ? <Button
+                            onPress={() => onSwitchConnection(i)}
+                            top={switchPos - 16}
+                            position='absolute'
+                            backgroundColor={nodeBackgroundColor}
+                            hoverStyle={{
+                                borderColor: typeConf[type].color,
+                            }}
+                            left={-16}
+                            borderWidth={4}
+                            borderColor={typeConf[type].color}
+                            scaleIcon={1.5}
+                            padding={"$2"}
+                            icon={<ArrowDownUp color={typeConf[type].color} />}
+                        /> : null}
                     </>
                 })}
             </div>
