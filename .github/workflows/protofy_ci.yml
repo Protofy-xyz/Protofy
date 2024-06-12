@@ -16,12 +16,15 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20.4.x'
-        cache: yarn
 
-    - name: Health check versions
-      run: |
-        node -v
-        yarn -v
+    - name: Setup yarn
+      run: npm install -g yarn
+
+    - name: Set up Node.js 20.4.x with yarn
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.4.x'
+        cache: yarn
 
     - name: Install NodeJS dependencies
       run: yarn
