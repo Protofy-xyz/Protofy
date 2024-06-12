@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
         path: ${{ runner.temp }}/testsReport.txt
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: test
     if: ${{ always() && github.event_name != 'pull_request' }} # This job runs only if the trigger is not a pull request
     steps:
