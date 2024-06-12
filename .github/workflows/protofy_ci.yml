@@ -28,11 +28,16 @@ jobs:
 
     - name: Install NodeJS dependencies
       run: yarn
-
+      
+    - name: Prepare dev
+      run: |
+        echo 'Packaging project'
+        yarn prepare-dev
+        
     - name: Start project
       run: |
         echo 'Started project'
-        yarn start > /dev/null &
+        yarn start-fast > /dev/null &
 
     - name: Healthcheck services start
       run: node .github/scripts/healthcheck-start.js
