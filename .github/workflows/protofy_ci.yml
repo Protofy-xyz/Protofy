@@ -12,11 +12,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up Node.js 22.x
-      uses: actions/setup-node@v3
+    - name: Set up Node.js 20.04.x
+      uses: actions/setup-node@v4
       with:
-        node-version: '22.x'
-        cache: 'yarn'
+        node-version: '20.04.x'
+        cache: yarn
 
     - name: Health check versions
       run: |
