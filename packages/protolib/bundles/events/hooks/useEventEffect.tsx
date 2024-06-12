@@ -21,7 +21,10 @@ export const useEventEffect = (onEvent, eventFilter?: { path?: string, from?: st
             return
         }
         const event = result.data?.items[0]?.payload
-        event.message =  JSON.stringify({payload: result.data?.items[0]?.payload})
+
+        if (!event) return
+
+        event['message'] = JSON.stringify({ payload: result.data?.items[0]?.payload })
         onEvent(event)
     }
 
@@ -35,6 +38,6 @@ export const useEventEffect = (onEvent, eventFilter?: { path?: string, from?: st
         if(initialEvent){
             readEvent();
         }
-    },[])
+    }, [eventFilter.path])
 
 }

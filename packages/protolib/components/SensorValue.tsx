@@ -33,7 +33,7 @@ export const SensorValue = React.forwardRef(({ enviroment, device, sensor, monit
         } catch (e) { }
     }
 
-    useEventEffect(onChange, { path: monitorData.getEventPath() })
+    useEventEffect(onChange, { path: monitorData.getEventPath() != "" ? monitorData.getEventPath() : null }, true)
 
     useEffect(() => {
         const updateDevices = async () => {
