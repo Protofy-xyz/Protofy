@@ -341,7 +341,7 @@ export const AutoAPI = ({
         if (!disableEvents) {
             generateEvent({
                 ...(env?{environment: env}:{}),
-                path: modelName + '/create', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                path: modelName + '/create/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
@@ -409,7 +409,7 @@ export const AutoAPI = ({
         if (!disableEvents) {
             generateEvent({
                 ...(env?{environment: env}:{}),
-                path: modelName + '/update', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                path: modelName + '/update/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: {
@@ -445,7 +445,7 @@ export const AutoAPI = ({
             if (!disableEvents) {
                 generateEvent({
                     ...(env?{environment: env}:{}),
-                    path: modelName + '/delete', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+                    path: modelName + '/delete/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                     from: 'api', // system entity where the event was generated (next, api, cmd...)
                     user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
                     payload: {

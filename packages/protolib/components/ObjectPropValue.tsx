@@ -13,8 +13,8 @@ export const ObjectPropValue = React.forwardRef(({ object, elementId, field, noV
 
     const defaultValue = noValueText ?? "n/a"
 
-    const value: any = useLastEvent({ path: object + "/update" })
-   
+    const value: any = useLastEvent({ path: object + "/update/" + elementId })
+
     return <Text ref={ref} {...props}>
         {(value && value?.payload?.data[field]) ?? defaultValue}
     </Text>;
