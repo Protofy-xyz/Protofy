@@ -49,7 +49,7 @@ export class EventModel extends ProtoModel<EventModel> {
     }
 
     getNotificationsTopic(action: string): string {
-        return `notifications/${this.getModelName()}/${action}/${this.data.path}`
+        return `notifications/${this.getModelName()}/${action}/${this.data.path}/${this.getId()}`
     }
 
 
