@@ -1,7 +1,7 @@
 import { useSubscription } from 'protolib'
 
-export const useEvent = (eventFilter) => {
-    const { message } = useSubscription('notifications/event/create/#')
+export const useEvent = (eventFilter, topic = "#") => {
+    const { message } = useSubscription('notifications/event/create/' + topic)
     
     if (message && message.message && eventFilter) {
         try {
