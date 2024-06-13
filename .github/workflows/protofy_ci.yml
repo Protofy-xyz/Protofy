@@ -45,7 +45,7 @@ jobs:
     - name: Run tests 
       run: |
         set -o pipefail
-        sudo yarn test:all | tee ${{ runner.temp }}/test_output.txt
+        yarn test:all | tee ${{ runner.temp }}/test_output.txt
 
     - name: Get test report
       if: always() # executed always even if job fails
