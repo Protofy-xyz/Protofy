@@ -30,12 +30,14 @@ export const EventsAPI = async (app, context) => {
         },
         notify: (entityModel, action) => {
             const env = entityModel.getEnvironment()
+            const id = entityModel.data.payload?.id
+            
             if(env == '*') {
                 Object.keys(context.mqtts).forEach((env) => {
-                    context.mqtts[env].publish(entityModel.getNotificationsTopic(action), entityModel.getNotificationsPayload())
+                    context.mqtts[env].publish(entityModel.getNotificationsTopic(action, id), entityModel.getNotificationsPayload())
                 })
             } else {
-                context.mqtts[env == 'dev' ? 'dev' : 'prod'].publish(entityModel.getNotificationsTopic(action), entityModel.getNotificationsPayload())
+                context.mqtts[env == 'dev' ? 'dev' : 'prod'].publish(entityModel.getNotificationsTopic(action, id), entityModel.getNotificationsPayload())
             }
         },
         disableEvents: true,

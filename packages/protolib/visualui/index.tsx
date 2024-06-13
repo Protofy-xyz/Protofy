@@ -34,6 +34,7 @@ import { Head2 } from '../components/Head2'
 import { Head3 } from '../components/Head3'
 import { Text } from '../components/Text'
 import { SensorValue } from '../components/SensorValue'
+import { ObjectPropValue } from '../components/ObjectPropValue'
 import { HeaderLink } from '../components/HeaderLink'
 import HorizontalBox from '../components/HorizontalBox'
 import HoveredGroup from '../components/HoveredGroup'
@@ -112,6 +113,7 @@ export const textPalette = {
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { rules: { canMoveIn: () => false } }),
   ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world", fontWeight: "bold", fontSize:"$16", lineHeight:"$16" }, {}, {}, true),
   ...cw(SensorValue, 'Radio', 'SensorValue', { }, uiDataText, {}),
+  ...cw(ObjectPropValue, 'Database', 'ObjectPropValue', { }, uiDataText, {}),
 }
 
 export const layoutPalette = {

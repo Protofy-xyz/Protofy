@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 import { API } from '../base/Api'
 import { DeviceCollection } from '../bundles/devices/models/DeviceModel';
 import { DeviceSubsystemMonitor } from '../bundles/devices/devices';
-import { useEventEffect } from '../bundles/events/hooks';
+import { useLastEvent } from '../bundles/events/hooks';
 
 type Props = {
     device: string,
@@ -18,7 +18,6 @@ export const SensorValue = React.forwardRef(({ enviroment, device, sensor, monit
 
     const defaultValue = noValueText ?? "n/a"
 
-    const [value, setValue] = useState(defaultValue)
     const [devices, setDevices] = useState([])
 
     const deviceCollection = new DeviceCollection(devices);
@@ -26,14 +25,7 @@ export const SensorValue = React.forwardRef(({ enviroment, device, sensor, monit
     const data = subsystem.getMonitorByName(monitor) ?? {}
     const monitorData = new DeviceSubsystemMonitor(device, sensor, data)
 
-    const onChange = (e) => {
-        try {
-            const value = JSON.parse(e.message)
-            setValue(value?.payload?.message)
-        } catch (e) { }
-    }
-
-    useEventEffect(onChange, { path: monitorData.getEventPath() != "" ? monitorData.getEventPath() : null }, true)
+    const value: any = useLastEvent({ path: monitorData.getEventPath() != "" ? monitorData.getEventPath() : null })
 
     useEffect(() => {
         const updateDevices = async () => {
@@ -46,6 +38,6 @@ export const SensorValue = React.forwardRef(({ enviroment, device, sensor, monit
     }, [])
 
     return <Text ref={ref} {...props}>
-        {value ?? defaultValue}
+        {(value && value?.payload?.message) ?? defaultValue}
     </Text>;
 })

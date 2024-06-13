@@ -48,8 +48,9 @@ export class EventModel extends ProtoModel<EventModel> {
         return '*'
     }
 
-    getNotificationsTopic(action: string): string {
-        return `notifications/${this.getModelName()}/${action}/${this.data.path}/${this.getId()}`
+    getNotificationsTopic(action: string, id?: string): string {
+        const topic = `notifications/${this.getModelName()}/${action}/${this.data.path}`
+        return topic + (id ? '/' + id : '')
     }
 
 
