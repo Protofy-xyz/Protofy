@@ -40,12 +40,12 @@ jobs:
         yarn start-fast > /dev/null &
 
     - name: Check service started
-      run: curl -s http://127.0.0.1:8000
+      run: curl --max-time 5 -s http://127.0.0.1:8000
 
     - name: Wait to be ready
       run: |
         for i in {1..60}; do
-          curl -s http://127.0.0.1:8000 && break
+          curl --max-time 5 -s http://127.0.0.1:8000 && break
           echo "Service not ready, retrying in 1s..."
           sleep 1
         done
