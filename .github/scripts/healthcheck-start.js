@@ -10,7 +10,7 @@ const healthCheck = () => { // Check system is up and ready to use
     return new Promise((resolve, reject) => {
         const isReady = () => {
             console.log('Checking if system is ready...')
-            let isEnabled = execSync(`curl -s ${DEV_SERVER_URL} | grep -q "__next" && echo true || echo false`, { encoding: 'utf-8' }).trim()
+            let isEnabled = execSync(`curl --max-time 10 -s ${DEV_SERVER_URL} | grep -q "__next" && echo true || echo false`, { encoding: 'utf-8' }).trim()
             console.log('isEnabled?', isEnabled)
             if (isEnabled === 'true') {
                 console.log('System Ready!')
