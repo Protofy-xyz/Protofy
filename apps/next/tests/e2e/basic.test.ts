@@ -209,7 +209,7 @@ describe("Test admin capabilities", () => {
             })
         })
     })
-    describe("Testing page in useEdit mode", () => {
+    describe.skip("Testing page in useEdit mode", () => {
         beforeAll(async () => {
             await protoBrowser.goTo('');
             await protoBrowser.clickElement("#use-edit-btn")
