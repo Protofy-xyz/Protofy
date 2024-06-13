@@ -12,7 +12,6 @@ const ObjectPropValueMask = ({ node = {}, nodeData = {} }: any) => {
     const [fields, setFields] = useState<any[]>([]);
 
     const objectsNames = objects.map((item: any) => item.name);
-    const fieldsNames = fields.map((item: any) => item.name);
 
     let object = getFieldValue("prop-object", nodeData);;
 
@@ -33,8 +32,9 @@ const ObjectPropValueMask = ({ node = {}, nodeData = {} }: any) => {
         const objectData = objects.find((item: any) => item.name == object)
         if (!objectData?.id) return
         const { data } = await API.get("/adminapi/v1/objects/" + objectData.id)
-
-        // setFields(data?.keys);
+        const keys = data?.keys
+        const stringFields = Object.keys(keys).filter((item: any) => ["string", "number", "date"].includes(keys[item].type))
+        setFields(stringFields);
     }
 
     const propsList = [
@@ -58,8 +58,8 @@ const ObjectPropValueMask = ({ node = {}, nodeData = {} }: any) => {
             "label": "field",
             "field": "prop-field",
             "staticLabel": true,
-            "type": "input",
-            // "data": fieldsNames,
+            "type": "select",
+            "data": fields,
             "section": "device"
         },
         ...TextProps,
