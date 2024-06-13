@@ -39,17 +39,22 @@ jobs:
         echo 'Started project'
         yarn start-fast > /dev/null &
 
-    - name: Check service started
-      run: curl --max-time 5 -s http://127.0.0.1:8000
-
     - name: Wait to be ready
       run: |
         for i in {1..60}; do
-          curl --max-time 5 -s http://127.0.0.1:8000 && break
-          echo "Service not ready, retrying in 1s..."
-          sleep 1
+          response=$(curl --max-time 10 -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000)
+          if [ "$response" -eq 200 ]; then
+            echo "Service ready!"
+            exit 0
+          else
+            echo "Service not ready (HTTP $response), retrying in 1s..."
+            sleep 1
+          fi
         done
-        echo "Service ready!"
+        echo "Service failed to start in time"
+        echo "Service logs:"
+        cat service.log
+        exit 1
       
     - name: Healthcheck services start
       if: false # skip
