@@ -1,7 +1,7 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonIcon, ButtonProps, Tooltip } from 'tamagui'
 import { Center, useRemoteStateList, ObjectGrid, DataTableCard, MapView, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
 import { forwardRef, useContext, useEffect, useState } from 'react'
-import { PlusCircle, Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye } from '@tamagui/lucide-icons'
+import { PlusCircle, Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
@@ -18,6 +18,8 @@ import { InteractiveIcon } from './InteractiveIcon';
 import { ItemMenu } from './ItemMenu';
 import { useRouter } from 'next/router';
 import ErrorMessage from './ErrorMessage';
+import { components } from 'react-select/dist/declarations/src';
+import { DataSheet } from './DataSheet';
 
 interface DataViewProps {
     onSelectItem?: (item: any) => void;
@@ -51,13 +53,14 @@ interface DataViewProps {
     dataTableRawProps?: any;
     dataTableListProps?: any;
     dataTableGridProps?: any;
+    dataTableSheetProps?: any;
     dataMapProps?: any;
     extraFieldsForms?: any;
     extraFieldsFormsEdit?: any;
     extraFieldsFormsAdd?: any;
     customFieldsForms?: any;
     defaultView?: string;
-    disableViews?: string[];
+    disableViews?: Array<"list" | "sheet" | "grid" | "raw" | "map" | string>;
     toolBarContent?: any;
     onAddButton?: any;
     extraMenuActions?: any[];
@@ -146,6 +149,7 @@ const DataViewInternal = forwardRef(({
     dataTableRawProps = {},
     dataTableListProps = {},
     dataTableGridProps = {},
+    dataTableSheetProps = {},
     dataMapProps = {},
     extraFieldsForms = {},
     extraFieldsFormsEdit = {},
@@ -249,6 +253,23 @@ const DataViewInternal = forwardRef(({
                 state,
                 disableItemSelection,
                 ...dataTableListProps
+            }
+        },
+        {
+            name: 'sheet',
+            icon: Sheet,
+            component: DataSheet,
+            props: {
+                model,
+                items: items?.data?.items,
+                sourceUrl,
+                name,
+                mt: "$2",
+                disableItemSelection,
+                lineSelect: true,
+                fillWidth: true,
+                onRowSelect: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
+                ...dataTableSheetProps
             }
         },
         {

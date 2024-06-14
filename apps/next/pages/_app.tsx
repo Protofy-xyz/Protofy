@@ -12,6 +12,8 @@ import 'protolib/styles/datatable.css';
 import '../chat.css'
 import '../map.css'
 import '../chonky.css'
+import "@blueprintjs/table/lib/css/table.css";
+import '../blueprint.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import 'react-chat-widget/lib/styles.css';
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'

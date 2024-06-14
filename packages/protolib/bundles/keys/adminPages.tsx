@@ -15,9 +15,8 @@ export default {
 
       return (<AdminPage title="Keys" pageSession={pageSession}>
         <DataView
-                integratedChat
                 enableAddToInitialData
-                disableViewSelector
+                disableViews={["grid"]}
                 defaultView={'list'}
                 rowIcon={Key}
                 sourceUrl={sourceUrl}

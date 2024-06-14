@@ -11,8 +11,10 @@ interface ZodExtensions {
     linkTo(getElements: Function, getId: Function, readIds: Function, displayKey?: string | Function, options?: { deleteOnCascade: boolean }): this;
     label(caption: string): this;
     hint(hintText: string): this;
+    synthesize(fn: Function): this;
     display(views?: string[] | undefined): this;
-    hidden(): this;
+    columnWidth(width: number): this;
+    hidden(views?: Array<"list" | "sheet" | "preview" | "add" | "edit" >): this;
     color(): this;
     file({ initialPath, extensions }: { initialPath?: string, extensions?: string[] }): this;
     generate(val: any, force?: boolean): this;
@@ -99,6 +101,11 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
+    type.prototype.synthesize = function (fn) {
+        this._def.synthesize = fn;
+        return this;
+    }
+
     type.prototype.label = function (caption: string) {
         this._def.label = caption;
         return this;
@@ -125,8 +132,13 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.hidden = function () {
-        this._def.display = ['none']
+    type.prototype.columnWidth = function (width: number) {
+        this._def.columnWidth = width;
+        return this;
+    };
+
+    type.prototype.hidden = function (views?: Array<"list" | "sheet" | "preview" | "add" | "edit">) {
+        this._def.hidden = !views ? ['*'] : views;
         return this;
     }
 

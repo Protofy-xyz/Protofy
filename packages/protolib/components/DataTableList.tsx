@@ -1,4 +1,4 @@
-import { Checkbox, Stack, Theme, XStack, Circle, Spacer } from "tamagui"
+import { Checkbox, Stack, Theme, XStack, Circle, Spacer, YStack } from "tamagui"
 import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
 import { CheckCheck, Check, Pencil } from '@tamagui/lucide-icons'
@@ -6,6 +6,34 @@ import { ItemMenu } from "./ItemMenu";
 import { usePageParams } from 'protolib/next'
 import { InteractiveIcon } from "./InteractiveIcon";
 import { Chip } from "./Chip";
+
+export const getFieldPreview = (key, row, def, plain?) => {
+    if (def?.color) {
+        return <Chip color={"$gray5"}>
+            <XStack ai="center" height={20}>
+                <Circle size={12} backgroundColor={row[key]} />
+                <Spacer size={5} />
+                {row[key] && row[key].toUpperCase ? row[key].toUpperCase() : row[key]}
+            </XStack>
+
+        </Chip>
+    }
+
+    if(def?.typeName === 'ZodBoolean') {
+        return row[key] ? 'true' : 'false'
+    }
+
+    if(def?.typeName === 'ZodArray') {
+        if(plain) {
+            return row[key] && row[key].length > 0 && row[key].join(', ')
+        }
+        return row[key] && row[key].length ? <XStack space={"$1"}>
+            {row[key].map((r,i) => <Chip key={i} text={r} color={'$color5'} />)}
+        </XStack> : ''
+    }
+
+    return row[key]
+}
 
 export const DataTableList = ({
     sourceUrl,
@@ -39,33 +67,25 @@ export const DataTableList = ({
 
     const fields = model.getObjectSchema().isDisplay('table')
 
-    const getFieldPreview = (key, row) => {
-        const field = fields.shape[key]
-        if (field._def?.color) {
-            return <Chip color={"$gray5"}>
-                <XStack ai="center" height={20}>
-                    <Circle size={12} backgroundColor={row[key]} />
-                    <Spacer size={5} />
-                    {row[key] && row[key].toUpperCase ? row[key].toUpperCase() : row[key]}
-                </XStack>
-
-            </Chip>
-        }
-        return row[key]
-    }
-
     const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean', 'ZodDate']
     const cols = columns ?? DataTable2.columns(
         ...(
             Object.keys(fields.shape)
-                .filter(key => validTypes.includes(fields.shape[key]._def?.typeName))
-                .map(key =>
-                    DataTable2.column(
+                .filter(key => {
+                    const def = fields.shape[key]._def?.innerType?._def ?? fields.shape[key]._def
+
+                    if(def?.typeName === 'ZodArray') {
+                        return validTypes.includes(def?.type?._def?.typeName)
+                    }
+                    return validTypes.includes(def?.typeName)
+                }).map(key => {
+                    const def = fields.shape[key]._def?.innerType?._def ?? fields.shape[key]._def
+                    return DataTable2.column(
                         fields.shape[key]._def?.label ?? key,
-                        row => getFieldPreview(key, row),
+                        row => getFieldPreview(key, row, def),
                         fields.shape[key]._def?.indexed ? key : false
                     )
-                )
+                })
         )
     )
     return <XStack pt="$1" flexWrap='wrap'>

@@ -57,9 +57,7 @@ export default {
         <DataView
           quickRefresh={true}
           hideAdd
-          integratedChat
           enableAddToInitialData
-          disableViewSelector
           defaultView={'grid'}
           rowIcon={Cog}
           sourceUrl={sourceUrl}

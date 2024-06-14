@@ -86,7 +86,6 @@ export default {
                     </YStack>
                 </AlertDialog>
                 <DataView
-                    integratedChat
                     rowIcon={entityName == 'Application' ? DatabaseBackup : Database}
                     sourceUrl={databasesSourceUrl+(env?'?env='+env: '')}
                     initialItems={initialItems}

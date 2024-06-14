@@ -90,7 +90,9 @@ export class ProtoSchema {
         const validFields = {}
         Object.keys(this.shape).forEach(k => {
             if(!this.shape[k]._def.display || (this.shape[k]._def.display.includes('*')) || this.shape[k]._def.display.includes(displayType)) {
-                validFields[k] = this.shape[k]
+                if(!this.shape[k]._def.hidden || (!this.shape[k]._def.hidden.includes('*') && !this.shape[k]._def.hidden.includes(displayType))) {
+                    validFields[k] = this.shape[k]
+                }
             }
         })
         return new ProtoSchema(validFields)

@@ -42,15 +42,15 @@ export default {
               z.literal("")
             ])).generateOptions(() => workspaces.data?.items.map(obj => obj.name)).after('name'),
           }}
-          columns={DataTable2.columns(
-            DataTable2.column("name", row => row.name, "name", undefined, true, '250px'),
-            DataTable2.column("workspaces", row => row.workspaces, false, (row) =>
-              Object.keys(row?.workspaces ?? []).length
-                ? Object.keys(row.workspaces).map((k, i) =>
-                  <Chip ml={i ? '$2' : '$0'} key={k} text={row.workspaces[k]} color={'$color5'} />)
-                : <Chip text='empty' color={'$gray5'} />,
-              true, '200px')
-          )}
+          // columns={DataTable2.columns(
+          //   DataTable2.column("name", row => row.name, "name", undefined, true, '250px'),
+          //   DataTable2.column("workspaces", row => row.workspaces, false, (row) =>
+          //     row?.workspaces?.length
+          //       ? row.workspaces.map((workspace, i) =>
+          //         <Chip ml={i ? '$2' : '$0'} key={i} text={workspace} color={'$color5'} />)
+          //       : "",
+          //     true, '200px')
+          // )}
           model={GroupModel}
           pageState={pageState}
           icons={GroupIcons}
