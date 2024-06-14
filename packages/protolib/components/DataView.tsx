@@ -265,6 +265,7 @@ const DataViewInternal = forwardRef(({
                 sourceUrl,
                 name,
                 mt: "$2",
+                mx: "$4",
                 disableItemSelection,
                 lineSelect: true,
                 fillWidth: true,

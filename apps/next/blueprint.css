@@ -1,5 +1,5 @@
 .bp5-table-container {
-    border-top: 1px solid var(--gray5);
+    border-top: 1px solid var(--gray7);
     box-shadow: none;
 }
 
@@ -12,6 +12,16 @@
     color: var(--color10) !important;
     font-family: Inter;
     font-weight: 500;
+}
+
+.bp5-table-top-container {
+    border-left: 1px solid var(--gray7);
+    border-right: 1px solid var(--gray7);
+}
+
+.bp5-table-bottom-container {
+    border-left: 1px solid var(--gray7);
+    border-right: 1px solid var(--gray7);
 }
 
 .bp5-dark .bp5-table-column-headers {

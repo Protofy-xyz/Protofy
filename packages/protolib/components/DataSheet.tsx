@@ -52,7 +52,7 @@ export const DataSheet = ({ items, model, sourceUrl, name, lineSelect, sheetProp
         const resizeObserver = new ResizeObserver(() => {
             if(fillWidth) {
                 const totalWidth = columnWidths.reduce((acc, width) => acc + width, 0)
-                const availWidth = containerRef.current.offsetWidth - 30
+                const availWidth = containerRef.current.offsetWidth - 32
                 if(totalWidth < availWidth) {
                     //get the value for multiplier, so totalWidth * multiplier = availWidth
                     setMultiplier(availWidth / totalWidth)
