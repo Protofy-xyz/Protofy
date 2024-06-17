@@ -40,7 +40,7 @@ const { name, prefix } = Objects.{{object}}.getApiOptions();
 
 const idField = Objects.{{object}}.getIdField()
 
-const spreadsheetId = '1hC_ZxkO0ZbMgnqgVei6IjrO6rpx_24ZUyaWiOjQAed4';
+const spreadsheetId = '{{param}}';
 
 const getCredentials = async () => {
     const key = await API.get('/adminapi/v1/keys/google_key?token='+getServiceToken())

@@ -43,6 +43,25 @@ export const apiTemplates = {
             }
             return
         }
+    },
+    "automatic-crud-google-sheet": {
+        id: "automatic-crud-google-sheet",
+        name: "Object storage (Google Sheets)",
+        description: 'Create automations to store and retrieve objects from Google Sheets',
+        icon: RefreshCcwDot,
+        extraFields: (objects) => ({
+            object: z.union([z.literal("without object"), ...(objects.data.items.map(o => z.literal(o.name)))] as any).after('name'),
+            param: z.string().label('Google Sheets ID').after('name'),
+        }),
+        extraValidation: (data) => {
+            if (!Object.keys(data).includes('object')) {
+                return { error: "object cant be empty" }
+            }
+            if (!Object.keys(data).includes('param')) {
+                return { error: "spreadsheetId cant be empty" }
+            }
+            return
+        }
     }
 }
 
