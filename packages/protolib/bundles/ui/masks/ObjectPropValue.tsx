@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Node, CustomFieldsList, getFieldValue } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Timer } from 'lucide-react';
+import { Database } from 'lucide-react';
 import { DimensionProps, LayoutProps, TextProps } from './PropsLists';
 import { API } from 'protolib/base'
 
@@ -80,7 +80,7 @@ const ObjectPropValueMask = ({ node = {}, nodeData = {} }: any) => {
 
     return (
         <Node
-            icon={Timer}
+            icon={Database}
             node={node}
             isPreview={!node.id}
             title='ObjectPropValue'
