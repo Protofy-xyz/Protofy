@@ -128,10 +128,11 @@ export type EditableObjectProps = {
     error?: any,
     setError?: Function,
     externalErrorHandling?: Boolean,
-    URLTransform?: Function
+    URLTransform?: Function,
+    disableAutoChangeMode?: Boolean
 }
 
-export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, URLTransform = (url) => url, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, URLTransform = (url) => url, disableAutoChangeMode = false, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [prevCurrentMode, setPrevCurrentMode] = useState('')
@@ -274,7 +275,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
                                     setLoading(true)
                                     try {
                                         await onSave(originalData.data, data.data)
-                                        if (prevCurrentMode != currentMode) {
+                                        if (prevCurrentMode != currentMode && !disableAutoChangeMode) {
                                             setCurrentMode(prevCurrentMode as any)
                                         }
                                     } catch (e) {

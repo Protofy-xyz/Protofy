@@ -62,6 +62,7 @@ export { default as RainbowText } from "./components/RainbowText";
 export * from "./components/IconStack";
 export { default as MainButton } from "./components/MainButton";
 export * from "./components/ObjectPropValue";
+export * from "./components/ObjectForm";
 export * from "./components/SensorValue";
 export * from "./components/Head1";
 export * from "./components/Text";
