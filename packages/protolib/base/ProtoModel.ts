@@ -98,6 +98,15 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         })
     }
 
+    static getObjectFields() {
+        return this._newInstance({}).getObjectFields()
+    }
+
+    getObjectFields() {
+        return this.objectSchema.getFields()
+    }
+
+
     static getModelName() {
         return this._newInstance({}).getModelName()
     }
