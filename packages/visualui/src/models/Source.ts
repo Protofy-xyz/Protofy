@@ -182,7 +182,7 @@ export class Source {
                 custom = { ...custom, [attrKey]: nodeKind }
             }
             if (contextId && attrKey) {
-                custom = { ...custom, context : { ...custom?.context, [attrKey]: contextId }}
+                custom = { ...custom, context: { ...custom?.context, [attrKey]: contextId } }
             }
         })
         // GET JsxText Children
@@ -476,6 +476,14 @@ export class Source {
                     case 'Identifier':
                         if (this.metadata?.context && this.metadata?.context[expression.getText()] != undefined) {
                             atrVal = this.metadata?.context[expression.getText()]
+                            contextId = expression.getText()
+                            break
+                        }
+                    case 'PropertyAccessExpression':
+                        const expressionName = expression.getName()
+                        const expressionIdentifier = expression.getExpression()?.getText()
+                        if (this.metadata?.context && this.metadata?.context[expressionIdentifier][expressionName] != undefined) {
+                            atrVal = this.metadata?.context[expressionIdentifier][expressionName]
                             contextId = expression.getText()
                             break
                         }
