@@ -47,7 +47,7 @@ export const getBaseConfig = (name, process, token?, config?) => {
       transport: {
         targets: [
           //prettify logs if in server-side, and only in development mode
-          ...(process && process.env.NODE_ENV === 'development' && typeof window === "undefined" ? [{
+          ...(process && typeof window === "undefined" ? [{
             target: 'pino-pretty',
             level: 'debug',
             options: {
