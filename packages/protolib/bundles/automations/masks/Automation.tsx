@@ -5,7 +5,7 @@ import React from 'react';
 import { SizableText, Spinner, XStack } from 'tamagui';
 import { API } from 'protolib'
 import { SiteConfig} from 'app/conf'
-import { useWorkspaceEnv } from 'protolib/packages/protolib/lib/useWorkspaceEnv';
+import { useWorkspaceEnv } from 'protolib';
 
 const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(9)
