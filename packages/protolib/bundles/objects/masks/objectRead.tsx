@@ -1,4 +1,4 @@
-import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback } from 'protoflow';
+import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, getFieldValue } from 'protoflow';
 import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { API } from 'protolib/base'
@@ -6,6 +6,10 @@ import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 
 const objectRead = (node: any = {}, nodeData = {}) => {
     const [objects, setObjects] = useState<any[]>([]);
+    const [elementsIds, setElementsIds] = useState<any[]>([]);
+
+    let object = getFieldValue("param-1", nodeData);;
+
     const color = useColorFromPalette(1)
 
     const getObjects = async () => {
@@ -13,17 +17,30 @@ const objectRead = (node: any = {}, nodeData = {}) => {
         setObjects(data?.items.map((item: any) => item.name));
     }
 
+    const getElements = async () => {
+        const { data } = await API.get('/api/v1/' + object + '?all=1')
+
+        const items = data?.items ?? []
+        setElementsIds(items.map((item: any) => item.id));
+    }
+
     useEffect(() => {
-        if(node.id) getObjects()
+        if (node.id) getObjects()
     }, [])
+
+    useEffect(() => {
+        if (object) {
+            getElements()
+        }
+    }, [object, objects])
 
     return (
         <Node icon={Search} node={node} isPreview={!node?.id} title='Object Read' id={node.id} color={color} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Object', field: 'param-1', type: 'select', static: true, data: objects }]} />
-            <NodeParams id={node.id} params={[{ label: 'Object ID', field: 'param-2', type: 'input' }]} />
-            <FallbackPortList 
+            <NodeParams id={node.id} params={[{ label: 'Object ID', field: 'param-2', type: 'input', data: { options: elementsIds } }]} />
+            <FallbackPortList
                 height='70px'
-                node={node} 
+                node={node}
                 fallbacks={[{
                     "name": "onread",
                     "label": "onRead(item)",
@@ -38,7 +55,7 @@ const objectRead = (node: any = {}, nodeData = {}) => {
                     "preText": "async (error) => ",
                     "fallbackText": "null",
                     "postText": ""
-                }]} 
+                }]}
                 startPosX={125}
             />
         </Node>
