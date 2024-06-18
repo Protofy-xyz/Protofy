@@ -480,9 +480,9 @@ export class Source {
                             break
                         }
                     case 'PropertyAccessExpression':
-                        const expressionName = expression.getName()
-                        const expressionIdentifier = expression.getExpression()?.getText()
-                        if (this.metadata?.context && this.metadata?.context[expressionIdentifier][expressionName] != undefined) {
+                        const expressionName = expression.getName ? expression?.getName() : null
+                        const expressionIdentifier = expression.getExpression ?  expression?.getExpression()?.getText() : null
+                        if (expressionName && expressionIdentifier && this.metadata?.context && this.metadata?.context[expressionIdentifier][expressionName] != undefined) {
                             atrVal = this.metadata?.context[expressionIdentifier][expressionName]
                             contextId = expression.getText()
                             break

@@ -242,5 +242,6 @@ export function formatText(unformatedText: string): string {
 }
 
 export const getValueFromPath = (obj, path) => {
-    return path.split('.').reduce((current, key) => current ? current[key] : undefined, obj);
+    if (!path?.split) return path
+    return path.split('.')?.reduce((current, key) => current ? current[key] : undefined, obj);
 }
