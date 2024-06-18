@@ -45,7 +45,7 @@ export const CustomFieldType = ({ item, node, nodeData }) => {
         ]
     }
 
-    if (nodeData[item.field]?.kind == "Identifier") {
+    if (nodeData[item.field]?.kind == "Identifier" && (!itemData.pre && !itemData.post)) {
         itemData['type'] = "input"
     }
 

@@ -13,12 +13,14 @@ export default ({ nodeData = {}, item, node }) => {
 
     const { field, label, type, data, menuActions } = item
 
-    const value = getFieldValue(field, nodeData)
+    const value = getFieldValue(field, nodeData) ?? ""
+    const pre = item.pre ? item.pre : (str) => str
+    const post = item.post ? item.post : (str) => str
 
     const options = (data ?? []).map(opt => ({ label: opt, value: opt }))
 
     const onValueChange = (val) => {
-        setNodeData(node.id, { ...nodeData, [field]: getDataFromField(val, field, nodeData) })
+        setNodeData(node.id, { ...nodeData, [field]: getDataFromField(post(val), field, nodeData) })
     }
 
     const getInput = () => {
@@ -29,7 +31,7 @@ export default ({ nodeData = {}, item, node }) => {
                     <Select
                         onChange={data => onValueChange(data.value)}
                         defaultValue={{
-                            value: value,
+                            value: pre(value),
                             label: value
                         }}
                         options={options} />
