@@ -144,9 +144,7 @@ const getDB = (path, req, session) => {
 
       await setSchema(filePath, result, value, req)
       //if api is selected, create an autoapi for the object
-      console.log("VALUEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", value.databaseType, value)
       const templateName = value.databaseType === "Google Sheets" ? "automatic-crud-google-sheet" : value.databaseType === "LevelDB" ? "automatic-crud" : "automatic-crud-storage"
-      console.log("TEMPLATE NAMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", templateName)
       if (value.api && session) {
         const objectApi = APIModel.load({
           name: value.name,

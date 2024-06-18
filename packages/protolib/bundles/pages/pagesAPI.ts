@@ -137,6 +137,7 @@ const getDB = (path, req, session) => {
                 ...value,
                 route: route,
                 permissions: value.permissions ? JSON.stringify(value.permissions) : '[]',
+                rawObject: value.object,
                 object: object,
                 _object: object.toLowerCase()
               }
