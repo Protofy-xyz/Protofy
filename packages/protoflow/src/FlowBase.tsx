@@ -141,7 +141,7 @@ const FlowsBase = ({
     const edgeTypes = useMemo(() => {
         return { custom: (props) => CustomEdge(props, bridgeNode) }
     }, []);
-    
+
     const extraStateData = { nodePreview: nodePreview, flowsHeight: diagramRef.current?.offsetHeight }
 
     const [nodes, setNodes, onNodesChange] = useProtoNodesState(initialNodes, extraStateData);
@@ -324,7 +324,7 @@ const FlowsBase = ({
             return total
         }, { nodes: nodes, edges: edges, nodeData: nodeData })
     }
-    
+
     const onSaveNodes = async (preview?) => {
         const tree = getTree(Object.assign({}, nodeData));
         var content
@@ -502,6 +502,7 @@ const FlowsBase = ({
                     nodeId,
                     param,
                     value,
+                    kind: payload.kind,
                     deleteKey: payload.deleteKey
                 }
                 publish('flow/editor', topicParams)
@@ -550,6 +551,7 @@ const FlowsBase = ({
 
             let value
             let param
+            let kind
             if (type == 'JsxElement' || type == 'JsxSelfClosingElement') {
                 let isProp
                 if (diff.path[2] == 'key') {
@@ -566,13 +568,15 @@ const FlowsBase = ({
                     isProp = !param.includes('child');
                     if (isProp) {
                         param = nodeData[nodeId]['prop-' + param]?.key ?? param
+                        kind = nodeData[nodeId]['prop-' + param]?.kind
                     }
                 }
                 payload = {
                     ...payload,
                     param,
                     value,
-                    isProp
+                    isProp,
+                    kind
                 }
             }
             else {

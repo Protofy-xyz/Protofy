@@ -240,3 +240,7 @@ export function formatText(unformatedText: string): string {
     } catch (e) { console.error('Could not format text. Error: ' + e) }
     return formatedText ?? unformatedText
 }
+
+export const getValueFromPath = (obj, path) => {
+    return path.split('.').reduce((current, key) => current ? current[key] : undefined, obj);
+}

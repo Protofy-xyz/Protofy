@@ -6,7 +6,7 @@ import Diff from 'deep-diff'
 import { Source } from "app/models";
 import { withTopics } from "react-topics";
 import ErrorBoundary from './ErrorBoundary'
-import { notify, computePreviousPositions } from "../utils/utils";
+import { notify, computePreviousPositions, getValueFromPath } from "../utils/utils";
 import { Stack, Spinner } from "@my/ui"
 import { useVisualUiComms } from "../visualUiHooks";
 import { frames } from "../utils/frames"
@@ -220,7 +220,10 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
     ndsWithContext.forEach(nd => {
       var ctx = currNodes[nd].custom?.context ?? {}
       Object.keys(ctx).forEach(prop => {
-        actions.setProp(nd, (props) => props[prop] = metadata.context[prop])
+        actions.setProp(nd, (props) => {
+          const value = getValueFromPath(ctx[prop], metadata.context)
+          return props[prop] = value
+        })
       })
     })
     setPreviousNodes(JSON.parse(query.serialize()))
@@ -231,7 +234,7 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
   }, [selectedNodeId])
 
   // udpate state based on topics
-  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'], contextAtom, metadata.context)
+  useVisualUiComms({ actions, query }, { resolveComponentsDir, appendNewNodeToTree }, setPreviousNodes, data['flow/editor'], { atom: contextAtom, ui: metadata.context })
 
   useEffect(() => {
     actions.setOptions(options => options['skipTopic'] = false)
