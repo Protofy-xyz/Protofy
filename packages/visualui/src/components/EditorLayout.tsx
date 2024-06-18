@@ -221,7 +221,7 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
       var ctx = currNodes[nd].custom?.context ?? {}
       Object.keys(ctx).forEach(prop => {
         actions.setProp(nd, (props) => {
-          const value = getValueFromPath(ctx[prop], metadata.context)
+          const value = getValueFromPath(metadata.context, ctx[prop])
           return props[prop] = value
         })
       })
