@@ -11,6 +11,9 @@ export const palettes = {
         layout: {
             ...protolibPalette.atoms.layout
         },
+        external: {
+            ...protolibPalette.atoms.external
+        },
         miscellany: {
             ...protolibPalette.atoms.miscellany
         },

@@ -35,6 +35,7 @@ import { Head3 } from '../components/Head3'
 import { Text } from '../components/Text'
 import { SensorValue } from '../components/SensorValue'
 import { ObjectPropValue } from '../components/ObjectPropValue'
+import { ObjectForm } from '../components/ObjectForm'
 import { HeaderLink } from '../components/HeaderLink'
 import HorizontalBox from '../components/HorizontalBox'
 import HoveredGroup from '../components/HoveredGroup'
@@ -111,9 +112,13 @@ export const textPalette = {
   ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, uiDataText, {}, true),
   ...cw(Text, 'Type', 'Text', { children: "hello" }, uiDataText, {}, true),
   ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { rules: { canMoveIn: () => false } }),
-  ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world", fontWeight: "bold", fontSize:"$16", lineHeight:"$16" }, {}, {}, true),
-  ...cw(SensorValue, 'Radio', 'SensorValue', { }, uiDataText, {}),
-  ...cw(ObjectPropValue, 'Database', 'ObjectPropValue', { }, uiDataText, {}),
+  ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world", fontWeight: "bold", fontSize: "$16", lineHeight: "$16" }, {}, {}, true),
+}
+
+export const external = {
+  ...cw(SensorValue, 'Radio', 'SensorValue', {}, uiDataText, {}),
+  ...cw(ObjectPropValue, 'Database', 'ObjectPropValue', {}, uiDataText, {}),
+  ...cw(ObjectForm, 'ListTodo', 'ObjectForm', { model: { value: "Objects.", kind: 'PropertyAccessExpression' } })
 }
 
 export const layoutPalette = {
@@ -289,7 +294,8 @@ export default {
     basic: basicPalette,
     text: textPalette,
     layout: layoutPalette,
-    miscellany: miscellanyPalette,
+    external: external,
+    miscellany: miscellanyPalette
   },
   molecules,
 }

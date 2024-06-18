@@ -7,6 +7,7 @@ import ButtonSimple from "./ButtonSimple";
 import Input from "./Input";
 import SensorValue from "./SensorValue";
 import ObjectPropValue from "./ObjectPropValue";
+import ObjectForm from "./ObjectForm";
 
 export default {
     dynamic: [
@@ -20,6 +21,7 @@ export default {
         ButtonSimple,
         SensorValue,
         ObjectPropValue,
+        ObjectForm,
         Input
     ]
 }
