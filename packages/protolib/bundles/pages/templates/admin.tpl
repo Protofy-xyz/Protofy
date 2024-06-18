@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
-const {name, prefix} = Objects.{{_object}}.getApiOptions()
+const {name, prefix} = Objects.{{object}}.getApiOptions()
 const apiUrl = prefix + name
 
 Protofy("object", "{{_object}}")
@@ -34,7 +34,7 @@ export default {
                 initialItems={initialItems}
                 numColumnsForm={1}
                 name="{{object}}"
-                model={Objects.{{_object}} } 
+                model={Objects.{{object}} } 
                 pageState={pageState}
                 icons={Icons}
             />
