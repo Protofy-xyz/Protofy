@@ -61,7 +61,7 @@ export default Protofy("code", async (app: Application, context) => {
         getDB: (path, req, session) => {
             const db = {
                 async *iterator() {
-                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, idField, Objects.{{object}}.getObjectFields())
+                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, Objects.{{object}}.getObjectFields())
                     const elements = await client.getSpreadSheetElements()
                     for (const element of elements) {
                         yield [element.id, JSON.stringify(element)];
@@ -69,17 +69,17 @@ export default Protofy("code", async (app: Application, context) => {
                 },
 
                 async put(key, value) {
-                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, idField, Objects.{{object}}.getObjectFields())
+                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, Objects.{{object}}.getObjectFields())
                     return client.put(key, value)
                 },
 
                 async get(key) {
-                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, idField, Objects.{{object}}.getObjectFields())
+                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, Objects.{{object}}.getObjectFields())
                     return client.get(key)
                 },
 
                 async del(key) {
-                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, idField, Objects.{{object}}.getObjectFields())
+                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, Objects.{{object}}.getObjectFields())
                     client.deleteId(key)
                 }
             };

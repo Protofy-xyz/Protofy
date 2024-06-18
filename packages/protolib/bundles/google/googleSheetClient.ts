@@ -6,7 +6,8 @@ export class GoogleSheetClient {
     idField
     objFields
     sheetName
-    constructor(credentials, spreadsheetId, idField, objFields) {
+    sheets
+    constructor(credentials, spreadsheetId, sheetName, idField, objFields) {
         this.auth = new google.auth.GoogleAuth({
             credentials,
             scopes: [
@@ -16,14 +17,78 @@ export class GoogleSheetClient {
         this.spreadsheetId = spreadsheetId
         this.idField = idField
         this.objFields = objFields
-        this.sheetName = 'Sheet1'
+        this.sheetName = sheetName
+
+        this.sheets = google.sheets({ version: 'v4', auth: this.auth });
+    }
+
+    async sheetExists() {
+        try {
+            const response = await this.sheets.spreadsheets.get({
+                spreadsheetId: this.spreadsheetId
+            });
+
+            const sheets = response.data.sheets;
+            const sheet = sheets.find(sheet => sheet.properties.title === this.sheetName);
+
+            return sheet !== undefined;
+        } catch (error) {
+            console.error('Error checking if sheet exists:', error);
+            return false;
+        }
+    }
+
+    async createSheet() {
+        try {
+            await this.sheets.spreadsheets.batchUpdate({
+                spreadsheetId: this.spreadsheetId,
+                requestBody: {
+                    requests: [
+                        {
+                            addSheet: {
+                                properties: {
+                                    title: this.sheetName
+                                }
+                            }
+                        }
+                    ]
+                }
+            });
+        } catch (error) {
+            console.error('Error creating sheet:', error);
+        }
+    }
+
+    async initialize() {
+        if (!(await this.sheetExists())) {
+            await this.createSheet();
+            const range = this.sheetName + '!A1:Z1';
+            try {
+                const response = await this.sheets.spreadsheets.values.get({
+                    spreadsheetId: this.spreadsheetId,
+                    range
+                });
+                const rows = response.data.values;
+                if (!rows || rows.length === 0) {
+                    await this.sheets.spreadsheets.values.append({
+                        spreadsheetId: this.spreadsheetId,
+                        range: this.sheetName + '!A:Z',
+                        valueInputOption: 'USER_ENTERED',
+                        requestBody: {
+                            values: [this.objFields]
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error retrieving data from the sheet:', error);
+            }
+        }
     }
 
     async getAllSheet() {
-        const sheets = google.sheets({ version: 'v4', auth: this.auth });
-
+        this.initialize()
         const range = this.sheetName + '!A:Z';
-        return await sheets.spreadsheets.values.get({
+        return await this.sheets.spreadsheets.values.get({
             spreadsheetId: this.spreadsheetId,
             range
         });
@@ -82,10 +147,9 @@ export class GoogleSheetClient {
     async deleteId(id) {
         const range = await this.findSpreeadSheetElement(id)
         if (range) {
-            const sheets = google.sheets({ version: 'v4', auth: this.auth });
             //delete entire row, without leaving a blank row
             //like the option 'delete row' on google sheets
-            await sheets.spreadsheets.batchUpdate({
+            await this.sheets.spreadsheets.batchUpdate({
                 spreadsheetId: this.spreadsheetId,
                 requestBody: {
                     requests: [
@@ -106,16 +170,16 @@ export class GoogleSheetClient {
     }
 
     async get(key) {
+        this.initialize()
         const elements = await this.getSpreadSheetElements()
         return JSON.stringify(elements.find(element => element[this.idField] == key));
     }
 
     async isSheetEmpty() {
-        const sheets = google.sheets({ version: 'v4', auth: this.auth });
         const range = `${this.sheetName}!A1:Z1`;
 
         try {
-            const response = await sheets.spreadsheets.values.get({
+            const response = await this.sheets.spreadsheets.values.get({
                 spreadsheetId: this.spreadsheetId,
                 range
             });
@@ -132,13 +196,13 @@ export class GoogleSheetClient {
     };
 
     async put(key, value) {
+        this.initialize()
         const range = await this.findSpreeadSheetElement(key)
         if (range) {
             const values = JSON.parse(value)
             const cols = [this.objFields.map(field => values[field])]
 
-            const sheets = google.sheets({ version: 'v4', auth: this.auth });
-            await sheets.spreadsheets.values.update({
+            await this.sheets.spreadsheets.values.update({
                 spreadsheetId: this.spreadsheetId,
                 range,
                 valueInputOption: 'USER_ENTERED',
@@ -148,24 +212,23 @@ export class GoogleSheetClient {
             });
         } else {
             //append
-            const sheets = google.sheets({ version: 'v4', auth: this.auth });
             const values = JSON.parse(value)
             const cols = [this.objFields.map(field => values[field])]
 
             if (await this.isSheetEmpty()) {
                 //add header
-                await sheets.spreadsheets.values.append({
+                await this.sheets.spreadsheets.values.append({
                     spreadsheetId: this.spreadsheetId,
-                    range: 'Sheet1!A:Z',
+                    range: this.sheetName + "!A:Z",
                     valueInputOption: 'USER_ENTERED',
                     requestBody: {
                         values: [this.objFields]
                     }
                 });
             }
-            await sheets.spreadsheets.values.append({
+            await this.sheets.spreadsheets.values.append({
                 spreadsheetId: this.spreadsheetId,
-                range: 'Sheet1!A:Z',
+                range: this.sheetName + "!A:Z",
                 valueInputOption: 'USER_ENTERED',
                 requestBody: {
                     values: cols
