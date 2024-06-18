@@ -104,14 +104,11 @@ export class ProtoSchema {
         const validFields = {}
         Object.keys(displayFields.shape).forEach((key) => {
             if (displayFields.shape[key]._def["visible"]) {
-                console.log("TIENE LA FUNCION VISIBLE", key, displayFields.shape[key]._def["visible"])
                 const visible = displayFields.shape[key]._def["visible"](displayType, object)
                 if (visible) {
-                    console.log("ES VISIBLE", key, displayFields.shape[key])
                     validFields[key] = displayFields.shape[key]
                 }
             } else {
-                console.log("NO TIENE LA FUNCION VISIBLE", key, displayFields.shape[key])
                 validFields[key] = displayFields.shape[key]
             }
         })
