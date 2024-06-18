@@ -12,6 +12,7 @@ import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 import { context } from "app/bundles/uiContext";
 import { useRouter } from "next/router";
+import { Objects } from "app/bundles/objects";
 
 const isProtected = Protofy("protected", {{protected}})
 Protofy("pageType", "blank")
@@ -44,7 +45,8 @@ export default {
                 path: "/packages/app/bundles/custom/pages/{{name}}.tsx",
                 context: {
                     currentView: currentView,
-                    setCurrentView: setCurrentView
+                    setCurrentView: setCurrentView,
+                    Objects: Objects
                 },
                 components: {
                     ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),

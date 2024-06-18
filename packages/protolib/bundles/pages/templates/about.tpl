@@ -11,6 +11,7 @@ import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
 import { context } from "app/bundles/uiContext";
 import { useRouter } from "next/router";
+import { Objects } from "app/bundles/objects";
 
 const isProtected = Protofy("protected", false)
 Protofy("pageType", "about")
@@ -67,7 +68,8 @@ export default {
           path: "/packages/app/bundles/custom/pages/{{name}}.tsx",
           context: {
             currentView: currentView,
-            setCurrentView: setCurrentView
+            setCurrentView: setCurrentView,
+            Objects: Objects
           },
           components: {
             ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
