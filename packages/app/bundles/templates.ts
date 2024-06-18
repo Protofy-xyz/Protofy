@@ -51,7 +51,7 @@ export const apiTemplates = {
         icon: RefreshCcwDot,
         extraFields: (objects) => ({
             object: z.union([z.literal("without object"), ...(objects.data.items.map(o => z.literal(o.name)))] as any).after('name'),
-            param: z.string().label('Google Sheets ID').after('name'),
+            param: z.string().label('Google Sheets Link').after('name').hint("https://docs.google.com/spreadsheets/d/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/edit?usp=sharing"),
         }),
         extraValidation: (data) => {
             if (!Object.keys(data).includes('object')) {

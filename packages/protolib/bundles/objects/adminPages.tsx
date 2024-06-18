@@ -6,6 +6,7 @@ import { usePageParams } from '../../next';
 import { XStack, Text } from "@my/ui";
 import { z } from 'protolib/base'
 import { PaginatedData } from '../../lib/SSR';
+import { GoogleSheetClient } from '../google/googleSheetClient';
 
 
 const format = 'YYYY-MM-DD HH:mm:ss'
@@ -23,7 +24,7 @@ export default {
                 <DataView
                     openMode={env === 'dev' ? 'edit' : 'view'}
                     hideAdd={env !== 'dev'}
-                    disableItemSelection={ env !== 'dev'}
+                    disableItemSelection={env !== 'dev'}
                     rowIcon={Boxes}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
@@ -35,8 +36,25 @@ export default {
                         DataTable2.column("features", row => row.features, "features", row => Object.keys(row.features).map(f => <Chip mr={"$2"} text={f} color={'$gray5'} />)),
                     )}
                     extraFieldsFormsAdd={{
-                        api: z.boolean().after("keys").label("automatic crud api").defaultValue(true),
-                        adminPage: z.boolean().after("keys").label("admin page").defaultValue(true),
+                        api: z.boolean()
+                            .after("keys")
+                            .label("automatic crud api")
+                            .defaultValue(true),
+                        databaseType: z.union([z.literal("LevelDB"), z.literal("Google Sheets"), z.literal("JSON File")])
+                            .after("keys")
+                            .label("database type")
+                            .defaultValue("LevelDB")
+                            .visible((displayType, object) => object?.data?.api),
+                        param: z.string()
+                            .after("keys")
+                            .label("Google Sheet Link")
+                            .hint("https://docs.google.com/spreadsheets/d/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/edit?usp=sharing")
+                            .visible((displayType, object) => object?.data?.api && object?.data?.databaseType === "Google Sheets"),
+                        adminPage: z.boolean()
+                            .after("keys")
+                            .label("admin page")
+                            .defaultValue(true)
+                            .visible((displayType, object) => object?.data?.api),
                     }}
                     // hideAdd={true}
                     model={ObjectModel}
@@ -63,7 +81,7 @@ export default {
                             action: (element) => { replace('editFile', element.getDefaultSchemaFilePath()) },
                             isVisible: (data) => true
                         }
-                    ]: []}
+                    ] : []}
                 />
             </AdminPage>)
         },

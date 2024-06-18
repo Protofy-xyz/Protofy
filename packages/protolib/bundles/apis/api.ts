@@ -80,6 +80,13 @@ const getDB = (path, req, session) => {
         }
       }
 
+      if(template == "automatic-crud-google-sheet") {
+          const regex = /\/d\/([a-zA-Z0-9-_]+)/;
+          const match = value.param.match(regex);
+          const id = match ? match[1] : null;
+          value.param = id
+      }
+
       const computedName = value.name
       const codeName = computedName.replace(/\s/g, "")
       const codeNameLowerCase = codeName.toLowerCase()

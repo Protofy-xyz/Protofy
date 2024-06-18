@@ -24,6 +24,7 @@ interface ZodExtensions {
     dependsOn(field: string, value?: any): this;
     location(latKey: string, lonKey: string): this;
     generateOptions(call: Function): this;
+    visible(visibilityCheck: Function): this;
     choices(): this;
     secret(): this;
     static(): this;
@@ -170,6 +171,11 @@ function extendZodTypePrototype(type: any) {
 
     type.prototype.generateOptions = function (call) {
         this._def.generateOptions = call
+        return this;
+    }
+    
+    type.prototype.visible = function (fn) {
+        this._def.visible = fn
         return this;
     }
 

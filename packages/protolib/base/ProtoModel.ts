@@ -311,7 +311,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     static load(data: any, session?: SessionDataType): ProtoModel<any> {
-        return this._newInstance(data, session);
+        return this._newInstance(data??{}, session);
     }
 
     getData(data?): any {

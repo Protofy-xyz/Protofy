@@ -19,11 +19,11 @@ export class ProtoSchema {
     }
 
     applyGenerators(data: any) {
-        let newData = {...data}
+        let newData = { ...data }
         Object.keys(this.shape).forEach((key) => {
-            if(this.shape[key]._def.generate) {
+            if (this.shape[key]._def.generate) {
                 const gen = this.shape[key]._def.generate;
-                if(!data[key] || gen.force) {
+                if (!data[key] || gen.force) {
                     newData[key] = typeof gen.generator === 'function' ? gen.generator(data) : gen.generator
                 }
             }
@@ -33,19 +33,19 @@ export class ProtoSchema {
     }
 
     //apply generative schema to data
-    async apply(eventName:string, data: any, transformers: any, prevData?: any) {
-        let newData = {...data}
+    async apply(eventName: string, data: any, transformers: any, prevData?: any) {
+        let newData = { ...data }
         const withEvents = this.is('events')
         const keys = Object.keys(withEvents.shape)
-        for(var i =0;i<keys.length; i++) {
+        for (var i = 0; i < keys.length; i++) {
             const key = keys[i]
-            const currField:any = withEvents.shape[key]
+            const currField: any = withEvents.shape[key]
             const isNode = typeof process !== 'undefined' && process.versions && process.versions.node
             const events = currField._def.events.filter(e => e.eventName == eventName && (!e.eventContext || (e.eventContext == 'client' && !isNode) || (e.eventContext == 'server' && isNode)))
-            for(var x=0;x < events.length; x++) {
+            for (var x = 0; x < events.length; x++) {
                 const e = events[x]
-                if(transformers[e.eventHandler]) {
-                    newData = await transformers[e.eventHandler](key,e,newData, prevData)
+                if (transformers[e.eventHandler]) {
+                    newData = await transformers[e.eventHandler](key, e, newData, prevData)
                 }
             }
         }
@@ -63,12 +63,12 @@ export class ProtoSchema {
                 elements.push([])
                 curIndex++
             }
-            elements[curIndex].push({...field, name: key})
+            elements[curIndex].push({ ...field, name: key })
         })
         return elements;
     }
 
-    getFirst(field: string):string|undefined {
+    getFirst(field: string): string | undefined {
         return Object.keys(this.shape).find((key) => {
             if (this.shape[key]._def[field]) {
                 return key
@@ -89,10 +89,30 @@ export class ProtoSchema {
     isDisplay(displayType) {
         const validFields = {}
         Object.keys(this.shape).forEach(k => {
-            if(!this.shape[k]._def.display || (this.shape[k]._def.display.includes('*')) || this.shape[k]._def.display.includes(displayType)) {
-                if(!this.shape[k]._def.hidden || (!this.shape[k]._def.hidden.includes('*') && !this.shape[k]._def.hidden.includes(displayType))) {
+            if (!this.shape[k]._def.display || (this.shape[k]._def.display.includes('*')) || this.shape[k]._def.display.includes(displayType)) {
+                if (!this.shape[k]._def.hidden || (!this.shape[k]._def.hidden.includes('*') && !this.shape[k]._def.hidden.includes(displayType))) {
                     validFields[k] = this.shape[k]
                 }
+            }
+        })
+        return new ProtoSchema(validFields)
+    }
+
+    isVisible(displayType, object) {
+        const displayFields = this.isDisplay(displayType)
+
+        const validFields = {}
+        Object.keys(displayFields.shape).forEach((key) => {
+            if (displayFields.shape[key]._def["visible"]) {
+                console.log("TIENE LA FUNCION VISIBLE", key, displayFields.shape[key]._def["visible"])
+                const visible = displayFields.shape[key]._def["visible"](displayType, object)
+                if (visible) {
+                    console.log("ES VISIBLE", key, displayFields.shape[key])
+                    validFields[key] = displayFields.shape[key]
+                }
+            } else {
+                console.log("NO TIENE LA FUNCION VISIBLE", key, displayFields.shape[key])
+                validFields[key] = displayFields.shape[key]
             }
         })
         return new ProtoSchema(validFields)

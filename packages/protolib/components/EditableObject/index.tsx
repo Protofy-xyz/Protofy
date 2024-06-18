@@ -175,11 +175,23 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
     }, [data])
 
     const getGroups = () => {
-        const elementObj = model.load(data.data)
-        const extraFieldsObject = ProtoSchema.load(Schema.object(extraFields))
-        const formFields = elementObj.getObjectSchema().isDisplay(currentMode).merge(extraFieldsObject).getLayout(1)
-        const groups = {}
+        var elementObj = model.load(data.data)
+        var extraFieldsObject = ProtoSchema.load(Schema.object(extraFields)).isVisible(currentMode, elementObj)
+        var formFields = elementObj.getObjectSchema().isVisible(currentMode, elementObj).merge(extraFieldsObject).getLayout(1)
+
         const defaultData = {}
+        formFields.forEach((row, x) => row.forEach((ele, i) => {
+            if (ele._def.hasOwnProperty('defaultValue')) {
+                defaultData[ele.name] = ele._def.defaultValue
+            }
+        }))
+
+        elementObj = model.load({ ...defaultData, ...data.data })
+        extraFieldsObject = ProtoSchema.load(Schema.object(extraFields)).isVisible(currentMode, elementObj)
+        formFields = elementObj.getObjectSchema().isVisible(currentMode, elementObj).merge(extraFieldsObject).getLayout(1)
+
+        const groups = {}
+
         formFields.forEach((row, x) => row.forEach((ele, i) => {
             const icon = icons[ele.name] ? icons[ele.name] : (currentMode == 'edit' || currentMode == 'add' ? Pencil : Tag)
             const groupId = ele._def.group ?? 0
