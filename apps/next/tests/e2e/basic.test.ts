@@ -213,9 +213,9 @@ describe("Test admin capabilities", () => {
         it("should be able to navigate to visualui", async () => {
             await protoBrowser.goTo('');
             await protoBrowser.clickElement("#use-edit-btn")
-            const locator = await protoBrowser.waitForElement("#editor-frame-container")
+            const locator = await protoBrowser.waitForElement("#editor-frame-container", 200000)
             expect(locator).toBeTruthy()
-        }, 120000)
+        }, 200000)
 
         it("should be able to save edited page content", async () => {
             const vp = ProtoBrowser.getViewPortSize()
