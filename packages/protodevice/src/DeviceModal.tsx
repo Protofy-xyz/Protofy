@@ -67,10 +67,11 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
     }
 
     const stepsTranslator = {
-        'compile': '1',
-        'upload': '2',
-        'write': '3',
-        'idle': '4'
+        'yaml': '1',
+        'compile': '2',
+        'upload': '3',
+        'write': '4',
+        'idle': '5'
     }
 
     const images = {
@@ -91,9 +92,9 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
         <div style={{ height: "350px", width: '400px', position: 'relative', overflow: 'visible', justifyContent: "space-between", display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: "flex", flexDirection: "column" }}>
                 <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 'xs' }}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</div>
-                <div style={{ flexGrow: 1, textAlign: 'center', color: isError ? 'red' : '', marginBottom: "0px", marginTop: stepsTranslator[stage] === '2' ? '100px' : '0px' }}>
+                <div style={{ flexGrow: 1, textAlign: 'center', color: isError ? 'red' : '', marginBottom: "0px", marginTop: stepsTranslator[stage] === '3' || stepsTranslator[stage] === '1'? '100px' : '0px' }}>
                     {
-                        modalFeedback && ['write', 'compile', 'upload'].includes(stage)
+                        modalFeedback && ['write', 'compile', 'upload','yaml'].includes(stage)
                             ? modalFeedback.message : msg
                     }
                 </div>

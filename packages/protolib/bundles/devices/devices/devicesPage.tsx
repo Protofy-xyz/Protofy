@@ -162,20 +162,30 @@ export default {
     }
 
     const saveYaml = async (yaml) => {
-      const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { "yaml": yaml })
-      const data = await response.json()
-      console.log("Save Yaml, compileSessionId: ", data.compileSessionId);
-      setCompileSessionId(data.compileSessionId)
+      try {
+        const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { "yaml": yaml })
+        const data = await response.json()
+        console.log("Save Yaml, compileSessionId: ", data.compileSessionId);
+        setCompileSessionId(data.compileSessionId)
+      } catch (err) {
+        const errorStr = "Error on fetch petition to compile.protofy.xyz: " + err
+        console.log(errorStr)
+        throw (errorStr)
+      }
     }
 
     useEffect(() => {
       const process = async () => {
         if (stage == 'yaml') {
-          await saveYaml(yamlRef.current)
-          setTimeout(() => {
-            setStage('compile')
-          }, 1 * 1000);//Todo remove setTimeout
-          targetDeviceModel ? await targetDeviceModel.setUploaded() : console.log("🤖 No targetDeviceModel")
+          try {
+            await saveYaml(yamlRef.current)
+            setTimeout(() => {
+              setStage('compile')
+            }, 1 * 1000);//Todo remove setTimeout
+            targetDeviceModel ? await targetDeviceModel.setUploaded() : console.log("🤖 No targetDeviceModel")
+          } catch (err) {
+            setModalFeedback({ message: 'Error connecting to compilation server. Please verify your Internet connection.', details: { error: true } })
+          }
 
         } else if (stage == 'compile') {
           console.log("stage - compile")
