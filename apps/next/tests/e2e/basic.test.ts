@@ -209,12 +209,12 @@ describe("Test admin capabilities", () => {
             })
         })
     })
-    describe.skip("Testing page in useEdit mode", () => {
+    describe("Testing page in useEdit mode", () => {
         beforeAll(async () => {
             await protoBrowser.goTo('');
             await protoBrowser.clickElement("#use-edit-btn")
             await protoBrowser.waitForElement("#editor-frame-container")
-        }, 60000)
+        }, 120000)
 
         it("should be able to save edited page content", async () => {
             const vp = ProtoBrowser.getViewPortSize()
@@ -230,7 +230,7 @@ describe("Test admin capabilities", () => {
                 error = !!e
             }
             expect(error).toBeTruthy()
-        }, 50000)
+        }, 100000)
 
         it("should be able to drag and drop all components", async () => {
             const allDraggablesIds = await protoBrowser.getClassNameIds('.draggable-element')
@@ -245,6 +245,6 @@ describe("Test admin capabilities", () => {
                 //TODO: change "#left-actions-container" id for components container id 
                 // await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
             }
-        }, 70000)
+        }, 140000)
     })
 })
