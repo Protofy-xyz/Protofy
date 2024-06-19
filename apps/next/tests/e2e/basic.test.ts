@@ -36,7 +36,7 @@ describe("Basic tests", () => {
     afterAll(async () => {
         await protoBrowser?.close()
     })
-  
+
     it("should have a public sign in authentication interface", async () => {
         await protoBrowser.navigateToLogin()
         expect(await protoBrowser.getUrlPath()).toBe('/auth/login');
@@ -44,7 +44,7 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement('#sign-in-password-input')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-btn')).toBeTruthy();
     }, 120000)
-    
+
     it("should have a public sign up authentication interface", async () => {
         await protoBrowser.navigateToRegister();
         expect(await protoBrowser.getUrlPath()).toBe('/auth/register');
@@ -149,7 +149,7 @@ describe("Test admin capabilities", () => {
                 beforeEach(async () => {
                     await protoBrowser.navigateToAdminSection('pages')
                 }, 60000)
-                it("should be able to edit the page", async () => {                                                                                                                                                                         
+                it("should be able to edit the page", async () => {
                     await protoBrowser.waitForElement('#admin-dataview-add-btn');
                     await protoBrowser.clickElement("#more-btn-home")
                     await protoBrowser.clickElement("#more-btn-home-option-1")
@@ -210,10 +210,11 @@ describe("Test admin capabilities", () => {
         })
     })
     describe("Testing page in useEdit mode", () => {
-        beforeAll(async () => {
+        it("should be able to navigate to visualui", async () => {
             await protoBrowser.goTo('');
             await protoBrowser.clickElement("#use-edit-btn")
-            await protoBrowser.waitForElement("#editor-frame-container")
+            const locator = await protoBrowser.waitForElement("#editor-frame-container")
+            expect(locator).toBeTruthy()
         }, 120000)
 
         it("should be able to save edited page content", async () => {
