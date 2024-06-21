@@ -402,8 +402,9 @@ export const AutoAPI = ({
         const db = getDB(getDBPath("update", req, requestModel), req, session)
         const modelData = (await recoverLinks([JSON.parse(await db.get(req.params.key))]))[0]
         const entityModel = await (modelType.load(modelData, session).updateTransformed(requestModel, transformers))
-        await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
-
+        const isPatch = req?.query?.patch === 'true'
+        
+        await db.put(entityModel.getId(), JSON.stringify({...(isPatch ? modelData : {}), ...processLinks(entityModel.serialize(true))})) 
         _notify(entityModel, 'update')
 
         if (!disableEvents) {

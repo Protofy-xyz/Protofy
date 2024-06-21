@@ -2,7 +2,11 @@ import {API} from '../../../base'
 
 export const update = async (objectName: string, id, data: any, objects, options, cb?, errorCb?) => {
     const endPoint = objects[objectName].getApiEndPoint()
-    const result = await API.post(endPoint+'/'+id, data)
+    let query = ""
+    if(options && options.patch) {
+        query = "?patch=true"
+    }
+    const result = await API.post(endPoint+'/' + id + query, data)
     if(result.isError) {
         if(errorCb) errorCb(result.error)
     } else {
