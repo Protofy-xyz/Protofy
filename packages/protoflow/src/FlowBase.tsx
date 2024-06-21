@@ -785,7 +785,7 @@ const FlowsBase = ({
             rendered.current = true
             // flowRef.current.fitView({maxZoom: 0.7})
         }
-    }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
+    }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + " " + n.height + ',', '')])
 
     if(typeof window !== undefined) window['reLayout'] = () => {
         reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
