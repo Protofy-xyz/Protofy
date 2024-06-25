@@ -1,4 +1,4 @@
-import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, FlowStoreContext, filterConnection, dumpArgumentsData, getId} from 'protoflow';
+import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, FlowStoreContext, filterConnection, dumpArgumentsData, getId, getFieldValue, getDataFromField } from 'protoflow';
 import { PenLine } from 'lucide-react';
 import { useEffect, useState, useContext } from 'react';
 import { API } from 'protolib/base'
@@ -18,7 +18,7 @@ const objectUpdate = (node: any = {}, nodeData = {}) => {
     }
 
     useEffect(() => {
-        if(node.id) getObjects()
+        if (node.id) getObjects()
     }, [])
 
     const onSelectObject = async () => {
@@ -44,11 +44,11 @@ const objectUpdate = (node: any = {}, nodeData = {}) => {
 
     useUpdateEffect(() => {
         const initialData = Object.keys(keys).reduce((obj, key) => {
-            return { ...obj, ['mask-' + key]: { value: '', kind: getKind(keys[key].type) } }
+            return { ...obj, ['mask-3-' + key]: { value: '', kind: getKind(keys[key].type) } }
         }, {})
-        
+
         const filteredNodeData = Object.keys(nodeData).reduce((obj, key) => {
-            if (!key.startsWith('mask-') || initialData[key]) {
+            if (!key.startsWith('mask-3-') || initialData[key]) {
                 obj[key] = nodeData[key];
             }
             return obj;
@@ -61,23 +61,30 @@ const objectUpdate = (node: any = {}, nodeData = {}) => {
     }, [keys])
 
     useEffect(() => {
-        if(!node.id) return
+        if (!node.id) return
+
+        const dumpMaskParams = (filterCb) => (nodeData, level) => {
+            const params = Object.keys(nodeData).filter(filterCb).map((param) => {
+                let key = param.split('-').slice(2).join('-');
+                var objValue = nodeData[param].value
+                return { key, value: objValue, kind: nodeData[param].kind }
+            })
+            return "{\n"
+                + params.reduce((total, p, i) => {
+                    return p.value === "" ? total : total + "\t".repeat(level) + p.key + ': ' + dumpArgumentsData(p) + (i < params.length - 1 ? ',' : '')
+                }, '')
+                + "\n}"
+        }
+
         setNodeData(node.id, {
             ...nodeData,
             'param-3': {
                 ...nodeData['param-3'],
-                _dump: (nodeData, level) => {
-                    const params = Object.keys(nodeData).filter(key => key.startsWith('mask-')).map((param) => {
-                        let key = param.split('-').slice(1).join('-');
-                        var objValue = nodeData[param].value
-                        return {key, value: objValue, kind: nodeData[param].kind}
-                    })
-                    return "{\n"
-                        + params.reduce((total, p, i) => {
-                            return p.value === "" ? total : total + "\t".repeat(level) + p.key + ': ' + dumpArgumentsData(p) + (i < params.length - 1 ? ',' : '')
-                        }, '')
-                        + "\n}"
-                }
+                _dump: dumpMaskParams(key => key.startsWith('mask-3-'))
+            },
+            'param-5': {
+                ...nodeData['param-5'],
+                _dump: dumpMaskParams(key => key.startsWith('mask-5-'))
             }
         })
     }, [])
@@ -87,7 +94,7 @@ const objectUpdate = (node: any = {}, nodeData = {}) => {
     return (
         <Node icon={PenLine} node={node} isPreview={!node?.id} title='Object Update' id={node.id} color={color} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Object', field: 'param-1', type: 'select', static: true, data: objects.map((item: any) => item.name) }]} />
-            <NodeParams id={node.id} params={[{ label: 'Object Id', field: 'param-2', type: 'input'}]} />
+            <NodeParams id={node.id} params={[{ label: 'Object Id', field: 'param-2', type: 'input' }]} />
             <FallbackPortList
                 height='70px'
                 node={node}
@@ -108,8 +115,9 @@ const objectUpdate = (node: any = {}, nodeData = {}) => {
                 }]}
                 startPosX={110}
             />
+            <NodeParams id={node.id} params={[{ label: "update only changed fields", field: 'mask-5-patch', type: 'boolean', static: true }]} />
             <NodeParams id={node.id} params={Object.keys(keys).map((key, i) => {
-                return { label: key, field: 'mask-' + key, type: 'input', static: true }
+                return { label: key, field: 'mask-3-' + key, type: 'input', static: true }
             })} />
         </Node>
     )
@@ -130,20 +138,25 @@ export default {
     filterChildren: (node, childScope, edges, nodeData, setNodeData) => {
         childScope = filterCallback("6", "onupdate")(node, childScope, edges)
         childScope = filterCallback("7", "onerror")(node, childScope, edges)
-        childScope = filterConnection("param-3", (id, nodeData, setNodeData) => {
+
+        const filterMaskConnection = (connection) => filterConnection("param-" + connection, (id, nodeData, setNodeData) => {
             const objData = nodeData[id]
-            if(objData) {
+            if (objData) {
                 Object.keys(objData).forEach(key => {
-                    if(key.startsWith('param-')) {
+                    if (key.startsWith('param-')) {
                         setNodeData(getId(node), {
                             ...nodeData[getId(node)],
-                            ['mask-'+objData[key].key]: { value: objData[key].value, kind: objData[key].kind ?? 'Identifier'}
+                            ["mask-" + connection + "-" + objData[key].key]: { value: objData[key].value, kind: objData[key].kind ?? 'Identifier' }
                         })
                     }
 
                 })
             }
         })(node, childScope, edges, nodeData, setNodeData)
+
+        childScope = filterMaskConnection("3")
+        childScope = filterMaskConnection("5")
+
         return childScope
     },
     restoreChildren: (node, nodes, originalNodes, edges, originalEdges) => {
@@ -158,7 +171,8 @@ export default {
             "param-2": { value: "", kind: "StringLiteral" },
             "param-3": { value: "{}", kind: "Identifier" },
             "param-4": { value: "context.objects", kind: "Identifier" },
-            "param-5": { value: "null", kind: "Identifier" },
+            "param-5": { value: "{}", kind: "Identifier" },
+            "mask-5-patch": { value: "true", kind: "FalseKeyword" },
             "param-6": { value: "null", kind: "Identifier" },
             "param-7": { value: "null", kind: "Identifier" }
         }
