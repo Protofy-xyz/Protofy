@@ -3,13 +3,13 @@ version: '3.8'
 services:
   admin-api:
     image: "protofy/workspace"
-    entrypoint: "sh -c 'cd apps/admin-api && yarn dev-standalone'"
+    entrypoint: "sh -c 'cd apps/admin-api && yarn prepare-dev && yarn build && yarn dev-standalone'"
     ports:
       - 3002:3002
-      - 8080:8080
+      - 8000:8000
     environment:
       - MQTT_URL=mqtt://localhost:1883
-      - PROXY_API_URL=http://admin-api:8080
+      - PROXY_API_URL=http://admin-api:8000
       - ADMIN_API_URL=http://admin-api:3002
       - API_URL=http://api:3001
       - SITE_URL=http://site:3000

@@ -3,11 +3,11 @@ version: "3.8"
 services:
   site:
     image: "protofy/workspace"
-    entrypoint: "sh -c 'cd apps/next && yarn dev-standalone'"
+    entrypoint: "sh -c 'cd apps/next && yarn prepare-dev && yarn dev-standalone'"
     ports:
       - 3000:3000
     environment:
-      - PROXY_API_URL=http://admin-api:8080
+      - PROXY_API_URL=http://admin-api:8000
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true

@@ -39,10 +39,8 @@ process.on('uncaughtException', function (err) {
 
 startProxy()
 startMqtt(config)
-
 logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: admin-api")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
-
 const devMqtt = getMQTTClient('dev', 'admin-api', getServiceToken())
 const prodMqtt = getMQTTClient('prod', 'admin-api', getServiceToken())
 
@@ -67,17 +65,15 @@ const topicPub = (mqtt, topic, data) => {
 
 try {
   import('app/bundles/adminapi').then((BundleAPI) => {
-    BundleAPI.default(app, { mqtt: devMqtt, mqtts: {prod: prodMqtt, dev: devMqtt}, topicSub, topicPub, ...BundleContext })
+    BundleAPI.default(app, { mqtt: devMqtt, mqtts: { prod: prodMqtt, dev: devMqtt }, topicSub, topicPub, ...BundleContext })
   })
-  
+
 } catch (error) {
   logger.error({ error: error.toString() }, "Server error")
 }
 
-
 const server = http.createServer(app);
 const PORT = 3002
-
 server.listen(PORT, () => {
   logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
   generateEvent({
