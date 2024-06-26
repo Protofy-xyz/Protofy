@@ -117,6 +117,11 @@ const getDB = (path, req, session) => {
 
     async put(key, value) {
       value = JSON.parse(value)
+      value = {
+        ...value,
+        name: value.name.replace(/\s/g, ""),
+        route: value.route.replace(/\s/g, "")
+      }
       const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
       const prevPage = getPage(filePath, req)
       const template = fspath.basename(value.template ?? 'default')

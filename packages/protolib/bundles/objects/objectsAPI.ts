@@ -115,6 +115,11 @@ const getDB = (path, req, session) => {
 
     async put(key, value) {
       value = JSON.parse(value)
+      value = {
+        ...value,
+        name: value.name.replace(/\s/g, ""),
+        id: value.id.replace(/\s/g, "")
+      }
       const filePath = getRoot(req) + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts'
       let exists
       try {

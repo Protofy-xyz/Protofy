@@ -63,9 +63,10 @@ const transformData = (data) => {
   return {
     ...data,
     keys: Object.keys(data.keys ? data.keys : {}).reduce((total, k) => {
+      var nK = k.replace(/\s/g, "")
       return {
         ...total,
-        [k]: {
+        [nK]: {
           type: "string",
           ...data.keys[k],
         }
