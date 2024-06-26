@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "jest"
   },
   "devDependencies": {
     "@jest/globals": "~29.7.0",
