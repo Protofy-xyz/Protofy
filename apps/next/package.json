@@ -11,7 +11,7 @@
     "package": "next build && shx cp -r .next/ ../next-compiled && shx cp -r pages/ ../next-compiled && shx cp -r public/ ../next-compiled",
     "lint": "next lint",
     "test": "yarn test:deps && jest --forceExit",
-    "test:deps": "sudo npx playwright install && sudo npx playwright install-deps",
+    "test:deps": "npx playwright install && npx playwright install-deps",
     "clean": "shx rm -rf .next"
   },
   "dependencies": {
