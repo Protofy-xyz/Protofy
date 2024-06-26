@@ -3,12 +3,12 @@ version: '3.8'
 services:
   api:
     image: "protofy/workspace"
-    entrypoint: "sh -c 'cd apps/api && yarn dev-standalone'"
+    entrypoint: "sh -c 'cd apps/api && yarn prepare-dev && yarn dev-standalone'"
     ports:
       - 3001:3001
     environment:
       - MQTT_URL=mqtt://admin-api:1883
-      - PROXY_API_URL=http://admin-api:8080
+      - PROXY_API_URL=http://admin-api:8000
       - NODE_ENV=development
     volumes:
       - ../../:/workspace

@@ -1,4 +1,4 @@
-<h3 align="center">
+<h3 align="center"> 
 <image height="50" src="https://raw.githubusercontent.com/Protofy-xyz/Protofy/assets/logo-protofy.png">
 </h3>
 
@@ -31,7 +31,7 @@ A ultra-extensible CMS with supercharged capabilities, mobile support and IoT su
 Check the [getting started](docs/getting-started.md) guide to run Protofy on your computer, directly with npm or using docker.
 
 ## 👨‍💻 Extentable and developer friendly CMS
-
+ 
 https://github.com/Protofy-xyz/Protofy/assets/5052882/e5c3f0fa-5b76-4c8e-bb4f-6a2c588ec53c
 
 ## 🤖 Ai Assisted

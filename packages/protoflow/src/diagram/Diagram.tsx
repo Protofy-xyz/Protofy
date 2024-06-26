@@ -217,8 +217,8 @@ const Diagram = React.forwardRef(({
             const posY = selectedNode.position.y + (flowsHeight / 2) - marginTop
 
             setCenter(posX, posY, { zoom: 1, duration: isViewModePreview ? 1 : 500 })
-        }, 80)
-    }, [setCenter, nodePreview, nodes]);
+        }, 500)
+    }, [setCenter, nodePreview, nodes, reactFlowWrapper.current?.offsetWidth]);
 
     const updatesNodesVisibility = () => {
         switch (nodePreview) {

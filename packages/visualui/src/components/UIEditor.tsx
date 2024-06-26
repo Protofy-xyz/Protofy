@@ -31,7 +31,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const [currentPageContent, setCurrentPageContent] = useState("")
     const [monacoHasChanges, setMonacoHasChanges] = useState(false)
-    const [flowViewMode, setFlowViewMode] = useState('preview')
+    const [flowViewMode, setFlowViewMode] = useState("undefined")
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
     const [customizeVisible, setCustomizeVisible] = useState(true);
     const [layerVisible, setLayerVisible] = useState(false);
@@ -132,8 +132,13 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
             setCodeEditorVisible(false)
         } else if (val == 'preview') {
             const isValidMode = ['flow-preview', 'preview'].includes(flowViewMode)
-            isValidMode ? setIsSideBarVisible(!isSideBarVisible) : setIsSideBarVisible(true)
-            setFlowViewMode(isValidMode ? flowViewMode : val)
+            if (isValidMode) {
+                setIsSideBarVisible(!isSideBarVisible)
+                setFlowViewMode("undefined")
+            } else {
+                setIsSideBarVisible(true)
+                setFlowViewMode(val)
+            }
             setCodeEditorVisible(false)
         }
     }
@@ -154,15 +159,6 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     useEffect(() => {
         loadPage()
     }, [sourceCode]);
-
-    useEffect(() => {
-        if (data['zoomToNode']?.id && !isSideBarVisible) {
-            if (!flowViewMode) {
-                setFlowViewMode('preview')
-            }
-            setIsSideBarVisible(true)
-        }
-    }, [data['zoomToNode']])
 
     const FlowPanel = (
         <div
@@ -403,4 +399,4 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
 
 }
 
-export default memo(withTopics(UIEditor, { topics: ['zoomToNode'] }));
+export default memo(withTopics(UIEditor));

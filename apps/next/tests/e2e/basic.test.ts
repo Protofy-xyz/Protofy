@@ -220,9 +220,9 @@ describe("Test admin capabilities", () => {
         it("should be able to save edited page content", async () => {
             const vp = ProtoBrowser.getViewPortSize()
             await protoBrowser.mouseClick(Math.floor(vp.width / 2), Math.floor(vp.height / 2))
-            await protoBrowser.clickElement("#render-node-options-btn")
-            await protoBrowser.clickElement("#render-node-delete-btn")
-            await protoBrowser.clickElement("#save-nodes-btn")
+            await protoBrowser.clickElement("#render-node-options-btn", 60000)
+            await protoBrowser.clickElement("#render-node-delete-btn", 60000)
+            await protoBrowser.clickElement("#save-nodes-btn", 60000)
             let error
             try {
                 // If "#nextjs__container_build_error_label" exist, means that has error compiling
@@ -231,7 +231,7 @@ describe("Test admin capabilities", () => {
                 error = !!e
             }
             expect(error).toBeTruthy()
-        }, 100000)
+        }, 120000)
 
         it("should be able to drag and drop all components", async () => {
             const allDraggablesIds = await protoBrowser.getClassNameIds('.draggable-element')

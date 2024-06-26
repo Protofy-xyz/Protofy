@@ -141,7 +141,6 @@ export default {
     const sendMessage = async () => {
       const response = await fetch(compileActionUrl(targetDeviceName, compileSessionId))
       const data = await response.json()
-      console.log("🤖 ~ sendMessage ~ data:", data)
     }
 
     const compile = async () => {

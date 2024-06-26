@@ -7,5 +7,5 @@ services:
       dockerfile: apps/next/Dockerfile 
     entrypoint: "yarn prod-standalone"
     environment:
-      - PROXY_API_URL=http://admin-api:8000
+      - PROXY_API_URL=http://admin-api:8080
       - NODE_ENV=production

@@ -1,10 +1,8 @@
-import { Node, NodeParams, FallbackPortList, filterCallbackProp, restoreCallbackProp, CustomFieldsList } from 'protoflow';
+import { Node, CustomFieldsList } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Timer } from 'lucide-react';
-import { useRef } from 'react'
 
 const InputMask = ({ node = {}, nodeData = {}, children }: any) => {
-    const paramsRef = useRef()
     const color = useColorFromPalette(55)
 
     const propsList = [
@@ -14,7 +12,7 @@ const InputMask = ({ node = {}, nodeData = {}, children }: any) => {
             "staticLabel": true,
             "type": "input",
             "section": "logic",
-            "pre": str => str.replace('cs.', ''),
+            "pre": str => str?.replace ? str.replace('cs.', '') : str,
             "post": str => 'cs.' + str,
             "disableToggle": true
         },
