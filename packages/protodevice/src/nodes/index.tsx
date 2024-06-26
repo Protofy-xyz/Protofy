@@ -31,6 +31,7 @@ import DallasBus from './DallasBus';
 import SPIBus from './SPIBus';
 import CANBus from './CANBus';
 import MKSServo42D from './MKSServo42D';
+import Msa3xx from './Msa3xx';
 
 const deviceMasks = [
   Wifi,
@@ -63,7 +64,8 @@ const deviceMasks = [
   DallasBus,
   SPIBus,
   CANBus,
-  MKSServo42D
+  MKSServo42D,
+  Msa3xx
 ]
 
 const masksLength = deviceMasks.length
