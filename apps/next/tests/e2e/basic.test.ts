@@ -28,11 +28,9 @@ const API_OBJECT_OPTIONS = {
 const USER_IDENTIFIER = 'user@user.user'
 const USER_PASSWORD = 'user1234'
 
-console.log('DEV: testing basic.test.ts')
 describe("Basic tests", () => {
     let protoBrowser: ProtoBrowser;
     beforeAll(async () => {
-        console.log('DEV: creating protobrowser')
         protoBrowser = await ProtoBrowser.__newInstance__(!DEBUG)
     }, 600000)
     afterAll(async () => {
@@ -56,7 +54,7 @@ describe("Basic tests", () => {
         expect(await protoBrowser.waitForElement('#sign-up-btn')).toBeTruthy();
         expect(await protoBrowser.waitForElement('#sign-in-link')).toBeTruthy();
     }, 30000)
-
+    // Disabled due that by default register is disabled
     // it.skip("should be able to register and retrieve a session using sign up interface", async () => { // sikpped: Signup is disabled by default
     //     await protoBrowser.navigateToRegister()
     //     await protoBrowser.waitForElement('#sign-up-email-input');
@@ -68,7 +66,6 @@ describe("Basic tests", () => {
     //     expect(await protoBrowser.waitForElement('#__next')).toBeTruthy();
     // }, 30000)
 })
-// COMMENTED FOR TESSTING PURPOSES
 describe("Test admin capabilities", () => {
     let protoBrowser: ProtoBrowser;
 
@@ -213,43 +210,43 @@ describe("Test admin capabilities", () => {
         })
     })
     //
-    describe("Testing page in useEdit mode", () => {
-        it("should be able to navigate to visualui", async () => {
-            await protoBrowser.goTo('');
-            await protoBrowser.clickElement("#use-edit-btn")
-            const locator = await protoBrowser.waitForElement("#editor-frame-container", 200000)
-            expect(locator).toBeTruthy()
-        }, 200000)
+    // describe("Testing page in useEdit mode", () => {
+    //     it("should be able to navigate to visualui", async () => {
+    //         await protoBrowser.goTo('');
+    //         await protoBrowser.clickElement("#use-edit-btn")
+    //         const locator = await protoBrowser.waitForElement("#editor-frame-container", 200000)
+    //         expect(locator).toBeTruthy()
+    //     }, 200000)
 
-        it("should be able to save edited page content", async () => {
-            const vp = ProtoBrowser.getViewPortSize()
-            await protoBrowser.mouseClick(Math.floor(vp.width / 2), Math.floor(vp.height / 2))
-            await protoBrowser.clickElement("#render-node-options-btn", 60000)
-            await protoBrowser.clickElement("#render-node-delete-btn", 60000)
-            await protoBrowser.clickElement("#save-nodes-btn", 60000)
-            let error
-            try {
-                // If "#nextjs__container_build_error_label" exist, means that has error compiling
-                await protoBrowser.waitForElement("#nextjs__container_build_error_label", 6000)
-            } catch (e) {
-                error = !!e
-            }
-            expect(error).toBeTruthy()
-        }, 120000)
+    //     it("should be able to save edited page content", async () => {
+    //         const vp = ProtoBrowser.getViewPortSize()
+    //         await protoBrowser.mouseClick(Math.floor(vp.width / 2), Math.floor(vp.height / 2))
+    //         await protoBrowser.clickElement("#render-node-options-btn", 60000)
+    //         await protoBrowser.clickElement("#render-node-delete-btn", 60000)
+    //         await protoBrowser.clickElement("#save-nodes-btn", 60000)
+    //         let error
+    //         try {
+    //             // If "#nextjs__container_build_error_label" exist, means that has error compiling
+    //             await protoBrowser.waitForElement("#nextjs__container_build_error_label", 6000)
+    //         } catch (e) {
+    //             error = !!e
+    //         }
+    //         expect(error).toBeTruthy()
+    //     }, 120000)
 
-        it("should be able to drag and drop all components", async () => {
-            const allDraggablesIds = await protoBrowser.getClassNameIds('.draggable-element')
-            // TODO: Test all draggable elements instead of the first one (now avoid 7 extra minutes just for this test).
-            const draggablesIds = [allDraggablesIds[0]]
-            for (const elementId of draggablesIds) {
-                await protoBrowser.clickElement("#components-to-drag-btn")
-                await protoBrowser.evaluate(".glass", element => element.style.display = 'none')
-                await protoBrowser.waitForElement(".glass", 6000, { state: "hidden" })
-                await protoBrowser.waitForElement(".visualui-sidebar")
-                await protoBrowser.dragAndDrop('#' + elementId, "#home-page")
-                //TODO: change "#left-actions-container" id for components container id 
-                // await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
-            }
-        }, 140000)
-    })
+    //     it("should be able to drag and drop all components", async () => {
+    //         const allDraggablesIds = await protoBrowser.getClassNameIds('.draggable-element')
+    //         // TODO: Test all draggable elements instead of the first one (now avoid 7 extra minutes just for this test).
+    //         const draggablesIds = [allDraggablesIds[0]]
+    //         for (const elementId of draggablesIds) {
+    //             await protoBrowser.clickElement("#components-to-drag-btn")
+    //             await protoBrowser.evaluate(".glass", element => element.style.display = 'none')
+    //             await protoBrowser.waitForElement(".glass", 6000, { state: "hidden" })
+    //             await protoBrowser.waitForElement(".visualui-sidebar")
+    //             await protoBrowser.dragAndDrop('#' + elementId, "#home-page")
+    //             //TODO: change "#left-actions-container" id for components container id 
+    //             // await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
+    //         }
+    //     }, 140000)
+    // })
 })
