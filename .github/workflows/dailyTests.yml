@@ -41,6 +41,9 @@ jobs:
     - name: Healthcheck services start
       run: node .github/scripts/healthcheck-start.js
 
+    - name: Install tests dependencies
+      run: cd ./apps/next && yarn test:deps
+      
     - name: Run tests 
       run: |
         set -o pipefail
