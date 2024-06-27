@@ -248,5 +248,5 @@ describe("Test admin capabilities", () => {
     //             // await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
     //         }
     //     }, 140000)
-    // })
+    // }) 
 })
