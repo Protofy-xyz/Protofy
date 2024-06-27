@@ -81,7 +81,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         setCurrentPageContent(sourceCode)
     }
 
-    const onEditorSave = async (code, data?) => {
+    const onEditorSave = async (code, data?, forceReload?) => {
         var content = code
         if (data) {
             const astContent = getSource(content)
@@ -113,7 +113,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         }
         sendMessage({ type: 'save', data: { content } })
         codeRef.current = content
-        setCurrentPageContent(content)
+        if (forceReload) setCurrentPageContent(content)
     }
 
     const onToggleAppBar = (val) => {
@@ -167,7 +167,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         {/* <Button hoverStyle={{ backgroundColor: useUITheme('secondaryBackground') }} size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
                             <X color={useUITheme('textColor')} />
                         </Button> */}
-                        <Button chromeless backgroundColor={useUITheme('interactiveColor')} hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }} size="$3" onPress={() => onEditorSave(monacoRef.current?.getValue(), flowsData.current)}>
+                        <Button chromeless backgroundColor={useUITheme('interactiveColor')} hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }} size="$3" onPress={() => onEditorSave(monacoRef.current?.getValue(), flowsData.current, true)}>
                             <Save color={useUITheme('textColor')} fillOpacity={0} />
                         </Button>
                     </XStack>
