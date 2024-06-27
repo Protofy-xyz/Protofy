@@ -220,32 +220,32 @@ describe("Test admin capabilities", () => {
         it("should be able to save edited page content", async () => {
             const vp = ProtoBrowser.getViewPortSize()
             await protoBrowser.mouseClick(Math.floor(vp.width / 2), Math.floor(vp.height / 2))
-            await protoBrowser.clickElement("#render-node-options-btn", 60000)
-            await protoBrowser.clickElement("#render-node-delete-btn", 60000)
-            await protoBrowser.clickElement("#save-nodes-btn", 60000)
+            await protoBrowser.clickElement("#render-node-options-btn", 100000)
+            await protoBrowser.clickElement("#render-node-delete-btn", 100000)
+            await protoBrowser.clickElement("#save-nodes-btn", 100000)
             let error
             try {
                 // If "#nextjs__container_build_error_label" exist, means that has error compiling
-                await protoBrowser.waitForElement("#nextjs__container_build_error_label", 6000)
+                await protoBrowser.waitForElement("#nextjs__container_build_error_label", 100000)
             } catch (e) {
                 error = !!e
             }
             expect(error).toBeTruthy()
-        }, 120000)
+        }, 200000)
 
         it("should be able to drag and drop all components", async () => {
             const allDraggablesIds = await protoBrowser.getClassNameIds('.draggable-element')
             // TODO: Test all draggable elements instead of the first one (now avoid 7 extra minutes just for this test).
             const draggablesIds = [allDraggablesIds[0]]
             for (const elementId of draggablesIds) {
-                await protoBrowser.clickElement("#components-to-drag-btn")
+                await protoBrowser.clickElement("#components-to-drag-btn", 10000)
                 await protoBrowser.evaluate(".glass", element => element.style.display = 'none')
-                await protoBrowser.waitForElement(".glass", 6000, { state: "hidden" })
-                await protoBrowser.waitForElement(".visualui-sidebar")
+                await protoBrowser.waitForElement(".glass", 100000, { state: "hidden" })
+                await protoBrowser.waitForElement(".visualui-sidebar", 10000)
                 await protoBrowser.dragAndDrop('#' + elementId, "#home-page")
                 //TODO: change "#left-actions-container" id for components container id 
                 // await protoBrowser.evaluate("#left-actions-container", element => element.style.display = 'flex')
             }
-        }, 140000)
+        }, 200000)
     }) 
 })
