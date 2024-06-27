@@ -27,6 +27,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const monacoRef = useRef(null);
 
     const codeRef = useRef("")
+    const flowsData = useRef({})
     const enableClickEventsRef = useRef();
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const [currentPageContent, setCurrentPageContent] = useState("")
@@ -80,45 +81,39 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         setCurrentPageContent(sourceCode)
     }
 
-    const onEditorSave = async (triggerer: "monaco" | "flows" | "editor", code?, data?) => {
+    const onEditorSave = async (code, data?) => {
         var content = code
-        switch (triggerer) {
-            case "monaco":
-                content = monacoRef.current?.getValue()
-                sendMessage({ type: 'save', data: { content } })
-                setCurrentPageContent(content)
-                break;
-            case "flows":
-                if (!data) break
-                const astContent = getSource(content)
-                const previousImports = astContent.getImportDeclarations();
-                const missingJsxImports = getMissingJsxImports(data.nodes, data.nodesData, resolveComponentsDir)
-                if (missingJsxImports.length) {
-                    const filteredMissingJsxImports = [...new Map(missingJsxImports.map(item => [item['tagName'], item])).values()]
-                    const missingJsxImportsText = filteredMissingJsxImports.reduce((total, impData) => {
-                        let impText;
-                        let moduleSpecifier = impData.moduleSpecifier;
-                        if (!moduleSpecifier) {
-                            impText = ""
-                        }
-                        else if (impData.namedImports?.length) { // is named import
-                            const namedImportName = impData.namedImports[0]?.alias
-                                ? (impData.namedImports[0]?.name + " as " + impData.namedImports[0]?.alias)
-                                : impData.namedImports[0]?.name;
-                            impText = "import {" + namedImportName + '} from "' + moduleSpecifier + '";\n'
-                        }
-                        else if (impData.defaultImport) { // is default import
-                            impText = "import " + impData.defaultImport + ' from "' + moduleSpecifier + '";\n'
-                        }
-                        return total + impText
-                    }, '\n')
-                    const lastImportPos = previousImports ? previousImports[previousImports.length - 1].getEnd() : 0
-                    const newAstContent = astContent.insertText(lastImportPos, missingJsxImportsText)
-                    content = newAstContent.getText()
-                }
-                sendMessage({ type: 'save', data: { content } })
-                break;
+        if (data) {
+            const astContent = getSource(content)
+            const previousImports = astContent.getImportDeclarations();
+            const missingJsxImports = getMissingJsxImports(data.nodes, data.nodesData, resolveComponentsDir)
+            if (missingJsxImports.length) {
+                const filteredMissingJsxImports = [...new Map(missingJsxImports.map(item => [item['tagName'], item])).values()]
+                const missingJsxImportsText = filteredMissingJsxImports.reduce((total, impData) => {
+                    let impText;
+                    let moduleSpecifier = impData.moduleSpecifier;
+                    if (!moduleSpecifier) {
+                        impText = ""
+                    }
+                    else if (impData.namedImports?.length) { // is named import
+                        const namedImportName = impData.namedImports[0]?.alias
+                            ? (impData.namedImports[0]?.name + " as " + impData.namedImports[0]?.alias)
+                            : impData.namedImports[0]?.name;
+                        impText = "import {" + namedImportName + '} from "' + moduleSpecifier + '";\n'
+                    }
+                    else if (impData.defaultImport) { // is default import
+                        impText = "import " + impData.defaultImport + ' from "' + moduleSpecifier + '";\n'
+                    }
+                    return total + impText
+                }, '\n')
+                const lastImportPos = previousImports ? previousImports[previousImports.length - 1].getEnd() : 0
+                const newAstContent = astContent.insertText(lastImportPos, missingJsxImportsText)
+                content = newAstContent.getText()
+            }
         }
+        sendMessage({ type: 'save', data: { content } })
+        codeRef.current = content
+        setCurrentPageContent(content)
     }
 
     const onToggleAppBar = (val) => {
@@ -172,7 +167,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         {/* <Button hoverStyle={{ backgroundColor: useUITheme('secondaryBackground') }} size="$3" chromeless circular marginRight="$2" onPress={onCancelMonaco}>
                             <X color={useUITheme('textColor')} />
                         </Button> */}
-                        <Button chromeless backgroundColor={useUITheme('interactiveColor')} hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }} size="$3" onPress={() => onEditorSave("monaco")}>
+                        <Button chromeless backgroundColor={useUITheme('interactiveColor')} hoverStyle={{ backgroundColor: useUITheme('interactiveHoverColor') }} size="$3" onPress={() => onEditorSave(monacoRef.current?.getValue(), flowsData.current)}>
                             <Save color={useUITheme('textColor')} fillOpacity={0} />
                         </Button>
                     </XStack>
@@ -218,12 +213,15 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             sourceCode={currentPageContent}
                             setSourceCode={setCurrentPageContent}
                             customComponents={getFlowsCustomComponents(router.pathname, router.query)}
-                            onSave={(code, _, data) => onEditorSave('flows', code, data)}
+                            onSave={(code, _, data) => onEditorSave(code, data)}
                             config={{ masks: getFlowMasks(router.pathname, router.query) }}
                             zoomOnDoubleClick={!isViewModePreview}
                             themeMode={resolvedTheme}
                             bgColor={'transparent'}
-                            onEdit={(content) => codeRef.current = content}
+                            onEdit={(content, data) => {
+                                codeRef.current = content
+                                flowsData.current = data
+                            }}
                             theme={Theme[resolvedTheme]}
                             nodePreview={flowViewMode}
                             metadata={metadata}

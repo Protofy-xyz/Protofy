@@ -664,7 +664,7 @@ const FlowsBase = ({
             //restore components before dump
             const content = await onSaveNodes(true);
             if (content !== undefined) {
-                onEdit(content)
+                onEdit(content, { nodesData: nodeData, nodes })
             } else {
                 console.error('There was an error in the code, not emitting')
             }
