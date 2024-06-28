@@ -32,6 +32,7 @@ import SPIBus from './SPIBus';
 import CANBus from './CANBus';
 import MKSServo42D from './MKSServo42D';
 import Msa3xx from './Msa3xx';
+import ODrive from './ODrive';
 
 const deviceMasks = [
   Wifi,
@@ -65,7 +66,8 @@ const deviceMasks = [
   SPIBus,
   CANBus,
   MKSServo42D,
-  Msa3xx
+  Msa3xx,
+  ODrive
 ]
 
 const masksLength = deviceMasks.length
