@@ -73,8 +73,8 @@ const Action = ({ deviceName, action, buttonAction }) => {
             </Button>
         </XStack>
         : 
-        <YStack gap="$2" flexWrap='wrap' mt="10px" mb="10px">
-            <XStack gap="$3">
+        <YStack gap="$2" alignSelf='flex-start'  alignItems="center" mt="10px" mb="10px" flex={1} width="$20">
+            <XStack gap="$3" flexWrap='wrap'>
             {
                 Object.keys(value).map((key, index) => {
                     return <Input
@@ -83,10 +83,9 @@ const Action = ({ deviceName, action, buttonAction }) => {
                         onChange={async (e) => {
                             setValue({ ...value, [key]: e.target.value })
                         }}
-                        width={80}
+                        width="$10"
                         placeholder={key}
-                        mr={8}
-                        flex={1}
+                        flex={2}
                     />
                 })
             }
@@ -96,7 +95,8 @@ const Action = ({ deviceName, action, buttonAction }) => {
                 onPress={() => { buttonAction(action, value) }}
                 color="$color10"
                 title={"Description: " + action.description}
-                flex={1}
+                width="100%"
+                flex={2}
             >
                 {action.label ?? action.name}
             </Button>
