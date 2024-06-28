@@ -61,6 +61,7 @@ export { default as FeatureItem } from "./components/FeatureItem";
 export { default as RainbowText } from "./components/RainbowText";
 export * from "./components/IconStack";
 export { default as MainButton } from "./components/MainButton";
+export * from "./components/Pressable";
 export * from "./components/ObjectPropValue";
 export * from "./components/ObjectForm";
 export * from "./components/SensorValue";
