@@ -67,6 +67,7 @@ export * from "./components/ObjectForm";
 export * from "./components/SensorValue";
 export * from "./components/Head1";
 export * from "./components/Text";
+export * from "./components/Icon";
 export * from "./components/Input";
 export * from "./components/InputSelect";
 export * from "./components/Link";

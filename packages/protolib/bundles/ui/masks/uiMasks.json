@@ -1342,6 +1342,43 @@
         ]
     },
     {
+        "id": "Icon",
+        "title": "Icon",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Icon"
+        },
+        "body": [
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "name",
+                        "field": "prop-name",
+                        "type": "input",
+                        "staticLabel": true,
+                        "section": "basic"
+                    },
+                    {
+                        "label": "color",
+                        "field": "prop-color",
+                        "staticLabel": true,
+                        "type": "color",
+                        "section": "basic"
+                    },
+                    {
+                        "label": "size",
+                        "field": "prop-size",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "basic"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "id": "Text",
         "title": "Text",
         "path": "*",

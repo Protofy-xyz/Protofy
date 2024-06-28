@@ -91,6 +91,7 @@ import { alignSelf, fontStyle, textAlign, fontWeight, flexDirection, justifyCont
 import { ProtoView } from '../components/ProtoView'
 import molecules from './molecules'
 import { Pressable } from '../components/Pressable'
+import { Icon } from '../components/Icon'
 
 const cw = getComponentWrapper('protolib')
 
@@ -242,6 +243,7 @@ export const miscellanyPalette = {
   ...cw(HeaderLink, 'Link2', 'HeaderLink', { href: "/hello", children: "hello" }),
   ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HR, 'MinusSquare', 'HR'),
+  ...cw(Icon, 'LogoIcon', 'Icon', { name: "Bird" }),
   ...cw(IconStack, 'SquareStack', 'IconStack'),
   ...cw(ItemCard, 'CreditCard', 'ItemCard', { children: "hello world!" }, {}, {}, true),
   ...cw(Link, 'Link', 'Link', { href: "/hello", children: "hello" }),
