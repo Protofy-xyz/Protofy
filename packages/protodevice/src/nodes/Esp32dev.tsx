@@ -60,14 +60,9 @@ const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
             return `${i + 2}-${i > ports.length/2-1 ? 'l' : 'r'}-${i}`
         }
     })
-    console.log("DevicePositioning: ", devicePositioning)
     if (!nodeData._devicePositioning) {
         setNodeData(node.id, { ...nodeData, _devicePositioning: devicePositioning })
     }
-    console.log("NodeData: ", nodeData)
-    console.log("node: ", node)
-    console.log("Calculanting: ", Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")))
-    console.log("Boolean value: ", Object.keys(nodeData).filter(e => e.includes("element-") && !e.includes("trivia")).length > 35)
     return (
         <Node output={false} skipCustom={true} node={node} color={color} isPreview={!id} title='ESP32' id={id} margin='200px' >
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>

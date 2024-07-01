@@ -83,6 +83,23 @@
                         "section": "basic"
                     },
                     {
+                        "label": "fontFamily",
+                        "field": "prop-fontFamily",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "$body",
+                            "$cherryBomb",
+                            "$heading",
+                            "$headingDmSans",
+                            "$headingDmSerifDisplay",
+                            "$mono",
+                            "$munro",
+                            "$silkscreen"
+                        ],
+                        "section": "basic"
+                    },
+                    {
                         "label": "margin",
                         "field": "prop-margin",
                         "staticLabel": true,
@@ -1050,6 +1067,23 @@
                         "section": "basic"
                     },
                     {
+                        "label": "fontFamily",
+                        "field": "prop-fontFamily",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "$body",
+                            "$cherryBomb",
+                            "$heading",
+                            "$headingDmSans",
+                            "$headingDmSerifDisplay",
+                            "$mono",
+                            "$munro",
+                            "$silkscreen"
+                        ],
+                        "section": "basic"
+                    },
+                    {
                         "label": "fontWeight",
                         "field": "prop-fontWeight",
                         "staticLabel": true,
@@ -1161,6 +1195,23 @@
                         "section": "basic"
                     },
                     {
+                        "label": "fontFamily",
+                        "field": "prop-fontFamily",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "$body",
+                            "$cherryBomb",
+                            "$heading",
+                            "$headingDmSans",
+                            "$headingDmSerifDisplay",
+                            "$mono",
+                            "$munro",
+                            "$silkscreen"
+                        ],
+                        "section": "basic"
+                    },
+                    {
                         "label": "fontWeight",
                         "field": "prop-fontWeight",
                         "staticLabel": true,
@@ -1268,6 +1319,23 @@
                         "data": [
                             "normal",
                             "italic"
+                        ],
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontFamily",
+                        "field": "prop-fontFamily",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "$body",
+                            "$cherryBomb",
+                            "$heading",
+                            "$headingDmSans",
+                            "$headingDmSerifDisplay",
+                            "$mono",
+                            "$munro",
+                            "$silkscreen"
                         ],
                         "section": "basic"
                     },
@@ -1423,6 +1491,23 @@
                         "data": [
                             "normal",
                             "italic"
+                        ],
+                        "section": "basic"
+                    },
+                    {
+                        "label": "fontFamily",
+                        "field": "prop-fontFamily",
+                        "staticLabel": true,
+                        "type": "select",
+                        "data": [
+                            "$body",
+                            "$cherryBomb",
+                            "$heading",
+                            "$headingDmSans",
+                            "$headingDmSerifDisplay",
+                            "$mono",
+                            "$munro",
+                            "$silkscreen"
                         ],
                         "section": "basic"
                     },

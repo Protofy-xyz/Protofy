@@ -26,7 +26,24 @@ const ButtonSimpleMask = ({ node = {}, nodeData = {}, children }: any) => {
             "field": "prop-textColor",
             "staticLabel": true,
             "type": "color",
-            "section": "layout"
+            "section": "theme"
+        },
+        {
+            "label": "fontFamily",
+            "field": "prop-fontFamily",
+            "staticLabel": true,
+            "type": "select",
+            "data": [
+                "$body",
+                "$cherryBomb",
+                "$heading",
+                "$headingDmSans",
+                "$headingDmSerifDisplay",
+                "$mono",
+                "$munro",
+                "$silkscreen"
+            ],
+            "section": "theme"
         },
         {
             "label": "size",
