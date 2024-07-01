@@ -26,10 +26,8 @@ export function extractNestedComponents(element, deviceComponents, keysToExtract
     const keys = keysToExtract.map((element)=>{
         return element.key
     })
-    console.log("lluis keys: ", keys)
     if (keys.includes(element.name)) {
       deviceComponents = extractNestedComponents(element, deviceComponents,keysToExtract)
-      console.log("deviceComponents lluis: ",deviceComponents)
     } else {
       if (!deviceComponents[element.name]) {
         deviceComponents[element.name] = element.config
@@ -40,7 +38,5 @@ export function extractNestedComponents(element, deviceComponents, keysToExtract
         deviceComponents[element.name].push(element.config)
       }
     }
-    console.log("lluis devComponents: ",deviceComponents);
-    console.log("lluis devComponents Array: ",new Array(deviceComponents))
     return new Array(deviceComponents)[0];
   }
