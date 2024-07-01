@@ -4,6 +4,9 @@ import { getBaseConfig } from '../../../packages/app/BaseConfig'
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import http from 'http';
 import httpProxy from 'http-proxy';
+import { join } from 'path';
+import fs from 'fs';
+var mime = require('mime-types')
 
 const isFullDev = process.env.FULL_DEV === '1';
 
@@ -44,6 +47,22 @@ export const _startProxy = (Port, mode) => {
     var server = http.createServer(function (req, res) {
         // You can define here your custom logic to handle the request
         // and then proxy the request.
+        //check if request is for a public file
+        if (req.url.startsWith('/public/')) {
+            logger.trace({ url: req.url }, "Serving public file: " + req.url)
+            //remove ../ from url
+            const url = req.url.replace(/\.\.\//g, '')
+            const path = join('../../data/', mode == "production" ? 'prod': 'dev', url)
+            if(!fs.existsSync(path)){
+                res.writeHead(404, { 'Content-Type': 'text/plain' });
+                res.end('Not Found');
+                return
+            }
+
+            res.writeHead(200, { 'Content-Type': mime.lookup(path) });
+            fs.createReadStream(path).pipe(res)
+            return
+        }
         const resolver = system.services.find((resolver) => resolver.route(req, mode))
         if (!resolver) {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
