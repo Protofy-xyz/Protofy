@@ -1,4 +1,4 @@
-import { Text as TamaguiText, styled } from 'tamagui'
+import { Text as TamaguiText, styled, TextProps } from 'tamagui'
 import React from "react"
 
 const StyledText = styled(TamaguiText, {
@@ -12,7 +12,7 @@ const StyledText = styled(TamaguiText, {
   },
 })
 
-export const Text = React.forwardRef((props: any, ref: any) => {
+export const Text = React.forwardRef((props: TextProps, ref: any) => {
   return <StyledText ref={ref} {...props}>
     {props.children}
   </StyledText>;

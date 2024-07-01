@@ -82,14 +82,14 @@ export const TextProps = [
         "field": "prop-color",
         "type": "color",
         "staticLabel": true,
-        "section": "basic"
+        "section": "text"
     },
     {
         "label": "fontSize",
         "field": "prop-fontSize",
         "staticLabel": true,
         "type": "input",
-        "section": "basic"
+        "section": "text"
     },
     {
         "label": "fontStyle",
@@ -100,7 +100,7 @@ export const TextProps = [
             "normal",
             "italic"
         ],
-        "section": "basic"
+        "section": "text"
     },
     {
         "label": "fontWeight",
@@ -120,8 +120,25 @@ export const TextProps = [
             "bold",
             "normal"
         ],
-        "section": "basic"
+        "section": "text"
     },
+    {
+        "label": "fontFamily",
+        "field": "prop-fontFamily",
+        "staticLabel": true,
+        "type": "select",
+        "data": [
+            "$body",
+            "$cherryBomb",
+            "$heading",
+            "$headingDmSans",
+            "$headingDmSerifDisplay",
+            "$mono",
+            "$munro",
+            "$silkscreen"
+        ],
+        "section": "text"
+    }
 
 ]
 
