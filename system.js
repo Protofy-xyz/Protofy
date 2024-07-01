@@ -70,6 +70,12 @@ const config = {
             "route": (req, mode) => mode === 'development' ? (process.env.SITE_URL ?? 'http://localhost:3000') : undefined
         },
         {
+            "name": "expo",
+            "description": "Expo services, providing the mobile user interface based on expo",
+            "disabled": true,
+            "route": () => false
+        },
+        {
             "name": "next",
             "dirname": "next-compiled",
             "description": "Frontend services, providing the web user interface based on nextjs",
