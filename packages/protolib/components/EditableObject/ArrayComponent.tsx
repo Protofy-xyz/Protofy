@@ -1,9 +1,9 @@
 import { Button, Stack, XStack } from "tamagui";
 import { Pencil, X, Tags, Layers } from '@tamagui/lucide-icons';
 import { Tinted } from 'protolib'
-import { FormGroup, getDefaultValue, iconStyle } from ".";
+import { DeleteButton, FormGroup, getDefaultValue, iconStyle } from ".";
 
-export const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields, URLTransform}) => {
+export const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields, URLTransform }) => {
     return <FormGroup ele={ele} title={' (' + arrData.length + ')'} icon={Layers} path={path}>
         <Stack>
             {arrData.map((d, i) => {
@@ -27,21 +27,10 @@ export const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, se
                         arrayName: ele.name,
                         URLTransform: URLTransform
                     })}
-                    {(mode == 'edit' || mode == 'add') && <Stack ml={"$2"}
-                        top={13} br={"$5"} p={"$2"}
-                        als="flex-start" cursor='pointer'
-                        {...elementDef.type._def.typeName != 'ZodObject' ? {} : {
-                            position: "absolute",
-                            right: '0',
-                            top: 6
-                        }}
-                        pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
-                        onPress={() => {
-                            arrData.splice(i, 1)
-                            setFormData(ele.name, [...arrData])
-                        }}>
-                        <X color={'var(--red7)'} strokeWidth={2} size={20} />
-                    </Stack>}
+                    <DeleteButton mode={mode} onPress={() => {
+                        arrData.splice(i, 1)
+                        setFormData(ele.name, [...arrData])
+                    }} />
                 </XStack>
             })}
         </Stack>

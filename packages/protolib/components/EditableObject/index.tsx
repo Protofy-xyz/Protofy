@@ -100,6 +100,21 @@ export const GridElement = ({ index, data, width }) => {
     </XStack>
 }
 
+export const DeleteButton = ({ mode, onPress }) => (
+    <>
+        {(mode == 'edit' || mode == 'add') && <Stack mr={"$2"}
+            top={6} br={"$5"} p={"$2"}
+            als="flex-start" cursor='pointer'
+            position="absolute"
+            right='0'
+            pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
+            onPress={onPress}>
+            <X color={'var(--red7)'} strokeWidth={2} size={20} />
+        </Stack>
+        }
+    </>
+)
+
 export type EditableObjectProps = {
     initialData?: any,
     sourceUrl: string,

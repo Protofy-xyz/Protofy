@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Button, Input, Stack, XStack, YStack } from "tamagui";
 import { List } from '@tamagui/lucide-icons';
 import { AlertDialog } from 'protolib'
-import { FormGroup, OpenedSectionsContext, getDefaultValue } from ".";
+import { DeleteButton, FormGroup, OpenedSectionsContext, getDefaultValue } from ".";
 import { getElement } from "./Element";
 
 export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, setData, mode, customFields, path, setFormData, URLTransform }) => {
@@ -31,11 +31,15 @@ export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, s
     const handleAccept = async () => {
         const val = getDefaultValue(ele._def.valueType._def.typeName);
         const id = [...path, ele.name, name].join("/")
-        // console.log("ID", id)
         setMenuOpened(false);
         setName("");
         setOpened(updatePathArray(opened, id))
         setFormData(ele.name, { ...recordData, [name]: val });
+    };
+
+    const handleDelete = async (keyToDelete) => {
+        delete recordData[keyToDelete]
+        setFormData(ele.name, { ...recordData })
     };
 
     return <FormGroup ele={ele} title={inArray ? ' #' + (ele.name + 1) : '...'} icon={List} path={path}>
@@ -56,6 +60,7 @@ export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, s
                         URLTransform
                     }
                     )}
+                    <DeleteButton key={key} onPress={() => handleDelete(key)} mode={mode} />
                 </XStack>
             }) : null}
         </Stack>
