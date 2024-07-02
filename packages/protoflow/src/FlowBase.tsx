@@ -147,6 +147,7 @@ const FlowsBase = ({
     const [nodes, setNodes, onNodesChange] = useProtoNodesState(initialNodes, extraStateData);
     const [edges, setEdges, onEdgesChange] = useProtoEdgesState(initialEdges, extraStateData);
     const [hasChanges, setHasChanges] = useState(false);
+    const [prevReducedNodes, setPrevReducedNodes] = useState("");
     const [prevNodeData, setPrevNodeData] = useState(deleteAdditionalKeys(nodeData));
 
     const rendered = useRef(false)
@@ -673,6 +674,21 @@ const FlowsBase = ({
         }
     }
 
+    const handleRelayout = async () => {
+        const reduceNodes = nds => nds.reduce((total, n) => total += n.id + " " + n.height + ',', '')
+        let currentReducedNodes = reduceNodes(nodes)
+
+        if (prevReducedNodes != currentReducedNodes) {
+            if (nodes && nodes.length && nodes.filter(n => n.width && n.height).length == nodes.length) {
+                const { layoutedNodes } = await reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
+                setPrevReducedNodes(reduceNodes(layoutedNodes))
+            }
+            else {
+                setPrevReducedNodes(currentReducedNodes)
+            }
+        }
+    }
+
     useEffect(() => {
         const edgesDiffs = getDiffs(removeSizes(initialEdges), removeSizes(edges))
         const nodesDiffs = getDiffs(removeSizes(initialNodes), removeSizes(nodes))
@@ -705,11 +721,6 @@ const FlowsBase = ({
         }
 
         if (nodesDiffs && nodesDiffs.length || edgesDiffs && edgesDiffs.length) {
-            if (edgesDiffs && !nodesDiffs) {
-                reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
-                rendered.current = true
-                setInitialEdges(edges)
-            }
             if (!showActionsBar) {
                 onGraphChanged()
             }
@@ -718,6 +729,8 @@ const FlowsBase = ({
             setHasChanges(false)
         }
         setSaveStatus(null)
+
+        handleRelayout()
     }, [nodes, edges])
 
     useEffect(() => {
@@ -779,15 +792,7 @@ const FlowsBase = ({
         }
     }, [nodeData])
 
-    useEffect(() => {
-        if (nodes && nodes.length && nodes.filter(n => n.width && n.height).length == nodes.length) {
-            reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
-            rendered.current = true
-            // flowRef.current.fitView({maxZoom: 0.7})
-        }
-    }, [nodes.reduce((total, n) => total += n.id + ' ' + (n.width && n.height ? '1' : '0') + ',', '')])
-
-    if(typeof window !== undefined) window['reLayout'] = () => {
+    if (typeof window !== undefined) window['reLayout'] = () => {
         reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
     }
 
@@ -816,7 +821,7 @@ const FlowsBase = ({
                 style={{ backgroundColor: bgColor }}
                 nodePreview={nodePreview}
                 onNodeInitializationStatusChange={(status) => {
-                    if(status && rendered.current) {
+                    if (status && rendered.current) {
                         reLayout(currentLayout, nodes, edges, setNodes, setEdges, _getFirstNode, setNodesMetaData, nodeData)
                     }
                 }}
