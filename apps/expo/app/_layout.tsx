@@ -14,11 +14,17 @@ export default function HomeLayout() {
   if (!loaded) {
     return null
   }
+
+  /* 
+    Disabled due that enabling "transform-inline-environment-variables"
+    at babel crash. There is a component in Provider that uses inline environment variables
+    and at this moment this project doesn't allow inline variables 
+  */
   return (
-    <Provider>
-      <ThemeProvider value={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack />
-      </ThemeProvider>
-    </Provider>
+    // <Provider>
+    <ThemeProvider value={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack />
+    </ThemeProvider>
+    // </Provider>
   )
 }

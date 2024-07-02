@@ -1,3 +1,16 @@
 {
-  "extends": "../../tsconfig"
+  "extends": "../../tsconfig",
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "./tamagui.config.ts",
+
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "react-jsx"
+  },
+  "references": []
 }

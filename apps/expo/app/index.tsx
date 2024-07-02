@@ -1,8 +1,9 @@
-import { HomeScreen } from 'app/features/home/screen'
 import { Stack } from 'expo-router'
 import { setConfig } from 'protolib/base/Config';
-import {getBaseConfig} from 'app/BaseConfig'
-setConfig({...getBaseConfig(process), logger: {...getBaseConfig(process).logger, name: "expo"}})
+import { getBaseConfig } from 'app/BaseConfig';
+import { MyComponent } from 'app/bundles/custom/expo/my-screen';
+
+setConfig({ ...getBaseConfig('expo', process), logger: { ...getBaseConfig('expo', process).logger } })
 
 export default function Screen() {
   return (
@@ -12,7 +13,7 @@ export default function Screen() {
           title: 'Home',
         }}
       />
-      <HomeScreen />
+      <MyComponent />
     </>
   )
 }

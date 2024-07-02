@@ -3,7 +3,6 @@ module.exports = function (api) {
   return {
     presets: [['babel-preset-expo', { jsxRuntime: 'automatic' }]],
     plugins: [
-      require.resolve('expo-router/babel'),
       [
         require.resolve('babel-plugin-module-resolver'),
         {
@@ -30,7 +29,7 @@ module.exports = function (api) {
               },
             ],
           ]),
-      'transform-inline-environment-variables',
+          // 'transform-inline-environment-variables',
     ],
   };
 };

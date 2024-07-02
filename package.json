@@ -12,6 +12,7 @@
     "./tests"
   ],
   "scripts": {
+    "native": "yarn prepare-dev && yarn workspace expo-app start",
     "start": "yarn prepare-dev && yarn start-fast",
     "start-fast": "START_ALL=1 pm2 start ecosystem.config.js --no-daemon",
     "start-service": "yarn prepare-dev && yarn start-service-fast",
@@ -45,11 +46,11 @@
     "clean": "yarn workspaces foreach --all run clean"
   },
   "resolutions": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "~18.2.0",
+    "react-dom": "~18.2.0",
     "react-refresh": "^0.14.0",
-    "react-native-svg": "13.4.0",
-    "react-native-web": "^0.18.12"
+    "react-native-svg": "15.2.0",
+    "react-native-web": "~0.19.12"
   },
   "dependencies": {
     "@babel/runtime": "^7.18.9",

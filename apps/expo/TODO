@@ -1,0 +1,5 @@
+can't use any '@my/ui' component or even 'tamagui' component 
+due that some exported components of the library use inline environment variables.
+
+To use inline environment variables you should set up the config at Babel (babel.comfig.js).
+If add line 'transform-inline-environment-variables' at babel config then crash whole expo app

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "protofy",
-    "slug": "protofy",
+    "slug": "app",
     "scheme": "protofy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -32,8 +32,15 @@
     },
     "extra": {
       "eas": {
-        "projectId": "[your_project_id]"
+        "projectId": "3c207c37-7baa-4471-a679-e2f147de9c2e"
       }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
     }
   }
 }
