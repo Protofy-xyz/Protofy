@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "protofy",
-    "slug": "protofy",
-    "scheme": "protofy",
+    "name": "[yourprojectsname]",
+    "slug": "[yourprojectsname]",
+    "scheme": "[yourprojectsname]",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,14 +18,14 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.protofy.app"
+      "bundleIdentifier": "com.[yourprojectsname].app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.protofy.app"
+      "package": "com.[yourprojectsname].app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
