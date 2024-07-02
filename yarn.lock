@@ -3620,29 +3620,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config-plugins@npm:~6.0.0":
-  version: 6.0.1
-  resolution: "@expo/config-plugins@npm:6.0.1"
-  dependencies:
-    "@expo/config-types": "npm:^48.0.0"
-    "@expo/json-file": "npm:~8.2.37"
-    "@expo/plist": "npm:^0.0.20"
-    "@expo/sdk-runtime-versions": "npm:^1.0.0"
-    "@react-native/normalize-color": "npm:^2.0.0"
-    chalk: "npm:^4.1.2"
-    debug: "npm:^4.3.1"
-    find-up: "npm:~5.0.0"
-    getenv: "npm:^1.0.0"
-    glob: "npm:7.1.6"
-    resolve-from: "npm:^5.0.0"
-    semver: "npm:^7.3.5"
-    slash: "npm:^3.0.0"
-    xcode: "npm:^3.0.1"
-    xml2js: "npm:0.4.23"
-  checksum: 10/b0dcf7453832ad5b42c2c4b354ecc964e7fa0fead76afe2fe9fbb2337bb697db0d6a752653b8a123a3204fb3ada8476f543afadc5f2416b0c737dce7207a05ea
-  languageName: node
-  linkType: hard
-
 "@expo/config-types@npm:^48.0.0":
   version: 48.0.0
   resolution: "@expo/config-types@npm:48.0.0"
@@ -3681,7 +3658,7 @@ __metadata:
   resolution: "@expo/config@npm:8.0.2"
   dependencies:
     "@babel/code-frame": "npm:~7.10.4"
-    "@expo/config-plugins": "npm:~6.0.0"
+    "@expo/config-plugins": "npm:~8.0.0"
     "@expo/config-types": "npm:^48.0.0"
     "@expo/json-file": "npm:^8.2.37"
     getenv: "npm:^1.0.0"
@@ -3784,7 +3761,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/json-file@npm:^8.2.37, @expo/json-file@npm:~8.2.37":
+"@expo/json-file@npm:^8.2.37":
   version: 8.2.37
   resolution: "@expo/json-file@npm:8.2.37"
   dependencies:
@@ -3879,17 +3856,6 @@ __metadata:
     split: "npm:^1.0.1"
     sudo-prompt: "npm:9.1.1"
   checksum: 10/5b95ef943dea3e1143a76f0da6b2477b26183e17028a258bcf22e26eb831d5ae09c00591c76915bf22c0069f7e064d2a0ee02595d3a00e93694f97336d30c2c4
-  languageName: node
-  linkType: hard
-
-"@expo/plist@npm:^0.0.20":
-  version: 0.0.20
-  resolution: "@expo/plist@npm:0.0.20"
-  dependencies:
-    "@xmldom/xmldom": "npm:~0.7.7"
-    base64-js: "npm:^1.2.3"
-    xmlbuilder: "npm:^14.0.0"
-  checksum: 10/793095f826b44414d119567099a5a7de641446083403df31a3c6d2dceec6e87ea893509a04a5f01e658a284112ddf3974dbca0a858b5be180b4b76ac66706b55
   languageName: node
   linkType: hard
 
@@ -6236,7 +6202,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/normalize-color@npm:^2.0.0, @react-native/normalize-color@npm:^2.1.0":
+"@react-native/normalize-color@npm:^2.1.0":
   version: 2.1.0
   resolution: "@react-native/normalize-color@npm:2.1.0"
   checksum: 10/a72b98538e6b7e265fb0669b8767d5f788777fb1a0ac1df7b0c82d8b3a804c8122aa7b819688c5e36fcf90b5ba93050b0070e29d3f0d70ab9530c2abd2bb9f9e
@@ -24600,7 +24566,7 @@ __metadata:
     rimraf: "npm:^5.0.1"
     semver: "npm:^7.5.4"
     turbo: "npm:^1.10.3"
-    typescript: "npm:^5.2.2"
+    typescript: "npm:~5.3.3"
   languageName: unknown
   linkType: soft
 
@@ -27501,16 +27467,6 @@ __metadata:
     simple-plist: "npm:^1.1.0"
     uuid: "npm:^7.0.3"
   checksum: 10/539d7b808ccce648078c5ceb63c4f9c14a7018a7db688fe0ff55c7d59e685c67392f18e9f531ce524f8d71162e836714b8835fa0a8688e976d4a293b147917c3
-  languageName: node
-  linkType: hard
-
-"xml2js@npm:0.4.23":
-  version: 0.4.23
-  resolution: "xml2js@npm:0.4.23"
-  dependencies:
-    sax: "npm:>=0.6.0"
-    xmlbuilder: "npm:~11.0.0"
-  checksum: 10/52896ef39429f860f32471dd7bb2b89ef25b7e15528e3a4366de0bd5e55a251601565e7814763e70f9e75310c3afe649a42b8826442b74b41eff8a0ae333fccc
   languageName: node
   linkType: hard
 
