@@ -19,6 +19,7 @@ export const NativeToast = () => {
       y={0}
       opacity={1}
       scale={1}
+      /* @ts-ignore */
       animation="quick"
     >
       <YStack>
