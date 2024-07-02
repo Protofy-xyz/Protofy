@@ -6,7 +6,7 @@ module.exports = {
     apps: isProduction? [] : [
       {
         name: "expo",
-        script: '../../.yarn/releases/yarn-3.5.0.cjs',
+        script: '../../.yarn/releases/yarn-4.1.0.cjs',
         args: 'start',
         windowsHide: true,
         watch: false,
