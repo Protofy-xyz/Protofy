@@ -3,7 +3,6 @@ import { API, Tinted } from 'protolib'
 import { Pencil } from '@tamagui/lucide-icons'
 import { getTokens } from '@tamagui/core'
 import { Button } from 'tamagui'
-import { useRouter } from "next/router"
 import dynamic from 'next/dynamic';
 import { palettes } from 'app/bundles/palettes'
 import { Session } from 'protolib'
@@ -33,7 +32,6 @@ export const useEditor = (fn, options: OptionsProps) => {
 }
 
 export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}, visualUiContext: any = undefined, options = {}) => {
-  const router = useRouter()
   const [session] = useAtom(Session)
   const edit = useIsEditing()
 

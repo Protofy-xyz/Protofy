@@ -1,9 +1,7 @@
 import * as React from 'react'
-import { Popover, YStack } from 'tamagui'
+import { YStack } from 'tamagui'
 import { HeaderLink, Tinted } from 'protolib'
-import { createSession } from 'protolib'
-import { useSession, clearSession, useUserSettings, useSessionContext, useWorkspaces } from 'protolib'
-import { useRouter } from 'next/router'
+import { useSession, useUserSettings, useSessionContext, useWorkspaces } from 'protolib'
 import menuOptions from '../bundles/menu'
 import workspaces from '../bundles/workspaces'
 

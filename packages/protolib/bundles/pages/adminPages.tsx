@@ -8,7 +8,6 @@ import { usePageParams } from '../../next';
 import { useState } from 'react'
 import { getPendingResult } from '../../base'
 import { usePendingEffect } from '../../lib/usePendingEffect'
-import { useRouter } from 'next/router'
 import { AlertDialog } from '../../components/AlertDialog'
 import { Slides } from '../../components/Slides'
 import { EditableObject } from '../../components/EditableObject'
@@ -68,7 +67,6 @@ export default {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
             const env = useWorkspaceEnv()
             const defaultData = { data: { web: true, electron: false, protected: false, template: 'blank' } }
-            const router = useRouter();
             const { replace } = usePageParams(pageState)
             const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
             const [addOpen, setAddOpen] = useState(false)

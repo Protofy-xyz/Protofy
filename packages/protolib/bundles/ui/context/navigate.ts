@@ -1,4 +1,4 @@
-import {useRouter } from 'next/router';
+import { useRouter } from 'solito/navigation';
 
 export const actionNavigate = (path) => {
     const router = useRouter();
