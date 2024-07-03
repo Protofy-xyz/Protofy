@@ -6,7 +6,7 @@ import { FileWidget } from '../../features/components/FilesWidget';
 import { IconContainer } from '../../../components/IconContainer';
 import { X } from '@tamagui/lucide-icons';
 import { useUpdateEffect } from 'usehooks-ts'
-import { useRouter } from 'next/router';
+import { useSearchParams, useRouter, usePathname } from 'solito/navigation';
 import { useState } from 'react';
 import { Explorer } from './Explorer';
 import FileActions from 'app/bundles/fileActions'
@@ -28,11 +28,13 @@ type FileBrowserProps = {
 }
 
 export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, selection, fileFilter }: FileBrowserProps) => {
-
     const router = useRouter()
+    const searchParams = useSearchParams();
+    const query = Object.fromEntries(searchParams.entries());
+    const pathname = usePathname();
 
-    const routePath = router.query.path ?? '/'
-    const routeFile = router.query.file ? routePath + '/' + router.query.file.split('/')[0] : null
+    const routePath = query.path ?? '/';
+    const routeFile = query.file ?routePath + '/' + query.file.split('/')[0] : null
 
     const [filesState, setFilesState] = useState(initialFilesState ?? getPendingResult('pending'))
     const [dialogOpen, setDialogOpen] = useState(routeFile ? true : false)
@@ -59,33 +61,36 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
     usePendingEffect((s) => { API.get({ url: '/adminapi/v1/files/' + currentPath }, s) }, setFilesState, initialFilesState)
 
     useUpdateEffect(() => {
-        logger.debug({ query: router.query.path, newpath: currentPath }, `query: ${router.query.path} newpath: ${currentPath}`)
+        logger.debug({ query: routePath, newpath: currentPath }, `query: ${routePath} newpath: ${currentPath}`)
         const path = (!currentPath.startsWith('/') ? '/' : '') + currentPath
-        if (router.query.path != currentPath) router.push({
-            pathname: router.pathname,
-            query: { ...router.query, path: path }
-        }, undefined, { shallow: true })
+
+        if (routePath !== currentPath) {
+            const newQuery = { ...query, path: path };
+            const newSearchParams = new URLSearchParams(newQuery).toString();
+            const newUrl = `${pathname}?${newSearchParams}`;
+            router.push(newUrl);
+          }
     }, [currentPath])
 
     useUpdateEffect(() => {
         if (currentFile) {
             setDialogOpen(true)
         } else {
-            const newQuery = { ...router.query };
+            const newQuery = { ...query };
             delete newQuery.file;
-            router.replace({
-                pathname: router.pathname,
-                query: newQuery
-            }, undefined, { shallow: true });
-        }
+      
+            const newSearchParams = new URLSearchParams(newQuery).toString();
+            const newUrl = `${pathname}?${newSearchParams}`;
+            router.replace(newUrl);
+          }
     }, [currentFile])
 
 
     useUpdateEffect(() => {
-        const path = router.query.path && router.query.path['split'] ? router.query.path['split']('\\').join('/') : ''
+        const path = routePath && routePath['split'] ? routePath['split']('\\').join('/') : ''
         logger.debug(`current path: ${path}`);
-        if (router.query.file) {
-            const file = (path + '/' + router.query.file).replace(/\/+/g, '/')
+        if (query.file) {
+            const file = (path + '/' + query.file).replace(/\/+/g, '/')
             setCurrentFile(file)
         } else {
             setCurrentFile('')
@@ -94,7 +99,7 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
             setCurrentPath(path)
         }
 
-    }, [router.query.path, router.query.file]);
+    }, [routePath, query.file]);
 
     const onOpen = (file: any) => {
         logger.debug({ file }, `on open client: ${JSON.stringify(file)}`)
@@ -108,7 +113,7 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
 
     const { resolvedTheme } = useThemeSetting()
 
-    const isFull = router.query?.file
+    const isFull = query?.file
 
     const getWidget = () => <FileWidget
         hideCloseIcon={isFull ? true : false}
