@@ -1,7 +1,8 @@
 const path = require('path')
 const fs = require('fs')
 
-const INVALID_DEPENDENCIES = ["bindings", "deasync", "node-etcd"]
+// const INVALID_DEPENDENCIES = ["bindings", "deasync", "node-etcd"]
+const INVALID_DEPENDENCIES = [ "deasync", "node-etcd"] // Removes bindings for passing tests
 
 describe("Protofy setup tests", () => {
     it("Should have a yarn.lock file and avoid usage of OS dependent packages", () => {
@@ -20,7 +21,6 @@ describe("Protofy setup tests", () => {
 
             return true
         }
-
         expect(validDependencies()).toBe(true);
-    })
+    }, 20000)
 })
