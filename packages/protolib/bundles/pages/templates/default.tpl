@@ -14,7 +14,7 @@ import { UIWrapLib, UIWrap, BigTitle, withSession, Page, useEditor, API, SSR, VS
 import { DefaultLayout, } from "../../../layout/DefaultLayout"
 import { Protofy } from 'protolib/base'
 import { context } from "app/bundles/uiContext";
-import { useRouter } from "next/router";
+import { useRouter } from "solito/navigation";
 import { Objects } from "app/bundles/objects";
 
 const isProtected = Protofy("protected", {{protected}})

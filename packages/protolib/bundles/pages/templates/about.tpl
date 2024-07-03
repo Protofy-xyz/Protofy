@@ -10,7 +10,7 @@ import React, { useState } from 'react'
 import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
 import { context } from "app/bundles/uiContext";
-import { useRouter } from "next/router";
+import { useRouter } from "solito/navigation";
 import { Objects } from "app/bundles/objects";
 
 const isProtected = Protofy("protected", false)

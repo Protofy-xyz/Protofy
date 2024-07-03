@@ -5,7 +5,7 @@ import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { Paragraph } from '@my/ui';
 import { context } from "app/bundles/uiContext";
-import { useRouter } from "next/router";
+import { useRouter } from "solito/navigation";
 
 const isProtected = Protofy("protected", {{protected}})
 Protofy("pageType", "ecommerce")
