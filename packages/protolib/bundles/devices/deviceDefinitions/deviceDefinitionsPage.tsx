@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { CircuitBoard, Tag, BookOpen, Eye } from '@tamagui/lucide-icons';
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas';
-import { API, Chip, DataTable2, DataView, ButtonSimple, AlertDialog, AdminPage, PaginatedData, InteractiveIcon } from 'protolib'
+import { API, Chip, DataTable2, DataView, AlertDialog, AdminPage, PaginatedData, InteractiveIcon } from 'protolib'
 import { z } from 'protolib/base'
-import { DeviceBoardModel } from '../deviceBoards';
 import { DeviceCoreModel } from '../devicecores';
 import { Button, XStack } from "tamagui";
 import { useThemeSetting } from '@tamagui/next-theme'
@@ -11,7 +10,7 @@ import { getPendingResult } from "protolib/base";
 import { usePendingEffect, useWorkspaceEnv } from "protolib";
 import { Flows } from "protolib";
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
-import { useRouter } from 'next/router'
+import { useSearchParams, usePathname } from 'solito/navigation';
 import layout from './DeviceLayout'
 
 const DeviceDefitionIcons = {
@@ -29,8 +28,11 @@ export default {
     const defaultJsCode = { "components": "[\n \"mydevice\",\n \"esp32dev\",\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n" }
     const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
     const [editedObjectData, setEditedObjectData] = React.useState<any>({})
-    const router = useRouter()
     const env = useWorkspaceEnv()
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
+    const query = Object.fromEntries(searchParams.entries());
 
     const [coresList, setCoresList] = useState(extraData?.cores ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: coresSourceUrl }, s) }, setCoresList, extraData?.cores)
@@ -50,7 +52,7 @@ export default {
             }}
             showActionsBar={false}
             layout={layout}
-            customComponents={getFlowsCustomComponents(router.pathname, router.query)}
+            customComponents={getFlowsCustomComponents(pathname, query)}
             bridgeNode={false}
             setSourceCode={(sourceCode) => {
               console.log('set new sourcecode from flows: ', sourceCode)
@@ -59,7 +61,7 @@ export default {
             sourceCode={sourceCode}
             themeMode={resolvedTheme}
             key={'flow'}
-            config={{ masks: getFlowMasks(router.pathname, router.query), layers: [] }}
+            config={{ masks: getFlowMasks(pathname, query), layers: [] }}
             bgColor={'transparent'}
             dataNotify={(data: any) => {
               if (data.notifyId) {
