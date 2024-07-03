@@ -112,12 +112,12 @@ describe("Test admin capabilities", () => {
                 const objectName = 'testObject'
                 await protoBrowser.fillEditableObjectInput('name', objectName)
                 // Open editable form
-                await protoBrowser.clickElement("xpath=//*[@id='eo-formgroup']/span/div/div/span/button")
+                await protoBrowser.clickElement("xpath=//*[@id='eo-formgroup']/div/div/span/span/button")
                 await protoBrowser.clickElement("#eo-obj-comp-btn")
                 // Fill object key
                 const keyName = "myKey"
-                await protoBrowser.waitForElement("xpath=//*[@id='eo-add-field-input']/span/input");
-                await protoBrowser.getPage().fill("xpath=//*[@id='eo-add-field-input']/span/input", keyName);
+                await protoBrowser.waitForElement("xpath=//*[@id='eo-add-field-input']/span/span/input");
+                await protoBrowser.getPage().fill("xpath=//*[@id='eo-add-field-input']/span/span/input", keyName);
                 await protoBrowser.clickElement("#alert-dlg-accept")
                 await protoBrowser.submitEditableObject()
                 await protoBrowser.waitForElement(`#objects-datatable-${objectName}`)

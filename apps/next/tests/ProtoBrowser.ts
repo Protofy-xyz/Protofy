@@ -182,7 +182,7 @@ export class ProtoBrowser {
     }
 
     async submitEditableObject() {
-        await this.clickElement("xpath=//*[@id='admin-eo']/div/div/div/span/span/span/button")
+        await this.clickElement("xpath=//*[@id='admin-eo']/div/div[2]/div[2]/span/span/button")
     }
 
     async takeScreenshot(filename: string, context?: number, page?: number) {
