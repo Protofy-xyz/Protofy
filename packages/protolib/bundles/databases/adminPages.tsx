@@ -1,6 +1,6 @@
 import { DatabaseEntryModel, DatabaseModel } from '.'
 import { DataView, API, AdminPage, PaginatedDataSSR, AlertDialog, Tinted, Center, useWorkspaceEnv } from 'protolib'
-import { useRouter } from "next/router"
+import { useSearchParams, useRouter, usePathname } from 'solito/navigation';
 import { Spinner, YStack } from '@my/ui'
 import { DataCard } from '../../components/DataCard'
 import { useState } from 'react'
@@ -28,7 +28,7 @@ const generateBackup = async (element) => {
 
 export default {
     'databases': {
-        component: ({ workspace, pageState, initialItems, pageSession, env}: any) => {
+        component: ({ workspace, pageState, initialItems, pageSession, env }: any) => {
             const workspaceEnv = useWorkspaceEnv()
             const router = useRouter()
             const subpath = env == 'system' ? './system/' : './databases/'
@@ -49,7 +49,7 @@ export default {
                 "bulk": {
                     buttonCaption: "Backup",
                     title: "Create Backups",
-                    description: "Are you sure want to backup "+ numSelectedItems +" databases?"
+                    description: "Are you sure want to backup " + numSelectedItems + " databases?"
                 },
                 "global": {
                     buttonCaption: "Backup all databases",
@@ -87,13 +87,13 @@ export default {
                 </AlertDialog>
                 <DataView
                     rowIcon={entityName == 'Application' ? DatabaseBackup : Database}
-                    sourceUrl={databasesSourceUrl+(env?'?env='+env: '')}
+                    sourceUrl={databasesSourceUrl + (env ? '?env=' + env : '')}
                     initialItems={initialItems}
                     numColumnsForm={1}
-                    entityName={entityName + ' databases'+(entityName != 'System' && env == 'dev' ? ' (dev)' : '')}
+                    entityName={entityName + ' databases' + (entityName != 'System' && env == 'dev' ? ' (dev)' : '')}
                     name="database"
                     onSelectItem={(item) => {
-                        router.push(subpath+'view?database=' + item.getId()+(env?'&env='+env: ''))
+                        router.push(subpath + 'view?database=' + item.getId() + (env ? '&env=' + env : ''))
                     }}
                     // hideAdd={true}
                     model={DatabaseModel}
@@ -126,7 +126,6 @@ export default {
     },
     'databases/view': {
         component: ({ workspace, pageState, sourceUrl, initialItems, pageSession, extraData, env }: any) => {
-            const router = useRouter()
             const [tmpItem, setTmpItem] = useState<string | null>(null)
             const [content, setContent] = useState(initialItems)
             const [newKey, setNewKey] = useState('')
@@ -134,20 +133,24 @@ export default {
             const [error, setError] = useState(false)
             const emptyItemValue = { exapmle: "exampleValue" }
             const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-            const currentDB = router.query.database ?? ''
+            const searchParams = useSearchParams();
+            const pathname = usePathname();
+
+            const query = Object.fromEntries(searchParams.entries());
+            const currentDB = query.database ?? ''
 
             const workspaceEnv = useWorkspaceEnv()
             env = env == 'system' ? undefined : workspaceEnv
 
             const fetch = async () => {
-                setContent(await API.fetch('/adminapi/v1/databases/' + currentDB+(env?'?env='+env: '')))
+                setContent(await API.fetch('/adminapi/v1/databases/' + currentDB + (env ? '?env=' + env : '')))
             }
             const onDelete = async (key, isTemplate) => {
                 if (isTemplate) {
                     setTmpItem(null)
                     content.data.shift()
                 } else {
-                    const result = await API.get('/adminapi/v1/databases/' + currentDB + '/' + key + '/delete'+(env?'?env='+env: ''))
+                    const result = await API.get('/adminapi/v1/databases/' + currentDB + '/' + key + '/delete' + (env ? '?env=' + env : ''))
                     if (result?.isLoaded && result.data.result == 'deleted') {
                         await fetch()
                         setRenew(renew + 1)
@@ -165,7 +168,7 @@ export default {
                 setNewKey("")
             }
             const onSave = async (newContent, key) => {
-                const result = await API.post('/adminapi/v1/databases/' + currentDB + '/' + key+(env?'?env='+env: ''), newContent)
+                const result = await API.post('/adminapi/v1/databases/' + currentDB + '/' + key + (env ? '?env=' + env : ''), newContent)
                 if (result?.isLoaded) {
                     await fetch()
                     setRenew(renew + 1)
@@ -174,12 +177,12 @@ export default {
                 return result
             }
 
-            
+
             return (<AdminPage title={currentDB} workspace={workspace} pageSession={pageSession}>
-                {router.isReady ? <DataView
+                {pathname ? <DataView
                     integratedChat
                     key={renew}
-                    sourceUrl={'/adminapi/v1/databases/' + currentDB+(env?'?env='+env: '') }
+                    sourceUrl={'/adminapi/v1/databases/' + currentDB + (env ? '?env=' + env : '')}
                     initialItems={content}
                     numColumnsForm={1}
                     name={currentDB}

@@ -1,14 +1,17 @@
-import { YStack, XStack, Stack, Paragraph, Text, Button, Input, Theme } from 'tamagui'
-import { useAtom, API, createApiAtom, DataCard, Search, Popover, Tinted } from 'protolib'
+import { YStack, XStack, Stack, Paragraph, Text, Button, Input } from 'tamagui'
+import { API, DataCard, Search, Popover, Tinted } from 'protolib'
 import { useUpdateEffect } from 'usehooks-ts'
-import { useRouter } from 'next/router'
+import { useSearchParams } from 'solito/navigation';
 import { useState } from 'react'
 import { Plus } from '@tamagui/lucide-icons'
 
 export default function DBAdmin({ contentState }) {
-    const router = useRouter()
+    const searchParams = useSearchParams();
+    const query = Object.fromEntries(searchParams.entries());
+    
+    const currentDB = query.name ? query.name[2] : undefined;
+
     const [content, setContent] = useState(contentState.data.entries)
-    const currentDB = router.query.name[2]
     const [renew, setRenew] = useState(1)
     const [originalContent, setOriginalContent] = useState<any>()
 
