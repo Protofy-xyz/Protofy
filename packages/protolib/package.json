@@ -55,7 +55,8 @@
     "resend": "~3.2.0",
     "short-uuid": "5.2.0",
     "tamagui": "^1.101.7",
-    "usehooks-ts": "^2.9.1"
+    "usehooks-ts": "^2.9.1",
+    "xstate": "5.14.0"
   },
   "devDependencies": {
     "@jest/globals": "~29.7.0",

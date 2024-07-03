@@ -24782,6 +24782,7 @@ __metadata:
     tamagui: "npm:^1.101.7"
     ts-jest: "npm:~29.1.1"
     usehooks-ts: "npm:^2.9.1"
+    xstate: "npm:5.14.0"
   languageName: unknown
   linkType: soft
 
@@ -30583,6 +30584,13 @@ __metadata:
   version: 11.0.1
   resolution: "xmlbuilder@npm:11.0.1"
   checksum: 10/c8c3d208783718db5b285101a736cd8e6b69a5c265199a0739abaa93d1a1b7de5489fd16df4e776e18b2c98cb91f421a7349e99fd8c1ebeb44ecfed72a25091a
+  languageName: node
+  linkType: hard
+
+"xstate@npm:5.14.0":
+  version: 5.14.0
+  resolution: "xstate@npm:5.14.0"
+  checksum: 10/5dbf04dfe7dd29a20deb470a09ae3f2ed510e4df52d2f7263f7b4f75a9be584ec05ca1e0460fe19977def1158c26f4659464c80efe94c31b9185dd38adc922ef
   languageName: node
   linkType: hard
 
