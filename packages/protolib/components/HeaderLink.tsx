@@ -1,9 +1,7 @@
 
-import { useRouter } from 'next/router'
 import * as React from 'react'
-import { Paragraph, TooltipSimple, styled } from 'tamagui'
+import { Paragraph, styled } from 'tamagui'
 import { NextLink } from './NextLink'
-import { AppBarProps } from './AppBar'
 
 export const HeadAnchor = styled(Paragraph, {
   //@ts-ignore

@@ -1,8 +1,6 @@
 
 import React, { memo, useEffect, useRef } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Component, Save, X } from 'lucide-react';
-import { useRouter } from "next/router"
 import SPanel from 'react-sliding-side-panel';
 import { useWindowSize } from 'usehooks-ts'
 

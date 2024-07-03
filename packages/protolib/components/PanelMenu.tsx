@@ -36,7 +36,7 @@ import {
     Layers
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@my/ui'
-import { useRouter } from 'next/router';
+import { usePathname, useSearchParams } from 'solito/navigation';
 import { useContext, useEffect, useState } from 'react';
 import { getPendingResult, API } from 'protolib/base';
 import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType, useWorkspaceRoot } from 'protolib';
@@ -145,7 +145,7 @@ const CreateDialog = ({ subtab }) => {
 }
 
 const Subtabs = ({ tabs, subtabs }: any) => {
-    const router = useRouter()
+    const pathname = usePathname();
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
     const isDev = process.env.NODE_ENV === 'development';
     //fix component not rendering correctly on the first render on client
@@ -185,15 +185,15 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                 const maxSelectedLength = allLinks.reduce((acc, tab) => {
                     const segment = typeof window !== 'undefined' ? window.location.pathname.split('/')[2] || SiteConfig.defaultWorkspace : SiteConfig.defaultWorkspace;
                     let href = "/" + workspaceRoot + '/' + segment + '/' + (tab.type + tab.path).replace(/\/+/g, '/')
-                    if (router.asPath.startsWith(href.replace(/\/$/, ''))) {
-                        return href.length > acc ? href.length : acc
-                    }
+                    if (pathname.startsWith(href.replace(/\/$/, ''))) {
+                        return href.length > acc ? href.length : acc;
+                      }
                     return acc
                 }, 0)
 
                 const content = <Tinted>
                     <PanelMenuItem
-                        selected={router.asPath.startsWith(originalHref.replace(/\/$/, '')) && originalHref.length == maxSelectedLength}
+                        selected={pathname.startsWith(originalHref.replace(/\/$/, '')) && originalHref.length == maxSelectedLength}
                         icon={getIcon(subtab.icon)}
                         text={subtab.name}
                     />
@@ -252,14 +252,13 @@ const Tabs = ({ tabs, environ }: any) => {
 };
 const disableEnvSelector = true
 export const PanelMenu = ({ workspace }) => {
-    const { query, isReady } = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const [environ, setEnviron] = useState()
+
+    const query = Object.fromEntries(searchParams.entries());
     const [state, setState] = useState(query)
     useQueryState(setState)
-
-    // if(isReady) {
-    //     console.log('ready query: ', query)
-    // }
 
     // useUpdateEffect(() => {
     //     if(!environ) return
@@ -275,7 +274,7 @@ export const PanelMenu = ({ workspace }) => {
     return (<YStack pt="$3">
         <Tinted>
             <YStack ai="center" mt={"$2"} ml={"$5"} mr={"$5"}>
-                {isReady && !disableEnvSelector && <SelectList
+                {pathname && searchParams && !disableEnvSelector && <SelectList
                     value={environ ?? query.env}
                     setValue={setEnviron}
                     rawDisplay={true}

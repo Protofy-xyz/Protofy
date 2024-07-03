@@ -3,7 +3,7 @@ import { Button, Input, XStack, Spinner, Dialog, Text } from "tamagui"
 import { Folder } from 'lucide-react'
 import { Tinted, Center } from 'protolib'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams, usePathname } from 'solito/navigation';
 
 const FileBrowser = dynamic<any>(() =>
     import('protolib/adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),
@@ -21,6 +21,10 @@ type FilePickerProps = {
 
 export function FilePicker({ onFileChange, file, placeholder, initialPath = "", fileFilter }: FilePickerProps) {
     const router = useRouter()
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
+    const query = Object.fromEntries(searchParams.entries());
 
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(file ?? initialPath)
@@ -60,9 +64,9 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "", 
                         onPress={() => {
                             if (!fileIsUrl) {
                                 const dirPath = file ? file.split('/').slice(0, -1).join('/') : initialPath
-                                router.replace({
-                                    query: { ...router.query, path: dirPath },
-                                });
+                                const newQuery = { ...query, path: dirPath };
+                                const newSearchParams = new URLSearchParams(newQuery).toString();
+                                router.replace(pathname + '?' + newSearchParams);
                             }
                             setOpen(!open)
                         }}

@@ -16,9 +16,7 @@ import { IconContainer } from './IconContainer';
 import { SearchContext } from '../context/SearchContext';
 import { InteractiveIcon } from './InteractiveIcon';
 import { ItemMenu } from './ItemMenu';
-import { useRouter } from 'next/router';
 import ErrorMessage from './ErrorMessage';
-import { components } from 'react-select/dist/declarations/src';
 import { DataSheet } from './DataSheet';
 
 interface DataViewProps {
@@ -168,7 +166,6 @@ const DataViewInternal = forwardRef(({
     URLTransform = (url) => url
 }: DataViewProps, ref) => {
     const displayName = (entityName ?? pluralName) ?? name
-    const { query } = useRouter();
     const [state, setState] = useState(pageState ?? {})
     sourceUrl = URLTransform(sourceUrl)
     
