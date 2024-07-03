@@ -17,6 +17,7 @@ import { AiAssistantsAPI } from './aiAssistants/aiAssistantsAPI';
 import { MasksAPI } from './visualui/masksAPI';
 import { LogsAPI } from './logs/logsAPI'
 import { ServicesAPI } from './services/servicesAPI'
+import { FSMApi } from './fsm/FSMApi'
 
 export default (app, context) => {
   UsersAPI(app, context)
@@ -36,6 +37,7 @@ export default (app, context) => {
   ResourcesAPI(app, context)
   AiAssistantsAPI(app, context)
   MasksAPI(app, context)
-  LogsAPI(app, context),
-  ServicesAPI(app, context)
+  LogsAPI(app, context)
+  ServicesAPI(app, context) 
+  FSMApi(app, context)
 }

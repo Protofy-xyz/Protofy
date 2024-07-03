@@ -11,6 +11,7 @@ import databasesPages from 'protolib/bundles/databases/adminPages'
 import resourcesPages from 'protolib/bundles/resources/adminPages'
 import keysPages from 'protolib/bundles/keys/adminPages'
 import servicesPages from 'protolib/bundles/services/adminPages'
+import FSMPages from 'protolib/bundles/fsm/adminPages'
 
 export default {
     ...devicePages,
@@ -25,5 +26,6 @@ export default {
     ...messagesPages,
     ...resourcesPages,
     ...keysPages,
-    ...servicesPages
+    ...servicesPages,
+    ...FSMPages
 }
