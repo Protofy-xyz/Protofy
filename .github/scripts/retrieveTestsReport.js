@@ -17,17 +17,15 @@ const splitGeneralReport = (str) => {
 }
 
 const getReportStatus = (report) => { // report: string
-    console.log('REPORT: ', report)
     const splitByReport = report.split('\n');
-    console.log('splitByReport: ', splitByReport);
     const length = splitByReport.length;
     let sumary = {}
     for (let i = 0; i < length; i++) {
         const line = splitByReport[i];
         if (line.includes('PASS') || line.includes('FAIL')) {
             const lineArrBySpace = line.split(' ');
-            const status = lineArrBySpace[3]
-            const file = lineArrBySpace[5]
+            const status = lineArrBySpace[1]
+            const file = lineArrBySpace[3]
             sumary = { ...sumary, status, file }
         }
         if (line.includes("Tests:")) {
@@ -60,9 +58,7 @@ const main = () => {
     const reportPath = args[0]
     const fs = require('fs')
     const test_output = fs.readFileSync(reportPath, 'utf-8')
-    console.log('testOUTPUT: ', test_output);
     const splitReportArr = splitGeneralReport(test_output)
-    console.log('splitReportArr: ', splitReportArr);
     const status = splitReportArr.map(report => getReportStatus(report))
     const output = status.reduce((total, s) => {
         let statusBadge = s['status'] == 'FAIL' ?
