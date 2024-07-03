@@ -76,14 +76,62 @@ export const RenderNode = ({ render, onEnableEvents, metadata }) => {
         )
     });
 
-    const enableDuplicate = childs.length == 0
-
     const componentColor = unknown ? "#EF9364" : "#2680EB"
     const iconSize = 20
     const border = '1px solid gray'
     const barHeight = 50
 
     const currentRef = useRef<HTMLDivElement>();
+
+    const onDuplicate = async () => {
+        const currentNodes = query.getNodes()
+        let nodesToDuplicate = [];
+        let mapedIds = {};
+
+        const traverseNodes = (id, parentId) => {
+            let currNode = currentNodes[id];
+
+            if (currNode) {
+                const newId = uuidv4()
+                mapedIds[id] = newId;
+
+                const duplicatedNode = {
+                    id: newId,
+                    _duplicatedId: id,
+                    _duplicatedParent: currNode.data.parent,
+                    rules: { ...currNode.rules },
+                    data: {
+                        ...currNode.data,
+                        nodes: [],
+                        parent: parentId
+                    },
+                    events: currNode.events
+                };
+
+                nodesToDuplicate.push(duplicatedNode);
+
+                if (currNode.data && currNode.data.nodes) {
+                    currNode.data.nodes.forEach(childId => {
+                        traverseNodes(childId, newId);
+                    });
+                }
+
+                return newId;
+            }
+        };
+        traverseNodes(id, parent);
+
+        actions.setOptions(options => options['awaitTopic'] = true)
+
+        for (const nd of nodesToDuplicate) {
+            const currentSiblings = nd._duplicatedParent ? query.node(nd._duplicatedParent).childNodes() : undefined
+
+            await actions.add([nd], nd.data.parent, currentSiblings.indexOf(nd._duplicatedId) + 1)
+        }
+
+        actions.setOptions(options => options['awaitTopic'] = false)
+    }
+
     useEffect(() => {
         if (dom) {
             if (isActive) {
@@ -261,7 +309,7 @@ export const RenderNode = ({ render, onEnableEvents, metadata }) => {
                                         : null
                                 }
                                 {
-                                    custom.options || enableDuplicate || deletable ?
+                                    custom.options || deletable ?
                                         <UIMenu
                                             onOpenChange={onEnableEvents}
                                             trigger={
@@ -273,25 +321,15 @@ export const RenderNode = ({ render, onEnableEvents, metadata }) => {
                                             }
                                             content={
                                                 <>
-                                                    {enableDuplicate ? <MenuOption
+                                                    <MenuOption
                                                         onClick={(e: React.MouseEvent) => {
                                                             e.stopPropagation();
-                                                            //TODO: Adds suport to duplicate nodes with childs
-                                                            actions.add([
-                                                                //@ts-ignore
-                                                                {
-                                                                    id: uuidv4(),
-                                                                    rules: { ...node.rules },
-                                                                    data: { ...node.data },
-                                                                    events: node.events
-                                                                }
-                                                            ], parent, nodeAndSiblings.indexOf(nodeId) + 1)
-                                                        }}
+                                                            onDuplicate()
+                                                        }
+                                                        }
                                                         icon={Copy}
                                                         name={"Duplicate"}
                                                     />
-
-                                                        : null}
                                                     {
                                                         custom.options?.map((st) => (<MenuOption
                                                             onClick={(e: React.MouseEvent) => {

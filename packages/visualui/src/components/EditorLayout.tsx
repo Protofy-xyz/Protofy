@@ -35,6 +35,8 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
   const { publish, data } = topics;
   var previousDiffs
   const { actions, query, connectors } = useEditor((state, query) => {
+    var awaitTopic = (query.getOptions() as any).awaitTopic
+    if (awaitTopic) return
     const currentEditorNodes: any = JSON.parse(query.serialize())
     const diffs = Diff.diff(currentPageInitialJson, currentEditorNodes)
     setSelectedNodeId(state.events.selected?.keys().next().value) // state.events.selected returns a Set{}, keys() reutnrs an iterator, and then we get the first element of iterator doing next()
