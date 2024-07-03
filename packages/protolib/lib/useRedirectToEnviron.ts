@@ -1,25 +1,30 @@
-import { AppConfContext, SiteConfigType, getWorkspaceEnv} from 'protolib';
-import { useContext } from 'react';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { AppConfContext, SiteConfigType, getWorkspaceEnv } from 'protolib';
+import { useContext, useEffect } from 'react';
+import { useRouter, usePathname } from 'solito/navigation';
 import { getEnv } from '../base';
 
-const serviceEnv = getEnv()
+const serviceEnv = getEnv();
 
 export const useRedirectToEnviron = () => {
-    const SiteConfig = useContext<SiteConfigType>(AppConfContext);
-    const router = useRouter();
+  const SiteConfig = useContext(AppConfContext);
+  const router = useRouter();
+  const pathname = usePathname();
 
+  useEffect(() => {
+    if (!pathname) return;
 
-    useEffect(() => {
-      if(!router.isReady) return;
-      const workspaceEnv = getWorkspaceEnv(document.location.pathname)
-      if(workspaceEnv == 'prod' && serviceEnv == 'dev') {
-        router.replace('/workspace/dev/'+router.asPath.split('/').slice(3).join('/'));
-        return
-      }
-      if(router.asPath.startsWith('/workspace/') && !router.asPath.startsWith('/workspace/dev/') && !router.asPath.startsWith('/workspace/prod/')) {
-        router.replace('/workspace/'+(SiteConfig.defaultWorkspace??'dev')+'/'+router.asPath.split('/').slice(2).join('/'));
-      }
-    }, [router.isReady]);
-}
+    const workspaceEnv = getWorkspaceEnv(document.location.pathname);
+
+    if (workspaceEnv === 'prod' && serviceEnv === 'dev') {
+      router.replace('/workspace/dev/' + pathname.split('/').slice(3).join('/'));
+      return;
+    }
+
+    if (pathname.startsWith('/workspace/') &&
+        !pathname.startsWith('/workspace/dev/') &&
+        !pathname.startsWith('/workspace/prod/')) {
+      const defaultWorkspace = SiteConfig.defaultWorkspace ? SiteConfig.defaultWorkspace : 'dev';
+      router.replace('/workspace/' + defaultWorkspace + '/' + pathname.split('/').slice(2).join('/'));
+    }
+  }, [pathname]);
+};

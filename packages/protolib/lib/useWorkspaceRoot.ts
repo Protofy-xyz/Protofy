@@ -1,7 +1,6 @@
-import { useRouter } from 'next/router';
+import { usePathname } from 'solito/navigation';
 
 export const useWorkspaceRoot = () => {
-    const router = useRouter();
-    const path = router.pathname;  
-    return path.split('/')[1];
-}
+  const pathname = usePathname();  
+  return pathname.split('/')[1];
+};

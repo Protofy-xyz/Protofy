@@ -1,12 +1,9 @@
-import { useRouter } from 'next/router';
-import { useWorkspaceRoot } from './useWorkspaceRoot';
-import { useEvent } from 'tamagui';
+import { usePathname } from 'solito/navigation';
 
 export const useWorkspaceEnv = () => {
-    const router = useRouter();
-    const path = router.pathname;  
-    const env = getWorkspaceEnv(path)
-    return env
+    const pathname = usePathname();  
+    const env = getWorkspaceEnv(pathname);
+    return env;
 }
 
 export const getWorkspaceEnv = (path) => {
