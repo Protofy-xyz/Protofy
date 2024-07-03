@@ -1,11 +1,11 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
-import { hasSessionCookie, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, Page} from 'protolib'
+import { useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, Page} from 'protolib'
 import { getEnv } from 'protolib/base'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG } from '@my/ui'
-import { useRouter } from 'next/router';
+import { useSearchParams, useRouter } from 'solito/navigation';
 import { getErrorMessage } from "@my/ui";
 import { SiteConfig } from '../../conf'
 
@@ -48,6 +48,10 @@ function SignIn() {
   const env = getEnv()
   const router = useRouter()
 
+  const searchParams = useSearchParams();
+  const query = Object.fromEntries(searchParams.entries());
+  
+
   useEffect(() => {
     // @ts-ignore
     emailRef.current?.focus()
@@ -63,7 +67,7 @@ function SignIn() {
   useEffect(() => {
     if (session.loggedIn) {
       //@ts-ignore
-      router.push(router.query.return ?? '/')
+      router.push(query.return ?? '/');
     }
   }, [session])
 
@@ -141,7 +145,7 @@ function SignIn() {
             <Paragraph theme="alt2" ta="center" size="$2">
               Don't have an account?
               {` `}
-              <Link id="sign-up-link" href={"/auth/register" + (router.query.return ? "?return=" + router.query.return : '')} style={{ fontWeight: '800' }}>
+              <Link id="sign-up-link" href={"/auth/register" + (query.return ? "?return=" + query.return : '')} style={{ fontWeight: '800' }}>
                 Sign up.
               </Link>
             </Paragraph>

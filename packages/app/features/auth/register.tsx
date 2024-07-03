@@ -1,12 +1,11 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
-import { Button, Input, Text, Paragraph, Separator, Spinner, Stack, XStack, YStack, Spacer } from 'tamagui'
-import { Page, hasSessionCookie, Session, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult } from 'protolib'
+import { Button, Input, Paragraph, Separator, Spinner, Stack, XStack, YStack } from 'tamagui'
+import { Page, useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult } from 'protolib'
 import { getEnv } from 'protolib/base'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG, getErrorMessage, getValidation } from '@my/ui'
-import { useAtom } from 'jotai'
-import { useRouter } from 'next/router';
+import { useSearchParams, useRouter } from 'solito/navigation';
 
 export function SignInPage(props) {
   return (
@@ -48,6 +47,9 @@ function SignUp() {
   const [sessionContext, setSessionContext] = useSessionContext()
   const router = useRouter()
   const env = getEnv()
+
+  const searchParams = useSearchParams();
+  const query = Object.fromEntries(searchParams.entries());
   
   useEffect(() => {
     // @ts-ignore
@@ -64,7 +66,8 @@ function SignUp() {
 
   useEffect(() => {
     if (session.loggedIn) {
-      router.push(router.query?.return ?? '/')
+      //@ts-ignore
+      router.push(query.return ?? '/');
     }
   }, [session])
 
