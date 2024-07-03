@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { FlowConstructor } from "protoflow/src/FlowBase"
-import { useRouter } from 'next/router'
 import { getKindName } from 'protoflow/src/nodes/JsxElement'
 import {
     addChildNodeDataAndReorder, addEdgeChildAndReorder,

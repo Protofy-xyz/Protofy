@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { atom, useAtom } from 'jotai'
+import { useState, useEffect } from 'react'
+import { useAtom } from 'jotai'
 import { EditorStore, useEditorContext } from "@protocraft/core";
-import { useRouter } from 'next/router'
 import Diff from 'deep-diff'
 import { computePreviousPositions, getValueFromPath } from './utils/utils';
 
