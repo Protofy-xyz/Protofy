@@ -45,7 +45,7 @@ const getReportStatus = (report) => { // report: string
             sumary = { ...sumary, passed, failed, skipped, total };
         }
         if (line.includes('Time:')) {
-            const elapsedTime = line.split('Time:')[1].trim()
+            const elapsedTime = line.split('Time:')[1].replaceAll(' ', '')
             sumary = { ...sumary, time: elapsedTime };
         }
     }
