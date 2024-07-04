@@ -5,7 +5,7 @@ import {
   XGroup,
   XStack,
 } from 'tamagui'
-
+import { SiteConfig } from 'app/conf'
 
 export type HeaderContentsProps = {
   logoSize?: number,
@@ -22,6 +22,11 @@ export type HeaderContentsProps = {
 const tooltipDelay = { open: 500, close: 150 }
 
 export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo, logoHref="/", themeSwitcher=true, tintSwitcher=true, logoSize=30, menu}: HeaderContentsProps) => {
+  const settingsTintSwitcher = SiteConfig.ui?.tintSwitcher
+  const settingsThemeSwitcher = SiteConfig.ui?.themeSwitcher
+
+  const settingsTintSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsTintSwitcher
+  const settingsThemeSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsThemeSwitcher
   return (
     <XStack f={1} pt="$3" >
       <XStack ai="center" space="$4">
@@ -34,10 +39,10 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
             </NextLink>}{(themeSwitcher || tintSwitcher) &&
               <TooltipGroup delay={tooltipDelay}>
                 <XGroup boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
-                  {themeSwitcher && <XGroup.Item>
+                  {themeSwitcher && settingsThemeSwitcherEnabled && <XGroup.Item>
                     <ThemeToggle borderWidth={0} chromeless />
                   </XGroup.Item>}
-                  {tintSwitcher && <XGroup.Item>
+                  {tintSwitcher && settingsTintSwitcherEnabled && <XGroup.Item>
                     <ColorToggleButton borderWidth={0} chromeless />
                   </XGroup.Item> }
                 </XGroup>
