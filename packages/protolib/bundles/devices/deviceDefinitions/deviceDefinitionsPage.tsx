@@ -50,7 +50,12 @@ export default {
             getFirstNode={(nodes) => {
               return nodes.find(n => n.type == 'ArrayLiteralExpression')
             }}
-            showActionsBar={false}
+            showActionsBar={true}
+            onSave={
+              (code)=>{
+                editedObjectData.setData({ components: code })
+              }
+            }
             layout={layout}
             customComponents={getFlowsCustomComponents(pathname, query)}
             bridgeNode={false}
@@ -123,8 +128,10 @@ export default {
                 onPress={(e) => {
                   setShowDialog(true)
                   if (mode == "add") {
+                    console.log("ADD mode: ", defaultJsCode.components)
                     setSourceCode(defaultJsCode.components)
                   } else {
+                    console.log("OTHER mode: ", data.components)
                     setSourceCode(data.components)
                   }
                   setEditedObjectData({ path, data, setData, mode })
