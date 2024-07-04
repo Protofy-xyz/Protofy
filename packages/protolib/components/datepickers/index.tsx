@@ -81,12 +81,12 @@ export function DatePicker({ onDatesChange, selectedDates, mode = 'single', conf
   }
 
   useEffect(() => {
-    if (mode == 'single') {
+    if (['single', 'month', 'year'].includes(mode)) {
       setOpen(false)
     } else if (dates.length === 2) {
       setOpen(false)
     }
-  }, [selected])
+  }, [dates, offsetValue])
 
   return (
     <DPicker
