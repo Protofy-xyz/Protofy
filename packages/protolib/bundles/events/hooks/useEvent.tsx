@@ -1,4 +1,4 @@
-import { useSubscription } from 'protolib'
+import { useSubscription } from '../../../lib/mqtt'
 
 export const useEvent = (eventFilter) => {
     const { message } = useSubscription('notifications/event/create/' + (eventFilter?.path && eventFilter.path))

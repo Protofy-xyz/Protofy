@@ -6,7 +6,7 @@ import { getErrorMessage } from "@my/ui";
 import { ProtoSchema } from "protolib/base";
 import { Schema } from "../../base";
 import { useUpdateEffect } from "usehooks-ts";
-import { useTint } from 'protolib'
+import {useTint} from '../../lib/Tints'
 import { ItemMenu } from "../ItemMenu";
 import { getElement } from "./Element";
 

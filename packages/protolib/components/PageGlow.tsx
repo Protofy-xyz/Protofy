@@ -1,4 +1,4 @@
-import { useTint } from 'protolib'
+import {useTint} from '../lib/Tints'
 import { memo, useMemo, useState } from 'react'
 import { ThemeName, YStack, isClient, useDebounce, Stack } from 'tamagui'
 

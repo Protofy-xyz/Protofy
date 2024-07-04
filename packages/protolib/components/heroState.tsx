@@ -1,4 +1,4 @@
-import { useTint } from 'protolib'
+import {useTint} from '../lib/Tints'
 import { useCallback, useEffect } from 'react'
 import { useForceUpdate } from 'tamagui'
 

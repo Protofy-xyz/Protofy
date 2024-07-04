@@ -1,4 +1,5 @@
 import { Paragraph, XStack } from '@my/ui'
+import Center  from 'protolib/components/Center'
 import { Stack } from 'expo-router'
 
 export default function Screen() {
@@ -9,9 +10,11 @@ export default function Screen() {
           title: 'Home',
         }}
       />
-      <XStack>
-        <Paragraph>hello</Paragraph>
-      </XStack>
+      <Center>
+        <Paragraph>
+          hello world
+        </Paragraph>
+      </Center>
     </>
   )
 }

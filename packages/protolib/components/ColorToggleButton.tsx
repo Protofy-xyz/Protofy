@@ -1,6 +1,6 @@
-import { useTint } from 'protolib'
 import { Button, ButtonProps, Circle, Stack, TooltipSimple } from 'tamagui'
 import React from 'react'
+import {useTint} from '../lib/Tints'
 
 export const ColorToggleButton = React.forwardRef((props: ButtonProps, ref: any) => {
   const { tint, setNextTint } = useTint()
