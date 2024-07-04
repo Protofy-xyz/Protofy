@@ -26,8 +26,11 @@ import React from 'react'
 import type { SolitoAppProps } from 'solito'
 import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
-import { initSchemaSystem } from 'protolib/base'
-import { useSession, AppConfContext, getBrokerUrl, Connector } from 'protolib'
+import { initSchemaSystem } from 'protolib/base/BaseSchema'
+import { useSession } from 'protolib/lib/Session'
+import {AppConfContext} from 'protolib/providers/AppConf'
+import { getBrokerUrl} from 'protolib/lib/Broker'
+import {Connector } from 'protolib/lib/mqtt'
 import { Toast, XStack, YStack } from '@my/ui'
 
 initSchemaSystem()

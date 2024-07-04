@@ -22,10 +22,13 @@ import React, { createContext } from 'react'
 import type { SolitoAppProps } from 'solito'
 import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
-import { initSchemaSystem } from 'protolib/base'
 import { setConfig } from 'protolib/base/Config';
 import {getBaseConfig} from 'app/BaseConfig'
-import { useSession, AppConfContext, getBrokerUrl, Connector } from 'protolib'
+import { initSchemaSystem } from 'protolib/base/BaseSchema'
+import { useSession } from 'protolib/lib/Session'
+import {AppConfContext} from 'protolib/providers'
+import { getBrokerUrl} from 'protolib/lib/Broker'
+import {Connector } from 'protolib/lib/mqtt'
 setConfig(getBaseConfig("electron", process))
 initSchemaSystem()
 
