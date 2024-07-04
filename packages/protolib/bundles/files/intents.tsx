@@ -19,6 +19,7 @@ import Flows from '../../adminpanel/features/components/Flows';
 import { getFlowsCustomComponents } from 'app/bundles/masks'
 import { getDefinition, toSourceFile } from '../../api/lib/code'
 import { ArrowFunction } from 'ts-morph';
+import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";
 import { useEventEffect } from 'protolib/bundles/events/hooks'
 import { useTint } from '../../lib/Tints'
@@ -180,6 +181,7 @@ If you include anything else in your message (like reasonings or natural languag
               definition.replaceWithText("{\n" + sourceCode.current + "\n}");
               const code = prettier.format(sourceFile.getFullText(), {
                 quoteProps: "consistent",
+                plugins: [parserTypeScript],
                 parser: "typescript"
               })
               if (code) {
