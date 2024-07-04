@@ -1,5 +1,5 @@
 import { memo, useEffect, useState, useRef } from "react";
-import { useRouter } from 'next/router'
+import { useSearchParams, usePathname } from 'solito/navigation';
 import { Editor } from "@protocraft/core";
 import { Layers } from "@protocraft/layers";
 import { RenderNode } from './RenderNode';
@@ -40,7 +40,10 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
 
     const isCodeActive = codeEditorVisible && isSideBarVisible
 
-    const router = useRouter();
+    const searchParams = useSearchParams();
+    const query = Object.fromEntries(searchParams.entries());
+    const pathname = usePathname();
+
     const { resolvedTheme, toggle: themeToggle, current: currentTheme } = useThemeSetting();
 
     // const resolvedTheme = 'dark'
@@ -212,9 +215,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             disableDots={!isActive || isViewModePreview}
                             sourceCode={currentPageContent}
                             setSourceCode={setCurrentPageContent}
-                            customComponents={getFlowsCustomComponents(router.pathname, router.query)}
+                            customComponents={getFlowsCustomComponents(pathname, query)}
                             onSave={(code, _, data) => onEditorSave(code, data)}
-                            config={{ masks: getFlowMasks(router.pathname, router.query) }}
+                            config={{ masks: getFlowMasks(pathname, query) }}
                             zoomOnDoubleClick={!isViewModePreview}
                             themeMode={resolvedTheme}
                             bgColor={'transparent'}

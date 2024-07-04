@@ -1,5 +1,5 @@
 import { Spinner, XStack, getTokenValue, useTheme, useThemeName } from 'tamagui'
-import { useRouter } from 'next/router'
+import { useSearchParams, usePathname } from 'solito/navigation';
 import { DataCard } from '../../components/DataCard'
 import AsyncView from '../../components/AsyncView'
 import { useFileFromAPI } from '../../lib/useFileFromAPI'
@@ -102,7 +102,9 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   const isPartial = useRef(false)
   const sourceCode = useRef('')
   const originalSourceCode = useRef('')
-  const router = useRouter()
+  const searchParams = useSearchParams();
+  const query = Object.fromEntries(searchParams.entries());
+  const pathname = usePathname();
   const theme = useTheme()
   const tint = useTint().tint
 
@@ -192,7 +194,7 @@ If you include anything else in your message (like reasonings or natural languag
       </XStack>
       {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={newFileContent ? newFileContent : sourceCode.current} onChange={(code) => { sourceCode.current = code }} /> : <Flows
         isModified={isModified}
-        customComponents={getFlowsCustomComponents(router.pathname, router.query)}
+        customComponents={getFlowsCustomComponents(pathname, query)}
         onEdit={(code) => { sourceCode.current = code }}
         setIsModified={setIsModified}
         setSourceCode={(sourceCode) => {
