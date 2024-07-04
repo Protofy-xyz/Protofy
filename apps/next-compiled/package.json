@@ -30,7 +30,7 @@
     "react-dom": "~18.2.0",
     "react-dropzone": "14.2.3",
     "react-dropzone-uploader": "2.11.0",
-    "react-native": "0.74.2",
+    "react-native": "0.74.3",
     "react-native-web": "~0.19.12",
     "react-native-web-lite": "latest",
     "react-topics": "0.1.7",
