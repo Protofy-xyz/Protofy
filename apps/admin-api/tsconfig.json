@@ -47,6 +47,7 @@
     "../../packages/protolib/bundles/library.ts",
     "../../packages/protolib/bundles/apiContext.ts",
     "../../packages/protolib/bundles/objects.ts",
+    "../../packages/app/bundles/custom/fsm/**/*",
   ],
   "exclude": [
     "node_modules",
