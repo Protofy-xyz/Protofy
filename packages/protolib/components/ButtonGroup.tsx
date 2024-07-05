@@ -1,7 +1,7 @@
 import React from 'react'
 import { GroupProps, XGroup, YGroup } from "tamagui"
 
-const ButtonGroup = React.forwardRef(({ mode, ...props }: GroupProps & { mode?: "vertical" | "horizontal" }, ref: any) => {
+export const ButtonGroup = React.forwardRef(({ mode, ...props }: GroupProps & { mode?: "vertical" | "horizontal" }, ref: any) => {
     return !mode || mode == 'horizontal' ? (
         <XGroup
             ref={ref}
