@@ -1,8 +1,8 @@
-import { HeaderContents as ProtoHeaderContents, HeaderContentsProps, HeaderLink, HeadAnchor, useSession, ConnectionIndicator, Tinted, SelectList } from 'protolib'
+import { HeaderContents as ProtoHeaderContents, HeaderContentsProps } from 'protolib/components/layout/HeaderContents'
+import { HeaderLink } from 'protolib/components/HeaderLink'
+import { Tinted } from 'protolib/components/Tinted'
 import { Text } from 'tamagui'
-import { useAtom } from 'jotai'
-import { Paragraph, Theme, XStack, YStack } from '@my/ui';
-import { Cloud, CloudOff } from '@tamagui/lucide-icons';
+import { Paragraph, XStack } from '@my/ui';
 import dynamic from 'next/dynamic';
 import { SiteConfig } from '../conf';
 
