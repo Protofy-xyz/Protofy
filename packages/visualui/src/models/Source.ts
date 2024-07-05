@@ -188,7 +188,7 @@ export class Source {
         // GET JsxText Children
         const jsxText = this.getJsxTextOfJsxElement(node)
         if (jsxText && jsxText.getText()) {
-            props = { ...props, "children": jsxText.getText() }
+            props = { ...props, "children": jsxText.getText()?.trim() }
             custom = { ...custom, "children": "StringLiteral" }
         }
 
