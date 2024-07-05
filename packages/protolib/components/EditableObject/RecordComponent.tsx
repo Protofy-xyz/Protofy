@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button, Input, Stack, XStack, YStack } from "tamagui";
 import { List } from '@tamagui/lucide-icons';
-import { AlertDialog } from 'protolib'
+import { AlertDialog } from 'protolib/components/AlertDialog'
 import { DeleteButton, FormGroup, OpenedSectionsContext, getDefaultValue } from ".";
 import { getElement } from "./Element";
 

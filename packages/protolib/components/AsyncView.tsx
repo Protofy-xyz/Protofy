@@ -16,7 +16,7 @@ type AsyncViewType = {
     loadingText?: string,
 }
 
-const AsyncView = React.forwardRef(({
+export const AsyncView = React.forwardRef(({
     atom,
     ready,
     forceLoad, 

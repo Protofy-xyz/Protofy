@@ -1,6 +1,14 @@
 import { Button, Fieldset, Label, Stack, XStack, H3, YStack, Paragraph, Spinner, StackProps, Accordion, Square, Spacer } from "tamagui";
 import { Pencil, Tag, ChevronDown, X } from '@tamagui/lucide-icons';
-import { Center, Grid, AsyncView, usePendingEffect, API, Tinted, Notice, getPendingResult, AlertDialog } from 'protolib'
+import { Center } from 'protolib/components/Center';
+import { Grid } from 'protolib/components/Grid';
+import { AsyncView } from 'protolib/components/AsyncView';
+import { usePendingEffect } from 'protolib/lib/usePendingEffect';
+import { API } from 'protolib/base/Api';
+import { Tinted } from 'protolib/components/Tinted';
+import { Notice } from 'protolib/components/Notice';
+import { getPendingResult } from 'protolib/base/PendingResult';
+import { AlertDialog } from 'protolib/components/AlertDialog';
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getErrorMessage } from "@my/ui";
 import { ProtoSchema } from "protolib/base";
