@@ -1,15 +1,13 @@
 import React from "react";
-// import { Modal } from "native-base";
 import compiling from './assets/protofitoCompiling.gif';
 import compilingW from './assets/protofitoCompilingW.gif';
 import loading from './assets/protofitoLoading.gif';
 import loadingW from './assets/protofitoLoadingW.gif';
 import dancing from './assets/protofitoDancing.gif';
 import dancingW from './assets/protofitoDancingW.gif';
-import { AlertDialog, Tinted } from 'protolib'
+import { AlertDialog } from 'protolib/components/AlertDialog'
+import { Tinted } from 'protolib/components/Tinted'
 import { useThemeName } from 'tamagui'
-
-
 
 const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
 
