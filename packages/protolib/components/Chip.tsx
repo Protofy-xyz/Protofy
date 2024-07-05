@@ -1,4 +1,3 @@
-import {Tinted} from 'protolib'
 import React from 'react'
 import {XStack, SizableText, ColorProp, Spinner, Spacer, XStackProps} from 'tamagui'
 
