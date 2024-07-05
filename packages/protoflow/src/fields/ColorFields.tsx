@@ -143,7 +143,7 @@ export default ({ nodeData = {}, node, item }) => {
                             width: "28px", height: "28px", cursor: 'pointer',
                             backgroundColor: getColorPreview(),
                             borderRadius: 4, zIndex: 10, position: 'absolute', marginLeft: '5px',
-                            border: !value ? '1px solid ' + textColor : '', top: '13px'
+                            border: !value ? '1px solid ' + textColor : '', top: '-13px'
                         }}
                     >
                     </div>
