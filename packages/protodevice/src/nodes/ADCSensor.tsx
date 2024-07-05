@@ -1,10 +1,6 @@
 import React from "react";
 import { Node, Field, NodeParams } from 'protoflow';
 import { getColor } from ".";
-// import { Text, Progress, XStack } from "tamagui";
-// import NodeBus, { cleanName, generateTopic } from "../NodeBus";
-// import { useDeviceStore } from "../oldThings/DeviceStore";
-// import { useSubscription } from "protolib";
 
 const ADCSensor = ({ node = {}, nodeData = {}, children, color }: any) => {
     const [name, setName] = React.useState(nodeData['param-1'])

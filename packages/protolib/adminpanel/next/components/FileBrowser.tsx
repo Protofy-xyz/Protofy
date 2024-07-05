@@ -12,10 +12,11 @@ import { Explorer } from './Explorer';
 import FileActions from 'app/bundles/fileActions'
 import { Tinted } from '../../../components/Tinted'
 import Chat from '../../../components/Chat'
-import { usePrompt, API } from "protolib"
-import { getLogger } from "protolib/base"
-import { getPendingResult } from 'protolib/base';
-import { usePendingEffect } from 'protolib/lib/usePendingEffect';
+import { API } from "../../../base/Api"
+import { getLogger } from "../../../base/logger"
+import { getPendingResult } from '../../../base/PendingResult';
+import { usePendingEffect } from '../../../lib/usePendingEffect';
+import { usePrompt } from '../../../context/PromptAtom';
 
 const logger = getLogger()
 
