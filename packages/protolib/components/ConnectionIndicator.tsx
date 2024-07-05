@@ -1,5 +1,5 @@
-import { useMqttState  } from 'protolib';
-import { Cloud, CloudOff } from '@tamagui/lucide-icons';
+import { useMqttState  } from 'protolib/lib/mqtt/useMqttState';
+import { CloudOff } from '@tamagui/lucide-icons';
 import { useInterval } from 'usehooks-ts';
 import { useState } from 'react';
 import { XStack } from 'tamagui';

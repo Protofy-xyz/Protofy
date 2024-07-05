@@ -5,7 +5,7 @@ import { Stack } from 'tamagui';
 
 export const ActiveGroupContext = createContext({ active: 0, setActive: (next: number) => { } });
 
-const ActiveGroup = React.forwardRef(({ initialState = 0, children }: any, ref:any) => {
+export const ActiveGroup = React.forwardRef(({ initialState = 0, children }: any, ref:any) => {
     const [active, setActive] = useState(initialState)
 
     return (
