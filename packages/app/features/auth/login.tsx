@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
-import { LogoIcon, PendingResult, getPendingResult, Page} from 'protolib'
-import { getEnv } from 'protolib/base'
+import { getEnv } from 'protolib/base/lib/getEnv'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG } from '@my/ui'
@@ -18,6 +17,9 @@ import { Section } from 'protolib/components/Section'
 import { SpotLight } from 'protolib/components/SpotLight'
 import { ElevatedArea } from 'protolib/components/ElevatedArea'
 import { BackgroundGradient } from 'protolib/components/BackgroundGradient'
+import { Page } from 'protolib/components/Page'
+import { LogoIcon } from 'protolib/components/LogoIcon'
+import { PendingResult, getPendingResult} from 'protolib/base/PendingResult'
 
 export function SignInPage(props) {
   return (
