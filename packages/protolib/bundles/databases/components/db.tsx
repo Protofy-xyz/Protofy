@@ -1,5 +1,10 @@
 import { YStack, XStack, Stack, Paragraph, Text, Button, Input } from 'tamagui'
-import { API, DataCard, Search, Popover, Tinted } from 'protolib'
+import { API } from '../../../base/Api';
+import { DataCard } from '../../../components/DataCard';
+import { Search } from '../../../components/Search';
+import { Popover } from '../../../components/Popover';
+import { Tinted } from '../../../components/Tinted';
+
 import { useUpdateEffect } from 'usehooks-ts'
 import { useSearchParams } from 'solito/navigation';
 import { useState } from 'react'
