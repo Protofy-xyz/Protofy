@@ -8,7 +8,7 @@ import { PendingResult } from '../base/PendingResult';
 import { AlertDialog } from './AlertDialog';
 import { API } from '../base/Api';
 import { Tinted } from './Tinted';
-import { EditableObject } from './EditableObject';
+import { EditableObject, EditableObjectProps } from './EditableObject';
 import { AsyncView } from './AsyncView';
 import { Notice } from './Notice';
 import { ActiveGroup } from './ActiveGroup';
@@ -24,7 +24,6 @@ import React from 'react';
 import { getPendingResult } from '../base/PendingResult'
 import { DataTableList } from './DataTableList'
 import ActiveRender from "./ActiveRender"
-import { EditableObjectProps } from './EditableObject';
 import { FileWidget } from '../adminpanel/features/components/FilesWidget';
 import { IconContainer } from './IconContainer';
 import { SearchContext } from '../context/SearchContext';
