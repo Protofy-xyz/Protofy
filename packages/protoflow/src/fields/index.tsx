@@ -93,7 +93,7 @@ export const CustomField = ({ label, input, menuActions = undefined }: any) => {
                         <Popover.Trigger>
                             <div
                                 onClick={() => setMenuOpened(true)}
-                                style={{ padding: '4px', justifyContent: 'center', cursor: 'pointer', position: 'absolute', right: 0, alignSelf: 'center', zIndex: 10 }}
+                                style={{ padding: '4px', justifyContent: 'center', cursor: 'pointer', position: 'absolute', right: -10, top: 2, alignSelf: 'center', zIndex: 10 }}
                             >
                                 <MoreVertical size={16} color={useTheme('textColor')} />
                             </div>
