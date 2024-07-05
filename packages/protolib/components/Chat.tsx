@@ -1,7 +1,9 @@
 import React from 'react';
 import { addResponseMessage, Widget, toggleMsgLoader } from 'react-chat-widget'
 import { useEffect, useRef, useState } from 'react';
-import { Tinted, API, PromptAtom, PromptResponseAtom } from 'protolib';
+import { Tinted } from 'protolib/components/Tinted';
+import { API } from 'protolib/base/Api';
+import { PromptAtom, PromptResponseAtom } from 'protolib/context/PromptAtom';
 import { useTimeout, useWindowSize, useClickAnyWhere } from 'usehooks-ts';
 import { Paperclip, Sparkles, X } from 'lucide-react';
 import ReactDOM from 'react-dom/client';
