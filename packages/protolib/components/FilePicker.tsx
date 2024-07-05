@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { Button, Input, XStack, Spinner, Dialog, Text } from "tamagui"
 import { Folder } from 'lucide-react'
-import { Tinted, Center } from 'protolib'
+import { Tinted, } from 'protolib/components/Tinted'
+import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams, usePathname } from 'solito/navigation';
 

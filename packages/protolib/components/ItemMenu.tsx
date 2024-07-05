@@ -1,5 +1,5 @@
 import { Popover, Stack, XStack, YStack, Text, StackProps } from "tamagui"
-import { AlertDialog } from 'protolib'
+import { AlertDialog } from 'protolib/components/AlertDialog'
 import { useState } from "react";
 import { Tinted } from "./Tinted";
 import { MoreVertical, Trash2, FilePlus } from '@tamagui/lucide-icons'

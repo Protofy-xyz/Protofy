@@ -38,8 +38,14 @@ import {
 import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@my/ui'
 import { usePathname, useSearchParams } from 'solito/navigation';
 import { useContext, useEffect, useState } from 'react';
-import { getPendingResult, API } from 'protolib/base';
-import { AlertDialog, Link, Tinted, PanelMenuItem, AppConfContext, SiteConfigType, useWorkspaceRoot } from 'protolib';
+import { API } from 'protolib/base/Api';
+import { getPendingResult } from 'protolib/base/PendingResult';
+import { useWorkspaceRoot } from 'protolib/lib/useWorkspaceRoot';
+import { AppConfContext, SiteConfigType } from 'protolib/providers/AppConf';
+import { AlertDialog } from 'protolib/components/AlertDialog';
+import { Link } from 'protolib/components/Link';
+import { Tinted } from 'protolib/components/Tinted';
+import { PanelMenuItem } from 'protolib/components/PanelMenuItem';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { SelectList } from './SelectList';
 import { useQueryState } from 'protolib/next'
