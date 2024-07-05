@@ -1,22 +1,22 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip } from 'tamagui'
-import { Center } from 'protolib/components/Center';
+import { Center } from './Center';
 import { useRemoteStateList } from 'protolib/lib/useRemoteState';
-import { ObjectGrid } from 'protolib/components/ObjectGrid';
-import { DataTableCard } from 'protolib/components/DataTableCard';
-import { MapView } from 'protolib/components/MapView';
-import { PendingResult } from 'protolib/base/PendingResult';
-import { AlertDialog } from 'protolib/components/AlertDialog';
-import { API } from 'protolib/base/Api';
-import { Tinted } from 'protolib/components/Tinted';
-import { EditableObject } from 'protolib/components/EditableObject';
-import { AsyncView } from 'protolib/components/AsyncView';
-import { Notice } from 'protolib/components/Notice';
-import { ActiveGroup } from 'protolib/components/ActiveGroup';
-import { ActiveGroupButton } from 'protolib/components/ActiveGroupButton';
-import { ButtonGroup } from 'protolib/components/ButtonGroup';
+import { ObjectGrid } from './ObjectGrid';
+import { DataTableCard } from './DataTableCard';
+import { MapView } from './MapView';
+import { PendingResult } from '../base/PendingResult';
+import { AlertDialog } from './AlertDialog';
+import { API } from '../base/Api';
+import { Tinted } from './Tinted';
+import { EditableObject } from './EditableObject';
+import { AsyncView } from './AsyncView';
+import { Notice } from './Notice';
+import { ActiveGroup } from './ActiveGroup';
+import { ActiveGroupButton } from './ActiveGroupButton';
+import { ButtonGroup } from './ButtonGroup';
 import { forwardRef, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet } from '@tamagui/lucide-icons'
-import { z } from "protolib/base";
+import { z } from "protolib/base/BaseSchema";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from 'protolib/next'
