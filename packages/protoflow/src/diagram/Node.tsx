@@ -1,4 +1,4 @@
-import React, { memo, use, useContext, useRef } from 'react';
+import React, { memo, useContext, useRef } from 'react';
 import Text from "./NodeText"
 import { Handle, Position } from 'reactflow';
 import chroma from "chroma-js";
@@ -8,7 +8,6 @@ import { useProtoEdges } from '../store/DiagramStore';
 import useTheme, { useNodeColor } from './Theme';
 import { NodeTypes } from './../nodes';
 import { write } from '../lib/memory';
-import { Plus } from 'lucide-react';
 import { generateBoxShadow } from '../lib/shadow';
 import { useHover } from 'usehooks-ts'
 
