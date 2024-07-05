@@ -1,5 +1,8 @@
 import { YStack, H1, Text, XStack, H3, Button } from "@my/ui";
-import { SSR, withSession, Page, API } from "protolib";
+import { API } from 'protolib/base/Api';
+import { SSR } from 'protolib/lib/SSR';
+import { withSession } from 'protolib/lib/Session';
+import { Page } from 'protolib/components/Page';
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { context } from "app/bundles/uiContext";
