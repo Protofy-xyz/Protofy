@@ -3,7 +3,7 @@ import { Grid } from './Grid';
 import { EditableObject } from "./EditableObject";
 import { getPendingResult } from '../base/PendingResult'
 import { ItemCard } from "./ItemCard";
-import { useTint } from "protolib";
+import { useTint } from "../lib/Tints";
 import { useEffect, useRef, useState } from "react";
 import { Tinted } from "./Tinted";
 
