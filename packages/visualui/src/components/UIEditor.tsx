@@ -6,7 +6,7 @@ import { RenderNode } from './RenderNode';
 import systemPalette from '../palettes';
 import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
-import { MainPanel } from "protolib";
+import { MainPanel } from "protolib/components/MainPanel";
 import Monaco from "./Monaco";
 import { Plus, LogOut, Network, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight, Monitor, Tablet, Smartphone, SunMoon, Sun, Moon } from "lucide-react";
 import { getMissingJsxImports, getSource } from "../utils/utils";
