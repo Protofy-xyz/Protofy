@@ -1,4 +1,4 @@
-import { NextLink } from 'protolib'
+import { NextLink } from 'protolib/components/NextLink'
 import { Paragraph, XStack, YStack } from '@my/ui'
 import { useState } from 'react'
 import { Tinted } from '../../components/Tinted'
