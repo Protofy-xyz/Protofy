@@ -10,7 +10,7 @@ type BlockTitleProps = {
     subtitleColor?: string
 }
 
-const BlockTitle = React.forwardRef(({ title = '', subtitle = '', titleColor, subtitleColor, ...props }: BlockTitleProps & StackProps, ref: any) => (
+export const BlockTitle = React.forwardRef(({ title = '', subtitle = '', titleColor, subtitleColor, ...props }: BlockTitleProps & StackProps, ref: any) => (
     //@ts-ignore
     <YStack ai="center" space="$3" {...props} ref={ref}>
         <Head2 color={titleColor}>{title}</Head2>

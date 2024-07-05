@@ -1,8 +1,37 @@
 import { Theme, YStack, Text, XStack, Paragraph, SizableText } from "@my/ui";
-import { UIWrapLib, UIWrap, SSR, TintSection, ContainerLarge, BigTitle, Spacer, LinkGroup, LinkGroupItem, HCenterStack, NextLink, TooltipContainer, DiscordIcon, Section, SpotLight, GithubIcon, ButtonSimple, HorizontalBox, SectionBlock, HoveredGroup, BlockTitle, BackgroundGradient, ElevatedArea, GridElement, RainbowText, FeatureItem, PageGlow, withSession, Page, Grid, useEdit, API } from "protolib";
+import { BigTitle} from 'protolib/components/BigTitle'
+import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
+import { API } from 'protolib/base/Api';
+import { withSession } from 'protolib/lib/Session';
+import { Page } from 'protolib/components/Page';
+import { SSR } from 'protolib/lib/SSR';
+import { DefaultLayout, } from '../../../layout/DefaultLayout'
+import { TintSection } from 'protolib';
+import { ContainerLarge } from 'protolib/components/Container';
+import { Spacer } from 'protolib/components/Spacer';
+import { LinkGroup, LinkGroupItem } from 'protolib/components/LinkGroup';
+import { HCenterStack } from 'protolib/components/HCenterStack';
+import { NextLink } from 'protolib/components/NextLink';
+import { TooltipContainer } from 'protolib/components/TooltipContainer';
+import { DiscordIcon } from 'protolib/components/icons/DiscordIcon';
+import { Section } from 'protolib/components/Section';
+import { SpotLight } from 'protolib/components/SpotLight';
+import { GithubIcon } from 'protolib/components/icons/GithubIcon';
+import { ButtonSimple } from 'protolib/components/ButtonSimple';
+import { HorizontalBox } from 'protolib/components/HorizontalBox';
+import { SectionBlock } from 'protolib/components/SectionBlock';
+import { HoveredGroup } from 'protolib/components/HoveredGroup';
+import { BlockTitle } from 'protolib/components/BlockTitle';
+import { BackgroundGradient } from 'protolib/components/BackgroundGradient';
+import { ElevatedArea } from 'protolib/components/ElevatedArea';
+import { GridElement } from 'protolib/components/GridElement';
+import { RainbowText } from 'protolib/components/RainbowText';
+import { FeatureItem } from 'protolib/components/FeatureItem';
+import { PageGlow } from 'protolib/components/PageGlow';
+import { Grid } from 'protolib/components/Grid';
+import { useEdit } from 'protolib/visualui/useEdit';
 import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
-import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { context } from "app/bundles/uiContext";
 import { useRouter } from "solito/navigation";

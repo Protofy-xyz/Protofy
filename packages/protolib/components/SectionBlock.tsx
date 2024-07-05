@@ -51,7 +51,7 @@ type SectionBlockProps = {
   id?: number
 }
 
-const SectionBlock = React.forwardRef(({ id, title, icon, children, href, hoveredTheme, nonHoveredTheme, ...props }: YStackProps & SectionBlockProps, ref:any) => {
+export const SectionBlock = React.forwardRef(({ id, title, icon, children, href, hoveredTheme, nonHoveredTheme, ...props }: YStackProps & SectionBlockProps, ref:any) => {
   const { hovered, setHovered } = useContext(HoveredGroupContext);
   return (
     <Stack flex={1} ref={ref}>

@@ -2,7 +2,7 @@ import { CheckCircle } from "./CheckCircle"
 import { Card, SizableText, XStack, Text, Paragraph } from "tamagui"
 import React from "react"
 
-const FeatureItem = React.forwardRef(({ label, children }:any, ref:any) => {
+export const FeatureItem = React.forwardRef(({ label, children }:any, ref:any) => {
   return (
     //@ts-ignore
     <Card p="$6" elevation="$1" $sm={{ p: '$4' }} ref={ref}>
