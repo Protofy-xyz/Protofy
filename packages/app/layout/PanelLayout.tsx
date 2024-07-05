@@ -1,12 +1,12 @@
-import {PanelLayout as ProtoPanelLayout, Search} from 'protolib'
-import {SearchContext} from 'protolib/context/SearchContext'
+import { PanelLayout as ProtoPanelLayout } from 'protolib/components/layout/PanelLayout'
+import { SearchContext } from 'protolib/context/SearchContext'
+import { Search } from 'protolib/components/Search'
 import { SideMenu } from './SideMenu'
 import { HeaderContents } from './HeaderContents'
 import { DefaultLayout } from './DefaultLayout'
 import { HeaderMenu } from './HeaderMenu'
 import { HeaderMenuContent } from './HeaderMenuContent'
 import { useContext } from 'react'
-import { Theme } from '@my/ui'
 
 export const PanelLayout = (props) => {
   const {search, setSearch, searchName} = useContext(SearchContext)
