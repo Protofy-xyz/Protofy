@@ -1,5 +1,11 @@
 import { DatabaseEntryModel, DatabaseModel } from '.'
-import { DataView, API, AdminPage, PaginatedDataSSR, AlertDialog, Tinted, Center, useWorkspaceEnv } from 'protolib'
+import { DataView } from '../../components/DataView';
+import { API } from '../../base/Api';
+import { AdminPage } from '../../components/AdminPage';
+import { AlertDialog } from '../../components/AlertDialog';
+import { Tinted } from '../../components/Tinted';
+import { Center } from '../../components/Center';
+import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import { useSearchParams, useRouter, usePathname } from 'solito/navigation';
 import { Spinner, YStack } from '@my/ui'
 import { DataCard } from '../../components/DataCard'
