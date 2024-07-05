@@ -14,10 +14,10 @@ import { useEditor } from 'protolib/visualui/useEdit';
 import { API } from 'protolib/base/Api';
 import { SSR } from 'protolib/lib/SSR';
 import { useComposedState } from 'protolib/lib/useComposedState';
-import { Text } from 'protolib';
-import { Center } from 'protolib';
-import { DefaultLayout, } from '../../../layout/DefaultLayout'
-import { Protofy } from 'protolib/base'
+import { Text } from 'protolib/components/Text';
+import { Center } from 'protolib/components/Center';
+import { DefaultLayout } from 'app/layout/DefaultLayout'
+import { Protofy } from 'protolib/base/Protofy'
 import { context } from 'app/bundles/uiContext';
 import { useRouter } from 'solito/navigation';
 import { Objects } from 'app/bundles/objects';
