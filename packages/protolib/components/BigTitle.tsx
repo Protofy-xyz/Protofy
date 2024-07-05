@@ -7,7 +7,7 @@ type BigTitleProps = {
     children?:any
 }
 
-export default React.forwardRef(({children, ...props}:BigTitleProps & ParagraphProps, ref) => (
+export const BigTitle = React.forwardRef(({children, ...props}:BigTitleProps & ParagraphProps, ref) => (
     <H1
     //@ts-ignore
     ref={ref}
@@ -44,3 +44,5 @@ export default React.forwardRef(({children, ...props}:BigTitleProps & ParagraphP
     {children}
   </H1>
 ))
+
+export default BigTitle

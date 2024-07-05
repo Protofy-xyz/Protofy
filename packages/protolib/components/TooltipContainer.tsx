@@ -12,7 +12,7 @@ type TooltipContainerProps = {
     tooltipText?:string
 }
 
-const TooltipContainer = React.forwardRef(({children, tooltipText=''}: TooltipContainerProps, ref:any) => (
+export const TooltipContainer = React.forwardRef(({children, tooltipText=''}: TooltipContainerProps, ref:any) => (
     <Stack ref={ref}>
         <TooltipSimple placement="top" delay={0} restMs={25} label={tooltipText}>
         {/* @ts-ignore */}
