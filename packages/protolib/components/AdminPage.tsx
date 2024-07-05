@@ -1,4 +1,9 @@
-import { useSession, Page, Tinted, usePrompt, SearchContext, AdminPanel } from 'protolib'
+import { useSession } from 'protolib/lib/Session';
+import { Page } from 'protolib/components/Page';
+import { Tinted } from 'protolib/components/Tinted';
+import { usePrompt } from 'protolib/context/PromptAtom';
+import { SearchContext } from 'protolib/context/SearchContext';
+import { AdminPanel } from 'protolib/components/AdminPanel';
 import dynamic from 'next/dynamic';
 import { forwardRef, useState } from 'react';
 import { AppState } from './AdminPanel'
