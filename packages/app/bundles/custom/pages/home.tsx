@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import { Theme } from "@my/ui";
-import {Page} from 'protolib/components/Page'
-import {Text} from 'protolib/components/Text'
-import {Pressable} from 'protolib/components/Pressable'
-import {Icon} from 'protolib/components/Icon'
-import VStack from 'protolib/components/VStack'
-import HStack from 'protolib/components/HStack'
-import Image from 'protolib/components/Image'
-import {useComposedState} from 'protolib/lib/useComposedState'
-import {withSession } from "protolib/lib/Session"
-import {useEditor} from 'protolib/visualui/useEdit'
-import {SSR} from 'protolib/lib/SSR'
-import {UIWrapLib, UIWrap} from 'protolib/visualui/visualuiWrapper'
+import { Page } from "protolib/components/Page";
+import { Text } from "protolib/components/Text";
+import { Pressable } from "protolib/components/Pressable";
+import { Icon } from "protolib/components/Icon";
+import VStack from "protolib/components/VStack";
+import HStack from "protolib/components/HStack";
+import Image from "protolib/components/Image";
+import { useComposedState } from "protolib/lib/useComposedState";
+import { withSession } from "protolib/lib/Session";
+import { useEditor } from "protolib/visualui/useEdit";
+import { SSR } from "protolib/lib/SSR";
+import { UIWrapLib, UIWrap } from "protolib/visualui/visualuiWrapper";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { context } from "app/bundles/uiContext";
-import { useRouter } from 'solito/navigation';
+import { useRouter } from "solito/navigation";
 import { Objects } from "app/bundles/objects";
 
 const isProtected = Protofy("protected", false);
@@ -24,7 +24,7 @@ const Home = ({ currentView, setCurrentView, props }: any) => {
   const { cs, states } = useComposedState();
 
   const router = useRouter();
-  context.onRender(async () => { });
+  context.onRender(async () => {});
   return (
     <Page height="99vh">
       <DefaultLayout footer={<></>}>
@@ -73,7 +73,7 @@ const Home = ({ currentView, setCurrentView, props }: any) => {
   );
 };
 
-const cw = UIWrapLib('@my/ui')
+const cw = UIWrapLib("@my/ui");
 
 export default {
   route: Protofy("route", "/"),
@@ -84,12 +84,12 @@ export default {
       path: "/packages/app/bundles/custom/pages/home.tsx",
       components: {
         ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-        ...cw("Theme", Theme)
+        ...cw("Theme", Theme),
       },
       context: {
         currentView: currentView,
         setCurrentView: setCurrentView,
-        Objects: Objects
+        Objects: Objects,
       },
     });
   },
