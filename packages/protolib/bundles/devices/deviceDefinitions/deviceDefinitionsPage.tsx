@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import { CircuitBoard, Tag, BookOpen, Eye } from '@tamagui/lucide-icons';
-import { DeviceDefinitionModel } from './deviceDefinitionsSchemas';
-import { API } from '../../../base/Api';
-import { Chip } from '../../../components/Chip';
-import { DataTable2 } from '../../../components/DataTable2';
-import { DataView } from '../../../components/DataView';
-import { AlertDialog } from '../../../components/AlertDialog';
-import { AdminPage } from '../../../components/AdminPage';
-import { PaginatedData } from '../../../lib/SSR';
-import { InteractiveIcon } from '../../../components/InteractiveIcon';
-import { z } from '../../../base'
-import { DeviceCoreModel } from '../devicecores';
-import { Button, XStack } from "tamagui";
+import React, { useState } from "react"
+import { CircuitBoard, Tag, BookOpen, Eye } from '@tamagui/lucide-icons'
+import { DeviceDefinitionModel } from './deviceDefinitionsSchemas'
+import { API } from '../../../base/Api'
+import { z } from '../../../base/BaseSchema'
+import { DeviceCoreModel } from '../devicecores'
+import { Button, XStack } from "tamagui"
 import { useThemeSetting } from '@tamagui/next-theme'
-import { getPendingResult } from "../../../base/PendingResult";
-import { usePendingEffect } from "../../../lib/usePendingEffect";
-import { useWorkspaceEnv } from "../../../lib/useWorkspaceEnv";
+import { getPendingResult } from "../../../base/PendingResult"
+import { usePendingEffect } from "../../../lib/usePendingEffect"
+import { useWorkspaceEnv } from "../../../lib/useWorkspaceEnv"
+import { Chip } from "../../../components/Chip"
+import { DataTable2 } from "../../../components/DataTable2"
+import { DataView } from "../../../components/DataView"
+import { AlertDialog } from "../../../components/AlertDialog"
+import { AdminPage } from "../../../components/AdminPage"
+import { PaginatedData } from "../../../lib/SSR"
+import { InteractiveIcon } from "../../../components/InteractiveIcon"
 import Flows from '../../../adminpanel/features/components/Flows'
-import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
-import { useSearchParams, usePathname } from 'solito/navigation';
+import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
+import { useSearchParams, usePathname } from 'solito/navigation'
 import layout from './DeviceLayout'
 
 const DeviceDefitionIcons = {
