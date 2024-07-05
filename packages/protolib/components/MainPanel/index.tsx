@@ -21,7 +21,7 @@ type Props = {
     borderLess?:boolean
 };
 
-const MainPanel = ({ borderLess, rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}, height = "100vh"}: Props) => {
+export const MainPanel = ({ borderLess, rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}, height = "100vh"}: Props) => {
     const rightRef = useRef()
     const resizerRef = useRef()
     const resizerBarRef = useRef()

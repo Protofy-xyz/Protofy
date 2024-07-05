@@ -1,4 +1,3 @@
-import { ThemeTint, useTint } from 'protolib'
 import * as React from 'react'
 import {
   StackProps,
