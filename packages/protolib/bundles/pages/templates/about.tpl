@@ -5,13 +5,28 @@ if you call paginated apis, you will need to wait for result.isLoaded and look i
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
 
-import { Protofy, Text, VStack, Image, HCenterStack, Page, UIWrapLib, UIWrap, SSR, useEditor, withSession, Center, GithubIcon, DiscordIcon, TwitterIcon, API, useComposedState } from 'protolib'
+import { Text } from 'protolib/components/Text';
+import { VStack } from 'protolib/components/VStack';
+import { Image } from 'protolib/components/Image';
+import { HCenterStack } from 'protolib/components/HCenterStack';
+import { Page } from 'protolib/components/Page';
+import { withSession } from 'protolib/lib/Session';
+import { Center } from 'protolib/components/Center';
+import { GithubIcon } from 'protolib/components/icons/GithubIcon';
+import { DiscordIcon } from 'protolib/components/icons/DiscordIcon';
+import { TwitterIcon } from 'protolib/components/icons/TwitterIcon';
+import { Protofy } from 'protolib/base/Protofy'
+import { API } from 'protolib/base/Api'
+import { useComposedState } from 'protolib/lib/useComposedState'
+import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
+import { useEditor } from 'protolib/visualui/useEdit'
+import { SSR } from 'protolib/lib/SSR'
 import React, { useState } from 'react'
 import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
-import { context } from "app/bundles/uiContext";
-import { useRouter } from "solito/navigation";
-import { Objects } from "app/bundles/objects";
+import { context } from 'app/bundles/uiContext'
+import { useRouter } from 'solito/navigation'
+import { Objects } from 'app/bundles/objects'
 
 const isProtected = Protofy("protected", false)
 Protofy("pageType", "about")

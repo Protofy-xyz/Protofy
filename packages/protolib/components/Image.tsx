@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   AvatarImageProps,
-  Image
+  Image as TamaguiImage
 } from 'tamagui'
 
 type ImageProps = {
@@ -10,8 +10,8 @@ type ImageProps = {
   url?: string,
 }
 
-export default React.forwardRef(({ width = 200, height, url = "/images/patterns/pattern-1.png", ...props }: ImageProps & AvatarImageProps, ref) => (
-  <Image
+export const Image = React.forwardRef(({ width = 200, height, url = "/images/patterns/pattern-1.png", ...props }: ImageProps & AvatarImageProps, ref) => (
+  <TamaguiImage
     //@ts-ignore
     ref={ref}
     //@ts-ignore
@@ -19,3 +19,5 @@ export default React.forwardRef(({ width = 200, height, url = "/images/patterns/
     {...props}
   />
 ))
+
+export default Image
