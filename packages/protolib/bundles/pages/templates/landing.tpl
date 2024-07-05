@@ -6,7 +6,7 @@ import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
 import { SSR } from 'protolib/lib/SSR';
 import { DefaultLayout, } from '../../../layout/DefaultLayout'
-import { TintSection } from 'protolib';
+import { TintSection } from 'protolib/components/TintSection';
 import { ContainerLarge } from 'protolib/components/Container';
 import { Spacer } from 'protolib/components/Spacer';
 import { LinkGroup, LinkGroupItem } from 'protolib/components/LinkGroup';
