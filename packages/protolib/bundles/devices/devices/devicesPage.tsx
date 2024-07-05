@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API, DataTable2, DataView, ButtonSimple, AdminPage, usePendingEffect, CardBody, ItemMenu, useWorkspaceEnv, Tinted, Chip, Connector, useSubscription } from 'protolib'
-import { z } from 'protolib/base'
+import { API } from '../../../base/Api';
+import { DataTable2 } from '../../../components/DataTable2';
+import { DataView } from '../../../components/DataView';
+import { ButtonSimple } from '../../../components/ButtonSimple';
+import { AdminPage } from '../../../components/AdminPage';
+import { usePendingEffect } from '../../../lib/usePendingEffect';
+import { CardBody } from '../../../components/CardBody';
+import { ItemMenu } from '../../../components/ItemMenu';
+import { useWorkspaceEnv } from '../../../lib/useWorkspaceEnv';
+import { Tinted } from '../../../components/Tinted';
+import { Chip } from '../../../components/Chip';
+import { useSubscription, Connector } from '../../../lib/mqtt';
+import { z } from '../../../base';
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
 import Subsystem from 'protodevice/src/Subsystem'
 import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text } from '@my/ui';
-import { getPendingResult } from "protolib/base";
+import { getPendingResult } from "../../../base";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
 import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic } from "../devicesUtils";
