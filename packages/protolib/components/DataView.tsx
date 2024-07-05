@@ -1,6 +1,6 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip } from 'tamagui'
 import { Center } from './Center';
-import { useRemoteStateList } from 'protolib/lib/useRemoteState';
+import { useRemoteStateList } from '../lib/useRemoteState';
 import { ObjectGrid } from './ObjectGrid';
 import { DataTableCard } from './DataTableCard';
 import { MapView } from './MapView';
@@ -16,10 +16,10 @@ import { ActiveGroupButton } from './ActiveGroupButton';
 import { ButtonGroup } from './ButtonGroup';
 import { forwardRef, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet } from '@tamagui/lucide-icons'
-import { z } from "protolib/base/BaseSchema";
+import { z } from "../base/BaseSchema";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
-import { usePageParams, useQueryState } from 'protolib/next'
+import { usePageParams, useQueryState } from '../next'
 import React from 'react';
 import { getPendingResult } from '../base/PendingResult'
 import { DataTableList } from './DataTableList'
