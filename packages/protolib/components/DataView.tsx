@@ -1,7 +1,21 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonIcon, ButtonProps, Tooltip } from 'tamagui'
-import { Center, useRemoteStateList, ObjectGrid, DataTableCard, MapView, PendingResult, AlertDialog, API, Tinted, EditableObject, AsyncView, Notice, ActiveGroup, ActiveGroupButton, ButtonGroup } from 'protolib'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip } from 'tamagui'
+import { Center } from 'protolib/components/Center';
+import { useRemoteStateList } from 'protolib/lib/useRemoteState';
+import { ObjectGrid } from 'protolib/components/ObjectGrid';
+import { DataTableCard } from 'protolib/components/DataTableCard';
+import { MapView } from 'protolib/components/MapView';
+import { PendingResult } from 'protolib/base/PendingResult';
+import { AlertDialog } from 'protolib/components/AlertDialog';
+import { API } from 'protolib/base/Api';
+import { Tinted } from 'protolib/components/Tinted';
+import { EditableObject } from 'protolib/components/EditableObject';
+import { AsyncView } from 'protolib/components/AsyncView';
+import { Notice } from 'protolib/components/Notice';
+import { ActiveGroup } from 'protolib/components/ActiveGroup';
+import { ActiveGroupButton } from 'protolib/components/ActiveGroupButton';
+import { ButtonGroup } from 'protolib/components/ButtonGroup';
 import { forwardRef, useContext, useEffect, useState } from 'react'
-import { PlusCircle, Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet } from '@tamagui/lucide-icons'
 import { z } from "protolib/base";
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
