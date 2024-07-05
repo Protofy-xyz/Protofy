@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Button, ButtonProps, Stack, XGroup } from "tamagui";
 import { ActiveGroupContext } from "./ActiveGroup";
 
-const GroupButton = React.forwardRef(( {inActive, ...props} : ButtonProps & {inActive?: boolean}, ref: any) => {
+export const GroupButton = React.forwardRef(( {inActive, ...props} : ButtonProps & {inActive?: boolean}, ref: any) => {
     return (<Stack ref={ref}>
         <XGroup.Item>
             <Button {...{
