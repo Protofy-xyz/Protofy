@@ -1,6 +1,7 @@
 import { GroupModel } from '.'
 import { z } from 'protolib/base'
-import { DataTable2, Chip, DataView, AdminPage } from 'protolib'
+import { DataView } from 'protolib/components/DataView'
+import { AdminPage } from 'protolib/components/AdminPage'
 import { Users } from '@tamagui/lucide-icons';
 import { API } from '../../base/Api'
 import { usePrompt } from '../../context/PromptAtom'

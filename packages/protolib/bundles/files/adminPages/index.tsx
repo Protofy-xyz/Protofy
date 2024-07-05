@@ -1,4 +1,8 @@
-import { withSession, Tinted, Center, SSR, AdminPage } from 'protolib'
+import { withSession } from 'protolib/lib/Session';
+import { Tinted } from 'protolib/components/Tinted';
+import { Center } from 'protolib/components/Center';
+import { SSR } from 'protolib/lib/SSR';
+import { AdminPage } from 'protolib/components/AdminPage';
 import dynamic from 'next/dynamic'
 import { Spinner } from 'tamagui'
 

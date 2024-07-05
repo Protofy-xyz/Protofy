@@ -1,6 +1,9 @@
-import { Cpu, Layers, Tag, Code } from '@tamagui/lucide-icons';
+import { Layers, Tag, Code } from '@tamagui/lucide-icons';
 import { DeviceSdkModel } from './deviceSdksSchema';
-import { Chip, DataTable2, DataView, AdminPage, PaginatedDataSSR } from 'protolib'
+import { PaginatedDataSSR } from 'protolib/lib/SSR'
+import { DataTable2 } from 'protolib/components/DataTable2'
+import { DataView } from 'protolib/components/DataView'
+import { AdminPage } from 'protolib/components/AdminPage'
 
 const DeviceSdkIcons = { name: Tag, sdk: Layers }
 const sourceUrl = '/adminapi/v1/devicesdks'

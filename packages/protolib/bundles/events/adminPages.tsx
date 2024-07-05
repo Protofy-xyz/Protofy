@@ -1,5 +1,9 @@
 import { EventModel } from '.'
-import { DataTable2, Chip, DataView, AdminPage, useWorkspaceEnv } from 'protolib'
+import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
+import { Chip } from '../../components/Chip'
+import { DataTable2 } from '../../components/DataTable2'
+import { DataView } from '../../components/DataView'
+import { AdminPage } from '../../components/AdminPage'
 import moment from 'moment'
 import { ClipboardList } from '@tamagui/lucide-icons';
 import { JSONViewer } from '../../components/jsonui'
