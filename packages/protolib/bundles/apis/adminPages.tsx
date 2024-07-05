@@ -1,11 +1,16 @@
 import { APIModel } from '.'
-import { DataTable2, API, DataView, AlertDialog, AdminPage, useWorkspaceEnv, DataViewActionButton } from 'protolib'
-import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView, useToastController, Progress, Spinner, Paragraph, SizableText } from "@my/ui";
+import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView, useToastController, Spinner, Paragraph, SizableText } from "@my/ui";
 import { ToyBrick, Eye, ChevronDown, UploadCloud, CheckCircle, Package, AlertTriangle} from '@tamagui/lucide-icons'
-import { z } from 'protolib/base'
+import { z } from '../../base/BaseSchema'
+import { API } from '../../base/Api'
 import { usePageParams } from '../../next'
 import { usePrompt } from '../../context/PromptAtom'
 import { Chip } from '../../components/Chip'
+import { DataTable2 } from '../../components/DataTable2'
+import { DataView, DataViewActionButton } from '../../components/DataView'
+import { AlertDialog } from '../../components/AlertDialog'
+import { AdminPage } from '../../components/AdminPage'
+import {useWorkspaceEnv} from '../../lib/useWorkspaceEnv'
 import { useEffect, useState } from 'react'
 import Center from '../../components/Center'
 import { Objects } from "app/bundles/objects";

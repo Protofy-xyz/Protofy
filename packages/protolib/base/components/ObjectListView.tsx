@@ -1,6 +1,8 @@
 
-import { YStack, Stack } from 'tamagui'
-import { ItemCard, AsyncView, Grid } from 'protolib'
+import { YStack } from 'tamagui'
+import { Grid } from '../../components/Grid'
+import { ItemCard } from '../../components/ItemCard'
+import { AsyncView } from '../../components/AsyncView'
 import React from 'react';
 
 export function ObjectListView({ elements, listItem, viewProps = {}, gridProps = {} }) {
