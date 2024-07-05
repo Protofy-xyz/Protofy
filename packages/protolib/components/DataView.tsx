@@ -182,6 +182,7 @@ const DataViewInternal = forwardRef(({
     const [currentItemData, setCurrentItemData] = useState(itemData)
     const { search, setSearch, setSearchName } = useContext(SearchContext)
     const hasGlobalMenu = extraMenuActions && extraMenuActions.some(action => action.menus && action.menus.includes("global"));
+    const filters = Object.entries(state).filter((st) => st[0].startsWith('filter'))
 
     useQueryState(setState)
 
@@ -216,7 +217,7 @@ const DataViewInternal = forwardRef(({
 
     useUpdateEffect(() => {
         fetch(setItems)
-    }, [state.orderBy + '_' + state.itemsPerPage + '_' + state.page + '_' + state.search + '_' + state.orderDirection])
+    }, [state.orderBy + '_' + state.itemsPerPage + '_' + state.page + '_' + state.search + '_' + state.orderDirection + '_' + filters])
 
     const toast = useToastController()
     const RowIcon = rowIcon
