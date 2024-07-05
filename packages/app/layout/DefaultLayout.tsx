@@ -1,10 +1,9 @@
 import { Footer } from './Footer'
 import { HeaderContents } from './HeaderContents'
-import { AppBar, Tinted, DefaultLayout as ProtoDefaultLayout } from 'protolib'
-import { ToastProvider, ToastViewport } from '@tamagui/toast'
+import { DefaultLayout as ProtoDefaultLayout } from 'protolib/components/layout/DefaultLayout'
+import { AppBar } from 'protolib/components/AppBar'
 import React from 'react'
-import { Stack, StackProps, XStack, YStack } from 'tamagui'
-import { Toast, useToastState } from '@my/ui'
+import { StackProps } from 'tamagui'
 import { HeaderMenu } from './HeaderMenu'
 import { HeaderMenuContent } from './HeaderMenuContent'
 
