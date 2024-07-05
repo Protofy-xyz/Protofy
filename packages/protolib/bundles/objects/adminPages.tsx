@@ -1,12 +1,15 @@
 
 import { ObjectModel } from './objectsSchemas'
-import { DataView, DataTable2, Chip, AdminPage, useWorkspaceEnv } from 'protolib'
+import { DataView } from 'protolib/components/DataView';
+import { DataTable2 } from 'protolib/components/DataTable2';
+import { Chip } from 'protolib/components/Chip';
+import { AdminPage } from 'protolib/components/AdminPage';
+import { useWorkspaceEnv } from 'protolib/lib/useWorkspaceEnv';
 import { Pencil, Boxes } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 import { XStack, Text } from "@my/ui";
 import { z } from 'protolib/base'
 import { PaginatedData } from '../../lib/SSR';
-import { GoogleSheetClient } from '../google/googleSheetClient';
 
 
 const format = 'YYYY-MM-DD HH:mm:ss'

@@ -80,7 +80,7 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
                 elements.map((item, i) => {
                   return (
                     <Select.Item
-                      debug="verbose"
+                      // debug="verbose"
                       index={i}
                       key={item.value ?? item}
                       value={item.value ?? item}
