@@ -2,7 +2,8 @@
 import {SiteConfig} from 'app/conf'
 export * from '../components/AdminPage'
 import { NextPageContext } from 'next'
-import { API, withSession, getURLWithToken, AdminPage } from 'protolib'
+import {API} from '../base/Api'
+import {withSession, getURLWithToken} from './Session'
 
 export const SSR = (fn) => SiteConfig.SSR ? fn : undefined
 

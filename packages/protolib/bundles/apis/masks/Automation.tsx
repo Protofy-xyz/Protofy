@@ -1,5 +1,5 @@
 import { Node, getFieldValue, FlowPort, NodeParams, FallbackPort, Button, filterCallback, restoreCallback } from 'protoflow';
-import { API } from 'protolib'
+import { API } from 'protolib/base/Api'
 import { Plug } from 'lucide-react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import React from 'react';

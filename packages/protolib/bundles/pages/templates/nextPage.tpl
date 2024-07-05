@@ -1,5 +1,5 @@
 import Feature from 'app/bundles/custom/pages/{{name}}'
-import { useSession } from 'protolib'
+import { useSession } from 'protolib/lib/Session'
 
 export default function {{upperName}}Page(props:any) {
   useSession(props.pageSession)

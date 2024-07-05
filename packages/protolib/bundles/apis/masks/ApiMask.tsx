@@ -1,5 +1,5 @@
 import { Node, Field, FlowPort, NodeParams, FallbackPort, Button, getFieldValue } from 'protoflow';
-import { API } from 'protolib'
+import { API } from 'protolib/base/Api'
 import { Plug } from 'lucide-react';
 import { filterCallback, restoreCallback } from 'protoflow';
 import { SiteConfig} from 'app/conf'

@@ -1,6 +1,17 @@
 import React, { useState } from "react";
 import { Theme } from "@my/ui";
-import { UIWrapLib, UIWrap, withSession, Page, useEditor, API, SSR, useComposedState, Text, Pressable, Icon, VStack, HStack, Image } from "protolib";
+import {Page} from 'protolib/components/Page'
+import {Text} from 'protolib/components/Text'
+import {Pressable} from 'protolib/components/Pressable'
+import {Icon} from 'protolib/components/Icon'
+import VStack from 'protolib/components/VStack'
+import HStack from 'protolib/components/HStack'
+import Image from 'protolib/components/Image'
+import {useComposedState} from 'protolib/lib/useComposedState'
+import {withSession } from "protolib/lib/Session"
+import {useEditor} from 'protolib/visualui/useEdit'
+import {SSR} from 'protolib/lib/SSR'
+import {UIWrapLib, UIWrap} from 'protolib/visualui/visualuiWrapper'
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protolib/base";
 import { context } from "app/bundles/uiContext";

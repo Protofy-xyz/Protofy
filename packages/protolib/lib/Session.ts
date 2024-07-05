@@ -4,7 +4,7 @@ import * as cookie from 'cookie'
 import { createSession, validateSession, SessionDataType, getSessionContext } from '../api/lib/session';
 import { NextPageContext } from 'next'
 import { parse } from 'cookie';
-import { getLogger } from "protolib/base"
+import { getLogger } from "protolib/base/logger"
 
 const logger = getLogger()
 

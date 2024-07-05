@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'solito/navigation';
 import { SiteConfig } from 'app/conf';
-import { getWorkspaceEnv } from 'protolib';
+import { getWorkspaceEnv } from 'protolib/lib/useWorkspaceEnv';
 import { getEnv } from 'protolib/base';
 
 const serviceEnv = getEnv()

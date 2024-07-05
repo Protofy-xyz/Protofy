@@ -1,4 +1,4 @@
-import {IntentType} from 'protolib'
+import {IntentType} from 'protolib/lib/Intent'
 import {processFilesIntent} from 'protolib/bundles/files/intents'
 import { useMemo } from 'react';
 
