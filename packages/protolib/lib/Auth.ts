@@ -1,6 +1,6 @@
 import { API } from "../base/Api"
 import { RegisterSchema } from 'app/schema';
-import {getPendingResult} from 'protolib';
+import { getPendingResult } from 'protolib/base/PendingResult';
 import { z } from "protolib/base";
 
 export const Auth = {
