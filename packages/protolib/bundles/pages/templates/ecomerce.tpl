@@ -1,11 +1,20 @@
-import { YStack, Text, XStack, H4 } from "@my/ui";
-import { Image, SSR, ContainerLarge, withSession, Page, Grid, NextLink, Logo, FooterElement, Footer as ProtoFooter, API }
-from "protolib";
-import { DefaultLayout } from "../../../layout/DefaultLayout";
-import { Protofy } from "protolib/base";
+import { YStack, Text, XStack, H4 } from '@my/ui';
+import { Image } from 'protolib/components/Image';
+import { ContainerLarge } from 'protolib/components/Container';
+import { Grid } from 'protolib/components/Grid';
+import { NextLink } from 'protolib/components/NextLink';
+import { Logo } from 'protolib/components/Logo';
+import { FooterElement } from 'protolib/components/layout';
+import { Footer as ProtoFooter } from 'protolib/components/layout/Footer';
+import { API } from 'protolib/base/Api';
+import { withSession } from 'protolib/lib/Session';
+import { Page } from 'protolib/components/Page';
+import { SSR } from 'protolib/lib/SSR';
+import { DefaultLayout } from '../../../layout/DefaultLayout';
+import { Protofy } from 'protolib/base';
 import { Paragraph } from '@my/ui';
-import { context } from "app/bundles/uiContext";
-import { useRouter } from "solito/navigation";
+import { context } from 'app/bundles/uiContext';
+import { useRouter } from 'solito/navigation';
 
 const isProtected = Protofy("protected", {{protected}})
 Protofy("pageType", "ecommerce")
