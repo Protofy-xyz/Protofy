@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { XStack, YStack, Text, Paragraph, Button, Input, Spinner, Switch } from '@my/ui';
-import { ContainerLarge, Tinted, Chip, useFetch, useMqttState, useSubscription } from 'protolib';
+import { ContainerLarge } from 'protolib/components/Container';
+import { Tinted } from 'protolib/components/Tinted';
+import { Chip } from 'protolib/components/Chip';
+import { useMqttState, useSubscription } from 'protolib/lib/Mqtt';
+import { useFetch } from 'protolib/lib/useFetch'
 import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 
 const Monitor = ({ deviceName, monitorData, subsystem }) => {
