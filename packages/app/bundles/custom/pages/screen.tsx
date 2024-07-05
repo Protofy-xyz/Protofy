@@ -2,7 +2,8 @@ import { DefaultLayout } from 'app/layout/DefaultLayout'
 import { AlertTriangle } from '@tamagui/lucide-icons'
 import { Protofy } from 'protolib/base'
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, H2 } from "@my/ui";
-import { SSR, withSession, Page, useEdit } from "protolib";
+import { withSession, Page, useEdit } from "protolib";
+import { SSR } from 'protolib/lib/SSR'
 
 const isProtected = Protofy("protected", false)
 
