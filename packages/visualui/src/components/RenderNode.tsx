@@ -309,7 +309,6 @@ export const RenderNode = ({ render, onEnableEvents, metadata }) => {
                                         : null
                                 }
                                 {
-                                    custom.options || deletable ?
                                         <UIMenu
                                             onOpenChange={onEnableEvents}
                                             trigger={
@@ -353,7 +352,6 @@ export const RenderNode = ({ render, onEnableEvents, metadata }) => {
                                                 </>
                                             }
                                         />
-                                        : null
                                 }
                             </div>
                         </div >,
