@@ -1,7 +1,7 @@
 import React from "react"
 import { YStack } from "tamagui"
 
-const SpotLight = React.forwardRef((props: any, ref: any) => (
+export const SpotLight = React.forwardRef((props: any, ref: any) => (
     <YStack
         ref={ref}
         o={0.75}

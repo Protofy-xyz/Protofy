@@ -1,7 +1,7 @@
 import { YStack } from "tamagui"
 import React from 'react'
 
-const BackgroundGradient = React.forwardRef(({height=521, o=0.08, direction="up", ...props}:any, ref: any) => (
+export const BackgroundGradient = React.forwardRef(({height=521, o=0.08, direction="up", ...props}:any, ref: any) => (
     <YStack
     ref={ref}
     className={"bg-grid mask-gradient-"+direction}

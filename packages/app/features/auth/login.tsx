@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
-import { useSession, useSessionContext, createSession, Auth, Center, HorizontalBox, Notice, Section, SpotLight, ElevatedArea, BackgroundGradient, LogoIcon, PendingResult, getPendingResult, Page} from 'protolib'
+import { LogoIcon, PendingResult, getPendingResult, Page} from 'protolib'
 import { getEnv } from 'protolib/base'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
@@ -8,7 +8,16 @@ import { ProtofyLogoSVG } from '@my/ui'
 import { useSearchParams, useRouter } from 'solito/navigation';
 import { getErrorMessage } from "@my/ui";
 import { SiteConfig } from '../../conf'
-
+import { useSession, useSessionContext } from 'protolib/lib/Session'
+import { createSession } from 'protolib/api/lib/session'
+import { Auth } from 'protolib/lib/Auth'
+import { Center } from 'protolib/components/Center'
+import { HorizontalBox } from 'protolib/components/HorizontalBox'
+import { Notice } from 'protolib/components/Notice'
+import { Section } from 'protolib/components/Section'
+import { SpotLight } from 'protolib/components/SpotLight'
+import { ElevatedArea } from 'protolib/components/ElevatedArea'
+import { BackgroundGradient } from 'protolib/components/BackgroundGradient'
 
 export function SignInPage(props) {
   return (

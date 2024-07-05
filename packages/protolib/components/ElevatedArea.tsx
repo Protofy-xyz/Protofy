@@ -1,7 +1,7 @@
 import { StackProps, YStack } from "tamagui";
 import React from "react"
 
-const ElevatedArea = React.forwardRef((props:StackProps, ref:any) => (
+export const ElevatedArea = React.forwardRef((props:StackProps, ref:any) => (
     <YStack
         ref={ref}
         //@ts-ignore

@@ -2,7 +2,7 @@ import React from "react"
 import { ContainerLarge } from "./Container"
 import { StackProps, XStack, XStackProps } from "tamagui"
 
-const HorizontalBox = React.forwardRef((props:StackProps, ref:any) => (
+export const HorizontalBox = React.forwardRef((props:StackProps, ref:any) => (
     <ContainerLarge ref={ref}>
         <XStack
         flex={1}
