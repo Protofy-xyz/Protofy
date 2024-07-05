@@ -1,6 +1,8 @@
-import { NextLink, Logo, ContainerLarge, ExternalIcon, FooterElement, Footer as ProtoFooter } from 'protolib'
+import { NextLink } from 'protolib/components/NextLink'
+import { Logo } from 'protolib/components/Logo'
+import { Footer as ProtoFooter, FooterElement } from 'protolib/components/layout/Footer'
 import React from 'react'
-import { H4, Paragraph, Text, XStack, YStack } from 'tamagui'
+import { Paragraph } from 'tamagui'
 
 export const Footer = () => <ProtoFooter>
   <FooterElement
