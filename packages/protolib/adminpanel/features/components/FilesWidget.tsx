@@ -1,4 +1,5 @@
-import { getIntent, Center } from 'protolib'
+import { Center } from '../../../components/Center'
+import { getIntent } from '../../../lib/Intent'
 import { H4, Stack, XStack, YStack, YStackProps } from '@my/ui'
 import React from 'react'
 import { lookup } from 'mrmime';
