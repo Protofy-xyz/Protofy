@@ -5,12 +5,17 @@ if you call paginated apis, you will need to wait for result.isLoaded and look i
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
 
-import {Protofy} from 'protolib/base'
-import {Objects} from 'app/bundles/objects'
-import {DataView, API, AdminPage, PaginatedDataSSR, useWorkspaceUrl, getWorkspaceApiUrl, useRedirectToEnviron } from 'protolib'
+import {Protofy} from 'protolib/base/Protofy'
+import { API } from 'protolib/base/Api'
+import { PaginatedDataSSR } from 'protolib/lib/SSR'
+import { useWorkspaceUrl, getWorkspaceApiUrl } from 'protolib/lib/useWorkspaceEnv'
+import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
+import { Objects } from 'app/bundles/objects'
+import { DataView } from 'protolib/components/DataView'
+import { AdminPage } from 'protolib/components/AdminPage'
 import { Tag } from '@tamagui/lucide-icons'
-import { context } from "app/bundles/uiContext";
-import { useRouter } from "solito/navigation";
+import { context } from 'app/bundles/uiContext'
+import { useRouter } from 'solito/navigation'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
