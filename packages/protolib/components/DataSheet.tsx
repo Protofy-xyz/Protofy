@@ -1,12 +1,10 @@
 import { Stack, StackProps } from "tamagui"
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Column, Table2, Cell, SelectionModes } from "@blueprintjs/table";
+import { useLayoutEffect, useRef, useState } from "react";
+import { Column, Table2, Cell } from "@blueprintjs/table";
 import { HotkeysProvider } from "@blueprintjs/core";
 import { Tinted } from "./Tinted";
 import { getFieldPreview } from "./DataTableList";
 import { useThemeSetting } from '@tamagui/next-theme'
-import { useUpdateEffect } from "usehooks-ts";
-import { set } from "../base";
 
 const validTypes = ['ZodString', 'ZodNumber', 'ZodBoolean', 'ZodDate']
 const widthTypes = {
