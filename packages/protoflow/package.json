@@ -42,7 +42,7 @@
     "@types/react-color": "3.0.6",
     "terser": "5.16.9",
     "tsup": "6.7.0",
-    "typescript": "^5.2.2"
+    "typescript": "~5.3.3"
   },
   "files": [
     "dist/**/*"
