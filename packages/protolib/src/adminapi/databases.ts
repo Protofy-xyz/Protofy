@@ -57,3 +57,5 @@ app.post('/adminapi/v1/dbsearch/:dbname', requireAdmin(), handler(async (req, re
     res.send(total)
     return
 }));
+
+export default 'databases'

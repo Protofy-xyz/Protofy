@@ -35,3 +35,5 @@ app.post('/adminapi/v1/templates/:tplname', requireAdmin(), handler(async (req, 
     res.send({"result":"created"})
     return
 }));
+
+export default 'templates'

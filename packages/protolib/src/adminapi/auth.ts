@@ -165,3 +165,5 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
         logger.info({ newSession }, "Session created: " + request.username)
     }
 }));
+
+export default 'auth'

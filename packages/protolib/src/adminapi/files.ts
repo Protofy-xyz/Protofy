@@ -240,3 +240,4 @@ app.get('/adminapi/v1/files/:path(*)', requireAdmin(), handler(handleFilesReques
 
 app.post('/adminapi/v1/renameItem', requireAdmin(), handler(handleRenameRequest));
 
+export default 'files'
