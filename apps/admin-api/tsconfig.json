@@ -22,35 +22,35 @@
     ],
 
     "paths": {
-      "protolib/*": ["packages/protolib/*"], // Ajusta el path según tu estructura
-      "app/*": ["packages/app/*"] // Ajusta el path según tu estructura
+      "protolib/*": ["./protolib/src/*"], 
+      "app/*": ["./app/*"] 
     }
   },
   "include": [
     "./src/**/*.ts",
     "../../.types/*.ts",
-    "../../packages/protolib/adminapi/**/*",
-    "../../packages/protolib/api/**/*",
-    "../../packages/protolib/base/**/*",
-    "../../packages/protolib/schema/**/*",
-    "../../packages/app/bundles/apiContext.ts",
-    "../../packages/app/bundles/adminapi.ts",
-    "../../packages/app/bundles/objects.ts",
-    "../../packages/app/bundles/library.ts",
-    "../../packages/app/bundles/storageProviders.ts",
-    "../../packages/app/BaseConfig.ts",
-    "../../packages/app/conf.ts",
-    "../../packages/app/initialData.ts",
-    "../../packages/app/templates/**/*",
-    "../../packages/app/schema/**/*",
-    "../../packages/protolib/bundles/adminapi.ts",
-    "../../packages/protolib/bundles/library.ts",
-    "../../packages/protolib/bundles/apiContext.ts",
-    "../../packages/protolib/bundles/objects.ts",
-    "../../packages/app/bundles/custom/fsm/**/*",
+    "./protolib/src/adminapi/**/*",
+    "./protolib/src/api/**/*",
+    "./protolib/src/base/**/*",
+    "./protolib/src/schema/**/*",
+    "./app/bundles/apiContext.ts",
+    "./app/bundles/adminapi.ts",
+    "./app/bundles/objects.ts",
+    "./app/bundles/library.ts",
+    "./app/bundles/storageProviders.ts",
+    "./app/BaseConfig.ts",
+    "./app/conf.ts",
+    "./app/initialData.ts",
+    "./app/templates/**/*",
+    "./app/schema/**/*",
+    "./protolib/src/bundles/adminapi.ts",
+    "./protolib/src/bundles/library.ts",
+    "./protolib/src/bundles/apiContext.ts",
+    "./protolib/src/bundles/objects.ts",
+    "./app/bundles/custom/fsm/**/*",
   ],
   "exclude": [
     "node_modules",
-    "../../packages/protolib/base/components/*",
+    "./protolib/src/base/components/*",
   ]
 }

@@ -3,7 +3,7 @@ import path from 'path';
 
 moduleAlias.addAliases({
   "app": path.resolve(__dirname, '../../../packages/app'),
-  "protolib": path.resolve(__dirname, '../../../packages/protolib')
+  "protolib": path.resolve(__dirname, '../../../packages/protolib/src')
 });
 
 import dotenv from 'dotenv'

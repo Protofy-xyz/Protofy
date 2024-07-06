@@ -22,32 +22,32 @@
     ],
 
     "paths": {
-      "protolib/*": ["packages/protolib/*"], 
-      "app/*": ["packages/app/*"]
+      "protolib/*": ["./protolib/src/*"], 
+      "app/*": ["./app/*"]
     }
   },
   "include": [
     "./src/**/*.ts",
     "../../.types/*.ts",
-    "../../packages/protolib/api/**/*",
-    "../../packages/protolib/base/**/*",
-    "../../packages/protolib/schema/**/*",
-    "../../packages/app/bundles/apiContext.ts",
-    "../../packages/app/bundles/apis.ts",
-    "../../packages/app/bundles/objects.ts",
-    "../../packages/app/bundles/library.ts",
-    "../../packages/app/bundles/storageProviders.ts",
-    "../../packages/app/BaseConfig.ts",
-    "../../packages/app/initialData.ts",
-    "../../packages/app/templates/**/*",
-    "../../packages/app/schema/**/*",
-    "../../packages/protolib/bundles/apiContext.ts",
-    "../../packages/protolib/bundles/devices/devices/devicesSchemas.ts",
-    "../../packages/protolib/bundles/library.ts",
-    "../../packages/protolib/bundles/objects.ts"
+    "./protolib/src/api/**/*",
+    "./protolib/src/base/**/*",
+    "./protolib/src/schema/**/*",
+    "./app/bundles/apiContext.ts",
+    "./app/bundles/apis.ts",
+    "./app/bundles/objects.ts",
+    "./app/bundles/library.ts",
+    "./app/bundles/storageProviders.ts",
+    "./app/BaseConfig.ts",
+    "./app/initialData.ts",
+    "./app/templates/**/*",
+    "./app/schema/**/*",
+    "./protolib/src/bundles/apiContext.ts",
+    "./protolib/src/bundles/devices/devices/devicesSchemas.ts",
+    "./protolib/src/bundles/library.ts",
+    "./protolib/src/bundles/objects.ts"
   ],
   "exclude": [
     "node_modules",
-    "../../packages/protolib/base/components/*",
+    "./protolib/src/base/components/*",
   ]
 }

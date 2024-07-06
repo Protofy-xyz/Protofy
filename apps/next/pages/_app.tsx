@@ -9,6 +9,7 @@ import 'protoflow/src/styles.css'
 import 'protoflow/src/diagram/menu.module.css'
 import 'react-sliding-side-panel/lib/index.css'
 import 'protolib/styles/datatable.css';
+import 'protolib/styles/styles.css';
 import '../chat.css'
 import '../map.css'
 import '../chonky.css'

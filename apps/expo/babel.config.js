@@ -13,7 +13,7 @@ module.exports = function (api) {
             'protoflow/src/fields/WeekdayPicker': '../../packages/protoflow/src/fields/WeekdayPicker.tsx',
             'protoflow/src/diagram/NodeText' : '../../packages/protoflow/src/diagram/NodeText.tsx',
             protoflow: '../../packages/protoflow/src',
-            protolib: '../../packages/protolib',
+            protolib: '../../packages/protolib/src',
             app: '../../packages/app',
             '@my/ui': '../../packages/ui',
             stream: 'stream-browserify',

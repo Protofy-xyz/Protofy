@@ -8,7 +8,9 @@
         "@lib/*": ["./lib/*"],
         "@data/*": ["./data/*"],
         "react-native": ["react-native-web"],
-        "@/*": ["./*"]
+        "@/*": ["./*"],
+        "protolib/*": ["../protolib/src/*"]
       }
-    }
+    },
+    "include": ["./**/*.ts", "./**/*.tsx", "../protolib/src/**/*.ts", "../protolib/src/**/*.tsx"],
   }

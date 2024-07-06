@@ -25311,6 +25311,7 @@ __metadata:
     "@react-three/drei": "npm:9.77.3"
     "@react-three/fiber": "npm:8.8.10"
     "@rehookify/datepicker": "npm:6.6.1"
+    "@tamagui/build": "npm:^1.101.7"
     "@tamagui/font-cherry-bomb": "npm:^1.101.7"
     "@tamagui/font-dm-sans": "npm:^1.101.7"
     "@tamagui/font-dm-serif-display": "npm:^1.101.7"

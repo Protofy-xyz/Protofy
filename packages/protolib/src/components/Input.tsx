@@ -6,7 +6,6 @@ import {
 } from '@tamagui/core'
 import { v4 as uuidv4 } from 'uuid';
 import { inputSizeVariant } from '../helpers/InputHelpers'
-import '../styles/styles.css'
 import { forwardRef } from 'react';
 
 type OptionProps = {
