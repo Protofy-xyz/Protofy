@@ -1,4 +1,3 @@
-import { generateEvent } from "../../bundles/events/eventsLibrary";
 import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
 import { API, getEnv, getLogger } from 'protobase';
@@ -20,6 +19,14 @@ const logger = getLogger()
     operations: list of provided operations, by default ['create', 'read', 'update', 'delete', 'list']
     single: most apis are used to expose a list of things. Single means a single entity, not a list of things. So /api/v1/test returns the entity, not a list of things
 */
+
+const generateEvent = async (event, token='') => {
+    try {
+        await API.post('/adminapi/v1/events?token='+token, event, undefined, true)
+    } catch(e) {
+        //console.error("Failed to send event: ", e)
+    }
+}
 
 type AutoAPIOptions = {
     modelName: string,
