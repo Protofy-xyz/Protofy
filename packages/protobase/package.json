@@ -1,0 +1,17 @@
+{
+    "name": "protobase",
+    "version": "1.0.0",
+    "description": "Shared library with base technologies for any js environment",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "clean": "rm -rf dist"
+    },
+    "files": [
+        "dist"
+    ],
+    "devDependencies": {
+        "typescript": "~5.3.3"
+    }
+}

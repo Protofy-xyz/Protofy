@@ -25230,6 +25230,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"protobase@workspace:packages/protobase":
+  version: 0.0.0-use.local
+  resolution: "protobase@workspace:packages/protobase"
+  dependencies:
+    typescript: "npm:~5.3.3"
+  languageName: unknown
+  linkType: soft
+
 "protocol-buffers-encodings@npm:^1.1.0":
   version: 1.2.0
   resolution: "protocol-buffers-encodings@npm:1.2.0"
