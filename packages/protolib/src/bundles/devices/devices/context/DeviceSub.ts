@@ -1,5 +1,5 @@
 import { getPeripheralTopic } from '../devicesSchemas';
-import { getApiUrl } from '../../../../base';
+import { getApiUrl } from 'protobase';
 
 export const deviceSub = async (mqtt, context, deviceName, component, monitorName, cb) => {
     var data = null

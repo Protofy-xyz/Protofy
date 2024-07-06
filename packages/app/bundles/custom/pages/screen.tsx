@@ -1,6 +1,6 @@
 import { DefaultLayout } from 'app/layout/DefaultLayout'
 import { AlertTriangle } from '@tamagui/lucide-icons'
-import { Protofy } from 'protolib/base/Protofy'
+import { Protofy } from 'protobase'
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, H2 } from "@my/ui"
 import { withSession } from "protolib/lib/Session"
 import { useEdit } from 'protolib/visualui/useEdit'

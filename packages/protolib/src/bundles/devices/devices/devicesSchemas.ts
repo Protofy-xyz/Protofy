@@ -1,4 +1,4 @@
-import { ProtoModel, SessionDataType, API, Schema, z } from '../../../base'
+import { ProtoModel, SessionDataType, API, Schema, z } from 'protobase'
 import path from 'path'
 
 export const DevicesSchema = Schema.object({

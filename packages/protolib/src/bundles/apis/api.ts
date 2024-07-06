@@ -3,7 +3,7 @@ import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralPrope
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
-import { API } from '../../base'
+import { API } from 'protobase'
 import { getServiceToken } from "../../api/lib/serviceToken";
 import { ObjectModel } from '../objects/objectsSchemas'
 

@@ -17,8 +17,9 @@ import "@blueprintjs/table/lib/css/table.css";
 import '../blueprint.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import 'react-chat-widget/lib/styles.css';
+
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
-import { setConfig } from 'protolib/base/Config';
+import { setConfig, initSchemaSystem } from 'protobase';
 import { getBaseConfig } from 'app/BaseConfig'
 setConfig(getBaseConfig("next", process))
 import { Provider } from 'app/provider'
@@ -27,12 +28,11 @@ import React from 'react'
 import type { SolitoAppProps } from 'solito'
 import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
-import { initSchemaSystem } from 'protolib/base/BaseSchema'
 import { useSession } from 'protolib/lib/Session'
 import {AppConfContext} from 'protolib/providers/AppConf'
 import { getBrokerUrl} from 'protolib/lib/Broker'
 import {Connector } from 'protolib/lib/mqtt'
-import { Toast, XStack, YStack } from '@my/ui'
+import { Toast, YStack } from '@my/ui'
 
 initSchemaSystem()
 

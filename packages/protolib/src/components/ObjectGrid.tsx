@@ -1,7 +1,7 @@
 import { H3, Paragraph, Stack, StackProps, XStack, YStack } from "tamagui"
 import { Grid } from './Grid';
 import { EditableObject } from "./EditableObject";
-import { getPendingResult } from '../base/PendingResult'
+import { getPendingResult } from 'protobase'
 import { ItemCard } from "./ItemCard";
 import { useTint } from "../lib/Tints";
 import { useEffect, useRef, useState } from "react";

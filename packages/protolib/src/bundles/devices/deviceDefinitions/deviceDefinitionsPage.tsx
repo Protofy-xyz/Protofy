@@ -1,12 +1,10 @@
 import React, { useState } from "react"
 import { CircuitBoard, Tag, BookOpen, Eye } from '@tamagui/lucide-icons'
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas'
-import { API } from '../../../base/Api'
-import { z } from '../../../base/BaseSchema'
+import { API, z, getPendingResult } from 'protobase'
 import { DeviceCoreModel } from '../devicecores'
 import { Button, XStack } from "tamagui"
 import { useThemeSetting } from '@tamagui/next-theme'
-import { getPendingResult } from "../../../base/PendingResult"
 import { usePendingEffect } from "../../../lib/usePendingEffect"
 import { useWorkspaceEnv } from "../../../lib/useWorkspaceEnv"
 import { Chip } from "../../../components/Chip"

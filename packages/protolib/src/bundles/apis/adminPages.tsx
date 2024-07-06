@@ -1,8 +1,7 @@
 import { APIModel } from '.'
 import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView, useToastController, Spinner, Paragraph, SizableText } from "@my/ui";
 import { ToyBrick, Eye, ChevronDown, UploadCloud, CheckCircle, Package, AlertTriangle} from '@tamagui/lucide-icons'
-import { z } from '../../base/BaseSchema'
-import { API } from '../../base/Api'
+import { z, getPendingResult, API } from 'protobase'
 import { usePageParams } from '../../next'
 import { usePrompt } from '../../context/PromptAtom'
 import { Chip } from '../../components/Chip'
@@ -16,7 +15,6 @@ import Center from '../../components/Center'
 import { Objects } from "app/bundles/objects";
 import { Tinted } from '../../components/Tinted';
 import { usePendingEffect } from '../../lib/usePendingEffect';
-import { getPendingResult } from '../../base';
 import { PaginatedData } from '../../lib/SSR';
 import { Slides } from '../../components/Slides';
 import { apiTemplates } from 'app/bundles/templates'

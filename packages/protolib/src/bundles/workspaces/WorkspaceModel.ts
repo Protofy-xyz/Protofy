@@ -1,4 +1,4 @@
-import { AutoModel, Schema, z } from '../../base'
+import { AutoModel, Schema, z } from 'protobase'
 
 export const WorkspaceResourceSchema = z.object({
     type: z.string(),

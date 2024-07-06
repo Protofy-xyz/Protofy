@@ -16,12 +16,11 @@ import { VStack } from 'protolib/components/VStack';
 import { useEditor } from 'protolib/visualui/useEdit';
 import { BigTitle} from 'protolib/components/BigTitle'
 import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
-import { API } from 'protolib/base/Api';
+import { API, Protofy } from 'protobase';
 import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
 import { SSR } from 'protolib/lib/SSR';
 import { DefaultLayout, } from '../../../layout/DefaultLayout'
-import { Protofy } from 'protolib/base'
 import { context } from 'app/bundles/uiContext';
 import { useRouter } from 'solito/navigation';
 import { Objects } from 'app/bundles/objects';

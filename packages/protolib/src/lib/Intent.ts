@@ -1,4 +1,4 @@
-import {z} from 'protolib/base'
+import {z} from 'protobase'
 
 export const IntentSchema = z.object({
     action: z.string(),

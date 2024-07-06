@@ -9,10 +9,9 @@ moduleAlias.addAliases({
 import dotenv from 'dotenv'
 dotenv.config({ path: '../../.env' });
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
-import { setConfig, getConfig } from 'protolib/base/Config';
-import { getBaseConfig, getConfigWithoutSecrets } from 'app/BaseConfig'
+import { setConfig, getLogger } from 'protobase';
+import { getBaseConfig } from 'app/BaseConfig'
 setConfig(getBaseConfig('api', process, getServiceToken()))
-import { getLogger } from 'protolib/base/logger';
 require('events').EventEmitter.defaultMaxListeners = 100;
 const logger = getLogger()
 import http from 'http';

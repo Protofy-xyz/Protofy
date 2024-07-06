@@ -1,12 +1,12 @@
 import { GroupModel } from '.'
-import { z } from 'protolib/base'
+import { z } from 'protobase'
 import { DataView } from 'protolib/components/DataView'
 import { AdminPage } from 'protolib/components/AdminPage'
 import { Users } from '@tamagui/lucide-icons';
-import { API } from '../../base/Api'
+import { API } from 'protobase'
 import { usePrompt } from '../../context/PromptAtom'
 import { useState } from 'react';
-import { getPendingResult } from '../../base';
+import { getPendingResult } from 'protobase';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { PaginatedData } from '../../lib/SSR';
 

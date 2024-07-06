@@ -1,7 +1,7 @@
 import { DefaultLayout } from 'app/layout/DefaultLayout'
 import { AlertTriangle } from '@tamagui/lucide-icons'
 import {Page} from 'protolib/components/Page'
-import { Protofy } from 'protolib/base'
+import { Protofy } from 'protobase'
 import { Theme, YStack, Text, XStack, Paragraph,H2 } from "@my/ui"
 import React, { useState } from 'react'
 import {withSession } from "protolib/lib/Session"

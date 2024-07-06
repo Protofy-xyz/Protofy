@@ -24,9 +24,8 @@ use the chat if in doubt
 
 import { Objects } from "app/bundles/objects";
 import { AutoAPI } from "protolib/api";
-import { API, Protofy } from "protolib/base";
+import { API, Protofy, getLogger } from "protobase";
 import { Application } from "express";
-import { getLogger } from "protolib/base";
 import {GoogleSheetClient} from 'protolib/bundles/google/googleSheetClient'
 import fsPath from "path";
 import { getServiceToken } from "protolib/api/lib/serviceToken";

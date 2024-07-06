@@ -5,7 +5,7 @@ import * as syncFs from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
 import { getServiceToken } from '../../api/lib/serviceToken'
-import { API } from '../../base'
+import { API } from 'protobase'
 import { ObjectModel } from "../objects/objectsSchemas";
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")

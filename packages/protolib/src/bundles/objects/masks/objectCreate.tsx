@@ -1,7 +1,7 @@
 import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, FlowStoreContext, filterConnection, dumpArgumentsData, getId} from 'protoflow';
 import { PackagePlus } from 'lucide-react';
 import { useEffect, useState, useContext } from 'react';
-import { API } from 'protolib/base'
+import { API } from 'protobase'
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { useUpdateEffect } from 'usehooks-ts';
 

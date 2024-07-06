@@ -1,6 +1,6 @@
 import { Text, TextProps } from 'tamagui'
 import React, { useState, useEffect } from "react"
-import { API } from '../base/Api'
+import { API } from 'protobase'
 import { DeviceCollection } from '../bundles/devices/models/DeviceModel';
 import { DeviceSubsystemMonitor } from '../bundles/devices/devices';
 import { useLastEvent } from '../bundles/events/hooks';

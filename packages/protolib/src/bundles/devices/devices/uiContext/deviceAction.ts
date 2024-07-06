@@ -1,4 +1,4 @@
-import { API } from "../../../../base";
+import { API } from "protobase";
 
 export const deviceAction = async (device, subsystem, action, value?) => {
     const url = `/adminapi/v1/devices/${device}/subsystems/${subsystem}/actions/${action}/${value}`

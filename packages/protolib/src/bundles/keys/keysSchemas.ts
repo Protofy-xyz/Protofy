@@ -1,4 +1,4 @@
-import { z, Schema, AutoModel } from "../../base";
+import { z, Schema, AutoModel } from "protobase";
 
 export const KeySchema = Schema.object({
 	name: z.string().id().search(),

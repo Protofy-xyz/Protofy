@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import {templates} from 'app/templates'
 import { handler, getApp} from 'protolib/api'
 import { connectDB } from 'app/bundles/storageProviders'
-import { getLogger } from '../base';
+import { getLogger } from 'protobase';
 
 const logger = getLogger()
 

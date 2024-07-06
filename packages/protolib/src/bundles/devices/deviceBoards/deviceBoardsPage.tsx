@@ -1,14 +1,12 @@
 import { CircuitBoard, Tag, Layers } from '@tamagui/lucide-icons';
 import { DeviceBoardModel } from './deviceBoardsSchemas';
-import { API } from '../../../base/Api';
+import { API, z, getPendingResult } from 'protobase';
 import { Chip } from '../../../components/Chip';
 import { DataTable2 } from '../../../components/DataTable2';
 import { DataView } from '../../../components/DataView';
 import { AdminPage } from '../../../components/AdminPage';
 import { PaginatedDataSSR } from '../../../lib/SSR';
-import { getPendingResult } from '../../../base/PendingResult';
 import { usePendingEffect } from '../../../lib/usePendingEffect';
-import { z } from '../../../base'
 import { DeviceCoreModel } from '../devicecores';
 import { useState } from 'react';
 

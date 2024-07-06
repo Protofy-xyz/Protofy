@@ -4,7 +4,7 @@ import { Check, FileEdit, X, Trash2 } from '@tamagui/lucide-icons'
 import { useMemo, useState } from 'react'
 import { ItemCard } from './ItemCard'
 import JSONViewer from './jsonui/JSONViewer'
-import { getPendingResult } from '../base/PendingResult'
+import { getPendingResult } from 'protobase'
 import React from 'react'
 import { IconContainer } from './IconContainer'
 

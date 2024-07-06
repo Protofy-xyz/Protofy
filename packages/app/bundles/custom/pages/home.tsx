@@ -13,7 +13,7 @@ import { useEditor } from "protolib/visualui/useEdit";
 import { SSR } from "protolib/lib/SSR";
 import { UIWrapLib, UIWrap } from "protolib/visualui/visualuiWrapper";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
-import { Protofy } from "protolib/base";
+import { Protofy } from "protobase";
 import { context } from "app/bundles/uiContext";
 import { useRouter } from "solito/navigation";
 import { Objects } from "app/bundles/objects";

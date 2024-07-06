@@ -1,5 +1,5 @@
 import * as mqtt from 'mqtt';
-import { getLogger } from '../../base';
+import { getLogger } from 'protobase';
 
 const logger = getLogger()
 

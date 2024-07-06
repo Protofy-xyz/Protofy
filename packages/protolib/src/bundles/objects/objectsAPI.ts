@@ -4,7 +4,7 @@ import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { getServiceToken } from '../../api/lib/serviceToken'
-import { API } from '../../base'
+import { API } from 'protobase'
 import { APIModel } from '../apis/APISchemas'
 import { PageModel } from '../pages/pagesSchemas'
 

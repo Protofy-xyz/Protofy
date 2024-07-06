@@ -1,7 +1,7 @@
 import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback } from 'protoflow';
 import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { API } from 'protolib/base'
+import { API } from 'protobase'
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 
 const objectDelete = (node: any = {}, nodeData = {}) => {

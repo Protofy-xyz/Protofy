@@ -1,4 +1,4 @@
-import { z } from "../../../../base";
+import { z } from "protobase";
 
 export const ActionSchema = z.object({
     name: z.string(),

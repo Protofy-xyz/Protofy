@@ -12,7 +12,7 @@ import { IntentType } from '../../lib/Intent'
 import Center from '../../components/Center'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react';
-import { API } from '../../base/Api';
+import { API } from 'protobase';
 import { usePrompt, promptCmd } from '../../context/PromptAtom';
 import { useInterval, useUpdateEffect } from 'usehooks-ts';
 import Flows from '../../adminpanel/features/components/Flows';

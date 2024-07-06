@@ -17,9 +17,8 @@ the session argument is a session object, with the following shape:
 use the chat if in doubt
 */
 
-import { Protofy } from 'protolib/base'
 import { getAuth } from "protolib/api";
-import { getLogger, API } from "protolib/base"
+import { API, Protofy, getLogger } from "protobase";
 import { Application } from 'express';
 import fs from 'fs'
 import path from "path";

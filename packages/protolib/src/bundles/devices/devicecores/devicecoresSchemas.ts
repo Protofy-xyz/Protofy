@@ -1,4 +1,4 @@
-import { AutoModel, Schema, z } from '../../../base'
+import { AutoModel, Schema, z } from 'protobase'
 
 export const DeviceCoreSchema = Schema.object({
   name: z.string().hint("ESP32, AT-MEGA2560  ARMv7, Protofy, ...").static().id(),

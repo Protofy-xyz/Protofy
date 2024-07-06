@@ -1,4 +1,4 @@
-import { AutoModel, Schema, z } from '../../../base'
+import { AutoModel, Schema, z } from 'protobase'
 import { v4 as uuidv4 } from 'uuid'
 
 export const DeviceSdkSchema = Schema.object({

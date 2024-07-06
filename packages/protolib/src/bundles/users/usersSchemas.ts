@@ -1,4 +1,4 @@
-import { z, Schema, AutoModel, ProtoModel, SessionDataType} from "../../base";
+import { z, Schema, AutoModel, ProtoModel, SessionDataType} from "protobase";
 import moment from "moment";
 
 export const UserSchema = Schema.object({

@@ -15,8 +15,7 @@ import { Center } from 'protolib/components/Center';
 import { GithubIcon } from 'protolib/components/icons/GithubIcon';
 import { DiscordIcon } from 'protolib/components/icons/DiscordIcon';
 import { TwitterIcon } from 'protolib/components/icons/TwitterIcon';
-import { Protofy } from 'protolib/base/Protofy'
-import { API } from 'protolib/base/Api'
+import { Protofy, API } from 'protobase'
 import { useComposedState } from 'protolib/lib/useComposedState'
 import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
 import { useEditor } from 'protolib/visualui/useEdit'

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePendingEffect } from 'protolib/lib/usePendingEffect';
 import useSubscription from 'protolib/lib/mqtt/useSubscription'; 
-import { PendingResult } from '../base';
+import { PendingResult } from 'protobase';
 
 export const useRemoteStateList = (items, fetch, topic, model, quickRefresh=false) => { // Quick refresh skips fetch when a change is detected
     const [dataState, setDataState] = useState<PendingResult | undefined>(items);

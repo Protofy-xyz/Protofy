@@ -2,7 +2,7 @@
 import WebSocket, { Server } from 'ws';
 import net from 'net';
 import aedes from 'aedes';
-import { getLogger } from 'protolib/base/logger';
+import { getLogger } from 'protobase';
 
 const logger = getLogger()
 

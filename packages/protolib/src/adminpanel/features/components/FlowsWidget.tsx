@@ -2,7 +2,7 @@ import { FlowFactory } from 'protoflow';
 import { TopicsProvider } from "react-topics";
 import { useState } from 'react';
 import customMasks from 'app/bundles/masks';
-import { getLogger } from "protolib/base"
+import { getLogger } from "protobase"
 
 const logger = getLogger()
 

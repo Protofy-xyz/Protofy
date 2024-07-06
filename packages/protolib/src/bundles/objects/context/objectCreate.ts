@@ -1,4 +1,4 @@
-import {API} from '../../../base'
+import {API} from 'protobase'
 
 export const create = async (objectName: string, data: any, objects, options, cb?, errorCb?) => {
     const endPoint = objects[objectName].getApiEndPoint()

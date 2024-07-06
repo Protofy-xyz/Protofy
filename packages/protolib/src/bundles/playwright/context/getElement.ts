@@ -1,4 +1,4 @@
-import { getLogger } from '../../../base/logger';
+import { getLogger } from 'protobase';
 import { chromium, firefox, webkit } from 'playwright';
 import { join } from 'path';
 

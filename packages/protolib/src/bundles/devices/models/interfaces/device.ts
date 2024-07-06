@@ -1,4 +1,4 @@
-import { z } from "../../../../base";
+import { z } from "protobase";
 import {SubsystemType, SubsystemSchema } from './'
 export type DeviceDataType = {
     name: string,

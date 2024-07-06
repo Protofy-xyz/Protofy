@@ -38,8 +38,7 @@ import {
 import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@my/ui'
 import { usePathname, useSearchParams } from 'solito/navigation';
 import { useContext, useEffect, useState } from 'react';
-import { API } from 'protolib/base/Api';
-import { getPendingResult } from 'protolib/base/PendingResult';
+import { API, getPendingResult } from 'protobase';
 import { useWorkspaceRoot } from 'protolib/lib/useWorkspaceRoot';
 import { AppConfContext, SiteConfigType } from 'protolib/providers/AppConf';
 import { AlertDialog } from 'protolib/components/AlertDialog';

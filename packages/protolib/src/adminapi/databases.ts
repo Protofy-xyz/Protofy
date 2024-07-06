@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { handler, getApp} from 'protolib/api'
 import { getDB } from 'app/bundles/storageProviders'
-import { getLogger } from '../base';
+import { getLogger } from 'protobase';
 
 const logger = getLogger()
 const app = getApp()

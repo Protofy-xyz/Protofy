@@ -1,10 +1,10 @@
-import { API } from "../../../base";
+import { API } from "protobase";
 import { DevicesModel } from ".";
 import { AutoAPI, handler } from '../../../api'
 import { getDB } from 'app/bundles/storageProviders'
 import { getServiceToken } from "../../../api/lib/serviceToken";
 import { generateEvent } from "../../events/eventsLibrary";
-import { getLogger } from '../../../base/logger';
+import { getLogger } from 'protobase';
 import moment from 'moment';
 import fs from 'fs';
 import path from 'path';

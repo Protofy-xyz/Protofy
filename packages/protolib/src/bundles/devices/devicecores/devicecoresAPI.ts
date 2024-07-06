@@ -1,6 +1,6 @@
 import { DeviceCoreModel } from ".";
 import { AutoAPI } from '../../../api'
-import { API } from '../../../base'
+import { API } from 'protobase'
 
 const initialData = {
     "esp32": {

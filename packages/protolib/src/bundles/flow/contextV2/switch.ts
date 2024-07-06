@@ -1,4 +1,4 @@
-import { getLogger } from '../../../base/logger';
+import { getLogger } from 'protobase';
 
 const logger = getLogger()
 

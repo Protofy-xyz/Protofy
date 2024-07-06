@@ -1,10 +1,9 @@
 import { YStack, H1, Text, XStack, H3, Button } from "@my/ui";
-import { API } from 'protolib/base/Api';
+import { API, Protofy } from 'protobase';
 import { SSR } from 'protolib/lib/SSR';
 import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
 import { DefaultLayout } from "../../../layout/DefaultLayout";
-import { Protofy } from "protolib/base";
 import { context } from "app/bundles/uiContext";
 import { useRouter } from "solito/navigation";
 

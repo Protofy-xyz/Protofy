@@ -31,7 +31,6 @@
     "../../.types/*.ts",
     "./protolib/src/adminapi/**/*",
     "./protolib/src/api/**/*",
-    "./protolib/src/base/**/*",
     "./protolib/src/schema/**/*",
     "./app/bundles/apiContext.ts",
     "./app/bundles/adminapi.ts",
@@ -50,7 +49,6 @@
     "./app/bundles/custom/fsm/**/*",
   ],
   "exclude": [
-    "node_modules",
-    "./protolib/src/base/components/*",
+    "node_modules"
   ]
 }

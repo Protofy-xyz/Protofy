@@ -5,8 +5,7 @@ if you call paginated apis, you will need to wait for result.isLoaded and look i
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
 
-import {Protofy} from 'protolib/base/Protofy'
-import { API } from 'protolib/base/Api'
+import { Protofy, API } from 'protobase'
 import { PaginatedDataSSR } from 'protolib/lib/SSR'
 import { useWorkspaceUrl, getWorkspaceApiUrl } from 'protolib/lib/useWorkspaceEnv'
 import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'

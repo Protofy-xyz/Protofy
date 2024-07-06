@@ -1,4 +1,4 @@
-import { z } from "../../../../base";
+import { z } from "protobase";
 import { ActionSchema, ActionType, MonitorSchema, MonitorType } from "./";
 
 export const SubsystemSchema = z.object({

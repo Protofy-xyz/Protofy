@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Node, CustomFieldsList, getFieldValue } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Database } from 'lucide-react';
-import { API } from 'protolib/base'
+import { API } from 'protobase'
 
 const ObjectFormMask = ({ node = {}, nodeData = {} }: any) => {
     const color = useColorFromPalette(55)

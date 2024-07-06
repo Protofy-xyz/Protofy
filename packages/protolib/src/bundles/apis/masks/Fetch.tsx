@@ -3,7 +3,7 @@ import { Send } from 'lucide-react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { filterCallback, restoreCallback } from 'protoflow';
 import { useEffect, useState } from 'react';
-import { API } from 'protolib/base/Api'
+import { API } from 'protobase'
 
 const Fetch = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(20)

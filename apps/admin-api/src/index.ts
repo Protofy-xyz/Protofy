@@ -8,14 +8,13 @@ moduleAlias.addAliases({
 });
 
 import dotenv from 'dotenv'
-import { setConfig, getConfig } from 'protolib/base/Config';
+import { setConfig, getConfig, getLogger } from 'protobase';
 import { getBaseConfig, getConfigWithoutSecrets } from '../../../packages/app/BaseConfig'
 // get config vars
 dotenv.config({ path: '../../.env' });
 global.defaultRoute = '/adminapi/v1'
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 setConfig(getBaseConfig("admin-api", process, getServiceToken()))
-import { getLogger } from 'protolib/base/logger';
 import { getApp, getMQTTClient } from 'protolib/api'
 import adminModules from 'protolib/adminapi'
 require('events').EventEmitter.defaultMaxListeners = 100;

@@ -1,4 +1,4 @@
-import { ProtoModel, Schema, z } from '../../base'
+import { ProtoModel, Schema, z } from 'protobase'
 import { SessionDataType } from "../../api";
 
 export const ServiceSchema = Schema.object({

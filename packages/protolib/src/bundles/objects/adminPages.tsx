@@ -8,7 +8,7 @@ import { useWorkspaceEnv } from 'protolib/lib/useWorkspaceEnv';
 import { Pencil, Boxes } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 import { XStack, Text } from "@my/ui";
-import { z } from 'protolib/base'
+import { z } from 'protobase'
 import { PaginatedData } from '../../lib/SSR';
 
 

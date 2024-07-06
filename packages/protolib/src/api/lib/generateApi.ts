@@ -1,7 +1,7 @@
 import { generateEvent } from "../../bundles/events/eventsLibrary";
 import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
-import { API, getEnv, getLogger } from '../../base';
+import { API, getEnv, getLogger } from 'protobase';
 import { connectDB as _connectDB, getDB as _getDB } from "app/bundles/storageProviders";
 import { getDBOptions } from "./db";
 

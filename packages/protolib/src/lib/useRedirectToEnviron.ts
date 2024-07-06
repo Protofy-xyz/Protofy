@@ -2,7 +2,7 @@ import { AppConfContext } from 'protolib/providers/AppConf';
 import { getWorkspaceEnv } from './useWorkspaceEnv';
 import { useContext, useEffect } from 'react';
 import { useRouter, usePathname } from 'solito/navigation';
-import { getEnv } from '../base';
+import { getEnv } from 'protobase';
 
 const serviceEnv = getEnv();
 

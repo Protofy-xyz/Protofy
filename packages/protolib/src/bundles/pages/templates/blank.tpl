@@ -11,13 +11,12 @@ import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
 import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
 import { useEditor } from 'protolib/visualui/useEdit';
-import { API } from 'protolib/base/Api';
+import { API, Protofy } from 'protobase';
 import { SSR } from 'protolib/lib/SSR';
 import { useComposedState } from 'protolib/lib/useComposedState';
 import { Text } from 'protolib/components/Text';
 import { Center } from 'protolib/components/Center';
 import { DefaultLayout } from 'app/layout/DefaultLayout'
-import { Protofy } from 'protolib/base/Protofy'
 import { context } from 'app/bundles/uiContext';
 import { useRouter } from 'solito/navigation';
 import { Objects } from 'app/bundles/objects';

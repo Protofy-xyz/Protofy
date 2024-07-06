@@ -1,17 +1,16 @@
 import { PageModel } from '.'
 import { DataView } from 'protolib/components/DataView'
-import {DataTable2} from 'protolib/components/DataTable2'
-import {Chip} from 'protolib/components/Chip'
-import {API} from 'protolib/base/Api'
-import {InteractiveIcon} from 'protolib/components/InteractiveIcon'
-import {AdminPage} from 'protolib/components/AdminPage'
-import {useWorkspaceEnv} from 'protolib/lib/useWorkspaceEnv'
-import { z } from 'protolib/base/BaseSchema'
+import { DataTable2 } from 'protolib/components/DataTable2'
+import { Chip } from 'protolib/components/Chip'
+import { API, z } from 'protobase'
+import { InteractiveIcon } from 'protolib/components/InteractiveIcon'
+import { AdminPage } from 'protolib/components/AdminPage'
+import { useWorkspaceEnv } from 'protolib/lib/useWorkspaceEnv'
 import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
 import { useState } from 'react'
-import { getPendingResult } from '../../base'
+import { getPendingResult } from 'protobase'
 import { usePendingEffect } from '../../lib/usePendingEffect'
 import { AlertDialog } from '../../components/AlertDialog'
 import { Slides } from '../../components/Slides'
@@ -162,11 +161,11 @@ export default {
                         DataTable2.column("", () => "", false, (row) => {
                             let route = row.route.startsWith('/') ? row.route : '/' + row.route
                             const parts = route.split('/')
-                            if(parts.length > 2 && parts[1] == 'workspace') {
-                                route = '/workspace/'+env+'/'+parts.slice(2).join('/')
+                            if (parts.length > 2 && parts[1] == 'workspace') {
+                                route = '/workspace/' + env + '/' + parts.slice(2).join('/')
                             }
-                            
-                            if(env == 'dev') {
+
+                            if (env == 'dev') {
                                 route = SiteConfig.getDevelopmentURL(route, document?.location.protocol, document?.location.hostname)
                             }
 

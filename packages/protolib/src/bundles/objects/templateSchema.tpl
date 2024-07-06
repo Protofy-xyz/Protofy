@@ -1,6 +1,4 @@
-import { ProtoModel, SessionDataType, z } from "protolib/base";
-import { Protofy, Schema, BaseSchema } from 'protolib/base'
-import { getLogger } from 'protolib/base';
+import { Protofy, Schema, BaseSchema, getLogger, ProtoModel, SessionDataType, z  } from 'protobase'
 
 const logger = getLogger()
 Protofy("features", {})

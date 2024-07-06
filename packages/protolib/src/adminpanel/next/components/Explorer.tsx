@@ -11,9 +11,9 @@ import { Download } from '@tamagui/lucide-icons'
 import { createApiAtom } from '../../../lib/createApiAtom';
 import { useAtom } from '../../../lib/Atom';
 import { AlertDialog } from '../../../components/AlertDialog';
-import { API } from '../../../base/Api';
+import { API } from 'protobase';
 import { Tinted } from '../../../components/Tinted';
-import { getLogger } from "protolib/base"
+import { getLogger } from "protobase"
 
 const logger = getLogger()
 

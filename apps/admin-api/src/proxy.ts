@@ -1,5 +1,5 @@
 
-import { getLogger } from 'protolib/base/logger';
+import { getLogger } from 'protobase';
 import { getBaseConfig } from '../../../packages/app/BaseConfig'
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import http from 'http';

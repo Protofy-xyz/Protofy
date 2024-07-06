@@ -1,4 +1,4 @@
-import { ProtoModel, Protofy, AutoModel, Schema, z } from "../../base";
+import { ProtoModel, Protofy, AutoModel, Schema, z } from "protobase";
 import { SessionDataType } from "../../api";
 
 export const DatabaseEntrySchema = Schema.object({

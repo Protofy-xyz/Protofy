@@ -1,5 +1,5 @@
 import {CronJob} from 'cron'
-import {getLogger } from '../../base';
+import {getLogger } from 'protobase';
 
 export const createPeriodicSchedule = (hours, minutes, callb, days) => {    
     const logger = getLogger()

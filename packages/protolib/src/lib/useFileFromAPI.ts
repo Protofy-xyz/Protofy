@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { getPendingResult } from "../base/PendingResult"
+import { getPendingResult } from "protobase"
 import { useUpdateEffect } from "usehooks-ts"
-import { API } from "../base/Api"
+import { API } from "protobase"
 import { usePendingEffect } from "./usePendingEffect"
 
 export const useFileFromAPI = (path, json?):[any, any] => {

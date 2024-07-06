@@ -1,4 +1,4 @@
-import { ProtoModel, SessionDataType } from "../../../base";
+import { ProtoModel, SessionDataType } from "protobase";
 import { SubsystemCollection, SubsystemModel } from "./SubsystemModel";
 import { DeviceDataType, DeviceSchema, SubsystemType } from "./interfaces";
 

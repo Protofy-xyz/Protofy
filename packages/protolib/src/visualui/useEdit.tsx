@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { API } from 'protolib/base/Api'
+import { API } from 'protobase'
 import {Tinted} from 'protolib/components/Tinted'
 import { Pencil } from '@tamagui/lucide-icons'
 import { getTokens } from '@tamagui/core'

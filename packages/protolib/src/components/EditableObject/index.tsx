@@ -4,15 +4,13 @@ import { Center } from 'protolib/components/Center';
 import { Grid } from 'protolib/components/Grid';
 import { AsyncView } from 'protolib/components/AsyncView';
 import { usePendingEffect } from 'protolib/lib/usePendingEffect';
-import { API } from 'protolib/base/Api';
+import { API, ProtoSchema, getPendingResult } from 'protobase';
 import { Tinted } from 'protolib/components/Tinted';
 import { Notice } from 'protolib/components/Notice';
-import { getPendingResult } from 'protolib/base/PendingResult';
 import { AlertDialog } from 'protolib/components/AlertDialog';
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getErrorMessage } from "@my/ui";
-import { ProtoSchema } from "protolib/base";
-import { Schema } from "../../base";
+import { Schema } from "protobase";
 import { useUpdateEffect } from "usehooks-ts";
 import {useTint} from '../../lib/Tints'
 import { ItemMenu } from "../ItemMenu";

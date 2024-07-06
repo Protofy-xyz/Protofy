@@ -3,7 +3,7 @@ import { Node, CustomFieldsList, getFieldValue } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Database } from 'lucide-react';
 import { DimensionProps, LayoutProps, TextProps } from './PropsLists';
-import { API } from 'protolib/base'
+import { API } from 'protobase'
 
 const ObjectPropValueMask = ({ node = {}, nodeData = {} }: any) => {
     const color = useColorFromPalette(55)

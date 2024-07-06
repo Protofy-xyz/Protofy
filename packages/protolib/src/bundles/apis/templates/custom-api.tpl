@@ -19,8 +19,7 @@ use the chat if in doubt
 */
 
 import { getAuth } from "protolib/api";
-import { Protofy, API } from 'protolib/base'
-import { getLogger } from "protolib/base"
+import { API, Protofy, getLogger } from "protobase";
 import { Application } from 'express';
 import fs from 'fs'
 import path from "path";

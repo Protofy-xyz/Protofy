@@ -6,7 +6,7 @@ import { connectDB, getDB } from 'app/bundles/storageProviders';
 import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";
-import { getLogger } from '../base';
+import { getLogger } from 'protobase';
 import { UserModel } from '../bundles/users';
 import {SiteConfig} from 'app/conf'
 import { getDBOptions } from '../api';

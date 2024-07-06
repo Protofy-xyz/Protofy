@@ -15,23 +15,22 @@ import '../blueprint.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import 'react-chat-widget/lib/styles.css';
 import "@blueprintjs/table/lib/css/table.css";
+
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { Provider } from 'app/provider'
 import Head from 'next/head'
-import React, { createContext } from 'react'
+import React from 'react'
 import type { SolitoAppProps } from 'solito'
 import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
-import { setConfig } from 'protolib/base/Config';
+import { setConfig, initSchemaSystem } from 'protobase';
 import {getBaseConfig} from 'app/BaseConfig'
-import { initSchemaSystem } from 'protolib/base/BaseSchema'
 import { useSession } from 'protolib/lib/Session'
-import {AppConfContext} from 'protolib/providers'
+import {AppConfContext} from 'protolib/providers/AppConf'
 import { getBrokerUrl} from 'protolib/lib/Broker'
 import {Connector } from 'protolib/lib/mqtt'
 setConfig(getBaseConfig("electron", process))
 initSchemaSystem()
-
 
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css')

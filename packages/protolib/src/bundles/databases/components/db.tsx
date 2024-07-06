@@ -1,5 +1,5 @@
 import { YStack, XStack, Stack, Paragraph, Text, Button, Input } from 'tamagui'
-import { API } from '../../../base/Api';
+import { API } from 'protobase';
 import { DataCard } from '../../../components/DataCard';
 import { Search } from '../../../components/Search';
 import { Popover } from '../../../components/Popover';

@@ -1,6 +1,6 @@
 import { DatabaseEntryModel, DatabaseModel } from '.'
 import { DataView } from '../../components/DataView';
-import { API } from '../../base/Api';
+import { API } from 'protobase';
 import { AdminPage } from '../../components/AdminPage';
 import { AlertDialog } from '../../components/AlertDialog';
 import { Tinted } from '../../components/Tinted';

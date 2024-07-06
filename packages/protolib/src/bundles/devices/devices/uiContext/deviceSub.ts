@@ -1,5 +1,5 @@
 import { DeviceSubsystemMonitor } from '../devicesSchemas';
-import { API } from '../../../../base';
+import { API } from 'protobase';
 import mqtt from 'mqtt'
 import { useEffect, useRef } from 'react';
 import { useIsomorphicLayoutEffect } from 'usehooks-ts'

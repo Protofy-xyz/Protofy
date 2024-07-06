@@ -1,4 +1,4 @@
-import { getLogger } from '../../base';
+import { getLogger } from 'protobase';
 import path from 'path'
 import fs from 'fs'
 

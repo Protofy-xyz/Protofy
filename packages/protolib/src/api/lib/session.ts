@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
-import {API} from '../../base/Api'
-import {userData, validatedUserData, SessionDataType} from '../../base/lib/perms'
+import {userData, validatedUserData, SessionDataType, API} from 'protobase'
 
 export const getSessionContext = async (type) => {
     return { state: 'resolved', group: type ? (await API.get('/adminapi/v1/groups/'+type)).data : {} }

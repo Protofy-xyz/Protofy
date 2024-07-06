@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import { getLogger } from '../../../base';
+import { getLogger } from 'protobase';
 
 const logger = getLogger()
 

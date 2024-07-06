@@ -1,4 +1,4 @@
-import { API } from "../../../base";
+import { API } from "protobase";
 
 const getKey = async ({ key = '', done = (key) => {}, error = (err) => {}, token = '' }) => {
     if(!key) {

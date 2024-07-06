@@ -1,7 +1,7 @@
 import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import * as fspath from 'path';
 import { getRoot } from './getRoot';
-import { getLogger } from '../../base';
+import { getLogger } from 'protobase';
 
 const logger = getLogger()
 

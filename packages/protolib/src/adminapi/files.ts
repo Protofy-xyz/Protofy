@@ -10,7 +10,7 @@ import syncFs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
 import {generateEvent} from '../bundles/events/eventsLibrary'
 import { getRoot, handler } from '../api';
-import { getLogger } from '../base';
+import { getLogger } from 'protobase';
 import archiver from 'archiver';
 
 const logger = getLogger()

@@ -12,9 +12,7 @@ import { Explorer } from './Explorer';
 import FileActions from 'app/bundles/fileActions'
 import { Tinted } from '../../../components/Tinted'
 import Chat from '../../../components/Chat'
-import { API } from "../../../base/Api"
-import { getLogger } from "../../../base/logger"
-import { getPendingResult } from '../../../base/PendingResult';
+import { getLogger, API, getPendingResult } from "protobase"
 import { usePendingEffect } from '../../../lib/usePendingEffect';
 import { usePrompt } from '../../../context/PromptAtom';
 

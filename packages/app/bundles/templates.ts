@@ -1,4 +1,4 @@
-import { z } from 'protolib/base'
+import { z } from 'protobase'
 import { Router, Database, DatabaseZap,RefreshCcwDot, PencilRuler } from 'lucide-react'
 
 export const apiTemplates = {

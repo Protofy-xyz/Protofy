@@ -1,7 +1,7 @@
 import { Theme, YStack, Text, XStack, Paragraph, SizableText } from "@my/ui";
 import { BigTitle} from 'protolib/components/BigTitle'
 import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
-import { API } from 'protolib/base/Api';
+import { API, Protofy } from 'protobase';
 import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
 import { SSR } from 'protolib/lib/SSR';
@@ -32,7 +32,6 @@ import { Grid } from 'protolib/components/Grid';
 import { useEdit } from 'protolib/visualui/useEdit';
 import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
-import { Protofy } from "protolib/base";
 import { context } from "app/bundles/uiContext";
 import { useRouter } from "solito/navigation";
 

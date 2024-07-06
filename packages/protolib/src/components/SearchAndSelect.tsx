@@ -1,6 +1,6 @@
 import { Input, InputProps, ListItem, YGroup, YStack } from "@my/ui"
 import { useEffect, useRef, useState } from "react"
-import { API } from 'protolib/base/Api'
+import { API } from 'protobase'
 
 type SearchAndSelectProps = {
     getDisplayField?: Function

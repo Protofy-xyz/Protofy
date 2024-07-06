@@ -11,7 +11,7 @@ import { atom, useAtom } from 'jotai';
 import { useEffect, useState } from 'react'
 import { atomWithStorage } from 'jotai/utils'
 import {LogPanel} from './LogPanel'
-import { API } from '../base'
+import { API } from 'protobase'
 import useSubscription from '../lib/mqtt/useSubscription'
 
 const WorkspaceSelector = () => {

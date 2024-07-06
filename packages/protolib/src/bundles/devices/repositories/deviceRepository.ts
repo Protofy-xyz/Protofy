@@ -1,4 +1,4 @@
-import { API, PendingResult } from "../../../base";
+import { API, PendingResult } from "protobase";
 
 export class DeviceRepository {
     async list(env): Promise<PendingResult>  {

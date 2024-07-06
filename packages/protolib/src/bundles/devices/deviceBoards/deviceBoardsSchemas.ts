@@ -1,4 +1,4 @@
-import { AutoModel, ProtoModel, Schema, SessionDataType, z } from '../../../base'
+import { AutoModel, ProtoModel, Schema, SessionDataType, z } from 'protobase'
 
 export const DeviceBoardSchema = Schema.object({
   name: z.string().hint("ESP32S3, CHUWI, Arduino UNO...").static().id().search(),

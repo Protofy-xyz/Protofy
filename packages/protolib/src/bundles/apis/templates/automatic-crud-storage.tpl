@@ -24,9 +24,8 @@ use the chat if in doubt
 
 import { Objects } from "app/bundles/objects";
 import { AutoAPI } from "protolib/api";
-import { Protofy, API } from "protolib/base";
+import { API, Protofy, getLogger } from "protobase";
 import { Application } from "express";
-import { getLogger } from "protolib/base";
 import { getAuth } from "protolib/api";
 import fs from "fs";
 import fsPath from "path";

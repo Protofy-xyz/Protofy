@@ -1,9 +1,8 @@
 import React from "react"
 import { EditableObject } from './EditableObject';
-import { API } from '../base';
-import { getPendingResult } from 'protolib/base/PendingResult';
+import { API } from 'protobase';
+import { getPendingResult, z } from 'protobase';
 import { useToastController, Text, YStack } from '@my/ui';
-import { z } from "protolib/base";
 
 type Props = {
     elementId?: string,

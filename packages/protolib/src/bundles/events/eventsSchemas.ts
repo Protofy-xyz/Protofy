@@ -1,6 +1,6 @@
 import moment from "moment";
 import { SessionDataType } from "../../api";
-import { ProtoModel, z, Protofy, BaseSchema} from "../../base";
+import { ProtoModel, z, Protofy, BaseSchema} from "protobase";
 
 export const BaseEventSchema = z.object(Protofy("schema", {
     path: z.string().search().groupIndex("path", "return data.path.split('/').reduce((acc, curr, index) => (acc.push(index === 0 ? curr : acc[index - 1] + '/' + curr), acc), [])"), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online

@@ -1,4 +1,4 @@
-import { ProtoModel, SessionDataType } from "../../../base";
+import { ProtoModel, SessionDataType } from "protobase";
 import { ActionType, MonitorType, SubsystemSchema, SubsystemType } from "./interfaces";
 
 

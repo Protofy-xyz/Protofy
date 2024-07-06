@@ -1,5 +1,5 @@
 import { getServiceToken as getServiceToken_} from '../../../api/lib/serviceToken'
-import { API, getLogger } from "../../../base";
+import { API, getLogger } from "protobase";
 
 const logger = getLogger()
 

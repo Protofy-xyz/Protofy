@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from "react"
 import Map, { Marker, Popup, NavigationControl, FullscreenControl, GeolocateControl } from 'react-map-gl';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { EditableObject } from "./EditableObject";
-import { getPendingResult } from "../base/PendingResult";
+import { getPendingResult } from "protobase";
 import { Tinted } from "./Tinted";
 import { useTint } from "../lib/Tints";
 import Center from './Center'

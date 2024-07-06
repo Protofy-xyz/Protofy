@@ -5,12 +5,11 @@ if you call paginated apis, you will need to wait for result.isLoaded and look i
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
 
-import { Protofy } from 'protolib/base'
+import { Protofy, API } from 'protobase'
 import { Objects } from 'app/bundles/objects'
 import { CardBody } from 'protolib/components/CardBody'
 import { DataView } from 'protolib/components/DataView'
 import { AdminPage } from 'protolib/components/AdminPage'
-import { API } from 'protolib/base/Api'
 import { withSession } from 'protolib/lib/Session';
 import { SSR, PaginatedDataSSR } from 'protolib/lib/SSR';
 import React from 'react'

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
-import { PendingResult, getPendingResult } from "../base/PendingResult"
+import { PendingResult, getPendingResult } from "protobase"
 import { useUpdateEffect } from "usehooks-ts"
-import { API } from "../base/Api"
+import { API } from "protobase"
 import { usePendingEffect } from "./usePendingEffect"
 
 export const useFetch = (url, data?, plain?):[any, boolean, any] => {

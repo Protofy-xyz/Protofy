@@ -1,5 +1,5 @@
 import { getServiceToken } from "../../../../api/lib/serviceToken";
-import { API } from "../../../../base";
+import { API } from "protobase";
 
 export const deviceMonitor = async (device, subsystem, monitor) => {
     const url = `/adminapi/v1/devices/${device}/subsystems/${subsystem}/monitors/${monitor}?token=${getServiceToken()}`

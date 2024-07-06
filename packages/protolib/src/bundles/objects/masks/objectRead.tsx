@@ -1,7 +1,7 @@
 import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, getFieldValue } from 'protoflow';
 import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { API } from 'protolib/base'
+import { API } from 'protobase'
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 
 const objectRead = (node: any = {}, nodeData = {}) => {

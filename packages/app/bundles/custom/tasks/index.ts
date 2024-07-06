@@ -1,4 +1,4 @@
-import {Protofy} from 'protolib/base'
+import {Protofy} from 'protobase'
 
 
 export default Protofy("tasks" , {

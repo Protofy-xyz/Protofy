@@ -1,5 +1,5 @@
 import { UserModel } from '.'
-import { z } from 'protolib/base'
+import { z } from 'protobase'
 import { usePrompt } from 'protolib/context/PromptAtom';
 import { DataTable2 } from 'protolib/components/DataTable2';
 import { Chip } from 'protolib/components/Chip';
@@ -8,10 +8,10 @@ import { AdminPage } from 'protolib/components/AdminPage';
 import { useWorkspaceEnv } from 'protolib/lib/useWorkspaceEnv';
 import moment from 'moment';
 import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
-import { API } from '../../base/Api'
+import { API } from 'protobase'
 import { SelectList } from '../../components/SelectList'
 import { useState } from 'react';
-import { getPendingResult } from '../../base';
+import { getPendingResult } from 'protobase';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { Switch, XStack, Text } from 'tamagui';
 import { Tinted } from '../../components/Tinted';

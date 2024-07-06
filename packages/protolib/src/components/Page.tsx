@@ -5,7 +5,7 @@ import Head from 'next/head'
 import { useSession, useSessionContext, useSessionGroup, useWorkspaces } from "../lib/Session";
 import { useUpdateEffect } from "usehooks-ts";
 import { getSessionContext } from "../api/lib/session";
-import { getLogger } from "../base";
+import { getLogger } from "protobase";
 
 export const Page = React.forwardRef(({mqttConfig, title, ...props}: {mqttConfig?: any, title?: string} & StackProps, ref: any) => {
     const theme = useTheme()

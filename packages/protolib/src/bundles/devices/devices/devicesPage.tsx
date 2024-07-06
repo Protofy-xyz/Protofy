@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
-import { API } from '../../../base/Api';
+import { API } from 'protobase';
 import { DataTable2 } from '../../../components/DataTable2';
 import { DataView } from '../../../components/DataView';
 import { ButtonSimple } from '../../../components/ButtonSimple';
@@ -13,14 +13,14 @@ import { useWorkspaceEnv } from '../../../lib/useWorkspaceEnv';
 import { Tinted } from '../../../components/Tinted';
 import { Chip } from '../../../components/Chip';
 import { useSubscription, Connector } from '../../../lib/mqtt';
-import { z } from '../../../base';
+import { z } from 'protobase';
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
 import Subsystem from 'protodevice/src/Subsystem'
 import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text } from '@my/ui';
-import { getPendingResult } from "../../../base";
+import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
 import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic } from "../devicesUtils";

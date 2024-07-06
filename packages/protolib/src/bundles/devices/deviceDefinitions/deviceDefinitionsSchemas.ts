@@ -1,4 +1,4 @@
-import { AutoModel, Schema, z } from '../../../base'
+import { AutoModel, Schema, z } from 'protobase'
 import { DeviceBoardModel } from '../deviceBoards';
 
 export const DeviceDefinitionSchema = Schema.object({

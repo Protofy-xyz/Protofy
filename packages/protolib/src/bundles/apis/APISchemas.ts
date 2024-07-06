@@ -1,4 +1,4 @@
-import { AutoModel, Schema, z } from '../../base'
+import { AutoModel, Schema, z } from 'protobase'
 
 export const APISchema = Schema.object({
     name: Schema.string().id().static()

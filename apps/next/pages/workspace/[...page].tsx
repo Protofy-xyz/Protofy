@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'solito/navigation';
 import { SiteConfig } from 'app/conf';
 import { getWorkspaceEnv } from 'protolib/lib/useWorkspaceEnv';
-import { getEnv } from 'protolib/base';
+import { getEnv } from 'protobase';
 
 const serviceEnv = getEnv()
 
@@ -10,9 +10,8 @@ const Home: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const query = Object.fromEntries(searchParams.entries());
+  const query = searchParams ? Object.fromEntries(searchParams.entries()) : {};
   const page = query.page;
-
 
   useEffect(() => {
     const workspaceEnv = getWorkspaceEnv(document.location.pathname)
