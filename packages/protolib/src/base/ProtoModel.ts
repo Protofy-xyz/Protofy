@@ -1,5 +1,6 @@
-import { createSession, SessionDataType } from 'protolib/api/lib/session'
-import { ZodObject } from 'protolib/base'
+import { createSession } from './Session'
+import { SessionDataType } from './lib/perms'
+import { ZodObject } from './BaseSchema'
 import { ProtoSchema } from './ProtoSchema';
 import { getLogger } from "./logger"
 import { API } from './Api';

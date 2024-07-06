@@ -1,7 +1,8 @@
 
-import type {Request, RequestHandler, Response} from 'express';
-import {ZodError} from "../../base";
-import {createSession, SessionDataType} from './session';
+import type { Request, RequestHandler, Response } from 'express';
+import { ZodError } from "../../base";
+import { SessionDataType } from './session';
+import { createSession } from '../../base/Session';
 import {verifyToken} from './crypt';
 import { getLogger } from '../../base';
 

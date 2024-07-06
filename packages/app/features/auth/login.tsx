@@ -8,7 +8,7 @@ import { useSearchParams, useRouter } from 'solito/navigation';
 import { getErrorMessage } from "@my/ui";
 import { SiteConfig } from '../../conf'
 import { useSession, useSessionContext } from 'protolib/lib/Session'
-import { createSession } from 'protolib/api/lib/session'
+import { createSession } from 'protolib/base/Session'
 import { Auth } from 'protolib/lib/Auth'
 import { Center } from 'protolib/components/Center'
 import { HorizontalBox } from 'protolib/components/HorizontalBox'

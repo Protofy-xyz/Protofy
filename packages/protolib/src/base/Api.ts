@@ -1,4 +1,4 @@
-import { PendingResult, getPendingResult } from "../base/PendingResult";
+import { PendingResult, getPendingResult } from "./PendingResult";
 import {devMode} from './env'
 import { isElectron } from "./lib/isElectron";
 import { getLogger } from "./logger"

@@ -6,18 +6,6 @@ export const getSessionContext = async (type) => {
     return { state: 'resolved', group: type ? (await API.get('/adminapi/v1/groups/'+type)).data : {} }
 }
 
-export const createSession = (data?:userData, token?:string):SessionDataType => {
-    return {
-        user: {
-            admin: data?.admin ? data?.admin : false,
-            id: data?.id ? data.id : 'guest',
-            type: data?.id ? (data?.type ? data.type : 'user') : 'guest',
-            permissions: data?.permissions ? data?.permissions : []
-        },
-        token: token ? token : '',
-        loggedIn: data?.id ? true : false
-    }
-}
 export const validateSession = async (session:SessionDataType):Promise<validatedUserData> => jwt.verify(session.token ?? '', process.env.TOKEN_SECRET ?? '') as validatedUserData
 //DO NOT DELETE
 //This is the code to validate sessions in api instead of nextjs
