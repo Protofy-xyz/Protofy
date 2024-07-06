@@ -1,0 +1,17 @@
+{
+    "name": "protonode",
+    "version": "1.0.0",
+    "description": "Protofy library with node technologies",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "clean": "rm -rf dist"
+    },
+    "files": [
+        "dist"
+    ],
+    "devDependencies": {
+        "typescript": "~5.3.3"
+    }
+}
