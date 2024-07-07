@@ -1,6 +1,4 @@
-import { API } from "protobase"
-import { RegisterSchema } from 'app/schema';
-import { getPendingResult, z } from 'protobase';
+import { getPendingResult, z, RegisterSchema, API } from 'protobase';
 
 export const Auth = {
     login: async (username, password, environment, setState) => {

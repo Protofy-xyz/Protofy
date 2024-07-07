@@ -8,7 +8,6 @@
     "src"
   ],
   "scripts": {
-    "add-user": "ts-node src/cmd/addUser.ts",
     "dev-standalone": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
     "prod-standalone": "NODE_ENV=production node -r module-alias/register dist/apps/api/src/index.js",
     "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts",

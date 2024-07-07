@@ -22,7 +22,7 @@
     "prepare-dev": "node prepare.js && yarn workspace api prepare-dev && yarn workspaces foreach --all --all --exclude api run prepare-dev && yarn build",
     "prod": "NODE_ENV=production pm2 start ecosystem.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start ecosystem.config.js && yarn monit",
-    "add-user": "yarn workspace api add-user",
+    "add-user": "yarn workspace admin-api add-user",
     "build": "yarn workspaces foreach -t --all run build",
     "package": "yarn workspaces foreach --all run clean && yarn prepare-dev",
     "package-fast": "yarn workspaces foreach --all --exclude electron-app run package",

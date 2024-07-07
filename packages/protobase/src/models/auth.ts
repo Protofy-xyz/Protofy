@@ -1,4 +1,4 @@
-import { z } from "protobase";
+import { z } from "../BaseSchema";
 
 export const LoginSchema = z.object({
     username: z.string().email(),

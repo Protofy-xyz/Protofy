@@ -3,9 +3,8 @@ import dotenv from 'dotenv'
 dotenv.config({ path: path.join(__dirname, "..", "..", "..", "..", ".env") });
 import { hash } from 'protonode';
 import { getDB } from 'app/bundles/storageProviders'
-import { CmdRegisterSchema} from 'protolib/schema';
+import { CmdRegisterSchema, UserModel} from 'protobase';
 import moment from 'moment';
-import { UserModel } from 'protolib/bundles/users/usersSchemas';
 
 if (process.argv.length < 5) {
     console.error('Usage: yarn add-user email password type',process.argv.length)

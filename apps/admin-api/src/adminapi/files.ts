@@ -6,13 +6,20 @@ import { getApp, getServiceToken } from 'protonode';
 import multer from 'multer';
 import fsExtra from 'fs-extra';
 import { v4 as uuidv4 } from 'uuid';
-import {generateEvent} from '../bundles/events/eventsLibrary'
 import { getRoot, handler } from 'protonode';
-import { getLogger } from 'protobase';
+import { getLogger, API } from 'protobase';
 import archiver from 'archiver';
 
 const logger = getLogger()
 const app = getApp()
+
+const generateEvent = async (event, token='') => {
+    try {
+        await API.post('/adminapi/v1/events?token='+token, event, undefined, true)
+    } catch(e) {
+        //console.error("Failed to send event: ", e)
+    }
+}
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {

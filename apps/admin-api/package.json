@@ -8,6 +8,7 @@
     "src"
   ],
   "scripts": {
+    "add-user": "ts-node src/cmd/addUser.ts",
     "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
     "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start pm2.config.js",

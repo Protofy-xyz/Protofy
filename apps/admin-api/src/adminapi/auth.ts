@@ -1,12 +1,8 @@
-
-import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from '../schema';
 import { getInitialData } from 'app/initialData'
 import { handler, checkPassword, hash, genToken, getApp, getSessionContext, getServiceToken } from 'protonode'
 import { connectDB, getDB } from 'app/bundles/storageProviders';
 import moment from 'moment';
-import { generateEvent } from "../bundles/events/eventsLibrary";
-import { getLogger } from 'protobase';
-import { UserModel } from '../bundles/users';
+import { getLogger, API, UserModel, LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'protobase';
 import {SiteConfig} from 'app/conf'
 import { getDBOptions } from 'protonode';
 
@@ -20,6 +16,14 @@ const dbPath = 'auth'
 const groupDBPath = 'auth_groups'
 
 connectDB(dbPath, getInitialData(dbPath), getDBOptions(UserModel)) //preconnect database
+
+const generateEvent = async (event, token='') => {
+    try {
+        await API.post('/adminapi/v1/events?token='+token, event, undefined, true)
+    } catch(e) {
+        //console.error("Failed to send event: ", e)
+    }
+}
 
 const genNewSession = (data: any) => {
     return {
