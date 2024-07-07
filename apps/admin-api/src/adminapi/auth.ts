@@ -1,4 +1,3 @@
-import { getInitialData } from 'app/initialData'
 import { handler, checkPassword, hash, genToken, getApp, getSessionContext, getServiceToken } from 'protonode'
 import { connectDB, getDB } from 'app/bundles/storageProviders';
 import moment from 'moment';
@@ -15,7 +14,7 @@ logger.debug(`API Module loaded: ${__filename.split('.')[0]}`);
 const dbPath = 'auth'
 const groupDBPath = 'auth_groups'
 
-connectDB(dbPath, getInitialData(dbPath), getDBOptions(UserModel)) //preconnect database
+connectDB(dbPath, {}, getDBOptions(UserModel)) //preconnect database
 
 const generateEvent = async (event, token='') => {
     try {
