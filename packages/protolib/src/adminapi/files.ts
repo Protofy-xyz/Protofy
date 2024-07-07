@@ -2,14 +2,12 @@
 import { promises as fs } from 'fs';
 import { constants } from 'fs';
 import path from 'path';
-import { getApp } from 'protolib/api';
-import {getServiceToken} from 'protolib/api/lib/serviceToken'
+import { getApp, getServiceToken } from 'protonode';
 import multer from 'multer';
 import fsExtra from 'fs-extra';
-import syncFs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
 import {generateEvent} from '../bundles/events/eventsLibrary'
-import { getRoot, handler } from '../api';
+import { getRoot, handler } from 'protonode';
 import { getLogger } from 'protobase';
 import archiver from 'archiver';
 

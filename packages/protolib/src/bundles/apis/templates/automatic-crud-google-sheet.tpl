@@ -23,12 +23,11 @@ use the chat if in doubt
 */
 
 import { Objects } from "app/bundles/objects";
-import { AutoAPI } from "protolib/api";
+import { AutoAPI, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
 import { Application } from "express";
 import {GoogleSheetClient} from 'protolib/bundles/google/googleSheetClient'
 import fsPath from "path";
-import { getServiceToken } from "protolib/api/lib/serviceToken";
 
 const root = fsPath.join(process.cwd(), '..', '..')
 const logger = getLogger();

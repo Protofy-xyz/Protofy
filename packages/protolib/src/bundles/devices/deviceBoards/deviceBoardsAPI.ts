@@ -1,5 +1,5 @@
 import { DeviceBoardModel } from ".";
-import { AutoAPI } from '../../../api'
+import { AutoAPI } from 'protonode'
 
 const initialData = {
     "Protofy ESP32 devBoard": {

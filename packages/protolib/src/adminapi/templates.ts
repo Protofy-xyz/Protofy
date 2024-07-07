@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import {templates} from 'app/templates'
-import { handler, getApp} from 'protolib/api'
+import { handler, getApp} from 'protonode'
 import { connectDB } from 'app/bundles/storageProviders'
 import { getLogger } from 'protobase';
 

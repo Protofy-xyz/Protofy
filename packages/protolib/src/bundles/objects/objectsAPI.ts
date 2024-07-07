@@ -1,9 +1,9 @@
 import { ObjectModel } from ".";
-import { getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports } from '../../api'
+import { getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports } from 'protonode'
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
-import { getServiceToken } from '../../api/lib/serviceToken'
+import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
 import { APIModel } from '../apis/APISchemas'
 import { PageModel } from '../pages/pagesSchemas'

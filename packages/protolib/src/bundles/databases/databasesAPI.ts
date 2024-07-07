@@ -1,4 +1,4 @@
-import { handler, AutoAPI, getRoot, closeDBS} from '../../api'
+import { handler, AutoAPI, getRoot, closeDBS} from 'protonode'
 import { connectDB, getDB } from 'app/bundles/storageProviders';
 import * as fs from 'fs'
 import * as path from 'path'

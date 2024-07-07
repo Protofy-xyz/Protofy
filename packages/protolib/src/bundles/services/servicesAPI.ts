@@ -1,10 +1,8 @@
-import { handler } from '../../api'
+import { handler, AutoAPI, getServiceToken } from 'protonode'
 import fs from 'fs';
 import pm2 from 'pm2';
-import { AutoAPI } from '../../api'
 import { ServiceModel } from './servicesSchema';
 import { generateEvent } from '../library';
-import { getServiceToken } from '../../api/lib/serviceToken';
 import {generate as uuidv4} from 'short-uuid'
 
 const readService = async (name, cb) => {

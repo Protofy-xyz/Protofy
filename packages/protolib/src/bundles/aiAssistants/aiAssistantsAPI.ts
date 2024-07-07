@@ -1,5 +1,5 @@
 
-import { handler } from '../../api'
+import { handler } from 'protonode'
 const MAX_TOKENS = 4096
 
 export function AiAssistantsAPI(app, context) {

@@ -1,4 +1,4 @@
-import { getServiceToken } from '../../../api/lib/serviceToken'
+import { getServiceToken } from 'protonode'
 import { generateEvent } from "../eventsLibrary"
 
 export const onEvent = (mqtt, context, cb, path?, from?) => {

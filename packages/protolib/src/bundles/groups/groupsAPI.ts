@@ -1,5 +1,5 @@
 import { GroupModel } from "./";
-import { AutoAPI } from '../../api'
+import { AutoAPI } from 'protonode'
 
 const initialData = {
     admin: {"name": "admin", "workspaces": ["admin", "editor"], "admin": true},

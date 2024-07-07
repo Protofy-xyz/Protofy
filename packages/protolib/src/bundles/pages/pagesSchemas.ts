@@ -1,5 +1,5 @@
 import { ProtoModel, Schema, optional, z } from 'protobase'
-import { SessionDataType } from "../../api";
+import { SessionDataType } from "protonode";
 
 export const PageSchema = Schema.object({
     name: z.string().search().id(),

@@ -1,4 +1,4 @@
-import { getServiceToken } from "../../../../api/lib/serviceToken";
+import { getServiceToken } from "protonode";
 import { API } from "protobase";
 
 export const deviceMonitor = async (device, subsystem, monitor) => {

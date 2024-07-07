@@ -1,7 +1,7 @@
 
 import { getLogger } from 'protobase';
 import { getBaseConfig } from '../../../packages/app/BaseConfig'
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import { getServiceToken } from 'protonode'
 import http from 'http';
 import httpProxy from 'http-proxy';
 import { join } from 'path';

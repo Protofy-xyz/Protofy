@@ -1,5 +1,5 @@
 import { ProtoModel, Schema, z } from 'protobase'
-import { SessionDataType } from "../../api";
+import { SessionDataType } from "protonode";
 
 export const ServiceSchema = Schema.object({
     name: z.string().search().id(),

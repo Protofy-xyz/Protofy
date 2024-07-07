@@ -1,5 +1,5 @@
 import { Schema, z, ProtoModel, BaseSchema } from 'protobase'
-import { SessionDataType } from 'protolib/api/lib/session'
+import { SessionDataType } from 'protonode'
 
 export const BaseResourceSchema = Schema.object({
     name: z.string().hint("catalog, tutorial, invoice...").search(),

@@ -1,5 +1,5 @@
 import { DeviceDefinitionModel } from ".";
-import { AutoAPI } from '../../../api'
+import { AutoAPI } from 'protonode'
 import { API } from 'protobase'
 import { DevicesModel } from "../devices";
 

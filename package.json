@@ -23,7 +23,7 @@
     "prod": "NODE_ENV=production pm2 start ecosystem.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start ecosystem.config.js && yarn monit",
     "add-user": "yarn workspace api add-user",
-    "build": "yarn workspaces foreach --all run build",
+    "build": "yarn workspaces foreach -t --all run build",
     "package": "yarn workspaces foreach --all run clean && yarn prepare-dev",
     "package-fast": "yarn workspaces foreach --all --exclude electron-app run package",
     "status": "pm2 status",

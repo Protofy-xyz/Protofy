@@ -1,6 +1,6 @@
-import { leveldbProvider } from 'protolib/api/lib/db';
+import { leveldbProvider } from 'protonode';
 
-export { leveldbProvider } from 'protolib/api/lib/db';
+export { leveldbProvider } from 'protonode';
 // DEFAULTS
 export const getDB = leveldbProvider.getDB;
 export const connectDB = leveldbProvider.connectDB;

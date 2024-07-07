@@ -8,7 +8,7 @@ moduleAlias.addAliases({
 
 import dotenv from 'dotenv'
 dotenv.config({ path: '../../.env' });
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
+import { getServiceToken } from 'protonode'
 import { setConfig, getLogger } from 'protobase';
 import { getBaseConfig } from 'app/BaseConfig'
 setConfig(getBaseConfig('api', process, getServiceToken()))

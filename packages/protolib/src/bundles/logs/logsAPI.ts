@@ -1,4 +1,4 @@
-import { handler } from '../../api'
+import { handler } from 'protonode'
 
 export const LogsAPI = (app, context) => {
   app.get('/adminapi/v1/logs', handler(async (req, res, session) => {

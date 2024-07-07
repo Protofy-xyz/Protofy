@@ -1,5 +1,5 @@
 import { EventModel } from ".";
-import { AutoAPI, getDBOptions } from '../../api'
+import { AutoAPI, getDBOptions } from 'protonode'
 import {connectDB} from "app/bundles/storageProviders";
 
 

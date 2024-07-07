@@ -1,6 +1,5 @@
-import { handler } from '../../api'
+import { handler, getServiceToken } from 'protonode'
 import { Protofy, getLogger, API } from 'protobase'
-import { getServiceToken } from '../../api/lib/serviceToken'
 
 const logger = getLogger()
 

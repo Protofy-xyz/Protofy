@@ -1,7 +1,7 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
-import { handler, getApp} from 'protolib/api'
+import { handler, getApp} from 'protonode'
 import { getDB } from 'app/bundles/storageProviders'
 import { getLogger } from 'protobase';
 

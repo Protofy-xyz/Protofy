@@ -1,5 +1,5 @@
 import { KeyModel } from "./";
-import { AutoAPI } from '../../api'
+import { AutoAPI } from 'protonode'
 
 
 export const KeysAPI = AutoAPI({

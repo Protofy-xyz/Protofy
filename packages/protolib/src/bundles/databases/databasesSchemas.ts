@@ -1,5 +1,5 @@
 import { ProtoModel, Protofy, AutoModel, Schema, z } from "protobase";
-import { SessionDataType } from "../../api";
+import { SessionDataType } from "protonode";
 
 export const DatabaseEntrySchema = Schema.object({
 	key: z.string(),

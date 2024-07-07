@@ -1,7 +1,7 @@
 import { Node, NodeParams, getFieldValue, Button } from 'protoflow';
 import { Mail } from 'lucide-react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-// import { sendMailWithResend } from 'protolib/api/lib/mail';
+// import { sendMailWithResend } from 'protonode';
 
 const SendMailResend = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(9)

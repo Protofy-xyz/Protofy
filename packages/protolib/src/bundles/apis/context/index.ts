@@ -1,4 +1,4 @@
-import { getServiceToken as getServiceToken_} from '../../../api/lib/serviceToken'
+import { getServiceToken as getServiceToken_} from 'protonode'
 import { API, getLogger } from "protobase";
 
 const logger = getLogger()

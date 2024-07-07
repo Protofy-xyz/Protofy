@@ -1,5 +1,5 @@
 import { ProtoModel, z } from "protobase";
-import { SessionDataType } from "../../api";
+import { SessionDataType } from "protonode";
 
 export const BaseObjectSchema = z.object({
   id: z.string().search().id().generate((obj) => obj.name.charAt(0).toUpperCase() + obj.name.slice(1) + 'Model').hidden(),

@@ -1,6 +1,5 @@
-import { getApp, getMQTTClient } from 'protolib/api'
+import { getApp, getMQTTClient, getServiceToken } from 'protonode'
 import { getLogger, getConfig } from 'protobase';
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import { getConfigWithoutSecrets } from 'app/BaseConfig'
 import BundleContext from 'app/bundles/apiContext'
 import { generateEvent } from 'protolib/bundles/events/eventsLibrary';

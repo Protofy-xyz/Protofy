@@ -1,5 +1,5 @@
 import moment from "moment";
-import { SessionDataType } from "../../api";
+import { SessionDataType } from "protonode";
 import { ProtoModel, z, Protofy, BaseSchema} from "protobase";
 
 export const BaseEventSchema = z.object(Protofy("schema", {

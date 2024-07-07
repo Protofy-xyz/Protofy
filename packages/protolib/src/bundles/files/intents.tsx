@@ -17,7 +17,7 @@ import { usePrompt, promptCmd } from '../../context/PromptAtom';
 import { useInterval, useUpdateEffect } from 'usehooks-ts';
 import Flows from '../../adminpanel/features/components/Flows';
 import { getFlowsCustomComponents } from 'app/bundles/masks'
-import { getDefinition, toSourceFile } from '../../api/lib/code'
+import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";

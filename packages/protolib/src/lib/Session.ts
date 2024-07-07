@@ -1,7 +1,7 @@
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage, useHydrateAtoms } from 'jotai/utils'
 import * as cookie from 'cookie'
-import { validateSession, SessionDataType, getSessionContext } from '../api/lib/session'
+import { validateSession, SessionDataType, getSessionContext } from 'protonode/dist/lib/session'
 import { NextPageContext } from 'next'
 import { parse } from 'cookie'
 import { getLogger, createSession } from "protobase"

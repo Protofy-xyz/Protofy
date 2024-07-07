@@ -1,10 +1,10 @@
 import { PageModel } from ".";
-import { getSourceFile, getDefinition, AutoAPI, getRoot, addFeature, hasFeature, removeFeature } from '../../api'
+import { getSourceFile, getDefinition, AutoAPI, getRoot, addFeature, hasFeature, removeFeature } from 'protonode'
 import { promises as fs } from 'fs';
 import * as syncFs from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
-import { getServiceToken } from '../../api/lib/serviceToken'
+import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
 import { ObjectModel } from "../objects/objectsSchemas";
 

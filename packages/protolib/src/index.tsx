@@ -118,7 +118,6 @@ export * from './components/AlertDialog'
 export * from './components/Tinted'
 export * from './components/Chip'
 export * from './schema'
-export * from './api/lib/session' //this is an exception
 export * from './components/EditableObject'
 export * from './components/DataView'
 export * from './components/DataTableCard'

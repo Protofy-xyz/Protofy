@@ -1,10 +1,11 @@
 import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
 import { API, getEnv, getLogger } from 'protobase';
-import { connectDB as _connectDB, getDB as _getDB } from "app/bundles/storageProviders";
-import { getDBOptions } from "./db";
+import { leveldbProvider, getDBOptions } from './db';
 
 const logger = getLogger()
+const _getDB = leveldbProvider.getDB;
+const _connectDB = leveldbProvider.connectDB;
 
 /*
     modelName: name of the model, used to generate api urls. for example, if model name is 'test' and prefix is '/api/v1/', then to read an item is: /api/v1/test
@@ -165,6 +166,7 @@ export const AutoAPI = ({
         if(links) {
             for(const link of links) {
                 let idsToRequest = items.map(x => x[link.field]).filter(x => x !== undefined)
+                //@ts-ignore
                 idsToRequest = [...new Set(idsToRequest)]
                 items = await link.linkToReadIds(link, idsToRequest, items)
             }

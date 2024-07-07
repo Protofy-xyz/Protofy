@@ -1,15 +1,14 @@
 
 import { LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from '../schema';
 import { getInitialData } from 'app/initialData'
-import { handler, checkPassword, hash, genToken, getApp, getSessionContext } from 'protolib/api'
+import { handler, checkPassword, hash, genToken, getApp, getSessionContext, getServiceToken } from 'protonode'
 import { connectDB, getDB } from 'app/bundles/storageProviders';
-import { getServiceToken } from 'protolib/api/lib/serviceToken'
 import moment from 'moment';
 import { generateEvent } from "../bundles/events/eventsLibrary";
 import { getLogger } from 'protobase';
 import { UserModel } from '../bundles/users';
 import {SiteConfig} from 'app/conf'
-import { getDBOptions } from '../api';
+import { getDBOptions } from 'protonode';
 
 const logger = getLogger()
 

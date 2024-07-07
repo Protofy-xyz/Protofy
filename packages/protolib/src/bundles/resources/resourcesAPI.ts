@@ -1,5 +1,5 @@
 import { ResourceModel } from "./";
-import { AutoAPI } from '../../api'
+import { AutoAPI } from 'protonode'
 
 export const ResourcesAPI = AutoAPI({
     modelName: 'resources',

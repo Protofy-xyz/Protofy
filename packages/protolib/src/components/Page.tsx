@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import { StackProps, YStack, useTheme } from "tamagui";
 import { useIsEditing } from "protolib/visualui/useIsEditing"
 import Head from 'next/head'
-import { useSession, useSessionContext, useSessionGroup, useWorkspaces } from "../lib/Session";
-import { useUpdateEffect } from "usehooks-ts";
-import { getSessionContext } from "../api/lib/session";
+import { useSession, useSessionContext } from "../lib/Session";
+import { getSessionContext } from "protonode/dist/lib/session";
 import { getLogger } from "protobase";
 
 export const Page = React.forwardRef(({mqttConfig, title, ...props}: {mqttConfig?: any, title?: string} & StackProps, ref: any) => {

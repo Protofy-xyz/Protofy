@@ -1,5 +1,5 @@
 import { DeviceSdkModel } from ".";
-import { AutoAPI } from '../../../api'
+import { AutoAPI } from 'protonode'
 
 const initialData = {
     "1": {   

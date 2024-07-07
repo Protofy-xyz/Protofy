@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import * as fspath from 'path';
-import { AutoAPI, getRoot } from '../../api'
+import { AutoAPI, getRoot } from 'protonode'
 import { WorkspaceModel } from './WorkspaceModel';
 
 const workspacesDir = (root) => fspath.join(root,"/packages/app/bundles/custom/workspaces/")
