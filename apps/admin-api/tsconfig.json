@@ -39,7 +39,6 @@
     "./app/BaseConfig.ts",
     "./app/conf.ts",
     "./app/initialData.ts",
-    "./app/templates/**/*",
     "./protolib/src/bundles/adminapi.ts",
     "./protolib/src/bundles/library.ts",
     "./protolib/src/bundles/apiContext.ts",

@@ -51,8 +51,8 @@ export default {
                 lastLogin: z.string().optional().search(),
                 from: z.string().min(1).search().generate((obj) => 'admin').help("Interface used to create the user. Users can be created from command line or from the admin panel")
             })
-            the user management system is located at /packages/protolib/bundles/users. The api for managing users is for admins only, and its located at /adminapi/v1/accounts. To read a specify account, /adminapi/v1/accounts/:email.
-            The UI of the users page is located at /packages/protolib/bundles/users/adminPages.tsx and the schema and protomodel declaration at /packages/protolib/bundles/users/usersSchema.ts. The API file is located at /packages/protolib/bundles/users/usersAPI.ts.
+            the user management system is located at /packages/protolib/src/bundles/users. The api for managing users is for admins only, and its located at /adminapi/v1/accounts. To read a specify account, /adminapi/v1/accounts/:email.
+            The UI of the users page is located at /packages/protolib/src/bundles/users/adminPages.tsx and the schema and protomodel declaration at /packages/protolib/src/bundles/users/usersSchema.ts. The API file is located at /packages/protolib/src/bundles/users/usersAPI.ts.
             The user management page allows to manage the users of the system. Users are able to login with their email and password.
             `+ (
                     initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''

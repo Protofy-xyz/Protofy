@@ -1,5 +1,5 @@
 import Handlebars from "handlebars"
-import { getLogger } from "protobase"
+import { getLogger } from "../logger"
 
 const logger = getLogger()
 

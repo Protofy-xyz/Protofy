@@ -38,7 +38,6 @@
     "./app/bundles/storageProviders.ts",
     "./app/BaseConfig.ts",
     "./app/initialData.ts",
-    "./app/templates/**/*",
     "./protolib/src/bundles/apiContext.ts",
     "./protolib/src/bundles/devices/devices/devicesSchemas.ts",
     "./protolib/src/bundles/library.ts",

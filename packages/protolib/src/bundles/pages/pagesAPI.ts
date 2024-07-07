@@ -132,12 +132,12 @@ const getDB = (path, req, session) => {
         // console.log('File: ' + filePath + ' already exists, not executing template')
       } catch (error) {
         // console.log('permissions: ', value.permissions ? JSON.stringify(value.permissions) : '[]', value.permissions)
-        // console.log('executing template: ', `/packages/protolib/bundles/pages/templates/${template}.tpl`)
+        // console.log('executing template: ', `/packages/protolib/src/bundles/pages/templates/${template}.tpl`)
         const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
           name: fspath.basename(value.name + '.tsx'),
           data: {
             options: {
-              template: `/packages/protolib/bundles/pages/templates/${template}.tpl`,
+              template: `/packages/protolib/src/bundles/pages/templates/${template}.tpl`,
               variables: {
                 ...value,
                 route: route,
@@ -218,7 +218,7 @@ const getDB = (path, req, session) => {
             name: route + '.tsx',
             data: {
               options: {
-                template: `/packages/protolib/bundles/pages/templates/nextPage.tpl`,
+                template: `/packages/protolib/src/bundles/pages/templates/nextPage.tpl`,
                 variables: {
                   ...value,
                   upperName: value.name ? value.name.charAt(0).toUpperCase() + value.name.slice(1) : ''
@@ -257,7 +257,7 @@ const getDB = (path, req, session) => {
             name: value.route + '.tsx',
             data: {
               options: {
-                template: `/packages/protolib/bundles/pages/templates/electronPage.tpl`,
+                template: `/packages/protolib/src/bundles/pages/templates/electronPage.tpl`,
                 variables: {
                   ...value,
                   upperName: value.name ? value.name.charAt(0).toUpperCase() + value.name.slice(1) : ''

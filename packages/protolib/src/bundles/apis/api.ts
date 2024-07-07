@@ -93,7 +93,7 @@ const getDB = (path, req, session) => {
       const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
         name: value.name + '.ts',
         data: {
-          options: { template: `/packages/protolib/bundles/apis/templates/${template}.tpl`, variables: { 
+          options: { template: `/packages/protolib/src/bundles/apis/templates/${template}.tpl`, variables: { 
             codeName: codeName,
             name: computedName, 
             codeNameLowerCase: codeNameLowerCase,

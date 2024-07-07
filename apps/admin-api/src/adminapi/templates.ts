@@ -1,8 +1,7 @@
 import * as fs from 'fs';
-import {templates} from 'app/templates'
 import { handler, getApp} from 'protonode'
 import { connectDB } from 'app/bundles/storageProviders'
-import { getLogger } from 'protobase';
+import { getLogger, templates } from 'protobase';
 
 const logger = getLogger()
 
