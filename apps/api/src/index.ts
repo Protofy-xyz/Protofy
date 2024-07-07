@@ -10,7 +10,7 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '../../.env' });
 import { getServiceToken } from 'protonode'
 import { setConfig, getLogger } from 'protobase';
-import { getBaseConfig } from 'app/BaseConfig'
+import { getBaseConfig } from '@my/config'
 setConfig(getBaseConfig('api', process, getServiceToken()))
 require('events').EventEmitter.defaultMaxListeners = 100;
 const logger = getLogger()

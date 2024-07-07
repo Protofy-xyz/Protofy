@@ -20,7 +20,7 @@ import 'react-chat-widget/lib/styles.css';
 
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { setConfig, initSchemaSystem } from 'protobase';
-import { getBaseConfig } from 'app/BaseConfig'
+import { getBaseConfig } from '@my/config'
 setConfig(getBaseConfig("next", process))
 import { Provider } from 'app/provider'
 import Head from 'next/head'

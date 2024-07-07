@@ -22,6 +22,7 @@
     "clean": "shx rm -rf dist"
   },
   "dependencies": {
+    "@my/config": "*",
     "app": "*",
     "chokidar": "^3.5.3",
     "cookie-parser": "^1.4.6",

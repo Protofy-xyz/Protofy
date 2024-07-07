@@ -24,7 +24,7 @@ import type { SolitoAppProps } from 'solito'
 import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
 import { setConfig, initSchemaSystem } from 'protobase';
-import {getBaseConfig} from 'app/BaseConfig'
+import { getBaseConfig } from '@my/config'
 import { useSession } from 'protolib/lib/Session'
 import {AppConfContext} from 'protolib/providers/AppConf'
 import { getBrokerUrl} from 'protolib/lib/Broker'

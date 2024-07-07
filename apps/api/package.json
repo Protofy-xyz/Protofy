@@ -20,6 +20,7 @@
     "clean": "shx rm -rf dist"
   },
   "dependencies": {
+    "@my/config": "*",
     "aedes": "^0.50.0",
     "bcrypt": "^5.1.1",
     "chokidar": "^3.5.3",

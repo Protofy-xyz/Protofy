@@ -36,7 +36,6 @@
     "./app/bundles/objects.ts",
     "./app/bundles/library.ts",
     "./app/bundles/storageProviders.ts",
-    "./app/BaseConfig.ts",
     "./app/initialData.ts",
     "./protolib/src/bundles/apiContext.ts",
     "./protolib/src/bundles/devices/devices/devicesSchemas.ts",

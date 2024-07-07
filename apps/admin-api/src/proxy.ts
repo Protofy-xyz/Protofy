@@ -1,6 +1,6 @@
 
 import { getLogger } from 'protobase';
-import { getBaseConfig } from '../../../packages/app/BaseConfig'
+import { getBaseConfig } from '@my/config'
 import { getServiceToken } from 'protonode'
 import http from 'http';
 import httpProxy from 'http-proxy';

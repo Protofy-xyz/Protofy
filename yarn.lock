@@ -5250,6 +5250,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@my/config@npm:*, @my/config@workspace:packages/config":
+  version: 0.0.0-use.local
+  resolution: "@my/config@workspace:packages/config"
+  dependencies:
+    protobase: "npm:*"
+    typescript: "npm:~5.3.3"
+  languageName: unknown
+  linkType: soft
+
 "@my/ui@npm:0.0.1, @my/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@my/ui@workspace:packages/ui"
@@ -10929,6 +10938,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "admin-api@workspace:apps/admin-api"
   dependencies:
+    "@my/config": "npm:*"
     "@types/bcrypt": "npm:^5.0.0"
     "@types/express": "npm:^4.17.17"
     "@types/node": "npm:20.6.0"
@@ -11262,6 +11272,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "api@workspace:apps/api"
   dependencies:
+    "@my/config": "npm:*"
     "@types/bcrypt": "npm:^5.0.0"
     "@types/express": "npm:^4.17.17"
     "@types/node": "npm:20.6.0"
@@ -23107,6 +23118,7 @@ __metadata:
     "@craftjs/core": "npm:0.2.0-beta.8"
     "@craftjs/layers": "npm:0.2.1"
     "@jest/globals": "npm:~29.7.0"
+    "@my/config": "npm:*"
     "@protocraft/core": "npm:0.2.4-2"
     "@protocraft/layers": "npm:0.2.1-2"
     "@react-three/drei": "npm:9.77.3"
@@ -23233,6 +23245,7 @@ __metadata:
     "@craftjs/core": "npm:0.2.0-beta.8"
     "@craftjs/layers": "npm:0.2.1"
     "@jest/globals": "npm:~29.7.0"
+    "@my/config": "npm:*"
     "@protocraft/core": "npm:0.2.4-2"
     "@protocraft/layers": "npm:0.2.1-2"
     "@react-three/drei": "npm:9.77.3"
@@ -25237,6 +25250,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "protobase@workspace:packages/protobase"
   dependencies:
+    handlebars: "npm:4.7.8"
     typescript: "npm:~5.3.3"
   languageName: unknown
   linkType: soft

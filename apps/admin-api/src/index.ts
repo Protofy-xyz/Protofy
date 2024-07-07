@@ -9,7 +9,7 @@ moduleAlias.addAliases({
 
 import dotenv from 'dotenv'
 import { setConfig, getConfig, getLogger } from 'protobase';
-import { getBaseConfig, getConfigWithoutSecrets } from '../../../packages/app/BaseConfig'
+import { getBaseConfig, getConfigWithoutSecrets } from '@my/config'
 // get config vars
 dotenv.config({ path: '../../.env' });
 global.defaultRoute = '/adminapi/v1'
