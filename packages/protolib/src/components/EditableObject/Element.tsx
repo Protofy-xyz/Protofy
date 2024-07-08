@@ -1,8 +1,8 @@
 import { Input, Stack, Switch, SizableText } from "tamagui";
-import { Tinted } from 'protolib/components/Tinted';
-import { SelectList } from 'protolib/components/SelectList';
-import { SimpleSlider } from 'protolib/components/SimpleSlider';
-import { DatePicker } from 'protolib/components/datepickers/dateParts';
+import { Tinted } from '../Tinted';
+import { SelectList } from '../SelectList';
+import { SimpleSlider } from '../SimpleSlider';
+import { DatePicker } from '../datepickers/dateParts';
 import { InputColor } from "../InputColor";
 import { SearchAndSelect } from "../SearchAndSelect";
 import { FormElement } from ".";
