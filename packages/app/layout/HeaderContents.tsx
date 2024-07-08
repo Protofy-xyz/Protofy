@@ -10,8 +10,10 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
   //@ts-ignore
   const SessionInfo = dynamic(() => import('./SessionInfo'), { ssr: false })
 
+  const projectName = SiteConfig.projectName ?? 'Protofy'
+
   return <ProtoHeaderContents
-    logo={<Paragraph mr={"$2"}><Text fontSize={20} fontWeight={"400"}>{props.headerTitle ?? 'Protofy'}</Text></Paragraph>}
+    logo={<Paragraph mr={"$2"}><Text fontSize={20} fontWeight={"400"}>{props.headerTitle ?? projectName}</Text></Paragraph>}
     rightArea={<XStack ai="center">
       {/* todo: publish button */}
       {props.topBar}

@@ -1,5 +1,6 @@
 import { useEffect, useState, startTransition, useMemo, useSyncExternalStore } from 'react'
-import { Theme, ThemeName, getConfig } from 'tamagui'
+import { Theme, ThemeName } from 'tamagui'
+import { SiteConfig } from 'app/conf'
 
 const familiesValues = {
   tamagui: ['gray', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'red']
@@ -17,7 +18,7 @@ type TintFamily = keyof typeof families
 
 let fam: TintFamily = 'tamagui'
 
-const defaultTint = getConfig()?.settings['defaultTint']
+const defaultTint = SiteConfig?.ui['defaultTint']
 const defaultTintIndex = familiesValues[fam].indexOf(defaultTint)
 
 export function getTints() {
