@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Frame, useEditor } from "@protocraft/core";
 import useKeypress from 'react-use-keypress';
 import Diff from 'deep-diff'
-import { Source } from "app/models";
+import { Source } from "../models";
 import { withTopics } from "react-topics";
 import ErrorBoundary from './ErrorBoundary'
 import { notify, computePreviousPositions, getValueFromPath } from "../utils/utils";
