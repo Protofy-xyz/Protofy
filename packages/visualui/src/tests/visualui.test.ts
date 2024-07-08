@@ -1,4 +1,4 @@
-import { Source } from 'app/models';
+import { Source } from '../models';
 
 var globalUuid = 0;
 const testUUID = () => "nodeId-" + globalUuid++
