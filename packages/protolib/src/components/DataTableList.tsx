@@ -3,7 +3,7 @@ import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
 import { CheckCheck, Check, Pencil } from '@tamagui/lucide-icons'
 import { ItemMenu } from "./ItemMenu";
-import { usePageParams } from 'protolib/next'
+import { usePageParams } from '../next'
 import { InteractiveIcon } from "./InteractiveIcon";
 import { Chip } from "./Chip";
 

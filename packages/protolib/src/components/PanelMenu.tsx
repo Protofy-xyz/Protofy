@@ -39,15 +39,15 @@ import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@m
 import { usePathname, useSearchParams } from 'solito/navigation';
 import { useContext, useEffect, useState } from 'react';
 import { API, getPendingResult } from 'protobase';
-import { useWorkspaceRoot } from 'protolib/lib/useWorkspaceRoot';
-import { AppConfContext, SiteConfigType } from 'protolib/providers/AppConf';
-import { AlertDialog } from 'protolib/components/AlertDialog';
-import { Link } from 'protolib/components/Link';
-import { Tinted } from 'protolib/components/Tinted';
-import { PanelMenuItem } from 'protolib/components/PanelMenuItem';
+import { useWorkspaceRoot } from '../lib/useWorkspaceRoot';
+import { AppConfContext, SiteConfigType } from '../providers/AppConf';
+import { AlertDialog } from './AlertDialog';
+import { Link } from './Link';
+import { Tinted } from './Tinted';
+import { PanelMenuItem } from './PanelMenuItem';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { SelectList } from './SelectList';
-import { useQueryState } from 'protolib/next'
+import { useQueryState } from '../next'
 import { useWorkspaceEnv } from '../lib/useWorkspaceEnv';
 
 const opacity = 0.8

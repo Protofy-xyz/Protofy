@@ -1,12 +1,12 @@
 
-import { withSession } from 'protolib/lib/Session';
-import { Tinted } from 'protolib/components/Tinted';
-import { useTint } from 'protolib/lib/Tints';
-import { JSONViewer } from 'protolib/components/jsonui';
-import { Center } from 'protolib/components/Center';
-import { SSR } from 'protolib/lib/SSR';
-import { AdminPage } from 'protolib/components/AdminPage';
-import { useSubscription } from 'protolib/lib/mqtt';
+import { withSession } from '../../lib/Session';
+import { Tinted } from '../../components/Tinted';
+import { useTint } from '../../lib/Tints';
+import { JSONViewer } from '../../components/jsonui';
+import { Center } from '../../components/Center';
+import { SSR } from '../../lib/SSR';
+import { AdminPage } from '../../components/AdminPage';
+import { useSubscription } from '../../lib/mqtt';
 import { H2, XStack, YStack, Text, Paragraph } from '@my/ui';
 import { useState } from 'react';
 import { useInterval, useUpdateEffect } from 'usehooks-ts';

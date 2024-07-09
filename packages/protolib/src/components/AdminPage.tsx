@@ -1,16 +1,16 @@
-import { useSession } from 'protolib/lib/Session';
-import { Page } from 'protolib/components/Page';
-import { Tinted } from 'protolib/components/Tinted';
-import { usePrompt } from 'protolib/context/PromptAtom';
-import { SearchContext } from 'protolib/context/SearchContext';
-import { AdminPanel } from 'protolib/components/AdminPanel';
+import { useSession } from '../lib/Session';
+import { Page } from './Page';
+import { Tinted } from './Tinted';
+import { usePrompt } from '../context/PromptAtom';
+import { SearchContext } from '../context/SearchContext';
+import { AdminPanel } from './AdminPanel';
 import dynamic from 'next/dynamic';
 import { forwardRef, useState } from 'react';
 import { AppState } from './AdminPanel'
 import { useAtom } from 'jotai';
 import { SiteConfig } from 'app/conf'
 
-const Chat = dynamic(() => import('protolib/components/Chat'), { ssr: false })
+const Chat = dynamic(() => import('./Chat'), { ssr: false })
 
 export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = true }: any, ref) => {
   useSession(pageSession)

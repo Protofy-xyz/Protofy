@@ -1,7 +1,7 @@
 import { Stack, Text, Input, Button, YStack } from '@my/ui';
 import { ChonkyIconName } from 'chonky';
-import { NextLink } from 'protolib/components/NextLink';
-import { CopyBubble } from 'protolib/components/CopyBubble';
+import { NextLink } from '../../components/NextLink';
+import { CopyBubble } from '../../components/CopyBubble';
 import { API } from 'protobase';
 import { useState } from 'react';
 

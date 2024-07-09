@@ -3,8 +3,8 @@ import Editor, { EditorProps, useMonaco, loader } from '@monaco-editor/react';
 import useKeypress from 'react-use-keypress';
 import { useThemeSetting } from '@tamagui/next-theme';
 import { useTheme } from '@my/ui';
-import { useTint } from 'protolib/lib/Tints'
-import { Tinted } from 'protolib/components/Tinted'
+import { useTint } from '../lib/Tints'
+import { Tinted } from './Tinted'
 
 type Props = {
     sourceCode: string,

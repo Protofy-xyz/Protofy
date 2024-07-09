@@ -1,6 +1,6 @@
 import { Button, Stack, XStack } from "tamagui";
 import { Pencil, Tags, Layers } from '@tamagui/lucide-icons';
-import { Tinted } from 'protolib/components/Tinted';
+import { Tinted } from '../Tinted';
 import { DeleteButton, FormGroup, getDefaultValue, iconStyle } from ".";
 
 export const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, setFormData, data, setData, mode, customFields, URLTransform }) => {

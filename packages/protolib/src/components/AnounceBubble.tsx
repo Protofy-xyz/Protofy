@@ -1,4 +1,4 @@
-import { ThemeTintAlt } from 'protolib/lib/Tints'
+import { ThemeTintAlt } from '../lib/Tints'
 import Link from 'next/link'
 import {
   Button,

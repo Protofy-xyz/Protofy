@@ -1,6 +1,6 @@
-import { ThemeToggle} from 'protolib/components/ThemeToggle'
-import { NextLink} from 'protolib/components/NextLink'
-import { ColorToggleButton} from 'protolib/components/ColorToggleButton'
+import { ThemeToggle} from '../ThemeToggle'
+import { NextLink} from '../NextLink'
+import { ColorToggleButton} from '../ColorToggleButton'
 import * as React from 'react'
 import {
   TooltipGroup,

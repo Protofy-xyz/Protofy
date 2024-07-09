@@ -1,9 +1,9 @@
 
 import { XStack, YStack, Text, ScrollView, Popover, Input } from 'tamagui'
-import { JSONViewer } from 'protolib/components/jsonui'
-import { useTint } from 'protolib/lib/Tints'
-import { GroupButton } from 'protolib/components/GroupButton'
-import { ButtonGroup } from 'protolib/components/ButtonGroup'
+import { JSONViewer } from './jsonui'
+import { useTint } from '../lib/Tints'
+import { GroupButton } from './GroupButton'
+import { ButtonGroup } from './ButtonGroup'
 import { InteractiveIcon } from './InteractiveIcon'
 import { Ban, Microscope, Bug, Info, AlertCircle, XCircle, Bomb, Filter } from '@tamagui/lucide-icons'
 import { Tinted } from './Tinted'

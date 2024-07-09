@@ -1,10 +1,10 @@
 
 import { ObjectModel } from './objectsSchemas'
-import { DataView } from 'protolib/components/DataView';
-import { DataTable2 } from 'protolib/components/DataTable2';
-import { Chip } from 'protolib/components/Chip';
-import { AdminPage } from 'protolib/components/AdminPage';
-import { useWorkspaceEnv } from 'protolib/lib/useWorkspaceEnv';
+import { DataView } from '../../components/DataView';
+import { DataTable2 } from '../../components/DataTable2';
+import { Chip } from '../../components/Chip';
+import { AdminPage } from '../../components/AdminPage';
+import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import { Pencil, Boxes } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 import { XStack, Text } from "@my/ui";

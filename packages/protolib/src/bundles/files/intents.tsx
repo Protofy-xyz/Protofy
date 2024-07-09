@@ -21,7 +21,7 @@ import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";
-import { useEventEffect } from 'protolib/bundles/events/hooks'
+import { useEventEffect } from '../../bundles/events/hooks'
 import { useTint } from '../../lib/Tints'
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {

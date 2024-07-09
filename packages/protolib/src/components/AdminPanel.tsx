@@ -1,9 +1,9 @@
 import { XStack } from 'tamagui'
 import { PanelLayout } from 'app/layout/PanelLayout'
-import { SelectList } from 'protolib/components/SelectList';
-import { useWorkspaces, useUserSettings } from 'protolib/lib/Session';
-import { PanelMenu } from 'protolib/components/PanelMenu';
-import { MainPanel } from 'protolib/components/MainPanel';
+import { SelectList } from './SelectList';
+import { useWorkspaces, useUserSettings } from '../lib/Session';
+import { PanelMenu } from './PanelMenu';
+import { MainPanel } from './MainPanel';
 import Workspaces from 'app/bundles/workspaces'
 import { InteractiveIcon } from './InteractiveIcon'
 import { Activity } from '@tamagui/lucide-icons'

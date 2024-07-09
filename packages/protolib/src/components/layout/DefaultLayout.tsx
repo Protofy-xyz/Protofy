@@ -1,4 +1,4 @@
-import { Tinted } from 'protolib/components/Tinted'
+import { Tinted } from '../Tinted'
 import { ToastProvider, ToastViewport } from '@tamagui/toast'
 import { NextSeo } from 'next-seo'
 import React from 'react'

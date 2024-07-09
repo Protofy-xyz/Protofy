@@ -1,11 +1,11 @@
 import { UserModel } from '.'
 import { z } from 'protobase'
-import { usePrompt } from 'protolib/context/PromptAtom';
-import { DataTable2 } from 'protolib/components/DataTable2';
-import { Chip } from 'protolib/components/Chip';
-import { DataView } from 'protolib/components/DataView';
-import { AdminPage } from 'protolib/components/AdminPage';
-import { useWorkspaceEnv } from 'protolib/lib/useWorkspaceEnv';
+import { usePrompt } from '../../context/PromptAtom';
+import { DataTable2 } from '../../components/DataTable2';
+import { Chip } from '../../components/Chip';
+import { DataView } from '../../components/DataView';
+import { AdminPage } from '../../components/AdminPage';
+import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import moment from 'moment';
 import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
 import { API } from 'protobase'

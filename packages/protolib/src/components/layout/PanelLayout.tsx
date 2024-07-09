@@ -1,5 +1,5 @@
 import { YStack, ScrollView, XStack, getTokens } from 'tamagui'
-import { AppBar } from 'protolib/components/AppBar'
+import { AppBar } from '../AppBar'
 
 export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, SideMenu, Layout, headerContents, HeaderMenu }) => {
   const appBarHeight = 55

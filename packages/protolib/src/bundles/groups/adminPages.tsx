@@ -1,7 +1,7 @@
 import { GroupModel } from '.'
 import { z } from 'protobase'
-import { DataView } from 'protolib/components/DataView'
-import { AdminPage } from 'protolib/components/AdminPage'
+import { DataView } from '../../components/DataView'
+import { AdminPage } from '../../components/AdminPage'
 import { Users } from '@tamagui/lucide-icons';
 import { API } from 'protobase'
 import { usePrompt } from '../../context/PromptAtom'

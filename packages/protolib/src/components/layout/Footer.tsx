@@ -1,5 +1,5 @@
-import { ContainerLarge } from 'protolib/components/Container'
-import { ParagraphLink } from 'protolib/components/Link'
+import { ContainerLarge } from '../Container'
+import { ParagraphLink } from '../Link'
 import { H4, XStack, YStack, YStackProps } from 'tamagui'
 
 export const FooterLink = ({href, children}) => <ParagraphLink href={href}>{children}</ParagraphLink>

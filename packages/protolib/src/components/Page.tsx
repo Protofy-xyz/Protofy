@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StackProps, YStack, useTheme } from "tamagui";
-import { useIsEditing } from "protolib/visualui/useIsEditing"
+import { useIsEditing } from "../visualui/useIsEditing"
 import Head from 'next/head'
 import { useSession, useSessionContext } from "../lib/Session";
 import { getSessionContext } from "protonode/dist/lib/session";

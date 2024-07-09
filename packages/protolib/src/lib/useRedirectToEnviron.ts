@@ -1,4 +1,4 @@
-import { AppConfContext } from 'protolib/providers/AppConf';
+import { AppConfContext } from '../providers/AppConf';
 import { getWorkspaceEnv } from './useWorkspaceEnv';
 import { useContext, useEffect } from 'react';
 import { useRouter, usePathname } from 'solito/navigation';

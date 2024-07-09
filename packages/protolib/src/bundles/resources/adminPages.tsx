@@ -1,9 +1,9 @@
 
 import { ResourceModel } from '.'
-import { DataTable2 } from 'protolib/components/DataTable2'
-import { Chip } from 'protolib/components/Chip'
-import { DataView } from 'protolib/components/DataView'
-import { AdminPage } from 'protolib/components/AdminPage'
+import { DataTable2 } from '../../components/DataTable2'
+import { Chip } from '../../components/Chip'
+import { DataView } from '../../components/DataView'
+import { AdminPage } from '../../components/AdminPage'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
 import { ExternalLink, Link } from '@tamagui/lucide-icons'
 import { PaginatedData } from '../../lib/SSR'
