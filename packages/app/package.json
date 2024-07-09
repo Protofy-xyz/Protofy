@@ -26,6 +26,7 @@
     "handlebars": "4.7.8",
     "moment": "2.29.4",
     "mrmime": "1.0.1",
+    "protolib": "*",
     "protonode": "*",
     "react-data-table-component": "^7.5.4",
     "react-data-table-component-extensions": "^1.6.0",

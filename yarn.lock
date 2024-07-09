@@ -11325,6 +11325,7 @@ __metadata:
     handlebars: "npm:4.7.8"
     moment: "npm:2.29.4"
     mrmime: "npm:1.0.1"
+    protolib: "npm:*"
     protonode: "npm:*"
     react-data-table-component: "npm:^7.5.4"
     react-data-table-component-extensions: "npm:^1.6.0"

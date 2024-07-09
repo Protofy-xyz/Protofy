@@ -17,7 +17,7 @@ import automations from './automations/context'
 import network from './network/context'
 import deviceContext from './devices/devices/context'
 
-export default {
+export const APIContext = {
     onEvent,
     emitEvent,
     automation,

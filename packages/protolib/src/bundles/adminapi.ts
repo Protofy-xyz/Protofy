@@ -20,7 +20,7 @@ import { ServicesAPI } from './services/servicesAPI'
 import { FSMApi } from './fsm/FSMApi'
 import { PackagesAPI } from './packages/packagesAPI'
 
-export default (app, context) => {
+export const AdminAPIBundles = (app, context) => {
   UsersAPI(app, context)
   GroupsAPI(app, context)
   EventsAPI(app, context)

@@ -1,5 +1,5 @@
-import BundlesAPI from 'protolib/bundles/adminapi'
+import {AdminAPIBundles} from 'protolib/bundles/adminapi'
 
 export default (app, context) => {
-  BundlesAPI(app, context)
+  AdminAPIBundles(app, context)
 }
