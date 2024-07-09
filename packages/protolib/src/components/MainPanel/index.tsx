@@ -69,7 +69,7 @@ export const MainPanel = ({ borderLess, rightPanelSize,setRightPanelSize,rightPa
     }, [rightPanelResizable])
 
     return (
-        <div style={{ flex: 1, display: 'flex' }}>
+        <div style={{ flex: 1, display: 'flex', maxWidth: '100%' }}>
             {leftPanelContent && <div id="sidebar-panel-container" style={{ flex: 1, display: openPanel ? 'flex' : 'none', position: 'absolute', width: getLeftWidth(), zIndex: 99999999 }}>
                 <SPanel
                     key="sidebar"
