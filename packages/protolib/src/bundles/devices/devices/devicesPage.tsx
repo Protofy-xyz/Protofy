@@ -49,7 +49,23 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
               });
             } else {
               onSetModalFeedback({
-                message: `Compiling...`,
+                message: (
+                  <YStack height="50px" gap="$2">
+                    <Paragraph>Compiling firmware: </Paragraph>                    
+                    {
+                      messages.length > 0 && (
+                        <Paragraph
+                          height={"100px"}
+                        >
+                          {messages
+                            .filter((msg) => Object.keys(msg).length === 1)
+                            .map((msg) => msg.message)
+                            .slice(-1)[0]}
+                        </Paragraph>
+                      )
+                    }
+                  </YStack>
+                ),
                 details: { error: false }
               });
               isDoneCompiling = true
