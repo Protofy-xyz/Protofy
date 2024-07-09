@@ -19,7 +19,7 @@
     "start-service-fast": "START_ALL=1 pm2 start ecosystem.config.js && yarn monit",
     "start-dev": "yarn prepare-dev && yarn start-dev-fast",
     "start-dev-fast": "FULL_DEV=1 && yarn start-fast",
-    "prepare-dev": "node prepare.js && yarn workspace api prepare-dev && yarn workspaces foreach --all --all --exclude api run prepare-dev && yarn build",
+    "prepare-dev": "node prepare.js && yarn build && yarn workspace api prepare-dev && yarn workspaces foreach --all --exclude api run prepare-dev",
     "prod": "NODE_ENV=production pm2 start ecosystem.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start ecosystem.config.js && yarn monit",
     "add-user": "yarn workspace admin-api add-user",
