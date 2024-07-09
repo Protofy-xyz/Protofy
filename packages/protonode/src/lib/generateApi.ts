@@ -163,10 +163,10 @@ export const AutoAPI = ({
 
     const recoverLinks = async (items) => {
         const links = modelType.getSchemaLinks()
+
         if(links) {
             for(const link of links) {
                 let idsToRequest = items.map(x => x[link.field]).filter(x => x !== undefined)
-                //@ts-ignore
                 idsToRequest = [...new Set(idsToRequest)]
                 items = await link.linkToReadIds(link, idsToRequest, items)
             }
