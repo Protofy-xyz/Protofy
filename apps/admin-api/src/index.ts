@@ -90,7 +90,9 @@ if (isFullDev) {
     '../../packages/app/conf.ts',
     '../../packages/protolib/**',
     '../../packages/app/bundles/adminapi.tsx',
-    '../../system.js'
+    '../../system.js',
+    '../../packages/protonode/dist/**',
+    '../../packages/protobase/dist/**',
   ];
 
   const watcher = chokidar.watch(pathsToWatch, {

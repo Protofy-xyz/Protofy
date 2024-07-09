@@ -3,7 +3,7 @@ import fs from 'fs';
 import pm2 from 'pm2';
 import { ServiceModel } from './servicesSchema';
 import { generateEvent } from '../library';
-import {generate as uuidv4} from 'short-uuid'
+import { generate as uuidv4 } from 'short-uuid'
 
 const readService = async (name, cb) => {
   pm2.connect(err => {
@@ -20,7 +20,7 @@ const readService = async (name, cb) => {
       cb({
         name: service.name,
         status: service.pm2_env.status,
-        uptime: Date.now() -  service.pm2_env.pm_uptime,
+        uptime: Date.now() - service.pm2_env.pm_uptime,
         restarts: service.pm2_env.restart_time,
         memory: service.monit.memory,
         cpu: service.monit.cpu
@@ -47,7 +47,7 @@ const listServices = () => {
         const serviceList = list.map(service => ({
           name: service.name,
           status: service.pm2_env.status,
-          uptime: Date.now() - service.pm2_env.pm_uptime ,
+          uptime: Date.now() - service.pm2_env.pm_uptime,
           restarts: service.pm2_env.restart_time,
           memory: service.monit.memory,
           cpu: service.monit.cpu
@@ -85,14 +85,14 @@ const monitorServices = (context) => {
           };
 
           const entityModel = ServiceModel.load(serviceData)
-          if(context.mqtts) {
+          if (context.mqtts) {
             Object.keys(context.mqtts).forEach(env => {
               context.mqtts[env].publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
             })
           }
         });
       });
-    }, 1000); 
+    }, 1000);
   });
 };
 
@@ -102,7 +102,7 @@ const getDB = (path, req, session) => {
     async *iterator() {
       try {
         // Esperamos los servicios de forma asíncrona
-        const services:any = await listServices();
+        const services: any = await listServices();
         for (const service of services) {
           // Podemos usar 'yield' aquí porque estamos en una función generadora asíncrona
           yield [service.name, JSON.stringify(service)];
@@ -112,7 +112,7 @@ const getDB = (path, req, session) => {
       }
     },
 
-    async del (key, value) {
+    async del(key, value) {
 
     },
 
@@ -184,10 +184,10 @@ export const ServicesAPI = (app, context) => {
       }
 
       generateEvent({
-        path: 'services/'+service+'/restart', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+        path: 'services/' + service + '/restart', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
         from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
         user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
-        payload: {service }
+        payload: { service }
       }, getServiceToken())
 
       pm2.restart(service, (err, proc) => {
@@ -209,15 +209,15 @@ export const ServicesAPI = (app, context) => {
       return;
     }
     const packageId = uuidv4()
-    
+
     const service = req.params.service;
 
     const _generateEvent = (type, payload?) => {
       generateEvent({
-        path: 'services/'+service+'/package/'+packageId+'/'+type,
+        path: 'services/' + service + '/package/' + packageId + '/' + type,
         from: 'admin-api',
         user: session.user.id,
-        payload: {packageId, ...payload}
+        payload: { packageId, ...payload }
       }, getServiceToken())
     }
     try {
@@ -233,7 +233,7 @@ export const ServicesAPI = (app, context) => {
       res.send({ packageId: packageId });
       //run the package command
       const { exec } = require('child_process');
-      exec('npm run package', { cwd: path }, (error, stdout, stderr) => {
+      exec('npm run package', { cwd: path, windowsHide: true }, (error, stdout, stderr) => {
         if (error) {
           console.error(`Error packaging service: ${error}`);
           _generateEvent('error', { error })
@@ -242,7 +242,7 @@ export const ServicesAPI = (app, context) => {
         }
         _generateEvent('done')
       });
-    } catch(e) {
+    } catch (e) {
       console.error(`Error getting service path: ${e}`);
       _generateEvent('error', { error: e })
       res.status(500).send({ error: "Error getting service information" });
@@ -254,30 +254,30 @@ export const ServicesAPI = (app, context) => {
       res.status(401).send({ error: "Unauthorized" });
       return;
     }
-  
+
     //@ts-ignore
     const linesRequested = req.query.lines ? parseInt(req.query.lines, 10) : 5000;
     if (isNaN(linesRequested)) {
       res.status(400).send({ error: "Invalid lines parameter" });
       return;
     }
-  
+
     pm2.connect(err => {
       if (err) {
         console.error('Error connecting to pm2:', err);
         res.status(500).send({ error: "Error connecting to pm2" });
         return;
       }
-  
+
       pm2.describe(req.params.service, (err, desc) => {
         pm2.disconnect();
         if (err || desc.length === 0) {
           res.status(500).send({ error: "Error getting service description" });
           return;
         }
-  
+
         const logFilePath = desc[0].pm2_env.pm_out_log_path;
-  
+
         readLastNLines(logFilePath, linesRequested).then(logs => {
           res.send(logs);
         }).catch(fileErr => {
@@ -287,14 +287,14 @@ export const ServicesAPI = (app, context) => {
       });
     });
   }));
-  
+
   async function readLastNLines(file, n) {
     const stats = fs.statSync(file);
     const chunkSize = 1024;
     let filePosition = stats.size - chunkSize;
     let linesCount = 0;
     let output = '';
-  
+
     while (filePosition > 0 && linesCount < n) {
       const buffer = Buffer.alloc(chunkSize);
       let bytesRead = fs.readSync(fs.openSync(file, 'r'), buffer, 0, chunkSize, filePosition);
@@ -302,11 +302,11 @@ export const ServicesAPI = (app, context) => {
       linesCount = (output.match(/\n/g) || []).length;
       filePosition -= chunkSize;
     }
-  
+
     if (linesCount >= n) {
       output = output.split('\n').slice(-n).join('\n');
     }
-  
+
     return output;
   }
 }

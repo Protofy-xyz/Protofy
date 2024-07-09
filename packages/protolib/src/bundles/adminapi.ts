@@ -18,6 +18,7 @@ import { MasksAPI } from './visualui/masksAPI';
 import { LogsAPI } from './logs/logsAPI'
 import { ServicesAPI } from './services/servicesAPI'
 import { FSMApi } from './fsm/FSMApi'
+import { PackagesAPI } from './packages/packagesAPI'
 
 export default (app, context) => {
   UsersAPI(app, context)
@@ -39,5 +40,6 @@ export default (app, context) => {
   MasksAPI(app, context)
   LogsAPI(app, context)
   ServicesAPI(app, context) 
+  PackagesAPI(app, context)
   FSMApi(app, context)
 }
