@@ -3,12 +3,14 @@ import Head from 'next/head'
 import { hasSessionCookie } from 'protolib/lib/Session'
 import { NextPageContext } from 'next'
 import { SSR } from 'protolib/lib/SSR'
+import { SiteConfig } from 'app/conf'
 
 export default function Page(props:any) {
+  const projectName = SiteConfig.projectName
   return (
     <>
       <Head>
-        <title>Protofy - Sign In</title>
+        <title>{projectName + " - Sign In"}</title>
       </Head>
       <SignInPage {...props} />
     </>

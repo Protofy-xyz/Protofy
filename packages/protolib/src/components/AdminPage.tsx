@@ -17,6 +17,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   const [search, setSearch] = useState('')
   const [searchName, setSearchName] = useState('')
   const [appState] = useAtom(AppState)
+  const projectName = SiteConfig.projectName
 
   const settingsAssistant = SiteConfig.assistant
   const settingsAssistantEnabled = settingsAssistant === undefined ? true : settingsAssistant
@@ -24,7 +25,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   usePrompt(() => `The user is browsing an admin page in the admin panel. The title of the admin page is: "${title}"`)
 
   return (
-    <Page ref={ref} title={"Protofy - " + title} backgroundColor={'$bgPanel'}>
+    <Page ref={ref} title={projectName + " - " + title} backgroundColor={'$bgPanel'}>
       <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName }}>
         <AdminPanel>
           {children}

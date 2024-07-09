@@ -33,6 +33,7 @@ import {AppConfContext} from 'protolib/providers/AppConf'
 import { getBrokerUrl} from 'protolib/lib/Broker'
 import {Connector } from 'protolib/lib/mqtt'
 import { Toast, YStack } from '@my/ui'
+import { SiteConfig } from 'app/conf'
 
 initSchemaSystem()
 
@@ -43,6 +44,7 @@ if (process.env.NODE_ENV === 'production') {
 function MyApp({ Component, pageProps }: SolitoAppProps) {
   //@ts-ignore
   const [session] = useSession(pageProps['pageSession'])
+  const projectName = SiteConfig.projectName
 
   const isElectron = () => {
     // Renderer process
@@ -69,7 +71,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
   return (
     <>
       <Head>
-        <title>Protofy - AI Supercharged LowCode Platform CMS and Framework</title>
+        <title>{projectName + " - AI Supercharged LowCode Platform CMS and Framework"}</title>
         <meta name="description" content="Next Generation Development Platform for web, mobile and IoT. Based on proven tech: React, ChatGPT, ESPHome, Express, Next, Node, Tamagui, Zod, LevelDB an much more." />
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
