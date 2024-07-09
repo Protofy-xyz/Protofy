@@ -2,7 +2,7 @@ import { Input, Stack, Switch, SizableText } from "tamagui";
 import { Tinted } from '../Tinted';
 import { SelectList } from '../SelectList';
 import { SimpleSlider } from '../SimpleSlider';
-import { DatePicker } from '../datepickers/dateParts';
+import { DatePicker } from '../datepickers';
 import { InputColor } from "../InputColor";
 import { SearchAndSelect } from "../SearchAndSelect";
 import { FormElement } from ".";
