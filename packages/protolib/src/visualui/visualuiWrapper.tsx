@@ -15,6 +15,13 @@ export const UIWrapLib = (importName) => {
         return cw(Component, icon, name, defaultProps, uiData, visualUIOnlyFallbackProps, editableText)
     }
 }
+export const UIWrapRelative = (path) => {
+    return (Component, icon, name, defaultProps = {}, uiData = {}, visualUIOnlyFallbackProps: any = {}, editableText = false) => {
+        const cw = getComponentWrapper(path + "/" + name)
+        return cw(Component, icon, name, defaultProps, uiData, visualUIOnlyFallbackProps, editableText)
+    }
+}
+
 export const getComponentWrapper = (importName) => (Component, icon, name, defaultProps = {}, uiData = {}, visualUIOnlyFallbackProps: any = {}, editableText = false) => {
     const importInfo = {
         moduleSpecifier: importName,

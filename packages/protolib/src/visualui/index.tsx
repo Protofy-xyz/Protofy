@@ -78,7 +78,7 @@ import Video from '../components/Video'
 //import { unwrapText } from '../components/unwrapText'
 import HCenterStack from '../components/HCenterStack'
 
-import { getComponentWrapper, BasicPlaceHolder } from './visualuiWrapper'
+import { BasicPlaceHolder, UIWrapRelative } from './visualuiWrapper'
 import { AlertDialog } from '../components/AlertDialog'
 
 import htmlBasicElements from './htmlBasics'
@@ -93,7 +93,7 @@ import molecules from './molecules'
 import { Pressable } from '../components/Pressable'
 import { Icon } from '../components/Icon'
 
-const cw = getComponentWrapper('protolib')
+const cw = UIWrapRelative('protolib/components')
 
 const nonDraggable = { custom: { hidden: true } }
 
