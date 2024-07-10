@@ -1,6 +1,6 @@
 import { ESPLoader } from "../esploader";
 import { ROM } from "./rom";
-import ESP8266_STUB from "./stub_flasher/stub_flasher_8266.json";
+import ESP8266_STUB from "./stub_flasher/stub_flasher_8266";
 
 export class ESP8266ROM extends ROM {
   public CHIP_NAME = "ESP8266";
