@@ -19,7 +19,7 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
       {props.topBar}
       <XStack $xs={{ display: 'none' }}>
         <Tinted>
-          <HeaderLink id="header-session-doc" href={SiteConfig.useLocalDocumentation ? "/documentation" : "https://protofy.xyz/documentation"}>Docs</HeaderLink>
+          {SiteConfig.documentationVisible ? <HeaderLink id="header-session-doc" href={SiteConfig.useLocalDocumentation ? "/documentation" : "https://protofy.xyz/documentation"}>Docs</HeaderLink> : <></>}
           {
             <SessionInfo />
           }
