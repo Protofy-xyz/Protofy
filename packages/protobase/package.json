@@ -11,7 +11,9 @@
         "dist"
     ],
     "dependencies": {
-        "handlebars": "4.7.8"
+        "handlebars": "4.7.8",
+        "pino": "9.2.0",
+        "pino-pretty": "11.2.1"
     },
     "devDependencies": {
         "typescript": "~5.3.3"
