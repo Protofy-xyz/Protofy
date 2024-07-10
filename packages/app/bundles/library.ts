@@ -1,1 +1,1 @@
-export * from 'protolib/bundles/library'
+export * from 'protolib/src/bundles/library'

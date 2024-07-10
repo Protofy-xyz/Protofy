@@ -11,7 +11,6 @@ export default {
   component: ({ pageState, initialItems, itemData, pageSession }: any) => {
     return (<AdminPage title="Device Sdks" pageSession={pageSession}>
       <DataView
-        integratedChat
         entityName={"devicesdks"}
         itemData={itemData}
         rowIcon={Code}

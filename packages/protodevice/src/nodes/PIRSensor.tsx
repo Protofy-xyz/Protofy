@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, Node, NodeParams } from '../../flowslib';
+import { Field, Node, NodeParams } from 'protoflow';
 import { useAppStore } from "../../../../../context/appStore";
 import { useDeviceStore } from "../../../store/DeviceStore";
 import { HStack, Text, Icon } from "native-base"

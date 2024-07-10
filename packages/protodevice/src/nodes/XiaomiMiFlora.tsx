@@ -1,5 +1,5 @@
 import React from 'react'
-import { Node, NodeParams, Field } from '../../flowslib'
+import { Node, NodeParams, Field } from 'protoflow'
 import NodeBus, { cleanName, generateTopic } from '../NodeBus';
 import { useAppStore } from "../../../../../context/appStore";
 import { useDeviceStore } from "../../../store/DeviceStore";

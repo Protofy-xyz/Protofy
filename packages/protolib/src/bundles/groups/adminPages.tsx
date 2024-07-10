@@ -28,7 +28,6 @@ export default {
 
       return (<AdminPage title="Groups" pageSession={pageSession}>
         <DataView
-          integratedChat
           enableAddToInitialData
           disableViewSelector
           defaultView={'list'}
@@ -55,6 +54,7 @@ export default {
           model={GroupModel}
           pageState={pageState}
           icons={GroupIcons}
+          //@ts-ignore
           dataTableCardProps={{ itemMinWidth: 300 }}
         />
       </AdminPage>)

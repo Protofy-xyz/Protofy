@@ -1,5 +1,5 @@
 import React from "react";
-import {Node, Field, HandleOutput, NodeParams } from '../../flowslib';
+import {Node, Field, HandleOutput, NodeParams } from 'protoflow';
 import { HStack, Text, Icon } from "native-base";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 

@@ -304,7 +304,6 @@ export default {
           return { ...data, environment: env }
         }}
         defaultView={"grid"}
-        integratedChat
         key={all ? 'all' : 'filtered'}
         toolBarContent={
           <XStack mr={"$2"} f={1} space="$1.5" ai="center" jc='flex-end'>
@@ -317,6 +316,7 @@ export default {
                 checked={all}
                 onCheckedChange={v => setAll(v)} size="$1"
               >
+                {/** @ts-ignore */}
                 <Switch.Thumb animation="quick" backgroundColor={"$color9"} />
               </Switch>
             </Tinted>

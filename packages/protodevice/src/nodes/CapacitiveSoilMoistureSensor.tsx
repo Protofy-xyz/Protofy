@@ -1,5 +1,5 @@
 import React from "react";
-import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
+import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 import { useAppStore } from "../../../../../context/appStore";
 import { useDeviceStore } from "../../../store/DeviceStore";
 import Text from "../../../../../palettes/uikit/Text";

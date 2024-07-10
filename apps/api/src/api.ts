@@ -1,8 +1,15 @@
 import { getApp, getMQTTClient, getServiceToken } from 'protonode'
-import { getLogger, getConfig } from 'protobase';
+import { getLogger, getConfig, API } from 'protobase';
 import { getConfigWithoutSecrets } from '@my/config'
 import BundleContext from 'app/bundles/apiContext'
-import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
+
+const generateEvent = async (event, token='') => {
+    try {
+        await API.post('/adminapi/v1/events?token='+token, event, undefined, true)
+    } catch(e) {
+        //console.error("Failed to send event: ", e)
+    }
+  }
 
 const logger = getLogger()
 const subscriptions = {}

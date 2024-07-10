@@ -1,4 +1,4 @@
-import { clearSession } from 'protolib/lib/Session'
+import { clearSession } from 'protolib'
 
 const logout = (setSession, setSessionContext) => {
     clearSession(setSession, setSessionContext)

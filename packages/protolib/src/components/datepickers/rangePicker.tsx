@@ -171,6 +171,7 @@ export function Calendar({
         })}
       </View>
       <View
+        //@ts-ignore
         animation="medium"
         enterStyle={{
           opacity: 0,

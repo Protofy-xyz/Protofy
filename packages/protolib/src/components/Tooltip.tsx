@@ -12,6 +12,7 @@ export const Tooltip = ({trigger, children, ...props}) => (
         x={0}
         y={0}
         opacity={1}
+        // @ts-ignore
         animation={[
             'quick',
             {

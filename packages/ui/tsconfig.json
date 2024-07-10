@@ -5,7 +5,10 @@
   ],
   "compilerOptions": {
     "composite": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "protolib/*": ["../protolib/*"]
+    }
   },
   "references": []
 }

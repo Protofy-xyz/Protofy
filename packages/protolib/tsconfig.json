@@ -3,18 +3,16 @@
   "compilerOptions": {
     "composite": true,
     "paths": {
-      "protolib/*": ["./*"],
       "@components/*": ["./components/*"],
       "@lib/*": ["./lib/*"],
       "@data/*": ["./data/*"],
       "react-native": ["react-native-web"],
       "@/*": ["./*"],
-      "@my/ui": ["../ui"]
+      "@my/ui": ["../ui/src/index.tsx"],
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "jest/jest-globals.d.ts"
-  ]
+    "src"
+  ],
+  "references": []
 }

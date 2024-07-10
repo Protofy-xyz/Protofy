@@ -1,4 +1,4 @@
-import BundleFileActions from 'protolib/bundles/files/fileActions'
+import BundleFileActions from 'protolib/src/bundles/files/fileActions'
 
 const fileActions = [
     ...BundleFileActions

@@ -1,4 +1,4 @@
-import { useSession } from 'protolib/lib/Session'
+import { useSession } from 'protolib'
 import Custom404 from './404'
 import { useSearchParams } from 'solito/navigation';
 import electronPages from 'app/bundles/electronPages'

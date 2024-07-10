@@ -1,5 +1,5 @@
 import React from "react";
-import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
+import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 import { pinTable } from '../../../lib/device/Device'
 
 const UltrasonicDistanceSensor = (node: any = {}, nodeData = {}, children) => {

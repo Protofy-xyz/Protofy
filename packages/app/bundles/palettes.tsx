@@ -1,4 +1,4 @@
-import protolibPalette from 'protolib/visualui'
+import {visualuiComponents as protolibPalette} from 'protolib'
 
 export const palettes = {
     atoms: {

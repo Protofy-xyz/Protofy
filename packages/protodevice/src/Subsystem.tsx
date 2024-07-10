@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { XStack, YStack, Text, Paragraph, Button, Input, Spinner, Switch } from '@my/ui';
-import { ContainerLarge } from 'protolib/components/Container';
-import { Tinted } from 'protolib/components/Tinted';
-import { Chip } from 'protolib/components/Chip';
-import { useMqttState, useSubscription } from 'protolib/lib/mqtt';
-import { useFetch } from 'protolib/lib/useFetch'
-import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
+import { ContainerLarge } from 'protolib';
+import { Tinted } from 'protolib';
+import { Chip } from 'protolib';
+import { useMqttState, useSubscription } from 'protolib';
+import { useFetch } from 'protolib'
+import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/src/bundles/devices/devices/devicesSchemas';
 
 const Monitor = ({ deviceName, monitorData, subsystem }) => {
     const monitor = new DeviceSubsystemMonitor(deviceName, subsystem.name, monitorData)
@@ -26,6 +26,7 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
     return (
         <XStack gap="$3">
             <Text flex={1} marginLeft={4} textAlign={"left"}>{monitor.getLabel()}: </Text>
+            {/**@ts-ignore */}
             {(loading || (value === undefined && result?.value === undefined)) ? <Spinner color="$color7" /> : <Chip color={value === undefined ? 'gray' : '$color5'} text={`${value ?? result?.value} ${monitor.getUnits()}`} scale={scale} animation="bouncy" ></Chip>}
         </XStack>
     );
@@ -49,6 +50,7 @@ const Action = ({ deviceName, action, buttonAction }) => {
             key={action.name} // Make sure to provide a unique key for each Button
             onPress={() => { buttonAction(action) }}
             color="$color10"
+            //@ts-ignore
             title={"Description: " + action.description}
             flex={1}
         >
@@ -59,8 +61,9 @@ const Action = ({ deviceName, action, buttonAction }) => {
 
         <XStack gap="$3">
             <Input
+                //@ts-ignore
                 value={value}
-                onChange={async (e) => setValue(e.target.value)}
+                onChange={async (e:any) => setValue(e.target.value)}
                 width={80}
                 placeholder="value"
                 mr={8}
@@ -70,6 +73,7 @@ const Action = ({ deviceName, action, buttonAction }) => {
                 key={action.name} // Make sure to provide a unique key for each Button
                 onPress={() => { buttonAction(action, value) }}
                 color="$color10"
+                //@ts-ignore
                 title={"Description: " + action.description}
                 flex={1}
             >
@@ -77,14 +81,14 @@ const Action = ({ deviceName, action, buttonAction }) => {
             </Button>
         </XStack>
         : 
-        <YStack gap="$2" alignSelf='flex-start'  alignItems="center" mt="10px" mb="10px" flex={1} width="$20">
+        <YStack gap="$2" alignSelf='flex-start'  alignItems="center" marginTop="10px" marginBottom="10px" flex={1} width="$20">
             <XStack gap="$3" flexWrap='wrap'>
             {
                 Object.keys(value).map((key, index) => {
                     return <Input
                         key={index}
                         value={value[key]}
-                        onChange={async (e) => {
+                        onChange={async (e:any) => {
                             setValue({ ...value, [key]: e.target.value })
                         }}
                         width="$10"
@@ -98,6 +102,7 @@ const Action = ({ deviceName, action, buttonAction }) => {
                 key={action.name} // Make sure to provide a unique key for each Button
                 onPress={() => { buttonAction(action, value) }}
                 color="$color10"
+                //@ts-ignore
                 title={"Description: " + action.description}
                 width="100%"
                 flex={2}
@@ -134,14 +139,15 @@ const subsystem = ({ subsystem, deviceName }) => {
                 <XStack alignItems="center" justifyContent="space-between">
                     <Paragraph textAlign='left' color={'$color10'}>{subsystem.name}</Paragraph>
                     {eventGenerationFlag?<Switch id={"pa"} size="$2" defaultChecked={subsystem.generateEvent}>
+                        {/*@ts-ignore*/}
                         <Switch.Thumb animation="quick" />
                     </Switch>:null}
                 </XStack>
-                <YStack mb="10px" mt="10px" alignSelf='flex-start'>
-                    {actionButtons?.length > 0 ? <XStack gap="$2" flexWrap='wrap' mt="10px" mb="10px">
+                <YStack marginBottom="10px" marginTop="10px" alignSelf='flex-start'>
+                    {actionButtons?.length > 0 ? <XStack gap="$2" flexWrap='wrap' marginTop="10px" marginBottom="10px">
                         {actionButtons}
                     </XStack> : null}
-                    {monitorLabels?.length > 0 ? <XStack gap="$3" flexWrap='wrap' mt="10px" mb="10px">
+                    {monitorLabels?.length > 0 ? <XStack gap="$3" flexWrap='wrap' marginTop="10px" marginBottom="10px">
                         {monitorLabels}
                     </XStack> : null}
                 </YStack>

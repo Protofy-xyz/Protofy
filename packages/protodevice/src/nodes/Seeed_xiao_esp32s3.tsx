@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { PORT_TYPES, Node, FlowStoreContext } from 'protoflow';
 import { Handle, Position, useEdges } from "reactflow";
 import { getColor } from ".";
-import seeed_xiao_esp32s3 from '../assets/seeed_xiao_esp32s3.png';
 
 const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId))
 
@@ -55,7 +54,7 @@ const Seeed_xiao_esp32s3 = ({ node = {}, nodeData = {}, topics = {}, color }: an
     return (
         <Node output={false} skipCustom={true} node={node} color={color} isPreview={!id} title='XIAO ESP32S3' id={id} margin='200px' >
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-                <img src={seeed_xiao_esp32s3.src} style={{ width: "100%" }} />
+                <img src={"/images/devices/seeed_xiao_esp32s3.png"} style={{ width: "100%" }} />
             </div>
             {/* //TODO Get ports from device definition */}
             {Array(ports.length).fill(1).map((x, i) => {

@@ -1,8 +1,8 @@
 import { SignInPage } from 'app/features/auth/login'
 import Head from 'next/head'
-import { hasSessionCookie } from 'protolib/lib/Session'
+import { hasSessionCookie } from 'protolib'
 import { NextPageContext } from 'next'
-import { SSR } from 'protolib/lib/SSR'
+import { SSR } from 'protolib'
 import { SiteConfig } from 'app/conf'
 
 export default function Page(props:any) {

@@ -1,7 +1,7 @@
 import { navigate } from "./navigate";
 import { fetch } from "./fetch";
 import { setCurrentView } from "./changeCurrentView";
-import uiMasks from "./uiMasks.json"
+import { UIMasks } from "./uiMasks"
 import onRender from "./onRender";
 import ButtonSimple from "./ButtonSimple";
 import Input from "./Input";
@@ -12,7 +12,7 @@ import Pressable from "./Pressable";
 
 export default {
     dynamic: [
-        ...uiMasks,
+        ...UIMasks,
         setCurrentView,
         navigate,
         fetch

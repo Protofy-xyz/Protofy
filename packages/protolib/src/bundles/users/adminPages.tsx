@@ -72,6 +72,7 @@ export default {
                                     checked={all}
                                     onCheckedChange={v => setAll(v)} size="$1"
                                 >
+                                    {/** @ts-ignore */}
                                     <Switch.Thumb animation="quick" backgroundColor={"$color9"} />
                                 </Switch>
                             </Tinted>
@@ -79,7 +80,6 @@ export default {
 
                         </XStack>
                     }
-                    integratedChat
                     enableAddToInitialData
                     entityName={'accounts'}
                     itemData={itemData}
@@ -106,6 +106,7 @@ export default {
                     customFields={{
                         type: {
                             component: (path, data, setData, mode) => mode == 'add' || mode == 'edit' ? <SelectList
+                                //@ts-ignore
                                 f={1}
                                 title={'type'}
                                 elements={groups?.data?.items.map(obj => obj.name).map(item => item)}

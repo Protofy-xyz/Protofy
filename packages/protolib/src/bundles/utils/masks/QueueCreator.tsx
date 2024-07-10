@@ -4,7 +4,7 @@ import { Cable } from 'lucide-react';
 import { useRef } from 'react';
 
 const QueueCreator = ({ node = {}, nodeData = {}, children }: any) => {
-    const paramsRef = useRef()
+    const paramsRef = useRef<any>()
     const color = useColorFromPalette(11)
 
     const params = [

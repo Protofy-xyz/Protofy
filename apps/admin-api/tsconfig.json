@@ -8,12 +8,12 @@
     "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file
     "resolveJsonModule": true,         // Allows importing .json files
     "outDir": "./dist",                // Redirect output structure to the directory
-    "baseUrl": "../../packages",
     "removeComments": true,            // Remove comments from the output files
     // "moduleResolution": "node",
     "typeRoots": [                     // Specifies a list of directories for type definitions
       "./node_modules/@types",
-      "../../node_modules/@types"
+      "../../node_modules/@types",
+      "../../packages/protolib/types"
     ],
     "lib": [                           // List of library files to be included in the compilation
       "es6",
@@ -22,27 +22,20 @@
     ],
 
     "paths": {
-      "protolib/*": ["./protolib/src/*"], 
-      "app/*": ["./app/*"] 
+      "app/*": ["../../packages/app/*"] 
     }
   },
   "include": [
     "./src/**/*.ts",
     "../../.types/*.ts",
-    "./protolib/src/adminapi/**/*",
-    "./protolib/src/api/**/*",
-    "./app/bundles/apiContext.ts",
-    "./app/bundles/adminapi.ts",
-    "./app/bundles/objects.ts",
-    "./app/bundles/library.ts",
-    "./app/bundles/storageProviders.ts",
-    "./app/conf.ts",
-    "./app/initialData.ts",
-    "./protolib/src/bundles/adminapi.ts",
-    "./protolib/src/bundles/library.ts",
-    "./protolib/src/bundles/apiContext.ts",
-    "./protolib/src/bundles/objects.ts",
-    "./app/bundles/custom/fsm/**/*",
+    "../../packages/app/bundles/apiContext.ts",
+    "../../packages/app/bundles/adminapi.ts",
+    "../../packages/app/bundles/objects.ts",
+    "../../packages/app/bundles/library.ts",
+    "../../packages/app/bundles/storageProviders.ts",
+    "../../packages/app/conf.ts",
+    "../../packages/app/initialData.ts",
+    "../../packages/app/bundles/custom/fsm/**/*",
   ],
   "exclude": [
     "node_modules"

@@ -1,4 +1,3 @@
-import device from "."
 
 class DeepSleep {
   run_duration

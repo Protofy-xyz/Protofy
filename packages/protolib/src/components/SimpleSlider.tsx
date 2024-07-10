@@ -1,6 +1,6 @@
 import { Stack, XStack, SliderProps, Slider, StackProps } from "tamagui";
 
-export function SimpleSlider({ showLabel=true, containerProps, defaultValue, children, ...props }: {showLabel?: boolean,containerProps: StackProps} & SliderProps) {
+export function SimpleSlider({ showLabel=true, containerProps, defaultValue, children, ...props }: {showLabel?: boolean,containerProps?: StackProps} & SliderProps) {
     return (
         <XStack f={1} {...containerProps}>
             <XStack f={1}>

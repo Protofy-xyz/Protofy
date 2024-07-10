@@ -2,14 +2,13 @@ const moduleAlias = require('module-alias')
 import path from 'path';
 
 moduleAlias.addAliases({
-  "app": path.resolve(__dirname, '../../../packages/app'),
-  "protolib": path.resolve(__dirname, '../../../packages/protolib/src')
+  "app": path.resolve(__dirname, '../../../packages/app')
 });
 
 import dotenv from 'dotenv'
 dotenv.config({ path: '../../.env' });
 import { getServiceToken } from 'protonode'
-import { setConfig, getLogger } from 'protobase';
+import { setConfig, getLogger, API } from 'protobase';
 import { getBaseConfig } from '@my/config'
 setConfig(getBaseConfig('api', process, getServiceToken()))
 require('events').EventEmitter.defaultMaxListeners = 100;
@@ -17,7 +16,6 @@ const logger = getLogger()
 import http from 'http';
 global.defaultRoute = '/api/v1'
 import app from './api'
-import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -29,6 +27,13 @@ server.listen(PORT, () => {
   logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
 });
 
+const generateEvent = async (event, token='') => {
+  try {
+      await API.post('/adminapi/v1/events?token='+token, event, undefined, true)
+  } catch(e) {
+      //console.error("Failed to send event: ", e)
+  }
+}
 
 generateEvent({
   path: 'services/'+serviceName+'/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online

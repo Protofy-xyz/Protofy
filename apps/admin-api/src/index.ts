@@ -3,12 +3,11 @@ import path from 'path'
 const moduleAlias = require('module-alias')
 
 moduleAlias.addAliases({
-  "app": path.resolve(__dirname, '../../../packages/app'),
-  "protolib": path.resolve(__dirname, '../../../packages/protolib/src')
+  "app": path.resolve(__dirname, '../../../packages/app')
 });
 
 import dotenv from 'dotenv'
-import { setConfig, getConfig, getLogger } from 'protobase';
+import { setConfig, getConfig, getLogger, API } from 'protobase';
 import { getBaseConfig, getConfigWithoutSecrets } from '@my/config'
 // get config vars
 dotenv.config({ path: '../../.env' });
@@ -22,9 +21,16 @@ import http from 'http';
 
 import chokidar from 'chokidar';
 import BundleContext from '../../../packages/app/bundles/adminApiContext'
-import { generateEvent } from 'app/bundles/library'
 import { startProxy } from './proxy';
 import { startMqtt } from './mqtt';
+
+const generateEvent = async (event, token='') => {
+  try {
+      await API.post('/adminapi/v1/events?token='+token, event, undefined, true)
+  } catch(e) {
+      //console.error("Failed to send event: ", e)
+  }
+}
 
 const config = getConfig()
 const logger = getLogger()

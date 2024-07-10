@@ -49,6 +49,7 @@ export const Popover = React.memo(function Popover({ children, menuPlacement = "
         y={0}
         o={1}
         bc={color}
+        //@ts-ignore
         animation={[
           'quick',
           {

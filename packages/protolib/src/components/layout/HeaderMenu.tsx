@@ -62,6 +62,7 @@ export const HeaderMenu = React.memo(function HeaderMenu({children, menuPlacemen
         x={0}
         y={0}
         o={1}
+        //@ts-ignore
         animation={[
           'quick',
           {

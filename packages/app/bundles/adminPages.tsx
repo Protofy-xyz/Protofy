@@ -1,4 +1,4 @@
-import { AdminPagesBundles } from 'protolib/bundles/AdminPages'
+import { AdminPagesBundles } from 'protolib/src/bundles/AdminPages'
 
 
 export default {

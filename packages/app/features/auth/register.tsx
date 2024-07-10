@@ -6,17 +6,17 @@ import Link from 'next/link'
 import { ProtofyLogoSVG, Separator, XStack, getValidation } from '@my/ui'
 import { useSearchParams, useRouter } from 'solito/navigation';
 import { getErrorMessage } from "@my/ui";
-import { useSession, useSessionContext } from 'protolib/lib/Session'
-import { Auth } from 'protolib/lib/Auth'
-import { Center } from 'protolib/components/Center'
-import { HorizontalBox } from 'protolib/components/HorizontalBox'
-import { Notice } from 'protolib/components/Notice'
-import { Section } from 'protolib/components/Section'
-import { SpotLight } from 'protolib/components/SpotLight'
-import { ElevatedArea } from 'protolib/components/ElevatedArea'
-import { BackgroundGradient } from 'protolib/components/BackgroundGradient'
-import { Page } from 'protolib/components/Page'
-import { LogoIcon } from 'protolib/components/LogoIcon'
+import { useSession, useSessionContext } from 'protolib'
+import { Auth } from 'protolib'
+import { Center } from 'protolib'
+import { HorizontalBox } from 'protolib'
+import { Notice } from 'protolib'
+import { Section } from 'protolib'
+import { SpotLight } from 'protolib'
+import { ElevatedArea } from 'protolib'
+import { BackgroundGradient } from 'protolib'
+import { Page } from 'protolib'
+import { LogoIcon } from 'protolib'
 
 export function SignInPage(props) {
   return (

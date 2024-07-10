@@ -9,7 +9,7 @@ const CreateComponent = ({ onCreate, buttonText, defaultInput="" }) => {
     const [inputValue, setInputValue] = useState(defaultInput);
     return <>
         <YStack f={1} jc='center' ai='center'>
-            <Input width={"300px"} mt={"$7"} value={inputValue} onChange={e => setInputValue(e.target.value)}></Input>
+            <Input width={"300px"} mt={"$7"} value={inputValue} onChange={(e: any) => setInputValue(e.target.value)}></Input>
             <Button onPress={() => onCreate(inputValue)} mt={"$6"} width={"150px"}>{buttonText}</Button>
         </YStack>
     </>

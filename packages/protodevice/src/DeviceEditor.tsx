@@ -8,8 +8,8 @@ import * as deviceFunctions from './device'
 import DeviceModal from "./DeviceModal";
 import { withTopics } from "react-topics";
 import { useThemeSetting } from '@tamagui/next-theme'
-import { useMqttState, useSubscription } from "protolib/lib/mqtt";
-import Flows from 'protolib/adminpanel/features/components/Flows'
+import { useMqttState, useSubscription } from "protolib";
+import Flows from 'protolib/src/adminpanel/features/components/Flows'
 
 // class ExternalApiConfig {
 //   config;

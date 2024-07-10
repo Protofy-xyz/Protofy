@@ -34,6 +34,7 @@ const BarChart = React.forwardRef(({
               </Paragraph>
             </YStack>
             <XStack marginRight={65} flex={1} alignItems="center">
+              {/**@ts-ignore */}
               <YStack
                 //@ts-ignore
                 bc={result.color}

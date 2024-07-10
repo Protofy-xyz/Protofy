@@ -2,7 +2,7 @@ import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize, SelectTriggerPr
 import { ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
 import { useEffect, useMemo, useState } from "react";
 
-export function SelectList({ title, value, elements, setValue, triggerProps, valueProps, rawDisplay, ...props }: SelectProps & { triggerProps?: SelectTriggerProps, rawDisplay?:boolean, title: any, elements: any[], value: any, setValue: any }) {
+export function SelectList({ title, value, elements, setValue, triggerProps, valueProps, rawDisplay, ...props }: SelectProps & { valueProps?:any,triggerProps?: SelectTriggerProps, rawDisplay?:boolean, title: any, elements: any[], value: any, setValue: any }) {
 
   let displaySelected = elements.find((element) => element.value && element.value === value)
   if(displaySelected) {
@@ -43,6 +43,7 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
             </Sheet.ScrollView>
           </Sheet.Frame>
           <Sheet.Overlay
+            //@ts-ignore
             animation="lazy"
             enterStyle={{ opacity: 0 }}
             exitStyle={{ opacity: 0 }}

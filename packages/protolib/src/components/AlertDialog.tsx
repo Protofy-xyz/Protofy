@@ -5,7 +5,8 @@ import { Tinted } from './Tinted'
 import { Notice } from './Notice'
 import Center from './Center'
 import dynamic from 'next/dynamic';
-const Chat = dynamic(() => import('protolib/components/Chat'), { ssr: false })
+//@ts-ignore
+const Chat = dynamic(() => import('protolib'), { ssr: false })
 
 export const AlertDialog = forwardRef(({
     showCancel,
@@ -50,6 +51,7 @@ export const AlertDialog = forwardRef(({
             <Dialog.Overlay />
             <Dialog.Content scale={1} p="$7" ai="flex-start" jc="flex-start" {...props}>
                 {integratedChat && openState && <Tinted>
+                    {/* @ts-ignore */}
                     <Chat tags={['doc', title]} zIndex={999999999} onScreen={openState} mode="popup"/>
                 </Tinted> }
                 <YStack f={1} width={"100%"}>

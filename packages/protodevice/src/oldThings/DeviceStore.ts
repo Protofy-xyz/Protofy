@@ -8,6 +8,7 @@ type DeviceStoreData = {
     setElectronicDevice: Function,
 }
 
+//@ts-ignore
 export const useDeviceStore = create<DeviceStoreData>((set,get) => ({
     devicesList: {},
     electronicDevice: "mydevice",

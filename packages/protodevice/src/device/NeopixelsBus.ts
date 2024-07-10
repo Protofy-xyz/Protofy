@@ -332,5 +332,5 @@ class NeopixelsBus {
 }
 
 export function neopixelsBus(name, numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11) {
-    return new NeopixelsBus(name, 'neopixelbus', numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11)
+    return new NeopixelsBus(name, 'neopixelbus', numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, undefined, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11)
 }

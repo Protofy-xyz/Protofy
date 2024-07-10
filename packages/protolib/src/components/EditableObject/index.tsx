@@ -68,6 +68,7 @@ export const FormGroup = ({ ele, title, children, icon, simple = false, path }) 
                 <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes(name) ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
                     {({ open }) => (
                         <>
+                            { /* @ts-ignore */}
                             <Square o={0.8} animation="quick" rotate={open ? '180deg' : '0deg'} mr={"$1.5"}>
                                 <ChevronDown size="$1" />
                             </Square>
@@ -123,8 +124,8 @@ export const DeleteButton = ({ mode, onPress }) => (
 
 export type EditableObjectProps = {
     initialData?: any,
-    sourceUrl: string,
-    onSave: Function,
+    sourceUrl?: string,
+    onSave?: Function,
     model: any,
     mode?: 'add' | 'edit' | 'view' | 'preview',
     icons?: any,
@@ -143,7 +144,7 @@ export type EditableObjectProps = {
     onDelete?: Function,
     deleteable?: Function,
     autoWidth?: Boolean,
-    extraMenuActions: any[],
+    extraMenuActions?: any[],
     data?: any,
     setData?: Function,
     error?: any,
@@ -153,7 +154,7 @@ export type EditableObjectProps = {
     disableAutoChangeMode?: Boolean
 }
 
-export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, URLTransform = (url) => url, disableAutoChangeMode = false, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave = (x, y) =>{}, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, URLTransform = (url) => url, disableAutoChangeMode = false, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [prevCurrentMode, setPrevCurrentMode] = useState('')

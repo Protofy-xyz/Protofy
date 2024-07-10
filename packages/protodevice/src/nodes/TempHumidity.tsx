@@ -1,7 +1,7 @@
 import React from "react";
 import { Node, Field, NodeParams } from 'protoflow';
 import { getColor } from ".";
-// import { Node, Field, HandleOutput, NodeParams } from '../../flowslib';
+// import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
 // import { pinTable } from '../../../lib/device/Device'
 
 const TempHumidity = ({ node = {}, nodeData = {}, children, color }: any) => {

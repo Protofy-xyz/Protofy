@@ -1,6 +1,6 @@
-import EventsPage from 'protolib/bundles/events/adminPages'
+import EventsPage from 'protolib/src/bundles/events/adminPages'
 import Head from 'next/head'
-import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
+import { useRedirectToEnviron } from 'protolib'
 import { SiteConfig } from 'app/conf'
 
 export default function Page(props:any) {

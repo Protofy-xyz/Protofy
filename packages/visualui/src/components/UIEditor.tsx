@@ -6,7 +6,7 @@ import { RenderNode } from './RenderNode';
 import systemPalette from '../palettes';
 import EditorLayout from "./EditorLayout";
 import { Sidebar } from "./Sidebar";
-import { MainPanel } from "protolib/components/MainPanel";
+import { MainPanel } from "protolib";
 import Monaco from "./Monaco";
 import { Plus, LogOut, Network, Workflow, SlidersHorizontal, Code, Layers as Layers3, Pencil, Save, X, PanelRight, Monitor, Tablet, Smartphone, SunMoon, Sun, Moon } from "lucide-react";
 import { getMissingJsxImports, getSource } from "../utils/utils";
@@ -31,7 +31,6 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const enableClickEventsRef = useRef();
     const [codeEditorVisible, setCodeEditorVisible] = useState(false)
     const [currentPageContent, setCurrentPageContent] = useState("")
-    const [monacoHasChanges, setMonacoHasChanges] = useState(false)
     const [flowViewMode, setFlowViewMode] = useState("undefined")
     const [isSideBarVisible, setIsSideBarVisible] = useState(false)
     const [customizeVisible, setCustomizeVisible] = useState(true);
@@ -49,7 +48,6 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     // const resolvedTheme = 'dark'
 
     const { publish } = topics;
-    const { data } = topics;
     const [openPanel, setOpenPanel] = React.useState(false);
 
     const isViewModePreview = flowViewMode == 'preview'
@@ -66,8 +64,8 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     }, [])
 
     const allPalettes = {
-        atoms: { ...systemPalette.atoms, ...userPalettes?.atoms },
-        molecules: { ...userPalettes?.molecules },
+        //@ts-ignore
+        atoms: { ...systemPalette.atoms, ...userPalettes?.atoms }, molecules: { ...userPalettes?.molecules },
     }
     const allPalettesAtoms = allPalettes.atoms
 
@@ -145,11 +143,6 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         monacoRef.current = code;
     }
 
-    const onCancelMonaco = () => {
-        monacoRef.current = currentPageContent;
-        setMonacoHasChanges(false)
-    }
-
     const onCancelEdit = () => {
         document.location.href = document.location.href.split('?')[0]
     }
@@ -175,6 +168,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                         </Button>
                     </XStack>
                     <XStack padding="10px" display={['flow-preview', 'preview'].includes(flowViewMode) ? 'flex' : 'none'} >
+                        {/* @ts-ignore */}
                         <ToggleGroup borderWidth="$0" theme={resolvedTheme == 'dark' ? 'dark' : 'light'} type="single" defaultValue="preview" disableDeactivation>
                             <ToggleGroup.Item
                                 hoverStyle={{ backgroundColor: flowViewMode == "flow-preview" ? useUITheme('interactiveHoverColorDarken') : useUITheme('interactiveHoverColor') }}

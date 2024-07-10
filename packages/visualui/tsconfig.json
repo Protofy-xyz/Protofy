@@ -22,7 +22,7 @@
         "esnext.asynciterable"
       ],
       "paths": {
-        "protolib/*": ["../protolib/src/**/*.ts", "../protolib/src/**/*.tsx"]
+        "protolib/*": ["../protolib/*"]
       }
     },
     "include": [

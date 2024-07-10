@@ -1,6 +1,6 @@
-import { NextLink } from 'protolib/components/NextLink'
-import { Logo } from 'protolib/components/Logo'
-import { Footer as ProtoFooter, FooterElement } from 'protolib/components/layout/Footer'
+import { NextLink } from 'protolib'
+import { Logo } from 'protolib'
+import { Footer as ProtoFooter, FooterElement } from 'protolib'
 import React from 'react'
 import { Paragraph } from 'tamagui'
 

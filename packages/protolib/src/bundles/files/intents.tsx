@@ -90,6 +90,7 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
       {<IconContainer disabled={state == 'unavailable'} onPress={_onSave}>
         {state != 'error' && state !== 'loading' && <Save color="var(--color)" size={"$1"} />}
         {state == 'error' && <Ban color="var(--red10)" size={"$1"} />}
+        {/*@ts-ignore*/}
         {state == "loading" && <Spinner color={"$color"} opacity={0.5} size={17} />}
       </IconContainer>}
     </XStack>

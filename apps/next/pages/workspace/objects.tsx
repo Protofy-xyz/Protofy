@@ -1,6 +1,6 @@
-import ObjectsPage from 'protolib/bundles/objects/adminPages'
+import ObjectsPage from 'protolib/src/bundles/objects/adminPages'
 import Head from 'next/head'
-import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
+import { useRedirectToEnviron } from 'protolib'
 import { SiteConfig } from 'app/conf'
 
 export default function Page(props:any) {

@@ -1,5 +1,5 @@
-import {IntentType} from 'protolib/lib/Intent'
-import {processFilesIntent} from 'protolib/bundles/files/intents'
+import {IntentType} from 'protolib'
+import {processFilesIntent} from 'protolib/src/bundles/files/intents'
 import { useMemo } from 'react';
 
 export const useIntent = (intent: IntentType) => {

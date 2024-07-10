@@ -21,6 +21,7 @@ const WorkspaceSelector = () => {
   return settings.workspace ? <SelectList
     triggerProps={{ o: 0.8, bc: "transparent", bw: 0 }}
     valueProps={{ o: 0.8 }}
+    //@ts-ignore
     f={1}
     title={"workspaces"}
     value={settings.workspace}

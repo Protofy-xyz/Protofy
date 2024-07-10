@@ -1,5 +1,5 @@
 import React from "react";
-import  {Node, Field, HandleOutput, NodeParams } from '../../flowslib';
+import  {Node, Field, NodeParams } from 'protoflow';
 
 const OutputPin = (node:any={}, nodeData={}, children) => {
     const nodeParams: Field[] = [

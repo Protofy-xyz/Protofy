@@ -56,6 +56,7 @@ export const Logo = React.forwardRef(
       >
         {animated && (
           <Circle
+            //@ts-ignore
             animation="quick"
             position="absolute"
             top={0}

@@ -1,6 +1,6 @@
-import GroupsPage from 'protolib/bundles/groups/adminPages'
+import GroupsPage from 'protolib/src/bundles/groups/adminPages'
 import Head from 'next/head'
-import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
+import { useRedirectToEnviron } from 'protolib'
 import { SiteConfig } from 'app/conf'
 
 export default function Page(props:any) {

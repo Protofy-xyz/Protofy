@@ -5,7 +5,7 @@ import { useRef } from 'react'
 import { DecorationProps, DimensionProps, LayoutProps, ThemeProps } from './PropsLists';
 
 const ButtonSimpleMask = ({ node = {}, nodeData = {}, children }: any) => {
-    const paramsRef = useRef()
+    const paramsRef = useRef<HTMLDivElement>()
     const color = useColorFromPalette(55)
 
     const childs = [

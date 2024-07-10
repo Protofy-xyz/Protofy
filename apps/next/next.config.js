@@ -54,6 +54,7 @@ module.exports = function () {
     ],
     experimental: {
       scrollRestoration: true,
+      esmExternals: 'loose',
     },
     webpack: (config, options) => {
       config.plugins.push(

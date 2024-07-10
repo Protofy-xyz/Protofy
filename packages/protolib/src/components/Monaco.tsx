@@ -7,6 +7,7 @@ import { useTint } from '../lib/Tints'
 import { Tinted } from './Tinted'
 
 type Props = {
+    darkMode?: boolean,
     sourceCode: string,
     onChange?: any,
     onSave?: any,

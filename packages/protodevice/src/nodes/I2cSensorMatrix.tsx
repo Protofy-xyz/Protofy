@@ -1,6 +1,6 @@
 import React from "react";
 import Select from 'react-select';
-import { Node, Field, NodeParams } from '../../flowslib';
+import { Node, Field, NodeParams } from 'protoflow';
 import NodeBus, { cleanName, generateTopic } from "../NodeBus";
 import { pinTable } from '../../../lib/device/Device'
 

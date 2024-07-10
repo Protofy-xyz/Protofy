@@ -25,10 +25,10 @@ import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
 import { setConfig, initSchemaSystem } from 'protobase';
 import { getBaseConfig } from '@my/config'
-import { useSession } from 'protolib/lib/Session'
-import {AppConfContext} from 'protolib/providers/AppConf'
-import { getBrokerUrl} from 'protolib/lib/Broker'
-import {Connector } from 'protolib/lib/mqtt'
+import { useSession } from 'protolib'
+import {AppConfContext} from 'protolib'
+import { getBrokerUrl} from 'protolib'
+import {Connector } from 'protolib'
 setConfig(getBaseConfig("electron", process))
 initSchemaSystem()
 
