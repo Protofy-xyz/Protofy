@@ -9,7 +9,7 @@ type MainButtonProps = {
   children: any
 }
 
-const MainButton = React.forwardRef(({ buttonProps = {}, buttonTextProps = {}, color = undefined, textColor = undefined,  children }: MainButtonProps, ref: any) => (
+export const MainButton = React.forwardRef(({ buttonProps = {}, buttonTextProps = {}, color = undefined, textColor = undefined,  children }: MainButtonProps, ref: any) => (
   <Button
     ref={ref}
     // layout shifts...
