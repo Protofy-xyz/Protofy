@@ -40,7 +40,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     constructor(data: any, schema: ZodObject<any>, session?: SessionDataType, modelName?:string) {
         this.data = data;
         this.session = session ?? createSession();
-        this.schema = schema
+        this.schema = schema.extend({}) // create a copy to avoid sharing schema with other instances
         this.objectSchema = ProtoSchema.load(this.schema)
         this.modelName = modelName?.toLowerCase() ?? 'unknown'
         this.idField = this.objectSchema.is('id').getLast('id') ?? 'id'
