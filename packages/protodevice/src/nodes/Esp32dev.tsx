@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { PORT_TYPES, Node, FlowStoreContext } from 'protoflow';
 import { Handle, Position, useEdges } from "reactflow";
-import esp32c4 from '../assets/esp32c4.png';
+
 import { getColor } from ".";
 
 const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId))
@@ -66,7 +66,7 @@ const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
     return (
         <Node output={false} skipCustom={true} node={node} color={color} isPreview={!id} title='ESP32' id={id} margin='200px' >
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-                <img src={esp32c4.src} style={{ width: "100%" }} />
+                <img src={'/images/device/esp32c4.png'} style={{ width: "100%" }} />
             </div>
             {Array(ports.length).fill(1).map((x, i) => {
                 if (["I", "O", "IO"].includes(ports[i].type)) {                    

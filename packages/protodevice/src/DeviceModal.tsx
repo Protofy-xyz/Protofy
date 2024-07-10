@@ -1,10 +1,4 @@
 import React from "react";
-import compiling from './assets/protofitoCompiling.gif';
-import compilingW from './assets/protofitoCompilingW.gif';
-import loading from './assets/protofitoLoading.gif';
-import loadingW from './assets/protofitoLoadingW.gif';
-import dancing from './assets/protofitoDancing.gif';
-import dancingW from './assets/protofitoDancingW.gif';
 import { AlertDialog } from 'protolib/components/AlertDialog'
 import { Tinted } from 'protolib/components/Tinted'
 import { useThemeName } from 'tamagui'
@@ -74,14 +68,14 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
 
     const images = {
         "light": {
-            "compile": compiling.src,
-            "loading": loading.src,
-            "idle": dancing.src
+            "compile": '/images/device/protofitoCompiling.gif',
+            "loading": '/images/device/protofitoLoading.gif',
+            "idle": '/images/device/protofitoDancing.gif'
         },
         "dark": {
-            "compile": compilingW.src,
-            "loading": loadingW.src,
-            "idle": dancingW.src
+            "compile": '/images/device/protofitoCompilingW.gif',
+            "loading": '/images/device/protofitoLoadingW.gif',
+            "idle": '/images/device/protofitoDancingW.gif'
         }
     }
 
