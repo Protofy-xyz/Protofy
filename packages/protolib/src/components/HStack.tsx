@@ -1,7 +1,7 @@
 import React from "react"
 import { StackProps, XStack } from "tamagui"
 
-const HStack = React.forwardRef((props: StackProps, ref:any) => (
+export const HStack = React.forwardRef((props: StackProps, ref:any) => (
     //@ts-ignore
     <XStack ref={ref} {...props}>
         {props.children}
