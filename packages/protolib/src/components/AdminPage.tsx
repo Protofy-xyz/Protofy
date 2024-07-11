@@ -1,4 +1,4 @@
-import { useSession } from '../lib/Session';
+import { useSession, useUserSettings, useWorkspaces } from '../lib/Session';
 import { Page } from './Page';
 import { Tinted } from './Tinted';
 import { usePrompt } from '../context/PromptAtom';
@@ -9,6 +9,7 @@ import { forwardRef, useState } from 'react';
 import { AppState } from './AdminPanel'
 import { useAtom } from 'jotai';
 import { SiteConfig } from 'app/conf'
+import workspaces from 'app/bundles/workspaces'
 
 const Chat = dynamic(() => import('./Chat'), { ssr: false })
 
@@ -19,7 +20,13 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   const [appState] = useAtom(AppState)
   const projectName = SiteConfig.projectName
 
-  const settingsAssistant = SiteConfig.assistant
+  const [settings] = useUserSettings()
+  const userSpaces = useWorkspaces()
+
+  const currentWorkspace = settings && settings.workspace ? settings.workspace : userSpaces[0]
+  const workspace = typeof workspaces[currentWorkspace] === 'function' ? workspaces[currentWorkspace]({ pages: [] }) : workspaces[currentWorkspace]
+
+  const settingsAssistant = workspace.assistant
   const settingsAssistantEnabled = settingsAssistant === undefined ? true : settingsAssistant
 
   usePrompt(() => `The user is browsing an admin page in the admin panel. The title of the admin page is: "${title}"`)

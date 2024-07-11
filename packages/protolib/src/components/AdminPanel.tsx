@@ -78,6 +78,8 @@ export const AdminPanel = ({ children }) => {
 
 
   const workspaceData = typeof Workspaces[currentWorkspace] === 'function' ? Workspaces[currentWorkspace]({pages: pages ?? []}) : Workspaces[currentWorkspace]
+  const settingsLogs = workspaceData.assistant
+  const settingsLogsEnabled = settingsLogs === undefined ? true : settingsLogs
 
   // console.log('userSpaces: ', userSpaces, 'current Workspace: ', currentWorkspace)
   return rightPanelSize && <MainPanel borderLess={true} rightPanelSize={rightPanelSize} setRightPanelSize={setRightPanelSize} rightPanelStyle={{ marginRight: '20px', height: 'calc(100vh - 85px)', marginTop: '68px', backgroundColor: 'transparent' }} rightPanelVisible={appState.logsPanelOpened} rightPanelResizable={true} centerPanelContent={Workspaces[currentWorkspace]
@@ -86,7 +88,7 @@ export const AdminPanel = ({ children }) => {
         <>
           <XStack ai="center">
             <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
-            <InteractiveIcon onPress={() => setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })} IconColor="var(--color)" Icon={Activity}></InteractiveIcon>
+            {settingsLogsEnabled ?  <InteractiveIcon onPress={() => setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })} IconColor="var(--color)" Icon={Activity}></InteractiveIcon> : null}
           </XStack>
         </>
       }

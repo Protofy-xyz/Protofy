@@ -4,6 +4,8 @@ export default (pages) => {
     return {
         "default": "/workspace/pages",
         "label": "Workspace",
+        "assistant": true,
+        "logs": false,
         "menu": {
             "System": [
                 { "name": "Users", "icon": "users", "type": "users", "path": "/" },
