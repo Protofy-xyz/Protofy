@@ -166,10 +166,10 @@ export const Sidebar = ({
                     borderBottomWidth="$0.25"
                     borderRadius={0}
                 >
-                    <Tabs.Tab unstyled value="atoms" onInteraction={handleOnInteraction}>
+                    <Tabs.Tab unstyled value="atoms" onInteraction={handleOnInteraction} padding="$3">
                         <Text fontWeight={"300"} color={textColor} style={{ fontSize: "14px" }}>Atoms</Text>
                     </Tabs.Tab>
-                    <Tabs.Tab unstyled value="molecules" onInteraction={handleOnInteraction}>
+                    <Tabs.Tab unstyled value="molecules" onInteraction={handleOnInteraction} padding="$3">
                         <Text fontWeight={"300"} color={textColor} style={{ fontSize: "14px" }}>Molecules</Text>
                     </Tabs.Tab>
                 </Tabs.List>
