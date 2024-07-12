@@ -9,7 +9,7 @@ import { forwardRef, useState } from 'react';
 import { AppState } from './AdminPanel'
 import { useAtom } from 'jotai';
 import { SiteConfig } from 'app/conf'
-import workspaces from 'app/bundles/workspaces'
+import Workspaces from 'app/bundles/workspaces'
 
 const Chat = dynamic(() => import('./Chat'), { ssr: false })
 
@@ -24,9 +24,9 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   const userSpaces = useWorkspaces()
 
   const currentWorkspace = settings && settings.workspace ? settings.workspace : userSpaces[0]
-  const workspace = typeof workspaces[currentWorkspace] === 'function' ? workspaces[currentWorkspace]({ pages: [] }) : workspaces[currentWorkspace]
+  const workspaceData = typeof Workspaces[currentWorkspace] === 'function' ? Workspaces[currentWorkspace]({ pages: [] }) : Workspaces[currentWorkspace]
 
-  const settingsAssistant = workspace.assistant
+  const settingsAssistant = workspaceData?.assistant
   const settingsAssistantEnabled = settingsAssistant === undefined ? true : settingsAssistant
 
   usePrompt(() => `The user is browsing an admin page in the admin panel. The title of the admin page is: "${title}"`)

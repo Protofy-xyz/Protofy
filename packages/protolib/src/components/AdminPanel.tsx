@@ -78,7 +78,7 @@ export const AdminPanel = ({ children }) => {
 
 
   const workspaceData = typeof Workspaces[currentWorkspace] === 'function' ? Workspaces[currentWorkspace]({ pages: pages ?? [] }) : Workspaces[currentWorkspace]
-  const settingsLogs = workspaceData.logs
+  const settingsLogs = workspaceData?.logs
   const settingsLogsEnabled = settingsLogs === undefined ? true : settingsLogs
 
   // console.log('userSpaces: ', userSpaces, 'current Workspace: ', currentWorkspace)
