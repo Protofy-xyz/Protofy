@@ -206,18 +206,21 @@ const Block = (node) => {
                         {connectedEdges.length > 0 && <div style={{ left: (nodeFontSize / 2 - 1) + 'px', position: 'absolute', top: (pos - (nodeFontSize / 4)) + 'px', width: nodeFontSize + 'px', height: (nodeFontSize / 2) + 'px', backgroundColor: typeConf[type].color }} />}
                         {isSwitchVisible && isAddVisible && <div style={{ left: - nodeFontSize + 'px', position: 'absolute', top: switchPos + 'px', width: nodeFontSize + 'px', height: (nodeFontSize / 2) + 'px', backgroundColor: typeConf[type].color }} />}
                         <FlowPort key={i} id={id} type='input' label='' style={{ left: isEmpty ? '' : (nodeFontSize) + 'px', top: pos + 'px' }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
+                        {/*@ts-ignore*/}
                         {isFirst && blockEdgesPos.includes(i) ? <Button
                             {...buttonStyle}
                             onPress={() => onAddConnection(i)}
                             top={singleNodeOffset}
                             icon={<Plus color={typeConf[type].color} />}
                         /> : null}
+                        {/*@ts-ignore*/}
                         {isAddVisible ? <Button
                             {...buttonStyle}
                             onPress={() => onAddConnection(i + 1)}
                             top={switchPos - 16}
                             icon={<Plus color={typeConf[type].color} />}
                         /> : null}
+                        {/*@ts-ignore*/}
                         {isSwitchVisible && isAddVisible ? <Button
                             {...buttonStyle}
                             onPress={() => onSwitchConnection(i + 1)}

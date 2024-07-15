@@ -9,6 +9,7 @@ const BarButton = ({ icon = undefined, onPress, text = undefined, buttonProps = 
         <UIMenu
             trigger={
                 <Button
+                    //@ts-ignore
                     animation={"bouncy"}
                     chromeless
                     paddingHorizontal="$3"

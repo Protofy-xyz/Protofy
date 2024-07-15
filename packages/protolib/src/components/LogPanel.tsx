@@ -22,7 +22,7 @@ const types = {
     60: { name: "FATAL", color: "$red10", icon: Bomb }
 }
 
-const MessageList = React.memo(({ data, topic }) => {
+const MessageList = React.memo(({ data, topic }: any) => {
     const from = topic.split("/")[1]
     const type = topic.split("/")[2]
     const Icon = types[type]?.icon
@@ -59,12 +59,13 @@ const MessageList = React.memo(({ data, topic }) => {
 })
 
 export const LogPanel = ({AppState}) => {
-    const [appState, setAppState] = useAtom(AppState)
-    const maxLog = 1000
+    const [state, setAppState] = useAtom<any>(AppState)
+    const appState: any = state
 
     const {messages, setMessages} = useSubscription('logs/#')
     const [filteredMessages, setFilteredMessages] = useState([])
     const [search, setSearch] = useState('')
+    const initialLevels = ['info', 'warn', 'error', 'fatal']
 
     useEffect(() => {
         setFilteredMessages(messages.filter((m: any) => {
@@ -155,6 +156,7 @@ export const LogPanel = ({AppState}) => {
             {filteredMessages.map((m, i) => {
                 return <XStack bc="transparent" hoverStyle={hoverStyle} key={i} btw={0} bbw={1} boc={"$color4"}>
                     <Tinted>
+                        {/* @ts-ignore */}
                         <MessageList data={m.message} topic={m.topic} />
                     </Tinted>
                 </XStack>

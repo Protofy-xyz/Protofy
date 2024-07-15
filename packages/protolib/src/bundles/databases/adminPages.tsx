@@ -186,7 +186,6 @@ export default {
 
             return (<AdminPage title={currentDB} workspace={workspace} pageSession={pageSession}>
                 {pathname ? <DataView
-                    integratedChat
                     key={renew}
                     sourceUrl={'/adminapi/v1/databases/' + currentDB + (env ? '?env=' + env : '')}
                     initialItems={content}

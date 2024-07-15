@@ -136,6 +136,7 @@ class Msa3xx {
         componentObjects.push({
             name: "external_components",
             config: {
+                //@ts-ignore
                 source: "github://pr#6795",
                 refresh: "10s",
                 components: ["msa3xx"]

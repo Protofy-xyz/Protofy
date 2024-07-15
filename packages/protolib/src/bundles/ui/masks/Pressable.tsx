@@ -57,7 +57,7 @@ const PressableMask = ({ node = {}, nodeData = {}, children }: any) => {
             </div>
             <div>
                 {
-                    paramsRef?.current?.clientHeight ? <FallbackPortList node={node} fallbacks={fallbacks} startPosX={paramsRef?.current?.clientHeight} /> : null
+                    (paramsRef.current as HTMLDivElement)?.clientHeight ? <FallbackPortList node={node} fallbacks={fallbacks} startPosX={(paramsRef.current as HTMLDivElement)?.clientHeight} /> : null
                 }
             </div>
             <NodeParams id={node.id} params={childs} />

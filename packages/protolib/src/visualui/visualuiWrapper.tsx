@@ -46,6 +46,7 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
                         innerRef={connect}
                         html={props.children.toString()}
                         onKeyDown={e => {
+                            //@ts-ignore
                             if (["Backspace", "Delete"].includes(e.code) && e.target?.innerText == "") {
                                 actions.delete(id)
                             }

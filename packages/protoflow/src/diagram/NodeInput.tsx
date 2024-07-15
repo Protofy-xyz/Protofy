@@ -2,7 +2,7 @@ import React from 'react';
 import useTheme from './Theme';
 import { Input } from 'protolib/components/Input'
 
-const NodeInput = React.forwardRef((props:any, ref) => {
+const NodeInput = React.forwardRef((props:any, ref:any) => {
   const nodeBorderColor = useTheme('nodeBorderColor')
   return (
     <Input
@@ -25,11 +25,11 @@ const NodeInput = React.forwardRef((props:any, ref) => {
         cursor: props.readOnly ? 'grab' : 'text',
         ...props.style
       }}
-      onFocus={e => {
+      onFocus={(e:any) => {
         e.currentTarget.style.boxShadow = "inset 0px 0px 0px 2px " + nodeBorderColor
         props.onFocus ? props.onFocus(e) : null
       }}
-      onBlur={e => {
+      onBlur={(e:any) => {
         e.currentTarget.style.boxShadow = ""
         props.onBlur ? props.onBlur(e) : null
       }}

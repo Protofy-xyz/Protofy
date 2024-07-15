@@ -17,6 +17,7 @@ const TabsRovingIndicator = ({ active, ...props }: { active?: boolean } & StackP
             borderBottomWidth="$1.5"
             borderRadius="$0"
             borderBottomColor={interactiveColor}
+            //@ts-ignore
             animation="50ms"
             enterStyle={{
                 opacity: 0,

@@ -107,6 +107,7 @@ function DayPicker() {
 
   return (
     <View
+      //@ts-ignore
       animation="medium"
       enterStyle={{
         opacity: 0,

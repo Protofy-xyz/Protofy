@@ -21,7 +21,6 @@ export default {
     
     return (<AdminPage title="Device Cores" pageSession={pageSession}>
       <DataView
-        integratedChat
         itemData={itemData}
         rowIcon={Cpu}
         sourceUrl={sourceUrl}

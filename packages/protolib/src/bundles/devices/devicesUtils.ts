@@ -20,7 +20,7 @@ const resetTransport = async (transport: Transport) => {
 export const connectSerialPort = async () => {
     let isError = true
     try {
-        port = await navigator.serial.requestPort();
+        port = await (navigator as any).serial.requestPort();
     } catch (err: any) {
         if ((err as DOMException).name === "NotFoundError") {
             //setConfigError(state => ('Please select a port.'))
@@ -45,7 +45,6 @@ export const connectSerialPort = async () => {
 
 export const flash = async (cb, deviceName, compileSessionId) => {
     cb({ message: 'Please hold "Boot" button of your ESP32 board.' })
-    let build: Build | undefined;
     let chipFamily: Build["chipFamily"];
     const transport = new Transport(port);
     const esploader = new ESPLoader(
@@ -79,7 +78,7 @@ export const flash = async (cb, deviceName, compileSessionId) => {
     }
     cb({ message: `Initialized. Found ${chipFamily}`, details: { done: true } })
 
-    build = manifest.builds.find((b) => b.chipFamily === chipFamily);
+    let build = manifest.builds.find((b) => b.chipFamily === chipFamily);
 
     if (!build) {
         cb({ message: `Your ${chipFamily} board is not supported.`, details: { error: FlashError.NOT_SUPPORTED, details: chipFamily } })

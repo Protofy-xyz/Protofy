@@ -13,7 +13,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
     const [first, setFirst] = useState(true)
     const [lastMessage, setLastMessage] = useAtom(PromptResponseAtom)
 
-    const chatContainer = useRef()
+    const chatContainer = useRef<any>()
     const scrollToBottom = () => {
         const chatContainer = document.querySelector('.rcw-messages-container');
         if (chatContainer) {
@@ -25,7 +25,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
     //     console.log(mode, 'LastMessage: "' + lastMessage + '"')
     // }, [lastMessage])
 
-    useClickAnyWhere((e) => {
+    useClickAnyWhere((e: any) => {
         if (e.target.classList.contains('rcw-input')) {
             e.target.focus()
         }
@@ -81,9 +81,9 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
     useEffect(() => {
         // Configuración del MutationObserver
         const mutationObserver = new MutationObserver(mutations => {
-            mutations.forEach(mutation => {
+            mutations.forEach((mutation: any) => {
                 if (mutation.type === 'childList' && mutation.addedNodes.length) {
-                    mutation.addedNodes.forEach(node => {
+                    mutation.addedNodes.forEach((node: any) => {
                         if (node.nodeType === Node.ELEMENT_NODE && (node.classList.contains('rcw-message') || node.classList.contains('rcw-conversation-container'))) {
                             const images = node.getElementsByClassName("rcw-message-img");
                             for (let img of images) {
@@ -178,11 +178,12 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.addEventListener('change', (event) => {
+        fileInput.addEventListener('change', (event: any) => {
             var file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
+                    //@ts-ignore
                     setFileInputData({ content: e.target.result, filename: file.name });
                 };
                 reader.readAsDataURL(file);
@@ -219,11 +220,17 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
     const getChatIcon = (handleToggle) => (
         <Button
             onPress={handleToggle}
+            //@ts-ignore
             animation="lazy"
             alignSelf='flex-end' marginTop='40px' hoverStyle={{ backgroundColor: "$color7" }} backgroundColor={"$color7"} size={"$5"} right="$5" bottom="$5" circular>
             {
                 isChatOpen
-                    ? <XStack animation='bouncy' enterStyle={{ rotate: '-90deg' }}><X size={"30px"} fillOpacity={0} color='white'></X></XStack>
+                    ? <XStack 
+                        //@ts-ignore
+                        animation='bouncy' 
+                        enterStyle={{ rotate: '-90deg' }}>
+                            <X size={"30px"} fillOpacity={0} color='white'></X>
+                    </XStack>
                     : <Sparkles fillOpacity={0} color='white'></Sparkles>
             }
         </Button>
