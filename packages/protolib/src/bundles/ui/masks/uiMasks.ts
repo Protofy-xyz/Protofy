@@ -1,4 +1,5 @@
-[
+
+export const UIMasks = [
     {
         "id": "ProtoView",
         "title": "ProtoView",
