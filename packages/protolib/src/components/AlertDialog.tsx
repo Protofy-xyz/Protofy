@@ -6,7 +6,7 @@ import { Notice } from './Notice'
 import Center from './Center'
 import dynamic from 'next/dynamic';
 //@ts-ignore
-const Chat = dynamic(() => import('protolib'), { ssr: false })
+const Chat = dynamic(() => import('protolib/components/Chat'), { ssr: false })
 
 export const AlertDialog = forwardRef(({
     showCancel,
