@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { FilePlus } from 'lucide-react';
+import { FilePlus } from '@tamagui/lucide-icons';
 
 const AppendToFile = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(7);  // Un color que sugiere adición o crecimiento

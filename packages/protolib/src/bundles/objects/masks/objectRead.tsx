@@ -1,5 +1,5 @@
 import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, getFieldValue } from 'protoflow';
-import { Search } from 'lucide-react';
+import { Search } from '@tamagui/lucide-icons';
 import { useEffect, useState } from 'react';
 import { API } from 'protobase'
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'

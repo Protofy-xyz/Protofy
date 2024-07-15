@@ -1,6 +1,6 @@
 import { Node, NodeOutput, FallbackPort, NodeParams, filterConnection, getId, connectNodes, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { MessageCircle } from 'lucide-react'
+import { MessageCircle } from '@tamagui/lucide-icons'
 
 const ChatGPTPrompt = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(11)

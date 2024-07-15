@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
 import { DataOutput } from '../lib/types';
-import { ListTodo } from 'lucide-react';
+import { ListTodo } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 const TryStatement = (node) => {

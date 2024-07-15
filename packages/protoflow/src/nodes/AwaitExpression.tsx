@@ -1,7 +1,7 @@
 import React from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { Timer } from 'lucide-react';
+import { Timer } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 const AwaitExpression =(node) => {

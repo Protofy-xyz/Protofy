@@ -5,7 +5,7 @@ import {
     AlignStartVertical, AlignEndVertical, AlignCenterVertical, StretchVertical,
     ArrowRightFromLine, ArrowLeftFromLine, ArrowDownFromLine, ArrowUpFromLine,
     AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd, AlignVerticalSpaceAround, AlignVerticalSpaceBetween
-} from 'lucide-react';
+} from '@tamagui/lucide-icons';
 import { CustomField } from '.';
 import useTheme from '../diagram/Theme';
 import { getDataFromField, getFieldValue } from '../utils';

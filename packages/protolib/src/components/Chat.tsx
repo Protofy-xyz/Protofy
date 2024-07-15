@@ -5,7 +5,7 @@ import { Tinted } from './Tinted';
 import { API } from 'protobase';
 import { PromptAtom, PromptResponseAtom } from '../context/PromptAtom';
 import { useTimeout, useWindowSize, useClickAnyWhere } from 'usehooks-ts';
-import { Paperclip, Sparkles, X } from 'lucide-react';
+import { Paperclip, Sparkles, X } from '@tamagui/lucide-icons';
 import ReactDOM from 'react-dom/client';
 import { useAtom } from 'jotai';
 import { Button, XStack } from '@my/ui';

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Node, CustomFieldsList, getFieldValue } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Database } from 'lucide-react';
+import { Database } from '@tamagui/lucide-icons';
 import { API } from 'protobase'
 
 const ObjectFormMask = ({ node = {}, nodeData = {} }: any) => {

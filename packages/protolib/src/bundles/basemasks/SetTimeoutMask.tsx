@@ -1,6 +1,6 @@
 import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback, getFieldValue } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Timer } from 'lucide-react';
+import { Timer } from '@tamagui/lucide-icons';
 
 const SetTimeoutMask = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(55)

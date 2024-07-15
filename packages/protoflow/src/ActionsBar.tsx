@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { FlowStoreContext } from "./store/FlowsStore";
-import { Save, Code, RefreshCcw, AlertTriangle } from 'lucide-react';
+import { Save, Code, RefreshCcw, AlertTriangle } from '@tamagui/lucide-icons';
 import layouts from "./diagram/layouts";
 
 export type Props = {

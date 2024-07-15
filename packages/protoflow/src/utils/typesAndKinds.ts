@@ -1,4 +1,4 @@
-import { Type, Hash, ToggleLeft, Braces, Code } from 'lucide-react'
+import { Type, Hash, ToggleLeft, Braces, Code } from '@tamagui/lucide-icons'
 
 const types = {
     "string": {

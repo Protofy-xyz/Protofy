@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Text } from 'lucide-react';
+import { Text } from '@tamagui/lucide-icons';
 
 const GetTextNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(60)  // Asegúrate de que el color sea adecuado o cámbialo según la paleta de tu proyecto

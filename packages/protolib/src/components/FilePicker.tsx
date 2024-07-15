@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button, Input, XStack, Spinner, Dialog, Text } from "tamagui"
-import { Folder } from 'lucide-react'
+import { Folder } from '@tamagui/lucide-icons'
 import { Tinted, } from './Tinted'
 import { Center } from './Center'
 import dynamic from 'next/dynamic'

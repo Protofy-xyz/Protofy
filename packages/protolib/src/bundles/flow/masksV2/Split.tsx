@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Scissors } from 'lucide-react';
+import { Scissors } from '@tamagui/lucide-icons';
 
 const SplitNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(18)

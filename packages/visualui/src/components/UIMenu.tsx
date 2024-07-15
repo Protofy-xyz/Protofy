@@ -1,7 +1,7 @@
 import { useState, createElement } from 'react'
 import { Popover } from "@my/ui";
 import { useUITheme } from "./Theme";
-import { Check } from 'lucide-react'
+import { Check } from '@tamagui/lucide-icons'
 
 export const MenuOption = ({ name, icon = undefined, selected = false, ...props }: any) => {
     const [hover, setHover] = useState(false)

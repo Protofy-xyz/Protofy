@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType, getId } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { Parentheses } from 'lucide-react';
+import { Parentheses } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 const ParenthesizedExpression = (node) => {

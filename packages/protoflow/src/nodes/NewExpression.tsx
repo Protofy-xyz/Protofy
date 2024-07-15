@@ -3,7 +3,7 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, HandleOutput, NodeParams } from '../Node';
 import AddPropButton from '../AddPropButton';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { CopyPlus } from 'lucide-react';
+import { CopyPlus } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 const NewExpression =(node) => {

@@ -15,7 +15,7 @@ import useTheme, { usePrimaryColor } from './diagram/Theme';
 import { DataOutput } from './lib/types';
 import { read } from './lib/memory';
 import NodeSelect from './diagram/NodeSelect';
-import { X, ChevronUp, AlertCircle } from 'lucide-react';
+import { X, ChevronUp, AlertCircle } from '@tamagui/lucide-icons';
 import { useProtoflow, useProtoEdges } from './store/DiagramStore';
 import { getFieldValue, getDataFromField } from './utils';
 import { getKindIcon, getNextKind, getTypeByKind } from './utils/typesAndKinds';

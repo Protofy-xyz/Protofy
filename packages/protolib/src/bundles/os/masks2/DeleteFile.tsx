@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { FileX } from 'lucide-react';
+import { FileX } from '@tamagui/lucide-icons';
 
 const DeleteFile = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(3)

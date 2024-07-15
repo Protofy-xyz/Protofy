@@ -1,7 +1,7 @@
 import { Node, NodeParams, getFieldValue, FallbackPort, FlowPort, filterCallback, restoreCallback } from 'protoflow';
 import { useState, useEffect } from 'react';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Play } from 'lucide-react';
+import { Play } from '@tamagui/lucide-icons';
 import { DeviceCollection } from '../../models/DeviceModel';
 import { DeviceRepository } from '../../repositories/deviceRepository';
 

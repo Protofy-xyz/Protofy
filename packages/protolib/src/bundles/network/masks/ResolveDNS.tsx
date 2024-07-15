@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Globe } from 'lucide-react';
+import { Globe } from '@tamagui/lucide-icons';
 
 const ResolveDNS = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(8)

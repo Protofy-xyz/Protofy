@@ -3,7 +3,7 @@ import { dumpConnection, PORT_TYPES, DumpType, connectItem } from '../lib/Node';
 import Node, { Field, NodeParams } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
-import { Shapes } from 'lucide-react';
+import { Shapes } from '@tamagui/lucide-icons';
 import { DataOutput } from '../lib/types';
 import { useNodeColor } from '../diagram/Theme';
 

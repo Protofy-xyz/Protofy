@@ -1,5 +1,5 @@
 import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, FlowStoreContext, filterConnection, dumpArgumentsData, getId, getFieldValue, getDataFromField } from 'protoflow';
-import { PenLine } from 'lucide-react';
+import { PenLine } from '@tamagui/lucide-icons';
 import { useEffect, useState, useContext } from 'react';
 import { API } from 'protobase'
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'

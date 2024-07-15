@@ -3,7 +3,7 @@ import Node, { Field, FlowPort, NodeParams } from '../Node';
 import FallbackPort from '../FallbackPort';
 import Button from '../Button';
 import Link from '../Link';
-import { MessageSquare, Code } from 'lucide-react'
+import { MessageSquare, Code } from '@tamagui/lucide-icons'
 import { getCustomFields } from '../fields';
 import AddPropButton from '../AddPropButton';
 import { CustomFieldsList } from '../fields/CustomFieldsList';

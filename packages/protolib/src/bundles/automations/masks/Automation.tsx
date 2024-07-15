@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject, getFieldValue, Button } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Plug } from 'lucide-react';
+import { Plug } from '@tamagui/lucide-icons';
 import React from 'react';
 import { SizableText, Spinner, XStack } from 'tamagui';
 import { API } from 'protobase'

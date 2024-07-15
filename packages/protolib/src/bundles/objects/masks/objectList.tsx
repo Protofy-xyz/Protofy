@@ -1,5 +1,5 @@
 import { Node, NodeParams, FlowPort, FallbackPort, FallbackPortList, filterCallback, restoreCallback } from 'protoflow';
-import { ClipboardList } from 'lucide-react';
+import { ClipboardList } from '@tamagui/lucide-icons';
 import { useEffect, useState } from 'react';
 import { API } from 'protobase'
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'

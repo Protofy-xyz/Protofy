@@ -1,6 +1,6 @@
 import React from 'react';
 import Node, { Field } from '../Node';
-import { LayoutTemplate } from 'lucide-react';
+import { LayoutTemplate } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 import { DumpType, PORT_TYPES, dumpConnection } from '../lib/Node';
 

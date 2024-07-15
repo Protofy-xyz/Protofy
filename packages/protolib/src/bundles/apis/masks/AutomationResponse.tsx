@@ -1,5 +1,5 @@
 import { Node, Field, HandleOutput, NodeParams } from 'protoflow';
-import { Reply } from 'lucide-react';
+import { Reply } from '@tamagui/lucide-icons';
 
 const AutomationResponse = ({ node = {}, nodeData = {}, children }: any) => {
 

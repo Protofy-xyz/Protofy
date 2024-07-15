@@ -1,5 +1,5 @@
 import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback } from 'protoflow';
-import { Trash2 } from 'lucide-react';
+import { Trash2 } from '@tamagui/lucide-icons';
 import { useEffect, useState } from 'react';
 import { API } from 'protobase'
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'

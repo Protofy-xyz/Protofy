@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { MapPin } from 'lucide-react';
+import { MapPin } from '@tamagui/lucide-icons';
 
 const MapNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(12)

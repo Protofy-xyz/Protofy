@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Camera } from 'lucide-react';
+import { Camera } from '@tamagui/lucide-icons';
 
 const ScreenshotNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(60)  

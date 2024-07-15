@@ -3,7 +3,7 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType, getTrivia } from '..
 import Node, { Field, NodeParams } from '../Node';
 import { isPortConnected } from '../lib/Edge';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { Blocks } from 'lucide-react';
+import { Blocks } from '@tamagui/lucide-icons';
 import { DataOutput } from '../lib/types';
 import Button from '../Button';
 import { useNodeColor } from '../diagram/Theme';

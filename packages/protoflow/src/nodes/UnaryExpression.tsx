@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { Calculator } from 'lucide-react';
+import { Calculator } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 export const UnaryExpressionFactory = (mode:"pre" | "post") => {

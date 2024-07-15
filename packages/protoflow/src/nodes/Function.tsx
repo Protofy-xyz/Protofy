@@ -5,7 +5,7 @@ import AddPropButton from '../AddPropButton';
 import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { SyntaxKind } from "ts-morph";
-import { FunctionSquare } from 'lucide-react';
+import { FunctionSquare } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 import { getArgumentsData, dumpArgumentsData } from '../utils/typesAndKinds';
 

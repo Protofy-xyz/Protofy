@@ -3,7 +3,7 @@ import { useNode, useEditor } from "@protocraft/core";
 import { ROOT_NODE } from "@craftjs/utils";
 import React, { useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
-import { ArrowDown, Trash2, Redo, ArrowUp, Move, MoreVertical, Copy } from 'lucide-react';
+import { ArrowDown, Trash2, Redo, ArrowUp, Move, MoreVertical, Copy } from '@tamagui/lucide-icons';
 import { XStack } from '@my/ui'
 import { useUITheme } from "./Theme";
 import Icon from "./Icon";

@@ -1,4 +1,4 @@
-import { icons } from 'lucide-react';
+import { icons } from '@tamagui/lucide-icons';
 
 const Icon = ({ name, color, size }) => {
     const LucideIcon = icons[name] ?? icons['Component'];

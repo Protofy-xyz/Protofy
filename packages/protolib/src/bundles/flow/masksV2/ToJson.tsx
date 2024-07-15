@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { FileText } from 'lucide-react';
+import { FileText } from '@tamagui/lucide-icons';
 
 const ToJSON = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(40)

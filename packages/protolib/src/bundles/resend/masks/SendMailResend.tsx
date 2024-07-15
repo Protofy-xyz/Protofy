@@ -1,5 +1,5 @@
 import { Node, NodeParams, getFieldValue, Button } from 'protoflow';
-import { Mail } from 'lucide-react';
+import { Mail } from '@tamagui/lucide-icons';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 // import { sendMailWithResend } from 'protonode';
 

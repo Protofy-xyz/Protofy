@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEditor } from "@protocraft/core";
 import { getIcon } from "../../utils/craftComponent";
-import { Search, X } from 'lucide-react';
+import { Search, X } from '@tamagui/lucide-icons';
 import { useUITheme } from "../Theme";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { ElementCard } from "./ElementCard";

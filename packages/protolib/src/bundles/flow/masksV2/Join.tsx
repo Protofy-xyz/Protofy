@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Link } from 'lucide-react';
+import { Link } from '@tamagui/lucide-icons';
 
 const JoinNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(18)

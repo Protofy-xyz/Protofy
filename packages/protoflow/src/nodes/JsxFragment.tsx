@@ -4,7 +4,7 @@ import Node, { Field, NodeParams } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { SyntaxKind } from "ts-morph";
-import { Code } from 'lucide-react';
+import { Code } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 const JsxFragment = (node) => {

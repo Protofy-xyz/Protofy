@@ -1,7 +1,7 @@
 import React from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { FileSymlink } from 'lucide-react';
+import { FileSymlink } from '@tamagui/lucide-icons';
 import { DataOutput } from '../lib/types';
 import { useNodeColor } from '../diagram/Theme';
 

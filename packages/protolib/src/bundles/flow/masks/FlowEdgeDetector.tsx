@@ -1,6 +1,6 @@
 import { Node, NodeParams, FlowPort, FallbackPort, getFieldValue } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Cable } from 'lucide-react';
+import { Cable } from '@tamagui/lucide-icons';
 import { filterCallback, restoreCallback } from 'protoflow';
 import { v4 as uuidv4 } from 'uuid';
 

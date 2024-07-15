@@ -3,7 +3,7 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType, getTrivia } from '..
 import AddPropButton from '../AddPropButton';
 import Node, { Field, NodeParams } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { SquareStack } from 'lucide-react';
+import { SquareStack } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 const ArrayLiteralExpression = (node) => {

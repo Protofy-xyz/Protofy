@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Package } from 'lucide-react';
+import { Package } from '@tamagui/lucide-icons';
 
 const CompressDirectory = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(9)

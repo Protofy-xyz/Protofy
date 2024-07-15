@@ -1,6 +1,6 @@
 import { Node, getFieldValue, CustomFieldsList } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Timer } from 'lucide-react';
+import { Timer } from '@tamagui/lucide-icons';
 import { useEffect, useState } from 'react';
 import { DeviceCollection } from '../../devices/models/DeviceModel';
 import { DimensionProps, LayoutProps, TextProps } from './PropsLists';

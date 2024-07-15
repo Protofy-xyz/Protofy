@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Pointer } from 'lucide-react';
+import { Pointer } from '@tamagui/lucide-icons';
 
 const ClickElementNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(60)  // Asegúrate de que el color sea adecuado o cámbialo según la paleta de tu proyecto

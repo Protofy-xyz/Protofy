@@ -1,6 +1,6 @@
 import { Node, NodeParams} from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Cable } from 'lucide-react';
+import { Cable } from '@tamagui/lucide-icons';
 import { useRef, useState } from 'react';
 
 const QueueEnqueue = ({ node = {}, nodeData = {}, children }: any) => {

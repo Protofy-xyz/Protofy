@@ -1,6 +1,6 @@
 import { Node, NodeParams, CustomFieldsList, FallbackPortList, filterCallback, FlowPort, FallbackPort, restoreCallback} from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Cable } from 'lucide-react';
+import { Cable } from '@tamagui/lucide-icons';
 import { useRef } from 'react';
 
 const WriteFile = ({ node = {}, nodeData = {}, children }: any) => {

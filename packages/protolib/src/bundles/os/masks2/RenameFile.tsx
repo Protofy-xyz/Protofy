@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Edit2 } from 'lucide-react';
+import { Edit2 } from '@tamagui/lucide-icons';
 
 const RenameFile = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(6);  // Un color neutral

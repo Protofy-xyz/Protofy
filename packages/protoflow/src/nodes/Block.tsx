@@ -6,7 +6,7 @@ import { FlowStoreContext } from "../store/FlowsStore";
 import { NODE_TREE } from '../toggles';
 import { DataOutput } from '../lib/types';
 import useTheme, { usePrimaryColor } from '../diagram/Theme';
-import { ListOrdered, Square, ArrowDownUp, Plus } from 'lucide-react';
+import { ListOrdered, Square, ArrowDownUp, Plus } from '@tamagui/lucide-icons';
 import { generateBoxShadow } from '../lib/shadow';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { useProtoflow } from '../store/DiagramStore';

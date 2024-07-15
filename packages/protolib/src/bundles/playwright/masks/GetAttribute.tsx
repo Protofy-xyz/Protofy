@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { TextSelect } from 'lucide-react';
+import { TextSelect } from '@tamagui/lucide-icons';
 
 const GetAttributeNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(60)

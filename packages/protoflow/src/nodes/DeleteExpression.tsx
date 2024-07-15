@@ -1,7 +1,7 @@
 import React, { memo, useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { Trash } from 'lucide-react';
+import { Trash } from '@tamagui/lucide-icons';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { DataOutput } from '../lib/types';
 import { useNodeColor } from '../diagram/Theme';

@@ -1,6 +1,6 @@
 import { Node, CustomFieldsList } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Timer } from 'lucide-react';
+import { Timer } from '@tamagui/lucide-icons';
 
 const InputMask = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(55)

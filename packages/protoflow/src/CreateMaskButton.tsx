@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Button, YStack, Dialog, Select, XStack, Input } from '@my/ui'
 import useTheme from './diagram/Theme';
-import { Drama, X, Check, ChevronDown } from 'lucide-react';
+import { Drama, X, Check, ChevronDown } from '@tamagui/lucide-icons';
 import { getAllFieldTypes } from './fields';
 
 type Props = {

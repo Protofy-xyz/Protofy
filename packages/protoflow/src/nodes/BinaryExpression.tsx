@@ -3,7 +3,7 @@ import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType, getTrivia, ge
 import Node, { Field, isDataPortConnected } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { useEdges } from 'reactflow';
-import { Calculator, Equal } from 'lucide-react';
+import { Calculator, Equal } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 export const BinaryExpressionFactory = (_operator: string) => {

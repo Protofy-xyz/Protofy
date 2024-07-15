@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Compass } from 'lucide-react';
+import { Compass } from '@tamagui/lucide-icons';
 
 const NavigateNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(60)

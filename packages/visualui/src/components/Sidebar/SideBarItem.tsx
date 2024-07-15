@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
 import { YStack } from '@my/ui';
 import { useUITheme } from '../Theme';
 

@@ -3,7 +3,7 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType, getValueTrivia } fro
 import Node, { Field, NodeParams } from '../Node';
 import AddPropButton from '../AddPropButton';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 import { SyntaxKind } from 'ts-morph';
 import { getArgumentsData, dumpArgumentsData } from '../utils/typesAndKinds';

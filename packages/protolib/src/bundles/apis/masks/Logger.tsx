@@ -1,5 +1,5 @@
 import { Node, Field, NodeParams } from 'protoflow';
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare } from '@tamagui/lucide-icons';
 
 const Logger = ({ node = {}, nodeData = {}, children }: any) => {
     const nodeParams: Field[] = [

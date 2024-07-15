@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { FolderPlus } from 'lucide-react';
+import { FolderPlus } from '@tamagui/lucide-icons';
 
 const CopyDirectory = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(2)

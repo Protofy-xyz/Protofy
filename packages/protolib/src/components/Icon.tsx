@@ -1,4 +1,4 @@
-import { icons } from 'lucide-react';
+import { icons } from '@tamagui/lucide-icons';
 import { forwardRef } from 'react';
 
 export const Icon = forwardRef(({ name, color, size }: {name: string, color?: string, size?: number | string}, ref) => {

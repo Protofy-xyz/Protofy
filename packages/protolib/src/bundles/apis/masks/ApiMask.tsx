@@ -1,6 +1,6 @@
 import { Node, Field, FlowPort, NodeParams, FallbackPort, Button, getFieldValue } from 'protoflow';
 import { API } from 'protobase'
-import { Plug } from 'lucide-react';
+import { Plug } from '@tamagui/lucide-icons';
 import { filterCallback, restoreCallback } from 'protoflow';
 import { SiteConfig} from 'app/conf'
 

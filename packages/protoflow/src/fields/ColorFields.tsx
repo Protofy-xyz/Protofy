@@ -5,7 +5,7 @@ import { FlowStoreContext } from '../store/FlowsStore';
 import { GithubPicker, SketchPicker } from "react-color";
 import Input from '../diagram/NodeInput'
 import { Popover } from '@my/ui'
-import { Pipette, Palette } from 'lucide-react'
+import { Pipette, Palette } from '@tamagui/lucide-icons'
 import { CustomField } from '.';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { getDataFromField, getFieldValue } from '../utils';

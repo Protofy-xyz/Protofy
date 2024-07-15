@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { PlusSquare } from 'lucide-react';
+import { PlusSquare } from '@tamagui/lucide-icons';
 
 const PushNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(12)

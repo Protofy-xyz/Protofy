@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Activity } from 'lucide-react';
+import { Activity } from '@tamagui/lucide-icons';
 
 const PingHost = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(8)

@@ -1,7 +1,7 @@
 
 import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { Cable } from 'lucide-react';
+import { Cable } from '@tamagui/lucide-icons';
 import { getFieldValue } from 'protoflow';
 
 const OnDeviceEventMask = ({ node = {}, nodeData = {}, children }: any) => {

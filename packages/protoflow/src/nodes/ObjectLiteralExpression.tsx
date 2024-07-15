@@ -4,7 +4,7 @@ import Node, { Field, NodeParams } from '../Node';
 import AddPropButton from '../AddPropButton';
 import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { TableProperties } from 'lucide-react';
+import { TableProperties } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 import { getArgumentsData, dumpArgumentsData } from '../utils/typesAndKinds';
 

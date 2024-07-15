@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { Crosshair } from 'lucide-react';
+import { Crosshair } from '@tamagui/lucide-icons';
 import { DataOutput } from '../lib/types';
 import { useNodeColor } from '../diagram/Theme';
 

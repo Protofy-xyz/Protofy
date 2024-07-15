@@ -5,7 +5,7 @@ import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { DataOutput } from '../lib/types';
-import { Combine } from 'lucide-react';
+import { Combine } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 const ObjectBindingPattern = (node) => {

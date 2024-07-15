@@ -1,6 +1,6 @@
 import React from 'react';
 import useTheme from './Theme';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown } from '@tamagui/lucide-icons';
 
 const NodeSelect = (props) => {
 	const onSelect = (event) => {

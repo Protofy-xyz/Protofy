@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Cpu } from 'lucide-react';
+import { Cpu } from '@tamagui/lucide-icons';
 
 const GetCPUs = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(8)

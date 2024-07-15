@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Network } from 'lucide-react';
+import { Network } from '@tamagui/lucide-icons';
 
 const GetNetworkInterfaces = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(8)

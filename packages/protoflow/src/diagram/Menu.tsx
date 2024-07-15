@@ -8,7 +8,7 @@ import { withTopics } from "react-topics";
 import Text from './NodeText';
 import useTheme, { usePrimaryColor } from './Theme';
 import { splitOpenerEdge } from '../lib/Edge';
-import { Search } from 'lucide-react'
+import { Search } from '@tamagui/lucide-icons'
 import { useProtoflow } from '../store/DiagramStore';
 
 const menuWidth = 259

@@ -2,7 +2,7 @@ import React, { memo, useContext } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field, FlowPort, NodeParams } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
-import { Network } from 'lucide-react';
+import { Network } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 export const ForXStatementFactory = (mode: 'in' | 'of') => {

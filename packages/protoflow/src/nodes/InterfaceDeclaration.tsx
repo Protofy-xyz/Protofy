@@ -5,7 +5,7 @@ import { generateId } from '../lib/IdGenerator';
 import { FlowStoreContext } from "../store/FlowsStore";
 import AddPropButton from '../AddPropButton';
 import { SyntaxKind } from "ts-morph";
-import { Shapes } from 'lucide-react';
+import { Shapes } from '@tamagui/lucide-icons';
 import { DataOutput } from '../lib/types';
 import { useNodeColor } from '../diagram/Theme';
 

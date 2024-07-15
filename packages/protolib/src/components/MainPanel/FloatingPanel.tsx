@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import Rnd from 'react-rnd';
-import { Move, Maximize, Minimize, X } from 'lucide-react';
+import { Move, Maximize, Minimize, X } from '@tamagui/lucide-icons';
 
 export default forwardRef(({ children, visibleFlows, size, expanded, previewState, onShowCropToggle, onExpandToggle, onResize, onDragStop }: any, ref: any) => {
 

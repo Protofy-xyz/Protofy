@@ -1,6 +1,6 @@
 import { Node, NodeOutput, FallbackPort, NodeParams, filterConnection, getId, connectNodes, filterObject, restoreObject} from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
-import { File } from 'lucide-react'
+import { File } from '@tamagui/lucide-icons'
 
 const ReadFile = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(12)

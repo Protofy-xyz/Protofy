@@ -1,7 +1,7 @@
 import React from 'react';
 import { dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { Link2Off } from 'lucide-react';
+import { Link2Off } from '@tamagui/lucide-icons';
 import useTheme, { useNodeColor } from '../diagram/Theme';
 
 const BreakStatement =(node) => {

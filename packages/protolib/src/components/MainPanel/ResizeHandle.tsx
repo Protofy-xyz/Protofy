@@ -1,6 +1,6 @@
 import React from "react";
 import { PanelResizeHandle } from "react-resizable-panels";
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons';
 
 type ResizeHandleProps = {
 	direction: "RIGHT" | "LEFT",

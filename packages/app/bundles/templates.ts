@@ -1,5 +1,5 @@
 import { z } from 'protobase'
-import { Router, Database, DatabaseZap,RefreshCcwDot, PencilRuler } from 'lucide-react'
+import { Router, Database, DatabaseZap, RefreshCcwDot, PencilRuler } from '@tamagui/lucide-icons'
 
 export const apiTemplates = {
     "custom-api": {

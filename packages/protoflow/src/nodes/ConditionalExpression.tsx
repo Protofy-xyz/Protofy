@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
-import { Split } from 'lucide-react';
+import { Split } from '@tamagui/lucide-icons';
 import { useNodeColor } from '../diagram/Theme';
 
 const ConditionalExpression = (node) => {

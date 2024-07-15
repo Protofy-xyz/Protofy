@@ -1,5 +1,5 @@
 import { Node, NodeParams } from 'protoflow';
-import { Plug } from 'lucide-react';
+import { Plug } from '@tamagui/lucide-icons';
 
 const emitEvent = (node: any = {}, nodeData = {}) => {
     return (

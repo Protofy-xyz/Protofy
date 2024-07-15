@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { NavigationIcon } from 'lucide-react';
+import { NavigationIcon } from '@tamagui/lucide-icons';
 
 const GetBrowserNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(60)

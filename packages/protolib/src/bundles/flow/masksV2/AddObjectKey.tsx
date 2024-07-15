@@ -1,6 +1,6 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Blocks } from 'lucide-react';
+import { Blocks } from '@tamagui/lucide-icons';
 
 const AddObjectKey = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(67)
