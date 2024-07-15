@@ -46,6 +46,7 @@ const DatePickerImpl = (props: DatePickerProps) => {
               <Adapt.Contents />
             </Popover.Sheet.Frame>
             <Popover.Sheet.Overlay
+              //@ts-ignore
               animation="lazy"
               enterStyle={{ opacity: 0 }}
               exitStyle={{ opacity: 0 }}
@@ -61,6 +62,7 @@ const DatePickerImpl = (props: DatePickerProps) => {
 const Trigger = Popover.Trigger
 
 const DatePickerContent = styled(Popover.Content, {
+  //@ts-ignore
   animation: [
     '100ms',
     {
@@ -105,7 +107,7 @@ export const DatePickerInput = Input.Area.styleable<DatePickerInputProps>(
     const { value, onButtonPress, size = '$3', onReset, ...rest } = props
     return (
       <View $platform-native={{ minWidth: '100%' }}>
-        <Input size={size} f={1}>
+        <Input size={size as any} f={1}>
           <Input.Box>
             <Input.Section>
               <Input.Area value={value} f={1} ref={ref} {...rest} />
@@ -151,6 +153,7 @@ export function MonthPicker({
       flexDirection="row"
       flexWrap="wrap"
       gap="$2"
+      //@ts-ignore
       animation="100ms"
       enterStyle={{
         opacity: 0,
@@ -199,6 +202,7 @@ export function YearPicker({
       flexDirection="row"
       flexWrap="wrap"
       gap="$2"
+      //@ts-ignore
       animation="100ms"
       enterStyle={{
         opacity: 0,

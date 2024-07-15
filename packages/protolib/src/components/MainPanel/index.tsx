@@ -7,9 +7,9 @@ import { useWindowSize } from 'usehooks-ts'
 type Props = {
     actionContent?: React.Component | any,
     rightPanelContent: React.Component | any,
-    leftPanelContent: React.Component | any,
+    leftPanelContent?: React.Component | any,
     centerPanelContent: React.Component | any,
-    height: React.Component | any,
+    height?: React.Component | any,
     rightPanelResizable?: boolean,
     rightPanelVisible?: boolean,
     openPanel?: boolean,
@@ -22,9 +22,9 @@ type Props = {
 };
 
 export const MainPanel = ({ borderLess, rightPanelSize,setRightPanelSize,rightPanelStyle={}, rightPanelWidth=0, actionContent, rightPanelContent, leftPanelContent, centerPanelContent, rightPanelResizable = false, rightPanelVisible = true, openPanel, setOpenPanel=()=>{}, height = "100vh"}: Props) => {
-    const rightRef = useRef()
-    const resizerRef = useRef()
-    const resizerBarRef = useRef()
+    const rightRef = useRef<any>()
+    const resizerRef = useRef<any>();
+    const resizerBarRef = useRef<any>()
     const hoverTimer = useRef(null);
     const size = useWindowSize()
     

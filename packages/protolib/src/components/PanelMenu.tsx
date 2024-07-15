@@ -237,6 +237,7 @@ const Tabs = ({ tabs, environ }: any) => {
                                 bw={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
                                     <XStack f={1} jc="center">
+                                        {/* @ts-ignore */}
                                         <Square animation="quick" rotate={open ? '0deg' : '-90deg'}>
                                             <ChevronDown size={20} />
                                         </Square>

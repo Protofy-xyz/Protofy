@@ -43,6 +43,7 @@ class RotaryEncoder {
             }
             componentObjects.push({
                 name: "globals",
+                //@ts-ignore
                 config: [
                     {        
                     initial_value: '0',
@@ -64,6 +65,7 @@ class RotaryEncoder {
                 name: "script",
                 config:{
                     id: `position_script_${this.name}`,
+                    //@ts-ignore
                     then: {
                         lambda:
 `if(id(disable_control_${this.name})==0){
@@ -89,6 +91,7 @@ class RotaryEncoder {
                 {
                     name: 'mqtt',
                     config: {
+                      //@ts-ignore
                       on_message: [
                         {
                           topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/command`,

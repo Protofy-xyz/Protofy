@@ -28,6 +28,7 @@ export const PageGlow = memo(React.forwardRef((props:any, ref: any) => {
     return (
       <Stack>
         {tints.map((cur, i) => {
+          //@ts-ignore
           const isDouble = name === 'xmas' || name === 'easter'
           const active = isDouble ? i == 0 || i == 1 : cur === tint
           const isOpposite = isDouble && cur === 'green' && tint !== cur
@@ -61,6 +62,7 @@ export const PageGlow = memo(React.forwardRef((props:any, ref: any) => {
       l={0}
       contain="layout"
       pe="none"
+      //@ts-ignore
       animation="quick"
       key={0}
       zi={-1}

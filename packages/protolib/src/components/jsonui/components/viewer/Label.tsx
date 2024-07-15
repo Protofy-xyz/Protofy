@@ -70,6 +70,7 @@ const Label = (props) => {
     switch (type) {
       case "boolean":
         return <Switch size="$4">
+          {/** @ts-ignore */}
           <Switch.Thumb animation="bouncy" />
         </Switch>
       case "property":
@@ -156,7 +157,10 @@ const Label = (props) => {
           onCheckedChange={(checked) => {
             props.onChange('update', [...props.parents, props.currentKey], checked, type)
           }} >
-          <Switch.Thumb backgroundColor={"$color9"} animation="bouncy" />
+          <Switch.Thumb 
+            backgroundColor={"$color9"} 
+            //@ts-ignore
+            animation="bouncy" />
         </Switch>
       case "property":
       case "number":

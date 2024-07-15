@@ -145,6 +145,7 @@ export default ({ nodeData, maskType }: Props) => {
                     {'Properties: '}
                 </Dialog.Description>
                 <YStack>
+                    {/*@ts-ignore*/}
                     <YStack overflow="scroll" maxHeight="$18" overflowX="hidden" >
                         {maskBodyData.map((ele, index) => (
                             <PropEditor

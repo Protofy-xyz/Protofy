@@ -18,6 +18,7 @@ const ToastArea = () => {
       y={0}
       opacity={1}
       scale={1}
+      //@ts-ignore
       animation="100ms"
       viewportName={currentToast.viewportName}
     >

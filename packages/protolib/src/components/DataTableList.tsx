@@ -35,6 +35,11 @@ export const getFieldPreview = (key, row, def, plain?) => {
     return row[key]
 }
 
+type DataTableListState = {
+    itemsPerPage?: number;
+    page?: number;
+};
+
 export const DataTableList = ({
     sourceUrl,
     onDelete = () => { },
@@ -46,7 +51,7 @@ export const DataTableList = ({
     selected = [],
     rowIcon = Pencil,
     columns,
-    state = {},
+    state = {} as DataTableListState,
     setSelected = (item) => { },
     onSelectItem = (item) => { },
     disableRowIcon = false,
@@ -100,6 +105,7 @@ export const DataTableList = ({
                 }
                 handlePerRowsChange={(itemsPerPage) => push('itemsPerPage', itemsPerPage)}
                 handlePageChange={(page) => push('page', parseInt(page, 10) - 1)}
+                //@ts-ignore
                 currentPage={(isNaN(parseInt(state.page, 10)) ? 0 : parseInt(state.page, 10)) + 1}
                 totalRows={items?.data?.total}
                 columns={[DataTable2.column(

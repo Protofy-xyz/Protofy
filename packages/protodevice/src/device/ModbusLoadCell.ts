@@ -147,6 +147,7 @@ class ModbusLoadCell {
                 }
             }
         ]
+        //@ts-ignore
         if(this.dpEnabled) components =  components.concat(dsComponents)
         return components
     }

@@ -44,6 +44,7 @@ const EmptyMessage = () => {
 
     useInterval(() => { setOpacity(opacity == 0.3 ? 0.1 : 0.3) }, 500)
     return <Tinted>
+        {/* @ts-ignore */}
         <XStack o={opacity} animation={"lazy"}>
             {/* <Spinner o={0.5} color="$color10" size='large' scale={3} /> */}
             <Radio strokeWidth={1.4} size={100} />

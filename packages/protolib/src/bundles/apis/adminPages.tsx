@@ -79,7 +79,7 @@ const AccordionMethod = ({ method, path, description, children }) => {
                                 description={description}
                             />
                         </Stack>
-
+                        {/** @ts-ignore */}
                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                             <ChevronDown size="$1" />
                         </Square>
@@ -159,7 +159,7 @@ export default {
             const notificationsTopicPrefix = 'notifications/event/create/services/api/package/'
             const [dialogOpen, setDialogOpen] = useState(false)
             const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
-            const [currentElement, setCurrentElement] = useState({})
+            const [currentElement, setCurrentElement] = useState<any>({})
             const [total, setTotal] = useState(0)
             const [addOpen, setAddOpen] = useState(false)
             const [publishOpen, setPublishOpen] = useState(false)
@@ -202,7 +202,6 @@ export default {
 
             return (<AdminPage title="Automations" pageSession={pageSession}>
                 <AlertDialog
-                    integratedChat
                     p={"$2"}
                     pt="$5"
                     pl="$5"

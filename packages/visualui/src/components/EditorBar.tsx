@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, createElement } from "react";
 import { Button, XStack } from "@my/ui";
 import { useUITheme } from "./Theme";
 import { MenuOption, UIMenu } from "./UIMenu";
@@ -9,13 +9,14 @@ const BarButton = ({ icon = undefined, onPress, text = undefined, buttonProps = 
         <UIMenu
             trigger={
                 <Button
+                    //@ts-ignore
                     animation={"bouncy"}
                     chromeless
                     paddingHorizontal="$3"
                     height="40px"
                     fontSize="$5"
                     borderRadius="$2"
-                    icon={icon}
+                    icon={createElement(icon, { fillOpacity: 0 })}
                     hoverStyle={{ backgroundColor: 'transparent' }}
                     color={hovered && !buttonProps['theme'] ? useUITheme('interactiveColor') : useUITheme('textColor')}
                     onMouseEnter={e => setHovered(true)}

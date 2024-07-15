@@ -22,7 +22,6 @@ export default {
 
     return (<AdminPage title="Device Boards" pageSession={pageSession}>
       <DataView
-        integratedChat
         entityName={"deviceboards"}
         itemData={itemData}
         rowIcon={CircuitBoard}
@@ -35,7 +34,7 @@ export default {
         columns={DataTable2.columns(
           DataTable2.column("name", (row) => row.name, "name"),
           DataTable2.column("core", (row) => row.core, "core", (row) => <Chip text={row.core} color={'$gray5'} />),
-          DataTable2.column("ports", (row) => row.ports, "ports", (row) => <Chip text={Object.keys(row.ports).length} color={'$gray5'} />),
+          DataTable2.column("ports", (row) => row.ports, "ports", (row) => <Chip text={Object.keys(row.ports).length + ""} color={'$gray5'} />),
         )}
         extraFieldsForms={{
           core: z.union(cores.isLoaded ? cores.data.items.map(i => z.literal(DeviceCoreModel.load(i).getId())) : []).after('name'),

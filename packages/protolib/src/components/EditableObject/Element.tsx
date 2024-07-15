@@ -89,6 +89,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                 if (data[dependsOn]) {
                     if (dependsOnValue) {
                         if (dependsOnValue == data[dependsOn]) {
+                            //@ts-ignore
                             return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
                         } else {
                             return <Input
@@ -99,6 +100,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                             ></Input>
                         }
                     } else {
+                        //@ts-ignore
                         return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
                     }
                 } else {
@@ -112,6 +114,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                 }
             }
             else {
+                //@ts-ignore
                 return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
             }
         }
@@ -195,6 +198,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
             <Tinted>
                 <Stack f={1} mt="$4">
                     <Switch disabled={mode != 'add' && mode != 'edit'} checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$2">
+                        {/*@ts-ignore*/}
                         <Switch.Thumb animation="quick" />
                     </Switch>
                     {/* <SimpleSlider onValueChange={v => setFormData(ele.name, v)} value={[getFormData(ele.name) ?? min.value]} width={190} min={min.value} max={max.value} /> */}

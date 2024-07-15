@@ -3,6 +3,7 @@ class Transport {
   public left_over = new Uint8Array(0);
   public baudrate = 0;
 
+  //@ts-ignore
   constructor(public device: SerialPort) {}
 
   get_info() {

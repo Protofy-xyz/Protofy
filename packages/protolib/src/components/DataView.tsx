@@ -72,8 +72,8 @@ interface DataViewProps {
     toolBarContent?: any;
     onAddButton?: any;
     extraMenuActions?: any[];
-    extraActions?: [];
-    deleteable?: () => boolean;
+    extraActions?: any[];
+    deleteable?: (x) => boolean;
     objectProps?: EditableObjectProps | {};
     refreshOnHotReload?: boolean;
     quickRefresh?: boolean;
@@ -108,6 +108,7 @@ export const DataViewActionButton = ({ icon, description, id, ...props }: DataVi
       x={0}
       y={0}
       opacity={1}
+      //@ts-ignore
       animation={[
         'quick',
         {
@@ -174,7 +175,7 @@ const DataViewInternal = forwardRef(({
     refreshOnHotReload = false,
     quickRefresh = false,
     URLTransform = (url) => url
-}: DataViewProps, ref) => {
+}: DataViewProps, ref: any) => {
     const displayName = (entityName ?? pluralName) ?? name
     const [state, setState] = useState(pageState ?? {})
     sourceUrl = URLTransform(sourceUrl)
@@ -184,7 +185,8 @@ const DataViewInternal = forwardRef(({
         fn(data)
     }
 
-    const [items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.getModelName() + "/#", model, quickRefresh)
+    const [_items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.getModelName() + "/#", model, quickRefresh)
+    const items: any = _items
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
     const [createOpen, setCreateOpen] = useState(false)
     const { push, mergePush, removePush, replace } = usePageParams(state)
@@ -215,7 +217,7 @@ const DataViewInternal = forwardRef(({
 
     useUpdateEffect(() => {
         if (search) {
-            push("search", search, false)
+            push("search", search)
         } else {
             removePush("search")
         }
@@ -416,6 +418,7 @@ const DataViewInternal = forwardRef(({
                     <YStack f={1} jc="center" ai="center" id={"admin-dataview-create-dlg"}>
                         <ScrollView maxHeight={"90vh"}>
                             <XStack mr="$4">
+                                {/* @ts-ignore */}
                                 <EditableObject
                                     URLTransform={URLTransform}
                                     id={"admin-eo"}

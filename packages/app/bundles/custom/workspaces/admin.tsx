@@ -6,6 +6,8 @@ export default ({pages}) => {
     return {
         "default": "/workspace/prod/services",
         "label": "Admin panel",
+        "assistant": true,
+        "logs": true,
         "dev": {
             "default": "/workspace/dev/services",
             "label": "Dev panel"

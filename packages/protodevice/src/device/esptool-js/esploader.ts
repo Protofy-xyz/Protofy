@@ -86,7 +86,7 @@ export class ESPLoader {
 
   USB_JTAG_SERIAL_PID = 0x1001;
 
-  chip!: ROM;
+  chip!: any;
   IS_STUB: boolean;
   FLASH_WRITE_SIZE: number;
 

@@ -18,7 +18,7 @@ export function MultiSelectList({
 }: MultiSelectListProps & StackProps) {
   const rootRef = useRef(null)
   const [open, setOpen] = useState(false);
-  const [selections, setSelections] = useState(defaultSelections);
+  const [selections, setSelections] = useState<string[]>(defaultSelections);
 
   const updateSelections = (e, cName) => {
     const target = choices[choices.indexOf(cName)]

@@ -81,7 +81,7 @@ export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, s
                     id="name"
                     placeholder='Field name...'
                     ref={inputRef}
-                    onKeyPress={(event) => {
+                    onKeyPress={(event: any) => {
                         if (event.key === 'Enter') {
                             handleAccept();
                         }

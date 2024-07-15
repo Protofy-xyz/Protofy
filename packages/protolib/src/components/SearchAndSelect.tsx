@@ -72,6 +72,7 @@ export const SearchAndSelect = (props: InputProps & SearchAndSelectProps) => {
                 {...inputProps}
             />
             <YStack>
+                {/* @ts-ignore */}
                 {open && <YGroup pb={0} bc="$bgContent" zIndex={99999999} overflow="auto" maxHeight={300} width={width} position="absolute" alignSelf="center" bordered size="$4">
                     {results.length === 0 && <ListItem>No results</ListItem>}
                     {results.map((item, i) => <YGroup.Item key={i}>
