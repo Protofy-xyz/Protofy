@@ -267,11 +267,11 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                 disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static) || (ele._def.dependsOn && !data[ele._def.dependsOn]))}
                 secureTextEntry={ele._def.secret}
                 value={generatedOptions && !getFormData(ele.name) ? generatedOptions : getFormData(ele.name)}
-                onChangeText={(t) => setFormData(ele.name, ele._def.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
+                onChangeText={(t) => setFormData(ele.name, elementDef.typeName == 'ZodNumber' ? t.replace(/[^0-9.-]/g, '') : t)}
                 placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? (typeof ele.name == "number" ? "..." : ele.name)}
                 autoFocus={x == 0 && i == 0}
                 onBlur={() => {
-                    if (ele._def.typeName == 'ZodNumber') {
+                    if (elementDef.typeName == 'ZodNumber') {
                         const numericValue = parseFloat(getFormData(ele.name));
                         if (!isNaN(numericValue)) {
                             setFormData(ele.name, numericValue);
