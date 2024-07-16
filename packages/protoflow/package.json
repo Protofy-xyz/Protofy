@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "displayName": "Protofy JS/TS Low-code react component",
   "description": "React component to generate automatic interactive Low-code diagrams from Javascript and Typescript code, with react support",
-  "main": "dist/index.js",
+  "main": "src/index.tsx",
   "scripts": {
     "build": "tamagui-build"
   },
