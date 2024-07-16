@@ -1,6 +1,6 @@
 import React from "react";
 import { useUITheme } from "../Theme";
-import Icon from "../Icon";
+import { Icon } from "protolib/components/Icon";
 
 type Props = {
     componentName: string,

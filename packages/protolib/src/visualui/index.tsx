@@ -109,39 +109,39 @@ const uiDataText = {
 }
 
 export const textPalette = {
-  ...cw(Head1, 'Heading1', 'Head1', { children: "hello" }, uiDataText, {}, true),
-  ...cw(Head2, 'Heading2', 'Head2', { children: "hello" }, uiDataText, {}, true),
-  ...cw(Head3, 'Heading3', 'Head3', { children: "hello" }, uiDataText, {}, true),
-  ...cw(Text, 'Type', 'Text', { children: "hello" }, uiDataText, {}, true),
-  ...cw(BlockTitle, 'Text', 'BlockTitle', { title: "hello", subtitle: "world" }, { rules: { canMoveIn: () => false } }),
-  ...cw(RainbowText, 'Rainbow', 'RainbowText', { children: "hello world", fontWeight: "bold", fontSize: "$16", lineHeight: "$16" }, {}, {}, true),
+  ...cw(Head1, 'type', 'Head1', { children: "hello" }, uiDataText, {}, true),
+  ...cw(Head2, 'type', 'Head2', { children: "hello" }, uiDataText, {}, true),
+  ...cw(Head3, 'type', 'Head3', { children: "hello" }, uiDataText, {}, true),
+  ...cw(Text, 'type', 'Text', { children: "hello" }, uiDataText, {}, true),
+  ...cw(BlockTitle, 'type', 'BlockTitle', { title: "hello", subtitle: "world" }, { rules: { canMoveIn: () => false } }),
+  ...cw(RainbowText, 'type', 'RainbowText', { children: "hello world", fontWeight: "bold", fontSize: "$16", lineHeight: "$16" }, {}, {}, true),
 }
 
 export const external = {
-  ...cw(SensorValue, 'Radio', 'SensorValue', {}, uiDataText, {}),
-  ...cw(ObjectPropValue, 'Database', 'ObjectPropValue', {}, uiDataText, {}),
-  ...cw(ObjectForm, 'ListTodo', 'ObjectForm', { model: { value: "Objects.", kind: 'PropertyAccessExpression' } })
+  ...cw(SensorValue, 'type', 'SensorValue', {}, uiDataText, {}),
+  ...cw(ObjectPropValue, 'type', 'ObjectPropValue', {}, uiDataText, {}),
+  ...cw(ObjectForm, 'type', 'ObjectForm', { model: { value: "Objects.", kind: 'PropertyAccessExpression' } })
 }
 
 export const layoutPalette = {
-  ...cw(VStack, 'ArrowDownSquare', 'VStack', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(HStack, 'ArrowRightSquare', 'HStack', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(Center, 'AlignVerticalSpaceAround', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(VStack, 'layout', 'VStack', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(HStack, 'layout', 'HStack', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(Center, 'layout', 'Center', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(Spacer, 'Maximize2', 'Spacer', { size: '$8' }),
-  ...cw(ProtoView, 'SquareAsterisk', 'ProtoView', { viewId: "default", currentView: { value: "currentView", kind: 'Identifier' } }, {}, { placeholder: <BasicPlaceHolder /> }),
-  ...cw(Section, 'BoxSelect', 'Section', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(Pressable, 'MousePointerSquare', 'Pressable', {}, {}, { children: <BasicPlaceHolder /> })
+  ...cw(ProtoView, 'layout', 'ProtoView', { viewId: "default", currentView: { value: "currentView", kind: 'Identifier' } }, {}, { placeholder: <BasicPlaceHolder /> }),
+  ...cw(Section, 'layout', 'Section', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(Pressable, 'pressable', 'Pressable', {}, {}, { children: <BasicPlaceHolder /> })
 }
 
 export const basicPalette = {
-  ...cw(BigTitle, 'Type', 'BigTitle', { children: "hello" }, {
+  ...cw(BigTitle, 'type', 'BigTitle', { children: "hello" }, {
     custom: {
       shortcuts: [
         fontStyle
       ]
     }
   }, {}, true),
-  ...cw(ButtonSimple, 'MousePointerSquare', 'ButtonSimple', { children: "Press Me" }, {
+  ...cw(ButtonSimple, 'pressable', 'ButtonSimple', { children: "Press Me" }, {
     custom: {
       shortcuts: [
         alignSelf
@@ -161,7 +161,7 @@ export const basicPalette = {
       ]
     }
   }, {}, true),
-  ...cw(Container, 'SquareAsterisk', 'Container', {}, {
+  ...cw(Container, 'layout', 'Container', {}, {
     custom: {
       shortcuts: [
         flexDirection,
@@ -169,7 +169,7 @@ export const basicPalette = {
       ]
     }
   }, { children: <BasicPlaceHolder /> }),
-  ...cw(Image, 'Image', 'Image', { url: "/images/patterns/pattern-1.png" }, {
+  ...cw(Image, 'media', 'Image', { url: "/images/patterns/pattern-1.png" }, {
     custom: {
       shortcuts: [
         alignSelf,
@@ -206,7 +206,7 @@ export const miscellanyPalette = {
   ...cw(Code, 'Code', 'Code', { children: "helloworld" }, {}, {}, true),
   ...cw(CodeInline, 'Terminal', 'CodeInline', { children: "helloworld" }, {}, {}, true),
   ...cw(ContainerLarge, 'Package', 'ContainerLarge', {}, {}, { children: <BasicPlaceHolder /> }),
-  ...cw(ContainerXL, 'Container', 'ContainerXL', {}, {}, { children: <BasicPlaceHolder /> }),
+  ...cw(ContainerXL, 'layout', 'ContainerXL', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(ColorToggleButton, 'ToggleRight', 'ColorToggleButton'),
   ...cw(CopyBubble, 'Copy', 'CopyBubble', { text: "copy" }),
   ...cw(HorizontalBox, 'RectangleHorizontal', 'HorizontalBox', {}, {}, { children: <BasicPlaceHolder /> }),
@@ -238,8 +238,8 @@ export const miscellanyPalette = {
   ...cw(FeatureItem, 'CheckCircle2', 'FeatureItem', { label: "hello", children: "world" }),
   ...cw(FancyCard, 'SquareAsterisk', 'FancyCard'),
   ...cw(GithubIcon, 'LogoIcon', 'GithubIcon', { width: 23, plain: true }),
-  ...cw(Grid, 'LayoutGrid', 'Grid'),
-  ...cw(GridElement, 'LayoutGrid', 'GridElement', { title: "hello", children: "world" }),
+  ...cw(Grid, 'layout', 'Grid'),
+  ...cw(GridElement, 'layout', 'GridElement', { title: "hello", children: "world" }),
   ...cw(HeaderLink, 'Link2', 'HeaderLink', { href: "/hello", children: "hello" }),
   ...cw(HoveredGroup, 'RectangleHorizontal', 'HoveredGroup', {}, {}, { children: <BasicPlaceHolder /> }),
   ...cw(HR, 'MinusSquare', 'HR'),

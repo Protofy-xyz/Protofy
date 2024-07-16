@@ -1,17 +1,5 @@
 export const alignSelf = {
-    icon: (props) => {
-        switch (props.alignSelf) {
-            case 'start':
-                return "AlignStartVertical"
-            case 'end':
-                return "AlignEndVertical"
-            case 'stretch':
-                return "StretchVertical"
-            case 'center':
-            default:
-                return "AlignCenterVertical"
-        }
-    },
+    icon: (props) => props.alignSelf ?? 'center',
     menu: [
         {
             action: ({ setProp }) => setProp(props => props['alignSelf'] = 'start'),
@@ -37,19 +25,7 @@ export const alignSelf = {
 }
 
 export const flexDirection = {
-    icon: (props) => {
-        switch (props.flexDirection) {
-            case 'row':
-                return "ArrowRightFromLine"
-            case 'row-reverse':
-                return "ArrowLeftFromLine"
-            case 'column-reverse':
-                return "ArrowUpFromLine"
-            case 'column':
-            default:
-                return "ArrowDownFromLine"
-        }
-    },
+    icon: (props) => props.flexDirection ?? 'column',
     menu: [
         {
             action: ({ setProp }) => setProp(props => props['flexDirection'] = 'row'),
@@ -75,7 +51,7 @@ export const flexDirection = {
 }
 
 export const fontStyle = {
-    icon: (props) => 'Italic',
+    icon: (props) => 'italic',
     selected: (props) => props.fontStyle == 'italic',
     action: ({ setProp }) => setProp(props => {
         if (props.fontStyle == 'italic') {
@@ -88,7 +64,7 @@ export const fontStyle = {
 }
 
 export const fontWeight = {
-    icon: (props) => 'Bold',
+    icon: (props) => 'bold',
     selected: (props) => props.fontWeight == 'bold',
     action: ({ setProp }) => setProp(props => {
         if (props.fontWeight == 'bold') {
@@ -101,21 +77,7 @@ export const fontWeight = {
 }
 
 export const justifyContent = {
-    icon: (props) => {
-        switch (props.justifyContent) {
-            case 'start':
-                return "AlignVerticalJustifyStart"
-            case 'end':
-                return "AlignVerticalJustifyEnd"
-            case 'space-between':
-                return "AlignVerticalSpaceBetween"
-            case 'space-around':
-                return "AlignVerticalSpaceAround"
-            case 'center':
-            default:
-                return "AlignVerticalJustifyCenter"
-        }
-    },
+    icon: (props) => props.justifyContent ?? 'center',
     menu: [
         {
             action: ({ setProp }) => setProp(props => props['justifyContent'] = 'start'),
@@ -146,19 +108,7 @@ export const justifyContent = {
 }
 
 export const textAlign = {
-    icon: (props) => {
-        switch (props.textAlign) {
-            case 'left':
-                return "AlignLeft"
-            case 'right':
-                return "AlignRight"
-            case 'justify':
-                return "AlignJustify"
-            case 'center':
-            default:
-                return "AlignCenter"
-        }
-    },
+    icon: (props) => 'text',
     menu: [
         {
             action: ({ setProp }) => setProp(props => props['textAlign'] = 'left'),
@@ -184,7 +134,7 @@ export const textAlign = {
 }
 
 export const resizeMode = {
-    icon: (props) => "Wallpaper",
+    icon: (props) => "wallpaper",
     menu: [
         {
             action: ({ setProp }) => setProp(props => props['resizeMode'] = 'center'),
