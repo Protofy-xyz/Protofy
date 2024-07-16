@@ -1,11 +1,11 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { NavigationIcon } from '@tamagui/lucide-icons';
+import { Navigation } from '@tamagui/lucide-icons';
 
 const GetBrowserNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(60)
     return (
-        <Node icon={NavigationIcon} node={node} isPreview={!node.id} title='Get Browser' color={color} id={node.id} skipCustom={true}>
+        <Node icon={Navigation} node={node} isPreview={!node.id} title='Get Browser' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Browser type', field: 'mask-browserType', type: 'select', data: ["chromium", "firefox", "webkit"] }]} />
             <NodeParams id={node.id} params={[{ label: 'Visible', field: 'mask-visible', type: 'boolean' }]} />
             <div style={{height: '30px'}} />

@@ -1,12 +1,12 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { CableIcon } from '@tamagui/lucide-icons';
+import { Cable } from '@tamagui/lucide-icons';
 
 const Rewire = ({ node = {}, nodeData = {}, children }: any) => {
 
     const color = useColorFromPalette(34)
     return (
-        <Node icon={CableIcon} node={node} isPreview={!node.id} title='Flow Variable' color={color} id={node.id} skipCustom={true}>
+        <Node icon={Cable} node={node} isPreview={!node.id} title='Flow Variable' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
                 { label: 'Name', field: 'mask-name', type: 'input' },
                 { label: 'Value', field: 'mask-value', type: 'input' },

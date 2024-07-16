@@ -1,11 +1,11 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Edit2 } from '@tamagui/lucide-icons';
+import { Edit3 } from '@tamagui/lucide-icons';
 
 const RenameFile = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(6);  // Un color neutral
     return (
-        <Node icon={Edit2} node={node} isPreview={!node.id} title='Rename File' color={color} id={node.id} skipCustom={true}>
+        <Node icon={Edit3} node={node} isPreview={!node.id} title='Rename File' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
                 { label: 'Old Path', field: 'mask-oldPath', type: 'input' },
                 { label: 'New Path', field: 'mask-newPath', type: 'input' }

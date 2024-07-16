@@ -1,11 +1,11 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { FileBoxIcon } from '@tamagui/lucide-icons';
+import { FileBox } from '@tamagui/lucide-icons';
 
 const GetElementNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(60)
     return (
-        <Node icon={FileBoxIcon} node={node} isPreview={!node.id} title={'Get Element'+(nodeData['mask-all']?.value ? 's':'')} color={color} id={node.id} skipCustom={true}>
+        <Node icon={FileBox} node={node} isPreview={!node.id} title={'Get Element'+(nodeData['mask-all']?.value ? 's':'')} color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
                 { label: 'Selector', field: 'mask-selector', type: 'input' },
                 { label: 'All', field: 'mask-all', type: 'boolean' },

@@ -57,6 +57,7 @@ export const DeleteButton = ({ id, left = false, field }) => {
     }
 
     return <div id={'deleteButton-' + id + field} style={{ display: 'flex', alignSelf: 'center', cursor: 'pointer' }} onClick={onDeleteParam}>
+        {/* @ts-ignore */}
         <X size={nodeFontSize} color={colorError} style={{ marginRight: left ? '7px' : '2px' }} />
     </div>
 }
@@ -333,6 +334,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                             paddingLeft: getTypeByKind(fieldKind) ? "30px" : undefined
                         }}>
                         {param.error ? <div style={{ alignItems: 'center', marginTop: '5px', display: 'flex' }}>
+                            {/* @ts-ignore */}
                             <AlertCircle size={"14px"} color='red' style={{ alignSelf: 'center', marginRight: '5px' }} />
                             <Text style={{ color: 'red', fontSize: '12px' }}>
                                 {param.error}
