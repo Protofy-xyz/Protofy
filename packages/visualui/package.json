@@ -3,13 +3,12 @@
   "version": "0.0.1",
   "sideEffects": false,
   "source": "src/index.ts",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "files": [
     "src"
   ],
   "scripts": {
-    "pull": "git pull",
-    "start": "ts-node src/index.ts",
+    "build": "tamagui-build",
     "test": "jest"
   },
   "dependencies": {
@@ -32,6 +31,6 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "typescript": "~5.3.3"
+    "@tamagui/build": "^1.101.7"
   }
 }

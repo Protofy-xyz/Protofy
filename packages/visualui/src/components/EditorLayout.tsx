@@ -292,7 +292,7 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
     }}>
       <Head>
         <title>Platform UI</title>
-        <link rel="icon" type="image/png" sizes="16x16" href={require("../assets/logo.png")}></link>
+        <link rel="icon" type="image/png" sizes="16x16" href={"/logo_bw.png"}></link>
       </Head>
       {loading ? <Stack style={{ height: '100vh', justifyContent: 'center', alignItems: 'center', zIndex: 100, backgroundColor: '#f0f0f0' }}>
         <Spinner size="large"></Spinner>

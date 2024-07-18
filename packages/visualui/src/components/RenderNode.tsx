@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import { ArrowDown, Trash2, Redo, ArrowUp, Move, MoreVertical, Copy } from '@tamagui/lucide-icons';
 import { XStack } from '@my/ui'
 import { useUITheme } from "./Theme";
-import { Icon } from "protolib/components/Icon";
+import { Icon } from "protolib/dist/components/Icon";
 import { v4 as uuidv4 } from 'uuid';
 import { MenuOption, UIMenu } from './UIMenu';
 
