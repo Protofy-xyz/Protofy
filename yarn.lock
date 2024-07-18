@@ -25467,8 +25467,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "protodevice@workspace:packages/protodevice"
   dependencies:
+    "@tamagui/build": "npm:^1.101.7"
     immer: "npm:9.0.5"
     json2yaml: "npm:^1.1.0"
+    protolib: "npm:*"
     react-topics: "npm:0.1.7"
     react-use-websocket: "npm:4.5.0"
     ts-node: "npm:10.9.1"

@@ -5,7 +5,7 @@ import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG } from '@my/ui'
 import { useSearchParams, useRouter } from 'solito/navigation';
-import { getErrorMessage } from "@my/ui";
+import { getErrorMessage } from "protolib/lib/error";
 import { SiteConfig } from '../../conf'
 import { useSession, useSessionContext } from 'protolib/lib/Session'
 import { Auth } from 'protolib/lib/Auth'

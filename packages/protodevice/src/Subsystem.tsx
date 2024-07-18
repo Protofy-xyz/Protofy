@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { XStack, YStack, Text, Paragraph, Button, Input, Spinner, Switch } from '@my/ui';
-import { ContainerLarge } from 'protolib/components/Container';
-import { Tinted } from 'protolib/components/Tinted';
-import { Chip } from 'protolib/components/Chip';
-import { useMqttState, useSubscription } from 'protolib/lib/mqtt';
-import { useFetch } from 'protolib/lib/useFetch'
-import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
+import { ContainerLarge } from 'protolib/dist/components/Container';
+import { Tinted } from 'protolib/dist/components/Tinted';
+import { Chip } from 'protolib/dist/components/Chip';
+import { useMqttState, useSubscription } from 'protolib/dist/lib/mqtt';
+import { useFetch } from 'protolib/dist/lib/useFetch'
+import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/dist/bundles/devices/devices/devicesSchemas';
+
 
 const Monitor = ({ deviceName, monitorData, subsystem }) => {
     const monitor = new DeviceSubsystemMonitor(deviceName, subsystem.name, monitorData)
@@ -107,7 +108,7 @@ const Action = ({ deviceName, action, buttonAction }) => {
         </YStack>
     )
 }
-const subsystem = ({ subsystem, deviceName }) => {
+export const Subsystem = ({ subsystem, deviceName }) => {
     const { client } = useMqttState();
     const eventGenerationFlag = false;
 
@@ -150,5 +151,3 @@ const subsystem = ({ subsystem, deviceName }) => {
 
     );
 }
-
-export default subsystem

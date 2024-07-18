@@ -15,7 +15,8 @@ import { ActiveGroupButton } from './ActiveGroupButton';
 import { ButtonGroup } from './ButtonGroup';
 import { forwardRef, useContext, useEffect, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet } from '@tamagui/lucide-icons'
-import { getErrorMessage, useToastController } from '@my/ui'
+import { useToastController } from '@my/ui'
+import { getErrorMessage } from '../lib/error';
 import { useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from '../next'
 import React from 'react';

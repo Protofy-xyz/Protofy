@@ -1,12 +1,12 @@
-import { Paragraph, Spinner, Stack, Unspaced, XStack, YStack } from 'tamagui'
-import { Button, Dialog, Spacer, getErrorMessage } from '@my/ui'
+import { Paragraph, Spinner, Button, Spacer, XStack, YStack, Dialog } from 'tamagui'
+import { getErrorMessage } from "../lib/error";
 import { forwardRef, useEffect, useState } from 'react'
 import { Tinted } from './Tinted'
 import { Notice } from './Notice'
 import Center from './Center'
 import dynamic from 'next/dynamic';
 //@ts-ignore
-const Chat = dynamic(() => import('protolib/components/Chat'), { ssr: false })
+const Chat = dynamic(() => import('./Chat'), { ssr: false })
 
 export const AlertDialog = forwardRef(({
     showCancel,

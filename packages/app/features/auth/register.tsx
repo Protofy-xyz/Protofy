@@ -3,9 +3,9 @@ import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
 import { getEnv, createSessio, PendingResult, getPendingResult } from 'protobase'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
-import { ProtofyLogoSVG, Separator, XStack, getValidation } from '@my/ui'
+import { ProtofyLogoSVG, Separator, XStack } from '@my/ui'
 import { useSearchParams, useRouter } from 'solito/navigation';
-import { getErrorMessage } from "@my/ui";
+import { getErrorMessage, getValidation } from "protolib/lib/error";
 import { useSession, useSessionContext } from 'protolib/lib/Session'
 import { Auth } from 'protolib/lib/Auth'
 import { Center } from 'protolib/components/Center'

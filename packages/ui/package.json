@@ -6,7 +6,7 @@
   ],
   "private": true,
   "types": "./types/index",
-  "main": "src/index.tsx",
+  "main": "dist/cjs/index.js",
   "module:jsx": "src",
   "files": [
     "types",

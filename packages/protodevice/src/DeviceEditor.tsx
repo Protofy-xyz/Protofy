@@ -5,11 +5,11 @@ import { Build, FlashError } from "./const";
 import { manifest } from "./manifest";
 import ApiCaller from './oldThings/apiCaller';
 import * as deviceFunctions from './device'
-import DeviceModal from "./DeviceModal";
+import {DeviceModal} from "./DeviceModal";
 import { withTopics } from "react-topics";
 import { useThemeSetting } from '@tamagui/next-theme'
-import { useMqttState, useSubscription } from "protolib/lib/mqtt";
-import Flows from 'protolib/adminpanel/features/components/Flows'
+import { useMqttState, useSubscription } from "protolib/dist/lib/mqtt";
+import Flows from 'protolib/dist/adminpanel/features/components/Flows'
 
 // class ExternalApiConfig {
 //   config;

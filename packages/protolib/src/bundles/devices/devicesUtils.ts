@@ -1,8 +1,4 @@
-import { Transport, ESPLoader } from "protodevice/src/device/esptool-js";
-import { sleep } from "protodevice/src/sleep";
-import { Build, FlashError } from "protodevice/src/const";
-import { manifest } from "protodevice/src/manifest";
-
+import { Transport, ESPLoader, sleep, Build, FlashError, manifest } from "protodevice";
 
 let port;
 

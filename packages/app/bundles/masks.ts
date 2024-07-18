@@ -1,4 +1,4 @@
-import devicesEditorMasks from 'protodevice/src/nodes'
+import { devicesEditorMasks } from 'protodevice'
 import customVisualUIMasks from 'app/bundles/custom/masks/custom.masks'
 import uiBundleMasks from 'protolib/bundles/ui/masks';
 import apiMasks from 'protolib/bundles/apis/masks';

@@ -3,17 +3,18 @@
   "version": "0.0.1",
   "sideEffects": false,
   "source": "src/index.ts",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
     "pull": "git pull",
-    "start": "ts-node src/index.ts"
+    "build": "tamagui-build"
   },
   "dependencies": {
     "immer": "9.0.5",
     "json2yaml": "^1.1.0",
+    "protolib": "*",
     "react-topics": "0.1.7",
     "react-use-websocket": "4.5.0",
     "ts-node": "10.9.1",
@@ -21,6 +22,7 @@
     "zustand": "3.6.9"
   },
   "devDependencies": {
+    "@tamagui/build": "^1.101.7",
     "typescript": "~5.3.3"
   }
 }

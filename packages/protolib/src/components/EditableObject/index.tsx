@@ -9,7 +9,7 @@ import { Tinted } from '../Tinted';
 import { Notice } from '../Notice';
 import { AlertDialog } from '../AlertDialog';
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { getErrorMessage } from "@my/ui";
+import { getErrorMessage } from "../../lib/error";
 import { Schema } from "protobase";
 import { useUpdateEffect } from "usehooks-ts";
 import {useTint} from '../../lib/Tints'

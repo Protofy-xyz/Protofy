@@ -84,7 +84,7 @@ export const getColor = (id) => {
 }
 
 
-export default deviceMasks.map((e) => {
+export const devicesEditorMasks = deviceMasks.map((e) => {
   return {
     ...e,
     capabilities: ["esphome"]

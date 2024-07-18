@@ -8,7 +8,10 @@
       "jsx": "react",
       "esModuleInterop": true,
       "paths": {
-        "protolib/*": ["../protolib/src/*"]
+        "protolib/*": ["../protolib/src/*"],
+        "react-native": [
+          "react-native-web"
+        ],
       }
     },
     "include": ["src", "index.tsx", "../protolib/src/**/*.ts", "../protolib/src/**/*.tsx"],

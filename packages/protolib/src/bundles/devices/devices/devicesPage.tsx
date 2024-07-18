@@ -16,9 +16,7 @@ import { useSubscription, Connector } from '../../../lib/mqtt';
 import { z } from 'protobase';
 import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
-import DeviceModal from 'protodevice/src/DeviceModal'
-import * as deviceFunctions from 'protodevice/src/device'
-import Subsystem from 'protodevice/src/Subsystem'
+import { DeviceModal, deviceFunctions, Subsystem } from 'protodevice'
 import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text } from '@my/ui';
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';

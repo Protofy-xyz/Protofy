@@ -10,7 +10,6 @@
       "resolveJsonModule": true,         // Allows importing .json files
       "outDir": "./dist",                // Redirect output structure to the directory
       "jsx":"react-jsx",
-      "rootDir": "./src",                // Specify the root directory of input files
       "removeComments": true,            // Remove comments from the output files
       "typeRoots": [                     // Specifies a list of directories for type definitions
         "./node_modules/@types",
@@ -20,15 +19,11 @@
         "es6",
         "dom",
         "esnext.asynciterable"
-      ],
-      "paths": {
-        "protolib/*": ["../protolib/src/*"]
-      }
+      ]
     },
     "include": [
       "src/**/*.ts",
-      "src/**/*.tsx",
-      "../protolib/src/**/*.ts",
+      "src/**/*.tsx"
     ],
     "exclude": [
       "node_modules"

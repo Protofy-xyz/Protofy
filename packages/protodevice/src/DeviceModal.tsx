@@ -1,9 +1,9 @@
 import React from "react";
-import { AlertDialog } from 'protolib/components/AlertDialog'
-import { Tinted } from 'protolib/components/Tinted'
+import { AlertDialog } from 'protolib/dist/components/AlertDialog'
+import { Tinted } from 'protolib/dist/components/Tinted'
 import { useThemeName } from 'tamagui'
 
-const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
+export const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
 
     const isError = modalFeedback?.details?.error
     const isLoading = ['write'].includes(stage) && !isError && !modalFeedback?.message?.includes('Please hold "Boot"')
@@ -127,5 +127,3 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
         </div>
     </AlertDialog >)
 }
-
-export default DeviceModal
