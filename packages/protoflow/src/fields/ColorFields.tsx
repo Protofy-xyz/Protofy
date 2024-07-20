@@ -4,7 +4,7 @@ import Text from '../diagram/NodeText'
 import { FlowStoreContext } from '../store/FlowsStore';
 import { GithubPicker, SketchPicker } from "react-color";
 import Input from '../diagram/NodeInput'
-import { Popover } from '@my/ui'
+import { Popover } from 'tamagui'
 import { Pipette, Palette } from '@tamagui/lucide-icons'
 import { CustomField } from '.';
 import { useThemeSetting } from '@tamagui/next-theme'

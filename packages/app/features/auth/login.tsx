@@ -5,19 +5,19 @@ import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG } from '@my/ui'
 import { useSearchParams, useRouter } from 'solito/navigation';
-import { getErrorMessage } from "protolib/lib/error";
+import { getErrorMessage } from "protolib/dist/lib/error";
 import { SiteConfig } from '../../conf'
-import { useSession, useSessionContext } from 'protolib/lib/Session'
-import { Auth } from 'protolib/lib/Auth'
-import { Center } from 'protolib/components/Center'
-import { HorizontalBox } from 'protolib/components/HorizontalBox'
-import { Notice } from 'protolib/components/Notice'
-import { Section } from 'protolib/components/Section'
-import { SpotLight } from 'protolib/components/SpotLight'
-import { ElevatedArea } from 'protolib/components/ElevatedArea'
-import { BackgroundGradient } from 'protolib/components/BackgroundGradient'
-import { Page } from 'protolib/components/Page'
-import { LogoIcon } from 'protolib/components/LogoIcon'
+import { useSession, useSessionContext } from 'protolib/dist/lib/Session'
+import { Auth } from 'protolib/dist/lib/Auth'
+import { Center } from 'protolib/dist/components/Center'
+import { HorizontalBox } from 'protolib/dist/components/HorizontalBox'
+import { Notice } from 'protolib/dist/components/Notice'
+import { Section } from 'protolib/dist/components/Section'
+import { SpotLight } from 'protolib/dist/components/SpotLight'
+import { ElevatedArea } from 'protolib/dist/components/ElevatedArea'
+import { BackgroundGradient } from 'protolib/dist/components/BackgroundGradient'
+import { Page } from 'protolib/dist/components/Page'
+import { LogoIcon } from 'protolib/dist/components/LogoIcon'
 
 export function SignInPage(props) {
   return (

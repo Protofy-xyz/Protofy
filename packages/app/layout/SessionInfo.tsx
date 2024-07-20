@@ -1,5 +1,5 @@
-import { useSession } from "protolib/lib/Session";
-import { HeaderLink } from 'protolib/components/HeaderLink';
+import { useSession } from "protolib/dist/lib/Session";
+import { HeaderLink } from 'protolib/dist/components/HeaderLink';
 
 export default function SessionInfo() {
     const [session] = useSession();

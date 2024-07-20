@@ -1,4 +1,4 @@
-import { APIContext } from 'protolib/bundles/apiContext'
+import { APIContext } from 'protolib/dist/bundles/apiContext'
 import {Objects} from './objects'
 
 export default {

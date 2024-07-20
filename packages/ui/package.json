@@ -5,16 +5,14 @@
     "*.css"
   ],
   "private": true,
-  "types": "./types/index",
-  "main": "dist/cjs/index.js",
+  "main": "src/index.tsx",
   "module:jsx": "src",
   "files": [
     "types",
     "dist"
   ],
   "scripts": {
-    "build": "tamagui-build",
-    "watch": "tamagui-build --watch"
+
   },
   "dependencies": {
     "@tamagui/animations-css": "^1.101.7",

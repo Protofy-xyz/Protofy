@@ -11,26 +11,26 @@ const variants = {
 } as const
 
 const StyledContainer = styled(YStack, {
-  mx: 'auto',
-  px: '$4',
+  marginHorizontal: 'auto',
+  paddingHorizontal: '$4',
   width: '100%',
 
   $gtSm: {
     maxWidth: 700,
     //@ts-ignore
-    pr: '$2',
+    paddingRight: '$2',
   },
 
   $gtMd: {
     maxWidth: 740,
     //@ts-ignore
-    pr: '$2',
+    paddingRight: '$2',
   },
 
   $gtLg: {
     maxWidth: 800,
     //@ts-ignore
-    pr: '$10',
+    paddingRight: '$10',
   },
 
   variants,
@@ -38,8 +38,8 @@ const StyledContainer = styled(YStack, {
 
 const StyledContainerLarge = styled(YStack, {
   //@ts-ignore
-  mx: 'auto',
-  px: '$4',
+  marginHorizontal: 'auto',
+  paddingHorizontal: '$4',
   width: '100%',
 
   $gtSm: {
@@ -55,8 +55,8 @@ const StyledContainerLarge = styled(YStack, {
 
 const StyledContainerXL = styled(YStack, {
   //@ts-ignore
-  mx: 'auto',
-  px: '$4',
+  marginHorizontal: 'auto',
+  paddingHorizontal: '$4',
   width: '100%',
 
   $gtSm: {

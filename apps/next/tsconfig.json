@@ -10,8 +10,7 @@
     "paths": {
       "react-native": [
         "react-native-web"
-      ],
-      "protolib/*": ["../../packages/protolib/src/*"]
+      ]
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -41,9 +40,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "jest/jest-globals.d.ts",
-    "../../packages/protolib/src/**/*.ts",
-    "../../packages/protolib/src/**/*.tsx"
+    "jest/jest-globals.d.ts"
   ],
   "exclude": [
     "node_modules"

@@ -1,13 +1,12 @@
 {
   "version": "0.0.1",
   "name": "protolib",
-  "main": "index.tsx",
+  "main": "./dist/index.js",
   "private": true,
   "sideEffects": [
     "*.css"
   ],
   "scripts": {
-    "pull": "git pull",
     "test": "jest --passWithNoTests",
     "build": "tamagui-build"
   },
@@ -22,6 +21,7 @@
     "@react-three/drei": "9.77.3",
     "@react-three/fiber": "8.8.10",
     "@rehookify/datepicker": "6.6.1",
+    "@tamagui/config": "^1.101.7",
     "@tamagui/font-cherry-bomb": "^1.101.7",
     "@tamagui/font-dm-sans": "^1.101.7",
     "@tamagui/font-dm-serif-display": "^1.101.7",
@@ -29,6 +29,7 @@
     "@tamagui/font-inter": "^1.101.7",
     "@tamagui/font-munro": "^1.101.7",
     "@tamagui/font-silkscreen": "^1.101.7",
+    "@tamagui/shorthands": "^1.101.7",
     "archiver": "7.0.1",
     "cookie": "^0.6.0",
     "express-list-endpoints": "^6.0.0",
@@ -38,7 +39,7 @@
     "mapbox-gl": "^3.1.2",
     "masonic": "^3.7.0",
     "moment": "2.29.4",
-    "mqtt": "^5.2.1",
+    "mqtt": "5.1.4",
     "mqtt-pattern": "^1.2.0",
     "multer": "1.4.5-lts.1",
     "pino": "9.2.0",

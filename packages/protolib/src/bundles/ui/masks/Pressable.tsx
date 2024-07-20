@@ -1,5 +1,5 @@
 import { Node, NodeParams, FallbackPortList, filterCallbackProp, restoreCallbackProp, CustomFieldsList, AddPropButton, Field } from 'protoflow';
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 import { Timer } from '@tamagui/lucide-icons';
 import { useRef } from 'react'
 import { DecorationProps, DimensionProps, LayoutProps, ThemeProps } from './PropsLists';

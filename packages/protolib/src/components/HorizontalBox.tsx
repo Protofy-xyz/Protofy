@@ -10,13 +10,13 @@ export const HorizontalBox = React.forwardRef((props:StackProps, ref:any) => (
         maxWidth="100%"
         space="$8"
         flexWrap="nowrap"
-        px="$2"
-        mb={-8}
+        paddingHorizontal="$2"
+        marginBottom={-8}
 
         $sm={{ flexDirection: 'column' }}
         $gtSm={{
             //@ts-ignore
-            px: '$6',
+            paddingHorizontal: '$6',
         }}
         {...props}
         >

@@ -10,7 +10,7 @@ import { Chip } from "./Chip";
 export const getFieldPreview = (key, row, def, plain?) => {
     if (def?.color) {
         return <Chip color={"$gray5"}>
-            <XStack ai="center" height={20}>
+            <XStack alignItems="center" height={20}>
                 <Circle size={12} backgroundColor={row[key]} />
                 <Spacer size={5} />
                 {row[key] && row[key].toUpperCase ? row[key].toUpperCase() : row[key]}
@@ -93,7 +93,7 @@ export const DataTableList = ({
                 })
         )
     )
-    return <XStack pt="$1" flexWrap='wrap'>
+    return <XStack paddingTop="$1" flexWrap='wrap'>
         <Tinted>
             <DataTable2.component
                 disableItemSelection={disableItemSelection}
@@ -111,7 +111,7 @@ export const DataTableList = ({
                 columns={[DataTable2.column(
                     <Theme reset>
                         <XStack>
-                            <Stack mt={"$2"} ml="$3" o={0.8}>
+                            <Stack marginTop={"$2"} marginLeft="$3" opacity={0.8}>
                                 <Checkbox focusStyle={{ outlineWidth: 0 }} checked={selected.length > 1} onPress={(e) => {
                                     if (selected.length) {
                                         setSelected([])
@@ -129,16 +129,16 @@ export const DataTableList = ({
                             {selected.length > 1 &&
                                 <ItemMenu enableAddToInitialData={enableAddToInitialData}
                                     type={"bulk"}
-                                    mt={"1px"}
-                                    ml={"-5px"}
+                                    marginTop={"1px"}
+                                    marginLeft={"-5px"}
                                     element={model.load(selected)}
                                     sourceUrl={sourceUrl}
                                     deleteable={deleteable}
                                     onDelete={onDelete}
                                     extraMenuActions={extraMenuActions} />}
                         </XStack>
-                    </Theme>, () => "", false, row => <Theme reset><XStack ml="$3" o={0.8}>
-                        <Stack mt={"$2"}>
+                    </Theme>, () => "", false, row => <Theme reset><XStack marginLeft="$3" opacity={0.8}>
+                        <Stack marginTop={"$2"}>
                             <Checkbox
                                 id={`select-checkbox-${model.load(row).getId()}`}
                                 focusStyle={{ outlineWidth: 0 }}
@@ -162,8 +162,8 @@ export const DataTableList = ({
                         </Stack>
                         <ItemMenu enableAddToInitialData={enableAddToInitialData}
                             type={"item"}
-                            ml={"-5px"}
-                            mt={"1px"}
+                            marginLeft={"-5px"}
+                            marginTop={"1px"}
                             element={model.load(row)}
                             sourceUrl={sourceUrl + "/" + model.load(row).getId()}
                             deleteable={deleteable}

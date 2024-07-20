@@ -2,7 +2,7 @@ import { Node, NodeParams, FlowPort, FallbackPort, FallbackPortList, filterCallb
 import { ClipboardList } from '@tamagui/lucide-icons';
 import { useEffect, useState } from 'react';
 import { API } from 'protobase'
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 
 const objectList = (node: any = {}, nodeData = {}) => {
     const [objects, setObjects] = useState<any[]>([]);

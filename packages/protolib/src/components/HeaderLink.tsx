@@ -5,7 +5,7 @@ import { NextLink } from './NextLink'
 
 export const HeadAnchor = styled(Paragraph, {
   //@ts-ignore
-  px: '$3', py: '$2',  size: '$5',  w: '100%',
+  paddingHorizontal: '$3', paddingVertical: '$2',  size: '$5',  width: '100%',
   cursor: 'pointer',
   fontFamily: "$heading",
   fontWeight: "600",

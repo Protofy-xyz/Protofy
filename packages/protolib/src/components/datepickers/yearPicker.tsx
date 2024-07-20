@@ -51,11 +51,13 @@ export function YearPickerInput() {
     >
       <DatePicker.Trigger asChild>
         <DatePickerInput
+          //@ts-ignore
           value={
             offsetDate?.toLocaleDateString('en-US', {
               year: 'numeric',
             }) || ''
           }
+          //@ts-ignore
           placeholder="Select year"
           onReset={() => {
             setOffsetDate(undefined)
@@ -63,11 +65,8 @@ export function YearPickerInput() {
           onButtonPress={() => setOpen(true)}
         />
       </DatePicker.Trigger>
-
-      <DatePicker.Content>
-        <DatePicker.Content.Arrow borderWidth={1} borderColor="$borderColor" />
-        <DatePickerBody />
-      </DatePicker.Content>
+      {/* @ts-ignore */}
+      <DatePicker.Content> <DatePicker.Content.Arrow borderWidth={1} borderColor="$borderColor" /> <DatePickerBody /> </DatePicker.Content>
     </DatePicker>
   )
 }

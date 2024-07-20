@@ -10,16 +10,16 @@ Don't modify export default object
 
 import React, { useState } from 'react'
 import { Theme } from '@my/ui'
-import { useComposedState } from 'protolib/lib/useComposedState'
-import { Text } from 'protolib/components/Text';
-import { VStack } from 'protolib/components/VStack';
-import { useEditor } from 'protolib/visualui/useEdit';
-import { BigTitle} from 'protolib/components/BigTitle'
-import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
+import { useComposedState } from 'protolib/dist/lib/useComposedState'
+import { Text } from 'protolib/dist/components/Text';
+import { VStack } from 'protolib/dist/components/VStack';
+import { useEditor } from 'protolib/dist/visualui/useEdit';
+import { BigTitle} from 'protolib/dist/components/BigTitle'
+import { UIWrapLib, UIWrap } from 'protolib/dist/visualui/visualuiWrapper'
 import { API, Protofy } from 'protobase';
-import { withSession } from 'protolib/lib/Session';
-import { Page } from 'protolib/components/Page';
-import { SSR } from 'protolib/lib/SSR';
+import { withSession } from 'protolib/dist/lib/Session';
+import { Page } from 'protolib/dist/components/Page';
+import { SSR } from 'protolib/dist/lib/SSR';
 import { DefaultLayout, } from '../../../layout/DefaultLayout'
 import { context } from 'app/bundles/uiContext';
 import { useRouter } from 'solito/navigation';
@@ -39,7 +39,7 @@ const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
         <Page minHeight="100vh">
             <DefaultLayout title="Protofy" description="Made with love from Barcelona">
                 {/* add your content here, this is just an example with a big text */}
-                <VStack mt="$10" ai="center">
+                <VStack marginTop="$10" alignItems="center">
                     <BigTitle>{{name}}</BigTitle>
                 </VStack>
             </DefaultLayout>

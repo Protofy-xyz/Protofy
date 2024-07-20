@@ -103,11 +103,11 @@ export const DataCard = React.forwardRef(({ compact=false, innerContainerProps =
                 </Theme>}
             >
                 <Stack
-                    f={1}
+                    flex={1}
                     {...innerContainerProps}
                 >
                     <Theme name={tint as any}>
-                        <XStack y={0} p={"$0"} pt="$0" maxHeight={-1} overflow={"hidden"}>
+                        <XStack y={0} padding={"$0"} paddingTop="$0" maxHeight={-1} overflow={"hidden"}>
                             {loadingState?.isLoading ?
                                 <Spinner /> :
                                 loadingState?.isError ?

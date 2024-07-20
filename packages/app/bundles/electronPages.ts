@@ -1,4 +1,4 @@
-import {ElectronPagesBundles} from 'protolib/bundles/electronPages'
+import {ElectronPagesBundles} from 'protolib/dist/bundles/electronPages'
 
 
 export default {

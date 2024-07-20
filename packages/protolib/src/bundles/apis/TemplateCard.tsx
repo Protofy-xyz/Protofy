@@ -21,8 +21,8 @@ export const TemplateCard = ({ template, isSelected, onPress }) => {
                 padding="$4"
             >
                 {template.icon ? createElement(template.icon, { size: '35px'}) : null}
-                <Text ta='center' marginBottom="$2" marginTop="$4">{template.name ?? template.id}</Text>
-                <Text ta='center' fontWeight="300" opacity={0.4}>{template.description}</Text>
+                <Text textAlign="center" marginBottom="$2" marginTop="$4">{template.name ?? template.id}</Text>
+                <Text textAlign="center" fontWeight="300" opacity={0.4}>{template.description}</Text>
             </YStack>
         </Tinted>
     )

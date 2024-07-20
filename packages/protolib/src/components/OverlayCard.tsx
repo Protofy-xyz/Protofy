@@ -4,14 +4,14 @@ import { Card, CardProps, YStack } from "tamagui"
 const OverlayCard = React.forwardRef((props: CardProps, ref:any) => {  
     return (
       //@ts-ignore
-      <Card ref={ref} bw={1} boc="$borderColor" br="$6" elevation="$6" shadowRadius={60}>
+      <Card ref={ref} borderWidth={1} borderColor="$borderColor" borderRadius="$6" elevation="$6" shadowRadius={60}>
         <YStack
-          jc="center"
-          p="$6"
+         justifyContent="center"
+          padding="$6"
           space="$5"
-          maw="calc(min(90vw, 400px))"
+          maxWidth="calc(min(90vw, 400px))"
           //@ts-ignore
-          $sm={{ p: '$5' }}
+          $sm={{ padding: '$5' }}
           {...props}
         >
           {props.children}

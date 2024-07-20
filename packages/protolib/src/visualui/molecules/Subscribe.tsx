@@ -9,8 +9,8 @@ const Subscribe = (atoms) => {
             Enter your email and be the first to recieve latest news
         </Element>
         <Element canvas is={atoms.layout.HStack} alignItems="center" gap="$2">
-            <Element canvas is={atoms.basic.Input} state="cs.email" placeholder="Type your email" minWidth={350} f={3}></Element>
-            <Element canvas is={atoms.basic.ButtonSimple} f={1} size="$4">
+            <Element canvas is={atoms.basic.Input} state="cs.email" placeholder="Type your email" minWidth={350} flex={3}></Element>
+            <Element canvas is={atoms.basic.ButtonSimple} flex={1} size="$4">
                 subscribe
             </Element>
         </Element>

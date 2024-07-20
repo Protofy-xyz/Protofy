@@ -1,7 +1,7 @@
 import { DatabaseEntryModel, DatabaseModel } from '.'
 import { DataView } from '../../components/DataView';
 import { API } from 'protobase';
-import { AdminPage } from '../../components/AdminPage';
+import { AdminPage } from 'app/layout/AdminPage';
 import { AlertDialog } from '../../components/AlertDialog';
 import { Tinted } from '../../components/Tinted';
 import { Center } from '../../components/Center';
@@ -85,9 +85,9 @@ export default {
                     }}
                     title={dialogMessages[currentType]?.title}
                     description={dialogMessages[currentType]?.description}
-                    w={400}
+                    width={400}
                 >
-                    <YStack f={1} jc="center" ai="center">
+                    <YStack flex={1} justifyContent="center" alignItems="center">
 
                     </YStack>
                 </AlertDialog>
@@ -202,14 +202,14 @@ export default {
                         overScanBy: 1,
                         getCard: (data, width) => {
                             const { _key, ...element } = data
-                            return <YStack px={"$3"} pb="$4" f={1}>
+                            return <YStack paddingHorizontal={"$3"} paddingBottom="$4" flex={1}>
                                 <DataCard
                                     innerContainerProps={{
                                         maxWidth: 700,
                                         $md: { maxWidth: 450 },
                                         $sm: { minWidth: 'calc(100vw - 65px)', maxWidth: 'calc(100vw - 65px)' },
                                         minWidth: 300,
-                                        p: '$3'
+                                        padding: '$3'
                                     }}
                                     onDelete={onDelete}
                                     key={renew}

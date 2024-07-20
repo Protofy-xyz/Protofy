@@ -1,20 +1,16 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.base",
+  "include": [
+    "src"
+  ],
   "compilerOptions": {
     "composite": true,
-    "paths": {
-      "protolib/*": ["./*"],
-      "@components/*": ["./components/*"],
-      "@lib/*": ["./lib/*"],
-      "@data/*": ["./data/*"],
-      "react-native": ["react-native-web"],
-      "@/*": ["./*"],
-      "@my/ui": ["../ui"]
-    }
+    "jsx": "react-jsx"
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "jest/jest-globals.d.ts"
+  "references": [],
+  "typeRoots": [ // Specifies a list of directories for type definitions
+    "./node_modules/@types",
+    "../../node_modules/@types",
+    "../../.types"
   ]
 }

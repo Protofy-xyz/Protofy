@@ -8,10 +8,10 @@ export const ButtonGroup = React.forwardRef(({ mode, ...props }: GroupProps & { 
             scrollable
             bordered
             //@ts-ignore
-            bc="$color2"
+            backgroundColor="$color2"
             maxWidth="100%"
-            als="center"
-            ov="hidden"
+            alignSelf="center"
+            overflow="hidden"
             {...props}
         >
             {props.children}
@@ -21,10 +21,10 @@ export const ButtonGroup = React.forwardRef(({ mode, ...props }: GroupProps & { 
         scrollable
         bordered
         //@ts-ignore
-        bc="$color2"
+        backgroundColor="$color2"
         maxWidth="100%"
-        als="center"
-        ov="hidden"
+        alignSelf="center"
+        overflow="hidden"
         {...props}
     >
         {props.children}

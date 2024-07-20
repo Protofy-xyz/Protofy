@@ -12,10 +12,10 @@ type BlockTitleProps = {
 
 export const BlockTitle = React.forwardRef(({ title = '', subtitle = '', titleColor, subtitleColor, ...props }: BlockTitleProps & StackProps, ref: any) => (
     //@ts-ignore
-    <YStack ai="center" space="$3" {...props} ref={ref}>
+    <YStack alignItems="center" space="$3" {...props} ref={ref}>
         <Head2 color={titleColor}>{title}</Head2>
         {/* @ts-ignore */}
-        {subtitle ? <Head3 ai="center" color={subtitleColor} jc="center">{subtitle}</Head3> : null}
+        {subtitle ? <Head3 alignItems="center" color={subtitleColor} justifyContent="center">{subtitle}</Head3> : null}
     </YStack>
 ))
 

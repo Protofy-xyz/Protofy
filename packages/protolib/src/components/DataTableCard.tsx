@@ -12,9 +12,9 @@ const GridElementCard = ({ index, data, width }) => {
         <DataCard
             compact={true}
             innerContainerProps={{
-                mb: "$3",
-                mt: "$5",
-                mx: "$3",
+                marginBottom: "$3",
+                 marginTop: "$5",
+                marginHorizontal: "$3",
             }}
             onDelete={onDelete}
             // onSave={(content) => onSave(content, element.key)}
@@ -37,7 +37,7 @@ export const DataTableCard = ({ itemMinWidth = 400, rightGap = 30, contentMargin
         }
     })
 
-    return <Stack ml={"$5"} ref={containerRef} f={1}{...props}>
+    return <Stack marginLeft={"$5"} ref={containerRef} flex={1}{...props}>
         <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
     </Stack>
 }

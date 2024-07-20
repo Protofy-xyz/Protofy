@@ -110,7 +110,9 @@ export function DatePicker({ onDatesChange, selectedDates, mode = 'single', conf
     >
       <DPicker.Trigger asChild>
         <DatePickerInput
+          //@ts-ignore
           placeholder={placeholder ?? data[mode].placeholder}
+          //@ts-ignore
           value={data[mode].value}
           onReset={() => {
             onValueChange([])
@@ -119,10 +121,8 @@ export function DatePicker({ onDatesChange, selectedDates, mode = 'single', conf
           onButtonPress={() => setOpen(true)}
         />
       </DPicker.Trigger>
-      <DPicker.Content>
-        <DPicker.Content.Arrow />
-        {data[mode].body}
-      </DPicker.Content>
+      {/*@ts-ignore*/}
+      <DPicker.Content> <DPicker.Content.Arrow /> {data[mode].body} </DPicker.Content>
     </DPicker>
   )
 }

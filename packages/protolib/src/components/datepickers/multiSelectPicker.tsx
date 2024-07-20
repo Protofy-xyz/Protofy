@@ -58,44 +58,22 @@ function Calendar({
       >
         {order === 'first' ? (
           <Button circular {...swapOnClick(subtractOffset({ months: 1 }))}>
-              <ChevronLeft fillOpacity={0} />
+            <ChevronLeft fillOpacity={0} />
           </Button>
         ) : (
           <View />
         )}
         <View flexDirection="column" height={50} alignItems="center">
-          <SizableText
-            onPress={() => setHeader('year')}
-            selectable
-            tabIndex={0}
-            size="$4"
-            cursor="pointer"
-            color="$color11"
-            hoverStyle={{
-              color: '$color12',
-            }}
-          >
-            {year}
-          </SizableText>
-          <SizableText
-            onPress={() => setHeader('month')}
-            selectable
-            tabIndex={0}
-            size="$6"
-            cursor="pointer"
-            color="$color11"
-            hoverStyle={{
-              color: '$color12',
-            }}
-          >
-            {month}
-          </SizableText>
+          {/* @ts-ignore */}
+          <SizableText onPress={() => setHeader('year')} selectable tabIndex={0} size="$4" cursor="pointer" color="$color11" hoverStyle={{ color: '$color12' }} >{year} </SizableText>
+          {/* @ts-ignore */}
+          <SizableText onPress={() => setHeader('month')} selectable tabIndex={0} size="$6" cursor="pointer" color="$color11" hoverStyle={{ color: '$color12' }}> {month} </SizableText>
         </View>
         {Platform.select({
           web:
             order === 'last' ? (
               <Button circular {...swapOnClick(subtractOffset({ months: -1 }))}>
-                  <ChevronRight fillOpacity={0} />
+                <ChevronRight fillOpacity={0} />
               </Button>
             ) : (
               <View />
@@ -119,9 +97,8 @@ function Calendar({
       >
         <View flexDirection="row" gap="$1">
           {weekDays.map((day) => (
-            <SizableText theme="alt1" key={day} ta="center" width={45} size="$6">
-              {day}
-            </SizableText>
+            //@ts-ignore
+            <SizableText theme="alt1" key={day} textAlign="center" width={45} size="$6"> {day} </SizableText>
           ))}
         </View>
         <View flexDirection="column" gap="$1" flexWrap="wrap">
@@ -246,24 +223,23 @@ export function MultiSelectPicker() {
     >
       <DatePicker.Trigger asChild>
         <DatePickerInput
+          //@ts-ignore
           width={250}
+          //@ts-ignore
           placeholder="Start date, End date"
-          value={`${selectedDates[0]?.toDateString() || ''}${
-            selectedDates[0] && selectedDates[1]
-              ? ' , '
-              : selectedDates[0]
-                ? ' , end date'
-                : ''
-          }${selectedDates[1]?.toDateString() || ''}`}
+          //@ts-ignore
+          value={`${selectedDates[0]?.toDateString() || ''}${selectedDates[0] && selectedDates[1]
+            ? ' , '
+            : selectedDates[0]
+              ? ' , end date'
+              : ''
+            }${selectedDates[1]?.toDateString() || ''}`}
           onReset={() => onDatesChange([])}
           onButtonPress={() => setOpen(true)}
         />
       </DatePicker.Trigger>
-
-      <DatePicker.Content>
-        <DatePicker.Content.Arrow />
-        <DatePickerBody />
-      </DatePicker.Content>
+      {/* @ts-ignore */}
+      <DatePicker.Content> <DatePicker.Content.Arrow /><DatePickerBody /> </DatePicker.Content>
     </DatePicker>
   )
 }

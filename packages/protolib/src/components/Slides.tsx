@@ -15,8 +15,8 @@ export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages" }) =>
         .join(" / ");
 
     return (
-        <YStack id="admin-dataview-create-dlg" w={800} mah={700} p="$3" f={1}>
-            <XStack id="admin-eo" mt="$4" justifyContent="space-between" width="100%">
+        <YStack id="admin-dataview-create-dlg" width={800} maxHeight={700} padding="$3" flex={1}>
+            <XStack id="admin-eo" marginTop="$4" justifyContent="space-between" width="100%">
                 <Stack flex={1}>
                     <Text fontWeight={"500"} fontSize={16} color="$gray9">{titlesUpToCurrentStep}</Text>
                 </Stack>
@@ -31,12 +31,12 @@ export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages" }) =>
                 </Stack>
             </Tinted>
 
-            <Stack mt={"$6"}>
+            <Stack marginTop={"$6"}>
                 {slides[step].component}
             </Stack>
 
-            <XStack gap={40} jc='center' mb={"$5"} flex={1} alignItems="flex-end">
-                {step !== 0 ? <Button w={250} onPress={(e) => {
+            <XStack gap={40} justifyContent='center' marginBottom={"$5"} flex={1} alignItems="flex-end">
+                {step !== 0 ? <Button width={250} onPress={(e) => {
                     e.stopPropagation();
                     if (step > 0) {
                         setStep(prev_step)
@@ -44,7 +44,7 @@ export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages" }) =>
                 }} >Back
                 </Button> : <></>}
                 <Tinted>
-                    <Button id={"admin-" + id + "-add-btn"} w={250} onPress={async (e) => {
+                    <Button id={"admin-" + id + "-add-btn"} width={250} onPress={async (e) => {
                         e.stopPropagation();
                         if (post_step) {
                             setStep(post_step)

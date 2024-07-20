@@ -86,7 +86,6 @@ import VStack from '../components/VStack'
 import HStack from '../components/HStack'
 import VCenterStack from '../components/VCenterStack'
 import Spacer from '../components/Spacer'
-import { AdminPage } from '../components/AdminPage'
 import { alignSelf, fontStyle, textAlign, fontWeight, flexDirection, justifyContent, resizeMode } from './shortcuts'
 import { ProtoView } from '../components/ProtoView'
 import molecules from './molecules'
@@ -263,7 +262,6 @@ export const miscellanyPalette = {
     href: "http://google.com"
   }),
   ...cw(Page, 'EyeOff', 'Page', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
-  ...cw(AdminPage, 'EyeOff', 'AdminPage', {}, nonDraggable),
   ...cw(PageGlow, 'EyeOff', 'PageGlow'),
   ...cw(PanelMenuItem, 'Puzzle', 'PanelMenuItem', { text: "hello world" }),
   ...cw(Pre, 'EyeOff', 'Pre', {}, nonDraggable),

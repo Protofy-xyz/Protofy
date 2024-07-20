@@ -5,7 +5,7 @@ import { API } from 'protobase';
 import { DataTable2 } from '../../../components/DataTable2';
 import { DataView } from '../../../components/DataView';
 import { ButtonSimple } from '../../../components/ButtonSimple';
-import { AdminPage } from '../../../components/AdminPage';
+import { AdminPage } from 'app/layout/AdminPage';
 import { usePendingEffect } from '../../../lib/usePendingEffect';
 import { CardBody } from '../../../components/CardBody';
 import { ItemMenu } from '../../../components/ItemMenu';
@@ -79,10 +79,10 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
             isDoneCompiling = true
             console.error('Error compiling', messages)
             onSetModalFeedback({
-              message: <YStack f={1} height="100%">
-                <Paragraph color="$red8" mt="$3">Error compiling code.</Paragraph>
+              message: <YStack flex={1} height="100%">
+                <Paragraph color="$red8" marginTop="$3">Error compiling code.</Paragraph>
                 <Paragraph color="$red8">Please check your flow configuration.</Paragraph>
-                <TextArea textAlign="left" f={1} mt="$2" mb={"$5"} minHeight={"200px"} value={
+                <TextArea textAlign="left" flex={1} marginTop="$2" marginBottom={"$5"} minHeight={"200px"} value={
                   messages.map((ele) => ele.message).join('')
                 }>
 
@@ -304,7 +304,7 @@ export default {
         defaultView={"grid"}
         key={all ? 'all' : 'filtered'}
         toolBarContent={
-          <XStack mr={"$2"} f={1} space="$1.5" ai="center" jc='flex-end'>
+          <XStack marginRight={"$2"} flex={1} space="$1.5" alignItems="center" justifyContent='flex-end'>
             <Text fontSize={14} color="$color11">
               View all
             </Text>
@@ -349,13 +349,13 @@ export default {
                 await API.get(`${sourceUrl}/${deviceId}/delete`)
               }} deleteable={() => true} element={DevicesModel.load(data)} extraMenuActions={extraMenuActions} />
             </XStack>
-            <YStack f={1}>
+            <YStack flex={1}>
               {data?.subsystem
                 ? data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)
                 : (
                   <>
-                    <Paragraph mt="20px" ml="20px" size={20}>{'You need to upload the device'}</Paragraph>
-                    <ButtonSimple mt="20px" ml="20px" width={100} onPress={() => { flashDevice(DevicesModel.load(data)); }}>Upload</ButtonSimple>
+                    <Paragraph marginTop="20px" marginLeft="20px" size={20}>{'You need to upload the device'}</Paragraph>
+                    <ButtonSimple marginTop="20px" marginLeft="20px" width={100} onPress={() => { flashDevice(DevicesModel.load(data)); }}>Upload</ButtonSimple>
                   </>
                 )
               }

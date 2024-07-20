@@ -1,6 +1,6 @@
 import { Node, NodeParams, FlowPort, FallbackPort } from 'protoflow';
 import { Send } from '@tamagui/lucide-icons';
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 import { filterCallback, restoreCallback } from 'protoflow';
 import { useEffect, useState } from 'react';
 import { API } from 'protobase'

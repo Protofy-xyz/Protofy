@@ -33,7 +33,7 @@ const SideBySide = React.forwardRef(({ children }: any, ref: any) => {
             theme="alt2"
             zIndex={1000}
             //@ts-ignore
-            pe="none"
+            pointerEvents="none"
         >
             {childArray[1]}
         </YStack>

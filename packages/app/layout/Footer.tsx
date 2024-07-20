@@ -1,20 +1,20 @@
-import { NextLink } from 'protolib/components/NextLink'
-import { Logo } from 'protolib/components/Logo'
-import { Footer as ProtoFooter, FooterElement } from 'protolib/components/layout/Footer'
+import { NextLink } from 'protolib/dist/components/NextLink'
+import { Logo } from 'protolib/dist/components/Logo'
+import { Footer as ProtoFooter, FooterElement } from 'protolib/dist/components/layout/Footer'
 import React from 'react'
 import { Paragraph } from 'tamagui'
 
 export const Footer = () => <ProtoFooter>
   <FooterElement
     flex={2}
-    mt="$-1"
-    mb="$2"
+    marginTop="$-1"
+    marginBottom="$2"
     space="$4"
   >
     <NextLink href="/" aria-label="Homepage">
       <Logo text='Protofy' />
     </NextLink>
-    <Paragraph mt="$2" size="$3">
+    <Paragraph marginTop="$2" size="$3">
       Made with love
     </Paragraph>
   </FooterElement>

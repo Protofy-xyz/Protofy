@@ -1,5 +1,5 @@
 import {useAtom as _useAtom} from 'jotai'
-import { PendingResult } from './createApiAtom'
+import { PendingResult } from 'protobase'
 
 export const useAtom = (atom, initialState?) => {
     const [content, setContent] = _useAtom<PendingResult>(atom)

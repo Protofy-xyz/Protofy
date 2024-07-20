@@ -1,5 +1,5 @@
 import { DataView } from '../../components/DataView';
-import { AdminPage } from '../../components/AdminPage';
+import { AdminPage } from 'app/layout/AdminPage';
 import { CardBody } from '../../components/CardBody';
 import { Cog, ScrollText, LineChart, RotateCw, Cpu, Activity} from '@tamagui/lucide-icons';
 import { ServiceModel } from './servicesSchema';
@@ -23,13 +23,13 @@ const pm2Colors = {
 };
 
 const ReportCard = ({Icon, value, description}) => {
-  return <XStack ai="center">
-    <XStack p="$2" boc="$gray3" br={4} m="$2" bw="0px">
+  return <XStack alignItems="center">
+    <XStack padding="$2" borderColor="$gray3" borderRadius={4} margin="$2" borderWidth="0px">
       <Icon color="$gray9" size={30} strokeWidth={1.25} />
     </XStack>
-    <YStack ml={"$2"}>
-      <SizableText size="$5" o={0.81} fontWeight={"600"}>{value}</SizableText>
-      <SizableText size="$4" o={0.6} fontWeight={"500"}>{description}</SizableText>
+    <YStack marginLeft={"$2"}>
+      <SizableText size="$5" opacity={0.81} fontWeight={"600"}>{value}</SizableText>
+      <SizableText size="$4" opacity={0.6} fontWeight={"500"}>{description}</SizableText>
     </YStack>
   </XStack>
 }
@@ -88,7 +88,7 @@ export default {
                     extraMenuActions={extraMenuActions}
                   /> */}
                 </Stack>
-                <YStack f={1} p="$2">
+                <YStack flex={1} padding="$2">
                   <ReportCard Icon={Cpu} value={cpu} description="CPU" />
                   <ReportCard Icon={LineChart} value={memory} description="Used Memory" />
                   <ReportCard Icon={Activity} value={uptime} description="Uptime" />

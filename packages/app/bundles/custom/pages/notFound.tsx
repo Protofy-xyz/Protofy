@@ -1,13 +1,13 @@
 import { DefaultLayout } from 'app/layout/DefaultLayout'
 import { AlertTriangle } from '@tamagui/lucide-icons'
-import {Page} from 'protolib/components/Page'
+import {Page} from 'protolib/dist/components/Page'
 import { Protofy } from 'protobase'
 import { Theme, YStack, Text, XStack, Paragraph,H2 } from "@my/ui"
 import React, { useState } from 'react'
-import {withSession } from "protolib/lib/Session"
-import {useEditor} from 'protolib/visualui/useEdit'
-import {SSR} from 'protolib/lib/SSR'
-import {UIWrapLib, UIWrap} from 'protolib/visualui/visualuiWrapper'
+import {withSession } from "protolib/dist/lib/Session"
+import {useEditor} from 'protolib/dist/visualui/useEdit'
+import {SSR} from 'protolib/dist/lib/SSR'
+import {UIWrapLib, UIWrap} from 'protolib/dist/visualui/visualuiWrapper'
 
 const isProtected = Protofy("protected", false)
 

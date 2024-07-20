@@ -34,27 +34,27 @@ const Tag = styled(Text, {
     fontFamily: 'inherit' as any,
     fontSize: 'inherit' as any,
     borderRadius: '$2',
-    px: '$1',
-    mx: '$-1',
+    paddingHorizontal: '$1',
+    marginHorizontal: '$-1',
     cursor: 'pointer',
     color: '$color',
-    bc: '$color2',
+    backgroundColor: '$color2',
 
     hoverStyle: {
         color: '$color',
         //@ts-ignore
-        bc: '$color3',
+        backgroundColor: '$color3',
     },
 
     variants: {
         active: {
             true: {
                 color: '$color10',
-                bc: '$color5',
+                backgroundColor: '$color5',
 
                 hoverStyle: {
                     color: '$color12',
-                    bc: '$color5',
+                    backgroundColor: '$color5',
                 },
             },
         },
@@ -74,6 +74,7 @@ export const LinkGroupItem = React.forwardRef(({id, themeColor, children, href, 
 export const LinkGroup = React.forwardRef(({children}:any, ref:any) => {
     return (
         <Subtitle>
+            {/* @ts-ignore */}
             <HoveredGroup>
                 {children}
             </HoveredGroup>

@@ -17,7 +17,7 @@ export const TemplatePreview = ({ template, isSelected, onPress, theme }) => {
                 />
                 <YStack
                     display={previewVisible ? 'block' : 'none'}
-                    zi={10000}
+                    zIndex={10000}
                     position='absolute'
                     right={"$2"}
                     top={"$2"}
@@ -26,7 +26,7 @@ export const TemplatePreview = ({ template, isSelected, onPress, theme }) => {
                         <Button
                             backgroundColor={"$color7"}
                             size="$1.5" borderRadius={"$1"}
-                            px="$2" textProps={{ size: "$1" }}
+                            paddingHorizontal="$2" textProps={{ size: "$1" }}
                             onPress={(e) => {
                                 e.stopPropagation()
                             }}
@@ -34,7 +34,7 @@ export const TemplatePreview = ({ template, isSelected, onPress, theme }) => {
                         >preview</Button>
                     </NextLink>
                 </YStack>
-                <XStack jc='space-between' borderTopWidth={"$0.5"} borderColor={"$gray8"} backgroundColor={"$gray3"} py="$1" px="$2">
+                <XStack justifyContent='space-between' borderTopWidth={"$0.5"} borderColor={"$gray8"} backgroundColor={"$gray3"} paddingVertical="$1" paddingHorizontal="$2">
                     <Paragraph>{template.name ?? template.id}</Paragraph>
                 </XStack>
             </YStack>

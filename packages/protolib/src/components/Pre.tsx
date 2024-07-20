@@ -7,7 +7,7 @@ const StyledPre = styled(YStack, {
   padding: '$4',
   borderRadius: '$4',
   //@ts-ignore
-  bc: '$background',
+  backgroundColor: '$background',
 })
 
 export const Pre = React.forwardRef((props: any, ref: any) => {

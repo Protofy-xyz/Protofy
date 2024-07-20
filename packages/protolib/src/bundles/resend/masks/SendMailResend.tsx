@@ -1,6 +1,6 @@
 import { Node, NodeParams, getFieldValue, Button } from 'protoflow';
 import { Mail } from '@tamagui/lucide-icons';
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 // import { sendMailWithResend } from 'protonode';
 
 const SendMailResend = (node: any = {}, nodeData = {}) => {

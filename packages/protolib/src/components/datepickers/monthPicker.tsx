@@ -63,7 +63,9 @@ export function MonthPickerInput() {
       >
         <DatePicker.Trigger asChild>
           <DatePickerInput
+            //@ts-ignore
             placeholder="Select Month"
+            //@ts-ignore
             value={
               offsetDate?.toLocaleDateString('en-US', {
                 year: 'numeric',
@@ -76,11 +78,8 @@ export function MonthPickerInput() {
             onButtonPress={() => setOpen(true)}
           />
         </DatePicker.Trigger>
-
-        <DatePicker.Content>
-          <DatePicker.Content.Arrow />
-          <DatePickerBody />
-        </DatePicker.Content>
+        {/*@ts-ignore*/}
+        <DatePicker.Content><DatePicker.Content.Arrow /> <DatePickerBody /> </DatePicker.Content>
       </DatePicker>
     </Tinted>
   )

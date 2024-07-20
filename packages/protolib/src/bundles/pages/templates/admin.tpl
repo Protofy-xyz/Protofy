@@ -6,12 +6,12 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 */
 
 import { Protofy, API } from 'protobase'
-import { PaginatedDataSSR } from 'protolib/lib/SSR'
-import { useWorkspaceUrl, getWorkspaceApiUrl } from 'protolib/lib/useWorkspaceEnv'
-import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
+import { PaginatedDataSSR } from 'protolib/dist/lib/SSR'
+import { useWorkspaceUrl, getWorkspaceApiUrl } from 'protolib/dist/lib/useWorkspaceEnv'
+import { useRedirectToEnviron } from 'protolib/dist/lib/useRedirectToEnviron'
 import { Objects } from 'app/bundles/objects'
-import { DataView } from 'protolib/components/DataView'
-import { AdminPage } from 'protolib/components/AdminPage'
+import { DataView } from 'protolib/dist/components/DataView'
+import { AdminPage } from 'app/layout/AdminPage'
 import { Tag } from '@tamagui/lucide-icons'
 import { context } from 'app/bundles/uiContext'
 import { useRouter } from 'solito/navigation'

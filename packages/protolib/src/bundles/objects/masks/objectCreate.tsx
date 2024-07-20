@@ -2,7 +2,7 @@ import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, Fl
 import { PackagePlus } from '@tamagui/lucide-icons';
 import { useEffect, useState, useContext } from 'react';
 import { API } from 'protobase'
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 import { useUpdateEffect } from 'usehooks-ts';
 
 const objectCreate = (node: any = {}, nodeData = {}) => {

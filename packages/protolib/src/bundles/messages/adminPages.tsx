@@ -5,7 +5,7 @@ import { useTint } from '../../lib/Tints';
 import { JSONViewer } from '../../components/jsonui';
 import { Center } from '../../components/Center';
 import { SSR } from '../../lib/SSR';
-import { AdminPage } from '../../components/AdminPage';
+import { AdminPage } from 'app/layout/AdminPage';
 import { useSubscription } from '../../lib/mqtt';
 import { H2, XStack, YStack, Text, Paragraph } from '@my/ui';
 import { useState } from 'react';
@@ -13,13 +13,13 @@ import { useInterval, useUpdateEffect } from 'usehooks-ts';
 import { Radio } from '@tamagui/lucide-icons'
 
 const MessageList = ({ data, topic }) => {
-    return <XStack p="$3" ml={"$0"} ai="center" jc="center">
-        {/* <YStack jc="center" mr="$4"><MessageSquare color="var(--color7)" strokeWidth={1} /></YStack> */}
+    return <XStack padding="$3" marginLeft={"$0"} alignItems="center" justifyContent="center">
+        {/* <YStack justifyContent="center" marginRight="$4"><MessageSquare color="var(--color7)" strokeWidth={1} /></YStack> */}
         <YStack>
-            <XStack left={-6} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" br={4} width="fit-content" ml={"$3"}>
-                <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
+            <XStack left={-6} hoverStyle={{ backgroundColor: "$color6" }} cursor="pointer" alignItems="center" marginBottom="$2" paddingVertical={3} paddingHorizontal="$2" borderRadius={4} width="fit-content" marginLeft={"$3"}>
+                <XStack alignItems="center" hoverStyle={{ opacity: 1 }} opacity={0.9}>
                     <Radio color="var(--color7)" strokeWidth={2} size={20} />
-                    <Text ml={"$2"} o={0.9} fontSize={14} fontWeight={"500"}>{topic}</Text>
+                    <Text marginLeft={"$2"} opacity={0.9} fontSize={14} fontWeight={"500"}>{topic}</Text>
                 </XStack>
                 {/* <Chip width="fit-content" text={m.topic} color={'$color5'} /> */}
             </XStack>
@@ -45,11 +45,11 @@ const EmptyMessage = () => {
     useInterval(() => { setOpacity(opacity == 0.3 ? 0.1 : 0.3) }, 500)
     return <Tinted>
         {/* @ts-ignore */}
-        <XStack o={opacity} animation={"lazy"}>
-            {/* <Spinner o={0.5} color="$color10" size='large' scale={3} /> */}
+        <XStack opacity={opacity} animation={"lazy"}>
+            {/* <Spinner opacity={0.5} color="$color10" size='large' scale={3} /> */}
             <Radio strokeWidth={1.4} size={100} />
         </XStack>
-        <H2 o={0.3} fontSize={20} mt={10} fontWeight={"400"}>Waiting for messages</H2>
+        <H2 opacity={0.3} fontSize={20} marginTop={10} fontWeight={"400"}>Waiting for messages</H2>
     </Tinted>
 }
 export default {
@@ -75,12 +75,12 @@ export default {
             }
             const filteredMessages = messages.filter((m) => !filter || JSON.stringify(m).includes(filter))
             return (<AdminPage title="Messages" pageSession={pageSession}>
-                <YStack f={1}>
+                <YStack flex={1}>
 
-                    <XStack pt="$3" px="$7" mb="$5">
-                        <XStack left={-12} top={9} f={1} ai="center">
+                    <XStack paddingTop="$3" paddingHorizontal="$7" marginBottom="$5">
+                        <XStack left={-12} top={9} flex={1} alignItems="center">
                             <Paragraph>
-                                <Text fontSize="$5" color="$color11">Messages [<Tinted><Text fontSize={"$5"} o={1} color="$color10">{filteredMessages.length}</Text></Tinted>]</Text>
+                                <Text fontSize="$5" color="$color11">Messages [<Tinted><Text fontSize={"$5"} opacity={1} color="$color10">{filteredMessages.length}</Text></Tinted>]</Text>
                             </Paragraph>
                         </XStack>
                     </XStack>
@@ -89,7 +89,7 @@ export default {
                     </Center>}
                     {filteredMessages.map((m, i) => {
                         const data = parseMessage(m.message)
-                        return <XStack hoverStyle={{ bc: "$" + tint + "4" }} key={i} btw={!i ? 1 : 0} bbw={1} boc={"$color4"}>
+                        return <XStack hoverStyle={{ backgroundColor: "$" + tint + "4" }} key={i} borderTopWidth={!i ? 1 : 0} borderBottomWidth={1} borderColor={"$color4"}>
                             <Tinted>
                                 <MessageList data={data} topic={m.topic} />
                             </Tinted>

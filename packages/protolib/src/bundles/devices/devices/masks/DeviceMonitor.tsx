@@ -1,6 +1,6 @@
 import { Node, NodeParams, getFieldValue } from 'protoflow';
 import { useState, useEffect } from 'react';
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 import { Cable } from '@tamagui/lucide-icons';
 import { DeviceRepository } from '../../repositories/deviceRepository';
 import { DeviceCollection, DeviceModel } from '../../models/DeviceModel';

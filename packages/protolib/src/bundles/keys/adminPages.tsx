@@ -1,6 +1,6 @@
 import { KeyModel } from '.'
 import { DataView } from '../../components/DataView'
-import { AdminPage } from '../../components/AdminPage'
+import { AdminPage } from 'app/layout/AdminPage'
 import { Key } from '@tamagui/lucide-icons';
 import { usePrompt } from '../../context/PromptAtom'
 import { PaginatedData } from '../../lib/SSR';

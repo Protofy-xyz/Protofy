@@ -1,6 +1,6 @@
 import React from 'react';
 import useTheme from './Theme';
-import { Input } from 'protolib/components/Input'
+import { Input } from 'protolib/dist/components/Input'
 
 const NodeInput = React.forwardRef((props:any, ref:any) => {
   const nodeBorderColor = useTheme('nodeBorderColor')

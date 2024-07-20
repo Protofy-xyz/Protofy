@@ -10,7 +10,7 @@ export const GroupButton = React.forwardRef(( {inActive, ...props} : ButtonProps
                 focusStyle: {outlineWidth:0},
                 borderRadius: 0,
                 size: "$3",
-                o: inActive?0.5:1,
+                opacity: inActive?0.5:1,
                 // fontFamily: "$silkscreen",
                 ...props
             }} />

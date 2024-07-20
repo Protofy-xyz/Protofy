@@ -1,6 +1,6 @@
-import KeysPage from 'protolib/bundles/keys/adminPages'
+import KeysPage from 'protolib/dist/bundles/keys/adminPages'
 import Head from 'next/head'
-import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
+import { useRedirectToEnviron } from 'protolib/dist/lib/useRedirectToEnviron'
 import { SiteConfig } from 'app/conf'
 
 export default function Page(props:any) {

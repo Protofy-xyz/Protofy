@@ -19,10 +19,10 @@ const WorkspaceSelector = () => {
   const [settings, setSettings] = useUserSettings()
 
   return settings.workspace ? <SelectList
-    triggerProps={{ o: 0.8, bc: "transparent", bw: 0 }}
-    valueProps={{ o: 0.8 }}
+    triggerProps={{ opacity: 0.8, backgroundColor: "transparent", borderWidth: 0 }}
+    valueProps={{ opacity: 0.8 }}
     //@ts-ignore
-    f={1}
+    flex={1}
     title={"workspaces"}
     value={settings.workspace}
     elements={workspaces}
@@ -87,7 +87,7 @@ export const AdminPanel = ({ children }) => {
     ? <PanelLayout
       topBar={
         <>
-          <XStack ai="center">
+          <XStack alignItems="center">
             <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
             {settingsLogsEnabled ? <InteractiveIcon onPress={() => setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })} IconColor="var(--color)" Icon={Activity}></InteractiveIcon> : null}
           </XStack>
@@ -95,7 +95,7 @@ export const AdminPanel = ({ children }) => {
       }
       menuContent={pages ? <PanelMenu workspace={workspaceData} />:<></>}
     >
-      <XStack f={1} px={"$0"} flexWrap='wrap'>
+      <XStack flex={1} paddingHorizontal={"$0"} flexWrap='wrap'>
         {children}
       </XStack>
     </PanelLayout>

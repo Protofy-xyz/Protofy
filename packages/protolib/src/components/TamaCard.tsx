@@ -59,7 +59,7 @@ export const TamaCard = React.forwardRef(({
       >
         {/* glow */}
         {/* @ts-ignore */}
-        <XStack bc="$backgroundStrong" f={1} p="$5" m={1} br="$6" space>
+        <XStack backgroundColor="$backgroundStrong" flex={1} padding="$5" m={1} borderRadius="$6" space>
           <YStack flex={1} space="$2">
             <H3
               alignSelf="flex-start"

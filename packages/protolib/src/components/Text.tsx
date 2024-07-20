@@ -4,7 +4,7 @@ import React from "react"
 const StyledText = styled(TamaguiText, {
   className: 'word-break-keep-all',
   //@ts-ignore
-  size: '$9', mb: '$2',
+  size: '$9', marginBottom: '$2',
   $gtSm: {
     //@ts-ignore
     size: '$10',
@@ -13,6 +13,7 @@ const StyledText = styled(TamaguiText, {
 })
 
 export const Text = React.forwardRef((props: TextProps, ref: any) => {
+  //@ts-ignore
   return <StyledText ref={ref} {...props}>
     {props.children}
   </StyledText>;

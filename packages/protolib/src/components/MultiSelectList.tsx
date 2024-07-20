@@ -9,10 +9,10 @@ type MultiSelectListProps = {
   onSetSelections?: Function,
   containerProps?: StackProps
 }
-export function MultiSelectList({ 
+export function MultiSelectList({
   choices,
   defaultSelections = [],
-  onSetSelections = (selections) => {},
+  onSetSelections = (selections) => { },
   containerProps = {},
   ...props
 }: MultiSelectListProps & StackProps) {
@@ -37,27 +37,27 @@ export function MultiSelectList({
     <Tinted>
       <XStack
         ref={rootRef}
-        bc="$backgroundTransparent"
-        w="100%"
-        h="fit-content"
-        jc="space-between"
-        ai="center"
-        px="10px"
-        py="7px"
-        br={6}
+        backgroundColor="$backgroundTransparent"
+        width="100%"
+        height="fit-content"
+        justifyContent="space-between"
+        alignItems="center"
+        paddingHorizontal="10px"
+        paddingVertical="7px"
+        borderRadius={6}
         outlineColor="$gray6"
         outlineWidth={1}
         outlineStyle='solid'
-        boc='$gray6'
+        borderColor='$gray6'
         cursor="pointer"
         onPress={() => setOpen(prev => !prev)}
         {...props}
       >
         <XStack
-          fw="wrap"
-          h="fit-content"
-          ov="hidden"
-          f={1}
+          flexWrap="wrap"
+          height="fit-content"
+          overflow="hidden"
+          flex={1}
           gap="$1.5"
         >
           {
@@ -65,18 +65,18 @@ export function MultiSelectList({
               ? selections.map((selection, i) =>
                 <Paragraph
                   key={i}
-                  px="7px"
-                  py="4px"
-                  bc="$color7"
-                  br={4}
+                  paddingHorizontal="7px"
+                  paddingVertical="4px"
+                  backgroundColor="$color7"
+                  borderRadius={4}
                   color="white"
                   onPress={(e) => updateSelections(e, selection)}
                 >{selection}</Paragraph>
               )
               : <Paragraph
-                px="7px"
-                py="4px"
-                br={4}
+                paddingHorizontal="7px"
+                paddingVertical="4px"
+                borderRadius={4}
                 color="$gray8"
               >Select</Paragraph>
           }
@@ -86,21 +86,21 @@ export function MultiSelectList({
           open
             ? <YStack
               zIndex={999999999}
-              pos="absolute"
+              position="absolute"
               top={"130%"}
               left={"0%"}
               width="100%"
-              bc={"$gray1"}
-              px="7px"
-              py="7px"
-              br={4}
+              backgroundColor={"$gray1"}
+              paddingHorizontal="7px"
+              paddingVertical="7px"
+              borderRadius={4}
               outlineColor="$gray6"
               outlineWidth={1}
               outlineStyle='solid'
               borderColor='$borderColor'
               maxHeight={'150px'}
               gap="$1.5"
-              ov="scroll"
+              overflow="scroll"
               {...containerProps}
             >
               {
@@ -108,26 +108,26 @@ export function MultiSelectList({
                   return selections.includes(choice)
                     ? <Paragraph
                       key={i}
-                      px="10px"
-                      py="7px"
-                      br={4}
+                      paddingHorizontal="10px"
+                      paddingVertical="7px"
+                      borderRadius={4}
                       fontSize={"$5"}
                       fontFamily={"$body"}
-                      bc="$color7"
+                      backgroundColor="$color7"
                       hoverStyle={{
                         cursor: 'pointer'
                       }}
                       onPress={(e) => updateSelections(e, choice)}
                     >{choice}</Paragraph>
                     : <Paragraph
-                      px="10px"
-                      py="7px"
-                      br={4}
+                      paddingHorizontal="10px"
+                      paddingVertical="7px"
+                      borderRadius={4}
                       fontSize={"$5"}
                       fontFamily={"$body"}
                       color="$color"
                       hoverStyle={{
-                        bc: '$backgroundPress',
+                        backgroundColor: '$backgroundPress',
                         cursor: 'pointer'
                       }}
                       onPress={(e) => updateSelections(e, choice)}

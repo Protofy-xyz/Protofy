@@ -2,7 +2,7 @@ import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback } f
 import { Trash2 } from '@tamagui/lucide-icons';
 import { useEffect, useState } from 'react';
 import { API } from 'protobase'
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 
 const objectDelete = (node: any = {}, nodeData = {}) => {
     const [objects, setObjects] = useState<any[]>([]);

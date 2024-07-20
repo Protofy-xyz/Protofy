@@ -5,16 +5,16 @@ export const ElevatedArea = React.forwardRef((props:StackProps, ref:any) => (
     <YStack
         ref={ref}
         //@ts-ignore
-        pos="relative"
+        position="relative"
         elevation="$4"
-        py="$4"
-        pt="$6"
-        pb="$10"
+        paddingVertical="$4"
+        paddingTop="$6"
+        paddingBottom="$10"
         zIndex={1}
         {...props}
     >
         {/*@ts-ignore*/}
-        <YStack fullscreen bc="$color3" zi={-1} o={0.25} btw={1} btc="$borderColor" />
+        <YStack fullscreen backgroundColor="$color3" zi={-1} opacity={0.25} borderTopWidth={1} btc="$borderColor" />
         {props.children}
     </YStack>
 ))

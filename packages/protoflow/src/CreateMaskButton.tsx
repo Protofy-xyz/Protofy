@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Button, YStack, Dialog, Select, XStack, Input } from '@my/ui'
+import { Button, YStack, Dialog, Select, XStack, Input } from 'tamagui'
 import useTheme from './diagram/Theme';
 import { Drama, X, Check, ChevronDown } from '@tamagui/lucide-icons';
 import { getAllFieldTypes } from './fields';

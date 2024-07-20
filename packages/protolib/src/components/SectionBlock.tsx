@@ -24,7 +24,7 @@ export const TitleLink = React.forwardRef(({ href, children, ...props }: any, re
         <CodeInline
           cursor="pointer"
           fontFamily="$silkscreen"
-          bc="$color2"
+          backgroundColor="$color2"
           hoverStyle={{
             backgroundColor: '$color3',
           }}

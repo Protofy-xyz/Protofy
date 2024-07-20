@@ -22,28 +22,20 @@
     ],
 
     "paths": {
-      "protolib/*": ["./protolib/src/*"], 
       "app/*": ["./app/*"]
     }
   },
   "include": [
     "./src/**/*.ts",
     "../../.types/*.ts",
-    "./protolib/src/api/**/*",
-    "./protolib/src/base/**/*",
     "./app/bundles/apiContext.ts",
     "./app/bundles/apis.ts",
     "./app/bundles/objects.ts",
     "./app/bundles/library.ts",
     "./app/bundles/storageProviders.ts",
     "./app/initialData.ts",
-    "./protolib/src/bundles/apiContext.ts",
-    "./protolib/src/bundles/devices/devices/devicesSchemas.ts",
-    "./protolib/src/bundles/library.ts",
-    "./protolib/src/bundles/objects.ts"
   ],
   "exclude": [
-    "node_modules",
-    "./protolib/src/base/components/*",
+    "node_modules"
   ]
 }

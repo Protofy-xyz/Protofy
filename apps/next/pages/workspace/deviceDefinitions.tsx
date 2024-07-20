@@ -1,6 +1,6 @@
-import DevicesPages from 'protolib/bundles/devices/adminPages'
+import DevicesPages from 'protolib/dist/bundles/devices/adminPages'
 import Head from 'next/head'
-import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
+import { useRedirectToEnviron } from 'protolib/dist/lib/useRedirectToEnviron'
 import { SiteConfig } from 'app/conf'
 
 export default function Page(props:any) {

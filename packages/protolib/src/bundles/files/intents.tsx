@@ -37,13 +37,13 @@ const JSONViewer = ({ extraIcons, name, path }) => {
   console.log('file content: ', fileContent)
   const data = fileContent.isLoaded ? JSON.parse(fileContent.data) : ''
   return <AsyncView waitForLoading={1000} key={path} atom={fileContent}>
-    <XStack f={1} width={'100%'}>
+    <XStack flex={1} width={'100%'}>
       <DataCard
         extraIcons={extraIcons}
         hideDeleteIcon={true}
         itemCardProps={{ topBarProps: { top: -10, backgroundColor: 'transparent' } }}
         minimal={true}
-        f={1}
+        flex={1}
         backgroundColor={'transprent'}
         onDelete={() => { }}
         onSave={(content) => { }}
@@ -159,15 +159,15 @@ If you include anything else in your message (like reasonings or natural languag
 
 
   return <AsyncView atom={fileContent}>
-    <XStack mt={30} f={1} width={"100%"}>
+    <XStack marginTop={30} flex={1} width={"100%"}>
       {/* <Theme name={tint as any}> */}
       <XStack position="absolute" right={20} top={-32}>
         {mode == 'code' ? <IconContainer onPress={() => setMode('flow')}>
-          {/* <SizableText mr={"$2"}>Save</SizableText> */}
+          {/* <SizableText marginRight={"$2"}>Save</SizableText> */}
           <Workflow color="var(--color)" size={"$1"} />
         </IconContainer> :
           <IconContainer onPress={() => setMode('code')}>
-            {/* <SizableText mr={"$2"}>Save</SizableText> */}
+            {/* <SizableText marginRight={"$2"}>Save</SizableText> */}
             <Code color="var(--color)" size={"$1"} />
           </IconContainer>}
         <SaveButton
@@ -225,7 +225,7 @@ const MonacoViewer = ({ path }) => {
   
   return (
     <AsyncView waitForLoading={1000} key={path} atom={fileContent}>
-      <XStack mt={30} f={1} width={"100%"}>
+      <XStack marginTop={30} flex={1} width={"100%"}>
 
         <SaveButton
           path={path}

@@ -10,7 +10,7 @@ export const ColorToggleButton = React.forwardRef((props: ButtonProps, ref: any)
         <Button size="$3" onPress={setNextTint} {...props} aria-label="Next theme">
           <Circle
             //@ts-ignore
-            bw={1} boc="var(--color9)" m={2}
+            borderWidth={1} borderColor="var(--color9)" m={2}
             size={12}
             backgroundColor={tint as any}
           />

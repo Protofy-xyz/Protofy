@@ -61,10 +61,10 @@ export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.t
       <Tinted>
         <Button
           id='use-edit-btn'
-          br={"$6"}
+          borderRadius={"$6"}
           display={process.env.NODE_ENV == "production" ? 'none' : "flex"} // Hide edit button when production mode
           pos='fixed'
-          bc={"$color8"}
+          backgroundColor={"$color8"}
           zIndex={9999999999}
           circular
           onPress={onEdit}
@@ -119,6 +119,7 @@ const VisualUILoader = ({ userComponents, path, metadata, visualUiContext }: { u
   }, [res])
   return (
     <UiManager
+      //@ts-ignore
       metadata={metadata}
       userPalettes={{
         atoms: { ...palettes.atoms, user: userComponents },

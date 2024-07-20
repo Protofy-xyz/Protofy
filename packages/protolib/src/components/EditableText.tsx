@@ -52,7 +52,7 @@ const EditableText = React.forwardRef(({ text='', placeHolder='' }: any, ref:any
             width="100%"
             size="$4"
             //@ts-ignore
-            p={0}
+            padding={0}
             space={0}
             borderWidth={0}
             value={content}>

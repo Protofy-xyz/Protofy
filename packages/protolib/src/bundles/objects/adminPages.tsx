@@ -3,7 +3,7 @@ import { ObjectModel } from './objectsSchemas'
 import { DataView } from '../../components/DataView';
 import { DataTable2 } from '../../components/DataTable2';
 import { Chip } from '../../components/Chip';
-import { AdminPage } from '../../components/AdminPage';
+import { AdminPage } from 'app/layout/AdminPage';
 import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import { Pencil, Boxes } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
@@ -36,7 +36,7 @@ export default {
                     entityName='Objects'
                     columns={DataTable2.columns(
                         DataTable2.column("name", row => row.name, "name", row => <XStack id={"objects-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
-                        DataTable2.column("features", row => row.features, "features", row => Object.keys(row.features).map(f => <Chip mr={"$2"} text={f} color={'$gray5'} />)),
+                        DataTable2.column("features", row => row.features, "features", row => Object.keys(row.features).map(f => <Chip marginRight={"$2"} text={f} color={'$gray5'} />)),
                     )}
                     extraFieldsFormsAdd={{
                         api: z.boolean()

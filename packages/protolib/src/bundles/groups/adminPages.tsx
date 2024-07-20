@@ -1,7 +1,7 @@
 import { GroupModel } from '.'
 import { z } from 'protobase'
 import { DataView } from '../../components/DataView'
-import { AdminPage } from '../../components/AdminPage'
+import { AdminPage } from 'app/layout/AdminPage'
 import { Users } from '@tamagui/lucide-icons';
 import { API } from 'protobase'
 import { usePrompt } from '../../context/PromptAtom'
@@ -47,7 +47,7 @@ export default {
           //   DataTable2.column("workspaces", row => row.workspaces, false, (row) =>
           //     row?.workspaces?.length
           //       ? row.workspaces.map((workspace, i) =>
-          //         <Chip ml={i ? '$2' : '$0'} key={i} text={workspace} color={'$color5'} />)
+          //         <Chip marginLeft={i ? '$2' : '$0'} key={i} text={workspace} color={'$color5'} />)
           //       : "",
           //     true, '200px')
           // )}

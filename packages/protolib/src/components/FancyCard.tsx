@@ -4,7 +4,7 @@ import { YStack, styled } from 'tamagui'
 const StyledFancyCard = styled(YStack, {
   name: 'Card',
   //@ts-ignore
-  f: 1,
+  flex: 1,
   className: 'transition all ease-in ms100',
   borderRadius: '$6',
   // backgroundColor: '$background',

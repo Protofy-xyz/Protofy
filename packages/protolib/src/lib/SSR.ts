@@ -1,6 +1,5 @@
 //helper function for pages
 import {SiteConfig} from 'app/conf'
-export * from '../components/AdminPage'
 import { NextPageContext } from 'next'
 import {API} from 'protobase'
 import {withSession, getURLWithToken} from './Session'

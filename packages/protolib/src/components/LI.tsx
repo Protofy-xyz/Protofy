@@ -6,5 +6,5 @@ export const LI = styled(Paragraph, {
   //@ts-ignore
   size: '$5',
   //@ts-ignore
-  pb: '$1',
+  paddingBottom: '$1',
 })

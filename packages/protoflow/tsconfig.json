@@ -1,19 +1,12 @@
 {
-    "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
-      "declaration": true,
-      "outDir": "./lib",
-      "strict": false,
-      "jsx": "react",
-      "esModuleInterop": true,
-      "paths": {
-        "protolib/*": ["../protolib/src/*"],
-        "react-native": [
-          "react-native-web"
-        ],
-      }
-    },
-    "include": ["src", "index.tsx", "../protolib/src/**/*.ts", "../protolib/src/**/*.tsx"],
-    "exclude": ["node_modules", "**/__tests__/*"]
-  }
+  "extends": "../../tsconfig.base",
+  "include": [
+    "src"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "module": "commonjs",
+    "jsx": "react-jsx"
+  },
+  "references": []
+}

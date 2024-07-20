@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { generateColorbyIndex } from 'protoflow/src/diagram/Theme';
+import { generateColorbyIndex } from 'protoflow/dist/diagram/Theme';
 import Wifi from './Wifi';
 import Esp32dev from './Esp32dev';
 import Seeed_xiao_esp32s3 from './Seeed_xiao_esp32s3';

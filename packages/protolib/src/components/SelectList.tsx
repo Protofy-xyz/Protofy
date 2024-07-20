@@ -20,11 +20,12 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
       {...props}
     >
       <YStack id={"eo-select-list-" + title} />
-      <Select.Trigger f={1} iconAfter={ChevronDown} {...triggerProps}>
+      <Select.Trigger flex={1} iconAfter={ChevronDown} {...triggerProps}>
         {!rawDisplay && <Select.Value {...valueProps} placeholder="choose an option">{displaySelected}</Select.Value>}
         {rawDisplay && displaySelected}
       </Select.Trigger>
-
+      
+      {/* @ts-ignore */}
       <Adapt when="sm" platform="touch">
         <Sheet
           native={!!props.native}
@@ -69,8 +70,8 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
           // to do animations:
           // animation="quick"
           // animateOnly={['transform', 'opacity']}
-          // enterStyle={{ o: 0, y: -10 }}
-          // exitStyle={{ o: 0, y: 10 }}
+          // enterStyle={{ opacity: 0, y: -10 }}
+          // exitStyle={{ opacity: 0, y: 10 }}
           minWidth={200}
         >
           <Select.Group>

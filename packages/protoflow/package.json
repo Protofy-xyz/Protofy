@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "displayName": "Protofy JS/TS Low-code react component",
   "description": "React component to generate automatic interactive Low-code diagrams from Javascript and Typescript code, with react support",
-  "main": "src/index.tsx",
+  "main": "dist/index.js",
+  "types": "types/index",
   "scripts": {
     "build": "tamagui-build"
   },
@@ -12,7 +13,6 @@
   "author": "protofy.xyz",
   "license": "MIT",
   "dependencies": {
-    "@my/ui": "0.0.1",
     "app": "0.0.0",
     "chroma-js": "2.4.2",
     "color-convert": "2.0.1",
@@ -42,6 +42,5 @@
   },
   "files": [
     "dist/**/*"
-  ],
-  "type": "module"
+  ]
 }

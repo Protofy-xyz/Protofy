@@ -3,7 +3,7 @@ import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import { Chip } from '../../components/Chip'
 import { DataTable2 } from '../../components/DataTable2'
 import { DataView } from '../../components/DataView'
-import { AdminPage } from '../../components/AdminPage'
+import { AdminPage } from 'app/layout/AdminPage'
 import moment from 'moment'
 import { ClipboardList } from '@tamagui/lucide-icons';
 import { JSONViewer } from '../../components/jsonui'

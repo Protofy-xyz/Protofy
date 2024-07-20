@@ -19,12 +19,12 @@ const SectionBox = forwardRef(({
       ref={ref}
       zi={2}
       contain="paint"
-      pos="relative"
-      py="$14"
+      position="relative"
+      paddingVertical="$14"
       elevation="$2"
       {...(bubble && {
-        maw: 1400,
-        br: '$6',
+        maxWidth: 1400,
+         borderRadius: '$6',
         bw: 1,
         boc: `$${tint}4`,
         als: 'center',

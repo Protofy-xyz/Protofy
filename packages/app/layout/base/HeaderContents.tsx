@@ -1,6 +1,6 @@
-import { ThemeToggle} from '../ThemeToggle'
-import { NextLink} from '../NextLink'
-import { ColorToggleButton} from '../ColorToggleButton'
+import { ThemeToggle} from 'protolib/dist/components/ThemeToggle'
+import { NextLink} from 'protolib/dist/components/NextLink'
+import { ColorToggleButton} from 'protolib/dist/components/ColorToggleButton'
 import * as React from 'react'
 import {
   TooltipGroup,
@@ -30,17 +30,17 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
   const settingsTintSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsTintSwitcher
   const settingsThemeSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsThemeSwitcher
   return (
-    <XStack f={1} pt="$3" >
-      <XStack ai="center" space="$4">
+    <XStack flex={1} paddingTop="$3" >
+      <XStack alignItems="center" space="$4">
         {(logo || themeSwitcher || tintSwitcher) &&
-          <XStack f={1} minWidth={210}>
+          <XStack flex={1} minWidth={210}>
             {logo && <NextLink href={logoHref}>
-              <XStack py={logoSize/4} ai="center" px="$3" cur="pointer" my={-20}>
+              <XStack paddingVertical={logoSize/4} alignItems="center" paddingHorizontal="$3" cursor="pointer" marginVertical={-20}>
                 {logo}
               </XStack>
             </NextLink>}{(themeSwitcher || tintSwitcher) &&
               <TooltipGroup delay={tooltipDelay}>
-                <XGroup boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
+                <XGroup borderColor="$color2" borderWidth={1} maxHeight={32} backgroundColor="transparent" alignItems="center" size="$3">
                   {themeSwitcher && settingsThemeSwitcherEnabled && <XGroup.Item>
                     <ThemeToggle borderWidth={0} chromeless />
                   </XGroup.Item>}
@@ -61,25 +61,25 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
           pointerEvents: 'none',
         }}
         zIndex={-1}
-        jc="center"
+       justifyContent="center"
         fullscreen
         pointerEvents="none"
-        ai="center"
+        alignItems="center"
       >
         {centerArea}
       </XStack>}
 
       <XStack
         marginLeft="auto"
-        jc="center"
-        h={40}
-        miw={160}
-        $xs={{ miw: 130 }}
+       justifyContent="center"
+        height={40}
+        minWidth={160}
+        $xs={{ minWidth: 130 }}
         pointerEvents="auto"
         tag="nav"
         marginRight="$3"
       >
-        <XStack ai="center" space="$3">
+        <XStack alignItems="center" space="$3">
           {rightArea}
           {menu}
         </XStack>

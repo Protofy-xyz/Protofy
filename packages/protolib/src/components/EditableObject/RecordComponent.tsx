@@ -45,8 +45,8 @@ export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, s
     return <FormGroup ele={ele} title={inArray ? ' #' + (ele.name + 1) : '...'} icon={List} path={path}>
         <Stack>
             {recordData ? Object.keys(recordData).map((key, i) => {
-                return <XStack key={i} mt={i ? "$2" : "$0"} ml="$1">
-                    {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack mr="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
+                return <XStack key={i} marginTop={i ? "$2" : "$0"} marginLeft="$1">
+                    {/* {elementDef.type._def.typeName != 'ZodObject' && <Tinted><XStack marginRight="$2" top={20}>{mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}</XStack></Tinted>} */}
                     {getElement({
                         ele: { ...elementDef.valueType, name: key },
                         icon: icon,
@@ -72,9 +72,9 @@ export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, s
             title={'Add new field'}
             description={""}
         >
-            <YStack f={1} id="eo-add-field-input" alignItems="center" mt="$6" justifyContent="center">
+            <YStack flex={1} id="eo-add-field-input" alignItems="center" marginTop="$6" justifyContent="center">
                 <Input
-                    f={1}
+                    flex={1}
                     value={name}
                     onChangeText={(text) => setName(text)}
                     textAlign='center'
@@ -89,6 +89,6 @@ export const RecordComp = ({ ele, inArray, recordData, elementDef, icon, data, s
                 />
             </YStack>
         </AlertDialog>
-        {(mode == 'edit' || mode == 'add') && <Button id={"eo-obj-comp-btn"} mt="$5" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
+        {(mode == 'edit' || mode == 'add') && <Button id={"eo-obj-comp-btn"} marginTop="$5" onPress={() => { setMenuOpened(true) }}> Add field</Button>}
     </FormGroup>
 }

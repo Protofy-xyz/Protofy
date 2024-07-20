@@ -130,11 +130,11 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
         currentFileName={currentFileName}
         backgroundColor={isFull ? '$colorTransparent' : (resolvedTheme == 'dark' ? "#1e1e1e" : 'white')}
         currentFile={currentFile}
-        mt={20}
+        marginTop={20}
     />
 
     return (
-        isFull ? getWidget() : <YStack overflow="hidden" f={1} backgroundColor={"$colorTransparent"} pt={4} pl={4}>
+        isFull ? getWidget() : <YStack overflow="hidden" flex={1} backgroundColor={"$colorTransparent"} paddingTop={4} paddingLeft={4}>
             <Explorer
                 currentPath={currentPath}
                 filesState={filesState}
@@ -147,7 +147,7 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
             <Dialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}>
                 <Dialog.Portal>
                     <Dialog.Overlay />
-                    <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
+                    <Dialog.Content padding={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
                         {getWidget()}
                         <Tinted>
                             <Chat tags={['doc', "files"]} zIndex={999999999} onScreen={dialogOpen} mode="popup" />
@@ -155,7 +155,8 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
                         <Dialog.Close />
                     </Dialog.Content>
                 </Dialog.Portal>
-
+                
+                {/* @ts-ignore */}
                 <Dialog.Adapt when="sm">
                     <Dialog.Sheet>
                         <Dialog.Sheet.Frame>

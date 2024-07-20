@@ -41,14 +41,14 @@ export const Popover = React.memo(function Popover({ children, menuPlacement = "
       </Adapt>
 
       <TamaguiPopover.Content
-        bw={1}
-        boc="$borderColor"
-        enterStyle={{ x: 0, y: -10, o: 0 }}
-        exitStyle={{ x: 0, y: -10, o: 0 }}
+        borderWidth={1}
+        borderColor="$borderColor"
+        enterStyle={{ x: 0, y: -10, opacity: 0 }}
+        exitStyle={{ x: 0, y: -10, opacity: 0 }}
         x={0}
         y={0}
-        o={1}
-        bc={color}
+        opacity={1}
+        backgroundColor={color}
         //@ts-ignore
         animation={[
           'quick',
@@ -59,13 +59,13 @@ export const Popover = React.memo(function Popover({ children, menuPlacement = "
           },
         ]}
         animateOnly={['transform', 'opacity']}
-        p={0}
+        padding={0}
         maxHeight="80vh"
         elevate
         zIndex={100000000}
 
       >
-        <TamaguiPopover.Arrow borderWidth={1} boc="$borderColor" bc={color}/>
+        <TamaguiPopover.Arrow borderWidth={1} borderColor="$borderColor" backgroundColor={color}/>
 
         <TamaguiPopover.ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
           {children}

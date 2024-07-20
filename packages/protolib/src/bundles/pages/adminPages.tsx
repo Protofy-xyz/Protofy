@@ -4,7 +4,7 @@ import { DataTable2 } from '../../components/DataTable2'
 import { Chip } from '../../components/Chip'
 import { API, z } from 'protobase'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
-import { AdminPage } from '../../components/AdminPage'
+import { AdminPage } from 'app/layout/AdminPage'
 import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv'
 import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
@@ -26,7 +26,7 @@ const sourceUrl = '/adminapi/v1/pages'
 const objectsSourceUrl = '/adminapi/v1/objects?all=1'
 
 const SelectGrid = ({ children }) => {
-    return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
+    return <XStack justifyContent="center" alignItems="center" gap={25} flexWrap='wrap'>
         {children}
     </XStack>
 }
@@ -34,7 +34,7 @@ const SelectGrid = ({ children }) => {
 const FirstSlide = ({ selected, setSelected }) => {
     const themeName = useThemeName();
     return <YStack>
-        <ScrollView mah={"500px"}>
+        <ScrollView maxHeight={"500px"}>
             <SelectGrid>
                 {Object.entries(pageTemplates).map(([templateId, template]) => (
                     <TemplatePreview
@@ -91,17 +91,17 @@ export default {
             return (<AdminPage title="Pages" pageSession={pageSession}>
                 <AlertDialog
                     integratedChat
-                    p={"$2"}
-                    pt="$5"
-                    pl="$5"
+                    padding={"$2"}
+                    paddingTop="$5"
+                    paddingLeft="$5"
                     setOpen={setAddOpen}
                     open={addOpen}
                     hideAccept={true}
                     description={""}
                 >
-                    <YStack f={1} jc="center" ai="center">
+                    <YStack flex={1} justifyContent="center" alignItems="center">
                         {/* <ScrollView maxHeight={"90vh"}> */}
-                        <XStack mr="$5">
+                        <XStack marginRight="$5">
                             <Slides
                                 lastButtonCaption="Create"
                                 onFinish={async () => {
@@ -176,7 +176,7 @@ export default {
                         DataTable2.column("name", row => row.name, "name", (row) => <XStack id={"pages-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
                         DataTable2.column("route", row => row.route, "route"),
                         DataTable2.column("visibility", row => row.protected, "protected", row => !row.protected ? <Chip text={'public'} color={'$color5'} /> : <Chip text={'protected'} color={'$gray5'} />),
-                        DataTable2.column("permissions", row => row.permissions, "permissions", row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
+                        DataTable2.column("permissions", row => row.permissions, "permissions", row => row.permissions.map((p, k) => <XStack key={k} marginLeft={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
                     )}
                     onAddButton={() => { setAddOpen(true) }}
                     extraMenuActions={env == 'dev' ? [

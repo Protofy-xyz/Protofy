@@ -1,9 +1,9 @@
-import { Tinted } from '../Tinted'
+import { Tinted } from 'protolib/dist/components/Tinted'
 import { ToastProvider, ToastViewport } from '@tamagui/toast'
 import { NextSeo } from 'next-seo'
 import React from 'react'
 import { Stack, StackProps, XStack, YStack } from 'tamagui'
-import { Toast, useToastState } from '@my/ui'
+import { Toast, useToastState } from '@tamagui/toast'
 
 const ToastArea = () => {
   const currentToast = useToastState()
@@ -63,7 +63,7 @@ export const DefaultLayout = React.forwardRef(({
   openGraph?: any
 } & StackProps, ref: any) => {
   return (
-    <Stack f={1} ref={ref} height="100%" {...props}>
+    <Stack flex={1} ref={ref} height="100%" {...props}>
       <NextSeo
         // title={title}
         description={description}
@@ -74,9 +74,9 @@ export const DefaultLayout = React.forwardRef(({
       <ToastProvider swipeDirection="horizontal">
           <Tinted><ToastArea /></Tinted>
           {header}
-          <XStack f={1}>
+          <XStack flex={1}>
             {sideMenu}
-            <YStack f={1}>
+            <YStack flex={1}>
               {children}
             </YStack>
 

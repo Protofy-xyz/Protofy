@@ -81,47 +81,48 @@ export const AppBar = React.forwardRef(({ backgroundColor, containerProps = {}, 
         backgroundColor={backgroundColor}
         ref={headerContainerRef}
         // @ts-ignore
-        pos="fixed"
+        position="fixed"
         top={top ?? position == 'top' ? 0 : undefined}
         bottom={position == 'bottom' ? 0 : undefined}
         // alignSelf='center'
-        r={0}
-        l={0}
+        right={0}
+        left={0}
         alignItems="center"
         justifyContent="center"
         zi={50000}
         width={headerContainerRef.current?.width ?? "100%"}
       >
         {/*@ts-ignore*/}
-        <XStack width="100%" maw={dettached ? 1120 : undefined} pos="relative">
+        <XStack width="100%" maxWidth={dettached ? 1120 : undefined} position="relative">
+          {/*@ts-ignore*/}
           <XStack
             className={`ease-out all ms200 ${isScrolled && dettached ? 'blur-medium hover-highlights ' : ''}`}
             height={dettached ? undefined : height}
-            bbc="$borderColor"
-            py={dettached ? "$1" : "$2"}
+            borderBottomColor="$borderColor"
+            paddingVertical={dettached ? "$1" : "$2"}
             y={dettached && position == 'top' ? 3 : 0}
-            ov="hidden"
+            overflow="hidden"
             contain="paint"
             width="100%"
-            bw={0}
-            boc="transparent"
-            br={dettached ? "$10" : 0}
+            borderWidth={0}
+            borderColor="transparent"
+            borderRadius={dettached ? "$10" : 0}
             $sm={{
               //@ts-ignore
-              br: 0,
+               borderRadius: 0,
               y: 0,
-              py: '$2',
+              paddingVertical: '$2',
             }}
             {...(isScrolled && {
               $gtSm: dettached ? {
-                py: '$2',
+                paddingVertical: '$2',
                 y: 5,
                 boc: '$borderColor',
               } : {},
             })}
           >
             {/*@ts-ignore*/}
-            <YStack o={translucid ? (isScrolled ? 0.75 : 0) : 1} fullscreen bc={backgroundColor} />
+            <YStack opacity={translucid ? (isScrolled ? 0.75 : 0) : 1} fullscreen backgroundColor={backgroundColor} />
             {fullscreen ? <YStack justifyContent="center" width={'100%'}>{getContent()}</YStack> : <ContainerLarge>{getContent()}</ContainerLarge>}
           </XStack>
           {/* do shadow separate so we can contain paint because its causing perf issues */}
@@ -129,11 +130,11 @@ export const AppBar = React.forwardRef(({ backgroundColor, containerProps = {}, 
             className={`ease-out all ms200`}
             //@ts-ignore
             zi={-1}
-            br="$10"
+            borderRadius="$10"
             fullscreen
             {...(isScrolled && {
               $gtSm: dettached ? {
-                py: '$2',
+                paddingVertical: '$2',
                 y: 5,
                 elevation: '$3',
                 boc: '$borderColor',

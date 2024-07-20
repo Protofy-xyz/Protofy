@@ -27,10 +27,8 @@ function ResizeHandle({ direction = "LEFT", onTogglePanel, disabled, onClick }: 
 					pointerEvents: 'all',
 					justifyContent: 'center'
 				}}>
-				{direction == "LEFT"
-					? <ChevronLeft size={25} style={{marginRight: '3px'}} color="white" />
-					: <ChevronRight size={25} style={{marginLeft: '3px'}} color="white" />
-				}
+				{/* @ts-ignore */}
+				{direction == "LEFT" ? <ChevronLeft size={25} style={{marginRight: '3px'}} color="white" /> : <ChevronRight size={25} style={{marginLeft: '3px'}} color="white" />}
 			</div>
 		</PanelResizeHandle>
 	);

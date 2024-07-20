@@ -1,6 +1,6 @@
 
 import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback } from 'protoflow';
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 import { Cable } from '@tamagui/lucide-icons';
 import { getFieldValue } from 'protoflow';
 

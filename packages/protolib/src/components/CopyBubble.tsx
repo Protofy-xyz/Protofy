@@ -13,19 +13,19 @@ export const CopyBubble = React.forwardRef(({text, tooltipCopy='Copy to clipboar
       borderWidth={1}
       borderColor="$borderColor"
       //@ts-ignore
-      px="$7"
-      pl="$6"
+      paddingHorizontal="$7"
+      paddingLeft="$6"
       height={48}
-      ai="center"
-      als="center"
+      alignItems="center"
+      alignSelf="center"
       elevation="$3"
-      bc="$background"
-      br="$10"
+      backgroundColor="$background"
+      borderRadius="$10"
       {...props}
     >
       <Paragraph
         //@ts-ignore
-        ta="center"
+        textAlign="center"
         size="$5"
         y={1}
         fontWeight="500"
@@ -41,7 +41,7 @@ export const CopyBubble = React.forwardRef(({text, tooltipCopy='Copy to clipboar
           size="$3"
           borderRadius="$8"
           //@ts-ignore
-          mr="$-6"
+          marginRight="$-6"
           x={-1}
           icon={hasCopied ? Check : Copy}
           onPress={onCopy}

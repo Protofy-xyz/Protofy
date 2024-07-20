@@ -49,19 +49,19 @@ export const AlertDialog = forwardRef(({
         </Dialog.Trigger>}
         <Dialog.Portal >
             <Dialog.Overlay />
-            <Dialog.Content scale={1} p="$7" ai="flex-start" jc="flex-start" {...props}>
+            <Dialog.Content scale={1} padding="$7" alignItems="flex-start" justifyContent="flex-start" {...props}>
                 {integratedChat && openState && <Tinted>
                     {/* @ts-ignore */}
                     <Chat tags={['doc', title]} zIndex={999999999} onScreen={openState} mode="popup"/>
                 </Tinted> }
-                <YStack f={1} width={"100%"}>
-                    <YStack f={1}>
-                        {title && <XStack width={"100%"} f={1}>
-                            <XStack f={1}>
+                <YStack flex={1} width={"100%"}>
+                    <YStack flex={1}>
+                        {title && <XStack width={"100%"} flex={1}>
+                            <XStack flex={1}>
                                 <Dialog.Title>{title}</Dialog.Title>
                             </XStack>
                         </XStack>}
-                        {description && <Dialog.Description mt="$3" mb="$6">
+                        {description && <Dialog.Description marginTop="$3" marginBottom="$6">
                             <Center>{description}</Center>
                         </Dialog.Description>}
 
@@ -71,23 +71,23 @@ export const AlertDialog = forwardRef(({
                             </Notice>
                         )}
 
-                        <XStack f={1}>
+                        <XStack flex={1}>
                             {children}
                         </XStack>
 
-                        {!hideAccept && <YStack p="$2" pt="$0" width="100%" f={1} alignSelf="center">
+                        {!hideAccept && <YStack padding="$2" paddingTop="$0" width="100%" flex={1} alignSelf="center">
                             <Spacer flex={1} height="$2" />
                             <XStack>
                                 {showCancel &&
                                     <Tinted tint={cancelTint}>
-                                        <Button mr="$5" f={1} onPress={() => {
+                                        <Button marginRight="$5" flex={1} onPress={() => {
                                             seter(false)
                                         }} aria-label="Close" {...cancelButtonProps}>
                                             {cancelCaption}
                                         </Button>
                                     </Tinted>}
                                 <Tinted tint={acceptTint}>
-                                    <Button id="alert-dlg-accept" f={1} onPress={async () => {
+                                    <Button id="alert-dlg-accept" flex={1} onPress={async () => {
                                         setLoading(true)
                                         try {
                                             const keepOpen = await onAccept(setOpen !== undefined ? setOpen : _setOpen)
@@ -109,13 +109,13 @@ export const AlertDialog = forwardRef(({
             </Dialog.Content>
 
         </Dialog.Portal>
-
+        {/* @ts-ignore */}
         <Dialog.Adapt when="sm" >
             <XStack position='absolute'>
                 <Dialog.Sheet disableDrag={disableDrag}>
                     {/* ml -18 because there is an bug centering the dialog on sm screen */}
-                    <Dialog.Sheet.Frame ml="-18px">
-                        <YStack p={"$5"} pb="$12" f={1}>
+                    <Dialog.Sheet.Frame marginLeft="-18px">
+                        <YStack padding={"$5"} paddingBottom="$12" flex={1}>
                             <Dialog.Adapt.Contents />
                         </YStack>
                     </Dialog.Sheet.Frame>

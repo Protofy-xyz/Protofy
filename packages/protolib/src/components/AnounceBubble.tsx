@@ -17,15 +17,15 @@ type AnounceBubbleProps = {
 
 export default React.forwardRef(({ href, children, color = 2, ...props}: AnounceBubbleProps & StackProps, ref: any) => (
   //@ts-ignore
-  <XStack als="center" ref={ref} {...props}>
+  <XStack alignSelf="center" ref={ref} {...props}>
     <Link prefetch={false} href={href}>
       <ThemeTintAlt>
         <Button
           //@ts-ignore
-          bw={color}
-          boc="$color5"
+          borderWidth={color}
+          borderColor="$color5"
           size="$3"
-          br="$10"
+          borderRadius="$10"
           elevation="$1"
           fontFamily="$silkscreen"
         >

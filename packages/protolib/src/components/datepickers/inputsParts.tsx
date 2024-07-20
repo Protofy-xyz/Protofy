@@ -107,6 +107,7 @@ const InputGroupImpl = InputGroupFrame.styleable((props, forwardedRef) => {
 
   return (
     <FocusContext.Provider focused={focused} setFocused={setFocused}>
+      {/*@ts-ignore*/}
       <InputGroupFrame applyFocusStyle={focused} ref={forwardedRef} {...rest}>
         {children}
       </InputGroupFrame>
@@ -149,9 +150,11 @@ const InputImpl = InputFrame.styleable((props, ref) => {
     <View flex={1}>
       <InputFrame
         ref={ref}
+        //@ts-ignore
         onFocus={() => {
           setFocused(true)
         }}
+        //@ts-ignore
         onBlur={() => setFocused(false)}
         size={size}
         {...rest}
@@ -231,6 +234,7 @@ const InputIcon = InputIconFrame.styleable<{
 
   const getThemedIcon = useGetThemedIcon({ size: iconSize, color: color as any })
   return (
+    //@ts-ignore
     <InputIconFrame ref={ref} {...rest}>
       {getThemedIcon(children)}
     </InputIconFrame>
@@ -244,6 +248,7 @@ export const InputContainerFrame = styled(View, {
   variants: {
     size: {
       '...size': (val, { tokens }) => ({
+        //@ts-ignore
         gap: tokens.space[val].val * 0.3,
       }),
     },
@@ -277,7 +282,9 @@ export const InputInfo = styled(Text, {
     size: {
       '...fontSize': (val, { font }) => {
         if (!font) return
+        //@ts-ignore
         const fontSize = font.size[val].val * 0.8
+        //@ts-ignore
         const lineHeight = font.lineHeight?.[val].val * 0.8
         const fontWeight = font.weight?.['$2']
         const letterSpacing = font.letterSpacing?.[val]
@@ -323,26 +330,7 @@ export const Input = withStaticProperties(InputContainerFrame, {
 })
 
 export const InputNew = () => {
-  return (
-    <Input w={400} size="$3">
-      <Input.Box>
-        <Input.Section>
-          <Input.Icon>
-            <User />
-          </Input.Icon>
-        </Input.Section>
-        <Input.Section>
-          <Input.Area paddingLeft={0} />
-        </Input.Section>
-        <Input.Section>
-          <Input.Button>
-            <Input.Icon>
-              <User />
-            </Input.Icon>
-          </Input.Button>
-        </Input.Section>
-      </Input.Box>
-    </Input>
-  )
+  //@ts-ignore
+  return <Input width={400} size="$3"><Input.Box><Input.Section><Input.Icon><User /></Input.Icon></Input.Section><Input.Section><Input.Area paddingLeft={0} /></Input.Section><Input.Section><Input.Button><Input.Icon><User /></Input.Icon></Input.Button></Input.Section></Input.Box></Input>;
 }
 

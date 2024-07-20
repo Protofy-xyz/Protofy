@@ -1,5 +1,5 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme';
 import { Text } from '@tamagui/lucide-icons';
 
 const GetTextNode = ({ node = {}, nodeData = {}, children }: any) => {

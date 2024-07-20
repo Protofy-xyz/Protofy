@@ -2,7 +2,7 @@ import { Element } from "@protocraft/core";
 
 const AboutUs = (atoms) => {
     return <Element is={atoms.layout.Center} canvas height="90vh" width="100%" paddingHorizontal="20px">
-        <Element is={atoms.layout.VStack} canvas height="100%" gap="20px" width="100%" maxWidth="900px" ai="center" jc="center">
+        <Element is={atoms.layout.VStack} canvas height="100%" gap="20px" width="100%" maxWidth="900px" alignItems="center" justifyContent="center">
             <Element is={atoms.basic.Image} canvas height={120} width={150} resizeMode='cover' url='/logo.png' ></Element>
             <Element is={atoms.text.Text} canvas fontFamily="$heading" fontSize="$12" fontWeight="700" >
                 About Us

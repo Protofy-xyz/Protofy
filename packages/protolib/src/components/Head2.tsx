@@ -4,7 +4,7 @@ import React from "react"
 const StyledHead2 = styled(H2, {
   className: 'word-break-keep-all',
   //@ts-ignore
-  name: 'HomeH2', ta: 'center', als: 'center', size: '$10', maw: 720, mt: '$-2',
+  name: 'HomeH2', ta: 'center', als: 'center', size: '$10', maxWidth: 720,  marginTop: '$-2',
   //@ts-ignore
   $sm: {
     //@ts-ignore

@@ -1,5 +1,5 @@
 import { Node, NodeOutput, NodeParams, filterObject, restoreObject } from 'protoflow';
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme';
 import { Cpu } from '@tamagui/lucide-icons';
 
 const GetSystemArchitecture = ({ node = {}, nodeData = {}, children }: any) => {

@@ -48,7 +48,7 @@ export const MapView = ({ items, model, sourceUrl, extraFields, icons, customFie
   const width = 300
 
   return (
-    <Stack ref={containerRef} f={1} {...props}>
+    <Stack ref={containerRef} flex={1} {...props}>
       {(process.env.NEXT_PUBLIC_MAPBOX_TOKEN && process.env.NEXT_PUBLIC_MAPBOX_TOKEN !== "PUT_HERE_YOUR_API_KEY") ?
         <Map
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
@@ -79,12 +79,12 @@ export const MapView = ({ items, model, sourceUrl, extraFields, icons, customFie
               onClose={() => setPopupInfo({ location: { lat: '', lon: '' } })}
               closeButton={false}
             >
-              <XStack f={1} ai="center">
+              <XStack flex={1} alignItems="center">
                 <EditableObject
                   initialData={getPendingResult("loaded", popupInfo.modelItem.read())}
                   name={popupInfo.modelItem.getId()}
                   spinnerSize={15}
-                  loadingText={<YStack ai="center" jc="center">Loading data...<Paragraph fontWeight={"bold"}></Paragraph></YStack>}
+                  loadingText={<YStack alignItems="center" justifyContent="center">Loading data...<Paragraph fontWeight={"bold"}></Paragraph></YStack>}
                   objectId={popupInfo.modelItem.getId()}
                   sourceUrl={sourceUrl + '/' + popupInfo.modelItem.getId()}
                   mode={'preview'}
@@ -106,13 +106,13 @@ export const MapView = ({ items, model, sourceUrl, extraFields, icons, customFie
         <YStack flex={1} alignItems="center" justifyContent="center" space="$4">
           <Center>
             <AlertTriangle size="$7" />
-            <H2 mt="$6">
+            <H2 marginTop="$6">
               <Text>Missing </Text>
               <Tinted><Text color='var(--color10)'>API Key</Text></Tinted>
             </H2>
-            <Paragraph ta="center" mt="$6" size={"$7"}>Map rendering is unavailable without a Mapbox access token.</Paragraph>
+            <Paragraph textAlign="center" marginTop="$6" size={"$7"}>Map rendering is unavailable without a Mapbox access token.</Paragraph>
             <Tinted>
-              <Paragraph ta="center" size={"$7"}>Please visit <a style={{ fontWeight: "bold", color: `var(--color10)` }} href="https://www.mapbox.com" target="_blank" rel="noopener noreferrer">Mapbox</a> to create your token and enable map features.</Paragraph>
+              <Paragraph textAlign="center" size={"$7"}>Please visit <a style={{ fontWeight: "bold", color: `var(--color10)` }} href="https://www.mapbox.com" target="_blank" rel="noopener noreferrer">Mapbox</a> to create your token and enable map features.</Paragraph>
             </Tinted>
           </Center>
         </YStack>

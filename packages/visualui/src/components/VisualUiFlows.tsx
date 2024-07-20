@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import { FlowConstructor } from "protoflow/src/FlowBase"
-import { getKindName } from 'protoflow/src/nodes/JsxElement'
+import { FlowConstructor } from "protoflow/dist/FlowBase"
+import { getKindName } from 'protoflow/dist/nodes/JsxElement'
 import {
     addChildNodeDataAndReorder, addEdgeChildAndReorder,
     dumpContent, moveEdgeChildAndReorder, removeDataChildAndReorder,
     reorderDataChilds, reorderEdgeChilds
-} from 'protoflow/src/lib/FlowsOperations'
+} from 'protoflow/dist/lib/FlowsOperations'
 import { experimentalComms, useVisualUi, useVisualUiAtom } from '../visualUiHooks'
 
 export const UIFLOWID = "flows-ui"

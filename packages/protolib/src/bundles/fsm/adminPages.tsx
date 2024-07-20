@@ -1,7 +1,7 @@
 import { FSMModel } from './FSMSchema'
 import { DataTable2 } from '../../components/DataTable2'
 import { DataView } from '../../components/DataView'
-import { AdminPage } from '../../components/AdminPage'
+import { AdminPage } from 'app/layout/AdminPage'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
 import { ExternalLink, Link } from '@tamagui/lucide-icons'
 import { PaginatedData } from '../../lib/SSR'

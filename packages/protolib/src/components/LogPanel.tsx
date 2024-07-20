@@ -29,19 +29,19 @@ const MessageList = React.memo(({ data, topic }: any) => {
     const message = JSON.parse(data)
     const { level, time, pid, hostname, msg, name, ...cleanData } = message
     return <XStack
-        p="$3"
-        ml={"$0"}
-        ai="center"
-        jc="center"
+        padding="$3"
+        marginLeft={"$0"}
+        alignItems="center"
+        justifyContent="center"
     >
         <YStack>
-            <XStack left={-12} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" width="fit-content" ml={"$3"}>
-                <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
-                    {/* <Chip text={types[type]?.name+"("+topic+")"} color={types[type]?.color} h={25} /> */}
-                    <XStack mr={"$2"}><Icon size={20} strokeWidth={2} color={types[type]?.color} /></XStack>
-                    {/* <Chip text={types[type]?.name} color={types[type]?.color} h={25} /> */}
-                    <Text o={0.7} fontSize={14} fontWeight={"500"}>[{from}]</Text>
-                    <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{msg}</Text>
+            <XStack left={-12} hoverStyle={{ backgroundColor: "$color6" }} cursor="pointer" alignItems="center" marginBottom="$2" paddingVertical={3} paddingHorizontal="$2" width="fit-content" marginLeft={"$3"}>
+                <XStack alignItems="center" hoverStyle={{ opacity: 1 }} opacity={0.9}>
+                    {/* <Chip text={types[type]?.name+"("+topic+")"} color={types[type]?.color} height={25} /> */}
+                    <XStack marginRight={"$2"}><Icon size={20} strokeWidth={2} color={types[type]?.color} /></XStack>
+                    {/* <Chip text={types[type]?.name} color={types[type]?.color} height={25} /> */}
+                    <Text opacity={0.7} fontSize={14} fontWeight={"500"}>[{from}]</Text>
+                    <Text marginLeft={"$3"} opacity={0.9} fontSize={14} fontWeight={"500"}>{msg}</Text>
                 </XStack>
             </XStack>
             <JSONViewer
@@ -58,11 +58,11 @@ const MessageList = React.memo(({ data, topic }: any) => {
     </XStack>
 })
 
-export const LogPanel = ({AppState}) => {
+export const LogPanel = ({ AppState }) => {
     const [state, setAppState] = useAtom<any>(AppState)
     const appState: any = state
 
-    const {messages, setMessages} = useSubscription('logs/#')
+    const { messages, setMessages } = useSubscription('logs/#')
     const [filteredMessages, setFilteredMessages] = useState([])
     const [search, setSearch] = useState('')
     const initialLevels = ['info', 'warn', 'error', 'fatal']
@@ -93,15 +93,15 @@ export const LogPanel = ({AppState}) => {
             levels: levels.includes(level) ? levels.filter(l => l !== level) : [...levels, level],
         });
     };
-    const hoverStyle = React.useMemo(() => ({ bc: "$" + tint + "4" }), [tint]);
+    const hoverStyle = React.useMemo(() => ({ backgroundColor: "$" + tint + "4" }), [tint]);
 
     return <YStack>
-        <XStack ai="center" backgroundColor={'$backgroundTransparent'}>
+        <XStack alignItems="center" backgroundColor={'$backgroundTransparent'}>
             <Input
                 focusStyle={{ borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 1, outlineWidth: 0 }}
                 borderBottomWidth={1}
                 forceStyle='focus'
-                br={0}
+                borderRadius={0}
                 backgroundColor={'$backgroundTransparent'}
                 value={search}
                 width={"100%"}
@@ -109,7 +109,7 @@ export const LogPanel = ({AppState}) => {
                     setSearch(text);
                 }}
                 placeholder='Filter logs...'
-                bw={0}
+                borderWidth={0}
                 paddingLeft={80}
             />
             <Popover placement="bottom-start">
@@ -121,29 +121,29 @@ export const LogPanel = ({AppState}) => {
                 <Popover.Trigger position='absolute' left={35}>
                     <InteractiveIcon size={20} Icon={Filter} />
                 </Popover.Trigger>
-                <Popover.Content padding={0} space={0} bw={1} boc="$borderColor" bc={"$color1"} >
+                <Popover.Content padding={0} space={0} borderWidth={1} borderColor="$borderColor" backgroundColor={"$color1"} >
                     <ButtonGroup mode="vertical">
-                        <GroupButton onPress={() => toggleLevel('trace')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('trace')}>
+                        <GroupButton onPress={() => toggleLevel('trace')} justifyContent="flex-start" inActive={!appState.levels || !appState.levels.includes('trace')}>
                             <Microscope size="$1" strokeWidth={1} />
                             <Text>Trace</Text>
                         </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('debug')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('debug')}>
+                        <GroupButton onPress={() => toggleLevel('debug')} justifyContent="flex-start" inActive={!appState.levels || !appState.levels.includes('debug')}>
                             <Bug size="$1" strokeWidth={1} />
                             <Text>Debug</Text>
                         </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('info')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('info')}>
+                        <GroupButton onPress={() => toggleLevel('info')} justifyContent="flex-start" inActive={!appState.levels || !appState.levels.includes('info')}>
                             <Info size="$1" strokeWidth={1} />
                             <Text>Info</Text>
                         </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('warn')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('warn')}>
+                        <GroupButton onPress={() => toggleLevel('warn')} justifyContent="flex-start" inActive={!appState.levels || !appState.levels.includes('warn')}>
                             <AlertCircle size="$1" strokeWidth={1} />
                             <Text>Warn</Text>
                         </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('error')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('error')}>
+                        <GroupButton onPress={() => toggleLevel('error')} justifyContent="flex-start" inActive={!appState.levels || !appState.levels.includes('error')}>
                             <XCircle size="$1" strokeWidth={1} />
                             <Text>Error</Text>
                         </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('fatal')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('fatal')}>
+                        <GroupButton onPress={() => toggleLevel('fatal')} justifyContent="flex-start" inActive={!appState.levels || !appState.levels.includes('fatal')}>
                             <Bomb size="$1" strokeWidth={1} />
                             <Text>Fatal</Text>
                         </GroupButton>
@@ -152,9 +152,9 @@ export const LogPanel = ({AppState}) => {
             </Popover>
         </XStack>
 
-        <ScrollView bc="transparent" f={1} height={"calc( 100vh - 130px )"}>
+        <ScrollView backgroundColor="transparent" flex={1} height={"calc( 100vh - 130px )"}>
             {filteredMessages.map((m, i) => {
-                return <XStack bc="transparent" hoverStyle={hoverStyle} key={i} btw={0} bbw={1} boc={"$color4"}>
+                return <XStack backgroundColor="transparent" hoverStyle={hoverStyle} key={i} borderTopWidth={0} borderBottomWidth={1} borderColor={"$color4"}>
                     <Tinted>
                         {/* @ts-ignore */}
                         <MessageList data={m.message} topic={m.topic} />

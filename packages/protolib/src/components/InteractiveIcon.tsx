@@ -5,11 +5,11 @@ export const InteractiveIcon = ({ Icon, IconColor='var(--color8)', DisabledIconC
   return (
     <XStack cursor={disabled?"dafault":"pointer"} {...props}>
       <Stack
-        o={0.8}
-        br={"$5"} p={"$2"}
-        als="flex-start" cursor={disabled?"dafault":"pointer"}
-        pressStyle={!disabled?{ o: 0.7 }:{}}
-        hoverStyle={!disabled?{ o: 1, bc: "$color5" }:{}
+        opacity={0.8}
+        borderRadius={"$5"} padding={"$2"}
+        alignSelf="flex-start" cursor={disabled?"dafault":"pointer"}
+        pressStyle={!disabled?{ opacity: 0.7 }:{}}
+        hoverStyle={!disabled?{ opacity: 1, backgroundColor: "$color5" }:{}
       }>
         <Icon size={size} color={disabled?DisabledIconColor:IconColor} strokeWidth={2}  />
       </Stack>

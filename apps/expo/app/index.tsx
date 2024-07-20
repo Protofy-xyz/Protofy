@@ -1,5 +1,5 @@
 import { Paragraph, XStack } from '@my/ui'
-import Center  from 'protolib/components/Center'
+import Center  from 'protolib/dist/components/Center'
 import { Stack } from 'expo-router'
 
 export default function Screen() {

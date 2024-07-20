@@ -5,7 +5,7 @@ import React from "react"
 export const FeatureItem = React.forwardRef(({ label, children }:any, ref:any) => {
   return (
     //@ts-ignore
-    <Card p="$6" elevation="$1" $sm={{ p: '$4' }} ref={ref}>
+    <Card padding="$6" elevation="$1" $sm={{ padding: '$4' }} ref={ref}>
       <XStack tag="li">
         <Text color="$green9">
           <CheckCircle />

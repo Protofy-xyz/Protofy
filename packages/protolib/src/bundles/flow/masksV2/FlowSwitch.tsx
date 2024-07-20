@@ -1,5 +1,5 @@
 import { Node, NodeOutput, FallbackPort, NodeParams, filterConnection, getId, connectNodes, filterObject, restoreObject} from 'protoflow';
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 import { Split } from '@tamagui/lucide-icons';
 import { filterCallback, restoreCallback } from 'protoflow';
 import {operations} from '../context/flowSwitch'

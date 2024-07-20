@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams, usePathname } from 'solito/navigation';
 
 const FileBrowser = dynamic<any>(() =>
-    import('protolib/adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),
+    import('../adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),
     { ssr: false, loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
@@ -50,7 +50,7 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "", 
                     value={file ?? value}
                     onChangeText={(e) => onChange(e)}
                     size={"$3"}
-                    f={1}
+                    flex={1}
                     paddingRight={"50px"}
                 >
                 </Input>
@@ -98,7 +98,7 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "", 
                     <XStack gap="$4" justifyContent="center" alignSelf="center" width={"100%"} maxWidth={"500px"}>
                         <Tinted>
                             <Button
-                                f={1}
+                                flex={1}
                                 onPress={() => setOpen(false)}
                                 backgroundColor={"transparent"}
                                 borderWidth={2}
@@ -112,7 +112,7 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "", 
                                 Cancel
                             </Button>
                             <Button
-                                f={1}
+                                flex={1}
                                 onPress={() => {
                                     setOpen(false)
                                     onChange(tmpFile)

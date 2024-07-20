@@ -136,13 +136,13 @@ const CreateDialog = ({ subtab }) => {
             trigger={<PanelMenuItem
                 icon={getIcon(subtab.icon)}
                 text={subtab.name}
-                mb={'$4'}
+                marginBottom={'$4'}
             />}
             description={template.description ?? ("Use a simple name for your " + subtab.options.templates[0] + ", related to what your " + subtab.options.templates[0] + " does.")}
         >
-            <YStack f={1} jc="center" ai="center">
-                {result.isError ? <Paragraph mb={"$5"} color="$red10">Error: {result.error?.error}</Paragraph> : null}
-                <Input value={name} onChangeText={(text) => setName(text)} f={1} mx={"$8"} textAlign='center' id="name" placeholder={template.placeholder ?? 'name...'} />
+            <YStack flex={1} justifyContent="center" alignItems="center">
+                {result.isError ? <Paragraph marginBottom={"$5"} color="$red10">Error: {result.error?.error}</Paragraph> : null}
+                <Input value={name} onChangeText={(text) => setName(text)} flex={1} marginHorizontal={"$8"} textAlign='center' id="name" placeholder={template.placeholder ?? 'name...'} />
             </YStack>
 
         </AlertDialog>
@@ -173,7 +173,7 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
 
                 let href = "/" + workspaceRoot + '/' + workspaceEnv + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
-                if(subtab.previewMode) {
+                if (subtab.previewMode) {
                     href = SiteConfig.getDevelopmentURL(href, document?.location?.protocol, document?.location?.hostname)
                 }
 
@@ -192,7 +192,7 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                     let href = "/" + workspaceRoot + '/' + segment + '/' + (tab.type + tab.path).replace(/\/+/g, '/')
                     if (pathname.startsWith(href.replace(/\/$/, ''))) {
                         return href.length > acc ? href.length : acc;
-                      }
+                    }
                     return acc
                 }, 0)
 
@@ -219,7 +219,7 @@ const Subtabs = ({ tabs, subtabs }: any) => {
 
 const Tabs = ({ tabs, environ }: any) => {
     return (tabs ?
-        <YStack f={1}>
+        <YStack flex={1}>
             {Object.keys(tabs).map((tab, index) => {
                 if (tabs[tab].length === undefined) {
                     return <Subtabs tabs={tabs} subtabs={[tabs[tab]]} />
@@ -227,26 +227,26 @@ const Tabs = ({ tabs, environ }: any) => {
                 const tabContent = tabs[tab].filter(t => !t.visibility || t.visibility.includes(environ))
                 if (!tabContent.length) return <></>
                 return (
-                    <Accordion defaultValue={["a" + index]} br={"$6"} overflow="hidden" type="multiple" key={index}>
+                    <Accordion defaultValue={["a" + index]} borderRadius={"$6"} overflow="hidden" type="multiple" key={index}>
                         <Accordion.Item value={"a" + index}>
                             <Accordion.Trigger
-                                p={"$2"}
+                                padding={"$2"}
                                 backgroundColor={"$backgroundTransparent"}
                                 focusStyle={{ backgroundColor: "$backgroundTransparent" }}
                                 hoverStyle={{ backgroundColor: '$backgroundTransparent' }}
-                                bw={0} flexDirection="row" justifyContent="space-between">
+                                borderWidth={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
-                                    <XStack f={1} jc="center">
+                                    <XStack flex={1} justifyContent="center">
                                         {/* @ts-ignore */}
                                         <Square animation="quick" rotate={open ? '0deg' : '-90deg'}>
                                             <ChevronDown size={20} />
                                         </Square>
-                                        <SizableText f={1} ml={"$2.5"} fontWeight="bold" size={"$5"}>{tab}</SizableText>
+                                        <SizableText flex={1} marginLeft={"$2.5"} fontWeight="bold" size={"$5"}>{tab}</SizableText>
 
                                     </XStack>
                                 )}
                             </Accordion.Trigger>
-                            <Accordion.Content position="relative" left={-10} pl="$0" backgroundColor={"$backgroundTransparent"} pt={'$0'} pb={"$2"} >
+                            <Accordion.Content position="relative" left={-10} paddingLeft="$0" backgroundColor={"$backgroundTransparent"} paddingTop={'$0'} paddingBottom={"$2"} >
                                 <Subtabs tabs={tabs} subtabs={tabContent} />
                             </Accordion.Content>
                         </Accordion.Item>
@@ -277,15 +277,15 @@ export const PanelMenu = ({ workspace }) => {
 
     // }, [environ])
 
-    return (<YStack pt="$3">
+    return (<YStack paddingTop="$3">
         <Tinted>
-            <YStack ai="center" mt={"$2"} ml={"$5"} mr={"$5"}>
+            <YStack alignItems="center" marginTop={"$2"} marginLeft={"$5"} marginRight={"$5"}>
                 {pathname && searchParams && !disableEnvSelector && <SelectList
                     value={environ ?? query.env}
                     setValue={setEnviron}
                     rawDisplay={true}
                     triggerProps={{
-                        bc: "transparent",
+                        backgroundColor: "transparent",
                         borderWidth: 0,
                         outlineWidth: 1,
                         borderBottomWidth: 2,
@@ -308,10 +308,10 @@ export const PanelMenu = ({ workspace }) => {
                         }]}
                 />}
             </YStack>
-            {/* <Separator f={1} borderBottomWidth={4} /> */}
+            {/* <Separator flex={1} borderBottomWidth={4} /> */}
         </Tinted>
 
-        <ScrollView pl={"$2"} pt={"$3"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>
+        <ScrollView paddingLeft={"$2"} paddingTop={"$3"} maxHeight="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>
 
     </YStack>)
 }

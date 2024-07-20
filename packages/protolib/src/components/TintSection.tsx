@@ -50,24 +50,24 @@ export const TintSection = React.forwardRef(({ containerProps, children, index, 
 
   return (
     //@ts-ignore
-    <YStack {...containerProps} zIndex={zIndex} pos="relative" ref={ref}>
+    <YStack {...containerProps} zIndex={zIndex} position="relative" ref={ref}>
       {useMemo(() => {
         return (
           <>
             {/*@ts-ignore*/}
-            <XStack ref={top} pos="absolute" t="10%" l={0} r={0} h={10} o={0} pe="none" />
+            <XStack ref={top} position="absolute" top="10%" left={0} right={0} height={10} opacity={0} pointerEvents="none" />
             {/*@ts-ignore*/}
-            <XStack ref={mid} pos="absolute" t="50%" l={0} r={0} h={10} o={0} pe="none" />
+            <XStack ref={mid} position="absolute" top="50%" left={0} right={0} height={10} opacity={0} pointerEvents="none" />
             <XStack
               ref={bottom}
               //@ts-ignore
-              pos="absolute"
-              b="10%"
-              l={0}
-              r={0}
-              h={10}
-              o={0}
-              pe="none"
+              position="absolute"
+              bottom="10%"
+              left={0}
+              right={0}
+              height={10}
+              opacity={0}
+              pointerEvents="none"
             />
           </>
         )
@@ -96,14 +96,14 @@ const StyledHomeSection = styled(YStack, {
   //@ts-ignore
   name: 'Section',
   //@ts-ignore
-  pos: 'relative',
-  py: '$14',
-  zi: 2,
+  position: 'relative',
+  paddingVertical: '$14',
+  zIndex: 2,
 
   variants: {
     below: {
       true: {
-        zi: 1,
+        zIndex: 1,
       },
     },
   } as const,

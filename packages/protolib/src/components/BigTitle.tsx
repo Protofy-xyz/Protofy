@@ -12,14 +12,14 @@ export const BigTitle = React.forwardRef(({children, ...props}:BigTitleProps & P
     //@ts-ignore
     ref={ref}
     //@ts-ignore
-    ta="left"
+    textAlign="left"
     size="$10"
     //@ts-ignore
-    maw={500}
+    maxWidth={500}
     // FOR CLS IMPORTANT TO SET EXACT HEIGHT IDK WHY LINE HEIGHT SHOULD BE STABLE
     $gtSm={{
       //@ts-ignore
-      mx: 0,
+      marginHorizontal: 0,
       maxWidth: 800,
       //@ts-ignore
       size: '$13',

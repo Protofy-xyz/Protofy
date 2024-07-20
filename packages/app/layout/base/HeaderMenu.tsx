@@ -21,7 +21,7 @@ export const HeaderMenu = React.memo(function HeaderMenu({children, menuPlacemen
           circular
           hoverStyle={{
             //@ts-ignore
-            bc: 'transparent',
+            backgroundColor: 'transparent',
           }}
           noTextWrap
           onPress={() => setOpen(!open)}
@@ -55,13 +55,13 @@ export const HeaderMenu = React.memo(function HeaderMenu({children, menuPlacemen
       </Adapt>
 
       <Popover.Content
-        bw={1}
-        boc="$borderColor"
-        enterStyle={{ x: 0, y: -10, o: 0 }}
-        exitStyle={{ x: 0, y: -10, o: 0 }}
+        borderWidth={1}
+        borderColor="$borderColor"
+        enterStyle={{ x: 0, y: -10, opacity: 0 }}
+        exitStyle={{ x: 0, y: -10, opacity: 0 }}
         x={0}
         y={0}
-        o={1}
+        opacity={1}
         //@ts-ignore
         animation={[
           'quick',
@@ -72,13 +72,13 @@ export const HeaderMenu = React.memo(function HeaderMenu({children, menuPlacemen
           },
         ]}
         animateOnly={['transform', 'opacity']}
-        p={0}
+        padding={0}
         maxHeight="80vh"
         elevate
         zIndex={100000000}
 
       >
-        <Popover.Arrow borderWidth={1} boc="$borderColor" />
+        <Popover.Arrow borderWidth={1} borderColor="$borderColor" />
 
         <Popover.ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
           {children}

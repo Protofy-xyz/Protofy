@@ -12,7 +12,7 @@ import React, { createContext, useContext, useEffect, useMemo, useRef, useState 
 import { getErrorMessage } from "../../lib/error";
 import { Schema } from "protobase";
 import { useUpdateEffect } from "usehooks-ts";
-import {useTint} from '../../lib/Tints'
+import { useTint } from '../../lib/Tints'
 import { ItemMenu } from "../ItemMenu";
 import { getElement } from "./Element";
 
@@ -44,10 +44,10 @@ export const getDefaultValue = (type) => {
 
 
 export const FormElement = ({ ele, i, icon, children, inArray = false }) => {
-    return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2" f={1}>
+    return <Fieldset marginLeft={!i ? "$0" : "$5"} key={i} gap="$2" flex={1}>
         {!inArray && <Label fontWeight={"bold"}>
             <Tinted>
-                <Stack mr="$2">{React.createElement(icon, iconStyle)}</Stack>
+                <Stack marginRight="$2">{React.createElement(icon, iconStyle)}</Stack>
             </Tinted>
             {ele._def.label ?? ele.name}
         </Label>}
@@ -62,25 +62,25 @@ export const FormGroup = ({ ele, title, children, icon, simple = false, path }) 
     const [opened, setOpened] = useContext(OpenedSectionsContext);
     const name = [...path, ele.name].join("/")
     // console.log("PATH: ", [...path, ele.name].join("/"))
-    const content = <XStack mb={'$2'} id="eo-formgroup" br="$5" f={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}>
-        <Accordion value={opened} onValueChange={(localOpened) => setOpened(localOpened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1}>
-            <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={name}>
-                <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes(name) ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
+    const content = <XStack marginBottom={'$2'} id="eo-formgroup" borderRadius="$5" flex={1} elevation={opened.includes(name) ? 10 : 0} hoverStyle={{ elevation: 10 }}>
+        <Accordion value={opened} onValueChange={(localOpened) => setOpened(localOpened)} onPress={(e) => e.stopPropagation()} type="multiple" borderColor={"$gray6"} flex={1}>
+            <Accordion.Item borderRadius="$5" borderWidth={1} borderColor={"$gray6"} value={name}>
+                <Accordion.Trigger padding={0} paddingHorizontal={8} height={43} backgroundColor="$transparent" focusStyle={{ backgroundColor: "$transparent" }} borderRadius={opened.includes(name) ? "$0" : '$5'} borderTopLeftRadius="$5" borderTopRightRadius="$5" borderWidth="$0" flexDirection="row" alignItems="center">
                     {({ open }) => (
                         <>
                             { /* @ts-ignore */}
-                            <Square o={0.8} animation="quick" rotate={open ? '180deg' : '0deg'} mr={"$1.5"}>
+                            <Square opacity={0.8} animation="quick" rotate={open ? '180deg' : '0deg'} marginRight={"$1.5"}>
                                 <ChevronDown size="$1" />
                             </Square>
                             <Tinted>{simple ? React.createElement(icon, iconStyle) : <></>}</Tinted>
 
-                            <Paragraph ml={"$2"}>{title}</Paragraph>
+                            <Paragraph marginLeft={"$2"}>{title}</Paragraph>
                             <Spacer flex={1} />
 
                         </>
                     )}
                 </Accordion.Trigger>
-                <Accordion.Content br="$5">
+                <Accordion.Content borderRadius="$5">
                     {children}
                 </Accordion.Content>
             </Accordion.Item>
@@ -93,7 +93,7 @@ export const FormGroup = ({ ele, title, children, icon, simple = false, path }) 
 export const GridElement = ({ index, data, width }) => {
     const numColumns = data.ele._def.size || 1
 
-    return <XStack f={1} width={(width * numColumns) + (numColumns === 1 ? data.columnMargin / 2 : ((numColumns - 1) * data.columnMargin))} key={data.x}>{getElement({
+    return <XStack flex={1} width={(width * numColumns) + (numColumns === 1 ? data.columnMargin / 2 : ((numColumns - 1) * data.columnMargin))} key={data.x}>{getElement({
         ele: data.ele,
         icon: data.icon,
         i: data.i,
@@ -109,12 +109,12 @@ export const GridElement = ({ index, data, width }) => {
 
 export const DeleteButton = ({ mode, onPress }) => (
     <>
-        {(mode == 'edit' || mode == 'add') && <Stack mr={"$2"}
-            top={6} br={"$5"} p={"$2"}
-            als="flex-start" cursor='pointer'
+        {(mode == 'edit' || mode == 'add') && <Stack marginRight={"$2"}
+            top={6} borderRadius={"$5"} padding={"$2"}
+            alignSelf="flex-start" cursor='pointer'
             position="absolute"
             right='0'
-            pressStyle={{ o: 0.7 }} hoverStyle={{ bc: "$red4" }}
+            pressStyle={{ opacity: 0.7 }} hoverStyle={{ backgroundColor: "$red4" }}
             onPress={onPress}>
             <X color={'var(--red7)'} strokeWidth={2} size={20} />
         </Stack>
@@ -154,7 +154,7 @@ export type EditableObjectProps = {
     disableAutoChangeMode?: Boolean
 }
 
-export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave = (x, y) =>{}, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, URLTransform = (url) => url, disableAutoChangeMode = false, ...props }: EditableObjectProps & StackProps) => {
+export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave = (x, y) => { }, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, URLTransform = (url) => url, disableAutoChangeMode = false, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))
     const [currentMode, setCurrentMode] = useState(mode)
     const [prevCurrentMode, setPrevCurrentMode] = useState('')
@@ -245,12 +245,12 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
     }
 
     const groups = useMemo(getGroups, [extraFields, data, model, columnMargin, numColumns, currentMode, mode, originalData])
-    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} width={autoWidth ? '100%' : columnWidth * numColumns + (numColumns > 1 ? numColumns : 1) * columnMargin} f={1}>
+    const gridView = useMemo(() => Object.keys(groups).map((k, i) => <XStack ref={containerRef} width={autoWidth ? '100%' : columnWidth * numColumns + (numColumns > 1 ? numColumns : 1) * columnMargin} flex={1}>
 
-        <YStack f={1} >
+        <YStack flex={1} >
             <Grid masonry={false} containerRef={containerRef} spacing={columnMargin / 2} data={groups[k]} card={GridElement} itemMinWidth={columnWidth} columns={numColumns} />
         </YStack>
-        {currentMode == 'preview' && <Stack t={"$-7"}>
+        {currentMode == 'preview' && <Stack top={"$-7"}>
             <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={onDelete} deleteable={deleteable} element={model.load(data.data)} extraMenuActions={extraMenuActions} />
         </Stack>}
     </XStack>), [columnMargin, groups, columnWidth, numColumns])
@@ -275,13 +275,13 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
                 title="Are you sure you want to leave?"
                 description=""
             >
-                <Center mt="$5">All unsaved changes will be lost</Center>
+                <Center marginTop="$5">All unsaved changes will be lost</Center>
             </AlertDialog>
             <AsyncView forceLoad={currentMode == 'add' || data.data} waitForLoading={1000} spinnerSize={spinnerSize} loadingText={loadingText ?? "Loading " + objectId} top={loadingTop ?? -30} atom={data}>
                 <YStack width="100%">
-                    <XStack ai="center">
+                    <XStack alignItems="center">
                         <XStack id="eo-dlg-title">{title ?? <H3><Tinted><H3 color="$color9">{capitalize(mode)}</H3></Tinted>{` ${capitalize(name)}`}</H3>}</XStack>
-                        {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ o: 0.8 }} onPress={async () => {
+                        {(!disableToggleMode && (currentMode == 'view' || currentMode == 'edit')) && <XStack pressStyle={{ opacity: 0.8 }} onPress={async () => {
                             if (currentMode == 'edit' && edited) {
                                 setDialogOpen(true)
                             } else {
@@ -294,7 +294,7 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
                             </Tinted>
                         </XStack>}
                     </XStack>
-                    <YStack width="100%" f={1} mt={title ? "$2" : "$0"} ai="center" jc="center">
+                    <YStack width="100%" flex={1} marginTop={title ? "$2" : "$0"} alignItems="center" justifyContent="center">
                         {error && (
                             <Notice>
                                 <Paragraph>{getErrorMessage(error.error)}</Paragraph>
@@ -303,9 +303,9 @@ export const EditableObject = ({ externalErrorHandling, error, setError, data, s
 
                         {gridView}
 
-                        {currentMode != 'preview' && <YStack mt="$4" p="$2" pb="$5" width="100%" f={1} alignSelf="center">
+                        {currentMode != 'preview' && <YStack marginTop="$4" padding="$2" paddingBottom="$5" width="100%" flex={1} alignSelf="center">
                             {(currentMode == 'add' || currentMode == 'edit') && !hideButton && <Tinted>
-                                <Button f={1} onPress={async () => {
+                                <Button flex={1} onPress={async () => {
                                     setLoading(true)
                                     try {
                                         await onSave(originalData.data, data.data)

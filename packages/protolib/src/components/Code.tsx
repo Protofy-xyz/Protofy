@@ -30,11 +30,11 @@ const StyledCodeInline = styled(Paragraph, {
   backgroundColor: '$background',
   cursor: 'inherit',
   //@ts-ignore
-  br: '$3',
+   borderRadius: '$3',
   // @ts-ignore
   fontSize: '85%',
   //@ts-ignore
-  p: '$1.5',
+  padding: '$1.5',
 })
 
 export const Code = React.forwardRef((props: any, ref: any) => {

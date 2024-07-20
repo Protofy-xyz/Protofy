@@ -11,7 +11,7 @@ import { Chip } from "../../../components/Chip"
 import { DataTable2 } from "../../../components/DataTable2"
 import { DataView } from "../../../components/DataView"
 import { AlertDialog } from "../../../components/AlertDialog"
-import { AdminPage } from "../../../components/AdminPage"
+import { AdminPage } from 'app/layout/AdminPage'
 import { PaginatedData } from "../../../lib/SSR"
 import { InteractiveIcon } from "../../../components/InteractiveIcon"
 import Flows from '../../../adminpanel/features/components/Flows'
@@ -46,7 +46,7 @@ export default {
 
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
       <AlertDialog open={showDialog} setOpen={(open) => { setShowDialog(open) }} hideAccept={true} style={{ width: "80%", height: "80%", padding: '0px', overflow: 'hidden' }}>
-        <XStack f={1} minWidth={"100%"}>
+        <XStack flex={1} minWidth={"100%"}>
           <Flows
             style={{ width: "100%" }}
             disableDots={false}

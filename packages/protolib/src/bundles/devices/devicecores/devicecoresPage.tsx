@@ -4,7 +4,7 @@ import { API, z, getPendingResult } from 'protobase';
 import { Chip } from '../../../components/Chip';
 import { DataTable2 } from '../../../components/DataTable2';
 import { DataView } from '../../../components/DataView';
-import { AdminPage } from '../../../components/AdminPage';
+import { AdminPage } from 'app/layout/AdminPage';
 import { PaginatedDataSSR } from '../../../lib/SSR';
 import { usePendingEffect } from '../../../lib/usePendingEffect';
 import { DeviceSdkModel } from '../deviceSdks';

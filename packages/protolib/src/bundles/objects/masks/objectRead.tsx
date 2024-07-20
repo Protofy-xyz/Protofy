@@ -2,7 +2,7 @@ import { Node, NodeParams, FallbackPortList, filterCallback, restoreCallback, ge
 import { Search } from '@tamagui/lucide-icons';
 import { useEffect, useState } from 'react';
 import { API } from 'protobase'
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 
 const objectRead = (node: any = {}, nodeData = {}) => {
     const [objects, setObjects] = useState<any[]>([]);

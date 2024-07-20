@@ -1,3 +1,3 @@
-import {HeaderMenu as ProtoHeaderMenu} from 'protolib/components/layout/HeaderMenu'
+import {HeaderMenu as ProtoHeaderMenu} from './base/HeaderMenu'
 
 export const HeaderMenu = (props) => <ProtoHeaderMenu {...props} /> 

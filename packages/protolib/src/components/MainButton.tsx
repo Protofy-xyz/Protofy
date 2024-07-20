@@ -19,8 +19,8 @@ export const MainButton = React.forwardRef(({ buttonProps = {}, buttonTextProps 
     borderRadius={1000}
     bordered
     //@ts-ignore
-    bw={2}
-    mx="$2"
+    borderWidth={2}
+    marginHorizontal="$2"
     tabIndex="0"
     elevation="$1"
     letterSpacing={-2}

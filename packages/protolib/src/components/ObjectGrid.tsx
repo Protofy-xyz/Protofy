@@ -18,7 +18,7 @@ const GridElementCard = ({ index, data, width }) => {
         topBarOutSideScrollArea={false}
         backgroundColor={"$color1"}
         elevation={"$0"}
-        hoverStyle={{...(data.disableItemSelection ? {} : { o: 0.8, backgroundColor: '$' + tint.tint + '1', elevation: "$1" })}}
+        hoverStyle={{...(data.disableItemSelection ? {} : { opacity: 0.8, backgroundColor: '$' + tint.tint + '1', elevation: "$1" })}}
         borderWidth={1}
         pointerEvents='none'
         pointerEventsControls="none"
@@ -29,12 +29,12 @@ const GridElementCard = ({ index, data, width }) => {
         } : {})}
     >
         {data.getBody ? data.getBody(element, width) :
-            <Stack mb={"$4"} key={element.key} width={width}>
+            <Stack marginBottom={"$4"} key={element.key} width={width}>
                 <EditableObject
                     initialData={data.element}
                     name={modelItem.getId()}
                     spinnerSize={75}
-                    loadingText={<YStack ai="center" jc="center">Loading data...<Paragraph fontWeight={"bold"}></Paragraph></YStack>}
+                    loadingText={<YStack alignItems="center" justifyContent="center">Loading data...<Paragraph fontWeight={"bold"}></Paragraph></YStack>}
                     objectId={modelItem.getId()}
                     sourceUrl={data.sourceUrl + '/' + modelItem.getId()}
                     mode={'preview'}
@@ -46,8 +46,8 @@ const GridElementCard = ({ index, data, width }) => {
                     onDelete={data.onDelete}
                     deleteable={data.deleteable}
                     extraMenuActions={data.extraMenuActions}
-                    title={<XStack mt="$4" ml={"$4"} ai="center">
-                        {data?.icon && <Stack mr="$2"><Tinted><Icon color="var(--color7)" /></Tinted></Stack>}<H3>{data?.name}</H3>
+                    title={<XStack marginTop="$4" marginLeft={"$4"} alignItems="center">
+                        {data?.icon && <Stack marginRight="$2"><Tinted><Icon color="var(--color7)" /></Tinted></Stack>}<H3>{data?.name}</H3>
                     </XStack>}
                 />
             </Stack>
@@ -117,7 +117,7 @@ export const ObjectGrid = ({
         setReady(1)
     }, [])
 
-    return <Stack f={1} o={ready?1:0} ref={containerRef} {...props}>
+    return <Stack flex={1} opacity={ready?1:0} ref={containerRef} {...props}>
         {data && data.length > 0 ? <Grid
             overScanBy={overScanBy} 
             key={data.length + ready} 

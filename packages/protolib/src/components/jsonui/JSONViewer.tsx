@@ -280,7 +280,7 @@ const JSONViewer = (_props: JSONViewerProps) => {
   const { styles } = props;
 
   recursiveParseData("root", "", state.data, elems, 0, true);
-  return <Stack f={1} style={styles.root}>{elems}</Stack>;
+  return <Stack flex={1} style={styles.root}>{elems}</Stack>;
   
 }
 

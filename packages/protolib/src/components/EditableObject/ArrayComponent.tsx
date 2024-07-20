@@ -7,9 +7,9 @@ export const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, se
     return <FormGroup ele={ele} title={' (' + arrData.length + ')'} icon={Layers} path={path}>
         <Stack>
             {arrData.map((d, i) => {
-                return <XStack key={i} mt={i ? "$2" : "$0"} ml="$1">
+                return <XStack key={i} marginTop={i ? "$2" : "$0"} marginLeft="$1">
                     {elementDef.type._def.typeName != 'ZodObject' && <Tinted>
-                        <XStack mr="$2" top={20}>
+                        <XStack marginRight="$2" top={20}>
                             {mode == 'edit' || mode == 'add' ? <Pencil {...iconStyle} /> : <Tags {...iconStyle} />}
                         </XStack>
                     </Tinted>}
@@ -34,7 +34,7 @@ export const ArrayComp = ({ ele, elementDef, icon, path, arrData, getElement, se
                 </XStack>
             })}
         </Stack>
-        {(mode == 'edit' || mode == 'add') && <Button mt="$4" onPress={() => {
+        {(mode == 'edit' || mode == 'add') && <Button marginTop="$4" onPress={() => {
             const eleDef = ele._def.typeName == 'ZodLazy' ? ele._def.getter()._def : ele._def
             const defaultValue = eleDef.typeName == "ZodOptional" ? eleDef.innerType._def.type._def.typeName : eleDef.type._def.typeName
             setFormData(ele.name, [...arrData, getDefaultValue(elementDef.type._def.typeName)])

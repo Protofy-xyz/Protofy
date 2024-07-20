@@ -2,7 +2,7 @@ import { withSession } from '../../../lib/Session';
 import { Tinted } from '../../../components/Tinted';
 import { Center } from '../../../components/Center';
 import { SSR } from '../../../lib/SSR';
-import { AdminPage } from '../../../components/AdminPage';
+import { AdminPage } from 'app/layout/AdminPage';
 import dynamic from 'next/dynamic'
 import { Spinner } from 'tamagui'
 

@@ -8,9 +8,9 @@ import { useState } from 'react';
 const CreateComponent = ({ onCreate, buttonText, defaultInput="" }) => {
     const [inputValue, setInputValue] = useState(defaultInput);
     return <>
-        <YStack f={1} jc='center' ai='center'>
-            <Input width={"300px"} mt={"$7"} value={inputValue} onChange={(e: any) => setInputValue(e.target.value)}></Input>
-            <Button onPress={() => onCreate(inputValue)} mt={"$6"} width={"150px"}>{buttonText}</Button>
+        <YStack flex={1} justifyContent='center' alignItems='center'>
+            <Input width={"300px"} marginTop={"$7"} value={inputValue} onChange={(e: any) => setInputValue(e.target.value)}></Input>
+            <Button onPress={() => onCreate(inputValue)} marginTop={"$6"} width={"150px"}>{buttonText}</Button>
         </YStack>
     </>
 }
@@ -21,8 +21,8 @@ const fileActions = [
             if (selected.length) {
                 const href = document.location.origin + path.slice(17) + '/' + selected[0].name
                 return <>
-                    <CopyBubble mt={"$10"} text={href} />
-                    <Stack mt={"$6"} ml="auto" mr="auto">
+                    <CopyBubble marginTop={"$10"} text={href} />
+                    <Stack marginTop={"$6"} marginLeft="auto" marginRight="auto">
                         <NextLink href={href} target='_blank'><Text fontWeight={"600"}>Open link</Text></NextLink>
                     </Stack>
                 </>

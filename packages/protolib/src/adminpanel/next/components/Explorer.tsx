@@ -132,7 +132,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                 //@ts-ignore
                 <YStack flex={1} {...getRootProps()} >
                     <AlertDialog
-                        p="$5"
+                        padding="$5"
                         maxHeight={'80vh'}
                         acceptCaption="Close"
                         setOpen={setOpenDownloadDialog}
@@ -142,22 +142,22 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         description="Use those links to download:"
                     >
                         <YStack 
-                            f={1} 
+                            flex={1} 
                             overflow={'scroll'} 
                             //@ts-ignore
                             overflowX={'hidden'}
                         >
                             {selectedFiles.map((f, id) => <a key={id} href={"/adminapi/v1/files/" + currentPath + '/' + f + '?download=1'} target="_new">
-                                <XStack mb="$2" br="$radius.12" p="$2" px="$4" backgroundColor={"$color4"} hoverStyle={{ backgroundColor: "$color6", o: 1 }} o={0.7} ai="center" jc="center">
+                                <XStack marginBottom="$2" borderRadius="$radius.12" padding="$2" paddingHorizontal="$4" backgroundColor={"$color4"} hoverStyle={{ backgroundColor: "$color6", opacity: 1 }} opacity={0.7} alignItems="center" justifyContent="center">
                                     <Download />
-                                    <SizableText ml="$2">{f}</SizableText>
+                                    <SizableText marginLeft="$2">{f}</SizableText>
                                 </XStack>
                             </a>)}
                         </YStack>
                     </AlertDialog>
                     <AlertDialog
                         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
-                        p="$5"
+                        padding="$5"
                         acceptCaption="Delete"
                         setOpen={setOpenDeleteDialog}
                         open={openDeleteDialog}
@@ -170,14 +170,14 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         title={<Text color="$red9">Delete{(selectedFiles.length > 1 ? ' ' + selectedFiles.length + ' files?' : '?')}</Text>}
                         description={"The following files will be deleted:"}
                     >
-                        <YStack f={1}>
+                        <YStack flex={1}>
                             {selectedFiles.map(f => <Paragraph>{f.name}</Paragraph>)}
                         </YStack>
                     </AlertDialog>
 
                     <AlertDialog
                         onPress={(e) => { e.stopPropagation() }}
-                        p="$5"
+                        padding="$5"
                         acceptCaption="Close"
                         setOpen={setCustomAction}
                         open={customAction}
@@ -185,13 +185,13 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         title={<Tinted><Text color="$color7">{customAction?.title}</Text></Tinted>}
                         description={customAction?.description}
                     >
-                        <YStack minWidth={customAction?.size?.width} h={customAction?.size?.height} f={1}>
+                        <YStack minWidth={customAction?.size?.width} height={customAction?.size?.height} flex={1}>
                             {customAction && customAction.getComponent && customAction.getComponent(selectedFiles, normalizedCurrentPath, setCustomAction, async () => setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] }))}
                         </YStack>
 
                     </AlertDialog>
 
-                    <YStack f={1}>
+                    <YStack flex={1}>
                         <input {...getInputProps()} />
                         <Tinted>
                             <FileBrowser
@@ -246,13 +246,13 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
                             <Dialog.Portal>
                                 <Dialog.Overlay />
-                                <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'600px'} width={"600px"} >
+                                <Dialog.Content padding={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'600px'} width={"600px"} >
                                     <Uploader path={currentPath} onUpload={onUploadFiles} setShowUploadDialog={setShowUploadDialog} />
                                     <Dialog.Close />
                                 </Dialog.Content>
                             </Dialog.Portal>
 
-                            {/* optionally change to sheet when small screen */}
+                            {/* @ts-ignore */}
                             <Dialog.Adapt when="sm">
                                 <Dialog.Sheet>
                                     <Dialog.Sheet.Frame>

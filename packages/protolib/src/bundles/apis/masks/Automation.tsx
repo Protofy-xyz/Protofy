@@ -1,7 +1,7 @@
 import { Node, getFieldValue, FlowPort, NodeParams, FallbackPort, Button, filterCallback, restoreCallback } from 'protoflow';
 import { API } from 'protobase'
 import { Plug } from '@tamagui/lucide-icons';
-import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import { useColorFromPalette } from 'protoflow/dist/diagram/Theme'
 import React from 'react';
 import { Spinner, XStack } from 'tamagui';
 import { SiteConfig} from 'app/conf'
@@ -19,7 +19,7 @@ const Automation = (node: any = {}, nodeData = {}) => {
                 <FallbackPort node={node} fallbackText={'null'} port={'param-2'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (params, res) => " postText="" />
             </div>
             <div style={{height: '80px'}} />
-            <Button label={<XStack minHeight='30px' ai="center" jc="center">{loading?<Spinner color={color} />:'Run'}</XStack>} onPress={async () => {
+            <Button label={<XStack minHeight='30px' alignItems="center" justifyContent="center">{loading?<Spinner color={color} />:'Run'}</XStack>} onPress={async () => {
                 const params = getFieldValue('testparams', nodeData)
                 setLoading(true)
                 await API.get(SiteConfig.getDevelopmentURL('/api/v1/automations/' + getFieldValue('param-3', nodeData)+(params ? '?'+params : '')))

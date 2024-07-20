@@ -12,10 +12,10 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
     const addToInitialData = ({ data }) => { }
 
     const MenuButton = ({ id = "", type, text, Icon, onPress, disabled }: { id?: string, type: string, text: string, Icon: any, onPress: any, disabled?: boolean }) => {
-        return <XStack id={id} ml={"$1"} o={1} br={"$5"} p={"$3"} als="flex-start"
+        return <XStack id={id} marginLeft={"$1"} opacity={1} borderRadius={"$5"} padding={"$3"} alignSelf="flex-start"
             cursor={!disabled ? 'pointer' : 'default'}
-            pressStyle={!disabled ? { o: 0.7 } : {}}
-            hoverStyle={!disabled ? { bc: "$color5" } : {}}
+            pressStyle={!disabled ? { opacity: 0.7 } : {}}
+            hoverStyle={!disabled ? { backgroundColor: "$color5" } : {}}
             onPress={(e) => {
                 if (!disabled) {
                     onPress(type === "global" ? '*' : element, e)
@@ -23,7 +23,7 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
                 }
             }}>
             <Icon size={"$1"} color={disabled ? "var(--gray9)" : "var(--color9)"} strokeWidth={2} />
-            <Text ml={"$3"}>{text}</Text>
+            <Text marginLeft={"$3"}>{text}</Text>
         </XStack>
     }
 
@@ -38,17 +38,17 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
             }}
             title={'Delete '}
             description={"Are you sure want to delete this item?"}
-            w={280}
+            width={280}
         >
-            <YStack f={1} jc="center" ai="center">
+            <YStack flex={1} justifyContent="center" alignItems="center">
 
             </YStack>
         </AlertDialog>
         <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom">
             <Popover.Trigger>
-                <InteractiveIcon id={`more-btn-${sourceUrl.split("/").slice(-1)}`} Icon={MoreVertical} onPress={(e) => { e.stopPropagation(); setMenuOpened(true) }} ml={"$3"}></InteractiveIcon>
+                <InteractiveIcon id={`more-btn-${sourceUrl.split("/").slice(-1)}`} Icon={MoreVertical} onPress={(e) => { e.stopPropagation(); setMenuOpened(true) }} marginLeft={"$3"}></InteractiveIcon>
             </Popover.Trigger>
-            <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} bw={1} boc="$borderColor" bc={"$color1"} >
+            <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} borderWidth={1} borderColor="$borderColor" backgroundColor={"$color1"} >
                 <Tinted>
                     <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e) => e.stopPropagation()}>
                         <YStack>

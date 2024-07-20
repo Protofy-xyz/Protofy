@@ -5,21 +5,21 @@ if you call paginated apis, you will need to wait for result.isLoaded and look i
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
 
-import { Text } from 'protolib/components/Text';
-import { VStack } from 'protolib/components/VStack';
-import { Image } from 'protolib/components/Image';
-import { HCenterStack } from 'protolib/components/HCenterStack';
-import { Page } from 'protolib/components/Page';
-import { withSession } from 'protolib/lib/Session';
-import { Center } from 'protolib/components/Center';
-import { GithubIcon } from 'protolib/components/icons/GithubIcon';
-import { DiscordIcon } from 'protolib/components/icons/DiscordIcon';
-import { TwitterIcon } from 'protolib/components/icons/TwitterIcon';
+import { Text } from 'protolib/dist/components/Text';
+import { VStack } from 'protolib/dist/components/VStack';
+import { Image } from 'protolib/dist/components/Image';
+import { HCenterStack } from 'protolib/dist/components/HCenterStack';
+import { Page } from 'protolib/dist/components/Page';
+import { withSession } from 'protolib/dist/lib/Session';
+import { Center } from 'protolib/dist/components/Center';
+import { GithubIcon } from 'protolib/dist/components/icons/GithubIcon';
+import { DiscordIcon } from 'protolib/dist/components/icons/DiscordIcon';
+import { TwitterIcon } from 'protolib/dist/components/icons/TwitterIcon';
 import { Protofy, API } from 'protobase'
-import { useComposedState } from 'protolib/lib/useComposedState'
-import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
-import { useEditor } from 'protolib/visualui/useEdit'
-import { SSR } from 'protolib/lib/SSR'
+import { useComposedState } from 'protolib/dist/lib/useComposedState'
+import { UIWrapLib, UIWrap } from 'protolib/dist/visualui/visualuiWrapper'
+import { useEditor } from 'protolib/dist/visualui/useEdit'
+import { SSR } from 'protolib/dist/lib/SSR'
 import React, { useState } from 'react'
 import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../../../layout/DefaultLayout'
@@ -41,7 +41,7 @@ const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
     <Page>
       <DefaultLayout title="Protofy" description="Made with love from Barcelona">
         <Center height="90vh" width="100%" paddingHorizontal="20px">
-          <VStack height="100%" gap="20px" width="100%" maxWidth="900px" ai="center" jc="center">
+          <VStack height="100%" gap="20px" width="100%" maxWidth="900px" alignItems="center" justifyContent="center">
             <Image height={120} width={150} resizeMode='cover' url='/logo.png' />
             <Text
               fontFamily="$heading"

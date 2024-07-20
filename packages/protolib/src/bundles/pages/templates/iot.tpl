@@ -7,14 +7,14 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 
 import { Protofy, API } from 'protobase'
 import { Objects } from 'app/bundles/objects'
-import { CardBody } from 'protolib/components/CardBody'
-import { DataView } from 'protolib/components/DataView'
-import { AdminPage } from 'protolib/components/AdminPage'
-import { withSession } from 'protolib/lib/Session';
-import { SSR, PaginatedDataSSR } from 'protolib/lib/SSR';
+import { CardBody } from 'protolib/dist/components/CardBody'
+import { DataView } from 'protolib/dist/components/DataView'
+import { AdminPage } from 'app/layout/AdminPage'
+import { withSession } from 'protolib/dist/lib/Session';
+import { SSR, PaginatedDataSSR } from 'protolib/dist/lib/SSR';
 import React from 'react'
 import { Router } from '@tamagui/lucide-icons';
-import { DevicesModel } from 'protolib/bundles/devices/devices';
+import { DevicesModel } from 'protolib/dist/bundles/devices/devices';
 import { Subsystem } from 'protodevice'
 import { useRouter } from "solito/navigation";
 

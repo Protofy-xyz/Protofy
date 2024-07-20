@@ -2,7 +2,7 @@ import { getApp, getMQTTClient, getServiceToken } from 'protonode'
 import { getLogger, getConfig } from 'protobase';
 import { getConfigWithoutSecrets } from '@my/config'
 import BundleContext from 'app/bundles/apiContext'
-import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
+import { generateEvent } from 'protolib/dist/bundles/events/eventsLibrary';
 
 const logger = getLogger()
 const subscriptions = {}

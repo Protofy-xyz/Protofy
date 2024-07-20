@@ -29,3 +29,5 @@ export const useRedirectToEnviron = () => {
     }
   }, [pathname]);
 };
+
+export default useRedirectToEnviron

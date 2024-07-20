@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import useTheme from '../diagram/Theme';
 import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
-import { XStack, Button } from "@my/ui"
+import { XStack, Button } from "tamagui"
 import Text from '../diagram/NodeText'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { getDataFromField, getFieldValue } from '../utils';

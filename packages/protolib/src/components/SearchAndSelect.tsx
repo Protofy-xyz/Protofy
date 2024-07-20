@@ -13,7 +13,7 @@ type SearchAndSelectProps = {
 /*
 
 <SearchAndSelect 
-    bc="$backgroundTransparent" 
+    backgroundColor="$backgroundTransparent" 
     width={300} 
     // options={["John", "Doe", "Jane", "Smith"]}
     getDisplayField={(item) => item.name}
@@ -73,7 +73,7 @@ export const SearchAndSelect = (props: InputProps & SearchAndSelectProps) => {
             />
             <YStack>
                 {/* @ts-ignore */}
-                {open && <YGroup pb={0} bc="$bgContent" zIndex={99999999} overflow="auto" maxHeight={300} width={width} position="absolute" alignSelf="center" bordered size="$4">
+                {open && <YGroup paddingBottom={0} backgroundColor="$bgContent" zIndex={99999999} overflow="auto" maxHeight={300} width={width} position="absolute" alignSelf="center" bordered size="$4">
                     {results.length === 0 && <ListItem>No results</ListItem>}
                     {results.map((item, i) => <YGroup.Item key={i}>
                         <ListItem onPointerDown={() => isClickingInOption.current = true} pressTheme hoverTheme onPress={() => {

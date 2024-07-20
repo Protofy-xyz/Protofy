@@ -13,8 +13,8 @@ export const BackgroundGradient = React.forwardRef(({height=521, o=0.08, directi
     right={-1000}
     flex={1}
     //@ts-ignore
-    pe="none"
-    o={o}
+    pointerEvents="none"
+    opacity={o}
     {...props}
   />
 ))

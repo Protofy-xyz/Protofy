@@ -7,15 +7,15 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 
 import React, { useState } from 'react'
 import { Theme } from '@my/ui'
-import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
-import { withSession } from 'protolib/lib/Session';
-import { Page } from 'protolib/components/Page';
-import { useEditor } from 'protolib/visualui/useEdit';
+import { UIWrapLib, UIWrap } from 'protolib/dist/visualui/visualuiWrapper'
+import { withSession } from 'protolib/dist/lib/Session';
+import { Page } from 'protolib/dist/components/Page';
+import { useEditor } from 'protolib/dist/visualui/useEdit';
 import { API, Protofy } from 'protobase';
-import { SSR } from 'protolib/lib/SSR';
-import { useComposedState } from 'protolib/lib/useComposedState';
-import { Text } from 'protolib/components/Text';
-import { Center } from 'protolib/components/Center';
+import { SSR } from 'protolib/dist/lib/SSR';
+import { useComposedState } from 'protolib/dist/lib/useComposedState';
+import { Text } from 'protolib/dist/components/Text';
+import { Center } from 'protolib/dist/components/Center';
 import { DefaultLayout } from 'app/layout/DefaultLayout'
 import { context } from 'app/bundles/uiContext';
 import { useRouter } from 'solito/navigation';

@@ -8,7 +8,7 @@ import { Chip } from '../../components/Chip'
 import { DataTable2 } from '../../components/DataTable2'
 import { DataView, DataViewActionButton } from '../../components/DataView'
 import { AlertDialog } from '../../components/AlertDialog'
-import { AdminPage } from '../../components/AdminPage'
+import { AdminPage } from 'app/layout/AdminPage'
 import {useWorkspaceEnv} from '../../lib/useWorkspaceEnv'
 import { useEffect, useState } from 'react'
 import Center from '../../components/Center'
@@ -25,13 +25,13 @@ import { useSubscription } from '../../lib/mqtt';
 const APIIcons = {}
 
 const SelectGrid = ({ children }) => {
-    return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
+    return <XStack justifyContent="center" alignItems="center" gap={25} flexWrap='wrap'>
         {children}
     </XStack>
 }
 const FirstSlide = ({ selected, setSelected }) => {
     return <YStack>
-        <ScrollView mah={"500px"}>
+        <ScrollView maxHeight={"500px"}>
             <SelectGrid>
                 {Object.entries(apiTemplates).map(([templateId, template]) => (
                     <TemplateCard
@@ -67,12 +67,12 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
 const AccordionMethod = ({ method, path, description, children }) => {
     const [opened, setOpened] = useState([''])
 
-    return (<Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" boc={"$gray6"} f={1} mb={"$5"} width={"640px"}>
-        <Accordion.Item br="$5" bw={1} boc={"$gray6"} value={"item"}>
-            <Accordion.Trigger p={0} px={8} height={43} bc="$transparent" focusStyle={{ bc: "$transparent" }} br={opened.includes("item") ? "$0" : '$5'} btlr="$5" btrr="$5" bw="$0" flexDirection="row" ai="center">
+    return (<Accordion onValueChange={(opened) => setOpened(opened)} onPress={(e) => e.stopPropagation()} type="multiple" borderColor={"$gray6"} flex={1} marginBottom={"$5"} width={"640px"}>
+        <Accordion.Item borderRadius="$5" borderWidth={1} borderColor={"$gray6"} value={"item"}>
+            <Accordion.Trigger padding={0} paddingHorizontal={8} height={43} backgroundColor="$transparent" focusStyle={{ backgroundColor: "$transparent" }} borderRadius={opened.includes("item") ? "$0" : '$5'} borderTopLeftRadius="$5" borderTopRightRadius="$5" borderWidth="$0" flexDirection="row" alignItems="center">
                 {({ open }) => (
                     <>
-                        <Stack mt={"$2"}>
+                        <Stack marginTop={"$2"}>
                             <MethodBadge
                                 method={method}
                                 path={path}
@@ -86,7 +86,7 @@ const AccordionMethod = ({ method, path, description, children }) => {
                     </>
                 )}
             </Accordion.Trigger>
-            <Accordion.Content f={1} br="$5">
+            <Accordion.Content flex={1} borderRadius="$5">
                 {children}
             </Accordion.Content>
         </Accordion.Item>
@@ -95,8 +95,8 @@ const AccordionMethod = ({ method, path, description, children }) => {
 
 const QueryParams = ({ query, desc }) => {
     return (<Tinted>
-        <XStack mb="$3" mt="$3">
-            <Chip text={query} color={'$color5'} mr="$3" h={25} w={"100px"} />
+        <XStack marginBottom="$3" marginTop="$3">
+            <Chip text={query} color={'$color5'} marginRight="$3" height={25} width={"100px"} />
             <Text> {desc}</Text>
         </XStack>
     </Tinted>)
@@ -109,13 +109,13 @@ const MethodBadge = ({ method, path, description }) => {
                 padding={10}
                 marginVertical={5}
                 width={"600px"}
-                ai="center"
-                mb={"$3"}
-                pr={"$10"}
+                alignItems="center"
+                marginBottom={"$3"}
+                paddingRight={"$10"}
             >
                 <XStack alignItems="center" space>
 
-                    <Stack p={"$1"} backgroundColor={method === 'GET' ? '$color8' : '$color7'} br={"$2"}>
+                    <Stack padding={"$1"} backgroundColor={method === 'GET' ? '$color8' : '$color7'} borderRadius={"$2"}>
                         <Text fontSize={14} fontWeight="bold" color="white" padding={5} borderRadius={5} >
                             {method}
                         </Text>
@@ -125,7 +125,7 @@ const MethodBadge = ({ method, path, description }) => {
                         {path}
                     </Text>
                 </XStack>
-                <XStack ml={"$3"}>
+                <XStack marginLeft={"$3"}>
                     <Text color="$grey" fontSize={14}>
                         {description}
                     </Text>
@@ -202,16 +202,16 @@ export default {
 
             return (<AdminPage title="Automations" pageSession={pageSession}>
                 <AlertDialog
-                    p={"$2"}
-                    pt="$5"
-                    pl="$5"
+                    padding={"$2"}
+                    paddingTop="$5"
+                    paddingLeft="$5"
                     setOpen={setAddOpen}
                     open={addOpen}
                     hideAccept={true}
                     description={""}
                 >
-                    <YStack f={1} jc="center" ai="center">
-                        <XStack mr="$5">
+                    <YStack flex={1} justifyContent="center" alignItems="center">
+                        <XStack marginRight="$5">
                             <Slides
                                 lastButtonCaption="Create"
                                 id='apis'
@@ -267,13 +267,13 @@ export default {
                     description=""
                 >
                     <ScrollView maxHeight={"80vh"}>
-                        <Center mt="$5">
+                        <Center marginTop="$5">
                             <YStack>
                                 <AccordionMethod
                                     method="GET"
                                     path={options ? options.prefix + options.name : ""}
                                     description={"List all " + currentElement?.data?.name + " entries"}>
-                                    <Text mb={"$3"} mt={"$"}>
+                                    <Text marginBottom={"$3"} marginTop={"$"}>
                                         The list API endpoint is designed to provide a paginated, ordered list of items from a dataset. It accepts several query parameters that allow you to customize the response.
                                     </Text>
                                     <QueryParams query={"itemsPerPage"} desc={"Defines max items returned per page; defaults to 25."}></QueryParams>
@@ -287,7 +287,7 @@ export default {
                                     method="GET"
                                     path={options ? options.prefix + options.name + "/:id" : ""}
                                     description={"Reads a " + currentElement?.data?.name + " entry by id"}>
-                                    <Text mb={"$3"} mt={"$"}>
+                                    <Text marginBottom={"$3"} marginTop={"$"}>
                                         This 'read' endpoint is used to fetch a specific item based on its unique id. It implements security checks and custom data transformations.
                                     </Text>
                                     <QueryParams query={":id"} desc={"The unique id of the item to be retrieved from the dataset."}></QueryParams>
@@ -298,7 +298,7 @@ export default {
                                     method="POST"
                                     path={options ? options.prefix + options.name : ""}
                                     description={"Creates a new " + currentElement?.data?.name + " entry"}>
-                                    <Text mb={"$3"} mt={"$"}>
+                                    <Text marginBottom={"$3"} marginTop={"$"}>
                                         The 'create' endpoint is utilized for adding new items to the dataset. It includes data transformations, and event notifications for successful creations.
                                     </Text>
                                 </AccordionMethod>
@@ -307,7 +307,7 @@ export default {
                                     method="POST"
                                     path={options ? options.prefix + options.name + "/:id" : ""}
                                     description={"Updates a " + currentElement?.data?.name + " entry by id"}>
-                                    <Text mb={"$3"} mt={"$"}>
+                                    <Text marginBottom={"$3"} marginTop={"$"}>
                                         The 'update' endpoint is used for modifying existing items based on their unique id. It includes data transformation processes, and notifications for each update action.
                                     </Text>
                                     <QueryParams query={":id"} desc={"The unique id of the item to be updated in the dataset."}></QueryParams>
@@ -317,7 +317,7 @@ export default {
                                     method="POST"
                                     path={options ? options.prefix + options.name + "/:id/delete" : ""}
                                     description={"Deletes a " + currentElement?.data?.name + " entry by id"}>
-                                    <Text mb={"$3"} mt={"$"}>
+                                    <Text marginBottom={"$3"} marginTop={"$"}>
                                         The 'delete' endpoint facilitates the removal of items based on their unique id. It encompasses transformations of the data for deletion, and event notifications for the action performed.
                                     </Text>
                                     <QueryParams query={":id"} desc={"The unique id of the item to be deleted from the dataset."}></QueryParams>
@@ -349,9 +349,9 @@ export default {
                         setPublishOpen(false)
                         setPublishState("confirm")
                     }}
-                    p={"$2"}
-                    pt="$5"
-                    pl="$5"
+                    padding={"$2"}
+                    paddingTop="$5"
+                    paddingLeft="$5"
 
                     setOpen={setPublishOpen}
                     open={publishOpen}
@@ -359,22 +359,22 @@ export default {
                     description={"Publish will transfer all the automations from the preview/development environment to the public environment with real data. Are you sure you want to publish?"}
                     title={"Publish Automations"}
                 >
-                    <YStack height={publishState == 'publishing' ? 380 : 300} f={1} jc="center" ai="center" id={"admin-dataview-apis-publish-dlg"}>
-                        {publishState == "publishing" && <YStack jc="center" ai="center" f={1}>
+                    <YStack height={publishState == 'publishing' ? 380 : 300} flex={1} justifyContent="center" alignItems="center" id={"admin-dataview-apis-publish-dlg"}>
+                        {publishState == "publishing" && <YStack justifyContent="center" alignItems="center" flex={1}>
                             <Spinner size='large' scale={2} />
-                            <Paragraph mt={"$5"}> Publishing automations... </Paragraph>
+                            <Paragraph marginTop={"$5"}> Publishing automations... </Paragraph>
                         </YStack>}
-                        {publishState == "published" && <YStack jc="center" ai="center" f={1}>
+                        {publishState == "published" && <YStack justifyContent="center" alignItems="center" flex={1}>
                             <Tinted><CheckCircle size={50} /></Tinted>
-                            <SizableText mt="$2"> Automations published successfully </SizableText>
+                            <SizableText marginTop="$2"> Automations published successfully </SizableText>
                         </YStack>}
-                        {publishState == "confirm" && <YStack jc="center" ai="center" f={1}>
+                        {publishState == "confirm" && <YStack justifyContent="center" alignItems="center" flex={1}>
                             <Tinted><Package size={80} /></Tinted>
-                            <SizableText mt="$2">{total} automation modules </SizableText>
+                            <SizableText marginTop="$2">{total} automation modules </SizableText>
                         </YStack>}
-                        {publishState == "error" && <YStack jc="center" ai="center" f={1}>
+                        {publishState == "error" && <YStack justifyContent="center" alignItems="center" flex={1}>
                             <Tinted><AlertTriangle size={80} /></Tinted>
-                            <SizableText mt="$2"> Error publishing automations </SizableText>
+                            <SizableText marginTop="$2"> Error publishing automations </SizableText>
                         </YStack>}
                     </YStack>
                 </AlertDialog>
@@ -388,7 +388,7 @@ export default {
                                 onPress={() => {
                                     setPublishOpen(true)
                                 }}
-                                ml={"$1"}
+                                marginLeft={"$1"}
                             />
                         </Tinted>
                     ]}

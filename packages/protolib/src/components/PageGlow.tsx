@@ -37,10 +37,10 @@ export const PageGlow = memo(React.forwardRef((props:any, ref: any) => {
               key={`${cur}${i}`}
               overflow="hidden"
               //@ts-ignore
-              h="100vh"
-              w={1000}
+              height="100vh"
+              width={1000}
               theme={cur as ThemeName}
-              o={active ? 0.3 : 0}
+              opacity={active ? 0.3 : 0}
               fullscreen
               left={`calc(50vw - 500px)`}
               x={isOnHeroBelow ? 0 : isDouble ? (isOpposite ? -500 : 500) : 0}
@@ -57,15 +57,15 @@ export const PageGlow = memo(React.forwardRef((props:any, ref: any) => {
     <YStack
       ref={ref}
       //@ts-ignore
-      pos="absolute"
-      t={0}
-      l={0}
+      position="absolute"
+      top={0}
+      left={0}
       contain="layout"
-      pe="none"
+      pointerEvents="none"
       //@ts-ignore
       animation="quick"
       key={0}
-      zi={-1}
+      zIndex={-1}
       x={0}
       y={scrollTop}
       {...(isOnHeroBelow && {

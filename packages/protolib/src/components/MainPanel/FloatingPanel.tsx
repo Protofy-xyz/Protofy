@@ -34,6 +34,7 @@ export default forwardRef(({ children, visibleFlows, size, expanded, previewStat
                         }}
                         onMouseUp={e => e.stopPropagation()}
                     >
+                        {/* @ts-ignore */}
                         <Move color="white" style={{ cursor: 'grab' }} />
                     </div>
                     <div

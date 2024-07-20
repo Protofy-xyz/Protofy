@@ -1,15 +1,15 @@
 import { YStack, Text, XStack, H4 } from '@my/ui';
-import { Image } from 'protolib/components/Image';
-import { ContainerLarge } from 'protolib/components/Container';
-import { Grid } from 'protolib/components/Grid';
-import { NextLink } from 'protolib/components/NextLink';
-import { Logo } from 'protolib/components/Logo';
-import { FooterElement } from 'protolib/components/layout';
-import { Footer as ProtoFooter } from 'protolib/components/layout/Footer';
+import { Image } from 'protolib/dist/components/Image';
+import { ContainerLarge } from 'protolib/dist/components/Container';
+import { Grid } from 'protolib/dist/components/Grid';
+import { NextLink } from 'protolib/dist/components/NextLink';
+import { Logo } from 'protolib/dist/components/Logo';
+import { FooterElement } from 'protolib/dist/components/layout';
+import { Footer as ProtoFooter } from 'protolib/dist/components/layout/Footer';
 import { API, Protofy } from 'protobase';
-import { withSession } from 'protolib/lib/Session';
-import { Page } from 'protolib/components/Page';
-import { SSR } from 'protolib/lib/SSR';
+import { withSession } from 'protolib/dist/lib/Session';
+import { Page } from 'protolib/dist/components/Page';
+import { SSR } from 'protolib/dist/lib/SSR';
 import { DefaultLayout } from '../../../layout/DefaultLayout';
 import { Paragraph } from '@my/ui';
 import { context } from 'app/bundles/uiContext';
@@ -95,7 +95,7 @@ const PageComponent = (props) => {
         <DefaultLayout headerTitle="Protofy-Store" title="ProtofyStore" description="Made with love from Barcelona"
             footer={<Footer />}
         >
-        <ContainerLarge pb="$20" pt="$6">
+        <ContainerLarge paddingBottom="$20" paddingTop="$6">
             <YStack mx="$5">
                 <Grid gap={"2rem"} itemMinWidth={280}>
                     {
@@ -115,11 +115,11 @@ const PageComponent = (props) => {
 const ProductGridElement = ({ id, name, category, image, priceRange }) => {
     return (
     <YStack id={id} cursor="pointer">
-        <YStack bg="$background" ai="center" mb={12}>
+        <YStack bg="$background" alignItems="center" marginBottom={12}>
             <Image width={330} aspectRatio={"1/1"} url={image} />
         </YStack>
         <XStack display="flex">
-            <YStack display="flex" f={1} space="$2">
+            <YStack display="flex" flex={1} space="$2">
                 <Text fontSize={14} fontWeight={"600"}>{name}</Text>
                 <Text theme="alt2" fontSize={14}>{category}</Text>
             </YStack>
@@ -134,11 +134,11 @@ const ProductGridElement = ({ id, name, category, image, priceRange }) => {
 
 const Footer = () => (
     <ProtoFooter>
-        <FooterElement flex={2} mt="$-1" mb="$2" space="$4">
+        <FooterElement flex={2} marginTop="$-1" marginBottom="$2" space="$4">
             <NextLink href="/" aria-label="Homepage">
                 <H4><strong>Protofy-Store</strong></H4>
             </NextLink>
-            <Paragraph mt="$2" size="$3">
+            <Paragraph marginTop="$2" size="$3">
                 Made with love
             </Paragraph>
         </FooterElement>

@@ -98,7 +98,7 @@ export const DataViewActionButton = ({ icon, description, id, ...props }: DataVi
     const Icon = icon
     return <Tooltip {...props}>
     <Tooltip.Trigger>
-        <Button id={id ?? ''} hoverStyle={{ o: 1 }} o={0.7} circular chromeless={true} {...props} >
+        <Button id={id ?? ''} hoverStyle={{ opacity: 1 }} opacity={0.7} circular chromeless={true} {...props} >
             <Icon color={"$color10"} />
         </Button>
     </Tooltip.Trigger>
@@ -275,8 +275,8 @@ const DataViewInternal = forwardRef(({
                 items: items?.data?.items,
                 sourceUrl,
                 name,
-                mt: "$2",
-                mx: "$4",
+                 marginTop: "$2",
+                marginHorizontal: "$4",
                 disableItemSelection,
                 lineSelect: true,
                 fillWidth: true,
@@ -289,14 +289,14 @@ const DataViewInternal = forwardRef(({
             icon: LayoutGrid,
             component: ObjectGrid,
             props: {
-                mt: "$8",
+                 marginTop: "$8",
                 model,
                 items: items?.data?.items,
                 sourceUrl,
                 customFields,
                 extraFields,
                 icons,
-                ml: "$5",
+                marginLeft: "$5",
                 deleteable: deleteable,
                 onDelete: async (sourceUrl) => {
                     await API.get(sourceUrl + '/delete')
@@ -310,10 +310,10 @@ const DataViewInternal = forwardRef(({
                     icon={RowIcon}
                     msg={`Empty ${displayName} list`}
                     detailsColor='$color'
-                    containerProps={{ mt: '-30%', o: 0.1 }}
+                    containerProps={{  marginTop: '-30%', opacity: 0.1 }}
                     iconProps={{}}
                 >
-                    {/* <XStack o={0.5} space="$1" ai="center">
+                    {/* <XStack opacity={0.5} space="$1" alignItems="center">
                         <Button>{`Add ${name}`}</Button>
                     </XStack> */}
                 </ErrorMessage>,
@@ -329,7 +329,7 @@ const DataViewInternal = forwardRef(({
             icon: Layers,
             component: DataTableCard,
             props: {
-                mt: "$8",
+                 marginTop: "$8",
                 items,
                 model,
                 onDelete: async (key) => {
@@ -347,7 +347,7 @@ const DataViewInternal = forwardRef(({
         icon: MapPin,
         component: MapView,
         props: {
-            mt: "$3",
+             marginTop: "$3",
             onDelete: async (key) => {
                 await API.get(`${sourceUrl}/${key}/delete`);
             },
@@ -407,7 +407,7 @@ const DataViewInternal = forwardRef(({
 
 
     return (<AsyncView atom={currentItems}>
-        <YStack ref={ref} height="100%" f={1}>
+        <YStack ref={ref} height="100%" flex={1}>
             <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
                 {
                     state.editFile && <FileWidget
@@ -428,17 +428,17 @@ const DataViewInternal = forwardRef(({
                 }
                 <AlertDialog
                     integratedChat
-                    p={"$2"}
-                    pt="$5"
-                    pl="$5"
+                    padding={"$2"}
+                    paddingTop="$5"
+                    paddingLeft="$5"
                     setOpen={setCreateOpen}
                     open={createOpen}
                     hideAccept={true}
                     description={""}
                 >
-                    <YStack f={1} jc="center" ai="center" id={"admin-dataview-create-dlg"}>
+                    <YStack flex={1} justifyContent="center" alignItems="center" id={"admin-dataview-create-dlg"}>
                         <ScrollView maxHeight={"90vh"}>
-                            <XStack mr="$4">
+                            <XStack marginRight="$4">
                                 {/* @ts-ignore */}
                                 <EditableObject
                                     URLTransform={URLTransform}
@@ -480,9 +480,9 @@ const DataViewInternal = forwardRef(({
                 </AlertDialog>
                 <AlertDialog
                     integratedChat
-                    p={"$1"}
-                    pt="$5"
-                    pl="$5"
+                    padding={"$1"}
+                    paddingTop="$5"
+                    paddingLeft="$5"
                     hideAccept={true}
                     acceptCaption="Save"
                     setOpen={(s) => {
@@ -493,15 +493,15 @@ const DataViewInternal = forwardRef(({
                     description={""}
                 //bc={resolvedTheme == 'dark' ? "$background": "$color1"}
                 >
-                    <YStack f={1} jc="center" ai="center">
+                    <YStack flex={1} justifyContent="center" alignItems="center">
                         <ScrollView maxHeight={"90vh"}>
-                            <Stack mr="$5">
+                            <Stack marginRight="$5">
                                 <EditableObject
                                     disableToggleMode={disableToggleMode}
                                     initialData={currentItemData}
                                     name={name}
                                     spinnerSize={75}
-                                    loadingText={<YStack ai="center" jc="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
+                                    loadingText={<YStack alignItems="center" justifyContent="center">Loading data for {name}<Paragraph fontWeight={"bold"}>{state.item}</Paragraph></YStack>}
                                     objectId={state.item}
                                     sourceUrl={sourceUrl + '/' + state.item}
                                     numColumns={numColumnsForm}
@@ -535,9 +535,9 @@ const DataViewInternal = forwardRef(({
                     </YStack>
                 </AlertDialog>
                 {!state.editFile && <>
-                    <XStack pt="$3" px="$3" mb="$1">
-                        <XStack ml="$2" f={1} ai="center">
-                            {rowIcon && <Stack mr="$3"><Tinted><RowIcon color='var(--color7)' /></Tinted></Stack>}
+                    <XStack paddingTop="$3" paddingHorizontal="$3" marginBottom="$1">
+                        <XStack marginLeft="$2" flex={1} alignItems="center">
+                            {rowIcon && <Stack marginRight="$3"><Tinted><RowIcon color='var(--color7)' /></Tinted></Stack>}
                             <Paragraph>
                                 <Text fontSize="$5" color="$color11">{displayName.charAt(0).toUpperCase() + displayName.slice(1)}</Text>
                             </Paragraph>
@@ -545,11 +545,11 @@ const DataViewInternal = forwardRef(({
                             {toolBarContent}
                         </XStack>
 
-                        <XStack ai="center" ml="$2">
-                            <XStack ai="center">
+                        <XStack alignItems="center" marginLeft="$2">
+                            <XStack alignItems="center">
                                 {currentItems.isLoaded && <XStack>
-                                    <XStack ai="center">
-                                        <XStack ai="center">
+                                    <XStack alignItems="center">
+                                        <XStack alignItems="center">
                                             <Text fontSize={14} color="$color11">{(currentItems.data.itemsPerPage * currentItems.data.page) + 1}-{Math.min(currentItems.data.total, (currentItems.data.itemsPerPage * (currentItems.data.page + 1)))} of {currentItems.data.total}</Text>
                                         </XStack>
                                         <Tinted>
@@ -560,7 +560,7 @@ const DataViewInternal = forwardRef(({
                                                     if (currentItems.data.page > 0) {
                                                         push("page", currentItems.data.page - 1);
                                                     }
-                                                }} ml={"$3"}
+                                                }} marginLeft={"$3"}
                                                 disabled={!(currentItems.data.page > 0)} />
                                             <Spacer size="$3" />
                                             <InteractiveIcon
@@ -571,13 +571,13 @@ const DataViewInternal = forwardRef(({
                                                         push("page", currentItems.data.page + 1);
                                                     }
                                                 }}
-                                                ml={"$3"}
+                                                marginLeft={"$3"}
                                                 disabled={!(currentItems.data.page < totalPages - 1)} />
                                         </Tinted>
                                     </XStack>
                                 </XStack>}
                             </XStack>
-                            <XStack ai="center" marginLeft="$3" mb={"$1"}>
+                            <XStack alignItems="center" marginLeft="$3" marginBottom={"$1"}>
                                 {!disableViewSelector && <ButtonGroup marginRight="$3">
                                     {
                                         tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>
@@ -605,7 +605,7 @@ const DataViewInternal = forwardRef(({
                             <Paragraph>{getErrorMessage(items.error)}</Paragraph>
                         </Notice>
                     )}
-                    <Stack f={1}>
+                    <Stack flex={1}>
                         <AsyncView atom={currentItems}>
                             {
                                 tableViews.map((v, index) => <ActiveRender height="100%" key={index} activeId={index}>

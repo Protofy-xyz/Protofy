@@ -39,7 +39,7 @@ export const SubTitle = React.forwardRef(({ children, ...props }: any, ref: any)
       fontWeight="300"
       tag="p"
       //@ts-ignore
-      mb="$3" mt="$0"
+      marginBottom="$3" marginTop="$0"
       maxWidth="95%"
       $sm={{
         maxWidth: '100%',

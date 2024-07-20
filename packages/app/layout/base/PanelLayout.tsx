@@ -1,5 +1,5 @@
 import { YStack, ScrollView, XStack, getTokens } from 'tamagui'
-import { AppBar } from '../AppBar'
+import { AppBar } from 'protolib/dist/components/AppBar'
 
 export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, SideMenu, Layout, headerContents, HeaderMenu }) => {
   const appBarHeight = 55
@@ -18,10 +18,10 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
           backgroundColor={bgPanels}
 
         >
-          <XStack ml={"$5"} justifyContent="space-between" f={1}>{headerContents}</XStack>
+          <XStack marginLeft={"$5"} justifyContent="space-between" flex={1}>{headerContents}</XStack>
         </AppBar>
       }
-      sideMenu={<SideMenu mt={appBarHeight} sideBarColor={bgPanels}>{menuContent}</SideMenu>}
+      sideMenu={<SideMenu marginTop={appBarHeight} sideBarColor={bgPanels}>{menuContent}</SideMenu>}
       footer={
         null
         // <AppBar dettached={false} translucid={false} position="bottom">
@@ -29,11 +29,11 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
         // </AppBar>
       }>
       {/* <Theme name={tint as any}> */}
-      <XStack f={1} p="$3" pl={0} bc={bgPanels}>
-        <XStack bc={bgPanels} elevation={3} br={"$6"} mt={appBarHeight} f={1} height={'calc(100vh - ' + (appBarHeight + 30) + 'px)'}>
-          <ScrollView $sm={{ br: "$0" }} height={'calc(100vh - ' + (appBarHeight + 30) + 'px)'}>
+      <XStack flex={1} padding="$3" paddingLeft={0} backgroundColor={bgPanels}>
+        <XStack backgroundColor={bgPanels} elevation={3} borderRadius={"$6"} marginTop={appBarHeight} flex={1} height={'calc(100vh - ' + (appBarHeight + 30) + 'px)'}>
+          <ScrollView $sm={{  borderRadius: "$0" }} height={'calc(100vh - ' + (appBarHeight + 30) + 'px)'}>
             {/* <Tinted> */}
-            <YStack br={"$6"} bc={panelBgColor ?? _panelBgColor} f={1} minHeight={'calc(100vh - ' + (appBarHeight + 30) + 'px)'} flex={1}>
+            <YStack borderRadius={"$6"} backgroundColor={panelBgColor ?? _panelBgColor} flex={1} minHeight={'calc(100vh - ' + (appBarHeight + 30) + 'px)'}>
               {/* <Theme reset> */}
               {children}
               {/* </Theme> */}

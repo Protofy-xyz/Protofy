@@ -90,32 +90,32 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                     if (dependsOnValue) {
                         if (dependsOnValue == data[dependsOn]) {
                             //@ts-ignore
-                            return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+                            return <SelectList flex={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
                         } else {
                             return <Input
                                 focusStyle={{ outlineWidth: 1 }}
                                 disabled={true}
                                 placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + dependsOn + ' property first'}
-                                bc="$backgroundTransparent"
+                                backgroundColor="$backgroundTransparent"
                             ></Input>
                         }
                     } else {
                         //@ts-ignore
-                        return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+                        return <SelectList flex={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
                     }
                 } else {
                     return <Input
                         focusStyle={{ outlineWidth: 1 }}
                         disabled={true}
-                        f={1}
+                        flex={1}
                         placeholder={ele._def.hint ? ele._def.hint : 'Fill ' + dependsOn + ' property first'}
-                        bc="$backgroundTransparent"
+                        backgroundColor="$backgroundTransparent"
                     ></Input>
                 }
             }
             else {
                 //@ts-ignore
-                return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+                return <SelectList flex={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
             }
         }
 
@@ -129,7 +129,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
             if (min && max) {
                 return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
                     <Tinted>
-                        <Stack f={1} mt="$4">
+                        <Stack flex={1} marginTop="$4">
                             <SimpleSlider onValueChange={v => setFormData(ele.name, v)} value={[getFormData(ele.name) ?? min.value]} width={190} min={min.value} max={max.value} />
                         </Stack>
                     </Tinted>
@@ -139,19 +139,19 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
     } else if (elementType == 'ZodObject') {
         if (ele._def.linkTo) {
             return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-                {mode != 'preview' && <Stack f={1} t={"$-2"}>
+                {mode != 'preview' && <Stack flex={1} top={"$-2"}>
                     <SearchAndSelect
-                        bc="$backgroundTransparent"
+                        backgroundColor="$backgroundTransparent"
                         // options={["John", "Doe", "Jane", "Smith"]}
                         getDisplayField={ele._def.getDisplayField}
                         options={(search) => ele._def.linkTo(search, URLTransform)}
                         onSelectItem={(item) => setFormData(ele.name, item)}
                         selectedItem={getFormData(ele.name)}
-                        f={1}
+                        flex={1}
                         placeholder={ele._def.hint}
                     /></Stack>}
 
-                {mode == 'preview' && <SizableText ml="$3.5" mt={"$2.5"} mb="$2">{ele._def.getDisplayField && ele._def.getDisplayField(getFormData(ele.name))}</SizableText>}
+                {mode == 'preview' && <SizableText marginLeft="$3.5" marginTop={"$2.5"} marginBottom="$2">{ele._def.getDisplayField && ele._def.getDisplayField(getFormData(ele.name))}</SizableText>}
 
             </FormElement>
         } else {
@@ -196,7 +196,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
         const recordData: any = getFormData(ele.name)
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <Tinted>
-                <Stack f={1} mt="$4">
+                <Stack flex={1} marginTop="$4">
                     <Switch disabled={mode != 'add' && mode != 'edit'} checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$2">
                         {/*@ts-ignore*/}
                         <Switch.Thumb animation="quick" />
@@ -223,7 +223,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
         var isStringDateType = ['year', 'month'].includes(dateMode)
 
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-            <Stack f={1}>
+            <Stack flex={1}>
                 {isStringDateType
                     ? <DatePicker mode={dateMode} offsetDate={getFormData(ele.name) ? new Date(getFormData(ele.name)) : null} onOffsetChange={isStringDateType ? d => setFormData(ele.name, d.toISOString()) : null} />
                     : <DatePicker mode={dateMode} selectedDates={getFormData(ele.name) ? [new Date(getFormData(ele.name))] : null} onDatesChange={!isStringDateType ? d => setFormData(ele.name, d[0]?.toISOString()) : null} />
@@ -234,7 +234,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
 
     if (elementType == "ZodString" && elementDef.color) {
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-            <Stack f={1}>
+            <Stack flex={1}>
                 <InputColor color={getFormData(ele.name)} onChange={color => setFormData(ele.name, color.hex)} />
             </Stack>
         </FormElement>
@@ -247,7 +247,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
             return f.isDir || isValidExtension
         }
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-            <Stack f={1}>
+            <Stack flex={1}>
                 <FilePicker
                     fileFilter={fileFilter}
                     file={getFormData(ele.name)}
@@ -259,7 +259,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
     }
 
     return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
-        <Stack f={1}>
+        <Stack flex={1}>
             <Input
                 id={"editable-object-input-" + ele?.name}
                 {...(mode != 'edit' && mode != 'add' ? { bw: 0, forceStyle: "hover" } : {})}
@@ -278,7 +278,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                         }
                     }
                 }}
-                bc="$backgroundTransparent"
+                backgroundColor="$backgroundTransparent"
             >
             </Input>
         </Stack>

@@ -3,7 +3,7 @@ import { DeviceSdkModel } from './deviceSdksSchema';
 import { PaginatedDataSSR } from '../../../lib/SSR'
 import { DataTable2 } from '../../../components/DataTable2'
 import { DataView } from '../../../components/DataView'
-import { AdminPage } from '../../../components/AdminPage'
+import { AdminPage } from 'app/layout/AdminPage'
 
 const DeviceSdkIcons = { name: Tag, sdk: Layers }
 const sourceUrl = '/adminapi/v1/devicesdks'

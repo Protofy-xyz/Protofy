@@ -84,14 +84,14 @@ export default function DBAdmin({ contentState }) {
     }
 
     return (
-        <YStack f={1}>
-            <XStack py="$4" px="$5">
-                <YStack f={1}>
+        <YStack flex={1}>
+            <XStack paddingVertical="$4" paddingHorizontal="$5">
+                <YStack flex={1}>
                     <Paragraph>
                         <Text fontSize="$5">{currentDB}</Text>
                     </Paragraph>
                     <Paragraph>
-                        <Text o={0.5}>[total: {content?.data?.length}]</Text>
+                        <Text opacity={0.5}>[total: {content?.data?.length}]</Text>
                     </Paragraph>
                 </YStack>
 
@@ -103,7 +103,7 @@ export default function DBAdmin({ contentState }) {
                         <Tinted>
                             <Popover isOpen={isPopoverOpen} onOpenChange={setIsPopoverOpen} trigger={
                                 <Button
-                                    hoverStyle={{ o: 1 }} o={0.7}
+                                    hoverStyle={{ opacity: 1 }} opacity={0.7}
                                     size="$3"
                                     chromeless
                                     circular
@@ -116,7 +116,7 @@ export default function DBAdmin({ contentState }) {
                             }
                             >
                                 <YStack padding={'$6'} gap='$6'>
-                                    <Text w={'$16'}>{'Please enter a unique key for the new DB item.'}</Text >
+                                    <Text width={'$16'}>{'Please enter a unique key for the new DB item.'}</Text >
                                     <Input
                                         placeholder='Enter new item key'
                                         onChangeText={text => { setNewKey(text); setError(false) }}
@@ -125,7 +125,7 @@ export default function DBAdmin({ contentState }) {
                                         onSubmitEditing={onCreateItem}
                                     ></Input>
                                     <Tinted>
-                                        <Button hoverStyle={{ bc: '$color8' }} disabled={error} onPress={onCreateItem} backgroundColor={error ? '$red10' : '$color9'} >
+                                        <Button hoverStyle={{ backgroundColor: '$color8' }} disabled={error} onPress={onCreateItem} backgroundColor={error ? '$red10' : '$color9'} >
                                             <Text color={"white"}>{error ? "Item already exists" : "Create"}</Text>
                                         </Button>
                                     </Tinted>
@@ -140,7 +140,7 @@ export default function DBAdmin({ contentState }) {
             <XStack flexWrap='wrap'>
                 {content?.data?.map((element, i) => {
                     return (
-                        <Stack key={element.key} p={"$5"}>
+                        <Stack key={element.key} padding={"$5"}>
                             <DataCard
                                 innerContainerProps={{
                                     maxWidth: 700,

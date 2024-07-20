@@ -1,8 +1,8 @@
 import { Node, FlowPort, NodeParams, FallbackPort, filterCallback, restoreCallback, getFieldValue } from 'protoflow';
-import WeekdayPicker from 'protoflow/src/fields/WeekdayPicker'
-import { usePrimaryColor } from 'protoflow/src/diagram/Theme'
+import WeekdayPicker from 'protoflow/dist/fields/WeekdayPicker'
+import { usePrimaryColor } from 'protoflow/dist/diagram/Theme'
 import { Timer } from '@tamagui/lucide-icons';
-import NodeText from 'protoflow/src/diagram/NodeText';
+import NodeText from 'protoflow/dist/diagram/NodeText';
 
 const PeriodicScheduleMask = ({ node = {}, nodeData = {}, children }: any) => {
     const primaryColor = usePrimaryColor()

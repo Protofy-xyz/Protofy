@@ -7,16 +7,16 @@ type CardBodyProps = {
     children: any
 }
 export const CardBody = ({ title, subtitle, children, ...props }: CardBodyProps & YStackProps) => {
-    const titleComp = typeof title === 'string' ? <SizableText o={0.8} mt="20px" size="$6" fontWeight="600">{title}</SizableText> : title
-    return <YStack px={"$2"} pb="$5" f={1} {...props}>
+    const titleComp = typeof title === 'string' ? <SizableText opacity={0.8} marginTop="20px" size="$6" fontWeight="600">{title}</SizableText> : title
+    return <YStack paddingHorizontal={"$2"} paddingBottom="$5" flex={1} {...props}>
         <Tinted>
-            <YStack ml="10px">
+            <YStack marginLeft="10px">
                 {titleComp}
                 {subtitle}
             </YStack>
 
         </Tinted>
-        <Separator  marginVertical={15} />
+        <Separator marginVertical={15} />
         <Tinted>
             {children}
         </Tinted>

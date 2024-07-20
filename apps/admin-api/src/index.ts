@@ -4,7 +4,6 @@ const moduleAlias = require('module-alias')
 
 moduleAlias.addAliases({
   "app": path.resolve(__dirname, '../../../packages/app'),
-  "protolib": path.resolve(__dirname, '../../../packages/protolib/src')
 });
 
 import dotenv from 'dotenv'
@@ -88,7 +87,7 @@ if (isFullDev) {
   const pathsToWatch = [
     'src/**',
     '../../packages/app/conf.ts',
-    '../../packages/protolib/**',
+    '../../packages/protolib/dist/**',
     '../../packages/app/bundles/adminapi.tsx',
     '../../system.js',
     '../../packages/protonode/dist/**',
@@ -100,14 +99,24 @@ if (isFullDev) {
     persistent: true
   });
 
+  var restarting = false
+  var restartTimer = null
   watcher.on('change', async (path) => {
-    console.log(`File ${path} has been changed.`);
-    await generateEvent({
-      path: 'services/adminapi/stop', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-      from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
-      user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-      payload: {}, // event payload, event-specific data
-    }, getServiceToken())
-    process.exit(0)
-  });
+    if (restarting) {
+      clearTimeout(restartTimer)
+    } else {
+      console.log(`File ${path} has been changed, restarting...`);
+      restarting = true
+    }
+
+    restartTimer = setTimeout(async () => {
+      await generateEvent({
+        path: 'services/adminapi/stop', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+        user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+        payload: {}, // event payload, event-specific data
+      }, getServiceToken())
+      process.exit(0)
+    }, 1000);
+  })
 }

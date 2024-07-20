@@ -40,6 +40,7 @@ const DatePickerImpl = (props: DatePickerProps) => {
   return (
     <DatePickerProvider config={config}>
       <Popover size="$5" allowFlip {...rest}>
+        {/* @ts-ignore */}
         <Adapt when="sm" platform="touch">
           <Popover.Sheet modal dismissOnSnapToBottom snapPointsMode="fit">
             <Popover.Sheet.Frame padding="$4">
@@ -105,39 +106,8 @@ type DatePickerInputProps = {
 export const DatePickerInput = Input.Area.styleable<DatePickerInputProps>(
   (props, ref) => {
     const { value, onButtonPress, size = '$3', onReset, ...rest } = props
-    return (
-      <View $platform-native={{ minWidth: '100%' }}>
-        <Input size={size as any} f={1}>
-          <Input.Box>
-            <Input.Section>
-              <Input.Area value={value} f={1} ref={ref} {...rest} />
-            </Input.Section>
-            <Input.Section>
-              <Input.Button
-                onPress={(e) => {
-                  if (value) {
-                    e.stopPropagation()
-                    onReset()
-                  } else {
-                    onButtonPress?.(e)
-                  }
-                }}
-              >
-                {value ? (
-                  <Input.Icon>
-                    <X />
-                  </Input.Icon>
-                ) : (
-                  <Input.Icon>
-                    <Calendar />
-                  </Input.Icon>
-                )}
-              </Input.Button>
-            </Input.Section>
-          </Input.Box>
-        </Input>
-      </View>
-    )
+    //@ts-ignore
+    return <View $platform-native={{ minWidth: '100%' }}><Input size={size as any} flex={1}><Input.Box><Input.Section><Input.Area value={value} flex={1} ref={ref} {...rest} /></Input.Section><Input.Section><Input.Button onPress={(e) => { if (value) { e.stopPropagation(); onReset(); } else { onButtonPress?.(e); } }}>{value ? (<Input.Icon><X /></Input.Icon>) : (<Input.Icon><Calendar /></Input.Icon>)}</Input.Button></Input.Section></Input.Box></Input></View>;
   }
 )
 
@@ -257,6 +227,7 @@ export function YearRangeSlider() {
       </Button>
       <View y={2} flexDirection="column" alignItems="center">
         <SizableText size="$5">
+          {/* @ts-ignore */}
           {`${years[0].year} - ${years[years.length - 1].year}`}
         </SizableText>
       </View>
@@ -286,16 +257,17 @@ export function YearSlider() {
         <ChevronLeft fillOpacity={0} />
       </Button>
       <SizableText
-        onPress={() => setHeader('year')}
-        selectable
-        tabIndex={0}
+        //@ts-ignore
+        onPress={() => setHeader('year')} selectable tabIndex={0}
         size="$6"
         cursor="pointer"
         color="$color11"
+        //@ts-ignore
         hoverStyle={{
           color: '$color12',
         }}
       >
+        {/* @ts-ignore */}
         {year}
       </SizableText>
       <Button circular size="$3" {...swapOnClick(subtractOffset({ months: -12 }))}>

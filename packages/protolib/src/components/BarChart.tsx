@@ -19,15 +19,15 @@ const BarChart = React.forwardRef(({
         return (
           <XStack space="$3" key={i}>
             {/*@ts-ignore*/}
-            <YStack w={large ? 120 : 70}>
+            <YStack width={large ? 120 : 70}>
               <Paragraph
                 key={result.name}
                 size="$2"
                 whiteSpace="nowrap"
                 //@ts-ignore
-                ta="right"
+                textAlign="right"
                 //@ts-ignore
-                my={-3}
+                marginVertical={-3}
                 fontWeight={result.name === selectedElement ? '700' : '400'}
               >
                 {result.name}
@@ -37,13 +37,13 @@ const BarChart = React.forwardRef(({
               {/**@ts-ignore */}
               <YStack
                 //@ts-ignore
-                bc={result.color}
-                o={1}
+                backgroundColor={result.color}
+                opacity={1}
                 width={width as any}
                 height={20}
-                br="$2"
+                borderRadius="$2"
                 position="relative"
-                jc="center"
+               justifyContent="center"
                 scaleX={1}
                 {...(animateEnter && {
                   animation: 'lazy',

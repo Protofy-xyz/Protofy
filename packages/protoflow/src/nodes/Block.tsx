@@ -10,7 +10,7 @@ import { ListOrdered, Square, ArrowDownUp, Plus } from '@tamagui/lucide-icons';
 import { generateBoxShadow } from '../lib/shadow';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { useProtoflow } from '../store/DiagramStore';
-import { Button } from '@my/ui';
+import { Button } from 'tamagui';
 
 const blockOffset = 200
 const _marginTop = 222

@@ -62,7 +62,7 @@ export const ItemCard = memo(React.forwardRef(
     const [error, setError] = useState(false)
     return (
       <YStack
-        f={1}
+        flex={1}
         ref={ref}
         display="flex"
         alignItems="stretch"
@@ -73,24 +73,24 @@ export const ItemCard = memo(React.forwardRef(
               //@ts-ignore
               zi={1000}
               w="100%"
-              bc="$backgroundHover"
-              btrr={10}
-              btlr={10}
-              jc="center"
+              backgroundColor="$backgroundHover"
+              borderTopRightRadius={10}
+              borderTopLeftRadius={10}
+             justifyContent="center"
               {...topBarProps}
             >
               {topBar}
             </XStack>
             {/*@ts-ignore*/}
-            <Separator mb={-1} />
+            <Separator marginBottom={-1} />
           </>
         ) : null}
         {React.createElement(containerElement as any, {
           borderWidth: 1,
           borderColor: "$borderColor",
           backgroundColor: "$color1",
-          br: "$5",
-          p: 0,
+           borderRadius: "$5",
+          padding: 0,
           ai: "stretch",
           elevation: "$2",
           overflow: 'hidden',
@@ -102,27 +102,27 @@ export const ItemCard = memo(React.forwardRef(
                 //@ts-ignore
                 zi={1000}
                 w="100%"
-                px="$2"
-                py="$2"
-                bc="$backgroundHover"
-                btrr={10}
-                btlr={10}
+                paddingHorizontal="$2"
+                paddingVertical="$2"
+                backgroundColor="$backgroundHover"
+                borderTopRightRadius={10}
+                borderTopLeftRadius={10}
                 space="$5"
-                jc="center"
+               justifyContent="center"
                 {...topBarProps}
               >
                 {topBar}
               </XStack>
               {/*@ts-ignore*/}
-              <Separator mb={-1} />
+              <Separator marginBottom={-1} />
             </>
           ) : null,
 
-          <YStack ai="center">
+          <YStack alignItems="center">
             {/*@ts-ignore*/}
             {hasPicture ? <Center>
-              {image && image.src && !error ? <Image onError={() => setError(true)} btrr={20} btlr={20} top={-20} source={{ uri: image.src, width: image.width, height: image.height }} /> :
-                <YStack o={0.2} btrr={20} btlr={20} width={image?.width} height={image?.height} jc="center" ai="center">
+              {image && image.src && !error ? <Image onError={() => setError(true)} borderTopRightRadius={20} borderTopLeftRadius={20} top={-20} source={{ uri: image.src, width: image.width, height: image.height }} /> :
+                <YStack opacity={0.2} borderTopRightRadius={20} borderTopLeftRadius={20} width={image?.width} height={image?.height} justifyContent="center" alignItems="center">
                   <ImageOff />
                   <SizableText>No photo</SizableText>
                 </YStack>
@@ -133,20 +133,20 @@ export const ItemCard = memo(React.forwardRef(
           bottomBar ? (
             <>
               {/*@ts-ignore*/}
-              <Separator mb={-1} />
+              <Separator marginBottom={-1} />
 
               <XStack
                 //@ts-ignore
                 zi={1000}
                 w="100%"
-                px="$2"
-                py="$2"
-                bc="$backgroundHover"
-                bbrr={17}
+                paddingHorizontal="$2"
+                paddingVertical="$2"
+                backgroundColor="$backgroundHover"
+                borderBottomRightRadius={17}
                 bblr={17}
-                ai="center"
+                alignItems="center"
                 space="$5"
-                jc="center"
+               justifyContent="center"
                 pointerEvents={pointerEvents}
                 {...bottomBarProps}
               >

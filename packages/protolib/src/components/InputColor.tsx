@@ -13,9 +13,9 @@ export const InputColor = ({ color, onChange, placeholder }: Props) => {
     return <Popover
         allowFlip
     >
-        <Popover.Trigger f={1}>
+        <Popover.Trigger flex={1}>
             <Input
-                f={1}
+                flex={1}
                 value={color}
                 placeholder={placeholder ?? "#000000"}
             />

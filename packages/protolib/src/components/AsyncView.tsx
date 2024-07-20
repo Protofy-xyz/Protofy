@@ -42,9 +42,9 @@ export const AsyncView = React.forwardRef(({
     if ((!atom && !ready) || (atom && !atom.isLoaded)) {
         if(!loadingVisible) return <></>
         //@ts-ignore
-        return loading ? loading : <Stack ref={ref} mt="$10" ai="center" jc="center" f={1} {...props}><Tinted><Spinner color="$color6" size={spinnerSize??'large'} /></Tinted>
+        return loading ? loading : <Stack ref={ref} marginTop="$10" alignItems="center" justifyContent="center" flex={1} {...props}><Tinted><Spinner color="$color6" size={spinnerSize??'large'} /></Tinted>
             <Stack>
-                {loadingText && <SizableText o={0.6} fontWeight="700" mt="$5">{loadingText}</SizableText>}
+                {loadingText && <SizableText opacity={0.6} fontWeight="700" marginTop="$5">{loadingText}</SizableText>}
             </Stack>
         </Stack>
     }

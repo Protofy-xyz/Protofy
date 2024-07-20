@@ -7,7 +7,7 @@ import RangeType, { getRangeTypes } from "./RangeFields";
 import ToggleFields, { getToggleTypes } from "./ToggleFields";
 import InputFields, { getInputTypes } from "./InputFields";
 import SelectFields, { getSelectTypes } from "./SelectFields";
-import { Popover, XStack } from "@my/ui";
+import { Popover, XStack } from "tamagui";
 import { MoreVertical, RotateCcw } from "@tamagui/lucide-icons";
 import { FlowStoreContext } from "../store/FlowsStore";
 

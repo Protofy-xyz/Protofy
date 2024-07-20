@@ -1,6 +1,6 @@
-import { HeaderContents as ProtoHeaderContents, HeaderContentsProps } from 'protolib/components/layout/HeaderContents'
-import { HeaderLink } from 'protolib/components/HeaderLink'
-import { Tinted } from 'protolib/components/Tinted'
+import { HeaderContents as ProtoHeaderContents, HeaderContentsProps } from './base/HeaderContents'
+import { HeaderLink } from 'protolib/dist/components/HeaderLink'
+import { Tinted } from 'protolib/dist/components/Tinted'
 import { Text } from 'tamagui'
 import { Paragraph, XStack } from '@my/ui';
 import dynamic from 'next/dynamic';
@@ -13,8 +13,8 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
   const projectName = SiteConfig.projectName ?? 'Protofy'
 
   return <ProtoHeaderContents
-    logo={<Paragraph mr={"$2"}><Text fontSize={20} fontWeight={"400"}>{props.headerTitle ?? projectName}</Text></Paragraph>}
-    rightArea={<XStack ai="center">
+    logo={<Paragraph marginRight={"$2"}><Text fontSize={20} fontWeight={"400"}>{props.headerTitle ?? projectName}</Text></Paragraph>}
+    rightArea={<XStack alignItems="center">
       {/* todo: publish button */}
       {props.topBar}
       <XStack $xs={{ display: 'none' }}>

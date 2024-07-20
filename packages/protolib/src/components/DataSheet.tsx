@@ -65,7 +65,7 @@ export const DataSheet = ({ items, model, sourceUrl, name, lineSelect, sheetProp
         }
     }, [])
 
-    return <Stack ref={containerRef} f={1} {...props}>
+    return <Stack ref={containerRef} flex={1} {...props}>
         <HotkeysProvider>
             <Tinted>
                 {multiplier && <Table2

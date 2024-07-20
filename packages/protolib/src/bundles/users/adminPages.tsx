@@ -4,7 +4,7 @@ import { usePrompt } from '../../context/PromptAtom';
 import { DataTable2 } from '../../components/DataTable2';
 import { Chip } from '../../components/Chip';
 import { DataView } from '../../components/DataView';
-import { AdminPage } from '../../components/AdminPage';
+import { AdminPage } from 'app/layout/AdminPage';
 import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import moment from 'moment';
 import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
@@ -58,11 +58,12 @@ export default {
                     initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
 
+        
             return (<AdminPage title="Users" pageSession={pageSession}>
                 <DataView
                     key={all ? 'all' : 'filtered'}
                     toolBarContent={
-                        <XStack mr={"$2"} f={1} space="$1.5" ai="center" jc='flex-end'>
+                        <XStack marginRight={"$2"} flex={1} space="$1.5" alignItems="center" justifyContent='flex-end'>
                             <Text fontSize={14} color="$color11">
                                 View all
                             </Text>
@@ -107,7 +108,7 @@ export default {
                         type: {
                             component: (path, data, setData, mode) => mode == 'add' || mode == 'edit' ? <SelectList
                                 //@ts-ignore
-                                f={1}
+                                flex={1}
                                 title={'type'}
                                 elements={groups?.data?.items.map(obj => obj.name).map(item => item)}
                                 value={getValue(data)}
