@@ -31,7 +31,6 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
 
   usePrompt(() => `The user is browsing an admin page in the admin panel. The title of the admin page is: "${title}"`)
 
-  return <h1>boletus</h1>
   return (
     <Page ref={ref} title={projectName + " - " + title} backgroundColor={'$bgPanel'}>
       <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName }}>
@@ -40,6 +39,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
         </AdminPanel>
       </SearchContext.Provider>
       <Tinted>
+        {/* @ts-ignore */}
         {integratedChat && settingsAssistantEnabled && <Chat tags={['doc', title]} />}
       </Tinted>
     </Page>

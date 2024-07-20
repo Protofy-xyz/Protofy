@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
-import { getEnv, createSessio, PendingResult, getPendingResult } from 'protobase'
+import { getEnv, createSession, PendingResult, getPendingResult } from 'protobase'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG, Separator, XStack } from '@my/ui'
