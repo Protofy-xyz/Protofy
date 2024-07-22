@@ -2,10 +2,11 @@ import { AutoModel, Schema, z } from 'protobase'
 
 export const FSMSchema = Schema.object({
     name: Schema.string().id().static(),
-    state: Schema.string(),
-    transitions: Schema.array(z.string()),
-    disabled: Schema.boolean()
-}) 
+    context: Schema.record(z.string(), z.any()),
+    states: Schema.array(z.string()),
+    transitions: Schema.record(z.string(), z.record(z.string(), z.string())),
+    currentState: Schema.union([z.literal(""), z.literal("")]).dependsOn("states").generateOptions((data) => [...data.states])
+})
 
 export type FSMType = z.infer<typeof FSMSchema>;
 export const FSMModel = AutoModel.createDerived<FSMType>("ObjectModel", FSMSchema);
