@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import useTheme from '../diagram/Theme';
 import { FlowStoreContext } from '../store/FlowsStore';
 import { CustomField } from '.';
-import { XStack, Button } from "@my/ui"
 import Text from '../diagram/NodeText'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { getDataFromField, getFieldValue } from '../utils';
@@ -22,41 +21,45 @@ export default ({ nodeData = {}, item, node }) => {
         setNodeData(node.id, { ...nodeData, [field]: getDataFromField(val, field, nodeData, { kind: 'FalseKeyword' }) })
     }
 
-    const borderWidth = useTheme('inputBorder').split(' ')[0]
+    const inputBorder = useTheme('inputBorder')
     const borderColor = useTheme('inputBorder').split(' ')[2]
 
-    const ToggleGroup = ({ defaultValue = false, values }) => <XStack
-        width="100%"
-        height='38px'
-        space="4px"
-        paddingHorizontal="2px"
-        backgroundColor={useTheme('inputBackgroundColor')}
-        borderWidth={borderWidth}
-        borderColor={borderColor}
-        alignItems='center'
-        justifyContent='space-around'
-        borderRadius="$2"
+    const ToggleGroup = ({ defaultValue = false, values }) => <div
+        style={{
+            width: '100%',
+            height: '38px',
+            display: 'flex',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            backgroundColor: useTheme('inputBackgroundColor'),
+            border: inputBorder,
+            borderRadius: '0.5ch',
+            gap: '4px',
+        }}
     >
         {values.map((v) => <ItemButton defaultValue={defaultValue} itemValue={v} onPress={onValueChange} />)}
-    </XStack>
+    </div>
 
     const ItemButton = ({ itemValue, onPress, defaultValue = false }) => {
         const isSelected = value == itemValue //|| !value && itemValue == defaultValue
         const isLight = resolvedTheme == 'light'
-        return <Button
-            onPress={() => onPress(itemValue)}
-            f={1}
-            chromeless={!isSelected}
-            backgroundColor={isSelected && isLight ? borderColor : undefined}
-            size={"$3"}
-            height="34px"
-            borderRadius="$1"
-            fontSize="$4"
+        return <button
+            onClick={() => onPress(itemValue)}
+            style={{
+                flex: 1,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: isSelected && isLight ? borderColor : undefined,
+                borderRadius: '2px',
+                height: '34px',
+                fontSize: '14px',
+            }}
         >
             <Text style={{ color: !isSelected ? useTheme('disableTextColor') : isSelected && isLight ? useTheme('textColor') : '' }}>
                 {itemValue ? 'true' : 'false'}
             </Text>
-        </Button>
+        </button>
     }
 
     const getInput = () => {
