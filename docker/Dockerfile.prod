@@ -4,4 +4,4 @@ FROM node:22-alpine3.19
 ENTRYPOINT [ "/bin/sh" ]
 WORKDIR /workspace
 COPY . .
-RUN yarn && yarn prepare-dev && yarn package
+RUN yarn && yarn package
