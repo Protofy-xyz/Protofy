@@ -6,6 +6,8 @@ services:
       context: ../..  # This should be set to two levels up from where the Dockerfile is, if that's where the folders you want to copy are located.
       dockerfile: apps/admin-api/Dockerfile
     entrypoint: "yarn prod-standalone"
+    ports:
+      - 8080:8080
     environment:
       - MQTT_URL=mqtt://localhost:1883
       - PROXY_API_URL=http://admin-api:8080
