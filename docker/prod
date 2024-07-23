@@ -1,3 +1,18 @@
 #!/bin/bash
 source ./helpers/get-envs --prod # Run in PROD mode
-$DOCKER_COMPOSE_CMD -p protofy $SERVICES_COMPOSE_FILES up
+SERVICE=false
+
+for arg in "$@"
+do
+  case $arg in
+    --service)
+    SERVICE=true
+    shift # Remove --service from processing
+    ;;
+  esac
+done
+COMMAND="$DOCKER_COMPOSE_CMD -p protofy $SERVICES_COMPOSE_FILES up $( [[ "$SERVICE" = true ]] && echo "-d && ./logs" )"
+echo "Running as service: $SERVICE"
+echo "Executing command: $COMMAND"
+
+eval $COMMAND
