@@ -18,6 +18,7 @@ import { MasksAPI } from './visualui/masksAPI';
 import { LogsAPI } from './logs/logsAPI'
 import { ServicesAPI } from './services/servicesAPI'
 import { FSMApi } from './fsm/FSMApi'
+import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 import { PackagesAPI } from './packages/packagesAPI'
 
 export const AdminAPIBundles = (app, context) => {
@@ -42,4 +43,5 @@ export const AdminAPIBundles = (app, context) => {
   ServicesAPI(app, context) 
   PackagesAPI(app, context)
   FSMApi(app, context)
+  StateMachinesDefinitionsApi(app, context)
 }
