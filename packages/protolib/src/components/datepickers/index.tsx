@@ -80,13 +80,27 @@ export function DatePicker({ onDatesChange, selectedDates, mode = 'single', conf
     },
   }
 
-  useEffect(() => {
-    if (['single', 'month', 'year'].includes(mode)) {
-      setOpen(false)
-    } else if (dates.length === 2) {
-      setOpen(false)
-    }
-  }, [dates, offsetValue])
+  if (['single', 'multiple', 'range'].includes(mode)) {
+
+    useEffect(() => {
+      if (mode == 'single' && dates.length) {
+        setOpen(false)
+      } else if (dates.length === 2) {
+        setOpen(false)
+      }
+    }, [dates])
+
+  } else {
+
+    useEffect(() => {
+      if (['month', 'year'].includes(mode) && dates.length) {
+        setOpen(false)
+      } else if (dates.length === 2) {
+        setOpen(false)
+      }
+    }, [offsetValue])
+
+  }
 
   return (
     <DPicker
