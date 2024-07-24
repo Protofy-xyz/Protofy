@@ -23,6 +23,7 @@ export const BaseObjectSchema = z.object({
         name: z.union([
           z.literal("id"),
           z.literal("search"),
+          z.literal("filter"),
           z.literal("generate"),
           z.literal("display"),
           z.literal("optional"),

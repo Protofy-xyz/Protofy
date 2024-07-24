@@ -28,6 +28,7 @@ import { InteractiveIcon } from './InteractiveIcon';
 import { ItemMenu } from './ItemMenu';
 import ErrorMessage from './ErrorMessage';
 import { DataSheet } from './DataSheet';
+import { Filters } from './Filters';
 
 interface DataViewProps {
     onSelectItem?: (item: any) => void;
@@ -43,6 +44,7 @@ interface DataViewProps {
     entityName?: string;
     pluralName?: string;
     hideAdd?: boolean;
+    hideFilters?: boolean;
     enableAddToInitialData?: boolean;
     pageState?: any;
     icons?: any;
@@ -140,6 +142,7 @@ const DataViewInternal = forwardRef(({
     entityName,
     pluralName,
     hideAdd = false,
+    hideFilters = true,
     enableAddToInitialData = false,
     pageState,
     icons = {},
@@ -594,6 +597,10 @@ const DataViewInternal = forwardRef(({
                                         }}
                                     />
                                 </Tinted>}
+                                {!hideFilters && <Filters
+                                    model={model}
+                                    state={state}
+                                />}
                                 {extraActions && extraActions.map((action, index) => action)}
                             </XStack>
                         </XStack>

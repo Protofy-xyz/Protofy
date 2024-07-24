@@ -41,6 +41,7 @@ export default {
                 model={Objects.{{rawObject}} } 
                 pageState={pageState}
                 icons={Icons}
+                hideFilters={false}
             />
         </AdminPage>)
     }, 
