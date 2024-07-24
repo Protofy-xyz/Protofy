@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  site:
+  next:
     build:
       context: ../..  # This should be set to two levels up from where the Dockerfile is, if that's where the folders you want to copy are located.
       dockerfile: apps/next/Dockerfile 

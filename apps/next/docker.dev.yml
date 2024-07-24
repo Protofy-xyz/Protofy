@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  site:
+  next:
     image: "protofy/workspace"
     entrypoint: "sh -c 'cd apps/next && yarn prepare-dev && yarn dev-standalone'"
     ports:

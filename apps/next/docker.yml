@@ -1,5 +1,5 @@
 version: '3.8'
 
 services:
-  site:
-    container_name: 'site'
+  next:
+    container_name: 'next'
