@@ -1,5 +1,5 @@
 version: '3.8'
 
 services:
-  docs:
-    container_name: 'docs'
+  nextra:
+    container_name: 'nextra'

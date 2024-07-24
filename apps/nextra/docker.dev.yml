@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  docs:
+  nextra:
     image: "protofy/workspace"
     entrypoint: "sh -c 'cd apps/nextra && yarn prepare-dev && yarn dev-standalone'"
     ports:
