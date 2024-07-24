@@ -2,7 +2,9 @@ import { getSourceFile, addImportToSourceFile, ImportType, addObjectLiteralPrope
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
+import { API } from 'protobase'
 import { StateMachineDefinitionModel } from "./stateMachineDefinitionSchema";
+import { getServiceToken } from '../../apis/context';
 
 const StateMachineDefinitionsDir = (root) => fspath.join(root, "/packages/app/bundles/custom/stateMachines")
 const getFSM = (fsmPath, req) => {
@@ -30,6 +32,39 @@ const getDB = (path, req, session) => {
         async put(key, value) {
             value = JSON.parse(value)
 
+            const machineDefinitionFilePath = fspath.join(StateMachineDefinitionsDir(getRoot(req)), fspath.basename(value.name) + '.ts')
+            const template = "defaultStateMachine" // for the moment hardcoded template only
+            const machineData = {
+                machineName: value.name ?? "defaultName",
+                machineContext: JSON.stringify(value.context ?? {}, null, 2),
+                machineStates: JSON.stringify(value.states ?? []),
+                machineTransitions: JSON.stringify(value.transitions ?? {}, null, 2)
+            }
+
+            try {
+                // check if file already exists
+                await fs.access(machineDefinitionFilePath, fs.constants.F_OK)
+            } catch (e) {
+                // create machine file with template
+                const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+                    name: fspath.basename(value.name + '.tsx'),
+                    data: {
+                        options: {
+                            template: `/packages/protolib/src/bundles/stateMachines/templates/${template}.tpl`,
+                            variables: {
+                                ...value,
+                                ...machineData
+                            }
+                        },
+                        path: StateMachineDefinitionsDir(getRoot(req))
+                    }
+                })
+
+                if (result.isError) {
+                    console.error("Error executing template: ", result)
+                    throw result.error
+                }
+            }
         },
 
         async get(key) {
