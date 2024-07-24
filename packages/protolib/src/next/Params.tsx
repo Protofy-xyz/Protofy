@@ -43,6 +43,8 @@ export const usePageParams = (state) => {
     }, {});
 
     return {
+        query,
+
         push: (key, value) => {
             const newQuery = {
                 ...query,
@@ -61,8 +63,12 @@ export const usePageParams = (state) => {
             navigate(router, pathname, newQuery, 'push');
         },
 
-        removePush: (key) => {
-            const newQuery = omitProp(query, key);
+        removePush: (keys: string | string[]) => {
+            const keysArr = Array.isArray(keys) ? keys : [keys];
+            let newQuery = { ...query };
+            keysArr.forEach(key => {
+                newQuery = omitProp(newQuery, key);
+            });
             navigate(router, pathname, newQuery, 'push');
         },
 
