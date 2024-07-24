@@ -64,16 +64,16 @@ const config = {
             }
         },
         {
-            "name": "next-dev",
-            "dirname": "next",
-            "description": "Development mode of the frontend service, providing the web user interface based on nextjs",
-            "route": (req, mode) => mode === 'development' ? (process.env.SITE_URL ?? 'http://localhost:3000') : undefined
-        },
-        {
             "name": "expo",
             "description": "Expo services, providing the mobile user interface based on expo",
             "disabled": true,
             "route": () => false
+        },
+        {
+            "name": "next-dev",
+            "dirname": "next",
+            "description": "Development mode of the frontend service, providing the web user interface based on nextjs",
+            "route": (req, mode) => mode === 'development' ? (process.env.SITE_URL ?? 'http://localhost:3000') : undefined
         },
         {
             "name": "next",
