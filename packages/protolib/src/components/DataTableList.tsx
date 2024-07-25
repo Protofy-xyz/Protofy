@@ -20,7 +20,7 @@ export const getFieldPreview = (key, row, def, plain?) => {
     }
 
     if(def?.typeName === 'ZodBoolean') {
-        return row[key] ? 'true' : 'false'
+        return row[key] == true ? 'true' : row[key] == false ? 'false' : ''
     }
 
     if(def?.typeName === 'ZodArray') {
