@@ -42,7 +42,7 @@
     "./protolib/src/bundles/library.ts",
     "./protolib/src/bundles/apiContext.ts",
     "./protolib/src/bundles/objects.ts",
-    "./app/bundles/custom/fsm/**/*",
+    "./app/bundles/custom/stateMachines/**/*",
   ],
   "exclude": [
     "node_modules"
