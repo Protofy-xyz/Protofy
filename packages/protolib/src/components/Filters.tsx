@@ -26,7 +26,7 @@ export const Filters = ({ model, state }: FiltersType) => {
         const value = query[`filter[${key}]`]
 
         const onFilter = (value) => {
-            value
+            value !== undefined
                 ? push(`filter[${key}]`, value)
                 : removePush(`filter[${key}]`)
         }
@@ -37,7 +37,7 @@ export const Filters = ({ model, state }: FiltersType) => {
             return <>
                 <Label>{key}</Label>
                 <Checkbox
-                    checked={Boolean(value)}
+                    checked={value == "true"}
                     onCheckedChange={(val) => onFilter(val)}
                 >
                     <Checkbox.Indicator>
