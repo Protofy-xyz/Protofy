@@ -1,14 +1,11 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
+      "baseUrl": ".",
       "composite": true,
       "strict": false,
       "paths": {
-        "@components/*": ["./components/*"],
-        "@lib/*": ["./lib/*"],
-        "@data/*": ["./data/*"],
         "react-native": ["react-native-web"],
-        "@/*": ["./*"],
         "protolib/*": ["../protolib/src/*"]
       }
     },
