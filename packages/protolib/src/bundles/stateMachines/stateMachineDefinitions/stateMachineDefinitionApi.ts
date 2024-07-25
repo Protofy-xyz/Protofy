@@ -36,9 +36,9 @@ const getDB = (path, req, session) => {
             const template = "defaultStateMachine" // for the moment hardcoded template only
             const machineData = {
                 machineName: value.name ?? "defaultName",
-                machineContext: JSON.stringify(value.context ?? {}, null, 2),
-                machineStates: JSON.stringify(value.states ?? []),
-                machineTransitions: JSON.stringify(value.transitions ?? {}, null, 2)
+                machineContext: JSON.stringify(value.context ?? {}, null, 4),
+                machineStates: JSON.stringify(value.states ?? [], null, 4),
+                machineTransitions: JSON.stringify(value.transitions ?? {}, null, 4)
             }
 
             try {
