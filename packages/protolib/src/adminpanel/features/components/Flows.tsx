@@ -8,3 +8,4 @@ const FlowsFactory = dinamyc(() => import('protoflow').then((mod) => mod.FlowFac
 export default (props) => {
     return <FlowsFactory {...props} />
 }
+

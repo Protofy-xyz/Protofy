@@ -1,8 +1,6 @@
 import '@tamagui/core/reset.css'
 import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
-import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
-import { Provider } from 'app/provider'
 import React, { useCallback, useMemo, useEffect, useRef, useState, useContext } from 'react';
 import { Panel, useNodesInitialized } from 'reactflow';
 import { PORT_TYPES, createNode, getId, saveNodes } from './lib/Node';
@@ -879,28 +877,11 @@ const FlowsWrapper = (props) => {
 
     return (
         <FlowStoreContext.Provider value={store}>
-            <ThemeProvider>
-                <FlowsBase {...props} />
-            </ThemeProvider>
+            <FlowsBase {...props} />
         </FlowStoreContext.Provider>
     );
 }
 
-const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-    const [theme, setTheme] = useRootTheme()
-
-    return (
-        <NextThemeProvider
-            onChangeTheme={(next) => {
-                setTheme(next as any)
-            }}
-        >
-            <Provider disableRootThemeClass defaultTheme={theme}>
-                {children}
-            </Provider>
-        </NextThemeProvider>
-    )
-}
 export default (props) => {
     const FlowsWithTopics = withTopics(FlowsWrapper, { topics: [props.flowId + '/play', props.flowId + '/ui', 'savenodes'] })
 
