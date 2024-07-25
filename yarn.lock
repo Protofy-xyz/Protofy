@@ -24688,6 +24688,7 @@ __metadata:
     mqtt: "npm:5.1.4"
     mqtt-pattern: "npm:^1.2.0"
     multer: "npm:1.4.5-lts.1"
+    ncp: "npm:~2.0.0"
     pino: "npm:9.2.0"
     pino-pretty: "npm:11.2.1"
     playwright: "npm:1.41.0"
@@ -24703,8 +24704,10 @@ __metadata:
     react-use-keypress: "npm:1.3.1"
     resend: "npm:~3.2.0"
     short-uuid: "npm:5.2.0"
+    shx: "npm:^0.3.4"
     tamagui: "npm:^1.101.7"
     ts-jest: "npm:~29.1.1"
+    typescript: "npm:~5.3.3"
     usehooks-ts: "npm:^2.9.1"
     xstate: "npm:5.14.0"
   languageName: unknown

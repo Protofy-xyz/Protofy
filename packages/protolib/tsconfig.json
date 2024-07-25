@@ -5,7 +5,9 @@
   ],
   "compilerOptions": {
     "composite": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "moduleResolution": "node"
   },
   "references": [],
   "typeRoots": [ // Specifies a list of directories for type definitions

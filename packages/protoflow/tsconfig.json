@@ -5,7 +5,7 @@
   ],
   "compilerOptions": {
     "composite": true,
-    "module": "commonjs",
+    "module": "esnext",
     "jsx": "react-jsx"
   },
   "references": []

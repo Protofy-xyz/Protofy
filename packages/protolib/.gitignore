@@ -27,7 +27,7 @@ node_modules
 .next
 
 .vercel
-
+src/app
 apps/site/out
 apps/kitchen-sink/ios
 

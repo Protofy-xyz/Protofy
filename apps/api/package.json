@@ -1,6 +1,7 @@
 {
   "name": "api",
   "version": "0.0.1",
+  "type": "module",
   "sideEffects": false,
   "source": "src/index.ts",
   "main": "src/index.ts",
@@ -8,7 +9,7 @@
     "src"
   ],
   "scripts": {
-    "dev-standalone": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
+    "dev-standalone": "NODE_ENV=development node --loader ts-node/esm --experimental-specifier-resolution=node src/index.ts",
     "prod-standalone": "NODE_ENV=production node -r module-alias/register dist/apps/api/src/index.js",
     "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts",
     "prepare-dev": "node prepare.js",

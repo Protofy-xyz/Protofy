@@ -11,9 +11,6 @@
     "types",
     "dist"
   ],
-  "scripts": {
-
-  },
   "dependencies": {
     "@tamagui/animations-css": "^1.101.7",
     "@tamagui/animations-moti": "^1.101.7",
