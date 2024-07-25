@@ -32,6 +32,7 @@ import { Connector } from 'protolib/lib/mqtt'
 import { palettes } from 'app/bundles/palettes'
 import Workspaces from 'app/bundles/workspaces'
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
+import { PanelLayout } from 'app/layout/PanelLayout'
 
 setConfig(getBaseConfig("electron", process))
 initSchemaSystem()
@@ -78,7 +79,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
                 masks: { getFlowMasks, getFlowsCustomComponents },
                 palettes,
                 workspaces: Workspaces
-              }
+              }, layout: { PanelLayout }
             }}>
               <Component {...pageProps} />
             </AppConfContext.Provider>

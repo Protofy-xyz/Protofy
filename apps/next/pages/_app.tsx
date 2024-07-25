@@ -29,14 +29,15 @@ import type { SolitoAppProps } from 'solito'
 import { AppConfig } from '../conf'
 import { Provider as JotaiProvider } from 'jotai'
 import { useSession } from 'protolib/lib/Session'
-import {AppConfContext} from 'protolib/providers/AppConf'
-import { getBrokerUrl} from 'protolib/lib/Broker'
-import {Connector } from 'protolib/lib/mqtt'
+import { AppConfContext } from 'protolib/providers/AppConf'
+import { getBrokerUrl } from 'protolib/lib/Broker'
+import { Connector } from 'protolib/lib/mqtt'
 import { Toast, YStack } from '@my/ui'
 import { SiteConfig } from 'app/conf'
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 import { palettes } from 'app/bundles/palettes'
 import Workspaces from 'app/bundles/workspaces'
+import { PanelLayout } from 'app/layout/PanelLayout'
 
 initSchemaSystem()
 
@@ -81,11 +82,17 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
       <JotaiProvider>
         <Connector brokerUrl={brokerUrl} options={{ username: session?.user?.id, password: session?.token }}>
           <ThemeProvider>
-            <AppConfContext.Provider value={{...AppConfig, bundles: {
-              masks: { getFlowMasks, getFlowsCustomComponents },
-              palettes,
-              workspaces: Workspaces
-            }}}>
+            <AppConfContext.Provider value={{
+              ...AppConfig,
+              bundles: {
+                masks: { getFlowMasks, getFlowsCustomComponents },
+                palettes,
+                workspaces: Workspaces,
+              },
+              layout: {
+                PanelLayout
+              }
+            }}>
               <Component {...pageProps} />
             </AppConfContext.Provider>
           </ThemeProvider>
@@ -121,7 +128,7 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
         >
           <YStack>
             <Toast.Title>Preview Mode</Toast.Title>
-              <Toast.Description>This page is in preview/development mode. This may affect your user experience and negatively impact the performance.</Toast.Description>
+            <Toast.Description>This page is in preview/development mode. This may affect your user experience and negatively impact the performance.</Toast.Description>
           </YStack>
         </Toast>}
       </Provider>

@@ -1,5 +1,4 @@
 import { XStack } from 'tamagui'
-import { PanelLayout } from 'app/layout/PanelLayout'
 import { SelectList } from './SelectList';
 import { useWorkspaces, useUserSettings } from '../lib/Session';
 import { PanelMenu } from './PanelMenu';
@@ -47,6 +46,8 @@ export const AdminPanel = ({ children }) => {
   const [appState, setAppState] = useAtom(AppState)
   const SiteConfig = useContext<SiteConfigType>(AppConfContext);
   const { workspaces } = SiteConfig.bundles
+  const { PanelLayout} = SiteConfig.layout
+
   const [rightPanelSize, setRightPanelSize] = useAtom(RightPanelAtom)
   const currentWorkspace = settings && settings.workspace ? settings.workspace : userSpaces[0]
 

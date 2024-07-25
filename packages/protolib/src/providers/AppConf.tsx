@@ -31,6 +31,9 @@ export type SiteConfigType = {
         },
         palettes: any,
         workspaces: any
+    },
+    layout: {
+        PanelLayout: React.FC,
     }
 }
 
@@ -44,6 +47,7 @@ export const AppConfContext = createContext<SiteConfigType>({
     defaultWorkspace: 'dev',
     defaultWorkspacePage: 'events',
     assistant: true,
+    projectName: 'Protofy',
     bundles: {
         masks: {
             getFlowsCustomComponents: (path: string, queryParams: {}) => [],
@@ -52,4 +56,7 @@ export const AppConfContext = createContext<SiteConfigType>({
         palettes: {},
         workspaces: {}
     },
+    layout: {
+        PanelLayout: () => <></>
+    }
 });
