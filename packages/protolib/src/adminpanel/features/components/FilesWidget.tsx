@@ -1,12 +1,11 @@
 import { Center } from '../../../components/Center'
-import { getIntent } from '../../../lib/Intent'
+import { getIntent, useIntent } from '../../../lib/Intent'
 import { H4, Stack, XStack, YStack, YStackProps } from '@my/ui'
 import React from 'react'
 import { lookup } from 'mrmime';
 import { ChonkyActions } from 'chonky';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
-import { useIntent } from 'app/bundles/intents'
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 //@ts-ignore
