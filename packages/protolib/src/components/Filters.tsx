@@ -1,9 +1,9 @@
 import { DatePicker } from './datepickers';
 import { Tinted } from './Tinted'
 import { SelectList } from './SelectList'
-import { Filter } from '@tamagui/lucide-icons'
-import { XStack, Button, Popover, H4, Label, YStack, Input } from '@my/ui'
-import React, { useState } from 'react';
+import { Filter, Check } from '@tamagui/lucide-icons'
+import { XStack, Button, Popover, H4, Label, YStack, Checkbox } from '@my/ui'
+import { useState } from 'react';
 import { usePageParams } from '../next';
 
 type FiltersType = {
@@ -33,16 +33,17 @@ export const Filters = ({ model, state }: FiltersType) => {
 
         if (!def.filter) return
 
-        if (def?.typeName === 'ZodString' || def?.typeName === "ZodNumber") {
+        if (def?.typeName === 'ZodBoolean') {
             return <>
-                <Label >{key}</Label>
-                <YStack>
-                    <Input
-                        size={"$3"}
-                        value={value}
-                        onChangeText={(val) => onFilter(def?.typeName === "ZodNumber" ? val.replace(/[^0-9.-]/g, '') : val)}
-                    />
-                </YStack>
+                <Label>{key}</Label>
+                <Checkbox
+                    checked={Boolean(value)}
+                    onCheckedChange={(val) => onFilter(val)}
+                >
+                    <Checkbox.Indicator>
+                        <Check></Check>
+                    </Checkbox.Indicator>
+                </Checkbox>
             </>
         } else if (def?.typeName === 'ZodDate') {
             return <>
