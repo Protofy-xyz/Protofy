@@ -22,7 +22,13 @@ export type SiteConfigType = {
     signupEnabled: boolean,
     defaultWorkspace: string,
     defaultWorkspacePage: string,
-    assistant: boolean
+    assistant: boolean,
+    bundles: {
+        masks: {
+            getFlowsCustomComponents: (path: string, queryParams: {}) => any[],
+            getFlowMasks: (path: string, queryParams: {}) => any[]
+        }
+    }
 }
 
 export const AppConfContext = createContext<SiteConfigType>({
@@ -34,5 +40,6 @@ export const AppConfContext = createContext<SiteConfigType>({
     signupEnabled: false,
     defaultWorkspace: 'dev',
     defaultWorkspacePage: 'events',
-    assistant: true
+    assistant: true,
+    bundles: {}
 });

@@ -11,18 +11,18 @@ import { Monaco } from '../../components/Monaco'
 import { IntentType } from '../../lib/Intent'
 import Center from '../../components/Center'
 import dynamic from 'next/dynamic'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import { API } from 'protobase';
 import { usePrompt, promptCmd } from '../../context/PromptAtom';
 import { useInterval, useUpdateEffect } from 'usehooks-ts';
 import Flows from '../../adminpanel/features/components/Flows';
-import { getFlowsCustomComponents } from 'app/bundles/masks'
 import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";
 import { useEventEffect } from '../../bundles/events/hooks'
 import { useTint } from '../../lib/Tints'
+import { AppConfContext, SiteConfigType } from '../../providers/AppConf';
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -109,6 +109,8 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   const pathname = usePathname();
   const theme = useTheme()
   const tint = useTint().tint
+  const SiteConfig = useContext<SiteConfigType>(AppConfContext);
+  const { getFlowsCustomComponents } = SiteConfig.bundles.masks
 
   const [promptResponse, setPromptResponse] = usePrompt(
     (prompt, total, image) => {

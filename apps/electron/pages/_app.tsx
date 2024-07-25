@@ -26,9 +26,9 @@ import { Provider as JotaiProvider } from 'jotai'
 import { setConfig, initSchemaSystem } from 'protobase';
 import { getBaseConfig } from '@my/config'
 import { useSession } from 'protolib/lib/Session'
-import {AppConfContext} from 'protolib/providers/AppConf'
-import { getBrokerUrl} from 'protolib/lib/Broker'
-import {Connector } from 'protolib/lib/mqtt'
+import { AppConfContext } from 'protolib/providers/AppConf'
+import { getBrokerUrl } from 'protolib/lib/Broker'
+import { Connector } from 'protolib/lib/mqtt'
 setConfig(getBaseConfig("electron", process))
 initSchemaSystem()
 
@@ -58,7 +58,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
     return false;
   }
   const brokerUrl = getBrokerUrl()
-  
+
   return (
     <>
       <Head>
@@ -67,9 +67,13 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <JotaiProvider>
-        <Connector brokerUrl={brokerUrl} options={{username: session?.user?.id, password: session?.token}}>
+        <Connector brokerUrl={brokerUrl} options={{ username: session?.user?.id, password: session?.token }}>
           <ThemeProvider>
-            <AppConfContext.Provider value={AppConfig}>
+            <AppConfContext.Provider value={{
+              ...AppConfig, bundles: {
+                masks: { getFlowMasks, getFlowsCustomComponents },
+              }
+            }}>
               <Component {...pageProps} />
             </AppConfContext.Provider>
           </ThemeProvider>

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { CircuitBoard, Tag, BookOpen, Eye } from '@tamagui/lucide-icons'
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas'
 import { API, z, getPendingResult } from 'protobase'
@@ -15,9 +15,9 @@ import { AdminPage } from "../../../components/AdminPage"
 import { PaginatedData } from "../../../lib/SSR"
 import { InteractiveIcon } from "../../../components/InteractiveIcon"
 import Flows from '../../../adminpanel/features/components/Flows'
-import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 import { useSearchParams, usePathname } from 'solito/navigation'
 import layout from './DeviceLayout'
+import { AppConfContext, SiteConfigType } from "../../../providers/AppConf"
 
 const DeviceDefitionIcons = {
   name: Tag,
@@ -37,6 +37,8 @@ export default {
     const env = useWorkspaceEnv()
     const searchParams = useSearchParams();
     const pathname = usePathname();
+    const SiteConfig = useContext<SiteConfigType>(AppConfContext);
+    const {getFlowsCustomComponents, getFlowMasks} = SiteConfig.bundles.masks
 
     const query = Object.fromEntries(searchParams.entries());
 

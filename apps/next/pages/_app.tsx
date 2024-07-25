@@ -34,6 +34,7 @@ import { getBrokerUrl} from 'protolib/lib/Broker'
 import {Connector } from 'protolib/lib/mqtt'
 import { Toast, YStack } from '@my/ui'
 import { SiteConfig } from 'app/conf'
+import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 
 initSchemaSystem()
 
@@ -78,7 +79,9 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
       <JotaiProvider>
         <Connector brokerUrl={brokerUrl} options={{ username: session?.user?.id, password: session?.token }}>
           <ThemeProvider>
-            <AppConfContext.Provider value={AppConfig}>
+            <AppConfContext.Provider value={{...AppConfig, bundles: {
+              masks: { getFlowMasks, getFlowsCustomComponents },
+            }}}>
               <Component {...pageProps} />
             </AppConfContext.Provider>
           </ThemeProvider>
