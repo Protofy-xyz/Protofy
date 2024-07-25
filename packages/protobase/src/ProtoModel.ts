@@ -177,7 +177,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
 
                     return valid
                 } else {
-                    return this.data && this.data[key] == params.filter[key];
+                    return this.data && this.data[key]?.toString() == params.filter[key];
                 }
             });
 
