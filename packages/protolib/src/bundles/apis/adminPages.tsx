@@ -16,7 +16,7 @@ import { Tinted } from '../../components/Tinted';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { PaginatedData } from '../../lib/SSR';
 import { Slides } from '../../components/Slides';
-import { apiTemplates } from 'app/bundles/templates'
+import { apiTemplates } from '../templates'
 import { TemplateCard } from './TemplateCard';
 import { EditableObject } from '../../components/EditableObject';
 import { useSubscription } from '../../lib/mqtt';

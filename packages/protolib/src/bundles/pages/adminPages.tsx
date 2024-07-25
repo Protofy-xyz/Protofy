@@ -17,7 +17,7 @@ import { Slides } from '../../components/Slides'
 import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
 import { TemplatePreview } from './TemplatePreview'
-import { pageTemplates } from 'app/bundles/templates'
+import { pageTemplates } from '../templates'
 import { SiteConfig } from '@my/config/dist/AppConfig'
 import { PaginatedData } from '../../lib/SSR'
 
