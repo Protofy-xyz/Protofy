@@ -30,6 +30,8 @@ import { AppConfContext } from 'protolib/providers/AppConf'
 import { getBrokerUrl } from 'protolib/lib/Broker'
 import { Connector } from 'protolib/lib/mqtt'
 import { palettes } from 'app/bundles/palettes'
+import Workspaces from 'app/bundles/workspaces'
+import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 
 setConfig(getBaseConfig("electron", process))
 initSchemaSystem()
@@ -74,7 +76,8 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
             <AppConfContext.Provider value={{
               ...AppConfig, bundles: {
                 masks: { getFlowMasks, getFlowsCustomComponents },
-                palettes
+                palettes,
+                workspaces: Workspaces
               }
             }}>
               <Component {...pageProps} />

@@ -36,6 +36,7 @@ import { Toast, YStack } from '@my/ui'
 import { SiteConfig } from 'app/conf'
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 import { palettes } from 'app/bundles/palettes'
+import Workspaces from 'app/bundles/workspaces'
 
 initSchemaSystem()
 
@@ -82,7 +83,8 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
           <ThemeProvider>
             <AppConfContext.Provider value={{...AppConfig, bundles: {
               masks: { getFlowMasks, getFlowsCustomComponents },
-              palettes
+              palettes,
+              workspaces: Workspaces
             }}}>
               <Component {...pageProps} />
             </AppConfContext.Provider>

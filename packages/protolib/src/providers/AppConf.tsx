@@ -23,12 +23,14 @@ export type SiteConfigType = {
     defaultWorkspace: string,
     defaultWorkspacePage: string,
     assistant: boolean,
+    projectName: string,
     bundles: {
         masks: {
             getFlowsCustomComponents: (path: string, queryParams: {}) => any[],
             getFlowMasks: (path: string, queryParams: {}) => any[]
         },
-        palettes: any
+        palettes: any,
+        workspaces: any
     }
 }
 
@@ -42,5 +44,12 @@ export const AppConfContext = createContext<SiteConfigType>({
     defaultWorkspace: 'dev',
     defaultWorkspacePage: 'events',
     assistant: true,
-    bundles: {},
+    bundles: {
+        masks: {
+            getFlowsCustomComponents: (path: string, queryParams: {}) => [],
+            getFlowMasks: (path: string, queryParams: {}) => []
+        },
+        palettes: {},
+        workspaces: {}
+    },
 });
