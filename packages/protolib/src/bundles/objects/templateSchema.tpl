@@ -18,10 +18,10 @@ export class {{name}}Model extends ProtoModel<{{name}}Model> {
     }
 
     public static getApiOptions() {
-        return {
-            name: '{{lowername}}',
-            prefix: '/api/v1/'
-        }
+        return Protofy("api", {
+            "name": '{{lowername}}',
+            "prefix": '/api/v1/'
+        })
     }
 
     create(data?):{{name}}Model {

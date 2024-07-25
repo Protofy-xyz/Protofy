@@ -24,6 +24,7 @@ const getSchemas = async (req, sourceFile?) => {
           return getSchema(schemaId, [], req, prop.getName()).then(schema => ({
             name: prop.getName(),
             features: schema.features,
+            apiOptions: schema.apiOptions,
             id: schemaId
           }));
         }
@@ -74,7 +75,23 @@ const getSchema = async (idSchema, schemas, req, name?) => {
       console.error("Features text producing the error: ", featuresNode.getText())
     }
   }
-  return { name: schemaName, features: features, id: idSchema, keys: keys }
+
+  const apiOptionsNode = getDefinition(sourceFile, '"api.options"')
+  let options = {
+    name: schemaName,
+    prefix: '/api/v1/'
+  }
+
+  if (apiOptionsNode instanceof ObjectLiteralExpression) {
+    console.log('api options', apiOptionsNode.getText())
+    try {
+      options = JSON.parse(apiOptionsNode.getText())
+    } catch (e) {
+      console.error("Ignoring api options in object: ", idSchema, "because of an error: ", e)
+      console.error("Api options text producing the error: ", apiOptionsNode.getText())
+    }
+  }
+  return { name: schemaName, features, id: idSchema, keys, apiOptions: options }
 }
 
 const setSchema = (path, content, value, req) => {

@@ -12,7 +12,6 @@ import { AdminPage } from '../../components/AdminPage'
 import {useWorkspaceEnv} from '../../lib/useWorkspaceEnv'
 import { useEffect, useState } from 'react'
 import Center from '../../components/Center'
-import { Objects } from "app/bundles/objects";
 import { Tinted } from '../../components/Tinted';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { PaginatedData } from '../../lib/SSR';
@@ -171,9 +170,12 @@ export default {
             const toast = useToastController()
 
             let options: any = {}
-            const ObjectModel = currentElement?.data?.object ? Objects[currentElement?.data?.object] : null
+            const ObjectModel = currentElement?.data?.object ? objects[currentElement?.data?.object] : null
             if (ObjectModel) {
-                options = ObjectModel.getApiOptions()
+                options = ObjectModel.apiOptions || {
+                    name: currentElement?.data?.object,
+                    prefix: '/api/v1/'
+                }
             }
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
 
