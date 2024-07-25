@@ -29,6 +29,8 @@ import { useSession } from 'protolib/lib/Session'
 import { AppConfContext } from 'protolib/providers/AppConf'
 import { getBrokerUrl } from 'protolib/lib/Broker'
 import { Connector } from 'protolib/lib/mqtt'
+import { palettes } from 'app/bundles/palettes'
+
 setConfig(getBaseConfig("electron", process))
 initSchemaSystem()
 
@@ -72,6 +74,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
             <AppConfContext.Provider value={{
               ...AppConfig, bundles: {
                 masks: { getFlowMasks, getFlowsCustomComponents },
+                palettes
               }
             }}>
               <Component {...pageProps} />
