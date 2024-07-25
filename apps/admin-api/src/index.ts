@@ -23,6 +23,7 @@ import http from 'http';
 import chokidar from 'chokidar';
 import BundleContext from '../../../packages/app/bundles/adminApiContext'
 import { generateEvent } from 'app/bundles/library'
+import machineDefinitions from 'app/bundles/custom/stateMachines'
 import { startProxy } from './proxy';
 import { startMqtt } from './mqtt';
 
@@ -63,7 +64,7 @@ const topicPub = (mqtt, topic, data) => {
 
 try {
   import('app/bundles/adminapi').then((BundleAPI) => {
-    BundleAPI.default(app, { mqtt: devMqtt, mqtts: { prod: prodMqtt, dev: devMqtt }, topicSub, topicPub, ...BundleContext })
+    BundleAPI.default(app, { mqtt: devMqtt, mqtts: { prod: prodMqtt, dev: devMqtt }, topicSub, topicPub, machineDefinitions, ...BundleContext })
   })
 
 } catch (error) {

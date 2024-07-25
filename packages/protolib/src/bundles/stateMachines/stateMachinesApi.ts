@@ -1,11 +1,11 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import { getRoot } from 'protonode'
-import machineDefinitions from 'app/bundles/custom/stateMachines'
 import { StateMachine } from './stateMachine'
 
 export const StateMachinesAPI = (app, context) => {
   const runtimeMachines: { [key: string]: StateMachine } = {}
+  const machineDefinitions = context.machineDefinitions
 
   const checkMachineInstanceName = (req, res, next) => {
     if (!runtimeMachines[req.params.instanceName]) {
