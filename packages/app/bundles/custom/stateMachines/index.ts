@@ -1,5 +1,5 @@
-import { FSM1Actor } from "./fsm1";
+import sm1 from "./sampleMachine"
 
 export default {
-    fsm1: FSM1Actor
+    sm1
 }
