@@ -1,7 +1,7 @@
 {
   "version": "0.0.1",
   "name": "protolib",
-  "main": "index.tsx",
+  "main": "dist/index.js",
   "private": true,
   "sideEffects": [
     "*.css"
