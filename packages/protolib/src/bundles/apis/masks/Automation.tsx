@@ -4,7 +4,7 @@ import { Plug } from '@tamagui/lucide-icons';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import React from 'react';
 import { Spinner, XStack } from 'tamagui';
-import { SiteConfig} from 'app/conf'
+import { SiteConfig} from '@my/config/dist/AppConfig'
 
 const Automation = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(9)

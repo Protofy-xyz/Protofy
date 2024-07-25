@@ -1,5 +1,5 @@
 //helper function for pages
-import {SiteConfig} from 'app/conf'
+import {SiteConfig} from '@my/config/dist/AppConfig'
 export * from '../components/AdminPage'
 import { NextPageContext } from 'next'
 import {API} from 'protobase'

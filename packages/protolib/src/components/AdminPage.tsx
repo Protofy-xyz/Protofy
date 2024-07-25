@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 import { forwardRef, useState } from 'react';
 import { AppState } from './AdminPanel'
 import { useAtom } from 'jotai';
-import { SiteConfig } from 'app/conf'
+import { SiteConfig } from '@my/config/dist/AppConfig'
 import Workspaces from 'app/bundles/workspaces'
 
 const Chat = dynamic(() => import('./Chat'), { ssr: false })

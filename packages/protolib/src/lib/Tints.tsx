@@ -1,6 +1,6 @@
 import { useEffect, useState, startTransition, useMemo, useSyncExternalStore } from 'react'
 import { Theme, ThemeName } from 'tamagui'
-import { SiteConfig } from 'app/conf'
+import { SiteConfig } from '@my/config/dist/AppConfig'
 
 const familiesValues = {
   tamagui: ['gray', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'red']

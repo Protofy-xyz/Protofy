@@ -2,7 +2,7 @@ import { Node, Field, FlowPort, NodeParams, FallbackPort, Button, getFieldValue 
 import { API } from 'protobase'
 import { Plug } from '@tamagui/lucide-icons';
 import { filterCallback, restoreCallback } from 'protoflow';
-import { SiteConfig} from 'app/conf'
+import { SiteConfig} from '@my/config/dist/AppConfig'
 
 const ApiMask = (node: any = {}, nodeData = {}) => {
   const nodeParams: Field[] = [{ label: 'Type', field: 'to', type: 'select', data: ['app.get', 'app.post'], static: true }]

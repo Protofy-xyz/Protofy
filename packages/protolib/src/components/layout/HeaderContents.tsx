@@ -7,7 +7,7 @@ import {
   XGroup,
   XStack,
 } from 'tamagui'
-import { SiteConfig } from 'app/conf'
+import { SiteConfig } from '@my/config/dist/AppConfig'
 
 export type HeaderContentsProps = {
   logoSize?: number,

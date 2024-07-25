@@ -18,7 +18,7 @@ import { EditableObject } from '../../components/EditableObject'
 import { useUpdateEffect } from 'usehooks-ts'
 import { TemplatePreview } from './TemplatePreview'
 import { pageTemplates } from 'app/bundles/templates'
-import { SiteConfig } from 'app/conf'
+import { SiteConfig } from '@my/config/dist/AppConfig'
 import { PaginatedData } from '../../lib/SSR'
 
 const PageIcons = {}

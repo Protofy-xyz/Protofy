@@ -4,7 +4,7 @@ import { Plug } from '@tamagui/lucide-icons';
 import React from 'react';
 import { SizableText, Spinner, XStack } from 'tamagui';
 import { API } from 'protobase'
-import { SiteConfig} from 'app/conf'
+import { SiteConfig} from '@my/config/dist/AppConfig'
 import { useWorkspaceEnv } from '../../../lib/useWorkspaceEnv';
 
 const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
