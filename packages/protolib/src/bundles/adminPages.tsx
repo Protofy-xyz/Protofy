@@ -11,7 +11,6 @@ import databasesPages from './databases/adminPages'
 import resourcesPages from './resources/adminPages'
 import keysPages from './keys/adminPages'
 import servicesPages from './services/adminPages'
-import FSMPages from './fsm/adminPages'
 import stateMachinePages from './stateMachines/adminPages'
 
 export const AdminPagesBundles = {
@@ -28,6 +27,5 @@ export const AdminPagesBundles = {
     ...resourcesPages,
     ...keysPages,
     ...servicesPages,
-    ...FSMPages, 
     ...stateMachinePages
 }
