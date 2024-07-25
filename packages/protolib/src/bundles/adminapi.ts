@@ -20,6 +20,7 @@ import { ServicesAPI } from './services/servicesAPI'
 import { FSMApi } from './fsm/FSMApi'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 import { PackagesAPI } from './packages/packagesAPI'
+import { StateMachinesAPI } from './stateMachines/stateMachinesApi'
 
 export const AdminAPIBundles = (app, context) => {
   UsersAPI(app, context)
@@ -43,5 +44,6 @@ export const AdminAPIBundles = (app, context) => {
   ServicesAPI(app, context) 
   PackagesAPI(app, context)
   FSMApi(app, context)
-  StateMachinesDefinitionsApi(app, context)
+  StateMachinesDefinitionsApi(app, context), 
+  StateMachinesAPI(app, context)
 }
