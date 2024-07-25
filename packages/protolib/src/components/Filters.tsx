@@ -31,7 +31,7 @@ export const Filters = ({ model, state }: FiltersType) => {
                 : removePush(`filter[${key}]`)
         }
 
-        if (!def.filter) return
+        if (def.filter == false) return
 
         if (def?.typeName === 'ZodBoolean') {
             return <>

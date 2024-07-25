@@ -28,7 +28,7 @@ interface ZodExtensions {
     secret(): this;
     static(): this;
     id(): this;
-    search(): this;
+    search(searchable?: boolean): this;
     filter(display?: boolean): this;
     displayOptions(options: any): this;
     size(size: number): this; //1, 2, 3, 4...
@@ -205,8 +205,8 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.search = function () {
-        this._def.search = true;
+    type.prototype.search = function (searchable = true) {
+        this._def.search = searchable;
         return this;
     };
 

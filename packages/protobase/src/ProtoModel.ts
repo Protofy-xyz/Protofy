@@ -194,7 +194,15 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
                 }
             }
 
-            const searchFields = this.objectSchema.is('search').getFields()
+            const schemaShape = this.objectSchema.shape
+            const searchFields = this.objectSchema.getFields().filter((field) => {
+                if (schemaShape[field]?._def && schemaShape[field]._def.search === false) {
+                    return false
+                } else {
+                    return true
+                }
+            })
+
             for (var i = 0; i < searchFields.length; i++) {
                 if (((this.data[searchFields[i]] + "").toLowerCase()).includes(searchWithoutTags.toLowerCase())) {
                     return this.read();
