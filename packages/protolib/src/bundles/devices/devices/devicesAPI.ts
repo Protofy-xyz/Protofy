@@ -1,7 +1,7 @@
 import { API } from "protobase";
 import { DevicesModel } from ".";
 import { AutoAPI, handler, getServiceToken } from 'protonode'
-import { getDB } from 'app/bundles/storageProviders'
+import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
 import moment from 'moment';

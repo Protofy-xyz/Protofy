@@ -1,5 +1,5 @@
 import { handler, AutoAPI, getRoot, closeDBS} from 'protonode'
-import { connectDB, getDB } from 'app/bundles/storageProviders';
+import { connectDB, getDB } from '@my/config/dist/storageProviders';
 import * as fs from 'fs'
 import * as path from 'path'
 import * as fspath from 'path'
