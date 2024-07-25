@@ -1,10 +1,11 @@
 import { DatePicker } from './datepickers';
 import { Tinted } from './Tinted'
 import { SelectList } from './SelectList'
-import { Filter, Check } from '@tamagui/lucide-icons'
-import { XStack, Button, Popover, H4, Label, YStack, Checkbox } from '@my/ui'
+import { Filter, Check, X } from '@tamagui/lucide-icons'
+import { XStack, Button, Popover, Text, Label, YStack, Checkbox } from '@my/ui'
 import { useState } from 'react';
 import { usePageParams } from '../next';
+import { Chip } from 'protolib/components/Chip';
 
 type FiltersType = {
     model: any
@@ -47,7 +48,7 @@ export const Filters = ({ model, state }: FiltersType) => {
             </>
         } else if (def?.typeName === 'ZodDate') {
             return <>
-                <Label >{key}</Label>
+                <Label>{key}</Label>
                 <DatePicker
                     selectedDates={value ? [new Date(value)] : []}
                     onDatesChange={([selectedDate]) => onFilter(selectedDate ? new Date(selectedDate).toISOString() : undefined)}
@@ -56,7 +57,7 @@ export const Filters = ({ model, state }: FiltersType) => {
         } else if (def?.typeName === 'ZodUnion') {
             const options = def.options?.map(option => option._def.value)
             return <>
-                <Label >{key}</Label>
+                <Label>{key}</Label>
                 <SelectList
                     value={value}
                     title={key}
@@ -67,39 +68,54 @@ export const Filters = ({ model, state }: FiltersType) => {
         }
     }
 
-    return < Tinted key="filter" >
-        <Popover
-            open={open}
-            onOpenChange={setOpen}
-            size="$5"
+    const queryFilters = Object.keys(query).filter(q => q.startsWith('filter'))
+
+    return <Popover
+        open={open}
+        onOpenChange={setOpen}
+        size="$5"
+    >
+        <Popover.Trigger>
+            <Tinted>
+                <Button onPress={() => setOpen(!open)} transparent circular icon={<Filter fillOpacity={0} color={'$color10'} />} />
+            </Tinted>
+        </Popover.Trigger>
+        <Popover.Content
+            backgroundColor={"$backgroundStrong"}
+            borderWidth={1}
+            borderColor="$borderColor"
+            elevate
+            mr={'$4'}
+            maxWidth={"350px"}
         >
-            <Popover.Trigger>
-                <Button onPress={() => setOpen(!open)} transparent circular icon={<Filter fillOpacity={0} color={'$color9'} />} />
-            </Popover.Trigger>
-            <Popover.Content
-                borderWidth={1}
-                borderColor="$borderColor"
-                elevate
-                mr={'$4'}
-            >
-                <Popover.Arrow ml={'$4'} borderWidth={1} borderColor="$borderColor" />
-                <YStack miw={'$20'} gap={'$2'}>
-                    <H4>Filters</H4>
-                    <YStack overflow='scroll' p="2px" maxHeight="400px">
-                        {Object.keys(schema.shape).map((key) => {
-                            const def = schema.shape[key]._def?.innerType?._def ?? schema.shape[key]._def
-                            return <>
-                                {getFilter(def, key)}
-                            </>
-                        })}
-                    </YStack>
-                    <XStack mt={'$4'} jc={'flex-end'} gap={'$3'} p={'$3'}>
-                        <Tinted tint={'gray'}>
-                            <Button onPress={onClear}>Clear</Button>
-                        </Tinted>
+            <Popover.Arrow ml={'$4'} borderWidth={1} borderColor="$borderColor" />
+            <YStack miw={'$20'} gap={'$2'}>
+                <Text fontWeight="bold">Filters</Text>
+                <Tinted key="filter" >
+                    <XStack gap={'$2'} mt="$2" flexWrap='wrap'>
+                        {
+                            queryFilters.map((q, i) => <Chip color={"$color6"} text={q.replace('filter[', '').replace(']', '')} gap="$2" pl="$1" pr="$2" py="$1" textProps={{ fontSize: 14, color: "$color12" }}>
+                                <Button onPress={() => removePush(q)} size="$1" circular={true}>
+                                    <X size={12} color={"var(--color8)"}></X>
+                                </Button>
+                            </Chip>)
+                        }
                     </XStack>
+                </Tinted>
+                <YStack overflow='scroll' overflowX='hidden' p="2px" maxHeight="300px">
+                    {Object.keys(schema.shape).map((key) => {
+                        const def = schema.shape[key]._def?.innerType?._def ?? schema.shape[key]._def
+                        return <>
+                            {getFilter(def, key)}
+                        </>
+                    })}
                 </YStack>
-            </Popover.Content>
-        </Popover>
-    </Tinted >
+                <XStack mt={'$4'} jc={'flex-end'} gap={'$3'} p={'$3'}>
+                    <Tinted>
+                        <Button onPress={onClear}>Clear</Button>
+                    </Tinted>
+                </XStack>
+            </YStack>
+        </Popover.Content>
+    </Popover>
 }
