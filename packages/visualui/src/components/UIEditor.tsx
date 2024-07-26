@@ -1,4 +1,4 @@
-import { memo, useEffect, useState, useRef } from "react";
+import { memo, useEffect, useState, useRef,useContext } from "react";
 import { useSearchParams, usePathname } from 'solito/navigation';
 import { Editor } from "@protocraft/core";
 import { Layers } from "@protocraft/layers";
@@ -14,17 +14,21 @@ import Theme, { useUITheme } from './Theme'
 import { withTopics } from "react-topics";
 import { ToggleGroup, Button, XStack } from "@my/ui"
 import { SidebarItem } from "./Sidebar/SideBarItem";
-import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks";
 import React from "react";
 import { newVisualUiContext, useVisualUiAtom } from "../visualUiHooks";
 import { VisualUiFlows } from "./VisualUiFlows";
 import EditorBar from "./EditorBar";
 import { useThemeSetting } from '@tamagui/next-theme'
+import { AppConfContext, SiteConfigType } from "protolib/providers/AppConf"
+
 
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, contextAtom = null }) {
     const [_, setContext] = useVisualUiAtom(contextAtom)
     const editorRef = useRef<any>()
     const monacoRef = useRef(null);
+
+    const SiteConfig = useContext<SiteConfigType>(AppConfContext);
+    const {getFlowsCustomComponents, getFlowMasks} = SiteConfig.bundles.masks
 
     const codeRef = useRef("")
     const flowsData = useRef({})
