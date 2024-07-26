@@ -60,6 +60,7 @@ interface DataViewProps {
     openMode?: 'edit' | 'view';
     disableToggleMode?: any;
     customFields?: any;
+    customFilters?: any;
     dataTableRawProps?: any;
     dataTableListProps?: any;
     dataTableGridProps?: any;
@@ -158,6 +159,7 @@ const DataViewInternal = forwardRef(({
     openMode = 'edit',
     disableToggleMode,
     customFields = {},
+    customFilters = {},
     dataTableRawProps = {},
     dataTableListProps = {},
     dataTableGridProps = {},
@@ -598,6 +600,7 @@ const DataViewInternal = forwardRef(({
                                     />
                                 </Tinted>}
                                 {!hideFilters && <Filters
+                                    customFilters={customFilters}
                                     model={model}
                                     state={state}
                                 />}

@@ -8,11 +8,12 @@ import { usePageParams } from '../next';
 import { Chip } from 'protolib/components/Chip';
 
 type FiltersType = {
-    model: any
-    state: any
+    model: any,
+    state: any,
+    customFilters?: any
 }
 
-export const Filters = ({ model, state }: FiltersType) => {
+export const Filters = ({ model, state, customFilters }: FiltersType) => {
 
     const [open, setOpen] = useState(false)
     const { push, removePush, query } = usePageParams(state)
@@ -24,7 +25,11 @@ export const Filters = ({ model, state }: FiltersType) => {
 
     const getFilter = (def, key) => {
 
-        const value = query[`filter[${key}]`]
+        var value: any = query[`filter[${key}]`]
+
+        if (def?.typeName === 'ZodBoolean') {
+            value = value == "true"
+        }
 
         const onFilter = (value) => {
             value !== undefined
@@ -34,11 +39,20 @@ export const Filters = ({ model, state }: FiltersType) => {
 
         if (def.filter == false) return
 
+        const customFilter = customFilters[key]
+
+        if (customFilters && customFilter && customFilter.component) {
+            return <>
+                {!customFilter.hideLabel && <Label>{customFilter.label ?? key}</Label>}
+                {customFilter.component(value, onFilter)}
+            </>
+        }
+
         if (def?.typeName === 'ZodBoolean') {
             return <>
                 <Label>{key}</Label>
                 <Checkbox
-                    checked={value == "true"}
+                    checked={value}
                     onCheckedChange={(val) => onFilter(val)}
                 >
                     <Checkbox.Indicator>
