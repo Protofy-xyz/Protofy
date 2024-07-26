@@ -36,7 +36,13 @@ export function PaginatedData(sourceUrl: string|Function, permissions?:string[]|
 
 export function PaginatedDataSSR(sourceUrl: string|Function, permissions?:string[]|any[]|null, dataProps:any={}, extraData:any={}) {
   return SSR(async (context:NextPageContext) => {
+    const filters = Object.keys(context.query ?? {}).filter(q => q.startsWith('filter')).reduce((total, current: string) => ({
+      ...total,
+      [current]: context.query[current]
+    }), {}) ?? {}
+
     const _dataProps = {
+      ...filters,
       itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : '',
       page: parseInt(context.query.page as string, 10) ? parseInt(context.query.page as string, 10) : '',
       search: context.query.search ?? '',
