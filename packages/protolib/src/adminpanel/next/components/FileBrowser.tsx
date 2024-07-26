@@ -9,7 +9,7 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { useSearchParams, useRouter, usePathname } from 'solito/navigation';
 import { useState } from 'react';
 import { Explorer } from './Explorer';
-import FileActions from '../../../bundles/files/FileActions';
+import FileActions from '../../../bundles/files/fileActions';
 import { Tinted } from '../../../components/Tinted'
 import Chat from '../../../components/Chat'
 import { getLogger, API, getPendingResult } from "protobase"
