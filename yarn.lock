@@ -5439,6 +5439,7 @@ __metadata:
   resolution: "@my/config@workspace:packages/config"
   dependencies:
     protobase: "npm:*"
+    protonode: "npm:*"
     typescript: "npm:~5.3.3"
   languageName: unknown
   linkType: soft
