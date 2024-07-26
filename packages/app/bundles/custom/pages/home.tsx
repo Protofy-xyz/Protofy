@@ -14,9 +14,9 @@ import { SSR } from "protolib/lib/SSR";
 import { UIWrapLib, UIWrap } from "protolib/visualui/visualuiWrapper";
 import { DefaultLayout } from "../../../layout/DefaultLayout";
 import { Protofy } from "protobase";
-import { context } from "app/bundles/uiContext";
+import { context } from "../../uiContext";
 import { useRouter } from "solito/navigation";
-import { Objects } from "app/bundles/objects";
+import { Objects } from "../../objects";
 
 const isProtected = Protofy("protected", false);
 
