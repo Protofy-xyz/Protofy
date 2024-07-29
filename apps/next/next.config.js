@@ -2,6 +2,9 @@
 const { withTamagui } = require('@tamagui/next-plugin')
 const { join, resolve } = require('path')
 const webpack = require('webpack');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.PROFILER_ENABLED === 'true',
+})
 
 const dotenv = require('dotenv');
 dotenv.config({ path: resolve(__dirname, '../../.env') });
@@ -81,5 +84,5 @@ module.exports = function () {
     }
   }
 
-  return config
+  return withBundleAnalyzer(config)
 }
