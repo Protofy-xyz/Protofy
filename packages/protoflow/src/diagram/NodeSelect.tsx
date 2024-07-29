@@ -35,6 +35,7 @@ const NodeSelect = (props) => {
 					<option key={key} value={opt.value}>{opt.label}</option>
 				))}
 			</select>
+			{/* @ts-ignore */}
 			<ChevronDown style={{ position: 'absolute', right: '10px', top: useTheme('nodeFontSize') / 2 , pointerEvents: 'none'}} />
 		</div>
 	)

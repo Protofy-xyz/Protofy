@@ -324,6 +324,7 @@ const Menu = withTopics(({
                             onChange={t => setSearchValue(t.target.value)}
                             placeholder="search node"
                         />
+                        {/*@ts-ignore*/}
                         <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
                     </div>
                     <div

@@ -121,7 +121,7 @@ export default ({ nodeData, maskType }: Props) => {
     return <Dialog modal onOpenChange={onOpenChange}>
         <Dialog.Trigger asChild>
             <YStack justifyContent='center'>
-                <Button chromeless alignSelf="center" theme={"blue"} mb="$3">
+                <Button chromeless alignSelf="center" theme={"blue"} marginBottom="$3">
                     <Drama fillOpacity={0} color={useTheme('interactiveColor')} />
                 </Button>
             </YStack>

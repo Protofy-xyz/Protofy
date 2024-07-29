@@ -148,7 +148,7 @@ export default ({ nodeData = {}, node, item }) => {
                     >
                     </div>
                 </Popover.Trigger>
-                <Popover.Content marginRight="20px" space={0} width='250px' shadowRadius={"$4"} shadowColor={"black"} shadowOpacity={0.6} bc={useTheme('nodeBackgroundColor')} >
+                <Popover.Content marginRight="20px" space={0} width='250px' shadowRadius={"$4"} shadowColor={"black"} shadowOpacity={0.6} backgroundColor={useTheme('nodeBackgroundColor')} >
                     {getInput()}
                 </Popover.Content>
             </Popover>

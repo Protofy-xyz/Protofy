@@ -98,12 +98,12 @@ export const CustomField = ({ label, input, menuActions = undefined }: any) => {
                                 <MoreVertical size={16} color={useTheme('textColor')} />
                             </div>
                         </Popover.Trigger>
-                        <Popover.Content padding={0} space={0} shadowRadius={"$4"} shadowColor={"black"} shadowOpacity={0.6} bc={useTheme('nodeBackgroundColor')} >
+                        <Popover.Content padding={0} space={0} shadowRadius={"$4"} shadowColor={"black"} shadowOpacity={0.6} backgroundColor={useTheme('nodeBackgroundColor')} >
                             {menuActions.map((action, i) => {
                                 return <XStack
-                                    key={i} gap="$2" ml={"$1"} o={1}
-                                    br={"$5"} ai="center" p={"$3"}
-                                    als="flex-start"
+                                    key={i} gap="$2" marginLeft={"$1"} opacity={1}
+                                    borderRadius={"$5"} alignItems="center" padding={"$3"}
+                                    alignSelf="flex-start"
                                     cursor={'pointer'}
                                     onPress={(e) => {
                                         action.action()
