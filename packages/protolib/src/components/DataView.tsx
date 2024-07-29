@@ -382,26 +382,6 @@ const DataViewInternal = forwardRef(({
         return parts.pop();
     }
 
-    const getDefaultValues = (): any => {
-        const shape = model.getObjectSchema().shape
-        const defaultValues: any = {};
-    
-        for (const key in shape) {
-            const def = shape[key]._def;
-    
-            if (def.defaultValue !== undefined) {
-                if (typeof def.defaultValue === 'function') {
-                    defaultValues[key] = def.defaultValue();
-                }
-                else {
-                    defaultValues[key] = def.defaultValue;
-                }
-            }
-        }
-    
-        return defaultValues;
-    };
-
     const totalPages = currentItems && currentItems.isLoaded ? Math.ceil(currentItems.data?.total / currentItems.data?.itemsPerPage) : 0
     if (items && items.isError) {
         return <Center>
@@ -450,7 +430,6 @@ const DataViewInternal = forwardRef(({
                                     name={name}
                                     numColumns={numColumnsForm}
                                     mode={'add'}
-                                    initialData={{data: getDefaultValues()}}
                                     onSave={async (originalData, data) => {
                                         try {
                                             const obj = model.load(data)
