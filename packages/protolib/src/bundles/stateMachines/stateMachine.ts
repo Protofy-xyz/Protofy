@@ -85,8 +85,7 @@ export class StateMachine {
 
         const snapshot = this.actor.getSnapshot()
         snapshot.running = true
-        snapshot.state = snapshot.state ?? snapshot.value ? snapshot.value.toString() : 'none'
-        delete snapshot.value
+        snapshot.state = snapshot.value ? snapshot.value.toString() : 'none'
 
         return snapshot
     }
