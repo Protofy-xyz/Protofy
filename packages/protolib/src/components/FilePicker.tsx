@@ -49,7 +49,6 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "", 
                     placeholder={placeholder ?? "Path or URL"}
                     value={file ?? value}
                     onChangeText={(e) => onChange(e)}
-                    size={"$3"}
                     f={1}
                     paddingRight={"50px"}
                 >
@@ -57,7 +56,6 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "", 
                 <Dialog.Trigger >
                     <Button
                         position="absolute"
-                        size={"$3"}
                         borderColor={"$color6"}
                         borderTopLeftRadius={"$0"}
                         borderBottomLeftRadius={"$0"}
