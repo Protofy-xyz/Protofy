@@ -6,10 +6,19 @@ import { API } from 'protobase'
 import { StateMachineDefinitionModel } from "./stateMachineDefinitionSchema";
 import { getServiceToken } from '../../apis/context';
 
-const StateMachineDefinitionsDir = (root) => fspath.join(root, "/packages/app/bundles/custom/stateMachines")
-const getFSM = (fsmPath, req) => {
+const StateMachineDefinitionsDir = (root) => fspath.join(root, "/packages/app/bundles/custom/stateMachines/")
+const getStateMachine = (fsmPath, req) => {
+    const sourceFile = getSourceFile(fspath.join(StateMachineDefinitionsDir(getRoot(req)), fsmPath))
+    const machineDefinitionCode = getDefinition(sourceFile, '"machineDefinition"').getText()
+    const machineDefinitionParser = new Function("return " + machineDefinitionCode)
+    const {on, ...machineDefinition} = machineDefinitionParser()
+    
     return {
         name: fsmPath.replace(/\.[^/.]+$/, ""), //remove extension
+        ...{
+            ...machineDefinition, 
+            states: Object.keys(machineDefinition.states)
+        }
     }
 }
 
@@ -17,7 +26,7 @@ const getDB = (path, req, session) => {
     const db = {
         async *iterator() {
             const files = (await fs.readdir(StateMachineDefinitionsDir(getRoot(req)))).filter(f => f != 'index.ts' && !fsSync.lstatSync(fspath.join(StateMachineDefinitionsDir(getRoot(req)), f)).isDirectory() && f.endsWith('.ts'))
-            const stateMachineDefinitions = await Promise.all(files.map(async f => getFSM(f, req)));
+            const stateMachineDefinitions = await Promise.all(files.map(async f => getStateMachine(f, req)));
 
             for (const machineDefinition of stateMachineDefinitions) {
                 if (machineDefinition) yield [machineDefinition.name, JSON.stringify(machineDefinition)];

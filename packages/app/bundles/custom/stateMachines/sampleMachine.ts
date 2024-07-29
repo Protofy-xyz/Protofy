@@ -1,4 +1,6 @@
-export default {
+import { Protofy } from "protobase";
+
+export default Protofy("machineDefinition", {
     context: {
         count: 0,
     },
@@ -23,4 +25,4 @@ export default {
         SET: {
         },
     },
-}
+})
