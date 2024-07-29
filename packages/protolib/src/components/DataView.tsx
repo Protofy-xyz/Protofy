@@ -1,4 +1,4 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip } from 'tamagui'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner } from 'tamagui'
 import { Center } from './Center';
 import { useRemoteStateList } from '../lib/useRemoteState';
 import { ObjectGrid } from './ObjectGrid';
@@ -21,7 +21,6 @@ import { usePageParams, useQueryState } from '../next'
 import React from 'react';
 import { DataTableList } from './DataTableList'
 import ActiveRender from "./ActiveRender"
-import { FileWidget } from '../adminpanel/features/components/FilesWidget';
 import { IconContainer } from './IconContainer';
 import { SearchContext } from '../context/SearchContext';
 import { InteractiveIcon } from './InteractiveIcon';
@@ -29,6 +28,12 @@ import { ItemMenu } from './ItemMenu';
 import ErrorMessage from './ErrorMessage';
 import { DataSheet } from './DataSheet';
 import { Filters } from './Filters';
+import dynamic from 'next/dynamic'
+
+const FileWidget = dynamic<any>(() =>
+    import('../adminpanel/features/components/FilesWidget').then(module => module.FileWidget),
+    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+);
 
 interface DataViewProps {
     onSelectItem?: (item: any) => void;

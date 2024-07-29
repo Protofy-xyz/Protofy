@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams, usePathname } from 'solito/navigation';
 
 const FileBrowser = dynamic<any>(() =>
-    import('protolib/adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),
+    import('../adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),
     { ssr: false, loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
