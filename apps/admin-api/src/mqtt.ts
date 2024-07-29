@@ -15,9 +15,9 @@ const _startMqtt = (config, mqttPort, webSocketPort) => {
     const aedesInstance = new aedes();
     aedesInstance.authenticate = function (client, username, password, callback) {
         if (!username) {
-            logger.debug({}, "MQTT anonymous login request")
+            logger.trace({}, "MQTT anonymous login request")
         } else {
-            logger.debug({ username }, "MQTT user login request: " + username)
+            logger.trace({ username }, "MQTT user login request: " + username)
         }
 
         if (config.mqtt.auth) {
