@@ -104,7 +104,7 @@ type DatePickerInputProps = {
 }
 export const DatePickerInput = Input.Area.styleable<DatePickerInputProps>(
   (props, ref) => {
-    const { value, onButtonPress, size = '$3', onReset, ...rest } = props
+    const { value, onButtonPress, size, onReset, ...rest } = props
     return (
       <View $platform-native={{ minWidth: '100%' }}>
         <Input size={size as any} f={1}>

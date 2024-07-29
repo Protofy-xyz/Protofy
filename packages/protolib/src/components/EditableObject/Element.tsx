@@ -198,7 +198,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
         const isUndefined = recordData === '' || recordData === undefined
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <Tinted>
-                <Stack f={1} mt="$4" flexDirection="row" gap="$2" alignItems="center">
+                <Stack f={1} flexDirection="row" gap="$2" alignItems="center">
                     <Switch cursor="pointer" disabled={mode != 'add' && mode != 'edit'} checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$2">
                         {/*@ts-ignore*/}
                         <Switch.Thumb style={{ width: isUndefined ? '100%' : '50%' }} animation="quick">
