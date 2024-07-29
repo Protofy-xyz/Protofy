@@ -157,6 +157,10 @@ export const StateMachinesAPI = (app, context) => {
     console.log('BODY: ', req.body)
     const {name, definition} = req.body
 
+    if (!name || !definition) {
+        return res.status(400).json({status: "Bad request. Missing params name or definition."})
+    }
+
     if (!machineDefinitions[definition.name]) {
       return res.status(404).json({ status: "Machine definition not found" })
     }
