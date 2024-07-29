@@ -15,6 +15,8 @@ import { useUpdateEffect } from "usehooks-ts";
 import {useTint} from '../../lib/Tints'
 import { ItemMenu } from "../ItemMenu";
 import { getElement } from "./Element";
+import { EditableObjectProps } from "./types";
+export { EditableObjectProps } from "./types";
 
 export const OpenedSectionsContext = createContext<[string[], Function]>([[], (openedSections) => { }]);
 
@@ -121,38 +123,6 @@ export const DeleteButton = ({ mode, onPress }) => (
         }
     </>
 )
-
-export type EditableObjectProps = {
-    initialData?: any,
-    sourceUrl?: string,
-    onSave?: Function,
-    model: any,
-    mode?: 'add' | 'edit' | 'view' | 'preview',
-    icons?: any,
-    extraFields?: any,
-    numColumns?: number,
-    objectId?: string,
-    title?: any,
-    loadingText?: any,
-    loadingTop?: number,
-    spinnerSize?: number,
-    name?: string,
-    customFields?: any,
-    columnWidth?: number,
-    disableToggleMode?: boolean,
-    columnMargin?: number,
-    onDelete?: Function,
-    deleteable?: Function,
-    autoWidth?: Boolean,
-    extraMenuActions?: any[],
-    data?: any,
-    setData?: Function,
-    error?: any,
-    setError?: Function,
-    externalErrorHandling?: Boolean,
-    URLTransform?: Function,
-    disableAutoChangeMode?: Boolean
-}
 
 export const EditableObject = ({ externalErrorHandling, error, setError, data, setData, autoWidth = false, columnMargin = 30, columnWidth = 350, extraMenuActions, disableToggleMode, name, initialData, loadingTop, spinnerSize, loadingText, title, sourceUrl = null, onSave = (x, y) =>{}, mode = 'view', model, icons = {}, extraFields = {}, numColumns = 1, objectId, onDelete = () => { }, deleteable = () => { return true }, customFields = {}, URLTransform = (url) => url, disableAutoChangeMode = false, ...props }: EditableObjectProps & StackProps) => {
     const [originalData, setOriginalData] = useState(initialData ?? getPendingResult('pending'))

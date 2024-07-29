@@ -1,13 +1,10 @@
 import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner } from 'tamagui'
 import { Center } from './Center';
 import { useRemoteStateList } from '../lib/useRemoteState';
-import { ObjectGrid } from './ObjectGrid';
-import { DataTableCard } from './DataTableCard';
-import { MapView } from './MapView';
 import { AlertDialog } from './AlertDialog';
 import { API, z, getPendingResult, PendingResult } from 'protobase';
 import { Tinted } from './Tinted';
-import { EditableObject, EditableObjectProps } from './EditableObject';
+import { EditableObjectProps } from './EditableObject/types';
 import { AsyncView } from './AsyncView';
 import { Notice } from './Notice';
 import { ActiveGroup } from './ActiveGroup';
@@ -19,19 +16,47 @@ import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from '../next'
 import React from 'react';
-import { DataTableList } from './DataTableList'
 import ActiveRender from "./ActiveRender"
 import { IconContainer } from './IconContainer';
 import { SearchContext } from '../context/SearchContext';
 import { InteractiveIcon } from './InteractiveIcon';
 import { ItemMenu } from './ItemMenu';
 import ErrorMessage from './ErrorMessage';
-import { DataSheet } from './DataSheet';
 import { Filters } from './Filters';
 import dynamic from 'next/dynamic'
 
 const FileWidget = dynamic<any>(() =>
     import('../adminpanel/features/components/FilesWidget').then(module => module.FileWidget),
+    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+);
+
+const DataSheet = dynamic<any>(() =>
+    import('./DataSheet').then(module => module.DataSheet),
+    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+);
+
+const DataTableList = dynamic<any>(() =>
+    import('./DataTableList').then(module => module.DataTableList),
+    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+);
+
+const ObjectGrid = dynamic<any>(() =>
+    import('./ObjectGrid').then(module => module.ObjectGrid),
+    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+);
+
+const DataTableCard = dynamic<any>(() =>
+    import('./DataTableCard').then(module => module.DataTableCard),
+    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+);
+
+const EditableObject = dynamic<any>(() =>
+    import('./EditableObject').then(module => module.EditableObject),
+    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+);
+
+const MapView = dynamic<any>(() =>
+    import('./MapView').then(module => module.MapView),
     { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
 );
 
