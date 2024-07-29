@@ -15,6 +15,7 @@ interface ZodExtensions {
     columnWidth(width: number): this;
     hidden(views?: Array<"list" | "sheet" | "preview" | "add" | "edit" >): this;
     color(): this;
+    textArea(height?: number): this;
     file({ initialPath, extensions }: { initialPath?: string, extensions?: string[] }): this;
     generate(val: any, force?: boolean): this;
     before(field: string): this;
@@ -222,6 +223,12 @@ function extendZodTypePrototype(type: any) {
 
     type.prototype.color = function () {
         this._def.color = true;
+        return this;
+    };
+    
+    type.prototype.textArea = function (height: number = 300) {
+        this._def.textArea = true;
+        this._def.textAreaHeight = height;
         return this;
     };
 

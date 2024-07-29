@@ -1,4 +1,4 @@
-import { Input, Stack, Switch, SizableText } from "tamagui";
+import { Input, Stack, Switch, SizableText, TextArea } from "tamagui";
 import { Tinted } from '../Tinted';
 import { SelectList } from '../SelectList';
 import { SimpleSlider } from '../SimpleSlider';
@@ -258,6 +258,27 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                     initialPath={elementDef.initialPath}
                     onFileChange={filePath => setFormData(ele.name, filePath)}
                 />
+            </Stack>
+        </FormElement>
+    }
+
+    if (elementType == "ZodString" && elementDef.textArea) {
+        return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
+            <Stack f={1}>
+                <TextArea
+                    id={"editable-object-input-" + ele?.name}
+                    height={elementDef.textAreaHeight}
+                    {...(mode != 'edit' && mode != 'add' ? { bw: 0, forceStyle: "hover" } : {})}
+                    focusStyle={{ outlineWidth: 1 }}
+                    disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static) || (ele._def.dependsOn && !data[ele._def.dependsOn]))}
+                    secureTextEntry={ele._def.secret}
+                    value={generatedOptions && !getFormData(ele.name) ? generatedOptions : getFormData(ele.name)}
+                    onChangeText={(t) => setFormData(ele.name, t)}
+                    placeholder={!data ? '' : ele._def.hint ?? ele._def.label ?? (ele.name)}
+                    autoFocus={x == 0 && i == 0}
+                    bc="$backgroundTransparent"
+                >
+                </TextArea>
             </Stack>
         </FormElement>
     }
