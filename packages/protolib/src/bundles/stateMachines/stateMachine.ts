@@ -76,10 +76,17 @@ export class StateMachine {
 
     inspect() {
         if (!this.actor) {
-            console.log("Cannot change machine instance state while it is stopped.")
-            return null
+            return {
+                running: false,
+                state: "none",
+                context: { ...this.machine.config.context }
+            }
         }
 
-        return this.actor.getSnapshot()
+        const snapshot = this.actor.getSnapshot()
+        snapshot.running = true
+        snapshot.state = snapshot.value ? snapshot.value.toString() : 'none'
+
+        return snapshot
     }
 }

@@ -2,10 +2,47 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { getRoot } from 'protonode'
 import { StateMachine } from './stateMachine'
+import { AutoAPI } from 'protonode'
+import { StateMachineModel } from './stateMachineSchema'
 
 export const StateMachinesAPI = (app, context) => {
   const runtimeMachines: { [key: string]: StateMachine } = {}
   const machineDefinitions = context.machineDefinitions
+
+  const getDB = (path, req, session) => {
+    const db = {
+      async *iterator() {
+        for (let i = 0; i < Object.keys(runtimeMachines).length; i++) {
+          const instanceName = Object.keys(runtimeMachines).sort()[i] // sort to guarantee order
+          let instanceData = {}
+
+          try {
+            instanceData = runtimeMachines[instanceName].inspect()
+          } catch (e) {
+            console.error("Error getting machine instances: ", e)
+          }
+
+          yield [instanceName, JSON.stringify({
+            name: instanceName,
+            ...instanceData
+          })]
+        }
+      },
+
+      async del(key, value) {
+
+      },
+
+      async put(key, value) {
+
+      },
+
+      async get(key) {
+      }
+    };
+
+    return db;
+  }
 
   const checkMachineInstanceName = (req, res, next) => {
     if (!runtimeMachines[req.params.instanceName]) {
@@ -15,9 +52,36 @@ export const StateMachinesAPI = (app, context) => {
     next()
   }
 
-  // list instances
-  app.get("/adminapi/v1/statemachines", async (req, res) => {
-    return res.status(200).json({ status: "Ok", machines: Object.keys(runtimeMachines) })
+  const autoAPI = AutoAPI({
+    modelName: 'statemachines',
+    modelType: StateMachineModel,
+    prefix: '/adminapi/v1/',
+    getDB: getDB,
+    connectDB: () => new Promise(resolve => resolve(null)),
+    requiresAdmin: ['*'],
+    useEventEnvironment: false,
+    useDatabaseEnvironment: false
+  })
+  autoAPI(app, context)
+
+  // get all machines inspection
+  app.get("/adminapi/v1/statemachines/inspect", async (req, res) => {
+    const inspections = []
+
+    try {
+      Object.keys(runtimeMachines).forEach(machine => {
+        let machineInspectionData = {
+          name: machine,
+          ...runtimeMachines[machine].inspect()
+        }
+        inspections.push(machineInspectionData)
+      })
+    } catch (e) {
+      console.error("Cannot inspect machines instances", e)
+      return res.status(500).json({ status: "Cannot inspect machines instances" })
+    }
+
+    return res.status(200).json({ status: "Ok", machines: inspections })
   })
 
   // get instance
@@ -81,11 +145,7 @@ export const StateMachinesAPI = (app, context) => {
 
     try {
       const machineInspectionData = runtimeMachines[instanceName].inspect()
-      if (machineInspectionData) {
-        return res.status(200).json({ status: "Ok", [instanceName]: machineInspectionData })
-      } else {
-        return res.status(400).json({ status: "Machine instance is not started", [instanceName]: runtimeMachines[instanceName] })
-      }
+      return res.status(200).json({ status: "Ok", [instanceName]: machineInspectionData })
     } catch (e) {
       console.error("Cannot inspect machine instance")
       return res.status(500).json({ status: "Cannot inspect machine instance" })
