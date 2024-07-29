@@ -11,6 +11,7 @@ import { ArrayComp } from "./ArrayComponent";
 import { UnionsArrayComp } from "./UnionsArrayComponent";
 import { RecordComp } from "./RecordComponent";
 import { FilePicker } from "../FilePicker";
+import { XCircle, Circle } from 'lucide-react'
 
 export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray = false, arrayName = "", URLTransform = (url) => url}) => {
     let elementDef = ele._def?.innerType?._def ?? ele._def
@@ -194,14 +195,17 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
         return <RecordComp URLTransform={URLTransform} ele={ele} inArray={inArray} recordData={recordData} elementDef={elementDef} icon={icon} data={data} setData={setData} mode={mode} customFields={customFields} path={path} setFormData={setFormData} />
     } else if (elementType == 'ZodBoolean') {
         const recordData: any = getFormData(ele.name)
+        const isUndefined = recordData === '' || recordData === undefined
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <Tinted>
-                <Stack f={1} mt="$4">
-                    <Switch disabled={mode != 'add' && mode != 'edit'} checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$2">
+                <Stack f={1} mt="$4" flexDirection="row" gap="$2" alignItems="center">
+                    <Switch cursor="pointer" disabled={mode != 'add' && mode != 'edit'} checked={recordData} onCheckedChange={v => setFormData(ele.name, v)} size="$2">
                         {/*@ts-ignore*/}
-                        <Switch.Thumb animation="quick" />
+                        <Switch.Thumb style={{ width: isUndefined ? '100%' : '50%' }} animation="quick">
+                            {isUndefined ? <Stack enterStyle={{ opacity: 0 }} alignSelf="center"><Circle size={18} fillOpacity={1} fill="var(--color)"></Circle></Stack> : null}
+                        </Switch.Thumb>
                     </Switch>
-                    {/* <SimpleSlider onValueChange={v => setFormData(ele.name, v)} value={[getFormData(ele.name) ?? min.value]} width={190} min={min.value} max={max.value} /> */}
+                    {/* {!isUndefined ? <XCircle color="var(--red7)" cursor="pointer" onClick={() => setFormData(ele.name, undefined)} size={20}></XCircle> : null} */}
                 </Stack>
             </Tinted>
         </FormElement>
