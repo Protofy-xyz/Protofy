@@ -461,6 +461,7 @@ const DataViewInternal = forwardRef(({
                                     numColumns={numColumnsForm}
                                     mode={'add'}
                                     onSave={async (originalData, data) => {
+                                        console.log('Saving from editable object: ', data)
                                         try {
                                             const obj = model.load(data)
                                             const repeatedId = items.data.items.find(i => i.id === obj.getId())
