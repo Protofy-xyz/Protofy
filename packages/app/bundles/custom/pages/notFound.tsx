@@ -1,17 +1,15 @@
 import { DefaultLayout } from 'app/layout/DefaultLayout'
 import { AlertTriangle } from '@tamagui/lucide-icons'
-import {Page} from 'protolib/components/Page'
+import { Page } from 'protolib/components/Page'
 import { Protofy } from 'protobase'
-import { Theme, YStack, Text, XStack, Paragraph,H2 } from "@my/ui"
-import React, { useState } from 'react'
+import { YStack, H2 } from "@my/ui"
 import {withSession } from "protolib/lib/Session"
-import {useEditor} from 'protolib/visualui/useEdit'
 import {SSR} from 'protolib/lib/SSR'
-import {UIWrapLib, UIWrap} from 'protolib/visualui/visualuiWrapper'
 
 const isProtected = Protofy("protected", false)
 
 const NotFound = () => {
+  console.log(withSession, SSR)
   return (
     <Page height="100vh">
       <DefaultLayout>
@@ -23,8 +21,6 @@ const NotFound = () => {
     </Page>
   )
 }
-
-const cw = UIWrapLib('@my/ui')
 
 export default {
     route: Protofy("route", "/404"),
