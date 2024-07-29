@@ -43,7 +43,6 @@
     "protolib": "*",
     "protonode": "*",
     "subleveldown": "^6.0.1",
-    "ts-morph": "20.0.0",
     "ts-node": "10.9.1",
     "tslib": "2.6.2",
     "zod": "^3.22.2"
