@@ -34,7 +34,7 @@ export const StateMachinesAPI = (app, context) => {
       },
 
       async put(key, value) {
-
+        // manually handled 
       },
 
       async get(key) {
@@ -153,20 +153,22 @@ export const StateMachinesAPI = (app, context) => {
   })
 
   // generate machine instance from definition
-  app.get("/adminapi/v1/statemachines/:definitionName/:instanceName", async (req, res) => {
-    const { definitionName, instanceName } = req.params
-    if (!machineDefinitions[definitionName]) {
+  app.post("/adminapi/v1/statemachines", async (req, res) => {
+    console.log('BODY: ', req.body)
+    const {name, definition} = req.body
+
+    if (!machineDefinitions[definition.name]) {
       return res.status(404).json({ status: "Machine definition not found" })
     }
 
-    const machine = StateMachine.CreateStateMachine(machineDefinitions[definitionName])
+    const machine = StateMachine.CreateStateMachine(machineDefinitions[definition.name])
     if (!machine) {
       return res
         .status(500)
-        .json({ status: "Cannot create machine from the '" + definitionName + "' machine definition" })
+        .json({ status: "Cannot create machine from the '" + definition.name + "' machine definition" })
     }
 
-    runtimeMachines[instanceName] = machine
-    res.status(200).json({ status: "Ok" })
+    runtimeMachines[name] = machine 
+    res.status(200).json(req.body)
   })
 }

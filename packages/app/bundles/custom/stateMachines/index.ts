@@ -1,5 +1,5 @@
-import sm1 from "./sampleMachine"
+import sampleMachine from "./sampleMachine"
 
 export default {
-    sm1
+    sampleMachine
 }
