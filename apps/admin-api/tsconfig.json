@@ -22,15 +22,13 @@
     ],
 
     "paths": {
-      "protolib/*": ["./protolib/src/*"], 
+      "protolib/*": ["protolib/dist/*"], 
       "app/*": ["./app/*"] 
     }
   },
   "include": [
     "./src/**/*.ts",
     "../../.types/*.ts",
-    "./protolib/src/adminapi/**/*",
-    "./protolib/src/api/**/*",
     "./app/bundles/apiContext.ts",
     "./app/bundles/adminapi.ts",
     "./app/bundles/objects.ts",
@@ -38,10 +36,6 @@
     "./app/bundles/storageProviders.ts",
     "./app/conf.ts",
     "./app/initialData.ts",
-    "./protolib/src/bundles/adminapi.ts",
-    "./protolib/src/bundles/library.ts",
-    "./protolib/src/bundles/apiContext.ts",
-    "./protolib/src/bundles/objects.ts",
     "./app/bundles/custom/stateMachines/**/*",
   ],
   "exclude": [

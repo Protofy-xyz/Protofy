@@ -1,10 +1,22 @@
 const moduleAlias = require('module-alias')
 import path from 'path';
 
-moduleAlias.addAliases({
-  "app": path.resolve(__dirname, '../../../packages/app'),
-  "protolib": path.resolve(__dirname, '../../../packages/protolib/src')
-});
+const resolveNodeModule = (moduleName) => {
+  try {
+    return require.resolve(moduleName);
+  } catch (e) {
+    // Handle the error if the module is not found
+    console.error(`Module ${moduleName} not found`);
+    return null;
+  }
+};
+
+const moduleConfig = {
+  "app": path.resolve(__dirname, "../../../packages/app"),
+  "protolib": path.join(resolveNodeModule("protolib"), "..")
+}
+
+moduleAlias.addAliases(moduleConfig);
 
 import dotenv from 'dotenv'
 dotenv.config({ path: '../../.env' });
@@ -17,6 +29,7 @@ const logger = getLogger()
 import http from 'http';
 global.defaultRoute = '/api/v1'
 import app from './api'
+//@ts-ignore
 import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
 
@@ -41,7 +54,7 @@ if (process.env.NODE_ENV != 'production') {
   const pathsToWatch = [
     'src/**',
     '../../packages/app/bundles/**',
-    '../../packages/protolib/**',
+    '../../packages/protolib/dist/**',
     '../../system.js',
     '../../packages/app/conf.ts',
     '../../packages/protonode/dist/**',

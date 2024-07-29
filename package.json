@@ -28,6 +28,7 @@
     "build": "yarn workspaces foreach -t --all run build",
     "docker-build": "yarn workspaces foreach -t --all run docker-build",
     "package": "yarn workspaces foreach --all run clean && yarn prepare-dev",
+    "package-apis": "yarn workspace api package && yarn workspace admin-api package",
     "package-fast": "yarn workspaces foreach --all --exclude electron-app run package",
     "status": "pm2 status",
     "monit": "pm2 monit",

@@ -2,10 +2,22 @@
 import path from 'path'
 const moduleAlias = require('module-alias')
 
-moduleAlias.addAliases({
-  "app": path.resolve(__dirname, '../../../packages/app'),
-  "protolib": path.resolve(__dirname, '../../../packages/protolib/src')
-});
+const resolveNodeModule = (moduleName) => {
+  try {
+    return require.resolve(moduleName);
+  } catch (e) {
+    // Handle the error if the module is not found
+    console.error(`Module ${moduleName} not found`);
+    return null;
+  }
+};
+
+const moduleConfig = {
+  "app": path.resolve(__dirname, "../../../packages/app"),
+  "protolib": path.join(resolveNodeModule("protolib"), "..")
+}
+
+moduleAlias.addAliases(moduleConfig);
 
 import dotenv from 'dotenv'
 import { setConfig, getConfig, getLogger } from 'protobase';
@@ -21,7 +33,8 @@ require('events').EventEmitter.defaultMaxListeners = 100;
 import http from 'http';
 
 import chokidar from 'chokidar';
-import BundleContext from '../../../packages/app/bundles/adminApiContext'
+import BundleContext from 'app/bundles/adminApiContext'
+//@ts-ignore
 import { generateEvent } from 'app/bundles/library'
 import machineDefinitions from 'app/bundles/custom/stateMachines'
 import { startProxy } from './proxy';
@@ -89,7 +102,7 @@ if (isFullDev) {
   const pathsToWatch = [
     'src/**',
     '../../packages/app/conf.ts',
-    '../../packages/protolib/**',
+    '../../packages/protolib/dist/**',
     '../../packages/app/bundles/adminapi.tsx',
     '../../system.js',
     '../../packages/protonode/dist/**',
