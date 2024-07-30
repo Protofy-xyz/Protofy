@@ -55,7 +55,7 @@ export const StateMachinesAPI = (app, context) => {
   const autoAPI = AutoAPI({
     modelName: 'statemachines',
     modelType: StateMachineModel,
-    prefix: '/adminapi/v1/',
+    prefix: '/api/v1/',
     getDB: getDB,
     connectDB: () => new Promise(resolve => resolve(null)),
     requiresAdmin: ['*'],
@@ -65,7 +65,7 @@ export const StateMachinesAPI = (app, context) => {
   autoAPI(app, context)
 
   // get all machines inspection
-  app.get("/adminapi/v1/statemachines/inspect", async (req, res) => {
+  app.get("/api/v1/statemachines/inspect", async (req, res) => {
     const inspections = []
 
     try {
@@ -85,12 +85,12 @@ export const StateMachinesAPI = (app, context) => {
   })
 
   // get instance
-  app.get("/adminapi/v1/statemachines/:instanceName", checkMachineInstanceName, async (req, res) => {
+  app.get("/api/v1/statemachines/:instanceName", checkMachineInstanceName, async (req, res) => {
     return res.status(200).json({ status: "Ok", [req.params.instanceName]: runtimeMachines[req.params.instanceName] })
   })
 
   // start and stop instance
-  app.get("/adminapi/v1/statemachines/:instanceName/start", checkMachineInstanceName, async (req, res) => {
+  app.get("/api/v1/statemachines/:instanceName/start", checkMachineInstanceName, async (req, res) => {
     const instanceName = req.params.instanceName
     try {
       if (runtimeMachines[instanceName].startMachine()) {
@@ -104,7 +104,7 @@ export const StateMachinesAPI = (app, context) => {
     }
   })
 
-  app.get("/adminapi/v1/statemachines/:instanceName/stop", checkMachineInstanceName, async (req, res) => {
+  app.get("/api/v1/statemachines/:instanceName/stop", checkMachineInstanceName, async (req, res) => {
     const instanceName = req.params.instanceName
     try {
       if (runtimeMachines[instanceName].stopMachine()) {
@@ -119,7 +119,7 @@ export const StateMachinesAPI = (app, context) => {
   })
 
   // change instance state
-  app.post("/adminapi/v1/statemachines/:instanceName/emit", checkMachineInstanceName, async (req, res) => {
+  app.post("/api/v1/statemachines/:instanceName/emit", checkMachineInstanceName, async (req, res) => {
     const instanceName = req.params.instanceName
     const { emitType, payload } = req.body ?? {}
 
@@ -140,7 +140,7 @@ export const StateMachinesAPI = (app, context) => {
   })
 
   // debugging options
-  app.get("/adminapi/v1/statemachines/:instanceName/inspect", checkMachineInstanceName, async (req, res) => {
+  app.get("/api/v1/statemachines/:instanceName/inspect", checkMachineInstanceName, async (req, res) => {
     const instanceName = req.params.instanceName
 
     try {
@@ -153,7 +153,7 @@ export const StateMachinesAPI = (app, context) => {
   })
 
   // generate machine instance from definition
-  app.post("/adminapi/v1/statemachines", async (req, res) => {
+  app.post("/api/v1/statemachines", async (req, res) => {
     console.log('BODY: ', req.body)
     const {name, definition} = req.body
 

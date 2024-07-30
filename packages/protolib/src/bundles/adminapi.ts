@@ -19,7 +19,6 @@ import { LogsAPI } from './logs/logsAPI'
 import { ServicesAPI } from './services/servicesAPI'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 import { PackagesAPI } from './packages/packagesAPI'
-import { StateMachinesAPI } from './stateMachines/stateMachinesApi'
 
 export const AdminAPIBundles = (app, context) => {
   UsersAPI(app, context)
@@ -42,6 +41,5 @@ export const AdminAPIBundles = (app, context) => {
   LogsAPI(app, context)
   ServicesAPI(app, context) 
   PackagesAPI(app, context)
-  StateMachinesDefinitionsApi(app, context), 
-  StateMachinesAPI(app, context)
+  StateMachinesDefinitionsApi(app, context)
 }

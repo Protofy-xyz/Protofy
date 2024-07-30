@@ -3,6 +3,7 @@ import { getLogger, getConfig } from 'protobase';
 import { getConfigWithoutSecrets } from '@my/config'
 import BundleContext from 'app/bundles/apiContext'
 import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
+import machineDefinitions from 'app/bundles/custom/stateMachines'
 
 const logger = getLogger()
 const subscriptions = {}
@@ -37,7 +38,7 @@ const mqtt = getMQTTClient(isProduction?'prod':'dev', serviceName, getServiceTok
     try {
         const BundleAPI = await import('app/bundles/apis');
          //wait for mqtt before starting API
-        BundleAPI.default(app, { mqtt, topicPub, topicSub, ...BundleContext })
+        BundleAPI.default(app, { mqtt, topicPub, topicSub, machineDefinitions, ...BundleContext })
     } catch (error) {
         generateEvent({
             path: 'services/'+serviceName+'/crash', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online

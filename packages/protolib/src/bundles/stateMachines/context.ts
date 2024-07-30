@@ -10,7 +10,7 @@ const spawnStateMachine = async (options: {
 }) => {
     const {definitionName, instanceName, doneCb, errorCb} = options
 
-    const url = `/adminapi/v1/statemachines?token=${getServiceToken()}`
+    const url = `/api/v1/statemachines?token=${getServiceToken()}`
     let result = await API.post(url, {
         name: instanceName,
         definition: {
@@ -35,7 +35,7 @@ const emitToStateMachine = async (options: {
     errorCb?: (err) => void
 }) => {
     const {instanceName, emitType, payload, doneCb, errorCb} = options
-    const url = `/adminapi/v1/statemachines/${instanceName}/emit?token=${getServiceToken()}`
+    const url = `/api/v1/statemachines/${instanceName}/emit?token=${getServiceToken()}`
     let result = await API.post(url, { emitType, payload })
     if (result.isError) {
         errorCb && errorCb(result.error)
