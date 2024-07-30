@@ -65,8 +65,33 @@ const getStateMachine = async (options: {
     return result.data 
 }
 
+const stateMachineFilter = async (options: {
+    instanceName: string, 
+    state: string, 
+    then?: () => void, 
+    otherwise?: () => void, 
+    error?: (err) => void 
+}) => {
+    const {instanceName, state, then, otherwise, error} = options
+    const url = `/api/v1/statemachines/${instanceName}?token=${getServiceToken()}`
+    let result = await API.get(url)
+    if (result.isError) {
+        error && error(result.error)
+        throw result.error
+    }
+
+    if (result.data.state === state) {
+        then && await then()
+    } else {
+        otherwise && await otherwise()
+    }
+
+    console.log(instanceName + "' state machine state: ", result.data)
+}
+
 export default {
     spawnStateMachine,
     emitToStateMachine, 
-    getStateMachine
+    getStateMachine, 
+    stateMachineFilter 
 }
