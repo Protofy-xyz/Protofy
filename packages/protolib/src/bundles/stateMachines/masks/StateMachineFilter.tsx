@@ -8,16 +8,6 @@ import { SMDefinitionsRepository } from '../repository';
 const StateMachineFilter = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(10)
 
-    const [machineDefinitions, setMachineDefinitions] = useState<any>([])
-    const getMachinesDefinitions = async () => {
-      const machines = await SMDefinitionsRepository.list()
-      setMachineDefinitions(machines.map(machine => machine['name']))
-    }
-
-    useEffect(() => {
-      getMachinesDefinitions()
-    }, [])
-
     return (
         <Node icon={Split} node={node} isPreview={!node.id} title='State Machine filter' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Instance name', field: 'mask-instanceName', type: 'input' }]} />
@@ -29,14 +19,6 @@ const StateMachineFilter = ({ node = {}, nodeData = {}, children }: any) => {
         </Node>
     )
 }
-
-/*
-    instanceName: string, 
-    state: string, 
-    then?: () => void, 
-    otherwise?: () => void, 
-    error?: (err) => void 
-*/
 
 export default {
     id: 'sm.stateMachineFilter',
