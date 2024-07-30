@@ -47,7 +47,26 @@ const emitToStateMachine = async (options: {
     return result.data
 }
 
+const getStateMachine = async (options: {
+    instanceName: string, 
+    done?: (result) => void
+    error?: (err) => void
+}) => {
+    const {instanceName, done, error} = options
+    const url = `/api/v1/statemachines/${instanceName}?token=${getServiceToken()}`
+    let result = await API.get(url)
+    if (result.isError) {
+        error && error(result.error)
+        throw result.error
+    }
+
+    console.log(instanceName + "' state machine: ", result.data)
+    done && await done(result.data)
+    return result.data 
+}
+
 export default {
     spawnStateMachine,
-    emitToStateMachine
+    emitToStateMachine, 
+    getStateMachine
 }
