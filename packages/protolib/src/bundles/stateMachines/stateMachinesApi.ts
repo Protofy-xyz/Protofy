@@ -64,31 +64,6 @@ export const StateMachinesAPI = (app, context) => {
   })
   autoAPI(app, context)
 
-  // get all machines inspection
-  app.get("/api/v1/statemachines/inspect", async (req, res) => {
-    const inspections = []
-
-    try {
-      Object.keys(runtimeMachines).forEach(machine => {
-        let machineInspectionData = {
-          name: machine,
-          ...runtimeMachines[machine].inspect()
-        }
-        inspections.push(machineInspectionData)
-      })
-    } catch (e) {
-      console.error("Cannot inspect machines instances", e)
-      return res.status(500).json({ status: "Cannot inspect machines instances" })
-    }
-
-    return res.status(200).json({ status: "Ok", machines: inspections })
-  })
-
-  // get instance
-  app.get("/api/v1/statemachines/:instanceName", checkMachineInstanceName, async (req, res) => {
-    return res.status(200).json({ status: "Ok", [req.params.instanceName]: runtimeMachines[req.params.instanceName] })
-  })
-
   // start and stop instance
   app.get("/api/v1/statemachines/:instanceName/start", checkMachineInstanceName, async (req, res) => {
     const instanceName = req.params.instanceName
@@ -140,7 +115,7 @@ export const StateMachinesAPI = (app, context) => {
   })
 
   // debugging options
-  app.get("/api/v1/statemachines/:instanceName/inspect", checkMachineInstanceName, async (req, res) => {
+  app.get("/api/v1/statemachines/:instanceName", checkMachineInstanceName, async (req, res) => {
     const instanceName = req.params.instanceName
 
     try {
