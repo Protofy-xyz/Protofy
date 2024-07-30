@@ -190,7 +190,7 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                 const maxSelectedLength = allLinks.reduce((acc, tab) => {
                     const segment = typeof window !== 'undefined' ? window.location.pathname.split('/')[2] || SiteConfig.defaultWorkspace : SiteConfig.defaultWorkspace;
                     let href = "/" + workspaceRoot + '/' + segment + '/' + (tab.type + tab.path).replace(/\/+/g, '/')
-                    if (pathname.startsWith(href.replace(/\/$/, ''))) {
+                    if (pathname.startsWith(href.replace(/\/$/, '').replace(/\?.*$/, ''))) {
                         return href.length > acc ? href.length : acc;
                       }
                     return acc
@@ -198,7 +198,7 @@ const Subtabs = ({ tabs, subtabs }: any) => {
 
                 const content = <Tinted>
                     <PanelMenuItem
-                        selected={pathname.startsWith(originalHref.replace(/\/$/, '')) && originalHref.length == maxSelectedLength}
+                        selected={pathname.startsWith(originalHref.replace(/\/$/, '').replace(/\?.*$/, '')) && originalHref.length == maxSelectedLength}
                         icon={getIcon(subtab.icon)}
                         text={subtab.name}
                     />
