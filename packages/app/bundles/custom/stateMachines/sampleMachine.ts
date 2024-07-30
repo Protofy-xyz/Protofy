@@ -1,4 +1,6 @@
 import { Protofy } from "protobase";
+import { generateEvent } from "protolib/bundles/events/eventsLibrary";
+import { getServiceToken } from "protonode";
 
 export default Protofy("machineDefinition", {
     context: {
@@ -9,11 +11,36 @@ export default Protofy("machineDefinition", {
         idle: {
             on: {
                 "CHANGE": "waiting"
+            }, 
+            entry: async () => {
+                await generateEvent(
+                    {
+                        path: "stateMachines/state/entry",
+                        from: "state-machine",
+                        user: "sampleMachine",
+                        payload: {
+                          machine: "sampleMachine", 
+                          currentState: "waiting"
+                        }
+                    },
+                    getServiceToken()
+                );
             }
         },
         waiting: {
-            entry: () => {
-                console.log("Changed to waiting")
+            entry: async () => {
+                await generateEvent(
+                    {
+                        path: "stateMachines/state/entry",
+                        from: "state-machine",
+                        user: "sampleMachine",
+                        payload: {
+                          machine: "sampleMachine", 
+                          currentState: "waiting"
+                        }
+                    },
+                    getServiceToken()
+                );
             }
         }
     },
