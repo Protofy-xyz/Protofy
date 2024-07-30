@@ -119,7 +119,7 @@ export const StateMachinesAPI = (app, context) => {
   })
 
   // change instance state
-  app.get("/adminapi/v1/statemachines/:instanceName/emit", checkMachineInstanceName, async (req, res) => {
+  app.post("/adminapi/v1/statemachines/:instanceName/emit", checkMachineInstanceName, async (req, res) => {
     const instanceName = req.params.instanceName
     const { emitType, payload } = req.body ?? {}
 

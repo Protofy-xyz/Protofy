@@ -18,6 +18,19 @@ const spawnStateMachine = async (definitionName, instaceName, errorCb?) => {
     return result.data
 }
 
+const emitToStateMachine = async (instaceName, emitType, payload = {}, errorCb?) => {
+    const url = `/adminapi/v1/statemachines/${instaceName}/emit?token=${getServiceToken()}`
+    let result = await API.post(url, { emitType, payload })
+    if (result.isError) {
+        errorCb && errorCb()
+        throw result.error
+    }
+
+    console.log("Emited to '" + instaceName + "' state machine: ", result.data)
+    return result.data
+}
+
 export default {
     spawnStateMachine,
+    emitToStateMachine
 }
