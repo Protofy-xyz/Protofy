@@ -140,7 +140,7 @@ export const StateMachinesAPI = (app, context) => {
       return res.status(404).json({ status: "Machine definition not found" })
     }
 
-    const machine = StateMachine.CreateStateMachine(machineDefinitions[definition.name])
+    const machine = StateMachine.CreateStateMachine(definition.name, machineDefinitions[definition.name])
     if (!machine) {
       return res
         .status(500)

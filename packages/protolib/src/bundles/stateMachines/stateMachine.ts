@@ -9,15 +9,17 @@ export class StateMachine {
     running: boolean
     machine: xStateMachine
     actor: MachineActor
+    definition: string
 
-    constructor(running, machine: xStateMachine) {
+    constructor(running, definition, machine: xStateMachine) {
         this.running = running
+        this.definition = definition
         this.machine = machine
     }
 
-    static CreateStateMachine(definition): StateMachine {
+    static CreateStateMachine(definitionName, definition): StateMachine {
         try {
-            return new StateMachine(false, StateMachine.getMachineFromDefinition(definition))
+            return new StateMachine(false, definitionName,StateMachine.getMachineFromDefinition(definition))
         } catch (e) {
             console.error("Cannot create State Machine from definition: ", e)
             return null
