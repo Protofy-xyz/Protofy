@@ -46,7 +46,7 @@ const getDB = (path, req, session) => {
             const machineData = {
                 machineName: value.name ?? "defaultName",
                 machineContext: JSON.stringify(value.context ?? {}, null, 4),
-                machineStates: JSON.stringify(value.states ?? [], null, 4),
+                machineStates: value.states,
                 machineTransitions: JSON.stringify(value.transitions ?? {}, null, 4)
             }
 
