@@ -173,6 +173,17 @@ export const StateMachinesAPI = (app, context) => {
     }
 
     runtimeMachines[name] = machine 
-    res.status(200).json(req.body)
+    
+    try {
+        if (runtimeMachines[name].startMachine()) {
+            res.status(200).json(req.body)
+        } else {
+            return res.status(500).json({ status: "Cannot start machine instance" })
+        }
+    } catch (e) {
+        console.error("Cannot start machine instance")
+        return res.status(500).json({ status: "Cannot start machine instance" })
+    }
+
   })
 }
