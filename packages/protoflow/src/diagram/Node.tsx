@@ -72,7 +72,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
         >
             {(title || headerContent) && !isNodePreviewMode ? <div ref={boxRef} style={{ display: 'flex', backgroundColor: color, borderRadius: isPreview ? '8px' : innerBorderRadius, borderBottom: mode == 'column' && !isPreview ? borderWidth + ' solid ' + borderColor : '0px', paddingBottom: '10px', justifyContent: 'center' }}>
                 {icon && flowDirection == "LEFT" ? <div style={{ display: 'flex', right: '15px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id ? titleSize : '18px', color: hColor })}</div> : null}
-                {title ? <Text style={{ fontSize: id ? titleSize : '18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '15ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{title}</Text> : null}
+                {title ? <Text style={{ fontSize: id ? titleSize : '18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '22ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{title}</Text> : null}
                 {icon && flowDirection == "RIGHT" ? <div style={{ display: 'flex', left: '10px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id ? titleSize : '18px', color: hColor })}</div> : null}
                 {headerContent}
             </div> : null}
