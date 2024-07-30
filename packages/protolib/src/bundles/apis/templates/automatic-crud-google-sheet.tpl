@@ -25,6 +25,7 @@ use the chat if in doubt
 import { Objects } from "app/bundles/objects";
 import { AutoAPI, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
+import { APIContext } from "protolib/bundles/apiContext"
 import { Application } from "express";
 import {GoogleSheetClient} from 'protolib/bundles/google/googleSheetClient'
 import fsPath from "path";
@@ -50,7 +51,7 @@ const getCredentials = async () => {
     }
 }
 
-export default Protofy("code", async (app: Application, context) => {
+export default Protofy("code", async (app: Application, context: typeof APIContext) => {
     const {{codeName}}API = AutoAPI({
         modelName: name,
         modelType: Objects.{{object}},

@@ -20,6 +20,7 @@ use the chat if in doubt
 
 import { getAuth } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
+import { APIContext } from "protolib/bundles/apiContext"
 import { Application } from 'express';
 import fs from 'fs'
 import path from "path";
@@ -29,7 +30,7 @@ const logger = getLogger()
 
 Protofy("type", "CustomAPI")
 
-export default Protofy("code", async (app:Application, context) => {
+export default Protofy("code", async (app: Application, context: typeof APIContext) => {
     //PUT YOUR API HERE
     //context.deviceAction function allows to communicate with devices via mqtt
     //context.deviceSub allows to receive notifications from devices via mqtt

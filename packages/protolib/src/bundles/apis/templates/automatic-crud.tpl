@@ -1,5 +1,6 @@
 import { Objects } from "app/bundles/objects";
 import { AutoAPI, getAuth } from 'protonode'
+import { APIContext } from "protolib/bundles/apiContext"
 import { API, Protofy, getLogger } from "protobase";
 import { Application } from 'express';
 import fs from 'fs'
@@ -20,7 +21,7 @@ const {{codeName}}API = AutoAPI({
     useDatabaseEnvironment: true
 })
 
-export default Protofy("code", async (app:Application, context) => {
+export default Protofy("code", async (app:Application, context: typeof APIContext) => {
     {{codeName}}API(app, context) 
     //you can add more apis here, like:
     /*

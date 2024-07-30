@@ -25,6 +25,7 @@ use the chat if in doubt
 import { Objects } from "app/bundles/objects";
 import { AutoAPI, getAuth } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
+import { APIContext } from "protolib/bundles/apiContext"
 import { Application } from "express";
 import fs from "fs";
 import fsPath from "path";
@@ -36,7 +37,7 @@ Protofy("type", "AutoAPI");
 Protofy("object", "{{object}}");
 const { name, prefix } = Objects.{{object}}.getApiOptions();
 
-export default Protofy("code", async (app: Application, context) => {
+export default Protofy("code", async (app: Application, context: typeof APIContext) => {
 
     const jsonPath = fsPath.join(root, 'data', '{{object}}.json')
     
