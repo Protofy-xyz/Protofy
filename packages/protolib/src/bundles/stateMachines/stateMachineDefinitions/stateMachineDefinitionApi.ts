@@ -56,7 +56,7 @@ const getDB = (path, req, session) => {
             } catch (e) {
                 // create machine file with template
                 const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-                    name: fspath.basename(value.name + '.tsx'),
+                    name: fspath.basename(value.name + '.ts'),
                     data: {
                         options: {
                             template: `/packages/protolib/src/bundles/stateMachines/templates/${template}.tpl`,
