@@ -9,7 +9,7 @@ import { JSONViewer } from 'protolib/src/components/jsonui'
 import { Chip } from 'protolib/src/components/Chip'
 
 
-const sourceUrl = '/adminapi/v1/statemachines'
+const sourceUrl = '/api/v1/statemachines'
 export default {
   component: ({ pageState, initialItems, pageSession, extraData }: any) => {
     return (<AdminPage title="State Machines" pageSession={pageSession}>
