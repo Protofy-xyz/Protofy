@@ -7,6 +7,8 @@ import { StateMachineDefinitionModel } from "./stateMachineDefinitionSchema";
 import { getServiceToken } from '../../apis/context';
 
 const StateMachineDefinitionsDir = (root) => fspath.join(root, "/packages/app/bundles/custom/stateMachines/")
+const StateMachineDefinitionsIndex = fspath.join(StateMachineDefinitionsDir(getRoot()), 'index.ts')
+
 const getStateMachine = (fsmPath, req) => {
     const sourceFile = getSourceFile(fspath.join(StateMachineDefinitionsDir(getRoot(req)), fsmPath))
     const machineDefinitionCode = getDefinition(sourceFile, '"machineDefinition"').getText()
@@ -20,6 +22,18 @@ const getStateMachine = (fsmPath, req) => {
             states: Object.keys(machineDefinition.states)
         }
     }
+}
+
+const linkToIndex = (sourcePath, importName, from) => {
+    const sourceFile = getSourceFile(sourcePath)
+    addImportToSourceFile(sourceFile, importName, ImportType.DEFAULT, from)
+
+    const arg = getDefinition(sourceFile, '"machines"')
+    if (!arg) {
+        throw "No link definition schema marker found for file: " + sourcePath
+    }
+    addObjectLiteralProperty(arg, importName, importName)
+    sourceFile.saveSync();
 }
 
 const getDB = (path, req, session) => {
@@ -54,9 +68,11 @@ const getDB = (path, req, session) => {
                 // check if file already exists
                 await fs.access(machineDefinitionFilePath, fs.constants.F_OK)
             } catch (e) {
+                // machineFile
+                const machineName = fspath.basename(value.name)
                 // create machine file with template
                 const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-                    name: fspath.basename(value.name + '.ts'),
+                    name: machineName+".ts",
                     data: {
                         options: {
                             template: `/packages/protolib/src/bundles/stateMachines/templates/${template}.tpl`,
@@ -73,6 +89,8 @@ const getDB = (path, req, session) => {
                     console.error("Error executing template: ", result)
                     throw result.error
                 }
+
+                linkToIndex(StateMachineDefinitionsIndex, value.name, "./"+machineName)
             }
         },
 
