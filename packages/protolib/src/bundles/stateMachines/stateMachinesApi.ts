@@ -120,7 +120,7 @@ export const StateMachinesAPI = (app, context) => {
 
     try {
       const machineInspectionData = runtimeMachines[instanceName].inspect()
-      return res.status(200).json({ status: "Ok", [instanceName]: machineInspectionData })
+      return res.status(200).json(machineInspectionData)
     } catch (e) {
       console.error("Cannot inspect machine instance")
       return res.status(500).json({ status: "Cannot inspect machine instance" })
