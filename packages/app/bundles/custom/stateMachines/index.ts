@@ -1,5 +1,5 @@
-import sampleMachine from "./sampleMachine"
+import {Protofy} from 'protobase'
 
-export default {
-    sampleMachine
-}
+export default Protofy("machines", {
+
+})
