@@ -43,5 +43,5 @@ export const APIContext = {
     playwright,
     automations,
     network, 
-    ...stateMachines
+    sm: stateMachines
 }
