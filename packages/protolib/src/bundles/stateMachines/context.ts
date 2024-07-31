@@ -1,5 +1,6 @@
 import { getServiceToken } from "../apis/context"
 import { API } from 'protobase'
+import { onEvent } from "../events/api"
 
 
 const spawnStateMachine = async (options: {
@@ -89,9 +90,31 @@ const stateMachineFilter = async (options: {
     console.log(instanceName + "' state machine state: ", result.data)
 }
 
+const onStateMachineEvent = async (options: {
+    mqtt, 
+    context, 
+    instanceName: string, 
+    state: string, 
+    onEventCb: (event) => void, 
+}) => {
+  const {mqtt, context, instanceName, state, onEventCb} = options; 
+  const stateMachinesPath = "stateMachines/state/entry"
+  const from = "state-machine"
+
+  const handleEvent = (msg) => {
+    if (msg.user !== instanceName) return 
+    if (msg.payload.currentState !== state) return 
+
+    onEventCb(msg)
+  }
+
+  onEvent(mqtt, context, handleEvent, stateMachinesPath, from); 
+}
+
 export default {
     spawnStateMachine,
     emitToStateMachine, 
     getStateMachine, 
-    stateMachineFilter 
+    stateMachineFilter, 
+    onStateMachineEvent
 }
