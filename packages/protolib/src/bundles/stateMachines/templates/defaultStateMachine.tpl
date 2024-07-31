@@ -4,17 +4,19 @@ import { getServiceToken } from "protonode";
 
 export default Protofy("machineDefinition", {
   context: {{{machineContext}}}, 
+  initial: "{{machineInitialState}}", 
   states: {
   {{#each machineStates}}
     {{this}}: {
-      entry: async () => {
+      entry: async (params) => {
         await generateEvent(
           {
               path: "stateMachines/state/entry",
               from: "state-machine",
-              user: "{{../machineName}}",
+              user: params.instanceName,
               payload: {
-                machine: "{{../machineName}}", 
+                machine: params.instanceName, 
+                definition: "{{../machineName}}", 
                 currentState: "{{this}}"
               }
           },

@@ -61,6 +61,7 @@ const getDB = (path, req, session) => {
                 machineName: value.name ?? "defaultName",
                 machineContext: JSON.stringify(value.context ?? {}, null, 4),
                 machineStates: value.states,
+                machineInitialState: value.states.length ? value.states[0] : "", 
                 machineTransitions: JSON.stringify(value.transitions ?? {}, null, 4)
             }
 

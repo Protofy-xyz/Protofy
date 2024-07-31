@@ -133,22 +133,46 @@ export const StateMachinesAPI = (app, context) => {
     const {name, definition} = req.body
 
     if (!name || !definition) {
-        return res.status(400).json({status: "Bad request. Missing params name or definition."})
+      return res.status(400).json({status: "Bad request. Missing params name or definition."})
     }
 
     if (!machineDefinitions[definition.name]) {
       return res.status(404).json({ status: "Machine definition not found" })
     }
 
-    const machine = StateMachine.CreateStateMachine(definition.name, machineDefinitions[definition.name])
+    const newStates = {}
+    Object.keys(machineDefinitions[definition.name].states).forEach(stateName => {
+        const overridedFunctionKeys = ["entry"]
+        const modifiedState = machineDefinitions[definition.name].states[stateName]
+
+        overridedFunctionKeys.forEach(funcKey => {
+            const oldFunction = modifiedState[funcKey]
+            modifiedState[funcKey] = () => oldFunction({ // params for definition state functions
+              instanceName: name 
+            })
+        })
+
+        newStates[stateName] = modifiedState
+    })
+
+    const instanceDefinition = {
+        ...machineDefinitions[definition.name],
+        context: {
+            ...machineDefinitions[definition.name].context,
+            _name: name
+        },
+        states: newStates
+    }
+
+    const machine = StateMachine.CreateStateMachine(definition.name, instanceDefinition)
     if (!machine) {
       return res
         .status(500)
         .json({ status: "Cannot create machine from the '" + definition.name + "' machine definition" })
     }
 
-    runtimeMachines[name] = machine 
-    
+    runtimeMachines[name] = machine
+
     try {
         if (runtimeMachines[name].startMachine()) {
             res.status(200).json(req.body)

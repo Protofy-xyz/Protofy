@@ -12,14 +12,15 @@ export default Protofy("machineDefinition", {
             on: {
                 "CHANGE": "waiting"
             }, 
-            entry: async () => {
+            entry: async (params) => {
                 await generateEvent(
                     {
                         path: "stateMachines/state/entry",
                         from: "state-machine",
-                        user: "sampleMachine",
+                        user: params.instanceName,
                         payload: {
-                          machine: "sampleMachine", 
+                          machine: params.instanceName, 
+                          definition: "sampleMachine", 
                           currentState: "waiting"
                         }
                     },
@@ -28,14 +29,15 @@ export default Protofy("machineDefinition", {
             }
         },
         waiting: {
-            entry: async () => {
+            entry: async (params) => {
                 await generateEvent(
                     {
                         path: "stateMachines/state/entry",
                         from: "state-machine",
-                        user: "sampleMachine",
+                        user: params.instanceName,
                         payload: {
-                          machine: "sampleMachine", 
+                          machine: params.instanceName, 
+                          definition: "sampleMachine", 
                           currentState: "waiting"
                         }
                     },
