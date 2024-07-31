@@ -21,7 +21,7 @@ export default Protofy("machineDefinition", {
                         payload: {
                           machine: params.instanceName, 
                           definition: "sampleMachine", 
-                          currentState: "waiting"
+                          currentState: "idle"
                         }
                     },
                     getServiceToken()
