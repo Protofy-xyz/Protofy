@@ -1,4 +1,4 @@
-import { Router, Inbox, Library, ToyBrick, Key, Cog, Database, DatabaseBackup, Package, Boxes, Box } from '@tamagui/lucide-icons'
+import { Router, Inbox, Library, ToyBrick, Key, Cog, Database, DatabaseBackup, Package, Boxes, Box, LayoutDashboard } from '@tamagui/lucide-icons'
 
 export default ({pages}) => {
     const adminPages = pages.filter(p => p.pageType == 'admin' && p.object && p.route.startsWith('/workspace/'))
@@ -17,6 +17,7 @@ export default ({pages}) => {
                 return { "name": page.object.charAt(0).toUpperCase() + page.object.slice(1), "icon": Box, "type": page.route.split('/')[2], "path": page.route.split('/').slice(3), previewMode: page.status?.web == 'unpublished' }
             })}: {}),
             "System": [
+                // { "name": "Dashboard", "icon": LayoutDashboard, "type": "dashboard", "path": "/" },
                 { "name": "Users", "icon": "users", "type": "users", "path": "/" },
                 { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
                 { "name": "Keys", "icon": Key, "type": "keys", "path": "/" },

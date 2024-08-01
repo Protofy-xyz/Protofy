@@ -12,6 +12,7 @@ import resourcesPages from './resources/adminPages'
 import keysPages from './keys/adminPages'
 import servicesPages from './services/adminPages'
 import stateMachinePages from './stateMachines/adminPages'
+import dashboardPages from './dashboard/adminPages'
 
 export const AdminPagesBundles = {
     ...devicePages,
@@ -27,5 +28,6 @@ export const AdminPagesBundles = {
     ...resourcesPages,
     ...keysPages,
     ...servicesPages,
-    ...stateMachinePages
+    ...stateMachinePages,
+    ...dashboardPages
 }
