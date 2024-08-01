@@ -628,7 +628,7 @@ const DataViewInternal = forwardRef(({
                         <AsyncView atom={currentItems}>
                             {
                                 tableViews.map((v, index) => <ActiveRender height="100%" key={index} activeId={index}>
-                                    {React.createElement(v.component, { ...v.props } ?? {})}
+                                    {React.createElement(v.component, { ...v.props, currentItems } ?? {})}
                                 </ActiveRender>
                                 )}
                         </AsyncView>
