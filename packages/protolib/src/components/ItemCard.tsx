@@ -1,19 +1,10 @@
-import { FastForward, Pause, Rewind } from '@tamagui/lucide-icons'
-import React, { memo, useMemo, useState } from 'react'
+import React, { memo, useState } from 'react'
 import {
-  Button,
-  Card,
-  CardProps,
   Image,
   ImageProps,
-  Paragraph,
-  ScrollView,
   Separator,
   SizableText,
-  Square,
-  Stack,
   StackProps,
-  Theme,
   ThemeName,
   XStack,
   YStack,
