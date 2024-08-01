@@ -87,6 +87,10 @@ export const pageTemplates = {
             return
         }
     },
+    "adminblank": {
+        id: "adminblank", 
+        name: "Admin blank" 
+    },
     "landing": {
         id: "landing",
         name: "Landing"
