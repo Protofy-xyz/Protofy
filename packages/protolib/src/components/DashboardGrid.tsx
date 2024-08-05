@@ -1,14 +1,11 @@
 import { Responsive, WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { XStack, Text, YStack } from 'tamagui'
-import { useTint } from '../lib/Tints'
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
+    
 
 export const DashboardGrid = ({ items = [], layouts = {}, borderRadius = 10, padding = 10, backgroundColor }) => {
-    const { tint } = useTint()
-
     return (
         <ResponsiveGridLayout
             className="layout"
@@ -18,24 +15,7 @@ export const DashboardGrid = ({ items = [], layouts = {}, borderRadius = 10, pad
             rowHeight={30}
         >
             {items.map((item) => (
-                <YStack
-                    key={item.key}
-                    backgroundColor={item.backgroundColor ?? backgroundColor}
-                    borderRadius={item.borderRadius ?? borderRadius}
-                >
-                    <XStack
-                        w="100%"
-                        bc="$backgroundHover"
-                        btrr={9}
-                        btlr={9}
-                        jc="center"
-                        h={30}
-                        ai="center"
-                    >{item.content}
-                    </XStack>
-                    <Text>{item.content}</Text>
-                </YStack>
-
+                <div key={item.key}>{item.content}</div>
             ))}
 
         </ResponsiveGridLayout>

@@ -1,5 +1,6 @@
 import { AdminPage } from '../../components/AdminPage';
 import { DashboardGrid } from '../../components/DashboardGrid';
+import { DashboardCard } from '../../components/DashboardCard';
 import { withSession } from '../../lib/Session';
 import { XStack, YStack } from '@my/ui';
 import 'react-grid-layout/css/styles.css';
@@ -15,7 +16,7 @@ const workspacesSourceUrl = '/adminapi/v1/workspaces'
 const isProtected = Protofy("protected", false)
 
 const itemsContent = [
-    { key: 'a', content: 'A' },
+    { key: 'a', content: <DashboardCard id={'a'}>A</DashboardCard> },
     { key: 'b', content: 'B' },
     { key: 'c', content: 'C' },
     { key: 'd', content: 'D' },
