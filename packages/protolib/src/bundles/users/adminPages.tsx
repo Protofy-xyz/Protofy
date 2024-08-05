@@ -101,7 +101,8 @@ export default {
                         if (data.password != data.repassword) {
                             throw "Passwords do not match"
                         }
-                        const { repassword, ...finalData } = data
+                        // const { repassword, ...finalData } = data
+                        return data
                     }}
                     customFields={{
                         type: {
