@@ -1,7 +1,7 @@
 import { AdminPage } from '../../components/AdminPage';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { withSession } from '../../lib/Session';
-import { YStack } from '@my/ui';
+import { XStack, YStack } from '@my/ui';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { Protofy, API } from 'protobase'
@@ -14,14 +14,41 @@ const sourceUrl = '/adminapi/v1/dashboard'
 const workspacesSourceUrl = '/adminapi/v1/workspaces'
 const isProtected = Protofy("protected", false)
 
-const items = [
-    { key: 'a', x: 0, y: 0, w: 5, h: 2, content: 'A' },
-    { key: 'b', x: 2, y: 0, w: 2, h: 2, content: 'B' },
-    { key: 'c', x: 4, y: 0, w: 2, h: 5, content: 'C' },
-    { key: 'd', x: 10, y: 0, w: 5, h: 2, content: 'D' },
-    { key: 'e', x: 20, y: 0, w: 2, h: 2, content: 'E' },
-    { key: 'f', x: 40, y: 0, w: 2, h: 5, content: 'F' },
-];
+const itemsContent = [
+    { key: 'a', content: 'A' },
+    { key: 'b', content: 'B' },
+    { key: 'c', content: 'C' },
+    { key: 'd', content: 'D' },
+    { key: 'e', content: 'E' },
+    { key: 'f', content: 'F' },
+  ];
+
+const layouts = {
+    lg: [
+      { i: 'a', x: 0, y: 0, w: 5, h: 2 },
+      { i: 'b', x: 2, y: 0, w: 2, h: 2 },
+      { i: 'c', x: 4, y: 0, w: 2, h: 5 },
+      { i: 'd', x: 10, y: 0, w: 5, h: 2 },
+      { i: 'e', x: 20, y: 0, w: 2, h: 2 },
+      { i: 'f', x: 40, y: 0, w: 2, h: 5 },
+    ],
+    md: [
+      { i: 'a', x: 0, y: 0, w: 4, h: 2 },
+      { i: 'b', x: 4, y: 0, w: 4, h: 2 },
+      { i: 'c', x: 0, y: 2, w: 4, h: 5 },
+      { i: 'd', x: 4, y: 2, w: 4, h: 2 },
+      { i: 'e', x: 0, y: 7, w: 4, h: 2 },
+      { i: 'f', x: 4, y: 7, w: 4, h: 5 },
+    ],
+    sm: [
+      { i: 'a', x: 0, y: 0, w: 2, h: 2 },
+      { i: 'b', x: 2, y: 0, w: 2, h: 2 },
+      { i: 'c', x: 0, y: 2, w: 2, h: 5 },
+      { i: 'd', x: 2, y: 2, w: 2, h: 2 },
+      { i: 'e', x: 0, y: 7, w: 2, h: 2 },
+      { i: 'f', x: 2, y: 7, w: 2, h: 5 },
+    ],
+  };
 
 
 export default {
@@ -31,7 +58,7 @@ export default {
             usePendingEffect((s) => { API.get(workspacesSourceUrl, s) }, setWorkspaces, extraData?.workspaces)
             return (<AdminPage title="Dashboard" pageSession={pageSession}>
                 <YStack flex={1} padding={20}>
-                    <DashboardGrid items={items} borderRadius={10} padding={10} backgroundColor="white"/>
+                    <DashboardGrid items={itemsContent} layouts={layouts} borderRadius={10} padding={10} backgroundColor="white"/>
                 </YStack>
             </AdminPage>)
         },
