@@ -70,10 +70,11 @@ export const getSessionCookie = async (cookieStr) => {
 
 //utility functions for nextjs pages
 const fail = (returnUrl?) => {
+    const encodedReturn = encodeURIComponent(returnUrl);
     return {
         redirect: {
             permanent: false,
-            destination: "/auth/login" + (returnUrl ? "?return=" + returnUrl : "")
+            destination: "/auth/login" + (returnUrl ? "?return=" + encodedReturn : "")
         }
     }
 }
