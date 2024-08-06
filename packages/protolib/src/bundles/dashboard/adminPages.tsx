@@ -7,17 +7,20 @@ import { XStack, YStack, Text } from '@my/ui';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { Protofy, API } from 'protobase'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getPendingResult } from 'protobase';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { SSR } from '../../lib/SSR';
+import { ServiceMemoryUsageChart } from '../services/widgets';
 
 const sourceUrl = '/adminapi/v1/dashboard'
 const workspacesSourceUrl = '/adminapi/v1/workspaces'
 const isProtected = Protofy("protected", false)
 
+
+
 const itemsContent = [
-    { key: 'a', content: <DashboardCard title='Box A' id={'a'}><Text>Content A</Text></DashboardCard> },
+    { key: 'a', content: <DashboardCard id={'a'}><ServiceMemoryUsageChart /></DashboardCard> },
     { key: 'b', content: <DashboardCard title='Box B' id={'b'}><Text>Content B</Text></DashboardCard> },
     { key: 'c', content: 
             <DashboardCard title='Box C' id={'c'}>
@@ -32,12 +35,12 @@ const itemsContent = [
 
 const layouts = {
     lg: [
-      { i: 'a', x: 0, y: 0, w: 5, h: 2 },
-      { i: 'b', x: 2, y: 0, w: 2, h: 2 },
-      { i: 'c', x: 4, y: 0, w: 2, h: 5 },
-      { i: 'd', x: 10, y: 0, w: 5, h: 2 },
-      { i: 'e', x: 20, y: 0, w: 2, h: 2 },
-      { i: 'f', x: 40, y: 0, w: 2, h: 5 },
+      { i: 'a', x: 0, y: 0, w: 4, h: 15 },
+      { i: 'b', x: 12, y: 0, w: 2, h: 2 },
+      { i: 'c', x: 14, y: 0, w: 2, h: 5 },
+      { i: 'd', x: 20, y: 0, w: 5, h: 2 },
+      { i: 'e', x: 30, y: 0, w: 2, h: 2 },
+      { i: 'f', x: 50, y: 0, w: 2, h: 5 },
     ],
     md: [
       { i: 'a', x: 0, y: 0, w: 4, h: 2 },
