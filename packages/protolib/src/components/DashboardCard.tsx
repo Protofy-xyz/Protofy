@@ -1,32 +1,42 @@
-import { YStack, XStack } from "@my/ui";
-import { ReactNode } from "react";
+import { ReactNode, HTMLAttributes } from "react";
 import { Tinted } from './Tinted';
+import { StackProps, XStack, YStack, isClient, } from 'tamagui'
 
 interface DashboardCardProps {
     children: ReactNode;
-    id: string
+    id: string,
+    title?: string;
+    titleProps?: StackProps;
+    containerProps?: StackProps;
 }
 
-export const DashboardCard = ({ children, id }: DashboardCardProps) => {
+export const DashboardCard = ({ children, id, title, titleProps = {}, containerProps = {} }: DashboardCardProps) => {
     return (
         <Tinted>
             <YStack
                 key={id}
                 borderRadius={10}
                 backgroundColor="$bgPanel"
+                flex={1}
+                {...containerProps}
             >
-                <XStack
+                {title?<XStack
                     w="100%"
-                    bc="$color5"
                     btrr={9}
                     btlr={9}
-                    jc="center"
+                    ml={15}
+                    mt={10}
                     h={20}
                     ai="center"
+                    {...titleProps}
                 >
+                    {title}
+                </XStack>:<></>}
+                <XStack
+                padding={15}>
                     {children}
                 </XStack>
-                {children}
+                
             </YStack>
         </Tinted>
     );

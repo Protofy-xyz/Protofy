@@ -2,7 +2,7 @@ import { AdminPage } from '../../components/AdminPage';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { DashboardCard } from '../../components/DashboardCard';
 import { withSession } from '../../lib/Session';
-import { XStack, YStack } from '@my/ui';
+import { XStack, YStack, Text } from '@my/ui';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { Protofy, API } from 'protobase'
@@ -16,12 +16,12 @@ const workspacesSourceUrl = '/adminapi/v1/workspaces'
 const isProtected = Protofy("protected", false)
 
 const itemsContent = [
-    { key: 'a', content: <DashboardCard id={'a'}>A</DashboardCard> },
-    { key: 'b', content: 'B' },
-    { key: 'c', content: 'C' },
-    { key: 'd', content: 'D' },
-    { key: 'e', content: 'E' },
-    { key: 'f', content: 'F' },
+    { key: 'a', content: <DashboardCard title='Box A' id={'a'}><Text>Content A</Text></DashboardCard> },
+    { key: 'b', content: <DashboardCard title='Box B' id={'b'}><Text>Content B</Text></DashboardCard> },
+    { key: 'c', content: <DashboardCard title='Box C' id={'c'}><Text>Content C</Text></DashboardCard> },
+    { key: 'd', content: <DashboardCard id={'d'}><Text>Content D</Text></DashboardCard> },
+    { key: 'e', content: <DashboardCard id={'e'}><Text>Content E</Text></DashboardCard> },
+    { key: 'f', content: <DashboardCard id={'f'}><Text>Content F</Text></DashboardCard> },
   ];
 
 const layouts = {

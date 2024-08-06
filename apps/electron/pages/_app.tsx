@@ -11,6 +11,7 @@ import 'protolib/styles/datatable.css';
 import '../chat.css'
 import '../map.css'
 import '../chonky.css'
+import '../dashboard.css'
 import '../blueprint.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import 'react-chat-widget/lib/styles.css';
