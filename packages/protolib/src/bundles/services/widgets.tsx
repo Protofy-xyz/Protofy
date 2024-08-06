@@ -8,18 +8,18 @@ import { useRemoteStateList } from 'protolib/src/lib/useRemoteState';
 import { ServiceModel } from './servicesSchema';
 import AsyncView from '../../components/AsyncView';
 import Center from '../../components/Center';
+import { DashboardCard } from '../../components/DashboardCard';
 
 import { LineChart, Cpu } from 'lucide-react'
 
+const fetch = async (fn) => {
+    const services = await API.get('/adminapi/v1/services')
+    console.log("services", services)
+    fn(services)
+}
 
-
-export const ServiceMemoryUsageChart = () => {
+export const ServiceMemoryUsageChart = ({ title, id }) => {
     const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF"];
-    const fetch = async (fn) => {
-        const services = await API.get('/adminapi/v1/services')
-        console.log("services", services)
-        fn(services)
-    }
     const [servicesData, setServicesData] = useRemoteStateList(undefined, fetch, ServiceModel.getNotificationsTopic(), ServiceModel, true)
 
     const renderCustomizedLabel = ({
@@ -38,42 +38,38 @@ export const ServiceMemoryUsageChart = () => {
     };
 
     return (
-        <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
-            <AsyncView atom={servicesData}>
-                {servicesData?.data?.items && <PieChart width={450} height={400}>
-                    <Pie
-                        data={servicesData.data.items}
-                        dataKey="memory"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={150}
-                        fill="#8884d8"
-                        label={renderCustomizedLabel}
-                        labelLine={false}
-                        isAnimationActive={false}
-                    >
-                        {servicesData.data.items.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                    </Pie>
-                    <Center><Tooltip formatter={(value) => `${(value / (1024 * 1024)).toFixed(2)} MB`} /></Center>
-                    <Legend />
-                </PieChart>}
-            </AsyncView>
-        </YStack>
+        <DashboardCard title={title} id={id}>
+            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
+                <AsyncView atom={servicesData}>
+                    {servicesData?.data?.items && <PieChart width={450} height={400}>
+                        <Pie
+                            data={servicesData.data.items}
+                            dataKey="memory"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={150}
+                            fill="#8884d8"
+                            label={renderCustomizedLabel}
+                            labelLine={false}
+                            isAnimationActive={false}
+                        >
+                            {servicesData.data.items.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Center><Tooltip formatter={(value) => `${(value / (1024 * 1024)).toFixed(2)} MB`} /></Center>
+                        <Legend />
+                    </PieChart>}
+                </AsyncView>
+            </YStack>
+        </DashboardCard>
     );
 };
 
 
 
-export const TotalMemoryUsage = () => {
-    const fetch = async (fn) => {
-        const services = await API.get('/adminapi/v1/services');
-        console.log("services", services);
-        fn(services);
-    };
-
+export const TotalMemoryUsage = ({ title, id }) => {
     const [servicesData, setServicesData] = useRemoteStateList(undefined, fetch, ServiceModel.getNotificationsTopic(), ServiceModel, true);
     const [totalMemory, setTotalMemory] = useState(0);
 
@@ -85,29 +81,25 @@ export const TotalMemoryUsage = () => {
     }, [servicesData]);
 
     return (
-        <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
-            <AsyncView atom={servicesData}>
-                {servicesData?.data?.items && (
-                    <YStack alignItems="center" justifyContent="center">
-                        <LineChart color="var(--color7)" size={48} strokeWidth={1.75} />
-                        <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
-                            {(totalMemory / (1024 * 1024)).toFixed(2)} MB
-                        </Text>
-                    </YStack>
-                )}
-            </AsyncView>
-        </YStack>
+        <DashboardCard title={title} id={id}>
+            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
+                <AsyncView atom={servicesData}>
+                    {servicesData?.data?.items && (
+                        <YStack alignItems="center" justifyContent="center">
+                            <LineChart color="var(--color7)" size={48} strokeWidth={1.75} />
+                            <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
+                                {(totalMemory / (1024 * 1024)).toFixed(2)} MB
+                            </Text>
+                        </YStack>
+                    )}
+                </AsyncView>
+            </YStack>
+        </DashboardCard>
     );
 };
 
 
-export const TotalCPUUsage = () => {
-    const fetch = async (fn) => {
-        const services = await API.get('/adminapi/v1/services');
-        console.log("services", services);
-        fn(services);
-    };
-
+export const TotalCPUUsage = ({ title, id }) => {
     const [servicesData, setServicesData] = useRemoteStateList(undefined, fetch, ServiceModel.getNotificationsTopic(), ServiceModel, true);
     const [totalCPU, setTotalCPU] = useState(0);
 
@@ -119,17 +111,19 @@ export const TotalCPUUsage = () => {
     }, [servicesData]);
 
     return (
-        <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
-            <AsyncView atom={servicesData}>
-                {servicesData?.data?.items && (
-                    <YStack alignItems="center" justifyContent="center">
-                        <Cpu color="var(--color7)" size={48} strokeWidth={1.75} />
-                        <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
-                            {totalCPU.toFixed(2)} %
-                        </Text>
-                    </YStack>
-                )}
-            </AsyncView>
-        </YStack>
+        <DashboardCard title={title} id={id}>
+            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
+                <AsyncView atom={servicesData}>
+                    {servicesData?.data?.items && (
+                        <YStack alignItems="center" justifyContent="center">
+                            <Cpu color="var(--color7)" size={48} strokeWidth={1.75} />
+                            <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
+                                {totalCPU.toFixed(2)} %
+                            </Text>
+                        </YStack>
+                    )}
+                </AsyncView>
+            </YStack>
+        </DashboardCard>
     );
 };

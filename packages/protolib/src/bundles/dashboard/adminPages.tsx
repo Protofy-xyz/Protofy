@@ -20,9 +20,9 @@ const isProtected = Protofy("protected", false)
 
 
 const itemsContent = [
-    { key: 'a', content: <DashboardCard title="Memory Usage" id={'a'}><ServiceMemoryUsageChart /></DashboardCard> },
-    { key: 'b', content: <DashboardCard title='Total Memory Usage' id={'b'}><TotalMemoryUsage /></DashboardCard> },
-    { key: 'c', content: <DashboardCard title='Total CPU Usage' id={'c'}><TotalCPUUsage /></DashboardCard> },
+    { key: 'a', content: <ServiceMemoryUsageChart title="Memory Usage" id={'a'}/>},
+    { key: 'b', content: <TotalMemoryUsage title='Total Memory Usage' id={'b'}/>},
+    { key: 'c', content: <TotalCPUUsage title='Total CPU Usage' id={'c'}/>},
     //     { key: 'f', content: <DashboardCard title='Box C' id={'d'}>
     //     <Text style={{ flex: 1, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
     //         <Image url="/images/protofito.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
