@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 import { getPendingResult } from 'protobase';
 import { usePendingEffect } from '../../lib/usePendingEffect';
 import { SSR } from '../../lib/SSR';
-import { ServiceMemoryUsageChart } from '../services/widgets';
+import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage } from '../services/widgets';
 
 const sourceUrl = '/adminapi/v1/dashboard'
 const workspacesSourceUrl = '/adminapi/v1/workspaces'
@@ -20,45 +20,33 @@ const isProtected = Protofy("protected", false)
 
 
 const itemsContent = [
-    { key: 'a', content: <DashboardCard id={'a'}><ServiceMemoryUsageChart /></DashboardCard> },
-    { key: 'b', content: <DashboardCard title='Box B' id={'b'}><Text>Content B</Text></DashboardCard> },
-    { key: 'c', content: 
-            <DashboardCard title='Box C' id={'c'}>
-                <Text style={{ flex: 1, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Image url="/images/protofito.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                </Text>
-            </DashboardCard> },
-    { key: 'd', content: <DashboardCard id={'d'}><Text>Content D</Text></DashboardCard> },
-    { key: 'e', content: <DashboardCard id={'e'}><Text>Content E</Text></DashboardCard> },
-    { key: 'f', content: <DashboardCard id={'f'}><Text>Content F</Text></DashboardCard> },
-  ];
+    { key: 'a', content: <DashboardCard title="Memory Usage" id={'a'}><ServiceMemoryUsageChart /></DashboardCard> },
+    { key: 'b', content: <DashboardCard title='Total Memory Usage' id={'b'}><TotalMemoryUsage /></DashboardCard> },
+    { key: 'c', content: <DashboardCard title='Total CPU Usage' id={'c'}><TotalCPUUsage /></DashboardCard> },
+    //     { key: 'f', content: <DashboardCard title='Box C' id={'d'}>
+    //     <Text style={{ flex: 1, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    //         <Image url="/images/protofito.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+    //     </Text>
+    // </DashboardCard>},
+];
 
 const layouts = {
     lg: [
-      { i: 'a', x: 0, y: 0, w: 4, h: 15 },
-      { i: 'b', x: 12, y: 0, w: 2, h: 2 },
-      { i: 'c', x: 14, y: 0, w: 2, h: 5 },
-      { i: 'd', x: 20, y: 0, w: 5, h: 2 },
-      { i: 'e', x: 30, y: 0, w: 2, h: 2 },
-      { i: 'f', x: 50, y: 0, w: 2, h: 5 },
+        { i: 'a', x: 0, y: 0, w: 6, h: 12, isResizable: false },
+        { i: 'b', x: 6, y: 0, w: 3, h: 6, isResizable: false },
+        { i: 'c', x: 6, y: 3, w: 3, h: 6, isResizable: false },
     ],
     md: [
-      { i: 'a', x: 0, y: 0, w: 4, h: 2 },
-      { i: 'b', x: 4, y: 0, w: 4, h: 2 },
-      { i: 'c', x: 0, y: 2, w: 4, h: 5 },
-      { i: 'd', x: 4, y: 2, w: 4, h: 2 },
-      { i: 'e', x: 0, y: 7, w: 4, h: 2 },
-      { i: 'f', x: 4, y: 7, w: 4, h: 5 },
+        { i: 'a', x: 0, y: 0, w: 6, h: 12, isResizable: false },
+        { i: 'b', x: 6, y: 0, w: 3, h: 4, isResizable: false },
+        { i: 'c', x: 0, y: 2, w: 4, h: 5, isResizable: false },
     ],
     sm: [
-      { i: 'a', x: 0, y: 0, w: 2, h: 2 },
-      { i: 'b', x: 2, y: 0, w: 2, h: 2 },
-      { i: 'c', x: 0, y: 2, w: 2, h: 5 },
-      { i: 'd', x: 2, y: 2, w: 2, h: 2 },
-      { i: 'e', x: 0, y: 7, w: 2, h: 2 },
-      { i: 'f', x: 2, y: 7, w: 2, h: 5 },
+        { i: 'a', x: 0, y: 0, w: 6, h: 12, isResizable: false },
+        { i: 'b', x: 6, y: 0, w: 3, h: 4, isResizable: false },
+        { i: 'c', x: 0, y: 2, w: 2, h: 5, isResizable: false },
     ],
-  };
+};
 
 
 export default {
@@ -68,7 +56,7 @@ export default {
             usePendingEffect((s) => { API.get(workspacesSourceUrl, s) }, setWorkspaces, extraData?.workspaces)
             return (<AdminPage title="Dashboard" pageSession={pageSession}>
                 <YStack flex={1} padding={20}>
-                    <DashboardGrid items={itemsContent} layouts={layouts} borderRadius={10} padding={10} backgroundColor="white"/>
+                    <DashboardGrid items={itemsContent} layouts={layouts} borderRadius={10} padding={10} backgroundColor="white" />
                 </YStack>
             </AdminPage>)
         },
