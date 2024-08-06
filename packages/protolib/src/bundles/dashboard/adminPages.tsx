@@ -1,6 +1,7 @@
 import { AdminPage } from '../../components/AdminPage';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { DashboardCard } from '../../components/DashboardCard';
+import { Image } from '../../components/Image';
 import { withSession } from '../../lib/Session';
 import { XStack, YStack, Text } from '@my/ui';
 import 'react-grid-layout/css/styles.css';
@@ -18,7 +19,12 @@ const isProtected = Protofy("protected", false)
 const itemsContent = [
     { key: 'a', content: <DashboardCard title='Box A' id={'a'}><Text>Content A</Text></DashboardCard> },
     { key: 'b', content: <DashboardCard title='Box B' id={'b'}><Text>Content B</Text></DashboardCard> },
-    { key: 'c', content: <DashboardCard title='Box C' id={'c'}><Text>Content C</Text></DashboardCard> },
+    { key: 'c', content: 
+            <DashboardCard title='Box C' id={'c'}>
+                <Text style={{ flex: 1, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Image url="/images/protofito.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                </Text>
+            </DashboardCard> },
     { key: 'd', content: <DashboardCard id={'d'}><Text>Content D</Text></DashboardCard> },
     { key: 'e', content: <DashboardCard id={'e'}><Text>Content E</Text></DashboardCard> },
     { key: 'f', content: <DashboardCard id={'f'}><Text>Content F</Text></DashboardCard> },

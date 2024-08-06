@@ -19,6 +19,7 @@ export const DashboardCard = ({ children, id, title, titleProps = {}, containerP
                 backgroundColor="$bgPanel"
                 flex={1}
                 {...containerProps}
+                style={{ overflow: 'hidden' }} 
             >
                 {title?<XStack
                     w="100%"
@@ -33,6 +34,7 @@ export const DashboardCard = ({ children, id, title, titleProps = {}, containerP
                     {title}
                 </XStack>:<></>}
                 <XStack
+                flex={1}
                 padding={15}>
                     {children}
                 </XStack>
