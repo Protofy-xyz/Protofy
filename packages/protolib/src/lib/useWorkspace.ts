@@ -2,7 +2,8 @@ import { AppConfContext, SiteConfigType } from "../providers/AppConf"
 import { useUserSettings, useWorkspaces } from "./Session"
 import { useContext } from 'react'
 
-export const useWorkspace = ({pages}:{pages?:string[]}) => {
+export const useWorkspace = (props?:{pages?:string[]}) => {
+    const {pages} = props ?? {}
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
     const { workspaces } = SiteConfig.bundles
     const [settings] = useUserSettings()
