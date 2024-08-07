@@ -1,3 +1,0 @@
-#/bin/bash
-source ./helpers/get-envs
-$DOCKER_COMPOSE_CMD -p protofy stop

@@ -1,4 +1,0 @@
-#!/bin/bash
-./init
-./build
-./dev-fast
