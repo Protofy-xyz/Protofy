@@ -1,5 +1,0 @@
-#!/bin/bash
-source ./helpers/get-envs
-./init
-./build
-$DOCKER_COMPOSE_CMD -f package.yml up

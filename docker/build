@@ -1,3 +1,0 @@
-#!/bin/bash
-source ./helpers/get-envs
-docker build -t protofy/workspace . && $DOCKER_COMPOSE_CMD -f build.yml up
