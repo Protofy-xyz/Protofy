@@ -12,6 +12,7 @@ import { LogPanel } from './LogPanel'
 import { API } from 'protobase'
 import useSubscription from '../lib/mqtt/useSubscription'
 import { AppConfContext, SiteConfigType } from "../providers/AppConf"
+import { useWorkspace } from '../lib/useWorkspace';
 
 const WorkspaceSelector = () => {
   const workspaces = useWorkspaces()
@@ -41,15 +42,12 @@ export const RightPanelAtom = atom(20)
 
 
 export const AdminPanel = ({ children }) => {
-  const [settings] = useUserSettings()
   const userSpaces = useWorkspaces()
   const [appState, setAppState] = useAtom(AppState)
   const SiteConfig = useContext<SiteConfigType>(AppConfContext);
-  const { workspaces } = SiteConfig.bundles
   const { PanelLayout} = SiteConfig.layout
 
   const [rightPanelSize, setRightPanelSize] = useAtom(RightPanelAtom)
-  const currentWorkspace = settings && settings.workspace ? settings.workspace : userSpaces[0]
 
   const {message} = useSubscription('notifications/page/#')
 
@@ -78,15 +76,19 @@ export const AdminPanel = ({ children }) => {
     }
   }, [rightPanelSize])
 
-
-
-  const workspaceData = typeof workspaces[currentWorkspace] === 'function' ? workspaces[currentWorkspace]({ pages: pages ?? [] }) : workspaces[currentWorkspace]
+  const workspaceData = useWorkspace({pages: pages})
   const settingsLogs = workspaceData?.logs
   const settingsLogsEnabled = settingsLogs === undefined ? true : settingsLogs
 
   // console.log('userSpaces: ', userSpaces, 'current Workspace: ', currentWorkspace)
-  return rightPanelSize && <MainPanel borderLess={true} rightPanelSize={rightPanelSize} setRightPanelSize={setRightPanelSize} rightPanelStyle={{ marginRight: '20px', height: 'calc(100vh - 85px)', marginTop: '68px', backgroundColor: 'transparent' }} rightPanelVisible={settingsLogsEnabled && appState.logsPanelOpened} rightPanelResizable={true} centerPanelContent={workspaces[currentWorkspace]
-    ? <PanelLayout
+  return rightPanelSize && <MainPanel 
+  borderLess={true} 
+  rightPanelSize={rightPanelSize} 
+  setRightPanelSize={setRightPanelSize} 
+  rightPanelStyle={{ marginRight: '20px', height: 'calc(100vh - 85px)', marginTop: '68px', backgroundColor: 'transparent' }} 
+  rightPanelVisible={settingsLogsEnabled && appState.logsPanelOpened} 
+  rightPanelResizable={true} 
+  centerPanelContent={workspaceData && <PanelLayout
       topBar={
         <>
           <XStack ai="center">
@@ -101,6 +103,5 @@ export const AdminPanel = ({ children }) => {
         {children}
       </XStack>
     </PanelLayout>
-    : <></>
   } rightPanelContent={settingsLogsEnabled ? <LogPanel AppState={AppState} /> : null} />
 }
