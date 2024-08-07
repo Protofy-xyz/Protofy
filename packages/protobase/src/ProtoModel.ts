@@ -142,8 +142,15 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.data[this.idField]
     }
 
-    getNotificationsTopic(action: string): string {
+    getNotificationsTopic(action?: string | undefined): string {
+        if (!action) {
+            return `notifications/${this.getModelName()}/#`
+        }
         return `notifications/${this.getModelName()}/${action}/${this.getId()}`
+    }
+
+    static getNotificationsTopic(): string {
+        return this._newInstance({}).getNotificationsTopic()
     }
 
     getNotificationsPayload() {

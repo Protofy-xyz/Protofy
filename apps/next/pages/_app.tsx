@@ -13,6 +13,7 @@ import 'protolib/styles/styles.css';
 import '../chat.css'
 import '../map.css'
 import '../chonky.css'
+import '../dashboard.css'
 import "@blueprintjs/table/lib/css/table.css";
 import '../blueprint.css'
 import 'react-dropzone-uploader/dist/styles.css'

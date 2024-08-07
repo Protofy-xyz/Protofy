@@ -1,0 +1,8 @@
+.react-grid-placeholder {
+    border: 2px dashed var(--color10) !important; /* Cambia el color y estilo del borde */
+    background-color: var(--color7) !important;
+}
+.react-grid-item > .react-resizable-handle::after {
+    border-right: 2px solid var(--color6) !important;
+    border-bottom: 2px solid var(--color6) !important;
+}
