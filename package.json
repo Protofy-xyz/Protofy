@@ -43,7 +43,7 @@
     "test:e2egen": "NODE_ENV=development npx playwright codegen",
     "test:protolib": "FORCE_COLOR=1 yarn workspace protolib test",
     "create-environment": "node copy.js",
-    "sync-setup": "git remote add upstream git@github.com:Protofy-xyz/Protofy-internal.git",
+    "sync-setup": "git remote add upstream git@github.com:Protofy-xyz/Protofy.git",
     "sync": "git fetch upstream && git merge upstream/main",
     "fix": "manypkg fix",
     "check-deps": "check-dependency-version-consistency .",
