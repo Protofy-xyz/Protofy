@@ -30,11 +30,9 @@ function main() {
         switch (arg) {
             case '--prod':
                 PROD = true;
-                arg.shift();
                 break;
             case '--service':
                 SERVICE = true;
-                arg.shift();
                 break
         }
     });
@@ -52,7 +50,7 @@ function main() {
             stop()
             break;
         case 'add-user':
-            const addUser_args = [...args].reduce((total, arg) => total += (arg + " "), "").trim();
+            const addUser_args = args.join(" ").trim();
             addUser(addUser_args)
             break;
     }
@@ -66,7 +64,7 @@ function start(isProd = false, isService = false) {
     let startCommand = `${docker_compose_cmd} -p protofy ${getComposeFiles(isProd)} up`;
     if (isService) {
         console.log('Service mode enabled.');
-        startCommand = `${startCommand} -d`; // Run in detached mode and show logs in a separate process
+        startCommand += " -d"; // Run in detached mode and show logs in a separate process
     }
     console.log('startCommand: ', startCommand);
     execSync(startCommand);
