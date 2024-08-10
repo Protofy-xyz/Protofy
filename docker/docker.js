@@ -13,6 +13,8 @@ function main() {
     let PROD = false;
     let SERVICE = false;
     let COMMAND = null;
+    let SINGLE = true
+    let FULLDEV = false
     // The command should be the first argument
     if (args.length > 0) {
         const firstArg = args[0];
@@ -28,11 +30,17 @@ function main() {
     // Parse flags
     args.forEach(arg => {
         switch (arg) {
+            case '--fulldev':
+                FULLDEV = true;
+                break;
             case '--prod':
                 PROD = true;
                 break;
             case '--service':
                 SERVICE = true;
+                break
+            case '--multi':
+                SINGLE = false;
                 break
         }
     });
@@ -44,7 +52,7 @@ function main() {
             build(PROD);
             break;
         case 'start':
-            start(PROD, SERVICE);
+            start(SINGLE, FULLDEV, PROD, SERVICE);
             break;
         case 'stop':
             stop()
@@ -57,11 +65,10 @@ function main() {
 
 }
 
-
 // MAIN PROCESSES
-function start(isProd = false, isService = false) {
+function start(single = true, fullDev = false, isProd = false, isService = false) {
     console.log('Running start command...');
-    let startCommand = `${docker_compose_cmd} -p protofy ${getComposeFiles(isProd)} up`;
+    let startCommand = `${docker_compose_cmd} -p protofy ${getComposeFiles(single, fullDev, isProd)} up`;
     if (isService) {
         console.log('Service mode enabled.');
         startCommand += " -d"; // Run in detached mode and show logs in a separate process
@@ -106,8 +113,10 @@ function build(isProd = false) {
         if (!volumeExists(MODULES_VOLUME_NAME)) createDockerVolume(MODULES_VOLUME_NAME)
         if (!volumeExists(NEXT_VOLUME_NAME)) createDockerVolume(NEXT_VOLUME_NAME)
         try {
-            const buildDevCmd = `docker build -t protofy/workspace . && ${docker_compose_cmd} -f build.yml up`
+            const buildDevCmd = `docker build -t protofy/workspace .`
             runCommand(buildDevCmd);
+            const buildDevCmd2 = `${docker_compose_cmd} -f build.yml up`
+            runCommand(buildDevCmd2);
             return true;
         } catch (error) {
             console.error('Could not generate development build')
@@ -162,7 +171,13 @@ function getEnabledServices() {
     return enabledServices
 }
 
-function getComposeFiles(isProd = false) {
+function getComposeFiles(single = true, fullDev = false,isProd = false) {
+    if (single) {
+        let str = '-f docker-compose.yml ';
+        if(fullDev) str += '-f docker-compose.dev.yml ';
+        return str.trim()
+    }
+    
     const enabledServices = getEnabledServices();
     const aplicationsDir = path.join(__dirname, '..', 'apps');
     let composeFiles = enabledServices.reduce((total, service, index) => {
