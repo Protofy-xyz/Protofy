@@ -1,6 +1,7 @@
 import { Protofy } from "protobase";
 import { generateEvent } from "protolib/bundles/events/eventsLibrary";
 import { getServiceToken } from "protonode";
+import { assign } from "protolib/bundles/stateMachines/handlers";
 
 export default Protofy("machineDefinition", {
     context: {
