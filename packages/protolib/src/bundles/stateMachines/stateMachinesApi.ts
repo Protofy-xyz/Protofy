@@ -148,7 +148,8 @@ export const StateMachinesAPI = (app, context) => {
         overridedFunctionKeys.forEach(funcKey => {
             const oldFunction = modifiedState[funcKey]
             modifiedState[funcKey] = () => oldFunction({ // params for definition state functions
-              instanceName: name 
+              instanceName: name, 
+              context: context
             })
         })
 
