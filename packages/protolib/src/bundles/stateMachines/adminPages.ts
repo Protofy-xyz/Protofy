@@ -1,5 +1,5 @@
 import stateMachineDefinitionPage from "./stateMachineDefinitions/stateMachineDefinitionPage"
-import stateMachinePage from "./stateMachinePage"
+import stateMachinePage from "./stateMachines/stateMachinePage"
 
 export default {
     "stateMachineDefinitions/**": stateMachineDefinitionPage,

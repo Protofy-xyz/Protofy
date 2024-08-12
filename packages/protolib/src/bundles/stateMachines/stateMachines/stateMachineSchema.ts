@@ -1,5 +1,5 @@
 import { AutoModel, Schema, z } from 'protobase'
-import { StateMachineDefinitionModel } from './stateMachineDefinitions/stateMachineDefinitionSchema';
+import { StateMachineDefinitionModel } from '../stateMachineDefinitions/stateMachineDefinitionSchema';
 
 export const StateMachineSchema = Schema.object({
     name: Schema.string().id().static(),
