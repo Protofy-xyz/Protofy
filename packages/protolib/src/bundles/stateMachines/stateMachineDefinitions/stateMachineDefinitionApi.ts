@@ -5,20 +5,21 @@ import * as fspath from 'path';
 import { API } from 'protobase'
 import { StateMachineDefinitionModel } from "./stateMachineDefinitionSchema";
 import { getServiceToken } from '../../apis/context';
+import { params, paramsHandlers } from '../handlers';
 
 const StateMachineDefinitionsDir = (root) => fspath.join(root, "/packages/app/bundles/custom/stateMachines/")
 const StateMachineDefinitionsIndex = fspath.join(StateMachineDefinitionsDir(getRoot()), 'index.ts')
 
 const getStateMachine = (fsmPath, req) => {
     const sourceFile = getSourceFile(fspath.join(StateMachineDefinitionsDir(getRoot(req)), fsmPath))
-    const machineDefinitionCode = getDefinition(sourceFile, '"machineDefinition"').getText()
-    const machineDefinitionParser = new Function("return " + machineDefinitionCode)
-    const {on, ...machineDefinition} = machineDefinitionParser()
-    
+    const machineDefinitionCode = "return " + getDefinition(sourceFile, '"machineDefinition"').getText()
+    const machineDefinitionParser = new Function(...params, machineDefinitionCode)
+    const { on, ...machineDefinition } = machineDefinitionParser(...paramsHandlers)
+
     return {
         name: fsmPath.replace(/\.[^/.]+$/, ""), //remove extension
         ...{
-            ...machineDefinition, 
+            ...machineDefinition,
             states: Object.keys(machineDefinition.states)
         }
     }
@@ -61,7 +62,7 @@ const getDB = (path, req, session) => {
                 machineName: value.name ?? "defaultName",
                 machineContext: JSON.stringify(value.context ?? {}, null, 4),
                 machineStates: value.states,
-                machineInitialState: value.states.length ? value.states[0] : "", 
+                machineInitialState: value.states.length ? value.states[0] : "",
                 machineTransitions: JSON.stringify(value.transitions ?? {}, null, 4)
             }
 
@@ -73,7 +74,7 @@ const getDB = (path, req, session) => {
                 const machineName = fspath.basename(value.name)
                 // create machine file with template
                 const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-                    name: machineName+".ts",
+                    name: machineName + ".ts",
                     data: {
                         options: {
                             template: `/packages/protolib/src/bundles/stateMachines/templates/${template}.tpl`,
@@ -91,7 +92,7 @@ const getDB = (path, req, session) => {
                     throw result.error
                 }
 
-                linkToIndex(StateMachineDefinitionsIndex, value.name, "./"+machineName)
+                linkToIndex(StateMachineDefinitionsIndex, value.name, "./" + machineName)
             }
         },
 
