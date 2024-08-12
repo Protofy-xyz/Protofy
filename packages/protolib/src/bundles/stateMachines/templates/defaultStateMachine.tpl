@@ -2,6 +2,18 @@ import { Protofy } from 'protobase'
 import { generateEvent } from "protolib/bundles/events/eventsLibrary";
 import { getServiceToken } from "protonode";
 
+/*
+    Generated State Machine definition from
+    template. State Machines bundle supports  
+    XState createMachine function object syntax, 
+    look at `https://www.jsdocs.io/package/xstate#createMachine`
+    
+    Each `params` is an object with the 
+    following keys. 
+      - instanceName: name of the spawned machine based in definition
+      - context: all api context functions
+*/ 
+
 export default Protofy("machineDefinition", {
   context: {{{machineContext}}}, 
   initial: "{{machineInitialState}}", 
@@ -25,6 +37,7 @@ export default Protofy("machineDefinition", {
       }
     }, 
   {{/each}}
-  }
+  },
+  on: {}
 })
 
