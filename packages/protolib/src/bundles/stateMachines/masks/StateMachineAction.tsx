@@ -45,7 +45,7 @@ export default {
     getInitialData: () => {
         return {
             await: true,
-            to: 'context.sm.spawnStateMachine',
+            to: 'context.sm.emitToStateMachine',
             "mask-instanceName": {
               value: "",
               kind: "StringLiteral"
