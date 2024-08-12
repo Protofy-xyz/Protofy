@@ -7,13 +7,18 @@ import { ExternalLink, Link, FileBox } from '@tamagui/lucide-icons'
 import { PaginatedDataSSR } from '../../../lib/SSR'
 import { JSONViewer } from 'protolib/src/components/jsonui'
 import { Chip } from 'protolib/src/components/Chip'
+import { useRedirectToEnviron } from 'protolib/src/lib/useRedirectToEnviron'
+import { useWorkspaceUrl } from 'protolib/src/lib/useWorkspaceEnv'
 
 
 const sourceUrl = '/api/v1/statemachines'
 export default {
   component: ({ pageState, initialItems, pageSession, extraData }: any) => {
+    useRedirectToEnviron()
+    const getWorkspaceUrl = useWorkspaceUrl()
     return (<AdminPage title="State Machines" pageSession={pageSession}>
       <DataView
+        URLTransform={getWorkspaceUrl}
         rowIcon={FileBox}
         enableAddToInitialData
         sourceUrl={sourceUrl}
@@ -40,3 +45,4 @@ export default {
   },
   getServerSideProps: PaginatedDataSSR(sourceUrl, ['admin'])
 }
+
