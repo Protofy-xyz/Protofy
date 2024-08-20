@@ -47,23 +47,15 @@ export const isDataPortConnected = (id, port, edges) => edges.find(e => e.target
 
 export const headerSize = 55;
 
-export const DeleteButton = ({ id, left = false, field }) => {
-    const useFlowsStore = useContext(FlowStoreContext)
-    const deletePropNodeData = useFlowsStore(state => state.deletePropNodeData)
-    const nodeFontSize = useTheme('nodeFontSize')
-    const colorError = useTheme('colorError')
-    const onDeleteParam = () => {
-        deletePropNodeData(id, field);
-    }
-
-    return <div id={'deleteButton-' + id + field} style={{ display: 'flex', alignSelf: 'center', cursor: 'pointer' }} onClick={onDeleteParam}>
+export const DeleteButton = ({ id, left = false, field, onDelete, size = 20, color = "#EF4444" }) => {
+    return <div id={'deleteButton-' + id + field} style={{ display: 'flex', alignSelf: 'center', cursor: 'pointer' }} onClick={onDelete}>
         {/* @ts-ignore */}
-        <X size={nodeFontSize} color={colorError} style={{ marginRight: left ? '7px' : '2px' }} />
+        <X size={size} color={color} style={{ marginRight: left ? '7px' : '2px' }} />
     </div>
 }
 
 
-export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlur, field, children, style = {}, editing = false, options=[]}: any) => {
+export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlur, field, children, style = {}, editing = false, options = [] }: any) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const { setNodes } = useProtoflow()
@@ -382,8 +374,13 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
     const handleBorderColor = useTheme("handleBorderColor");
     const dataOutputColor = useTheme('dataOutputColor');
     const dataPort = useTheme("dataPort");
+    const colorError = useTheme("colorError");
 
     const ref = React.useRef()
+
+    const onDeleteParam = () => {
+        deletePropNodeData(id, param.field);
+    }
 
     return (
         <div style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', zIndex: param.type == 'select' || param.type == 'colorPicker' ? 1100 : 0, flexDirection: "column" }}>
@@ -391,12 +388,12 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 !isDefaultCase ?
                     <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
                         <div className={"handleKey"} ref={textBoxRef} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 2 }}>
-                            {(param?.deleteable && isDeletedLeft) ? <DeleteButton id={id} left={true} field={param.field} /> : null}
+                            {(param?.deleteable && isDeletedLeft) ? <DeleteButton color={colorError} size={nodeFontSize} onDelete={onDeleteParam} id={id} left={true} field={param.field} /> : null}
                             {getValue()}
                         </div>
                         <div className={"handleValue"} title={param.description} style={{ minWidth: '180px', marginRight: '10px', display: 'flex', flexDirection: 'row', justifyContent: param.type == 'boolean' ? 'flex-end' : '', alignItems: 'center', flex: 3 }}>
                             {getInput(isConnected)}
-                            {(param?.deleteable && !isDeletedLeft) ? <DeleteButton id={id} field={param.field} /> : null}
+                            {(param?.deleteable && !isDeletedLeft) ? <DeleteButton color={colorError} size={nodeFontSize} onDelete={onDeleteParam} id={id} field={param.field} /> : null}
                         </div>
                     </div>
                     : null
