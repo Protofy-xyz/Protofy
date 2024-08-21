@@ -111,6 +111,7 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   const tint = useTint().tint
   const SiteConfig = useContext<SiteConfigType>(AppConfContext);
   const { getFlowsCustomComponents } = SiteConfig.bundles.masks
+  const { getFlowsCustomSnippets } = SiteConfig.bundles.snippets
 
   const [promptResponse, setPromptResponse] = usePrompt(
     (prompt, total, image) => {
@@ -200,6 +201,7 @@ If you include anything else in your message (like reasonings or natural languag
       {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={newFileContent ? newFileContent : sourceCode.current} onChange={(code) => { sourceCode.current = code }} /> : <Flows
         isModified={isModified}
         customComponents={getFlowsCustomComponents(pathname, query)}
+        customSnippets={getFlowsCustomSnippets(pathname, query)}
         onEdit={(code) => { sourceCode.current = code }}
         setIsModified={setIsModified}
         setSourceCode={(sourceCode) => {

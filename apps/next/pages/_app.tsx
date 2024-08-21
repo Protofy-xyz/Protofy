@@ -38,6 +38,7 @@ import { Connector } from 'protolib/lib/mqtt'
 import { Toast, YStack } from '@my/ui'
 import { SiteConfig } from 'app/conf'
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
+import { getFlowsCustomSnippets } from "app/bundles/snippets"
 import { palettes } from 'app/bundles/palettes'
 import Workspaces from 'app/bundles/workspaces'
 import { PanelLayout } from 'app/layout/PanelLayout'
@@ -89,6 +90,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
               ...AppConfig,
               bundles: {
                 masks: { getFlowMasks, getFlowsCustomComponents },
+                snippets: { getFlowsCustomSnippets },
                 palettes,
                 workspaces: Workspaces,
               },

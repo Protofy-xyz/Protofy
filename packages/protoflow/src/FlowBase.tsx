@@ -30,6 +30,13 @@ interface customComponentInterface {
     check: Function,
     getComponent: Function
 }
+interface customSnippetsInterface {
+    code: string,
+    name: string,
+    category?: string,
+    keywords?: string[]
+}
+
 interface FlowProps {
     disableMiniMap?: boolean,
     disableControls?: boolean,
@@ -46,6 +53,7 @@ interface FlowProps {
     getFirstNode?: any,
     layout?: Function,
     customComponents?: customComponentInterface[],
+    customSnippets?: customSnippetsInterface[],
     hideBaseComponents?: boolean,
     topics?: any,
     flowId?: string,
@@ -84,6 +92,7 @@ const FlowsBase = ({
     disableStart = false,
     getFirstNode = (nodes) => nodes.find(n => n.id && n.id.startsWith('SourceFile')),
     customComponents = [],
+    customSnippets = [],
     hideBaseComponents = false,
     positions,
     autoFitView,
@@ -154,12 +163,7 @@ const FlowsBase = ({
     const reload = async () => {
         clearNodesData()
         const { nodes, edges, nodeDataTable } = await readSourceFile()
-        setNodesData(nodeDataTable)
-        setPrevNodeData(deleteAdditionalKeys(nodeDataTable))
-        setNodes(nodes)
-        setEdges(edges)
-        setInitialEdges(edges) //save original edges before deleting unconnected edges. 
-        setInitialNodes(nodes)
+        setsAll(nodeDataTable, nodes, edges)
     }
 
     const prepare = (sourceCode) => {
@@ -182,7 +186,7 @@ const FlowsBase = ({
 
     const _getFirstNode = mode == 'json' ? (nodes) => nodes.find(n => n.id && n.id.startsWith('ObjectLiteralExpression')) : getFirstNode
 
-    const readSourceFile = async () => {
+    const readSourceFile = async (src = sourceCode, isDisableStart = disableStart) => {
         const project = new Project({
             useInMemoryFileSystem: true,
             manipulationSettings: { indentationText: IndentationText.Tab },
@@ -192,7 +196,7 @@ const FlowsBase = ({
                 languageVariant: LanguageVariant.JSX
             },
         })
-        let source = project.createSourceFile('_temp1.tsx', prepare(sourceCode), { overwrite: true })
+        let source = project.createSourceFile('_temp1.tsx', prepare(src), { overwrite: true })
 
         if (mode == 'json') {
             //@ts-ignore
@@ -247,7 +251,7 @@ const FlowsBase = ({
                     if (customComponent?.nonDeletable) deletable = false
                 }
 
-                if ((!flowNodeType.isShadow || !flowNodeType.isShadow(node, _data, mode, edges)) && (!flowNodeType.checkCreate || flowNodeType.checkCreate(node, _data)) && (node.getKindName() != 'SourceFile' || !disableStart)) {
+                if ((!flowNodeType.isShadow || !flowNodeType.isShadow(node, _data, mode, edges)) && (!flowNodeType.checkCreate || flowNodeType.checkCreate(node, _data)) && (node.getKindName() != 'SourceFile' || !isDisableStart)) {
                     let newNodes = createNode([0, 0], node.getKindName(), getId(node), null, node.getKindName() != 'SourceFile' && deletable, edges, nodeDataTable[getId(node)])
                     // if (flowNodeType.getSize) {
                     //     newNodes = flowNodeType.getSize(newNodes, node, nodeDataTable[getId(node)])
@@ -658,6 +662,27 @@ const FlowsBase = ({
         return validateCode(code, mode)
     }
 
+    const onAddSnippet = async (snippet, edg) => {
+        const { nodes: smNodes, nodeDataTable, edges: smEdges } = await readSourceFile(snippet?.code, true)
+        const index = smEdges.findIndex(v => v.target.startsWith('SourceFile'))
+
+        smEdges[index] = {
+            ...smEdges[index],
+            target: edg.target,
+            targetHandle: edg.targetHandle
+        }
+        setsAll({ ...nodeDataTable, ...nodeData }, [...smNodes, ...nodes], [...smEdges, ...edges])
+    }
+
+    const setsAll = (data, nds, edgs) => {
+        setNodesData(data)
+        setPrevNodeData(deleteAdditionalKeys(data))
+        setNodes(nds)
+        setEdges(edgs)
+        setInitialEdges(edgs) //save original edges before deleting unconnected edges. 
+        setInitialNodes(nds)
+    }
+
     const onGraphChanged = async () => {
         try {
             //restore components before dump
@@ -837,6 +862,7 @@ const FlowsBase = ({
                             setEdges={setEdges}
                             setNodeData={setNodeData}
                             nodeData={nodeData}
+                            onAddSnippet={onAddSnippet}
                             style={{
                                 position: 'absolute',
                                 top: '0px',
@@ -844,6 +870,7 @@ const FlowsBase = ({
                             }}
                             hideBaseComponents={hideBaseComponents}
                             customComponents={_customComponents}
+                            customSnippets={customSnippets}
                             onAddNode={(node, newEdge, initialData) => actionPublisher('add-node', { node, newEdge, initialData })}
                         /> : <></>
                 }

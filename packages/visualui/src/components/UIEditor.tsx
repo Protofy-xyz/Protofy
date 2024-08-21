@@ -29,6 +29,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
 
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
     const {getFlowsCustomComponents, getFlowMasks} = SiteConfig.bundles.masks
+    const {getFlowsCustomSnippets} = SiteConfig.bundles.snippets
 
     const codeRef = useRef("")
     const flowsData = useRef({})
@@ -214,6 +215,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             sourceCode={currentPageContent}
                             setSourceCode={setCurrentPageContent}
                             customComponents={getFlowsCustomComponents(pathname, query)}
+                            customSnippets={getFlowsCustomSnippets(pathname, query)}
                             onSave={(code, _, data) => onEditorSave(code, data)}
                             config={{ masks: getFlowMasks(pathname, query) }}
                             zoomOnDoubleClick={!isViewModePreview}

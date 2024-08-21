@@ -39,6 +39,7 @@ export default {
     const pathname = usePathname();
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
     const {getFlowsCustomComponents, getFlowMasks} = SiteConfig.bundles.masks
+    const { getFlowsCustomSnippets } = SiteConfig.bundles.snippets
 
     const query = Object.fromEntries(searchParams.entries());
 
@@ -66,6 +67,7 @@ export default {
             }
             layout={layout}
             customComponents={getFlowsCustomComponents(pathname, query)}
+            customSnippets={getFlowsCustomSnippets(pathname, query)}
             bridgeNode={false}
             setSourceCode={(sourceCode) => {
               console.log('set new sourcecode from flows: ', sourceCode)

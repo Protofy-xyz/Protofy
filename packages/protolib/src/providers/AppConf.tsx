@@ -29,6 +29,9 @@ export type SiteConfigType = {
             getFlowsCustomComponents: (path: string, queryParams: {}) => any[],
             getFlowMasks: (path: string, queryParams: {}) => any[]
         },
+        snippets: {
+            getFlowsCustomSnippets: (path: string, queryParams: {}) => any[]
+        },
         palettes: any,
         workspaces: any
     },
@@ -52,6 +55,9 @@ export const AppConfContext = createContext<SiteConfigType>({
         masks: {
             getFlowsCustomComponents: (path: string, queryParams: {}) => [],
             getFlowMasks: (path: string, queryParams: {}) => []
+        },
+        snippets: {
+            getFlowsCustomSnippets: (path: string, queryParams: {}) => []
         },
         palettes: {},
         workspaces: {}

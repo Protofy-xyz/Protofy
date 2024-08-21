@@ -35,6 +35,7 @@ import { Connector } from 'protolib/lib/mqtt'
 import { palettes } from 'app/bundles/palettes'
 import Workspaces from 'app/bundles/workspaces'
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
+import { getFlowsCustomSnippets } from "app/bundles/snippets"
 import { PanelLayout } from 'app/layout/PanelLayout'
 
 setConfig(getBaseConfig("electron", process))
@@ -80,6 +81,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
             <AppConfContext.Provider value={{
               ...AppConfig, bundles: {
                 masks: { getFlowMasks, getFlowsCustomComponents },
+                snippets: { getFlowsCustomSnippets },
                 palettes,
                 workspaces: Workspaces
               }, layout: { PanelLayout }

@@ -10,6 +10,7 @@ import useTheme, { usePrimaryColor } from './Theme';
 import { splitOpenerEdge } from '../lib/Edge';
 import { Search } from '@tamagui/lucide-icons'
 import { useProtoflow } from '../store/DiagramStore';
+import { generateBoxShadow } from '../lib/shadow';
 
 const menuWidth = 259
 const defMenuHeight = 500
@@ -64,10 +65,12 @@ const Menu = withTopics(({
     enabledNodes = ['*'],
     hideBaseComponents,
     customComponents = [],
+    customSnippets = [],
     diagramNodes,
     setNodeData,
     nodeData,
     edges,
+    onAddSnippet,
     takeSnapshot = () => null,
     reactFlowWrapper = null,
     topics,
@@ -136,9 +139,14 @@ const Menu = withTopics(({
         })
     }
     let customNodeList = _customComponents
+    let customSnippetsList = customSnippets
     if (searchValue) {
         customNodeList = _customComponents.filter(customN => {
             const customNodeKeyWords = [...(customN?.keywords ?? []), customN.id]
+            return isRelatedKeyWord(customNodeKeyWords)
+        })
+        customSnippetsList = customSnippets.filter(customM => {
+            const customNodeKeyWords = [...(customM?.keywords ?? []), customM.name]
             return isRelatedKeyWord(customNodeKeyWords)
         })
     }
@@ -175,6 +183,12 @@ const Menu = withTopics(({
     const groupByCategory = list.reduce((total, current) => {
         if (!total[current.category]) total[current.category] = []
         total[current.category].push(current)
+        return total
+    }, {})
+    const snippetsByCategory = customSnippetsList.reduce((total, current) => {
+        const moleculeCategory = current.category ?? 'customSnippets'
+        if (!total[moleculeCategory]) total[moleculeCategory] = []
+        total[moleculeCategory].push(current)
         return total
     }, {})
 
@@ -248,6 +262,12 @@ const Menu = withTopics(({
         }
         onEditDiagram(finalNodes, finalEdges, focusElement)
     }
+
+    const _onAddSnippet = (snippets) => {
+        onAddSnippet(snippets, menuOpener)
+        setMenu('closed')
+    }
+
     const handleTransform = useCallback((posX, posY, zoom) => {
         //setViewport({ x: posX, y: posY, zoom: zoom}, { duration: 500 });
     }, [setViewport]);
@@ -291,6 +311,8 @@ const Menu = withTopics(({
     const bgColor = useTheme("nodeBackgroundColor")
     const inputBorder = useTheme('inputBorder')
     const highlightInputBackgroundColor = useTheme("highlightInputBackgroundColor")
+    const tColor = useTheme('titleColor')
+    const primaryColor = usePrimaryColor()
 
     return (
         <Panel position='top-left'>
@@ -338,7 +360,35 @@ const Menu = withTopics(({
                             flexDirection: 'column',
                             paddingRight: scrollRef?.current?.scrollHeight > scrollRef?.current?.clientHeight ? '10px' : '0px'
                         }}>
-
+                        {Object.keys(snippetsByCategory).map((category, index) => {
+                            return <div key={index}>
+                                <Text
+                                    style={{
+                                        fontSize: '16px',
+                                        fontFamily: 'Jost-Medium',
+                                        marginLeft: '10px'
+                                    }}
+                                >
+                                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                                </Text>
+                                <div style={{ marginTop: '12px' }}>
+                                    {snippetsByCategory[category].map((molecule, index) => {
+                                        return <div 
+                                            onClick={() => _onAddSnippet(molecule)} 
+                                            style={{ display: 'flex', backgroundColor: primaryColor, borderRadius: '8px', borderBottom: '0px', paddingBottom: '10px', justifyContent: 'center', marginBottom: '10px' }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.boxShadow = generateBoxShadow(10)
+                                            } }
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.boxShadow = generateBoxShadow(3)
+                                            } }
+                                            >
+                                            <Text style={{ fontSize: '18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '22ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{molecule.name}</Text>
+                                        </div>
+                                    })}
+                                </div>
+                            </div>
+                        })}
                         {Object.keys(groupByCategory).map((category, index) => {
                             return <div key={index}>
                                 <Text
