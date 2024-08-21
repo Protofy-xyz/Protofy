@@ -360,35 +360,6 @@ const Menu = withTopics(({
                             flexDirection: 'column',
                             paddingRight: scrollRef?.current?.scrollHeight > scrollRef?.current?.clientHeight ? '10px' : '0px'
                         }}>
-                        {Object.keys(snippetsByCategory).map((category, index) => {
-                            return <div key={index}>
-                                <Text
-                                    style={{
-                                        fontSize: '16px',
-                                        fontFamily: 'Jost-Medium',
-                                        marginLeft: '10px'
-                                    }}
-                                >
-                                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                                </Text>
-                                <div style={{ marginTop: '12px' }}>
-                                    {snippetsByCategory[category].map((molecule, index) => {
-                                        return <div 
-                                            onClick={() => _onAddSnippet(molecule)} 
-                                            style={{ display: 'flex', backgroundColor: primaryColor, borderRadius: '8px', borderBottom: '0px', paddingBottom: '10px', justifyContent: 'center', marginBottom: '10px' }}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.boxShadow = generateBoxShadow(10)
-                                            } }
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.boxShadow = generateBoxShadow(3)
-                                            } }
-                                            >
-                                            <Text style={{ fontSize: '18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '22ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{molecule.name}</Text>
-                                        </div>
-                                    })}
-                                </div>
-                            </div>
-                        })}
                         {Object.keys(groupByCategory).map((category, index) => {
                             return <div key={index}>
                                 <Text
@@ -407,7 +378,35 @@ const Menu = withTopics(({
                                 </div>
                             </div>
                         })}
-
+                        {Object.keys(snippetsByCategory).map((category, index) => {
+                            return <div key={index}>
+                                <Text
+                                    style={{
+                                        fontSize: '16px',
+                                        fontFamily: 'Jost-Medium',
+                                        marginLeft: '10px'
+                                    }}
+                                >
+                                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                                </Text>
+                                <div style={{ marginTop: '12px' }}>
+                                    {snippetsByCategory[category].map((molecule, index) => {
+                                        return <div
+                                            onClick={() => _onAddSnippet(molecule)}
+                                            style={{ display: 'flex', backgroundColor: primaryColor, boxShadow: generateBoxShadow(3), borderRadius: '8px', borderBottom: '0px', paddingBottom: '10px', justifyContent: 'center', marginBottom: '10px' }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.boxShadow = generateBoxShadow(10)
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.boxShadow = generateBoxShadow(3)
+                                            }}
+                                        >
+                                            <Text style={{ fontSize: '18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '22ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{molecule.name}</Text>
+                                        </div>
+                                    })}
+                                </div>
+                            </div>
+                        })}
                     </div>
                 </div>
             </div>
