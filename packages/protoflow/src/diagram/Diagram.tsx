@@ -76,7 +76,7 @@ const Diagram = React.forwardRef(({
     onViewPortChange = () => { },
     nodePreview = 'flow',
     defaultSelected = () => undefined,
-    onNodeInitializationStatusChange = (initialized) => undefined 
+    onNodeInitializationStatusChange = (initialized) => undefined
 }: DiagramParams, ref) => {
     const reactFlowWrapper = useRef<HTMLElement | null>(null);
     const isDiagramVisible = reactFlowWrapper.current?.getBoundingClientRect()?.height > 0
@@ -287,7 +287,7 @@ const Diagram = React.forwardRef(({
         // If you select a node when the diagram is not visible, it is necessary to zoom in when it is visible again.
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting && reactFlowWrapper.current['open'] == false && !zoomNodes[0]) {
+                if (entry.isIntersecting && reactFlowWrapper.current && reactFlowWrapper.current['open'] == false && !zoomNodes[0]) {
                     zoomNodes[0] = defaultSelected(reactFlowWrapper.current['nodeData'])
                     setZoomNodes([...zoomNodes])
                 }
@@ -313,7 +313,7 @@ const Diagram = React.forwardRef(({
     }, [nodePreview, zoomNodes[0]])
 
     const proOptions = { hideAttribution: true };
-    
+
     return (<div style={{ width: '100%', height: "100%" }} ref={ref as any}>
         <SelectionListener onSelectionChange={onSelectionChange} />
         <div style={{ height: '100%' }} ref={reactFlowWrapper as any}>
