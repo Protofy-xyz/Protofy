@@ -46,7 +46,9 @@ type DiagramParams = {
     onViewPortChange?: any,
     nodePreview?: 'preview' | 'flow-preview' | 'flow',
     defaultSelected?: Function,
-    autoFitView?: boolean
+    autoFitView?: boolean,
+    onPaneClick?: any,
+    onNodeContextMenu?: any
 }
 
 const Diagram = React.forwardRef(({
@@ -76,7 +78,9 @@ const Diagram = React.forwardRef(({
     onViewPortChange = () => { },
     nodePreview = 'flow',
     defaultSelected = () => undefined,
-    onNodeInitializationStatusChange = (initialized) => undefined
+    onNodeInitializationStatusChange = (initialized) => undefined,
+    onNodeContextMenu = () => {},
+    onPaneClick = () => {}
 }: DiagramParams, ref) => {
     const reactFlowWrapper = useRef<HTMLElement | null>(null);
     const isDiagramVisible = reactFlowWrapper.current?.getBoundingClientRect()?.height > 0
@@ -349,6 +353,8 @@ const Diagram = React.forwardRef(({
                 onInit={(reactFlowInstance: any) => {
                     onInit(reactFlowInstance)
                 }}
+                onPaneClick={onPaneClick}
+                onNodeContextMenu={onNodeContextMenu}
             >
                 {!disableMiniMap ? <MiniMap zoomable pannable /> : null}
                 {!disableDots ? <Background /> : null}
