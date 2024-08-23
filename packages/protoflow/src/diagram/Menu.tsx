@@ -118,7 +118,7 @@ const Menu = withTopics(({
         }
     }
 
-    const isRelatedKeyWord = (keywords) => keywords?.some(k => k.toLowerCase().includes(searchValue.toLowerCase()) || searchValue.toLowerCase().includes(k.toLowerCase()))
+    const isRelatedKeyWord = (keywords) => keywords?.some(k => k?.toLowerCase()?.includes(searchValue.toLowerCase()) || searchValue?.toLowerCase()?.includes(k?.toLowerCase()))
 
     const _nodes: any = Object.fromEntries(Object.entries(nodes).filter(([key, value]) => enabledNodes.includes(key) || enabledNodes.includes('*')))
     const _customComponents = customComponents.filter((c) => enabledNodes.includes(c.type) || enabledNodes.includes('*'))
