@@ -32,7 +32,7 @@ export const FlowAPI = (app, context) => {
     addElementToArrayLiteral(elemValue, name + 'Snippet')
     addImportToSourceFile(sourceFile, name + 'Snippet', ImportType.DEFAULT, './' + name)
     sourceFile.saveSync();
-    res.send('OK')
+    res.send({message: 'OK'})
   }))
 }
 

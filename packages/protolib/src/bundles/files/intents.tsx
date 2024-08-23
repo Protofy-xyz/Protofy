@@ -1,4 +1,4 @@
-import { Spinner, XStack, getTokenValue, useTheme, useThemeName } from 'tamagui'
+import { Spinner, XStack, YStack, useTheme, Button, Text, Input } from 'tamagui'
 import { useSearchParams, usePathname } from 'solito/navigation';
 import { DataCard } from '../../components/DataCard'
 import AsyncView from '../../components/AsyncView'
@@ -23,6 +23,8 @@ import prettier from "prettier/standalone.js";
 import { useEventEffect } from '../../bundles/events/hooks'
 import { useTint } from '../../lib/Tints'
 import { AppConfContext, SiteConfigType } from '../../providers/AppConf';
+import { Tinted } from 'protolib/src/components/Tinted';
+import { useToastController } from '@my/ui';
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -31,6 +33,20 @@ const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/Mo
   </Center>,
   ssr: false
 })
+
+const onGenerateSnippset = async (name, getCode, cb, onError) => {
+  const code = getCode();
+  if (!code || !name) {
+    onError("")
+    return
+  };
+  const res = await API.post("/adminapi/v1/flow/snippet", { name, code });
+  if (res?.error) {
+    onError(res?.error?.error)
+    return
+  }
+  cb()
+}
 
 const JSONViewer = ({ extraIcons, name, path }) => {
   const [fileContent, setFileContent] = useFileFromAPI(path)
@@ -112,6 +128,7 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   const SiteConfig = useContext<SiteConfigType>(AppConfContext);
   const { getFlowsCustomComponents } = SiteConfig.bundles.masks
   const { getFlowsCustomSnippets } = SiteConfig.bundles.snippets
+  const toast = useToastController();
 
   const [promptResponse, setPromptResponse] = usePrompt(
     (prompt, total, image) => {
@@ -198,15 +215,42 @@ If you include anything else in your message (like reasonings or natural languag
         />
         {extraIcons}
       </XStack>
-      {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={newFileContent ? newFileContent : sourceCode.current} onChange={(code) => { sourceCode.current = code }} /> : <Flows
-        isModified={isModified}
-        customComponents={getFlowsCustomComponents(pathname, query)}
-        customSnippets={getFlowsCustomSnippets(pathname, query)}
-        onEdit={(code) => { sourceCode.current = code }}
-        setIsModified={setIsModified}
-        setSourceCode={(sourceCode) => {
-          sourceCode.current = sourceCode
-        }} sourceCode={newFileContent ? newFileContent : sourceCode.current} path={path} themeMode={resolvedTheme} primaryColor={resolvedTheme == 'dark' ? theme[tint+'8'].val : theme[tint+'7'].val} />}
+      {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={newFileContent ? newFileContent : sourceCode.current} onChange={(code) => { sourceCode.current = code }} />
+        : <Flows
+          nodeMenu={({ nodeId, dumpFragment, closeMenu }) => {
+            const [snippetName, setSnippetName] = useState();
+            return (
+              <YStack w={280} bg="$backgroundStrong" br="$6" p="$4" style={{ boxShadow: '0px 0px 33px 0px rgba(0, 0, 0, 0.1)' }} onPress={(e) => e.stopPropagation()}>
+                <Text fontSize={"$3"} fontWeight={"500"} pb="$4">Save as Code Snippet</Text>
+                <XStack gap="$2">
+                  <Input value={snippetName} size="$3" placeholder='Snippet Name...' onChange={(e) => {
+                    // Only accepts alphabetical characters
+                    const regex = /^[a-zA-Z]+$/;
+                    // @ts-ignore 
+                    const value = e.target?.value
+                    if (regex.test(value) || value == '') {
+                      setSnippetName(value);
+                    }
+                  }} />
+                  <Tinted>
+                    <Button disabled={!snippetName} size="$3" onPress={() => {
+                      onGenerateSnippset(snippetName, dumpFragment, closeMenu, (err = "") => {
+                        toast.show("Error generating snippet", { message: err, duration: 3000 })
+                      });
+                    }}>Save</Button>
+                  </Tinted>
+                </XStack>
+              </YStack>
+            )
+          }}
+          isModified={isModified}
+          customComponents={getFlowsCustomComponents(pathname, query)}
+          customSnippets={getFlowsCustomSnippets(pathname, query)}
+          onEdit={(code) => { sourceCode.current = code }}
+          setIsModified={setIsModified}
+          setSourceCode={(sourceCode) => {
+            sourceCode.current = sourceCode
+          }} sourceCode={newFileContent ? newFileContent : sourceCode.current} path={path} themeMode={resolvedTheme} primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />}
       <XStack opacity={0} top={-200000} position={"absolute"}>
         <Flows preload={true} primary={"#f00"} />
       </XStack>
@@ -226,7 +270,7 @@ const MonacoViewer = ({ path }) => {
     }
   }, [fileContent]);
 
-  
+
   return (
     <AsyncView waitForLoading={1000} key={path} atom={fileContent}>
       <XStack mt={30} f={1} width={"100%"}>
@@ -269,9 +313,9 @@ export const processFilesIntent = ({ action, domain, data }: IntentType) => {
     }
   } else if (type == 'image') {
     return { component: <img src={url} />, widget: 'image' }
-  } else if( type == 'video') {
+  } else if (type == 'video') {
     return { component: <video src={url} controls />, widget: 'video' }
-  } else if( type == 'audio') {
+  } else if (type == 'audio') {
     return { component: <audio src={url} controls />, widget: 'audio' }
   }
 }

@@ -936,7 +936,7 @@ const FlowsBase = ({
                         : null
                 }
                 {(menu && nodeMenu) && <ContextMenu menuContent={nodeMenu} onClick={onPaneClick} {...menu}>
-                    {React.createElement(nodeMenu, { nodeId: menu.id, onDumpFragment: () => getDumpedFragment(menu?.id) })}</ContextMenu>
+                    {React.createElement(nodeMenu, { nodeId: menu.id, dumpFragment: () => getDumpedFragment(menu?.id), closeMenu: () => setMenu(false) })}</ContextMenu>
                 }
             </Diagram> : <></>}
         </div>
