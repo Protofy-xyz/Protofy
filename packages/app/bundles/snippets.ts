@@ -1,4 +1,5 @@
 import flowSnippets from 'protolib/bundles/flow/snippets';
+import customSnippets from './custom/snippets';
 
 const paths = {
     devices: [
@@ -27,6 +28,7 @@ export const getFlowsCustomSnippets = (path: string, queryParams: {}) => {
     ]
     if (paths.apis.includes(segment)) return [
         ...flowSnippets,
+        ...customSnippets?.api ?? []
     ]
     return []
 }
