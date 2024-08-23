@@ -25,6 +25,7 @@ import GetDynamicCustomComponent from './DynamicCustomComponent';
 import { generateId } from './lib/IdGenerator';
 import { useProtoEdgesState, useProtoNodesState, addProtoEdge } from './store/DiagramStore'
 import layouts from "./diagram/layouts";
+import { ContextMenu } from './ContextMenu';
 
 interface customComponentInterface {
     check: Function,
@@ -77,7 +78,8 @@ interface FlowProps {
     nodePreview?: 'preview' | 'flow-preview' | 'flow',
     metadata?: any
     defaultSelected?: Function,
-    autoFitView?: boolean
+    autoFitView?: boolean,
+    nodeMenu?: any,
 }
 
 const FlowsBase = ({
@@ -118,7 +120,8 @@ const FlowsBase = ({
     mode = 'js',
     nodePreview = 'flow',
     metadata = {},
-    defaultSelected = () => undefined
+    defaultSelected = () => undefined,
+    nodeMenu = null
 }: FlowProps) => {
     const { data, publish } = topics;
     const useFlowsStore = useContext(FlowStoreContext)
@@ -156,6 +159,7 @@ const FlowsBase = ({
     const [hasChanges, setHasChanges] = useState(false);
     const [prevReducedNodes, setPrevReducedNodes] = useState("");
     const [prevNodeData, setPrevNodeData] = useState(deleteAdditionalKeys(nodeData));
+    const [menu, setMenu] = useState(null);
 
     const rendered = useRef(false)
     const onConnect = useCallback((params) => setEdges((eds) => addProtoEdge(params, eds)), [setEdges]);
@@ -712,6 +716,43 @@ const FlowsBase = ({
         }
     }
 
+    const getDumpedFragment = (nodeId) => {
+        if (!nodeId) return null
+        const selectedNode = nodes.find(n => n.id === nodeId)
+        const firstNodeType = selectedNode?.type
+        let start = NodeTypes[firstNodeType]
+        const startType = start?.type;
+        if (!startType) return null
+        const code = startType.dump(selectedNode, nodes, edges, nodeData);
+        return code;
+    }
+
+    const onNodeContextMenu = useCallback(
+        (event, node) => {
+            // Prevent native context menu from showing
+            event.preventDefault();
+
+            // Calculate position of the context menu. We want to make sure it
+            // doesn't get positioned off-screen.
+            const pane = diagramRef.current?.getBoundingClientRect();
+            setMenu({
+                id: node.id,
+                top: event.clientY - 200,
+                left: event.clientX - 200,
+                // right: pane.width - event.clientX,
+                // bottom: pane.height - event.clientY,
+                right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
+                // bottom: event.clientY >= pane.height - 200 && pane.height - event.clientY,
+            });
+
+        },
+        [setMenu],
+    );
+
+    // Close the context menu if it's open whenever the window is clicked.
+    const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
+
+
     useEffect(() => {
         const edgesDiffs = getDiffs(removeSizes(initialEdges), removeSizes(edges))
         const nodesDiffs = getDiffs(removeSizes(initialNodes), removeSizes(nodes))
@@ -878,6 +919,8 @@ const FlowsBase = ({
                 disableDots={disableDots}
                 disableMiniMap={disableMiniMap}
                 theme={theme}
+                onNodeContextMenu={onNodeContextMenu}
+                onPaneClick={onPaneClick}
             >
                 {children}
                 {
@@ -891,6 +934,9 @@ const FlowsBase = ({
                             />
                         </Panel>
                         : null
+                }
+                {(menu && nodeMenu) && <ContextMenu menuContent={nodeMenu} onClick={onPaneClick} {...menu}>
+                    {React.createElement(nodeMenu, { nodeId: menu.id, onDumpFragment: () => getDumpedFragment(menu?.id) })}</ContextMenu>
                 }
             </Diagram> : <></>}
         </div>
