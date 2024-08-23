@@ -1,4 +1,4 @@
-import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
+import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment, ArrayLiteralExpression } from 'ts-morph';
 import * as fspath from 'path';
 import { getRoot } from './getRoot';
 import { getLogger } from 'protobase';
@@ -49,7 +49,7 @@ export const getSourceFile = (path) => {
 }
 
 export const toSourceFile = (code: string) => {
-    const project = new Project({useInMemoryFileSystem: true});
+    const project = new Project({ useInMemoryFileSystem: true });
     let source = project.createSourceFile('_temp1.tsx', code, { overwrite: true })
     return source
 }
@@ -103,6 +103,29 @@ export const removeImportFromSourceFile = (sourceFile, path: string): void => {
             importDeclaration.remove();
             break;
         }
+    }
+}
+
+export const getPropertyValueFromObjectLiteral = (objectLiteral: ObjectLiteralExpression, key: string): any => {
+    try {
+        const property = objectLiteral.getProperty(key);
+        if (!property || property.getKind() !== SyntaxKind.PropertyAssignment) throw "Property doesn't exist";
+        const propertyAssignment = property.asKindOrThrow(SyntaxKind.PropertyAssignment);
+        if (!propertyAssignment || !propertyAssignment.getInitializer) throw "Property doesn't exist";
+        const initializer = propertyAssignment.getInitializer();
+        if (!initializer) throw "Property doesn't exist";
+        return initializer;
+    } catch (e) {
+        console.log("Error retrieving property. Doesn't exist")
+    }
+}
+
+export const addElementToArrayLiteral = (arrayLiteral: ArrayLiteralExpression, elem: string): void => {
+    try {
+        if (!arrayLiteral || arrayLiteral.getKind() !== SyntaxKind.ArrayLiteralExpression) throw "Element is not an array";
+        arrayLiteral.addElement(elem);
+    } catch (e) {
+        console.log("Error adding element to array literal")
     }
 }
 
