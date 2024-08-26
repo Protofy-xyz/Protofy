@@ -8,14 +8,15 @@ import { withTopics } from "react-topics";
 import Text from './NodeText';
 import useTheme, { usePrimaryColor } from './Theme';
 import { splitOpenerEdge } from '../lib/Edge';
-import { Search } from '@tamagui/lucide-icons'
+import { Search, Code } from '@tamagui/lucide-icons'
 import { useProtoflow } from '../store/DiagramStore';
 import { generateBoxShadow } from '../lib/shadow';
 
 const menuWidth = 259
 const defMenuHeight = 500
 const menuMargin = 100
-const inputHeight = 50
+const inputHeight = 38
+const inputRadius = 8
 
 const SelectedBorder = (props) => {
     const borderWidthSelected = useTheme("borderWidthSelected")
@@ -74,6 +75,7 @@ const Menu = withTopics(({
     takeSnapshot = () => null,
     reactFlowWrapper = null,
     topics,
+    rawCodeFromMenu,
     onAddNode = (node: any, newEdge: any, initialData: any) => null,
     onEditDiagram = (nodes, edges, focus) => { }
 }) => {
@@ -263,7 +265,7 @@ const Menu = withTopics(({
         onEditDiagram(finalNodes, finalEdges, focusElement)
     }
 
-    const _onAddSnippet = (snippets) => {
+    const addSnippet = (snippets) => {
         onAddSnippet(snippets, menuOpener)
         setMenu('closed')
     }
@@ -313,6 +315,7 @@ const Menu = withTopics(({
     const highlightInputBackgroundColor = useTheme("highlightInputBackgroundColor")
     const tColor = useTheme('titleColor')
     const interactiveColor = useTheme('interactiveColor')
+    const disableTextColor = useTheme('disableTextColor')
     const primaryColor = usePrimaryColor()
 
     return (
@@ -322,13 +325,14 @@ const Menu = withTopics(({
                 style={{ display: menuState == 'closed' ? 'none' : 'flex', height: '100vh', width: '100vw', position: 'absolute' }}>
             </div>
             <div style={{ display: 'flex', flexDirection: "column", height: menuHeight, margin: '0px', position: 'absolute', borderRadius: '14px', ...extraStyle }}>
-                <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, boxShadow: generateBoxShadow(8), backgroundColor: bgColor, backdropFilter: 'blur(20px)', borderRadius: '10px', paddingBottom: '20px', padding: '10px'     }}>
-                    <div style={{ height: inputHeight }}>
+                <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, boxShadow: generateBoxShadow(8), backgroundColor: bgColor, backdropFilter: 'blur(20px)', borderRadius: '10px', paddingBottom: '20px', padding: '10px' }}>
+                    <div style={{ height: inputHeight, display: 'flex', flexDirection: 'row', gap: '5px', marginBottom: '10px' }}>
                         <input
                             ref={inputRef}
                             style={{
                                 fontFamily: 'Jost-Regular',
                                 padding: '8px',
+                                height: inputHeight,
                                 border: inputBorder,
                                 display: 'flex',
                                 flex: 1,
@@ -336,7 +340,7 @@ const Menu = withTopics(({
                                 boxSizing: 'border-box',
                                 fontSize: '14px',
                                 backgroundColor: highlightInputBackgroundColor,
-                                borderRadius: '8px',
+                                borderRadius: inputRadius,
                                 borderWidth: '0px',
                                 outline: 'none',
                                 paddingLeft: '32px',
@@ -347,10 +351,23 @@ const Menu = withTopics(({
                             value={searchValue}
                             onKeyDown={onKeyDown}
                             onChange={t => setSearchValue(t.target.value)}
-                            placeholder="search node"
+                            placeholder={rawCodeFromMenu ? "search or write code" : "search nodes"}
                         />
                         {/*@ts-ignore*/}
                         <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
+                        {
+                            rawCodeFromMenu &&
+                            <button
+                                title='Add raw code'
+                                disabled={!searchValue}
+                                onMouseEnter={e => searchValue ? e.currentTarget.style.opacity = "0.8" : null}
+                                onMouseLeave={e => searchValue ? e.currentTarget.style.opacity = "1" : null}
+                                style={{ backgroundColor: !searchValue ? disableTextColor : interactiveColor, height: inputHeight, width: inputHeight, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: inputRadius }}
+                                onClick={() => addSnippet({ code: searchValue })}
+                            >
+                                <Code size={16} fillOpacity={0} />
+                            </button>
+                        }
                     </div>
                     <div
                         ref={scrollRef}
@@ -395,8 +412,8 @@ const Menu = withTopics(({
                                 <div style={{ marginTop: '12px' }}>
                                     {snippetsByCategory[category].map((molecule, index) => {
                                         return <div
-                                            onClick={() => _onAddSnippet(molecule)}
-                                            style={{ display: 'flex', backgroundColor: primaryColor, boxShadow: generateBoxShadow(3), borderRadius: '8px', borderBottom: '0px', paddingBottom: '10px', justifyContent: 'center', marginBottom: '10px' }}
+                                            onClick={() => addSnippet(molecule)}
+                                            style={{ display: 'flex', backgroundColor: primaryColor, boxShadow: generateBoxShadow(3), borderRadius: inputRadius, borderBottom: '0px', paddingBottom: '10px', justifyContent: 'center', marginBottom: '10px' }}
                                             onMouseEnter={(e) => {
                                                 e.currentTarget.style.boxShadow = generateBoxShadow(10)
                                             }}

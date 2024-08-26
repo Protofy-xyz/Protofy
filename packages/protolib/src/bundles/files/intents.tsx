@@ -244,6 +244,7 @@ If you include anything else in your message (like reasonings or natural languag
             )
           }}
           isModified={isModified}
+          rawCodeFromMenu={true}
           customComponents={getFlowsCustomComponents(pathname, query)}
           customSnippets={getFlowsCustomSnippets(pathname, query)}
           onEdit={(code) => { sourceCode.current = code }}
