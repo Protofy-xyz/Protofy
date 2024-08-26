@@ -8,7 +8,7 @@ import { generateBoxShadow } from '../lib/shadow';
 type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "textColor" | "interactiveColor" | 'interactiveHoverColor' | 'inputBorder' | 'borderColor'
     | 'borderWidth' | 'borderWidthSelected' | 'colorError' | 'handleBorderColor' | 'flowOutputColor' | 'dataOutputColor' | 'highlightInputBackgroundColor' | 'blockPort' | 'flowPort'
     | 'dataPort' | 'nodeBorderWidth' | 'nodeBorderColor' | 'portSize' | 'nodeFontSize' | 'containerColor' | 'titleColor' | 'disableTextColor' | 'nodeEdgeWidth' | 'nodeEdgeStyle'
-    | 'plusColor' | 'selectedColor' | 'separatorColor' | 'nodePalette' | 'borderColorSelected' | 'borderRadiusSelected' | 'boxShadowSelected'
+    | 'plusColor' | 'selectedColor' | 'separatorColor' | 'nodePalette' | 'borderColorSelected' | 'borderRadiusSelected' | 'boxShadowSelected' | 'menuBackground'
 
 const commonVars: any = {
     nodeBorderWidth: '1px',
@@ -62,7 +62,8 @@ const Theme = {
         containerColor: '#00000005',
         separatorColor: '#D4D4D4',
         borderColorSelected: '#222',
-        boxShadowSelected: ''//generateBoxShadow(12)
+        boxShadowSelected: '',//generateBoxShadow(12)
+        menuBackground: '#FFFFF60'
     },
     dark: {
         ...commonVars,
@@ -100,7 +101,8 @@ const Theme = {
         containerColor: '#FFFFFF05',
         separatorColor: '#424242',
         borderColorSelected: 'white',
-        boxShadowSelected: ''//generateBoxShadow(15, 255, 255, 255)
+        boxShadowSelected: '',//generateBoxShadow(15, 255, 255, 255)
+        menuBackground: '#44444460'
     }
 }
 

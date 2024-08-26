@@ -308,10 +308,11 @@ const Menu = withTopics(({
     }, [menuState])
 
     const textColor = useTheme("textColor")
-    const bgColor = useTheme("nodeBackgroundColor")
+    const bgColor = useTheme("menuBackground")
     const inputBorder = useTheme('inputBorder')
     const highlightInputBackgroundColor = useTheme("highlightInputBackgroundColor")
     const tColor = useTheme('titleColor')
+    const interactiveColor = useTheme('interactiveColor')
     const primaryColor = usePrimaryColor()
 
     return (
@@ -320,8 +321,8 @@ const Menu = withTopics(({
                 onClick={() => setMenu('closed')}
                 style={{ display: menuState == 'closed' ? 'none' : 'flex', height: '100vh', width: '100vw', position: 'absolute' }}>
             </div>
-            <div style={{ display: 'flex', flexDirection: "column", height: menuHeight, margin: '0px', position: 'absolute', border: '1px solid grey', borderRadius: '10px', ...extraStyle }}>
-                <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, backgroundColor: bgColor, borderRadius: '10px', paddingBottom: '20px', padding: '10px', border: `${useTheme('borderWidth')}px solid ${useTheme('borderColor')}` }}>
+            <div style={{ display: 'flex', flexDirection: "column", height: menuHeight, margin: '0px', position: 'absolute', borderRadius: '14px', ...extraStyle }}>
+                <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, boxShadow: generateBoxShadow(8), backgroundColor: bgColor, backdropFilter: 'blur(20px)', borderRadius: '10px', paddingBottom: '20px', padding: '10px'     }}>
                     <div style={{ height: inputHeight }}>
                         <input
                             ref={inputRef}
@@ -335,12 +336,14 @@ const Menu = withTopics(({
                                 boxSizing: 'border-box',
                                 fontSize: '14px',
                                 backgroundColor: highlightInputBackgroundColor,
-                                borderRadius: '6px',
+                                borderRadius: '8px',
                                 borderWidth: '0px',
                                 outline: 'none',
                                 paddingLeft: '32px',
                                 color: textColor
                             }}
+                            onFocus={e => e.currentTarget.style.border = '2px solid ' + interactiveColor}
+                            onBlur={e => e.currentTarget.style.border = inputBorder}
                             value={searchValue}
                             onKeyDown={onKeyDown}
                             onChange={t => setSearchValue(t.target.value)}
