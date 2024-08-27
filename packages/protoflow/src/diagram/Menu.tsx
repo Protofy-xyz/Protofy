@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useContext, useEffect, useCallback, forwardRef } from 'react';
 import { Panel } from 'reactflow';
 import nodes from '../nodes'
 import { FlowStoreContext } from "../store/FlowsStore";
@@ -11,12 +11,29 @@ import { splitOpenerEdge } from '../lib/Edge';
 import { Search, Code } from '@tamagui/lucide-icons'
 import { useProtoflow } from '../store/DiagramStore';
 import { generateBoxShadow } from '../lib/shadow';
+import { Separator, SizableText, Tabs, TabsContentProps, Button } from '@my/ui';
+import { Monaco } from 'protolib/src/components/Monaco'
 
-const menuWidth = 259
+const menuWidth = 300
 const defMenuHeight = 500
 const menuMargin = 100
 const inputHeight = 38
 const inputRadius = 8
+
+const TabsContent = (props: TabsContentProps) => {
+    return (
+        <Tabs.Content
+            padding="$2"
+            flex={1}
+            borderRadius="$2"
+            borderTopLeftRadius={0}
+            borderTopRightRadius={0}
+            {...props}
+        >
+            {props.children}
+        </Tabs.Content>
+    )
+}
 
 const SelectedBorder = (props) => {
     const borderWidthSelected = useTheme("borderWidthSelected")
@@ -49,6 +66,55 @@ const SelectedBorder = (props) => {
         </div>
     )
 }
+
+const SearchBar = forwardRef(({ inputBorder, bgColor, textColor, interactiveColor, value, onChange, display = 'flex', ...props }: any, ref) => {
+    return <div style={{ height: inputHeight, display: display, flexDirection: 'row', gap: '5px', marginBottom: '10px', position: 'relative', padding: '7px' }}>
+        <input
+            ref={ref}
+            style={{
+                fontFamily: 'Jost-Regular',
+                padding: '8px',
+                height: inputHeight,
+                border: inputBorder,
+                display: 'flex',
+                flex: 1,
+                width: '100%',
+                boxSizing: 'border-box',
+                fontSize: '14px',
+                backgroundColor: bgColor,
+                borderRadius: inputRadius,
+                borderWidth: '0px',
+                outline: 'none',
+                paddingLeft: '32px',
+                color: textColor
+            }}
+            onFocus={e => e.currentTarget.style.border = '2px solid ' + interactiveColor}
+            onBlur={e => e.currentTarget.style.border = inputBorder}
+            value={value}
+            // onKeyDown={onKeyDown}
+            onChange={t => onChange(t.target.value)}
+            {...props}
+        // placeholder={rawCodeFromMenu ? "search or write code" : "search nodes"}
+        />
+        {/*@ts-ignore*/}
+        <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 16 }} />
+    </div>
+})
+
+const List = forwardRef(({ ...props }: any, ref) => {
+    return <div
+        ref={ref}
+        className={".list-protoflow"}
+        style={{
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            paddingRight: ref?.current?.scrollHeight > ref?.current?.clientHeight ? '10px' : '0px'
+        }}>
+        {props.children}
+    </div>
+})
 
 const RenderCustomComponent = ({ index, node, addElement, isSelected, realIndex }) => {
     return <div
@@ -83,7 +149,9 @@ const Menu = withTopics(({
     const inputRef = useRef()
     const scrollRef: any = useRef()
 
+    const [selectedTab, setSelectedTab] = useState('nodesTab')
     const [searchValue, setSearchValue] = useState('')
+    const [fragmentText, setFragmentText] = useState('')
     const [selectedNode, setSelectedNode] = useState(0)
 
     const useFlowsStore = useContext(FlowStoreContext)
@@ -94,7 +162,7 @@ const Menu = withTopics(({
     const { project, setViewport, getViewport } = useProtoflow();
     const { publish } = topics;
 
-    const offsetHeight = reactFlowWrapper?.current.offsetHeight
+    const offsetHeight = reactFlowWrapper?.current?.offsetHeight
     const menuHeight = offsetHeight < (defMenuHeight + menuMargin * 2) ? offsetHeight - (menuMargin * 1.5) : defMenuHeight
 
     const getMenuTop = () => {
@@ -324,111 +392,160 @@ const Menu = withTopics(({
                 onClick={() => setMenu('closed')}
                 style={{ display: menuState == 'closed' ? 'none' : 'flex', height: '100vh', width: '100vw', position: 'absolute' }}>
             </div>
-            <div style={{ display: 'flex', flexDirection: "column", height: menuHeight, margin: '0px', position: 'absolute', borderRadius: '14px', ...extraStyle }}>
-                <div ref={panelRef} style={{ flexGrow: 1, width: menuWidth, boxShadow: generateBoxShadow(8), backgroundColor: bgColor, backdropFilter: 'blur(20px)', borderRadius: '10px', paddingBottom: '20px', padding: '10px' }}>
-                    <div style={{ height: inputHeight, display: 'flex', flexDirection: 'row', gap: '5px', marginBottom: '10px' }}>
-                        <input
-                            ref={inputRef}
-                            style={{
-                                fontFamily: 'Jost-Regular',
-                                padding: '8px',
-                                height: inputHeight,
-                                border: inputBorder,
-                                display: 'flex',
-                                flex: 1,
-                                width: '100%',
-                                boxSizing: 'border-box',
-                                fontSize: '14px',
-                                backgroundColor: highlightInputBackgroundColor,
-                                borderRadius: inputRadius,
-                                borderWidth: '0px',
-                                outline: 'none',
-                                paddingLeft: '32px',
-                                color: textColor
-                            }}
-                            onFocus={e => e.currentTarget.style.border = '2px solid ' + interactiveColor}
-                            onBlur={e => e.currentTarget.style.border = inputBorder}
-                            value={searchValue}
-                            onKeyDown={onKeyDown}
-                            onChange={t => setSearchValue(t.target.value)}
-                            placeholder={rawCodeFromMenu ? "search or write code" : "search nodes"}
-                        />
-                        {/*@ts-ignore*/}
-                        <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 18 }} />
-                        {
-                            rawCodeFromMenu &&
-                            <button
-                                title='Add raw code'
-                                disabled={!searchValue}
-                                onMouseEnter={e => searchValue ? e.currentTarget.style.opacity = "0.8" : null}
-                                onMouseLeave={e => searchValue ? e.currentTarget.style.opacity = "1" : null}
-                                style={{ backgroundColor: !searchValue ? disableTextColor : interactiveColor, height: inputHeight, width: inputHeight, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: inputRadius }}
-                                onClick={() => addSnippet({ code: searchValue })}
+            <div style={{ position: 'absolute', ...extraStyle }}>
+                <Tabs
+                    ref={panelRef}
+                    defaultValue={selectedTab}
+                    orientation="horizontal"
+                    flexDirection="column"
+                    width={menuWidth}
+                    height={menuHeight}
+                    borderRadius="14px"
+                    overflow="hidden"
+                    backgroundColor={bgColor}
+                    onValueChange={(v) => {
+                        try {
+                            if (["nodesTab", "snippetsTab"].includes(v)){
+                                //@ts-ignore
+                                setTimeout(() => inputRef?.current.focus(), 20)
+                            }
+                        } catch (e) { console.error('error focusing element. ', e) }
+                        setSelectedTab(v)
+                    }}
+                    style={{ boxShadow: generateBoxShadow(8), backdropFilter: 'blur(20px)' }}
+                >
+                    <Tabs.List
+                        disablePassBorderRadius="bottom"
+                    >
+                        <Tabs.Tab flex={1} value="nodesTab" backgroundColor={"transparent"}>
+                            <SizableText fontWeight={selectedTab == "nodesTab" ? "500" : ""} color={selectedTab == "nodesTab" ? interactiveColor : ""}>Nodes</SizableText>
+                        </Tabs.Tab>
+                        <Tabs.Tab flex={1} value="snippetsTab" backgroundColor={"transparent"}>
+                            <SizableText fontWeight={selectedTab == "snippetsTab" ? "500" : ""} color={selectedTab == "snippetsTab" ? interactiveColor : ""}>Snippets</SizableText>
+                        </Tabs.Tab>
+                        <Tabs.Tab flex={1} value="codeTab" backgroundColor={"transparent"}>
+                            <SizableText fontWeight={selectedTab == "codeTab" ? "500" : ""} color={selectedTab == "codeTab" ? interactiveColor : ""}>Code</SizableText>
+                        </Tabs.Tab>
+                    </Tabs.List>
+                    <Separator />
+                    <SearchBar
+                        ref={inputRef}
+                        display={["nodesTab", "snippetsTab"].includes(selectedTab) ? 'flex' : 'none'}
+                        onChange={setSearchValue}
+                        value={searchValue}
+                        inputBorder={inputBorder}
+                        textColor={textColor}
+                        bgColor={highlightInputBackgroundColor}
+                        interactiveColor={interactiveColor}
+                        placeholder={selectedTab == "snippetsTab" ? "search snippets" : "search nodes"}
+                    />
+                    <TabsContent value="nodesTab">
+                        <List>
+                            {Object.keys(groupByCategory).map((category, index) => {
+                                return <div key={index}>
+                                    <Text
+                                        style={{
+                                            fontSize: '16px',
+                                            fontFamily: 'Jost-Medium',
+                                            marginLeft: '10px'
+                                        }}
+                                    >
+                                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                                    </Text>
+                                    <div style={{ marginTop: '12px' }}>
+                                        {groupByCategory[category].map((node, index) => {
+                                            return node.render()
+                                        })}
+                                    </div>
+                                </div>
+                            })}
+                        </List>
+                    </TabsContent>
+
+                    <TabsContent value="snippetsTab">
+                        <List>
+                            {Object.keys(snippetsByCategory).map((category, index) => {
+                                return <div key={category}>
+                                    <Text
+                                        style={{
+                                            fontSize: '16px',
+                                            fontFamily: 'Jost-Medium',
+                                            marginLeft: '10px'
+                                        }}
+                                    >
+                                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                                    </Text>
+                                    <div style={{ marginTop: '12px' }}>
+                                        {snippetsByCategory[category].map((molecule, index) => {
+                                            return <div
+                                                key={molecule.name}
+                                                onClick={() => addSnippet(molecule)}
+                                                style={{ display: 'flex', backgroundColor: primaryColor, boxShadow: generateBoxShadow(3), borderRadius: inputRadius, borderBottom: '0px', padding: '10px', marginBottom: '10px', flexDirection: 'column' }}
+                                                onMouseEnter={(e) => {
+                                                    e.currentTarget.style.boxShadow = generateBoxShadow(10)
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.boxShadow = generateBoxShadow(3)
+                                                }}
+                                            >
+                                                <Text style={{
+                                                    fontSize: '18px', padding: '0px 10px 0px 10px', color: tColor,
+                                                    flex: 1, top: '4px', fontFamily: 'Jost-Medium', maxWidth: '22ch',
+                                                    overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'
+                                                }}
+                                                >
+                                                    {molecule.name}
+                                                </Text>
+                                                <Text style={{
+                                                    fontSize: '14px', padding: '0px 10px 0px 10px', color: tColor,
+                                                    opacity: 0.5, flex: 1, top: '4px', fontFamily: 'Jost-Regular',
+                                                    whiteSpace: 'pre-line', WebkitLineClamp: 6, overflow: 'hidden',
+                                                    textOverflow: 'ellipsis', display: '-webkit-box',
+                                                    WebkitBoxOrient: 'vertical',
+                                                }}
+                                                >
+                                                    {molecule.code}
+                                                </Text>
+                                            </div>
+                                        })}
+                                    </div>
+                                </div>
+                            })}
+                        </List>
+                    </TabsContent>
+                    {
+                        rawCodeFromMenu &&
+                        <TabsContent value="codeTab" gap="$2">
+                            <Monaco
+                                sourceCode={fragmentText}
+                                options={{
+                                    folding: false,
+                                    lineDecorationsWidth: 0,
+                                    lineNumbersMinChars: 0,
+                                    lineNumbers: false,
+                                    minimap: { enabled: false }
+                                }}
+                                onChange={(code) => { setFragmentText(code); }}
+                            />
+
+                            <Button
+                                alignSelf='flex-end'
+                                size={"$3"}
+                                disabled={!fragmentText}
+                                hoverStyle={{
+                                    backgroundColor: !fragmentText ? disableTextColor : interactiveColor,
+                                    opacity: 0.8
+                                }}
+                                color={"white"}
+                                backgroundColor={!fragmentText ? disableTextColor : interactiveColor}
+                                onPress={() => addSnippet({ code: fragmentText })}
                             >
-                                <Code size={16} fillOpacity={0} />
-                            </button>
-                        }
-                    </div>
-                    <div
-                        ref={scrollRef}
-                        className={".list-protoflow"}
-                        style={{
-                            height: `calc(${menuHeight}px - ${inputHeight}px - 22px)`,
-                            overflowY: 'auto',
-                            overflowX: 'hidden',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            paddingRight: scrollRef?.current?.scrollHeight > scrollRef?.current?.clientHeight ? '10px' : '0px'
-                        }}>
-                        {Object.keys(groupByCategory).map((category, index) => {
-                            return <div key={index}>
-                                <Text
-                                    style={{
-                                        fontSize: '16px',
-                                        fontFamily: 'Jost-Medium',
-                                        marginLeft: '10px'
-                                    }}
-                                >
-                                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                                </Text>
-                                <div style={{ marginTop: '12px' }}>
-                                    {groupByCategory[category].map((node, index) => {
-                                        return node.render()
-                                    })}
-                                </div>
-                            </div>
-                        })}
-                        {Object.keys(snippetsByCategory).map((category, index) => {
-                            return <div key={index}>
-                                <Text
-                                    style={{
-                                        fontSize: '16px',
-                                        fontFamily: 'Jost-Medium',
-                                        marginLeft: '10px'
-                                    }}
-                                >
-                                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                                </Text>
-                                <div style={{ marginTop: '12px' }}>
-                                    {snippetsByCategory[category].map((molecule, index) => {
-                                        return <div
-                                            onClick={() => addSnippet(molecule)}
-                                            style={{ display: 'flex', backgroundColor: primaryColor, boxShadow: generateBoxShadow(3), borderRadius: inputRadius, borderBottom: '0px', paddingBottom: '10px', justifyContent: 'center', marginBottom: '10px' }}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.boxShadow = generateBoxShadow(10)
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.boxShadow = generateBoxShadow(3)
-                                            }}
-                                        >
-                                            <Text style={{ fontSize: '18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '22ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{molecule.name}</Text>
-                                        </div>
-                                    })}
-                                </div>
-                            </div>
-                        })}
-                    </div>
-                </div>
+                                Add Code
+                            </Button>
+
+                        </TabsContent>
+                    }
+                </Tabs>
             </div>
         </Panel>
     );
