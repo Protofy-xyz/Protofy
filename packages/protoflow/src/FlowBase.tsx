@@ -668,16 +668,43 @@ const FlowsBase = ({
         return validateCode(code, mode)
     }
 
-    const onAddSnippet = async (snippet, edg) => {
+    const onAddSnippet = async (snippet, edg, nodeId = undefined) => {
         const { nodes: smNodes, nodeDataTable, edges: smEdges } = await readSourceFile(snippet?.code, true)
         const index = smEdges.findIndex(v => v.target.startsWith('SourceFile'))
+
+        var newEdges = [...edges]
+        var newNodes = [...nodes]
+        var newNodesData = { ...nodeData }
+        var nodesIdsToDelete = []
+
+        if (nodeId) {
+            const deleteRecursiveEdges = (currentNodeId) => {
+                const edgesToDelete = newEdges.filter(e => e?.target == currentNodeId)
+                nodesIdsToDelete.push(currentNodeId)
+
+                if (edgesToDelete?.length) {
+                    edgesToDelete.forEach(e => {
+                        deleteRecursiveEdges(e.source)
+                    })
+                    newEdges = [...newEdges].filter(e => e?.target != currentNodeId)
+                }
+
+            }
+            deleteRecursiveEdges(nodeId)
+
+            nodesIdsToDelete.forEach(nodeId => {
+                delete newNodesData[nodeId]
+            })
+
+            newNodes = newNodes.filter(n => !nodesIdsToDelete.includes(n.id))
+        }
 
         smEdges[index] = {
             ...smEdges[index],
             target: edg.target,
             targetHandle: edg.targetHandle
         }
-        setsAll({ ...nodeDataTable, ...nodeData }, [...smNodes, ...nodes], [...smEdges, ...edges])
+        setsAll({ ...nodeDataTable, ...nodeData }, [...smNodes, ...newNodes], [...smEdges, ...newEdges])
     }
 
     const setsAll = (data, nds, edgs) => {
@@ -726,7 +753,13 @@ const FlowsBase = ({
         const startType = start?.type;
         if (!startType) return null
         const code = startType.dump(selectedNode, nodes, edges, nodeData);
-        return code;
+        const prettierCode = validateCode(code, mode)
+        return prettierCode;
+    }
+
+    const updateFragment = (codeFragment: string, nodeId: string) => {
+        const edge = edges.find(e => e.source == nodeId)
+        onAddSnippet({ code: codeFragment }, edge, nodeId)
     }
 
     const onNodeContextMenu = useCallback(
@@ -734,17 +767,21 @@ const FlowsBase = ({
             // Prevent native context menu from showing
             event.preventDefault();
 
-            // Calculate position of the context menu. We want to make sure it
-            // doesn't get positioned off-screen.
             const pane = diagramRef.current?.getBoundingClientRect();
+            const absoluteCY = event.clientY - pane.top
+            const absoluteCX = event.clientX - pane.left
+
+            const hasSpaceOnTop = absoluteCY > 450
+            const hasSpaceFromBottom = (absoluteCY - 450) > 0
+            const hasSpaceOnLeft = absoluteCX > 360
+            const hasSpaceFromRight = (absoluteCY - 360) > 0
+
             setMenu({
                 id: node.id,
-                top: event.clientY - 200,
-                left: event.clientX - 200,
-                // right: pane.width - event.clientX,
-                // bottom: pane.height - event.clientY,
-                right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
-                // bottom: event.clientY >= pane.height - 200 && pane.height - event.clientY,
+                top: absoluteCY < pane.height - 450 ? absoluteCY : hasSpaceOnTop && !hasSpaceFromBottom && 20,
+                left: absoluteCX < pane.width - 360 ? absoluteCX : hasSpaceOnLeft && !hasSpaceFromRight && 20,
+                right: absoluteCX >= pane.width - 360 && hasSpaceFromRight && pane.width - absoluteCX,
+                bottom: absoluteCY >= pane.height - 450 && hasSpaceFromBottom && pane.height - absoluteCY,
             });
 
         },
@@ -939,7 +976,13 @@ const FlowsBase = ({
                         : null
                 }
                 {(menu && nodeMenu) && <ContextMenu menuContent={nodeMenu} onClick={onPaneClick} {...menu}>
-                    {React.createElement(nodeMenu, { nodeId: menu.id, dumpFragment: () => getDumpedFragment(menu?.id), closeMenu: () => setMenu(false) })}</ContextMenu>
+                    {React.createElement(nodeMenu, {
+                        nodeId: menu.id,
+                        dumpFragment: () => getDumpedFragment(menu?.id),
+                        closeMenu: () => setMenu(false),
+                        updateFragment: (code: string) => updateFragment(code, menu.id)
+                    })}
+                </ContextMenu>
                 }
             </Diagram> : <></>}
         </div>

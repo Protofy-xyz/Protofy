@@ -1,10 +1,10 @@
-import { Spinner, XStack, YStack, useTheme, Button, Text, Input } from 'tamagui'
+import { Spinner, XStack, YStack, useTheme, Button, Text, Input, TextArea } from 'tamagui'
 import { useSearchParams, usePathname } from 'solito/navigation';
 import { DataCard } from '../../components/DataCard'
 import AsyncView from '../../components/AsyncView'
 import { useFileFromAPI } from '../../lib/useFileFromAPI'
 import { IconContainer } from '../../components/IconContainer'
-import { Save, Workflow, Code, Ban } from '@tamagui/lucide-icons';
+import { Save, Workflow, Code, Ban, Check, X } from '@tamagui/lucide-icons';
 import { useThemeSetting } from '@tamagui/next-theme'
 // import GLTFViewer from '../../adminpanel/features/components/ModelViewer'
 import { Monaco } from '../../components/Monaco'
@@ -34,8 +34,7 @@ const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/Mo
   ssr: false
 })
 
-const onGenerateSnippset = async (name, getCode, cb, onError) => {
-  const code = getCode();
+const onGenerateSnippset = async (name, code, cb, onError) => {
   if (!code || !name) {
     onError("")
     return
@@ -217,13 +216,53 @@ If you include anything else in your message (like reasonings or natural languag
       </XStack>
       {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={newFileContent ? newFileContent : sourceCode.current} onChange={(code) => { sourceCode.current = code }} />
         : <Flows
-          nodeMenu={({ nodeId, dumpFragment, closeMenu }) => {
+          nodeMenu={({ nodeId, dumpFragment, closeMenu, updateFragment }) => {
             const [snippetName, setSnippetName] = useState();
+            const [fragmentText, setFragmentText] = useState(dumpFragment());
             return (
-              <YStack w={280} bg="$backgroundStrong" br="$6" p="$4" style={{ boxShadow: '0px 0px 33px 0px rgba(0, 0, 0, 0.1)' }} onPress={(e) => e.stopPropagation()}>
-                <Text fontSize={"$3"} fontWeight={"500"} pb="$4">Save as Code Snippet</Text>
+              <YStack w={350} bg="$backgroundStrong" br="$6" p="$4" gap="$4" style={{ boxShadow: '0px 0px 33px 0px rgba(0, 0, 0, 0.1)' }} onPress={(e) => e.stopPropagation()}>
+                <XStack f={1} jc="space-between" ai="center">
+                  <Tinted>
+                    <Text color={"$color7"} fontWeight={"500"}>Edit from code</Text>
+                  </Tinted>
+                  <XStack gap="$2">
+                    <Button
+                      backgroundColor={"transparent"}
+                      hoverStyle={{
+                        backgroundColor: "$color2",
+                        borderColor: "$color8"
+                      }}
+                      color="$color8"
+                      borderColor="$color8"
+                      size="$3"
+                      onPress={() => closeMenu()}
+                    >
+                      <X size={16} />
+                    </Button>
+                    <Tinted>
+                      <Button disabled={!fragmentText} size="$3" onPress={() => { updateFragment(fragmentText); closeMenu() }}>
+                        <Check size={16} fillOpacity={0} />
+                      </Button>
+                    </Tinted>
+                  </XStack>
+                </XStack>
+                <YStack height={300} themeInverse>
+                  <Monaco
+                    path={path}
+                    darkMode={resolvedTheme == 'dark'}
+                    sourceCode={fragmentText}
+                    options={{
+                      folding: false,
+                      lineDecorationsWidth: 0,
+                      lineNumbersMinChars: 0,
+                      lineNumbers: false,
+                      minimap: { enabled: false }
+                    }}
+                    onChange={(code) => { setFragmentText(code); }}
+                  />
+                </YStack>
                 <XStack gap="$2">
-                  <Input value={snippetName} size="$3" placeholder='Snippet Name...' onChange={(e) => {
+                  <Input f={1} value={snippetName} size="$3" placeholder='Snippet name required to export...' onChange={(e) => {
                     // Only accepts alphabetical characters
                     const regex = /^[a-zA-Z]+$/;
                     // @ts-ignore 
@@ -233,11 +272,27 @@ If you include anything else in your message (like reasonings or natural languag
                     }
                   }} />
                   <Tinted>
-                    <Button disabled={!snippetName} size="$3" onPress={() => {
-                      onGenerateSnippset(snippetName, dumpFragment, closeMenu, (err = "") => {
-                        toast.show("Error generating snippet", { message: err, duration: 3000 })
-                      });
-                    }}>Save</Button>
+                    <Button
+                      disabled={!snippetName}
+                      size="$3"
+                      color={!snippetName ? "$gray8" : "$color7"}
+                      backgroundColor={"transparent"}
+                      disabledStyle={{
+                        borderColor: "$gray8",
+                      }}
+                      hoverStyle={{
+                        backgroundColor: "$color2",
+                        borderColor: "$color7"
+                      }}
+                      borderColor="$color7"
+                      onPress={() => {
+                        onGenerateSnippset(snippetName, fragmentText, closeMenu, (err = "") => {
+                          toast.show("Error generating snippet", { message: err, duration: 3000 })
+                        });
+                      }}
+                    >
+                      Export
+                    </Button>
                   </Tinted>
                 </XStack>
               </YStack>
