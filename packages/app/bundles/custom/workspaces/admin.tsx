@@ -1,4 +1,4 @@
-import { Router, Inbox, Library, ToyBrick, Key, Cog, Database, DatabaseBackup, Package, Boxes, Box, LayoutDashboard } from '@tamagui/lucide-icons'
+import { Router, Inbox, Library, ToyBrick, Key, Cog, Database, DatabaseBackup, Package, Boxes, Box, LayoutDashboard, Power, FileCog } from '@tamagui/lucide-icons'
 import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage } from 'protolib/bundles/services/widgets'
 
 export default ({pages}) => {
@@ -62,6 +62,10 @@ export default ({pages}) => {
                 { "name": "Objects", "icon": Boxes, "type": "objects", "path": "/" },//"visibility": ["development"]
                 { "name": "Pages", "icon": "layout", "type": "pages", "path": "/" },
                 { "name": "Automations", "icon": ToyBrick, "type": "apis", "path": "/" },
+            ],
+            "State Machines": [
+              { "name": "Instances", "icon": Power, "type": "stateMachines", "path": "/" },
+              { "name": "Definitions", "icon": FileCog, "type": "stateMachineDefinitions", "path": "/" },
             ],
             "Content": [
                 { "name": "Files", "icon": "folder", "type": "files", "path": "?path=/" },

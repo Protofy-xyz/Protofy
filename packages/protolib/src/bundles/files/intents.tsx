@@ -246,7 +246,7 @@ If you include anything else in your message (like reasonings or natural languag
                     </Tinted>
                   </XStack>
                 </XStack>
-                <YStack height={300} themeInverse>
+                <YStack height={300}>
                   <Monaco
                     path={path}
                     darkMode={resolvedTheme == 'dark'}
