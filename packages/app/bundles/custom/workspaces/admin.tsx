@@ -29,12 +29,12 @@ export default ({pages}) => {
     const adminPages = pages.filter(p => p.pageType == 'admin' && p.object && p.route.startsWith('/workspace/'))
 
     return {
-        "default": "/workspace/prod/services",
+        "default": "/workspace/prod/dashboard",
         "label": "Admin panel",
         "assistant": true,
         "logs": true,
         "dev": {
-            "default": "/workspace/dev/services",
+            "default": "/workspace/dev/dashboard",
             "label": "Dev panel"
         },
         "dashboards": [{
