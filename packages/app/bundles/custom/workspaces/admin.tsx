@@ -18,7 +18,8 @@ import {
     ServiceMemoryUsageChart, 
     TotalMemoryUsage, 
     TotalCPUUsage,
-    TotalUsers
+    TotalUsers,
+    LastEvents
 } from '../../widgets'
 
 import { DashboardCard } from 'protolib/components/DashboardCard'
@@ -38,11 +39,12 @@ export default ({pages}) => {
         "dashboards": [{
             "name": "Dashboard",
             "content": [
-                { key: 'a', content: <ServiceMemoryUsageChart title="Memory Usage" id={'a'}/>},
-                { key: 'b', content: <TotalMemoryUsage title='Total Memory Usage' id={'b'}/>},
-                { key: 'c', content: <TotalCPUUsage title='Total CPU Usage' id={'c'}/>},
-                { key: 'd', content: <TotalUsers title='Total users' id={'d'}/>},
-                //     { key: 'f', content: <DashboardCard title='Box C' id={'d'}>
+                { key: 'servicememorychart', content: <ServiceMemoryUsageChart title="Memory Usage" id={'servicememorychart'}/>},
+                { key: 'totalmemory', content: <TotalMemoryUsage title='Total Memory Usage' id={'totalmemory'}/>},
+                { key: 'totalcpu', content: <TotalCPUUsage title='Total CPU Usage' id={'totalcpu'}/>},
+                { key: 'totalusers', content: <TotalUsers title='Total users' id={'totalusers'}/>},
+                { key: 'lastevents', content: <LastEvents title='Last Events' id={'lastevents'}/>},
+                //     { key: 'f', content: <DashboardCard title='Box C' id={'totalusers'}>
                 //     <Text style={{ flex: 1, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 //         <Image url="/images/protofito.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 //     </Text>
@@ -50,23 +52,27 @@ export default ({pages}) => {
             ],
             "layout": {
                 lg: [
-                    { i: 'a', x: 0, y: 0, w: 6, h: 12, isResizable: false },
-                    { i: 'b', x: 6, y: 0, w: 3, h: 6, isResizable: false },
-                    { i: 'c', x: 6, y: 3, w: 3, h: 6, isResizable: false },
-                    { i: 'd', x: 9, y: 0, w: 3, h: 6, isResizable: false }
+                    { i: 'servicememorychart', x: 0, y: 0, w: 6, h: 12, isResizable: false },
+                    { i: 'lastevents', x: 6, y: 0, w: 6, h: 12, isResizable: false },
+                    { i: 'totalmemory', x: 0, y: 12, w: 3, h: 6, isResizable: false },
+                    { i: 'totalcpu', x: 3, y: 12, w: 3, h: 6, isResizable: false },
+                    { i: 'totalusers', x: 6, y: 12, w: 3, h: 6, isResizable: false },
+                    
                 ],
                 md: [
-                    { i: 'a', x: 0, y: 0, w: 6, h: 12, isResizable: false },
-                    { i: 'b', x: 6, y: 0, w: 3, h: 4, isResizable: false },
-                    { i: 'c', x: 0, y: 2, w: 4, h: 5, isResizable: false },
-                    { i: 'd', x: 9, y: 0, w: 3, h: 6, isResizable: false }
+                    { i: 'servicememorychart', x: 0, y: 0, w: 8, h: 12, isResizable: false },
+                    { i: 'lastevents', x: 0, y: 12, w: 8, h: 12, isResizable: false },
+                    { i: 'totalmemory', x: 0, y: 20, w: 4, h: 6, isResizable: false },
+                    { i: 'totalcpu', x: 4, y: 20, w: 4, h: 6, isResizable: false },
+                    { i: 'totalusers', x: 0, y: 26, w: 8, h: 6, isResizable: false },
                 ],
                 sm: [
-                    { i: 'a', x: 0, y: 0, w: 6, h: 12, isResizable: false },
-                    { i: 'b', x: 6, y: 0, w: 3, h: 4, isResizable: false },
-                    { i: 'c', x: 0, y: 2, w: 2, h: 5, isResizable: false },
-                    { i: 'd', x: 9, y: 0, w: 3, h: 6, isResizable: false }
-                ],
+                    { i: 'servicememorychart', x: 0, y: 0, w: 12, h: 12, isResizable: false },
+                    { i: 'lastevents', x: 0, y: 12, w: 12, h: 12, isResizable: false },
+                    { i: 'totalmemory', x: 0, y: 24, w: 6, h: 6, isResizable: false },
+                    { i: 'totalcpu', x: 6, y: 24, w: 6, h: 6, isResizable: false },
+                    { i: 'totalusers', x: 0, y: 30, w: 12, h: 6, isResizable: false },
+                ]
             },
             "label": "Dashboard"
         }],
