@@ -278,8 +278,8 @@ class NeopixelsBus {
                             state: "ON",
                             color: {
                                 r: 255,
-                                g: 0,
-                                b: 0
+                                g: 255,
+                                b: 255
                             },
                             effect: "none",
                             brightness: 255
@@ -307,7 +307,7 @@ class NeopixelsBus {
                     },
                 },
                 {
-                    name: 'toggle',
+                    name: 'pulse',
                     label: 'Pulse Effect',
                     description: 'Turn on an effect on the neopixel bus',
                     endpoint: "/" + this.type + "/" + this.name + "/command",
