@@ -1,7 +1,5 @@
 import { Router, Inbox, Library, ToyBrick, Key, Cog, Database, DatabaseBackup, Package, Boxes, Box, LayoutDashboard } from '@tamagui/lucide-icons'
 import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage } from 'protolib/bundles/services/widgets'
-import { DashboardCard } from 'protolib/components/DashboardCard'
-
 
 export default ({pages}) => {
     const adminPages = pages.filter(p => p.pageType == 'admin' && p.object && p.route.startsWith('/workspace/'))
