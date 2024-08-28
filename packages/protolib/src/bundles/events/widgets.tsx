@@ -1,16 +1,19 @@
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { API } from 'protobase'
-import { useRemoteStateList } from 'protolib/src/lib/useRemoteState';
+import { useRemoteStateList } from '../../lib/useRemoteState';
+import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import { EventModel } from './eventsSchemas';
 import AsyncView from '../../components/AsyncView';
 import { DashboardCard } from '../../components/DashboardCard';
 import { YStack, XStack, Text, Card } from '@my/ui';
 
 
+
 export const LastEvents = ({ title, id }) => {
+    const env = useWorkspaceEnv()
     const fetch = async (fn) => {
-        const events = await API.get('/adminapi/v1/events');
+        const events = await API.get({url: '/adminapi/v1/events', env});
         fn(events);
     };
 
@@ -23,7 +26,7 @@ export const LastEvents = ({ title, id }) => {
                     {eventsData?.data?.items && (
                         <YStack space={10}>
                             {eventsData.data.items.slice(0, 5).map(event => (
-                                <Card key={event.id} borderRadius={10} padding={15} backgroundColor="$bgHover" shadow="md">
+                                <Card key={event.id} borderRadius={10} padding={15} backgroundColor="$color1" shadow="md">
                                     <YStack space={5}>
                                         <Text fontWeight="bold" fontSize={18} color="$primary">
                                             {event.path}
