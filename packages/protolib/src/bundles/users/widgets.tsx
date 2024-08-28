@@ -9,7 +9,7 @@ import { UserModel } from './usersSchemas';
 import AsyncView from '../../components/AsyncView';
 import Center from '../../components/Center';
 import { DashboardCard } from '../../components/DashboardCard';
-
+import Link from 'next/link'
 import { User2, Cpu } from 'lucide-react'
 
 const fetch = async (fn) => {
@@ -34,12 +34,14 @@ export const TotalUsers = ({ title, id }) => {
             <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
                 <AsyncView atom={usersData}>
                     {usersData?.data?.items && (
-                        <YStack alignItems="center" justifyContent="center">
-                            <User2 color="var(--color7)" size={48} strokeWidth={1.75} />
-                            <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
-                                {totalUsers}
-                            </Text>
-                        </YStack>
+                        <Link href="./users" className="no-drag">
+                            <YStack alignItems="center" justifyContent="center">
+                                <User2 color="var(--color7)" size={48} strokeWidth={1.75} />
+                                <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
+                                    {totalUsers}
+                                </Text>
+                            </YStack>
+                        </Link>
                     )}
                 </AsyncView>
             </YStack>
