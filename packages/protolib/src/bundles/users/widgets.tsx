@@ -10,7 +10,7 @@ import AsyncView from '../../components/AsyncView';
 import Center from '../../components/Center';
 import { DashboardCard } from '../../components/DashboardCard';
 
-import { LineChart, Cpu } from 'lucide-react'
+import { User2, Cpu } from 'lucide-react'
 
 const fetch = async (fn) => {
     const users = await API.get('/adminapi/v1/accounts')
@@ -18,7 +18,7 @@ const fetch = async (fn) => {
 }
 
 
-export const TotalUsersWidget = ({ title, id }) => {
+export const TotalUsers = ({ title, id }) => {
     const [usersData, setusersData] = useRemoteStateList(undefined, fetch, UserModel.getNotificationsTopic(), UserModel, true);
     const [totalUsers, setTotalUsers] = useState(0);
 
@@ -35,7 +35,7 @@ export const TotalUsersWidget = ({ title, id }) => {
                 <AsyncView atom={usersData}>
                     {usersData?.data?.items && (
                         <YStack alignItems="center" justifyContent="center">
-                            <LineChart color="var(--color7)" size={48} strokeWidth={1.75} />
+                            <User2 color="var(--color7)" size={48} strokeWidth={1.75} />
                             <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
                                 {totalUsers}
                             </Text>
