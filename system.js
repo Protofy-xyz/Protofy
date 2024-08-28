@@ -83,7 +83,7 @@ const config = {
         }
     ],
 
-    "alwaisCompiledPaths": [
+    "alwaysCompiledPaths": [
         "/workspace/prod",
         "/workspace/dev/users",
         "/workspace/dev/groups",
