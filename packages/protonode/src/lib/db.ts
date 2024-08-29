@@ -145,12 +145,15 @@ export class ProtoLevelDB extends ProtoDB {
                 const counter = sublevel(groupCollection, 'counter')
                 return await counter.get('total')
             }
-
             const counter = sublevel(this.rootDb, 'counter_' + this.tableVersion)
+
             return await counter.get('total')
         }
         catch(e){
-            return 0;
+            if(e?.message === "Key not found in database [total]") { // When no items added to database can't use counter.get('total')
+                return 0; 
+            }
+            throw e; // Throw back error,  if not handled
         }
     }
 
