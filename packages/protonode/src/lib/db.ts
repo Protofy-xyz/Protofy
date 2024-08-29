@@ -138,15 +138,20 @@ export class ProtoLevelDB extends ProtoDB {
     }
 
     async count(filter?) {
-        if (filter) {
-            const groupDb = sublevel(this.rootDb, 'group_' + filter.key + '_' + this.tableVersion)
-            const groupCollection = sublevel(groupDb, filter.value)
-            const counter = sublevel(groupCollection, 'counter')
+        try {
+            if (filter) {
+                const groupDb = sublevel(this.rootDb, 'group_' + filter.key + '_' + this.tableVersion)
+                const groupCollection = sublevel(groupDb, filter.value)
+                const counter = sublevel(groupCollection, 'counter')
+                return await counter.get('total')
+            }
+
+            const counter = sublevel(this.rootDb, 'counter_' + this.tableVersion)
             return await counter.get('total')
         }
-
-        const counter = sublevel(this.rootDb, 'counter_' + this.tableVersion)
-        return await counter.get('total')
+        catch(e){
+            return 0;
+        }
     }
 
     async getIndexedKeys() {
