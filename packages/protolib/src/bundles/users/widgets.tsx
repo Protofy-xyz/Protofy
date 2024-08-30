@@ -1,48 +1,14 @@
-import { YStack, Text } from '@my/ui';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-import { API } from 'protobase'
-import { useState, useEffect } from 'react';
-import { useRemoteStateList } from 'protolib/src/lib/useRemoteState';
+import { TotalItems } from '../../components/TotalItems';
 import { UserModel } from './usersSchemas';
-import AsyncView from '../../components/AsyncView';
-import { DashboardCard } from '../../components/DashboardCard';
-import Link from 'next/link'
-import { User2 } from 'lucide-react'
+import { User2 } from 'lucide-react';
 
-const fetch = async (fn) => {
-    const users = await API.get('/adminapi/v1/accounts')
-    fn(users)
-}
-
-
-export const TotalUsers = ({ title, id }) => {
-    const [usersData, setusersData] = useRemoteStateList(undefined, fetch, UserModel.getNotificationsTopic(), UserModel, true);
-    const [totalUsers, setTotalUsers] = useState(0);
-
-    useEffect(() => {
-        if (usersData?.data?.items) {
-            const total = usersData.data.total
-            setTotalUsers(total);
-        }
-    }, [usersData]);
-
-    return (
-        <DashboardCard title={title} id={id}>
-            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
-                <AsyncView atom={usersData}>
-                    {usersData?.data?.items && (
-                        <Link href="./users" className="no-drag">
-                            <YStack alignItems="center" justifyContent="center">
-                                <User2 color="var(--color7)" size={48} strokeWidth={1.75} />
-                                <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
-                                    {totalUsers}
-                                </Text>
-                            </YStack>
-                        </Link>
-                    )}
-                </AsyncView>
-            </YStack>
-        </DashboardCard>
-    );
-};
+export const TotalUsers = () => (
+    <TotalItems
+        title="Total Users"
+        id="totalusers"
+        fetchFunc="/adminapi/v1/accounts"
+        model={UserModel}
+        icon={User2}
+        link="./users"
+    />
+);
