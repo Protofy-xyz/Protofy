@@ -1,47 +1,14 @@
-import { YStack, Text, XStack } from '@my/ui';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-import { API } from 'protobase'
-import { useRemoteStateList } from 'protolib/src/lib/useRemoteState';
+import { ListItems } from '../../components/ListItems';
 import { PageModel } from './pagesSchemas';
-import AsyncView from '../../components/AsyncView';
-import { DashboardCard } from '../../components/DashboardCard';
-import { Tinted } from '../../components/Tinted';
 
-const fetch = async (fn) => {
-    const users = await API.get('/adminapi/v1/pages')
-    fn(users)
-}
-
-export const ListPages = ({ title, id }) => {
-    const [pagesData, setPagesData] = useRemoteStateList(undefined, fetch, PageModel.getNotificationsTopic(), PageModel, true);
-
-    return (
-        <DashboardCard title={title} id={id}>
-            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1}>
-
-                <AsyncView atom={pagesData}>
-                    {pagesData?.data?.items && (
-                        <YStack space={10}>
-                            {pagesData.data.items.map(page => (
-                                <XStack space={5} f={1}>
-                                    <Tinted>
-                                        <Text fontWeight="bold" fontSize={18} color="$primary">
-                                            {page.name}
-                                        </Text>
-                                    </Tinted>
-
-                                    <XStack space={15} alignItems="center" justifyContent="space-between">
-                                        <XStack>
-                                            <Text ml="$2">{page.route}</Text>
-                                        </XStack>
-                                    </XStack>
-                                </XStack>
-                            ))}
-                        </YStack>
-                    )}
-                </AsyncView>
-            </YStack>
-        </DashboardCard>
-    );
-};
+export const ListPages = () => (
+    <ListItems
+        title="Pages"
+        id="listpages"
+        fetchFunc='/adminapi/v1/pages'
+        model={PageModel}
+        displayFields={[
+            { label: "", field: "route" },
+        ]}
+    />
+);
