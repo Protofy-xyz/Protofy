@@ -1,16 +1,14 @@
-import { YStack, Text, XStack } from '@my/ui';
+import { YStack, Text } from '@my/ui';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { API } from 'protobase'
 import { useState, useEffect } from 'react';
-import { PieChart, Pie, Tooltip, Cell, Legend } from "recharts";
 import { useRemoteStateList } from 'protolib/src/lib/useRemoteState';
 import { UserModel } from './usersSchemas';
 import AsyncView from '../../components/AsyncView';
-import Center from '../../components/Center';
 import { DashboardCard } from '../../components/DashboardCard';
 import Link from 'next/link'
-import { User2, Cpu } from 'lucide-react'
+import { User2 } from 'lucide-react'
 
 const fetch = async (fn) => {
     const users = await API.get('/adminapi/v1/accounts')
