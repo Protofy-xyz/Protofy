@@ -3,10 +3,10 @@ import { ListItems } from '../../components/ListItems';
 import { UserModel } from './usersSchemas';
 import { User2 } from 'lucide-react';
 
-export const TotalUsers = () => (
+export const TotalUsers = ({ title, id }) => (
     <TotalItems
-        title="Total Users"
-        id="totalusers"
+        title={title}
+        id={id}
         fetchFunc="/adminapi/v1/accounts"
         model={UserModel}
         icon={User2}
@@ -15,10 +15,10 @@ export const TotalUsers = () => (
 );
 
 
-export const ListLatestUsers = () => (
+export const ListLatestUsers = ({ title, id }) => (
     <ListItems
-        title="Users"
-        id="listlatestusers"
+        title={title}
+        id={id}
         fetchFunc="/adminapi/v1/accounts"
         model={UserModel}
         displayFields={[

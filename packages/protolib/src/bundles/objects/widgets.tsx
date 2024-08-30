@@ -3,10 +3,10 @@ import { ObjectModel } from './objectsSchemas';
 import { Box } from 'lucide-react';
 import { API } from 'protobase';
 
-export const TotalObjects = () => (
+export const TotalObjects = ({ title, id }) => (
     <TotalItems
-        title="Total Objects"
-        id="totalobjects"
+        title={title}
+        id={id}
         fetchFunc='/adminapi/v1/objects'
         model={ObjectModel}
         icon={Box}

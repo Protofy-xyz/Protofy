@@ -1,10 +1,10 @@
 import { ListItems } from '../../components/ListItems';
 import { PageModel } from './pagesSchemas';
 
-export const ListPages = () => (
+export const ListPages = ({ title, id }) => (
     <ListItems
-        title="Pages"
-        id="listpages"
+        title={title}
+        id={id}
         fetchFunc='/adminapi/v1/pages'
         model={PageModel}
         displayFields={[
