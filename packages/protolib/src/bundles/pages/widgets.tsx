@@ -8,7 +8,8 @@ export const ListPages = () => (
         fetchFunc='/adminapi/v1/pages'
         model={PageModel}
         displayFields={[
-            { label: "", field: "route" },
+            { label: "name", field: "name" },
+            { label: "route", field: "route" },
         ]}
     />
 );

@@ -50,15 +50,6 @@ export const ListItems: React.FC<ListItemsProps> = ({ title, id, fetchFunc, mode
                         <YStack space={10}>
                             {data.data.items.slice(0, limit ?? data.data.items.length).map(item => (
                                 <XStack key={item.id} space={5} f={1}>
-                                    {ItemComponent ? (
-                                        <ItemComponent item={item} />
-                                    ) : (
-                                        <Tinted>
-                                            <Text fontWeight="bold" fontSize={18} color="$primary">
-                                                {item.name}
-                                            </Text>
-                                        </Tinted>
-                                    )}
                                     <XStack space={15} alignItems="center" justifyContent="space-between">
                                         {displayFields.map(({ label, field }) => (
                                             <XStack key={field}>
