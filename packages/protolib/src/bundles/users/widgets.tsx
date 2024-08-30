@@ -1,4 +1,5 @@
 import { TotalItems } from '../../components/TotalItems';
+import { ListItems } from '../../components/ListItems';
 import { UserModel } from './usersSchemas';
 import { User2 } from 'lucide-react';
 
@@ -10,5 +11,21 @@ export const TotalUsers = () => (
         model={UserModel}
         icon={User2}
         link="./users"
+    />
+);
+
+
+export const ListLatestUsers = () => (
+    <ListItems
+        title="Users"
+        id="listlatestusers"
+        fetchFunc="/adminapi/v1/accounts"
+        model={UserModel}
+        displayFields={[
+            { label: "Username", field: "username" },
+            { label: "Created at", field: "createdAt" },
+            { label: "Type", field: "type" },
+        ]}
+        limit={5}
     />
 );

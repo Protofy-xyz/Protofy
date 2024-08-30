@@ -21,7 +21,8 @@ import {
     TotalUsers,
     LastEvents,
     ListPages,
-    TotalObjects
+    TotalObjects,
+    ListLatestUsers
 } from '../../widgets'
 
 import { DashboardCard } from 'protolib/components/DashboardCard'
@@ -48,6 +49,7 @@ export default ({ pages }) => {
                 { key: 'lastevents', content: <LastEvents title='Last Events' id={'lastevents'} /> },
                 { key: 'listpages', content: <ListPages title='Pages' id={'listpages'} /> },
                 { key: 'totalobjects', content: <TotalObjects title='Total objects' id={'totalobjects'} /> },
+                { key: 'listlatestusers', content: <ListLatestUsers title='Latest Users' id={'listlatestusers'} /> },
                 //     { key: 'f', content: <DashboardCard title='Box C' id={'totalusers'}>
                 //     <Text style={{ flex: 1, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 //         <Image url="/images/protofito.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -62,7 +64,8 @@ export default ({ pages }) => {
                     { i: 'totalcpu', x: 3, y: 12, w: 3, h: 6, isResizable: false },
                     { i: 'totalusers', x: 6, y: 12, w: 3, h: 6, isResizable: false },
                     { i: 'listpages', x: 9, y: 12, w: 3, h: 6, isResizable: false },
-                    { i: 'totalobjects', x: 0, y: 18, w: 3, h: 6, isResizable: false }
+                    { i: 'totalobjects', x: 0, y: 18, w: 3, h: 6, isResizable: false },
+                    { i: 'listlatestusers', x: 3, y: 18, w: 4, h: 6, isResizable: false }
                 ],
                 "md": [
                     { i: 'servicememorychart', x: 0, y: 0, w: 8, h: 12, isResizable: false },
@@ -71,16 +74,18 @@ export default ({ pages }) => {
                     { i: 'totalcpu', x: 4, y: 24, w: 4, h: 6, isResizable: false },
                     { i: 'totalusers', x: 0, y: 30, w: 4, h: 6, isResizable: false },
                     { i: 'listpages', x: 4, y: 30, w: 4, h: 6, isResizable: false },
-                    { i: 'totalobjects', x: 0, y: 36, w: 8, h: 6, isResizable: false }
+                    { i: 'totalobjects', x: 0, y: 36, w: 4, h: 6, isResizable: false },
+                    { i: 'listlatestusers', x: 4, y: 36, w: 4, h: 6, isResizable: false }
                 ],
                 "sm": [
                     { i: 'servicememorychart', x: 0, y: 0, w: 12, h: 12, isResizable: false },
                     { i: 'lastevents', x: 0, y: 12, w: 12, h: 12, isResizable: false },
                     { i: 'totalmemory', x: 0, y: 24, w: 6, h: 6, isResizable: false },
                     { i: 'totalcpu', x: 6, y: 24, w: 6, h: 6, isResizable: false },
-                    { i: 'totalusers', x: 0, y: 30, w: 12, h: 6, isResizable: false },
-                    { i: 'listpages', x: 0, y: 36, w: 6, h: 6, isResizable: false },
-                    { i: 'totalobjects', x: 6, y: 36, w: 6, h: 6, isResizable: false }
+                    { i: 'totalusers', x: 0, y: 30, w: 6, h: 6, isResizable: false },
+                    { i: 'listpages', x: 6, y: 30, w: 6, h: 6, isResizable: false },
+                    { i: 'totalobjects', x: 0, y: 36, w: 6, h: 6, isResizable: false },
+                    { i: 'listlatestusers', x: 6, y: 36, w: 6, h: 6, isResizable: false }
                 ]
             },
             "label": "Dashboard"
