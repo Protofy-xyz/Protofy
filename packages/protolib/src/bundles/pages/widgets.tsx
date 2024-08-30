@@ -1,16 +1,11 @@
-import { YStack, Text, XStack, Card, Separator } from '@my/ui';
+import { YStack, Text, XStack } from '@my/ui';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { API } from 'protobase'
-import { useState, useEffect } from 'react';
-import { PieChart, Pie, Tooltip, Cell, Legend } from "recharts";
 import { useRemoteStateList } from 'protolib/src/lib/useRemoteState';
 import { PageModel } from './pagesSchemas';
 import AsyncView from '../../components/AsyncView';
-import Center from '../../components/Center';
 import { DashboardCard } from '../../components/DashboardCard';
-import Link from 'next/link'
-import { User2, Cpu, Link as LinkIcon} from 'lucide-react'
 import { Tinted } from '../../components/Tinted';
 
 const fetch = async (fn) => {
