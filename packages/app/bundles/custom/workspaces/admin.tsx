@@ -22,7 +22,9 @@ import {
     LastEvents,
     ListPages,
     TotalObjects,
-    ListLatestUsers
+    ListLatestUsers,
+    TotalGroups,
+    TotalEvents
 } from '../../widgets'
 
 import { DashboardCard } from 'protolib/components/DashboardCard'
@@ -50,6 +52,8 @@ export default ({ pages }) => {
                 { key: 'listpages', content: <ListPages title='Pages' id={'listpages'} /> },
                 { key: 'totalobjects', content: <TotalObjects title='Total objects' id={'totalobjects'} /> },
                 { key: 'listlatestusers', content: <ListLatestUsers title='Latest Users' id={'listlatestusers'} /> },
+                { key: 'totalgroups', content: <TotalGroups title='Total groups' id={'totalgroups'} /> },
+                { key: 'totalevents', content: <TotalEvents title='Total events' id={'totalevents'} /> },
                 //     { key: 'f', content: <DashboardCard title='Box C' id={'totalusers'}>
                 //     <Text style={{ flex: 1, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 //         <Image url="/images/protofito.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -62,10 +66,13 @@ export default ({ pages }) => {
                     { i: 'lastevents', x: 6, y: 0, w: 6, h: 12, isResizable: false },
                     { i: 'totalmemory', x: 0, y: 12, w: 3, h: 6, isResizable: false },
                     { i: 'totalcpu', x: 3, y: 12, w: 3, h: 6, isResizable: false },
-                    { i: 'totalusers', x: 6, y: 12, w: 3, h: 6, isResizable: false },
-                    { i: 'listpages', x: 9, y: 12, w: 3, h: 6, isResizable: false },
-                    { i: 'totalobjects', x: 0, y: 18, w: 3, h: 6, isResizable: false },
+                    { i: 'totalusers', x: 6, y: 12, w: 2, h: 6, isResizable: false },
+                    { i: 'totalgroups', x: 8, y: 12, w: 2, h: 6, isResizable: false },
+                    { i: 'totalobjects', x: 10, y: 12, w: 2, h: 6, isResizable: false },
+                    { i: 'listpages', x: 9, y: 18, w: 3, h: 6, isResizable: false },
+                    { i: 'totalevents', x: 0, y: 18, w: 2, h: 6, isResizable: false },
                     { i: 'listlatestusers', x: 3, y: 18, w: 4, h: 6, isResizable: false }
+                    
                 ],
                 "md": [
                     { i: 'servicememorychart', x: 0, y: 0, w: 8, h: 12, isResizable: false },

@@ -7,8 +7,19 @@ import { EventModel } from './eventsSchemas';
 import AsyncView from '../../components/AsyncView';
 import { DashboardCard } from '../../components/DashboardCard';
 import { YStack, XStack, Text, Card } from '@my/ui';
+import { TotalItems } from '../../components/TotalItems';
+import { ClipboardList } from '@tamagui/lucide-icons';
 
-
+export const TotalEvents = ({ title, id }) => (
+    <TotalItems
+        title={title}
+        id={id}
+        fetchFunc="/adminapi/v1/events"
+        model={EventModel}
+        icon={ClipboardList}
+        link="./events"
+    />
+);
 
 export const LastEvents = ({ title, id }) => {
     const env = useWorkspaceEnv()
