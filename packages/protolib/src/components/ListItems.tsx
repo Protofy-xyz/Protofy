@@ -9,11 +9,11 @@ import { API } from 'protobase';
 interface ListItemsProps {
     title: string;
     id: string;
-    fetchFunc: ((fn: Function) => void) | string; 
+    fetchFunc: ((fn: Function) => void) | string;
     model: any;
     displayFields: Array<{ label: string; field: string }>;
     itemComponent?: React.FC<{ item: any }>;
-    limit?: number; // Maximum number of items to display
+    limit?: number;
 }
 
 export const ListItems: React.FC<ListItemsProps> = ({ title, id, fetchFunc, model, displayFields, itemComponent: ItemComponent, limit }) => {
@@ -27,6 +27,20 @@ export const ListItems: React.FC<ListItemsProps> = ({ title, id, fetchFunc, mode
     const finalFetchFunc = typeof fetchFunc === 'function' ? fetchFunc : defaultFetchFunc;
 
     const [data, setData] = useRemoteStateList(undefined, finalFetchFunc, model.getNotificationsTopic(), model, true);
+
+    // RegExp to detect ISO date strings
+    const isoDateRegExp = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(date);
+    };
 
     return (
         <DashboardCard title={title} id={id}>
@@ -49,7 +63,11 @@ export const ListItems: React.FC<ListItemsProps> = ({ title, id, fetchFunc, mode
                                         {displayFields.map(({ label, field }) => (
                                             <XStack key={field}>
                                                 <Text fontWeight="600" color="$color9">{label}:</Text>
-                                                <Text ml="$2">{item[field]}</Text>
+                                                <Text ml="$2">
+                                                    {isoDateRegExp.test(item[field])
+                                                        ? formatDate(item[field])
+                                                        : item[field]}
+                                                </Text>
                                             </XStack>
                                         ))}
                                     </XStack>
