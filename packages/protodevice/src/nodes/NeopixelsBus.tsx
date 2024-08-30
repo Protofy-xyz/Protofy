@@ -40,27 +40,27 @@ const NeopixelsBus = ({ node = {}, nodeData = {}, children, color }: any) => {
         {
             label: 'Flicker', static: true, field: 'param-11', type: 'boolean'
         },
-        {
-            label: 'Adressable Rainbow', static: true, field: 'param-12', type: 'boolean'
-        },
-        {
-            label: 'Adressable Color Wipe', static: true, field: 'param-13', type: 'boolean'
-        },
-        {
-            label: 'Adressable Scan', static: true, field: 'param-14', type: 'boolean'
-        },
-        {
-            label: 'Adressable Twinkle', static: true, field: 'param-15', type: 'boolean'
-        },
-        {
-            label: 'Adressable Random Twinkle', static: true, field: 'param-16', type: 'boolean'
-        },
-        {
-            label: 'Adressable Fireworks', static: true, field: 'param-17', type: 'boolean'
-        },
-        {
-            label: 'Adressable Flicker', static: true, field: 'param-18', type: 'boolean'
-        },
+        // {
+        //     label: 'Adressable Rainbow', static: true, field: 'param-12', type: 'boolean'
+        // },
+        // {
+        //     label: 'Adressable Color Wipe', static: true, field: 'param-13', type: 'boolean'
+        // },
+        // {
+        //     label: 'Adressable Scan', static: true, field: 'param-14', type: 'boolean'
+        // },
+        // {
+        //     label: 'Adressable Twinkle', static: true, field: 'param-15', type: 'boolean'
+        // },
+        // {
+        //     label: 'Adressable Random Twinkle', static: true, field: 'param-16', type: 'boolean'
+        // },
+        // {
+        //     label: 'Adressable Fireworks', static: true, field: 'param-17', type: 'boolean'
+        // },
+        // {
+        //     label: 'Adressable Flicker', static: true, field: 'param-18', type: 'boolean'
+        // },
     ] as Field[]
     return (
         <Node node={node} isPreview={!node.id} title='Neopixels' color={color} id={node.id} skipCustom={true} disableInput disableOutput>

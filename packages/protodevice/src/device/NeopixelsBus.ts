@@ -159,104 +159,104 @@ class NeopixelsBus {
                     }
                 ])
             }
-            if (this.effects[4]) {
-                effects = effects.concat([
-                    { addressable_rainbow: null },
-                    {
-                        addressable_rainbow:
-                        {
-                            name: "Rainbow Effect With Custom Values",
-                            speed: 10,
-                            width: 50
-                        }
-                    }
-                ])
-            }
-            if (this.effects[5]) {
-                effects = effects.concat([
-                    { addressable_color_wipe: null },
-                    {
-                        addressable_color_wipe:
-                        {
-                            name: "Color Wipe Effect With Custom Values",
-                            add_led_interval: "100ms",
-                            reverse: false,
-                            colors: [
-                                { red: "100%", green: "100%", blue: "100%", num_leds: 1 },
-                                { red: "0%", green: "0%", blue: "0%", num_leds: 1 },
-                            ]
-                        }
-                    }
-                ])
-            }
-            if (this.effects[6]) {
-                effects = effects.concat([
-                    { addressable_scan: null },
-                    {
-                        addressable_scan:
-                        {
-                            name: "Scan Effect With Custom Values",
-                            move_interval: "100ms",
-                            scan_width: 1
-                        }
-                    }
-                ])
-            }
-            if (this.effects[7]) {
-                effects = effects.concat([
-                    { addressable_twinkle: null },
-                    {
-                        addressable_twinkle:
-                        {
-                            name: "Twinkle Effect With Custom Values",
-                            twinkle_probability: "5%",
-                            progress_interval: "4ms"
-                        }
-                    }
-                ])
-            }
-            if (this.effects[8]) {
-                effects = effects.concat([
-                    { addressable_random_twinkle: null },
-                    {
-                        addressable_random_twinkle:
-                        {
-                            name: "Random Twinkle Effect With Custom Values",
-                            twinkle_probability: "5%",
-                            progress_interval: "32ms"
-                        }
-                    }
-                ])
-            }
-            if (this.effects[9]) {
-                effects = effects.concat([
-                    { addressable_fireworks: null },
-                    {
-                        addressable_fireworks:
-                        {
-                            name: "Fireworks Effect With Custom Values",
-                            update_interval: "32ms",
-                            spark_probability: "10%",
-                            use_random_color: false,
-                            fade_out_rate: 120
-                        }
-                    }
-                ])
-            }
+            // if (this.effects[4]) {
+            //     effects = effects.concat([
+            //         { addressable_rainbow: null },
+            //         {
+            //             addressable_rainbow:
+            //             {
+            //                 name: "Rainbow Effect With Custom Values",
+            //                 speed: 10,
+            //                 width: 50
+            //             }
+            //         }
+            //     ])
+            // }
+            // if (this.effects[5]) {
+            //     effects = effects.concat([
+            //         { addressable_color_wipe: null },
+            //         {
+            //             addressable_color_wipe:
+            //             {
+            //                 name: "Color Wipe Effect With Custom Values",
+            //                 add_led_interval: "100ms",
+            //                 reverse: false,
+            //                 colors: [
+            //                     { red: "100%", green: "100%", blue: "100%", num_leds: 1 },
+            //                     { red: "0%", green: "0%", blue: "0%", num_leds: 1 },
+            //                 ]
+            //             }
+            //         }
+            //     ])
+            // }
+            // if (this.effects[6]) {
+            //     effects = effects.concat([
+            //         { addressable_scan: null },
+            //         {
+            //             addressable_scan:
+            //             {
+            //                 name: "Scan Effect With Custom Values",
+            //                 move_interval: "100ms",
+            //                 scan_width: 1
+            //             }
+            //         }
+            //     ])
+            // }
+            // if (this.effects[7]) {
+            //     effects = effects.concat([
+            //         { addressable_twinkle: null },
+            //         {
+            //             addressable_twinkle:
+            //             {
+            //                 name: "Twinkle Effect With Custom Values",
+            //                 twinkle_probability: "5%",
+            //                 progress_interval: "4ms"
+            //             }
+            //         }
+            //     ])
+            // }
+            // if (this.effects[8]) {
+            //     effects = effects.concat([
+            //         { addressable_random_twinkle: null },
+            //         {
+            //             addressable_random_twinkle:
+            //             {
+            //                 name: "Random Twinkle Effect With Custom Values",
+            //                 twinkle_probability: "5%",
+            //                 progress_interval: "32ms"
+            //             }
+            //         }
+            //     ])
+            // }
+            // if (this.effects[9]) {
+            //     effects = effects.concat([
+            //         { addressable_fireworks: null },
+            //         {
+            //             addressable_fireworks:
+            //             {
+            //                 name: "Fireworks Effect With Custom Values",
+            //                 update_interval: "32ms",
+            //                 spark_probability: "10%",
+            //                 use_random_color: false,
+            //                 fade_out_rate: 120
+            //             }
+            //         }
+            //     ])
+            // }
 
-            if (this.effects[10]) {
-                effects = effects.concat([
-                    { addressable_flicker: null },
-                    {
-                        addressable_flicker:
-                        {
-                            name: "Adressable flicker Effect With Custom Values",
-                            update_interval: "16ms",
-                            intensity: "5%"
-                        }
-                    }
-                ])
-            }
+            // if (this.effects[10]) {
+            //     effects = effects.concat([
+            //         { addressable_flicker: null },
+            //         {
+            //             addressable_flicker:
+            //             {
+            //                 name: "Adressable flicker Effect With Custom Values",
+            //                 update_interval: "16ms",
+            //                 intensity: "5%"
+            //             }
+            //         }
+            //     ])
+            // }
             componentObjects[0].config["effects"] = effects
             return deviceComponents;
         }
@@ -326,11 +326,71 @@ class NeopixelsBus {
                         },
                     },
                 },
+                {
+                    name: 'random',
+                    label: 'Random Effect',
+                    description: 'Turn on a random effect on the neopixel bus',
+                    endpoint: "/" + this.type + "/" + this.name + "/command",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json',
+                        value: {
+                            state: "ON",
+                            color: {
+                                r: 255,
+                                g: 255,
+                                b: 255
+                            },
+                            effect: "random",
+                            brightness: 255
+                        },
+                    },
+                },
+                {
+                    name: 'strobe',
+                    label: 'Strobe Effect',
+                    description: 'Turn on a strobe effect on the neopixel bus',
+                    endpoint: "/" + this.type + "/" + this.name + "/command",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json',
+                        value: {
+                            state: "ON",
+                            color: {
+                                r: 255,
+                                g: 255,
+                                b: 255
+                            },
+                            effect: "strobe",
+                            brightness: 255
+                        },
+                    },
+                },
+                {
+                    name: 'flicker',
+                    label: 'Flicker Effect',
+                    description: 'Turn on a flicker effect on the neopixel bus',
+                    endpoint: "/" + this.type + "/" + this.name + "/command",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json',
+                        value: {
+                            state: "ON",
+                            color: {
+                                r: 255,
+                                g: 255,
+                                b: 255
+                            },
+                            effect: "flicker",
+                            brightness: 255
+                        },
+                    },
+                },
             ]
         }
     }
 }
 
-export function neopixelsBus(name, numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11) {
-    return new NeopixelsBus(name, 'neopixelbus', numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11)
+export function neopixelsBus(name, numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, channel, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11) {
+    return new NeopixelsBus(name, 'neopixelbus', numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, channel, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11)
 }
