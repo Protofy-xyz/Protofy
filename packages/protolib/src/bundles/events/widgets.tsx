@@ -32,7 +32,7 @@ export const LastEvents = ({ title, id }) => {
 
     return (
         <DashboardCard title={title} id={id}>
-            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center'>
+            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1}>
                 <AsyncView atom={eventsData}>
                     {eventsData?.data?.items && (
                         <YStack space={10}>
