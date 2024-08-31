@@ -48,7 +48,9 @@
     "sync": "git fetch upstream && git merge upstream/main",
     "fix": "manypkg fix",
     "check-deps": "check-dependency-version-consistency .",
-    "clean": "yarn workspaces foreach --all run clean"
+    "clean": "yarn workspaces foreach --all run clean",
+    "protofy-update-setup": "git remote add protofy git@github.com:Protofy-xyz/Protofy.git",
+    "protofy-update": "git fetch protofy && git rebase protofy/main"
   },
   "resolutions": {
     "react": "18.2.0",
