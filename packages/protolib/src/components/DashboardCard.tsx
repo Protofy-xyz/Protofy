@@ -1,10 +1,10 @@
-import { ReactNode, HTMLAttributes } from "react";
+import { ReactNode } from "react";
 import { Tinted } from './Tinted';
-import { StackProps, XStack, YStack, isClient, } from 'tamagui'
+import { StackProps, XStack, YStack } from 'tamagui';
 
 interface DashboardCardProps {
     children: ReactNode;
-    id: string,
+    id: string;
     title?: string;
     titleProps?: StackProps;
     containerProps?: StackProps;
@@ -19,26 +19,29 @@ export const DashboardCard = ({ children, id, title, titleProps = {}, containerP
                 backgroundColor="$bgPanel"
                 flex={1}
                 {...containerProps}
-                style={{ overflow: 'hidden' }} 
+                style={{ overflow: 'hidden', ...containerProps.style }}
             >
-                {title?<XStack
-                    w="100%"
-                    btrr={9}
-                    btlr={9}
-                    ml={15}
-                    mt={10}
-                    h={20}
-                    ai="center"
-                    {...titleProps}
+                {title ? (
+                    <XStack
+                        w="100%"
+                        btrr={9}
+                        btlr={9}
+                        ml={15}
+                        mt={10}
+                        h={20}
+                        ai="center"
+                        {...titleProps}
+                    >
+                        {title}
+                    </XStack>
+                ) : null}
+                <YStack
+                    flex={1}
+                    padding={15}
+                    style={{ overflowY: 'auto', maxHeight: '100%' }}
                 >
-                    {title}
-                </XStack>:<></>}
-                <XStack
-                flex={1}
-                padding={15}>
                     {children}
-                </XStack>
-                
+                </YStack>
             </YStack>
         </Tinted>
     );
