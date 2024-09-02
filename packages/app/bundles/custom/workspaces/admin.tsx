@@ -24,6 +24,7 @@ import {
     TotalObjects,
     ListLatestUsers,
     TotalGroups,
+    ListGroups,
     TotalEvents
 } from '../../widgets'
 
@@ -50,6 +51,7 @@ export default ({ pages }) => {
                 { key: 'totalusers', content: <TotalUsers title='Total users' id={'totalusers'} /> },
                 { key: 'lastevents', content: <LastEvents title='Last Events' id={'lastevents'} /> },
                 { key: 'listpages', content: <ListPages title='Pages' id={'listpages'} /> },
+                {key: 'listgroups', content: <ListGroups title='Groups' id={'listgroups'} />},
                 { key: 'totalobjects', content: <TotalObjects title='Total objects' id={'totalobjects'} /> },
                 { key: 'listlatestusers', content: <ListLatestUsers title='Latest Users' id={'listlatestusers'} /> },
                 { key: 'totalgroups', content: <TotalGroups title='Total groups' id={'totalgroups'} /> },
@@ -62,37 +64,43 @@ export default ({ pages }) => {
             ],
             "layout": {
                 "lg": [
-                    { i: 'servicememorychart', x: 0, y: 0, w: 6, h: 12, isResizable: false },
-                    { i: 'lastevents', x: 6, y: 0, w: 6, h: 12, isResizable: false },
-                    { i: 'totalmemory', x: 0, y: 12, w: 3, h: 6, isResizable: false },
-                    { i: 'totalcpu', x: 3, y: 12, w: 3, h: 6, isResizable: false },
-                    { i: 'totalusers', x: 6, y: 12, w: 2, h: 6, isResizable: false },
-                    { i: 'totalgroups', x: 8, y: 12, w: 2, h: 6, isResizable: false },
-                    { i: 'totalobjects', x: 10, y: 12, w: 2, h: 6, isResizable: false },
-                    { i: 'listpages', x: 9, y: 18, w: 3, h: 6, isResizable: false },
-                    { i: 'totalevents', x: 0, y: 18, w: 2, h: 6, isResizable: false },
-                    { i: 'listlatestusers', x: 3, y: 18, w: 4, h: 6, isResizable: false }
-                    
+                    { "i": "totalcpu", "x": 0, "y": 0, "w": 3, "h": 6, "isResizable": true },
+                    { "i": "totalmemory", "x": 3, "y": 0, "w": 3, "h": 6, "isResizable": true },
+                    { "i": "totalusers", "x": 6, "y": 0, "w": 2, "h": 6, "isResizable": true },
+                    { "i": "listlatestusers", "x": 9, "y": 0, "w": 4, "h": 6, "isResizable": true },
+                    { "i": "servicememorychart", "x": 0, "y": 6, "w": 6, "h": 13, "isResizable": true },
+                    { "i": "lastevents", "x": 6, "y": 6, "w": 6, "h": 13, "isResizable": true },
+                    { "i": "totalgroups", "x": 0, "y": 19, "w": 2, "h": 6, "isResizable": true },
+                    { "i": "listgroups", "x": 2, "y": 19, "w": 3, "h": 6, "isResizable": true },
+                    { "i": "totalevents", "x": 5, "y": 19, "w": 2, "h": 6, "isResizable": true },
+                    { "i": "totalobjects", "x": 7, "y": 19, "w": 2, "h": 6, "isResizable": true },
+                    { "i": "listpages", "x": 9, "y": 19, "w": 3, "h": 6, "isResizable": true }
                 ],
                 "md": [
-                    { i: 'servicememorychart', x: 0, y: 0, w: 8, h: 12, isResizable: false },
-                    { i: 'lastevents', x: 0, y: 12, w: 8, h: 12, isResizable: false },
-                    { i: 'totalmemory', x: 0, y: 24, w: 4, h: 6, isResizable: false },
-                    { i: 'totalcpu', x: 4, y: 24, w: 4, h: 6, isResizable: false },
-                    { i: 'totalusers', x: 0, y: 30, w: 4, h: 6, isResizable: false },
-                    { i: 'listpages', x: 4, y: 30, w: 4, h: 6, isResizable: false },
-                    { i: 'totalobjects', x: 0, y: 36, w: 4, h: 6, isResizable: false },
-                    { i: 'listlatestusers', x: 4, y: 36, w: 4, h: 6, isResizable: false }
+                    { "i": "totalcpu", "x": 0, "y": 0, "w": 3, "h": 6, "isResizable": true },
+                    { "i": "totalmemory", "x": 3, "y": 0, "w": 4, "h": 6, "isResizable": true },
+                    { "i": "totalusers", "x": 7, "y": 0, "w": 3, "h": 6, "isResizable": true },
+                    { "i": "listlatestusers", "x": 0, "y": 6, "w": 12, "h": 6, "isResizable": true },
+                    { "i": "servicememorychart", "x": 0, "y": 12, "w": 12, "h": 12, "isResizable": true },
+                    { "i": "lastevents", "x": 0, "y": 24, "w": 12, "h": 12, "isResizable": true },
+                    { "i": "totalgroups", "x": 0, "y": 36, "w": 3, "h": 6, "isResizable": true },
+                    { "i": "listgroups", "x": 3, "y": 36, "w": 6, "h": 6, "isResizable": true },
+                    { "i": "totalevents", "x": 9, "y": 36, "w": 3, "h": 6, "isResizable": true },
+                    { "i": "totalobjects", "x": 0, "y": 42, "w": 3, "h": 6, "isResizable": true },
+                    { "i": "listpages", "x": 3, "y": 42, "w": 9, "h": 6, "isResizable": true }
                 ],
                 "sm": [
-                    { i: 'servicememorychart', x: 0, y: 0, w: 12, h: 12, isResizable: false },
-                    { i: 'lastevents', x: 0, y: 12, w: 12, h: 12, isResizable: false },
-                    { i: 'totalmemory', x: 0, y: 24, w: 6, h: 6, isResizable: false },
-                    { i: 'totalcpu', x: 6, y: 24, w: 6, h: 6, isResizable: false },
-                    { i: 'totalusers', x: 0, y: 30, w: 6, h: 6, isResizable: false },
-                    { i: 'listpages', x: 6, y: 30, w: 6, h: 6, isResizable: false },
-                    { i: 'totalobjects', x: 0, y: 36, w: 6, h: 6, isResizable: false },
-                    { i: 'listlatestusers', x: 6, y: 36, w: 6, h: 6, isResizable: false }
+                    { "i": "totalcpu", "x": 0, "y": 0, "w": 6, "h": 6, "isResizable": true },
+                    { "i": "totalmemory", "x": 0, "y": 6, "w": 6, "h": 6, "isResizable": true },
+                    { "i": "totalusers", "x": 0, "y": 12, "w": 6, "h": 6, "isResizable": true },
+                    { "i": "listlatestusers", "x": 0, "y": 18, "w": 6, "h": 6, "isResizable": true },
+                    { "i": "servicememorychart", "x": 0, "y": 24, "w": 6, "h": 12, "isResizable": true },
+                    { "i": "lastevents", "x": 0, "y": 36, "w": 6, "h": 12, "isResizable": true },
+                    { "i": "totalgroups", "x": 0, "y": 48, "w": 6, "h": 6, "isResizable": true },
+                    { "i": "listgroups", "x": 0, "y": 54, "w": 6, "h": 6, "isResizable": true },
+                    { "i": "totalevents", "x": 0, "y": 60, "w": 6, "h": 6, "isResizable": true },
+                    { "i": "totalobjects", "x": 0, "y": 66, "w": 6, "h": 6, "isResizable": true },
+                    { "i": "listpages", "x": 0, "y": 72, "w": 6, "h": 6, "isResizable": true }
                 ]
             },
             "label": "Dashboard"
