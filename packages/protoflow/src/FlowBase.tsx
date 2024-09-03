@@ -80,7 +80,6 @@ interface FlowProps {
     defaultSelected?: Function,
     autoFitView?: boolean,
     nodeMenu?: any,
-    rawCodeFromMenu?: boolean
 }
 
 const FlowsBase = ({
@@ -123,7 +122,6 @@ const FlowsBase = ({
     metadata = {},
     defaultSelected = () => undefined,
     nodeMenu = null,
-    rawCodeFromMenu = false
 }: FlowProps) => {
     const { data, publish } = topics;
     const useFlowsStore = useContext(FlowStoreContext)
@@ -936,7 +934,6 @@ const FlowsBase = ({
                                 setNodes(nodes)
                                 setEdges(edges)
                             }}
-                            rawCodeFromMenu={rawCodeFromMenu}
                             edges={edges}
                             diagramNodes={nodes}
                             setNodes={setNodes}
@@ -949,6 +946,7 @@ const FlowsBase = ({
                                 top: '0px',
                                 left: '0px'
                             }}
+                            config={config?.menu}
                             hideBaseComponents={hideBaseComponents}
                             customComponents={_customComponents}
                             customSnippets={customSnippets}

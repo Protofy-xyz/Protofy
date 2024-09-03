@@ -91,10 +91,8 @@ const SearchBar = forwardRef(({ inputBorder, bgColor, textColor, interactiveColo
             onFocus={e => e.currentTarget.style.border = '2px solid ' + interactiveColor}
             onBlur={e => e.currentTarget.style.border = inputBorder}
             value={value}
-            // onKeyDown={onKeyDown}
             onChange={t => onChange(t.target.value)}
             {...props}
-        // placeholder={rawCodeFromMenu ? "search or write code" : "search nodes"}
         />
         {/*@ts-ignore*/}
         <Search color='#57534e' size={20} style={{ marginRight: '-5px', marginLeft: '8px', position: 'absolute', top: 16 }} />
@@ -130,6 +128,7 @@ const RenderCustomComponent = ({ index, node, addElement, isSelected, realIndex 
 
 const Menu = withTopics(({
     enabledNodes = ['*'],
+    config = {},
     hideBaseComponents,
     customComponents = [],
     customSnippets = [],
@@ -141,7 +140,6 @@ const Menu = withTopics(({
     takeSnapshot = () => null,
     reactFlowWrapper = null,
     topics,
-    rawCodeFromMenu,
     onAddNode = (node: any, newEdge: any, initialData: any) => null,
     onEditDiagram = (nodes, edges, focus) => { }
 }) => {
@@ -149,7 +147,11 @@ const Menu = withTopics(({
     const inputRef = useRef()
     const scrollRef: any = useRef()
 
-    const [selectedTab, setSelectedTab] = useState('nodesTab')
+    const visibleTabs = config?.visibleTabs ?? ["*"]
+    const allTabsVisible = visibleTabs.includes("*")
+
+    const defaultTab = allTabsVisible ? 'nodes' : visibleTabs[0]
+    const [selectedTab, setSelectedTab] = useState(defaultTab)
     const [searchValue, setSearchValue] = useState('')
     const [fragmentText, setFragmentText] = useState('')
     const [selectedNode, setSelectedNode] = useState(0)
@@ -263,6 +265,11 @@ const Menu = withTopics(({
     }, {})
 
     const extraStyle = menuState != 'open' ? { top: '-5000px' } : { top: getMenuTop() + 'px', left: getMenuLeft() + 'px' }
+
+    const isTabVisible = (tab) => {
+        if (allTabsVisible || visibleTabs.includes(tab)) return true
+        else return false
+    }
 
     const addElement = async (type, customNode?) => {
         takeSnapshot()
@@ -405,7 +412,7 @@ const Menu = withTopics(({
                     backgroundColor={bgColor}
                     onValueChange={(v) => {
                         try {
-                            if (["nodesTab", "snippetsTab"].includes(v)){
+                            if (["nodes", "snippets"].includes(v)) {
                                 //@ts-ignore
                                 setTimeout(() => inputRef?.current.focus(), 20)
                             }
@@ -415,31 +422,32 @@ const Menu = withTopics(({
                     style={{ boxShadow: generateBoxShadow(8), backdropFilter: 'blur(20px)' }}
                 >
                     <Tabs.List
+                        display={!allTabsVisible && visibleTabs.length == 1 ? 'none' : 'flex'}
                         disablePassBorderRadius="bottom"
                     >
-                        <Tabs.Tab flex={1} value="nodesTab" backgroundColor={"transparent"}>
-                            <SizableText fontWeight={selectedTab == "nodesTab" ? "500" : ""} color={selectedTab == "nodesTab" ? interactiveColor : ""}>Nodes</SizableText>
-                        </Tabs.Tab>
-                        <Tabs.Tab flex={1} value="snippetsTab" backgroundColor={"transparent"}>
-                            <SizableText fontWeight={selectedTab == "snippetsTab" ? "500" : ""} color={selectedTab == "snippetsTab" ? interactiveColor : ""}>Snippets</SizableText>
-                        </Tabs.Tab>
-                        <Tabs.Tab flex={1} value="codeTab" backgroundColor={"transparent"}>
-                            <SizableText fontWeight={selectedTab == "codeTab" ? "500" : ""} color={selectedTab == "codeTab" ? interactiveColor : ""}>Code</SizableText>
-                        </Tabs.Tab>
+                        {isTabVisible('nodes') && <Tabs.Tab flex={1} value="nodes" backgroundColor={"transparent"}>
+                            <SizableText fontWeight={selectedTab == "nodes" ? "500" : ""} color={selectedTab == "nodes" ? interactiveColor : ""}>Nodes</SizableText>
+                        </Tabs.Tab>}
+                        {isTabVisible('snippets') && <Tabs.Tab flex={1} value="snippets" backgroundColor={"transparent"}>
+                            <SizableText fontWeight={selectedTab == "snippets" ? "500" : ""} color={selectedTab == "snippets" ? interactiveColor : ""}>Snippets</SizableText>
+                        </Tabs.Tab>}
+                        {isTabVisible('code') && <Tabs.Tab flex={1} value="code" backgroundColor={"transparent"}>
+                            <SizableText fontWeight={selectedTab == "code" ? "500" : ""} color={selectedTab == "code" ? interactiveColor : ""}>Code</SizableText>
+                        </Tabs.Tab>}
                     </Tabs.List>
                     <Separator />
                     <SearchBar
                         ref={inputRef}
-                        display={["nodesTab", "snippetsTab"].includes(selectedTab) ? 'flex' : 'none'}
+                        display={["nodes", "snippets"].includes(selectedTab) ? 'flex' : 'none'}
                         onChange={setSearchValue}
                         value={searchValue}
                         inputBorder={inputBorder}
                         textColor={textColor}
                         bgColor={highlightInputBackgroundColor}
                         interactiveColor={interactiveColor}
-                        placeholder={selectedTab == "snippetsTab" ? "search snippets" : "search nodes"}
+                        placeholder={selectedTab == "snippets" ? "search snippets" : "search nodes"}
                     />
-                    <TabsContent value="nodesTab">
+                    {isTabVisible('nodes') && <TabsContent value="nodes">
                         <List>
                             {Object.keys(groupByCategory).map((category, index) => {
                                 return <div key={index}>
@@ -460,9 +468,9 @@ const Menu = withTopics(({
                                 </div>
                             })}
                         </List>
-                    </TabsContent>
+                    </TabsContent>}
 
-                    <TabsContent value="snippetsTab">
+                    {isTabVisible('snippets') && <TabsContent value="snippets">
                         <List>
                             {Object.keys(snippetsByCategory).map((category, index) => {
                                 return <div key={category}>
@@ -512,10 +520,10 @@ const Menu = withTopics(({
                                 </div>
                             })}
                         </List>
-                    </TabsContent>
+                    </TabsContent>}
                     {
-                        rawCodeFromMenu &&
-                        <TabsContent value="codeTab" gap="$2">
+                        isTabVisible('code') &&
+                        <TabsContent value="code" gap="$2">
                             <Monaco
                                 sourceCode={fragmentText}
                                 options={{

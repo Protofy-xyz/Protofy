@@ -40,6 +40,7 @@ export default {
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
     const {getFlowsCustomComponents, getFlowMasks} = SiteConfig.bundles.masks
     const { getFlowsCustomSnippets } = SiteConfig.bundles.snippets
+    const { getFlowsMenuConfig } = SiteConfig.bundles.flowsMenu
 
     const query = Object.fromEntries(searchParams.entries());
 
@@ -76,7 +77,7 @@ export default {
             sourceCode={sourceCode}
             themeMode={resolvedTheme}
             key={'flow'}
-            config={{ masks: getFlowMasks(pathname, query), layers: [] }}
+            config={{ masks: getFlowMasks(pathname, query), layers: [], menu: getFlowsMenuConfig(pathname, query) }}
             bgColor={'transparent'}
             dataNotify={(data: any) => {
               if (data.notifyId) {

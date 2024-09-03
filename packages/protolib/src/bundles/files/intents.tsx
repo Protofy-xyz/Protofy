@@ -125,6 +125,7 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   const theme = useTheme()
   const tint = useTint().tint
   const SiteConfig = useContext<SiteConfigType>(AppConfContext);
+  const { getFlowsMenuConfig } = SiteConfig.bundles.flowsMenu
   const { getFlowsCustomComponents } = SiteConfig.bundles.masks
   const { getFlowsCustomSnippets } = SiteConfig.bundles.snippets
   const toast = useToastController();
@@ -175,7 +176,6 @@ If you include anything else in your message (like reasonings or natural languag
 
   const { resolvedTheme } = useThemeSetting()
   const [mode, setMode] = useState('flow')
-
 
   return <AsyncView atom={fileContent}>
     <XStack mt={30} f={1} width={"100%"}>
@@ -298,6 +298,7 @@ If you include anything else in your message (like reasonings or natural languag
               </YStack>
             )
           }}
+          config={{ menu: getFlowsMenuConfig(pathname, query) }}
           isModified={isModified}
           rawCodeFromMenu={true}
           customComponents={getFlowsCustomComponents(pathname, query)}
