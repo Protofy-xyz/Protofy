@@ -1,21 +1,6 @@
 import flowSnippets from 'protolib/bundles/flow/snippets';
 import customSnippets from './custom/snippets';
-
-const paths = {
-    devices: [
-        'devices',
-        'deviceDefinitions',
-        'deviceBoards',
-        'deviceCores',
-        'deviceSdks'
-    ],
-    visualui: [
-        'visualui',
-    ],
-    apis:[
-        'apis'
-    ]
-}
+import { paths } from './flows';
 
 export const getFlowsCustomSnippets = (path: string, queryParams: {}) => {
     const pathParts = path.split('/')

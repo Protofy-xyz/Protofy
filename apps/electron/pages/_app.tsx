@@ -36,6 +36,7 @@ import { palettes } from 'app/bundles/palettes'
 import Workspaces from 'app/bundles/workspaces'
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 import { getFlowsCustomSnippets } from "app/bundles/snippets"
+import { getFlowsMenuConfig } from "app/bundles/flows"
 import { PanelLayout } from 'app/layout/PanelLayout'
 
 setConfig(getBaseConfig("electron", process))
@@ -80,6 +81,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
           <ThemeProvider>
             <AppConfContext.Provider value={{
               ...AppConfig, bundles: {
+                flowsMenu: { getFlowsMenuConfig },
                 masks: { getFlowMasks, getFlowsCustomComponents },
                 snippets: { getFlowsCustomSnippets },
                 palettes,

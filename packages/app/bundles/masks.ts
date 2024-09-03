@@ -21,22 +21,7 @@ import logsMasks from 'protolib/bundles/logs/masks'
 import playwrightMasks from 'protolib/bundles/playwright/masks'
 import networkMasks from 'protolib/bundles/network/masks'
 import stateMachineMasks from 'protolib/bundles/stateMachines/masks'
-
-const paths = {
-    devices: [
-        'devices',
-        'deviceDefinitions',
-        'deviceBoards',
-        'deviceCores',
-        'deviceSdks'
-    ],
-    visualui: [
-        'visualui',
-    ],
-    apis:[
-        'apis'
-    ]
-}
+import { paths } from './flows';
 
 export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     const pathParts = path.split('/')

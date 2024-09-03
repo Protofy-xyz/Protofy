@@ -17,6 +17,7 @@
     "start-fast": "START_ALL=1 pm2 start ecosystem.config.js --no-daemon",
     "start-service": "yarn prepare-dev && yarn start-service-fast",
     "start-service-fast": "START_ALL=1 pm2 start ecosystem.config.js && yarn monit",
+    "start-dev-service": "FULL_DEV=1 yarn prepare-dev && FULL_DEV=1 yarn start-service-fast",
     "start-dev": "yarn prepare-dev && yarn start-dev-fast",
     "start-dev-fast": "FULL_DEV=1 && yarn start-fast",
     "start-dev-profiler": "PROFILER_ENABLED=true yarn start-dev",
@@ -47,7 +48,9 @@
     "sync": "git fetch upstream && git merge upstream/main",
     "fix": "manypkg fix",
     "check-deps": "check-dependency-version-consistency .",
-    "clean": "yarn workspaces foreach --all run clean"
+    "clean": "yarn workspaces foreach --all run clean",
+    "protofy-update-setup": "git remote add protofy git@github.com:Protofy-xyz/Protofy.git",
+    "protofy-update": "git fetch protofy && git rebase protofy/main"
   },
   "resolutions": {
     "react": "18.2.0",

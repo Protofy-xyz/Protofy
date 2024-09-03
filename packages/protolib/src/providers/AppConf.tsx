@@ -25,6 +25,9 @@ export type SiteConfigType = {
     assistant: boolean,
     projectName: string,
     bundles: {
+        flowsMenu: {
+            getFlowsMenuConfig: (path: string, queryParams: {}) => any,
+        },
         masks: {
             getFlowsCustomComponents: (path: string, queryParams: {}) => any[],
             getFlowMasks: (path: string, queryParams: {}) => any[]
@@ -52,6 +55,9 @@ export const AppConfContext = createContext<SiteConfigType>({
     assistant: true,
     projectName: 'Protofy',
     bundles: {
+        flowsMenu: {
+            getFlowsMenuConfig: (path: string, queryParams: {}) => {}
+        },
         masks: {
             getFlowsCustomComponents: (path: string, queryParams: {}) => [],
             getFlowMasks: (path: string, queryParams: {}) => []

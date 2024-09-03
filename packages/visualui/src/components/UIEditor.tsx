@@ -30,6 +30,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
     const {getFlowsCustomComponents, getFlowMasks} = SiteConfig.bundles.masks
     const {getFlowsCustomSnippets} = SiteConfig.bundles.snippets
+    const { getFlowsMenuConfig } = SiteConfig.bundles.flowsMenu
 
     const codeRef = useRef("")
     const flowsData = useRef({})
@@ -217,7 +218,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                             customComponents={getFlowsCustomComponents(pathname, query)}
                             customSnippets={getFlowsCustomSnippets(pathname, query)}
                             onSave={(code, _, data) => onEditorSave(code, data)}
-                            config={{ masks: getFlowMasks(pathname, query) }}
+                            config={{ masks: getFlowMasks(pathname, query), menu: getFlowsMenuConfig(pathname, query) }}
                             zoomOnDoubleClick={!isViewModePreview}
                             themeMode={resolvedTheme}
                             bgColor={'transparent'}
