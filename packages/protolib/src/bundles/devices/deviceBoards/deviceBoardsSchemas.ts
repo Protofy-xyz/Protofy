@@ -44,6 +44,15 @@ export class DeviceBoardModel extends ProtoModel<DeviceBoardModel> {
       return result
   }
 
+  getJsArray(): string{
+    const arrayPorts = this.data.ports.map((port) => {
+        if(port.type === 'IO' || port.type === 'I'){
+            return null;
+        }
+    });
+    return  JSON.stringify([null,null,...arrayPorts]);
+  }
+
   protected static _newInstance(data: any, session?: SessionDataType): DeviceBoardModel {
       return new DeviceBoardModel(data, session);
   }
