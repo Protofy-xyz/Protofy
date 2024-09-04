@@ -111,11 +111,13 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useRootTheme()
+  const forcedTheme = SiteConfig.ui.forcedTheme
 
   const isDev = process.env.NODE_ENV === 'development'
 
   return (
     <NextThemeProvider
+      forcedTheme={forcedTheme}
       onChangeTheme={(next) => {
         setTheme(next as any)
       }}

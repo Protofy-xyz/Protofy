@@ -17,6 +17,7 @@ const SiteConfig = {
         defaultTint: 'green', // 'gray', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'red'
         tintSwitcher: true,
         themeSwitcher: true,
+        forcedTheme: undefined, // 'light', 'dark'
     }
 }
 export { SiteConfig }
