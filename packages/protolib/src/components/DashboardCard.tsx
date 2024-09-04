@@ -19,7 +19,7 @@ export const DashboardCard = ({ children, id, title, titleProps = {}, containerP
                 backgroundColor="$bgPanel"
                 flex={1}
                 {...containerProps}
-                style={{ overflow: 'hidden', ...containerProps.style }}
+                style={{ height: '100%', overflow: 'hidden', ...containerProps.style }}
             >
                 {title ? (
                     <XStack
@@ -37,7 +37,8 @@ export const DashboardCard = ({ children, id, title, titleProps = {}, containerP
                 ) : null}
                 <YStack
                     flex={1}
-                    padding={15}
+                    paddingHorizontal={15}
+                    paddingBottom={15}
                     style={{ overflowY: 'auto', maxHeight: '100%' }}
                 >
                     {children}

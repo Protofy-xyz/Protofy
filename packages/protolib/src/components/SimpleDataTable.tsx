@@ -11,8 +11,8 @@ interface SimpleDataTableProps {
 
 export const SimpleDataTable: React.FC<SimpleDataTableProps> = ({ columns, data, maxHeight }) => {
     return (
-        <YStack>
-            <XStack padding={10} borderBottomWidth={1} borderBottomColor="$borderColor">
+        <YStack flex={1} height="100%"> 
+            <XStack padding={10} borderBottomWidth={1} borderBottomColor="$borderColor" >
                 {columns.map((col, index) => (
                     <Text 
                         key={index} 
@@ -26,9 +26,10 @@ export const SimpleDataTable: React.FC<SimpleDataTableProps> = ({ columns, data,
             </XStack>
 
             <YStack 
+                flex={1} 
                 style={{ 
-                    maxHeight: maxHeight || 300, 
-                    overflowY: 'auto'
+                    maxHeight: maxHeight || '100%', 
+                    overflowY: 'auto' 
                 }}
             >
                 {data.map((row, rowIndex) => (
