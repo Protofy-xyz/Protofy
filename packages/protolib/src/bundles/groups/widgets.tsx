@@ -24,6 +24,6 @@ export const TotalGroups = ({ title, id }) => (
         fetchFunc="/adminapi/v1/groups"
         model={GroupModel}
         icon={Tag}
-        link="./users"
+        link="./groups"
     />
 );
