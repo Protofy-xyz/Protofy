@@ -129,10 +129,6 @@ export class ProtoLevelDB extends ProtoDB {
 
     del(key: string, options?) {
         const result = this.db.del(key, options)
-        if (this.orderedInsert) {
-            console.log('skip regenerate indexes because orderedInsert is enabled')
-            return result
-        }
         this.regenerateIndexes()
         return result
     }
