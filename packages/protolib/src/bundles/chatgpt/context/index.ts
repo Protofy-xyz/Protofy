@@ -1,19 +1,22 @@
 
-const chatGPTSession = async ({
+export const chatGPTSession = async ({
     apiKey = process.env.OPENAI_API_KEY,
     done = (response, message) => { },
     error = (error) => { },
+    model = "gpt-4-1106-preview",
+    max_tokens = 4096,
     ...props
 }: ChatGPTRequest) => {
+
     const body: GPT4VCompletionRequest = {
-        model: "gpt-4-1106-preview",
-        max_tokens: 4096,
+        model,
+        max_tokens,
         ...props
     }
 
     if (!apiKey) {
-        error("No api Key provided")
-        return
+        error("No API Key provided");
+        return null;
     }
 
     try {
@@ -26,15 +29,16 @@ const chatGPTSession = async ({
             body: JSON.stringify(body),
         });
         const json = await response.json();
-        if (done) done(json)
-        return json
+        if (done) done(json);
+        return json;
     } catch (e) {
-        if (error) error(e)
-        return
+        if (error) error(e);
+        return null;
     }
 }
 
-const chatGPTPrompt = async ({
+
+export const chatGPTPrompt = async ({
     message,
     ...props
 
