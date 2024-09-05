@@ -25,11 +25,20 @@ export const chatGPTSession = async ({
         console.error("Error fetching key:", err);
     }
     
-    apiKey = apiKey || process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+        apiKey = process.env.OPENAI_API_KEY;
+    }
 
     if (!apiKey) {
+        //logger.error("No API Key provided");
         error("No API Key provided");
-        return null;
+        return {
+            isError: true,
+            data:{error: {
+                message: "No API Key provided",
+                code: "invalid_api_key"
+            }}
+        };
     }
     
     try {
