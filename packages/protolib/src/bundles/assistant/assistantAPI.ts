@@ -12,7 +12,7 @@ export function AssistantAPI(app, context) {
             const response = await chatGPTSession({
                 apiKey: process.env.OPENAI_API_KEY,
                 messages: messages,
-                model: gptModel ?? "gpt-4-1106-preview",
+                model: gptModel ?? "gpt-4o",
                 max_tokens: MAX_TOKENS
             });
         
