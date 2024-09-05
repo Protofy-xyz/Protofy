@@ -1,6 +1,11 @@
+import { getLogger } from "protobase";
+import { getServiceToken } from '../../apis/context';
+import { getKey } from "../../keys/context";
+
+const logger = getLogger()
 
 export const chatGPTSession = async ({
-    apiKey = process.env.OPENAI_API_KEY,
+    apiKey = undefined,
     done = (response, message) => { },
     error = (error) => { },
     model = "gpt-4o",
@@ -14,11 +19,19 @@ export const chatGPTSession = async ({
         ...props
     }
 
+    try {
+        apiKey = await getKey({ key: "OPENAI_API_KEY", token: getServiceToken() });
+    } catch (err) {
+        console.error("Error fetching key:", err);
+    }
+    
+    apiKey = apiKey || process.env.OPENAI_API_KEY;
+
     if (!apiKey) {
         error("No API Key provided");
         return null;
     }
-
+    
     try {
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
@@ -51,12 +64,12 @@ export const chatGPTPrompt = async ({
             }
         ],
         ...props,
-        done: (response) => { 
+        done: (response) => {
             let message = ""
-            if(response.choices && response.choices.length){
+            if (response.choices && response.choices.length) {
                 message = response.choices[0].message.content
             }
-            if(props.done) props.done(response, message)
+            if (props.done) props.done(response, message)
         }
     })
 

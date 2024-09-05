@@ -1,10 +1,14 @@
 import { API } from "protobase";
+import { getLogger } from "protobase";
 
-const getKey = async ({ key = '', done = (key) => {}, error = (err) => {}, token = '' }) => {
+const logger = getLogger()
+
+export const getKey = async ({ key = '', done = (key) => {}, error = (err) => {}, token = '' }) => {
     if(!key) {
         error("No key provided")
         return
     }
+
     var urlEnch = '/adminapi/v1/keys/' + key
 
     if (token) {
