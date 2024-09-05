@@ -4,8 +4,8 @@ import { chatGPTSession } from '../chatgpt/context'
 
 const MAX_TOKENS = 4096
 
-export function AiAssistantsAPI(app, context) {
-    app.post('/adminapi/v1/assistants', handler(async (req: any, res: any) => {
+export function AssistantAPI(app, context) {
+    app.post('/adminapi/v1/assistant', handler(async (req: any, res: any) => {
         let { messages, gptModel } = req.body;
 
         try {

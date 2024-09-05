@@ -13,7 +13,7 @@ import { DeviceDefinitionsAPI } from './devices/deviceDefinitions/deviceDefiniti
 import { DatabasesAPI } from './databases/databasesAPI'
 import { WorkspacesAPI } from './workspaces/workspacesAPI'
 import { ResourcesAPI } from './resources/resourcesAPI'
-import { AiAssistantsAPI } from './aiAssistants/aiAssistantsAPI';
+import { AssistantAPI } from './assistant/assistantAPI';
 import { MasksAPI } from './visualui/masksAPI';
 import { LogsAPI } from './logs/logsAPI'
 import { ServicesAPI } from './services/servicesAPI'
@@ -37,7 +37,7 @@ export const AdminAPIBundles = (app, context) => {
   DatabasesAPI(app, context)
   WorkspacesAPI(app, context)
   ResourcesAPI(app, context)
-  AiAssistantsAPI(app, context)
+  AssistantAPI(app, context)
   MasksAPI(app, context)
   LogsAPI(app, context)
   ServicesAPI(app, context) 
