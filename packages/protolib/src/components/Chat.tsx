@@ -276,10 +276,9 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                             console.log('prompt: ', prompt)
                             toggleMsgLoader();
                             const result = await API.post('/adminapi/v1/assistant', {
-                                messages: [{ role: 'user', content: prompt }],
+                                messages: [{ role: 'user', content: message }],
                                 best_of: 4,
                                 temperature: isHelp ? 0 : 1,
-                                gptModel: isVision ? "gpt-4-vision-preview" : undefined // undefined sets default gpt model
                             })
                             toggleMsgLoader();
                             console.log('result: ', result)
