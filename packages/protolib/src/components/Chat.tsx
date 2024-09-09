@@ -282,12 +282,11 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                             })
                             toggleMsgLoader();
                             console.log('result: ', result)
-    
                             if (result.isError) {
                                 addResponseMessage("Error generating response: ", result.error)
-                            } else if (result.data && result.data.error) {
-                                var errorMsg = result.data.error.message;
-                                if (result.data.error.code === "invalid_api_key") {
+                            } else if (result.data && result.data.data && result.data.data.error) {
+                                var errorMsg = result.data.data.error.message;
+                                if (result.data.data.error.code === "invalid_api_key") {
                                     errorMsg = errorMsg + '\nPlease add your key named "OPENAI_API_KEY" in Keys tab';
                                 }
                                 addResponseMessage(errorMsg);
