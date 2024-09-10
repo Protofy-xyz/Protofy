@@ -108,6 +108,9 @@ export const PromptAtom = atom<PromptContext[]>([{
         - /workspace/dev/deviceDefinitions A CRUD for device definitions. A device definition allows the user to define ESPHome yaml files assigned with a name, that later can be used to flash esp32 devices and enroll them into the IoT system
         - /workspace/dev/devices View a list of online devices, and run the 'actions' and reads the 'monitors' for each online device. IoT admin page.
 
+        All the user questions will be related to this system, Protofy. The system can be used to create websites, mobile apps (still alpha stage), electron apps (still alpha stage), apis and automations,
+        and IoT systems. Reply in the language the user uses to make the question.
+
         `
     },
     generateCommand: (prompt) => {
