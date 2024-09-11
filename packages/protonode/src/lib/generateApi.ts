@@ -49,6 +49,7 @@ type AutoAPIOptions = {
     itemsPerPage?: number
     defaultOrderBy?: string,
     defaultOrderDirection?: string,
+    skipStorage?: Function,
     onBeforeList?: Function,
     onAfterList?: Function,
     onBeforeCreate?: Function,
@@ -89,6 +90,7 @@ export const AutoAPI = ({
     extraData = {},
     logLevel = 'info',
     itemsPerPage = 25,
+    skipStorage = async (data, session?,req?)=> false,
     onBeforeList = async (data, session?, req?) => data,
     onAfterList = async (data, session?, req?) => data,
     onBeforeCreate = async (data, session?, req?) => data,
@@ -331,18 +333,21 @@ export const AutoAPI = ({
         }
 
         const entityModel = await (modelType.load(await onBeforeCreate(req.body, session, req), session).createTransformed(transformers))
-        let dbPath = getDBPath("create", req, entityModel)
-        if(!dbPath) {
-            res.status(404).send({ error: "Not found" })
-        }
+        const skipStorageResult = skipStorage? await skipStorage(entityModel.read(), session, req):false
+        if (!skipStorageResult) {
+            let dbPath = getDBPath("create", req, entityModel)
+            if (!dbPath) {
+                res.status(404).send({ error: "Not found" })
+            }
 
-        if(!(dbPath instanceof Array)) {
-            dbPath = [dbPath]
-        }
+            if (!(dbPath instanceof Array)) {
+                dbPath = [dbPath]
+            }
 
-        for(const path of dbPath) {
-            const db = getDB(path, req, session)
-            await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
+            for (const path of dbPath) {
+                const db = getDB(path, req, session)
+                await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
+            }
         }
         
         _notify(entityModel, 'create')
@@ -359,7 +364,7 @@ export const AutoAPI = ({
                 } // event payload, event-specific data
             }, getServiceToken())
         }
-        logger[logLevel ?? 'info']({ data: entityModel.read() }, modelName + " created: " + entityModel.getId())
+        logger[logLevel ?? 'info']({ data: entityModel.read() }, modelName + " created: " + entityModel.getId() + skipStorageResult?" storage skipped":"")
         res.send(await onAfterCreate(await entityModel.readTransformed(transformers), session, req))
     }));
 
