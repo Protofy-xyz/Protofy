@@ -31,6 +31,7 @@
     "@tamagui/font-silkscreen": "^1.101.7",
     "archiver": "7.0.1",
     "cookie": "^0.6.0",
+    "discord.js": "^14.16.1",
     "express-list-endpoints": "^6.0.0",
     "googleapis": "137.1.0",
     "jotai": "^2.4.2",
