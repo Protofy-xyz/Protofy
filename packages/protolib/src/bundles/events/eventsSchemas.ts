@@ -8,6 +8,7 @@ export const BaseEventSchema = z.object(Protofy("schema", {
     user: z.string().generate((obj) => 'me').search(), // the original user that generates the action, 'system' if the event originated in the system itself
     environment: z.enum(['dev', 'prod']).optional(), // the environment where the event was generated (dev, prod, ...
     payload: z.record(z.string(), z.any()).search(), // event payload, event-specific data
+    ephemeral: z.boolean().optional(), // if true, the event will not be stored in the database
     created: z.string().generate((obj) => moment().toISOString()).search().indexed(), // event date (iso)
 }))
 

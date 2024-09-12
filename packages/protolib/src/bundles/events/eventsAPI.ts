@@ -9,6 +9,12 @@ export const EventsAPI = async (app, context) => {
         modelName: 'events',
         modelType: EventModel,
         prefix: '/adminapi/v1/',
+        skipStorage: async(data,session?,req?) => {
+            if(data.ephemeral){
+                return true
+            }
+            return false
+        },
         dbName: (action, req?, entityModel?:EventModel) => {
             if(req && req.query && req.query.env && (req.query.env == 'prod' || req.query.env == 'dev')) {
                 return req.query.env + '/events'
