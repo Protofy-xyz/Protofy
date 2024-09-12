@@ -1,5 +1,5 @@
-import { getServiceToken } from '../apis/context';
-import { getKey } from '../keys/context';
+import { getServiceToken } from '../../apis/context';
+import { getKey } from '../../keys/context';
 import { Client, GatewayIntentBits } from 'discord.js'
 
 const getToken = async (apiKey?): Promise<string> => {
@@ -29,11 +29,12 @@ type connectProps = {
     onMessage?: (message: any) => void
     onConnect?: (client) => void
     onDisconnect?: (client) => void
+    onError?: (err) => void
     apiKey?: string
 }
 
 export const discord = {
-    connect : async ({onMessage, onConnect, onDisconnect, apiKey}:connectProps) => {
+    connect : async ({onMessage, onConnect, onDisconnect, onError, apiKey}:connectProps) => {
         const key = await getToken(apiKey)
         try {
             await client.login(key)
@@ -47,7 +48,10 @@ export const discord = {
             })
     
         } catch (err) {
+            if(onError) onError(err)
             console.error("Error al iniciar el bot:", err)
         }
     }
 }
+
+export default discord

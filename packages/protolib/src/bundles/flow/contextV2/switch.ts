@@ -1,8 +1,15 @@
 import { getLogger } from 'protobase';
 
 const logger = getLogger()
+type FlowSwitchProps = {
+    condition: any
+    then?: (condition) => any
+    otherwise?: (condition) => any
+    error?: (error, condition) => any
+    after?: (condition) => any
+}
 
-export const flowSwitch = async ({condition, then, otherwise, error, after}) => {
+export const flowSwitch = async ({condition, then, otherwise, error, after}:FlowSwitchProps) => {
     const _then = then ? then : () => {}
     const _otherwise = otherwise ? otherwise : () => {}
     const _error = error ? error : () => {}

@@ -11,6 +11,7 @@ import os2 from './os/context2'
 import utils from './utils/context'
 import keys from './keys/context'
 import chatGPT from './chatgpt/context'
+import discord from './discord/context'
 import logs from './logs/context'
 import playwright from './playwright/context'
 import automations from './automations/context'
@@ -33,6 +34,7 @@ export const APIContext = {
     ...deviceContext,
     keys,
     chatGPT,
+    discord,
     flow,
     flow2,
     object,

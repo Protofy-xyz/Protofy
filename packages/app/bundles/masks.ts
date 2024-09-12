@@ -17,6 +17,7 @@ import osMasks2 from 'protolib/bundles/os/masks2'
 import utilsMasks from 'protolib/bundles/utils/masks'
 import keyMasks from 'protolib/bundles/keys/masks'
 import chatGPTMasks from 'protolib/bundles/chatgpt/masks'
+import discordMasks from 'protolib/bundles/discord/masks';
 import logsMasks from 'protolib/bundles/logs/masks'
 import playwrightMasks from 'protolib/bundles/playwright/masks'
 import networkMasks from 'protolib/bundles/network/masks'
@@ -54,6 +55,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...keyMasks,
         ...utilsMasks,
         ...chatGPTMasks,
+        ...discordMasks,
         ...logsMasks,
         ...playwrightMasks,
         ...networkMasks, 
