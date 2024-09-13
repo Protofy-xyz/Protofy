@@ -39,7 +39,7 @@ class LEDCOutput {
                     topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/command`,
                     then: [
                       {
-                        lambda: `if(x.containsKey("pwmLevel")) { id(${this.name}).set_level((float)x["pwmLevel"]); }`
+                        lambda: `float value = atoi(x.c_str()); id(${this.name}).set_level(value);`
                     },
                     ]
                   }
@@ -63,7 +63,7 @@ class LEDCOutput {
             {
               name: 'set_pwm_level',
               label: 'Set pwm level',
-              description: 'Set the pwm level on the pin',
+              description: 'Set the pwm level in percentage 0-100',
               endpoint: "/"+this.type+"/"+this.name+"/command",
               connectionType: 'mqtt',
               payload: {
