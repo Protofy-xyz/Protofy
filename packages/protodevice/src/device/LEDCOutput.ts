@@ -1,74 +1,80 @@
+import { extractComponent } from "./utils"
+
 class LEDCOutput {
-  name;
-  platform;
-  frequency;
-  mqttTopicPrefix;
-  constructor(name, platform,frequency) {
-      this.name = name
-      this.platform = platform
-      this.frequency = frequency
-      this.mqttTopicPrefix = ''
-  }
+    name;
+    platform;
+    mqttTopicPrefix;
+    type;
+    frequency;
+    constructor(name, platform,frequency) {
+        this.name = name
+        this.type = 'pwm'
+        this.platform = platform
+        this.mqttTopicPrefix = ''
+        this.frequency = frequency
+    }
+
+    setMqttTopicPrefix(setMqttTopicPrefix){
+        this.mqttTopicPrefix= setMqttTopicPrefix;
+    }
 
 
-/*mqtt:
-  broker: 192.168.0.45
-  topic_prefix: protofy-seed/mydevice
-  on_json_message:
-    topic: protofy-seed/mydevice/output/pwm1/command
-    then:
-      - lambda: |-
-          if (x.containsKey("pwmLevel"))  {
-            id(pwm1SetLevel).execute(x['pwmLevel']);
-          }
+    attach(pin,deviceComponents) {
+        const componentObjects = [
+            {
+              name: "output",
+              config: {
+                platform: this.platform,
+                id: `${this.name}`,
+                pin: pin,
+                frequency: this.frequency
+              },
+              subsystem: this.getSubsystem()
+            },
+            {
+              name: 'mqtt',
+              config: {
+                on_message: [
+                  {
+                    topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/command`,
+                    then: [
+                      {
+                        lambda: `if(x.containsKey("pwmLevel")) { id(${this.name}).set_level((float)x["pwmLevel"]); }`
+                    },
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+          componentObjects.forEach((element, j) => {
+            deviceComponents = extractComponent(element, deviceComponents, [{ key: 'mqtt', nestedKey: 'on_message' }])
+          })
+          return deviceComponents
+    }
 
-script:
-- id: pwm1SetLevel
-  parameters:
-    level: int
-  then:
-    - lambda: !lambda id(pwm1).set_level(level/100);
-*/
-
-  setMqttTopicPrefix(setMqttTopicPrefix){
-      this.mqttTopicPrefix= setMqttTopicPrefix;
-  }
-
-
-  attach(pin) {
-      return [
-  {
-      componentName: "on_json_message",
-      payload:
-`    - topic: ${this.mqttTopicPrefix}/output/${this.name}/command
-      then:
-      - lambda: |-
-          if (x.containsKey("pwmLevel"))  {
-            id(${this.name}).set_level((float)x["pwmLevel"]);
-          }
-`
-
-  },
-//   {
-// componentName:'script',
-// payload:
-// `   - id: ${this.name}SetLevel
-//      parameters:
-//        level: int
-//      then:
-//        - lambda: !lambda id(${this.name}).set_level(level/100);
-// `
-//       },  
-    {componentName: 'output',payload:
-`    - platform: ${this.platform}
-      pin: ${pin}
-      id: ${this.name}
-      frequency: ${this.frequency}
-`
-  } ]
-  }
+    getSubsystem() {
+        return {
+          name: this.name,
+          type: this.type,
+          config:{
+          },
+          actions: [
+            {
+              name: 'set_pwm_level',
+              label: 'Set pwm level',
+              description: 'Set the pwm level on the pin',
+              endpoint: "/"+this.type+"/"+this.name+"/command",
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+              },
+            },
+          ]
+        }
+      }
 }
 
-export function ledcOutput(name,frequency) { 
-  return new LEDCOutput(name, 'ledc',frequency);
+export function ledcOutput(name, frequency) { 
+    return new LEDCOutput(name, 'ledc',frequency);
 }
