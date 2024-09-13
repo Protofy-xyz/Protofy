@@ -33,6 +33,11 @@ type connectProps = {
     apiKey?: string
 }
 
+const send = async ({channel, message, onSend}:{channel: any, message: string, onSend?: Function}) => {
+    channel.send(message)
+    if(onSend) onSend()
+}
+
 export const discord = {
     connect : async ({onMessage, onConnect, onDisconnect, onError, apiKey}:connectProps) => {
         const key = await getToken(apiKey)
@@ -51,7 +56,12 @@ export const discord = {
             if(onError) onError(err)
             console.error("Error al iniciar el bot:", err)
         }
+    },
+    send,
+    response: async ({message, response, onSend}:{message: any, response: string, onSend?: Function}) => {
+        return send({channel: message.channel, message: response, onSend})
     }
 }
+
 
 export default discord
