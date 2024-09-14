@@ -22,7 +22,7 @@ const client = new Client({
 });
 
 client.once('ready', () => {
-    console.log(`ProtoBot listo! Iniciado como ${client.user?.tag}`)
+    console.log(`ProtoBot connected! ${client.user?.tag}`)
 });
 
 type connectProps = {
@@ -54,12 +54,48 @@ export const discord = {
     
         } catch (err) {
             if(onError) onError(err)
-            console.error("Error al iniciar el bot:", err)
+            console.error("Bot initialization error", err)
         }
     },
     send,
     response: async ({message, response, onSend}:{message: any, response: string, onSend?: Function}) => {
         return send({channel: message.channel, message: response, onSend})
+    },
+    readMessages: async ({channelId, limit = 0, onMessagesRead}: {channelId: string, limit?: number, onMessagesRead: Function}) => {
+        console.log("Reading messages from channel", channelId, "with limit:", limit);
+        try {
+            const channel = await client.channels.fetch(channelId);
+            if (!channel || !channel.isTextBased()) {
+                throw new Error("Channel not found or is not a text-based channel.");
+            }
+
+            let messages = [];
+            let lastMessageId;
+            let fetchedMessages;
+            let remainingMessages = limit; // Tracks how many messages are left to fetch
+
+            do {
+                // If limit is 0 (fetch all), request 100, otherwise fetch the minimum of 100 or the remaining messages
+                const fetchLimit = limit === 0 ? 100 : Math.min(remainingMessages, 100);
+                
+                fetchedMessages = await channel.messages.fetch({ limit: fetchLimit, before: lastMessageId });
+                messages.push(...fetchedMessages.values());
+                lastMessageId = fetchedMessages.last()?.id;
+                
+                // Update remaining messages count, if we are limiting
+                if (limit !== 0) {
+                    remainingMessages -= fetchedMessages.size;
+                }
+            } while (fetchedMessages.size > 0 && (limit === 0 || remainingMessages > 0));
+
+            // Call the onMessagesRead callback with the fetched messages
+            if (onMessagesRead) {
+                await onMessagesRead(messages);
+            }
+        } catch (err) {
+            console.error("Error fetching messages from the channel:", err);
+            throw err;
+        }
     }
 }
 
