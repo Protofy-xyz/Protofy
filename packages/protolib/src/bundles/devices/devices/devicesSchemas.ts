@@ -129,6 +129,26 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       return path.join(this.getConfigDir(),"config.yaml")
     }
   }
+
+  getMonitorByEndpoint(endpoint: string) {
+    if(!this.data || !this.data.subsystem) {
+      return null
+    }
+    let monitor = null
+    this.data.subsystem.forEach(subsystem => {
+      // console.log("Subsystems - getMonitorByEndpoint: ", subsystem)
+      if(subsystem.monitors) {
+        const monitorData = subsystem.monitors.find(m => m.endpoint == endpoint)
+        // console.log("MonitorData: ", monitorData)
+        if(monitorData) {
+          monitor =new DeviceSubsystemMonitor(this.data.name, subsystem.name, monitorData)
+          // console.log("Monitor: ", monitor)
+        }
+      }
+    })
+    return monitor
+  }
+
   getSubsystem(name: string) {
     if(!this.data || !this.data.subsystem) {
       return
