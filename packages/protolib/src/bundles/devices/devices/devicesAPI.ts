@@ -92,6 +92,37 @@ export const DevicesAPI = (app, context) => {
         res.send({value: data.data['items'][0]?.payload?.message})
     }))
 
+    app.post('/adminapi/v1/devices/:device/subsystems/:subsystem/monitors/:monitor/ephemeral', handler(async (req, res, session) => {
+        if(!session || !session.user.admin) {
+            res.status(401).send({error: "Unauthorized"})
+            return
+        }
+
+        const db = getDB('devices')
+        const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
+        const env = deviceInfo.getEnvironment()
+        const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
+        if(!subsystem) {
+            res.status(404).send(`Subsytem [${req.params.subsystem}] not found in device [${req.params.device}]`)
+            return
+        }
+
+        const monitor = subsystem.getMonitor(req.params.monitor)
+        if(!monitor) {
+            res.status(404).send(`Monitor [${req.params.monitor}] not found in Subsytem [${req.params.subsystem}] for device [${req.params.device}]`)
+            return
+        }
+        let {value} = req.body
+        if(value == "true"  || value == true) {
+            value = true;
+        }else{
+            value = false;
+        }
+        const device = deviceInfo.setMonitorEphemeral(req.params.subsystem, req.params.monitor, value)
+        await db.put(device.getId(), JSON.stringify(device.serialize(true)))
+        res.send({value})
+    }))
+
     app.get('/adminapi/v1/devices/:device/yaml', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
