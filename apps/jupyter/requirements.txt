@@ -1,0 +1,14 @@
+jupyter==1.1.1
+tensorflow
+scikit-learn
+pandas
+librosa==0.10.0
+soundfile==0.12.1
+matplotlib==3.8.0
+scipy
+numpy==1.26.0
+xgboost 
+joblib
+lightgbm
+catboost
+keras_tuner

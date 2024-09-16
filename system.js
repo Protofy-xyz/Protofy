@@ -64,6 +64,12 @@ const config = {
             }
         },
         {
+            "name": "jupyter",
+            "description": "Jupyter notebook for interactive computing",
+            "disabled": true,
+            "route": () => false
+        },
+        {
             "name": "expo",
             "description": "Expo services, providing the mobile user interface based on expo",
             "disabled": true,
