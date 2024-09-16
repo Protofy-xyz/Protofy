@@ -24,10 +24,31 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
         }, 200);
     }, [message])
     return (
+        <YStack >
         <XStack gap="$3">
-            <Text flex={1} marginLeft={4} textAlign={"left"}>{monitor.getLabel()}: </Text>
+            <Text flex={1} marginLeft={4} textAlign={"left"}>{monitor.getLabel()}: </Text> 
             {(loading || (value === undefined && result?.value === undefined)) ? <Spinner color="$color7" /> : <Chip color={value === undefined ? 'gray' : '$color5'} text={`${value ?? result?.value} ${monitor.getUnits()}`} scale={scale} animation="bouncy" ></Chip>}
+           
         </XStack>
+        <XStack gap="$3" paddingTop={10}>
+            <Text flex={1} marginLeft={4} textAlign={"left"}>Ephemeral event: </Text> 
+            <Switch id={"pa"} size="$1" defaultChecked={monitor.data.ephemeral??false} onCheckedChange={(checked) =>{
+                console.log("checked: ", checked)
+                fetch("/adminapi/v1/devices/"+deviceName+"/subsystems/"+subsystem.name+"/monitors/"+monitor.data.name+"/ephemeral", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({value: checked})
+                })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                
+            }}>
+                <Switch.Thumb animation="quick" />
+            </Switch>
+        </XStack>
+ </YStack>
     );
 }
 
