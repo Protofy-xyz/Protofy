@@ -53,7 +53,7 @@ def start_jupyter():
         print(f"Error: {jupyter_executable} not found.")
         sys.exit(1)
 
-    subprocess.run([jupyter_executable, '--ip=0.0.0.0', '--port=8888', '--no-browser'])
+    subprocess.run([jupyter_executable, '--ip=0.0.0.0', '--port=8888', '--no-browser', '--notebook-dir=../../'])
 
 if __name__ == "__main__":
     create_venv()

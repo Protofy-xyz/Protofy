@@ -4,9 +4,11 @@ const path = require('path');
 const pythonScript = path.join(__dirname, 'setup.py');
 const pythonExecutable = process.platform === 'win32' ? 'python' : 'python3';
 
+let subprocess;  // Declare subprocess variable to use globally
+
 try {
     // Execute the Python script and keep it running
-    const subprocess = spawn(pythonExecutable, [pythonScript], {
+    subprocess = spawn(pythonExecutable, [pythonScript], {
         windowsHide: true // Hide the window on Windows
     });
 
@@ -27,3 +29,20 @@ try {
 } catch (err) {
     console.error(`Error launching Jupyter: ${err.message}`);
 }
+
+// Handle process termination and stop the subprocess
+process.on('SIGINT', () => {
+    console.log('Received SIGINT. Shutting down...');
+    if (subprocess) {
+        subprocess.kill('SIGINT');
+    }
+    process.exit();
+});
+
+process.on('SIGTERM', () => {
+    console.log('Received SIGTERM. Shutting down...');
+    if (subprocess) {
+        subprocess.kill('SIGTERM');
+    }
+    process.exit();
+});
