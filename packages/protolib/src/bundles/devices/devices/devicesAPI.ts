@@ -119,7 +119,9 @@ export const DevicesAPI = (app, context) => {
             value = false;
         }
         const device = deviceInfo.setMonitorEphemeral(req.params.subsystem, req.params.monitor, value)
-        await db.put(device.getId(), JSON.stringify(device.serialize(true)))
+        if(device){
+            await db.put(device.getId(), JSON.stringify(device.serialize(true)))
+        }
         res.send({value})
     }))
 
