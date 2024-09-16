@@ -130,6 +130,17 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
     }
   }
 
+  setMonitorEphemeral(subsystem: string, monitor: string, value: boolean){
+    const subsystemCandidate = this.getSubsystem(subsystem)
+    if(subsystemCandidate){
+      const monitorCandidate = subsystemCandidate.getMonitor(monitor)
+      if(monitorCandidate){
+        this.data.subsystem.find(s => s.name == subsystem).monitors.find(m => m.name == monitor).ephemeral = value
+        return new DevicesModel(this.data)
+      }
+    }
+  }
+
   getMonitorByEndpoint(endpoint: string) {
     if(!this.data || !this.data.subsystem) {
       return null
