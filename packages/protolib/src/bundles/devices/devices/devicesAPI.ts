@@ -137,8 +137,22 @@ export const DevicesAPI = (app, context) => {
         if (endpoint == 'debug') {
             logger.debug({ from: device, deviceName, endpoint }, JSON.stringify({topic, message}))
         } else {
+            const db = getDB('devices')
+            const deviceInfo = DevicesModel.load(JSON.parse(await db.get(deviceName)))
+            const env = deviceInfo.getEnvironment()
+            // console.log("deviceInfo: ", deviceInfo)
+            // console.log("subsystems: ", deviceInfo.data.subsystem)
+            // console.log("endpoint: ", endpoint)
+            const monitor = deviceInfo.getMonitorByEndpoint("/"+endpoint)
+            // console.log("monitor: ", monitor)
+            if(!monitor){
+                logger.debug({ from: device, deviceName, endpoint }, "Device not found: "+JSON.stringify({topic, message}))
+                return
+            }
+            // const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
             await generateEvent(
                 {
+                    ephemeral: monitor.data.ephemeral??false,
                     environment: env,
                     path: endpoint, 
                     from: "device",
