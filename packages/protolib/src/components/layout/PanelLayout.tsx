@@ -2,7 +2,7 @@ import { YStack, ScrollView, XStack, getTokens } from 'tamagui'
 import { AppBar } from '../AppBar'
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
-export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, SideMenu, Layout, headerContents, HeaderMenu, panelBottom = true }) => {
+export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, SideMenu, Layout, headerContents, HeaderMenu, panelBottom = false }) => {
   const appBarHeight = 55
   const bgPanels = '$bgPanel'
   const _panelBgColor = '$bgContent'
