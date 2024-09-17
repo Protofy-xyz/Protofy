@@ -29,6 +29,7 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
 
     const actionValue = deviceCollection.getSubsystemAction(deviceName, deviceComponent, deviceAction)
     const isJsonType = actionValue?.payload?.type == "json"
+    const hasNoPayload = actionValue?.payload?.value == undefined
 
     useEffect(() => {
         if (node.id) getDevices()
@@ -39,12 +40,12 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
             <NodeParams id={node.id} params={[{ label: 'Device name', field: 'param-1', type: 'select', data: deviceNames }]} />
             <NodeParams id={node.id} params={[{ label: 'Component', field: 'param-2', type: 'select', data: deviceSubsystemsNames }]} />
             <NodeParams id={node.id} params={[{ label: 'Action', field: 'param-3', type: 'select', data: subsystemActionNames }]} />
-            {isJsonType && <NodeParams id={node.id} params={[{ label: 'Payload (optional)', field: 'param-4', type: 'input' }]} />}
-
+            {isJsonType || hasNoPayload
+                && <NodeParams id={node.id} params={[{ label: 'Payload' + (hasNoPayload ? '' : ' (optional)'), field: 'param-4', type: 'input' }]} />}
             <div style={{ marginTop: '120px' }}>
-                <FlowPort id={node.id} type='input' label='On done (data)' style={{ top: isJsonType ? '300px' : '250px' }} handleId={'param-5'} />
+                <FlowPort id={node.id} type='input' label='On done (data)' style={{ top: isJsonType || hasNoPayload ? '300px' : '250px' }} handleId={'param-5'} />
                 <FallbackPort fallbackText={"null"} node={node} port={'param-5'} type={"target"} fallbackPort={'param-5'} portType={"_"} preText="async () => " postText="" />
-                <FlowPort id={node.id} type='input' label='On error (error)' style={{ top: isJsonType ? '350px' : '300px' }} handleId={'param- 6'} />
+                <FlowPort id={node.id} type='input' label='On error (error)' style={{ top: isJsonType || hasNoPayload ? '350px' : '300px' }} handleId={'param- 6'} />
                 <FallbackPort fallbackText={"null"} node={node} port={'param-6'} type={"target"} fallbackPort={'param-6'} portType={"_"} preText="async () => " postText="" />
             </div>
         </Node>
