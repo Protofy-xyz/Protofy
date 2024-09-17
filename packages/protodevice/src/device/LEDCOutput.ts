@@ -39,7 +39,7 @@ class LEDCOutput {
                     topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/command`,
                     then: [
                       {
-                        lambda: `float value = atoi(x.c_str()); id(${this.name}).set_level(value);`
+                        lambda: `float value = atof(x.c_str()); id(${this.name}).set_level(value);ESP_LOGD("Pwm output ${this.name}", "Received value: %f", value);`
                     },
                     ]
                   }
