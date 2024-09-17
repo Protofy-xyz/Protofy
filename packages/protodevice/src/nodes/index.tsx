@@ -34,6 +34,7 @@ import MKSServo42D from './MKSServo42D';
 import Msa3xx from './Msa3xx';
 import ODrive from './ODrive';
 import INA226 from './INA226';
+import LEDCOutput from './LEDCOutput';
 
 
 const deviceMasks = [
@@ -70,7 +71,8 @@ const deviceMasks = [
   MKSServo42D,
   Msa3xx,
   ODrive,
-  INA226
+  INA226,
+  LEDCOutput
 ]
 
 const masksLength = deviceMasks.length

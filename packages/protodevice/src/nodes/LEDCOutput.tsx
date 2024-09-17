@@ -1,29 +1,40 @@
 import React from "react";
-import {Node, Field, HandleOutput, NodeParams } from '../../flowslib';
-import { HStack, Text, Icon } from "native-base";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Node, Field, NodeParams } from 'protoflow';
+import { getColor } from ".";
 
-const LEDCOutput = (node: any = {}, nodeData = {}, children) => {
-    const errorMsg = 'Units should be Hz'
+const LEDCOutput = ({ node = {}, nodeData = {}, children, color }: any) => {
+    const [name, setName] = React.useState(nodeData['param-1'])
+    const nameErrorMsg = 'Reserved name'
+
     const nodeParams: Field[] = [
-        { label: 'Name', static: true, field: 'param-1', type: 'input', post: (str) => str.toLowerCase() },
         {
-            label: 'Frequency', static: true, field: 'param-2', type: 'input',
-            error: !nodeData['param-2']?.value?.replace(/['"0-9]+/g, '').endsWith('Hz') ? errorMsg : null
+            label: 'Name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(nodeData['param-1']) },
+            error: nodeData['param-1']?.value?.replace(/['"]+/g, '') == 'LEDCOutput' ? nameErrorMsg : null
+        },
+        {
+            label: 'Frequency', static: true, field: 'param-2', type: 'select', onBlur: () => { nodeData['param-2'] },
+            data: ["1220Hz", "2441Hz", "4882Hz", "9765Hz", "19531Hz"],
         }
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='PWM Output' color="#BDAAA4" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node node={node} isPreview={!node.id} title='PWM output' color={color} id={node.id} skipCustom={true} >
             <NodeParams id={node.id} params={nodeParams} />
-            <HStack mt="20px" mb="10px" alignItems={'center'} justifyContent={"space-between"}>
-                <Text ml={3} textAlign={"left"} color="warmGray.300">Pwm controls: </Text>
-                <HStack mr={"14px"}>
-                    <Icon size={"2xl"} as={MaterialCommunityIcons} color={"black"} name={'plus-circle'}  onPress={()=>console.log("plus")}/>
-                    <Icon size={"2xl"} as={MaterialCommunityIcons} color={"black"} name={'minus-circle'} onPress={()=>console.log("minus")}/>
-                </HStack>
-            </HStack>
         </Node>
     )
 }
 
-export default LEDCOutput
+export default {
+    id: 'LEDCOutput',
+    type: 'CallExpression',
+    category: "actuators",
+    keywords: ["LEDCOutput", "motor", "pwm", "device", "output"],
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('ledcOutput'),
+    getComponent: (node, nodeData, children) => <LEDCOutput color={getColor('LEDCOutput')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => {
+        return {
+            to: 'ledcOutput',
+            "param-1": { value: "", kind: "StringLiteral" }, ///DESPLEGABLE FREUQENCIAS
+            "param-2": { value: '50 Hz', kind: "StringLiteral" },
+        }
+    }
+}
