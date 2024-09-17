@@ -44,7 +44,7 @@ const config = {
             }
         },
         {
-            "name": "nextra-dev",
+            "name": "nextra",
             "disabled": true,
             "description": "Development mode of the documentation service, providing the documentation based on nextra",
             "route": (req, mode) => {
@@ -54,7 +54,7 @@ const config = {
             }
         },
         {
-            "name": "nextra",
+            "name": "nextra-compiled",
             "disabled": true,
             "description": "Documentation service, providing the documentation based on nextra",
             "route": (req, mode) => {
