@@ -1,4 +1,3 @@
-import React from "react";
 import { Node, Field, NodeParams } from 'protoflow';
 import { getColor } from ".";
 
@@ -43,7 +42,7 @@ const ports = [
     { "number": 19, "side": "right", "name": "CLK", "type": "IO", "analog": false, "description": "GPIO6, CLK", "maxVoltage": 3.3, "rtc": false }
 ]
 
-const Ethernet = ({ node = {}, nodeData = {}, children, color }: any) => {
+const EthernetRmii = ({ node = {}, nodeData = {}, children, color }: any) => {
     const nodeParams: Field[] = [
         {
             label: 'Type', static: true, field: 'param-1', type: 'select',
@@ -70,18 +69,26 @@ const Ethernet = ({ node = {}, nodeData = {}, children, color }: any) => {
         },
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='Ethernet' color={color} id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='Ethernet (RMII)' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )
 }
 
 export default {
-    id: 'Ethernet',
+    id: 'EthernetRmii',
     type: 'CallExpression',
     category: "connectivity",
     keywords: ["ethernet", "bus","tcp", "udp","internet", "device"],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('ethernet'),
-    getComponent: (node, nodeData, children) => <Ethernet color={getColor('Ethernet')} node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'ethernet', "param-1": { value: "LAN8720", kind: "StringLiteral" }, "param-2": { value: 23, kind: "NumericLiteral" }, "param-3": { value: 18, kind: "NumericLiteral" }, "param-4": { value: "GPIO17_OUT", kind: "StringLiteral" }, "param-5": { value: 0, kind: "NumericLiteral" }, "param-6": { value: 12, kind: "NumericLiteral" } } }
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('ethernetRmii'),
+    getComponent: (node, nodeData, children) => <EthernetRmii color={getColor('EthernetRmii')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { 
+        to: 'ethernetRmii', 
+        "param-1": { value: "LAN8720", kind: "StringLiteral" }, 
+        "param-2": { value: 23, kind: "NumericLiteral" }, 
+        "param-3": { value: 18, kind: "NumericLiteral" }, 
+        "param-4": { value: "GPIO17_OUT", kind: "StringLiteral" },
+        "param-5": { value: 0, kind: "NumericLiteral" }, 
+        "param-6": { value: 12, kind: "NumericLiteral" } 
+    } }
 }

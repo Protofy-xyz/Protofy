@@ -12,7 +12,8 @@ import ADCSensor from './ADCSensor';
 import I2cBus from './I2cBus';
 import UARTBus from './UARTBus';
 import PCA9685 from './PCA9685';
-import Ethernet from './Ethernet';
+import EthernetRmii from './EthernetRmii';
+import EthernetSpi from './EthernetSpi';
 import TempHumidity from './TempHumidity';
 import MicrofirePhEcTemp from './MicrofirePhEcTemp';
 import HX711 from './HX711';
@@ -50,7 +51,8 @@ const deviceMasks = [
   I2cBus,
   UARTBus,
   PCA9685,
-  Ethernet,
+  EthernetRmii,
+  EthernetSpi,
   TempHumidity,
   MicrofirePhEcTemp,
   HX711,

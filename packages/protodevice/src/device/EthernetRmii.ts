@@ -1,4 +1,4 @@
-class Ethernet {
+class EthernetRmii {
     type;
     mdc_pin;
     mdio_pin;
@@ -48,6 +48,6 @@ class Ethernet {
     }
 }
 
-export function ethernet(type, mdc_pin, mdio_pin, clk_mode, phy_addr, power_pin) { 
-    return new Ethernet(type, mdc_pin, mdio_pin, clk_mode, phy_addr, power_pin)
+export function ethernetRmii(type, mdc_pin, mdio_pin, clk_mode, phy_addr, power_pin) { 
+    return new EthernetRmii(type, mdc_pin, mdio_pin, clk_mode, phy_addr, power_pin)
 }
