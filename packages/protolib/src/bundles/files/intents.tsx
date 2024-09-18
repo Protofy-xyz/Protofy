@@ -23,7 +23,7 @@ import prettier from "prettier/standalone.js";
 import { useEventEffect } from '../../bundles/events/hooks'
 import { useTint } from '../../lib/Tints'
 import { AppConfContext, SiteConfigType } from '../../providers/AppConf';
-import { Tinted } from 'protolib/src/components/Tinted';
+import { Tinted } from '../../components/Tinted';
 import { useToastController } from '@my/ui';
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {

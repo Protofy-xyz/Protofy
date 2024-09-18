@@ -3,7 +3,7 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { API } from 'protobase'
 import { useState, useEffect } from 'react';
-import { useRemoteStateList } from 'protolib/src/lib/useRemoteState';
+import { useRemoteStateList } from '../../lib/useRemoteState';
 import { ServiceModel } from './servicesSchema';
 import AsyncView from '../../components/AsyncView';
 import { DashboardCard } from '../../components/DashboardCard';

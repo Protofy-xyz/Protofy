@@ -12,7 +12,7 @@ import { Search, Code } from '@tamagui/lucide-icons'
 import { useProtoflow } from '../store/DiagramStore';
 import { generateBoxShadow } from '../lib/shadow';
 import { Separator, SizableText, Tabs, TabsContentProps, Button } from '@my/ui';
-import { Monaco } from 'protolib/src/components/Monaco'
+import { Monaco } from 'protolib/components/Monaco'
 
 const menuWidth = 300
 const defMenuHeight = 500

@@ -1,8 +1,5 @@
 {
     "name": "jupyter",
     "version": "1.0.0",
-    "description": "Jupyter notebook",
-    "dependencies": {
-
-    }
+    "description": "Jupyter notebook"
 }
