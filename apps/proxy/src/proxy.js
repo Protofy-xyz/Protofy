@@ -1,25 +1,26 @@
 
-import { getLogger } from 'protobase';
-import { getBaseConfig } from '@my/config'
+import { setConfig, getConfig, getLogger } from 'protobase';
+import { getBaseConfig, getConfigWithoutSecrets } from '@my/config'
 import { getServiceToken } from 'protonode'
 import http from 'http';
 import httpProxy from 'http-proxy';
 import { join } from 'path';
 import fs from 'fs';
-var mime = require('mime-types')
+import mime from 'mime-types';
+import dotenv from 'dotenv'
+dotenv.config({ path: '../../.env' });
 
-const isFullDev = process.env.FULL_DEV === '1';
-
-const system = require(isFullDev ? '../../../system.js' : '../../../../../../system.js')
+setConfig(getBaseConfig("proxy", process, getServiceToken()))
 
 const startTime = new Date().getTime();
 
-export const startProxy = () => {
-    _startProxy(8080, "production") //production proxy on port 8080
-    _startProxy(8000, "development") //development proxy on port 8000
+export const startProxy = async () => {
+    const system = await import('../../../system.js').then(module => module.default);
+    _startProxy(8080, "production", system) //production proxy on port 8080
+    _startProxy(8000, "development", system) //development proxy on port 8000
 }
 
-export const _startProxy = (Port, mode) => {
+export const _startProxy = (Port, mode, system) => {
     const logger = getLogger('proxy', getBaseConfig("proxy", process, getServiceToken()))
 
     var proxy = httpProxy.createProxyServer({
@@ -91,3 +92,5 @@ export const _startProxy = (Port, mode) => {
     server.listen(Port);
     logger.debug({ service: { protocol: "http", port: Port } }, "Service started: HTTP")
 }
+
+startProxy()

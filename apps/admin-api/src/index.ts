@@ -36,7 +36,6 @@ import chokidar from 'chokidar';
 import BundleContext from 'app/bundles/adminApiContext'
 //@ts-ignore
 import { generateEvent } from 'app/bundles/library'
-import { startProxy } from './proxy';
 import { startMqtt } from './mqtt';
 
 const config = getConfig()
@@ -48,7 +47,6 @@ process.on('uncaughtException', function (err) {
   logger.error({ err }, 'Uncaught Exception: ', err.message)
 });
 
-startProxy()
 startMqtt(config)
 logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: admin-api")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))

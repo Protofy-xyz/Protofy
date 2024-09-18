@@ -86,7 +86,13 @@ const config = {
             "dirname": "next-compiled",
             "description": "Frontend services, providing the web user interface based on nextjs",
             "route": (req, mode) => mode === 'production' ? (process.env.SITE_URL ?? 'http://localhost:4000') : undefined
-        }
+        },
+        {
+            "name": "proxy",
+            "description": "Proxy services",
+            "disabled": false,
+            "route": () => false
+        },
     ],
 
     "alwaysCompiledPaths": [
