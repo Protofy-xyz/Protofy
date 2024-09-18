@@ -22812,6 +22812,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jupyter@workspace:apps/jupyter":
+  version: 0.0.0-use.local
+  resolution: "jupyter@workspace:apps/jupyter"
+  languageName: unknown
+  linkType: soft
+
 "jwa@npm:^1.4.1":
   version: 1.4.1
   resolution: "jwa@npm:1.4.1"
