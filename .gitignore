@@ -51,3 +51,5 @@ thumbs.db
 
 # turbo build log
 **/.turbo/*
+
+.ipynb_checkpoints

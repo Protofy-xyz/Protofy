@@ -10,6 +10,7 @@
     "apps/next-compiled",
     "apps/nextra",
     "apps/nextra-compiled",
+    "apps/jupyter",
     "packages/*",
     "./tests"
   ],
