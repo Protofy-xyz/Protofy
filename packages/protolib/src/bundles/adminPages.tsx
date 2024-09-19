@@ -1,4 +1,5 @@
 import devicePages from './devices/adminPages'
+import agentsPages from './agents/adminPages'
 import filesPages from './files/adminPages'
 import usersPages from './users/adminPages'
 import groupsPages from './groups/adminPages'
@@ -16,6 +17,7 @@ import dashboardPages from './dashboard/adminPages'
 
 export const AdminPagesBundles = {
     ...devicePages,
+    ...agentsPages, 
     ...filesPages,
     ...usersPages,
     ...groupsPages,

@@ -20,6 +20,7 @@ import { ServicesAPI } from './services/servicesAPI'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 import { PackagesAPI } from './packages/packagesAPI'
 import { FlowAPI } from './flow/flowAPI';
+import { AgentsAPI } from './agents/agents/agentsApi'
 
 export const AdminAPIBundles = (app, context) => {
   UsersAPI(app, context)
@@ -30,6 +31,7 @@ export const AdminAPIBundles = (app, context) => {
   PagesAPI(app, context)
   APIsAPI(app, context)
   DevicesAPI(app, context)
+  AgentsAPI(app, context)
   DeviceSdksAPI(app, context)
   DeviceCoresAPI(app, context)
   DeviceBoardsAPI(app, context)
