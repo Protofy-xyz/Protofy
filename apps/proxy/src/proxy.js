@@ -52,7 +52,7 @@ export const _startProxy = (Port, mode, system) => {
         if (req.url.startsWith('/public/')) {
             logger.trace({ url: req.url }, "Serving public file: " + req.url)
             //remove ../ from url
-            const url = req.url.replace(/\.\.\//g, '')
+            const url = decodeURIComponent(req.url.replace(/\.\.\//g, ''))
             const path = join('../../data/', mode == "production" ? 'prod': 'dev', url)
             if(!fs.existsSync(path)){
                 res.writeHead(404, { 'Content-Type': 'text/plain' });
