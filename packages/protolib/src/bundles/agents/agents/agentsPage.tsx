@@ -14,7 +14,7 @@ import { Tinted } from '../../../components/Tinted';
 import { Chip } from '../../../components/Chip';
 import { useSubscription, Connector } from '../../../lib/mqtt';
 import { z } from 'protobase';
-import { DeviceDefinitionModel } from '../deviceDefinitions';
+import { AgentDefinitionModel } from '../agentDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
@@ -336,7 +336,7 @@ export default {
           DataTable2.column("config", row => row.config, false, (row) => <ButtonSimple onPress={(e) => { flashDevice(AgentsModel.load(row)) }}>Upload</ButtonSimple>)
         )}
         extraFieldsForms={{
-          agentDefinition: z.union(deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => z.literal(DeviceDefinitionModel.load(i).getId())) : []).after('name'),
+          agentDefinition: z.union(deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => z.literal(AgentDefinitionModel.load(i).getId())) : []).after('name'),
         }}
         model={AgentsModel}
         pageState={pageState}
