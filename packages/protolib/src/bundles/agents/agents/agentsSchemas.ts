@@ -7,7 +7,7 @@ export const AgentsSchema = Schema.object({
   substitutions: z.record(z.string().optional(), z.any().optional()).optional().hidden(),
   subsystem: z.record(z.string(), z.any()).optional().hidden(),
   data: z.array(z.record(z.string(), z.any())).optional().hidden(),
-  currentSdk: z.string().hidden().generate("esphome"),
+  platform: z.string().hidden(),
   environment: z.string().optional().help("The environment the agent has access to").hidden().groupIndex("env"),
   location: z.object({
     lat: z.string(),
