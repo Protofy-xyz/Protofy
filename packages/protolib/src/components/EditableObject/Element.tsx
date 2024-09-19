@@ -13,8 +13,12 @@ import { RecordComp } from "./RecordComponent";
 import { FilePicker } from "../FilePicker";
 import { XCircle, Circle } from 'lucide-react'
 
-export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray = false, arrayName = "", URLTransform = (url) => url}) => {
-    let elementDef = ele._def?.innerType?._def ?? ele._def
+export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields = {}, path = [], inArray = false, arrayName = "", URLTransform = (url) => url }) => {
+    let elementDef = {
+        ...ele._def,
+        ...ele._def?.innerType?._def
+    }
+
     const setFormData = (key, value) => {
         const formData = data;
         let target = formData;
@@ -169,7 +173,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                 arrayName={arrayName}
                 getFormData={getFormData}
                 URLTransform={URLTransform}
-                ></ObjectComp>
+            ></ObjectComp>
         }
 
 
@@ -247,8 +251,8 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
     if (elementType == "ZodString" && elementDef.file) {
         const extensions = elementDef.extensions
         const fileFilter = f => {
-            const isValidExtension = extensions.some(ext => f.name.endsWith(ext) || ext == "*")
-            return f.isDir || isValidExtension
+            const isValidExtension = extensions.some(ext => f.name.endsWith(ext) || ext == "*")
+            return f.isDir || isValidExtension
         }
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <Stack f={1}>
