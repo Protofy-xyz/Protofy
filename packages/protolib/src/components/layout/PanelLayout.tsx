@@ -1,6 +1,7 @@
-import { YStack, ScrollView, XStack, getTokens } from 'tamagui'
+import { YStack, ScrollView, XStack } from 'tamagui'
 import { AppBar } from '../AppBar'
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { Panel, PanelGroup } from "react-resizable-panels";
+import CustomPanelResizeHandle from '../MainPanel/CustomPanelResizeHandle';
 
 export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, SideMenu, Layout, headerContents, HeaderMenu, panelBottom = false }) => {
   const appBarHeight = 55
@@ -50,9 +51,9 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
               </XStack>
             </div>
           </Panel>
-          {panelBottom && <><PanelResizeHandle>
-            <div style={{ backgroundColor: '#ccc', width: '100%', height: '4px', cursor: 'row-resize' }}></div>
-          </PanelResizeHandle>
+          {panelBottom && <> <CustomPanelResizeHandle
+            direction="horizontal"
+          />
             <Panel>
               <div style={{ display: 'flex', flex: 1, height: '100%', backgroundColor: 'grey' }}>
                 <p>Contenido del panel inferior</p>
