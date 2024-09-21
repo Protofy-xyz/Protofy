@@ -9,3 +9,4 @@ scipy
 numpy==1.26.0
 joblib
 keras_tuner
+-e ../../packages/protopy

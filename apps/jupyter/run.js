@@ -1,8 +1,11 @@
 const { spawn } = require('child_process');
 const path = require('path');
 
-const pythonScript = path.join(__dirname, 'setup.py');
-const pythonExecutable = process.platform === 'win32' ? 'python' : 'python3';
+const pythonScript = path.join(__dirname, 'start.py');
+const venvDir = path.join(__dirname, '.venv');
+const pythonExecutable = process.platform === 'win32' 
+    ? path.join(venvDir, 'Scripts', 'python.exe') 
+    : path.join(venvDir, 'bin', 'python');
 
 let subprocess;  // Declare subprocess variable to use globally
 
