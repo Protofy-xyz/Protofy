@@ -118,7 +118,12 @@ export const PackagesAPI = (app, context) => {
       }, getServiceToken())
     }
     try {
+      
       const path = root + "packages/" + pkg;
+      if (!fs.existsSync(`${path}/package.json`)) {
+        res.status(400).send({ error: "No package.json found, skiping build" });
+        return;
+      }
       //check if the service has a package command in the package.json
       const packageJson = JSON.parse(fs.readFileSync(`${path}/package.json`, 'utf8'));
       if (!packageJson.scripts || !packageJson.scripts.build) {
