@@ -3,6 +3,6 @@
     "version": "1.0.0",
     "description": "Jupyter notebook",
     "scripts": {
-        "start": "python start.py"
+        "start": "node ../python/run.js -m jupyterlab --no-browser --port 8888 --ip=0.0.0.0 --notebook-dir=../../ --no-browser"
     }
 }

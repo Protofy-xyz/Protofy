@@ -4,7 +4,8 @@ const currentDir = path.dirname(__filename);
 module.exports = {
     apps: [{
         name: "jupyter",
-        script: path.join(currentDir, 'run.js'),
+        script: path.join(currentDir, '..', 'python', 'run.js'),
+        args: '-m jupyterlab --no-browser --port 8888 --ip=0.0.0.0 --notebook-dir=../../ --no-browser',
         interpreter: "node",  // Make sure this points to "node"
         windowsHide: true,
         autorestart: false,
