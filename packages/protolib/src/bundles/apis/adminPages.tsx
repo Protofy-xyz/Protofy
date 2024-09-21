@@ -1,6 +1,6 @@
 import { APIModel } from '.'
 import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView, useToastController, Spinner, Paragraph, SizableText } from "@my/ui";
-import { ToyBrick, Eye, ChevronDown, UploadCloud, CheckCircle, Package, AlertTriangle} from '@tamagui/lucide-icons'
+import { ToyBrick, Eye, ChevronDown, UploadCloud, CheckCircle, Package, AlertTriangle } from '@tamagui/lucide-icons'
 import { z, getPendingResult, API } from 'protobase'
 import { usePageParams } from '../../next'
 import { usePrompt } from '../../context/PromptAtom'
@@ -9,7 +9,7 @@ import { DataTable2 } from '../../components/DataTable2'
 import { DataView, DataViewActionButton } from '../../components/DataView'
 import { AlertDialog } from '../../components/AlertDialog'
 import { AdminPage } from '../../components/AdminPage'
-import {useWorkspaceEnv} from '../../lib/useWorkspaceEnv'
+import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv'
 import { useEffect, useState } from 'react'
 import Center from '../../components/Center'
 import { Tinted } from '../../components/Tinted';
@@ -164,7 +164,7 @@ export default {
             const [publishOpen, setPublishOpen] = useState(false)
             const [publishState, setPublishState] = useState<"confirm" | "publishing" | "published" | "error">("confirm")
             const [packageId, setPackageId] = useState("")
-            const {messages, setMessages} = useSubscription(notificationsTopicPrefix+'#')
+            const { messages, setMessages } = useSubscription(notificationsTopicPrefix + '#')
             const [data, setData] = useState(defaultData)
             const [error, setError] = useState<any>('')
             const toast = useToastController()
@@ -187,10 +187,10 @@ export default {
             }, [publishOpen])
 
             const processMessages = async (messages) => {
-                if(packageId) {
+                if (packageId) {
                     //search messages for messages directed at packageId
-                    const done = messages.find(m => m.topic.startsWith(notificationsTopicPrefix+packageId+'/done'))
-                    if(done) {
+                    const done = messages.find(m => m.topic.startsWith(notificationsTopicPrefix + packageId + '/done'))
+                    if (done) {
                         await API.get('/adminapi/v1/services/api/restart')
                         setPublishState("published")
                         setPackageId("")
@@ -337,17 +337,17 @@ export default {
                     width={"600px"}
                     integratedChat
                     onAccept={async () => {
-                        if(publishState == "confirm") {
+                        if (publishState == "confirm") {
                             setPublishState("publishing")
                             const result = await API.get('/adminapi/v1/services/api/package')
                             const currentPackageId = result?.data?.packageId
-                            if(!currentPackageId) {
+                            if (!currentPackageId) {
                                 setPublishState("error")
                                 return true
                             }
                             setPackageId(currentPackageId)
                             return true
-                        } 
+                        }
                         setPublishOpen(false)
                         setPublishState("confirm")
                     }}
@@ -397,7 +397,10 @@ export default {
                     openMode={env === 'dev' ? 'edit' : 'view'}
                     hideAdd={env !== 'dev'}
                     disableItemSelection={env !== 'dev'}
-                    onSelectItem={(item) => replace('editFile', '/packages/app/bundles/custom/apis/' + item.data.name + '.ts')}
+                    onSelectItem={(item) => {
+                        replace('editFile', item.data.filePath);
+                    }}
+
                     rowIcon={ToyBrick}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}

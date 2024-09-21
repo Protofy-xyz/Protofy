@@ -12,18 +12,28 @@ const indexFile = (root) => APIDir(root) + "index.ts"
 const indexFilePath = "/packages/app/bundles/custom/apis/index.ts"
 
 const getAPI = (apiPath, req) => {
-  const sourceFile = getSourceFile(APIDir(getRoot(req)) + apiPath)
-  const arg = getDefinition(sourceFile, '"type"')
-  const obj = getDefinition(sourceFile, '"object"')
+  const apiType = apiPath.endsWith('.py') ? 'python' : 'typescript'
+  let type = apiType
+  let object = "None"
+  const filePath = APIDir(getRoot(req)) + apiPath
+  if (apiType === 'typescript') {
+    const sourceFile = getSourceFile(filePath)
+    const arg = getDefinition(sourceFile, '"type"')
+    const obj = getDefinition(sourceFile, '"object"')
+    type = arg ? arg.getText().replace(/^['"]+|['"]+$/g, '') : type
+    object = obj ? obj.getText().replace(/^['"]+|['"]+$/g, '') : object
+  }
   return {
     name: apiPath.replace(/\.[^/.]+$/, ""), //remove extension
-    type: arg ? arg.getText().replace(/^['"]+|['"]+$/g, '') : "Unknown",
-    object: obj ? obj.getText().replace(/^['"]+|['"]+$/g, '') : "None"
+    type,
+    object,
+    filePath: APIDir("") + apiPath
   }
 }
 
 const deleteAPI = (req, value) => {
-  const api = getAPI(fspath.basename(value.name) + '.ts', req)
+  const extension = value.template === 'python-api' ? '.py' : '.ts'
+  const api = getAPI(fspath.basename(value.name) + extension, req)
   removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req, fs);
   if (api.type === "AutoAPI") {
     const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(api.object))
@@ -45,7 +55,7 @@ async function checkFileExists(filePath) {
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const files = (await fs.readdir(APIDir(getRoot(req)))).filter(f => f != 'index.ts' && !fsSync.lstatSync(fspath.join(APIDir(getRoot(req)), f)).isDirectory() && f.endsWith('.ts'))
+      const files = (await fs.readdir(APIDir(getRoot(req)))).filter(f => f != 'index.ts' && !fsSync.lstatSync(fspath.join(APIDir(getRoot(req)), f)).isDirectory() && (f.endsWith('.ts') || f.endsWith('.py')))
       const apis = await Promise.all(files.map(async f => getAPI(f, req)));
 
       for (const api of apis) {
@@ -65,8 +75,9 @@ const getDB = (path, req, session) => {
       let ObjectSourceFile
 
       const template = fspath.basename(value.template ?? 'empty')
+      const extension = value.template === 'python-api' ? '.py' : '.ts'
 
-      const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + '.ts';
+      const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + extension;
       exists = await checkFileExists(filePath);
 
       if (template.startsWith("automatic-crud")) {
@@ -80,26 +91,28 @@ const getDB = (path, req, session) => {
         }
       }
 
-      if(template == "automatic-crud-google-sheet") {
-          const regex = /\/d\/([a-zA-Z0-9-_]+)/;
-          const match = value.param.match(regex);
-          const id = match ? match[1] : null;
-          value.param = id
+      if (template == "automatic-crud-google-sheet") {
+        const regex = /\/d\/([a-zA-Z0-9-_]+)/;
+        const match = value.param.match(regex);
+        const id = match ? match[1] : null;
+        value.param = id
       }
 
       const computedName = value.name
       const codeName = computedName.replace(/\s/g, "")
       const codeNameLowerCase = codeName.toLowerCase()
       const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
-        name: value.name + '.ts',
+        name: value.name + extension,
         data: {
-          options: { template: `/packages/protolib/src/bundles/apis/templates/${template}.tpl`, variables: { 
-            codeName: codeName,
-            name: computedName, 
-            codeNameLowerCase: codeNameLowerCase,
-            object: value.object,
-            param: value.param,
-          }},
+          options: {
+            template: `/packages/protolib/src/bundles/apis/templates/${template}.tpl`, variables: {
+              codeName: codeName,
+              name: computedName,
+              codeNameLowerCase: codeNameLowerCase,
+              object: value.object,
+              param: value.param,
+            }
+          },
           path: '/packages/app/bundles/custom/apis'
         }
       })
@@ -114,15 +127,17 @@ const getDB = (path, req, session) => {
         await addFeature(ObjectSourceFile, '"AutoAPI"', "true")
       }
       //link in index.ts
-      const sourceFile = getSourceFile(indexFile(getRoot(req)))
-      addImportToSourceFile(sourceFile, codeName + 'Api', ImportType.DEFAULT, './' + codeName)
+      if (extension == '.ts') {
+        const sourceFile = getSourceFile(indexFile(getRoot(req)))
+        addImportToSourceFile(sourceFile, codeName + 'Api', ImportType.DEFAULT, './' + codeName)
 
-      const arg = getDefinition(sourceFile, '"apis"')
-      if (!arg) {
-        throw "No link definition schema marker found for file: " + path
+        const arg = getDefinition(sourceFile, '"apis"')
+        if (!arg) {
+          throw "No link definition schema marker found for file: " + path
+        }
+        addObjectLiteralProperty(arg, codeName, codeName + 'Api')
+        sourceFile.saveSync();
       }
-      addObjectLiteralProperty(arg, codeName, codeName + 'Api')
-      sourceFile.saveSync();
     },
 
     async get(key) {

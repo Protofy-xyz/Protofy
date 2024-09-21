@@ -29,6 +29,12 @@ export const apiTemplates = {
             return
         }
     },
+    "python-api": {
+        id: "python-api",
+        name: "Python API",
+        description: 'Create python automations that react to events and perform actions (when ..., do ...)',
+        icon: PencilRuler
+    },
     "automatic-crud-storage": {
         id: "automatic-crud-storage",
         name: "Object storage (custom database)",
