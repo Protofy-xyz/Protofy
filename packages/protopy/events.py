@@ -3,7 +3,8 @@ import re
 import json
 
 def pubEvent(host, token, event, secure_connection):
-    protocol = "http" if secure_connection == "false" else "https"
+    protocol = "http" if secure_connection == False else "https"
+    
     url =  protocol + "://" + host + "/adminapi/v1/events?token=" + token
     headers = {
         "content-type": "application/json",
@@ -23,5 +24,5 @@ def pubEvent(host, token, event, secure_connection):
 
         print("[EVENT] Succesfully sent event to Protofy")
         return response.json()
-    except:
-        print("[EVENT] Cannot send event to Protofy")
+    except Exception as e:
+        print("[EVENT] Cannot send event to Protofy: ", e)

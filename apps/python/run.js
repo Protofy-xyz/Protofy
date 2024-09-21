@@ -11,10 +11,10 @@ const params = process.argv.slice(2);
 
 // Construct the absolute path to the 'packages' directory
 const currentDir = __dirname; // Directory of run.js
-const packagesDir = path.join(currentDir, '..', '..', 'packages');
+const packagesDir = path.resolve(path.join(currentDir, '..', '..', 'packages'));
 
 // Determine the path to the Python executable in the virtual environment
-const venvDir = path.join(currentDir, '..', '..', 'packages', 'app', '.venv');
+const venvDir = path.resolve(path.join(currentDir, '..', '..', 'packages', 'app', '.venv'));
 
 const pythonExecutable = process.platform === 'win32' 
     ? path.join(venvDir, 'Scripts', 'python.exe') 
