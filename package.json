@@ -55,7 +55,8 @@
     "check-deps": "check-dependency-version-consistency .",
     "clean": "yarn workspaces foreach --all run clean",
     "protofy-update-setup": "git remote add protofy git@github.com:Protofy-xyz/Protofy.git",
-    "protofy-update": "git fetch protofy && git rebase protofy/main"
+    "protofy-update": "git fetch protofy && git rebase protofy/main",
+    "python": "node apps/python/run.js"
   },
   "resolutions": {
     "react": "18.2.0",
