@@ -3,8 +3,8 @@ import subprocess
 import sys
 import time
 
-venv_dir = os.path.join(os.path.dirname(__file__), '.venv')
-requirements_file = os.path.join(os.path.dirname(__file__), 'requirements.txt')
+venv_dir = os.path.join(os.path.dirname(__file__), '..','..','packages', 'app', '.venv')
+requirements_file = os.path.join(os.path.dirname(__file__), '..', '..', 'requirements.txt')
 
 def create_venv():
     # Determine the correct path to pip based on the OS

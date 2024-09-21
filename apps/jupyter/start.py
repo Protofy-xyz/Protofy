@@ -2,7 +2,7 @@ import os
 import subprocess
 import sys
 
-venv_dir = os.path.join(os.path.dirname(__file__), '.venv')
+venv_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'packages', 'app', '.venv')
 
 def start_jupyter():
     print("Starting Jupyter Lab...")

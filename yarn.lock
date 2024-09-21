@@ -28406,6 +28406,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"python@workspace:apps/python":
+  version: 0.0.0-use.local
+  resolution: "python@workspace:apps/python"
+  languageName: unknown
+  linkType: soft
+
 "qlobber@npm:^7.0.0":
   version: 7.0.1
   resolution: "qlobber@npm:7.0.1"

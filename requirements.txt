@@ -1,0 +1,4 @@
+jupyter==1.1.1
+flask
+-e ../../packages/protopy
+-e ../../packages/app

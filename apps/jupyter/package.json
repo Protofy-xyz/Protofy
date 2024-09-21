@@ -3,7 +3,6 @@
     "version": "1.0.0",
     "description": "Jupyter notebook",
     "scripts": {
-        "start": "python start.py",
-        "prepare-dev": "python setup.py"
+        "start": "python start.py"
     }
 }

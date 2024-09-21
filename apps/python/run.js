@@ -1,6 +1,13 @@
 const { spawn } = require('child_process');
 const path = require('path');
+const { exit } = require('process');
 
+if (process.argv.length < 3) {
+    console.error('Usage: node run.js <python_script>');
+    process.exit(1);
+}
+
+const params = process.argv.slice(2);
 
 // Construct the absolute path to the 'packages' directory
 const currentDir = __dirname; // Directory of run.js
@@ -27,7 +34,7 @@ try {
         : packagesDir;
 
     // Execute the Python script and keep it running
-    subprocess = spawn(pythonExecutable, 'start.py', {
+    subprocess = spawn(pythonExecutable, params, {
         windowsHide: true, // Hide the window on Windows
         env: env, // Pass the modified environment variables
     });

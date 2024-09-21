@@ -1,0 +1,10 @@
+{
+    "name": "python",
+    "version": "1.0.0",
+    "description": "Python integration service",
+    "scripts": {
+        "python": "node run.js",
+        "start": "node run.js -m flask --app server run",
+        "prepare-dev": "python setup.py"
+    }
+}
