@@ -28409,6 +28409,8 @@ __metadata:
 "python@workspace:apps/python":
   version: 0.0.0-use.local
   resolution: "python@workspace:apps/python"
+  dependencies:
+    shx: "npm:^0.3.4"
   languageName: unknown
   linkType: soft
 

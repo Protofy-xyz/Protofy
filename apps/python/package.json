@@ -5,6 +5,9 @@
     "scripts": {
         "python": "node run.js",
         "start": "node run.js -m flask --app server run",
-        "prepare-dev": "python setup.py"
+        "prepare-dev": "shx which python3 && python3 setup.py || python setup.py"
+    },
+    "dependencies": {
+        "shx": "^0.3.4"
     }
 }
