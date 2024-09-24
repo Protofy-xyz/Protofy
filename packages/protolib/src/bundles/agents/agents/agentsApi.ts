@@ -123,46 +123,54 @@ export const AgentsAPI = (app, context) => {
     }))
 
     const processMessage = async (env: string, message: string, topic: string) => {
-        const splitted = topic.split("/");
-        const agent = splitted[0];
-        const agentName = splitted[1];
-        const endpoint = splitted.slice(2).join("/")
+        const [agent, agentName, ...path] = topic.split("/");
+        const endpoint = path.join("/")
+
         let parsedMessage = message;
         try {
             parsedMessage = JSON.parse(message);
         } catch (err) { }
+
+
         if (endpoint == 'debug') {
             logger.debug({ from: agent, agentName, endpoint }, JSON.stringify({ topic, message }))
-        } else {
+        } else if (endpoint === 'register') {
             const db = getDB('agents')
-            const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
-            const env = agentInfo.getEnvironment()
-            // console.log("agentInfo: ", agentInfo)
-            // console.log("subsystems: ", agentInfo.data.subsystem)
-            // console.log("endpoint: ", endpoint)
-            const monitor = agentInfo.getMonitorByEndpoint("/" + endpoint)
-            // console.log("monitor: ", monitor)
-            if (!monitor) {
-                logger.debug({ from: agent, agentName, endpoint }, "Agent not found: " + JSON.stringify({ topic, message }))
-                return
+            try {
+                const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
+
+                console.log('parsed', parsedMessage)
+                agentInfo.setSubsystem(parsedMessage)
+            } catch (e) {
+                console.error('cannot register agent: ', e)
             }
-            // const subsystem = agentInfo.getSubsystem(req.params.subsystem)
-            await generateEvent(
-                {
-                    ephemeral: monitor.data.ephemeral ?? false,
-                    environment: env,
-                    path: endpoint,
-                    from: "agent",
-                    user: agentName,
-                    payload: {
-                        message: parsedMessage,
-                        agentName,
-                        endpoint
-                    }
-                },
-                getServiceToken()
-            );
         }
+        // const env = agentInfo.getEnvironment()
+        // // console.log("agentInfo: ", agentInfo)
+        // // console.log("subsystems: ", agentInfo.data.subsystem)
+        // // console.log("endpoint: ", endpoint)
+        // const monitor = agentInfo.getMonitorByEndpoint("/" + endpoint)
+        // // console.log("monitor: ", monitor)
+        // if (!monitor) {
+        //     logger.debug({ from: agent, agentName, endpoint }, "Agent not found: " + JSON.stringify({ topic, message }))
+        //     return
+        // }
+        // // const subsystem = agentInfo.getSubsystem(req.params.subsystem)
+        // await generateEvent(
+        //     {
+        //         ephemeral: monitor.data.ephemeral ?? false,
+        //         environment: env,
+        //         path: endpoint,
+        //         from: "agent",
+        //         user: agentName,
+        //         payload: {
+        //             message: parsedMessage,
+        //             agentName,
+        //             endpoint
+        //         }
+        //     },
+        //     getServiceToken()
+        // );
     }
 
     topicSub(mqtts['dev'], 'agents/#', (message, topic) => processMessage('dev', message, topic))

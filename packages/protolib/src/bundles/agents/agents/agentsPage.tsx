@@ -19,7 +19,7 @@ import { connectSerialPort, flash } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
 import Subsystem from 'protodevice/src/Subsystem'
-import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text } from '@my/ui';
+import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text, Button } from '@my/ui';
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
@@ -302,8 +302,22 @@ export default {
             </XStack>
             <YStack f={1}>
               {
-                data?.subsystem
-                  ? data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)
+                Object.keys(data?.subsystems ?? {}).length
+                  ? <>
+                    <Paragraph mt="20px" ml="20px" size={30}>{'Actions'}</Paragraph>
+                    {
+                      data.subsystems?.actions.map(action => {
+                        return <Button mt="20px" ml="20px" size={30}>{action}</Button>
+                      })
+                    }
+
+                    <Paragraph mt="20px" ml="20px" size={30}>{'Monitors'}</Paragraph>
+                    {
+                      data.subsystems?.monitors.map(monitor => {
+                        return <Button mt="20px" ml="20px" size={30}>{monitor}</Button>
+                      })
+                    }
+                  </>
                   : <Paragraph mt="20px" ml="20px" size={20}>{'No subsystems defined'}</Paragraph>
               }
             </YStack>
