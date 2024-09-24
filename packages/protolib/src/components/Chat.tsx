@@ -279,22 +279,30 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                                 messages: [{ role: 'user', content: prompt }],
                                 best_of: 4,
                                 temperature: isHelp ? 0 : 1,
-                            })
+                            });
                             toggleMsgLoader();
-                            console.log('result: ', result)
-                            if (result.isError) {
-                                addResponseMessage("Error generating response: ", result.error)
-                            } else if (result.data && result.data.data && result.data.data.error) {
-                                var errorMsg = result.data.data.error.message;
-                                if (result.data.data.error.code === "invalid_api_key") {
-                                    errorMsg = errorMsg + '\nPlease add your key named "OPENAI_API_KEY" in Keys tab';
+                            console.log('result: ', result);
+                            
+                            if (result.isError || (result.data && result.data.error)) {
+                                const errorData = result.error || result.data.error; 
+                                let errorMsg = errorData.message;
+                                
+                                if (errorData.code === "invalid_api_key") {
+                                    errorMsg += '\nPlease add your key named "OPENAI_API_KEY" in Keys tab';
                                 }
-                                addResponseMessage(errorMsg);
-                            } else {
-                                addResponseMessage(result.data.choices[0].message.content)
-                                setLastMessage(result.data.choices[0].message.content)
+                                console.log("Error generating response: " + errorMsg);
+                                addResponseMessage("Error generating response: " + errorMsg);
+                            
+                            } else if (result.data && result.data.choices) {
+                                const responseContent = result.data.choices[0].message.content;
+                                
+                                addResponseMessage(responseContent);
+                                setLastMessage(responseContent);
                                 setFileInputData(undefined); // clear selected image
+                            } else {
+                                addResponseMessage("Unexpected response format");
                             }
+                            
 
                         }}
                         handleToggle={async (state) => {

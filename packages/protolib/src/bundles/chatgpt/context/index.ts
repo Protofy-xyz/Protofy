@@ -8,7 +8,7 @@ export const chatGPTSession = async ({
     apiKey = undefined,
     done = (response, message) => { },
     error = (error) => { },
-    model = "gpt-4o",
+    model = "gpt-4",
     max_tokens = 4096,
     ...props
 }: ChatGPTRequest) => {
@@ -92,7 +92,7 @@ type ChatGPTRequest = {
 } & GPT4VCompletionRequest
 
 type GPT4VCompletionRequest = {
-    model: "gpt-4-vision-preview" | "gpt-4-1106-preview" | "gpt-4" | "gpt-4-32k" | "gpt-4-0613" | "gpt-4-32k-0613" | "gpt-4-0314" | "gpt-4-32k-0314" | "gpt-4o"; // https://platform.openai.com/docs/models/overview
+    model: "gpt-4-vision-preview" | "gpt-4-1106-preview" | "gpt-4" | "gpt-4-32k" | "gpt-4-0613" | "gpt-4-32k-0613" | "gpt-4-0314" | "gpt-4-32k-0314" | "gpt-4"; // https://platform.openai.com/docs/models/overview
     messages: Message[];
     functions?: any[] | undefined;
     function_call?: any | undefined;
