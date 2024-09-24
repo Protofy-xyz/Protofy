@@ -1,6 +1,5 @@
-import { IonIcon } from "@ionic/react";
 import Avatar from "../Avatar/Avatar";
-import { createOutline, pencilOutline, checkmark } from "ionicons/icons";
+import { Pencil, PenSquare, Check } from "lucide-react";
 import { useAuth } from "../../store/store";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -77,7 +76,9 @@ export default function ProfileTab({ visible }: { visible: boolean }) {
             }}
             className="invisible absolute z-10 top-0 left-0 right-0 bottom-0 group-hover:visible  transition rounded-full  bg-gray-700 bg-opacity-50  flex items-center justify-center"
           >
-            <IonIcon icon={pencilOutline} className="text-xl text-gray-100" />
+            <div className="text-xl text-gray-100">
+              <Pencil />
+            </div>
           </button>
         </Avatar>
       </div>
@@ -91,7 +92,7 @@ export default function ProfileTab({ visible }: { visible: boolean }) {
               className="flex items-center"
               onClick={() => setEditName(true)}
             >
-              <IonIcon icon={createOutline} className=" dark:text-gray-100" />
+                <PenSquare />
             </button>
           </div>
         )}
@@ -111,7 +112,7 @@ export default function ProfileTab({ visible }: { visible: boolean }) {
               className="flex items-center ml-2 text-xl"
               onClick={handleUpdateName}
             >
-              <IonIcon icon={checkmark} />
+              <Check />
             </button>
           </div>
         )}

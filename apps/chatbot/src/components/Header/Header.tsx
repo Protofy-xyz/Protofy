@@ -1,5 +1,4 @@
-import { IonIcon } from "@ionic/react";
-import { shareOutline, informationCircleOutline } from "ionicons/icons";
+import { Info, Share } from "lucide-react";
 import { useSettings } from "../../store/store";
 
 export default function Header() {
@@ -17,7 +16,7 @@ export default function Header() {
         <span>Using ({model.toLocaleUpperCase()})</span>
         {useSystemMessageForAllChats && (
           <span className=" flex text-xl ml-2 group cursor-pointer">
-            <IonIcon icon={informationCircleOutline} />
+            <Info />
             <span className=" absolute z-10 left-0 w-[calc(100%+10rem)] top-[calc(100%+1rem)] text-sm bg-gray-900 text-white p-2  rounded-md invisible  pointer-events-none group-hover:visible group-hover:pointer-events-auto transition">
               <span className=" block underline text-teal-600">
                 <strong>System message</strong>
@@ -31,7 +30,7 @@ export default function Header() {
       </div>
       <div className="">
         <button className=" text-xl">
-          <IonIcon icon={shareOutline} />
+          <Share />
         </button>
       </div>
     </header>

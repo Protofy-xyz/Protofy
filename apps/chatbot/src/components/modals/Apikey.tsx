@@ -1,5 +1,4 @@
-import { IonIcon } from "@ionic/react";
-import { informationCircleOutline, closeCircleOutline } from "ionicons/icons";
+import { Info, XCircle } from "lucide-react";
 import { useAuth } from "../../store/store";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -34,7 +33,7 @@ export default function Apikey() {
           className=" text-xl"
           onClick={() => setApiKey("sk-")}
         >
-          <IonIcon icon={closeCircleOutline} />
+          <XCircle />
         </button>
       </div>
       <h2 className="text-xl font-medium   text-center my-2">
@@ -50,7 +49,7 @@ export default function Apikey() {
         />
         <div className=" flex items-center mt-4">
           <span className=" flex items-center ">
-            <IonIcon icon={informationCircleOutline} />
+            <Info/>
           </span>
           <span className="ml-2 text-sm font-medium">
             Your api key is stored in your own browser

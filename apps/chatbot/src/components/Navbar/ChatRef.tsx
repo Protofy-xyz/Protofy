@@ -1,12 +1,4 @@
-import { IonIcon } from "@ionic/react";
-import {
-  chatboxOutline,
-  trashOutline,
-  pencilOutline,
-  checkmarkOutline,
-  closeOutline,
-} from "ionicons/icons";
-
+import { MessageSquare, Trash2, Pencil, Check, X } from "lucide-react";
 import useChat, { isChatSelected } from "../../store/store";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
@@ -61,7 +53,7 @@ export default function ChatRef({
           title={chat.title}
         >
           <span className="mr-2  flex">
-            <IonIcon icon={chatboxOutline} />
+          <MessageSquare />
           </span>
 
           <span className="text-sm truncate capitalize">
@@ -84,13 +76,13 @@ export default function ChatRef({
             className={classNames(" mr-2 flex hover:text-blue-300")}
             onClick={() => setIsEditingTitle(true)}
           >
-            <IonIcon icon={pencilOutline} />
+            <Pencil />
           </button>
           <button
             className={classNames("  flex hover:text-red-300")}
             onClick={() => setConfirmDeleteChat(true)}
           >
-            <IonIcon icon={trashOutline} />
+            <Trash2 />
           </button>
         </div>
       )}
@@ -100,13 +92,13 @@ export default function ChatRef({
             className={classNames(" mr-2 flex hover:text-blue-300")}
             onClick={() => handleEditTitle(chat.id, editTitle)}
           >
-            <IonIcon icon={checkmarkOutline} />
+            <Check />
           </button>
           <button
             className={classNames("  flex hover:text-red-300")}
             onClick={() => setIsEditingTitle(false)}
           >
-            <IonIcon icon={closeOutline} />
+            <X />
           </button>
         </div>
       )}

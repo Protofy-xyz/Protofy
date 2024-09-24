@@ -2,10 +2,9 @@ import { useState } from "react";
 import SettingsTab from "../Tabs/SettingsTab";
 import { motion } from "framer-motion";
 import classNames from "classnames";
-import { IonIcon } from "@ionic/react";
-import { closeOutline } from "ionicons/icons";
 import { useSettings } from "../../store/store";
 import ProfileTab from "../Tabs/ProfileTab";
+import { X } from "lucide-react";
 
 const varinats = {
   hidden: { opacity: 0, scale: 0.8 },
@@ -48,7 +47,7 @@ export default function Settings() {
             className={classNames(" flex hover:text-red-300 text-xl")}
             onClick={() => setModalVisible(false)}
           >
-            <IonIcon icon={closeOutline} />
+            <X/>
           </button>
         </div>
       </div>

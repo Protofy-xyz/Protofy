@@ -1,6 +1,5 @@
-import { IonIcon } from "@ionic/react";
 import Avatar from "../Avatar/Avatar";
-import { createOutline } from "ionicons/icons";
+import { PenSquare } from "lucide-react";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import useChat, { ChatMessageType } from "../../store/store";
@@ -69,7 +68,7 @@ export default function UserMessage({ chat, chatIndex }: Props) {
               className="edit md:ml-8 dark:text-gray-200  text-gray-500 text-xl "
               onClick={() => setEdit((prev) => !prev)}
             >
-              <IonIcon icon={createOutline} />
+              <PenSquare />
             </button>
           )}
         </div>

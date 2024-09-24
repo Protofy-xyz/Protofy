@@ -1,5 +1,4 @@
-import { IonIcon } from "@ionic/react";
-import { checkmarkOutline, createOutline } from "ionicons/icons";
+import { Check, PenSquare } from "lucide-react";
 import useChat, { useAuth, useSettings, useTheme } from "../../store/store";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -188,7 +187,7 @@ export default function SettingsTab({ visible }: { visible: boolean }) {
                 className="w-11 text-xl"
                 onClick={handleSetNewApiKey}
               >
-                <IonIcon icon={checkmarkOutline} />
+                <Check />
               </button>
             ) : (
               <button
@@ -196,7 +195,7 @@ export default function SettingsTab({ visible }: { visible: boolean }) {
                 className="w-11 text-xl"
                 onClick={() => setEditApiKey(true)}
               >
-                <IonIcon icon={createOutline} />
+                <PenSquare />
               </button>
             )}
           </div>

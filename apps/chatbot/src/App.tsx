@@ -3,8 +3,7 @@ import Navbar from "./components/Navbar/Navbar";
 import DefaultIdeas from "./components/DefaultIdea/DefaultIdeas";
 import UserQuery from "./components/UserInput/UserQuery";
 import GptIntro from "./components/Ui/GptIntro";
-import { IonIcon, setupIonicReact } from "@ionic/react";
-import { menuOutline, addOutline } from "ionicons/icons";
+import { Plus, Menu } from "lucide-react";
 import Header from "./components/Header/Header";
 import useChat, { chatsLength, useAuth, useTheme } from "./store/store";
 import classNames from "classnames";
@@ -12,7 +11,6 @@ import Chats from "./components/Chat/Chats";
 import Modal from "./components/modals/Modal";
 import Apikey from "./components/modals/Apikey";
 
-setupIonicReact();
 function App() {
   const [active, setActive] = useState(false);
   const isChatsVisible = useChat(chatsLength);
@@ -42,11 +40,11 @@ function App() {
       </div>
       <div className="p-3 z-10 flex items-center justify-between bg-[#202123] dark:bg-[#343541] border-b sticky top-0  text-gray-300 md:hidden">
         <button onClick={() => setActive(true)} className=" text-2xl flex">
-          <IonIcon icon={menuOutline} />
+          <Menu />
         </button>
         <h2>New chat</h2>
         <button className="text-2xl flex items-center" onClick={addNewChat}>
-          <IonIcon icon={addOutline} />
+          <Plus />
         </button>
       </div>
       <main

@@ -1,14 +1,7 @@
 import classnames from "classnames";
 import ChatHistory from "./ChatHistory";
-import { IonIcon } from "@ionic/react";
 import Avatar from "../Avatar/Avatar";
-import {
-  addOutline,
-  chatboxEllipsesOutline,
-  settingsOutline,
-  ellipsisHorizontalOutline,
-  closeOutline,
-} from "ionicons/icons";
+import { X, Plus, MessageSquare, Settings as SettingsIcon, MoreHorizontal } from "lucide-react";
 import useChat, { ModalList, useAuth, useSettings } from "../../store/store";
 import Settings from "../modals/Settings";
 import Modal from "../modals/Modal";
@@ -72,7 +65,7 @@ export default function Navbar({
               onClick={addNewChat}
             >
               <span className="mr-2 text-xl">
-                <IonIcon icon={addOutline} />
+                <Plus />
               </span>
               <span>New chat</span>
             </button>
@@ -118,7 +111,7 @@ export default function Navbar({
 
                 <span className="p-2">{name}</span>
                 <span className=" ml-auto  text-gray-400 text-2xl ">
-                  <IonIcon icon={ellipsisHorizontalOutline} />
+                  <MoreHorizontal />
                 </span>
               </button>
               <div className="options absolute bottom-12 rounded-md left-0 right-0 bg-gray-800 font-normal invisible transition  m-2 z-30 text-gray-300 ">
@@ -127,7 +120,7 @@ export default function Navbar({
                   onClick={() => setSystemMessageModalVisible(true)}
                 >
                   <span className="mr-2 p-1 text-xl  flex items-center">
-                    <IonIcon icon={chatboxEllipsesOutline} />
+                    <MessageSquare />
                   </span>
                   <span>Custom instructions</span>
                 </button>
@@ -136,7 +129,7 @@ export default function Navbar({
                   onClick={() => setModalVisible(true)}
                 >
                   <span className="mr-2 p-1  text-xl flex items-center">
-                    <IonIcon icon={settingsOutline} />
+                    <SettingsIcon />
                   </span>
                   <span>Settings</span>
                 </button>
@@ -157,7 +150,7 @@ export default function Navbar({
             className="close md:hidden absolute top-2 h-10 w-10 border-2 -right-10  p-2 flex items-center justify-center"
           >
             <span className=" text-2xl flex">
-              <IonIcon icon={closeOutline} />
+              <X />
             </span>
           </button>
         </nav>

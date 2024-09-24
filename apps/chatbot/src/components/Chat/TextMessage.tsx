@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import Avatar from "../Avatar/Avatar";
-import { clipboardOutline, checkmarkOutline } from "ionicons/icons";
-import { IonIcon } from "@ionic/react";
+import { Check, Clipboard } from "lucide-react";
 import { SyncLoader } from "react-spinners";
 import useClipboard from "../../hooks/useClipboard";
 import useBot from "../../hooks/useBot";
@@ -72,11 +71,11 @@ export default function TextMessage({ index, chat }: Props) {
             className="edit md:ml-8 text-gray-500 dark:text-gray-200 text-xl"
             onClick={() => copy(result)}
           >
-            <IonIcon icon={clipboardOutline} />
+            <Clipboard/>
           </button>
         ) : (
           <span className="dark:text-gray-200 text-gray-500 text-xl">
-            <IonIcon icon={checkmarkOutline} />
+            <Check />
           </span>
         )}
       </div>

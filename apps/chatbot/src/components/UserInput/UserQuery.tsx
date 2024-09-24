@@ -1,6 +1,5 @@
-import { IonIcon } from "@ionic/react";
 import classNames from "classnames";
-import { sendOutline, send } from "ionicons/icons";
+import { Send } from "lucide-react";
 import { useRef, useState } from "react";
 import useChat, { useSettings } from "../../store/store";
 import { createMessage } from "../../utils/createMessage";
@@ -72,7 +71,7 @@ export default function UserQuery() {
             { "bg-green-500 dark:text-gray-200 text-white": query }
           )}
         >
-          <IonIcon icon={query ? send : sendOutline} />
+          <Send />
         </button>
       </div>
     </form>

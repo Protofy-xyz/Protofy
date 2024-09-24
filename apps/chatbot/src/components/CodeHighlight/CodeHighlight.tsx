@@ -1,8 +1,7 @@
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import "highlight.js/styles//a11y-dark.min.css";
-import { IonIcon } from "@ionic/react";
-import { clipboardOutline, checkmarkOutline } from "ionicons/icons";
+import { Check, Clipboard } from "lucide-react";
 import useClipboard from "../../hooks/useClipboard";
 
 type Props = {
@@ -20,11 +19,11 @@ export default function CodeHighlight({ children, language }: Props) {
             className="edit md:ml-8 text-white dark:text-teal-200 text-xl"
             onClick={() => copy(children)}
           >
-            <IonIcon icon={clipboardOutline} />
+            <Clipboard />
           </button>
         ) : (
           <span className="dark:text-teal-200 text-white text-xl">
-            <IonIcon icon={checkmarkOutline} />
+            <Check />
           </span>
         )}
       </div>

@@ -1,9 +1,8 @@
-import { IonIcon } from "@ionic/react";
 import useImage from "../../hooks/useImage";
 import Avatar from "../Avatar/Avatar";
 import Image from "../Image/Image";
 import ImageSkeleton from "../Skeleton/ImageSkeleton";
-import { downloadOutline, checkmarkOutline } from "ionicons/icons";
+import { Plus, Download } from "lucide-react";
 import { useState } from "react";
 import { ChatMessageType } from "../../store/store";
 
@@ -43,11 +42,11 @@ export default function ImageMessage({ index, chat }: Props) {
             className="edit md:ml-8 text-gray-500 dark:text-gray-200 text-xl"
             onClick={handleDownload}
           >
-            <IonIcon icon={downloadOutline} />
+            <Download />
           </button>
         ) : (
           <span className="dark:text-gray-200 text-gray-500 text-xl">
-            <IonIcon icon={checkmarkOutline} />
+            <Plus/>
           </span>
         )}
       </div>

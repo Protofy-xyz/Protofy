@@ -1,5 +1,4 @@
-import { IonIcon } from "@ionic/react";
-import { sendOutline } from "ionicons/icons";
+import { Send } from "lucide-react";
 import useChat from "../../store/store";
 import classNames from "classnames";
 import { createMessage } from "../../utils/createMessage";
@@ -36,7 +35,7 @@ export default function DefaultIdea({
           </div>
 
           <div className="btn text-gray-600 dark:text-gray-200 text-lg invisible duration-75 transition-all group-hover:visible ">
-            <IonIcon icon={sendOutline} />
+            <Send />
           </div>
         </button>
       ))}

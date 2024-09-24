@@ -1,5 +1,4 @@
-import { IonIcon } from "@ionic/react";
-import { sparkles } from "ionicons/icons";
+import { Sparkles } from "lucide-react";
 import { useSettings } from "../../store/store";
 import classNames from "classnames";
 
@@ -52,7 +51,7 @@ export default function GptIntro() {
               "text-teal-400": !isGptThreeSelected,
             })}
           >
-            <IonIcon icon={sparkles} />
+            <Sparkles />
           </span>
           <span className="mr-2">gpt - 4</span>
         </button>
