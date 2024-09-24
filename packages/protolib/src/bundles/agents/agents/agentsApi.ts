@@ -145,6 +145,7 @@ export const AgentsAPI = (app, context) => {
                 console.error('cannot register agent: ', e)
             }
         }
+
         // const env = agentInfo.getEnvironment()
         // // console.log("agentInfo: ", agentInfo)
         // // console.log("subsystems: ", agentInfo.data.subsystem)
@@ -156,21 +157,22 @@ export const AgentsAPI = (app, context) => {
         //     return
         // }
         // // const subsystem = agentInfo.getSubsystem(req.params.subsystem)
-        // await generateEvent(
-        //     {
-        //         ephemeral: monitor.data.ephemeral ?? false,
-        //         environment: env,
-        //         path: endpoint,
-        //         from: "agent",
-        //         user: agentName,
-        //         payload: {
-        //             message: parsedMessage,
-        //             agentName,
-        //             endpoint
-        //         }
-        //     },
-        //     getServiceToken()
-        // );
+        
+        await generateEvent(
+            {
+                ephemeral: false,
+                environment: env, // based on mqtt server environment
+                path: topic,
+                from: "agent",
+                user: agentName,
+                payload: {
+                    message: parsedMessage,
+                    agentName,
+                    endpoint
+                }
+            },
+            getServiceToken()
+        );
     }
 
     topicSub(mqtts['dev'], 'agents/#', (message, topic) => processMessage('dev', message, topic))
