@@ -231,7 +231,7 @@ const useAuth = create<AuthType>()(
       user: {
         name: "Your name?",
         email: "",
-        avatar: "/imgs/default-avatar.jpg",
+        avatar: "/imgs/avatar.png",
       },
       setToken: (token) => {
         set(
