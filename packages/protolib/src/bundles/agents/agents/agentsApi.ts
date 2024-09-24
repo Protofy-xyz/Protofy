@@ -4,9 +4,6 @@ import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
-import moment from 'moment';
-import fs from 'fs';
-import path from 'path';
 
 export const AgentsAutoAPI = AutoAPI({
     modelName: 'Agents',
@@ -125,80 +122,57 @@ export const AgentsAPI = (app, context) => {
         res.send({ value })
     }))
 
-    app.get('/adminapi/v1/agents/:agent/yaml', handler(async (req, res, session) => {
-        if (!session || !session.user.admin) {
-            res.status(401).send({ error: "Unauthorized" })
-            return
-        }
-        const agentPath = path.join(agentsPath, req.params.agent)
-        if (!fs.existsSync(agentPath)) {
-            res.status(404).send({ error: "Not Found" })
-            return
-        }
-        const yaml = fs.readFileSync(path.join(agentPath, "config.yaml"), 'utf8')
-        res.send({ yaml })
-    }))
-
-    app.post('/adminapi/v1/agents/:agent/yamls', handler(async (req, res, session) => {
-        if (!session || !session.user.admin) {
-            res.status(401).send({ error: "Unauthorized" })
-            return
-        }
-
-        const { yaml } = req.body
-
-
-        if (!fs.existsSync(agentsPath)) fs.mkdirSync(agentsPath)
-        const agentPath = path.join(agentsPath, req.params.agent)
-        if (!fs.existsSync(agentPath)) fs.mkdirSync(agentPath)
-
-        fs.writeFileSync(path.join(agentPath, "config.yaml"), yaml)
-        fs.writeFileSync(path.join(agentPath, "config_" + moment().format("DD_MM_YYYY_HH_mm_ss") + ".yaml"), yaml)
-
-        res.send({ value: yaml })
-    }))
-
     const processMessage = async (env: string, message: string, topic: string) => {
-        const splitted = topic.split("/");
-        const agent = splitted[0];
-        const agentName = splitted[1];
-        const endpoint = splitted.slice(2).join("/")
+        const [agent, agentName, ...path] = topic.split("/");
+        const endpoint = path.join("/")
+
         let parsedMessage = message;
         try {
             parsedMessage = JSON.parse(message);
         } catch (err) { }
+
+
         if (endpoint == 'debug') {
             logger.debug({ from: agent, agentName, endpoint }, JSON.stringify({ topic, message }))
-        } else {
+        } else if (endpoint === 'register') {
             const db = getDB('agents')
-            const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
-            const env = agentInfo.getEnvironment()
-            // console.log("agentInfo: ", agentInfo)
-            // console.log("subsystems: ", agentInfo.data.subsystem)
-            // console.log("endpoint: ", endpoint)
-            const monitor = agentInfo.getMonitorByEndpoint("/" + endpoint)
-            // console.log("monitor: ", monitor)
-            if (!monitor) {
-                logger.debug({ from: agent, agentName, endpoint }, "Agent not found: " + JSON.stringify({ topic, message }))
-                return
+            try {
+                const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
+
+                console.log('parsed', parsedMessage)
+                agentInfo.setSubsystem(parsedMessage)
+            } catch (e) {
+                console.error('cannot register agent: ', e)
             }
-            // const subsystem = agentInfo.getSubsystem(req.params.subsystem)
-            await generateEvent(
-                {
-                    ephemeral: monitor.data.ephemeral ?? false,
-                    environment: env,
-                    path: endpoint,
-                    from: "agent",
-                    user: agentName,
-                    payload: {
-                        message: parsedMessage,
-                        agentName,
-                        endpoint
-                    }
-                },
-                getServiceToken()
-            );
         }
+
+        // const env = agentInfo.getEnvironment()
+        // // console.log("agentInfo: ", agentInfo)
+        // // console.log("subsystems: ", agentInfo.data.subsystem)
+        // // console.log("endpoint: ", endpoint)
+        // const monitor = agentInfo.getMonitorByEndpoint("/" + endpoint)
+        // // console.log("monitor: ", monitor)
+        // if (!monitor) {
+        //     logger.debug({ from: agent, agentName, endpoint }, "Agent not found: " + JSON.stringify({ topic, message }))
+        //     return
+        // }
+        // // const subsystem = agentInfo.getSubsystem(req.params.subsystem)
+        
+        await generateEvent(
+            {
+                ephemeral: false,
+                environment: env, // based on mqtt server environment
+                path: topic,
+                from: "agent",
+                user: agentName,
+                payload: {
+                    message: parsedMessage,
+                    agentName,
+                    endpoint
+                }
+            },
+            getServiceToken()
+        );
     }
 
     topicSub(mqtts['dev'], 'agents/#', (message, topic) => processMessage('dev', message, topic))
