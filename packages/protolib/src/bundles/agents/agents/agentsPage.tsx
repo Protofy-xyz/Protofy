@@ -241,59 +241,12 @@ export default {
       process()
     }, [stage])
 
-
-    // useEffect(() => {
-    //   console.log("Compile Message: ", message);
-    //   try {
-    //     if (message?.message) {
-    //       const data = JSON.parse(message?.message.toString());
-    //       if (data.event == 'exit' && data.code == 0) {
-    //         console.log("Succesfully compiled");
-    //         setStage('upload')
-
-    //       } else if (data.event == 'exit' && data.code != 0) {
-    //         console.error('Error compiling')
-    //         setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
-    //       }
-    //     }
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // }, [message])
-
     const [deviceDefinitions, setDeviceDefinitions] = useState(extraData?.deviceDefinitions ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: definitionsSourceUrl }, s) }, setDeviceDefinitions, extraData?.deviceDefinitions)
 
-    const extraMenuActions = [
-      {
-        text: "Upload definition",
-        icon: UploadCloud,
-        action: (element) => { flashDevice(element) },
-        isVisible: (element) => true
-      },
-      {
-        text: "Edit config file",
-        icon: Pencil,
-        action: (element) => { replace('editFile', element.getConfigFile()) },
-        isVisible: (element) => element.isInitialized() && element.getConfigFile()
-      },
-      {
-        text: "Upload config file",
-        icon: UploadCloud,
-        action: async (element) => {
-          try {
-            var result = await API.get("/adminapi/v1/devices/" + element.data.name + "/yaml")
-            flashDevice(element, result.data.yaml)
-          } catch (err) {
-            console.error(err)
-          }
+    const extraMenuActions = []
 
-        },
-        isVisible: (element) => element.isInitialized() && element.getConfigFile()
-      }
-    ]
-
-    return (<AdminPage title="Devices" pageSession={pageSession}>
+    return (<AdminPage title="Agents" pageSession={pageSession}>
       <Connector brokerUrl={onlineCompilerSecureWebSocketUrl()}>
         <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} compileSessionId={compileSessionId} stage={stage} />
@@ -329,15 +282,11 @@ export default {
         sourceUrl={sourceUrl}
         sourceUrlParams={all ? undefined : { env }}
         initialItems={initialItems}
-        name="device"
+        name="agent"
         columns={DataTable2.columns(
           DataTable2.column("name", row => row.name, "name"),
-          DataTable2.column("device definition", row => row.deviceDefinition, "deviceDefinition"),
-          DataTable2.column("config", row => row.config, false, (row) => <ButtonSimple onPress={(e) => { flashDevice(AgentsModel.load(row)) }}>Upload</ButtonSimple>)
+          DataTable2.column("platform", row => row.platform, "platform"),
         )}
-        extraFieldsForms={{
-          agentDefinition: z.union(deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => z.literal(AgentDefinitionModel.load(i).getId())) : []).after('name'),
-        }}
         model={AgentsModel}
         pageState={pageState}
         icons={DevicesIcons}
@@ -352,14 +301,10 @@ export default {
               }} deleteable={() => true} element={AgentsModel.load(data)} extraMenuActions={extraMenuActions} />
             </XStack>
             <YStack f={1}>
-              {data?.subsystem
-                ? data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)
-                : (
-                  <>
-                    <Paragraph mt="20px" ml="20px" size={20}>{'You need to upload the device'}</Paragraph>
-                    <ButtonSimple mt="20px" ml="20px" width={100} onPress={() => { flashDevice(AgentsModel.load(data)); }}>Upload</ButtonSimple>
-                  </>
-                )
+              {
+                data?.subsystem
+                  ? data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)
+                  : <Paragraph mt="20px" ml="20px" size={20}>{'No subsystems defined'}</Paragraph>
               }
             </YStack>
           </CardBody>

@@ -4,9 +4,6 @@ import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
-import moment from 'moment';
-import fs from 'fs';
-import path from 'path';
 
 export const AgentsAutoAPI = AutoAPI({
     modelName: 'Agents',
@@ -123,39 +120,6 @@ export const AgentsAPI = (app, context) => {
             await db.put(agent.getId(), JSON.stringify(agent.serialize(true)))
         }
         res.send({ value })
-    }))
-
-    app.get('/adminapi/v1/agents/:agent/yaml', handler(async (req, res, session) => {
-        if (!session || !session.user.admin) {
-            res.status(401).send({ error: "Unauthorized" })
-            return
-        }
-        const agentPath = path.join(agentsPath, req.params.agent)
-        if (!fs.existsSync(agentPath)) {
-            res.status(404).send({ error: "Not Found" })
-            return
-        }
-        const yaml = fs.readFileSync(path.join(agentPath, "config.yaml"), 'utf8')
-        res.send({ yaml })
-    }))
-
-    app.post('/adminapi/v1/agents/:agent/yamls', handler(async (req, res, session) => {
-        if (!session || !session.user.admin) {
-            res.status(401).send({ error: "Unauthorized" })
-            return
-        }
-
-        const { yaml } = req.body
-
-
-        if (!fs.existsSync(agentsPath)) fs.mkdirSync(agentsPath)
-        const agentPath = path.join(agentsPath, req.params.agent)
-        if (!fs.existsSync(agentPath)) fs.mkdirSync(agentPath)
-
-        fs.writeFileSync(path.join(agentPath, "config.yaml"), yaml)
-        fs.writeFileSync(path.join(agentPath, "config_" + moment().format("DD_MM_YYYY_HH_mm_ss") + ".yaml"), yaml)
-
-        res.send({ value: yaml })
     }))
 
     const processMessage = async (env: string, message: string, topic: string) => {
