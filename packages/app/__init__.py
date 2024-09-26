@@ -1,1 +1,1 @@
-from bundles.apis import app
+from .bundles.apis import app
