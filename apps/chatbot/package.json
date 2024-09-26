@@ -4,17 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
+    "start": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "lucide-react": "0.279.0",
     "axios": "0.21.4",
     "classnames": "2.3.2",
     "framer-motion": "6.5.1",
     "highlight.js": "^11.9.0",
     "immer": "9.0.21",
+    "lucide-react": "0.279.0",
     "moment": "2.29.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -85,6 +85,16 @@ const config = {
             "disabled": true,
             "route": () => false
         },
+        // {
+        //     "name": "chatbot",
+        //     "description": "chatbot",
+        //     "disabled": false,
+        //     "route": (req, mode) => {
+        //         if (req.url.startsWith('/chatbot/')) {
+        //             return process.env.API_URL ?? 'http://localhost:5173'
+        //         }
+        //     }
+        // },
         {
             "name": "next-dev",
             "dirname": "next",
