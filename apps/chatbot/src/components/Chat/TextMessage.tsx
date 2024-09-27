@@ -23,7 +23,7 @@ export default function TextMessage({ index, chat }: Props) {
     <>
       <div className="flex items-start w-full">
         <div className="mr-4  rounded-md flex items-center flex-shrink-0">
-          <Avatar className=" h-11 w-11" src="/imgs/bot.webp" />
+          <Avatar className=" h-11 w-11" src="/chatbot/imgs/bot.webp" />
         </div>
 
         {!result && !error ? (

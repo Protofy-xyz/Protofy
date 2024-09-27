@@ -15,7 +15,7 @@ export const ChatWidget = () => {
         position="fixed"
         bottom={50}
         right={50}
-        size="$4"
+        size="$5"
         circular
         icon={isOpen ? <X size={"$2"} /> : <Sparkles size={"$2"} />}
         onPress={toggleChat}
@@ -26,10 +26,11 @@ export const ChatWidget = () => {
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogContent
             width="500px"
-            height="600px"
+            height="800px"
+            padding = "$0"
             position="fixed"
-            bottom={100}
-            right={20}
+            bottom={130}
+            right={50}
             backgroundColor="$background"
             borderRadius="$4"
             elevation="$6"
