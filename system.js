@@ -91,7 +91,7 @@ const config = {
             "disabled": true,
             "route": (req, mode) => {
                 if (req.url.startsWith('/chatbot/')) {
-                    return process.env.API_URL ?? 'http://localhost:5173'
+                    return 'http://localhost:5173'
                 }
             }
         },
