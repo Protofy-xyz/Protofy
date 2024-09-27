@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Sparkles, X, Maximize, Minimize } from '@tamagui/lucide-icons'
-import { YStack, Button } from 'tamagui'
+import { YStack, Button, XStack } from 'tamagui'
 
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,10 +25,16 @@ export const ChatWidget = () => {
         right={50}
         size="$5"
         circular
-        icon={isOpen ? <X size={"$2"} /> : <Sparkles size={"$2"} />}
+        icon={isOpen ?
+          <XStack>
+            <X size={"30px"} fillOpacity={0} color='white'></X>
+          </XStack>
+          : <Sparkles size={"30px"} fillOpacity={0} color='white'></Sparkles>}
         onPress={toggleChat}
         zIndex={10002}
         elevation="$5"
+        backgroundColor="$color7"
+        hoverStyle={{ backgroundColor: "$color7" }}
       />
 
       {isOpen && (
@@ -38,10 +44,12 @@ export const ChatWidget = () => {
           right={110}
           size="$4"
           circular
-          icon={isExpanded ? <Minimize size={"$2"} /> : <Maximize size={"$2"} />}
+          icon={isExpanded ? <Minimize fillOpacity={0} color='white' size={"$2"} /> : <Maximize fillOpacity={0} color='white' size={"$2"} />}
           onPress={toggleExpand}
           zIndex={10002}
           elevation="$5"
+          backgroundColor="$color7"
+          hoverStyle={{ backgroundColor: "$color7" }}
         />
       )}
 
