@@ -1,12 +1,20 @@
 import { useState } from "react"
-import { Sparkles, X } from '@tamagui/lucide-icons'
-import { YStack, Button, Dialog, DialogContent } from 'tamagui'
+import { Sparkles, X, Maximize, Minimize } from '@tamagui/lucide-icons'
+import { YStack, Button } from 'tamagui'
 
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const toggleChat = () => {
+    console.log('toggleChat: clicked', isOpen)
     setIsOpen(!isOpen)
+    setIsExpanded(false)
+  }
+
+  const toggleExpand = () => {
+    console.log('toggleExpand: clicked', isExpanded)
+    setIsExpanded(!isExpanded)
   }
 
   return (
@@ -19,31 +27,45 @@ export const ChatWidget = () => {
         circular
         icon={isOpen ? <X size={"$2"} /> : <Sparkles size={"$2"} />}
         onPress={toggleChat}
-        zIndex={1000}
+        zIndex={10002}
         elevation="$5"
       />
+
       {isOpen && (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogContent
-            width="500px"
-            height="800px"
-            padding = "$0"
-            position="fixed"
-            bottom={130}
-            right={50}
-            backgroundColor="$background"
-            borderRadius="$4"
-            elevation="$6"
-          >
-            <iframe
-              src="/chatbot/"
-              width="100%"
-              height="100%"
-              style={{ border: "none", borderRadius: "8px" }}
-              title="Chat Widget"
-            />
-          </DialogContent>
-        </Dialog>
+        <Button
+          position="fixed"
+          bottom={50}
+          right={110}
+          size="$4"
+          circular
+          icon={isExpanded ? <Minimize size={"$2"} /> : <Maximize size={"$2"} />}
+          onPress={toggleExpand}
+          zIndex={10002}
+          elevation="$5"
+        />
+      )}
+
+      {isOpen && (
+        <YStack
+          width={isExpanded ? "100vw" : 500}
+          height={isExpanded ? "95vh" : 800}
+          position="fixed"
+          bottom={isExpanded ? 0 : 130}
+          right={isExpanded ? 0 : 50}
+          backgroundColor="$background"
+          borderRadius={isExpanded ? 0 : "$4"}
+          elevation="$6"
+          zIndex={10000}
+          overflow="hidden"
+        >
+          <iframe
+            src="/chatbot/"
+            width="100%"
+            height="100%"
+            style={{ border: "none" }}
+            title="Chat Widget"
+          />
+        </YStack>
       )}
     </YStack>
   )
