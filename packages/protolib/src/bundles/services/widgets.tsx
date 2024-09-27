@@ -19,8 +19,8 @@ const fetch = async (fn) => {
 
 export const ServiceMemoryUsageChart = ({ title, id }) => {
     const [servicesData, setServicesData] = useRemoteStateList(undefined, fetch, ServiceModel.getNotificationsTopic(), ServiceModel, true);
-
-    const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF"];
+    const COLORS = [ "#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF", "#FF007F", "#7B00FF", "#00FF7F", "#FF4500", "#4682B4" ]
+      
     if (!servicesData?.data?.items) return null;
 
     return (
