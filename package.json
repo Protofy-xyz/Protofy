@@ -13,6 +13,7 @@
     "apps/jupyter",
     "apps/python",
     "apps/proxy",
+    "apps/chatbot",
     "packages/*",
     "scripts",
     "./tests"
