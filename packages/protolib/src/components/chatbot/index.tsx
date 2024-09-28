@@ -43,19 +43,18 @@ function App() {
   }, [theme]);
 
   return (
-    <div className="App font-montserrat md:flex">
+    <div className="App  font-montserrat md:flex ">
       <Navbar active={active} setActive={setActive} />
       <div className="">
-  <button
-    type="button"
-    className="shadow fixed p-2 h-8 w-8 text-sm top-4 left-4 border-2 md:inline-flex dark:text-white text-gray-700 dark:border border-gray-400 rounded-md items-center justify-center z-50"
-    onClick={() => setActive(true)}
-  >
-    <i className="fa-regular fa-window-maximize rotate-90"></i>
-  </button>
-</div>
-
-      <div className="p-3 z-10 flex items-center justify-between bg-[#202123] dark:bg-[#343541] border-b sticky top-0 text-gray-300 md:hidden">
+        <button
+          type="button"
+          className="shadow fixed p-2 h-8 w-8 text-sm top-4 left-4 border-2 hidden md:inline-flex dark:text-white text-gray-700 dark:border border-gray-400 rounded-md items-center justify-center"
+          onClick={() => setActive(true)}
+        >
+          <i className="fa-regular fa-window-maximize rotate-90"></i>
+        </button>
+      </div>
+      <div className="p-3 z-10 flex items-center justify-between bg-[#202123] dark:bg-[#343541] border-b sticky top-0  text-gray-300 md:hidden">
         <button onClick={() => setActive(true)} className=" text-2xl flex">
           <Menu />
         </button>
@@ -73,13 +72,12 @@ function App() {
         {isChatsVisible && <Chats />}
         <div
           className={classNames(
-            "left-0 px-2 right-0 transition-all duration-500 bottom-0 absolute dark:shadow-lg py-0 shadow-md backdrop-blur-sm bg-white/10 dark:bg-dark-primary/10",
+            "fixed left-0 px-2  right-0 transition-all duration-500 bottom-0 dark:shadow-lg py-1 shadow-md backdrop-blur-sm bg-white/10 dark:bg-dark-primary/10",
             {
               "dark:bg-dark-primary bg-white": isChatsVisible,
               "md:ml-[260px]": active,
             }
           )}
-          style={{ bottom: 0, position: 'absolute' }}
         >
           <div className="max-w-2xl md:max-w-[calc(100% - 260px)] mx-auto">
             {!isChatsVisible && (
@@ -90,11 +88,10 @@ function App() {
 
             <div className="dark:bg-inherit">
               <UserQuery />
-              <footer className="py-3" />
+              <footer className="py-3"/>
             </div>
           </div>
         </div>
-
       </main>
       <Modal visible={!Boolean(userHasApiKey)}>
         <Apikey />

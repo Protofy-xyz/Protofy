@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { Sparkles, X, Maximize, Minimize } from '@tamagui/lucide-icons';
 import { YStack, Button, XStack } from 'tamagui';
-import dynamic from 'next/dynamic';
 
 export const ChatWidget = () => {
-  //@ts-ignore
-  const Chatbot = dynamic(() => import('./chatbot'), { ssr: false })
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -82,14 +79,13 @@ export const ChatWidget = () => {
         overflow="hidden"
         display={isChatVisible ? "flex" : "none"}
       >
-        <Chatbot />
-        {/* <iframe
-          src="/chatbot/"
+        <iframe
+          src="/workspace/dev/chatbot/"
           width="100%"
           height="100%"
           style={{ border: "none" }}
           title="Chat Widget"
-        /> */}
+        />
       </YStack>
     </YStack>
   );
