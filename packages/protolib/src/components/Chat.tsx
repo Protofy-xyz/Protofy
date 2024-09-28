@@ -231,7 +231,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                         enterStyle={{ rotate: '-90deg' }}>
                             <X size={"30px"} fillOpacity={0} color='white'></X>
                     </XStack>
-                    : <Sparkles fillOpacity={0} color='white'></Sparkles>
+                    : <Sparkles size={"30px"} fillOpacity={0} color='white'></Sparkles>
             }
         </Button>
     )
