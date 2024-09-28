@@ -43,6 +43,7 @@ import { getFlowsMenuConfig } from "app/bundles/flows"
 import { palettes } from 'app/bundles/palettes'
 import Workspaces from 'app/bundles/workspaces'
 import { PanelLayout } from 'app/layout/PanelLayout'
+import { useRouter } from 'next/router';
 
 initSchemaSystem()
 
@@ -110,9 +111,12 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
 }
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [theme, setTheme] = useRootTheme()
   const forcedTheme = SiteConfig.ui.forcedTheme
-
+  const currentUrl = router.asPath;
+  console.log('currentUrl', currentUrl)
+  const containsChatbot = currentUrl.includes('/chatbot');
   const isDev = process.env.NODE_ENV === 'development'
 
   return (
@@ -125,7 +129,7 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
       <Provider disableRootThemeClass defaultTheme={theme}>
         {children}
 
-        {isDev && <Toast
+        {(isDev && !containsChatbot) && <Toast
           viewportName="warnings"
           enterStyle={{ opacity: 0, scale: 0.5, y: -25 }}
           exitStyle={{ opacity: 0, scale: 1, y: -20 }}
