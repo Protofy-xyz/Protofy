@@ -86,16 +86,6 @@ const config = {
             "route": () => false
         },
         {
-            "name": "chatbot",
-            "description": "chatbot",
-            "disabled": true,
-            "route": (req, mode) => {
-                if (req.url.startsWith('/chatbot/')) {
-                    return 'http://localhost:5173'
-                }
-            }
-        },
-        {
             "name": "next-dev",
             "dirname": "next",
             "description": "Development mode of the frontend service, providing the web user interface based on nextjs",
