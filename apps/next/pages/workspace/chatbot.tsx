@@ -12,7 +12,7 @@ export default function Page(props: any) {
     return (
         <>
             <Head>
-                <title>{projectName + " - Dashboard"}</title>
+                <title>{projectName + " - Chatbot"}</title>
             </Head>
             <Chatbot />
         </>

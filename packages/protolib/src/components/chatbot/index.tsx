@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar/Navbar";
 import DefaultIdeas from "./components/DefaultIdea/DefaultIdeas";
 import UserQuery from "./components/UserInput/UserQuery";
 import GptIntro from "./components/Ui/GptIntro";
-import { Plus, Menu } from "lucide-react";
+import { Plus, Menu, PanelLeft } from "lucide-react";
 import Header from "./components/Header/Header";
 import useChat, { chatsLength, useAuth, useTheme } from "./store/store";
 import classNames from "classnames";
@@ -51,7 +51,7 @@ function App() {
           className="shadow fixed p-2 h-8 w-8 text-sm top-4 left-4 border-2 hidden md:inline-flex dark:text-white text-gray-700 dark:border border-gray-400 rounded-md items-center justify-center"
           onClick={() => setActive(true)}
         >
-          <i className="fa-regular fa-window-maximize rotate-90"></i>
+          <PanelLeft />
         </button>
       </div>
       <div className="p-3 z-10 flex items-center justify-between bg-[#202123] dark:bg-[#343541] border-b sticky top-0  text-gray-300 md:hidden">
@@ -88,7 +88,7 @@ function App() {
 
             <div className="dark:bg-inherit">
               <UserQuery />
-              <footer className="py-3"/>
+              <footer className="py-3" />
             </div>
           </div>
         </div>

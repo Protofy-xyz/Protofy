@@ -1,7 +1,7 @@
 import classnames from "classnames";
 import ChatHistory from "./ChatHistory";
 import Avatar from "../Avatar/Avatar";
-import { X, Plus, MessageSquare, Settings as SettingsIcon, MoreHorizontal } from "lucide-react";
+import { X, Plus, MessageSquare, Settings as SettingsIcon, MoreHorizontal, PanelLeft } from "lucide-react";
 import useChat, { ModalList, useAuth, useSettings } from "../../store/store";
 import Settings from "../modals/Settings";
 import Modal from "../modals/Modal";
@@ -74,7 +74,7 @@ export default function Navbar({
               className="border h-10 w-10 border-gray-500 rounded-md p-2 hidden md:inline-block text-gray-200"
               onClick={() => setActive(false)}
             >
-              <i className="fa-regular fa-window-maximize rotate-90"></i>
+              <PanelLeft />
             </button>
           </div>
           <div className="history overflow-y-auto h-[calc(100%-60px)]">
