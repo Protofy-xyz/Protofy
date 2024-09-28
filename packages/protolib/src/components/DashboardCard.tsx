@@ -32,7 +32,7 @@ export const DashboardCard = ({ children, id, title, titleProps = {}, containerP
                         ai="center"
                         {...titleProps}
                     >
-                        {title}
+                        <text>{title}</text>
                     </XStack>
                 ) : null}
                 <YStack
