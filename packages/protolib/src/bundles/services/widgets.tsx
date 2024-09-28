@@ -13,7 +13,6 @@ import { LineChart, Cpu } from 'lucide-react'
 
 const fetch = async (fn) => {
     const services = await API.get('/adminapi/v1/services')
-    console.log("services", services)
     fn(services)
 }
 

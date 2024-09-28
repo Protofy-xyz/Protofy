@@ -47,7 +47,7 @@ export const SimpleDataTable: React.FC<SimpleDataTableProps> = ({ columns, data,
                                     <XStack space={5}>
                                         {col.selector(row).map((item, chipIndex) => (
                                             <Chip key={chipIndex} color="$color5">
-                                                <text>{item}</text>
+                                                <Text>{item}</Text>
                                             </Chip>
                                         ))}
                                     </XStack>
