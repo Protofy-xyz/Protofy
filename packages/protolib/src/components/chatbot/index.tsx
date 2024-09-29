@@ -5,21 +5,21 @@ import UserQuery from "./components/UserInput/UserQuery";
 import GptIntro from "./components/Ui/GptIntro";
 import { Plus, Menu, PanelLeft } from "lucide-react";
 import Header from "./components/Header/Header";
-import useChat, { chatsLength, useAuth, useTheme } from "./store/store";
+import useChat, { chatsLength, useAuth } from "./store/store";
 import classNames from "classnames";
 import Chats from "./components/Chat/Chats";
 import Modal from "./components/modals/Modal";
 import Apikey from "./components/modals/Apikey";
+import { useThemeSetting } from "@tamagui/next-theme";
 // import { getServiceToken } from "protonode";
-// import { getKey } from "protolib/dist/bundles/keys/context";
+// import { getKey } from "../../bundles/keys/context";
 
 function App() {
   const [active, setActive] = useState(false);
   const isChatsVisible = useChat(chatsLength);
   const addNewChat = useChat((state) => state.addNewChat);
   let userHasApiKey = useAuth((state) => state.apikey);
-  const [theme] = useTheme((state) => [state.theme]);
-
+  const { resolvedTheme } = useThemeSetting();
 
   // const fetchApiKey = () => {
   //   if (userHasApiKey === null) {
@@ -34,16 +34,16 @@ function App() {
   // };
 
   useEffect(() => {
-    //fetchApiKey(); 
-    if (theme === "dark") {
+    // fetchApiKey(); 
+    if (resolvedTheme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [theme]);
+  }, [resolvedTheme]);
 
   return (
-    <div className="App  font-montserrat md:flex ">
+    <div className="App font-montserrat md:flex">
       <Navbar active={active} setActive={setActive} />
       <div className="">
         <button
@@ -54,7 +54,8 @@ function App() {
           <PanelLeft />
         </button>
       </div>
-      <div className="p-3 z-10 flex items-center justify-between bg-[#202123] dark:bg-[#343541] border-b sticky top-0  text-gray-300 md:hidden">
+      <div
+        className="p-3 z-10 flex items-center justify-between bg-[#202123] dark:bg-[#343541] border-b sticky top-0 text-gray-300 md:hidden">
         <button onClick={() => setActive(true)} className=" text-2xl flex">
           <Menu />
         </button>
@@ -64,7 +65,7 @@ function App() {
         </button>
       </div>
       <main
-        className={classNames(" w-full transition-all duration-500", {
+        className={classNames("w-full transition-all duration-500", {
           "md:ml-[260px]": active,
         })}
       >
@@ -72,7 +73,7 @@ function App() {
         {isChatsVisible && <Chats />}
         <div
           className={classNames(
-            "fixed left-0 px-2  right-0 transition-all duration-500 bottom-0 dark:shadow-lg py-1 shadow-md backdrop-blur-sm bg-white/10 dark:bg-dark-primary/10",
+            "fixed left-0 px-2 right-0 transition-all duration-500 bottom-0 dark:shadow-lg py-1 shadow-md backdrop-blur-sm bg-white/10 dark:bg-dark-primary/10",
             {
               "dark:bg-dark-primary bg-white": isChatsVisible,
               "md:ml-[260px]": active,
@@ -97,6 +98,7 @@ function App() {
         <Apikey />
       </Modal>
     </div>
+
   );
 }
 
