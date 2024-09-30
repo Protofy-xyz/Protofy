@@ -28,7 +28,7 @@ function App() {
   }, [resolvedTheme]);
 
   return (
-    <div className="App  font-montserrat md:flex ">
+    <div className="App font-montserrat md:flex dark:bg-[#343541]">
       <Navbar active={active} setActive={setActive} />
       <div className="">
         <button
