@@ -7,6 +7,8 @@ import useBot from "../../hooks/useBot";
 import { ChatMessageType } from "../../store/store";
 import Markdown from "react-markdown";
 import CodeHighlight from "../CodeHighlight/CodeHighlight";
+import { PromptAtom } from '../../../../context/PromptAtom';
+import { useAtom } from "jotai";
 
 type Props = {
   index: number;
@@ -14,10 +16,18 @@ type Props = {
 };
 
 export default function TextMessage({ index, chat }: Props) {
+  const [promptChain] = useAtom(PromptAtom);
   const { copy, copied } = useClipboard();
+
+  const prompt: any = promptChain.reduce((total, current) => {
+    return total + current.generate();
+  }, '') + `
+    reply directly to the user, acting as the assistant.
+  `;
   const { result, error, isStreamCompleted, cursorRef } = useBot({
     index,
     chat,
+    prompt
   });
   return (
     <>
@@ -71,7 +81,7 @@ export default function TextMessage({ index, chat }: Props) {
             className="edit md:ml-8 text-gray-500 dark:text-gray-200 text-xl"
             onClick={() => copy(result)}
           >
-            <Clipboard/>
+            <Clipboard />
           </button>
         ) : (
           <span className="dark:text-gray-200 text-gray-500 text-xl">

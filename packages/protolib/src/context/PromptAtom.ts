@@ -19,7 +19,7 @@ export const PromptResponseAtom = atom("")
 
 export const PromptAtom = atom<PromptContext[]>([{
     id: "root",
-    generate: (prompt) => {
+    generate: (prompt = '') => {
         return (!prompt.startsWith('/')?`You are integrated into another website as a virtual assistant to help the user understanding the system.`:'')+`
         The system is a typescript based yarn workspce with some apps and some packages. The system is called Protofy. 
         Protofy is open source, and the repo is located at: https://github.com/Protofy-xyz/Protofy.

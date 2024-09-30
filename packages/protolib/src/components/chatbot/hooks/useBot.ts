@@ -7,9 +7,20 @@ import { createMessage } from "../utils/createMessage";
 type Props = {
   index: number;
   chat: ChatMessageType;
+  prompt: string;
 };
 
-export default function useBot({ index, chat }: Props) {
+function transformChats(prevChats: Omit<ChatMessageType, "type" | "id">[], prompt: string) {
+  const additionalSystemMessage: Omit<ChatMessageType, "type" | "id"> = {
+    role: "system",
+    content: prompt
+  };
+  return [additionalSystemMessage, ...prevChats];
+}
+
+
+
+export default function useBot({ index, chat, prompt }: Props) {
   const resultRef = useRef(chat.content);
   const cursorRef = useRef<HTMLDivElement>(null);
   const [result, setResult] = useState(chat.content);
@@ -88,7 +99,7 @@ export default function useBot({ index, chat }: Props) {
           ];
         }
         await fetchResults(
-          prevChats,
+          transformChats(prevChats, prompt),
           selectedModal,
           signal,
           handleOnData,
