@@ -266,7 +266,7 @@ const useSettings = createWithEqualityFn<SettingsType>()(
   persist(
     (set) => ({
       settings: {
-        sendChatHistory: false,
+        sendChatHistory: true,
         systemMessage: "",
         useSystemMessageForAllChats: false,
         selectedModal: "gpt-3.5-turbo",
