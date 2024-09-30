@@ -11,8 +11,6 @@ import Chats from "./components/Chat/Chats";
 import Modal from "./components/modals/Modal";
 import Apikey from "./components/modals/Apikey";
 import { useThemeSetting } from "@tamagui/next-theme";
-// import { getServiceToken } from "protonode";
-// import { getKey } from "../../bundles/keys/context";
 
 function App() {
   const [active, setActive] = useState(false);
@@ -21,20 +19,7 @@ function App() {
   let userHasApiKey = useAuth((state) => state.apikey);
   const { resolvedTheme } = useThemeSetting();
 
-  // const fetchApiKey = () => {
-  //   if (userHasApiKey === null) {
-  //     getKey({ key: "OPENAI_API_KEY", token: getServiceToken() })
-  //       .then((key) => {
-  //         userHasApiKey = key;
-  //       })
-  //       .catch((err) => {
-  //         console.error("Error fetching key:", err);
-  //       });
-  //   }
-  // };
-
   useEffect(() => {
-    // fetchApiKey(); 
     if (resolvedTheme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
@@ -43,7 +28,7 @@ function App() {
   }, [resolvedTheme]);
 
   return (
-    <div className="App font-montserrat md:flex">
+    <div className="App  font-montserrat md:flex ">
       <Navbar active={active} setActive={setActive} />
       <div className="">
         <button
@@ -55,6 +40,7 @@ function App() {
         </button>
       </div>
       <div
+      style={{ position: "fixed", width: "100%"}}
         className="p-3 z-10 flex items-center justify-between bg-[#202123] dark:bg-[#343541] border-b sticky top-0 text-gray-300 md:hidden">
         <button onClick={() => setActive(true)} className=" text-2xl flex">
           <Menu />
