@@ -4,6 +4,7 @@ import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
+import { SubsystemsSchema } from './subsystemSchemas'
 
 export const AgentsAutoAPI = AutoAPI({
     modelName: 'Agents',
@@ -137,10 +138,14 @@ export const AgentsAPI = (app, context) => {
         } else if (endpoint === 'register') {
             const db = getDB('agents')
             try {
-                const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
-
                 console.log('parsed', parsedMessage)
-                agentInfo.setSubsystem(parsedMessage)
+                const validation = SubsystemsSchema.safeParse(parsedMessage)
+                if (validation.success) {
+                    const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
+                    agentInfo.setSubsystem(parsedMessage)
+                } else {
+                    throw new Error("Bad register message format")
+                }
             } catch (e) {
                 console.error('cannot register agent: ', e)
             }
@@ -157,7 +162,7 @@ export const AgentsAPI = (app, context) => {
         //     return
         // }
         // // const subsystem = agentInfo.getSubsystem(req.params.subsystem)
-        
+
         await generateEvent(
             {
                 ephemeral: false,
