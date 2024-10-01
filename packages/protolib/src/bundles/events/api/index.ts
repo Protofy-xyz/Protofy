@@ -19,11 +19,12 @@ export const onEvent = (mqtt, context, cb, path?, from?) => {
     }))
 }
 
-export const emitEvent = (path, from, user, payload) => {
+export const emitEvent = (path, from, user, payload, ephemeral = false) => {
     return generateEvent({
         path,
         from,
         user,
-        payload
+        payload,
+        ephemeral
     }, getServiceToken())
 }
