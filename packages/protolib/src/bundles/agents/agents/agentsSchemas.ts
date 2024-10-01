@@ -34,7 +34,7 @@ export class AgentsModel extends ProtoModel<AgentsModel> {
         return this.data?.subsystem ? true : false
     }
 
-    async setSubsystem(subsystems: any) {
+    async setSubsystems(subsystems: any) {
         const agentObject = await API.get("/adminapi/v1/agents/" + this.data.name)
         if (agentObject.isError) {
             console.error(agentObject.error)
