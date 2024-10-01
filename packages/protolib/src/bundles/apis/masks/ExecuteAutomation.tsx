@@ -33,11 +33,13 @@ const ExecuteAutomation = (node: any = {}, nodeData = {}) => {
                     data: { options: endPoints.map(endpoint => endpoint) }
                 }
             ]} />
+            
+            <NodeParams id={node.id} params={[{ label: 'Params[string]', field: 'param-5', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Use service token', field: 'param-4', type: 'boolean' }]} />
-            <div style={{ marginTop: "120px" }}>
-                <FlowPort id={node.id} type='output' label='On Response (data)' style={{ top: '180px' }} handleId={'then'} />
+            <div style={{ marginTop: "200px" }}>
+                <FlowPort id={node.id} type='output' label='On Response (data)' style={{ top: '240px' }} handleId={'then'} />
                 <FallbackPort fallbackText="null" node={node} port={'param-2'} type={"target"} fallbackPort={'then'} portType={"_"} preText="async (data) => " postText="" />
-                <FlowPort id={node.id} type='output' label='On Error (error)' style={{ top: '230px' }} handleId={'error'} />
+                <FlowPort id={node.id} type='output' label='On Error (error)' style={{ top: '290px' }} handleId={'error'} />
                 <FallbackPort fallbackText="null" node={node} port={'param-3'} type={"target"} fallbackPort={'error'} portType={"_"} preText="async (error) => " postText="" />
             </div>
 
@@ -73,7 +75,8 @@ export default {
             "param-1": { value: "", kind: "StringLiteral" },
             "param-2": { value: "null", kind: "Identifier" },
             "param-3": { value: "null", kind: "Identifier" },
-            "param-4": { value: "false", kind: "FalseKeyword" }
+            "param-4": { value: "false", kind: "FalseKeyword" },
+            "param-5": { value: "", kind: "StringLiteral"}
         }
     }
 }
