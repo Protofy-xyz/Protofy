@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      background-color: #000;
+      overflow-y: hidden;
+    }
+
+    .parent {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    img {
+      width: 200px;
+      margin-bottom: 10px;
+    }
+
+    .loader {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: block;
+      margin: 15px auto;
+      position: relative;
+      color: #F7B33B;
+      box-sizing: border-box;
+      animation: animloader 1s linear infinite alternate;
+    }
+
+    @keyframes animloader {
+      0% {
+        box-shadow: -38px -12px, -14px 0, 14px 0, 38px 0;
+      }
+
+      33% {
+        box-shadow: -38px 0px, -14px -12px, 14px 0, 38px 0;
+      }
+
+      66% {
+        box-shadow: -38px 0px, -14px 0, 14px -12px, 38px 0;
+      }
+
+      100% {
+        box-shadow: -38px 0, -14px 0, 14px 0, 38px -12px;
+      }
+    }
+  </style>
+  <script>
+    async function makeRequest(retryCount = 0) {
+      const maxRetries = 10;
+      const delay = Math.min(1000 * Math.pow(2, retryCount), 30000);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+      // IN CASE THAT DEFAULT CASE WITH FETCH DOESN'T WORK USE TIMEOUT
+      setTimeout(() => {
+        window.location.href = "http://localhost:8080/";
+      }, 30000)
+
+      // DEFAULT CASE
+      // try {
+      //   const responseFront = await fetch('http://localhost:8080/', { signal: controller.signal });
+      //   clearTimeout(timeoutId);
+
+      //   if (responseFront.ok) {
+      //     window.location.href = "http://localhost:8080/";
+      //   } else {
+      //     console.log('Response not ok, retrying in', delay, 'ms');
+      //     setTimeout(() => makeRequest(retryCount + 1), delay);
+      //   }
+      // } catch (err) {
+      //   if (err.name === 'AbortError') {
+      //     console.log('Request aborted due to timeout');
+      //   } else {
+      //     console.log('Error fetching URL, retrying in', delay, 'ms', err);
+      //   }
+      //   setTimeout(() => makeRequest(retryCount + 1), delay);
+      // }
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      setTimeout(() => makeRequest(), 3000);
+    });
+  </script>
+</head>
+
+<body>
+  <div class="parent">
+    <div class="child">
+      <img src="\Users\miquelcos\Protofy\apps\next\public\logo.png">
+      <span class="loader"></span>
+    </div>
+  </div>
+</body>
+
+</html>
