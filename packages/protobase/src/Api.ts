@@ -10,7 +10,7 @@ export const getApiUrl = () => process?.env?.PROXY_API_URL ?? APIURL
 
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const _fetch = async (urlOrData, data?, update?, plain?, retryNum=0):Promise<PendingResult | undefined> => {
+const _fetch = async (urlOrData, data?, update?, plain?, retryNum=10):Promise<PendingResult | undefined> => {
     const SERVER = getApiUrl()
     let realUrl;
 
@@ -51,10 +51,10 @@ const _fetch = async (urlOrData, data?, update?, plain?, retryNum=0):Promise<Pen
 
             if (!res.ok) {
 
-                if(retryNum < 10 && (res.status < 400 || res.status > 499) && res.status !== 500) {
+                if(retryNum > 0 && (res.status < 400 || res.status > 499) && res.status !== 500) {
                     console.error('API retry: ', res.status, realUrl)
                     await wait(1000);
-                    return _fetch(urlOrData, data, update, plain, retryNum + 1)
+                    return _fetch(urlOrData, data, update, plain, retryNum - 1)
                 }
                 
                 const err = getPendingResult('error', null, resData)
@@ -73,9 +73,9 @@ const _fetch = async (urlOrData, data?, update?, plain?, retryNum=0):Promise<Pen
             }
         } catch (e: any) {
             logger.trace('API retry: ', {realUrl, urlOrData, data, update, plain,retryNum})
-            if(retryNum < 6) {
+            if(retryNum > 0) {
                 await wait(2000);
-                return _fetch(urlOrData, data, update, plain, retryNum + 1)
+                return _fetch(urlOrData, data, update, plain, retryNum - 1)
             }
             let errStr = e.apiError ?? e.toString()
             if (e instanceof SyntaxError) {
@@ -101,8 +101,6 @@ export const API = {
     //@ts-ignore
     actionFetch: (...arg) => () => _fetch(...arg),
     fetch: _fetch,
-    //@ts-ignore
-    get: (url, update?, plain?):Promise<PendingResult> => _fetch(url, null, update, plain),
-    //@ts-ignore
-    post: (url, data, update?, plain?):Promise<PendingResult> => _fetch(url, data, update, plain)
+    get: (url, update?, plain?, retryNum? ): Promise<PendingResult> => _fetch(url, null, update, plain, retryNum),
+    post: (url, data, update?, plain?, retryNum?): Promise<PendingResult> => _fetch(url, data, update, plain, retryNum)
 }
