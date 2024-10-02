@@ -72,7 +72,7 @@ const _fetch = async (urlOrData, data?, update?, plain?, retryNum=0):Promise<Pen
                 return response
             }
         } catch (e: any) {
-            logger.trace('API retry: ', realUrl)
+            logger.trace('API retry: ', {realUrl, urlOrData, data, update, plain,retryNum})
             if(retryNum < 6) {
                 await wait(2000);
                 return _fetch(urlOrData, data, update, plain, retryNum + 1)
