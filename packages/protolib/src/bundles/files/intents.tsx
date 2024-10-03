@@ -1,4 +1,5 @@
 import { Spinner, XStack, YStack, useTheme, Button, Text, Input, TextArea } from 'tamagui'
+import React, { useEffect, useRef, useCallback, useState, useContext } from 'react';
 import { useSearchParams, usePathname } from 'solito/navigation';
 import { DataCard } from '../../components/DataCard'
 import AsyncView from '../../components/AsyncView'
@@ -11,7 +12,6 @@ import { Monaco } from '../../components/Monaco'
 import { IntentType } from '../../lib/Intent'
 import Center from '../../components/Center'
 import dynamic from 'next/dynamic'
-import { useEffect, useRef, useState, useContext } from 'react';
 import { API } from 'protobase';
 import { usePrompt, promptCmd } from '../../context/PromptAtom';
 import { useInterval, useUpdateEffect } from 'usehooks-ts';
@@ -317,9 +317,9 @@ If you include anything else in your message (like reasonings or natural languag
 }
 
 const MonacoViewer = ({ path }) => {
-  const [fileContent] = useFileFromAPI(path)
+  const [fileContent] = useFileFromAPI(path);
   const sourceCode = useRef('');
-  const { resolvedTheme } = useThemeSetting()
+  const { resolvedTheme } = useThemeSetting();
 
   useEffect(() => {
     if (fileContent.isLoaded) {
@@ -327,11 +327,13 @@ const MonacoViewer = ({ path }) => {
     }
   }, [fileContent]);
 
+  const handleChange = useCallback((code) => {
+    sourceCode.current = code;
+  }, []);
 
   return (
     <AsyncView waitForLoading={1000} key={path} atom={fileContent}>
       <XStack mt={30} f={1} width={"100%"}>
-
         <SaveButton
           path={path}
           getContent={() => sourceCode.current}
@@ -339,15 +341,14 @@ const MonacoViewer = ({ path }) => {
         />
         <Monaco
           path={path}
-          darkMode={resolvedTheme == 'dark'}
+          darkMode={resolvedTheme === 'dark'}
           sourceCode={fileContent.data}
-          onChange={(code) => { sourceCode.current = code; }}
+          onChange={handleChange}
         />
       </XStack>
     </AsyncView>
   );
-}
-
+};
 export const processFilesIntent = ({ action, domain, data }: IntentType) => {
   const { mime } = data
   const type = mime ? mime.split('/')[0] : 'text'

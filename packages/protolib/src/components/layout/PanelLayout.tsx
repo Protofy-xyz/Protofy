@@ -7,6 +7,24 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
   const appBarHeight = 55
   const bgPanels = '$bgPanel'
   const _panelBgColor = '$bgContent'
+  const panel = <Panel>
+  <div style={{ display: 'flex', flexDirection: 'column', flex: 1, height: '100%', overflow: 'auto' }}>
+    <XStack bc={"bgPanels"} elevation={3} br={"$6"} mt={appBarHeight} f={1} paddingBottom={panelBottom ? '20px' : '0px'} style={{ flex: 1 }}>
+      <ScrollView f={1} $sm={{ br: "$0" }} style={{
+        flexGrow: 1,
+        overflowY: 'auto',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <YStack f={1} br={"$6"} bc={panelBgColor ?? _panelBgColor} style={{ flex: 1, overflowY: 'auto' }}>
+          {children}
+        </YStack>
+      </ScrollView>
+    </XStack>
+  </div>
+</Panel>
 
   return (
     <Layout
@@ -32,26 +50,10 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
       }>
       {/* <Theme name={tint as any}> */}
       <XStack f={1} p="$3" pl={0} bc={bgPanels}>
+        {!panelBottom?panel:
         <PanelGroup direction="vertical" style={{ height: '100%', width: '100%' }}>
-          <Panel>
-            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, height: '100%', overflow: 'auto' }}>
-              <XStack bc={"bgPanels"} elevation={3} br={"$6"} mt={appBarHeight} f={1} paddingBottom={panelBottom ? '20px' : '0px'} style={{ flex: 1 }}>
-                <ScrollView f={1} $sm={{ br: "$0" }} style={{
-                  flexGrow: 1,
-                  overflowY: 'auto',
-                  display: 'flex',
-                  flexDirection: 'column'
-                }}
-                  contentContainerStyle={{ flexGrow: 1 }}
-                >
-                  <YStack f={1} br={"$6"} bc={panelBgColor ?? _panelBgColor} style={{ flex: 1, overflowY: 'auto' }}>
-                    {children}
-                  </YStack>
-                </ScrollView>
-              </XStack>
-            </div>
-          </Panel>
-          {panelBottom && <> <CustomPanelResizeHandle
+         {panel}
+          <> <CustomPanelResizeHandle
             direction="horizontal"
           />
             <Panel>
@@ -59,8 +61,9 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
                 <p>Contenido del panel inferior</p>
               </div>
             </Panel>
-          </>}
+          </>
         </PanelGroup>
+        }
       </XStack>
     </Layout>
   )
