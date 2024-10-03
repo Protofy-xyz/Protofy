@@ -4,11 +4,9 @@ import { Tinted } from './Tinted';
 import { usePrompt } from '../context/PromptAtom';
 import { SearchContext } from '../context/SearchContext';
 import { AdminPanel } from './AdminPanel';
-import dynamic from 'next/dynamic';
 import { forwardRef, useState, useContext } from 'react';
 import { AppConfContext, SiteConfigType } from "../providers/AppConf"
-
-const Chat = dynamic(() => import('./Chat'), { ssr: false })
+import { ChatWidget } from './ChatWidget';
 
 export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = true }: any, ref) => {
   useSession(pageSession)
@@ -37,7 +35,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
         </AdminPanel>
       </SearchContext.Provider>
       <Tinted>
-        {integratedChat && settingsAssistantEnabled && <Chat tags={['doc', title]} />}
+        {integratedChat && settingsAssistantEnabled && <ChatWidget/>}
       </Tinted>
     </Page>
   )

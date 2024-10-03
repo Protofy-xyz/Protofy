@@ -10,8 +10,6 @@ import { useSearchParams, useRouter, usePathname } from 'solito/navigation';
 import { useState } from 'react';
 import { Explorer } from './Explorer';
 import FileActions from '../../../bundles/files/fileActions';
-import { Tinted } from '../../../components/Tinted'
-import Chat from '../../../components/Chat'
 import { getLogger, API, getPendingResult } from "protobase"
 import { usePendingEffect } from '../../../lib/usePendingEffect';
 import { usePrompt } from '../../../context/PromptAtom';
@@ -149,9 +147,9 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
                         {getWidget()}
-                        <Tinted>
+                        {/* <Tinted>
                             <Chat tags={['doc', "files"]} zIndex={999999999} onScreen={dialogOpen} mode="popup" />
-                        </Tinted>
+                        </Tinted> */}
                         <Dialog.Close />
                     </Dialog.Content>
                 </Dialog.Portal>
