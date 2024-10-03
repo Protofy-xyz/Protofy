@@ -37,6 +37,11 @@ jobs:
     - name: Install NodeJS dependencies
       run: yarn
 
+    - name: Modify requirements.txt with absolute paths
+      run: |
+        sed -i 's|../../packages/protopy|'"$GITHUB_WORKSPACE"'/packages/protopy|' requirements.txt
+        sed -i 's|../../packages/app|'"$GITHUB_WORKSPACE"'/packages/app|' requirements.txt
+
     - name: Install Python dependencies
       run: pip install -r requirements.txt
   
