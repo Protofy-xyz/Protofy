@@ -28,11 +28,11 @@ export default function Header() {
           </span>
         )}
       </div>
-      <div className="">
+      {/* <div className="">
         <button className=" text-xl">
           <Share />
         </button>
-      </div>
+      </div> */}
     </header>
   );
 }

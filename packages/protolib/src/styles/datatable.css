@@ -236,11 +236,6 @@
   text-align: right !important;
 }
 
-button > svg {
-  fill: var(--color7) !important;
-  opacity: 1;
-}
-
 .rdt_Table > div:not(.rdt_TableHead):not(.rdt_TableBody) {
   padding-top: 50px;
   padding-bottom: 50px;

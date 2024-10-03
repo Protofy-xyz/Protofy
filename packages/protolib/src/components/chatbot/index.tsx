@@ -51,7 +51,7 @@ function App() {
         </button>
       </div>
       <main
-      style={{marginTop:"100px"}}
+      style={{marginTop:"50px"}}
         className={classNames("w-full transition-all duration-500", {
           "md:ml-[260px]": active,
         })}
