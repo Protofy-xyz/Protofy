@@ -7,17 +7,13 @@ import moment from "moment";
 import { ImageSize } from "../services/chatService";
 
 const modalsList = [
-  "gpt-3.5-turbo",
-  "gpt-3.5-turbo-1106",
-  "gpt-3.5-turbo-16k-0613",
-  "gpt-3.5-turbo-16k",
-  "gpt-3.5-turbo-0613",
   "gpt-4",
   "gpt-4-0613",
-  "gpt-4-0314",
   "gpt-4-1106-preview",
+  "gpt-4-turbo",
+  "gpt-3.5-turbo",
+  "gpt-3.5-turbo-16k",
   "dall-e-3",
-  "dall-e-2",
 ] as const;
 
 export interface ChatMessageType {
@@ -68,7 +64,7 @@ export interface SettingsType {
     systemMessage: string;
     useSystemMessageForAllChats: boolean;
     selectedModal: ModalList;
-    dalleImageSize: { "dall-e-2": ImageSize; "dall-e-3": ImageSize };
+    dalleImageSize: { "dall-e-3": ImageSize };
   };
   modalsList: readonly string[];
   isSystemMessageModalVisible: boolean;
@@ -79,7 +75,7 @@ export interface SettingsType {
   setModalVisible: (value: boolean) => void;
   setModalsList: (value: string[]) => void;
   setModal: (value: ModalList) => void;
-  setDalleImageSize: (value: ImageSize, type: "dall-e-2" | "dall-e-3") => void;
+  setDalleImageSize: (value: ImageSize, type: "dall-e-3") => void;
 }
 export interface ChatType {
   chats: ChatMessageType[];
@@ -269,8 +265,8 @@ const useSettings = createWithEqualityFn<SettingsType>()(
         sendChatHistory: true,
         systemMessage: "",
         useSystemMessageForAllChats: false,
-        selectedModal: "gpt-3.5-turbo",
-        dalleImageSize: { "dall-e-2": "256x256", "dall-e-3": "1024x1024" },
+        selectedModal: "gpt-4-turbo",
+        dalleImageSize: { "dall-e-3": "1024x1024" },
       },
       modalsList: modalsList,
       isSystemMessageModalVisible: false,
@@ -333,7 +329,6 @@ const useSettings = createWithEqualityFn<SettingsType>()(
       migrate: (persistedState: unknown, version: number) => {
         if (version === 0) {
           (persistedState as SettingsType["settings"]).dalleImageSize = {
-            "dall-e-2": "256x256",
             "dall-e-3": "1024x1024",
           };
         }
