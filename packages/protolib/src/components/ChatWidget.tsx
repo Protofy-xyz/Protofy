@@ -23,7 +23,7 @@ export const ChatWidget = () => {
   return (
     <YStack>
       <Button
-        position="fixed"
+        position="absolute"
         bottom={50}
         right={50}
         size="$5"
@@ -46,7 +46,7 @@ export const ChatWidget = () => {
 
       {isChatVisible && (
         <Button
-          position="fixed"
+          position="absolute"
           bottom={50}
           right={110}
           size="$4"
@@ -69,7 +69,7 @@ export const ChatWidget = () => {
       <YStack
         width={isExpanded ? "100vw" : 500}
         height={isExpanded ? "95vh" : 800}
-        position="fixed"
+        position="absolute"
         bottom={isExpanded ? 0 : 130}
         right={isExpanded ? 0 : 50}
         backgroundColor="$background"
