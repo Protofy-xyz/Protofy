@@ -1,4 +1,4 @@
-import { onEvent, emitEvent } from './events/api'
+import { onEvent, emitEvent, getLastEvent } from './events/api'
 import { automation, fetch, automationResponse, executeAutomation, getServiceToken, serviceToken } from './apis/context/'
 import {createSchedule} from './automations/schedule'
 import {createPeriodicSchedule} from './automations/periodicSchedule'
@@ -22,6 +22,7 @@ import stateMachines from './stateMachines/context'
 export const APIContext = {
     onEvent,
     emitEvent,
+    getLastEvent,
     automation,
     automationResponse,
     getServiceToken,

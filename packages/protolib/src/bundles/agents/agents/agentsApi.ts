@@ -4,6 +4,7 @@ import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
+import { bifrost } from "./bifrost";
 
 export const AgentsAutoAPI = AutoAPI({
     modelName: 'Agents',
@@ -66,14 +67,14 @@ export const AgentsAPI = (app, context) => {
 
         const db = getDB('agents')
         const agentInfo = AgentsModel.load(JSON.parse(await db.get(req.params.agent)), session)
-        const env = agentInfo.getEnvironment()
+        // const env = agentInfo.getEnvironment()
         const subsystem = agentInfo.getSubsystem(req.params.subsystem)
         if (!subsystem) {
             res.status(404).send(`Subsytem [${req.params.subsystem}] not found in agent [${req.params.agent}]`)
             return
         }
 
-        const monitor = subsystem.getMonitor(req.params.monitor)
+        const monitor = subsystem.getMonitor(req.params.monior)
         if (!monitor) {
             res.status(404).send(`Monitor [${req.params.monitor}] not found in Subsytem [${req.params.subsystem}] for agent [${req.params.agent}]`)
             return
@@ -122,59 +123,6 @@ export const AgentsAPI = (app, context) => {
         res.send({ value })
     }))
 
-    const processMessage = async (env: string, message: string, topic: string) => {
-        const [agent, agentName, ...path] = topic.split("/");
-        const endpoint = path.join("/")
 
-        let parsedMessage = message;
-        try {
-            parsedMessage = JSON.parse(message);
-        } catch (err) { }
-
-
-        if (endpoint == 'debug') {
-            logger.debug({ from: agent, agentName, endpoint }, JSON.stringify({ topic, message }))
-        } else if (endpoint === 'register') {
-            const db = getDB('agents')
-            try {
-                const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
-
-                console.log('parsed', parsedMessage)
-                agentInfo.setSubsystem(parsedMessage)
-            } catch (e) {
-                console.error('cannot register agent: ', e)
-            }
-        }
-
-        // const env = agentInfo.getEnvironment()
-        // // console.log("agentInfo: ", agentInfo)
-        // // console.log("subsystems: ", agentInfo.data.subsystem)
-        // // console.log("endpoint: ", endpoint)
-        // const monitor = agentInfo.getMonitorByEndpoint("/" + endpoint)
-        // // console.log("monitor: ", monitor)
-        // if (!monitor) {
-        //     logger.debug({ from: agent, agentName, endpoint }, "Agent not found: " + JSON.stringify({ topic, message }))
-        //     return
-        // }
-        // // const subsystem = agentInfo.getSubsystem(req.params.subsystem)
-        
-        await generateEvent(
-            {
-                ephemeral: false,
-                environment: env, // based on mqtt server environment
-                path: topic,
-                from: "agent",
-                user: agentName,
-                payload: {
-                    message: parsedMessage,
-                    agentName,
-                    endpoint
-                }
-            },
-            getServiceToken()
-        );
-    }
-
-    topicSub(mqtts['dev'], 'agents/#', (message, topic) => processMessage('dev', message, topic))
-    topicSub(mqtts['prod'], 'agents/#', (message, topic) => processMessage('prod', message, topic))
+    bifrost(context) // agents connection mqtt based protocol
 }

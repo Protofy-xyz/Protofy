@@ -66,6 +66,6 @@ export const fetch = async (method, url, data={}, cb, errorCb, hasSarviceToken=f
     return result.data
 }
 
-export const executeAutomation = async (automation, cb, errorCb, hasSarviceToken=false)=>{
-    return fetch("get", '/api/v1/automations/'+automation, {}, cb, errorCb, hasSarviceToken)
+export const executeAutomation = async (automation, cb, errorCb, hasSarviceToken=false, params= null)=>{
+    return fetch("get", '/api/v1/automations/' + automation + (params?'?'+params:''), {}, cb, errorCb, hasSarviceToken)
 }

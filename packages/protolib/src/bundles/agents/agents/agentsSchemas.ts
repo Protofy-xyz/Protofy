@@ -1,11 +1,10 @@
 import { ProtoModel, SessionDataType, API, Schema, z, AutoModel } from 'protobase'
+import { SubsystemsSchema } from './subsystemSchemas';
+
 
 export const AgentsSchema = Schema.object({
     name: z.string().hint("Agent name").static().regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").id().search(),
-    subsystems: z.object({
-        "monitors": z.array(z.record(z.string(), z.any())),
-        "actions": z.array(z.record(z.string(), z.any())),
-    }).optional(),
+    subsystems: SubsystemsSchema.optional().hidden(),
     platform: z.string(),
 })
 export type AgentsType = z.infer<typeof AgentsSchema>;
@@ -35,12 +34,14 @@ export class AgentsModel extends ProtoModel<AgentsModel> {
         return this.data?.subsystem ? true : false
     }
 
-    async setSubsystem(subsystems: any) {
+    async setSubsystems(subsystems: any) {
         const agentObject = await API.get("/adminapi/v1/agents/" + this.data.name)
         if (agentObject.isError) {
             console.error(agentObject.error)
             return;
         }
+
+
         agentObject.data.subsystems = subsystems
         API.post("/adminapi/v1/agents/" + this.data.name, agentObject.data)
     }

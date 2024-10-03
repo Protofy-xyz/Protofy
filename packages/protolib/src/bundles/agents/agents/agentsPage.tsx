@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
-import { AgentsModel } from './agentsSchemas';
+import { AgentsModel, AgentsType } from './agentsSchemas';
 import { API } from 'protobase';
 import { DataTable2 } from '../../../components/DataTable2';
 import { DataView } from '../../../components/DataView';
@@ -293,28 +293,29 @@ export default {
         dataTableGridProps={{
           disableItemSelection: true,
           onSelectItem: (item) => { },
-          getBody: (data) => <CardBody title={data.name}>
+          getBody: (data: AgentsType) => <CardBody title={data.name}>
             <XStack right={20} top={20} position={"absolute"}>
-              {data.environment && all && <Chip color={data.environment == 'dev' ? "$color5" : "$color7"} text={data.environment} />}
+              {/* ADD ENVIRONMENTS COMPATIBILITY */}
+              {/* {data.environment && all && <Chip color={data.environment == 'dev' ? "$color5" : "$color7"} text={data.environment} />} */}
               <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?: string) => {
                 await API.get(`${sourceUrl}/${deviceId}/delete`)
               }} deleteable={() => true} element={AgentsModel.load(data)} extraMenuActions={extraMenuActions} />
             </XStack>
             <YStack f={1}>
               {
-                Object.keys(data?.subsystems ?? {}).length
+                Object.keys(data.subsystems ?? {}).length
                   ? <>
                     <Paragraph mt="20px" ml="20px" size={30}>{'Actions'}</Paragraph>
                     {
-                      data.subsystems?.actions.map(action => {
-                        return <Button mt="20px" ml="20px" size={30}>{action}</Button>
+                      data.subsystems.actions.map(action => {
+                        return <Button mt="20px" ml="20px" size={30}>{action.name}</Button>
                       })
                     }
 
                     <Paragraph mt="20px" ml="20px" size={30}>{'Monitors'}</Paragraph>
                     {
-                      data.subsystems?.monitors.map(monitor => {
-                        return <Button mt="20px" ml="20px" size={30}>{monitor}</Button>
+                      data.subsystems.monitors.map(monitor => {
+                        return <Button mt="20px" ml="20px" size={30}>{monitor.name}</Button>
                       })
                     }
                   </>

@@ -1,0 +1,9 @@
+@REM Win + R --- shell:startup --- OK
+@REM and create a file with this
+@REM NOTE: Change this path for your project path
+
+@echo off
+cd C:\Users\Protofy\Protofy\apps\launcher\windows\
+echo running index.bat...
+start index.bat
+echo index.bat finished
