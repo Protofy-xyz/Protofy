@@ -17,6 +17,14 @@ jobs:
       with:
         node-version: '20.4.x'
 
+    - name: Install Python dependencies (venv)
+      run: sudo apt-get install -y python3-venv
+
+    - name: Setup Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
     - name: Setup yarn
       run: npm install -g yarn
 
@@ -28,7 +36,15 @@ jobs:
 
     - name: Install NodeJS dependencies
       run: yarn
-      
+
+    - name: Modify requirements.txt with absolute paths
+      run: |
+        sed -i 's|../../packages/protopy|'"$GITHUB_WORKSPACE"'/packages/protopy|' requirements.txt
+        sed -i 's|../../packages/app|'"$GITHUB_WORKSPACE"'/packages/app|' requirements.txt
+
+    - name: Install Python dependencies
+      run: pip install -r requirements.txt
+  
     - name: Prepare dev
       run: |
         echo 'Packaging project'
