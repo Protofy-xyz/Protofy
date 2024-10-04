@@ -32,7 +32,7 @@ export default function UserMessage({ chat, chatIndex }: Props) {
 
   return (
     <div className={classNames("py-4 px-2 md:px-0")}>
-      <div className=" max-w-2xl mx-auto md:flex md:items-center group">
+      <div style={{ maxWidth: "900px" }} className="mx-auto md:flex md:items-center group">
         <div className="flex items-start w-full max-w-[620px]">
           <div className="mr-4  rounded-md flex items-center flex-shrink-0">
             <Avatar className=" h-11 w-11" />

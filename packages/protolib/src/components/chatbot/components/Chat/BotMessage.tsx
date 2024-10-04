@@ -24,7 +24,8 @@ export default function BotMessage({ index, chat }: Props) {
         variants={variants}
         initial="hidden"
         animate="visible"
-        className=" max-w-2xl mx-auto md:flex md:items-center group"
+        style={{ maxWidth: "900px" }}
+        className="mx-auto md:flex md:items-center group"
       >
         {chat.type && chat.type === "image_url" ? (
           <ImageMessage index={index} chat={chat}/>
