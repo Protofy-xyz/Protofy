@@ -9,7 +9,7 @@ export function AssistantAPI(app, context) {
         try {
             const response = await chatGPTSession({
                 messages: messages,                
-                model: gptModel ?? "gpt-4",
+                model: gptModel ?? "gpt-4-turbo",
             });
         
             res.json(response);
