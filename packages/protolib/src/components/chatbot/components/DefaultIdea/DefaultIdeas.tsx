@@ -2,19 +2,37 @@ import DefaultIdea from "./DefaultIdea";
 
 const defaultIdeas = [
   {
-    idea: "Design database schema",
-    moreContext: "Design a database schema for a social media app",
+    idea: "Create a new Object",
+    moreContext: "Use the visual form to define a new data entity, like 'Product' or 'Customer'",
   },
   {
-    idea: "Give me code snippet",
-    moreContext:
-      "Give me a code snippet to create a database schema for a social media app",
+    idea: "Edit an API",
+    moreContext: "Modify an existing API or create a new automation using the visual editor",
   },
-  { idea: "Tell me a joke", moreContext: "Tell me a joke" },
   {
-    idea: "Design redux store",
-    moreContext: " Design a redux store for a social media app",
+    idea: "Manage IoT devices",
+    moreContext: "View and control your IoT devices connected through ESP32",
   },
+  {
+    idea: "Design a new page",
+    moreContext: "Create a new page for your app using the visual-ui editor",
+  },
+  {
+    idea: "View system events",
+    moreContext: "Check out the system events viewer to monitor events in real-time",
+  },
+  {
+    idea: "Explore user management",
+    moreContext: "Manage user accounts, reset passwords, and configure user groups",
+  },
+  {
+    idea: "Monitor database",
+    moreContext: "View and edit application-level databases directly from the dev panel",
+  },
+  {
+    idea: "Customize dashboard",
+    moreContext: "Customize the dashboard to better fit your workflow in the dev panel",
+  }
 ];
 
 export default function DefaultIdeas({ visible = true }) {
