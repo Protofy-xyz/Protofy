@@ -13,7 +13,7 @@ export default function Page(props: any) {
     const { resolvedTheme } = useThemeSetting();
 
     return (
-        <Stack f={1}>
+        <Stack backgroundColor={resolvedTheme==="light"?"":"#343541"} f={1}>
             <Head>
                 <title>{projectName + " - Chatbot"}</title>
             </Head>
