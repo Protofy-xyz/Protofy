@@ -340,24 +340,6 @@ const useSettings = createWithEqualityFn<SettingsType>()(
   shallow
 );
 
-const useTheme = create<ThemeType>()(
-  persist(
-    (set) => ({
-      theme: "dark",
-      setTheme: (theme) => {
-        set(
-          produce((state) => {
-            state.theme = theme;
-          })
-        );
-      },
-    }),
-    {
-      name: "chatTheme",
-    }
-  )
-);
-
 export const months = [
   "Januray",
   "February",
@@ -435,4 +417,4 @@ export const isChatSelected = (id: string) => (state: ChatType) =>
   state.chats[0]?.id === id;
 
 export default useChat;
-export { useAuth, useSettings, useTheme };
+export { useAuth, useSettings };

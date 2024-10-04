@@ -1,5 +1,5 @@
 import { Check, PenSquare } from "lucide-react";
-import useChat, { useAuth, useSettings, useTheme } from "../../store/store";
+import useChat, { useAuth, useSettings } from "../../store/store";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Modal from "../modals/Modal";
@@ -26,8 +26,6 @@ export default function SettingsTab({ visible }: { visible: boolean }) {
     state.settings.dalleImageSize,
     state.setDalleImageSize,
   ]);
-
-  const [theme, setTheme] = useTheme((state) => [state.theme, state.setTheme]);
 
   const clearAllChats = useChat((state) => state.clearAllChats);
   const [apikey, setApiKey] = useAuth((state) => [
@@ -84,24 +82,6 @@ export default function SettingsTab({ visible }: { visible: boolean }) {
     >
       <div className="p-2">
         <div className="flex items-center mb-4 justify-between border border-gray-200 rounded dark:border-gray-700 p-2">
-          <label
-            htmlFor="default-checkbox"
-            className="ml-2  font-bold  dark:text-gray-300"
-          >
-            Dark mode
-          </label>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              value=""
-              checked={theme === "dark"}
-              onChange={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="sr-only peer"
-            />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-          </label>
-        </div>
-        <div className="flex items-center mb-4 justify-between border border-gray-200 rounded dark:border-gray-700 p-2">
           <span className="ml-2  font-bold  dark:text-gray-300">
             Clear all chats
           </span>
@@ -113,7 +93,6 @@ export default function SettingsTab({ visible }: { visible: boolean }) {
             Clear
           </button>
         </div>
-
         <div className="flex items-center mb-4 justify-between border border-gray-200 rounded dark:border-gray-700 p-2">
           <label
             htmlFor="default-checkbox"

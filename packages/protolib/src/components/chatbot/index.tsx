@@ -20,10 +20,10 @@ function App() {
   const { resolvedTheme } = useThemeSetting();
 
   useEffect(() => {
-    if (resolvedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
+    if (resolvedTheme === "light") {
       document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
     }
   }, [resolvedTheme]);
 

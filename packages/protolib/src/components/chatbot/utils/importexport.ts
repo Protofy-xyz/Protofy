@@ -1,9 +1,7 @@
 import useChat, {
   ChatMessageType,
   SettingsType,
-  Theme,
-  useSettings,
-  useTheme,
+  useSettings
 } from "../store/store";
 
 type Backup = {
@@ -38,7 +36,6 @@ export function handleExportChats(): Promise<boolean> {
         JSON.stringify(useSettings.getState().settings)
       );
       backup.settings = settingsClone;
-      backup.settings.theme = useTheme.getState().theme;
 
       const data = JSON.stringify(backup, null, 2);
 
@@ -78,7 +75,6 @@ export function handleImportChats(file: File): Promise<Error | boolean> {
             Object.keys(chats.conversations).concat(prev.chatHistory)
           ),
         }));
-        useTheme.setState({ theme: chats.settings.theme as Theme });
         useSettings.setState((prev) => ({
           settings: { ...prev.settings, ...chats.settings },
         }));
