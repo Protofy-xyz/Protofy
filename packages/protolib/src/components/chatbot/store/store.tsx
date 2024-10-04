@@ -353,7 +353,7 @@ const useTheme = create<ThemeType>()(
       },
     }),
     {
-      name: "theme",
+      name: "chatTheme",
     }
   )
 );
