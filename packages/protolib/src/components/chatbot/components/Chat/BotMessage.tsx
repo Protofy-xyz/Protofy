@@ -18,7 +18,7 @@ type Props = {
 export default function BotMessage({ index, chat }: Props) {
   return (
     <div
-      className={classNames("py-4 bg-gray-100 dark:bg-[#40414f] px-2 md:px-0")}
+      className={classNames("py-4 px-2 md:px-0")}
     >
       <motion.div
         variants={variants}

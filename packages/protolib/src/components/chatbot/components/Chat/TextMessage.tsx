@@ -30,7 +30,7 @@ export default function TextMessage({ index, chat }: Props) {
     prompt
   });
   return (
-    <>
+    <div>
       <div className="flex items-start w-full">
         <div className="mr-4  rounded-md flex items-center flex-shrink-0">
           <Avatar className=" h-11 w-11" src="/images/bot.webp" />
@@ -72,23 +72,25 @@ export default function TextMessage({ index, chat }: Props) {
                 ref={cursorRef}
               ></span>
             )}
+
+            <div className="mt-2 md:mt-5  text-left self-start">
+              {!copied ? (
+                <button
+                  className="edit text-gray-500 dark:text-gray-200 text-xl"
+                  onClick={() => copy(result)}
+                >
+                  <Clipboard />
+                </button>
+              ) : (
+                <span className="dark:text-gray-200 text-gray-500 text-xl">
+                  <Check />
+                </span>
+              )}
+            </div>
           </div>
         )}
+
       </div>
-      <div className="mt-2 md:mt-0  text-right self-start">
-        {!copied ? (
-          <button
-            className="edit md:ml-8 text-gray-500 dark:text-gray-200 text-xl"
-            onClick={() => copy(result)}
-          >
-            <Clipboard />
-          </button>
-        ) : (
-          <span className="dark:text-gray-200 text-gray-500 text-xl">
-            <Check />
-          </span>
-        )}
-      </div>
-    </>
+    </div>
   );
 }

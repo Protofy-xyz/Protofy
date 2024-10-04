@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
 import { SiteConfig } from 'app/conf'
@@ -10,14 +11,13 @@ export default function Page(props: any) {
     const Chatbot = dynamic(() => import('protolib/src/components/chatbot'), { ssr: false })
     useRedirectToEnviron()
     const projectName = SiteConfig.projectName
-    const { resolvedTheme } = useThemeSetting();
 
     return (
-        <Stack backgroundColor={resolvedTheme==="light"?"":"#343541"} f={1}>
+        <>
             <Head>
                 <title>{projectName + " - Chatbot"}</title>
             </Head>
             <Chatbot />
-        </Stack>
+        </>
     )
 }

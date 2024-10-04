@@ -49,12 +49,6 @@ export interface ModalType {
   root: string;
   parent: null;
 }
-export type Theme = "light" | "dark";
-
-export interface ThemeType {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-}
 
 export type ModalList = (typeof modalsList)[number];
 
@@ -412,7 +406,6 @@ export const selectChatsHistory = (state: ChatType) => {
 
 export const selectUser = (state: AuthType) => state.user;
 export const chatsLength = (state: ChatType) => state.chats.length > 0;
-export const isDarkTheme = (state: ThemeType) => state.theme === "dark";
 export const isChatSelected = (id: string) => (state: ChatType) =>
   state.chats[0]?.id === id;
 

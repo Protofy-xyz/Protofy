@@ -32,37 +32,8 @@ export default function UserMessage({ chat, chatIndex }: Props) {
 
   return (
     <div className={classNames("py-4 px-2 md:px-0")}>
-      <div style={{ maxWidth: "900px" }} className="mx-auto md:flex md:items-center group">
-        <div className="flex items-start w-full max-w-[620px]">
-          <div className="mr-4  rounded-md flex items-center flex-shrink-0">
-            <Avatar className=" h-11 w-11" />
-          </div>
-
-          {!edit ? (
-            <p
-              className={classNames(
-                " dark:text-gray-200 overflow-x-auto"
-              )}
-            >
-              {chat.content}
-            </p>
-          ) : (
-            <textarea
-              name="query"
-              ref={editTextareaRef}
-              value={updatedQuery}
-              onChange={(e) => {
-                setUpdatedQuery(e.target.value);
-                e.target.style.height = "auto";
-                e.target.style.height = `${e.target.scrollHeight}px`;
-              }}
-              className="w-full bg-transparent border-0 dark:text-white outline-none resize-none"
-              autoFocus
-            ></textarea>
-          )}
-        </div>
-
-        <div className=" md:invisible group-hover:visible  text-right">
+      <div style={{ paddingLeft: "75px", maxWidth: "900px", display: 'flex', justifyContent: 'flex-end' }} className="mx-auto md:flex md:items-center group">
+        <div className="mr-5 md:invisible group-hover:visible text-right">
           {!edit && (
             <button
               className="edit md:ml-8 dark:text-gray-200  text-gray-500 text-xl "
@@ -72,23 +43,53 @@ export default function UserMessage({ chat, chatIndex }: Props) {
             </button>
           )}
         </div>
-      </div>
-      {edit && (
-        <div className=" max-w-2xl mx-auto flex items-center group justify-center font-bold mt-4">
-          <button
-            className=" p-2 bg-teal-600 hover:bg-teal-700 focus:border-2  rounded-md text-white mr-2 "
-            onClick={handelChatEdit}
-          >
-            Save & submit
-          </button>
-          <button
-            className=" p-2 bg-transparent border dark:hover:bg-gray-700 hover:bg-gray-200 focus:border-2 hover:border border-gray-600 rounded-md text-black dark:text-white"
-            onClick={() => setEdit((prev) => !prev)}
-          >
-            Cancel
-          </button>
+        <div style={{}} className="bg-gray-100 dark:bg-[#40414f] p-4 rounded-2xl">
+          <div className="flex items-start w-full max-w-[620px]">
+            {/* <div className="mr-4  rounded-md flex items-center flex-shrink-0">
+              <Avatar className=" h-11 w-11" />
+            </div> */}
+
+            {!edit ? (
+              <p
+                className={classNames(
+                  " dark:text-gray-200 overflow-x-auto"
+                )}
+              >
+                {chat.content}
+              </p>
+            ) : (
+              <textarea
+                name="query"
+                ref={editTextareaRef}
+                value={updatedQuery}
+                onChange={(e) => {
+                  setUpdatedQuery(e.target.value);
+                  e.target.style.height = "auto";
+                  e.target.style.height = `${e.target.scrollHeight}px`;
+                }}
+                className="w-full bg-transparent border-0 dark:text-white outline-none resize-none"
+                autoFocus
+              ></textarea>
+            )}
+          </div>
         </div>
-      )}
+        {edit && (
+          <div className=" max-w-2xl mx-auto flex items-center group justify-center font-bold mt-4">
+            <button
+              className=" p-2 bg-teal-600 hover:bg-teal-700 focus:border-2  rounded-md text-white mr-2 "
+              onClick={handelChatEdit}
+            >
+              Save & submit
+            </button>
+            <button
+              className=" p-2 bg-transparent border dark:hover:bg-gray-700 hover:bg-gray-200 focus:border-2 hover:border border-gray-600 rounded-md text-black dark:text-white"
+              onClick={() => setEdit((prev) => !prev)}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
