@@ -54,7 +54,7 @@ export default function Navbar({
       >
         <nav
           className={classnames(
-            " absolute left-0 bottom-0 top-0  md:flex-grow-1 w-9/12 md:w-[260px] bg-[#202123] text-white z-10 flex flex-col transition duration-500",
+            " absolute left-0 bottom-0 top-0  md:flex-grow-1 w-9/12 md:w-[260px] bg-[#171717] text-white z-10 flex flex-col transition duration-500",
             { "translate-x-0": active, "-translate-x-[150%]": !active }
           )}
         >
@@ -80,12 +80,12 @@ export default function Navbar({
           <div className="history overflow-y-auto h-[calc(100%-60px)]">
             <ChatHistory />
           </div>
-          <div className="account  font-bold  z-20 bg-[#202123] border-t border-gray-500 shadow  ">
+          <div className="account  font-bold  z-20 bg-[#171717] border-t border-gray-500 shadow  ">
             <div className=" self-stretch mr-4 w-full mb-2">
               <select
                 value={selectedModal}
                 onChange={(e) => setModal(e.target.value as ModalList)}
-                className="border border-gray-300    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="border border-gray-300 block w-full p-2.5  dark:text-white"
               >
                 {Object.keys(groupedModels).map((group) => (
                   <optgroup

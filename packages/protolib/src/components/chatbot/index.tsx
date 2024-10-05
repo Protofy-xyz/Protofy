@@ -34,8 +34,8 @@ function App() {
 
 
   return (
-    <Stack backgroundColor={resolvedTheme==="light"?"":"#343541"} f={1}>
-      <div className="App font-montserrat md:flex dark:bg-[#343541]">
+    <Stack backgroundColor={resolvedTheme==="light"?"":"#212121"} f={1}>
+      <div className="App font-montserrat md:flex dark:bg-[#212121]">
         <Navbar active={active} setActive={setActive} />
         <div className="">
           <button
@@ -48,7 +48,7 @@ function App() {
         </div>
         <div
         style={{ position: "fixed", width: "100%"}}
-          className="p-3 z-10 flex items-center justify-between bg-[#202123] dark:bg-[#343541] border-b sticky top-0 text-gray-300 md:hidden">
+          className="p-3 z-10 flex items-center justify-between bg-[#171717] dark:bg-[#212121] border-b sticky top-0 text-gray-300 md:hidden">
           <button onClick={() => setActive(true)} className=" text-2xl flex">
             <Menu />
           </button>
@@ -60,14 +60,14 @@ function App() {
         <main
         style={{marginTop:"50px"}}
           className={classNames("w-full transition-all duration-500", {
-            "md:ml-[260px]": active,
+            "md:ml-[200px]": active,
           })}
         >
-          {isChatsVisible ? <Header /> : <GptIntro />}
+          {isChatsVisible ?? <GptIntro />}
           {isChatsVisible && <Chats />}
           <div
             className={classNames(
-              "fixed left-0 px-2 right-0 transition-all duration-500 bottom-0 dark:shadow-lg py-1 shadow-md backdrop-blur-sm bg-white/10 dark:bg-dark-primary/10",
+              "fixed left-0 px-2 right-0 transition-all duration-500 bottom-0 dark:shadow-lg py-1 shadow-md backdrop-blur-sm bg-white dark:bg-dark-primary",
               {
                 "dark:bg-dark-primary bg-white": isChatsVisible,
                 "md:ml-[260px]": active,

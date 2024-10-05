@@ -43,7 +43,7 @@ export default function UserMessage({ chat, chatIndex }: Props) {
             </button>
           )}
         </div>
-        <div style={{}} className="bg-gray-100 dark:bg-[#40414f] p-4 rounded-2xl">
+        <div style={{}} className="bg-gray-100 dark:bg-[#2f2f2f] p-4 rounded-2xl">
           <div className="flex items-start w-full max-w-[620px]">
             {/* <div className="mr-4  rounded-md flex items-center flex-shrink-0">
               <Avatar className=" h-11 w-11" />
