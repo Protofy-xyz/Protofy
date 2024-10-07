@@ -120,11 +120,12 @@ const Action = ({ deviceName, action }) => {
                 onPress={() => { buttonAction(action) }}
                 color="$color10"
                 title={"Description: " + action.description}
+                {...action.props}
             >
                 {action.label ?? action.name}
             </Button>
         case "input":
-            return <XStack gap="$3" w={'100%'} alignItems="center">
+            return <XStack gap="$3" width={'100%'} alignItems="center">
                 <Text whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden" maxWidth="150px">{action.label ?? action.name}</Text>
                 <Input
                     value={value}
