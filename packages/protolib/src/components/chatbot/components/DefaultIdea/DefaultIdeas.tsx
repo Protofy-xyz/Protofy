@@ -37,12 +37,15 @@ const defaultIdeas = [
 
 export default function DefaultIdeas({ visible = true }) {
   return (
-    <div className={`row1 ${visible ? "block" : "hidden"}`}>
-      <DefaultIdea ideas={defaultIdeas.slice(0, 2)} />
-      <DefaultIdea
-        ideas={defaultIdeas.slice(2, 4)}
-        myclassNames="hidden md:visible"
-      />
+    <div
+      className={`flex flex-col items-center justify-end ${
+        visible ? "block" : "hidden"
+      } h-full py-4`}
+    >
+      <div className="max-w-[900px] w-full px-4 md:px-0 mx-auto">
+        <DefaultIdea ideas={defaultIdeas.slice(0, 2)} />
+        <DefaultIdea ideas={defaultIdeas.slice(2, 4)} myclassNames="hidden md:visible" />
+      </div>
     </div>
   );
 }

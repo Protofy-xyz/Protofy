@@ -55,7 +55,7 @@ function App() {
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 mt-4 md:mt-0">
+          <div className="flex-1 overflow-y-auto p-4 mt-0">
             {isChatsVisible ? <Chats /> : <DefaultIdeas />}
           </div>
 
