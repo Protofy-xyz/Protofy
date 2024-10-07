@@ -67,23 +67,22 @@ function App() {
           {isChatsVisible && <Chats />}
           <div
             className={classNames(
-              "fixed left-0 px-2 right-0 transition-all duration-500 bottom-0 dark:shadow-lg py-1 shadow-md backdrop-blur-sm bg-white dark:bg-dark-primary",
+              "fixed left-0 px-2 right-0 transition-all duration-500 bottom-0 dark:shadow-lg py-1 shadow-md backdrop-blur-sm bg-white dark:bg-[#212121]",
               {
-                "dark:bg-dark-primary bg-white": isChatsVisible,
+                "dark:bg-[#212121] bg-white": isChatsVisible,
                 "md:ml-[260px]": active,
               }
             )}
           >
-            <div className="max-w-2xl md:max-w-[calc(100% - 260px)] mx-auto">
+            <div className="max-w-2xl md:max-w-[calc(100% - 260px)] mx-auto ">
               {!isChatsVisible && (
                 <>
                   <DefaultIdeas />
                 </>
               )}
 
-              <div className="dark:bg-inherit">
+              <div style={{paddingTop:"15px", paddingBottom:"15px"}}>
                 <UserQuery />
-                <footer className="py-3" />
               </div>
             </div>
           </div>
