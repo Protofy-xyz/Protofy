@@ -220,7 +220,7 @@ ESP_LOGD("Report position", "${this.name} stepper move X steps set to: %d",  val
           actions: [
             {
               name: 'set_target',
-              label: 'Set target',
+              label: 'Target',
               description: 'Sets target of the stepper',
               endpoint: "/"+this.type+"/"+this.name+"/set_target",
               connectionType: 'mqtt',
@@ -230,7 +230,7 @@ ESP_LOGD("Report position", "${this.name} stepper move X steps set to: %d",  val
             },
             {
               name: 'set_max_speed',
-              label: 'Set max speed',
+              label: 'Max Speed',
               description: 'Sets speed of the stepper',
               endpoint: "/"+this.type+"/"+this.name+"/set_max_speed",
               connectionType: 'mqtt',
@@ -240,7 +240,7 @@ ESP_LOGD("Report position", "${this.name} stepper move X steps set to: %d",  val
             },
             {
               name: 'set_acceleration',
-              label: 'Set acceleration',
+              label: 'Acceleration',
               description: 'Sets acceleration of the stepper',
               endpoint: "/"+this.type+"/"+this.name+"/set_acceleration",
               connectionType: 'mqtt',
@@ -250,7 +250,7 @@ ESP_LOGD("Report position", "${this.name} stepper move X steps set to: %d",  val
             },
             {
               name: 'set_deceleration',
-              label: 'Set deceleration',
+              label: 'Deceleration',
               description: 'Sets deceleration of the stepper',
               endpoint: "/"+this.type+"/"+this.name+"/set_deceleration",
               connectionType: 'mqtt',
@@ -270,7 +270,7 @@ ESP_LOGD("Report position", "${this.name} stepper move X steps set to: %d",  val
             },
             {
               name: 'move_steps',
-              label: 'Move X steps',
+              label: 'X steps',
               description: 'Move stepper X steps',
               endpoint: "/"+this.type+"/"+this.name+"/move_steps",
               connectionType: 'mqtt',

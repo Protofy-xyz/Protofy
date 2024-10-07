@@ -150,7 +150,7 @@ id(${this.name}_current_state) = 6;
           actions: [
             {
               name: 'set_speed',
-              label: 'Set speed',
+              label: 'Speed',
               description: 'Sets speed of the motor',
               endpoint: `/${this.name}/set_speed`,
               connectionType: 'mqtt',
