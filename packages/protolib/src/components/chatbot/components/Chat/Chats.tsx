@@ -18,7 +18,7 @@ export default function Chats() {
   }, [chats]);
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1 overflow-y-auto mx">
       {chats.map((chat, index) =>
         chat.role === "assistant" ? (
           <BotMessage index={index} key={chat.id} chat={chat} />

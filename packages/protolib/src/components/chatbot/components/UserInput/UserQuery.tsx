@@ -33,29 +33,19 @@ export default function UserQuery() {
     e.preventDefault();
     if (query) {
       addChat(createMessage("user", query, "text"));
-      addChat(
-        createMessage(
-          "assistant",
-          "",
-          selectedModal.startsWith("dall-e") ? "image_url" : "text"
-        )
-      );
+      addChat(createMessage("assistant", "", selectedModal.startsWith("dall-e") ? "image_url" : "text"));
       setQuery("");
       if (textareaRef.current) textareaRef.current.style.height = "30px";
     }
   }
 
   return (
-    <form
-      className="flex items-center shadow-md dark:bg-[#2f2f2f] bg-white dark:border-white border-gray-700 border-2 rounded-md"
-      onSubmit={handleOnSubmit}
-      ref={formRef}
-    >
+    <form className="flex items-center shadow-md dark:bg-[#2f2f2f] bg-white dark:border-white border-gray-700 border-2 rounded-md" onSubmit={handleOnSubmit} ref={formRef}>
       <div className="flex-grow p-2">
         <textarea
           name="query"
           ref={textareaRef}
-          className="h-6 px-2  w-full outline-none resize-none dark:bg-transparent dark:text-white placeholder:font-bold"
+          className="h-6 px-2 w-full outline-none resize-none dark:bg-transparent dark:text-white placeholder:font-bold"
           placeholder="Send a message"
           onKeyDown={handleOnKeyDown}
           onChange={handleOnInputChange}
@@ -63,12 +53,12 @@ export default function UserQuery() {
           autoFocus
         ></textarea>
       </div>
-      <div className=" w-1/12 text-center mx-2">
+      <div className="w-1/12 text-center mx-2">
         <button
-        style={{marginTop:"-1px"}}
+          style={{ marginTop: "-1px" }}
           type="submit"
           className={classNames(
-            " text-center  text-gray-600 dark:text-white transition inline-flex items-center justify-center py-2 px-2 rounded-md",
+            "text-center text-gray-600 dark:text-white transition inline-flex items-center justify-center py-2 px-2 rounded-md",
             { "bg-gray-500 dark:text-gray-200 text-white": query }
           )}
         >
