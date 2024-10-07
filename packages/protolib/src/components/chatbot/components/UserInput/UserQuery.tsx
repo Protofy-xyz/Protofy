@@ -47,11 +47,11 @@ export default function UserQuery() {
 
   return (
     <form
-      className="input shadow-md dark:bg-[#2f2f2f] bg-white  dark:border-white border-gray-700 border-2 flex items-center   rounded-md"
+      className="flex items-center shadow-md dark:bg-[#2f2f2f] bg-white dark:border-white border-gray-700 border-2 rounded-md"
       onSubmit={handleOnSubmit}
       ref={formRef}
     >
-      <div className="w-11/12 p-2">
+      <div className="flex-grow p-2">
         <textarea
           name="query"
           ref={textareaRef}

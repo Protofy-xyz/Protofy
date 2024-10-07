@@ -17,7 +17,7 @@ const applyTheme = (resolvedTheme) => {
   console.log("resolvedTheme", resolvedTheme);
   if (resolvedTheme === "light" && document.documentElement.classList.contains("dark")) {
     document.documentElement.classList.remove("dark");
-  } else if(resolvedTheme === "dark" && !document.documentElement.classList.contains("dark")) {
+  } else if (resolvedTheme === "dark" && !document.documentElement.classList.contains("dark")) {
     document.documentElement.classList.add("dark");
   }
 }
@@ -34,7 +34,7 @@ function App() {
 
 
   return (
-    <Stack backgroundColor={resolvedTheme==="light"?"":"#212121"} f={1}>
+    <Stack backgroundColor={resolvedTheme === "light" ? "" : "#212121"} f={1}>
       <div className="App font-montserrat md:flex dark:bg-[#212121]">
         <Navbar active={active} setActive={setActive} />
         <div className="">
@@ -47,7 +47,7 @@ function App() {
           </button>
         </div>
         <div
-        style={{ position: "fixed", width: "100%"}}
+          style={{ position: "fixed", width: "100%" }}
           className="p-3 z-10 flex items-center justify-between bg-[#171717] dark:bg-[#212121] border-b sticky top-0 text-gray-300 md:hidden">
           <button onClick={() => setActive(true)} className=" text-2xl flex">
             <Menu />
@@ -58,10 +58,13 @@ function App() {
           </button>
         </div>
         <main
-        style={{marginTop:"50px"}}
-          className={classNames("w-full transition-all duration-500", {
-            "md:ml-[200px]": active,
-          })}
+          style={{ marginTop: "50px"}}
+          className={classNames(
+            "w-full flex flex-col h-[calc(100vh-50px)]", // Altura ajustada
+            {
+              "md:ml-[200px]": active,
+            }
+          )}
         >
           {isChatsVisible ?? <GptIntro />}
           {isChatsVisible && <Chats />}
@@ -81,7 +84,7 @@ function App() {
                 </>
               )}
 
-              <div style={{paddingTop:"15px", paddingBottom:"15px"}}>
+              <div style={{ paddingTop: "15px", paddingBottom: "15px" }}>
                 <UserQuery />
               </div>
             </div>
