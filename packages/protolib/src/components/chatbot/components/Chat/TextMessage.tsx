@@ -32,9 +32,9 @@ export default function TextMessage({ index, chat }: Props) {
   return (
     <div>
       <div className="flex items-start w-full">
-        <div className="mr-4  rounded-md flex items-center flex-shrink-0">
+        {/* <div className="mr-4  rounded-md flex items-center flex-shrink-0">
           <Avatar className=" h-11 w-11" src="/images/bot.webp" />
-        </div>
+        </div> */}
 
         {!result && !error ? (
           <div className=" self-center">
