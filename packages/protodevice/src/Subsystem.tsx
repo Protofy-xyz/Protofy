@@ -69,7 +69,7 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
             >
                 {ephemeral ? <MegaphoneOff size={16} color="$background" /> : <Megaphone size={16} color="$color8" />}
             </YStack>
-            <Text>{monitor.getLabel()}</Text>
+            <Text>{subsystem.name}</Text>
             {(loading || (value === undefined && result?.value === undefined))
                 ? <Spinner color="$color7" />
                 : <Text
