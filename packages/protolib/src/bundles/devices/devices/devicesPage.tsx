@@ -18,7 +18,7 @@ import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
-import Subsystem from 'protodevice/src/Subsystem'
+import { Subsystems } from 'protodevice/src/Subsystem'
 import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text } from '@my/ui';
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
@@ -51,7 +51,7 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
               onSetModalFeedback({
                 message: (
                   <YStack height="50px" gap="$2">
-                    <Paragraph>Compiling firmware: </Paragraph>                    
+                    <Paragraph>Compiling firmware: </Paragraph>
                     {
                       messages.length > 0 && (
                         <Paragraph
@@ -343,8 +343,9 @@ export default {
         icons={DevicesIcons}
         dataTableGridProps={{
           disableItemSelection: true,
+          itemMinWidth: 500,
           onSelectItem: (item) => { },
-          getBody: (data) => <CardBody title={data.name}>
+          getBody: (data) => <CardBody title={data.name} separator={false}>
             <XStack right={20} top={20} position={"absolute"}>
               {data.environment && all && <Chip color={data.environment == 'dev' ? "$color5" : "$color7"} text={data.environment} />}
               <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?: string) => {
@@ -353,7 +354,7 @@ export default {
             </XStack>
             <YStack f={1}>
               {data?.subsystem
-                ? data?.subsystem?.map(element => <Subsystem subsystem={element} deviceName={data.name} />)
+                ? <Subsystems subsystems={data.subsystem} deviceName={data.name} />
                 : (
                   <>
                     <Paragraph mt="20px" ml="20px" size={20}>{'You need to upload the device'}</Paragraph>

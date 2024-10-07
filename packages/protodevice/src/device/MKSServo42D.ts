@@ -213,7 +213,7 @@ id(${this.canBusId}).send_data(${this.motorId}, false, data);
           actions: [
             {
               name: 'set_target',
-              label: 'Set target',
+              label: 'Target',
               description: 'Sets target of the stepper',
               endpoint: "/"+this.type+"/"+this.name+"/set_target",
               connectionType: 'mqtt',

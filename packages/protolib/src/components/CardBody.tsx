@@ -4,10 +4,11 @@ import { Tinted } from "./Tinted"
 type CardBodyProps = {
     title: any,
     subtitle?: any,
-    children: any
+    children: any,
+    separator?: boolean
 }
-export const CardBody = ({ title, subtitle, children, ...props }: CardBodyProps & YStackProps) => {
-    const titleComp = typeof title === 'string' ? <SizableText o={0.8} mt="20px" size="$6" fontWeight="600">{title}</SizableText> : title
+export const CardBody = ({ title, subtitle, separator = true, children, ...props }: CardBodyProps & YStackProps) => {
+    const titleComp = typeof title === 'string' ? <SizableText mt="20px" size="$8" fontWeight="600">{title}</SizableText> : title
     return <YStack px={"$2"} pb="$5" f={1} {...props}>
         <Tinted>
             <YStack ml="10px">
@@ -16,7 +17,7 @@ export const CardBody = ({ title, subtitle, children, ...props }: CardBodyProps 
             </YStack>
 
         </Tinted>
-        <Separator  marginVertical={15} />
+        {separator && <Separator  marginVertical={15} />}
         <Tinted>
             {children}
         </Tinted>

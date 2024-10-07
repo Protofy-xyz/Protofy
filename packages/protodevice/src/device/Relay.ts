@@ -95,6 +95,10 @@ class RelayComponent {
           name: 'on',
           label: 'Turn on',
           description: 'turns on the gpio',
+          props: {
+            theme: "green",
+            color: "$green10"
+          },
           endpoint: "/"+this.type+"/"+this.name+"/command",
           connectionType: 'mqtt',
           payload: {
@@ -106,6 +110,10 @@ class RelayComponent {
           name: 'off',
           label: 'Turn off',
           description: 'turns off the gpio',
+          props: {
+            theme: "red",
+            color: "$red10"
+          },
           endpoint: "/"+this.type+"/"+this.name+"/command",
           connectionType: 'mqtt',
           payload: {
@@ -117,6 +125,10 @@ class RelayComponent {
           name: 'toggle',
           label: 'Toggle',
           description: 'Toggles the gpio',
+          props: {
+            theme: "purple",
+            color: "$purple10"
+          },
           endpoint: "/"+this.type+"/"+this.name+"/command",
           connectionType: 'mqtt',
           payload: {
