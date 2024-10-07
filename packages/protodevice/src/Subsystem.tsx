@@ -48,7 +48,8 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
     return (
         <YStack
             borderWidth="1px"
-            padding="$2"
+            paddingVertical="$2"
+            paddingHorizontal="$4"
             gap="$2"
             cursor="pointer"
             borderRadius="$4"
@@ -64,7 +65,7 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
                 borderRadius={100}
                 borderWidth="1px"
                 borderColor="$color8"
-                right="14px"
+                right="6px"
                 top="-11px"
             >
                 {ephemeral ? <MegaphoneOff size={16} color="$background" /> : <Megaphone size={16} color="$color8" />}
