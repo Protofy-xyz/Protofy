@@ -66,13 +66,13 @@ const config = {
         {
             "name": "jupyter",
             "description": "Jupyter notebook for interactive computing",
-            "disabled": false,
+            "disabled": true,
             "route": () => false
         },
         {
             "name": "python",
             "description": "Python integration services",
-            "disabled": false,
+            "disabled": true,
             "route": (req, mode) => {
                 if (req.url.startsWith('/pyapi/') || req.url == '/pyapi') {
                     return process.env.API_URL ?? 'http://localhost:5000'
