@@ -97,9 +97,9 @@ const Action = ({ deviceName, action }) => {
     }
 
     const [value, setValue] = useState(
-        action.payload.type == "json-schema" ?
+        action?.payload?.type == "json-schema" ?
 
-            action.payload.schema ? Object.keys(action.payload.schema).reduce((acc, key) => {
+            action?.payload?.schema ? Object.keys(action.payload.schema).reduce((acc, key) => {
                 acc[key] = "";
                 return acc;
             }
@@ -108,9 +108,9 @@ const Action = ({ deviceName, action }) => {
             : "");
 
     var type
-    if (action.payload.value) {
+    if (action?.payload?.value) {
         type = "button"
-    } else if (action.payload.type != "json-schema") {
+    } else if (action?.payload?.type != "json-schema") {
         type = "input"
     }
 
