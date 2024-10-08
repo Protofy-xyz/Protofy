@@ -26,6 +26,7 @@ import { usePageParams } from '../../../next';
 import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic } from "../devicesUtils";
 import { SSR } from '../../../lib/SSR'
 import { withSession } from '../../../lib/Session'
+import { Subsystems } from 'protodevice/src/Subsystem'
 
 const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
   const { message } = useSubscription([compileMessagesTopic(compileSessionId)]);
@@ -305,18 +306,8 @@ export default {
               {
                 Object.keys(data.subsystems ?? {}).length
                   ? <>
-                    <Paragraph mt="20px" ml="20px" size={30}>{'Actions'}</Paragraph>
                     {
-                      data.subsystems.actions.map(action => {
-                        return <Button mt="20px" ml="20px" size={30}>{action.name}</Button>
-                      })
-                    }
-
-                    <Paragraph mt="20px" ml="20px" size={30}>{'Monitors'}</Paragraph>
-                    {
-                      data.subsystems.monitors.map(monitor => {
-                        return <Button mt="20px" ml="20px" size={30}>{monitor.name}</Button>
-                      })
+                      data.subsystems.map(subsystem => <Subsystem deviceName={subsystem.name} subsystem={subsystem} />)
                     }
                   </>
                   : <Paragraph mt="20px" ml="20px" size={20}>{'No subsystems defined'}</Paragraph>

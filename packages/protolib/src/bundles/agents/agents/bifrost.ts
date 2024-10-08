@@ -31,15 +31,15 @@ export const bifrost = async (context: any) => {
     }
 
     const messageHandlers = async (env: string, topic: string, endpoint: string, agentName: string, payload: object) => {
-        console.log('agents message handler payload: ', payload)
+        console.log('agents message handler payload: ', JSON.stringify(payload, null, 2))
         if (endpoint === "register") {
             const db = getDB('agents')
             try {
-                const validation = SubsystemsSchema.safeParse(payload)
+                const validation = SubsystemsSchema.safeParse(payload['subsystems'])
                 if (validation.success) {
                     // register agent
                     const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
-                    agentInfo.setSubsystems(payload)
+                    agentInfo.setSubsystems(payload['subsystems'])
                     await generateEvent(
                         {
                             ephemeral: false,
@@ -56,8 +56,10 @@ export const bifrost = async (context: any) => {
                     );
 
                     // register agent monitors listeners
-                    payload['monitors'].forEach(monitor => {
-                        registerMonitors('mqtt', env, agentName, monitor)
+                    payload['subsystems'].forEach(subsystem => {
+                        subsystem['monitors'].forEach(monitor => {
+                            registerMonitors('mqtt', env, agentName, monitor)
+                        })
                     })
                 } else {
                     throw new Error("Bad agent registration message format")

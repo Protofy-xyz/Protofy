@@ -3,6 +3,7 @@ import { z } from 'protobase'
 export const MonitorSchema = z.object({
     name: z.string(),
     label: z.string(),
+    type: z.string(),
     description: z.string(),
     endpoint: z.string().nullable(),
 })
@@ -10,6 +11,7 @@ export const MonitorSchema = z.object({
 export type MonitorType = {
     name: string,
     label: string,
+    type: string,
     description: string,
     endpoint: string | null,
 }
@@ -17,20 +19,30 @@ export type MonitorType = {
 export const ActionSchema = z.object({
     name: z.string(),
     label: z.string(),
+    type: z.string(),
     description: z.string(),
     endpoint: z.string().nullable(),
-    arguments: z.record(z.string(), z.any())
+    arguments: z.record(z.string(), z.any()).nullable(),
+    // payload: z.any().nullable().optional()
 })
 
 export type ActionType = {
     name: string,
     label: string,
+    type: string,
     description: string,
     endpoint: string,
     arguments: object,
+    payload: {
+        type: string,
+        value: string
+    }
 }
 
-export const SubsystemsSchema = z.object({
+export const SubsystemSchema = z.object({
+    "name": z.string(),
     "monitors": z.array(MonitorSchema),
     "actions": z.array(ActionSchema),
 })
+
+export const SubsystemsSchema = z.array(SubsystemSchema)

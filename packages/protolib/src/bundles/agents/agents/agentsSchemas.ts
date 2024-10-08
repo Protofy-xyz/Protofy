@@ -1,10 +1,10 @@
 import { ProtoModel, SessionDataType, API, Schema, z, AutoModel } from 'protobase'
-import { SubsystemsSchema } from './subsystemSchemas';
+import { SubsystemSchema } from './subsystemSchemas';
 
 
 export const AgentsSchema = Schema.object({
     name: z.string().hint("Agent name").static().regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").id().search(),
-    subsystems: SubsystemsSchema.optional().hidden(),
+    subsystems: z.array(SubsystemSchema).optional().hidden(),
     platform: z.string(),
 })
 export type AgentsType = z.infer<typeof AgentsSchema>;
@@ -43,6 +43,7 @@ export class AgentsModel extends ProtoModel<AgentsModel> {
 
 
         agentObject.data.subsystems = subsystems
+        console.log('onera: ', JSON.stringify(agentObject))
         API.post("/adminapi/v1/agents/" + this.data.name, agentObject.data)
     }
 
