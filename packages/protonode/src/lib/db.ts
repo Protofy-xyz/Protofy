@@ -129,7 +129,7 @@ export class ProtoLevelDB extends ProtoDB {
 
     async del(key: string, options?) {
         const result = await this.db.del(key, options)
-        await this.regenerateIndexes(true,key)
+        await this.regenerateIndexes()
         return result
     }
 
@@ -243,7 +243,7 @@ export class ProtoLevelDB extends ProtoDB {
         this.batchCounter = 0;
     }
 
-    async regenerateIndexes(deleteElement = false,key=null) {
+    async regenerateIndexes() {
         if (this.regeneratingIndexes) {
             this.pendingIndex = true
             //logger.info({ db: this.location }, 'Skip regenerate indexes: already regenerating indexes for database: ' + this.location)
@@ -255,11 +255,8 @@ export class ProtoLevelDB extends ProtoDB {
         console.time('regenerateIndexes_' + id)
         try {
             const nextTableVersion = this.tableVersion == 'a' ? 'b' : 'a'
-            if(deleteElement){
-                await ProtoLevelDB.updateIndexesAfterDelete(this.rootDb, this.db, this.location, nextTableVersion,key);
-            }else{
-                await ProtoLevelDB.regenerateIndexes(this.rootDb, this.db, this.location, nextTableVersion);
-            }
+         
+            await ProtoLevelDB.regenerateIndexes(this.rootDb, this.db, this.location, nextTableVersion);
             this.tableVersion = nextTableVersion
 
         } catch (e) {
@@ -390,67 +387,6 @@ export class ProtoLevelDB extends ProtoDB {
         }
     }
     
-    static async updateIndexesAfterDelete(rootDb, db, location, tableVersion, deletedItemKey) {
-        
-        let indexData;
-        let groupIndexData;
-        try {
-            const indexTable = sublevel(rootDb, 'indexTable');
-            indexData = JSON.parse(await indexTable.get('indexes'));
-            groupIndexData = JSON.parse(await indexTable.get('groupIndexes'));
-        } catch (e) {
-            console.log('No indexes found for this table.');
-        }
-    
-        if (indexData && indexData.keys.length) {
-            for (const currentIndex of indexData.keys) {
-                const orderedIndex = sublevel(rootDb, 'order_' + currentIndex + '_' + tableVersion);
-                
-                const iterator = orderedIndex.iterator();
-                let foundKey = null;
-                for await (const [key, value] of iterator) {
-                    if (key.includes(deletedItemKey)) {
-                        foundKey = key;
-                        break;
-                    }
-                }
-    
-                if (foundKey) {
-                    await orderedIndex.del(foundKey);
-                }
-            }
-        }
-    
-        if (groupIndexData && groupIndexData.length) {
-            for (const currentIndex of groupIndexData) {
-                const groupSubLevel = sublevel(rootDb, 'group_' + currentIndex.key + '_' + tableVersion);
-                const groupSubLevelOptions = sublevel(rootDb, 'group_' + currentIndex.key + '_options_' + tableVersion);
-    
-                for await (const [groupKey, value] of groupSubLevelOptions.iterator()) {
-                    const groupItems = sublevel(groupSubLevel, groupKey);
-                    const iterator = groupItems.iterator();
-                    let foundKey = null;
-    
-                    for await (const [key, value] of iterator) {
-                        if (key.includes(deletedItemKey)) {
-                            foundKey = key;
-                            break;
-                        }
-                    }
-    
-                    if (foundKey) {
-                        await groupItems.del(foundKey);
-    
-                        const total = sublevel(groupItems, 'counter');
-                        const totalCount = parseInt(await total.get('total')) - 1;
-                        await total.put('total', JSON.stringify(totalCount));
-                    }
-                }
-            }
-        }
-    }
-    
-
     static async regenerateIndexes(rootDb, db, location, tableVersion) {
         let indexData;
         let groupIndexData;
