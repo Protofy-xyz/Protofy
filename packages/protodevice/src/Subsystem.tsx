@@ -210,6 +210,8 @@ const subsystem = ({ subsystem, deviceName }) => {
     );
 }
 
+// This componente will be deprecated: Use 'protolib/bundles/agents/subsystems/Subsystems' instead.
+// export {Subsystems} from 'protolib/bundles/agents/subsystems/Subsystems'
 export const Subsystems = ({ subsystems, deviceName }) => <YStack maxHeight={550} overflow="scroll" padding="$2" paddingTop="20px">
     <>
         <XStack flexWrap="wrap" gap="$3">
