@@ -45,4 +45,10 @@ export const SubsystemSchema = z.object({
     "actions": z.array(ActionSchema),
 })
 
+export type SubsystemType = {
+    name: string, 
+    monitors: MonitorType[], 
+    actions: ActionType[]
+}
+
 export const SubsystemsSchema = z.array(SubsystemSchema)
