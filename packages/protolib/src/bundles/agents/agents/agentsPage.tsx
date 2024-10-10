@@ -18,7 +18,6 @@ import { AgentDefinitionModel } from '../agentDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
-import Subsystem from 'protodevice/src/Subsystem'
 import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text, Button } from '@my/ui';
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
@@ -26,7 +25,7 @@ import { usePageParams } from '../../../next';
 import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic } from "../devicesUtils";
 import { SSR } from '../../../lib/SSR'
 import { withSession } from '../../../lib/Session'
-import { Subsystems } from 'protodevice/src/Subsystem'
+import { Subsystems } from '../subsystems/Subsystems'
 
 const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
   const { message } = useSubscription([compileMessagesTopic(compileSessionId)]);
@@ -305,11 +304,7 @@ export default {
             <YStack f={1}>
               {
                 Object.keys(data.subsystems ?? {}).length
-                  ? <>
-                    {
-                      data.subsystems.map(subsystem => <Subsystem deviceName={subsystem.name} subsystem={subsystem} />)
-                    }
-                  </>
+                  ? <Subsystems name={data.name} subsystems={data.subsystems} type={"agent"}/>
                   : <Paragraph mt="20px" ml="20px" size={20}>{'No subsystems defined'}</Paragraph>
               }
             </YStack>

@@ -4,8 +4,8 @@
 */
 
 import { getDB } from '@my/config/dist/storageProviders';
-import { AgentsModel } from './agentsSchemas';
-import { MonitorType, SubsystemsSchema } from './subsystemSchemas';
+import { AgentsModel } from '../agents/agentsSchemas';
+import { MonitorType, SubsystemsSchema } from '../agents/subsystemSchemas';
 import { getLogger } from 'protobase';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getServiceToken } from 'protonode';
@@ -128,4 +128,3 @@ export const bifrost = async (context: any) => {
     topicSub(mqtts['dev'], 'agents/#', (message, topic) => processMessage('dev', message, topic))
     topicSub(mqtts['prod'], 'agents/#', (message, topic) => processMessage('prod', message, topic))
 }
-

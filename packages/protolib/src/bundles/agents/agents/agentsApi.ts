@@ -4,7 +4,7 @@ import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
-import { bifrost } from "./bifrost";
+import { bifrost } from "../bifrost/bifrost";
 
 export const AgentsAutoAPI = AutoAPI({
     modelName: 'Agents',
@@ -65,22 +65,23 @@ export const AgentsAPI = (app, context) => {
             return
         }
 
+        const {agent: agentName, subsystem: subsystemName, monitor: monitorName} = req.params
         const db = getDB('agents')
-        const agentInfo = AgentsModel.load(JSON.parse(await db.get(req.params.agent)), session)
+        const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)), session)
         // const env = agentInfo.getEnvironment()
-        const subsystem = agentInfo.getSubsystem(req.params.subsystem)
-        if (!subsystem) {
-            res.status(404).send(`Subsytem [${req.params.subsystem}] not found in agent [${req.params.agent}]`)
+        if (!agentInfo.getSubsystem(subsystemName)) {
+            res.status(404).send(`Subsytem [${subsystemName}] not found in agent [${agentName}]`)
             return
         }
 
-        const monitor = subsystem.getMonitor(req.params.monior)
+        const monitor = agentInfo.getMonitor(subsystemName, monitorName)
         if (!monitor) {
-            res.status(404).send(`Monitor [${req.params.monitor}] not found in Subsytem [${req.params.subsystem}] for agent [${req.params.agent}]`)
+            res.status(404).send(`Monitor [${req.params.monitor}] not found in Subsytem [${subsystemName}] for agent [${agentName}]`)
             return
         }
 
-        const urlLastAgentEvent = `/adminapi/v1/events?env=${env}&filter[from]=agent&filter[user]=${req.params.agent}&filter[path]=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
+        // environment query param:  env=${env}&
+        const urlLastAgentEvent = `/adminapi/v1/events?filter[from]=agents&filter[user]=${agentName}&filter[path]=${monitor.endpoint}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
         const data = await API.get(urlLastAgentEvent)
 
         if (!data || !data.data || !data.data['items'] || !data.data['items'].length) {
