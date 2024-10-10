@@ -119,8 +119,8 @@ export default function Navbar({
                   <MoreHorizontal />
                 </span>
               </button>
-              <div className="options absolute bottom-12 rounded-md left-0 right-0 bg-gray-100 dark:bg-gray-800 font-normal invisible transition m-2 z-30 text-gray-800 dark:text-gray-300"> {/* Colores ajustados */}
-                <button
+              <div className="options absolute bottom-12 rounded-md left-0 right-0 bg-gray-100 dark:bg-gray-800 font-normal invisible transition m-2 z-30 text-gray-800 dark:text-gray-300">
+                {/* <button
                   className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 w-full text-left flex items-center"
                   onClick={() => setSystemMessageModalVisible(true)}
                 >
@@ -128,7 +128,7 @@ export default function Navbar({
                     <MessageSquare />
                   </span>
                   <span>Custom instructions</span>
-                </button>
+                </button> */}
                 <button
                   className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 w-full text-left flex items-center"
                   onClick={() => setModalVisible(true)}
