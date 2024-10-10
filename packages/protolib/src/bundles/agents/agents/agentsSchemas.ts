@@ -1,5 +1,5 @@
 import { ProtoModel, SessionDataType, API, Schema, z, AutoModel } from 'protobase'
-import { SubsystemSchema } from './subsystemSchemas';
+import { MonitorType, SubsystemSchema, SubsystemType } from './subsystemSchemas';
 
 
 export const AgentsSchema = Schema.object({
@@ -43,8 +43,16 @@ export class AgentsModel extends ProtoModel<AgentsModel> {
 
 
         agentObject.data.subsystems = subsystems
-        console.log('onera: ', JSON.stringify(agentObject))
         API.post("/adminapi/v1/agents/" + this.data.name, agentObject.data)
+    }
+
+    getSubsystem(name: string): SubsystemType | null {
+        return this.data.subsystems && this.data.subsystems.length ? this.data.subsystems.find(sub => sub.name === name) : null
+    }
+
+    getMonitor(subsystemName: string, monitorName: string) {
+        const subsystem = this.getSubsystem(subsystemName)
+        return subsystem.monitors && subsystem.monitors.length ? subsystem.monitors.find(monitor => monitor.name === monitorName) : null
     }
 
 
