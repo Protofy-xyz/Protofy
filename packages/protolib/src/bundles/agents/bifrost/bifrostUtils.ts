@@ -1,0 +1,1 @@
+export const defActionEndpoint = (agentName: string, actionName: string) => `agents/${agentName}/monitor/${actionName}`
