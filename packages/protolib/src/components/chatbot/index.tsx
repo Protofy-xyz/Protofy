@@ -45,12 +45,12 @@ function App() {
         </div>
 
         <div className="flex-1 flex flex-col overflow-hidden mt-12 md:mt-0">
-          <div className="p-3 z-10 flex items-center justify-between bg-[#171717] dark:bg-[#212121] border-b top-0 text-gray-300 md:hidden fixed w-full">
-            <button onClick={() => setActive(true)} className="text-2xl flex">
+          <div className="p-3 z-10 flex items-center justify-between bg-[#f8f8f8] dark:bg-[#212121] border-b border-gray-300 dark:border-gray-700 top-0 text-gray-800 dark:text-gray-300 md:hidden fixed w-full">
+            <button onClick={() => setActive(true)} className="text-2xl flex text-gray-800 dark:text-white">
               <Menu />
             </button>
-            <h2>New chat</h2>
-            <button className="text-2xl flex items-center" onClick={addNewChat}>
+            <h2 className="text-gray-800 dark:text-white">New chat</h2>
+            <button className="text-2xl flex items-center text-gray-800 dark:text-white" onClick={addNewChat}>
               <Plus />
             </button>
           </div>
