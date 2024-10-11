@@ -1,5 +1,5 @@
 import { ProtoModel, SessionDataType, API, Schema, z, AutoModel } from 'protobase'
-import { MonitorType, SubsystemSchema, SubsystemType } from './subsystemSchemas';
+import { MonitorType, SubsystemSchema, SubsystemType } from '../subsystems/subsystemSchemas';
 
 
 export const AgentsSchema = Schema.object({

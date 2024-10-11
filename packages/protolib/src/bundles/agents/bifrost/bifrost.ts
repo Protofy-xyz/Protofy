@@ -5,7 +5,7 @@
 
 import { getDB } from '@my/config/dist/storageProviders';
 import { AgentsModel } from '../agents/agentsSchemas';
-import { MonitorType, SubsystemsSchema } from '../agents/subsystemSchemas';
+import { MonitorType, SubsystemsSchema } from '../subsystems/subsystemSchemas';
 import { getLogger } from 'protobase';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getServiceToken } from 'protonode';
