@@ -8,7 +8,7 @@ import { useMqttState, useSubscription } from 'protolib/lib/mqtt';
 import { useFetch } from 'protolib/lib/useFetch'
 import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 import { defActionEndpoint, defMonitorEndpoint } from "../bifrost/bifrostUtils";
-import { ActionType } from "../agents";
+import { ActionType } from "../subsystems/subsystemSchemas";
 
 const buildActionEndpoint = (type: 'agent' | 'device', name, endpoint) => {
   if (type === "agent") {
@@ -33,7 +33,7 @@ const Monitor = ({ type, name, monitorData, subsystem }) => {
   //const value = 'test'
   const { message } = useSubscription(buildMonitorEndpoint(type, monitorData, name, monitorData.endpoint))
   const [result, loading, error] = useFetch(monitor.getValueAPIURL())
-  // const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(1);
   const [ephemeral, setEphemeral] = useState(monitorData?.data?.ephemeral ?? false);
 
   // const toast = useToastController()
@@ -58,10 +58,10 @@ const Monitor = ({ type, name, monitorData, subsystem }) => {
   React.useEffect(() => {
     console.log('message---', message)
     setValue(message?.message?.toString())
-    // setScale(1.15);
-    // setTimeout(() => {
-    //   setScale(1);
-    // }, 200);
+    setScale(1.15);
+    setTimeout(() => {
+      setScale(1);
+    }, 200);
   }, [message])
 
   return (
@@ -96,6 +96,7 @@ const Monitor = ({ type, name, monitorData, subsystem }) => {
           fontWeight="600"
           color={value === undefined ? 'gray' : '$color8'}
           animation="bouncy"
+          scale={scale}
         >
           {`${value ?? result?.value} ${monitor.getUnits()}`}
         </Text>
