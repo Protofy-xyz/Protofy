@@ -7,7 +7,7 @@ import { Megaphone, MegaphoneOff } from "@tamagui/lucide-icons"
 import { useMqttState, useSubscription } from 'protolib/lib/mqtt';
 import { useFetch } from 'protolib/lib/useFetch'
 import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
-import { defActionEndpoint } from "../bifrost/bifrostUtils";
+import { defActionEndpoint, defMonitorEndpoint } from "../bifrost/bifrostUtils";
 import { ActionType } from "../agents";
 
 const buildActionEndpoint = (type: 'agent' | 'device', name, endpoint) => {
@@ -18,41 +18,50 @@ const buildActionEndpoint = (type: 'agent' | 'device', name, endpoint) => {
   }
 }
 
-const Monitor = ({ type, deviceName, monitorData, subsystem }) => {
-  const monitor = new DeviceSubsystemMonitor(deviceName, subsystem.name, monitorData)
+const buildMonitorEndpoint = (type: 'agent' | 'device', monitor, name, endpoint) => {
+  if (type === 'agent') {
+    return monitor.endpoint ?? defMonitorEndpoint(name, monitor.name)
+  } else {
+    return getPeripheralTopic(name, endpoint)
+  }
+}
+
+const Monitor = ({ type, name, monitorData, subsystem }) => {
+  const monitor = new DeviceSubsystemMonitor(name, subsystem.name, monitorData)
   // Define the state hook outside of JSX mapping
   const [value, setValue] = useState<any>(undefined);
   //const value = 'test'
-  const { message } = useSubscription(monitor.getEndpoint())
+  const { message } = useSubscription(buildMonitorEndpoint(type, monitorData, name, monitorData.endpoint))
   const [result, loading, error] = useFetch(monitor.getValueAPIURL())
-  const [scale, setScale] = useState(1);
+  // const [scale, setScale] = useState(1);
   const [ephemeral, setEphemeral] = useState(monitorData?.data?.ephemeral ?? false);
 
-  const toast = useToastController()
+  // const toast = useToastController()
 
-  const onToggleEphemeral = (checked) => {
-    setEphemeral(checked)
-    fetch("/adminapi/v1/devices/" + deviceName + "/subsystems/" + subsystem.name + "/monitors/" + monitor.data.name + "/ephemeral", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ value: checked })
-    })
-      .then(response => response.json())
-      .then(data => console.log(data))
+  // const onToggleEphemeral = (checked) => {
+  //   setEphemeral(checked)
+  //   fetch("/adminapi/v1/devices/" + deviceName + "/subsystems/" + subsystem.name + "/monitors/" + monitor.data.name + "/ephemeral", {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ value: checked })
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => console.log(data))
 
-    // toast.show("[" + deviceName + "/" + subsystem.name + "] events are now " + (checked ? '"EPHEMERAL".' : '"PERSISTENT".'), {
-    //   duration: 2000
-    // })
-  }
+  //   // toast.show("[" + deviceName + "/" + subsystem.name + "] events are now " + (checked ? '"EPHEMERAL".' : '"PERSISTENT".'), {
+  //   //   duration: 2000
+  //   // })
+  // }
 
   React.useEffect(() => {
+    console.log('message---', message)
     setValue(message?.message?.toString())
-    setScale(1.15);
-    setTimeout(() => {
-      setScale(1);
-    }, 200);
+    // setScale(1.15);
+    // setTimeout(() => {
+    //   setScale(1);
+    // }, 200);
   }, [message])
 
   return (
@@ -199,7 +208,7 @@ export const Subsystems = ({ type, subsystems, name }) => <YStack maxHeight={550
           .filter((subsystem) => subsystem.monitors?.length > 0)
           .map((subsystem, key) => <>
             {
-              subsystem.monitors.map((monitor) => <Monitor key={key} type={type ?? 'device'} deviceName={name} monitorData={monitor} subsystem={subsystem} />)
+              subsystem.monitors.map((monitor) => <Monitor key={key} type={type ?? 'device'} name={name} monitorData={monitor} subsystem={subsystem} />)
             }
           </>)
       }

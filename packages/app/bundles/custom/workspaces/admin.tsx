@@ -68,13 +68,13 @@ export default ({ pages }) => {
                     { "i": "totalmemory", "x": 3, "y": 0, "w": 3, "h": 6, "isResizable": true },
                     { "i": "totalusers", "x": 6, "y": 0, "w": 2, "h": 6, "isResizable": true },
                     { "i": "listlatestusers", "x": 9, "y": 0, "w": 4, "h": 6, "isResizable": true },
-                    { "i": "servicememorychart", "x": 0, "y": 6, "w": 6, "h": 13, "isResizable": true },
-                    { "i": "lastevents", "x": 6, "y": 6, "w": 6, "h": 13, "isResizable": true },
-                    { "i": "totalgroups", "x": 0, "y": 19, "w": 2, "h": 6, "isResizable": true },
-                    { "i": "listgroups", "x": 2, "y": 19, "w": 3, "h": 6, "isResizable": true },
-                    { "i": "totalevents", "x": 5, "y": 19, "w": 2, "h": 6, "isResizable": true },
-                    { "i": "totalobjects", "x": 7, "y": 19, "w": 2, "h": 6, "isResizable": true },
-                    { "i": "listpages", "x": 9, "y": 19, "w": 3, "h": 6, "isResizable": true }
+                    { "i": "servicememorychart", "x": 0, "y": 6, "w": 6, "h": 14, "isResizable": true },
+                    { "i": "lastevents", "x": 6, "y": 6, "w": 6, "h": 14, "isResizable": true },
+                    { "i": "totalgroups", "x": 0, "y": 20, "w": 2, "h": 6, "isResizable": true },
+                    { "i": "listgroups", "x": 2, "y": 20, "w": 3, "h": 6, "isResizable": true },
+                    { "i": "totalevents", "x": 5, "y": 20, "w": 2, "h": 6, "isResizable": true },
+                    { "i": "totalobjects", "x": 7, "y": 20, "w": 2, "h": 6, "isResizable": true },
+                    { "i": "listpages", "x": 9, "y": 20, "w": 3, "h": 6, "isResizable": true }
                 ],
                 "md": [
                     { "i": "totalcpu", "x": 0, "y": 0, "w": 3, "h": 6, "isResizable": true },
