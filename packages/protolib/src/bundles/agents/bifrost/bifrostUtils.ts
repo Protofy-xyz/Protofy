@@ -1,2 +1,2 @@
-export const defActionEndpoint = (agentName: string, actionName: string) => `agents/${agentName}/action/${actionName}`
+export const defActionEndpoint = (agentName: string, subsystemName: string, actionName: string) => `agents/${agentName}/subsystem/${subsystemName}/action/${actionName}`
 export const defMonitorEndpoint = (agentName: string, monitorName: string) => `agents/${agentName}/monitor/${monitorName}`

@@ -8,11 +8,14 @@ import { useMqttState, useSubscription } from 'protolib/lib/mqtt';
 import { useFetch } from 'protolib/lib/useFetch'
 import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
 import { defActionEndpoint, defMonitorEndpoint } from "../bifrost/bifrostUtils";
-import { ActionType } from "../subsystems/subsystemSchemas";
+import { ActionType, SubsystemType } from "../subsystems/subsystemSchemas";
 
-const buildActionEndpoint = (type: 'agent' | 'device', name, endpoint) => {
+const buildActionEndpoint = (type: 'agent' | 'device', name, subsystem, action) => {
+  const {name: actionName, endpoint} = action
+  const {name: subsystemName} = subsystem
+  
   if (type === "agent") {
-    return defActionEndpoint(name, endpoint)
+    return endpoint ?? defActionEndpoint(name, subsystemName, actionName)
   } else if (type === "device") {
     return getPeripheralTopic(name, endpoint)
   }
@@ -106,10 +109,11 @@ const Monitor = ({ type, name, monitorData, subsystem }) => {
 }
 
 const Action = (
-  { type, name, action }:
+  { type, name, subsystem, action }:
     {
       type: 'agent' | 'device',
       name: string,
+      subsystem: SubsystemType, 
       action: ActionType
     }
 ) => {
@@ -119,7 +123,8 @@ const Action = (
     const sendValue = value != undefined ? value : action.payload.value
     // if (action.connectionType == "mqtt") {
     console.log("Subsystems MQTT Dev: ", action.payload)
-    client.publish(buildActionEndpoint(type, name, action.endpoint), (action.payload.type == "json" || action.payload.type == "json-schema") ? JSON.stringify(sendValue) : sendValue.toString())
+    console.log('Subsystem Action endpoint: ', buildActionEndpoint(type, name, subsystem, action))
+    client.publish(buildActionEndpoint(type, name, subsystem, action), (action.payload.type == "json" || action.payload.type == "json-schema") ? JSON.stringify(sendValue) : sendValue.toString())
     // }
   }
 
@@ -222,7 +227,7 @@ export const Subsystems = ({ type, subsystems, name }) => <YStack maxHeight={550
             <Text mt="$4" fow="600">{subsystem.name}</Text>
             <XStack flexWrap="wrap" gap="$3">
               {
-                subsystem.actions.map((action) => <Action key={key} type={type ?? 'device'} name={name} action={action} />)
+                subsystem.actions.map((action) => <Action key={key} type={type ?? 'device'} name={name} action={action} subsystem={subsystem}/>)
               }
             </XStack>
           </>)
