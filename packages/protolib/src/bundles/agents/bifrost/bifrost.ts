@@ -1,6 +1,13 @@
 /*
-    bifrost is the protofy mqtt based protocol
-    for agents connection and comunication. 
+    bifrost is the protofy protocol for 
+    agents connection and comunication.
+
+    bifrost actions
+    - register: a new agent (agents/<agent_name>/register)
+
+    bifrost defaults
+    - actions endpoint: agents/<agent_name>/subsystem/<subsystem_name>/action/<action_name>
+    - monitors endpoint: agents/<agent_name>/subsystem/<subsystem_name>/monitor/<monitor_name>
 */
 
 import { getDB } from '@my/config/dist/storageProviders';

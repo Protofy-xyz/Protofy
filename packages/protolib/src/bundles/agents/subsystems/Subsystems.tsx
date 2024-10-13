@@ -11,9 +11,9 @@ import { defActionEndpoint, defMonitorEndpoint } from "../bifrost/bifrostUtils";
 import { ActionType, SubsystemType } from "../subsystems/subsystemSchemas";
 
 const buildActionEndpoint = (type: 'agent' | 'device', name, subsystem, action) => {
-  const {name: actionName, endpoint} = action
-  const {name: subsystemName} = subsystem
-  
+  const { name: actionName, endpoint } = action
+  const { name: subsystemName } = subsystem
+
   if (type === "agent") {
     return endpoint ?? defActionEndpoint(name, subsystemName, actionName)
   } else if (type === "device") {
@@ -21,9 +21,12 @@ const buildActionEndpoint = (type: 'agent' | 'device', name, subsystem, action) 
   }
 }
 
-const buildMonitorEndpoint = (type: 'agent' | 'device', monitor, name, endpoint) => {
+const buildMonitorEndpoint = (type: 'agent' | 'device', name, subsystem, monitor) => {
+  const { name: monitorName, endpoint } = monitor
+  const { name: subsystemName } = subsystem
+
   if (type === 'agent') {
-    return monitor.endpoint ?? defMonitorEndpoint(name, monitor.name)
+    return monitor.endpoint ?? defMonitorEndpoint(name, subsystemName, monitorName)
   } else {
     return getPeripheralTopic(name, endpoint)
   }
@@ -34,7 +37,7 @@ const Monitor = ({ type, name, monitorData, subsystem }) => {
   // Define the state hook outside of JSX mapping
   const [value, setValue] = useState<any>(undefined);
   //const value = 'test'
-  const { message } = useSubscription(buildMonitorEndpoint(type, monitorData, name, monitorData.endpoint))
+  const { message } = useSubscription(buildMonitorEndpoint(type, name, subsystem, monitorData))
   const [result, loading, error] = useFetch(monitor.getValueAPIURL())
   const [scale, setScale] = useState(1);
   const [ephemeral, setEphemeral] = useState(monitorData?.data?.ephemeral ?? false);
