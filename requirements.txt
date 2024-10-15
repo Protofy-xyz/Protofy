@@ -1,4 +1,5 @@
 jupyter==1.1.1
 flask
+-r packages/protopy/requirements.txt
 -e ../../packages/protopy
 -e ../../packages/app
