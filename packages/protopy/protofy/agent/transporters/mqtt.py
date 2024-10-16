@@ -1,4 +1,4 @@
-from protopy.agent.bifrost import gen_action_endpoint
+from ..bifrost import gen_action_endpoint
 
 def on_message_factory(agent_name, handlers): 
     def on_message(client, userdata, message): 

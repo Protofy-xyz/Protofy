@@ -2,8 +2,8 @@ import paho.mqtt.client as mqtt
 import time
 import json
 import os
-from protopy.agent.transporters.mqtt import on_message_factory
-from protopy.agent.bifrost import register, pub_monitor, gen_action_endpoint
+from .transporters.mqtt import on_message_factory
+from .bifrost import register, pub_monitor, gen_action_endpoint
 
 class ProtoAgent: 
     def __init__(self, agent_name): 
