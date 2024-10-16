@@ -72,3 +72,10 @@ process.on('SIGTERM', () => {
     }
     process.exit();
 });
+
+process.on('exit', (code) => {
+  console.log('Node.js process exiting with code:', code);
+  if (subprocess) {
+      subprocess.kill();
+  }
+});
