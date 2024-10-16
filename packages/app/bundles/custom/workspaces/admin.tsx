@@ -12,7 +12,8 @@ import {
     Box,
     LayoutDashboard,
     Power,
-    FileCog
+    FileCog,
+    Bot
 } from '@tamagui/lucide-icons'
 import {
     ServiceMemoryUsageChart,
@@ -136,7 +137,8 @@ export default ({ pages }) => {
                 { "name": "Public", "icon": "doorOpen", "type": "files", "path": "?path=/apps/next/public" },
                 { "name": "Databases", "icon": DatabaseBackup, "type": "databases", "path": "/" },
             ],
-            "IoT Devices": [
+            "Fleets": [
+                { "name": "Agents", "icon": Bot, "type": "agents", "path": "/" },
                 { "name": "Devices", "icon": Router, "type": "devices", "path": "/" },
                 { "name": "Definitions", "icon": "bookOpen", "type": "deviceDefinitions", "path": "/" }
             ]
