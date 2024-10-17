@@ -51,6 +51,16 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
             return target
         }
 
+        if (!(target && target.hasOwnProperty(key))) {
+            var defaultValue = elementDef?.defaultValue
+            if (typeof defaultValue === 'function') {
+                defaultValue = defaultValue()
+            }
+
+            if (defaultValue != undefined) {
+                setFormData(key, defaultValue)
+            }
+        }
         // Retorna el valor de ele.name o un valor predeterminado.
         return target && target.hasOwnProperty(key) ? target[key] : '';
     }
