@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button, Input, XStack, Spinner, Dialog, Text } from "tamagui"
+import { Button, Input, XStack, Spinner, Dialog, Text, InputProps } from "tamagui"
 import { Folder } from '@tamagui/lucide-icons'
 import { Tinted, } from './Tinted'
 import { Center } from './Center'
@@ -16,11 +16,12 @@ type FilePickerProps = {
     file?: string,
     placeholder?: string
     initialPath?: string
-    fileFilter?: Function
+    fileFilter?: Function,
+    disabled?: boolean
 }
 
 
-export function FilePicker({ onFileChange, file, placeholder, initialPath = "", fileFilter }: FilePickerProps) {
+export function FilePicker({ onFileChange, file, placeholder, initialPath = "", fileFilter, disabled }: FilePickerProps) {
     const router = useRouter()
     const searchParams = useSearchParams();
     const pathname = usePathname();
@@ -51,6 +52,7 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "", 
                     onChangeText={(e) => onChange(e)}
                     f={1}
                     paddingRight={"50px"}
+                    disabled={disabled}
                 >
                 </Input>
                 <Dialog.Trigger >
@@ -59,6 +61,7 @@ export function FilePicker({ onFileChange, file, placeholder, initialPath = "", 
                         borderColor={"$color6"}
                         borderTopLeftRadius={"$0"}
                         borderBottomLeftRadius={"$0"}
+                        disabled={disabled}
                         right={"$0"}
                         onPress={() => {
                             if (!fileIsUrl) {
