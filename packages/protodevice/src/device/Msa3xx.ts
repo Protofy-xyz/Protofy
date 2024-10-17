@@ -137,7 +137,7 @@ class Msa3xx {
             name: "external_components",
             config: {
                 //@ts-ignore
-                source: "github://pr#6795",
+                source: "github://Protofy-xyz/esphome-components",
                 refresh: "10s",
                 components: ["msa3xx"]
             }
