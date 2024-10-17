@@ -129,8 +129,18 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                 }
             }
             else {
-                //@ts-ignore
-                return <SelectList f={1} data={data} title={ele.name} elements={options} value={options[_rawOptions.indexOf(getFormData(ele.name))]} setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])} />
+                return <SelectList
+                    triggerProps={{
+                        disabled: mode != 'add' && mode != 'edit'
+                    }}
+                    //@ts-ignore
+                    f={1}
+                    data={data}
+                    title={ele.name}
+                    elements={options}
+                    value={options[_rawOptions.indexOf(getFormData(ele.name))]}
+                    setValue={(v) => setFormData(ele.name, _rawOptions[options.indexOf(v)])}
+                />
             }
         }
 
@@ -267,6 +277,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
         return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
             <Stack f={1}>
                 <FilePicker
+                    disabled={mode != 'add' && mode != 'edit'}
                     fileFilter={fileFilter}
                     file={getFormData(ele.name)}
                     initialPath={elementDef.initialPath}
