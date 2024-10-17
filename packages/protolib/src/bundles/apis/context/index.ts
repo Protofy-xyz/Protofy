@@ -44,7 +44,7 @@ export const automation = (app, cb, name, disableAutoResponse?)=>{
     })
 }
 
-export const fetch = async (method, url, data={}, cb, errorCb, hasSarviceToken=false)=>{
+export const fetch = async (method, url, data={}, cb, errorCb, hasSarviceToken=false, retryNum?)=>{
     var urlEnch = url
     if(hasSarviceToken) {
         urlEnch = url.includes("?")? `${url}&token=${getServiceToken_()}`: `${url}?token=${getServiceToken_()}`
@@ -52,9 +52,9 @@ export const fetch = async (method, url, data={}, cb, errorCb, hasSarviceToken=f
     
     let result
     if(method == "get") {
-        result = await API.get(urlEnch)
+        result = await API.get(urlEnch, undefined, undefined, retryNum)
     } else {
-        result = await API.post(urlEnch, data)
+        result = await API.post(urlEnch, data, undefined, undefined, retryNum)
     }
 
     if(result.isError) {

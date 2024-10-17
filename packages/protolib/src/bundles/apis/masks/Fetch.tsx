@@ -31,11 +31,13 @@ const Fetch = (node: any = {}, nodeData = {}) => {
                 }
             ]} />
             <NodeParams id={node.id} params={[{ label: 'Post Data', field: 'param-3', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'Retries?', field: 'param-7', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Use service token', field: 'param-6', type: 'boolean' }]} />
+            <NodeParams id={node.id} params={[{ label: 'Await', field: 'await', type: 'boolean', static: true }]} />
             <div style={{ marginTop: "120px" }}>
-                <FlowPort id={node.id} type='output' label='On Response (data)' style={{ top: '300px' }} handleId={'then'} />
+                <FlowPort id={node.id} type='output' label='On Response (data)' style={{ top: '400px' }} handleId={'then'} />
                 <FallbackPort fallbackText="null" node={node} port={'param-4'} type={"target"} fallbackPort={'then'} portType={"_"} preText="async (data) => " postText="" />
-                <FlowPort id={node.id} type='output' label='On Error (error)' style={{ top: '350px' }} handleId={'error'} />
+                <FlowPort id={node.id} type='output' label='On Error (error)' style={{ top: '450px' }} handleId={'error'} />
                 <FallbackPort fallbackText="null" node={node} port={'param-5'} type={"target"} fallbackPort={'error'} portType={"_"} preText="async (error) => " postText="" />
             </div>
 
@@ -68,12 +70,14 @@ export default {
     getInitialData: () => {
         return {
             to: 'context.fetch',
+            await: true,
             "param-1": { value: "get", kind: "StringLiteral" },
             "param-2": { value: "/api/v1/", kind: "StringLiteral" },
             "param-3": { value: "null", kind: "Identifier" },
             "param-4": { value: "null", kind: "Identifier" },
             "param-5": { value: "null", kind: "Identifier" },
-            "param-6": { value: "false", kind: "FalseKeyword" }
+            "param-6": { value: "false", kind: "FalseKeyword" },
+            "param-7": { value: "undefined", kind: "NumericLiteral" },
         }
     }
 }
