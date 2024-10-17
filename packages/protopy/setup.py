@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="protofy",
-    version="0.1.3",
+    version="0.1.4",
     packages=find_packages(),
     install_requires=[
         "paho-mqtt>=2.1.0", 
