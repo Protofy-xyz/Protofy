@@ -76,6 +76,7 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
                 : <Text
                     fontWeight="600"
                     color={value === undefined ? 'gray' : '$color8'}
+                    scale={scale} 
                     animation="bouncy"
                 >
                     {`${value ?? result?.value} ${monitor.getUnits()}`}
