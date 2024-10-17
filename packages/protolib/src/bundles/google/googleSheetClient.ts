@@ -204,7 +204,7 @@ export class GoogleSheetClient {
 
             await this.sheets.spreadsheets.values.update({
                 spreadsheetId: this.spreadsheetId,
-                range,
+                range: this.sheetName + "!" + range,
                 valueInputOption: 'USER_ENTERED',
                 requestBody: {
                     values: cols
