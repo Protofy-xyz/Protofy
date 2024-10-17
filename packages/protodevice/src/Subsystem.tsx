@@ -70,7 +70,7 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
             >
                 {ephemeral ? <MegaphoneOff size={16} color="$background" /> : <Megaphone size={16} color="$color8" />}
             </YStack>
-            <Text>{subsystem.name}</Text>
+            <Text>{monitor.data.label}</Text>
             {(loading || (value === undefined && result?.value === undefined))
                 ? <Spinner color="$color7" />
                 : <Text
@@ -214,29 +214,36 @@ const subsystem = ({ subsystem, deviceName }) => {
 // export {Subsystems} from 'protolib/bundles/agents/subsystems/Subsystems'
 export const Subsystems = ({ subsystems, deviceName }) => <YStack maxHeight={550} overflow="scroll" padding="$2" paddingTop="20px">
     <>
-        <XStack flexWrap="wrap" gap="$3">
-            {
-                subsystems
-                    .filter((subsystem) => subsystem.monitors?.length > 0)
-                    .map((subsystem, key) => <>
-                        {
-                            subsystem.monitors.map((monitor) => <Monitor key={key} deviceName={deviceName} monitorData={monitor} subsystem={subsystem} />)
-                        }
-                    </>)
-            }
-        </XStack>
         <YStack gap="$3">
             {
                 subsystems
-                    .filter((subsystem) => subsystem.actions?.length > 0)
+                    .sort((a, b) => {
+                        if (a.monitors && !a.actions && b.actions) return -1;
+                        if (!a.monitors && a.actions && b.monitors) return 1;
+                        return 0;
+                    })
                     .map((subsystem, key) => <>
                         <Text mt="$4" fow="600">{subsystem.name}</Text>
-                        <XStack flexWrap="wrap" gap="$3">
-                            {
-                                subsystem.actions.map((action) => <Action key={key} deviceName={deviceName} action={action} />)
-                            }
-                        </XStack>
+                        {
+                            subsystem.monitors?.length > 0 && <>
+                                <XStack flexWrap="wrap" gap="$3">
+                                    {
+                                        subsystem.monitors.map((monitor) => <Monitor key={key} deviceName={deviceName} monitorData={monitor} subsystem={subsystem} />)
+                                    }
+                                </XStack>
+                            </>
+                        }
+                        {
+                            subsystem.actions?.length > 0 && <>
+                                <XStack flexWrap="wrap" gap="$3">
+                                    {
+                                        subsystem.actions.map((action) => <Action key={key} deviceName={deviceName} action={action} />)
+                                    }
+                                </XStack>
+                            </>
+                        }
                     </>)
+
             }
         </YStack>
     </>
