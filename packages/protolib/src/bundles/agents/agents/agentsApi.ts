@@ -5,6 +5,7 @@ import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
 import { bifrost } from "../bifrost/bifrost";
+import { getTransporter } from "../bifrost/transporters";
 
 export const AgentsAutoAPI = AutoAPI({
     modelName: 'Agents',
@@ -65,7 +66,7 @@ export const AgentsAPI = (app, context) => {
             return
         }
 
-        const {agent: agentName, subsystem: subsystemName, monitor: monitorName} = req.params
+        const { agent: agentName, subsystem: subsystemName, monitor: monitorName } = req.params
         const db = getDB('agents')
         const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)), session)
         // const env = agentInfo.getEnvironment()
@@ -124,6 +125,15 @@ export const AgentsAPI = (app, context) => {
         res.send({ value })
     }))
 
-
-    bifrost(context) // agents connection mqtt based protocol
+    // agents protocol
+    switch (getTransporter()) {
+        case "mqtt":
+            topicSub(mqtts['dev'], 'agents/#', (message, topic) => bifrost('dev', context, message, topic))
+            topicSub(mqtts['prod'], 'agents/#', (message, topic) => bifrost('prod', context, message, topic))
+            break
+        default:
+            topicSub(mqtts['dev'], 'agents/#', (message, topic) => bifrost('dev', context, message, topic))
+            topicSub(mqtts['prod'], 'agents/#', (message, topic) => bifrost('prod', context, message, topic))
+            break
+    }
 }

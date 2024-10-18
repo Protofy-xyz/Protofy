@@ -19,24 +19,7 @@ import { getServiceToken } from 'protonode';
 
 const logger = getLogger()
 
-export const bifrost = async (context: any) => {
-    const { topicSub, mqtts } = context
-
-    const processMessage = async (env: string, message: string, topic: string) => {
-        const [agent, agentName, ...path] = topic.split("/");
-        const endpoint = path.join("/")
-
-        let parsedMessage = {};
-        try {
-            parsedMessage = JSON.parse(message);
-            if (endpoint == 'debug') {
-                logger.debug({ from: agent, agentName, endpoint }, JSON.stringify({ topic, message }))
-            } else {
-                messageHandlers(env, topic, endpoint, agentName, parsedMessage)
-            }
-        } catch (err) { }
-    }
-
+export const bifrost = async (env, context, message, topic) => {
     const messageHandlers = async (env: string, topic: string, endpoint: string, agentName: string, payload: object) => {
         console.log('agents message handler payload: ', JSON.stringify(payload, null, 2))
         if (endpoint === "register") {
@@ -65,7 +48,7 @@ export const bifrost = async (context: any) => {
                     // register agent monitors listeners
                     payload['subsystems'].forEach(subsystem => {
                         subsystem['monitors'].forEach(monitor => {
-                            registerMonitors('mqtt', env, agentName, monitor)
+                            registerMonitors("mqtt", env, agentName, monitor)
                         })
                     })
                 } else {
@@ -132,6 +115,17 @@ export const bifrost = async (context: any) => {
         }
     }
 
-    topicSub(mqtts['dev'], 'agents/#', (message, topic) => processMessage('dev', message, topic))
-    topicSub(mqtts['prod'], 'agents/#', (message, topic) => processMessage('prod', message, topic))
+    
+    const [agent, agentName, ...path] = topic.split("/");
+    const endpoint = path.join("/")
+
+    let parsedMessage = {};
+    try {
+        parsedMessage = JSON.parse(message);
+        if (endpoint == 'debug') {
+            logger.debug({ from: agent, agentName, endpoint }, JSON.stringify({ topic, message }))
+        } else {
+            messageHandlers(env, topic, endpoint, agentName, parsedMessage)
+        }
+    } catch (err) { }
 }
