@@ -162,21 +162,21 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
             }
         }
     } else if (elementType == 'ZodObject') {
-        if (ele._def.linkTo) {
+        if (elementDef.linkTo) {
             return <FormElement ele={ele} icon={icon} i={i} inArray={inArray}>
                 {mode != 'preview' && <Stack f={1} t={"$-2"}>
                     <SearchAndSelect
                         bc="$backgroundTransparent"
                         // options={["John", "Doe", "Jane", "Smith"]}
-                        getDisplayField={ele._def.getDisplayField}
-                        options={(search) => ele._def.linkTo(search, URLTransform)}
+                        getDisplayField={elementDef.getDisplayField}
+                        options={(search) => elementDef.linkTo(search, URLTransform)}
                         onSelectItem={(item) => setFormData(ele.name, item)}
                         selectedItem={getFormData(ele.name)}
                         f={1}
-                        placeholder={ele._def.hint}
+                        placeholder={elementDef.hint}
                     /></Stack>}
 
-                {mode == 'preview' && <SizableText ml="$3.5" mt={"$2.5"} mb="$2">{ele._def.getDisplayField && ele._def.getDisplayField(getFormData(ele.name))}</SizableText>}
+                {mode == 'preview' && <SizableText ml="$3.5" mt={"$2.5"} mb="$2">{elementDef.getDisplayField && elementDef.getDisplayField(getFormData(ele.name))}</SizableText>}
 
             </FormElement>
         } else {
