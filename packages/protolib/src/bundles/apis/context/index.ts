@@ -67,5 +67,10 @@ export const fetch = async (method, url, data={}, cb, errorCb, hasSarviceToken=f
 }
 
 export const executeAutomation = async (automation, cb, errorCb, hasSarviceToken=false, params= null)=>{
-    return fetch("get", '/api/v1/automations/' + automation + (params?'?'+params:''), {}, cb, errorCb, hasSarviceToken)
+    if(automation.includes("/automations")){
+        return fetch("get",automation + (params?'?'+params:''), {}, cb, errorCb, hasSarviceToken)
+    }else{
+        // Avoid breaking changes on old code
+        return fetch("get", '/api/v1/automations/' + automation + (params?'?'+params:''), {}, cb, errorCb, hasSarviceToken)
+    }
 }

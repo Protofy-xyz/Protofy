@@ -8,17 +8,26 @@ import { API } from 'protobase'
 const ExecuteAutomation = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(20)
     const [endPoints, setEndPoints] = useState<any[]>([]);
-
+    let allEndPoints = []
     useEffect(() => {
         const fetchData = async () => {
             const response = await API.get('/api/v1/endpoints');
             if (response.isLoaded) {
-                setEndPoints(
-                    response.data
+                allEndPoints =[ ...allEndPoints,
+                    ...response.data
                       .filter((endpoint: any) => endpoint.path.startsWith('/api/v1/automations'))
-                      .map((endpoint: any) => endpoint.path.replace('/api/v1/automations/', ''))
-                  )
+                      .map((endpoint: any) => endpoint.path)
+                ]
             }
+            const pythonResponse = await API.get('/pyapi/v1/endpoints');
+            if (pythonResponse.isLoaded) {
+                allEndPoints = [ ...allEndPoints,
+                    ...pythonResponse.data
+                      .filter((endpoint: any) => endpoint.path.startsWith('/pyapi/v1/automations'))
+                      .map((endpoint: any) => endpoint.path)
+                ]
+            }
+            setEndPoints(allEndPoints)
         }
         if(node.id) fetchData()
     }, [])
