@@ -2,7 +2,7 @@ import { AutoModel, Schema, z } from 'protobase'
 import { DeviceBoardModel } from '../deviceBoards';
 
 export const DeviceDefinitionSchema = Schema.object({
-  name: z.string().hint("Protofy screen controller...").static().id(),
+  name: z.string().hint("Protofy screen controller...").regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").static().id(),
   board: DeviceBoardModel.linkTo((data) => data.name).hint("Select your board"),
   sdk: z.string().hidden(),
   subsystems: z.record(z.string(), z.any()).optional().hidden(),

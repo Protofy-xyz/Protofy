@@ -3,6 +3,7 @@ import { CircuitBoard, Tag, BookOpen, Eye } from '@tamagui/lucide-icons'
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas'
 import { API, z, getPendingResult } from 'protobase'
 import { DeviceCoreModel } from '../devicecores'
+import { DeviceBoardModel } from "../deviceBoards"
 import { Button, XStack } from "tamagui"
 import { useThemeSetting } from '@tamagui/next-theme'
 import { usePendingEffect } from "../../../lib/usePendingEffect"
@@ -25,6 +26,7 @@ const DeviceDefitionIcons = {
 }
 
 const sourceUrl = '/adminapi/v1/devicedefinitions'
+const boardsSourceUrl = '/adminapi/v1/deviceboards'
 const coresSourceUrl = '/adminapi/v1/devicecores?all=1'
 
 export default {
@@ -47,6 +49,25 @@ export default {
     const [coresList, setCoresList] = useState(extraData?.cores ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: coresSourceUrl }, s) }, setCoresList, extraData?.cores)
     const cores = coresList.isLoaded ? coresList.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
+
+    const [boardsList, setBoardsList] = useState(extraData?.boards ?? getPendingResult('pending'))
+    usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardsList, extraData?.boards)
+    const boards = boardsList.isLoaded ? boardsList.data.items.map(i => DeviceBoardModel.load(i).getData()) : []
+
+    const generateBoardJs = (esphomeBoardName,boardName)=>{
+      const board = boards.find(board => board.name == boardName)
+      if(!board){
+        console.error("Board not found")
+        return null;
+      }
+      const components = ["mydevice",esphomeBoardName]
+      //filter all ports board that are IO or I or O
+      const ports = board.ports.filter(port => {return (port.type == 'IO' || port.type == 'I' || port.type == 'O')})
+      ports.forEach(port => {
+        components.push(null)
+      })
+      return { "components": JSON.stringify(components)+";" }
+    }
 
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
       <AlertDialog open={showDialog} setOpen={(open) => { setShowDialog(open) }} hideAccept={true} style={{ width: "80%", height: "80%", padding: '0px', overflow: 'hidden' }}>
@@ -132,15 +153,21 @@ export default {
         dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
         customFields={{
           'config': {
-            component: (path, data, setData, mode) => {
+            component: (path, data, setData, mode,originalData) => {
+              console.log("Original Data: ",originalData)
               if (mode == "preview") { return <></> }
               return <Button
                 style={{ width: "100%" }}
                 onPress={(e) => {
                   setShowDialog(true)
                   if (mode == "add") {
-                    console.log("ADD mode: ", defaultJsCode.components)
-                    setSourceCode(defaultJsCode.components)
+                    const esphomeBoardName = originalData.board.config[originalData.sdk].esp32.board
+                    if(esphomeBoardName == 'esp32dev') {
+                      setSourceCode(defaultJsCode.components)
+                    }else if(esphomeBoardName == 'seeed_xiao_esp32s3') {
+                      const generatedComponents =  generateBoardJs(esphomeBoardName,originalData.board.name)
+                      setSourceCode(generatedComponents.components)
+                    }
                   } else {
                     console.log("OTHER mode: ", data.components)
                     setSourceCode(data.components)
@@ -155,6 +182,7 @@ export default {
     </AdminPage>)
   },
   getServerSideProps: PaginatedData(sourceUrl, ['admin'], {
-    cores: coresSourceUrl
+    cores: coresSourceUrl,
+    boards: boardsSourceUrl
   })
 }
