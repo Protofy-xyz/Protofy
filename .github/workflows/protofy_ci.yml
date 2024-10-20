@@ -7,6 +7,7 @@ on:
 
 jobs:
   test:
+    if: github.repository == 'Protofy-xyz/Protofy'
     runs-on: self-hosted
     steps:
     - name: Checkout repository
@@ -83,7 +84,7 @@ jobs:
   notify:
     runs-on: self-hosted
     needs: test
-    if: ${{ always() && github.event_name != 'pull_request' }} # This job runs only if the trigger is not a pull request
+    if: ${{ always() && github.event_name != 'pull_request' && github.repository == 'Protofy-xyz/Protofy' }} # This job runs only if the trigger is not a pull request
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4

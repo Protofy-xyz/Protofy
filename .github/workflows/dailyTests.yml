@@ -6,6 +6,7 @@ on:
 
 jobs:
   test:
+    if: github.repository == 'Protofy-xyz/Protofy'
     runs-on: self-hosted
     steps:
     - name: Checkout repository
@@ -66,7 +67,7 @@ jobs:
   notify:
     runs-on: self-hosted
     needs: test
-    if: always()  # This ensures that the notify job runs whether the test job succeeds or fails
+    if: always() && github.repository == 'Protofy-xyz/Protofy'  # This ensures that the notify job runs whether the test job succeeds or fails
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4

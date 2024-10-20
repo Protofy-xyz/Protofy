@@ -7,6 +7,7 @@ on:
 
 jobs:
   local_runners:
+    if: github.repository == 'Protofy-xyz/Protofy'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -53,6 +54,7 @@ jobs:
         path: ${{ runner.temp }}/result.txt
 
   docker_runners:
+    if: github.repository == 'Protofy-xyz/Protofy'
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout repository
@@ -110,7 +112,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs: [local_runners, docker_runners]
-    if: always()  # This ensures that the notification job runs whether the build job succeeds or fails
+    if: always() && github.repository == 'Protofy-xyz/Protofy'  # This ensures that the notification job runs whether the build job succeeds or fails
     steps:
     - name: Download all artifacts
       uses: actions/download-artifact@v3
