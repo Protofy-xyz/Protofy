@@ -54,7 +54,7 @@ const Seeed_xiao_esp32s3 = ({ node = {}, nodeData = {}, topics = {}, color }: an
     return (
         <Node output={false} skipCustom={true} node={node} color={color} isPreview={!id} title='XIAO ESP32S3' id={id} margin='200px' >
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-                <img src={"/images/devices/seeed_xiao_esp32s3.png"} style={{ width: "100%" }} />
+                <img src={"/images/device/seeed_xiao_esp32s3.png"} style={{ width: "100%" }} />
             </div>
             {/* //TODO Get ports from device definition */}
             {Array(ports.length).fill(1).map((x, i) => {
