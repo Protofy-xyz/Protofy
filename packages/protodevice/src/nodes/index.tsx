@@ -3,6 +3,7 @@ import { generateColorbyIndex } from 'protoflow/src/diagram/Theme';
 import Wifi from './Wifi';
 import Esp32dev from './Esp32dev';
 import Seeed_xiao_esp32s3 from './Seeed_xiao_esp32s3';
+import Esp32s3devkitc1 from './Esp32s3devkitc1';
 import Mqtt from './Mqtt';
 import Relay from './Relay';
 import GPIOSwitch from './GPIOSwitch';
@@ -42,6 +43,7 @@ const deviceMasks = [
   Wifi,
   Esp32dev,
   Seeed_xiao_esp32s3,
+  Esp32s3devkitc1,
   Mqtt,
   Relay,
   GPIOSwitch,

@@ -167,6 +167,9 @@ export default {
                     }else if(esphomeBoardName == 'seeed_xiao_esp32s3') {
                       const generatedComponents =  generateBoardJs(esphomeBoardName,originalData.board.name)
                       setSourceCode(generatedComponents.components)
+                    } else if(esphomeBoardName == 'esp32-s3-devkitc-1') {
+                      const generatedComponents =  generateBoardJs(esphomeBoardName,originalData.board.name)
+                      setSourceCode(generatedComponents.components)
                     }
                   } else {
                     console.log("OTHER mode: ", data.components)
