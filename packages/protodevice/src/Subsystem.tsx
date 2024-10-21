@@ -16,7 +16,7 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
     const { message } = useSubscription(monitor.getEndpoint())
     const [result, loading, error] = useFetch(monitor.getValueAPIURL())
     const [scale, setScale] = useState(1);
-    const [ephemeral, setEphemeral] = useState(monitorData?.data?.ephemeral ?? false);
+    const [ephemeral, setEphemeral] = useState(monitorData?.ephemeral ?? false);
 
     const toast = useToastController()
 
