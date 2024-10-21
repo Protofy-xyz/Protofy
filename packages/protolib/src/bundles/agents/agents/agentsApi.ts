@@ -4,8 +4,7 @@ import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
-import { bifrost } from "../bifrost/bifrost";
-import { getTransporter } from "../bifrost/transporters";
+import { BifrostProtocol } from "../bifrost/Protocol";
 
 export const AgentsAutoAPI = AutoAPI({
     modelName: 'Agents',
@@ -126,14 +125,5 @@ export const AgentsAPI = (app, context) => {
     }))
 
     // agents protocol
-    switch (getTransporter()) {
-        case "mqtt":
-            topicSub(mqtts['dev'], 'agents/#', (message, topic) => bifrost('dev', context, message, topic))
-            topicSub(mqtts['prod'], 'agents/#', (message, topic) => bifrost('prod', context, message, topic))
-            break
-        default:
-            topicSub(mqtts['dev'], 'agents/#', (message, topic) => bifrost('dev', context, message, topic))
-            topicSub(mqtts['prod'], 'agents/#', (message, topic) => bifrost('prod', context, message, topic))
-            break
-    }
+    BifrostProtocol({ ...context, logger })
 }

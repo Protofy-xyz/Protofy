@@ -19,113 +19,64 @@ import { getServiceToken } from 'protonode';
 
 const logger = getLogger()
 
-export const bifrost = async (env, context, message, topic) => {
-    const messageHandlers = async (env: string, topic: string, endpoint: string, agentName: string, payload: object) => {
-        console.log('agents message handler payload: ', JSON.stringify(payload, null, 2))
-        if (endpoint === "register") {
-            const db = getDB('agents')
-            try {
-                const validation = SubsystemsSchema.safeParse(payload['subsystems'])
-                if (validation.success) {
-                    // register agent
-                    const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
-                    agentInfo.setSubsystems(payload['subsystems'])
-                    await generateEvent(
-                        {
-                            ephemeral: false,
-                            environment: env,
-                            path: topic,
-                            from: "agent",
-                            user: agentName,
-                            payload: {
-                                agentName,
-                                endpoint
-                            }
-                        },
-                        getServiceToken()
-                    );
-
-                    // register agent monitors listeners
-                    payload['subsystems'].forEach(subsystem => {
-                        subsystem['monitors'].forEach(monitor => {
-                            registerMonitors("mqtt", env, agentName, monitor)
-                        })
-                    })
-                } else {
-                    throw new Error("Bad agent registration message format")
-                }
-            } catch (e) {
-                console.error('cannot register agent: ', e)
-            }
-        }
+export const register = async ({ env, topic, agentName, endpoint, payload, registerMonitors }:
+    {
+        env: string,
+        topic: string,
+        agentName: string,
+        endpoint: string,
+        payload: any,
+        registerMonitors: (env: string, agentName: string, subsystem, monitor: MonitorType, onMonitorMessage: (monitorEndoint, message) => void) => void
     }
-
-    const registerMonitors = (type = 'mqtt', env: string, agentName: string, monitor: MonitorType) => {
-        if (type == 'mqtt') {
-            const { topicSub, mqtts } = context
-            // fallback to 'agents/agentName/monitor/monitorName' if monitor endpoint is null
-            const endpoint = monitor.endpoint ?? `agents/${agentName}/monitor/${monitor.name}`
-            if (env === 'dev') {
-                topicSub(mqtts['dev'], endpoint, async (message, topic) => {
-                    try {
-                        const parsedMessage = JSON.parse(message)
-                        await generateEvent(
-                            {
-                                ephemeral: false,
-                                environment: 'dev',
-                                path: endpoint,
-                                from: "agents",
-                                user: agentName,
-                                payload: {
-                                    message: parsedMessage,
-                                    agentName,
-                                    endpoint
-                                }
-                            },
-                            getServiceToken()
-                        );
-                    } catch (err) {
-                        console.error("Error, cannot parse agent monitor message")
-                    }
-                })
-            } else if (env === 'prod') {
-                topicSub(mqtts['prod'], endpoint, async (message, topic) => {
-                    try {
-                        const parsedMessage = JSON.parse(message)
-                        await generateEvent(
-                            {
-                                ephemeral: false,
-                                environment: 'prod',
-                                path: endpoint,
-                                from: "agents",
-                                user: agentName,
-                                payload: {
-                                    message: parsedMessage,
-                                    agentName,
-                                    endpoint
-                                }
-                            },
-                            getServiceToken()
-                        );
-                    } catch (err) {
-                        console.error("Error, cannot parse agent monitor message")
-                    }
-                })
-            }
-        }
-    }
-
-    
-    const [agent, agentName, ...path] = topic.split("/");
-    const endpoint = path.join("/")
-
-    let parsedMessage = {};
+) => {
+    const db = getDB('agents')
     try {
-        parsedMessage = JSON.parse(message);
-        if (endpoint == 'debug') {
-            logger.debug({ from: agent, agentName, endpoint }, JSON.stringify({ topic, message }))
+        const validation = SubsystemsSchema.safeParse(payload['subsystems'])
+        if (validation.success) {
+            // register agent
+            const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
+            agentInfo.setSubsystems(payload['subsystems'])
+            await generateEvent(
+                {
+                    ephemeral: false,
+                    environment: env,
+                    path: topic,
+                    from: "agent",
+                    user: agentName,
+                    payload: {
+                        agentName,
+                        endpoint
+                    }
+                },
+                getServiceToken()
+            );
+
+            // register agent monitors listeners
+            payload['subsystems'].forEach(subsystem => {
+                subsystem['monitors'].forEach(monitor => {
+                    registerMonitors(env, agentName, subsystem, monitor, async (monitorEndpoint, monitorMessage) => {
+                        await generateEvent(
+                            {
+                                ephemeral: false,
+                                environment: env,
+                                path: monitorEndpoint,
+                                from: "agents",
+                                user: agentName,
+                                payload: {
+                                    message: monitorMessage,
+                                    agentName,
+                                    monitorEndpoint
+                                }
+                            },
+                            getServiceToken()
+                        );
+                    })
+                })
+            })
         } else {
-            messageHandlers(env, topic, endpoint, agentName, parsedMessage)
+            throw new Error("Bad agent registration message format")
         }
-    } catch (err) { }
+    } catch (e) {
+        console.error('cannot register agent: ', e)
+    }
 }
