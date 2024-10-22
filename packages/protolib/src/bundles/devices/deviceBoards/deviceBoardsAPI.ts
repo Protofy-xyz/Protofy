@@ -345,7 +345,7 @@ const initialData = {
     //             }
     //         }
     //     }
-    }
+    // }
 }
 
 export const DeviceBoardsAPI = AutoAPI({
