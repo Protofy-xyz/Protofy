@@ -1,1 +1,5 @@
-export default {}
+import CreateAgent from "./CreateAgent"
+
+export default {
+    CreateAgent
+}

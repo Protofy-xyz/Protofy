@@ -11867,6 +11867,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"agents@workspace:packages/agents":
+  version: 0.0.0-use.local
+  resolution: "agents@workspace:packages/agents"
+  dependencies:
+    mqtt: "npm:^5.2.1"
+  languageName: unknown
+  linkType: soft
+
 "aggregate-error@npm:^3.0.0":
   version: 3.1.0
   resolution: "aggregate-error@npm:3.1.0"

@@ -18,6 +18,7 @@ import automations from './automations/context'
 import network from './network/context'
 import deviceContext from './devices/devices/context'
 import stateMachines from './stateMachines/context'
+import agents from './agents/agents/context'
 
 export const APIContext = {
     onEvent,
@@ -45,6 +46,7 @@ export const APIContext = {
     logs,
     playwright,
     automations,
-    network, 
-    sm: stateMachines
+    network,
+    sm: stateMachines, 
+    agents
 }

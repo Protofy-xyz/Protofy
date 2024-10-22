@@ -1,0 +1,11 @@
+{
+  "name": "agents",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "mqtt": "^5.2.1"
+  }
+}
