@@ -73,7 +73,7 @@ const Seeed_xiao_esp32s3 = ({ node = {}, nodeData = {}, topics = {}, color }: an
 export default {
     id: 'seeed_xiao_esp32s3',
     type: 'ArrayLiteralExpression',
-    check: (node, nodeData) => node.type == "ArrayLiteralExpression" && nodeData['element-1'] == '"seeed_xiao_esp32s3"',
+    check: (node, nodeData) => node.type == "ArrayLiteralExpression" && nodeData['element-1'] == '"Seeed Studio XIAO ESP32S3"',
     getComponent: (node, nodeData, children) => <Seeed_xiao_esp32s3 color={getColor('seeed_xiao_esp32s3')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: '"seeed_xiao_esp32s3"' } },
     hidden: true,

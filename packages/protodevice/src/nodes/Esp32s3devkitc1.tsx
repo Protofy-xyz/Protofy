@@ -71,7 +71,7 @@ const Esp32s3devkitc1 = ({ node = {}, nodeData = {}, topics = {}, color }: any) 
 export default {
     id: 'esp32s3devkitc1',
     type: 'ArrayLiteralExpression',
-    check: (node, nodeData) => node.type == "ArrayLiteralExpression" && nodeData['element-1'] == '"esp32-s3-devkitc-1"',
+    check: (node, nodeData) => node.type == "ArrayLiteralExpression" && nodeData['element-1'] == '"ESP32 S3 DevKitC"',
     getComponent: (node, nodeData, children) => <Esp32s3devkitc1 color={getColor('esp32s3devkitc1')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: '"esp32s3devkitc1"' } },
     hidden: true,

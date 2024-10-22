@@ -56,13 +56,13 @@ export default {
     usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardsList, extraData?.boards)
     const boards = boardsList.isLoaded ? boardsList.data.items.map(i => DeviceBoardModel.load(i).getData()) : []
 
-    const generateBoardJs = (esphomeBoardName,boardName)=>{
+    const generateBoardJs = (boardName)=>{
       const board = boards.find(board => board.name == boardName)
       if(!board){
         console.error("Board not found")
         return null;
       }
-      const components = ["mydevice",esphomeBoardName]
+      const components = ["mydevice",boardName]
       //filter all ports board that are IO or I or O
       const ports = board.ports.filter(port => {return (port.type == 'IO' || port.type == 'I' || port.type == 'O')})
       ports.forEach(port => {
@@ -168,16 +168,9 @@ export default {
                   setSelectedSdk(originalData.sdk)
                   setShowDialog(true)
                   if (mode == "add") {
-                    const esphomeBoardName = originalData.board.config[originalData.sdk].esp32.board
-                    if(esphomeBoardName == 'esp32dev') {
-                      setSourceCode(defaultJsCode.components)
-                    }else if(esphomeBoardName == 'seeed_xiao_esp32s3') {
-                      const generatedComponents =  generateBoardJs(esphomeBoardName,originalData.board.name)
-                      setSourceCode(generatedComponents.components)
-                    } else if(esphomeBoardName == 'esp32-s3-devkitc-1') {
-                      const generatedComponents =  generateBoardJs(esphomeBoardName,originalData.board.name)
-                      setSourceCode(generatedComponents.components)
-                    }
+                    const esphomeBoardName = originalData.board.name
+                    const generatedComponents =  generateBoardJs(esphomeBoardName)
+                    setSourceCode(generatedComponents.components)
                   } else {
                     setSourceCode(data.components)
                   }

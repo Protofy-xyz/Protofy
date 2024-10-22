@@ -71,7 +71,7 @@ const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
 export default {
     id: 'esp32dev',
     type: 'ArrayLiteralExpression',
-    check: (node, nodeData) => node.type == "ArrayLiteralExpression" && nodeData['element-1'] == '"esp32dev"',
+    check: (node, nodeData) => node.type == "ArrayLiteralExpression" && nodeData['element-1'] == '"Protofy ESP32 devBoard"',
     getComponent: (node, nodeData, children) => <Esp32dev color={getColor('esp32dev')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: '"esp32dev"' } },
     hidden: true,

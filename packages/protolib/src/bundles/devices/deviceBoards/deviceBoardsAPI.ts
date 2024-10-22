@@ -118,9 +118,9 @@ const initialData = {
             }
         }
     },
-    "Protofy ESP32S3 devBoard": {
+    "ESP32 S3 DevKitC": {
         "id": "3",
-        "name": "Protofy ESP32S3 devBoard",
+        "name": "ESP32 S3 DevKitC",
         "core": "esp32s3",
         "ports": [
             { "number": 1, "side": "left", "name": "3V3", "type": "P", "analog": false, "description": "3.3 V power supply", "maxVoltage": 3.3, "rtc": false },
