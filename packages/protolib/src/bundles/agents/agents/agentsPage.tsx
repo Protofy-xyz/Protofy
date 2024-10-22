@@ -4,253 +4,34 @@ import { AgentsModel, AgentsType } from './agentsSchemas';
 import { API } from 'protobase';
 import { DataTable2 } from '../../../components/DataTable2';
 import { DataView } from '../../../components/DataView';
-import { ButtonSimple } from '../../../components/ButtonSimple';
 import { AdminPage } from '../../../components/AdminPage';
-import { usePendingEffect } from '../../../lib/usePendingEffect';
 import { CardBody } from '../../../components/CardBody';
 import { ItemMenu } from '../../../components/ItemMenu';
 import { useWorkspaceEnv } from '../../../lib/useWorkspaceEnv';
 import { Tinted } from '../../../components/Tinted';
 import { Chip } from '../../../components/Chip';
-import { useSubscription, Connector } from '../../../lib/mqtt';
 import { z } from 'protobase';
-import { AgentDefinitionModel } from '../agentDefinitions';
-import { connectSerialPort, flash } from "../devicesUtils";
-import DeviceModal from 'protodevice/src/DeviceModal'
-import * as deviceFunctions from 'protodevice/src/device'
 import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text, Button } from '@my/ui';
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
-import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic } from "../devicesUtils";
 import { SSR } from '../../../lib/SSR'
 import { withSession } from '../../../lib/Session'
 import { Subsystems } from '../subsystems/Subsystems'
 
-const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
-  const { message } = useSubscription([compileMessagesTopic(compileSessionId)]);
-  //keep a log of messages until success/failure
-  //so we can inform the user of the problems if anything fails.
-
-  const [messages, setMessages] = useState([])
-  var isDoneCompiling = false
-  useEffect(() => {
-    if (stage == "compile") {
-      console.log("Compile Message: ", message);
-      try {
-        if (message?.message) {
-          const data = JSON.parse(message?.message.toString());
-          if (data.position != "undefined") {
-            console.log("DEV: ", data)
-            if (data.position && !isDoneCompiling) {
-              onSetModalFeedback({
-                message: `Current position in queue: ${data.position}. Status: ${data.status}`,
-                details: { error: false }
-              });
-            } else {
-              onSetModalFeedback({
-                message: (
-                  <YStack height="50px" gap="$2">
-                    <Paragraph>Compiling firmware: </Paragraph>
-                    {
-                      messages.length > 0 && (
-                        <Paragraph
-                          height={"100px"}
-                        >
-                          {messages
-                            .filter((msg) => Object.keys(msg).length === 1)
-                            .map((msg) => msg.message)
-                            .slice(-1)[0]}
-                        </Paragraph>
-                      )
-                    }
-                  </YStack>
-                ),
-                details: { error: false }
-              });
-              isDoneCompiling = true
-            }
-          }
-
-          if (data.event == 'exit' && data.code == 0) {
-            isDoneCompiling = true
-            setMessages([])
-            console.log("Succesfully compiled");
-            onSetStage('upload')
-          } else if (data.event == 'exit' && data.code != 0) {
-            isDoneCompiling = true
-            console.error('Error compiling', messages)
-            onSetModalFeedback({
-              message: <YStack f={1} height="100%">
-                <Paragraph color="$red8" mt="$3">Error compiling code.</Paragraph>
-                <Paragraph color="$red8">Please check your flow configuration.</Paragraph>
-                <TextArea textAlign="left" f={1} mt="$2" mb={"$5"} minHeight={"200px"} value={
-                  messages.map((ele) => ele.message).join('')
-                }>
-
-                </TextArea>
-              </YStack>, details: { error: true }
-            })
-          }
-          setMessages([...messages, data])
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }, [message])
-  return <></>
-}
-
-const DevicesIcons = { name: Tag, deviceDefinition: BookOpen }
-
-const callText = async (url: string, method: string, params?: any, token?: string): Promise<any> => {
-  var fetchParams: any = {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  }
-
-
-  if (params) {
-    fetchParams.body = JSON.stringify(params);
-  }
-
-  let separator = '?';
-  if (url.indexOf('?') != -1) {
-    separator = '&';
-  }
-
-  var defUrl = url + (token ? separator + "token=" + token : "");
-  console.log("Deff URL: ", defUrl)
-  return fetch(defUrl, fetchParams)
-    .then(function (response) {
-      return response;
-    }).catch((error) => {
-      console.log("Error fetching url: ", error)
-    })
-}
+const agentsIcon = { name: Tag, deviceDefinition: BookOpen }
 
 const sourceUrl = '/adminapi/v1/agents'
-const definitionsSourceUrl = '/adminapi/v1/agentDefinitions?all=1'
 
 export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
     const { replace } = usePageParams(pageState)
-    if (typeof window !== 'undefined') {
-      Object.keys(deviceFunctions).forEach(k => (window as any)[k] = deviceFunctions[k])
-    }
-    const [showModal, setShowModal] = useState(false)
-    const [modalFeedback, setModalFeedback] = useState<any>()
-    const [stage, setStage] = useState('')
-    const yamlRef = React.useRef()
-    const [targetDeviceName, setTargetDeviceName] = useState('')
-    const [targetDeviceModel, setTargetDeviceModel] = useState(AgentsModel.load({}))
-    const [compileSessionId, setCompileSessionId] = useState('')
     const [all, setAll] = useState(false)
     const env = useWorkspaceEnv()
-
-    // const { message } = useSubscription(['device/compile']);
-
-    const flashDevice = async (device, yaml?) => {
-      setTargetDeviceName(device.data.name)
-      setTargetDeviceModel(device)
-      yamlRef.current = yaml ?? await device.getYaml(env)
-      console.log("TURBO YAML PARAMETER: ", yaml)
-      setShowModal(true)
-      try {
-        setStage('yaml')
-      } catch (e) {
-        console.error('error writting firmware: ', e)
-      }
-    }
-    const sendMessage = async () => {
-      const response = await fetch(compileActionUrl(targetDeviceName, compileSessionId))
-      const data = await response.json()
-    }
-
-    const compile = async () => {
-      // setModalFeedback({ message: `Compiling firmware...`, details: { error: false } })
-      // const compileMsg = { type: "spawn", configuration: +".yaml" };
-      sendMessage();
-    }
-
-    const flashCb = (msgObj) => {
-      console.log(msgObj);
-      setModalFeedback(state => state = msgObj)
-    }
-
-    const onSelectPort = async () => {
-      const isError = await connectSerialPort()
-      if (isError) return
-      setStage('write')
-    }
-
-    const saveYaml = async (yaml) => {
-      try {
-        const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { "yaml": yaml })
-        const data = await response.json()
-        console.log("Save Yaml, compileSessionId: ", data.compileSessionId);
-        setCompileSessionId(data.compileSessionId)
-      } catch (err) {
-        const errorStr = "Error on fetch petition to compile.protofy.xyz: " + err
-        console.log(errorStr)
-        throw (errorStr)
-      }
-    }
-
-    useEffect(() => {
-      const process = async () => {
-        if (stage == 'yaml') {
-          try {
-            await saveYaml(yamlRef.current)
-            setTimeout(() => {
-              setStage('compile')
-            }, 1 * 1000);//Todo remove setTimeout
-            targetDeviceModel ? await targetDeviceModel.setUploaded() : console.log("🤖 No targetDeviceModel")
-          } catch (err) {
-            setModalFeedback({ message: 'Error connecting to compilation server. Please verify your Internet connection.', details: { error: true } })
-          }
-
-        } else if (stage == 'compile') {
-          console.log("stage - compile")
-          await compile()
-        } else if (stage == 'write') {
-
-          try {
-            await flash(flashCb, targetDeviceName, compileSessionId)
-            setStage('idle')
-          } catch (e) { flashCb({ message: 'Error writing the device. Check that the USB connection and serial port are correctly configured.', details: { error: true } }) }
-        } else if (stage == 'upload') {
-          // getWebSocket()?.close()
-          const chromiumBasedAgent =
-            (navigator.userAgent.includes('Chrome') ||
-              navigator.userAgent.includes('Edge') ||
-              navigator.userAgent.includes('Opera'))
-
-          if (chromiumBasedAgent) {
-            setModalFeedback({ message: 'Connect your device and click select to chose the port. ', details: { error: false } })
-            console.log('chormium based true')
-          } else {
-            console.log('chormium based very false')
-            setModalFeedback({ message: 'You need Chrome, Opera or Edge to upload the code to the device.', details: { error: true } })
-          }
-        }
-      }
-      process()
-    }, [stage])
-
-    const [deviceDefinitions, setDeviceDefinitions] = useState(extraData?.deviceDefinitions ?? getPendingResult('pending'))
-    usePendingEffect((s) => { API.get({ url: definitionsSourceUrl }, s) }, setDeviceDefinitions, extraData?.deviceDefinitions)
 
     const extraMenuActions = []
 
     return (<AdminPage title="Agents" pageSession={pageSession}>
-      <Connector brokerUrl={onlineCompilerSecureWebSocketUrl()}>
-        <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
-        <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} compileSessionId={compileSessionId} stage={stage} />
-      </Connector>
       <DataView
         entityName="agents"
         onAdd={data => {
@@ -289,7 +70,7 @@ export default {
         )}
         model={AgentsModel}
         pageState={pageState}
-        icons={DevicesIcons}
+        icons={agentsIcon}
         dataTableGridProps={{
           disableItemSelection: true,
           onSelectItem: (item) => { },
@@ -304,7 +85,7 @@ export default {
             <YStack f={1}>
               {
                 Object.keys(data.subsystems ?? {}).length
-                  ? <Subsystems name={data.name} subsystems={data.subsystems} type={"agent"}/>
+                  ? <Subsystems name={data.name} subsystems={data.subsystems} type={"agent"} />
                   : <Paragraph mt="20px" ml="20px" size={20}>{'No subsystems defined'}</Paragraph>
               }
             </YStack>
