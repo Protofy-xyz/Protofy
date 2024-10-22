@@ -1,3 +1,4 @@
+import { NodeTypes } from 'protoflow'; //prevent circular dependency
 import { memo, useEffect, useState, useRef,useContext } from "react";
 import { useSearchParams, usePathname } from 'solito/navigation';
 import { Editor } from "@protocraft/core";
@@ -16,22 +17,21 @@ import { ToggleGroup, Button, XStack } from "@my/ui"
 import { SidebarItem } from "./Sidebar/SideBarItem";
 import React from "react";
 import { newVisualUiContext, useVisualUiAtom } from "../visualUiHooks";
-import { VisualUiFlows } from "./VisualUiFlows";
 import EditorBar from "./EditorBar";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { AppConfContext, SiteConfigType } from "protolib/providers/AppConf"
+import { getFlowsCustomSnippets } from "app/bundles/snippets"
+import { getFlowsMenuConfig } from "app/bundles/flows"
+import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
+import dynamic from 'next/dynamic';
 
+const VisualUiFlows = dynamic(() => import('./VisualUiFlows').then(mod => mod.VisualUiFlows));
 
 function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, contextAtom = null }) {
     const [_, setContext] = useVisualUiAtom(contextAtom)
     const editorRef = useRef<any>()
     const monacoRef = useRef(null);
-
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
-    const {getFlowsCustomComponents, getFlowMasks} = SiteConfig.bundles.masks
-    const {getFlowsCustomSnippets} = SiteConfig.bundles.snippets
-    const { getFlowsMenuConfig } = SiteConfig.bundles.flowsMenu
-
     const codeRef = useRef("")
     const flowsData = useRef({})
     const enableClickEventsRef = useRef();

@@ -37,10 +37,6 @@ import { getBrokerUrl } from 'protolib/lib/Broker'
 import { Connector } from 'protolib/lib/mqtt'
 import { Toast, YStack } from '@my/ui'
 import { SiteConfig } from 'app/conf'
-import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
-import { getFlowsCustomSnippets } from "app/bundles/snippets"
-import { getFlowsMenuConfig } from "app/bundles/flows"
-import { palettes } from 'app/bundles/palettes'
 import Workspaces from 'app/bundles/workspaces'
 import { PanelLayout } from 'app/layout/PanelLayout'
 import { useRouter } from 'next/router';
@@ -91,10 +87,6 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
             <AppConfContext.Provider value={{
               ...AppConfig,
               bundles: {
-                flowsMenu: { getFlowsMenuConfig },
-                masks: { getFlowMasks, getFlowsCustomComponents },
-                snippets: { getFlowsCustomSnippets },
-                palettes,
                 workspaces: Workspaces,
               },
               layout: {

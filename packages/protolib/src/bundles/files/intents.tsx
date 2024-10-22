@@ -25,6 +25,9 @@ import { useTint } from '../../lib/Tints'
 import { AppConfContext, SiteConfigType } from '../../providers/AppConf';
 import { Tinted } from '../../components/Tinted';
 import { useToastController } from '@my/ui';
+import { getFlowsCustomSnippets } from "app/bundles/snippets"
+import { getFlowsMenuConfig } from "app/bundles/flows"
+import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 
 const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -124,10 +127,6 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   const pathname = usePathname();
   const theme = useTheme()
   const tint = useTint().tint
-  const SiteConfig = useContext<SiteConfigType>(AppConfContext);
-  const { getFlowsMenuConfig } = SiteConfig.bundles.flowsMenu
-  const { getFlowsCustomComponents } = SiteConfig.bundles.masks
-  const { getFlowsCustomSnippets } = SiteConfig.bundles.snippets
   const toast = useToastController();
 
   const [promptResponse, setPromptResponse] = usePrompt(

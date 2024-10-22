@@ -19,6 +19,9 @@ import Flows from '../../../adminpanel/features/components/Flows'
 import { useSearchParams, usePathname } from 'solito/navigation'
 import layout from './DeviceLayout'
 import { AppConfContext, SiteConfigType } from "../../../providers/AppConf"
+import { getFlowsCustomSnippets } from "app/bundles/snippets"
+import { getFlowsMenuConfig } from "app/bundles/flows"
+import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 
 const DeviceDefitionIcons = {
   name: Tag,
@@ -39,10 +42,6 @@ export default {
     const env = useWorkspaceEnv()
     const searchParams = useSearchParams();
     const pathname = usePathname();
-    const SiteConfig = useContext<SiteConfigType>(AppConfContext);
-    const {getFlowsCustomComponents, getFlowMasks} = SiteConfig.bundles.masks
-    const { getFlowsCustomSnippets } = SiteConfig.bundles.snippets
-    const { getFlowsMenuConfig } = SiteConfig.bundles.flowsMenu
     const [selectedBoard, setSelectedBoard] = useState(null)
     const [selectedSdk, setSelectedSdk] = useState(null)
 

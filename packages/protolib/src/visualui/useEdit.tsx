@@ -10,6 +10,7 @@ import { useAtom } from 'jotai'
 import { useIsEditing } from './useIsEditing'
 import { useToastController } from '@my/ui'
 import { AppConfContext, SiteConfigType } from "../providers/AppConf"
+import { palettes } from 'app/bundles/palettes'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
@@ -81,8 +82,6 @@ const VisualUILoader = ({ userComponents, path, metadata, visualUiContext }: { u
   const [res, setRes] = useState<any>()
   const [fileContent, setFileContent] = useState()
   const toast = useToastController()
-  const SiteConfig = useContext<SiteConfigType>(AppConfContext);
-  const { palettes } = SiteConfig.bundles
 
   const onSave = (content: string) => {
     writeFileContent(content)

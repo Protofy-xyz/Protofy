@@ -1,8 +1,8 @@
 import { Project, IndentationText, ScriptTarget, ScriptKind, LanguageVariant } from "ts-morph";
 import parserTypeScript from "prettier/parser-typescript";
 import prettier from "prettier";
-import { UIFLOWID } from "../components/VisualUiFlows";
 import { experimentalComms } from "../visualUiHooks";
+const UIFLOWID = "flows-ui" //if imported, a circular dependency is created
 
 function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);

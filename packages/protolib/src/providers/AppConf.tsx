@@ -25,17 +25,6 @@ export type SiteConfigType = {
     assistant: boolean,
     projectName: string,
     bundles: {
-        flowsMenu: {
-            getFlowsMenuConfig: (path: string, queryParams: {}) => any,
-        },
-        masks: {
-            getFlowsCustomComponents: (path: string, queryParams: {}) => any[],
-            getFlowMasks: (path: string, queryParams: {}) => any[]
-        },
-        snippets: {
-            getFlowsCustomSnippets: (path: string, queryParams: {}) => any[]
-        },
-        palettes: any,
         workspaces: any
     },
     layout: {
