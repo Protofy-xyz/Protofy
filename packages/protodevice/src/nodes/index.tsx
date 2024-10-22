@@ -4,6 +4,7 @@ import Wifi from './Wifi';
 import Esp32dev from './Esp32dev';
 import Seeed_xiao_esp32s3 from './Seeed_xiao_esp32s3';
 import Esp32s3devkitc1 from './Esp32s3devkitc1';
+//import ProtofyESP32S3devBoard from './ProtofyESP32S3devBoard';
 import Mqtt from './Mqtt';
 import Relay from './Relay';
 import GPIOSwitch from './GPIOSwitch';
@@ -44,6 +45,7 @@ const deviceMasks = [
   Esp32dev,
   Seeed_xiao_esp32s3,
   Esp32s3devkitc1,
+  //ProtofyESP32S3devBoard,
   Mqtt,
   Relay,
   GPIOSwitch,
