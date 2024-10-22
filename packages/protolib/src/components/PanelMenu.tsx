@@ -204,15 +204,10 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                     />
                 </Tinted>
 
-                if (isDev || subtab.previewMode) {
-                    return <a href={href} key={index}>
-                        {content}
-                    </a>
-                } else {
-                    return <Link href={href} key={index}>
-                        {content}
-                    </Link>
-                }
+                return <Link href={href} key={index}>
+                    {content}
+                </Link>
+                
             })}
         </>)
 }
