@@ -3,43 +3,70 @@ import { PORT_TYPES, Node, FlowStoreContext } from 'protoflow';
 import { Handle, Position, useEdges } from "reactflow";
 import { getColor } from ".";
 
-const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId))
+const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId));
 
-const renderHandles = (ports, offsetY, spacing, extraRightOffset, edges, id, topGroupLength) => {
-    const descriptions = ports.map(port => ({
-        name: port.name,
-        type: port.type,
-        description: port.description,
-        maxVoltage: port.maxVoltage,
-        rtc: port.rtc
-    }));
+// Function to calculate positions for all ports and return a new array of ports with positions
+const calculatePortPositions = (ports, offsetYTop, spacingTop, offsetYMiddle, spacingMiddle, offsetYBottom, spacingBottom, extraRightOffset) => {
     return ports.map((port, i) => {
-        const idString = `${id}${PORT_TYPES.data}element-${i + topGroupLength + 2}`;
-        const isLeft = port.side === "left"; // Add side logic from metadata
+        // Determine which group the port belongs to (top, middle, or bottom)
+        const isTopGroup = [44, 43, 47, 21].includes(parseInt(port.name.replace('D', '')));
+        const isMiddleGroup = [5, 4, 42, 48].includes(parseInt(port.name.replace('D', '')));
+        const isLeft = port.side === "left";
+
+        let top;
+        if (isTopGroup) {
+            top = i > ports.length / 2 - 1 
+                ? (spacingTop * (i - ports.length / 2)) + offsetYTop + (isLeft ? 0 : extraRightOffset)
+                : (spacingTop * i) + offsetYTop + (isLeft ? 0 : extraRightOffset);
+        } else if (isMiddleGroup) {
+            top = i > ports.length / 2 - 1 
+                ? (spacingMiddle * (i - ports.length / 2)) + offsetYMiddle + (isLeft ? 0 : extraRightOffset)
+                : (spacingMiddle * i) + offsetYMiddle + (isLeft ? 0 : extraRightOffset);
+        } else {
+            top = i > ports.length / 2 - 1 
+                ? (spacingBottom * (i - ports.length / 2)) + offsetYBottom + (isLeft ? 0 : extraRightOffset)
+                : (spacingBottom * i) + offsetYBottom + (isLeft ? 0 : extraRightOffset);
+        }
+
+        // Return a new port object with the position field added
+        return {
+            ...port,
+            position: {
+                top,
+                side: isLeft ? Position.Left : Position.Right
+            }
+        };
+    });
+};
+
+// Function to render handles based on the calculated port positions
+const renderHandles = (portsWithPositions, edges, id) => {
+    return portsWithPositions.map((port, i) => {
+        const idString = `${id}${PORT_TYPES.data}element-${i + 2}`;
+        const { top, side } = port.position;
 
         return (
             <Handle
-                key={i + topGroupLength} // Ensure key is unique
+                key={i} // Ensure key is unique
                 isConnectable={!isHandleConnected(edges, idString)}
                 isValidConnection={(c) => {
                     const sourceConnected = isHandleConnected(edges, c.sourceHandle);
                     return !sourceConnected;
                 }}
                 type={"target"}
-                title={JSON.stringify(descriptions[i], null, 2)} // Adjust index for description
+                title={JSON.stringify(port, null, 2)} // Use port description for the title
                 style={{
                     position: 'absolute',
-                    top: i > ports.length / 2 - 1
-                        ? (spacing * (i - ports.length / 2)) + offsetY + (isLeft ? 0 : extraRightOffset) + 'px'
-                        : (spacing * i) + offsetY + (isLeft ? 0 : extraRightOffset) + 'px',
+                    top: `${top}px`,
                     width: "15px",
                     height: "15px",
                     backgroundColor: isHandleConnected(edges, idString) ? "#BA68C8" : "white",
-                    marginLeft: isLeft ? '133px' : '0px',
-                    marginRight: isLeft ? '0px' : '133px',
+                    // Use `left` for left-side pins, `right` for right-side pins
+                    left: side === Position.Left ? '130px' : 'auto',
+                    right: side === Position.Right ? '130px' : 'auto',
                     border: isHandleConnected(edges, idString) ? "2px solid #BA68C8" : "2px solid white"
                 }}
-                position={isLeft ? Position.Left : Position.Right}
+                position={side}
                 id={idString}
             />
         );
@@ -53,8 +80,8 @@ const ProtofyESP32S3devBoard = ({ node = {}, nodeData = {}, topics = {}, color }
 
     // Adjusted offsets for top, middle, and bottom groups
     const offsetYTop = 184.5; // Initial Y offset for the top group
-    const offsetYMiddle = 337; // Y offset for the middle group
-    const offsetYBottom = 1022; // Y offset for the bottom group
+    const offsetYMiddle = 282; // Y offset for the middle group
+    const offsetYBottom = 515; // Y offset for the bottom group
 
     // Spacing for each group
     const spacingTop = 26.6; // Spacing for the top group of ports
@@ -68,12 +95,8 @@ const ProtofyESP32S3devBoard = ({ node = {}, nodeData = {}, topics = {}, color }
     const metadata = useFlowsStore(state => state.metadata);
     const ports = metadata.board.ports;
 
-    // Manually define port numbers based on your new groupings
-    const topPorts = ports.filter(port => [44, 43, 47, 21].includes(parseInt(port.name.replace('D', ''))));
-    const middlePorts = ports.filter(port => [5, 4, 42, 48].includes(parseInt(port.name.replace('D', ''))));
-    const bottomPorts = ports.filter(port => ![44, 43, 47, 21, 5, 4, 42, 48].includes(parseInt(port.name.replace('D', ''))));
-
-
+    // Calculate positions for all ports and return a new array of ports with positions
+    const portsWithPositions = calculatePortPositions(ports, offsetYTop, spacingTop, offsetYMiddle, spacingMiddle, offsetYBottom, spacingBottom, extraRightOffset);
 
     const devicePositioning = Array(ports.length).fill(1).map((x, i) => {
         return `${i + 2}-${i > ports.length / 2 - 1 ? 'l' : 'r'}-${i}`;
@@ -89,15 +112,8 @@ const ProtofyESP32S3devBoard = ({ node = {}, nodeData = {}, topics = {}, color }
                 <img src={'/images/device/ProtofyESP32S3devBoard.png'} style={{ width: "100%" }} />
             </div>
 
-            {/* Render top group of ports */}
-            {renderHandles(topPorts, offsetYTop, spacingTop, extraRightOffset, edges, id, 0)}
-
-            {/* Render middle group of ports */}
-            {renderHandles(middlePorts, offsetYMiddle, spacingMiddle, extraRightOffset, edges, id, topPorts.length)}
-
-            {/* Render bottom group of ports */}
-            {renderHandles(bottomPorts, offsetYBottom, spacingBottom, extraRightOffset, edges, id, topPorts.length + middlePorts.length)}
-
+            {/* Render handles directly from the new portsWithPositions array */}
+            {renderHandles(portsWithPositions, edges, id)}
         </Node>
     );
 };
