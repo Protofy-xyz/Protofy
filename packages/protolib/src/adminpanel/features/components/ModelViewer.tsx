@@ -1,4 +1,4 @@
-import { Canvas } from '@react-three/fiber'
+/*import { Canvas } from '@react-three/fiber'
 import { useGLTF, Environment, OrbitControls } from '@react-three/drei'
 
 function Model({ url, ...props }) {
@@ -15,4 +15,7 @@ export default function GLTFViewer({ path }) {
       <OrbitControls />
     </Canvas>
   )
+}*/
+export default () => {
+  return <div>The 3d Model Viewer is disabled, go to ModelViewer.tsx to enable it.</div>
 }
