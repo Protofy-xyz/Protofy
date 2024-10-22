@@ -5,36 +5,6 @@ import { getColor } from ".";
 
 const isHandleConnected = (edges, handleId) => edges.find(e => (e.targetHandle == handleId || e.sourceHandle == handleId))
 
-const ports = [
-    { "number": 1, "side": "left", "name": "44", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": false },
-    { "number": 2, "side": "left", "name": "7", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": true },
-    { "number": 3, "side": "left", "name": "8", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": true },
-    { "number": 4, "side": "left", "name": "9", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": true },
-    { "number": 5, "side": "left", "name": "3V3", "type": "P", "analog": false, "description": "3V3 Power supply", "maxVoltage": 3.3, "rtc": true },
-    { "number": 6, "side": "left", "name": "GND", "type": "G", "analog": false, "description": "Ground", "maxVoltage": 0, "rtc": false },
-    { "number": 7, "side": "left", "name": "VUSB", "type": "P", "analog": false, "description": "USB Voltage", "maxVoltage": 5.0, "rtc": false },
-
-    { "number": 1, "side": "right", "name": "43", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": false },
-    { "number": 2, "side": "right", "name": "6", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": true },
-    { "number": 3, "side": "right", "name": "5", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": true },
-    { "number": 4, "side": "right", "name": "4", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": true },
-    { "number": 5, "side": "right", "name": "3", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": false },
-    { "number": 6, "side": "right", "name": "2", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": true },
-    { "number": 7, "side": "right", "name": "1", "type": "IO", "analog": true, "description": "", "maxVoltage": 3.3, "rtc": true }
-]
-
-//remove number, side, descriptyion from ports
-
-const portsDescriptions = ports.map(port => {
-    return {
-        name: port.name,
-        type: port.type,
-        description: port.description,
-        maxVoltage: port.maxVoltage,
-        rtc: port.rtc
-    }
-})
-
 const Seeed_xiao_esp32s3 = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
     const { id, type } = node
     const useFlowsStore = useContext(FlowStoreContext)
@@ -42,6 +12,17 @@ const Seeed_xiao_esp32s3 = ({ node = {}, nodeData = {}, topics = {}, color }: an
     const offsetY = 99 //This value is for setting the initial point where the available pins start to draw
     const spacing = 30.4
     const edges = useEdges();
+    const metadata = useFlowsStore(state => state.metadata)
+    const ports = metadata.board.ports
+    const portsDescriptions = ports.map(port => {
+        return {
+            name: port.name,
+            type: port.type,
+            description: port.description,
+            maxVoltage: port.maxVoltage,
+            rtc: port.rtc
+        }
+    })
 
     const devicePositioning = Array(ports.length).fill(1).map((x, i) => {
         if (true) {
