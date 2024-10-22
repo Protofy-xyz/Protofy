@@ -43,6 +43,8 @@ export default {
     const {getFlowsCustomComponents, getFlowMasks} = SiteConfig.bundles.masks
     const { getFlowsCustomSnippets } = SiteConfig.bundles.snippets
     const { getFlowsMenuConfig } = SiteConfig.bundles.flowsMenu
+    const [selectedBoard, setSelectedBoard] = useState(null)
+    const [selectedSdk, setSelectedSdk] = useState(null)
 
     const query = Object.fromEntries(searchParams.entries());
 
@@ -111,6 +113,7 @@ export default {
             // store={uiStore}
             display={true}
             flowId={"flows-editor"}
+            metadata={{board: selectedBoard, sdk: selectedSdk}}
           />
         </XStack>
       </AlertDialog>
@@ -129,6 +132,8 @@ export default {
         onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
         columns={DataTable2.columns(
           DataTable2.column("", () => "", false, (row) => <InteractiveIcon onPress={async (e) => {
+            setSelectedBoard(row.board)
+            setSelectedSdk(row.sdk)
             setShowDialog(true)
             setSourceCode(row.config.components)
           }} Icon={Eye}></InteractiveIcon>, true, '50px'),
@@ -159,6 +164,8 @@ export default {
               return <Button
                 style={{ width: "100%" }}
                 onPress={(e) => {
+                  setSelectedBoard(originalData.board)
+                  setSelectedSdk(originalData.sdk)
                   setShowDialog(true)
                   if (mode == "add") {
                     const esphomeBoardName = originalData.board.config[originalData.sdk].esp32.board
@@ -172,7 +179,6 @@ export default {
                       setSourceCode(generatedComponents.components)
                     }
                   } else {
-                    console.log("OTHER mode: ", data.components)
                     setSourceCode(data.components)
                   }
                   setEditedObjectData({ path, data, setData, mode })
