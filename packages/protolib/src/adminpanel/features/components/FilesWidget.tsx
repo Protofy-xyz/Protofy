@@ -3,13 +3,6 @@ import { getIntent, useIntent } from '../../../lib/Intent'
 import { H4, Stack, XStack, YStack, YStackProps } from '@my/ui'
 import React from 'react'
 import { lookup } from 'mrmime';
-import { ChonkyActions } from 'chonky';
-import { setChonkyDefaults } from 'chonky';
-import { ChonkyIconFA } from 'chonky-icon-fontawesome';
-
-setChonkyDefaults({ iconComponent: ChonkyIconFA });
-//@ts-ignore
-ChonkyActions.ToggleHiddenFiles.option.defaultValue = false;
 
 type FilesWidget = {
     hideCloseIcon: boolean,
