@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./js",
     "outDir": "./dist",
@@ -16,6 +15,10 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "*/**.ts",
+    "js/**.ts",
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }
