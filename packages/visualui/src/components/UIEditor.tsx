@@ -1,4 +1,3 @@
-import { NodeTypes } from 'protoflow'; //prevent circular dependency
 import { memo, useEffect, useState, useRef,useContext } from "react";
 import { useSearchParams, usePathname } from 'solito/navigation';
 import { Editor } from "@protocraft/core";

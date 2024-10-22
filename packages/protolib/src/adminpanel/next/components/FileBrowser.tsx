@@ -13,6 +13,7 @@ import FileActions from '../../../bundles/files/fileActions';
 import { getLogger, API, getPendingResult } from "protobase"
 import { usePendingEffect } from '../../../lib/usePendingEffect';
 import { usePrompt } from '../../../context/PromptAtom';
+import "next/dynamic"
 
 const logger = getLogger()
 

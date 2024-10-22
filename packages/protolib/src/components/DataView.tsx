@@ -27,7 +27,7 @@ import dynamic from 'next/dynamic'
 
 const FileWidget = dynamic<any>(() =>
     import('../adminpanel/features/components/FilesWidget').then(module => module.FileWidget),
-    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+    {loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
 );
 
 //uncomment to enable datasheet view (excel like)
