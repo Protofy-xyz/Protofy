@@ -30,10 +30,11 @@ const FileWidget = dynamic<any>(() =>
     { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
 );
 
-const DataSheet = dynamic<any>(() =>
-    import('./DataSheet').then(module => module.DataSheet),
-    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
-);
+//uncomment to enable datasheet view (excel like)
+// const DataSheet = dynamic<any>(() =>
+//     import('./DataSheet').then(module => module.DataSheet),
+//     { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+// );
 
 const DataTableList = dynamic<any>(() =>
     import('./DataTableList').then(module => module.DataTableList),
@@ -300,24 +301,25 @@ const DataViewInternal = forwardRef(({
                 ...dataTableListProps
             }
         },
-        {
-            name: 'sheet',
-            icon: Sheet,
-            component: DataSheet,
-            props: {
-                model,
-                items: items?.data?.items,
-                sourceUrl,
-                name,
-                mt: "$2",
-                mx: "$4",
-                disableItemSelection,
-                lineSelect: true,
-                fillWidth: true,
-                onRowSelect: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
-                ...dataTableSheetProps
-            }
-        },
+        //uncomment to enable datasheet view (excel like)
+        // {
+        //     name: 'sheet',
+        //     icon: Sheet,
+        //     component: DataSheet,
+        //     props: {
+        //         model,
+        //         items: items?.data?.items,
+        //         sourceUrl,
+        //         name,
+        //         mt: "$2",
+        //         mx: "$4",
+        //         disableItemSelection,
+        //         lineSelect: true,
+        //         fillWidth: true,
+        //         onRowSelect: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
+        //         ...dataTableSheetProps
+        //     }
+        // },
         {
             name: 'grid',
             icon: LayoutGrid,
