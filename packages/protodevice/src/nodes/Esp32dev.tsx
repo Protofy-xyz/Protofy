@@ -14,6 +14,15 @@ const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
     const spacing = 27.8
     const edges = useEdges();
     const ports = metadata.board.ports
+    const portsDescriptions = ports.map(port => {
+        return {
+            name: port.name,
+            type: port.type,
+            description: port.description,
+            maxVoltage: port.maxVoltage,
+            rtc: port.rtc
+        }
+    })
 
     const devicePositioning = Array(ports.length).fill(1).map((x, i) => {
         if (true) {
@@ -39,6 +48,7 @@ const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
                             return !sourceConnected
                         }}
                         type={"target"}
+                        title={JSON.stringify(portsDescriptions[i], null, 2)}
                         style={{
                             position: 'absolute',
                             top: i > ports.length/2-1 ? (spacing * (i - ports.length/2)) + (offsetY) + 'px' : (spacing * i) + offsetY + 'px',
