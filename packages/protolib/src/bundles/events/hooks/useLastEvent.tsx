@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useEventEffect } from "./useEventEffect"
+import { useFullEventEffect } from "./useFullEventEffect"
 
 export const useLastEvent = (eventFilter?: { path?: string, from?: string, user?: string }) => {
     const [value, setValue] = useState()
@@ -10,8 +10,8 @@ export const useLastEvent = (eventFilter?: { path?: string, from?: string, user?
             setValue(value)
         } catch (e) { }
     }
-
-    useEventEffect(onChange, eventFilter, true)
-
+    
+    useFullEventEffect(onChange, eventFilter, true)
+    
     return value
 }
