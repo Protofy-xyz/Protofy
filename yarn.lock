@@ -25410,18 +25410,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"nextra-compiled@workspace:apps/nextra-compiled":
-  version: 0.0.0-use.local
-  resolution: "nextra-compiled@workspace:apps/nextra-compiled"
-  dependencies:
-    next: "npm:^14.2.3"
-    nextra: "npm:^2.13.3"
-    nextra-theme-docs: "npm:^2.13.3"
-    pm2: "npm:^5.3.0"
-    shx: "npm:^0.3.4"
-  languageName: unknown
-  linkType: soft
-
 "nextra-theme-docs@npm:^2.13.3":
   version: 2.13.4
   resolution: "nextra-theme-docs@npm:2.13.4"

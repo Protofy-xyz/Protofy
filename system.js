@@ -48,18 +48,8 @@ const config = {
             "disabled": true,
             "description": "Development mode of the documentation service, providing the documentation based on nextra",
             "route": (req, mode) => {
-                if (mode == 'development' && (req.url.startsWith('/documentation/') || req.url == '/documentation')) {
-                    return process.env.DOCS_SITE_URL ?? 'http://localhost:7600'
-                }
-            }
-        },
-        {
-            "name": "nextra-compiled",
-            "disabled": true,
-            "description": "Documentation service, providing the documentation based on nextra",
-            "route": (req, mode) => {
-                if (mode == 'production' && (req.url.startsWith('/documentation/') || req.url == '/documentation')) {
-                    return process.env.DOCS_SITE_URL ?? 'http://localhost:7700'
+                if (req.url.startsWith('/documentation/') || req.url == '/documentation') {
+                    return process.env.DOCS_SITE_URL ?? 'http://localhost:'+ (mode == 'production' ? 7700 : 7600)
                 }
             }
         },
@@ -95,7 +85,7 @@ const config = {
             "description": "Proxy services",
             "disabled": false,
             "route": () => false
-        },
+        }
     ],
 
     "alwaysCompiledPaths": [
