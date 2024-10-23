@@ -38,6 +38,8 @@ export class ProtoMqttAgent {
             this.client.on('connect', () => {
                 register(this.client.publish.bind(this.client), this.name, this.subsystems)
                 this.__consumerCallbacksChecker("connect")
+                // Register the message handler
+                this.__onMessage();
             });
 
             return this
@@ -92,8 +94,6 @@ export class ProtoMqttAgent {
             }
         });
 
-        // Register the message handler
-        this.__onMessage();
         console.log(`Handler assigned for action '${actionName}' in subsystem '${subsystemName}'`);
     }
 
