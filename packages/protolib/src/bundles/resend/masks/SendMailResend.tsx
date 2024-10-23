@@ -1,6 +1,8 @@
-import { Node, NodeParams, getFieldValue, Button } from 'protoflow';
+import { Node, NodeParams, getFieldValue } from 'protoflow';
 import { Mail } from '@tamagui/lucide-icons';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
+import NodeText from 'protoflow/src/diagram/NodeText';
+import {Link} from 'protolib/src/components/Link';
 // import { sendMailWithResend } from 'protonode';
 
 const SendMailResend = (node: any = {}, nodeData = {}) => {
@@ -23,6 +25,10 @@ const SendMailResend = (node: any = {}, nodeData = {}) => {
                     }} />
                     : null
             } */}
+            <NodeText
+                style={{ width: 'fit-content', height: 'fit-content', marginBottom: '15px' }}
+            ><Link href="keys">Generate a MAIL_RESEND_TOKEN key</Link>.
+            </NodeText>
         </Node>
     )
 }
