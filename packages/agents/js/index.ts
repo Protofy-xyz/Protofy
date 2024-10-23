@@ -18,7 +18,7 @@ export class ProtoMqttAgent {
         this.subsystemsHandlers = {};
     }
 
-    on(key: "connect" | "error", cb: Function) {
+    on(key: "connect" | "error" | "monitor_pub", cb: Function) {
         this.listeners[key] = cb
     }
 
@@ -48,14 +48,22 @@ export class ProtoMqttAgent {
         return null
     }
 
-    // pubMonitor(subsystemName, monitorName, value) {
-    //     pubMonitor(this.client.publish.bind(this.client), this.name, subsystemName, monitorName, value).then(() => {
-    //         console.log(`Published monitor value ${value} to subsystem ${subsystemName}`);
-    //     });
+    pubMonitor(subsystemName, monitorName, value) {
+        const subsystem = this.subsystems.find(s => s.name === subsystemName);
+        if (!subsystem) {
+            throw new Error(`Subsystem '${subsystemName}' not found.`);
+        }
 
-    //     // Consumer defined callback
-    //     this.__consumerCallbacksChecker('on_monitor_pub', value);
-    // }
+        const action = subsystem.monitors.find(a => a.name === monitorName);
+        if (!action) {
+            throw new Error(`Action '${monitorName}' not found in subsystem '${subsystemName}'.`);
+        }
+
+        pubMonitor(this.client.publish.bind(this.client), this.name, subsystemName, monitorName, value)
+
+        // Consumer defined callback
+        this.__consumerCallbacksChecker('monitor_pub', value);
+    }
 
     // handle(subsystemName, actionName, handler) {
     //     const subsystem = this.subsystems.find(s => s.name === subsystemName);
