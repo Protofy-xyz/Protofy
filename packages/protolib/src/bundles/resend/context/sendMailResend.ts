@@ -1,13 +1,35 @@
 import { Resend } from 'resend';
 import { getLogger } from 'protobase';
 
+import { getServiceToken } from '../../apis/context';
+import { getKey } from "../../keys/context";
+
+
+
 const logger = getLogger()
 
 export const sendMailWithResend = async (from, to, subject, html) => {
     // 'html' can be content or an html string
-    const RESEND_TOKEN = process.env.MAIL_RESEND_TOKEN
+
+    var RESEND_TOKEN : string;
+
+    try {
+        RESEND_TOKEN = await getKey({
+            key: "MAIL_RESEND_TOKEN",
+            token: getServiceToken()
+        });
+    
+    } catch (err) {
+        logger.info(err, "There was an error getting RESEND_TOKEN key.")
+    }
+
     if (!RESEND_TOKEN) {
-        logger.error("Resend Api key is not provided at env 'MAIL_RESEND_TOKEN'")
+        logger.warn("MAIL_RESEND_TOKEN not found in keys. Trying to find it in .env file. This will be deprecated soon.")
+        RESEND_TOKEN = process.env.MAIL_RESEND_TOKEN;
+    }
+
+    if (!RESEND_TOKEN) {
+        logger.error("Resend Api key is not provided at keys 'MAIL_RESEND_TOKEN'")
         return
     }
     const resend = new Resend(RESEND_TOKEN);
