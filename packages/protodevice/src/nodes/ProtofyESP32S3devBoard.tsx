@@ -44,6 +44,13 @@ const renderHandles = (portsWithPositions, edges, id) => {
     return portsWithPositions.map((port, i) => {
         const idString = `${id}${PORT_TYPES.data}element-${i + 2}`;
         const { top, side } = port.position;
+        const description = {
+            name: port.name,
+            type: port.type,
+            description: port.description,
+            maxVoltage: port.maxVoltage,
+            rtc: port.rtc
+        };
 
         return (
             <Handle
@@ -54,7 +61,7 @@ const renderHandles = (portsWithPositions, edges, id) => {
                     return !sourceConnected;
                 }}
                 type={"target"}
-                title={JSON.stringify(port, null, 2)} // Use port description for the title
+                title={JSON.stringify(description, null, 2)} // Use port description for the title
                 style={{
                     position: 'absolute',
                     top: `${top}px`,
