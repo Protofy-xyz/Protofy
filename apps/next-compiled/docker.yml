@@ -1,5 +1,0 @@
-version: '3.8'
-
-services:
-  next-compiled:
-    container_name: 'next-compiled'

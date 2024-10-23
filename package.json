@@ -7,7 +7,6 @@
     "apps/api",
     "apps/expo",
     "apps/next",
-    "apps/next-compiled",
     "apps/nextra",
     "apps/nextra-compiled",
     "apps/jupyter",

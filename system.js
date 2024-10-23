@@ -86,16 +86,9 @@ const config = {
             "route": () => false
         },
         {
-            "name": "next-dev",
-            "dirname": "next",
-            "description": "Development mode of the frontend service, providing the web user interface based on nextjs",
-            "route": (req, mode) => mode === 'development' ? (process.env.SITE_URL ?? 'http://localhost:3000') : undefined
-        },
-        {
             "name": "next",
-            "dirname": "next-compiled",
             "description": "Frontend services, providing the web user interface based on nextjs",
-            "route": (req, mode) => mode === 'production' ? (process.env.SITE_URL ?? 'http://localhost:4000') : undefined
+            "route": (req, mode) => process.env.SITE_URL ?? 'http://localhost:' + (mode == 'production' ? 4000 : 3000)
         },
         {
             "name": "proxy",

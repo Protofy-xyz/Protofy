@@ -39,6 +39,7 @@ const plugins = [
 module.exports = function () {
   /** @type {import('next').NextConfig} */
   let config = {
+    output: 'standalone',
     typescript: {
       ignoreBuildErrors: true,
     },
@@ -57,6 +58,7 @@ module.exports = function () {
     ],
     experimental: {
       scrollRestoration: true,
+      outputFileTracingRoot: join(__dirname, '../../'),
     },
     webpack: (config, options) => {
       config.plugins.push(
