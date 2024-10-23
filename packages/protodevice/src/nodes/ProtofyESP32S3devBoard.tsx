@@ -44,6 +44,13 @@ const renderHandles = (portsWithPositions, edges, id) => {
     return portsWithPositions.map((port, i) => {
         const idString = `${id}${PORT_TYPES.data}element-${i + 2}`;
         const { top, side } = port.position;
+        const description = {
+            name: port.name,
+            type: port.type,
+            description: port.description,
+            maxVoltage: port.maxVoltage,
+            rtc: port.rtc
+        };
 
         return (
             <Handle
@@ -54,16 +61,16 @@ const renderHandles = (portsWithPositions, edges, id) => {
                     return !sourceConnected;
                 }}
                 type={"target"}
-                title={JSON.stringify(port, null, 2)} // Use port description for the title
+                title={JSON.stringify(description, null, 2)} // Use port description for the title
                 style={{
                     position: 'absolute',
                     top: `${top}px`,
-                    width: "15px",
-                    height: "15px",
+                    width: "25px",
+                    height: "25px",
                     backgroundColor: isHandleConnected(edges, idString) ? "#BA68C8" : "white",
                     // Use `left` for left-side pins, `right` for right-side pins
-                    left: side === Position.Left ? '130px' : 'auto',
-                    right: side === Position.Right ? '130px' : 'auto',
+                    left: side === Position.Left ? '10px' : 'auto',
+                    right: side === Position.Right ? '10px' : 'auto',
                     border: isHandleConnected(edges, idString) ? "2px solid #BA68C8" : "2px solid white"
                 }}
                 position={side}
@@ -79,17 +86,17 @@ const ProtofyESP32S3devBoard = ({ node = {}, nodeData = {}, topics = {}, color }
     const setNodeData = useFlowsStore(state => state.setNodeData);
 
     // Adjusted offsets for top, middle, and bottom groups
-    const offsetYTop = 184.5; // Initial Y offset for the top group
-    const offsetYMiddle = 282; // Y offset for the middle group
-    const offsetYBottom = 515; // Y offset for the bottom group
+    const offsetYTop = 210.5; // Initial Y offset for the top group
+    const offsetYMiddle = 258; // Y offset for the middle group
+    const offsetYBottom = 552; // Y offset for the bottom group
 
     // Spacing for each group
-    const spacingTop = 26.6; // Spacing for the top group of ports
-    const spacingMiddle = 26.6; // Spacing for the middle group
-    const spacingBottom = 126.3; // Spacing for the bottom group
+    const spacingTop = 49; // Spacing for the top group of ports
+    const spacingMiddle = 49; // Spacing for the middle group
+    const spacingBottom = 128; // Spacing for the bottom group
 
     // Extra offset for the right-side ports
-    const extraRightOffset = 75.2; // Add this value to shift the right side
+    const extraRightOffset = 0; // Add this value to shift the right side
 
     const edges = useEdges();
     const metadata = useFlowsStore(state => state.metadata);
