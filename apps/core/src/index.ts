@@ -33,7 +33,7 @@ require('events').EventEmitter.defaultMaxListeners = 100;
 import http from 'http';
 
 import chokidar from 'chokidar';
-import BundleContext from 'app/bundles/adminApiContext'
+import BundleContext from 'app/bundles/coreApiContext'
 //@ts-ignore
 import { generateEvent } from 'app/bundles/library'
 import { startMqtt } from './mqtt';
@@ -73,7 +73,7 @@ const topicPub = (mqtt, topic, data) => {
 }
 
 try {
-  import('app/bundles/adminapi').then((BundleAPI) => {
+  import('app/bundles/coreApis').then((BundleAPI) => {
     BundleAPI.default(app, { mqtt: devMqtt, mqtts: { prod: prodMqtt, dev: devMqtt }, topicSub, topicPub, ...BundleContext })
   })
 
@@ -100,7 +100,8 @@ if (isFullDev) {
     'src/**',
     '../../packages/app/conf.ts',
     '../../packages/protolib/dist/**',
-    '../../packages/app/bundles/adminapi.tsx',
+    '../../packages/app/bundles/coreApis.ts',
+    '../../packages/app/bundles/coreApiContext.ts',
     '../../system.js',
     '../../packages/protonode/dist/**',
     '../../packages/protobase/dist/**',

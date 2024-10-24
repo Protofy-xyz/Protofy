@@ -70,8 +70,8 @@ export const PromptAtom = atom<PromptContext[]>([{
         The workspace definitions in packages/app/bundles/custom are wired into the apps and made effective/activated by adding them to the central file packages/app/bundles/workspaces.tsx. 
         Similar central bundle files are used to aggregate elements from different bundles in different places, into the system:
 
-        - packages/app/bundles/adminapi.tsx to add administrative api endpoints at apps/core (with preffix /adminapi/v1 in reverse proxy)
-        - packages/app/bundles/adminApiContext.ts to add variables that will be context-accessible from administrative apis, so administrative apis don't need to use import
+        - packages/app/bundles/coreApis.tsx to add core api endpoints at apps/core (with preffix /adminapi/v1 in reverse proxy)
+        - packages/app/bundles/CoreApiContext.ts to add variables that will be context-accessible from core apis, so core apis don't need to use import
         - packages/app/bundles/apiContext.ts to add variables that will be context-accessible from apis, so apis don't need to use import
         - packages/app/bundles/flows.ts to configure the lowcode visual nodes editor for javascript and typescript (protoflow) menus
         - packages/app/bundles/library.ts to add functions accesible through and part of the system without directly importing the function from its location (only used by events bundle, providing generateEvent function through this bundle port)
