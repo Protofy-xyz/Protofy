@@ -26,7 +26,7 @@ const monitorPackages = () => {
     watcher.on('change', async (path) => {
       const pkg = path.substring(root.length).split(nodePath.sep)[1]
       console.log(`File ${pkg} has been changed.`);
-      API.get('/adminapi/v1/packages/' + pkg + "/build?token=" + getServiceToken())
+      API.get('/api/core/v1/packages/' + pkg + "/build?token=" + getServiceToken())
 
     });
   }
@@ -88,7 +88,7 @@ const getDB = (path, req, session) => {
 const packageAutoAPI = AutoAPI({
   modelName: 'packages',
   modelType: PackageModel,
-  prefix: '/adminapi/v1/',
+  prefix: '/api/core/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*'],
@@ -99,7 +99,7 @@ const packageAutoAPI = AutoAPI({
 export const PackagesAPI = (app, context) => {
   packageAutoAPI(app, context)
   monitorPackages()
-  app.get('/adminapi/v1/packages/:pkg/build', handler(async (req, res, session) => {
+  app.get('/api/core/v1/packages/:pkg/build', handler(async (req, res, session) => {
     if (!session || !session.user.admin) {
       res.status(401).send({ error: "Unauthorized" });
       return;

@@ -28,9 +28,9 @@ const DeviceDefitionIcons = {
   board: CircuitBoard
 }
 
-const sourceUrl = '/adminapi/v1/devicedefinitions'
-const boardsSourceUrl = '/adminapi/v1/deviceboards'
-const coresSourceUrl = '/adminapi/v1/devicecores?all=1'
+const sourceUrl = '/api/core/v1/devicedefinitions'
+const boardsSourceUrl = '/api/core/v1/deviceboards'
+const coresSourceUrl = '/api/core/v1/devicecores?all=1'
 
 export default {
   component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData }: any) => {

@@ -22,8 +22,8 @@ import { SiteConfig } from '@my/config/dist/AppConfig'
 import { PaginatedData } from '../../lib/SSR'
 
 const PageIcons = {}
-const sourceUrl = '/adminapi/v1/pages'
-const objectsSourceUrl = '/adminapi/v1/objects?all=1'
+const sourceUrl = '/api/core/v1/pages'
+const objectsSourceUrl = '/api/core/v1/objects?all=1'
 
 const SelectGrid = ({ children }) => {
     return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>

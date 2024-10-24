@@ -8,7 +8,7 @@ export const EventsAPI = async (app, context) => {
     const EventAPI = AutoAPI({
         modelName: 'events',
         modelType: EventModel,
-        prefix: '/adminapi/v1/',
+        prefix: '/api/core/v1/',
         skipStorage: async(data,session?,req?) => {
             if(data.ephemeral){
                 return true

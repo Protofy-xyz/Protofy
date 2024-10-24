@@ -43,7 +43,7 @@ export const PromptAtom = atom<PromptContext[]>([{
         
         There is an automatic api system to create list, create, read, update, delete Rest apis wrapping an 'object'. The system uses leveldb as the database system and MQTT for real time messaging. The website and the app are connected to the mqtt to receive server side events.
         
-        There is a reverse proxy on port 8080, with all the needed routing configured to proxy requests to /api to :4001, /adminapi to :3002 and all other router to :4000  (nextjs).
+        There is a reverse proxy on port 8080, with all the needed routing configured to proxy requests to /api to :4001, /api/core to :3002 and all other router to :4000  (nextjs).
         There is also a port 8000 with a webserver, routing the requests to the same services, but on development mode.
         
         The mqtt server is based on aedes and running in apps/core, providing a mqtt server for the stack.
@@ -70,7 +70,7 @@ export const PromptAtom = atom<PromptContext[]>([{
         The workspace definitions in packages/app/bundles/custom are wired into the apps and made effective/activated by adding them to the central file packages/app/bundles/workspaces.tsx. 
         Similar central bundle files are used to aggregate elements from different bundles in different places, into the system:
 
-        - packages/app/bundles/coreApis.tsx to add core api endpoints at apps/core (with preffix /adminapi/v1 in reverse proxy)
+        - packages/app/bundles/coreApis.tsx to add core api endpoints at apps/core (with preffix /api/core/v1 in reverse proxy)
         - packages/app/bundles/CoreApiContext.ts to add variables that will be context-accessible from core apis, so core apis don't need to use import
         - packages/app/bundles/apiContext.ts to add variables that will be context-accessible from apis, so apis don't need to use import
         - packages/app/bundles/flows.ts to configure the lowcode visual nodes editor for javascript and typescript (protoflow) menus

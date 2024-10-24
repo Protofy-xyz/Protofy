@@ -22,7 +22,7 @@ const Monitor = ({ deviceName, monitorData, subsystem }) => {
 
     const onToggleEphemeral = (checked) => {
         setEphemeral(checked)
-        fetch("/adminapi/v1/devices/" + deviceName + "/subsystems/" + subsystem.name + "/monitors/" + monitor.data.name + "/ephemeral", {
+        fetch("/api/core/v1/devices/" + deviceName + "/subsystems/" + subsystem.name + "/monitors/" + monitor.data.name + "/ephemeral", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

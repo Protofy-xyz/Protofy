@@ -88,7 +88,7 @@ export const getDatabases = async (env?) => {
 const EventAPI = AutoAPI({
   modelName: 'databases',
   modelType: DatabaseModel,
-  prefix: '/adminapi/v1/',
+  prefix: '/api/core/v1/',
   dbName: '',
   requiresAdmin: ['*'],
   connectDB: () => new Promise(resolve => resolve(null)),
@@ -102,7 +102,7 @@ const EventAPI = AutoAPI({
 export const DatabasesAPI = (app, context) => {
   EventAPI(app, context) //register basic crud
 
-  app.post('/adminapi/v1/backup/databases', handler(async (req, res, session) => {
+  app.post('/api/core/v1/backup/databases', handler(async (req, res, session) => {
     let ids = req.body
     if (!session || !session.user.admin) {
       res.status(401).send({ error: "Unauthorized" })

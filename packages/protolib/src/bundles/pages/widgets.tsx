@@ -5,7 +5,7 @@ export const ListPages = ({ title, id }) => (
     <ListItems
         title={title}
         id={id}
-        fetchFunc='/adminapi/v1/pages'
+        fetchFunc='/api/core/v1/pages'
         model={PageModel}
         displayFields={[
             { label: "name", field: "name" },

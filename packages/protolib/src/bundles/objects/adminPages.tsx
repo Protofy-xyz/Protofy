@@ -16,7 +16,7 @@ const format = 'YYYY-MM-DD HH:mm:ss'
 const ObjectIcons = {}
 const rowsPerPage = 20
 
-const sourceUrl = '/adminapi/v1/objects'
+const sourceUrl = '/api/core/v1/objects'
 
 export default {
     'objects': {

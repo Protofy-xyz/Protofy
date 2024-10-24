@@ -12,8 +12,8 @@ import { useState } from 'react';
 
 const DeviceBoardIcons = { name: Tag, core: Layers }
 
-const sourceUrl = '/adminapi/v1/deviceboards'
-const coresSourceUrl = '/adminapi/v1/devicecores?all=1'
+const sourceUrl = '/api/core/v1/deviceboards'
+const coresSourceUrl = '/api/core/v1/devicecores?all=1'
 
 export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {

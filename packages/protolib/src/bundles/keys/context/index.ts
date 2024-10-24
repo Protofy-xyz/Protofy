@@ -9,7 +9,7 @@ export const getKey = async ({ key = '', done = (key) => {}, error = (err) => {}
         return
     }
 
-    var urlEnch = '/adminapi/v1/keys/' + key
+    var urlEnch = '/api/core/v1/keys/' + key
 
     if (token) {
         urlEnch = urlEnch + "?token=" + token

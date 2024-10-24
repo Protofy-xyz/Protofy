@@ -16,7 +16,7 @@ import { SSR } from '../../lib/SSR'
 import { withSession } from '../../lib/Session'
 
 const DatabaseIcons = {}
-const databasesSourceUrl = '/adminapi/v1/databases'
+const databasesSourceUrl = '/api/core/v1/databases'
 
 const generateBackup = async (element) => {
     let ids = []
@@ -29,7 +29,7 @@ const generateBackup = async (element) => {
     } else {
         throw new Error("Invalid input for extractIds");
     }
-    await API.post('/adminapi/v1/backup/databases', ids)
+    await API.post('/api/core/v1/backup/databases', ids)
 }
 
 export default {
@@ -149,14 +149,14 @@ export default {
             env = env == 'system' ? undefined : workspaceEnv
 
             const fetch = async () => {
-                setContent(await API.fetch('/adminapi/v1/databases/' + currentDB + (env ? '?env=' + env : '')))
+                setContent(await API.fetch('/api/core/v1/databases/' + currentDB + (env ? '?env=' + env : '')))
             }
             const onDelete = async (key, isTemplate) => {
                 if (isTemplate) {
                     setTmpItem(null)
                     content.data.shift()
                 } else {
-                    const result = await API.get('/adminapi/v1/databases/' + currentDB + '/' + key + '/delete' + (env ? '?env=' + env : ''))
+                    const result = await API.get('/api/core/v1/databases/' + currentDB + '/' + key + '/delete' + (env ? '?env=' + env : ''))
                     if (result?.isLoaded && result.data.result == 'deleted') {
                         await fetch()
                         setRenew(renew + 1)
@@ -174,7 +174,7 @@ export default {
                 setNewKey("")
             }
             const onSave = async (newContent, key) => {
-                const result = await API.post('/adminapi/v1/databases/' + currentDB + '/' + key + (env ? '?env=' + env : ''), newContent)
+                const result = await API.post('/api/core/v1/databases/' + currentDB + '/' + key + (env ? '?env=' + env : ''), newContent)
                 if (result?.isLoaded) {
                     await fetch()
                     setRenew(renew + 1)
@@ -187,7 +187,7 @@ export default {
             return (<AdminPage title={currentDB} workspace={workspace} pageSession={pageSession}>
                 {pathname ? <DataView
                     key={renew}
-                    sourceUrl={'/adminapi/v1/databases/' + currentDB + (env ? '?env=' + env : '')}
+                    sourceUrl={'/api/core/v1/databases/' + currentDB + (env ? '?env=' + env : '')}
                     initialItems={content}
                     numColumnsForm={1}
                     name={currentDB}

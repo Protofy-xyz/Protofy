@@ -9,7 +9,7 @@ import { ExternalLink, Link } from '@tamagui/lucide-icons'
 import { PaginatedData } from '../../lib/SSR'
 
 const ResourceIcons = {}
-const sourceUrl = '/adminapi/v1/resources'
+const sourceUrl = '/api/core/v1/resources'
 export default {
     'resources': {
         component: ({ pageState, initialItems, pageSession }: any) => {
@@ -36,6 +36,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedData('/adminapi/v1/resources', ['admin'])
+        getServerSideProps: PaginatedData('/api/core/v1/resources', ['admin'])
     }
 }

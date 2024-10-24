@@ -9,7 +9,7 @@ const objectDelete = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(1)
 
     const getObjects = async () => {
-        const { data } = await API.get('/adminapi/v1/objects?all=1')
+        const { data } = await API.get('/api/core/v1/objects?all=1')
         setObjects(data?.items.map((item: any) => item.name));
     }
 

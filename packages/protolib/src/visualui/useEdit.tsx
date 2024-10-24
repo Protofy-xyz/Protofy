@@ -87,11 +87,11 @@ const VisualUILoader = ({ userComponents, path, metadata, visualUiContext }: { u
     writeFileContent(content)
   }
   const getFileContent = () => {
-    const url = ('/adminapi/v1/files/' + path).replace(/\/+/g, '/')
+    const url = ('/api/core/v1/files/' + path).replace(/\/+/g, '/')
     API.get(url, setRes, true)
   }
   const writeFileContent = (content: string) => {
-    const url = ('/adminapi/v1/files/' + path).replace(/\/+/g, '/')
+    const url = ('/api/core/v1/files/' + path).replace(/\/+/g, '/')
 
     API.post(url, { content }, (response: any) => {
       if (response.status == "loaded") {

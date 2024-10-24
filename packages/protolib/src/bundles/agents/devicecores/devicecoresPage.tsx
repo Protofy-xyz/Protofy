@@ -11,8 +11,8 @@ import { DeviceSdkModel } from '../deviceSdks';
 import { useState } from 'react';
 
 const DeviceCoreIcons = { name: Tag, sdk: Layers }
-const sourceUrl = '/adminapi/v1/devicecores'
-const sdksSourceUrl = '/adminapi/v1/devicesdks?all=1'
+const sourceUrl = '/api/core/v1/devicecores'
+const sdksSourceUrl = '/api/core/v1/devicesdks?all=1'
 
 export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {

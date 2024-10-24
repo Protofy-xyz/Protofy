@@ -136,7 +136,7 @@ const getDB = (path, req, session) => {
 const serviceAutoAPI = AutoAPI({
   modelName: 'services',
   modelType: ServiceModel,
-  prefix: '/adminapi/v1/',
+  prefix: '/api/core/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*'],
@@ -168,7 +168,7 @@ const getServicePath = async (service) => {
 export const ServicesAPI = (app, context) => {
   monitorServices(context)
   serviceAutoAPI(app, context)
-  app.get('/adminapi/v1/services/:service/restart', handler(async (req, res, session) => {
+  app.get('/api/core/v1/services/:service/restart', handler(async (req, res, session) => {
     if (!session || !session.user.admin) {
       res.status(401).send({ error: "Unauthorized" });
       return;
@@ -203,7 +203,7 @@ export const ServicesAPI = (app, context) => {
     });
   }));
 
-  app.get('/adminapi/v1/services/:service/package', handler(async (req, res, session) => {
+  app.get('/api/core/v1/services/:service/package', handler(async (req, res, session) => {
     if (!session || !session.user.admin) {
       res.status(401).send({ error: "Unauthorized" });
       return;
@@ -249,7 +249,7 @@ export const ServicesAPI = (app, context) => {
     }
   }));
 
-  app.get('/adminapi/v1/services/:service/logs', handler(async (req, res, session) => {
+  app.get('/api/core/v1/services/:service/logs', handler(async (req, res, session) => {
     if (!session || !session.user.admin) {
       res.status(401).send({ error: "Unauthorized" });
       return;

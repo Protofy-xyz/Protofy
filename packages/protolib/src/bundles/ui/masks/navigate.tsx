@@ -9,7 +9,7 @@ export const navigate = {
     "body": [
         {
             "type": "api",
-            "data": { label: "route", field: "param-1", apiUrl: "/adminapi/v1/pages", list: "return res.route", selector: "items" }
+            "data": { label: "route", field: "param-1", apiUrl: "/api/core/v1/pages", list: "return res.route", selector: "items" }
         }
     ],
     "initialData": { to: 'context.navigate', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "router", kind: "Identifier" } }

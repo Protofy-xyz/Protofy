@@ -17,7 +17,7 @@ export class StateMachineDefinitionModel extends ProtoModel<StateMachineDefiniti
     public static getApiOptions() {
         return {
             name: 'statemachinedefinition',
-            prefix: '/adminapi/v1/'
+            prefix: '/api/core/v1/'
         }
     }
 

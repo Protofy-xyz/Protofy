@@ -6,7 +6,7 @@ import { DataView } from '../../../components/DataView'
 import { AdminPage } from '../../../components/AdminPage'
 
 const DeviceSdkIcons = { name: Tag, sdk: Layers }
-const sourceUrl = '/adminapi/v1/devicesdks'
+const sourceUrl = '/api/core/v1/devicesdks'
 export default {
   component: ({ pageState, initialItems, itemData, pageSession }: any) => {
     return (<AdminPage title="Device Sdks" pageSession={pageSession}>

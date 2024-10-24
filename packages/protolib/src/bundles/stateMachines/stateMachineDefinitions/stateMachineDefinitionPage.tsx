@@ -7,7 +7,7 @@ import { ExternalLink, Link, FileBox } from '@tamagui/lucide-icons'
 import { PaginatedData } from '../../../lib/SSR'
 
 
-const sourceUrl = '/adminapi/v1/statemachinedefinition'
+const sourceUrl = '/api/core/v1/statemachinedefinition'
 export default {
   component: ({ pageState, initialItems, pageSession }: any) => {
     return (<AdminPage title="State Machine Definitions" pageSession={pageSession}>

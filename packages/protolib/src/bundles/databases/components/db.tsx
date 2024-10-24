@@ -27,15 +27,15 @@ export default function DBAdmin({ contentState }) {
     const [tmpItem, setTmpItem] = useState<string | null>(null)
 
     // usePendingEffect(async () => {
-    //     const databases = await API.get('/adminapi/v1/databases')
+    //     const databases = await API.get('/api/core/v1/databases')
     //     setDatabases(databases)
     //     if (databases?.isLoaded && databases?.data.length) {
-    //         API.get('/adminapi/v1/databases/' + currentDB, setContent)
+    //         API.get('/api/core/v1/databases/' + currentDB, setContent)
     //     }
     // }, databases)
     useUpdateEffect(() => {
         console.log('refreshing database content')
-        API.get('/adminapi/v1/databases/' + currentDB, setContent)
+        API.get('/api/core/v1/databases/' + currentDB, setContent)
     }, [currentDB])
 
     const onDelete = async (key, isTemplate) => {
@@ -43,7 +43,7 @@ export default function DBAdmin({ contentState }) {
             setTmpItem(null)
             content.data.shift()
         } else {
-            const result = await API.get('/adminapi/v1/databases/' + currentDB + '/' + key + '/delete')
+            const result = await API.get('/api/core/v1/databases/' + currentDB + '/' + key + '/delete')
             if (result?.isLoaded && result.data.result == 'deleted') {
                 content.data = content.data.filter((l) => l.key != key)
             }
@@ -61,7 +61,7 @@ export default function DBAdmin({ contentState }) {
         setNewKey("")
     }
     const onSave = async (newContent, key) => {
-        const result = await API.post('/adminapi/v1/databases/' + currentDB + '/' + key, newContent)
+        const result = await API.post('/api/core/v1/databases/' + currentDB + '/' + key, newContent)
         if (result?.isLoaded) {
             setContent({
                 ...content,
@@ -76,7 +76,7 @@ export default function DBAdmin({ contentState }) {
 
     const onSearch = async (text) => {
         if (!originalContent) setOriginalContent(content)
-        API.post('/adminapi/v1/dbsearch/' + currentDB, { search: text }, setContent)
+        API.post('/api/core/v1/dbsearch/' + currentDB, { search: text }, setContent)
     }
 
     const onCancelSearch = async () => {

@@ -135,8 +135,8 @@ const MethodBadge = ({ method, path, description }) => {
     );
 };
 
-const sourceUrl = '/adminapi/v1/apis'
-const objectsSourceUrl = '/adminapi/v1/objects?all=1'
+const sourceUrl = '/api/core/v1/apis'
+const objectsSourceUrl = '/api/core/v1/objects?all=1'
 
 export default {
     'apis': {
@@ -191,7 +191,7 @@ export default {
                     //search messages for messages directed at packageId
                     const done = messages.find(m => m.topic.startsWith(notificationsTopicPrefix + packageId + '/done'))
                     if (done) {
-                        await API.get('/adminapi/v1/services/api/restart')
+                        await API.get('/api/core/v1/services/api/restart')
                         setPublishState("published")
                         setPackageId("")
                     }
@@ -339,7 +339,7 @@ export default {
                     onAccept={async () => {
                         if (publishState == "confirm") {
                             setPublishState("publishing")
-                            const result = await API.get('/adminapi/v1/services/api/package')
+                            const result = await API.get('/api/core/v1/services/api/package')
                             const currentPackageId = result?.data?.packageId
                             if (!currentPackageId) {
                                 setPublishState("error")

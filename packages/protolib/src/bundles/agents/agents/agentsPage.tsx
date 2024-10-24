@@ -21,7 +21,7 @@ import { Subsystems } from '../subsystems/Subsystems'
 
 const agentsIcon = { name: Tag, deviceDefinition: BookOpen }
 
-const sourceUrl = '/adminapi/v1/agents'
+const sourceUrl = '/api/core/v1/agents'
 
 export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {

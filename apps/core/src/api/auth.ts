@@ -18,7 +18,7 @@ connectDB(dbPath, {}, getDBOptions(UserModel)) //preconnect database
 
 const generateEvent = async (event, token='') => {
     try {
-        await API.post('/adminapi/v1/events?token='+token, event, undefined, true)
+        await API.post('/api/core/v1/events?token='+token, event, undefined, true)
     } catch(e) {
         //console.error("Failed to send event: ", e)
     }
@@ -31,7 +31,7 @@ const genNewSession = (data: any) => {
     }
 }
 
-app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
+app.post('/api/core/v1/auth/login', handler(async (req: any, res: any) => {
     const request: LoginRequest = req.body
     const env = req.query.env ?? 'prod'
     const fail = (msg) => {
@@ -103,11 +103,11 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
     }
 }));
 
-app.get('/adminapi/v1/auth/validate', handler(async (req: any, res: any, session) => {
+app.get('/api/core/v1/auth/validate', handler(async (req: any, res: any, session) => {
     res.send(session)
 }));
 
-app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
+app.post('/api/core/v1/auth/register', handler(async (req: any, res: any) => {
     if(!SiteConfig.signupEnabled) {
         res.status(403).send('Signup is disabled');
         return

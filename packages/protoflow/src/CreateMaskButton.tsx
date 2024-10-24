@@ -84,7 +84,7 @@ export default ({ nodeData, maskType }: Props) => {
         const customPropsData = convertedData.filter(c => c.type)
         const defaultPropsData = convertedData.filter(c => !c.type)
 
-        fetch('/adminapi/v1/mask', {
+        fetch('/api/core/v1/mask', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -133,7 +133,7 @@ const getDB = (path, req, session) => {
       } catch (error) {
         // console.log('permissions: ', value.permissions ? JSON.stringify(value.permissions) : '[]', value.permissions)
         // console.log('executing template: ', `/packages/protolib/src/bundles/pages/templates/${template}.tpl`)
-        const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        const result = await API.post('/api/core/v1/templates/file?token=' + getServiceToken(), {
           name: fspath.basename(value.name + '.tsx'),
           data: {
             options: {
@@ -214,7 +214,7 @@ const getDB = (path, req, session) => {
       } catch (error) {
         if (value.web) {
           //page does not exist, create it
-          const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+          const result = await API.post('/api/core/v1/templates/file?token=' + getServiceToken(), {
             name: route + '.tsx',
             data: {
               options: {
@@ -253,7 +253,7 @@ const getDB = (path, req, session) => {
       } catch (error) {
         if (value.electron) {
           //page does not exist, create it
-          const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+          const result = await API.post('/api/core/v1/templates/file?token=' + getServiceToken(), {
             name: value.route + '.tsx',
             data: {
               options: {
@@ -285,7 +285,7 @@ const getDB = (path, req, session) => {
 export const PagesAPI = AutoAPI({
   modelName: 'pages',
   modelType: PageModel,
-  prefix: '/adminapi/v1/',
+  prefix: '/api/core/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*'],

@@ -132,8 +132,8 @@ const callText = async (url: string, method: string, params?: any, token?: strin
     })
 }
 
-const sourceUrl = '/adminapi/v1/devices'
-const definitionsSourceUrl = '/adminapi/v1/deviceDefinitions?all=1'
+const sourceUrl = '/api/core/v1/devices'
+const definitionsSourceUrl = '/api/core/v1/deviceDefinitions?all=1'
 
 export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
@@ -282,7 +282,7 @@ export default {
         icon: UploadCloud,
         action: async (element) => {
           try {
-            var result = await API.get("/adminapi/v1/devices/" + element.data.name + "/yaml")
+            var result = await API.get("/api/core/v1/devices/" + element.data.name + "/yaml")
             flashDevice(element, result.data.yaml)
           } catch (err) {
             console.error(err)

@@ -16,7 +16,7 @@ const ObjectPropValueMask = ({ node = {}, nodeData = {} }: any) => {
     let object = getFieldValue("prop-object", nodeData);;
 
     const getObjects = async () => {
-        const { data } = await API.get('/adminapi/v1/objects?all=1')
+        const { data } = await API.get('/api/core/v1/objects?all=1')
 
         setObjects(data?.items);
     }
@@ -31,7 +31,7 @@ const ObjectPropValueMask = ({ node = {}, nodeData = {} }: any) => {
     const getFields = async () => {
         const objectData = objects.find((item: any) => item.name == object)
         if (!objectData?.id) return
-        const { data } = await API.get("/adminapi/v1/objects/" + objectData.id)
+        const { data } = await API.get("/api/core/v1/objects/" + objectData.id)
         const keys = data?.keys
         const stringFields = Object.keys(keys).filter((item: any) => ["string", "number", "date"].includes(keys[item].type))
         setFields(stringFields);

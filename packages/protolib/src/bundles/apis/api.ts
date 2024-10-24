@@ -101,7 +101,7 @@ const getDB = (path, req, session) => {
       const computedName = value.name
       const codeName = computedName.replace(/\s/g, "")
       const codeNameLowerCase = codeName.toLowerCase()
-      const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+      const result = await API.post('/api/core/v1/templates/file?token=' + getServiceToken(), {
         name: value.name + extension,
         data: {
           options: {
@@ -151,7 +151,7 @@ const getDB = (path, req, session) => {
 export const APIsAPI = AutoAPI({
   modelName: 'apis',
   modelType: APIModel,
-  prefix: '/adminapi/v1/',
+  prefix: '/api/core/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*'],

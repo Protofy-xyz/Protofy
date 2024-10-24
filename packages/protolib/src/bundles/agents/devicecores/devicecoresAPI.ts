@@ -60,10 +60,10 @@ export const DeviceCoresAPI = AutoAPI({
     modelType: DeviceCoreModel,
     initialData,
     skipDatabaseIndexes: true,
-    prefix: '/adminapi/v1/',
+    prefix: '/api/core/v1/',
     transformers: {
         getConfig: async (field, e, data) => {
-            const sdksData = await API.get("/adminapi/v1/devicesdks")
+            const sdksData = await API.get("/api/core/v1/devicesdks")
             data.sdks.forEach(async (sdk) => {
                 const sdkData = sdksData.data.items.find((item) => item.name === sdk)
                 if (sdkData !== undefined) {

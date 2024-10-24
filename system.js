@@ -19,7 +19,7 @@ const config = {
                     return acc
                 }, {}) : {}
 
-                if (url.startsWith('/adminapi/') || url == '/adminapi') {
+                if (url.startsWith('/api/core/') || url == '/api/core') {
                     return process.env.ADMIN_API_URL ?? 'http://localhost:3002'
                 } else if (url == '/websocket') {
                     if (query.env && (query.env == 'dev' || query.env == 'prod')) {
@@ -33,11 +33,11 @@ const config = {
             "name": "api",
             "description": "API services for protofy",
             "route": (req, mode) => {
-                if (req.url.startsWith('/api/') || req.url == '/api') {
+                if (req.url.startsWith('/api/v1/') || req.url == '/api/v1') {
                     return process.env.API_URL ?? 'http://localhost:' + (mode == 'production' && !disableProdApi ? 4001 : 3001)
                 }
 
-                if (req.url.startsWith('/_dev/api/') || req.url == '/_dev/api') {
+                if (req.url.startsWith('/_dev/api/v1/') || req.url == '/_dev/api/v1') {
                     var target = process.env.API_URL ?? 'http://localhost:3001'
                     return target
                 }

@@ -23,7 +23,7 @@ const _connectDB = leveldbProvider.connectDB;
 
 const generateEvent = async (event, token='') => {
     try {
-        await API.post('/adminapi/v1/events?token='+token, event, undefined, true)
+        await API.post('/api/core/v1/events?token='+token, event, undefined, true)
     } catch(e) {
         //console.error("Failed to send event: ", e)
     }

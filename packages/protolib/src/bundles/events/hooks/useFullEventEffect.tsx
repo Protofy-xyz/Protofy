@@ -12,7 +12,7 @@ export const useFullEventEffect = (onEvent, eventFilter?: { path?: string, from?
         const pathUrl = eventFilter.path? `&filter[path]=${eventFilter.path}`: ""
         const from = eventFilter.from? `&filter[from]=${eventFilter.from}`: ""
         const env = process.env.NODE_ENV == 'development' ? 'dev' : 'prod'
-        const urlLastEvent = `/adminapi/v1/events?env=${env}${from}${userUrl}${pathUrl}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
+        const urlLastEvent = `/api/core/v1/events?env=${env}${from}${userUrl}${pathUrl}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
 
         let result = await API.get(urlLastEvent)
         if (result.isError) {

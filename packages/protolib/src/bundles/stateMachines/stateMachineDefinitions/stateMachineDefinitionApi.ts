@@ -73,7 +73,7 @@ const getDB = (path, req, session) => {
                 // machineFile
                 const machineName = fspath.basename(value.name)
                 // create machine file with template
-                const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+                const result = await API.post('/api/core/v1/templates/file?token=' + getServiceToken(), {
                     name: machineName + ".ts",
                     data: {
                         options: {
@@ -107,7 +107,7 @@ export const StateMachinesDefinitionsApi = (app, context) => {
     const autoAPI = AutoAPI({
         modelName: 'statemachinedefinition',
         modelType: StateMachineDefinitionModel,
-        prefix: '/adminapi/v1/',
+        prefix: '/api/core/v1/',
         getDB: getDB,
         connectDB: () => new Promise(resolve => resolve(null)),
         requiresAdmin: ['*'],

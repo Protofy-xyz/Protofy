@@ -4,7 +4,7 @@ import { AutoAPI, hash} from 'protonode'
 export const UsersAPI = AutoAPI({
     modelName: 'accounts',
     modelType: UserModel,
-    prefix: '/adminapi/v1/',
+    prefix: '/api/core/v1/',
     dbName: 'auth',
     transformers: {
         cypher: async (field, e, data) => {

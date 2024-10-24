@@ -5,7 +5,7 @@ export const deviceSub = async (mqtt, context, deviceName, component, monitorNam
     var data = null
     const SERVER = getApiUrl()
     try {
-        const urlDevices = `${SERVER}/adminapi/v1/devices`
+        const urlDevices = `${SERVER}/api/core/v1/devices`
         const res = await fetch(urlDevices);
         data = await res.json();
     } catch (err) {

@@ -13,7 +13,7 @@ const onAfterCreate = async (data, session?, req?) => {
             deviceDefinition: data.name,
             environment: data.environment,
         })
-        await API.post("/adminapi/v1/devices?token=" + session.token, objectDevice.create().getData())
+        await API.post("/api/core/v1/devices?token=" + session.token, objectDevice.create().getData())
     }
 }
 
@@ -24,11 +24,11 @@ export const DeviceDefinitionsAPI = AutoAPI({
     initialData,
     onAfterCreate: onAfterCreate,
     skipDatabaseIndexes: true,
-    prefix: '/adminapi/v1/',
+    prefix: '/api/core/v1/',
     transformers: {
         getConfig: async (field, e, data) => {
             //get config from deviceBoard
-            const deviceBoard = await API.get("/adminapi/v1/deviceboards/" +encodeURI(data.board.name))
+            const deviceBoard = await API.get("/api/core/v1/deviceboards/" +encodeURI(data.board.name))
             data.config.sdkConfig = deviceBoard.data.config[data.sdk]
             return data
         }

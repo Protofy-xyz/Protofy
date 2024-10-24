@@ -55,8 +55,8 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
     ${currentFile ? 'The user is viewing the file' + currentFile : `The directory contents are: ${JSON.stringify(filesState)}`}
     `)
 
-    useUpdateEffect(() => { API.get({ url: '/adminapi/v1/files/' + currentPath }, setFilesState) }, [currentPath])
-    usePendingEffect((s) => { API.get({ url: '/adminapi/v1/files/' + currentPath }, s) }, setFilesState, initialFilesState)
+    useUpdateEffect(() => { API.get({ url: '/api/core/v1/files/' + currentPath }, setFilesState) }, [currentPath])
+    usePendingEffect((s) => { API.get({ url: '/api/core/v1/files/' + currentPath }, s) }, setFilesState, initialFilesState)
 
     useUpdateEffect(() => {
         logger.debug({ query: routePath, newpath: currentPath }, `query: ${routePath} newpath: ${currentPath}`)

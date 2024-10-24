@@ -15,7 +15,7 @@ const ObjectFormMask = ({ node = {}, nodeData = {} }: any) => {
     let object = getFieldValue("prop-model", nodeData);
 
     const getObjects = async () => {
-        const { data } = await API.get('/adminapi/v1/objects?all=1')
+        const { data } = await API.get('/api/core/v1/objects?all=1')
 
         setObjects(data?.items);
     }

@@ -11,6 +11,6 @@ export const useFileFromAPI = (path):[any, any] => {
         setFileContent(getPendingResult('pending'))
     }, [path])
 
-    usePendingEffect((s) => API.get('/adminapi/v1/files/'+path.replace(/\/+/g, '/'), s, true), setFileContent, fileContent)
+    usePendingEffect((s) => API.get('/api/core/v1/files/'+path.replace(/\/+/g, '/'), s, true), setFileContent, fileContent)
     return [fileContent, setFileContent]
 }

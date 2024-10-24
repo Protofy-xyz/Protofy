@@ -124,8 +124,8 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
     }, []);
 
     const getResources = async () => {
-        console.log('requesting: ', '/adminapi/v1/resources?search=tags:' + tags.join(','));
-        const resources = await API.get('/adminapi/v1/resources?search=tags:' + tags.join(','));
+        console.log('requesting: ', '/api/core/v1/resources?search=tags:' + tags.join(','));
+        const resources = await API.get('/api/core/v1/resources?search=tags:' + tags.join(','));
 
         if (resources.isLoaded && resources.data.items && resources.data.items.length) {
             const promises = resources.data.items.map(async (resource) => {
@@ -275,7 +275,7 @@ const Chat = ({ tags = [], zIndex = 1, onScreen = true, mode = "default" }: any)
                             }
                             console.log('prompt: ', prompt)
                             toggleMsgLoader();
-                            const result = await API.post('/adminapi/v1/assistant', {
+                            const result = await API.post('/api/core/v1/assistant', {
                                 messages: [{ role: 'user', content: prompt }],
                                 best_of: 4,
                                 temperature: isHelp ? 0 : 1,

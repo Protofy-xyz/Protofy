@@ -20,7 +20,7 @@ export const deviceSub = async (deviceName: string, subsystemName: string, monit
 
     useEffect(() => {
         const prepare = async () => {
-            const result = await API.get('/adminapi/v1/devices/' + deviceName)
+            const result = await API.get('/api/core/v1/devices/' + deviceName)
             if (result.isLoaded) {
                 const subsystem = result.data.subsystem.find(s => s.name == subsystemName)
                 if (!subsystem) {

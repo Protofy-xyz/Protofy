@@ -24,7 +24,7 @@ import { setConfig, getConfig, getLogger } from 'protobase';
 import { getBaseConfig, getConfigWithoutSecrets } from '@my/config'
 // get config vars
 dotenv.config({ path: '../../.env' });
-global.defaultRoute = '/adminapi/v1'
+global.defaultRoute = '/api/core/v1'
 import { getServiceToken, getApp, getMQTTClient } from 'protonode'
 setConfig(getBaseConfig("core", process, getServiceToken()))
 import adminModules from './api'

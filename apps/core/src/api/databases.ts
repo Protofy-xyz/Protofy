@@ -25,7 +25,7 @@ const requireAdmin = () => handler(async (req, res, session, next) => {
     next()
 })
 
-app.post('/adminapi/v1/databases/:dbname/:key', requireAdmin(), handler(async (req, res) => {
+app.post('/api/core/v1/databases/:dbname/:key', requireAdmin(), handler(async (req, res) => {
     const env = req.query.env ? path.basename(req.query.env as string) + '/' : ''
     
     const db = getDB(env+req.params.dbname, req)
@@ -34,7 +34,7 @@ app.post('/adminapi/v1/databases/:dbname/:key', requireAdmin(), handler(async (r
     return
 }));
 
-app.get('/adminapi/v1/databases/:dbname/:key/delete', requireAdmin(), handler(async (req, res) => {
+app.get('/api/core/v1/databases/:dbname/:key/delete', requireAdmin(), handler(async (req, res) => {
     const env = req.query.env ? path.basename(req.query.env as string)+'/' : ''
 
     const db = getDB(env+req.params.dbname) 
@@ -43,7 +43,7 @@ app.get('/adminapi/v1/databases/:dbname/:key/delete', requireAdmin(), handler(as
     return
 }));
 
-app.post('/adminapi/v1/dbsearch/:dbname', requireAdmin(), handler(async (req, res) => {
+app.post('/api/core/v1/dbsearch/:dbname', requireAdmin(), handler(async (req, res) => {
     const env = req.query.env ? path.basename(req.query.env as string)+'/' : ''
 
     const db = getDB(env+req.params.dbname) 

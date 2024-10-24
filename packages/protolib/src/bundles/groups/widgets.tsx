@@ -7,7 +7,7 @@ export const ListGroups = ({ title, id }) => (
     <ListItems
         title={title}
         id={id}
-        fetchFunc='/adminapi/v1/groups'
+        fetchFunc='/api/core/v1/groups'
         model={GroupModel}
         displayFields={[
             { label: "name", field: "name" },
@@ -21,7 +21,7 @@ export const TotalGroups = ({ title, id }) => (
     <TotalItems
         title={title}
         id={id}
-        fetchFunc="/adminapi/v1/groups"
+        fetchFunc="/api/core/v1/groups"
         model={GroupModel}
         icon={Tag}
         link="./groups"

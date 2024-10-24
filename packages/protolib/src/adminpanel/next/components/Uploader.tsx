@@ -2,7 +2,7 @@ import Dropzone from 'react-dropzone-uploader'
 
 export const Uploader = ({ path, onUpload, setShowUploadDialog, accept = "image/*,audio/*,video/*" }) => {
   // specify upload params and url for your files
-  const getUploadParams = ({ meta }) => { return { url: '/adminapi/v1/files/' + path } }
+  const getUploadParams = ({ meta }) => { return { url: '/api/core/v1/files/' + path } }
 
   // called every time a file's `status` changes
   const handleChangeStatus = ({ meta, file }, status) => {

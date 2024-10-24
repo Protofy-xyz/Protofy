@@ -35,7 +35,7 @@ export class AgentsModel extends ProtoModel<AgentsModel> {
     }
 
     async setSubsystems(subsystems: any) {
-        const agentObject = await API.get("/adminapi/v1/agents/" + this.data.name)
+        const agentObject = await API.get("/api/core/v1/agents/" + this.data.name)
         if (agentObject.isError) {
             console.error(agentObject.error)
             return;
@@ -43,7 +43,7 @@ export class AgentsModel extends ProtoModel<AgentsModel> {
 
 
         agentObject.data.subsystems = subsystems
-        API.post("/adminapi/v1/agents/" + this.data.name, agentObject.data)
+        API.post("/api/core/v1/agents/" + this.data.name, agentObject.data)
     }
 
     getSubsystem(name: string): SubsystemType | null {

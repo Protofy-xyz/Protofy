@@ -149,7 +149,7 @@ const getDB = (path, req, session) => {
       if (exists) {
         console.log('File: ' + filePath + ' already exists, not executing template')
       } else {
-        const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+        const result = await API.post('/api/core/v1/templates/file?token=' + getServiceToken(), {
           name: value.name + '.ts',
           data: {
             options: { template: '/packages/protolib/src/bundles/objects/templateSchema.tpl', variables: { lowername: value.name.toLowerCase(), name: value.name.charAt(0).toUpperCase() + value.name.slice(1) }},
@@ -174,7 +174,7 @@ const getDB = (path, req, session) => {
           template: templateName,
           param: value.param,
         })
-        await API.post("/adminapi/v1/apis?token=" + session.token, objectApi.create().getData())
+        await API.post("/api/core/v1/apis?token=" + session.token, objectApi.create().getData())
         if (value.adminPage) {
           const objectApi = PageModel.load({
             name: value.name,
@@ -186,7 +186,7 @@ const getDB = (path, req, session) => {
             object: value.name,
             template: "admin"
           })
-          await API.post("/adminapi/v1/pages?token=" + session.token, objectApi.create().getData())
+          await API.post("/api/core/v1/pages?token=" + session.token, objectApi.create().getData())
         }
       }
 
@@ -206,7 +206,7 @@ const getDB = (path, req, session) => {
 export const ObjectsAPI = AutoAPI({
   modelName: 'objects',
   modelType: ObjectModel,
-  prefix: '/adminapi/v1/',
+  prefix: '/api/core/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*'],

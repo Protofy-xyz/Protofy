@@ -21,8 +21,8 @@ import { withSession } from '../../lib/Session'
 const format = 'YYYY-MM-DD HH:mm:ss'
 const UserIcons = { username: Mail, type: Tag, passwod: Key, repassword: Key }
 
-const sourceUrl = '/adminapi/v1/accounts'
-const groupsSourceUrl = '/adminapi/v1/groups'
+const sourceUrl = '/api/core/v1/accounts'
+const groupsSourceUrl = '/api/core/v1/groups'
 
 export default {
     'users': {
@@ -51,7 +51,7 @@ export default {
                 lastLogin: z.string().optional().search(),
                 from: z.string().min(1).search().generate((obj) => 'admin').help("Interface used to create the user. Users can be created from command line or from the admin panel")
             })
-            the user management system is located at /packages/protolib/src/bundles/users. The api for managing users is for admins only, and its located at /adminapi/v1/accounts. To read a specify account, /adminapi/v1/accounts/:email.
+            the user management system is located at /packages/protolib/src/bundles/users. The api for managing users is for admins only, and its located at /api/core/v1/accounts. To read a specify account, /api/core/v1/accounts/:email.
             The UI of the users page is located at /packages/protolib/src/bundles/users/adminPages.tsx and the schema and protomodel declaration at /packages/protolib/src/bundles/users/usersSchema.ts. The API file is located at /packages/protolib/src/bundles/users/usersAPI.ts.
             The user management page allows to manage the users of the system. Users are able to login with their email and password.
             `+ (

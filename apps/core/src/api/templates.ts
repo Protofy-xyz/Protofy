@@ -17,7 +17,7 @@ const requireAdmin = () => handler(async (req, res, session, next) => {
     next()
 })
 
-app.post('/adminapi/v1/templates/:tplname', requireAdmin(), handler(async (req, res) => {
+app.post('/api/core/v1/templates/:tplname', requireAdmin(), handler(async (req, res) => {
     const tplname = req.params.tplname;
     const params = req.body
 

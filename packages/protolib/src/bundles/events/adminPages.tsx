@@ -13,7 +13,7 @@ import { withSession } from '../../lib/Session';
 
 const format = 'HH:mm:ss DD-MM-YYYY'
 const EventIcons = {}
-const sourceUrl = '/adminapi/v1/events'
+const sourceUrl = '/api/core/v1/events'
 
 export default {
     'events': {

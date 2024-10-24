@@ -14,7 +14,7 @@ export const TotalEvents = ({ title, id }) => (
     <TotalItems
         title={title}
         id={id}
-        fetchFunc="/adminapi/v1/events"
+        fetchFunc="/api/core/v1/events"
         model={EventModel}
         icon={ClipboardList}
         link="./events"
@@ -24,7 +24,7 @@ export const TotalEvents = ({ title, id }) => (
 export const LastEvents = ({ title, id }) => {
     const env = useWorkspaceEnv()
     const fetch = async (fn) => {
-        const events = await API.get({url: '/adminapi/v1/events', env});
+        const events = await API.get({url: '/api/core/v1/events', env});
         fn(events);
     };
 

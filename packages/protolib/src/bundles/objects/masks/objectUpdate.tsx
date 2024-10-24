@@ -13,7 +13,7 @@ const objectUpdate = (node: any = {}, nodeData = {}) => {
     const setNodeData = useFlowsStore(state => state.setNodeData)
 
     const getObjects = async () => {
-        const { data } = await API.get('/adminapi/v1/objects?all=1')
+        const { data } = await API.get('/api/core/v1/objects?all=1')
         setObjects(data?.items);
     }
 
@@ -27,7 +27,7 @@ const objectUpdate = (node: any = {}, nodeData = {}) => {
             const object = objects.find((item: any) => item.name == objectName)
             if (!object) return console.error('Object not found')
 
-            const result = await API.get(`/adminapi/v1/objects/${object.id}`)
+            const result = await API.get(`/api/core/v1/objects/${object.id}`)
 
             if (result.isLoaded) {
                 const objectKeys = result?.data?.keys

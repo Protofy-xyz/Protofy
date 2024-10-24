@@ -15,7 +15,7 @@ const app = getApp()
 
 const generateEvent = async (event, token='') => {
     try {
-        await API.post('/adminapi/v1/events?token='+token, event, undefined, true)
+        await API.post('/api/core/v1/events?token='+token, event, undefined, true)
     } catch(e) {
         //console.error("Failed to send event: ", e)
     }
@@ -232,17 +232,17 @@ const requireAdmin = () => handler(async (req, res, session, next) => {
 
 
 //Route to delete files and directories
-app.post('/adminapi/v1/deleteItems/:path(*)', requireAdmin(), handler(handleDeleteRequest));
+app.post('/api/core/v1/deleteItems/:path(*)', requireAdmin(), handler(handleDeleteRequest));
 
-// Route to write files or create directories directly in /adminapi/v1/files
-app.post('/adminapi/v1/files', requireAdmin(), upload.single('file'), handler(handleFilesWriteRequest));
-// Route to write files or create directories in /adminapi/v1/files/*
-app.post('/adminapi/v1/files/:path(*)', requireAdmin(), upload.single('file'), handler(handleFilesWriteRequest));
-// Route to create directories in /adminapi/v1/directories/*
-app.post('/adminapi/v1/directories/:path(*)', requireAdmin(), handler(handleDirectoryCreateRequest));
+// Route to write files or create directories directly in /api/core/v1/files
+app.post('/api/core/v1/files', requireAdmin(), upload.single('file'), handler(handleFilesWriteRequest));
+// Route to write files or create directories in /api/core/v1/files/*
+app.post('/api/core/v1/files/:path(*)', requireAdmin(), upload.single('file'), handler(handleFilesWriteRequest));
+// Route to create directories in /api/core/v1/directories/*
+app.post('/api/core/v1/directories/:path(*)', requireAdmin(), handler(handleDirectoryCreateRequest));
 
-app.get('/adminapi/v1/files/:path(*)', requireAdmin(), handler(handleFilesRequest));
+app.get('/api/core/v1/files/:path(*)', requireAdmin(), handler(handleFilesRequest));
 
-app.post('/adminapi/v1/renameItem', requireAdmin(), handler(handleRenameRequest));
+app.post('/api/core/v1/renameItem', requireAdmin(), handler(handleRenameRequest));
 
 export default 'files'

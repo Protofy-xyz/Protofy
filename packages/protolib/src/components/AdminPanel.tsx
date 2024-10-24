@@ -54,7 +54,7 @@ export const AdminPanel = ({ children }) => {
   const [pages, setPages] = useState()
 
   const getPages = async () => {
-    const pages = await API.get('/adminapi/v1/pages')
+    const pages = await API.get('/api/core/v1/pages')
     if(pages.isLoaded) {
       setPages(pages.data.items)
     }

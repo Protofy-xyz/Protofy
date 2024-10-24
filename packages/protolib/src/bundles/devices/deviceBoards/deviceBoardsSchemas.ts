@@ -15,7 +15,7 @@ export class DeviceBoardModel extends ProtoModel<DeviceBoardModel> {
   public static getApiOptions() {
       return {
           name: 'deviceboards',
-          prefix: '/adminapi/v1/'
+          prefix: '/api/core/v1/'
       }
   }
 

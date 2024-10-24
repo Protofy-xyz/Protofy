@@ -29,7 +29,7 @@ const customGetDB = (path, req, session) => {
 export const WorkspacesAPI = AutoAPI({
   modelName: 'workspaces',
   modelType: WorkspaceModel,
-  prefix: '/adminapi/v1/',
+  prefix: '/api/core/v1/',
   dbName: '',
   requiresAdmin: ['*'],
   connectDB: () => new Promise(resolve => resolve(null)),

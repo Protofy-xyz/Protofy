@@ -11,7 +11,7 @@ import path from 'path';
 export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
     modelType: DevicesModel,
-    prefix: '/adminapi/v1/',
+    prefix: '/api/core/v1/',
     skipDatabaseIndexes: true,
     useDatabaseEnvironment: false,
     useEventEnvironment: false
@@ -30,7 +30,7 @@ export const DevicesAPI = (app, context) => {
         devices/patata/button/relay/actions/status
         ...
     */
-    app.get('/adminapi/v1/devices/:device/subsystems/:subsystem/actions/:action/:value', handler(async (req, res, session) => {
+    app.get('/api/core/v1/devices/:device/subsystems/:subsystem/actions/:action/:value', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -61,7 +61,7 @@ export const DevicesAPI = (app, context) => {
         })
     }))
 
-    app.get('/adminapi/v1/devices/:device/subsystems/:subsystem/monitors/:monitor', handler(async (req, res, session) => {
+    app.get('/api/core/v1/devices/:device/subsystems/:subsystem/monitors/:monitor', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -82,7 +82,7 @@ export const DevicesAPI = (app, context) => {
             return
         }
         
-        const urlLastDeviceEvent = `/adminapi/v1/events?env=${env}&filter[from]=device&filter[user]=${req.params.device}&filter[path]=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
+        const urlLastDeviceEvent = `/api/core/v1/events?env=${env}&filter[from]=device&filter[user]=${req.params.device}&filter[path]=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
         const data = await API.get(urlLastDeviceEvent)
 
         if(!data || !data.data ||  !data.data['items'] || !data.data['items'].length) {
@@ -92,7 +92,7 @@ export const DevicesAPI = (app, context) => {
         res.send({value: data.data['items'][0]?.payload?.message})
     }))
 
-    app.post('/adminapi/v1/devices/:device/subsystems/:subsystem/monitors/:monitor/ephemeral', handler(async (req, res, session) => {
+    app.post('/api/core/v1/devices/:device/subsystems/:subsystem/monitors/:monitor/ephemeral', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -125,7 +125,7 @@ export const DevicesAPI = (app, context) => {
         res.send({value})
     }))
 
-    app.get('/adminapi/v1/devices/:device/yaml', handler(async (req, res, session) => {
+    app.get('/api/core/v1/devices/:device/yaml', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -139,7 +139,7 @@ export const DevicesAPI = (app, context) => {
         res.send({yaml})
     }))
 
-    app.post('/adminapi/v1/devices/:device/yamls', handler(async (req, res, session) => {
+    app.post('/api/core/v1/devices/:device/yamls', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return

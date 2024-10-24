@@ -19,8 +19,8 @@ const AgentDefitionIcons = {
   board: CircuitBoard
 }
 
-const sourceUrl = '/adminapi/v1/agentdefinitions'
-const coresSourceUrl = '/adminapi/v1/devicecores?all=1'
+const sourceUrl = '/api/core/v1/agentdefinitions'
+const coresSourceUrl = '/api/core/v1/devicecores?all=1'
 
 export default {
   component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData }: any) => {

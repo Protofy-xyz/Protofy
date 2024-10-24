@@ -116,7 +116,7 @@ const CreateDialog = ({ subtab }) => {
     return <XStack onPress={() => { }}>
         <AlertDialog
             onAccept={async (setOpen) => {
-                const response = await API.post('/adminapi/v1/templates/' + subtab.options.templates[0].options.type, {
+                const response = await API.post('/api/core/v1/templates/' + subtab.options.templates[0].options.type, {
                     name: name,
                     data: {
                         options: subtab.options.templates[0].options,

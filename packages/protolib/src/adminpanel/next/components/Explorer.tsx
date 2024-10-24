@@ -41,7 +41,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
     const setSelectedFiles = onChangeSelection ?? setSelected
 
     const onUploadFiles = async () => {
-        setFiles(await API.get('/adminapi/v1/files/' + normalizedCurrentPath) ?? { data: [] })
+        setFiles(await API.get('/api/core/v1/files/' + normalizedCurrentPath) ?? { data: [] })
     }
     const onScroll = () => { }
     const myFileActions = [
@@ -63,7 +63,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
     const parsedFiles = files && files.data ? files.data.filter(fileFilter).map((f: any) => {
         return {
             ...f,
-            thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/adminapi/v1/files/' + f.path : undefined
+            thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/api/core/v1/files/' + f.path : undefined
         }
     }) : []
 
@@ -96,7 +96,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
         const filesToDownload = data.state.selectedFilesForAction.map(f => f.name)
         if (!filesToDownload.length) return
         if (filesToDownload.length == 1) {
-            window.open("/adminapi/v1/files/" + currentPath + '/' + filesToDownload[0] + '?download=1', '_new')
+            window.open("/api/core/v1/files/" + currentPath + '/' + filesToDownload[0] + '?download=1', '_new')
         } else {
             setSelectedFiles(filesToDownload)
             setOpenDownloadDialog(true)
@@ -147,7 +147,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                             //@ts-ignore
                             overflowX={'hidden'}
                         >
-                            {selectedFiles.map((f, id) => <a key={id} href={"/adminapi/v1/files/" + currentPath + '/' + f + '?download=1'} target="_new">
+                            {selectedFiles.map((f, id) => <a key={id} href={"/api/core/v1/files/" + currentPath + '/' + f + '?download=1'} target="_new">
                                 <XStack mb="$2" br="$radius.12" p="$2" px="$4" backgroundColor={"$color4"} hoverStyle={{ backgroundColor: "$color6", o: 1 }} o={0.7} ai="center" jc="center">
                                     <Download />
                                     <SizableText ml="$2">{f}</SizableText>
@@ -163,8 +163,8 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         open={openDeleteDialog}
                         onAccept={async (seter) => {
                             const itemsToDelete = selectedFiles
-                            await API.post('/adminapi/v1/deleteItems/' + currentPath, itemsToDelete);
-                            setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] })
+                            await API.post('/api/core/v1/deleteItems/' + currentPath, itemsToDelete);
+                            setFiles(await API.get('/api/core/v1/files/' + currentPath) ?? { data: [] })
                         }}
                         acceptTint="red"
                         title={<Text color="$red9">Delete{(selectedFiles.length > 1 ? ' ' + selectedFiles.length + ' files?' : '?')}</Text>}
@@ -186,7 +186,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         description={customAction?.description}
                     >
                         <YStack minWidth={customAction?.size?.width} h={customAction?.size?.height} f={1}>
-                            {customAction && customAction.getComponent && customAction.getComponent(selectedFiles, normalizedCurrentPath, setCustomAction, async () => setFiles(await API.get('/adminapi/v1/files/' + currentPath) ?? { data: [] }))}
+                            {customAction && customAction.getComponent && customAction.getComponent(selectedFiles, normalizedCurrentPath, setCustomAction, async () => setFiles(await API.get('/api/core/v1/files/' + currentPath) ?? { data: [] }))}
                         </YStack>
 
                     </AlertDialog>

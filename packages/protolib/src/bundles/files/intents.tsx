@@ -42,7 +42,7 @@ const onGenerateSnippset = async (name, code, cb, onError) => {
     onError("")
     return
   };
-  const res = await API.post("/adminapi/v1/flow/snippet", { name, code });
+  const res = await API.post("/api/core/v1/flow/snippet", { name, code });
   if (res?.error) {
     onError(res?.error?.error)
     return
@@ -96,7 +96,7 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
   const _onSave = async () => {
     setState("loading")
     const content = getContent();
-    await API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/'), { content });
+    await API.post('/api/core/v1/files/' + path.replace(/\/+/g, '/'), { content });
     if (!path.startsWith('/packages/app/bundles/custom/apis/')) {
       setState(defaultState)
       onSave()
@@ -351,7 +351,7 @@ const MonacoViewer = ({ path }) => {
 export const processFilesIntent = ({ action, domain, data }: IntentType) => {
   const { mime } = data
   const type = mime ? mime.split('/')[0] : 'text'
-  const url = ('/adminapi/v1/files/' + data.path).replace(/\/+/g, '/')
+  const url = ('/api/core/v1/files/' + data.path).replace(/\/+/g, '/')
   if (mime == 'application/json') {
     return { component: <JSONViewer {...data} />, supportIcons: true }
   } else if (mime == 'application/javascript' || mime == 'video/mp2t') {

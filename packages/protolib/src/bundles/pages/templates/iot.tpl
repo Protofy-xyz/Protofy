@@ -19,7 +19,7 @@ import Subsystem from 'protodevice/src/Subsystem'
 import { useRouter } from "solito/navigation";
 
 const isProtected = Protofy("protected", {{protected}})
-const sourceUrl = '/adminapi/v1/devices'
+const sourceUrl = '/api/core/v1/devices'
 
 Protofy("pageType", "iot")
 

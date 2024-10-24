@@ -7,12 +7,12 @@ const indexFile = (root) => SnippetsDir(root) + "index.ts"
 const indexFilePath = "/packages/app/bundles/custom/snippets/index.ts"
 
 export const FlowAPI = (app, context) => {
-  app.post('/adminapi/v1/flow/snippet', handler(async (req, res, session) => {
+  app.post('/api/core/v1/flow/snippet', handler(async (req, res, session) => {
     const { name, code } = req.body;
     if (!name || !code) throw new Error("Error creating snippet, you must provide a name and the snippet code")
     // Create and save snippet 
     const tags = name.split(" ")?.filter(e => e != " ")?.map(v => `"${v}"`).join(", ");
-    const result = await API.post('/adminapi/v1/templates/file?token=' + getServiceToken(), {
+    const result = await API.post('/api/core/v1/templates/file?token=' + getServiceToken(), {
       name: name + '.ts',
       data: {
         options: { template: `/packages/protolib/src/bundles/flow/templates/snippet.tpl`, variables: { code, name, tags }},

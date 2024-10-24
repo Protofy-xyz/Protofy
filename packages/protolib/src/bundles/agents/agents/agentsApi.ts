@@ -9,7 +9,7 @@ import { BifrostProtocol } from "../bifrost/Protocol";
 export const AgentsAutoAPI = AutoAPI({
     modelName: 'Agents',
     modelType: AgentsModel,
-    prefix: '/adminapi/v1/',
+    prefix: '/api/core/v1/',
     skipDatabaseIndexes: true,
     useDatabaseEnvironment: false,
     useEventEnvironment: false
@@ -28,7 +28,7 @@ export const AgentsAPI = (app, context) => {
         agents/patata/button/relay/actions/status
         ...
     */
-    app.get('/adminapi/v1/agents/:agent/subsystems/:subsystem/actions/:action/:value', handler(async (req, res, session) => {
+    app.get('/api/core/v1/agents/:agent/subsystems/:subsystem/actions/:action/:value', handler(async (req, res, session) => {
         if (!session || !session.user.admin) {
             res.status(401).send({ error: "Unauthorized" })
             return
@@ -59,7 +59,7 @@ export const AgentsAPI = (app, context) => {
         })
     }))
 
-    app.get('/adminapi/v1/agents/:agent/subsystems/:subsystem/monitors/:monitor', handler(async (req, res, session) => {
+    app.get('/api/core/v1/agents/:agent/subsystems/:subsystem/monitors/:monitor', handler(async (req, res, session) => {
         if (!session || !session.user.admin) {
             res.status(401).send({ error: "Unauthorized" })
             return
@@ -81,7 +81,7 @@ export const AgentsAPI = (app, context) => {
         }
 
         // environment query param:  env=${env}&
-        const urlLastAgentEvent = `/adminapi/v1/events?filter[from]=agents&filter[user]=${agentName}&filter[path]=${monitor.endpoint}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
+        const urlLastAgentEvent = `/api/core/v1/events?filter[from]=agents&filter[user]=${agentName}&filter[path]=${monitor.endpoint}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
         const data = await API.get(urlLastAgentEvent)
 
         if (!data || !data.data || !data.data['items'] || !data.data['items'].length) {
@@ -91,7 +91,7 @@ export const AgentsAPI = (app, context) => {
         res.send({ value: data.data['items'][0]?.payload?.message })
     }))
 
-    app.post('/adminapi/v1/agents/:agent/subsystems/:subsystem/monitors/:monitor/ephemeral', handler(async (req, res, session) => {
+    app.post('/api/core/v1/agents/:agent/subsystems/:subsystem/monitors/:monitor/ephemeral', handler(async (req, res, session) => {
         if (!session || !session.user.admin) {
             res.status(401).send({ error: "Unauthorized" })
             return

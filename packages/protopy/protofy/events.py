@@ -6,7 +6,7 @@ import sys
 def pubEvent(host, token, event, secure_connection):
     protocol = "http" if secure_connection == False else "https"
     
-    url =  protocol + "://" + host + "/adminapi/v1/events?token=" + token
+    url =  protocol + "://" + host + "/api/core/v1/events?token=" + token
     headers = {
         "content-type": "application/json",
     }

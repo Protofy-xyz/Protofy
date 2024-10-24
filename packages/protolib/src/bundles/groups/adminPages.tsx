@@ -11,8 +11,8 @@ import { usePendingEffect } from '../../lib/usePendingEffect';
 import { PaginatedData } from '../../lib/SSR';
 
 const GroupIcons = {}
-const sourceUrl = '/adminapi/v1/groups'
-const workspacesSourceUrl = '/adminapi/v1/workspaces'
+const sourceUrl = '/api/core/v1/groups'
+const workspacesSourceUrl = '/api/core/v1/workspaces'
 
 export default {
   'groups': {

@@ -29,7 +29,7 @@ export const SensorValue = React.forwardRef(({ enviroment, device, sensor, monit
 
     useEffect(() => {
         const updateDevices = async () => {
-            const response = await API.get("/adminapi/v1/devices?env=" + env)
+            const response = await API.get("/api/core/v1/devices?env=" + env)
             setDevices(response.data?.items)
         }
 

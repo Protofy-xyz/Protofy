@@ -7,7 +7,7 @@ export const TotalUsers = ({ title, id }) => (
     <TotalItems
         title={title}
         id={id}
-        fetchFunc="/adminapi/v1/accounts"
+        fetchFunc="/api/core/v1/accounts"
         model={UserModel}
         icon={User2}
         link="./users"
@@ -19,7 +19,7 @@ export const ListLatestUsers = ({ title, id }) => (
     <ListItems
         title={title}
         id={id}
-        fetchFunc="/adminapi/v1/accounts"
+        fetchFunc="/api/core/v1/accounts"
         model={UserModel}
         displayFields={[
             { label: "Username", field: "username" },

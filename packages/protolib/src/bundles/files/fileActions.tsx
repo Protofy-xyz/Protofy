@@ -52,7 +52,7 @@ const fileActions = [
         getComponent: (selected, path, setCustomAction, setFiles) => {
             return <CreateComponent 
             buttonText={"Create directory"}
-            onCreate={(name) => { API.post('/adminapi/v1/directories/' + path.replace(/\/+/g, '/') + '/' + name, { content: "" }); setCustomAction(false); setFiles() }} />
+            onCreate={(name) => { API.post('/api/core/v1/directories/' + path.replace(/\/+/g, '/') + '/' + name, { content: "" }); setCustomAction(false); setFiles() }} />
         },
         title: "Create folder",
         size: {
@@ -73,7 +73,7 @@ const fileActions = [
         getComponent: (selected, path, setCustomAction, setFiles) => {
             return <CreateComponent 
             buttonText={"Create file"}
-            onCreate={(name) => { API.post('/adminapi/v1/files/' + path.replace(/\/+/g, '/') + '/' + name, { content: "" }); setCustomAction(false); setFiles() }} />
+            onCreate={(name) => { API.post('/api/core/v1/files/' + path.replace(/\/+/g, '/') + '/' + name, { content: "" }); setCustomAction(false); setFiles() }} />
         },
         title: "Create file",
         size: {
@@ -95,7 +95,7 @@ const fileActions = [
             return <CreateComponent 
             buttonText={"Rename"}
             defaultInput={selected[0].name}
-            onCreate={(name) => { API.post('/adminapi/v1/renameItem', { currentPath: path.replace(/\/+/g, '/')  + '/' + selected[0].name, newName: name }); setCustomAction(false); setFiles() }} />
+            onCreate={(name) => { API.post('/api/core/v1/renameItem', { currentPath: path.replace(/\/+/g, '/')  + '/' + selected[0].name, newName: name }); setCustomAction(false); setFiles() }} />
         },
         title: "Rename",
         filter: (path, selected) => {

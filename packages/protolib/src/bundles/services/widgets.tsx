@@ -12,7 +12,7 @@ import { PieChart } from '../../components/PieChart';
 import { LineChart, Cpu } from 'lucide-react'
 
 const fetch = async (fn) => {
-    const services = await API.get('/adminapi/v1/services')
+    const services = await API.get('/api/core/v1/services')
     fn(services)
 }
 

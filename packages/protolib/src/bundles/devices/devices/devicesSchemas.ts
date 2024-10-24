@@ -63,7 +63,7 @@ export class DeviceSubsystemMonitor{
   }
 
   getValueAPIURL() {
-    return "/adminapi/v1/devices/"+this.device+"/subsystems/"+this.subsystem+"/monitors/"+this.data.name
+    return "/api/core/v1/devices/"+this.device+"/subsystems/"+this.subsystem+"/monitors/"+this.data.name
   }
 }
 
@@ -174,13 +174,13 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
   async getYaml(env: string){
     let yaml = undefined
     try {
-      const response = await API.get('/adminapi/v1/deviceDefinitions/' + this.data.deviceDefinition);
+      const response = await API.get('/api/core/v1/deviceDefinitions/' + this.data.deviceDefinition);
       if (response.isError) {
         console.log(response.error)
         return;
       }
       const deviceDefinition = response.data
-      const response1 = await API.get('/adminapi/v1/deviceBoards/' + deviceDefinition.board.name);
+      const response1 = await API.get('/api/core/v1/deviceBoards/' + deviceDefinition.board.name);
         if (response1.isError) {
           console.log(response1.error)
           return;
@@ -199,8 +199,8 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       yaml = deviceObj.dump("yaml").replace(/'@/g,"").replace(/@'/g,"")
 
       const subsystems = deviceObj.getSubsystemsTree(this.data.name, deviceDefinition)
-      const deviceObject = await API.get("/adminapi/v1/devices/" + this.data.name)
-      await API.post("/adminapi/v1/devices/" + this.data.name + "/yamls", { yaml })
+      const deviceObject = await API.get("/api/core/v1/devices/" + this.data.name)
+      await API.post("/api/core/v1/devices/" + this.data.name + "/yamls", { yaml })
       if (deviceObject.isError) {
         console.error(deviceObject.error)
         return;
@@ -208,7 +208,7 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       // deviceObject.data.subsystem = subsystems
       deviceObject.data.environment = env
       
-      API.post("/adminapi/v1/devices/" + this.data.name, deviceObject.data)
+      API.post("/api/core/v1/devices/" + this.data.name, deviceObject.data)
       console.log("ComponentsTree: ", componentsTree)
       console.log("Subsystems: ", subsystems)
     } catch (error) {
@@ -217,7 +217,7 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
     return yaml
   }
   async setSubsystem(){
-    const response = await API.get('/adminapi/v1/deviceDefinitions/' + this.data.deviceDefinition);
+    const response = await API.get('/api/core/v1/deviceDefinitions/' + this.data.deviceDefinition);
     if (response.isError) {
       console.log(response.error)
       return;
@@ -227,13 +227,13 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
     const deviceCode = 'device(' + jsCode.replace(/;/g, "") + ')';
     const deviceObj = eval(deviceCode)
     const subsystems = deviceObj.getSubsystemsTree(this.data.name, deviceDefinition)
-    const deviceObject = await API.get("/adminapi/v1/devices/" + this.data.name)
+    const deviceObject = await API.get("/api/core/v1/devices/" + this.data.name)
     if (deviceObject.isError) {
       console.error(deviceObject.error)
       return;
     }
     deviceObject.data.subsystem = subsystems
-    API.post("/adminapi/v1/devices/" + this.data.name, deviceObject.data)
+    API.post("/api/core/v1/devices/" + this.data.name, deviceObject.data)
   }
   
   async setUploaded(){

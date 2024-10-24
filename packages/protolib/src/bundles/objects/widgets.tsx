@@ -7,7 +7,7 @@ export const TotalObjects = ({ title, id }) => (
     <TotalItems
         title={title}
         id={id}
-        fetchFunc='/adminapi/v1/objects'
+        fetchFunc='/api/core/v1/objects'
         model={ObjectModel}
         icon={Box}
         link="./objects"

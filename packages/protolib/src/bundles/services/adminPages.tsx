@@ -8,7 +8,7 @@ import { usePageParams } from '../../next';
 import moment from 'moment';
 import { PaginatedData } from '../../lib/SSR';
 
-const sourceUrl = '/adminapi/v1/services'
+const sourceUrl = '/api/core/v1/services'
 
 const lc = '8'
 const pm2Colors = {

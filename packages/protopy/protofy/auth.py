@@ -4,7 +4,7 @@ import sys
 def login(host, username, password, secure_connection):
     try:
         protocol = "http" if secure_connection == "false" or secure_connection == False else "https"
-        url =  protocol + "://" + host + "/adminapi/v1/auth/login"
+        url =  protocol + "://" + host + "/api/core/v1/auth/login"
 
         # Headers you want to send
         headers = {

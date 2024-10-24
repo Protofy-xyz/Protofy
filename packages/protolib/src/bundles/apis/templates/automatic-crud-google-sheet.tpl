@@ -42,8 +42,8 @@ const idField = Objects.{{object}}.getIdField()
 const spreadsheetId = '{{param}}';
 
 const getCredentials = async () => {
-    const key = await API.get('/adminapi/v1/keys/google_key?token='+getServiceToken())
-    const mail = await API.get('/adminapi/v1/keys/google_mail?token='+getServiceToken())
+    const key = await API.get('/api/core/v1/keys/google_key?token='+getServiceToken())
+    const mail = await API.get('/api/core/v1/keys/google_mail?token='+getServiceToken())
 
     return {
         client_email: mail.data.value,

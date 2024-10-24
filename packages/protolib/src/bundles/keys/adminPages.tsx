@@ -5,7 +5,7 @@ import { Key } from '@tamagui/lucide-icons';
 import { usePrompt } from '../../context/PromptAtom'
 import { PaginatedData } from '../../lib/SSR';
 
-const sourceUrl = '/adminapi/v1/keys'
+const sourceUrl = '/api/core/v1/keys'
 
 export default {
   'keys': {
