@@ -27,7 +27,7 @@ dotenv.config({ path: '../../.env' });
 global.defaultRoute = '/adminapi/v1'
 import { getServiceToken, getApp, getMQTTClient } from 'protonode'
 setConfig(getBaseConfig("core", process, getServiceToken()))
-import adminModules from './adminapi'
+import adminModules from './api'
 require('events').EventEmitter.defaultMaxListeners = 100;
 
 import http from 'http';

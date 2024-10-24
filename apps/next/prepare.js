@@ -17,7 +17,7 @@ if (!fs.existsSync('./../../.env')) {
     }
 }
 
-if (!fs.existsSync('./.next/standalone')) {
+if (!fs.existsSync('./dist/apps/next/server.js')) {
     //run yarn package
     const { exec } = require('child_process');
     console.log("Compiling nextjs app...")
