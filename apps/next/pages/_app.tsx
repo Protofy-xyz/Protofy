@@ -2,7 +2,6 @@ import '@tamagui/core/reset.css'
 import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
 import "mapbox-gl/dist/mapbox-gl.css"
-import '../app.css'
 import 'raf/polyfill'
 import 'reactflow/dist/style.css'
 import 'protoflow/src/styles.css'
@@ -10,12 +9,13 @@ import 'protoflow/src/diagram/menu.module.css'
 import 'react-sliding-side-panel/lib/index.css'
 import 'protolib/styles/datatable.css';
 import 'protolib/styles/styles.css';
-import '../chat.css'
-import '../map.css'
-import '../chonky.css'
-import '../dashboard.css'
+import 'protolib/styles/chat.css';
+import 'protolib/styles/chonky.css';
+import 'protolib/styles/blueprint.css';
+import 'protolib/styles/dashboard.css';
+import 'protolib/styles/map.css';
+import 'app/styles/app.css';
 import "@blueprintjs/table/lib/css/table.css";
-import '../blueprint.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import 'react-chat-widget/lib/styles.css';
 import 'react-grid-layout/css/styles.css';
