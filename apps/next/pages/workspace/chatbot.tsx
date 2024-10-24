@@ -8,7 +8,7 @@ import { useThemeSetting } from "@tamagui/next-theme";
 
 export default function Page(props: any) {
     //@ts-ignore
-    const Chatbot = dynamic(() => import('protolib/src/components/chatbot'), { ssr: false })
+    const Chatbot = dynamic(() => import('protolib/components/chatbot'), { ssr: false })
     useRedirectToEnviron()
     const projectName = SiteConfig.projectName
 

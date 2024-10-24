@@ -11,7 +11,7 @@
       "react-native": [
         "react-native-web"
       ],
-      "protolib/*": ["../../packages/protolib/*"],
+      "protolib/*": ["../../packages/protolib/src/*"],
     },
     "allowJs": true,
     "skipLibCheck": true,

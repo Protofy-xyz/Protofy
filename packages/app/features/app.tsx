@@ -1,3 +1,4 @@
+
 import '@tamagui/core/reset.css'
 import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
@@ -20,6 +21,7 @@ import 'react-dropzone-uploader/dist/styles.css'
 import 'react-chat-widget/lib/styles.css';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { Provider } from 'app/provider'
 import Head from 'next/head'
@@ -35,10 +37,6 @@ import { SiteConfig } from 'app/conf'
 import Workspaces from 'app/bundles/workspaces'
 import { PanelLayout } from 'app/layout/PanelLayout'
 import { useRouter } from 'next/router';
-
-if (process.env.NODE_ENV === 'production') {
-  require('../public/tamagui.css')
-}
 
 const getApp = (AppConfig) => {
     return function MyApp({ Component, pageProps }: SolitoAppProps) {
