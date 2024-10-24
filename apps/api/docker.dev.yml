@@ -7,8 +7,8 @@ services:
     ports:
       - 3001:3001
     environment:
-      - MQTT_URL=mqtt://admin-api:1883
-      - PROXY_API_URL=http://admin-api:8000
+      - MQTT_URL=mqtt://core:1883
+      - PROXY_API_URL=http://core:8000
       - NODE_ENV=development
     volumes:
       - ../../:/workspace

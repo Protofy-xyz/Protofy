@@ -185,7 +185,7 @@ export const ServicesAPI = (app, context) => {
 
       generateEvent({
         path: 'services/' + service + '/restart', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+        from: 'core', // system entity where the event was generated (next, api, cmd...)
         user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
         payload: { service }
       }, getServiceToken())
@@ -215,7 +215,7 @@ export const ServicesAPI = (app, context) => {
     const _generateEvent = (type, payload?) => {
       generateEvent({
         path: 'services/' + service + '/package/' + packageId + '/' + type,
-        from: 'admin-api',
+        from: 'core',
         user: session.user.id,
         payload: { packageId, ...payload }
       }, getServiceToken())

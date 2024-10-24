@@ -26,7 +26,7 @@ import { getBaseConfig, getConfigWithoutSecrets } from '@my/config'
 dotenv.config({ path: '../../.env' });
 global.defaultRoute = '/adminapi/v1'
 import { getServiceToken, getApp, getMQTTClient } from 'protonode'
-setConfig(getBaseConfig("admin-api", process, getServiceToken()))
+setConfig(getBaseConfig("core", process, getServiceToken()))
 import adminModules from './adminapi'
 require('events').EventEmitter.defaultMaxListeners = 100;
 
@@ -48,10 +48,10 @@ process.on('uncaughtException', function (err) {
 });
 
 startMqtt(config)
-logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: admin-api")
+logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: core")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
-const devMqtt = getMQTTClient('dev', 'admin-api', getServiceToken())
-const prodMqtt = getMQTTClient('prod', 'admin-api', getServiceToken())
+const devMqtt = getMQTTClient('dev', 'core', getServiceToken())
+const prodMqtt = getMQTTClient('prod', 'core', getServiceToken())
 
 const topicSub = (mqtt, topic, cb) => {
   mqtt.subscribe(topic)
@@ -86,8 +86,8 @@ const PORT = 3002
 server.listen(PORT, () => {
   logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
   generateEvent({
-    path: 'services/adminapi/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-    from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+    path: 'services/core/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+    from: 'core', // system entity where the event was generated (next, api, cmd...)
     user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
     payload: {}, // event payload, event-specific data
   }, getServiceToken())
@@ -123,8 +123,8 @@ if (isFullDev) {
 
     restartTimer = setTimeout(async () => {
       await generateEvent({
-        path: 'services/adminapi/stop', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+        path: 'services/core/stop', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+        from: 'core', // system entity where the event was generated (next, api, cmd...)
         user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
         payload: {}, // event payload, event-specific data
       }, getServiceToken())

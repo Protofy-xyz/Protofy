@@ -73,7 +73,7 @@ The project has two main folders:
   - `expo` (native)
   - `next` (web)
   - `api` (express API to create the web or app)
-  - `admin-api` (express API with the admin API)
+  - `core` (mqtt, mangement apis, authentication, ...)
 
 - `packages` shared packages across apps
   - `ui` includes your custom UI kit that will be optimized by Tamagui

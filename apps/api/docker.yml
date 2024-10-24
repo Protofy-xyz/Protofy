@@ -3,6 +3,6 @@ version: '3.8'
 services:
   api:
     depends_on: 
-      - admin-api
+      - core
     container_name: 'api'
   

@@ -1,5 +1,5 @@
 {
-  "name": "admin-api",
+  "name": "core",
   "version": "0.0.1",
   "sideEffects": false,
   "source": "src/index.ts",
@@ -15,7 +15,7 @@
     "dev-service": "NODE_ENV=development pm2 start pm2.config.js",
     "dev-full": "FULL_DEV=1 NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
     "dev-standalone": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
-    "prod-standalone": "NODE_ENV=production && node -r module-alias/register dist/apps/admin-api/src/index.js",
+    "prod-standalone": "NODE_ENV=production && node -r module-alias/register dist/apps/core/src/index.js",
     "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts && shx cp ../../system.js dist/",
     "prepare-dev": "node prepare.js",
     "clean": "shx rm -rf dist"

@@ -7,7 +7,7 @@ services:
     ports:
       - 7600:7600
     environment:
-      - PROXY_API_URL=http://admin-api:8000
+      - PROXY_API_URL=http://core:8000
       - NODE_ENV=development
     volumes:
       - ../../:/workspace

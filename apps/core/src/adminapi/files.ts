@@ -134,7 +134,7 @@ const handleFilesWriteRequest = async (req, res, session) => {
 
     generateEvent({
         path: 'files/write/file', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-        from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+        from: 'core', // system entity where the event was generated (next, api, cmd...)
         user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
         payload: {'path': name} // event payload, event-specific data
     }, getServiceToken())
@@ -149,7 +149,7 @@ const handleDirectoryCreateRequest = async (req, res, session) => {
         await fs.mkdir(dirPath, { recursive: true }); // recursive: true permite crear directorios anidados si no existen
         generateEvent({
             path: 'files/create/dir',
-            from: 'admin-api',
+            from: 'core',
             user: session.user.id, // Actualiza según corresponda
             payload: { 'path': name }
         }, getServiceToken());
@@ -174,7 +174,7 @@ const handleDeleteRequest = async (req, res, session) => {
                 await fs.rm(itemPath, { recursive: true, force: true }); // Delete directories
                 generateEvent({
                     path: 'files/delete/dir',
-                    from: 'admin-api',
+                    from: 'core',
                     user: session.user.id,
                     payload: { 'path': path.join(basePath, item.name) }
                 }, getServiceToken());
@@ -182,7 +182,7 @@ const handleDeleteRequest = async (req, res, session) => {
                 await fs.unlink(itemPath); // Delete files
                 generateEvent({
                     path: 'files/delete/file',
-                    from: 'admin-api',
+                    from: 'core',
                     user: session.user.id,
                     payload: { 'path': path.join(basePath, item.name) }
                 }, getServiceToken());
@@ -209,7 +209,7 @@ const handleRenameRequest = async (req, res, session) => {
         await fs.rename(oldPath, newPath);
         generateEvent({
             path: 'files/rename',
-            from: 'admin-api',
+            from: 'core',
             user: session.user.id,
             payload: { 'oldPath': currentPath, 'newPath': newName }
         }, getServiceToken());

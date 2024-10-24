@@ -1,17 +1,17 @@
 version: '3.8'
 
 services:
-  admin-api:
+  core:
     build:
       context: ../..  # This should be set to two levels up from where the Dockerfile is, if that's where the folders you want to copy are located.
-      dockerfile: apps/admin-api/Dockerfile
+      dockerfile: apps/core/Dockerfile
     entrypoint: "yarn prod-standalone"
     ports:
       - 8080:8080
     environment:
       - MQTT_URL=mqtt://localhost:1883
-      - PROXY_API_URL=http://admin-api:8080
-      - ADMIN_API_URL=http://admin-api:3002
+      - PROXY_API_URL=http://core:8080
+      - ADMIN_API_URL=http://core:3002
       - API_URL=http://api:4001
       - SITE_URL=http://next:4000 
       - ADMIN_SITE_URL=http://admin:4003 

@@ -39,7 +39,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
         generateEvent({
             environment: env,
             path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-            from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+            from: 'core', // system entity where the event was generated (next, api, cmd...)
             user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
             payload: {reason: msg, username: request.username, clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
         }, getServiceToken())
@@ -82,7 +82,7 @@ app.post('/adminapi/v1/auth/login', handler(async (req: any, res: any) => {
             generateEvent({
                 environment: env,
                 path: 'auth/login/success', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-                from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+                from: 'core', // system entity where the event was generated (next, api, cmd...)
                 user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
                 payload: { clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
             }, getServiceToken())
@@ -146,7 +146,7 @@ app.post('/adminapi/v1/auth/register', handler(async (req: any, res: any) => {
         generateEvent({
             environment: env,
             path: 'auth/register/user', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-            from: 'admin-api', // system entity where the event was generated (next, api, cmd...)
+            from: 'core', // system entity where the event was generated (next, api, cmd...)
             user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
             payload: {environments: [req.query.env ?? 'prod']} // event payload, event-specific data
         }, getServiceToken())

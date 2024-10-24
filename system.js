@@ -8,8 +8,8 @@ const systemConfig = {
 const config = {
     "services": [
         {
-            "name": "admin-api",
-            "description": "Administration API services for protofy admin panel",
+            "name": "core",
+            "description": "Core services for protofy",
             "route": (req, mode) => {
                 const url = req.url.split('?')[0]
                 const queryString = req.url.split('?')[1]

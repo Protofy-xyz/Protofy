@@ -1,2 +1,2 @@
 FROM protofy/protofy
-WORKDIR /workspace/apps/admin-api
+WORKDIR /workspace/apps/proxy

@@ -13,7 +13,7 @@ if(!fs.existsSync('./../../.env')) {
 if (!fs.existsSync('./../next-compiled/.next')) {
     //run yarn package
     const { exec } = require('child_process');
-    console.log("Compiling admin-api...")
+    console.log("Compiling core...")
     exec('yarn package', (err, stdout, stderr) => {
         if (err) {
             console.error(err);

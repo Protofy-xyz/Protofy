@@ -126,7 +126,7 @@ function build(isProd = false) {
 }
 
 function addUser(args) {
-    runCommandInContainer("admin-api", `sh -c "yarn add-user ${args}"`)
+    runCommandInContainer("core", `sh -c "yarn add-user ${args}"`)
 }
 
 // HELPERS

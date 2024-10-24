@@ -112,7 +112,7 @@ export const PackagesAPI = (app, context) => {
     const _generateEvent = (type, payload?) => {
       generateEvent({
         path: 'packages/' + pkg + '/build/' + buildId + '/' + type,
-        from: 'admin-api',
+        from: 'core',
         user: session.user.id,
         payload: { buildId, ...payload }
       }, getServiceToken())

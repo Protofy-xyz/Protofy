@@ -6,7 +6,7 @@ const currentDir = path.dirname(__filename);
 module.exports = {
     apps: [
         isFullDev ? {
-            name: 'admin-api-dev',
+            name: 'core-dev',
             script: path.join(currentDir, '..', '..', 'node_modules', 'ts-node', 'dist', 'bin.js'),
             args: '--files --project tsconfig.json src/index.ts',
             watch: false,
@@ -16,11 +16,11 @@ module.exports = {
             },
             cwd: currentDir,
             log_date_format: "YYYY-MM-DD HH:mm:ss",
-            out_file: '../../logs/raw/admin-api-dev.stdout.log',
-            error_file: '../../logs/raw/admin-api-dev.stderr.log'
+            out_file: '../../logs/raw/core-dev.stdout.log',
+            error_file: '../../logs/raw/core-dev.stderr.log'
         } : {
-            name: 'admin-api',
-            script: path.join(currentDir, 'dist', 'apps', 'admin-api', 'src', 'index.js'),
+            name: 'core',
+            script: path.join(currentDir, 'dist', 'apps', 'core', 'src', 'index.js'),
             node_args: "-r module-alias/register",
             watch: false,
             autorestart: true,
@@ -29,8 +29,8 @@ module.exports = {
             },
             cwd: currentDir,
             log_date_format: "YYYY-MM-DD HH:mm:ss",
-            out_file: '../../logs/raw/admin-api.stdout.log',
-            error_file: '../../logs/raw/admin-api.stderr.log'
+            out_file: '../../logs/raw/core.stdout.log',
+            error_file: '../../logs/raw/core.stderr.log'
         }
     ],
 };

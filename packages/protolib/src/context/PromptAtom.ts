@@ -35,7 +35,7 @@ export const PromptAtom = atom<PromptContext[]>([{
 
         Website screens (apps/next) and expo screens (app/mobile) are created in apps/next/pages and apps/expo/app and importing the screen from packages/app/bundles/custom/pages and rendering it.
 
-        There is another service apps/admin-api providing administrative apis, the reverse proxy and the mqtt bus for notifications and messages between services.
+        There is another service apps/core providing administrative apis, the reverse proxy and the mqtt bus for notifications and messages between services.
 
         The default bundle for the user to edit is in packages/app/bundles/custom, and the bundle files are in packages/app/bundles, for example packages/app/bundles/apis.ts, imported by apps/api.
         
@@ -46,7 +46,7 @@ export const PromptAtom = atom<PromptContext[]>([{
         There is a reverse proxy on port 8080, with all the needed routing configured to proxy requests to /api to :4001, /adminapi to :3002 and all other router to :4000  (nextjs).
         There is also a port 8000 with a webserver, routing the requests to the same services, but on development mode.
         
-        The mqtt server is based on aedes and running in apps/admin-api, providing a mqtt server for the stack.
+        The mqtt server is based on aedes and running in apps/core, providing a mqtt server for the stack.
         
         Since aedes, nextjs, express, expo and level are all npm-based packages the system can be run just with yarn commands and depends only on nodejs and yarn to work.
         
@@ -70,7 +70,7 @@ export const PromptAtom = atom<PromptContext[]>([{
         The workspace definitions in packages/app/bundles/custom are wired into the apps and made effective/activated by adding them to the central file packages/app/bundles/workspaces.tsx. 
         Similar central bundle files are used to aggregate elements from different bundles in different places, into the system:
 
-        - packages/app/bundles/adminapi.tsx to add administrative api endpoints at apps/admin-api (with preffix /adminapi/v1 in reverse proxy)
+        - packages/app/bundles/adminapi.tsx to add administrative api endpoints at apps/core (with preffix /adminapi/v1 in reverse proxy)
         - packages/app/bundles/adminApiContext.ts to add variables that will be context-accessible from administrative apis, so administrative apis don't need to use import
         - packages/app/bundles/apiContext.ts to add variables that will be context-accessible from apis, so apis don't need to use import
         - packages/app/bundles/flows.ts to configure the lowcode visual nodes editor for javascript and typescript (protoflow) menus
@@ -95,7 +95,7 @@ export const PromptAtom = atom<PromptContext[]>([{
         - /workspace/dev/keys Keys crud. Keys are variables accessible from automations to use, for example used to define the OPENAI_API_KEY and similar api tokens. Keys are secret.
         - /workspace/dev/events System events viewer. In Protofy events are the core of how things are interconnected. Every system entity emits events, so automations can be created to reacto to those events. Events allow to decouple automations and apis, and connect them indirectly through event listeners and event emitters.
         - /workspace/dev/messages Low level mqtt messages viewer, allowing to view raw mqtt messages in the message broker. Events and other real time parts of the system work by publishing mqtt messages, and this page allows to monitor the mqtt directly, instead of high level event viewer. devices using esp32 can be diagnosed using this tool, since esp32 devices are connected to the system through mqtt.
-        - /workspace/dev/services Allows to view resource usage for the runnings apps (like apps/next or apps/api or apps/admin-api). Its normal to see apps duplicated, but with the preffix -dev, since protofy start some apps (like apps/api and apps/next) twice, one in development mode and the other in production mode (compiled and without HMR)
+        - /workspace/dev/services Allows to view resource usage for the runnings apps (like apps/next or apps/api or apps/core). Its normal to see apps duplicated, but with the preffix -dev, since protofy start some apps (like apps/api and apps/next) twice, one in development mode and the other in production mode (compiled and without HMR)
         - /workspace/dev/databases/system View and edit system level databases (users, groups, etc)
         - /workspace/dev/databases View and edit application level databases (databases for the objects defined in the app, like "product" or "inventory" or "friends". By default, there is a database "events" with the app events)
         - /workspace/dev/objects View and edit Object definitions. Object definitions are zod schemas that defines a data entity, and allows to create automatic apis and automatic pages to CRUD them. The zod definitions are wrapped in ProtoModel, a class extending their behaviour. Objects created from here will be created in the custom bundle (packages/app/bundles/custom/objects folder) and wired in packages/app/bundles/custom/objects/index.ts that is included in packages/app/bundles/objects.ts bundle file hub/central file. Objects can be created either by code or with the visual form. The visual form asks the user the type of each field, and doesn't need to understand what its zod, just defines properties and types. When creating an object there is an option to create its CURD api, and to create a page to CRUD the object collection as a user. The created page can be later customized.
