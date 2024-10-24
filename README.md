@@ -116,5 +116,5 @@ The first point of call should be our [Discord]("https://discord.gg/VpeZxMFfYW")
 ## 🙏 Credits and References
 Many thanks [@natew](https://twitter.com/natebirdman) for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original [@natew](https://twitter.com/natebirdman) starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
 
-Many thanks also to [@OttoWinter](https://github.com/OttoWinter) for creating [ESPHome](https://github.com/esphome) project. We want also to thank [Choly Knight](https://cholyknight.com/) for being our main inspiration creating Protofito concept based on her Robot Plush desing. 
+Many thanks also to [@OttoWinter](https://github.com/OttoWinter) for creating [ESPHome](https://github.com/esphome) project. We want also to thank [Choly Knight](https://cholyknight.com/) for being our main inspiration creating Protofito concept based on her Robot Plush design. 
 
