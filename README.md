@@ -102,7 +102,7 @@ You already know the basics? Check these amazing docs to learn more:
 - [Extending Protofy](docs/extending-protofy.md)
 
 ## 🧭 Roadmap
-Comming soon...
+Coming  soon...
 
 ## 📜 License
 Check out the [LICENSE](LICENSE.md) file for details.
