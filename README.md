@@ -30,7 +30,7 @@ A ultra-extensible CMS with supercharged capabilities, mobile support and IoT su
 
 Check the [getting started](docs/getting-started.md) guide to run Protofy on your computer, directly with npm or using docker.
 
-## 👨‍💻 Extentable and developer friendly CMS
+## 👨‍💻 Extendable and developer friendly CMS
  
 https://github.com/Protofy-xyz/Protofy/assets/5052882/e5c3f0fa-5b76-4c8e-bb4f-6a2c588ec53c
 
@@ -38,7 +38,7 @@ https://github.com/Protofy-xyz/Protofy/assets/5052882/e5c3f0fa-5b76-4c8e-bb4f-6a
 
 https://github.com/Protofy-xyz/Protofy/assets/5052882/4b7da628-a55e-4904-81c3-6aca23eb776d
 
-Get help and code from integrated ChatGPT with autmatic context transfer
+Get help and code from integrated ChatGPT with automatic context transfer
 
 ## 😎 Realtime interactive diagrams that edit Javascript / Typescript code
 
@@ -102,7 +102,7 @@ You already know the basics? Check these amazing docs to learn more:
 - [Extending Protofy](docs/extending-protofy.md)
 
 ## 🧭 Roadmap
-Comming soon...
+Coming  soon...
 
 ## 📜 License
 Check out the [LICENSE](LICENSE.md) file for details.
@@ -116,5 +116,5 @@ The first point of call should be our [Discord]("https://discord.gg/VpeZxMFfYW")
 ## 🙏 Credits and References
 Many thanks [@natew](https://twitter.com/natebirdman) for creating the original starter and to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which the original [@natew](https://twitter.com/natebirdman) starter was forked from. Check out Fernando Rojo his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
 
-Many thanks also to [@OttoWinter](https://github.com/OttoWinter) for creating [ESPHome](https://github.com/esphome) project. We want also to thank [Choly Knight](https://cholyknight.com/) for being our main inspiration creating Protofito concept based on her Robot Plush desing. 
+Many thanks also to [@OttoWinter](https://github.com/OttoWinter) for creating [ESPHome](https://github.com/esphome) project. We want also to thank [Choly Knight](https://cholyknight.com/) for being our main inspiration creating Protofito concept based on her Robot Plush design. 
 
