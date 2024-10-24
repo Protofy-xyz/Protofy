@@ -38,7 +38,7 @@ https://github.com/Protofy-xyz/Protofy/assets/5052882/e5c3f0fa-5b76-4c8e-bb4f-6a
 
 https://github.com/Protofy-xyz/Protofy/assets/5052882/4b7da628-a55e-4904-81c3-6aca23eb776d
 
-Get help and code from integrated ChatGPT with autmatic context transfer
+Get help and code from integrated ChatGPT with automatic context transfer
 
 ## 😎 Realtime interactive diagrams that edit Javascript / Typescript code
 
