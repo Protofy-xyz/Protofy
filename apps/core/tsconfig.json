@@ -35,9 +35,9 @@
     "./app/bundles/objects.ts",
     "./app/bundles/library.ts",
     "./app/bundles/storageProviders.ts",
+    "./app/bundles/stateMachines.ts",
     "./app/conf.ts",
-    "./app/initialData.ts",
-    "./app/bundles/custom/stateMachines/**/*",
+    "./app/initialData.ts"
   ],
   "exclude": [
     "node_modules"
