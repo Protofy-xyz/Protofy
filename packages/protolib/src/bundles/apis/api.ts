@@ -7,9 +7,9 @@ import { API } from 'protobase'
 import { getServiceToken } from "protonode";
 import { ObjectModel } from '../objects/objectsSchemas'
 
-const APIDir = (root) => fspath.join(root, "/packages/app/bundles/custom/apis/")
+const APIDir = (root) => fspath.join(root, "/packages/app/apis/")
 const indexFile = (root) => APIDir(root) + "index.ts"
-const indexFilePath = "/packages/app/bundles/custom/apis/index.ts"
+const indexFilePath = "/packages/app/apis/index.ts"
 
 const getAPI = (apiPath, req) => {
   const apiType = apiPath.endsWith('.py') ? 'python' : 'typescript'
@@ -77,7 +77,7 @@ const getDB = (path, req, session) => {
       const template = fspath.basename(value.template ?? 'empty')
       const extension = value.template === 'python-api' ? '.py' : '.ts'
 
-      const filePath = getRoot(req) + 'packages/app/bundles/custom/apis/' + fspath.basename(value.name) + extension;
+      const filePath = getRoot(req) + 'packages/app/apis/' + fspath.basename(value.name) + extension;
       exists = await checkFileExists(filePath);
 
       if (template.startsWith("automatic-crud")) {
@@ -113,7 +113,7 @@ const getDB = (path, req, session) => {
               param: value.param,
             }
           },
-          path: '/packages/app/bundles/custom/apis'
+          path: '/packages/app/apis'
         }
       })
 

@@ -1,4 +1,4 @@
-import customStateMachines from './custom/stateMachines'
+import customStateMachines from '../stateMachines'
 
 export default {
     ...customStateMachines

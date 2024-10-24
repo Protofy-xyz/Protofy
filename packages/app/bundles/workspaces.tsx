@@ -1,4 +1,4 @@
-import customWorkspaces from './custom/workspaces'
+import customWorkspaces from '../workspaces'
 
 export default {
     ...customWorkspaces

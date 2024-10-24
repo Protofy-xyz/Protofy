@@ -8,7 +8,7 @@ import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
 import { ObjectModel } from "../objects/objectsSchemas";
 
-const pagesDir = (root) => fspath.join(root, "/packages/app/bundles/custom/pages/")
+const pagesDir = (root) => fspath.join(root, "/packages/app/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
 const publishedNextPagesDir = (root) => fspath.join(root, "/apps/next-compiled/pages/")
 const electronPagesDir = (root) => fspath.join(root, "/apps/electron/pages/")

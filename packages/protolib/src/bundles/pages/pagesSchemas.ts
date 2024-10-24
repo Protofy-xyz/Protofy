@@ -26,7 +26,7 @@ export class PageModel extends ProtoModel<PageModel> {
     }
 
     getDefaultFilePath() {
-        return '/packages/app/bundles/custom/pages/'+this.data.name+'.tsx'
+        return '/packages/app/pages/'+this.data.name+'.tsx'
     }
 
     protected static _newInstance(data: any, session?: SessionDataType): PageModel {

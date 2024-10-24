@@ -79,7 +79,7 @@ export default {
     return useEditor(
       <PageComponent currentView={currentView} setCurrentView={setCurrentView} {...props} />,
       {
-          path: "/packages/app/bundles/custom/pages/{{name}}.tsx",
+          path: "/packages/app/pages/{{name}}.tsx",
           context: {
             currentView: currentView,
             setCurrentView: setCurrentView,

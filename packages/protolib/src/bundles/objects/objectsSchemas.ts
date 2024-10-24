@@ -105,7 +105,7 @@ export class ObjectModel extends ProtoModel<ObjectModel> {
   }
 
   static getDefaultSchemaFilePath(name) {
-    return '/packages/app/bundles/custom/objects/' + name + '.ts'
+    return '/packages/app/objects/' + name + '.ts'
   }
 
   create(data?) {

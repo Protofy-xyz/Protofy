@@ -1,5 +1,5 @@
 import {APIBundles} from 'protolib/bundles/api'
-import CustomAPI from './custom/apis'
+import CustomAPI from '../apis'
 
 export default (app, context) => {
     APIBundles(app, context), 

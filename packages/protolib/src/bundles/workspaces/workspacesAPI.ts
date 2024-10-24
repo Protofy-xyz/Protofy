@@ -3,7 +3,7 @@ import * as fspath from 'path';
 import { AutoAPI, getRoot } from 'protonode'
 import { WorkspaceModel } from './WorkspaceModel';
 
-const workspacesDir = (root) => fspath.join(root,"/packages/app/bundles/custom/workspaces/")
+const workspacesDir = (root) => fspath.join(root,"/packages/app/workspaces/")
 
 const customGetDB = (path, req, session) => {
   const db = {

@@ -71,5 +71,5 @@ We have some fields to fill in order to create a new page.
   - **Require user**: If the page requires admin user to be accessed. 
   - **Permissions**: Comming soon. 
 
-The pages are created in the path `packages/app/bundles/custom/pages/pageName.tsx` of the project. This means that you can manually create a page without using the workspace. 
+The pages are created in the path `packages/app/pages/pageName.tsx` of the project. This means that you can manually create a page without using the workspace. 
 

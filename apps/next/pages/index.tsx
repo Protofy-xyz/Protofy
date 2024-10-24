@@ -1,4 +1,4 @@
-import Feature from 'app/bundles/custom/pages/home'
+import Feature from 'app/pages/home'
 import { useSession } from 'protolib/lib/Session'
 
 export default function IndexPage(props:any) {

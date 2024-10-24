@@ -190,7 +190,7 @@ export const removeFileWithImports = async (
     removeImportFromSourceFile(sourceFile, localPath);
     sourceFile.saveSync();
 
-    const filePath = getRoot(req) + 'packages/app/bundles/custom/' + type.replace(/"/g, '') + '/' + fspath.basename(value.name) + '.ts';
+    const filePath = getRoot(req) + 'packages/app/' + type.replace(/"/g, '') + '/' + fspath.basename(value.name) + '.ts';
 
     try {
         await fs.unlink(filePath);

@@ -8,7 +8,7 @@ import { API } from 'protobase'
 import { APIModel } from '../apis/APISchemas'
 import { PageModel } from '../pages/pagesSchemas'
 
-const indexFile = "/packages/app/bundles/custom/objects/index.ts"
+const indexFile = "/packages/app/objects/index.ts"
 
 const getSchemas = async (req, sourceFile?) => {
   const node = getDefinition(
@@ -43,7 +43,7 @@ const getSchema = async (idSchema, schemas, req, name?) => {
 
   const schemaName = name ?? schemas.find(s => s.id == idSchema)?.name
 
-  sourceFile = getSourceFile(fspath.join("../../packages/app/bundles/custom/objects/", getImport(sourceFile, idSchema)) + ".ts")
+  sourceFile = getSourceFile(fspath.join("../../packages/app/objects/", getImport(sourceFile, idSchema)) + ".ts")
   const node = getDefinition(sourceFile, '"schema"')
   let keys = {}
   if (node) {
@@ -137,7 +137,7 @@ const getDB = (path, req, session) => {
         name: value.name.replace(/\s/g, ""),
         id: value.id.replace(/\s/g, "")
       }
-      const filePath = getRoot(req) + 'packages/app/bundles/custom/objects/' + fspath.basename(value.name) + '.ts'
+      const filePath = getRoot(req) + 'packages/app/objects/' + fspath.basename(value.name) + '.ts'
       let exists
       try {
         await fs.access(filePath, fs.constants.F_OK)
@@ -153,7 +153,7 @@ const getDB = (path, req, session) => {
           name: value.name + '.ts',
           data: {
             options: { template: '/packages/protolib/src/bundles/objects/templateSchema.tpl', variables: { lowername: value.name.toLowerCase(), name: value.name.charAt(0).toUpperCase() + value.name.slice(1) }},
-            path: '/packages/app/bundles/custom/objects'
+            path: '/packages/app/objects'
           }
         })
 

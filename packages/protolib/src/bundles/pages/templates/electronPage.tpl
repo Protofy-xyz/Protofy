@@ -1,4 +1,4 @@
-import Feature from 'app/bundles/custom/pages/{{name}}'
+import Feature from 'app/pages/{{name}}'
 import { useSession } from 'protolib/lib/Session'
 import { useRouter } from "solito/navigation";
 

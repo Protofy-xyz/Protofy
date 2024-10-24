@@ -2,9 +2,9 @@ import { handler, getRoot, getSourceFile, getDefinition, addObjectLiteralPropert
 import * as path from 'path'
 import { API } from 'protobase';
 
-const SnippetsDir = (root) => path.join(root, "/packages/app/bundles/custom/snippets/")
+const SnippetsDir = (root) => path.join(root, "/packages/app/snippets/")
 const indexFile = (root) => SnippetsDir(root) + "index.ts"
-const indexFilePath = "/packages/app/bundles/custom/snippets/index.ts"
+const indexFilePath = "/packages/app/snippets/index.ts"
 
 export const FlowAPI = (app, context) => {
   app.post('/api/core/v1/flow/snippet', handler(async (req, res, session) => {
@@ -16,7 +16,7 @@ export const FlowAPI = (app, context) => {
       name: name + '.ts',
       data: {
         options: { template: `/packages/protolib/src/bundles/flow/templates/snippet.tpl`, variables: { code, name, tags }},
-        path: '/packages/app/bundles/custom/snippets'
+        path: '/packages/app/snippets'
       }
     })
     if (result.isError) {

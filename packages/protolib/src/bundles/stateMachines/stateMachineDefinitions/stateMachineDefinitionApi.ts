@@ -7,7 +7,7 @@ import { StateMachineDefinitionModel } from "./stateMachineDefinitionSchema";
 import { getServiceToken } from '../../apis/context';
 import { params, paramsHandlers } from '../handlers';
 
-const StateMachineDefinitionsDir = (root) => fspath.join(root, "/packages/app/bundles/custom/stateMachines/")
+const StateMachineDefinitionsDir = (root) => fspath.join(root, "/packages/app/stateMachines/")
 const StateMachineDefinitionsIndex = fspath.join(StateMachineDefinitionsDir(getRoot()), 'index.ts')
 
 const getStateMachine = (fsmPath, req) => {

@@ -27,7 +27,7 @@ import {
     TotalGroups,
     ListGroups,
     TotalEvents
-} from '../../widgets'
+} from '../bundles/widgets'
 
 import { DashboardCard } from 'protolib/components/DashboardCard'
 

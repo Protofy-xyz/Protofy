@@ -5,7 +5,7 @@ from flask import Flask, Blueprint
 
 app = Flask(__name__)
 
-blueprints_folder = os.path.join(os.path.dirname(__file__), 'custom', 'apis')
+blueprints_folder = os.path.join(os.path.dirname(__file__), '..', 'apis')
 
 for filename in os.listdir(blueprints_folder):
     if filename.endswith('.py') and filename != '__init__.py':

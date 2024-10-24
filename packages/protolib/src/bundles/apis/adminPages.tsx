@@ -146,7 +146,7 @@ export default {
             usePrompt(() => `At this moment the user is browsing the Rest API management page. The Rest API management page allows to list, create, read, update and delete API definitions. API definitions are typescript files using express.
             The system allows to create APIs either from an empty template, or from an AutoCRUD template. The automatic crud template creates an automatic CRUD API for a given object. 
             To Automatic CRUD API generates the following endpoints: get /api/v1/:objectName (list), post /api/v1/:objectName (create), post /api/v1/:objectName/:objectId (update), get /api/v1/:objectName/:objectId/delete (delete) and get /api/v1/:objectName/:objectId (read)
-            the API files are located at /packages/app/bundles/custom/apis. 
+            the API files are located at /packages/app/apis. 
             The Automatic CURD system can be manually extended to have more endpoints.
             The user can edit the API files by clicking on any API, and can choose visual programming using interactive diagrams generated from the source code, or text based tradicional programming to edit the .ts api file.
             Those APIs allow the user to create pages based on object data. The automatic crud is an "storage" to manage data for a specific object.

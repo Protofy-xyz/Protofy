@@ -2,12 +2,12 @@
 So maybe your project has a specific use case that Protofy doesn't cover, or you want to add a new feature to the admin panel. In this section we will explain how to extend admin panel to add new features to your project.
 
 ## Changing Sidebar
-You can change the content of sidebar panel going to `packages/app/boundles/custom/workspaces/admin.tsx`. All configurations of the following sections are
+You can change the content of sidebar panel going to `packages/app/workspaces/admin.tsx`. All configurations of the following sections are
 related with editing the previous file.
 ### Changing sidebar sections
 To add new section you must add new key to menu, key is going to be the name of the section.
 Previous state:
-```typescript filename="packages/app/boundles/custom/workspaces/admin.tsx"
+```typescript filename="packages/app/workspaces/admin.tsx"
 export default {
     "default": "/workspace/pages",
     "label": "Workspace",
@@ -21,7 +21,7 @@ export default {
 }
 ```
 New state:
-```typescript {9} filename="packages/app/boundles/custom/workspaces/admin.tsx"
+```typescript {9} filename="packages/app/workspaces/admin.tsx"
 export default {
     "default": "/workspace/pages",
     "label": "Workspace",
@@ -63,7 +63,7 @@ Here is an explaination of each of the properties that accepts the object that c
 </table>
 
 Here is an example of how to add subsection to "New Section" section:
-```typescript {9-11} filename="packages/app/boundles/custom/workspaces/admin.tsx"
+```typescript {9-11} filename="packages/app/workspaces/admin.tsx"
 export default {
     "default": "/workspace/pages",
     "label": "Workspace",

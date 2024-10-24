@@ -12,11 +12,11 @@ import { withSession } from "protolib/lib/Session";
 import { useEditor } from "protolib/visualui/useEdit";
 import { SSR } from "protolib/lib/SSR";
 import { UIWrapLib, UIWrap } from "protolib/visualui/visualuiWrapper";
-import { DefaultLayout } from "../../../layout/DefaultLayout";
+import { DefaultLayout } from "../layout/DefaultLayout";
 import { Protofy } from "protobase";
-import { context } from "../../uiContext";
+import { context } from "../bundles/uiContext";
 import { useRouter } from "solito/navigation";
-import { Objects } from "../../objects";
+import { Objects } from "../bundles/objects";
 
 const isProtected = Protofy("protected", false);
 
@@ -81,7 +81,7 @@ export default {
     const [currentView, setCurrentView] = useState("default");
 
     return useEditor(<Home currentView={currentView} setCurrentView={setCurrentView} {...props} />, {
-      path: "/packages/app/bundles/custom/pages/home.tsx",
+      path: "/packages/app/pages/home.tsx",
       components: {
         ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
         ...cw("Theme", Theme),

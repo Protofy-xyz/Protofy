@@ -3,7 +3,7 @@
 In this section we are going to configure the elements of Header Menu right side menu.
 ![header-menu-content](/documentation/components/headerMenuContent.png)
 
-The elements and its visibility are configure through `packages/app/bundles/custom/menu.tsx`.
+The elements and its visibility are configure through `packages/app/menu.tsx`.
 To modify/add elements of this menu you have modify the previous file. The structure of element is the following:
 ```javascript
     { label: "Profile", path: "/profile", visibility: session => session.loggedIn }

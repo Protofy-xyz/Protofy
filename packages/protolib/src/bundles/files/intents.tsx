@@ -97,7 +97,7 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
     setState("loading")
     const content = getContent();
     await API.post('/api/core/v1/files/' + path.replace(/\/+/g, '/'), { content });
-    if (!path.startsWith('/packages/app/bundles/custom/apis/')) {
+    if (!path.startsWith('/packages/app/apis/')) {
       setState(defaultState)
       onSave()
     }

@@ -1,5 +1,5 @@
 import flowSnippets from 'protolib/bundles/flow/snippets';
-import customSnippets from './custom/snippets';
+import customSnippets from '../snippets';
 import { paths } from './flows';
 
 export const getFlowsCustomSnippets = (path: string, queryParams: {}) => {

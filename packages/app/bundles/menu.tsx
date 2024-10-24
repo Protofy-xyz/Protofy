@@ -1,4 +1,4 @@
-import menu from "./custom/menu";
+import menu from "../menu";
 
 export default [
     ...menu

@@ -1,4 +1,4 @@
-import Feature from 'app/bundles/custom/pages/{{name}}'
+import Feature from 'app/pages/{{name}}'
 import { useSession } from 'protolib/lib/Session'
 
 export default function {{upperName}}Page(props:any) {

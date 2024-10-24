@@ -49,7 +49,7 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
     - /data/databases contain the databases (leveldb files)
     - /apps contain the system applications (next, expo, proxy and express apis)
     - /apps/next/public publicly accesible directory. The files you upload here can be accessed from the public system url (its the public directory of the next app)
-    - /packages/app/bundles/custom the custom bundle. The system encourages extension through bundles, and the custom bundle is the bundle for your specific system. You can extend the system from this bundle, or create other bundles. bundles can add apis, pages, tasks, objects and more things 
+    - /packages/app the custom bundle. The system encourages extension through bundles, and the custom bundle is the bundle for your specific system. You can extend the system from this bundle, or create other bundles. bundles can add apis, pages, tasks, objects and more things 
     
     Currently the user is in the directory: ${currentPath}. 
     ${currentFile ? 'The user is viewing the file' + currentFile : `The directory contents are: ${JSON.stringify(filesState)}`}
