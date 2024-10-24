@@ -54,6 +54,7 @@ if (process.env.NODE_ENV != 'production') {
   const pathsToWatch = [
     'src/**',
     '../../packages/app/bundles/**',
+    '../../packages/app/apis/**',
     '../../packages/protolib/dist/**',
     '../../system.js',
     '../../packages/app/conf.ts',
