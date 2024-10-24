@@ -12,7 +12,7 @@
     "lint": "next lint",
     "test": "jest",
     "test:deps": "npx playwright install && npx playwright install-deps",
-    "clean": "shx rm -rf .next"
+    "clean": "shx rm -rf .next dist"
   },
   "dependencies": {
     "@craftjs/core": "0.2.0-beta.8",

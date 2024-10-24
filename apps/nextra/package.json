@@ -8,7 +8,7 @@
     "dev-service": "FULL_DEV=1 NODE_ENV=development pm2 start pm2.config.js",
     "dev": "FULL_DEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "package": "next build && node copy-assets.js && shx mv .next/standalone dist",
-    "clean": "shx rm -rf .next"
+    "clean": "shx rm -rf .next dist"
   },
   "dependencies": {
     "next": "^14.2.3",
