@@ -23,12 +23,12 @@ const siteDev = {
 
 const site = {
   name: "next",
-  script: path.join(currentDir, 'dist/apps/next/server.js'),
+  script: path.join(currentDir, 'dist/apps/next/entrypoint.js'),
   windowsHide: true,
   watch: false,
   env: {
       NODE_ENV: 'production',
-      PORT: 4000,
+      PORT: 8080,
       DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env')
   },
   cwd: path.join(currentDir, 'dist/apps/next'),

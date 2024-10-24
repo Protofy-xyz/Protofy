@@ -78,13 +78,7 @@ const config = {
         {
             "name": "next",
             "description": "Frontend services, providing the web user interface based on nextjs",
-            "route": (req, mode) => process.env.SITE_URL ?? 'http://localhost:' + (mode == 'production' ? 4000 : 3000)
-        },
-        {
-            "name": "proxy",
-            "description": "Proxy services",
-            "disabled": false,
-            "route": () => false
+            "route": (req, mode) => process.env.SITE_URL ?? 'http://localhost:' + (mode == 'production' ? 8080 : 8000)
         }
     ],
 

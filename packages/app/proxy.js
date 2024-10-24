@@ -1,33 +1,22 @@
 
-import { setConfig, getConfig, getLogger } from 'protobase';
-import { getBaseConfig, getConfigWithoutSecrets } from '@my/config'
-import { getServiceToken } from 'protonode'
-import http from 'http';
-import httpProxy from 'http-proxy';
-import { join } from 'path';
-import fs from 'fs';
-import mime from 'mime-types';
-import dotenv from 'dotenv'
-dotenv.config({ path: '../../.env' });
+const system = require('../../system.js');
+const httpProxy = require('http-proxy');
+const protobose = require('protobase')
+const getLogger = protobose.getLogger
+const protonode = require('protonode')
+const config = require('@my/config')
 
-setConfig(getBaseConfig("proxy", process, getServiceToken()))
+const isFullDev = process.env.FULL_DEV === '1';
+const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 
-const startTime = new Date().getTime();
-
-export const startProxy = async () => {
-    const system = await import('../../../system.js').then(module => module.default);
-    _startProxy(8080, "production", system) //production proxy on port 8080
-    _startProxy(8000, "development", system) //development proxy on port 8000
-}
-
-export const _startProxy = (Port, mode, system) => {
-    const logger = getLogger('proxy', getBaseConfig("proxy", process, getServiceToken()))
-
+const setupProxyHandler = (name, subscribe, handle) => {
+    const startTime = new Date().getTime();
+    const logger = getLogger(name, config.getBaseConfig(name, process, protonode.getServiceToken()))
     var proxy = httpProxy.createProxyServer({
         ws: true,
         xfwd: true
     });
-
+    
     proxy.on('proxyReq', function (proxyReq, req, res, options) {
         proxyReq.path = req.url.replace('/_dev/api/', '/api/')
     });
@@ -38,17 +27,22 @@ export const _startProxy = (Port, mode, system) => {
             return;
         }
         logger.error({ err, url: req.url }, 'Proxy error occurred');
-
+  
         if (res.writeHead) {
             res.writeHead(502, { 'Content-Type': 'text/plain' });
         }
         res.end('Bad Gateway: Unable to connect to upstream service');
     });
 
-    var server = http.createServer(function (req, res) {
-        // You can define here your custom logic to handle the request
-        // and then proxy the request.
-        //check if request is for a public file
+    subscribe((req, res) => {
+        if(!isFullDev && system['alwaisCompiledPaths'] && system['redirectToCompiled']) {
+          //check if alwaisCompiledPaths array contains a path that matches the start of the request url
+          const isCompiled = system['alwaisCompiledPaths'].some(path => req.url.startsWith(path));
+          if(isCompiled) {
+            return system.redirectToCompiled(req, res)
+          }
+        }
+    
         if (req.url.startsWith('/public/')) {
             logger.trace({ url: req.url }, "Serving public file: " + req.url)
             //remove ../ from url
@@ -59,18 +53,18 @@ export const _startProxy = (Port, mode, system) => {
                 res.end('Not Found');
                 return
             }
-
+    
             res.writeHead(200, { 'Content-Type': mime.lookup(path) });
             fs.createReadStream(path).pipe(res)
             return
         }
+    
         const resolver = system.services.find((resolver) => resolver.route(req, mode))
-        if (!resolver) {
-            res.writeHead(404, { 'Content-Type': 'text/plain' });
-            res.end('Not Found');
-            return
+    
+        if (!resolver || resolver.name == name) {
+          return handle(req, res)
         }
-
+    
         logger.trace({
             url: req.url,
             target: resolver.route(req, mode),
@@ -79,18 +73,6 @@ export const _startProxy = (Port, mode, system) => {
         }, "Proxying request for: " + req.url + " to: " + resolver.route(req, mode) + " from: " + req.connection.remoteAddress + " method: " + req.method)
         proxy.web(req, res, { target: resolver.route(req, mode) });
     });
-
-    server.on('upgrade', (req, socket, head) => {
-        const resolver = system.services.find((resolver) => resolver.route(req, mode))
-        if (!resolver) {
-            socket.write('HTTP/1.1 404 Not Found\r\n\r\n');
-            socket.destroy();
-            return;
-        }
-        proxy.ws(req, socket, head, { target: resolver.route(req, mode) });
-    });
-    server.listen(Port);
-    logger.debug({ service: { protocol: "http", port: Port } }, "Service started: HTTP")
 }
 
-startProxy()
+module.exports = setupProxyHandler;

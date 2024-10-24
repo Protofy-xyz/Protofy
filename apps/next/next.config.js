@@ -59,6 +59,18 @@ module.exports = function () {
     experimental: {
       scrollRestoration: true,
       outputFileTracingRoot: join(__dirname, '../../'),
+      outputFileTracingIncludes: {
+        '*': [
+          // Include your proxy handler and its dependencies
+          '../../packages/app/proxy.js',
+          '../../system.js',
+          '../../node_modules/http-proxy/**',
+          '../../node_modules/protobase/**',
+          '../../node_modules/protonode/**',
+          '../../node_modules/@my/config/**',
+          // Add any other modules or files your proxy depends on
+        ]
+      }
     },
     webpack: (config, options) => {
       config.plugins.push(
