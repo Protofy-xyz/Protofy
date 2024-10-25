@@ -1,4 +1,4 @@
-import { YStack } from '@my/ui';
+import { YStack, Text } from 'tamagui';
 import { PieChart as PieChartR, Pie, Tooltip, Cell, Legend } from "recharts";
 import { DashboardCard } from './DashboardCard';
 
@@ -33,9 +33,9 @@ export const PieChart: React.FC<PieChartProps> = ({
         const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
         return (
-            <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+            <Text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
                 {`${(percent * 100).toFixed(0)}%`}
-            </text>
+            </Text>
         );
     };
 
@@ -64,8 +64,11 @@ export const PieChart: React.FC<PieChartProps> = ({
                         <Legend />
                     </PieChartR>
                 ) : (
-                    <Text>No data available</Text>
-                )}
+                    <YStack>
+                        <Text>No data available</Text>
+                    </YStack>
+                )
+                }
             </YStack>
         </DashboardCard>
     );
