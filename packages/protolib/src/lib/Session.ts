@@ -70,6 +70,11 @@ export const getSessionCookie = async (cookieStr) => {
 
 //utility functions for nextjs pages
 const fail = (returnUrl?) => {
+    if (returnUrl.includes('_next/data/development/')) {
+        const basePath = returnUrl.split('_next/data/development')[1].split('.json')[0];
+        returnUrl = basePath
+    }
+    if (returnUrl == "/") returnUrl = undefined
     const encodedReturn = encodeURIComponent(returnUrl);
     return {
         redirect: {

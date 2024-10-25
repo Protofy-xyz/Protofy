@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  adminpanel:
+    image: "protofy/workspace"
+    entrypoint: "sh -c 'cd apps/adminpanel && yarn prepare-dev && yarn dev-standalone'"
+    ports:
+      - 8000:8000
+    environment:
+      - PROXY_API_URL=http://localhost:8000
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ../../:/workspace
+      - protofy_modules:/workspace/node_modules
+      - protofy_adminpanel_next:/workspace/apps/adminpanel/.next
+      
+volumes:
+  protofy_modules:
+    external: true
+  protofy_next:
+    external: true

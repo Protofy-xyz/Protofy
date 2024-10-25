@@ -9,8 +9,8 @@ const SiteConfig = {
     documentationVisible: true,
     useLocalDocumentation: false,
     signupEnabled: false,
-    defaultWorkspace: 'prod',
-    defaultWorkspacePage: 'pages',
+    defaultWorkspace: 'dev',
+    defaultWorkspacePage: 'dashboard',
     assistant: true,
     projectName: 'Protofy',
     ui: {

@@ -20,10 +20,10 @@ import { API, Protofy } from 'protobase';
 import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
 import { SSR } from 'protolib/lib/SSR';
-import { DefaultLayout, } from '../../../layout/DefaultLayout'
-import { context } from 'app/bundles/uiContext';
+import { DefaultLayout, } from '../layout/DefaultLayout'
+import { context } from '../bundles/uiContext';
 import { useRouter } from 'solito/navigation';
-import { Objects } from 'app/bundles/objects';
+import { Objects } from '../bundles/objects';
 
 const isProtected = Protofy("protected", {{protected}})
 Protofy("pageType", "default")

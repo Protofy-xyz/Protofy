@@ -28,7 +28,7 @@ const site = {
   watch: false,
   env: {
       NODE_ENV: 'production',
-      PORT: 8080,
+      PORT: 4000,
       DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env')
   },
   cwd: path.join(currentDir, 'dist/apps/next'),

@@ -6,7 +6,7 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 */
 
 import { Protofy, API } from 'protobase'
-import { Objects } from 'app/bundles/objects'
+import { Objects } from '../bundles/objects'
 import { CardBody } from 'protolib/components/CardBody'
 import { DataView } from 'protolib/components/DataView'
 import { AdminPage } from 'protolib/components/AdminPage'

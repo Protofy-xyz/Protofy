@@ -7,17 +7,21 @@ import { ArrayLiteralExpression } from 'ts-morph';
 import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
 import { ObjectModel } from "../objects/objectsSchemas";
+import admin from "app/workspaces/admin";
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
-const publishedNextPagesDir = (root) => fspath.join(root, "/apps/next-compiled/pages/")
+const adminPanelPagesDir = (root) => fspath.join(root, "/apps/adminpanel/pages/[env]/")
+const publishedNextPagesDir = (root) => fspath.join(root, "/apps/next/dist/apps/next/.next/server/pages/")
+const publishedAdminPagesDir = (root) => fspath.join(root, "/apps/adminpanel/dist/apps/adminpanel/.next/server/pages/[env]/")
+const publishedAdminRootPagesDir = (root) => fspath.join(root, "/apps/adminpanel/dist/apps/adminpanel/.next/server/pages/")
 const electronPagesDir = (root) => fspath.join(root, "/apps/electron/pages/")
 
 const getPage = (pagePath, req) => {
   try {
     const sourceFile = getSourceFile(pagePath)
     const route = getDefinition(sourceFile, '"route"')
-    const routeValue = route.getText().replace(/^["']|["']$/g, '')
+    let routeValue = route.getText().replace(/^["']|["']$/g, '')
     const pageType = getDefinition(sourceFile, '"pageType"')
     let pageTypeValue = null
     if(pageType) {
@@ -27,7 +31,13 @@ const getPage = (pagePath, req) => {
     const prot = getDefinition(sourceFile, '"protected"')
     let permissions = getDefinition(sourceFile, '"permissions"')
     const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
-    const publishedNextFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
+    const adminPanelFilePath = fspath.join(adminPanelPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
+    const publishedNextJSFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
+    const publishedNextHTMLFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
+    const publishedAdminJSFilePath = fspath.join(publishedAdminPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
+    const publishedAdminHTMLFilePath = fspath.join(publishedAdminPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
+    const publishedAdminRootJSFilePath = fspath.join(publishedAdminRootPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
+    const publishedAdminRootHTMLFilePath = fspath.join(publishedAdminRootPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
     const electronFilePath = fspath.join(electronPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
     if (!route || !permissions || !prot) return undefined
     if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
@@ -47,14 +57,16 @@ const getPage = (pagePath, req) => {
 
     return {
       name: fspath.basename(pagePath, fspath.extname(pagePath)),
-      route: routeValue,
+      route: pageTypeValue == 'admin' ? '/workspace'+routeValue : routeValue,
       pageType: pageTypeValue,
       protected: prot.getText() == 'false' ? false : true,
       permissions: permissions,
       web: syncFs.existsSync(nextFilePath),
       electron: syncFs.existsSync(electronFilePath),
+      adminpanel: syncFs.existsSync(adminPanelFilePath),
       status: {
-        web: syncFs.existsSync(publishedNextFilePath) ? 'published' : 'unpublished',
+        web: syncFs.existsSync(publishedNextJSFilePath) || syncFs.existsSync(publishedNextHTMLFilePath) ? 'published' : 'unpublished',
+        adminpanel: syncFs.existsSync(publishedAdminJSFilePath) || syncFs.existsSync(publishedAdminHTMLFilePath) || syncFs.existsSync(publishedAdminRootJSFilePath) || syncFs.existsSync(publishedAdminRootHTMLFilePath) ? 'published' : 'unpublished'
       },
       ...(objectName ? {object: objectName}: {})
     }
@@ -97,22 +109,12 @@ const getDB = (path, req, session) => {
           const ObjectSourceFile = getSourceFile(objectPath)
           removeFeature(ObjectSourceFile, '"'+pageType+'Page"')
         }
-      }
-
-      await deleteFile(fspath.join(getRoot(req), "apps/next/pages", route + '.tsx'))
-      const pagePath = "apps/electron/pages" + route + '.tsx'
-      await deleteFile(fspath.join(getRoot(req), pagePath))
-
-      if(route.startsWith('/workspace/')) {
-        const devPath = fspath.join(getRoot(req), "apps/next/pages", route.replace('/workspace/', '/workspace/dev/') + '.tsx')
-        const prodPath = fspath.join(getRoot(req), "apps/next/pages", route.replace('/workspace/', '/workspace/prod/') + '.tsx')
-        
-        try { await deleteFile(devPath) } catch(e) {console.error('Delete dev workspace page failed: ', e)}
-        try { await deleteFile(prodPath) } catch(e) {console.error('Delete prod workspace page failed: ', e)}
+        await deleteFile(fspath.join(getRoot(req), "apps/adminpanel/pages/[env]/", route + '.tsx'))
+      } else {
+        await deleteFile(fspath.join(getRoot(req), "apps/next/pages", route + '.tsx'))
       }
 
       await deleteFile(filePath)
-      
     },
 
     async put(key, value) {
@@ -127,6 +129,9 @@ const getDB = (path, req, session) => {
       const template = fspath.basename(value.template ?? 'default')
       const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
       const route = value.route.startsWith('/') ? value.route : '/' + value.route
+      //TODO: develop a multy system pages api, compatible with multiple app frontends
+      //Fow now, we use the template name to determine the frontend
+      const pagesAppDir = template == 'admin' || template == 'adminblank' ? adminPanelPagesDir(getRoot(req)) : nextPagesDir(getRoot(req))
       try {
         await fs.access(filePath, fs.constants.F_OK)
         // console.log('File: ' + filePath + ' already exists, not executing template')
@@ -181,28 +186,17 @@ const getDB = (path, req, session) => {
       arg.replaceWithText(route ? JSON.stringify(route) : '""')
       sourceFile.save()
 
-      const pagesAppDir = nextPagesDir(getRoot(req))
       if (prevPage && prevPage.route != route) {
         //delete previous route if changed
         const prevRoute = prevPage.route.startsWith('/') ? prevPage.route : '/' + prevPage.route
         const prevFile = fspath.join(pagesAppDir, prevRoute + '.tsx')
         console.log('Deleting prev page', prevFile)
         await fs.unlink(prevFile)
-
-        if(prevRoute.startsWith('/workspace/')) {
-          const devPath = fspath.join(pagesAppDir, prevRoute.replace('/workspace/', '/workspace/dev/') + '.tsx')
-          const prodPath = fspath.join(pagesAppDir, prevRoute.replace('/workspace/', '/workspace/prod/') + '.tsx')
-          try {await fs.unlink(devPath)} catch (e) {console.error('Delete dev workspace page failed: ', e)}
-          try {await fs.unlink(prodPath)} catch (e) {console.error('Delete prod workspace page failed: ', e)}
-        }
-
         console.log('Deleted')
       }
 
       //link in nextPages
       const appFilePath = fspath.join(pagesAppDir, route + '.tsx')
-      const devPath = fspath.join(pagesAppDir, route.replace('/workspace/', '/workspace/dev/') + '.tsx')
-      const prodPath = fspath.join(pagesAppDir, route.replace('/workspace/', '/workspace/prod/') + '.tsx')
 
       try {
         //TODO: routes with subdirectories
@@ -229,14 +223,6 @@ const getDB = (path, req, session) => {
           })
           if (result.isError) {
             throw result.error
-          }
-
-          console.log('---------------------------------------------')
-          console.log('checking if route is workspace route: ', route, route.startsWith('/workspace/'))
-          if(route.startsWith('/workspace/')) {
-            console.log('is a workspace route, creating: ', devPath, prodPath)
-            await fs.copyFile(appFilePath, devPath)
-            await fs.copyFile(appFilePath, prodPath)
           }
         }
       }

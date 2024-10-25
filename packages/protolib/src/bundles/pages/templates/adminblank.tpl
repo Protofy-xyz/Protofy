@@ -10,7 +10,7 @@ import { SSR } from 'protolib/lib/SSR';
 import { useWorkspaceUrl, getWorkspaceApiUrl } from 'protolib/lib/useWorkspaceEnv'
 import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
 import { AdminPage } from 'protolib/components/AdminPage'
-import { context } from 'app/bundles/uiContext'
+import { context } from '../bundles/uiContext'
 import { useRouter } from 'solito/navigation'
 import { withSession } from 'protolib/lib/Session';
 import { VStack } from 'protolib/components/VStack';

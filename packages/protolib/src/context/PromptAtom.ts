@@ -89,7 +89,7 @@ export const PromptAtom = atom<PromptContext[]>([{
 
         Both the admin panel and the dev panel contain the following categories available (and exposed in the sidebar of the admin.tsx and editor.tsx workspaces):
 
-        - /workspace/dev/dashboard a dashboard with information about the system (default view when accessing the dev pane)
+        - /workspace/dev/ a dashboard with information about the system (default view when accessing the dev pane)
         - /workspace/dev/users users crud and reset password options. Information about last login from each user.
         - /workspace/dev/groups Groups crud. Users have a group assigned and groups have permissions and workspaces assigned
         - /workspace/dev/keys Keys crud. Keys are variables accessible from automations to use, for example used to define the OPENAI_API_KEY and similar api tokens. Keys are secret.

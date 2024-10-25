@@ -37,17 +37,16 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
   });
 
   server.on('upgrade', function (req, socket, head) {
-    if(req.url.endsWith('/webpack-hmr')) {
-        //let nextjs handle its own websocket
-        return
-    }
-
     const resolver = system.services.find((resolver) => resolver.route(req, mode));
 
     if (!resolver || resolver.name === name) {
-      console.log('No resolver found for WebSocket request: ' + req.url);
-      socket.destroy();
-      return;
+        if(resolver.name === name && req.url.endsWith('/webpack-hmr')) {
+            //let nextjs handle its own websocket
+            return
+        }
+        console.log('No resolver found for WebSocket request: ' + req.url);
+        socket.destroy();
+        return;
     }
 
     console.log('Proxying WebSocket request for: ' + req.url + ' to: ' + resolver.route(req, mode));
@@ -81,11 +80,11 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
     const resolver = system.services.find((resolver) => resolver.route(req, mode));
 
     if (!resolver || resolver.name === name) {
-      console.log('No resolver found for: ' + req.url);
+    //   console.log('No resolver found for: ' + req.url);
       return handle(req, res);
     }
 
-    console.log('Resolving request for: ' + req.url + ' to: ' + resolver.route(req, mode));
+    // console.log('Resolving request for: ' + req.url + ' to: ' + resolver.route(req, mode));
 
     logger.trace({
       url: req.url,

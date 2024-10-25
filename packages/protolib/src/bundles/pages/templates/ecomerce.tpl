@@ -10,9 +10,9 @@ import { API, Protofy } from 'protobase';
 import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
 import { SSR } from 'protolib/lib/SSR';
-import { DefaultLayout } from '../../../layout/DefaultLayout';
+import { DefaultLayout } from '../layout/DefaultLayout';
 import { Paragraph } from '@my/ui';
-import { context } from 'app/bundles/uiContext';
+import { context } from '../bundles/uiContext';
 import { useRouter } from 'solito/navigation';
 
 const isProtected = Protofy("protected", {{protected}})

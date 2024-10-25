@@ -7,6 +7,7 @@ export const PageSchema = Schema.object({
     permissions: z.array(z.string()).label("Permissions").generate(() => []),
     web: z.boolean().defaultValue(true),
     electron: z.boolean().hidden().defaultValue(false),
+    adminpanel: z.boolean().hidden().defaultValue(false).generate(() => false),
     mobile: z.boolean().optional().hidden().defaultValue(false),
     protected: z.boolean().defaultValue(false).label("Require user"),
     object: z.string().optional().hidden(),

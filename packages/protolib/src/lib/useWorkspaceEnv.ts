@@ -7,7 +7,7 @@ export const useWorkspaceEnv = () => {
 }
 
 export const getWorkspaceEnv = (path) => {
-    const env = path.split('/')[2];
+    const env = path.split('/')[1];
     return env
 }
 

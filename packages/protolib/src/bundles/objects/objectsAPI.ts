@@ -178,7 +178,7 @@ const getDB = (path, req, session) => {
         if (value.adminPage) {
           const objectApi = PageModel.load({
             name: value.name,
-            route: "workspace/" + value.name,
+            route: value.name,
             permissions: ["admin"],
             web: true,
             electron: false,

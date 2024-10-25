@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "react-native": [
+        "react-native-web"
+      ],
+      "protolib/*": ["../../packages/protolib/src/*"],
+    },
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "typeRoots": [ // Specifies a list of directories for type definitions
+    "./node_modules/@types",
+    "../../node_modules/@types",
+    "../../.types"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "jest/jest-globals.d.ts",
+    "../../packages/protolib/src/**/*.ts",
+    "../../packages/protolib/src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

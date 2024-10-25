@@ -9,11 +9,11 @@ import { Protofy, API } from 'protobase'
 import { PaginatedDataSSR } from 'protolib/lib/SSR'
 import { useWorkspaceUrl, getWorkspaceApiUrl } from 'protolib/lib/useWorkspaceEnv'
 import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
-import { Objects } from 'app/bundles/objects'
+import { Objects } from '../bundles/objects'
 import { DataView } from 'protolib/components/DataView'
 import { AdminPage } from 'protolib/components/AdminPage'
 import { Tag } from '@tamagui/lucide-icons'
-import { context } from 'app/bundles/uiContext'
+import { context } from '../bundles/uiContext'
 import { useRouter } from 'solito/navigation'
 
 const Icons =  {}

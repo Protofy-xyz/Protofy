@@ -6,7 +6,7 @@ import { Protofy } from 'protobase'
 import { SSR } from '../../lib/SSR';
 import { useWorkspace } from '../../lib/useWorkspace';
 
-const isProtected = Protofy("protected", false)
+const isProtected = Protofy("protected", true)
 
 export default {
     'dashboard': {

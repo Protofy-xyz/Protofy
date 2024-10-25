@@ -5,7 +5,7 @@ import { API, Protofy } from 'protobase';
 import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
 import { SSR } from 'protolib/lib/SSR';
-import { DefaultLayout, } from '../../../layout/DefaultLayout'
+import { DefaultLayout, } from '../layout/DefaultLayout'
 import { TintSection } from 'protolib/components/TintSection';
 import { ContainerLarge } from 'protolib/components/Container';
 import { Spacer } from 'protolib/components/Spacer';
@@ -32,7 +32,7 @@ import { Grid } from 'protolib/components/Grid';
 import { useEdit } from 'protolib/visualui/useEdit';
 import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
-import { context } from "app/bundles/uiContext";
+import { context } from "../bundles/uiContext";
 import { useRouter } from "solito/navigation";
 
 const isProtected = Protofy("protected", {{protected}})

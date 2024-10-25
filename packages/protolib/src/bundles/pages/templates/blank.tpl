@@ -16,10 +16,10 @@ import { SSR } from 'protolib/lib/SSR';
 import { useComposedState } from 'protolib/lib/useComposedState';
 import { Text } from 'protolib/components/Text';
 import { Center } from 'protolib/components/Center';
-import { DefaultLayout } from 'app/layout/DefaultLayout'
-import { context } from 'app/bundles/uiContext';
+import { DefaultLayout } from '../layout/DefaultLayout'
+import { context } from '../bundles/uiContext';
 import { useRouter } from 'solito/navigation';
-import { Objects } from 'app/bundles/objects';
+import { Objects } from '../bundles/objects';
 
 
 const isProtected = Protofy("protected", {{protected}})

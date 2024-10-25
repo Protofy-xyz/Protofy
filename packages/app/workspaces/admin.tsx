@@ -35,12 +35,12 @@ export default ({ pages }) => {
     const adminPages = pages.filter(p => p.pageType == 'admin' && p.object && p.route.startsWith('/workspace/'))
 
     return {
-        "default": "/workspace/prod/dashboard",
+        "default": "/workspace/prod/",
         "label": "Admin panel",
         "assistant": true,
         "logs": true,
         "dev": {
-            "default": "/workspace/dev/dashboard",
+            "default": "/workspace/dev/",
             "label": "Dev panel"
         },
         "dashboards": [{
@@ -113,7 +113,7 @@ export default ({ pages }) => {
                 })
             } : {}),
             "System": [
-                { "name": "Dashboard", "icon": LayoutDashboard, "type": "dashboard", "path": "/" },
+                { "name": "Dashboard", "icon": LayoutDashboard, "type": "", "path": "/" },
                 { "name": "Users", "icon": "users", "type": "users", "path": "/" },
                 { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
                 { "name": "Keys", "icon": Key, "type": "keys", "path": "/" },

@@ -7,6 +7,7 @@
     "apps/api",
     "apps/expo",
     "apps/next",
+    "apps/adminpanel",
     "apps/nextra",
     "apps/jupyter",
     "apps/python",
@@ -53,7 +54,7 @@
     "check-deps": "check-dependency-version-consistency .",
     "clean": "yarn workspaces foreach --all run clean",
     "protofy-update-setup": "git remote add protofy git@github.com:Protofy-xyz/Protofy.git",
-    "protofy-update": "git fetch protofy && git rebase protofy/main",
+    "protofy-update": "git fetch protofy && git rebase protofy/main && yarn clean",
     "python": "node apps/python/run.js",
     "git-origin-setup": "node git-origin-setup.js"
   },

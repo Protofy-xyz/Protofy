@@ -10889,6 +10889,61 @@ __metadata:
   languageName: node
   linkType: hard
 
+"adminpanel@workspace:apps/adminpanel":
+  version: 0.0.0-use.local
+  resolution: "adminpanel@workspace:apps/adminpanel"
+  dependencies:
+    "@craftjs/core": "npm:0.2.0-beta.8"
+    "@craftjs/layers": "npm:0.2.1"
+    "@jest/globals": "npm:~29.7.0"
+    "@my/config": "npm:*"
+    "@next/bundle-analyzer": "npm:^14.2.5"
+    "@protocraft/core": "npm:0.2.4-2"
+    "@protocraft/layers": "npm:0.2.1-2"
+    "@react-three/drei": "npm:9.77.3"
+    "@react-three/fiber": "npm:8.8.10"
+    "@tamagui/config": "npm:^1.101.7"
+    "@tamagui/next-plugin": "npm:^1.101.7"
+    "@tamagui/next-theme": "npm:^1.101.7"
+    "@types/jest": "npm:~29.5.5"
+    "@types/node": "npm:^20.14.1"
+    "@types/react": "npm:^18.0.27"
+    app: "npm:0.0.0"
+    compare-versions: "npm:^3.4.0"
+    dotenv: "npm:^16.3.1"
+    eslint-config-next: "npm:^14.2.3"
+    http-proxy: "npm:^1.18.1"
+    jest: "npm:~29.7.0"
+    leva: "npm:^0.9.35"
+    mime-types: "npm:^2.1.35"
+    next: "npm:^14.2.3"
+    next-compose-plugins: "npm:^2.2.1"
+    next-seo: "npm:6.5.0"
+    next-transpile-modules: "npm:^10.0.1"
+    playwright: "npm:1.41.0"
+    pm2: "npm:^5.3.0"
+    protobase: "npm:*"
+    protolib: "npm:0.0.1"
+    protonode: "npm:*"
+    raf: "npm:^3.4.1"
+    react: "npm:18.2.0"
+    react-dom: "npm:18.2.0"
+    react-dropzone: "npm:14.2.3"
+    react-dropzone-uploader: "npm:2.11.0"
+    react-native: "npm:0.74.3"
+    react-native-web: "npm:~0.19.12"
+    react-native-web-lite: "npm:^1.101.7"
+    react-topics: "npm:0.1.7"
+    selenium-webdriver: "npm:~4.16.0"
+    sharp: "npm:0.33.4"
+    shx: "npm:^0.3.4"
+    tamagui: "npm:^1.101.7"
+    three: "npm:0.146.0"
+    ts-jest: "npm:~29.1.1"
+    vercel: "npm:latest"
+  languageName: unknown
+  linkType: soft
+
 "aedes-packet@npm:^3.0.0":
   version: 3.0.0
   resolution: "aedes-packet@npm:3.0.0"

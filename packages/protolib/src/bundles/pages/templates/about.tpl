@@ -22,10 +22,10 @@ import { useEditor } from 'protolib/visualui/useEdit'
 import { SSR } from 'protolib/lib/SSR'
 import React, { useState } from 'react'
 import Theme from 'visualui/src/components/Theme'
-import { DefaultLayout } from '../../../layout/DefaultLayout'
-import { context } from 'app/bundles/uiContext'
+import { DefaultLayout } from '../layout/DefaultLayout'
+import { context } from '../bundles/uiContext'
 import { useRouter } from 'solito/navigation'
-import { Objects } from 'app/bundles/objects'
+import { Objects } from '../bundles/objects'
 
 const isProtected = Protofy("protected", false)
 Protofy("pageType", "about")

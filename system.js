@@ -76,9 +76,19 @@ const config = {
             "route": () => false
         },
         {
+            "name": "adminpanel",
+            "disabled": false,
+            "description": "Admin panel UI to manage and interact with core services",
+            "route": (req, mode) => {
+                if(req.url.startsWith('/workspace/') || req.url == '/workspace') {
+                    return process.env.ADMIN_PANEL_URL ?? 'http://localhost:' + (mode == 'production' ? 8080 : 8000)
+                }
+            } 
+        },
+        {
             "name": "next",
             "description": "Frontend services, providing the web user interface based on nextjs",
-            "route": (req, mode) => process.env.SITE_URL ?? 'http://localhost:' + (mode == 'production' ? 8080 : 8000)
+            "route": (req, mode) => process.env.SITE_URL ?? 'http://localhost:' + (mode == 'production' ? 4000 : 3000)
         }
     ],
 

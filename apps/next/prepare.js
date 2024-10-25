@@ -48,19 +48,6 @@ function copyFiles(source, target, skip = []) {
     });
 }
 
-if (!fast) {
-    //dev
-    try {
-        fs.rmSync('./pages/workspace/dev', { recursive: true })
-    } catch (e) { }
-    fs.mkdirSync('./pages/workspace/dev', { recursive: true })
-
-    //prod
-    try {
-        fs.rmSync('./pages/workspace/prod', { recursive: true })
-    } catch (e) { }
-    fs.mkdirSync('./pages/workspace/prod', { recursive: true })
+if(fs.existsSync('dist/')) {
+    fs.copyFileSync('../../system.js', 'dist/system.js')
 }
-
-copyFiles('./pages/workspace', './pages/workspace/dev', ['prod', 'dev', '[...page].tsx', 'index.tsx'])
-copyFiles('./pages/workspace', './pages/workspace/prod', ['prod', 'dev', '[...page].tsx', 'index.tsx'])
