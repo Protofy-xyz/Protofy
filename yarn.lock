@@ -27906,19 +27906,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"proxy@workspace:apps/proxy":
-  version: 0.0.0-use.local
-  resolution: "proxy@workspace:apps/proxy"
-  dependencies:
-    "@my/config": "npm:*"
-    dotenv: "npm:^16.3.1"
-    http-proxy: "npm:^1.18.1"
-    mime-types: "npm:^2.1.35"
-    protobase: "npm:*"
-    protonode: "npm:*"
-  languageName: unknown
-  linkType: soft
-
 "pseudomap@npm:^1.0.2":
   version: 1.0.2
   resolution: "pseudomap@npm:1.0.2"
