@@ -109,7 +109,8 @@ export default ({ pages }) => {
         "menu": {
             ...(adminPages.length ? {
                 "CMS": adminPages.map((page) => {
-                    return { "name": page.object.charAt(0).toUpperCase() + page.object.slice(1), "icon": Box, "type": page.route.split('/')[2], "path": page.route.split('/').slice(3), previewMode: page.status?.web == 'unpublished' }
+                    const parts = page.route.split('/')
+                    return { "name": page.object.charAt(0).toUpperCase() + page.object.slice(1), "icon": Box, "type": parts[2], "path": '/', previewMode: page.status?.adminpanel == 'unpublished' }
                 })
             } : {}),
             "System": [

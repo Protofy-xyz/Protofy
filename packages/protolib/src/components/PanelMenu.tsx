@@ -171,9 +171,8 @@ const Subtabs = ({ tabs, subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-
                 let href = workspaceRoot + workspaceEnv + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
-                if(subtab.previewMode) {
+                if(subtab.previewMode && workspaceEnv != 'dev') {
                     href = SiteConfig.getDevelopmentURL(href, document?.location?.protocol, document?.location?.hostname)
                 }
 
