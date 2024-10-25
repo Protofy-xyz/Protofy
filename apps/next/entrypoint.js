@@ -1,38 +1,24 @@
-const next = require('next');
-const setupProxyHandler = require('app/proxy.js');
+const next = require('next')
+const setupProxyHandler = require('app/proxy.js')
+const http = require('http')
 const fs = require('fs')
-const path = require('path');
+const path = require('path')
 
-function extractNextConfig(script) {
-  const nextConfigRegex = /const nextConfig = (.*)/;
-  const match = script.match(nextConfigRegex);
-
-  if (match && match[1]) {
-    try {
-      const nextConfig = JSON.parse(match[1]);
-      return nextConfig;
-    } catch (error) {
-      console.error("Error in entrypoint.js: error parsing nextConfig from server.js:", error);
-      return null;
-    }
-  }
-  return null;
-}
-
-const app = next({ dev: true });
-const handle = app.getRequestHandler();
+const app = next({ dev: true })
+const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
-  const express = require('express');
-  const server = express();
+  const server = http.createServer()
+
   setupProxyHandler('next', (subFn) => {
-    server.all('*', (req, res) => {
-      return subFn(req, res);
+    server.on('request', (req, res) => {
+      return subFn(req, res)
     });
-  }, handle);
+  }, handle, server)
+
   const PORT = 8000
   server.listen(PORT, (err) => {
-    if (err) throw err;
-    console.log(`> Ready on http://localhost:${PORT}`);
-  });
-});
+    if (err) throw err
+    console.log(`> Ready on http://localhost:${PORT}`)
+  })
+})

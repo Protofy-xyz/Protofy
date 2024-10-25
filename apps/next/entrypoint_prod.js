@@ -3,34 +3,34 @@ const fs = require('fs')
 const dir = path.join(__dirname)
 process.env.NODE_ENV = 'production'
 process.chdir(__dirname)
-const setupProxyHandler = require('../../packages/app/proxy');
+const setupProxyHandler = require('../../packages/app/proxy')
 
 if(!fs.existsSync(path.join(__dirname, '../../node_modules/@my/protolib'))) {
-  fs.mkdirSync(path.join(__dirname, '../../node_modules/@my/protolib/lib'), { recursive: true });
-  fs.copyFileSync(path.join(__dirname, '../../packages/protolib/lib/RemoteTransport.ts'), path.join(__dirname, '../../node_modules/@my/protolib/lib/RemoteTransport.ts'));
+  fs.mkdirSync(path.join(__dirname, '../../node_modules/@my/protolib/lib'), { recursive: true })
+  fs.copyFileSync(path.join(__dirname, '../../packages/protolib/lib/RemoteTransport.ts'), path.join(__dirname, '../../node_modules/@my/protolib/lib/RemoteTransport.ts'))
 }
 
 function extractNextConfig(script) {
-  const nextConfigRegex = /const nextConfig = (.*)/;
+  const nextConfigRegex = /const nextConfig = (.*)/
   const match = script.match(nextConfigRegex);
 
   if (match && match[1]) {
     try {
       const nextConfig = JSON.parse(match[1]);
-      return nextConfig;
+      return nextConfig
     } catch (error) {
-      console.error("Error in entrypoint.js: error parsing nextConfig from server.js:", error);
-      return null;
+      console.error("Error in entrypoint.js: error parsing nextConfig from server.js:", error)
+      return null
     }
   }
-  return null;
+  return null
 }
 
 if (fs.existsSync(path.join(__dirname, 'server.js'))) {
   const content = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
-  const nextConfig = extractNextConfig(content);
+  const nextConfig = extractNextConfig(content)
 
-  const currentPort = parseInt(process.env.PORT, 10) || 8080
+  const currentPort = parseInt(process.env.PORT, 10) || 4000
   const hostname = process.env.HOSTNAME || '0.0.0.0'
 
   let keepAliveTimeout = parseInt(process.env.KEEP_ALIVE_TIMEOUT, 10)
@@ -50,16 +50,18 @@ if (fs.existsSync(path.join(__dirname, 'server.js'))) {
       }
     };
 
+    server = originalCreateServer.call(this, wrappedRequestListener)
+
     setupProxyHandler('next', (subFn) => {
       listener = subFn
-    }, requestListener);
+    }, requestListener, server);
 
-    return originalCreateServer.call(this, wrappedRequestListener);
+    return server
   };
 
 
   require('next')
-  const { startServer } = require('next/dist/server/lib/start-server');
+  const { startServer } = require('next/dist/server/lib/start-server')
 
   if (
     Number.isNaN(keepAliveTimeout) ||
@@ -79,8 +81,8 @@ if (fs.existsSync(path.join(__dirname, 'server.js'))) {
     keepAliveTimeout,
     config: nextConfig,
   }).catch((err) => {
-    console.error(err);
-    process.exit(1);
+    console.error(err)
+    process.exit(1)
   });
 } else {
   print("Error starting production server: server.js not found")
