@@ -14,7 +14,6 @@ if (process.argv.length < 5) {
 const username = process.argv[2]
 const password = process.argv[3]
 const type = process.argv[4]
-const environments = process.argv.length > 5 ? process.argv.slice(5) : ['*']
 const dbPath = 'auth'
 
 
@@ -38,8 +37,7 @@ const addUser = async () => {
             password: await hash(password),
             createdAt: currentDateISO,
             from: 'cmd',
-            type: type,
-            environments: environments
+            type: type
         }
         const entityModel = UserModel.load(userData)
         await getDB(dbPath).put(username, JSON.stringify(userData))

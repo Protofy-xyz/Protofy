@@ -5,7 +5,6 @@ import { DataTable2 } from '../../components/DataTable2';
 import { Chip } from '../../components/Chip';
 import { DataView } from '../../components/DataView';
 import { AdminPage } from '../../components/AdminPage';
-import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import moment from 'moment';
 import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
 import { API } from 'protobase'
@@ -29,7 +28,6 @@ export default {
         component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
             const [all, setAll] = useState(false)
             const [groups, setGroups] = useState(extraData?.groups ?? getPendingResult("pending"))
-            const env = useWorkspaceEnv()
 
             usePendingEffect((s) => { API.get(groupsSourceUrl, s) }, setGroups, extraData?.groups)
 
@@ -85,7 +83,6 @@ export default {
                     itemData={itemData}
                     rowIcon={User}
                     sourceUrl={sourceUrl}
-                    sourceUrlParams={all ? undefined : { env }}
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="user"
@@ -95,7 +92,7 @@ export default {
                             throw "Passwords do not match"
                         }
                         const { repassword, ...finalData } = data
-                        return { ...finalData, environments: data.environments && data.environments.length ? data.environments : [env] }
+                        return finalData
                     }}
                     onEdit={data => {
                         if (data.password != data.repassword) {
@@ -121,8 +118,7 @@ export default {
                         DataTable2.column("type", row => row.type, "tyoe", row => <Chip text={row.type?.toUpperCase()} color={row.type == 'admin' ? '$color5' : '$gray5'} />),
                         DataTable2.column("from", row => row.from, "from", row => <Chip text={row.from?.toUpperCase()} color={row.from == 'cmd' ? '$blue5' : '$gray5'} />),
                         DataTable2.column("created", row => row.createdAt, "createdAt", row => moment(row.createdAt).format(format)),
-                        DataTable2.column("last login", row => row.lastLogin, "lastLogin", row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'never'} color={'$gray5'} />),
-                        DataTable2.column("environments", row => row.environments, "environments", row => row.environments ? <XStack>{row.environments.map((env) => <Chip text={env.toUpperCase()} color={env == '*' ? '$orange5' : (env == 'dev' ? '$gray5' : '$color5')} />)}</XStack> : <Chip text={'*'} color={'$orange5'} />)
+                        DataTable2.column("last login", row => row.lastLogin, "lastLogin", row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'never'} color={'$gray5'} />)
                     )}
                     extraFieldsForms={{
                         repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()

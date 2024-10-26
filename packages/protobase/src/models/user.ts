@@ -10,7 +10,6 @@ export const UserSchema = Schema.object({
     permissions: z.array(z.string()).optional().label("additional permissions"),
     createdAt: z.string().min(1).generate((obj) => moment().toISOString()).search().hidden(["edit", "add"]).indexed(),
     lastLogin: z.string().optional().search().hidden(["edit", "add"]).indexed(),
-    environments: z.array(z.enum(['dev', 'prod', '*'])).optional().help("The environments the user has access to. '*' means all environments").groupIndex("env", "return !data.environments || data.environments.includes('*') ? ['dev', 'prod'] : data.environments"),
     from: z.string().min(1).search().generate((obj) => 'admin').help("Interface used to create the user. Users can be created from command line or from the admin panel").hidden(["edit", "add"])
 })
 export type UserType = z.infer<typeof UserSchema>;
@@ -19,31 +18,8 @@ export class UserModel extends ProtoModel<UserModel> {
         super(data, UserSchema, session, "User");
     }
 
-    hasEnvironment(env: string) {
-        return !this.data.environments || this.data.environments.includes('*') || this.data.environments.includes(env)
-    }
-
     static load(data: any, session?: SessionDataType): UserModel {
         return this._newInstance(data, session);
-    }
-
-    list(search?, session?, extraData?, params?): any {
-        if(params && params.filter && params.filter.environments) {
-            const {environments, ...filter} = params.filter
-            if(!this.hasEnvironment(environments)) { 
-                return
-            }
-            params = {
-                ...params,
-                filter: {
-                    ...filter,
-                }
-            }
-        }
-        
-        //pass params with params.filter.environments removed
-
-        return super.list(search, session, extraData, params)
     }
 
     protected static _newInstance(data: any, session?: SessionDataType): UserModel {

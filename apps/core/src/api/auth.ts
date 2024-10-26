@@ -33,14 +33,12 @@ const genNewSession = (data: any) => {
 
 app.post('/api/core/v1/auth/login', handler(async (req: any, res: any) => {
     const request: LoginRequest = req.body
-    const env = req.query.env ?? 'prod'
     const fail = (msg) => {
         res.status(401).send('"'+msg+'"')
         generateEvent({
-            environment: env,
-            path: 'auth/login/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-            from: 'core', // system entity where the event was generated (next, api, cmd...)
-            user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+            path: 'auth/login/error',
+            from: 'core', 
+            user: 'system', 
             payload: {reason: msg, username: request.username, clientIp: req.get('X-Client-IP') || req.headers['x-client-ip'] } // event payload, event-specific data
         }, getServiceToken())
     }
@@ -52,11 +50,6 @@ app.post('/api/core/v1/auth/login', handler(async (req: any, res: any) => {
         }
 
         const storedUser = JSON.parse(await db.get(request.username))
-        const entityModel = UserModel.load(storedUser)
-
-        if(!entityModel.hasEnvironment(env)) {
-            return fail("This user is not registered for this environment")
-        }
 
         if (await checkPassword(request.password, storedUser.password)) {
             //update lastLogin
@@ -70,7 +63,6 @@ app.post('/api/core/v1/auth/login', handler(async (req: any, res: any) => {
             }
             const newSession = {
                 id: storedUser.username,
-                environments: storedUser.environments,
                 type: storedUser.type,
                 admin: group.admin ? true : false,
                 permissions: [...(group.admin ? ["*"] : []), storedUser.type, ...(group.permissions ?? []), ...(storedUser.permissions ?? [])]
@@ -80,7 +72,6 @@ app.post('/api/core/v1/auth/login', handler(async (req: any, res: any) => {
                 context: await getSessionContext(storedUser.type)
             })
             generateEvent({
-                environment: env,
                 path: 'auth/login/success', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'core', // system entity where the event was generated (next, api, cmd...)
                 user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
@@ -112,7 +103,6 @@ app.post('/api/core/v1/auth/register', handler(async (req: any, res: any) => {
         res.status(403).send('Signup is disabled');
         return
     }
-    const env = req.query.env ?? 'prod'
     const request: RegisterRequest = req.body
     const defaultGroup = "user"
     RegisterSchema.parse(request)
@@ -124,7 +114,6 @@ app.post('/api/core/v1/auth/register', handler(async (req: any, res: any) => {
         const newUser = {
             ...newUserData,
             from: 'signup',
-            environments: [env], 
             password: await hash(password)
         }
         const entityModel = UserModel.load(newUser).create()
@@ -144,11 +133,9 @@ app.post('/api/core/v1/auth/register', handler(async (req: any, res: any) => {
         }
 
         generateEvent({
-            environment: env,
             path: 'auth/register/user', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
             from: 'core', // system entity where the event was generated (next, api, cmd...)
             user: request.username, // the original user that generates the action, 'system' if the event originated in the system itself
-            payload: {environments: [req.query.env ?? 'prod']} // event payload, event-specific data
         }, getServiceToken())
         logger.info({ newUserData }, "User created: " + newUserData.username)
 
@@ -158,7 +145,6 @@ app.post('/api/core/v1/auth/register', handler(async (req: any, res: any) => {
             type: defaultGroup,
             admin: group.admin ? true : false,
             permissions: [...(group.admin ? ["*"] : []), defaultGroup, ...(group.permissions ?? [])],
-            environments: [env]
         }
         res.send({
             session: genNewSession(newSession),
