@@ -55,17 +55,10 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
   });
 
   subscribe((req, res) => {
-    if (!isFullDev && system['alwaisCompiledPaths'] && system['redirectToCompiled']) {
-      const isCompiled = system['alwaisCompiledPaths'].some(path => req.url.startsWith(path));
-      if (isCompiled) {
-        return system.redirectToCompiled(req, res);
-      }
-    }
-
     if (req.url.startsWith('/public/')) {
       logger.trace({ url: req.url }, "Serving public file: " + req.url);
       const url = decodeURIComponent(req.url.replace(/\.\.\//g, ''));
-      const filePath = join('../../data/', mode == "production" ? 'prod' : 'dev', url);
+      const filePath = join('../../data/', url);
       if (!fs.existsSync(filePath)) {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('Not Found');
