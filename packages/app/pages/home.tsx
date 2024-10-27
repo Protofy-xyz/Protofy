@@ -39,7 +39,7 @@ const Home = ({ currentView, setCurrentView, props }: any) => {
             </Text>
           </VStack>
           <HStack gap="$6" margin="$6" flexWrap="wrap" justifyContent="center">
-            <Pressable onPress={(e) => context.navigate("/workspace/dev/pages", router)} width="300px" padding="$5" theme="green">
+            <Pressable onPress={(e) => context.navigate("/workspace/pages", router)} width="300px" padding="$5" theme="green">
               <HStack gap="$2">
                 <Text fontWeight="600" fontSize="18px">
                   CMS

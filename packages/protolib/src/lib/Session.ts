@@ -152,20 +152,16 @@ export const getURLWithToken = (url, context: NextPageContext) => {
     const cookies = req.headers.cookie;
 
     let session;
-    let __env = ''
     if (cookies) {
         try {
             const parsedCookies = parse(cookies);
             session = JSON.parse(parsedCookies.session);
-            if (session.environment) {
-                __env = '&__env=' + session.environment
-            }
         } catch (e) {
             session = null
         }
     }
 
-    const finalUrl = url + (session && session.token ? (url.includes('?') ? '&' : '?') + 'token=' + session.token + __env : '')
+    const finalUrl = url + (session && session.token ? (url.includes('?') ? '&' : '?') + 'token=' + session.token : '')
     logger.debug({ url: finalUrl }, "Return url with session token")
     return finalUrl
 }

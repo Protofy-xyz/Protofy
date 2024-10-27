@@ -110,9 +110,7 @@ export const StateMachinesDefinitionsApi = (app, context) => {
         prefix: '/api/core/v1/',
         getDB: getDB,
         connectDB: () => new Promise(resolve => resolve(null)),
-        requiresAdmin: ['*'],
-        useEventEnvironment: false,
-        useDatabaseEnvironment: false
+        requiresAdmin: ['*']
     })
     autoAPI(app, context)
 }

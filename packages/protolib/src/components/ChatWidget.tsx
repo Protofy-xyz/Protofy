@@ -1,16 +1,21 @@
 import { useState } from "react";
 import { Sparkles, X, Maximize, Minimize } from '@tamagui/lucide-icons';
-import { YStack, Button, XStack } from 'tamagui';
+import { Tinted }  from 'protolib/components/Tinted'
+import { YStack, Button, XStack, Theme, Spinner, Paragraph} from 'tamagui';
 
 export const ChatWidget = () => {
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isChatLoaded, setIsChatLoaded] = useState(false);
 
   const toggleChat = () => {
     if (isChatVisible) {
       setIsChatVisible(false);
       setIsExpanded(false);
     } else {
+      if(!isChatLoaded) {
+        setIsChatLoaded(true);
+      }
       setIsChatVisible(true);
       setIsExpanded(false);
     }
@@ -66,27 +71,37 @@ export const ChatWidget = () => {
         />
       )}
 
-      <YStack
-        width={isExpanded ? "100vw" : 500}
-        height={isExpanded ? "95vh" : 800}
-        position="absolute"
-        bottom={isExpanded ? 0 : 130}
-        right={isExpanded ? 0 : 50}
-        backgroundColor="$background"
-        borderRadius={isExpanded ? 0 : "$4"}
-        elevation="$6"
-        zIndex={10000}
-        overflow="hidden"
-        display={isChatVisible ? "flex" : "none"}
-      >
-        <iframe
-          src="/workspace/dev/chatbot/"
-          width="100%"
-          height="100%"
-          style={{ border: "none" }}
-          title="Chat Widget"
-        />
-      </YStack>
+    
+        <YStack
+          width={isExpanded ? "100vw" : 500}
+          height={isExpanded ? "95vh" : 800}
+          position="absolute"
+          bottom={isExpanded ? 0 : 130}
+          right={isExpanded ? 0 : 50}
+          backgroundColor="$bgContent"
+          borderRadius={isExpanded ? 0 : "$4"}
+          elevation="$6"
+          zIndex={10000}
+          overflow="hidden"
+          display={isChatVisible ? "flex" : "none"}
+        >
+          <YStack position="absolute" height="100%" width="100%" alignItems="center" justifyContent="center" f={1} top={0} right={0} zIndex={-2}>
+            <Tinted>
+              <Spinner color="$color6" size={100} mb="$6" />
+            </Tinted>
+
+            <Paragraph size="$5">Loading chat...</Paragraph>
+          </YStack>
+          {isChatLoaded && <iframe
+            src="/workspace/chatbot/"
+            width="100%"
+            height="100%"
+            style={{ border: "none" }}
+            title="Chat Widget"
+          />}
+        </YStack>
+
+
     </YStack>
   );
 };

@@ -23,7 +23,7 @@ export const getServerSideProps = SSR(async (context:NextPageContext) => {
     return {
       redirect: {
         permanent: false,
-        destination: "/"+(SiteConfig.defaultWorkspace ?? 'dev')+"/"
+        destination: "/workspace/"
       }
     }
   }

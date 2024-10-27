@@ -125,7 +125,5 @@ export const DeviceBoardsAPI = AutoAPI({
     modelType: DeviceBoardModel,
     initialData,
     skipDatabaseIndexes: true,
-    prefix: '/api/core/v1/',
-    useDatabaseEnvironment: false,
-    useEventEnvironment: false
+    prefix: '/api/core/v1/'
 })

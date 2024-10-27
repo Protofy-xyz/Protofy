@@ -1,5 +1,4 @@
 const isProduction = process.env.NODE_ENV === 'production';
-const startAll = process.env.START_ALL === '1';
 
 const path = require('path');
 const currentDir = path.dirname(__filename);
@@ -28,7 +27,7 @@ const nextra = {
   watch: false,
   env: {
       NODE_ENV: 'production',
-      PORT: 7700,
+      PORT: 7600,
   },
   cwd: path.join(currentDir, 'dist/apps/nextra'),
   log_date_format: "YYYY-MM-DD HH:mm:ss",
@@ -37,8 +36,5 @@ const nextra = {
 }
 
 module.exports = {
-    apps: (startAll && !disableStartAll ? [
-        nextra,
-        nextraDev
-    ] : (isProduction ? [nextra] : [nextraDev]))
+    apps: isProduction ? [nextra] : [nextraDev],
 }

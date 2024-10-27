@@ -1,10 +1,8 @@
-const isProduction = process.env.NODE_ENV === 'production';
-const startAll = process.env.START_ALL === '1';
+const isFullDev = process.env.FULL_DEV === '1';
 
 const path = require('path');
 const currentDir = path.dirname(__filename);
 
-const disableStartAll = false
 
 const siteDev = {
   name: "adminpanel-dev",
@@ -28,7 +26,7 @@ const site = {
   watch: false,
   env: {
       NODE_ENV: 'production',
-      PORT: 8080,
+      PORT: 8000,
       DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env')
   },
   cwd: path.join(currentDir, 'dist/apps/adminpanel'),
@@ -39,8 +37,5 @@ const site = {
 }
 
 module.exports = {
-    apps: (startAll && !disableStartAll ? [
-        site,
-        siteDev
-    ] : (isProduction ? [site] : [siteDev]))
+    apps: isFullDev ? [siteDev] : [site],
 }

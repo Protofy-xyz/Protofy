@@ -10,12 +10,9 @@ type Props = {
     sensor: string,
     monitor: string,
     noValueText?: string
-    enviroment?: string
 }
 
-export const SensorValue = React.forwardRef(({ enviroment, device, sensor, monitor, noValueText, ...props }: Props & TextProps, ref: any) => {
-    const env = enviroment ?? process.env.NODE_ENV == 'development' ? 'dev' : 'prod'
-
+export const SensorValue = React.forwardRef(({device, sensor, monitor, noValueText, ...props }: Props & TextProps, ref: any) => {
     const defaultValue = noValueText ?? "n/a"
 
     const [devices, setDevices] = useState([])
@@ -29,7 +26,7 @@ export const SensorValue = React.forwardRef(({ enviroment, device, sensor, monit
 
     useEffect(() => {
         const updateDevices = async () => {
-            const response = await API.get("/api/core/v1/devices?env=" + env)
+            const response = await API.get("/api/core/v1/devices")
             setDevices(response.data?.items)
         }
 

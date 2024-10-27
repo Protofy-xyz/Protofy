@@ -1,5 +1,4 @@
 const isProduction = process.env.NODE_ENV === 'production';
-const startAll = process.env.START_ALL === '1';
 
 const path = require('path');
 const currentDir = path.dirname(__filename);
@@ -28,7 +27,7 @@ const site = {
   watch: false,
   env: {
       NODE_ENV: 'production',
-      PORT: 4000,
+      PORT: 3000,
       DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env')
   },
   cwd: path.join(currentDir, 'dist/apps/next'),
@@ -39,8 +38,5 @@ const site = {
 }
 
 module.exports = {
-    apps: (startAll && !disableStartAll ? [
-        site,
-        siteDev
-    ] : (isProduction ? [site] : [siteDev]))
+    apps: isProduction ? [site] : [siteDev],
 }

@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
-import { getEnv, createSessio, PendingResult, getPendingResult } from 'protobase'
+import { createSession, PendingResult, getPendingResult } from 'protobase'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'
 import { ProtofyLogoSVG, Separator, XStack, getValidation } from '@my/ui'
@@ -57,7 +57,6 @@ function SignUp() {
   const [session, setSession] = useSession()
   const [sessionContext, setSessionContext] = useSessionContext()
   const router = useRouter()
-  const env = getEnv()
 
   const searchParams = useSearchParams();
   const query = Object.fromEntries(searchParams.entries());
@@ -84,7 +83,7 @@ function SignUp() {
 
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    Auth.register(email, password, rePassword, env, setAuthState)
+    Auth.register(email, password, rePassword, setAuthState)
   }
 
   return (

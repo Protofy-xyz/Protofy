@@ -8,7 +8,6 @@ export const DevicesSchema = Schema.object({
   subsystem: z.record(z.string(), z.any()).optional().hidden(),
   data: z.array(z.record(z.string(), z.any())).optional().hidden(),
   currentSdk: z.string().hidden().generate("esphome"),
-  environment: z.string().optional().help("The environment the device has access to").hidden().groupIndex("env"),
   location: z.object({
     lat: z.string(),
     long: z.string()
@@ -101,14 +100,6 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       super(data, DevicesSchema, session, "Test");
   }
 
-  getEnvironment() {
-    return this.data.environment ?? 'dev'
-  }
-
-  hasEnvironment(env: string) {
-    return (!this.data.environment && env == 'dev') || this.data.environment == env
-  }
-
   public static getApiOptions() {
       return {
           name: 'devices',
@@ -171,7 +162,7 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
     }
   }
 
-  async getYaml(env: string){
+  async getYaml(){
     let yaml = undefined
     try {
       const response = await API.get('/api/core/v1/deviceDefinitions/' + this.data.deviceDefinition);
@@ -188,9 +179,6 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       console.log("---------deviceDefinition----------", deviceDefinition)
       deviceDefinition.board = response1.data
       const jsCode = deviceDefinition.config.components;
-      window['deviceCompileVars'] = {
-        env
-      }
 
       const deviceCode = 'device(' + jsCode.replace(/;/g, "") + ')';
       console.log("-------DEVICE CODE------------", deviceCode)
@@ -206,7 +194,6 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
         return;
       }
       // deviceObject.data.subsystem = subsystems
-      deviceObject.data.environment = env
       
       API.post("/api/core/v1/devices/" + this.data.name, deviceObject.data)
       console.log("ComponentsTree: ", componentsTree)
@@ -255,24 +242,6 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       const result = super.update(updatedModel, data)
       return result
   }
-
-
-  list(search?, session?, extraData?, params?): any {
-    if(params && params.filter && params.filter.environment) {
-        const {environment, ...filter} = params.filter
-        if(!this.hasEnvironment(environment)) { 
-            return
-        }
-        params = {
-            ...params,
-            filter: {
-                ...filter,
-            }
-        }
-    }
-
-    return super.list(search, session, extraData, params)
-}
 
   delete(data?): DevicesModel {
       const result = super.delete(data)

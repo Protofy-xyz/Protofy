@@ -7,7 +7,6 @@ import { DeviceBoardModel } from "../deviceBoards"
 import { Button, XStack } from "tamagui"
 import { useThemeSetting } from '@tamagui/next-theme'
 import { usePendingEffect } from "../../../lib/usePendingEffect"
-import { useWorkspaceEnv } from "../../../lib/useWorkspaceEnv"
 import { Chip } from "../../../components/Chip"
 import { DataTable2 } from "../../../components/DataTable2"
 import { DataView } from "../../../components/DataView"
@@ -39,7 +38,6 @@ export default {
     const defaultJsCode = { "components": "[\n \"mydevice\",\n \"esp32dev\",\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n" }
     const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
     const [editedObjectData, setEditedObjectData] = React.useState<any>({})
-    const env = useWorkspaceEnv()
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const [selectedBoard, setSelectedBoard] = useState(null)
@@ -125,9 +123,6 @@ export default {
         initialItems={initialItems}
         numColumnsForm={1}
         name="Definition"
-        onAdd={data => {
-          return { ...data, environment: env }
-        }}
         onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
         columns={DataTable2.columns(
           DataTable2.column("", () => "", false, (row) => <InteractiveIcon onPress={async (e) => {

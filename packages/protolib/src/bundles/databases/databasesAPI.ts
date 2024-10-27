@@ -7,8 +7,7 @@ import fse from 'fs-extra'
 import { DatabaseEntryModel, DatabaseModel } from './databasesSchemas'
 
 const dbDir = (req) => {
-  const env = req.query.env ? fspath.basename(req.query.env) : null
-  return fspath.join(getRoot(req), env ? "data/"+env+"/databases" : "/data/databases/")
+  return fspath.join(getRoot(req), "/data/databases/")
 }
 
 function getTimestamp() {
@@ -47,8 +46,7 @@ async function createBackupFolderIfNeeded(backupPath) {
 const customGetDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const env = req.query.env
-      const databases = await getDatabases(env)
+      const databases = await getDatabases()
       for (const db of databases) {
         yield [db.name, JSON.stringify(db)]
       }
@@ -74,9 +72,8 @@ const customGetDB = (path, req, session) => {
   return db
 }
 
-export const getDatabases = async (env?) => {
-  const environ = env ? fspath.basename(env) : null
-  const path = '../../' + (environ ? fspath.join('data', environ, 'databases') : fspath.join('data', 'databases'))
+export const getDatabases = async () => {
+  const path = '../../' + fspath.join('data', 'databases')
 
   return (await fs.promises.readdir(path)).map((name) => {
     return {
@@ -94,8 +91,6 @@ const EventAPI = AutoAPI({
   connectDB: () => new Promise(resolve => resolve(null)),
   getDB: customGetDB,
   operations: ['list', 'create', 'read', 'delete'],
-  useDatabaseEnvironment: false,
-  useEventEnvironment: false,
   paginatedRead: { model: DatabaseEntryModel }
 })
 

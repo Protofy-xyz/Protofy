@@ -7,18 +7,13 @@ import { ExternalLink, Link, FileBox } from '@tamagui/lucide-icons'
 import { PaginatedDataSSR } from '../../../lib/SSR'
 import { JSONViewer } from '../../../components/jsonui'
 import { Chip } from '../../../components/Chip'
-import { useRedirectToEnviron } from '../../../lib/useRedirectToEnviron'
-import { useWorkspaceUrl } from '../../../lib/useWorkspaceEnv'
 
 
 const sourceUrl = '/api/v1/statemachines'
 export default {
   component: ({ pageState, initialItems, pageSession, extraData }: any) => {
-    useRedirectToEnviron()
-    const getWorkspaceUrl = useWorkspaceUrl()
     return (<AdminPage title="State Machines" pageSession={pageSession}>
       <DataView
-        URLTransform={getWorkspaceUrl}
         rowIcon={FileBox}
         enableAddToInitialData
         sourceUrl={sourceUrl}

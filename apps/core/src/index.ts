@@ -50,8 +50,7 @@ process.on('uncaughtException', function (err) {
 startMqtt(config)
 logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: core")
 logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
-const devMqtt = getMQTTClient('dev', 'core', getServiceToken())
-const prodMqtt = getMQTTClient('prod', 'core', getServiceToken())
+const mqtt = getMQTTClient('core', getServiceToken())
 
 const topicSub = (mqtt, topic, cb) => {
   mqtt.subscribe(topic)
@@ -74,7 +73,7 @@ const topicPub = (mqtt, topic, data) => {
 
 try {
   import('app/bundles/coreApis').then((BundleAPI) => {
-    BundleAPI.default(app, { mqtt: devMqtt, mqtts: { prod: prodMqtt, dev: devMqtt }, topicSub, topicPub, ...BundleContext })
+    BundleAPI.default(app, { mqtt, topicSub, topicPub, ...BundleContext })
   })
 
 } catch (error) {

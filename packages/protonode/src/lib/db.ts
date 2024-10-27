@@ -252,7 +252,7 @@ export class ProtoLevelDB extends ProtoDB {
         this.regeneratingIndexes = true
 
         const id = Math.random().toString(36).substring(7);
-        console.time('regenerateIndexes_' + id)
+        // console.time('regenerateIndexes_' + id)
         try {
             const nextTableVersion = this.tableVersion == 'a' ? 'b' : 'a'
          
@@ -263,7 +263,7 @@ export class ProtoLevelDB extends ProtoDB {
             logger.error({ db: this.location }, 'Error regenerating indexes for database: ' + this.location)
             this.regeneratingIndexes = false
         }
-        console.timeEnd('regenerateIndexes_' + id)
+        // console.timeEnd('regenerateIndexes_' + id)
         this.regeneratingIndexes = false
 
         if (this.pendingIndex) {

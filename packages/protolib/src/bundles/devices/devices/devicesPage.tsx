@@ -9,7 +9,6 @@ import { AdminPage } from '../../../components/AdminPage';
 import { usePendingEffect } from '../../../lib/usePendingEffect';
 import { CardBody } from '../../../components/CardBody';
 import { ItemMenu } from '../../../components/ItemMenu';
-import { useWorkspaceEnv } from '../../../lib/useWorkspaceEnv';
 import { Tinted } from '../../../components/Tinted';
 import { Chip } from '../../../components/Chip';
 import { useSubscription, Connector } from '../../../lib/mqtt';
@@ -149,14 +148,12 @@ export default {
     const [targetDeviceModel, setTargetDeviceModel] = useState(DevicesModel.load({}))
     const [compileSessionId, setCompileSessionId] = useState('')
     const [all, setAll] = useState(false)
-    const env = useWorkspaceEnv()
-
     // const { message } = useSubscription(['device/compile']);
 
     const flashDevice = async (device, yaml?) => {
       setTargetDeviceName(device.data.name)
       setTargetDeviceModel(device)
-      yamlRef.current = yaml ?? await device.getYaml(env)
+      yamlRef.current = yaml ?? await device.getYaml()
       console.log("TURBO YAML PARAMETER: ", yaml)
       setShowModal(true)
       try {
@@ -300,9 +297,6 @@ export default {
       </Connector>
       <DataView
         entityName="devices"
-        onAdd={data => {
-          return { ...data, environment: env }
-        }}
         defaultView={"grid"}
         key={all ? 'all' : 'filtered'}
         toolBarContent={
@@ -327,7 +321,6 @@ export default {
         itemData={itemData}
         rowIcon={Router}
         sourceUrl={sourceUrl}
-        sourceUrlParams={all ? undefined : { env }}
         initialItems={initialItems}
         name="device"
         columns={DataTable2.columns(
@@ -347,7 +340,6 @@ export default {
           onSelectItem: (item) => { },
           getBody: (data) => <CardBody title={data.name} separator={false}>
             <XStack right={20} top={20} position={"absolute"}>
-              {data.environment && all && <Chip color={data.environment == 'dev' ? "$color5" : "$color7"} text={data.environment} />}
               <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?: string) => {
                 await API.get(`${sourceUrl}/${deviceId}/delete`)
               }} deleteable={() => true} element={DevicesModel.load(data)} extraMenuActions={extraMenuActions} />

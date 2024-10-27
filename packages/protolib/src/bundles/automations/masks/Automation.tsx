@@ -5,12 +5,10 @@ import React from 'react';
 import { SizableText, Spinner, XStack } from 'tamagui';
 import { API } from 'protobase'
 import { SiteConfig} from '@my/config/dist/AppConfig'
-import { useWorkspaceEnv } from '../../../lib/useWorkspaceEnv';
 
 const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(9)
     const [loading, setLoading] = React.useState(false)
-    const env = useWorkspaceEnv();
 
     return (
         <Node icon={Plug} node={node} isPreview={!node.id} title='Automation' color={color} id={node.id} skipCustom={true}>
@@ -26,7 +24,7 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
                 const params = getFieldValue('testparams', nodeData)
                 setLoading(true)
                 const url ='/api/v1/automations/' + getFieldValue('mask-name', nodeData)+(params ? '?'+params : '')
-                await API.get(env=='dev'? SiteConfig.getDevelopmentURL(url): url)
+                await API.get(url)
                 setLoading(false)
             }}>
             </Button>

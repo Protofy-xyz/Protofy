@@ -11,11 +11,7 @@ const directories = [
     "./data",
     "./data/public",
     "./logs/raw",
-    "./data/databases",
-    "./data/dev",
-    "./data/dev/databases",
-    "./data/prod",
-    "./data/prod/databases",
+    "./data/databases"
 ];
 
 directories.forEach(directory => {

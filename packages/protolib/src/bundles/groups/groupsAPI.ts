@@ -13,7 +13,5 @@ export const GroupsAPI = AutoAPI({
     initialData: initialData,
     prefix: '/api/core/v1/',
     dbName: 'auth_groups',
-    requiresAdmin: ['create', 'update'],
-    useDatabaseEnvironment: false,
-    useEventEnvironment: false
+    requiresAdmin: ['create', 'update']
 })

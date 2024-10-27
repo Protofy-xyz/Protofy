@@ -1,16 +1,12 @@
 const isProduction = process.env.NODE_ENV === 'production';
 const disableProdApi = false
 
-const systemConfig = {
-    compiledPort: 8080
-}
-
 const config = {
     "services": [
         {
             "name": "core",
             "description": "Core services for protofy",
-            "route": (req, mode) => {
+            "route": (req) => {
                 const url = req.url.split('?')[0]
                 const queryString = req.url.split('?')[1]
                 const query = queryString ? queryString.split('&').reduce((acc, val) => {
@@ -22,34 +18,26 @@ const config = {
                 if (url.startsWith('/api/core/') || url == '/api/core') {
                     return process.env.ADMIN_API_URL ?? 'http://localhost:3002'
                 } else if (url == '/websocket') {
-                    if (query.env && (query.env == 'dev' || query.env == 'prod')) {
-                        mode = query.env == 'dev' ? 'development' : 'production'
-                    }
-                    return process.env.WEBSOCKET_URL ?? 'http://localhost:' + (mode == 'production' && !disableProdApi ? 4003 : 3003)
+                    return process.env.WEBSOCKET_URL ?? 'http://localhost:3003'
                 }
             }
         },
         {
             "name": "api",
             "description": "API services for protofy",
-            "route": (req, mode) => {
+            "route": (req) => {
                 if (req.url.startsWith('/api/v1/') || req.url == '/api/v1') {
-                    return process.env.API_URL ?? 'http://localhost:' + (mode == 'production' && !disableProdApi ? 4001 : 3001)
-                }
-
-                if (req.url.startsWith('/_dev/api/v1/') || req.url == '/_dev/api/v1') {
-                    var target = process.env.API_URL ?? 'http://localhost:3001'
-                    return target
+                    return process.env.API_URL ?? 'http://localhost:3001'
                 }
             }
         },
         {
             "name": "nextra",
             "disabled": true,
-            "description": "Development mode of the documentation service, providing the documentation based on nextra",
-            "route": (req, mode) => {
+            "description": "Documentation service, providing the documentation based on nextra",
+            "route": (req) => {
                 if (req.url.startsWith('/documentation/') || req.url == '/documentation') {
-                    return process.env.DOCS_SITE_URL ?? 'http://localhost:'+ (mode == 'production' ? 7700 : 7600)
+                    return process.env.DOCS_SITE_URL ?? 'http://localhost:7600'
                 }
             }
         },
@@ -63,7 +51,7 @@ const config = {
             "name": "python",
             "description": "Python integration services",
             "disabled": true,
-            "route": (req, mode) => {
+            "route": (req) => {
                 if (req.url.startsWith('/pyapi/') || req.url == '/pyapi') {
                     return process.env.API_URL ?? 'http://localhost:5000'
                 }
@@ -79,49 +67,18 @@ const config = {
             "name": "adminpanel",
             "disabled": false,
             "description": "Admin panel UI to manage and interact with core services",
-            "route": (req, mode) => {
+            "route": (req) => {
                 if(req.url.startsWith('/workspace/') || req.url == '/workspace') {
-                    return process.env.ADMIN_PANEL_URL ?? 'http://localhost:' + (mode == 'production' ? 8080 : 8000)
+                    return process.env.ADMIN_PANEL_URL ?? 'http://localhost:8000'
                 }
             } 
         },
         {
             "name": "next",
             "description": "Frontend services, providing the web user interface based on nextjs",
-            "route": (req, mode) => process.env.SITE_URL ?? 'http://localhost:' + (mode == 'production' ? 4000 : 3000)
+            "route": (req) => process.env.SITE_URL ?? 'http://localhost:3000'
         }
-    ],
-
-    "alwaysCompiledPaths": [
-        "/workspace/prod",
-        "/workspace/dev/users",
-        "/workspace/dev/groups",
-        "/workspace/dev/keys",
-        "/workspace/dev/events",
-        "/workspace/dev/messages",
-        "/workspace/dev/services",
-        "/workspace/dev/databases",
-        "/workspace/dev/objects",
-        "/workspace/dev/pages",
-        "/workspace/dev/apis",
-        "/workspace/dev/stateMachines",
-        "/workspace/dev/stateMachineDefinitions",
-        "/workspace/dev/files",
-        "/workspace/dev/resources",
-        "/workspace/dev/databases",
-        "/workspace/dev/devices",
-        "/workspace/dev/deviceDefinitions",
-    ],
-    "redirectToCompiled": (req, res) => {
-        const host = req.headers.host.split(':')[0]
-        const port = systemConfig.compiledPort
-        const url = req.url
-        const redirectUrl = `http://${host}:${port}${url}`
-        res.writeHead(302, {
-            Location: redirectUrl
-        })
-        res.end()
-    }
+    ]
 }
 
 module.exports = config

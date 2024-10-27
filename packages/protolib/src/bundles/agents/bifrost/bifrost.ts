@@ -19,14 +19,13 @@ import { getServiceToken } from 'protonode';
 
 const logger = getLogger()
 
-export const register = async ({ env, topic, agentName, endpoint, payload, registerMonitors }:
+export const register = async ({topic, agentName, endpoint, payload, registerMonitors }:
     {
-        env: string,
         topic: string,
         agentName: string,
         endpoint: string,
         payload: any,
-        registerMonitors: (env: string, agentName: string, subsystem, monitor: MonitorType, onMonitorMessage: (monitorEndoint, message) => void) => void
+        registerMonitors: (agentName: string, subsystem, monitor: MonitorType, onMonitorMessage: (monitorEndoint, message) => void) => void
     }
 ) => {
     const db = getDB('agents')
@@ -39,7 +38,6 @@ export const register = async ({ env, topic, agentName, endpoint, payload, regis
             await generateEvent(
                 {
                     ephemeral: false,
-                    environment: env,
                     path: topic,
                     from: "agent",
                     user: agentName,
@@ -54,11 +52,10 @@ export const register = async ({ env, topic, agentName, endpoint, payload, regis
             // register agent monitors listeners
             payload['subsystems'].forEach(subsystem => {
                 subsystem['monitors'].forEach(monitor => {
-                    registerMonitors(env, agentName, subsystem, monitor, async (monitorEndpoint, monitorMessage) => {
+                    registerMonitors(agentName, subsystem, monitor, async (monitorEndpoint, monitorMessage) => {
                         await generateEvent(
                             {
                                 ephemeral: false,
-                                environment: env,
                                 path: monitorEndpoint,
                                 from: "agents",
                                 user: agentName,

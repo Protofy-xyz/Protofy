@@ -1,10 +1,7 @@
 const isProduction = process.env.NODE_ENV === 'production';
-const startAll = process.env.START_ALL === '1';
 
 const path = require('path');
 const currentDir = path.dirname(__filename);
-
-const disableStartAll = false
 
 const api = {
     name: 'api',
@@ -37,8 +34,5 @@ const apiDev = {
 }
 
 module.exports = {
-    apps: (startAll && !disableStartAll ? [
-        api,
-        apiDev
-    ] : (isProduction ? [api] : [apiDev]))
+    apps: isProduction ? [api] : [apiDev],
 };

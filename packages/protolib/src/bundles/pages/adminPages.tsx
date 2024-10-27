@@ -5,7 +5,6 @@ import { Chip } from '../../components/Chip'
 import { API, z } from 'protobase'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
 import { AdminPage } from '../../components/AdminPage'
-import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv'
 import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text } from '@my/ui'
 import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
@@ -69,7 +68,6 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
 export default {
     'pages': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
-            const env = useWorkspaceEnv()
             const defaultData = { data: { web: true, electron: false, protected: false, template: 'blank' } }
             const { replace } = usePageParams(pageState)
             const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
@@ -148,9 +146,6 @@ export default {
                 </AlertDialog>
 
                 <DataView
-                    openMode={env === 'dev' ? 'edit' : 'view'}
-                    hideAdd={env !== 'dev'}
-                    disableItemSelection={env !== 'dev'}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={2}
@@ -160,14 +155,6 @@ export default {
                     columns={DataTable2.columns(
                         DataTable2.column("", () => "", false, (row) => {
                             let route = row.route.startsWith('/') ? row.route : '/' + row.route
-                            const parts = route.split('/')
-                            if (parts.length > 2 && parts[1] == 'workspace') {
-                                route = '/workspace/' + env + '/' + parts.slice(2).join('/')
-                            }
-
-                            if (env == 'dev') {
-                                route = SiteConfig.getDevelopmentURL(route, document?.location.protocol, document?.location.hostname)
-                            }
 
                             return <a href={route} target='_blank'>
                                 <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
@@ -179,14 +166,14 @@ export default {
                         DataTable2.column("permissions", row => row.permissions, "permissions", row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
                     )}
                     onAddButton={() => { setAddOpen(true) }}
-                    extraMenuActions={env == 'dev' ? [
+                    extraMenuActions={[
                         {
                             text: "Edit Page file",
                             icon: Pencil,
                             action: (element) => { replace('editFile', element.getDefaultFilePath()) },
                             isVisible: (data) => true
                         }
-                    ] : []}
+                    ]}
                     model={PageModel}
                     pageState={pageState}
                     icons={PageIcons}

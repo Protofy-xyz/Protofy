@@ -1,5 +1,4 @@
 import { EventModel } from '.'
-import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import { Chip } from '../../components/Chip'
 import { DataTable2 } from '../../components/DataTable2'
 import { DataView } from '../../components/DataView'
@@ -18,7 +17,6 @@ const sourceUrl = '/api/core/v1/events'
 export default {
     'events': {
         component: ({ pageState, initialItems, pageSession }: any) => {
-            const env = useWorkspaceEnv()
             usePrompt(() => `At this moment the user is browsing the events list page. The events list page allows to monitor system events. The list is updated automatically if any events occurs.
             An event can be a user created, invalid login attempt, successful login, file edit, file create, file update, and also system object modification events, like "product created", or "product updated".
             Events can be used to monitor the system, auditing pruposes, or to trigger API actions when a specific event happens.
@@ -35,7 +33,6 @@ export default {
                     hideAdd
                     openMode="view"
                     sourceUrl={sourceUrl}
-                    sourceUrlParams={{ env }}
                     initialItems={initialItems}
                     numColumnsForm={1}
                     name="event"

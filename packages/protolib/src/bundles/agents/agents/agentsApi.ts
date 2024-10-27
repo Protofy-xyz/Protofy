@@ -10,9 +10,7 @@ export const AgentsAutoAPI = AutoAPI({
     modelName: 'Agents',
     modelType: AgentsModel,
     prefix: '/api/core/v1/',
-    skipDatabaseIndexes: true,
-    useDatabaseEnvironment: false,
-    useEventEnvironment: false
+    skipDatabaseIndexes: true
 })
 
 const logger = getLogger()
@@ -20,7 +18,7 @@ const logger = getLogger()
 
 export const AgentsAPI = (app, context) => {
     const agentsPath = '../../data/agents/'
-    const { topicSub, topicPub, mqtts } = context;
+    const { topicSub, topicPub, mqtt } = context;
     AgentsAutoAPI(app, context)
     // agents topics: agents/[agentName]/[endpoint], en caso de no tener endpoint: agents/[agentName]
     /* examples
@@ -36,7 +34,6 @@ export const AgentsAPI = (app, context) => {
 
         const db = getDB('agents')
         const agentInfo = AgentsModel.load(JSON.parse(await db.get(req.params.agent)), session)
-        const env = agentInfo.getEnvironment()
         const subsystem = agentInfo.getSubsystem(req.params.subsystem)
         if (!subsystem) {
             res.status(404).send(`Subsytem [${req.params.subsystem}] not found in agent [${req.params.agent}]`)
@@ -49,7 +46,7 @@ export const AgentsAPI = (app, context) => {
             return
         }
 
-        topicPub(mqtts[env], action.getEndpoint(), req.params.value == "undefined" ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : req.params.value)
+        topicPub(mqtt, action.getEndpoint(), req.params.value == "undefined" ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : req.params.value)
 
         res.send({
             subsystem: req.params.subsystem,
@@ -68,7 +65,7 @@ export const AgentsAPI = (app, context) => {
         const { agent: agentName, subsystem: subsystemName, monitor: monitorName } = req.params
         const db = getDB('agents')
         const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)), session)
-        // const env = agentInfo.getEnvironment()
+
         if (!agentInfo.getSubsystem(subsystemName)) {
             res.status(404).send(`Subsytem [${subsystemName}] not found in agent [${agentName}]`)
             return
@@ -80,7 +77,6 @@ export const AgentsAPI = (app, context) => {
             return
         }
 
-        // environment query param:  env=${env}&
         const urlLastAgentEvent = `/api/core/v1/events?filter[from]=agents&filter[user]=${agentName}&filter[path]=${monitor.endpoint}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
         const data = await API.get(urlLastAgentEvent)
 
@@ -99,7 +95,6 @@ export const AgentsAPI = (app, context) => {
 
         const db = getDB('agents')
         const agentInfo = AgentsModel.load(JSON.parse(await db.get(req.params.agent)), session)
-        const env = agentInfo.getEnvironment()
         const subsystem = agentInfo.getSubsystem(req.params.subsystem)
         if (!subsystem) {
             res.status(404).send(`Subsytem [${req.params.subsystem}] not found in agent [${req.params.agent}]`)

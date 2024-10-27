@@ -34,9 +34,7 @@ export const WorkspacesAPI = AutoAPI({
   requiresAdmin: ['*'],
   connectDB: () => new Promise(resolve => resolve(null)),
   getDB: customGetDB,
-  operations: ['list'],
-  useDatabaseEnvironment: false,
-  useEventEnvironment: false
+  operations: ['list']
 })
 
 export default WorkspacesAPI

@@ -36,7 +36,7 @@ import chokidar from 'chokidar';
 const isProduction = process.env.NODE_ENV === 'production';
 const serviceName = isProduction?'api':'api-dev'
 const server = http.createServer(app);
-const PORT = isProduction ? 4001 : 3001
+const PORT = 3001
 
 server.listen(PORT, () => {
   logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")

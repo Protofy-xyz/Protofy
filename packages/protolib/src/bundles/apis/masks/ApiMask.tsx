@@ -16,7 +16,7 @@ const ApiMask = (node: any = {}, nodeData = {}) => {
       </div>
 
       {nodeData && nodeData['to'] == 'app.get' && <Button label="Make request" onPress={() => {
-        API.get(SiteConfig.getDevelopmentURL(nodeData['param-1']?.value))
+        API.get(nodeData['param-1']?.value)
       }} />}
     </Node>
   )

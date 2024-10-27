@@ -68,8 +68,6 @@ type AutoAPIOptions = {
         batchTimeout?: number,
         orderedInsert?: boolean
     }
-    useDatabaseEnvironment?: boolean,
-    useEventEnvironment?: boolean
 }
 
 export const AutoAPI = ({
@@ -103,14 +101,11 @@ export const AutoAPI = ({
     onAfterDelete = async (data, session?, req?) => data,
     skipDatabaseIndexes,
     dbOptions = {},
-    useDatabaseEnvironment = false,
-    useEventEnvironment = true,
     defaultOrderBy = undefined,
     defaultOrderDirection = 'asc',
     skipDatabaseInitialization = false
 }: AutoAPIOptions) => async (app, context) => {
-    const env = useEventEnvironment ? getEnv() : undefined
-    const defaultName  = useDatabaseEnvironment ? getEnv() + '/' + (dbName ?? modelName) : (dbName ?? modelName)
+    const defaultName  = dbName ?? modelName
     const groupIndexes = modelType.getGroupIndexes()
 
     const getDBPath = (action: "init" | "list" | "create" | "read" | "update" | "delete", req?, entityModel?) => {
@@ -124,14 +119,8 @@ export const AutoAPI = ({
     const _notify = (entityModel, action) => {
         if(notify) return notify(entityModel, action)
             
-        if(context) {
-            if(context.mqtts) {
-                Object.keys(context.mqtts).forEach((env) => {
-                    context.mqtts[env].publish(entityModel.getNotificationsTopic(action), entityModel.getNotificationsPayload())
-                })
-            } else if(context.mqtt) {
-                context.mqtt.publish(entityModel.getNotificationsTopic(action), entityModel.getNotificationsPayload())
-            }
+        if(context && context.mqtt) {
+            context.mqtt.publish(entityModel.getNotificationsTopic(action), entityModel.getNotificationsPayload())
         }
     }
 
@@ -354,7 +343,6 @@ export const AutoAPI = ({
 
         if (!disableEvents) {
             generateEvent({
-                ...(env?{environment: env}:{}),
                 path: modelName + '/create/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
@@ -423,7 +411,6 @@ export const AutoAPI = ({
 
         if (!disableEvents) {
             generateEvent({
-                ...(env?{environment: env}:{}),
                 path: modelName + '/update/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'api', // system entity where the event was generated (next, api, cmd...)
                 user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
@@ -459,7 +446,6 @@ export const AutoAPI = ({
             _notify(entityModel, 'delete')
             if (!disableEvents) {
                 generateEvent({
-                    ...(env?{environment: env}:{}),
                     path: modelName + '/delete/' + entityModel.getId(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                     from: 'api', // system entity where the event was generated (next, api, cmd...)
                     user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself

@@ -85,10 +85,8 @@ const monitorServices = (context) => {
           };
 
           const entityModel = ServiceModel.load(serviceData)
-          if (context.mqtts) {
-            Object.keys(context.mqtts).forEach(env => {
-              context.mqtts[env].publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
-            })
+          if (context.mqtt) {
+            context.mqtt.publish(entityModel.getNotificationsTopic('update'), entityModel.getNotificationsPayload())
           }
         });
       });
@@ -139,10 +137,10 @@ const serviceAutoAPI = AutoAPI({
   prefix: '/api/core/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
-  requiresAdmin: ['*'],
-  useDatabaseEnvironment: false,
-  useEventEnvironment: false
+  requiresAdmin: ['*']
 })
+
+console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
 
 const getServicePath = async (service) => {
   return new Promise((resolve, reject) => {
@@ -184,9 +182,9 @@ export const ServicesAPI = (app, context) => {
       }
 
       generateEvent({
-        path: 'services/' + service + '/restart', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-        from: 'core', // system entity where the event was generated (next, api, cmd...)
-        user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
+        path: 'services/' + service + '/restart',
+        from: 'core',
+        user: session.user.id,
         payload: { service }
       }, getServiceToken())
 

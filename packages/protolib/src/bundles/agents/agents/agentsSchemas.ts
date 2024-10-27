@@ -19,10 +19,6 @@ export class AgentsModel extends ProtoModel<AgentsModel> {
         return this.data.environment ?? 'dev'
     }
 
-    hasEnvironment(env: string) {
-        return (!this.data.environment && env == 'dev') || this.data.environment == env
-    }
-
     public static getApiOptions() {
         return {
             name: 'adminapi',
@@ -69,24 +65,6 @@ export class AgentsModel extends ProtoModel<AgentsModel> {
     update(updatedModel: AgentsModel, data?: AgentsType): AgentsModel {
         const result = super.update(updatedModel, data)
         return result
-    }
-
-
-    list(search?, session?, extraData?, params?): any {
-        if (params && params.filter && params.filter.environment) {
-            const { environment, ...filter } = params.filter
-            if (!this.hasEnvironment(environment)) {
-                return
-            }
-            params = {
-                ...params,
-                filter: {
-                    ...filter,
-                }
-            }
-        }
-
-        return super.list(search, session, extraData, params)
     }
 
     delete(data?): AgentsModel {

@@ -41,14 +41,6 @@ export class EventModel extends ProtoModel<EventModel> {
         return super.list(search, session, extraData, params)
     }
 
-    getEnvironment() {
-        if(this.data.environment == 'dev' || this.data.environment == 'prod') {
-            return this.data.environment 
-        }
-
-        return '*'
-    }
-
     getNotificationsTopic(action: string): string {
         return `notifications/${this.getModelName()}/${action}/${this.data.path}`
     }

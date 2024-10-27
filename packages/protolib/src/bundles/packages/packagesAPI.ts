@@ -91,9 +91,7 @@ const packageAutoAPI = AutoAPI({
   prefix: '/api/core/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
-  requiresAdmin: ['*'],
-  useDatabaseEnvironment: false,
-  useEventEnvironment: false
+  requiresAdmin: ['*']
 })
 
 export const PackagesAPI = (app, context) => {

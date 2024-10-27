@@ -36,8 +36,8 @@ export const getLastEvent = async (eventFilter?: { path?: string, from?: string,
     const userUrl = eventFilter.user ? `&filter[user]=${eventFilter.user}` : ""
     const pathUrl = eventFilter.path ? `&filter[path]=${eventFilter.path}` : ""
     const from = eventFilter.from ? `&filter[from]=${eventFilter.from}` : ""
-    const env = process.env.NODE_ENV == 'development' ? 'dev' : 'prod'
-    const urlLastEvent = `/api/core/v1/events?env=${env}${from}${userUrl}${pathUrl}&itemsPerPage=1&token=${token}&orderBy=created&orderDirection=desc`
+    //x=1 is a dummy param to allow the use of the & operator in the url
+    const urlLastEvent = `/api/core/v1/events?x=1&${from}${userUrl}${pathUrl}&itemsPerPage=1&token=${token}&orderBy=created&orderDirection=desc`
 
     let result = await API.get(urlLastEvent)
 

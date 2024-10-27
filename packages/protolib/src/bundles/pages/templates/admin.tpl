@@ -7,8 +7,6 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 
 import { Protofy, API } from 'protobase'
 import { PaginatedDataSSR } from 'protolib/lib/SSR'
-import { useWorkspaceUrl, getWorkspaceApiUrl } from 'protolib/lib/useWorkspaceEnv'
-import { useRedirectToEnviron } from 'protolib/lib/useRedirectToEnviron'
 import { Objects } from '../bundles/objects'
 import { DataView } from 'protolib/components/DataView'
 import { AdminPage } from 'protolib/components/AdminPage'
@@ -27,12 +25,8 @@ Protofy("pageType", "admin")
 export default {
     route: Protofy("route", "{{route}}"),
     component: ({pageState, initialItems, pageSession, extraData}:any) => {
-        useRedirectToEnviron()
-        const getWorkspaceUrl = useWorkspaceUrl()
-
         return (<AdminPage title="{{object}}" pageSession={pageSession}>
             <DataView
-                URLTransform={getWorkspaceUrl}
                 rowIcon={Tag}
                 sourceUrl={apiUrl}
                 initialItems={initialItems}

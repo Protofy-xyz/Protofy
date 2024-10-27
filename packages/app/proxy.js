@@ -9,9 +9,6 @@ const fs = require('fs');
 const mime = require('mime');
 const { join } = require('path');
 
-const isFullDev = process.env.FULL_DEV === '1';
-const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
-
 const setupProxyHandler = (name, subscribe, handle, server) => {
   const startTime = new Date().getTime();
   const logger = getLogger(name, config.getBaseConfig(name, process, protonode.getServiceToken()));
@@ -20,10 +17,6 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
     xfwd: true,
   });
   
-  proxy.on('proxyReq', function (proxyReq, req, res, options) {
-    proxyReq.path = req.url.replace('/_dev/api/', '/api/');
-  });
-
   proxy.on('error', (err, req, res) => {
     if (startTime + 10000 > new Date().getTime()) {
       return;
@@ -37,7 +30,7 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
   });
 
   server.on('upgrade', function (req, socket, head) {
-    const resolver = system.services.find((resolver) => resolver.route(req, mode));
+    const resolver = system.services.find((resolver) => resolver.route(req));
 
     if (!resolver || resolver.name === name) {
         if(resolver.name === name && req.url.endsWith('/webpack-hmr')) {
@@ -49,9 +42,9 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
         return;
     }
 
-    console.log('Proxying WebSocket request for: ' + req.url + ' to: ' + resolver.route(req, mode));
+    console.log('Proxying WebSocket request for: ' + req.url + ' to: ' + resolver.route(req));
 
-    proxy.ws(req, socket, head, { target: resolver.route(req, mode) });
+    proxy.ws(req, socket, head, { target: resolver.route(req) });
   });
 
   subscribe((req, res) => {
@@ -70,23 +63,35 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
       return;
     }
 
-    const resolver = system.services.find((resolver) => resolver.route(req, mode));
+    //legacy urls redirector, to be removed in the future, but necessary for the transition
+    if (
+      (req.url.includes('/workspace/dev/') || req.url.includes('/workspace/prod/') ||
+       req.url === '/workspace/dev' || req.url === '/workspace/prod') &&
+      !req.url.includes('redirected=true')
+    ) {
+      const newUrl = req.url.replace('/workspace/dev/', '/workspace/').replace('/workspace/prod/', '/workspace/').replace('/workspace/dev', '/workspace').replace('/workspace/prod', '/workspace') + '?redirected=true';
+      res.writeHead(301, { Location: newUrl });
+      res.end();
+      return;
+    }
+
+    const resolver = system.services.find((resolver) => resolver.route(req));
 
     if (!resolver || resolver.name === name) {
-    //   console.log('No resolver found for: ' + req.url);
+      // console.log('No resolver found for: ' + req.url);
       return handle(req, res);
     }
 
-    // console.log('Resolving request for: ' + req.url + ' to: ' + resolver.route(req, mode));
+    // console.log('Resolving request for: ' + req.url + ' to: ' + resolver.route(req));
 
     logger.trace({
       url: req.url,
-      target: resolver.route(req, mode),
+      target: resolver.route(req),
       ip: req.connection.remoteAddress,
       method: req.method
-    }, "Proxying request for: " + req.url + " to: " + resolver.route(req, mode) + " from: " + req.connection.remoteAddress + " method: " + req.method);
+    }, "Proxying request for: " + req.url + " to: " + resolver.route(req) + " from: " + req.connection.remoteAddress + " method: " + req.method);
 
-    proxy.web(req, res, { target: resolver.route(req, mode) });
+    proxy.web(req, res, { target: resolver.route(req) });
   });
 };
 

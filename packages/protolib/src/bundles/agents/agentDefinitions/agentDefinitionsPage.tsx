@@ -5,7 +5,6 @@ import { API, z, getPendingResult } from 'protobase'
 import { DeviceCoreModel } from '../devicecores'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { usePendingEffect } from "../../../lib/usePendingEffect"
-import { useWorkspaceEnv } from "../../../lib/useWorkspaceEnv"
 import { Chip } from "../../../components/Chip"
 import { DataTable2 } from "../../../components/DataTable2"
 import { DataView } from "../../../components/DataView"
@@ -25,7 +24,6 @@ const coresSourceUrl = '/api/core/v1/devicecores?all=1'
 export default {
   component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData }: any) => {
     const { resolvedTheme } = useThemeSetting();
-    const env = useWorkspaceEnv()
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const SiteConfig = useContext<SiteConfigType>(AppConfContext);
@@ -45,9 +43,6 @@ export default {
         initialItems={initialItems}
         numColumnsForm={1}
         name="Definition"
-        onAdd={data => {
-          return { ...data, environment: env }
-        }}
         onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
         columns={DataTable2.columns(
           DataTable2.column("name", row => row.name, "name"),

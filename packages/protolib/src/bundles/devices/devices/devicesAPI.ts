@@ -12,9 +12,7 @@ export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
     modelType: DevicesModel,
     prefix: '/api/core/v1/',
-    skipDatabaseIndexes: true,
-    useDatabaseEnvironment: false,
-    useEventEnvironment: false
+    skipDatabaseIndexes: true
 })
 
 const logger = getLogger()
@@ -22,7 +20,7 @@ const logger = getLogger()
 
 export const DevicesAPI = (app, context) => {
     const devicesPath = '../../data/devices/'
-    const { topicSub, topicPub, mqtts } = context;
+    const { topicSub, topicPub, mqtt } = context;
     DevicesAutoAPI(app, context)
     // Device topics: devices/[deviceName]/[endpoint], en caso de no tener endpoint: devices/[deviceName]
     /* examples
@@ -38,7 +36,6 @@ export const DevicesAPI = (app, context) => {
 
         const db = getDB('devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
-        const env = deviceInfo.getEnvironment()
         const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
         if(!subsystem) {
             res.status(404).send(`Subsytem [${req.params.subsystem}] not found in device [${req.params.device}]`)
@@ -51,7 +48,7 @@ export const DevicesAPI = (app, context) => {
             return
         }
 
-        topicPub(mqtts[env], action.getEndpoint(), req.params.value == "undefined" ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : req.params.value)
+        topicPub(mqtt, action.getEndpoint(), req.params.value == "undefined" ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : req.params.value)
         
         res.send({
             subsystem: req.params.subsystem,
@@ -69,7 +66,6 @@ export const DevicesAPI = (app, context) => {
 
         const db = getDB('devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
-        const env = deviceInfo.getEnvironment()
         const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
         if(!subsystem) {
             res.status(404).send(`Subsytem [${req.params.subsystem}] not found in device [${req.params.device}]`)
@@ -82,7 +78,8 @@ export const DevicesAPI = (app, context) => {
             return
         }
         
-        const urlLastDeviceEvent = `/api/core/v1/events?env=${env}&filter[from]=device&filter[user]=${req.params.device}&filter[path]=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
+        //x=1 is a dummy param to allow the use of the & operator in the url
+        const urlLastDeviceEvent = `/api/core/v1/events?x=1&filter[from]=device&filter[user]=${req.params.device}&filter[path]=${monitor.getEventPath()}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
         const data = await API.get(urlLastDeviceEvent)
 
         if(!data || !data.data ||  !data.data['items'] || !data.data['items'].length) {
@@ -100,7 +97,6 @@ export const DevicesAPI = (app, context) => {
 
         const db = getDB('devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
-        const env = deviceInfo.getEnvironment()
         const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
         if(!subsystem) {
             res.status(404).send(`Subsytem [${req.params.subsystem}] not found in device [${req.params.device}]`)
@@ -158,7 +154,7 @@ export const DevicesAPI = (app, context) => {
         res.send({value: yaml})
     }))
 
-    const processMessage = async (env: string, message: string, topic: string) => {
+    const processMessage = async (message: string, topic: string) => {
         const splitted = topic.split("/");
         const device = splitted[0];
         const deviceName = splitted[1];
@@ -172,7 +168,6 @@ export const DevicesAPI = (app, context) => {
         } else {
             const db = getDB('devices')
             const deviceInfo = DevicesModel.load(JSON.parse(await db.get(deviceName)))
-            const env = deviceInfo.getEnvironment()
             // console.log("deviceInfo: ", deviceInfo)
             // console.log("subsystems: ", deviceInfo.data.subsystem)
             // console.log("endpoint: ", endpoint)
@@ -186,7 +181,6 @@ export const DevicesAPI = (app, context) => {
             await generateEvent(
                 {
                     ephemeral: monitor.data.ephemeral??false,
-                    environment: env,
                     path: endpoint, 
                     from: "device",
                     user: deviceName,
@@ -201,6 +195,5 @@ export const DevicesAPI = (app, context) => {
         }
     }
 
-    topicSub(mqtts['dev'], 'devices/#', (message, topic) => processMessage('dev', message, topic))
-    topicSub(mqtts['prod'], 'devices/#', (message, topic) => processMessage('prod', message, topic))
+    topicSub(mqtt, 'devices/#', (message, topic) => processMessage(message, topic))
 }

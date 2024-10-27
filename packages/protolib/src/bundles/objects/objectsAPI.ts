@@ -209,7 +209,5 @@ export const ObjectsAPI = AutoAPI({
   prefix: '/api/core/v1/',
   getDB: getDB,
   connectDB: () => new Promise(resolve => resolve(null)),
-  requiresAdmin: ['*'],
-  useDatabaseEnvironment: false,
-  useEventEnvironment: false
+  requiresAdmin: ['*']
 })

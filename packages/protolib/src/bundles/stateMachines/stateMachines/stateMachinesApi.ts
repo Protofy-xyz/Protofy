@@ -58,9 +58,7 @@ export const StateMachinesAPI = (app, context) => {
     prefix: '/api/v1/',
     getDB: getDB,
     connectDB: () => new Promise(resolve => resolve(null)),
-    requiresAdmin: ['*'],
-    useEventEnvironment: false,
-    useDatabaseEnvironment: false
+    requiresAdmin: ['*']
   })
   autoAPI(app, context)
 

@@ -7,7 +7,6 @@ import { DataView } from '../../../components/DataView';
 import { AdminPage } from '../../../components/AdminPage';
 import { CardBody } from '../../../components/CardBody';
 import { ItemMenu } from '../../../components/ItemMenu';
-import { useWorkspaceEnv } from '../../../lib/useWorkspaceEnv';
 import { Tinted } from '../../../components/Tinted';
 import { Chip } from '../../../components/Chip';
 import { z } from 'protobase';
@@ -27,16 +26,12 @@ export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
     const { replace } = usePageParams(pageState)
     const [all, setAll] = useState(false)
-    const env = useWorkspaceEnv()
 
     const extraMenuActions = []
 
     return (<AdminPage title="Agents" pageSession={pageSession}>
       <DataView
         entityName="agents"
-        onAdd={data => {
-          return { ...data, environment: env }
-        }}
         defaultView={"grid"}
         key={all ? 'all' : 'filtered'}
         toolBarContent={
@@ -61,7 +56,6 @@ export default {
         itemData={itemData}
         rowIcon={Router}
         sourceUrl={sourceUrl}
-        sourceUrlParams={all ? undefined : { env }}
         initialItems={initialItems}
         name="agent"
         columns={DataTable2.columns(
@@ -76,8 +70,6 @@ export default {
           onSelectItem: (item) => { },
           getBody: (data: AgentsType) => <CardBody title={data.name}>
             <XStack right={20} top={20} position={"absolute"}>
-              {/* ADD ENVIRONMENTS COMPATIBILITY */}
-              {/* {data.environment && all && <Chip color={data.environment == 'dev' ? "$color5" : "$color7"} text={data.environment} />} */}
               <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?: string) => {
                 await API.get(`${sourceUrl}/${deviceId}/delete`)
               }} deleteable={() => true} element={AgentsModel.load(data)} extraMenuActions={extraMenuActions} />

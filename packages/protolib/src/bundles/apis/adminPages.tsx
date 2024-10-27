@@ -9,7 +9,6 @@ import { DataTable2 } from '../../components/DataTable2'
 import { DataView, DataViewActionButton } from '../../components/DataView'
 import { AlertDialog } from '../../components/AlertDialog'
 import { AdminPage } from '../../components/AdminPage'
-import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv'
 import { useEffect, useState } from 'react'
 import Center from '../../components/Center'
 import { Tinted } from '../../components/Tinted';
@@ -141,7 +140,6 @@ const objectsSourceUrl = '/api/core/v1/objects?all=1'
 export default {
     'apis': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
-            const env = useWorkspaceEnv()
             const { replace } = usePageParams(pageState ?? {})
             usePrompt(() => `At this moment the user is browsing the Rest API management page. The Rest API management page allows to list, create, read, update and delete API definitions. API definitions are typescript files using express.
             The system allows to create APIs either from an empty template, or from an AutoCRUD template. The automatic crud template creates an automatic CRUD API for a given object. 
@@ -155,16 +153,11 @@ export default {
                 ))
 
             const defaultData = { data: { template: 'custom-api' } }
-            const notificationsTopicPrefix = 'notifications/event/create/services/api/package/'
             const [dialogOpen, setDialogOpen] = useState(false)
             const [objects, setObjects] = useState(extraData?.objects ?? getPendingResult('pending'))
             const [currentElement, setCurrentElement] = useState<any>({})
             const [total, setTotal] = useState(0)
             const [addOpen, setAddOpen] = useState(false)
-            const [publishOpen, setPublishOpen] = useState(false)
-            const [publishState, setPublishState] = useState<"confirm" | "publishing" | "published" | "error">("confirm")
-            const [packageId, setPackageId] = useState("")
-            const { messages, setMessages } = useSubscription(notificationsTopicPrefix + '#')
             const [data, setData] = useState(defaultData)
             const [error, setError] = useState<any>('')
             const toast = useToastController()
@@ -179,28 +172,6 @@ export default {
             }
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
 
-            useEffect(() => {
-                if (publishOpen) {
-                    setPublishState("confirm")
-                    setPackageId("")
-                }
-            }, [publishOpen])
-
-            const processMessages = async (messages) => {
-                if (packageId) {
-                    //search messages for messages directed at packageId
-                    const done = messages.find(m => m.topic.startsWith(notificationsTopicPrefix + packageId + '/done'))
-                    if (done) {
-                        await API.get('/api/core/v1/services/api/restart')
-                        setPublishState("published")
-                        setPackageId("")
-                    }
-                }
-            }
-
-            useEffect(() => {
-                processMessages(messages)
-            }, [messages])
 
             return (<AdminPage title="Automations" pageSession={pageSession}>
                 <AlertDialog
@@ -329,74 +300,8 @@ export default {
                         </Center>
                     </ScrollView>
                 </AlertDialog>
-                <AlertDialog
-                    showCancel={publishState == "confirm"}
-                    hideAccept={publishState == "publishing"}
-                    acceptCaption={publishState == "confirm" ? "Publish" : "Done"}
-                    cancelCaption="Cancel"
-                    width={"600px"}
-                    integratedChat
-                    onAccept={async () => {
-                        if (publishState == "confirm") {
-                            setPublishState("publishing")
-                            const result = await API.get('/api/core/v1/services/api/package')
-                            const currentPackageId = result?.data?.packageId
-                            if (!currentPackageId) {
-                                setPublishState("error")
-                                return true
-                            }
-                            setPackageId(currentPackageId)
-                            return true
-                        }
-                        setPublishOpen(false)
-                        setPublishState("confirm")
-                    }}
-                    p={"$2"}
-                    pt="$5"
-                    pl="$5"
-
-                    setOpen={setPublishOpen}
-                    open={publishOpen}
-                    // hideAccept={true}
-                    description={"Publish will transfer all the automations from the preview/development environment to the public environment with real data. Are you sure you want to publish?"}
-                    title={"Publish Automations"}
-                >
-                    <YStack height={publishState == 'publishing' ? 380 : 300} f={1} jc="center" ai="center" id={"admin-dataview-apis-publish-dlg"}>
-                        {publishState == "publishing" && <YStack jc="center" ai="center" f={1}>
-                            <Spinner size='large' scale={2} />
-                            <Paragraph mt={"$5"}> Publishing automations... </Paragraph>
-                        </YStack>}
-                        {publishState == "published" && <YStack jc="center" ai="center" f={1}>
-                            <Tinted><CheckCircle size={50} /></Tinted>
-                            <SizableText mt="$2"> Automations published successfully </SizableText>
-                        </YStack>}
-                        {publishState == "confirm" && <YStack jc="center" ai="center" f={1}>
-                            <Tinted><Package size={80} /></Tinted>
-                            <SizableText mt="$2">{total} automation modules </SizableText>
-                        </YStack>}
-                        {publishState == "error" && <YStack jc="center" ai="center" f={1}>
-                            <Tinted><AlertTriangle size={80} /></Tinted>
-                            <SizableText mt="$2"> Error publishing automations </SizableText>
-                        </YStack>}
-                    </YStack>
-                </AlertDialog>
                 <DataView
                     onDataAvailable={(total) => setTotal(total)}
-                    extraActions={[
-                        <Tinted>
-                            <DataViewActionButton
-                                icon={(props) => <UploadCloud fillOpacity={0} {...props} />}
-                                description={`Publish automations`}
-                                onPress={() => {
-                                    setPublishOpen(true)
-                                }}
-                                ml={"$1"}
-                            />
-                        </Tinted>
-                    ]}
-                    openMode={env === 'dev' ? 'edit' : 'view'}
-                    hideAdd={env !== 'dev'}
-                    disableItemSelection={env !== 'dev'}
                     onSelectItem={(item) => {
                         replace('editFile', item.data.filePath);
                     }}

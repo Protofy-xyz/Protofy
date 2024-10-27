@@ -4,7 +4,6 @@ import { DataView } from '../../components/DataView';
 import { DataTable2 } from '../../components/DataTable2';
 import { Chip } from '../../components/Chip';
 import { AdminPage } from '../../components/AdminPage';
-import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import { Pencil, Boxes } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 import { XStack, Text } from "@my/ui";
@@ -22,12 +21,8 @@ export default {
     'objects': {
         component: ({ pageState, initialItems, pageSession }: any) => {
             const { replace } = usePageParams(pageState)
-            const env = useWorkspaceEnv()
             return (<AdminPage title="Objects" pageSession={pageSession}>
                 <DataView
-                    openMode={env === 'dev' ? 'edit' : 'view'}
-                    hideAdd={env !== 'dev'}
-                    disableItemSelection={env !== 'dev'}
                     rowIcon={Boxes}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
@@ -77,14 +72,14 @@ export default {
                     }
                     }
 
-                    extraMenuActions={env == "dev" ? [
+                    extraMenuActions={[
                         {
                             text: "Edit Object file",
                             icon: Pencil,
                             action: (element) => { replace('editFile', element.getDefaultSchemaFilePath()) },
                             isVisible: (data) => true
                         }
-                    ] : []}
+                    ]}
                 />
             </AdminPage>)
         },

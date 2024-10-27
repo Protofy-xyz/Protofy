@@ -5,7 +5,6 @@ import { AdminPage } from '../../components/AdminPage';
 import { AlertDialog } from '../../components/AlertDialog';
 import { Tinted } from '../../components/Tinted';
 import { Center } from '../../components/Center';
-import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import { useSearchParams, useRouter, usePathname } from 'solito/navigation';
 import { Spinner, YStack } from '@my/ui'
 import { DataCard } from '../../components/DataCard'
@@ -34,12 +33,10 @@ const generateBackup = async (element) => {
 
 export default {
     'databases': {
-        component: ({ workspace, pageState, initialItems, pageSession, env }: any) => {
-            const workspaceEnv = useWorkspaceEnv()
+        component: ({ workspace, pageState, initialItems, pageSession }: any) => {
             const router = useRouter()
-            const subpath = env == 'system' ? './system/' : './databases/'
-            env = env == 'system' ? undefined : workspaceEnv
-            const entityName = !env ? 'System' : 'Application'
+            const subpath = './databases/'
+            const entityName = 'Databases'
 
             const [open, setOpen] = useState(false)
             const [backupId, setBackupId] = useState("")
@@ -92,14 +89,14 @@ export default {
                     </YStack>
                 </AlertDialog>
                 <DataView
-                    rowIcon={entityName == 'Application' ? DatabaseBackup : Database}
-                    sourceUrl={databasesSourceUrl + (env ? '?env=' + env : '')}
+                    rowIcon={Database}
+                    sourceUrl={databasesSourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
-                    entityName={entityName + ' databases' + (entityName != 'System' && env == 'dev' ? ' (dev)' : '')}
+                    entityName={'Databases'}
                     name="database"
                     onSelectItem={(item) => {
-                        router.push(subpath + 'view?database=' + item.getId() + (env ? '&env=' + env : ''))
+                        router.push('./databases/view?database=' + item.getId())
                     }}
                     // hideAdd={true}
                     model={DatabaseModel}
@@ -131,7 +128,7 @@ export default {
         getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
     },
     'databases/view': {
-        component: ({ workspace, pageState, sourceUrl, initialItems, pageSession, extraData, env }: any) => {
+        component: ({ workspace, pageState, sourceUrl, initialItems, pageSession, extraData }: any) => {
             const [tmpItem, setTmpItem] = useState<string | null>(null)
             const [content, setContent] = useState(initialItems)
             const [newKey, setNewKey] = useState('')
@@ -145,18 +142,15 @@ export default {
             const query = Object.fromEntries(searchParams.entries());
             const currentDB = query.database ?? ''
 
-            const workspaceEnv = useWorkspaceEnv()
-            env = env == 'system' ? undefined : workspaceEnv
-
             const fetch = async () => {
-                setContent(await API.fetch('/api/core/v1/databases/' + currentDB + (env ? '?env=' + env : '')))
+                setContent(await API.fetch('/api/core/v1/databases/' + currentDB))
             }
             const onDelete = async (key, isTemplate) => {
                 if (isTemplate) {
                     setTmpItem(null)
                     content.data.shift()
                 } else {
-                    const result = await API.get('/api/core/v1/databases/' + currentDB + '/' + key + '/delete' + (env ? '?env=' + env : ''))
+                    const result = await API.get('/api/core/v1/databases/' + currentDB + '/' + key + '/delete')
                     if (result?.isLoaded && result.data.result == 'deleted') {
                         await fetch()
                         setRenew(renew + 1)
@@ -174,7 +168,7 @@ export default {
                 setNewKey("")
             }
             const onSave = async (newContent, key) => {
-                const result = await API.post('/api/core/v1/databases/' + currentDB + '/' + key + (env ? '?env=' + env : ''), newContent)
+                const result = await API.post('/api/core/v1/databases/' + currentDB + '/' + key, newContent)
                 if (result?.isLoaded) {
                     await fetch()
                     setRenew(renew + 1)
@@ -187,7 +181,7 @@ export default {
             return (<AdminPage title={currentDB} workspace={workspace} pageSession={pageSession}>
                 {pathname ? <DataView
                     key={renew}
-                    sourceUrl={'/api/core/v1/databases/' + currentDB + (env ? '?env=' + env : '')}
+                    sourceUrl={'/api/core/v1/databases/' + currentDB}
                     initialItems={content}
                     numColumnsForm={1}
                     name={currentDB}

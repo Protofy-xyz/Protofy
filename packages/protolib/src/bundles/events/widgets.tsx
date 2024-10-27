@@ -2,7 +2,6 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { API } from 'protobase'
 import { useRemoteStateList } from '../../lib/useRemoteState';
-import { useWorkspaceEnv } from '../../lib/useWorkspaceEnv';
 import { EventModel } from './eventsSchemas';
 import AsyncView from '../../components/AsyncView';
 import { DashboardCard } from '../../components/DashboardCard';
@@ -22,9 +21,8 @@ export const TotalEvents = ({ title, id }) => (
 );
 
 export const LastEvents = ({ title, id }) => {
-    const env = useWorkspaceEnv()
     const fetch = async (fn) => {
-        const events = await API.get({url: '/api/core/v1/events', env});
+        const events = await API.get({url: '/api/core/v1/events'});
         fn(events);
     };
 

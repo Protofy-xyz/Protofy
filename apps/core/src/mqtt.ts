@@ -6,12 +6,7 @@ import { getLogger } from 'protobase';
 
 const logger = getLogger()
 
-export const startMqtt = (config) => {
-    _startMqtt(config, 1883, 3003)
-    _startMqtt(config, 8883, 4003)
-}
-
-const _startMqtt = (config, mqttPort, webSocketPort) => {
+export const startMqtt = (config, mqttPort=1883, webSocketPort=3003) => {
     const aedesInstance = new aedes();
     aedesInstance.authenticate = function (client, username, password, callback) {
         if (!username) {

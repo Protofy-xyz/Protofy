@@ -3,12 +3,11 @@ import { getLogger } from 'protobase';
 
 const logger = getLogger()
 
-var mqttClients = {};
+var mqttClient
 
-export const getMQTTClient = (env, username, password?, onConnect?) => {
-    let mqttClient = mqttClients[env]
+export const getMQTTClient = (username, password?, onConnect?) => {
     if (!mqttClient) {
-        const mqttServer = process.env.MQTT_URL ?? 'mqtt://localhost:'+(env == 'dev' ? '1883' : '8883')
+        const mqttServer = process.env.MQTT_URL ?? 'mqtt://localhost:1883'
         mqttClient = mqtt.connect(mqttServer, {
             username: username, 
             clientId: username + '_' + Math.random().toString(16).substr(2, 8),
@@ -49,7 +48,7 @@ export const getMQTTClient = (env, username, password?, onConnect?) => {
             }
         });
 
-        mqttClients[env] = mqttClient
+        mqttClient = mqttClient
     }
     return mqttClient
 }

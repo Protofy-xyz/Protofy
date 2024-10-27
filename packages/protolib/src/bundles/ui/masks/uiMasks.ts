@@ -485,7 +485,7 @@ export const UIMasks = [
                 "type": "link",
                 "data": {
                     "text": "Need to upload a file?",
-                    "url": "/workspace/dev/files?path=%2F%2Fapps%2Fnext%2Fpublic"
+                    "url": "/workspace/files?path=%2F%2Fapps%2Fnext%2Fpublic"
                 }
             },
             {
