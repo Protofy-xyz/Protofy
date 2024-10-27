@@ -32,7 +32,7 @@ import {
 import { DashboardCard } from 'protolib/components/DashboardCard'
 
 export default ({ pages }) => {
-    const adminPages = pages.filter(p => p.pageType == 'admin' && p.object && p.route.startsWith('/workspace/'))
+    const adminPages = pages.filter(p => p.pageType == 'admin')
 
     return {
         "default": "/workspace/",
@@ -106,11 +106,11 @@ export default ({ pages }) => {
             ...(adminPages.length ? {
                 "CMS": adminPages.map((page) => {
                     const parts = page.route.split('/')
-                    return { "name": page.object.charAt(0).toUpperCase() + page.object.slice(1), "icon": Box, "type": parts[2], "path": '/', previewMode: page.status?.adminpanel == 'unpublished' }
+                    return { "name": page.object.charAt(0).toUpperCase() + page.object.slice(1), "icon": Box, "type": page.route, path: '/', external: true }
                 })
             } : {}),
             "System": [
-                { "name": "Dashboard", "icon": LayoutDashboard, "type": "", "path": "/" },
+                { "name": "Dashboard", "icon": LayoutDashboard, "type": "dashboard", "path": "/" },
                 { "name": "Users", "icon": "users", "type": "users", "path": "/" },
                 { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
                 { "name": "Keys", "icon": Key, "type": "keys", "path": "/" },

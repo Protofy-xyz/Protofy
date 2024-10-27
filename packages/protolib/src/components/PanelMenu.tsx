@@ -169,7 +169,7 @@ const Subtabs = ({ tabs, subtabs }: any) => {
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                let href = workspaceRoot + '/' + (subtab.type + subtab.path).replace(/\/+/g, '/')
+                let href = (subtab.type + subtab.path).replace(/\/+/g, '/')
                 const originalHref = href
 
                 const allLinks = Object.keys(tabs).reduce((acc, tab) => {
@@ -194,7 +194,11 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                         text={subtab.name}
                     />
                 </Tinted>
-
+                if(subtab.external) {
+                    return <a href={href} key={index}>
+                        {content}
+                    </a>
+                }
                 return <Link href={href} key={index}>
                     {content}
                 </Link>
