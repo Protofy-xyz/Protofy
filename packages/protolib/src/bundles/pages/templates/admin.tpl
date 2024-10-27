@@ -39,5 +39,5 @@ export default {
             />
         </AdminPage>)
     }, 
-    getServerSideProps: (context) => PaginatedDataSSR(getWorkspaceApiUrl(context.resolvedUrl, apiUrl), isProtected?Protofy("permissions", {{{permissions}}}):undefined)(context)
+    getServerSideProps: (context) => PaginatedDataSSR(apiUrl, isProtected?Protofy("permissions", {{{permissions}}}):undefined)(context)
 }
