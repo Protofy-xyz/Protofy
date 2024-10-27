@@ -140,8 +140,6 @@ const serviceAutoAPI = AutoAPI({
   requiresAdmin: ['*']
 })
 
-console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-
 const getServicePath = async (service) => {
   return new Promise((resolve, reject) => {
     pm2.connect(err => {
