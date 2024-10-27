@@ -43,9 +43,6 @@ export const PromptAtom = atom<PromptContext[]>([{
         
         There is an automatic api system to create list, create, read, update, delete Rest apis wrapping an 'object'. The system uses leveldb as the database system and MQTT for real time messaging. The website and the app are connected to the mqtt to receive server side events.
         
-        There is a reverse proxy on port 8080, with all the needed routing configured to proxy requests to /api to :4001, /api/core to :3002 and all other router to :4000  (nextjs).
-        There is also a port 8000 with a webserver, routing the requests to the same services, but on development mode.
-        
         The mqtt server is based on aedes and running in apps/core, providing a mqtt server for the stack.
         
         Since aedes, nextjs, express, expo and level are all npm-based packages the system can be run just with yarn commands and depends only on nodejs and yarn to work.
