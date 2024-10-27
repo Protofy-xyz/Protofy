@@ -96,7 +96,7 @@ export default {
                     entityName={'Databases'}
                     name="database"
                     onSelectItem={(item) => {
-                        router.push('./databases/view?database=' + item.getId())
+                        router.push('./view?database=' + item.getId())
                     }}
                     // hideAdd={true}
                     model={DatabaseModel}
