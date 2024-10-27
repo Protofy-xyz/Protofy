@@ -60,16 +60,16 @@
 
       // IN CASE THAT DEFAULT CASE WITH FETCH DOESN'T WORK USE TIMEOUT
       // setTimeout(() => {
-      //   window.location.href = "http://localhost:8080/";
+      //   window.location.href = "http://localhost:3000/";
       // }, 30000)
 
       // DEFAULT CASE
       try {
-        const responseFront = await fetch('http://localhost:8080/', { signal: controller.signal });
+        const responseFront = await fetch('http://localhost:3000/', { signal: controller.signal });
         clearTimeout(timeoutId);
 
         if (responseFront.ok) {
-          window.location.href = "http://localhost:8080/";
+          window.location.href = "http://localhost:3000/";
         } else {
           console.log('Response not ok, retrying in', delay, 'ms');
           setTimeout(() => makeRequest(retryCount + 1), delay);

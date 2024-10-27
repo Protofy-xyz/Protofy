@@ -24,7 +24,7 @@ export const PromptAtom = atom<PromptContext[]>([{
         The system is a typescript based yarn workspce with some apps and some packages. The system is called Protofy. 
         Protofy is open source, and the repo is located at: https://github.com/Protofy-xyz/Protofy.
         The system contains a packages/ folder with some packages and apps/ folder with some apps.
-        The system is designed to extend the api (apps/api) and to allow the user to extend the website (available at port 8080) or the mobile app (app/expo) by creating elements in packages/app, a package common for all apps.
+        The system is designed to extend the api (apps/api) and to allow the user to extend the website (available at port 3000) or the mobile app (app/expo) by creating elements in packages/app, a package common for all apps.
         packages/app adds api endspoints to apps/api by using a concept called bundles. A bundle is a folder with all screens, apis, objects, or other elements injectable in apps,centralized place to extend aspects of
         the apps without editing the app code, by using things imported from packages app.
         There is a custom bundle in packages/app/, where the user can add elements. The custom bundle is already wired with apps/api and apps/next. 

@@ -4,7 +4,7 @@ import { isElectron } from "./lib/isElectron";
 import { getLogger } from "./logger"
 
 const logger = getLogger()
-let APIURL = devMode?'http://localhost:8000':'http://localhost:8080'
+let APIURL = 'http://localhost:3002'
 export const setApiUrl = (apiurl) => APIURL = apiurl 
 export const getApiUrl = () => process?.env?.PROXY_API_URL ?? APIURL
 
