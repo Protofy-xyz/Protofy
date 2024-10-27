@@ -131,8 +131,7 @@ export default ({ pages }) => {
             "Content": [
                 { "name": "Files", "icon": "folder", "type": "files", "path": "?path=/" },
                 { "name": "Resources", "icon": Library, "type": "resources", "path": "/" },
-                { "name": "Public", "icon": "doorOpen", "type": "files", "path": "?path=/apps/next/public" },
-                { "name": "Databases", "icon": DatabaseBackup, "type": "databases", "path": "/" },
+                { "name": "Public", "icon": "doorOpen", "type": "files", "path": "?path=/apps/next/public" }
             ],
             "Fleets": [
                 { "name": "Agents", "icon": Bot, "type": "agents", "path": "/" },
