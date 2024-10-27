@@ -5,7 +5,7 @@ class RemoteTransport extends Writable {
   constructor(opts) {
     super(opts);
     const isProduction = process.env.NODE_ENV === 'production';
-    this.client = mqtt.connect(process.env.MQTT_URL ?? ('mqtt://localhost:'+(isProduction?'8883':'1883')), {
+    this.client = mqtt.connect(process.env.MQTT_URL ?? 'mqtt://localhost:1883', {
       username: opts.username,
       password: opts.password,
       clientId: opts.username + '_' + Math.random().toString(16).substr(2, 8)

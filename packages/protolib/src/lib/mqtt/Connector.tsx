@@ -17,7 +17,7 @@ export default function Connector({
   const [client, setClient] = useState<MqttClient | null>(null);
 
   useEffect(() => {
-    if (!client && !clientValid.current) {
+    if (!client && !clientValid.current && brokerUrl) {
       // This synchronously ensures we won't enter this block again
       // before the client is asynchronously set
       clientValid.current = true;
