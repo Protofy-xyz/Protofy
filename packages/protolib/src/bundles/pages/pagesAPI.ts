@@ -11,9 +11,9 @@ import admin from "app/workspaces/admin";
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
-const adminPanelPagesDir = (root) => fspath.join(root, "/apps/adminpanel/pages/[env]/")
+const adminPanelPagesDir = (root) => fspath.join(root, "/apps/adminpanel/pages/")
 const publishedNextPagesDir = (root) => fspath.join(root, "/apps/next/dist/apps/next/.next/server/pages/")
-const publishedAdminPagesDir = (root) => fspath.join(root, "/apps/adminpanel/dist/apps/adminpanel/.next/server/pages/[env]/")
+const publishedAdminPagesDir = (root) => fspath.join(root, "/apps/adminpanel/dist/apps/adminpanel/.next/server/pages/")
 const publishedAdminRootPagesDir = (root) => fspath.join(root, "/apps/adminpanel/dist/apps/adminpanel/.next/server/pages/")
 const electronPagesDir = (root) => fspath.join(root, "/apps/electron/pages/")
 
@@ -109,7 +109,7 @@ const getDB = (path, req, session) => {
           const ObjectSourceFile = getSourceFile(objectPath)
           removeFeature(ObjectSourceFile, '"'+pageType+'Page"')
         }
-        await deleteFile(fspath.join(getRoot(req), "apps/adminpanel/pages/[env]/", route + '.tsx'))
+        await deleteFile(fspath.join(getRoot(req), "apps/adminpanel/pages/", route + '.tsx'))
       } else {
         await deleteFile(fspath.join(getRoot(req), "apps/next/pages", route + '.tsx'))
       }
