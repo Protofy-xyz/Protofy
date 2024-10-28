@@ -286,6 +286,7 @@ export const AutoAPI = ({
         
     }));
 
+    //create
     //this endpoint serves two purposes: create and batch read (read multiple items at once)
     //post with ?action=read_multiple to read multiple items at once (body should a json array with the keys to read)
     //post without ?action to create an item
@@ -335,7 +336,13 @@ export const AutoAPI = ({
 
             for (const path of dbPath) {
                 const db = getDB(path, req, session)
-                await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
+                try {
+                    await db.get(entityModel.getId())
+                    res.status(409).send({ error: "Already exists" })
+                    return
+                } catch (e) {
+                    await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
+                }
             }
         }
         

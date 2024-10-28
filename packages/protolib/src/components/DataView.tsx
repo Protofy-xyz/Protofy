@@ -466,10 +466,6 @@ const DataViewInternal = forwardRef(({
                                         console.log('Saving from editable object: ', data)
                                         try {
                                             const obj = model.load(data)
-                                            const repeatedId = items.data.items.find(i => i.id === obj.getId())
-                                            if (repeatedId) {
-                                                throw { error: "This id already exists" }
-                                            }
                                             const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
                                             if (result.isError) {
                                                 throw result.error
@@ -480,7 +476,6 @@ const DataViewInternal = forwardRef(({
                                                 message: obj.getId()
                                             })
                                         } catch (e) {
-                                            console.log('original error: ', e, e.flatten())
                                             throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
                                         }
                                     }}

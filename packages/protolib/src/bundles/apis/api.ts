@@ -44,11 +44,15 @@ const deleteAPI = (req, value) => {
 
 async function checkFileExists(filePath) {
   try {
-    await fs.access(filePath, fs.constants.F_OK);
-    console.log('File: ' + filePath + ' already exists');
+    await fs.access(filePath + '.ts', fs.constants.F_OK);
     return true;
   } catch (error) {
-    return false;
+    try {
+      await fs.access(filePath + '.py', fs.constants.F_OK);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }
 
@@ -68,27 +72,26 @@ const getDB = (path, req, session) => {
       deleteAPI(req, value)
     },
 
-    async put(key, value) {
+    async put(key, value, options?) {
       value = JSON.parse(value)
-
       let exists
       let ObjectSourceFile
 
       const template = fspath.basename(value.template ?? 'empty')
       const extension = value.template === 'python-api' ? '.py' : '.ts'
 
-      const filePath = getRoot(req) + 'packages/app/apis/' + fspath.basename(value.name) + extension;
+      const filePath = getRoot(req) + 'packages/app/apis/' + fspath.basename(value.name)
       exists = await checkFileExists(filePath);
+
+      if (exists) {
+        console.log("AutoAPI already exists")
+        return
+      }
 
       if (template.startsWith("automatic-crud")) {
         const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(value.object))
         ObjectSourceFile = getSourceFile(objectPath)
         exists = hasFeature(ObjectSourceFile, '"AutoAPI"')
-
-        if (exists) {
-          console.log("AutoAPI already exists")
-          return
-        }
       }
 
       if (template == "automatic-crud-google-sheet") {

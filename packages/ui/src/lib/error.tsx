@@ -12,7 +12,7 @@ export const getErrorMessage = (err) => {
           return <Text>
             - [<Text color="$red9" fontWeight={"bold"}>{field}</Text>] {err.fieldErrors[field]}
           </Text>
-        }) : <Text>Server Error</Text>}</>
+        }) : err && err.error? <Text>{err.error?.error ?? err.error}</Text>: <Text>Server Error</Text>}</>
       }
     </YStack>
   )
