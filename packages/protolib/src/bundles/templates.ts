@@ -8,12 +8,12 @@ export const chatbotTemplates = {
         description: 'Creates a chatbot that can be used in your website',
         icon: PencilRuler
     },
-    "python-chatbot": {
-        id: "python-chatbot",
-        name: "Python Chatbot",
-        description: 'Creates a python chatbot that can be used in your website',
-        icon: PencilRuler
-    }
+    // "python-chatbot": {
+    //     id: "python-chatbot",
+    //     name: "Python Chatbot",
+    //     description: 'Creates a python chatbot that can be used in your website',
+    //     icon: PencilRuler
+    // }
 }
 
 export const apiTemplates = {

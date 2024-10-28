@@ -6,12 +6,13 @@ import * as fspath from 'path';
 import { API } from 'protobase'
 import { getServiceToken } from "protonode";
 
-const ChatbotDir = (root) => fspath.join(root, "/packages/app/chatbots/")
-const indexFilePath = "/packages/app/chatbots/index.ts"
+const chatbotDirPath = "/packages/app/chatbots/"
+const ChatbotDir = (root) => fspath.join(root, chatbotDirPath)
+const indexFilePath = fspath.join(getRoot(), chatbotDirPath, "index.ts")
 
-const getChatbot = (chatbotPath, req, extension?) => {
+const getChatbot = (name, req, extension?) => {
   let engine
-  let filePath = ChatbotDir(getRoot(req)) + chatbotPath
+  let filePath = ChatbotDir(getRoot(req)) + name
   if(extension) {
     filePath += extension
     engine = extension === '.ts' ? 'typescript' : 'python'
@@ -19,9 +20,11 @@ const getChatbot = (chatbotPath, req, extension?) => {
     if(fsSync.existsSync(filePath + '.ts')) {
       filePath += '.ts'
       engine = "typescript"
+      extension = '.ts'
     } else if(fsSync.existsSync(filePath + '.py')) {
       filePath += '.py'
       engine = "python"
+      extension = '.py'
     } else {
       throw "Chatbot file not found"
     }
@@ -34,10 +37,10 @@ const getChatbot = (chatbotPath, req, extension?) => {
     type = arg ? arg.getText().replace(/^['"]+|['"]+$/g, '') : type
   }
   return {
-    name: chatbotPath.replace(/\.[^/.]+$/, ""),
+    name: name.replace(/\.[^/.]+$/, ""),
     engine,
     type,
-    filePath
+    filePath: chatbotDirPath + name + extension
   }
 }
 

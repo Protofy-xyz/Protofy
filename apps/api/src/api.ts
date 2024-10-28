@@ -36,8 +36,10 @@ const mqtt = getMQTTClient(serviceName, getServiceToken(), async () => {
 
     try {
         const BundleAPI = await import('app/bundles/apis');
+        const BundleChatbotsAPI = await import('app/bundles/chatbots');
          //wait for mqtt before starting API
         BundleAPI.default(app, { mqtt, topicPub, topicSub, ...BundleContext })
+        BundleChatbotsAPI.default(app, { mqtt, topicPub, topicSub, ...BundleContext })
     } catch (error) {
         generateEvent({
             path: 'services/'+serviceName+'/crash', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
