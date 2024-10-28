@@ -21,6 +21,7 @@ import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinit
 import { PackagesAPI } from './packages/packagesAPI'
 import { FlowAPI } from './flow/flowAPI';
 import { AgentsAPI } from './agents/agents/agentsApi'
+import { ChatbotsAPI } from './chatbots/chatbotsAPI'
 
 export const AdminAPIBundles = (app, context) => {
   UsersAPI(app, context)
@@ -45,5 +46,6 @@ export const AdminAPIBundles = (app, context) => {
   ServicesAPI(app, context) 
   PackagesAPI(app, context)
   StateMachinesDefinitionsApi(app, context),
-  FlowAPI(app, context)
+  FlowAPI(app, context),
+  ChatbotsAPI(app, context)
 }
