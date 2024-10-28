@@ -15,6 +15,7 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
   const proxy = httpProxy.createProxyServer({
     ws: true,
     xfwd: true,
+    proxyTimeout: 0
   });
   
   proxy.on('error', (err, req, res) => {
