@@ -1,4 +1,4 @@
-import { ProtoMqttAgent } from 'agents'
+import { ProtoAgent } from 'agents'
 export default function (agentName) {
-    return new ProtoMqttAgent(agentName)
+    return ProtoAgent.mqtt(agentName)
 }
