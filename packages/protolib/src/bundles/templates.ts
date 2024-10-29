@@ -1,13 +1,19 @@
 import { z } from 'protobase'
-import { Router, Database, DatabaseZap, RefreshCcwDot, PencilRuler } from '@tamagui/lucide-icons'
+import { Router, Database, DatabaseZap, RefreshCcwDot, PencilRuler, MessageCircle, Sparkles } from '@tamagui/lucide-icons'
 
 export const chatbotTemplates = {
     "custom-chatbot": {
         id: "custom-chatbot",
-        name: "Chatbot",
+        name: "Custom",
         description: 'Creates a chatbot that can be used in your website',
-        icon: PencilRuler
+        icon: MessageCircle
     },
+    "chatgpt-chatbot": {
+        id: "chatgpt-chatbot",
+        name: "ChatGPT",
+        description: 'Creates a chatbot based on chatGPT that can be used in your website',
+        icon: Sparkles
+    }
     // "python-chatbot": {
     //     id: "python-chatbot",
     //     name: "Python Chatbot",

@@ -5,7 +5,7 @@ const IMAGE_GENERATION_API_URL = "https://api.openai.com/v1/images/generations";
 
 export async function fetchResults(
   messages: Omit<ChatMessageType, "id" | "type">[],
-  modal: string,
+  model: string,
   signal: AbortSignal,
   onData: (data: any) => void,
   onCompletion: () => void
@@ -41,7 +41,6 @@ export async function fetchResults(
       }
 
       let chunk = new TextDecoder("utf-8").decode(value, { stream: true });
-
       const chunks = chunk.split("\n").filter((x: string) => x !== "");
 
       chunks.forEach((chunk: string) => {
@@ -51,27 +50,17 @@ export async function fetchResults(
         if (!chunk.startsWith("data: ")) return;
         chunk = chunk.replace("data: ", "");
         const data = JSON.parse(chunk);
-        if (data.choices[0].finish_reason === "stop") return;
-        onData(data.choices[0].delta.content);
+        if (data.choices) {
+          if (data.choices[0].finish_reason === "stop") return;
+          onData(data.choices[0].delta.content);
+        }
+        if(data.error) {
+          throw new Error(data.error.message);
+        }
       });
     }
   } catch (error) {
-    if (error instanceof DOMException || error instanceof Error) {
-      throw new Error(error.message);
-    }
-  }
-}
-
-export async function fetchModals() {
-  try {
-    const response = await fetch("https://api.openai.com/v1/models", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("apikey")}`,
-      },
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
+    console.error(error);
     if (error instanceof DOMException || error instanceof Error) {
       throw new Error(error.message);
     }

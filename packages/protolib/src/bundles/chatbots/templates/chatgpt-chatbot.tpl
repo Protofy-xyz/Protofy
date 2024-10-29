@@ -9,12 +9,22 @@ import { createChatbot } from "protolib/bundles/chatbots/createChatbot";
 const root = path.join(process.cwd(), '..', '..')
 const logger = getLogger()
 
-Protofy("type", "custom")
+Protofy("type", "chatGPT")
 
 export default Protofy("code", async (app:Application, context: typeof APIContext) => {
     createChatbot(app, '{{codeNameLowerCase}}', async (req, res, chatbot) => {
         const {session, token} = getAuth(req)
-        chatbot.send("hello")
-        chatbot.end()
+        context.chatGPT.chatGPTPrompt({
+            ...req.body,
+            done: (response, message) => {
+                chatbot.end()
+            },
+            chunk: (chunk) => {
+                chatbot.sendRaw(chunk)
+            },
+            error: (error) => {
+                chatbot.sendError(error)
+            }
+        })
     })
 })

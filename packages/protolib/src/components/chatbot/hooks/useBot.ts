@@ -59,8 +59,8 @@ export default function useBot({ index, chat, prompt }: Props) {
     function handleOnError(error: Error | string) {
       if (typeof error === "string") setError(error);
       else setError(error.message);
-      resultRef.current = "Sorry, looks like I'm having a bad day.";
-      setResult("Sorry, looks like I'm having a bad day.");
+      resultRef.current = "Error processing the request: " + error.message;
+      setResult("Error processing the request: " + error.message);
       addMessage();
     }
 

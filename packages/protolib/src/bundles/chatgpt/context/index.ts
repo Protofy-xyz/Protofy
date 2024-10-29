@@ -70,6 +70,7 @@ export const chatGPTSession = async ({
         done({choices: fullResponse}); // Procesa la respuesta completa
 
     } catch (e) {
+        logger.error({ error: e.message || e, stack: e.stack }, "Error in chatGPTSession");
         if (error) error(e);
         return null;
     }

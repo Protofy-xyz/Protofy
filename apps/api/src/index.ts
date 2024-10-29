@@ -55,6 +55,7 @@ if (process.env.NODE_ENV != 'production') {
     'src/**',
     '../../packages/app/bundles/**',
     '../../packages/app/apis/**',
+    '../../packages/app/chatbots/**',
     '../../packages/protolib/dist/**',
     '../../system.js',
     '../../packages/app/conf.ts',

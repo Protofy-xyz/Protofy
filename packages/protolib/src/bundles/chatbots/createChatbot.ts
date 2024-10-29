@@ -9,10 +9,22 @@ export const createChatbot = (app, name, onMessage) => {
                 choices: [{delta: {content: data}}]
             })}\n\n`);
         }
+        const sendRaw = (data) => {
+            res.write(`data: ${JSON.stringify(data)}\n\n`);
+        }
         const end = () => {
             res.write("data: [DONE]\n\n");
             res.end();
         }
-        onMessage(req, res, {send, end})
+        const sendError = (error) => {
+            res.write(`data: ${JSON.stringify({
+                error: {
+                    message: error.message,
+                    code: error.code
+                }
+            })}\n\n`);
+            res.end();
+        }
+        onMessage(req, res, {send, end, sendRaw, sendError})
     })
 }
