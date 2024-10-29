@@ -7,7 +7,7 @@ import { getLogger } from 'protobase';
 import { BifrostProtocol } from "../bifrost/Protocol";
 
 export const AgentsAutoAPI = AutoAPI({
-    modelName: 'Agents',
+    modelName: 'agents',
     modelType: AgentsModel,
     prefix: '/api/core/v1/',
     skipDatabaseIndexes: true
