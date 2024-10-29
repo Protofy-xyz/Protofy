@@ -7,38 +7,63 @@ import { API } from 'protobase'
 import { getServiceToken } from "protonode";
 import { ObjectModel } from '../objects/objectsSchemas'
 
+const APIDirPath = "/packages/app/apis/"
 const APIDir = (root) => fspath.join(root, "/packages/app/apis/")
 const indexFile = (root) => APIDir(root) + "index.ts"
 const indexFilePath = "/packages/app/apis/index.ts"
 
-const getAPI = (apiPath, req) => {
-  const apiType = apiPath.endsWith('.py') ? 'python' : 'typescript'
-  let type = apiType
+const getAPI = (name, req, extension?) => {
   let object = "None"
-  const filePath = APIDir(getRoot(req)) + apiPath
+  let filePath = APIDir(getRoot(req)) + name
+  let engine
+
+  if (extension) {
+    filePath += extension
+    engine = extension === '.ts' ? 'typescript' : 'python'
+  } else {
+    if (fsSync.existsSync(filePath + '.ts')) {
+      filePath += '.ts'
+      extension = '.ts'
+      engine = "typescript"
+    } else if (fsSync.existsSync(filePath + '.py')) {
+      filePath += '.py'
+      extension = '.py'
+      engine = "python"
+    } else {
+      throw "API file not found"
+    }
+  }
+
+  let apiType = filePath.endsWith('.py') ? 'python' : 'typescript'
+
   if (apiType === 'typescript') {
     const sourceFile = getSourceFile(filePath)
     const arg = getDefinition(sourceFile, '"type"')
     const obj = getDefinition(sourceFile, '"object"')
-    type = arg ? arg.getText().replace(/^['"]+|['"]+$/g, '') : type
+    apiType = arg ? arg.getText().replace(/^['"]+|['"]+$/g, '') : apiType
     object = obj ? obj.getText().replace(/^['"]+|['"]+$/g, '') : object
   }
   return {
-    name: apiPath.replace(/\.[^/.]+$/, ""), //remove extension
-    type,
+    name: name.replace(/\.[^/.]+$/, ""), //remove extension
+    type: apiType,
     object,
-    filePath: APIDir("") + apiPath
+    engine,
+    filePath: APIDirPath + name + extension
   }
 }
 
 const deleteAPI = (req, value) => {
-  const extension = value.template === 'python-api' ? '.py' : '.ts'
-  const api = getAPI(fspath.basename(value.name) + extension, req)
-  removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req, fs);
-  if (api.type === "AutoAPI") {
-    const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(api.object))
-    let sourceFile = getSourceFile(objectPath)
-    removeFeature(sourceFile, '"AutoAPI"')
+
+  const api = getAPI(fspath.basename(value.name), req)
+  if(api.engine === 'typescript') {
+    removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req, fs);
+    if (api.type === "AutoAPI") {
+      const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(api.object))
+      let sourceFile = getSourceFile(objectPath)
+      removeFeature(sourceFile, '"AutoAPI"')
+    }
+  } else {
+    fsSync.unlinkSync(getRoot(req) + api.filePath)
   }
 }
 
@@ -60,7 +85,11 @@ const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
       const files = (await fs.readdir(APIDir(getRoot(req)))).filter(f => f != 'index.ts' && !fsSync.lstatSync(fspath.join(APIDir(getRoot(req)), f)).isDirectory() && (f.endsWith('.ts') || f.endsWith('.py')))
-      const apis = await Promise.all(files.map(async f => getAPI(f, req)));
+      const apis = await Promise.all(files.map(async f => {
+        const name = f.replace(/\.[^/.]+$/, "")
+        const extension = f.endsWith('.ts') ? '.ts' : '.py'
+        return getAPI(name, req, extension)
+      }));
 
       for (const api of apis) {
         if (api) yield [api.name, JSON.stringify(api)];
@@ -144,7 +173,7 @@ const getDB = (path, req, session) => {
     },
 
     async get(key) {
-      return JSON.stringify({ name: key })
+      return JSON.stringify(getAPI(key, req))
     }
   };
 

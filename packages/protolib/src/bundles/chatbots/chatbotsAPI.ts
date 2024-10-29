@@ -48,6 +48,8 @@ const deleteChatbot = (req, key, value) => {
   const api = getChatbot(fspath.basename(key), req)
   if(api.engine === 'typescript') {
     removeFileWithImports(getRoot(req), value, '"chatbots"', indexFilePath, req, fs);
+  } else {
+    fsSync.unlinkSync(getRoot(req) + api.filePath)
   }
 }
 
