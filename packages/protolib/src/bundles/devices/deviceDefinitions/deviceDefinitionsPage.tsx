@@ -61,7 +61,7 @@ export default {
       }
       const components = ["mydevice",boardName]
       //filter all ports board that are IO or I or O
-      const ports = board.ports.filter(port => {return (port.type == 'IO' || port.type == 'I' || port.type == 'O')})
+      const ports = board.ports
       ports.forEach(port => {
         components.push(null)
       })
