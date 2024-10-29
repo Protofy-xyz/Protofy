@@ -1,5 +1,5 @@
-import CreateAgent from "./CreateAgent"
+import spawnAgent from "./SpawnAgent"
 
 export default {
-    CreateAgent
+    spawnAgent
 }

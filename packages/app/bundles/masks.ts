@@ -22,6 +22,7 @@ import logsMasks from 'protolib/bundles/logs/masks'
 import playwrightMasks from 'protolib/bundles/playwright/masks'
 import networkMasks from 'protolib/bundles/network/masks'
 import stateMachineMasks from 'protolib/bundles/stateMachines/masks'
+import agentsMasks from 'protolib/bundles/agents/agents/masks'
 import { paths } from './flows';
 
 export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
@@ -58,8 +59,9 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...discordMasks,
         ...logsMasks,
         ...playwrightMasks,
-        ...networkMasks, 
-        ...stateMachineMasks
+        ...networkMasks,
+        ...stateMachineMasks, 
+        ...agentsMasks
     ]
     return []
 }
