@@ -1,4 +1,4 @@
-import spawnAgent from "./SpawnAgent"
+import spawnAgent from "./spawnAgent"
 
 export default {
     spawnAgent
