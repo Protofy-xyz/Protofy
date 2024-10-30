@@ -6,6 +6,9 @@ export default function (options: {
     subsystems: object[],
     host: string,
     hostPort: number,
+    auth: boolean,
+    username: string,
+    password: string,
     onConnect: () => void
 }) {
     const {
@@ -14,6 +17,9 @@ export default function (options: {
         subsystems,
         host,
         hostPort,
+        auth,
+        username,
+        password,
         onConnect,
     } = options
 
@@ -21,7 +27,11 @@ export default function (options: {
         case "mqtt":
             const agent = ProtoAgent.mqtt(agentName).configure(subsystems)
             agent.on("connect", onConnect)
-            agent.connect(host, hostPort)
+            if (auth) {
+                agent.connect(host, hostPort, { username, password })
+            } else {
+                agent.connect(host, hostPort)
+            }
         default:
             return ProtoAgent.mqtt(agentName)
     }

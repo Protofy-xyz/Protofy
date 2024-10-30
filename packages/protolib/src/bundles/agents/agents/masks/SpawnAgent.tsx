@@ -16,6 +16,15 @@ const SpawnAgent = ({ node = {}, nodeData = {}, children }: any) => {
       <NodeParams id={node.id} params={[{ label: 'Host', field: 'mask-host', type: 'input', }]} />
       <NodeParams id={node.id} params={[{ label: 'Host Port', field: 'mask-hostPort', type: 'input', }]} />
       <NodeParams id={node.id} params={[{ label: 'Connection type', field: 'mask-connectionType', type: 'select', data: agentBusTypes }]} />
+      <NodeParams id={node.id} params={[{ label: 'Authentication', field: 'mask-auth', type: 'boolean' }]} />
+      {
+        nodeData["mask-auth"]?.value
+          ? <>
+            <NodeParams id={node.id} params={[{ label: 'Username', field: 'mask-username', type: 'input' }]} />
+            <NodeParams id={node.id} params={[{ label: 'Password', field: 'mask-password', type: 'input' }]} />
+          </>
+          : <></>
+      }
       <div style={{ height: '30px' }} />
       <p style={{ fontSize: "22px" }}>Handlers</p>
       <NodeOutput id={node.id} type={'input'} label={'On Connect'} vars={[]} handleId={'mask-onConnect'} />
@@ -39,6 +48,9 @@ export default {
       subsystems: 'input',
       host: 'input',
       hostPort: 'input',
+      auth: 'input',
+      username: 'input',
+      password: 'input',
       onConnect: 'output',
     }
   }),
@@ -49,6 +61,9 @@ export default {
       subsystems: 'input',
       host: 'input',
       hostPort: 'input',
+      auth: 'input',
+      username: 'input',
+      password: 'input',
       onConnect: {
         params: { 'mask-onConnect': {}, }
       },
@@ -72,6 +87,10 @@ export default {
       },
       "mask-hostPort": {
         value: 1883,
+        kind: "Identifier"
+      },
+      "mask-auth": {
+        value: false,
         kind: "Identifier"
       },
     }
