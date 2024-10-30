@@ -1,6 +1,6 @@
-import SpawnAgent from "./SpawnAgent";
+import RegisterAgent from './RegisterAgent'
 
 export const agentBusTypes = ["mqtt"]
 export default [
-  SpawnAgent
+  RegisterAgent
 ];

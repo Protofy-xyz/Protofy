@@ -1,5 +1,5 @@
-import spawnAgent from "./spawnAgent"
+import registerAgent from "./registerAgent"
 
 export default {
-    spawnAgent
+    registerAgent
 }

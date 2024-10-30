@@ -3,11 +3,11 @@ import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Split } from '@tamagui/lucide-icons';
 import { agentBusTypes } from './index';
 
-const SpawnAgent = ({ node = {}, nodeData = {}, children }: any) => {
+const RegisterAgent = ({ node = {}, nodeData = {}, children }: any) => {
   const color = useColorFromPalette(10)
 
   return (
-    <Node icon={Split} node={node} isPreview={!node.id} title='Spawn Agent' color={color} id={node.id} skipCustom={true}>
+    <Node icon={Split} node={node} isPreview={!node.id} title='Register Agent' color={color} id={node.id} skipCustom={true}>
       <p style={{ fontSize: "22px" }}>Client</p>
       <NodeParams id={node.id} params={[{ label: 'Agent name', field: 'mask-agentName', type: 'input' }]} />
       <NodeParams id={node.id} params={[{ label: 'Exposed Subsystems', field: 'mask-subsystems', type: 'input' }]} />
@@ -33,14 +33,14 @@ const SpawnAgent = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-  id: 'agents.spawnAgent',
+  id: 'agents.registerAgent',
   type: 'CallExpression',
   category: "Agents",
   keywords: ["Agents", "remote", "connection"],
   check: (node, nodeData) => {
-    return node.type == "CallExpression" && nodeData.to?.startsWith('context.agents.spawnAgent')
+    return node.type == "CallExpression" && nodeData.to?.startsWith('context.agents.registerAgent')
   },
-  getComponent: (node, nodeData, children) => <SpawnAgent node={node} nodeData={nodeData} children={children} />,
+  getComponent: (node, nodeData, children) => <RegisterAgent node={node} nodeData={nodeData} children={children} />,
   filterChildren: filterObject({
     keys: {
       agentName: 'input',
@@ -72,7 +72,7 @@ export default {
   getInitialData: () => {
     return {
       await: true,
-      to: 'context.agents.spawnAgent',
+      to: 'context.agents.registerAgent',
       "mask-agentName": {
         value: "",
         kind: "StringLiteral"
