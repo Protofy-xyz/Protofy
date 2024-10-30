@@ -18,60 +18,56 @@ const publishedAdminRootPagesDir = (root) => fspath.join(root, "/apps/next/dist/
 const electronPagesDir = (root) => fspath.join(root, "/apps/electron/pages/")
 
 const getPage = (pagePath, req) => {
-  try {
-    const sourceFile = getSourceFile(pagePath)
-    const route = getDefinition(sourceFile, '"route"')
-    let routeValue = route.getText().replace(/^["']|["']$/g, '')
-    const pageType = getDefinition(sourceFile, '"pageType"')
-    let pageTypeValue = null
-    if(pageType) {
-      pageTypeValue = pageType.getText().replace(/^["']|["']$/g, '')
-    }
+  const sourceFile = getSourceFile(pagePath)
+  const route = getDefinition(sourceFile, '"route"')
+  let routeValue = route.getText().replace(/^["']|["']$/g, '')
+  const pageType = getDefinition(sourceFile, '"pageType"')
+  let pageTypeValue = null
+  if (pageType) {
+    pageTypeValue = pageType.getText().replace(/^["']|["']$/g, '')
+  }
 
-    const prot = getDefinition(sourceFile, '"protected"')
-    let permissions = getDefinition(sourceFile, '"permissions"')
-    const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
-    const adminPanelFilePath = fspath.join(adminPanelPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
-    const publishedNextJSFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
-    const publishedNextHTMLFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
-    const publishedAdminJSFilePath = fspath.join(publishedAdminPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
-    const publishedAdminHTMLFilePath = fspath.join(publishedAdminPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
-    const publishedAdminRootJSFilePath = fspath.join(publishedAdminRootPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
-    const publishedAdminRootHTMLFilePath = fspath.join(publishedAdminRootPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
-    const electronFilePath = fspath.join(electronPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
-    if (!route || !permissions || !prot) return undefined
-    if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
-      permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
-    } else {
-      permissions = permissions.getText()
-    }
+  const prot = getDefinition(sourceFile, '"protected"')
+  let permissions = getDefinition(sourceFile, '"permissions"')
+  const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
+  const adminPanelFilePath = fspath.join(adminPanelPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
+  const publishedNextJSFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
+  const publishedNextHTMLFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
+  const publishedAdminJSFilePath = fspath.join(publishedAdminPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
+  const publishedAdminHTMLFilePath = fspath.join(publishedAdminPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
+  const publishedAdminRootJSFilePath = fspath.join(publishedAdminRootPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
+  const publishedAdminRootHTMLFilePath = fspath.join(publishedAdminRootPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
+  const electronFilePath = fspath.join(electronPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
+  if (!route || !permissions || !prot) return undefined
+  if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
+    permissions = permissions.getElements().map(element => element.getText().replace(/^["']|["']$/g, ''));
+  } else {
+    permissions = permissions.getText()
+  }
 
-    let objectName = null
-    //get object name if pageType is admin
-    if(pageTypeValue == 'admin') {
-      let obj = getDefinition(sourceFile, '"object"')
-      if(obj) {
-        objectName = obj.getText().replace(/^["']|["']$/g, '')
-      }
+  let objectName = null
+  //get object name if pageType is admin
+  if (pageTypeValue == 'admin') {
+    let obj = getDefinition(sourceFile, '"object"')
+    if (obj) {
+      objectName = obj.getText().replace(/^["']|["']$/g, '')
     }
+  }
 
-    return {
-      name: fspath.basename(pagePath, fspath.extname(pagePath)),
-      route: pageTypeValue == 'admin' ? '/admin'+routeValue : routeValue,
-      pageType: pageTypeValue,
-      protected: prot.getText() == 'false' ? false : true,
-      permissions: permissions,
-      web: syncFs.existsSync(nextFilePath),
-      electron: syncFs.existsSync(electronFilePath),
-      adminpanel: syncFs.existsSync(adminPanelFilePath),
-      status: {
-        web: syncFs.existsSync(publishedNextJSFilePath) || syncFs.existsSync(publishedNextHTMLFilePath) ? 'published' : 'unpublished',
-        adminpanel: syncFs.existsSync(publishedAdminJSFilePath) || syncFs.existsSync(publishedAdminHTMLFilePath) || syncFs.existsSync(publishedAdminRootJSFilePath) || syncFs.existsSync(publishedAdminRootHTMLFilePath) ? 'published' : 'unpublished'
-      },
-      ...(objectName ? {object: objectName}: {})
-    }
-  } catch (e) {
-    return null
+  return {
+    name: fspath.basename(pagePath, fspath.extname(pagePath)),
+    route: pageTypeValue == 'admin' ? '/admin' + routeValue : routeValue,
+    pageType: pageTypeValue,
+    protected: prot.getText() == 'false' ? false : true,
+    permissions: permissions,
+    web: syncFs.existsSync(nextFilePath),
+    electron: syncFs.existsSync(electronFilePath),
+    adminpanel: syncFs.existsSync(adminPanelFilePath),
+    status: {
+      web: syncFs.existsSync(publishedNextJSFilePath) || syncFs.existsSync(publishedNextHTMLFilePath) ? 'published' : 'unpublished',
+      adminpanel: syncFs.existsSync(publishedAdminJSFilePath) || syncFs.existsSync(publishedAdminHTMLFilePath) || syncFs.existsSync(publishedAdminRootJSFilePath) || syncFs.existsSync(publishedAdminRootHTMLFilePath) ? 'published' : 'unpublished'
+    },
+    ...(objectName ? { object: objectName } : {})
   }
 }
 
@@ -93,21 +89,21 @@ const getDB = (path, req, session) => {
         if (page) yield [page.name, JSON.stringify(page)];
       }
     },
-    async del (key, value:any) {
+    async del(key, value: any) {
       value = JSON.parse(value)
       const route = value.route.startsWith('/') ? value.route : '/' + value.route
       const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
-      
+
       const apiSourceFile = getSourceFile(filePath)
       let arg = getDefinition(apiSourceFile, '"pageType"')
       const pageType = arg ? arg.getText().replace(/^["']|["']$/g, '') : undefined
-      if(pageType == 'admin') {
+      if (pageType == 'admin') {
         let obj = getDefinition(apiSourceFile, '"object"')
-        if(obj) {
+        if (obj) {
           obj = obj.getText().replace(/^["']|["']$/g, '')
           const objectPath = fspath.join(getRoot(req), ObjectModel.getDefaultSchemaFilePath(obj))
           const ObjectSourceFile = getSourceFile(objectPath)
-          removeFeature(ObjectSourceFile, '"'+pageType+'Page"')
+          removeFeature(ObjectSourceFile, '"' + pageType + 'Page"')
         }
         await deleteFile(fspath.join(getRoot(req), "apps/next/pages/admin/", route + '.tsx'))
       } else {
@@ -125,7 +121,11 @@ const getDB = (path, req, session) => {
         route: value.route.replace(/\s/g, "")
       }
       const filePath = fspath.join(pagesDir(getRoot(req)), fspath.basename(value.name) + '.tsx')
-      const prevPage = getPage(filePath, req)
+      let prevPage
+      try {
+        prevPage = getPage(filePath, req)
+      } catch (error) {}
+      
       const template = fspath.basename(value.template ?? 'default')
       const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
       const route = value.route.startsWith('/') ? value.route : '/' + value.route
@@ -165,9 +165,9 @@ const getDB = (path, req, session) => {
       if (value.object) {
         const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(value.object))
         const ObjectSourceFile = getSourceFile(objectPath)
-        
+
         console.log('Adding feature to object: ', value.object, value.template)
-        await addFeature(ObjectSourceFile, '"'+value.template+'Page"', '"'+route+'"')
+        await addFeature(ObjectSourceFile, '"' + value.template + 'Page"', '"' + route + '"')
       }
 
       let sourceFile = getSourceFile(filePath)
