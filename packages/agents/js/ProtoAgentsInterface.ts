@@ -20,7 +20,7 @@ export class ProtoAgentInterface {
         return this.configure(subsystems);
     }
 
-    connect(mqttHost, mqttPort) {
+    connect(...any) {
         throw new Error('Method "connect" must be implemented by subclasses');
     }
 

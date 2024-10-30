@@ -29,9 +29,14 @@ export class ProtoMqttAgent extends ProtoAgentInterface {
         return this;
     }
 
-    connect(mqttHost, mqttPort) {
+    connect(mqttHost, mqttPort, auth?: { username?: string, password?: string }) {
+        const opts = (auth?.username && auth?.password) ? {
+            username: auth.username,
+            password: auth.password
+        } : null;
+
         const url = `mqtt://${mqttHost}:${mqttPort}`;
-        this.client = mqtt.connect(url)
+        this.client = mqtt.connect(url, opts)
         try {
             this.client.on('error', (error) => {
                 this.__consumerCallbacksChecker("error")
