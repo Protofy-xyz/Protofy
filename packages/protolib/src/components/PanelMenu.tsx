@@ -91,6 +91,9 @@ const iconTable = {
     alert: <AlertTriangle color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
 }
 
+const replaceFirstCharIfSlash = (str) => (str.startsWith('/')? str.replace(/^./, '') : str) ;
+const healthCheckLinkRoute = (str) => (str.startsWith('/') ? str : ("/" + str)) ;
+
 const getIcon = (Icon) => {
     if (typeof Icon === "string") {
         if (!iconTable[Icon]) {
@@ -171,7 +174,6 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
                 let href = (subtab.type + subtab.path).replace(/\/+/g, '/')
                 const originalHref = href
-
                 const allLinks = Object.keys(tabs).reduce((acc, tab) => {
                     if (tabs[tab].length === undefined) {
                         return acc
@@ -180,29 +182,29 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                 }, [])
 
                 const maxSelectedLength = allLinks.reduce((acc, tab) => {
-                    let href = "/" + workspaceRoot + '/' + (tab.type + tab.path).replace(/\/+/g, '/')
-                    if (pathname.startsWith(href.replace(/\/$/, '').replace(/\?.*$/, ''))) {
-                        return href.length > acc ? href.length : acc;
-                      }
+                    let _href = "/" + workspaceRoot + '/' + (tab.type + tab.path).replace(/\/+/g, '/')
+                    if (pathname.startsWith(_href.replace(/\/$/, '').replace(/\?.*$/, ''))) {
+                        return _href.length > acc ? _href.length : acc;
+                    }
                     return acc
                 }, 0)
 
                 const content = <Tinted>
                     <PanelMenuItem
-                        selected={pathname.startsWith(originalHref.replace(/\/$/, '').replace(/\?.*$/, '')) && originalHref.length == maxSelectedLength}
+                        selected={replaceFirstCharIfSlash(pathname).startsWith(originalHref.replace(/\/$/, '').replace(/\?.*$/, ''))}
                         icon={getIcon(subtab.icon)}
                         text={subtab.name}
                     />
                 </Tinted>
-                if(subtab.external) {
+                if (subtab.external) {
                     return <a href={href} key={index}>
                         {content}
                     </a>
                 }
-                return <Link href={href} key={index}>
+                return <Link href={healthCheckLinkRoute(href)} key={index}>
                     {content}
                 </Link>
-                
+
             })}
         </>)
 }
