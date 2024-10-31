@@ -39,6 +39,7 @@ import ODrive from './ODrive';
 import INA226 from './INA226';
 import LEDCOutput from './LEDCOutput';
 import SntpTime from './SntpTime';
+import SdOfflineLogger from './SdOfflineLogger';
 
 
 const deviceMasks = [
@@ -81,6 +82,7 @@ const deviceMasks = [
   INA226,
   LEDCOutput,
   SntpTime,
+  SdOfflineLogger,
 ]
 
 const masksLength = deviceMasks.length
