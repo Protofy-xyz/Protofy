@@ -21,6 +21,42 @@ class SdOfflineLogger {
         this.sensorsArray = [];
     }
 
+    extractNestedComponents(element, deviceComponents) {
+        const keysToExtract = [
+          { key: 'esphome', nestedKey: 'libraries' }
+        ];
+      
+        keysToExtract.forEach(({ key, nestedKey }) => {
+          if (element.config[nestedKey]) {
+            if(!deviceComponents[key]) deviceComponents[key] = {}
+            if(!deviceComponents[key][nestedKey]) deviceComponents[key][nestedKey] = []
+    
+            if(Array.isArray(deviceComponents[key][nestedKey])){
+              deviceComponents[key][nestedKey].push(...element.config[nestedKey])
+            } else {
+              deviceComponents[key][nestedKey] = {
+                ...deviceComponents[key][nestedKey],
+                ...element.config[nestedKey]
+              }
+            }
+          }
+        });
+    }
+    
+    extractComponent(element, deviceComponents) {
+        if (['esphome'].includes(element.name)) {
+          this.extractNestedComponents(element, deviceComponents)
+        } else {
+          if (!deviceComponents[element.name]) {
+            deviceComponents[element.name] = element.config
+          } else {
+            if (!Array.isArray(deviceComponents[element.name])) {
+              deviceComponents[element.name] = [deviceComponents[element.name]]
+            }
+            deviceComponents[element.name].push(element.config)
+          }
+        }
+    }
     attach(pin, deviceComponents) {
         deviceComponents?.sensor?.forEach((sensor) => {
             if (sensor.name){
@@ -53,18 +89,17 @@ class SdOfflineLogger {
                     sensors: this.sensorsArray,
                 },
             },
+            {
+                name: "esphome",
+                config: {
+                    libraries: ["spi", "FS", "SD"]
+                }
+            }
         ];
 
-        componentObjects.forEach((element) => {
-            if (!deviceComponents[element.name]) {
-                deviceComponents[element.name] = element.config;
-            } else {
-                if (!Array.isArray(deviceComponents[element.name])) {
-                    deviceComponents[element.name] = [deviceComponents[element.name]];
-                }
-                deviceComponents[element.name] = [...deviceComponents[element.name], element.config];
-            }
-        });
+        componentObjects.forEach((element, j) => {
+            this.extractComponent(element, deviceComponents)
+        })
 
         return deviceComponents;
     }
