@@ -4,6 +4,10 @@ import { MonitorType, SubsystemSchema, SubsystemType } from '../subsystems/subsy
 
 export const AgentsSchema = Schema.object({
     name: z.string().hint("Agent name").static().regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").id().search(),
+    status: z.object({
+        "online": z.boolean(),
+        "last_view": z.string().nullable(),
+    }).generate({ online: false, last_view: null }).hidden(),
     subsystems: z.array(SubsystemSchema).optional().hidden(),
     platform: z.string(),
 })
@@ -49,6 +53,18 @@ export class AgentsModel extends ProtoModel<AgentsModel> {
     getMonitor(subsystemName: string, monitorName: string) {
         const subsystem = this.getSubsystem(subsystemName)
         return subsystem.monitors && subsystem.monitors.length ? subsystem.monitors.find(monitor => monitor.name === monitorName) : null
+    }
+
+    async updateStatus(newStatus) {
+        const agentObject = await API.get("/api/core/v1/agents/" + this.data.name)
+        if (agentObject.isError) {
+            console.error(agentObject.error)
+            return;
+        }
+
+
+        agentObject.data.status = newStatus
+        API.post("/api/core/v1/agents/" + this.data.name, agentObject.data)
     }
 
 

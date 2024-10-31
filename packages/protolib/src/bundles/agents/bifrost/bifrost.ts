@@ -16,10 +16,11 @@ import { MonitorType, SubsystemsSchema } from '../subsystems/subsystemSchemas';
 import { getLogger } from 'protobase';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getServiceToken } from 'protonode';
+import { heartbeatTimeout } from './bifrostUtils';
 
 const logger = getLogger()
 
-export const register = async ({topic, agentName, endpoint, payload, registerMonitors }:
+export const register = async ({ topic, agentName, endpoint, payload, registerMonitors }:
     {
         topic: string,
         agentName: string,
@@ -70,10 +71,27 @@ export const register = async ({topic, agentName, endpoint, payload, registerMon
                     })
                 })
             })
+
+            // update agent status
+            status({ agentName })
         } else {
             throw new Error("Bad agent registration message format")
         }
     } catch (e) {
         console.error('cannot register agent: ', e)
     }
+}
+
+
+export const status = async ({ agentName }) => {
+    const last_view = Date.now()
+    const online = true
+
+    const db = getDB('agents')
+    const agentInfo = AgentsModel.load(JSON.parse(await db.get(agentName)))
+    await agentInfo.updateStatus({ online, last_view })
+
+    setTimeout(() => {
+        agentInfo.updateStatus({ online: false, last_view })
+    }, heartbeatTimeout)
 }

@@ -1,11 +1,11 @@
 import { MonitorType, SubsystemType } from "../../subsystems/subsystemSchemas"
-import { register } from "../bifrost"
+import { register, status } from "../bifrost"
 import { defMonitorEndpoint } from "../bifrostUtils"
 
 export const MqttTransporter = (context) => {
     const { topicSub, mqtt, logger } = context
     topicSub(mqtt, 'agents/#', (message, topic) => handle(topic, message))
-    
+
     const handle = (topic, message) => {
         const [agent, agentName, ...path] = topic.split("/");
         const endpoint = path.join("/")
@@ -24,7 +24,9 @@ export const MqttTransporter = (context) => {
     const messageHandlers = async (topic: string, endpoint: string, agentName: string, payload: object) => {
         console.log('agents message handler payload: ', JSON.stringify(payload, null, 2))
         if (endpoint === "register") {
-            register({topic, agentName, endpoint, payload, registerMonitors: registerMonitors })
+            register({ topic, agentName, endpoint, payload, registerMonitors: registerMonitors })
+        } else if (endpoint === "status") {
+            status({ agentName })
         }
     }
 
@@ -41,6 +43,5 @@ export const MqttTransporter = (context) => {
                 console.error("Error, cannot parse agent monitor message")
             }
         })
-        
     }
 }

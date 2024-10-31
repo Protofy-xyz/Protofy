@@ -119,6 +119,19 @@ export const AgentsAPI = (app, context) => {
         res.send({ value })
     }))
 
+    app.get('/api/core/v1/agents/:agent/status', handler(async (req, res, session) => {
+        if (!session || !session.user.admin) {
+            res.status(401).send({ error: "Unauthorized" })
+            return
+        }
+
+        const db = getDB('agents')
+        const agentInfo = AgentsModel.load(JSON.parse(await db.get(req.params.agent)), session)
+
+        // await db.put(agent.getId(), JSON.stringify(agent.serialize(true)))
+        res.send({ status: agentInfo.data.status })
+    }))
+
     // agents protocol
     BifrostProtocol({ ...context, logger })
 }

@@ -68,24 +68,60 @@ export default {
         dataTableGridProps={{
           disableItemSelection: true,
           onSelectItem: (item) => { },
-          getBody: (data: AgentsType) => <CardBody title={data.name}>
-            <XStack right={20} top={20} position={"absolute"}>
-              <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?: string) => {
-                await API.get(`${sourceUrl}/${deviceId}/delete`)
-              }} deleteable={() => true} element={AgentsModel.load(data)} extraMenuActions={extraMenuActions} />
-            </XStack>
-            <YStack f={1}>
-              {
-                Object.keys(data.subsystems ?? {}).length
-                  ? <Subsystems name={data.name} subsystems={data.subsystems} type={"agent"} />
-                  : <Paragraph mt="20px" ml="20px" size={20}>{'No subsystems defined'}</Paragraph>
-              }
-            </YStack>
-          </CardBody>
+          getBody: (data: AgentsType) => <AgentCard data={data} extraMenuActions={extraMenuActions} />
         }}
         extraMenuActions={extraMenuActions}
       />
     </AdminPage>)
   },
   getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
+}
+
+type status = {
+  online: boolean,
+  last_view: string | null
+}
+
+const AgentCard = ({ data, extraMenuActions }) => {
+  const [status, setStatus] = useState<status>({
+    online: false,
+    last_view: null
+  })
+  const getAgentStatus = async (agentName) => {
+    const response = await API.get(`${sourceUrl}/${agentName}/status`)
+    if (!response.data) return {
+      online: false,
+    }
+
+    return response.data
+  }
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const statusResult = await getAgentStatus(data.name)
+      setStatus(statusResult.status)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  return <CardBody title={data.name}>
+    <XStack right={20} top={20} position={"absolute"}>
+      <ItemMenu type="item" sourceUrl={sourceUrl} onDelete={async (sourceUrl, deviceId?: string) => {
+        await API.get(`${sourceUrl}/${deviceId}/delete`)
+      }} deleteable={() => true} element={AgentsModel.load(data)} extraMenuActions={extraMenuActions} />
+    </XStack>
+    <XStack paddingInline={20} gap="$3">
+      <YStack h="$1" w="$1" bg={status.online ? "$color9" : "$color4"} borderRadius="100%" />
+      <Paragraph size={20}>{status.online ? 'online' : 'offline'}</Paragraph>
+    </XStack>
+    <YStack f={1}>
+      {
+        Object.keys(data.subsystems ?? {}).length
+          ? <Subsystems name={data.name} subsystems={data.subsystems} type={"agent"} />
+          : <Paragraph mt="20px" ml="20px" size={20}>{'No subsystems defined'}</Paragraph>
+      }
+    </YStack>
+  </CardBody>
+
 }
