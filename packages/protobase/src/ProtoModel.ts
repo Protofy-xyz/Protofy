@@ -53,8 +53,8 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         const groupIndexes = groupIndexesSchema.getFields()
         this.groupIndexes = groupIndexes.map((field) => {
             return {
-                key: field, 
-                name: groupIndexesSchema.getFieldKeyDefinition(field, 'groupName') ?? field, 
+                key: field,
+                name: groupIndexesSchema.getFieldKeyDefinition(field, 'groupName') ?? field,
                 fn: groupIndexesSchema.getFieldKeyDefinition(field, 'groupCode')
             }
         })
@@ -169,7 +169,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     }
 
     list(search?, session?, extraData?, params?): any {
-        
+
         if(params && params.filter) {
             const allFiltersMatch = Object.keys(params.filter).every(key => {
                 if(params.filter[key].from || params.filter[key].to) {
@@ -177,7 +177,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
                     if(params.filter[key].from && this.data && this.data[key] < params.filter[key].from) {
                         valid = false
                     }
-    
+
                     if(params.filter[key].to && this.data && this.data[key] > params.filter[key].to) {
                         valid = false
                     }
@@ -201,19 +201,26 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
                 }
             }
 
-            const schemaShape = this.objectSchema.shape
-            const searchFields = this.objectSchema.getFields().filter((field) => {
-                if (schemaShape[field]?._def && schemaShape[field]._def.search === false) {
-                    return false
-                } else {
-                    return true
+            const findMatch = (schema, data, searchTerm, path = []) => {
+                for (const key in schema.shape) {
+                    const value = schema.shape[key];
+            
+                    if (value._def.typeName === "ZodObject") {
+                        if (findMatch(value, data[key], searchTerm, [...path, key])) return true;
+                    } 
+                    else if (value._def.search || value._def?.innerType?._def?.search) {
+                        const propValue = [...path, key].reduce((acc, key) => acc && acc[key], this.data);
+            
+                        if (propValue && propValue.toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                            return true;
+                        }
+                    }
                 }
-            })
+                return false;
+            };
 
-            for (var i = 0; i < searchFields.length; i++) {
-                if (((this.data[searchFields[i]] + "").toLowerCase()).includes(searchWithoutTags.toLowerCase())) {
-                    return this.read();
-                }
+            if (findMatch(this.objectSchema, this.data, searchWithoutTags)) {
+                return this.read();
             }
         } else {
             return this.read();
@@ -303,7 +310,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
                 }
                 return items
             },
-            displayKey, 
+            displayKey,
             options
         )
     }
