@@ -59,9 +59,7 @@ class SdOfflineLogger {
     }
     attach(pin, deviceComponents) {
         deviceComponents?.sensor?.forEach((sensor) => {
-            if (sensor.name){
-                this.sensorsArray.push(sensor.name);
-            } else if (sensor.id){
+            if (sensor.id){
                 this.sensorsArray.push(sensor.id);
             }
         });
