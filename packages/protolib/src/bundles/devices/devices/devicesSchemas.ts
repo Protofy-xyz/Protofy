@@ -176,6 +176,10 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
           console.log(response1.error)
           return;
         }
+      const res = await API.get("/api/core/v1/tokens/device/create?deviceId=" + this.data.name)
+        if (res.isError) {
+          console.log(res.error)
+        }
       console.log("---------deviceDefinition----------", deviceDefinition)
       deviceDefinition.board = response1.data
       const jsCode = deviceDefinition.config.components;
@@ -183,6 +187,9 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
       const deviceCode = 'device(' + jsCode.replace(/;/g, "") + ')';
       console.log("-------DEVICE CODE------------", deviceCode)
       const deviceObj = eval(deviceCode)
+      if(res.data.token){
+        deviceObj.setCredentials({mqtt: {username: this.data.name, password: res.data.token}})
+      }
       const componentsTree = deviceObj.getComponentsTree(this.data.name, deviceDefinition)
       yaml = deviceObj.dump("yaml").replace(/'@/g,"").replace(/@'/g,"")
 
