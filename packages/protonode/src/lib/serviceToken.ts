@@ -7,3 +7,7 @@ export const getServiceToken = () => {
     }
     return serviceToken
 }
+
+export const getDeviceToken = (deviceId,isAdmin:boolean=false) =>{
+    return genToken({id: deviceId, type: 'device', admin: isAdmin===false?false:true})
+}
