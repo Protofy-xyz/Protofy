@@ -96,6 +96,21 @@ const AgentCard = ({ data, extraMenuActions }) => {
     return response.data
   }
 
+  function formatTimestamp(timestamp) {
+    if (timestamp === null) return "never connected"
+    const date = new Date(timestamp);
+
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${hours}:${minutes} ${day}/${month}/${year}`;
+  }
+
+
   useEffect(() => {
     const interval = setInterval(async () => {
       const statusResult = await getAgentStatus(data.name)
@@ -114,6 +129,7 @@ const AgentCard = ({ data, extraMenuActions }) => {
     <XStack paddingInline={20} gap="$3">
       <YStack h="$1" w="$1" bg={status.online ? "$color9" : "$color4"} borderRadius="100%" />
       <Paragraph size={20}>{status.online ? 'online' : 'offline'}</Paragraph>
+      <Paragraph size={20} color={"$gray10"}>{formatTimestamp(status.last_view)}</Paragraph>
     </XStack>
     <YStack f={1}>
       {
