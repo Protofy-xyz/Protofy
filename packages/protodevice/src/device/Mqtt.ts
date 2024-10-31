@@ -24,6 +24,11 @@ class Mqtt {
       }
     ]
 
+    if(deviceComponents.protofy.credentials.mqtt){
+      componentObjects[0].config["username"] = deviceComponents.protofy.credentials.mqtt.username
+      componentObjects[0].config["password"] = deviceComponents.protofy.credentials.mqtt.password
+    }
+
     componentObjects.forEach((element, j) => {
         if (!deviceComponents[element.name]) {
             deviceComponents[element.name] = element.config
