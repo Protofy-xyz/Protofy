@@ -6,6 +6,7 @@ import { ObjectModel } from './objects/objectsSchemas'
 import { WorkspaceModel } from './workspaces/WorkspaceModel'
 import { APIModel } from './apis/APISchemas'
 import { PageModel } from './pages/pagesSchemas'
+import { TokenModel } from './tokens/tokensSchemas'
 
 export default {
     event: EventModel,
@@ -16,4 +17,5 @@ export default {
     workspace: WorkspaceModel,
     api: APIModel,
     page: PageModel,
+    token: TokenModel
 }

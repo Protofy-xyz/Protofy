@@ -17,6 +17,7 @@ import { AssistantAPI } from './assistant/assistantAPI';
 import { MasksAPI } from './visualui/masksAPI';
 import { LogsAPI } from './logs/logsAPI'
 import { ServicesAPI } from './services/servicesAPI'
+import { TokensAPI } from './tokens/tokensAPI'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 import { PackagesAPI } from './packages/packagesAPI'
 import { FlowAPI } from './flow/flowAPI';
@@ -43,7 +44,8 @@ export const AdminAPIBundles = (app, context) => {
   AssistantAPI(app, context)
   MasksAPI(app, context)
   LogsAPI(app, context)
-  ServicesAPI(app, context) 
+  ServicesAPI(app, context)
+  TokensAPI(app, context)
   PackagesAPI(app, context)
   StateMachinesDefinitionsApi(app, context),
   FlowAPI(app, context),
