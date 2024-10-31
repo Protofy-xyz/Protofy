@@ -38,6 +38,7 @@ import Msa3xx from './Msa3xx';
 import ODrive from './ODrive';
 import INA226 from './INA226';
 import LEDCOutput from './LEDCOutput';
+import SntpTime from './SntpTime';
 
 
 const deviceMasks = [
@@ -78,7 +79,8 @@ const deviceMasks = [
   Msa3xx,
   ODrive,
   INA226,
-  LEDCOutput
+  LEDCOutput,
+  SntpTime,
 ]
 
 const masksLength = deviceMasks.length
