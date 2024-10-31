@@ -4,12 +4,14 @@ class Device {
     pinTable;
     componentsTree;
     subsystemsTree;
+    credentials;
 
     constructor(components) {
         this.pinTable = []
         this.components = components.slice(2)
         this.componentsTree = {}
         this.subsystemsTree = []
+        this.credentials = {}
     }
     
     createComponentsTree(deviceName, deviceDefinition){
@@ -18,6 +20,7 @@ class Device {
             logger: {}
         }
         deviceComponents.esphome.name = deviceName
+        deviceComponents.protofy = { credentials: this.credentials }
 
         this.components?.forEach((component, i) => {
             console.log("🚀 ~ file: Device.ts:62 ~ Device ~ this.components?.forEach ~ component:", component)
@@ -29,6 +32,7 @@ class Device {
                   );
             }
         })
+        delete deviceComponents.protofy
         //console.log("🚀 ~ file: Device.ts:120 ~ Device ~ getComponents ~ deviceComponents:", deviceComponents)
         this.componentsTree = deviceComponents
 
@@ -70,6 +74,10 @@ class Device {
     getSubsystemsTree(deviceName?, deviceDefinition?) {
         this.createSubsystemsTree(deviceName, deviceDefinition)
         return this.subsystemsTree;
+    }
+
+    setCredentials(credentials){
+        this.credentials = credentials
     }
 
     dump(format="yaml"){
