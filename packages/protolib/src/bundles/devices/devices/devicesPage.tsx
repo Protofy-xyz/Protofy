@@ -22,7 +22,7 @@ import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text } from '@my/ui
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
-import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic } from "../devicesUtils";
+import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic, downloadDeviceFirmwareEndpoint } from "../devicesUtils";
 import { SSR } from '../../../lib/SSR'
 import { withSession } from '../../../lib/Session'
 
@@ -184,30 +184,61 @@ export default {
       setStage('write')
     }
 
-    const saveYaml = async (yaml) => {
+    const saveYaml = async (yaml, onSuccess) => {
       try {
-        const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { "yaml": yaml })
-        const data = await response.json()
-        console.log("Save Yaml, compileSessionId: ", data.compileSessionId);
-        setCompileSessionId(data.compileSessionId)
+        const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { yaml });
+        const data = await response.json();
+        console.log("Save Yaml, compileSessionId:", data.compileSessionId);
+        
+        // Set compileSessionId and trigger the next step
+        setCompileSessionId(data.compileSessionId);
+        if (onSuccess) {
+          onSuccess(data.compileSessionId);
+        }
       } catch (err) {
-        const errorStr = "Error on fetch petition to compile.protofy.xyz: " + err
-        console.log(errorStr)
-        throw (errorStr)
+        const errorStr = "Error on fetch petition to compile.protofy.xyz: " + err;
+        console.log(errorStr);
+        setModalFeedback({
+          message: errorStr,
+          details: { error: true }
+        });
+        throw errorStr;
       }
-    }
-
+    };
+    
     useEffect(() => {
-      const process = async () => {
+      const process = async (compileSessionId) => {
         if (stage == 'yaml') {
           try {
-            await saveYaml(yamlRef.current)
-            setTimeout(() => {
-              setStage('compile')
-            }, 1 * 1000);//Todo remove setTimeout
-            targetDeviceModel ? await targetDeviceModel.setUploaded() : console.log("🤖 No targetDeviceModel")
+            // Call saveYaml with a callback to continue processing
+            await saveYaml(yamlRef.current, async (sessionId) => {
+    
+              // Check if binary is already available to skip compilation
+              const url = downloadDeviceFirmwareEndpoint(targetDeviceName, sessionId);
+              const resp = await fetch(url);
+    
+              if (resp.ok) {
+                // Binary exists, skip compilation and go to upload
+                setStage('upload');
+                setModalFeedback({
+                  message: 'Binary already exists. Skipping compilation.',
+                  details: { error: false }
+                });
+                console.log("Binary already exists. Skipping compilation.");
+              } else {
+                // Binary not found, proceed to compile
+                setTimeout(() => {
+                  setStage('compile');
+                }, 1000);
+              }
+    
+              targetDeviceModel ? await targetDeviceModel.setUploaded() : console.log("🤖 No targetDeviceModel");
+            });
           } catch (err) {
-            setModalFeedback({ message: 'Error connecting to compilation server. Please verify your Internet connection.', details: { error: true } })
+            setModalFeedback({
+              message: 'Error connecting to compilation server. Please verify your Internet connection.',
+              details: { error: true }
+            });
           }
 
         } else if (stage == 'compile') {
@@ -234,9 +265,12 @@ export default {
             setModalFeedback({ message: 'You need Chrome, Opera or Edge to upload the code to the device.', details: { error: true } })
           }
         }
-      }
-      process()
-    }, [stage])
+      };
+    
+      process(compileSessionId);
+    }, [stage]);
+    
+    
 
 
     // useEffect(() => {
