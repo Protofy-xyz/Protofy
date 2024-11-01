@@ -11,7 +11,8 @@ export const DevicesSchema = Schema.object({
   location: z.object({
     lat: z.string(),
     long: z.string()
-  }).optional().location("lat", "long").hidden().generate(()=>{return {lat: "41.3947846",long: "2.1939663"}},true) // PROTOFY HQ
+  }).optional().location("lat", "long").hidden().generate(()=>{return {lat: "41.3947846",long: "2.1939663"}},true), // PROTOFY HQ
+  credentials: z.record(z.record(z.string(), z.any())).optional().onCreate("generateDeviceCredentials").hidden(),
 })
 export type DevicesType = z.infer<typeof DevicesSchema>;
 // export const DevicesModel = AutoModel.createDerived<DevicesType>("DevicesModel", DevicesSchema);
@@ -176,25 +177,23 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
           console.log(response1.error)
           return;
         }
-      const res = await API.get("/api/core/v1/tokens/device/create?deviceId=" + this.data.name)
-        if (res.isError) {
-          console.log(res.error)
-        }
+      const deviceObject = await API.get("/api/core/v1/devices/" + this.data.name)
+
       console.log("---------deviceDefinition----------", deviceDefinition)
       deviceDefinition.board = response1.data
       const jsCode = deviceDefinition.config.components;
-
+      console.log("-----------------deviceData-----------------", deviceObject.data)
       const deviceCode = 'device(' + jsCode.replace(/;/g, "") + ')';
       console.log("-------DEVICE CODE------------", deviceCode)
       const deviceObj = eval(deviceCode)
-      if(res.data.token){
-        deviceObj.setCredentials({mqtt: {username: this.data.name, password: res.data.token}})
+      if(deviceObject.data.credentials){
+        deviceObj.setCredentials(deviceObject.data.credentials)
       }
       const componentsTree = deviceObj.getComponentsTree(this.data.name, deviceDefinition)
       yaml = deviceObj.dump("yaml").replace(/'@/g,"").replace(/@'/g,"")
 
       const subsystems = deviceObj.getSubsystemsTree(this.data.name, deviceDefinition)
-      const deviceObject = await API.get("/api/core/v1/devices/" + this.data.name)
+
       await API.post("/api/core/v1/devices/" + this.data.name + "/yamls", { yaml })
       if (deviceObject.isError) {
         console.error(deviceObject.error)

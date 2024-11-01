@@ -1,6 +1,6 @@
 import { API } from "protobase";
 import { DevicesModel } from ".";
-import { AutoAPI, handler, getServiceToken } from 'protonode'
+import { AutoAPI, handler, getServiceToken, getDeviceToken } from 'protonode'
 import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
@@ -12,7 +12,16 @@ export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
     modelType: DevicesModel,
     prefix: '/api/core/v1/',
-    skipDatabaseIndexes: true
+    skipDatabaseIndexes: true,
+    transformers:{
+        generateDeviceCredentials: async (field, e, data) => {
+            if(!data.credentials) data.credentials = {}
+            data.credentials.mqtt = {username: data.name, password: getDeviceToken(data.name, false)}
+            return data
+        }
+
+    }
+
 })
 
 const logger = getLogger()
