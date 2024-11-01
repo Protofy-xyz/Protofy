@@ -178,7 +178,7 @@ export const flash = async (cb, deviceName, compileSessionId) => {
 
 const onlineCompiler = "compile.protofy.xyz";
 const secured = true;
-const downloadDeviceFirmwareEndpoint = (targetDevice, compileSessionId) => {
+export const downloadDeviceFirmwareEndpoint = (targetDevice, compileSessionId) => {
     return (`http${secured?"s":""}://${onlineCompiler}/api/v1/device/download/${targetDevice}?compileSessionId=${compileSessionId}`)
 };
 
