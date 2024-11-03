@@ -17,56 +17,20 @@ import { Protofy } from "protobase";
 import { context } from "../bundles/uiContext";
 import { useRouter } from "solito/navigation";
 import { Objects } from "../bundles/objects";
+import dynamic from 'next/dynamic';
 
 const isProtected = Protofy("protected", false);
 
 const Home = ({ currentView, setCurrentView, props }: any) => {
   const { cs, states } = useComposedState();
-
   const router = useRouter();
-  context.onRender(async () => {});
+  context.onRender(async () => { });
+  const AssistantChat = dynamic(() => import('../components/asistants/assistant-chat'));
   return (
     <Page height="99vh">
       <DefaultLayout footer={<></>}>
         <VStack height="100%" alignItems="center" padding="$10">
-          <Image url="/images/protofito.png" width="280px" height="200px"></Image>
-          <VStack width="100%" margin="$6" alignItems="center">
-            <Text fontSize="60px" fontWeight="600" textAlign="center">
-              Welcome to Protofy
-            </Text>
-            <Text textAlign="center" fontWeight="200" width="550px" maxWidth="100%">
-              Get started by editing this page. Log in with admin user to edit using the Visual UI Editor or access to CMS.
-            </Text>
-          </VStack>
-          <HStack gap="$6" margin="$6" flexWrap="wrap" justifyContent="center">
-            <Pressable onPress={(e) => context.navigate("/workspace/pages", router)} width="300px" padding="$5" theme="green">
-              <HStack gap="$2">
-                <Text fontWeight="600" fontSize="18px">
-                  CMS
-                </Text>
-                <Icon name="ArrowRight" size="20px"></Icon>
-              </HStack>
-              <Text fontWeight="200">Manage the contents of your project. Automations, devices and many others.</Text>
-            </Pressable>
-            <Pressable onPress={(e) => context.navigate("https://protofy.xyz/documentation", router)} width="300px" padding="$5" theme="blue">
-              <HStack gap="$2">
-                <Text fontWeight="600" fontSize="18px">
-                  Documentation
-                </Text>
-                <Icon name="ArrowRight" size="20px"></Icon>
-              </HStack>
-              <Text fontWeight="200">Find detailed information about Protofy features, examples and more.</Text>
-            </Pressable>
-            <Pressable onPress={(e) => context.navigate("https://discord.com/invite/VpeZxMFfYW", router)} width="300px" padding="$5" theme="purple">
-              <HStack gap="$2">
-                <Text fontWeight="600" fontSize="18px">
-                  Discord
-                </Text>
-                <Icon name="ArrowRight" size="20px"></Icon>
-              </HStack>
-              <Text fontWeight="200">Communicate your doubts and be the first to know about updates</Text>
-            </Pressable>
-          </HStack>
+          <AssistantChat />
         </VStack>
       </DefaultLayout>
     </Page>
@@ -95,3 +59,4 @@ export default {
   },
   getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined)),
 };
+
