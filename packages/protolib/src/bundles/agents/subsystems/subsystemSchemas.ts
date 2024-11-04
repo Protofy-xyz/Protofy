@@ -4,6 +4,7 @@ export const MonitorSchema = z.object({
     name: z.string(),
     label: z.string(),
     type: z.string(),
+    //ephemeral: z.boolean().optional().generate(() => false),
     description: z.string(),
     endpoint: z.string().nullable(),
 })
