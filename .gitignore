@@ -6,6 +6,9 @@ logs/*
 !data/workspaces
 !data/templates
 !data/devices
+!data/public/
+!data/public/fonts/
+!data/public/fonts/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases

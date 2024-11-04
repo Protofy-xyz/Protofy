@@ -1,22 +1,5 @@
 import NextDocument, { Head, Html, Main, NextScript } from 'next/document'
 import { StyleSheet } from 'react-native'
-
-import {
-  LoadInter400,
-  LoadInter700,
-  LoadSilkscreen,
-  LoadInter900,
-  LoadMunro,
-  LoadCherryBomb,
-  LoadJostMedium,
-  LoadJostRegular,
-  LoadInter100,
-  LoadInter200,
-  LoadInter300,
-  LoadInter500,
-  LoadInter600,
-  LoadInter800
-} from 'app/components/next/LoadFont'
 import Tamagui from '../tamagui.config'
 import { FontsLoader } from 'app/components/FontsLoader'
 
@@ -60,20 +43,6 @@ export default class Document extends NextDocument {
           <meta name="docsearch:version" content="1.0.0,latest" />
           {/* <LoadInter100 /> */}
           <FontsLoader />
-
-          <LoadInter200 />
-          <LoadInter300 />
-          <LoadInter400 />
-          <LoadInter500 />
-          <LoadInter600 />
-          <LoadInter700 />
-          <LoadInter800 />
-          <LoadInter900 />
-          <LoadSilkscreen />
-          <LoadMunro />
-          <LoadCherryBomb />
-          <LoadJostMedium />
-          <LoadJostRegular />
           <script dangerouslySetInnerHTML={{
             __html: `
               (function() {
