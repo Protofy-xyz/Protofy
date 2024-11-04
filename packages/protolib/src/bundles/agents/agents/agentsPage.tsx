@@ -87,6 +87,19 @@ const AgentCard = ({ data, extraMenuActions }) => {
     online: false,
     last_view: null
   })
+
+  useEffect(() => {
+    const setNewStatus = async () => {
+      const statusResult = await getAgentStatus(data.name)
+      setStatus(statusResult.status)
+    }
+
+    setNewStatus()
+    const interval = setInterval(setNewStatus, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   const getAgentStatus = async (agentName) => {
     const response = await API.get(`${sourceUrl}/${agentName}/status`)
     if (!response.data) return {
@@ -109,16 +122,6 @@ const AgentCard = ({ data, extraMenuActions }) => {
 
     return `${hours}:${minutes} ${day}/${month}/${year}`;
   }
-
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const statusResult = await getAgentStatus(data.name)
-      setStatus(statusResult.status)
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [])
 
   return <CardBody title={data.name}>
     <XStack right={20} top={20} position={"absolute"}>
