@@ -18,6 +18,7 @@ import {
   LoadInter800
 } from 'app/components/next/LoadFont'
 import Tamagui from '../tamagui.config'
+import { FontsLoader } from 'app/components/FontsLoader'
 
 export default class Document extends NextDocument {
   static async getInitialProps({ renderPage }) {
@@ -58,6 +59,8 @@ export default class Document extends NextDocument {
           <meta name="docsearch:language" content="en" />
           <meta name="docsearch:version" content="1.0.0,latest" />
           {/* <LoadInter100 /> */}
+          <FontsLoader />
+
           <LoadInter200 />
           <LoadInter300 />
           <LoadInter400 />
