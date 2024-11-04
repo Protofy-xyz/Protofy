@@ -81,9 +81,9 @@ const Monitor = ({ type, name, monitorData, subsystem }) => {
       alignItems="center"
       backgroundColor={ephemeral ? "$color4" : "$transparent"}
       hoverStyle={{ backgroundColor: ephemeral ? "$color6" : "$color2" }}
-      onPress={() => onToggleEphemeral(!ephemeral)}
+      // onPress={() => onToggleEphemeral(!ephemeral)}
     >
-      <YStack
+      {/* <YStack
         backgroundColor={ephemeral ? "$color8" : "$background"}
         position="absolute"
         padding="2px"
@@ -94,7 +94,7 @@ const Monitor = ({ type, name, monitorData, subsystem }) => {
         top="-11px"
       >
         {ephemeral ? <MegaphoneOff size={16} color="$background" /> : <Megaphone size={16} color="$color8" />}
-      </YStack>
+      </YStack> */}
       <Text>{subsystem.name}</Text>
       {(loading || (value === undefined && result?.value === undefined))
         ? <Spinner color="$color7" />
