@@ -85,6 +85,6 @@ if (fs.existsSync(path.join(__dirname, 'server.js'))) {
     process.exit(1)
   });
 } else {
-  print("Error starting production server: server.js not found")
+  console.error("Error starting production server: server.js not found")
 }
 
