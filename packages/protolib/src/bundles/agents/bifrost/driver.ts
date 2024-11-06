@@ -1,44 +1,9 @@
-/*
-    bifrost is the protofy protocol for 
-    agents connection and comunication.
-
-    bifrost actions
-    - register: a new agent (agents/<agent_name>/register)
-
-    bifrost defaults
-    - actions endpoint: agents/<agent_name>/subsystem/<subsystem_name>/action/<action_name>
-    - monitors endpoint: agents/<agent_name>/subsystem/<subsystem_name>/monitor/<monitor_name>
-*/
-
 import { getDB } from '@my/config/dist/storageProviders';
 import { AgentsModel } from '../agents/agentsSchemas';
 import { MonitorType, SubsystemsSchema, SubsystemType } from '../subsystems/subsystemSchemas';
-import { getLogger } from 'protobase';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getServiceToken } from 'protonode';
 import { heartbeatTimeout, defMonitorEndpoint } from './bifrostConfigs'
-
-const logger = getLogger()
-export const packageSerde = async (path: string, payload: string, subscriber: (path, handler) => void) => {
-    const [agent, agentName, ...segments] = path.split("/");
-    const endpoint = segments.join("/")
-
-    let parsedPayload = payload
-    try {
-        parsedPayload = JSON.parse(payload)
-    } catch (err) { }
-
-    if (endpoint == 'debug') {
-        logger.debug({ from: agent, agentName, endpoint }, JSON.stringify({ path, parsedPayload }))
-    }
-
-    console.log('agents message handler payload: ', payload)
-    if (endpoint === "register") {
-        register({ path, agentName, endpoint, payload: parsedPayload, subscriber })
-    } else if (endpoint === "status") {
-        status({ agentName })
-    }
-}
 
 const registerMonitors = ({
     agentName,
@@ -66,7 +31,7 @@ const registerMonitors = ({
     })
 }
 
-const register = async ({ path, agentName, endpoint, payload, subscriber }:
+export const register = async ({ path, agentName, endpoint, payload, subscriber }:
     {
         path: string,
         agentName: string,
@@ -134,7 +99,7 @@ const register = async ({ path, agentName, endpoint, payload, subscriber }:
     }
 }
 
-const status = async ({ agentName }) => {
+export const status = async ({ agentName }) => {
     const last_view = Date.now()
     const online = true
 

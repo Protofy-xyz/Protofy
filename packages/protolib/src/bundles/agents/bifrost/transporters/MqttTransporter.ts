@@ -1,4 +1,4 @@
-import { packageSerde } from "../serde"
+import { routePackage } from "../router"
 
 export const MqttTransporter = (context) => {
     const { topicSub, mqtt, logger } = context
@@ -7,5 +7,5 @@ export const MqttTransporter = (context) => {
         topicSub(mqtt, path, handler)
     }
 
-    topicSub(mqtt, 'agents/#', (message, topic) => packageSerde(topic, message, subscriber))
+    topicSub(mqtt, 'agents/#', (message, topic) => routePackage(topic, message, subscriber))
 }
