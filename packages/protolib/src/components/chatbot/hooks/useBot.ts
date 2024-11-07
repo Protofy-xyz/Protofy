@@ -10,15 +10,6 @@ type Props = {
   prompt: string;
 };
 
-function transformChats(prevChats: Omit<ChatMessageType, "type" | "id">[], prompt: string) {
-  const additionalSystemMessage: Omit<ChatMessageType, "type" | "id"> = {
-    role: "system",
-    content: prompt
-  };
-  return [additionalSystemMessage, ...prevChats];
-}
-
-
 
 export default function useBot({ index, chat, prompt }: Props) {
   const resultRef = useRef(chat.content);
@@ -99,7 +90,8 @@ export default function useBot({ index, chat, prompt }: Props) {
           ];
         }
         await fetchResults(
-          transformChats(prevChats, prompt),
+          prevChats,
+          {context: prompt},
           selectedModal,
           signal,
           handleOnData,

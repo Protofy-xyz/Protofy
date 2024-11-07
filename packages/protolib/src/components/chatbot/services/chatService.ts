@@ -4,6 +4,7 @@ const IMAGE_GENERATION_API_URL = "https://api.openai.com/v1/images/generations";
 
 export async function fetchResults(
   messages: Omit<ChatMessageType, "id" | "type">[],
+  metadata: any,
   model: string,
   signal: AbortSignal,
   onData: (data: any) => void,
@@ -24,6 +25,7 @@ export async function fetchResults(
         temperature: 0.7,
         stream: true,
         messages: messages,
+        metadata: metadata
       }),
     });
 

@@ -36,12 +36,11 @@ function App({ apiUrl }: AppProps) {
     applyTheme(resolvedTheme)
   }, [resolvedTheme])
 
-  // Almacena apiUrl en el store al montar el componente
   useEffect(() => {
     if (apiUrl) {
-      setApiUrl(apiUrl) // Guarda apiUrl en el store
+      setApiUrl(apiUrl)
     }
-  }, [apiUrl, setApiUrl])
+  }, [apiUrl])
 
   return (
     <Stack backgroundColor={resolvedTheme === "light" ? "" : "#212121"} f={1} className="h-screen flex flex-col">
