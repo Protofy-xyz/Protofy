@@ -1,6 +1,5 @@
 import { ChatMessageType, ModalList, useSettings } from "../store/store";
 
-const apiUrl = "/api/v1/chatbots/assistant";
 const IMAGE_GENERATION_API_URL = "https://api.openai.com/v1/images/generations";
 
 export async function fetchResults(
@@ -11,6 +10,7 @@ export async function fetchResults(
   onCompletion: () => void
 ) {
   try {
+    const apiUrl = useSettings.getState().settings.apiUrl
     const response = await fetch(apiUrl, {
       method: `POST`,
       signal: signal,

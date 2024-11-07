@@ -59,6 +59,7 @@ export interface SettingsType {
     useSystemMessageForAllChats: boolean;
     selectedModal: ModalList;
     dalleImageSize: { "dall-e-3": ImageSize };
+    apiUrl: string;
   };
   modalsList: readonly string[];
   isSystemMessageModalVisible: boolean;
@@ -70,6 +71,7 @@ export interface SettingsType {
   setModalsList: (value: string[]) => void;
   setModal: (value: ModalList) => void;
   setDalleImageSize: (value: ImageSize, type: "dall-e-3") => void;
+  setApiUrl: (url: string) => void;
 }
 export interface ChatType {
   chats: ChatMessageType[];
@@ -261,6 +263,7 @@ const useSettings = createWithEqualityFn<SettingsType>()(
         useSystemMessageForAllChats: false,
         selectedModal: "gpt-4-turbo",
         dalleImageSize: { "dall-e-3": "1024x1024" },
+        apiUrl: "",
       },
       modalsList: modalsList,
       isSystemMessageModalVisible: false,
@@ -312,6 +315,13 @@ const useSettings = createWithEqualityFn<SettingsType>()(
         set(
           produce((state: SettingsType) => {
             state.settings.dalleImageSize[type] = value;
+          })
+        );
+      },
+      setApiUrl: (url) => {
+        set(
+          produce((state: SettingsType) => {
+            state.settings.apiUrl = url;
           })
         );
       },

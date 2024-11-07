@@ -35,7 +35,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
         </AdminPanel>
       </SearchContext.Provider>
       <Tinted>
-        {integratedChat && settingsAssistantEnabled && <BubbleChat/>}
+        {integratedChat && settingsAssistantEnabled && <BubbleChat apiUrl="/api/v1/chatbots/assistant"/>}
       </Tinted>
     </Page>
   )

@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { Sparkles, X, Maximize, Minimize } from '@tamagui/lucide-icons';
 import { Tinted }  from './Tinted'
-import { Chatbot } from './Chatbot'
+import { Chat } from './Chat'
 import { YStack, Button, XStack, Theme, Spinner, Paragraph} from 'tamagui';
 
-export const BubbleChat = () => {
+type BubleChatProps = {
+  apiUrl: string;
+};
+
+export const BubbleChat = ({ apiUrl }: BubleChatProps) => {
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isChatLoaded, setIsChatLoaded] = useState(false);
@@ -93,7 +97,7 @@ export const BubbleChat = () => {
 
             <Paragraph size="$5">Loading chat...</Paragraph>
           </YStack>
-          {isChatLoaded && <Chatbot/>}
+          {isChatLoaded && <Chat apiUrl={apiUrl}/>}
         </YStack>
 
 

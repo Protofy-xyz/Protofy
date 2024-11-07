@@ -1,34 +1,47 @@
-import { useEffect, useState } from "react";
-import Navbar from "./components/Navbar/Navbar";
-import DefaultIdeas from "./components/DefaultIdea/DefaultIdeas";
-import UserQuery from "./components/UserInput/UserQuery";
-import { Plus, Menu, PanelLeft } from "lucide-react";
-import useChat, { chatsLength, useAuth } from "./store/store";
-import classNames from "classnames";
-import Chats from "./components/Chat/Chats";
-import Modal from "./components/modals/Modal";
-import Apikey from "./components/modals/Apikey";
-import { useThemeSetting } from "@tamagui/next-theme";
-import { Stack } from "tamagui";
+import { useEffect, useState } from "react"
+import Navbar from "./components/Navbar/Navbar"
+import DefaultIdeas from "./components/DefaultIdea/DefaultIdeas"
+import UserQuery from "./components/UserInput/UserQuery"
+import { Plus, Menu, PanelLeft } from "lucide-react"
+import useChat, { chatsLength, useAuth, useSettings } from "./store/store"
+import classNames from "classnames"
+import Chats from "./components/Chat/Chats"
+import Modal from "./components/modals/Modal"
+import Apikey from "./components/modals/Apikey"
+import { useThemeSetting } from "@tamagui/next-theme"
+import { Stack } from "tamagui"
 
 const applyTheme = (resolvedTheme) => {
   if (resolvedTheme === "light" && document.documentElement.classList.contains("dark")) {
-    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.remove("dark")
   } else if (resolvedTheme === "dark" && !document.documentElement.classList.contains("dark")) {
-    document.documentElement.classList.add("dark");
+    document.documentElement.classList.add("dark")
   }
-};
+}
 
-function App() {
-  const [active, setActive] = useState(false);
-  const isChatsVisible = useChat(chatsLength);
-  const addNewChat = useChat((state) => state.addNewChat);
-  let userHasApiKey = useAuth((state) => state.apikey);
-  const { resolvedTheme } = useThemeSetting();
+type AppProps = {
+  apiUrl: string
+}
 
+function App({ apiUrl }: AppProps) {
+  const [active, setActive] = useState(false)
+  const isChatsVisible = useChat(chatsLength)
+  const addNewChat = useChat((state) => state.addNewChat)
+  let userHasApiKey = useAuth((state) => state.apikey)
+  const { resolvedTheme } = useThemeSetting()
+  
+  const setApiUrl = useSettings((state) => state.setApiUrl)
+  
   useEffect(() => {
-    applyTheme(resolvedTheme);
-  }, [resolvedTheme]);
+    applyTheme(resolvedTheme)
+  }, [resolvedTheme])
+
+  // Almacena apiUrl en el store al montar el componente
+  useEffect(() => {
+    if (apiUrl) {
+      setApiUrl(apiUrl) // Guarda apiUrl en el store
+    }
+  }, [apiUrl, setApiUrl])
 
   return (
     <Stack backgroundColor={resolvedTheme === "light" ? "" : "#212121"} f={1} className="h-screen flex flex-col">
@@ -71,7 +84,7 @@ function App() {
         </Modal>
       </div>
     </Stack>
-  );
+  )
 }
 
-export default App;
+export default App
