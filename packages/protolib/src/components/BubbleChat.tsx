@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Sparkles, X, Maximize, Minimize } from '@tamagui/lucide-icons';
-import { Tinted }  from 'protolib/components/Tinted'
+import { Tinted }  from './Tinted'
+import { Chatbot } from './Chatbot'
 import { YStack, Button, XStack, Theme, Spinner, Paragraph} from 'tamagui';
 
-export const ChatWidget = () => {
+export const BubbleChat = () => {
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isChatLoaded, setIsChatLoaded] = useState(false);
@@ -92,13 +93,7 @@ export const ChatWidget = () => {
 
             <Paragraph size="$5">Loading chat...</Paragraph>
           </YStack>
-          {isChatLoaded && <iframe
-            src="/workspace/chatbot/"
-            width="100%"
-            height="100%"
-            style={{ border: "none" }}
-            title="Chat Widget"
-          />}
+          {isChatLoaded && <Chatbot/>}
         </YStack>
 
 
@@ -106,4 +101,4 @@ export const ChatWidget = () => {
   );
 };
 
-export default ChatWidget;
+export default BubbleChat;

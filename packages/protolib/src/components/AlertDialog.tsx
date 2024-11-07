@@ -48,7 +48,7 @@ export const AlertDialog = forwardRef(({
             <Dialog.Overlay />
             <Dialog.Content scale={1} p="$7" ai="flex-start" jc="flex-start" {...props}>
                 {/* {integratedChat && openState && <Tinted>
-                    <ChatWidget/>
+                    <BubbleChat/>
                 </Tinted> } */}
                 <YStack f={1} width={"100%"}>
                     <YStack f={1}>

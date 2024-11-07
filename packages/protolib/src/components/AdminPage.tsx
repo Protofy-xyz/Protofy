@@ -6,7 +6,7 @@ import { SearchContext } from '../context/SearchContext';
 import { AdminPanel } from './AdminPanel';
 import { forwardRef, useState, useContext } from 'react';
 import { AppConfContext, SiteConfigType } from "../providers/AppConf"
-import { ChatWidget } from './ChatWidget';
+import { BubbleChat } from './BubbleChat';
 
 export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = true }: any, ref) => {
   useSession(pageSession)
@@ -35,7 +35,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
         </AdminPanel>
       </SearchContext.Provider>
       <Tinted>
-        {integratedChat && settingsAssistantEnabled && <ChatWidget/>}
+        {integratedChat && settingsAssistantEnabled && <BubbleChat/>}
       </Tinted>
     </Page>
   )
