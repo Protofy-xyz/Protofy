@@ -11,11 +11,22 @@ const logger = getLogger()
 
 Protofy("type", "chatGPT")
 
+function transformChats(prevChats, prompt: string) {
+    const additionalSystemMessage = {
+        role: "system",
+        content: prompt
+    };
+    return [additionalSystemMessage, ...prevChats];
+}
+
 export default Protofy("code", async (app:Application, context: typeof APIContext) => {
     createChatbot(app, '{{codeNameLowerCase}}', async (req, res, chatbot) => {
-        const {session, token} = getAuth(req)
+        const { metadata, ...body } = req.body
+        const { session, token } = getAuth(req)
+
         context.chatGPT.chatGPTPrompt({
-            ...req.body,
+            ...body,
+            //messages: transformChats(body.messages, metadata.context),
             done: (response, message) => {
                 chatbot.end()
             },
