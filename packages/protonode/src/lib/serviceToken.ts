@@ -9,5 +9,5 @@ export const getServiceToken = () => {
 }
 
 export const getDeviceToken = (deviceId,isAdmin:boolean=false) =>{
-    return genToken({id: deviceId, type: 'device', admin: isAdmin===false?false:true})
+    return genToken({id: deviceId, type: 'device', admin: isAdmin},{expiresIn: '100y'})
 }
