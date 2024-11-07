@@ -148,9 +148,6 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
                     <Dialog.Overlay />
                     <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'90%'} width={"90%"} >
                         {getWidget()}
-                        {/* <Tinted>
-                            <Chat tags={['doc', "files"]} zIndex={999999999} onScreen={dialogOpen} mode="popup" />
-                        </Tinted> */}
                         <Dialog.Close />
                     </Dialog.Content>
                 </Dialog.Portal>

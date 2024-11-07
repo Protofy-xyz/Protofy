@@ -18,7 +18,6 @@ import 'protolib/styles/map.css';
 import 'app/styles/app.css';
 import "@blueprintjs/table/lib/css/table.css";
 import 'react-dropzone-uploader/dist/styles.css'
-import 'react-chat-widget/lib/styles.css';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
