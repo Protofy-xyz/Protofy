@@ -11,7 +11,7 @@ for filename in os.listdir(blueprints_folder):
     if filename.endswith('.py') and filename != '__init__.py':
         module_name = filename[:-3]
         # Importación relativa ajustada
-        module = importlib.import_module(f'.custom.apis.{module_name}', package=__package__)
+        module = importlib.import_module(f'..apis.{module_name}', package=__package__)
         for attribute_name in dir(module):
             attribute = getattr(module, attribute_name)
             if isinstance(attribute, Blueprint):
