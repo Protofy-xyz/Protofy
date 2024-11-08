@@ -7,7 +7,7 @@ import { Megaphone, MegaphoneOff } from "@tamagui/lucide-icons"
 import { useMqttState, useSubscription } from 'protolib/lib/mqtt';
 import { useFetch } from 'protolib/lib/useFetch'
 import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
-import { defActionEndpoint, defMonitorEndpoint } from "../bifrost/bifrostConfigs";
+import { defActionEndpoint, defMonitorEndpoint } from "../network/networkConfig";
 import { ActionType, SubsystemType } from "../subsystems/subsystemSchemas";
 
 const buildActionEndpoint = (type: 'agent' | 'device', name, subsystem, action) => {

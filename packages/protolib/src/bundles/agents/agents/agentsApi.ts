@@ -4,7 +4,6 @@ import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
-import { BifrostProtocol } from "../bifrost/bifrost";
 import { network } from "../network/networkApi";
 
 export const AgentsAutoAPI = AutoAPI({
@@ -124,8 +123,6 @@ export const AgentsAPI = (app, context) => {
 
         const db = getDB('agents')
         const agentInfo = AgentsModel.load(JSON.parse(await db.get(req.params.agent)), session)
-
-        // await db.put(agent.getId(), JSON.stringify(agent.serialize(true)))
         res.send({ status: agentInfo.data.status })
     }))
 }

@@ -1,7 +1,7 @@
 import { API } from "protobase";
 import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { getLogger } from 'protobase';
-import { BifrostProtocol } from "../bifrost/bifrost";
+import { NetworkProtocol } from "./network";
 
 const logger = getLogger()
 
@@ -20,5 +20,5 @@ export const network = (app, context) => {
     }))
 
     // agents protocol
-    BifrostProtocol({ ...context, logger })
+    NetworkProtocol({ ...context, logger })
 }

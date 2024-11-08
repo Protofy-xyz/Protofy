@@ -3,7 +3,7 @@ import { AgentsModel } from '../agents/agentsSchemas';
 import { MonitorType, SubsystemsSchema, SubsystemType } from '../subsystems/subsystemSchemas';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getServiceToken } from 'protonode';
-import { heartbeatTimeout, defMonitorEndpoint } from './bifrostConfigs'
+import { heartbeatTimeout, defMonitorEndpoint } from './networkConfig'
 
 const registerMonitors = ({
     agentName,
