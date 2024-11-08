@@ -5,6 +5,7 @@ import { getDB } from '@my/config/dist/storageProviders';
 import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
 import { BifrostProtocol } from "../bifrost/bifrost";
+import { network } from "../network/networkApi";
 
 export const AgentsAutoAPI = AutoAPI({
     modelName: 'agents',
@@ -20,12 +21,8 @@ export const AgentsAPI = (app, context) => {
     const agentsPath = '../../data/agents/'
     const { topicSub, topicPub, mqtt } = context;
     AgentsAutoAPI(app, context)
-    // agents topics: agents/[agentName]/[endpoint], en caso de no tener endpoint: agents/[agentName]
-    /* examples
-        agents/patata/switch/relay/actions/status
-        agents/patata/button/relay/actions/status
-        ...
-    */
+    network(app, context)
+
     app.get('/api/core/v1/agents/:agent/subsystems/:subsystem/actions/:action/:value', handler(async (req, res, session) => {
         if (!session || !session.user.admin) {
             res.status(401).send({ error: "Unauthorized" })
@@ -131,7 +128,4 @@ export const AgentsAPI = (app, context) => {
         // await db.put(agent.getId(), JSON.stringify(agent.serialize(true)))
         res.send({ status: agentInfo.data.status })
     }))
-
-    // agents protocol
-    BifrostProtocol({ ...context, logger })
 }
