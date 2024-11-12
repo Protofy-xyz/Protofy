@@ -9,6 +9,7 @@ class SdOfflineLogger {
     publishDataWhenOnline;
     publishDataTopic;
     sensorsArray;
+    numbersArray;
 
     constructor(name, timeId, jsonFileName, intervalSeconds, publishDataWhenOnline, publishDataTopic) {
         this.name = name;
@@ -19,6 +20,7 @@ class SdOfflineLogger {
         this.publishDataWhenOnline = publishDataWhenOnline;
         this.publishDataTopic = publishDataTopic;
         this.sensorsArray = [];
+        this.numbersArray = [];
     }
 
     extractNestedComponents(element, deviceComponents) {
@@ -64,6 +66,12 @@ class SdOfflineLogger {
             }
         });
 
+        deviceComponents?.number?.forEach((text_sensor) => {
+            if (text_sensor.id){
+                this.numbersArray.push(text_sensor.id);
+            }
+        });
+
         const componentObjects = [
             {
                 name: "external_components",
@@ -84,14 +92,9 @@ class SdOfflineLogger {
                     interval_seconds: this.intervalSeconds,
                     publish_data_when_online: this.publishDataWhenOnline,
                     publish_data_topic: deviceComponents.mqtt?.topic_prefix+this.publishDataTopic,
-                    sensors: this.sensorsArray,
+                    sensors: this.sensorsArray.length > 0 ? this.sensorsArray : undefined,
+                    numbers: this.numbersArray.length > 0 ? this.numbersArray : undefined
                 },
-            },
-            {
-                name: "esphome",
-                config: {
-                    libraries: ["spi", "FS", "SD"]
-                }
             }
         ];
 
