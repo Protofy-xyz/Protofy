@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { XStack, YStack, Text, Paragraph, Button, Input, Spinner, Switch, useToastController } from '@my/ui';
+import { XStack, YStack, Text, Paragraph, Button, Input, Spinner, Switch, useToastController, Select } from '@my/ui';
 import { ContainerLarge } from 'protolib/components/Container';
 import { Tinted } from 'protolib/components/Tinted';
 import { Chip } from 'protolib/components/Chip';
-import { Megaphone, MegaphoneOff } from "@tamagui/lucide-icons"
+import { Megaphone, MegaphoneOff, ChevronDown, Check } from "@tamagui/lucide-icons"
 import { useMqttState, useSubscription } from 'protolib/lib/mqtt';
 import { useFetch } from 'protolib/lib/useFetch'
 import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
@@ -111,6 +111,8 @@ const Action = ({ deviceName, action }) => {
     var type
     if (action?.payload?.value) {
         type = "button"
+    } else if (Array.isArray(action?.payload)) {
+        type = "select"
     } else if (action?.payload?.type != "json-schema") {
         type = "input"
     }
@@ -146,6 +148,45 @@ const Action = ({ deviceName, action }) => {
                     Send
                 </Button>
             </XStack>
+        case "select":
+            const [selectedOption, setSelectedOption] = useState(action.payload[0].value);
+            const payloadOptions = Array.isArray(action.payload.value) ? action.payload.value : [];
+
+            console.log("🤖 ~ Action ~ selectedOption:", selectedOption)
+            
+            return <XStack gap="$3" width={'100%'} alignItems="center">
+            <Text whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden" maxWidth="150px">{action.label ?? action.name}</Text>
+            <Select value={selectedOption} onValueChange={setSelectedOption} disablePreventBodyScroll>
+                <Select.Trigger f={1} iconAfter={ChevronDown}>
+                    <Select.Value placeholder="Select an option" />
+                </Select.Trigger>
+                <Select.Content zIndex={9999999999}>
+                    <Select.Viewport>
+                        <Select.Group>
+                            {action.payload.map((item, i) => (
+                                <Select.Item key={i} value={item.value}>
+                                    <Select.ItemText>{item.label}</Select.ItemText>
+                                    <Select.ItemIndicator marginLeft="auto">
+                                        <Check size={16} />
+                                    </Select.ItemIndicator>
+                                </Select.Item>
+                            ))}
+                        </Select.Group>
+                    </Select.Viewport>
+                </Select.Content>
+            </Select>
+            <Button
+                key={action.name} // Make sure to provide a unique key for each Button
+                onPress={() => { 
+                    const selectedPayload = payloadOptions.find(option => option.value === selectedOption);
+                    buttonAction(action, selectedPayload ? selectedPayload.value : selectedOption);
+                }}
+                color="$color10"
+                title={"Description: " + action.description}
+            >
+                Send
+            </Button>
+        </XStack>
         default:
             return <XStack gap="$3" alignSelf='flex-start' alignItems="center" mt="10px" mb="10px" width="100%">
                 <Text whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden" maxWidth="150px">{action.label ?? action.name}</Text>
