@@ -33,6 +33,18 @@ type connectProps = {
     apiKey?: string
 }
 
+const send = async ({ channel, message, onSend }: { channel: any, message: string, onSend?: Function }) => {
+    if (channel && typeof channel === 'string') { // Checks that provided channel is channelId instead of channel object
+        try {
+            channel = await client.channels.fetch(channel); // Fetch channel object given channelId ('channel')
+        } catch (err) {
+            console.error("Error fetching channel: ", err);
+        }
+    }
+    channel.send(message)
+    if (onSend) onSend()
+}
+
 export const discord = {
     connect: async ({ onMessage, onConnect, onDisconnect, onError, apiKey }: connectProps) => {
         const key = await getToken(apiKey)
@@ -52,17 +64,7 @@ export const discord = {
             console.error("Bot initialization error", err)
         }
     },
-    send: async ({ channel, message, onSend }: { channel: any, message: string, onSend?: Function }) => {
-        if (channel && typeof channel === 'string') { // Checks that provided channel is channelId instead of channel object
-            try {
-                channel = await client.channels.fetch(channel); // Fetch channel object given channelId ('channel')
-            } catch (err) {
-                console.error("Error fetching channel: ", err);
-            }
-        }
-        channel.send(message)
-        if (onSend) onSend()
-    },
+    send,
     response: async ({ message, response, onSend }: { message: any, response: string, onSend?: Function }) => {
         return send({ channel: message.channel, message: response, onSend })
     },
