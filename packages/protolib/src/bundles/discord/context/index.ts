@@ -143,7 +143,7 @@ export const discord = {
             throw err;
         }
     },
-    createCommand: async ({ guildId, clientId, command, apiKey, overwrite = false }: { guildId: string, clientId: string, command: any, apiKey?: string, overwrite: boolean }) => {
+    createCommand: async ({ guildId, clientId, command, apiKey, overwrite = false }: { guildId: string, clientId: string, command: any, apiKey?: string, overwrite?: boolean }) => {
         /* @params
             overwrite: allow to overwrite specific command given its name
         */
