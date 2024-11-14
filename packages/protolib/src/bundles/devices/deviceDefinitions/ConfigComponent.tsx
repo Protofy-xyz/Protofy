@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Button, XStack } from 'tamagui'
+import { Button, XStack, YStack, Text } from 'tamagui'
 import { AlertDialog } from '../../../components/AlertDialog'
 import Flows from '../../../adminpanel/features/components/Flows'
 import { getFlowsCustomSnippets } from 'app/bundles/snippets'
@@ -8,6 +8,7 @@ import { getFlowMasks, getFlowsCustomComponents } from 'app/bundles/masks'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { useSearchParams, usePathname } from 'solito/navigation'
 import layout from './DeviceLayout'
+import { SelectList } from '../../../components/SelectList'
 
 
 export const ConfigComponent = ({ path, data, setData, mode, originalData, cores, boards }) => {
@@ -108,18 +109,74 @@ export const ConfigComponent = ({ path, data, setData, mode, originalData, cores
         </AlertDialog>
       </>
     )
-  } else if (selectedSdk === 'binary') {
-    return (
-        <div style={{ padding: 20 }}>
-          <input
-            type="file"
-            onChange={(e) => {
-              const file = e.target.files[0]
-              console.log('File uploaded: ', file)
-            }}
-          />
-        </div>
-      )
+  } else if (selectedSdk === 'wled') {
+    const [releases, setReleases] = useState([]);
+    const [selectedVersion, setSelectedVersion] = useState(data.version ?? '');
+    const [binFiles, setBinFiles] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(data.fileName ?? '');
+
+    useEffect(() => {
+      fetchGitHubReleases();
+    }, []);
+
+    useEffect(() => {
+      // Load bin files for the selected version if data.version is provided or if binFiles are empty
+      if (selectedVersion && binFiles.length === 0) {
+        handleVersionSelect(selectedVersion);
+      }
+    }, [selectedVersion, releases]);
+
+    const fetchGitHubReleases = async () => {
+      try {
+        const response = await fetch(
+          'https://api.github.com/repos/Aircoookie/WLED/releases'
+        );
+        const data = await response.json();
+        const versions = data.map(release => ({
+          tagName: release.tag_name,
+          assets: release.assets.filter(asset => asset.name.endsWith('.bin')),
+        }));
+        setReleases(versions);
+      } catch (error) {
+        console.error('Error fetching releases:', error);
+      }
+    };
+
+    const handleVersionSelect = (version) => {
+      setSelectedVersion(version);
+      const selectedRelease = releases.find(release => release.tagName === version);
+      if (selectedRelease) {
+        setBinFiles(selectedRelease.assets);
+        // Set selected file if data.fileName matches a file in the binFiles list
+        if (data.fileName) {
+          const initialFile = selectedRelease.assets.find(file => file.name === data.fileName);
+          if (initialFile) setSelectedFile(initialFile);
+        }
+      } else {
+        setBinFiles([]);
+      }
+    };
+
+    const handleFileSelect = (file) => {
+      setSelectedFile(file);
+      setData({ version: selectedVersion, fileName: file.name, fileUrl: file.browser_download_url });
+    };
+    //@ts-ignore
+    return (              
+      <YStack>
+        <XStack>
+          <Text>Select a Version: </Text>
+          <SelectList title="Select a Version" elements={releases.map((release, index) => ({ caption: release.tagName, value: release.tagName }))} value={selectedVersion} setValue={handleVersionSelect} />
+        </XStack>
+        {binFiles.length > 0 && (
+          <XStack>
+            <Text>Select a file: </Text>
+            <SelectList title="Select a .bin file" elements={binFiles.map((file, index) => ({ caption: file.name, value: file }))} value={selectedFile} setValue={handleFileSelect} />
+          </XStack>
+        )}
+      </YStack>
+
+    )
     } else {
         return <a>SDK not defined</a>
     }
