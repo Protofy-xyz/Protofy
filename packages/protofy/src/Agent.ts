@@ -6,10 +6,12 @@ const ajv = new Ajv();
 const validateSchemaObject = ajv.compile({ type: "object" });
 
 const AgentProtocolSchema = z.object({
-    type: z.string(), // function, http-request, http-response, mqtt-message
+    type: z.string(), // function, http, mqtt
     serializer: z.string().optional(), // json, xml, none (for local function calls)
-    encoder: z.string().optional(), // body, query, path, arguments, ...
-    params: z.record(z.any()).optional(), //protocol-specific configs host, port, topic, path...
+    serializerOptions: z.record(z.any()).optional(), // options for the serializer
+    encoder: z.string().optional(), // body, query, path, arguments, return, callback...
+    encoderOptions: z.record(z.any()).optional(), // options for the encoder
+    config: z.record(z.any()).optional(), //protocol-specific configs host, port, topic, path...
 })
 
 const AgentInterfaceSchema = z.object({
