@@ -42,11 +42,13 @@ export class Agent {
     children: Agent[];
     input: AgentInterface | undefined;
     output: AgentInterface | undefined;
-    constructor(data: AgentData, agents: Agent[] = []) {
+    parent: Agent | undefined;
+    constructor(data: AgentData, children: Agent[] = [], parent: Agent = undefined, ) {
         this.data = data;
-        this.children = agents;
+        this.children = children;
         this.input = data.input && new AgentInputInterface(data.input, this);
         this.output = data.output && new AgentOutputInterface(data.output, this);
+        this.parent = parent;
     }
 
     getName() {
@@ -66,6 +68,12 @@ export class Agent {
     }
 
     getProtocol() {
+        if(this.parent) {
+            return {
+                ...this.parent.getProtocol(),
+                ...this.data.protocol
+            }
+        }
         return this.data.protocol
     }
 
@@ -86,6 +94,7 @@ export class Agent {
     }
 
     addChildren(agents: Agent[]) {
+        agents.forEach(agent => agent.setParent(this));
         this.children.push(...agents);
     }
 
@@ -94,11 +103,16 @@ export class Agent {
     }
 
     addChild(agent: Agent) {
+        agent.setParent(this);
         this.children.push(agent);
     }
 
     getChild(id: string) {
         return this.children && this.children.find(agent => agent.data.id === id);
+    }
+
+    setParent(agent: Agent) {
+        this.parent = agent;
     }
 }
 

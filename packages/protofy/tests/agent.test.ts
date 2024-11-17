@@ -5,6 +5,7 @@ import { zodToJsonSchema } from 'zod-to-json-schema';
 let userSchema: z.ZodObject<any>;
 let returnSchema: z.ZodString;
 let agent: Agent;
+let childAgent: Agent;
 
 describe('Agents basic behavior', () => {
   beforeEach(() => {
@@ -17,13 +18,20 @@ describe('Agents basic behavior', () => {
 
     returnSchema = z.string()
 
+    childAgent = new Agent({
+      id: 'childAgent',
+      name: 'childAgent',
+      description: 'Child agent',
+      tags: ['child']
+    });
+
     agent = new Agent({
       id: 'getDisplayInfo',
       name: 'getDisplayInfo',
       description: 'Get display info of a user',
       tags: ['user', 'display'],
       protocol: {
-        type: 'function'
+        type: 'function',
       },
       input: {
         shape: zodToJsonSchema(userSchema, "user"),
@@ -49,70 +57,29 @@ describe('Agents basic behavior', () => {
   });
 
   it('Should be able to add children to the agent', () => {
-    const childAgent = new Agent({
-      id: 'childAgent',
-      name: 'childAgent',
-      description: 'Child agent',
-      tags: ['child'],
-      protocol: {
-        type: 'function'
-      },
-      input: {
-        shape: zodToJsonSchema(userSchema, "user")
-      },
-      output: {
-        shape: zodToJsonSchema(returnSchema, "displayInfo")
-      }
-    })
-
     agent.addChildren([childAgent]);
     expect(agent.getChildren()).toEqual([childAgent]);
   });
 
   it('Should be able to add a single child to the agent', () => {
-    const childAgent = new Agent({
-      id: 'childAgent',
-      name: 'childAgent',
-      description: 'Child agent',
-      tags: ['child'],
-      protocol: {
-        type: 'function'
-      },
-      input: {
-        shape: zodToJsonSchema(userSchema, "user")
-      },
-      output: {
-        shape: zodToJsonSchema(returnSchema, "displayInfo")
-      }
-    })
-
     agent.addChild(childAgent);
     expect(agent.getChildren()).toEqual([childAgent]);
   });
 
   it('Should be able to get a child by id', () => {
-    const childAgent = new Agent({
-      id: 'childAgent',
-      name: 'childAgent',
-      description: 'Child agent',
-      tags: ['child'],
-      protocol: {
-        type: 'function'
-      },
-      input: {
-        shape: zodToJsonSchema(userSchema, "user")
-      },
-      output: {
-        shape: zodToJsonSchema(returnSchema, "displayInfo")
-      }
-    })
-
     agent.addChild(childAgent);
     expect(agent.getChild('childAgent')).toEqual(childAgent);
   });
 
   it('Should return undefined if the child does not exist', () => {
     expect(agent.getChild('childAgent')).toBeUndefined();
+  });
+
+  it('Should return combined agent protocol from the parent', () => {
+    agent.addChild(childAgent);
+    expect(agent.getChild('childAgent').getProtocol()).toEqual({
+      type: 'function'
+    });
   });
 
   it('Should combine agent protocol definition with input and output protocol definition, to reduce verbosity', () => {
