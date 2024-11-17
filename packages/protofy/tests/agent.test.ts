@@ -32,11 +32,16 @@ describe('Agents basic behavior', () => {
       tags: ['user', 'display'],
       protocol: {
         type: 'function',
+        config: {
+          fn: (user) => {
+            return user.name + ', ' + user.age
+          }
+        }
       },
       input: {
         shape: zodToJsonSchema(userSchema, "user"),
         protocol: {
-          encoder: 'object' //instead of the default 'positional' for the function protocol
+          config: {test: 'test'} 
         }
       },
       output: {
@@ -50,7 +55,8 @@ describe('Agents basic behavior', () => {
     expect(agent.getName()).toBe('getDisplayInfo');
     expect(agent.getDescription()).toBe('Get display info of a user');
     expect(agent.getTags()).toEqual(['user', 'display']);
-    expect(agent.getProtocol()).toEqual({ type: 'function' });
+    expect(agent.getProtocol().type).toEqual('function');
+    expect(agent.getProtocol().config).toHaveProperty('fn');
     expect(agent.getInputShape()).toEqual(zodToJsonSchema(userSchema, "user"))
     expect(agent.getOutputShape()).toEqual(zodToJsonSchema(returnSchema, "displayInfo"))
     expect(agent.getChildren()).toEqual([]);
@@ -77,13 +83,15 @@ describe('Agents basic behavior', () => {
 
   it('Should return combined agent protocol from the parent', () => {
     agent.addChild(childAgent);
-    expect(agent.getChild('childAgent').getProtocol()).toEqual({
-      type: 'function'
-    });
+    const childProtocol = agent.getChild('childAgent').getProtocol()
+    expect(childProtocol.config).toHaveProperty('fn')
+    expect(childProtocol.type).toEqual('function');
   });
 
   it('Should combine agent protocol definition with input and output protocol definition, to reduce verbosity', () => {
-    expect(agent.getInputProtocol()).toEqual({ type: 'function', encoder: 'object' });
-    expect(agent.getOutputProtocol()).toEqual({ type: 'function' });
+    const protocol = agent.getInputProtocol()
+    expect(protocol.config.test).toEqual('test');
+    expect(protocol.config).toHaveProperty('fn')
+    expect(agent.getOutputProtocol().type).toEqual('function');
   });
 });

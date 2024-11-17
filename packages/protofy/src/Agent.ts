@@ -7,12 +7,14 @@ const validateSchemaObject = ajv.compile({ type: "object" });
 
 const AgentProtocolSchema = z.object({
     type: z.string(), // function, http, mqtt
-    serializer: z.string().optional(), // json, xml, none (for local function calls)
-    serializerOptions: z.record(z.any()).optional(), // options for the serializer
-    encoder: z.string().optional(), // body, query, path, arguments, return, callback...
-    encoderOptions: z.record(z.any()).optional(), // options for the encoder
-    config: z.record(z.any()).optional(), //protocol-specific configs host, port, topic, path...
-})
+    config: z.object({
+        serializer: z.string().optional(), // json, xml, value (for local function calls)
+        serializerOptions: z.record(z.any()).optional(), // options for the serializer
+        encoder: z.string().optional(), // body, query, path, arguments, return, callback...
+        encoderOptions: z.record(z.any()).optional(), // options for the encoder
+        //any other protocol specific options like host, port, path, method, headers, etc.
+    }).catchall(z.any()).optional(), // Allow any other properties in config
+});
 
 const AgentInterfaceSchema = z.object({
     shape: z.custom<SchemaObject>((value) => {
@@ -133,7 +135,10 @@ export class AgentInterface {
     getProtocol() {
         return {
             ...this.agent.getProtocol(),
-            ...this.protocol
+            config: {
+                ...this.agent.getProtocol().config,
+                ...this.protocol?.config
+            }
         }
     }
 }
