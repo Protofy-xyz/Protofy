@@ -16,7 +16,7 @@ const AgentProtocolSchema = z.object({
     }).catchall(z.any()).optional(), // Allow any other properties in config
 });
 
-const AgentInterfaceSchema = z.object({
+const AgentIOSchema = z.object({
     shape: z.custom<SchemaObject>((value) => {
         // Use Ajv to validate the value
         return validateSchemaObject(value);
@@ -29,21 +29,22 @@ const AgentSchema = z.object({
     name: z.string().optional(), // Optional string
     description: z.string().optional(), // Optional string
     tags: z.array(z.string()).optional(), // Optional array of strings
+
     protocol: AgentProtocolSchema.optional(),
-    input: AgentInterfaceSchema.optional(),
-    output: AgentInterfaceSchema.optional()
+    input: AgentIOSchema.optional(),
+    output: AgentIOSchema.optional()
 })
 
 // Infer the TypeScript type
 export type AgentData = z.infer<typeof AgentSchema>;
 export type AgentProtocolData = z.infer<typeof AgentProtocolSchema>;
-export type AgentInterfaceData = z.infer<typeof AgentInterfaceSchema>;
+export type AgentIOData = z.infer<typeof AgentIOSchema>;
 
 export class Agent {
     data: AgentData;
     children: Agent[];
-    input: AgentInterface | undefined;
-    output: AgentInterface | undefined;
+    input: AgentIOInterface | undefined;
+    output: AgentIOInterface | undefined;
     parent: Agent | undefined;
     constructor(data: AgentData, children: Agent[] = [], parent: Agent = undefined, ) {
         this.data = data;
@@ -118,11 +119,11 @@ export class Agent {
     }
 }
 
-export class AgentInterface {
+export class AgentIOInterface {
     shape: SchemaObject;
     protocol: AgentProtocolData;
     agent: Agent;
-    constructor(data: AgentInterfaceData, agent: Agent) {
+    constructor(data: AgentIOData, agent: Agent) {
         this.shape = data.shape;
         this.protocol = data.protocol;
         this.agent = agent;
@@ -143,14 +144,14 @@ export class AgentInterface {
     }
 }
 
-export class AgentInputInterface extends AgentInterface {
-    constructor(data: AgentInterfaceData, agent: Agent) {
+export class AgentInputInterface extends AgentIOInterface {
+    constructor(data: AgentIOData, agent: Agent) {
         super(data, agent);
     }
 }
 
-export class AgentOutputInterface extends AgentInterface {
-    constructor(data: AgentInterfaceData, agent: Agent) {
+export class AgentOutputInterface extends AgentIOInterface {
+    constructor(data: AgentIOData, agent: Agent) {
         super(data, agent);
     }
 }
