@@ -16,7 +16,7 @@ const AgentProtocolSchema = z.object({
     }).catchall(z.any()).optional(), // Allow any other properties in config
 });
 
-const AgentInterfaceSchema = z.object({
+const AgentIOSchema = z.object({
     shape: z.custom<SchemaObject>((value) => {
         // Use Ajv to validate the value
         return validateSchemaObject(value);
@@ -24,32 +24,36 @@ const AgentInterfaceSchema = z.object({
     protocol: AgentProtocolSchema.optional()
 })
 
+const AgentInterfaceSchema = z.object({
+    protocol: AgentProtocolSchema.optional(),
+    input: AgentIOSchema.optional(),
+    output: AgentIOSchema.optional()
+})
+
 const AgentSchema = z.object({
     id: z.string(), // Required string
     name: z.string().optional(), // Optional string
     description: z.string().optional(), // Optional string
     tags: z.array(z.string()).optional(), // Optional array of strings
-    protocol: AgentProtocolSchema.optional(),
-    input: AgentInterfaceSchema.optional(),
-    output: AgentInterfaceSchema.optional()
+    children: z.array(z.lazy(() => AgentSchema)).optional(), // Optional array of agents
+    interface: AgentInterfaceSchema.optional() // Optional interface
 })
 
 // Infer the TypeScript type
 export type AgentData = z.infer<typeof AgentSchema>;
 export type AgentProtocolData = z.infer<typeof AgentProtocolSchema>;
+export type AgentIOData = z.infer<typeof AgentIOSchema>;
 export type AgentInterfaceData = z.infer<typeof AgentInterfaceSchema>;
 
 export class Agent {
     data: AgentData;
     children: Agent[];
-    input: AgentInterface | undefined;
-    output: AgentInterface | undefined;
+    interface: AgentInterface | undefined;
     parent: Agent | undefined;
-    constructor(data: AgentData, children: Agent[] = [], parent: Agent = undefined, ) {
+    constructor(data: AgentData, parent: Agent = undefined, ) {
         this.data = data;
-        this.children = children;
-        this.input = data.input && new AgentInputInterface(data.input, this);
-        this.output = data.output && new AgentOutputInterface(data.output, this);
+        this.children = data.children && data.children.map(agent => new Agent(agent, this)) || [];
+        this.interface = data.interface && new AgentInterface(data.interface, this);
         this.parent = parent;
     }
 
@@ -70,29 +74,30 @@ export class Agent {
     }
 
     getProtocol() {
+        const protocol = this.interface?.getProtocol()
         if(this.parent) {
             return {
                 ...this.parent.getProtocol(),
-                ...this.data.protocol
+                ...protocol
             }
         }
-        return this.data.protocol
+        return protocol
     }
 
     getInputShape() {
-        return this.input?.getShape()
+        return this.interface?.getInput()?.getShape()
     }
 
     getInputProtocol() {
-        return this.input?.getProtocol()
+        return this.interface?.getInput()?.getProtocol()
     }
 
     getOutputShape() {
-        return this.output?.getShape()
+        return this.interface?.getOutput()?.getShape()
     }
 
     getOutputProtocol() {
-        return this.output?.getProtocol()
+        return this.interface?.getOutput()?.getProtocol()
     }
 
     addChildren(agents: Agent[]) {
@@ -102,6 +107,10 @@ export class Agent {
 
     getChildren() {
         return this.children;
+    }
+
+    getInterface() {
+        return this.interface
     }
 
     addChild(agent: Agent) {
@@ -119,10 +128,34 @@ export class Agent {
 }
 
 export class AgentInterface {
+    input: AgentIOInterface;
+    output: AgentIOInterface;
+    protocol: AgentProtocolData;
+    
+    constructor(data: AgentInterfaceData, agent: Agent) {
+        this.input = data.input && new AgentInputInterface(data.input, agent);
+        this.output = data.output && new AgentOutputInterface(data.output, agent);
+        this.protocol = data.protocol;
+    }
+
+    getProtocol() {
+        return this.protocol
+    }
+
+    getInput() {
+        return this.input
+    }
+
+    getOutput() {
+        return this.output
+    }
+}
+
+export class AgentIOInterface {
     shape: SchemaObject;
     protocol: AgentProtocolData;
     agent: Agent;
-    constructor(data: AgentInterfaceData, agent: Agent) {
+    constructor(data: AgentIOData, agent: Agent) {
         this.shape = data.shape;
         this.protocol = data.protocol;
         this.agent = agent;
@@ -143,14 +176,14 @@ export class AgentInterface {
     }
 }
 
-export class AgentInputInterface extends AgentInterface {
-    constructor(data: AgentInterfaceData, agent: Agent) {
+export class AgentInputInterface extends AgentIOInterface {
+    constructor(data: AgentIOData, agent: Agent) {
         super(data, agent);
     }
 }
 
-export class AgentOutputInterface extends AgentInterface {
-    constructor(data: AgentInterfaceData, agent: Agent) {
+export class AgentOutputInterface extends AgentIOInterface {
+    constructor(data: AgentIOData, agent: Agent) {
         super(data, agent);
     }
 }

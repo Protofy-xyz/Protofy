@@ -30,22 +30,24 @@ describe('Agents basic behavior', () => {
       name: 'getDisplayInfo',
       description: 'Get display info of a user',
       tags: ['user', 'display'],
-      protocol: {
-        type: 'function',
-        config: {
-          fn: (user) => {
-            return user.name + ', ' + user.age
-          }
-        }
-      },
-      input: {
-        shape: zodToJsonSchema(userSchema, "user"),
+      interface: {
         protocol: {
-          config: {test: 'test'} 
+          type: 'function',
+          config: {
+            fn: (user) => {
+              return user.name + ', ' + user.age
+            }
+          }
+        },
+        input: {
+          shape: zodToJsonSchema(userSchema, "user"),
+          protocol: {
+            config: {test: 'test'} 
+          }
+        },
+        output: {
+          shape: zodToJsonSchema(returnSchema, "displayInfo")
         }
-      },
-      output: {
-        shape: zodToJsonSchema(returnSchema, "displayInfo")
       }
     })
   });
