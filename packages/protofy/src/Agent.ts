@@ -35,6 +35,7 @@ const AgentSchema = z.object({
     name: z.string().optional(), // Optional string
     description: z.string().optional(), // Optional string
     tags: z.array(z.string()).optional(), // Optional array of strings
+    children: z.array(z.lazy(() => AgentSchema)).optional(), // Optional array of agents
     interface: AgentInterfaceSchema.optional() // Optional interface
 })
 
@@ -49,9 +50,9 @@ export class Agent {
     children: Agent[];
     interface: AgentInterface | undefined;
     parent: Agent | undefined;
-    constructor(data: AgentData, children: Agent[] = [], parent: Agent = undefined, ) {
+    constructor(data: AgentData, parent: Agent = undefined, ) {
         this.data = data;
-        this.children = children;
+        this.children = data.children && data.children.map(agent => new Agent(agent, this)) || [];
         this.interface = data.interface && new AgentInterface(data.interface, this);
         this.parent = parent;
     }
