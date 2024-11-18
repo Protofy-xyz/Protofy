@@ -2,19 +2,19 @@ import { Agent } from '../src/Agent';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
-let userSchema: z.ZodObject<any>;
+let paramsSchema;
 let returnSchema: z.ZodString;
 let agent: Agent;
 let childAgent: Agent;
 
 describe('Agents basic behavior', () => {
   beforeEach(() => {
-    userSchema = z.object({
+    paramsSchema = z.tuple([z.object({
       id: z.string().uuid(),
       name: z.string().min(1),
       age: z.number().min(18),
       email: z.string().email(),
-    });
+    })]);
 
     returnSchema = z.string()
 
@@ -40,7 +40,7 @@ describe('Agents basic behavior', () => {
           }
         },
         input: {
-          shape: zodToJsonSchema(userSchema, "user"),
+          shape: zodToJsonSchema(paramsSchema, "params"),
           protocol: {
             config: {test: 'test'} 
           }
@@ -59,7 +59,7 @@ describe('Agents basic behavior', () => {
     expect(agent.getTags()).toEqual(['user', 'display']);
     expect(agent.getProtocol().type).toEqual('function');
     expect(agent.getProtocol().config).toHaveProperty('fn');
-    expect(agent.getInputShape()).toEqual(zodToJsonSchema(userSchema, "user"))
+    expect(agent.getInputShape()).toEqual(zodToJsonSchema(paramsSchema, "params"))
     expect(agent.getOutputShape()).toEqual(zodToJsonSchema(returnSchema, "displayInfo"))
     expect(agent.getChildren()).toEqual([]);
   });

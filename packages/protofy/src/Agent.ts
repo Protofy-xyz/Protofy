@@ -6,7 +6,7 @@ const ajv = new Ajv();
 const validateSchemaObject = ajv.compile({ type: "object" });
 
 const AgentProtocolSchema = z.object({
-    type: z.string(), // function, http, mqtt
+    type: z.string(), // function, http, mqtt, ui, etc.
     config: z.object({
         serializer: z.string().optional(), // json, xml, value (for local function calls)
         serializerOptions: z.record(z.any()).optional(), // options for the serializer
