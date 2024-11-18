@@ -12,7 +12,7 @@ const ODrive = ({ node = {}, nodeData = {}, children, color }: any) => {
         },
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='ODrive motor' color={color} id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='ODrive motor UART' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )
@@ -23,7 +23,7 @@ export default {
     type: 'CallExpression',
     category: "actuators",
     keywords: ["brushless", "motor","driver", "ODrive", "device"],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('odrive'),
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to == 'odrive',
     getComponent: (node, nodeData, children) => <ODrive color={getColor('odrive')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { return { to: 'odrive', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }}}
 }
