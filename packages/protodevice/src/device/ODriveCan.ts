@@ -560,6 +560,18 @@ id(${this.name}_errors).publish_state(error_string.c_str());
                 value: {}
               },
             },
+            {
+              name: 'idle',
+              label: "IDLE motor",
+              description: "Sets the motor to idle",
+              endpoint: `/${this.name}/set_current_state`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'json',
+                value: {state: 1}
+              }
+            }
+
           ],
           monitors: [
             {
@@ -608,7 +620,7 @@ id(${this.name}_errors).publish_state(error_string.c_str());
               units: 'string',
               endpoint: `/sensor/${this.name}_errors/state`,
               connectionType: 'mqtt',
-            },
+            },            
           ]
                 
           
