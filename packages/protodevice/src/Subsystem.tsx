@@ -93,7 +93,7 @@ const Action = ({ deviceName, action }) => {
         const sendValue = value != undefined ? value : action.payload.value
         if (action.connectionType == "mqtt") {
             console.log("MQTT Dev: ", action.payload)
-            client.publish(getPeripheralTopic(deviceName, action.endpoint), (action.payload.type == "json" || action.payload.type == "json-schema") ? JSON.stringify(sendValue) : sendValue.toString())
+            client.publish(getPeripheralTopic(deviceName, action.endpoint), (action.payload.type == "json" || action.payload.type == "json-schema" || Array.isArray(action?.payload)) ? JSON.stringify(sendValue) : sendValue.toString())
         }
     }
 
