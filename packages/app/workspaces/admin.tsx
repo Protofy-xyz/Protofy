@@ -105,8 +105,7 @@ export default ({ pages }) => {
         "menu": {
             ...(adminPages.length ? {
                 "CMS": adminPages.map((page) => {
-                    const parts = page.route.split('/')
-                    return { "name": page.object.charAt(0).toUpperCase() + page.object.slice(1), "icon": Box, "type": page.route, path: '/', external: true }
+                    return { "name": page.name.charAt(0).toUpperCase() + page.name.slice(1), "icon": Box, "type": page.route, path: '/', external: true }
                 })
             } : {}),
             "System": [
