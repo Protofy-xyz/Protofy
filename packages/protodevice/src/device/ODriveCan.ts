@@ -71,7 +71,7 @@ float torque_ff = x["torque"].as<float>();    // Torque feedforward in Nm
 ESP_LOGD("canbus", "Parsed JSON: Velocity=%.2f, Torque=%.2f", input_vel, torque_ff);
 
 // Check current axis state
-uint8_t current_axis_state = id(${this.name}_axis_state).state;
+uint8_t current_axis_state = id(${this.name}_axis_state_numeric).state;
 if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   // Set axis state to CLOSED_LOOP_CONTROL
   std::vector<uint8_t> state_data(4);
@@ -125,7 +125,7 @@ int16_t torque_ff = x["torque"].as<int16_t>();  // Torque feedforward
 ESP_LOGD("canbus", "Parsed JSON: Position=%.2f, Velocity=%d, Torque=%d", input_pos, vel_ff, torque_ff);
 
 // Check current axis state
-uint8_t current_axis_state = id(${this.name}_axis_state).state;
+uint8_t current_axis_state = id(${this.name}_axis_state_numeric).state;
 if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   // Set axis state to CLOSED_LOOP_CONTROL
   std::vector<uint8_t> state_data(4);
@@ -294,11 +294,19 @@ id(can_bus).send_data(0x07, false, state_data);  // 0x07 is the CAN ID for setti
             }
           },
           {
-            name: 'sensor',
+            name: 'text_sensor',
             config: {
               platform: 'template',
               name: `${this.name}_axis_state`,
               id: `${this.name}_axis_state`,
+            }
+          },
+          {
+            name: 'sensor',
+            config: {
+              platform: 'template',
+              name: `${this.name}_axis_state_numeric`,
+              id: `${this.name}_axis_state_numeric`,
               unit_of_measurement: 'state',
               accuracy_decimals: 0
             }
@@ -369,8 +377,39 @@ id(${this.name}_speed).publish_state(vel_estimate);
 uint8_t axis_state = x[4];
 ESP_LOGD("canbus", "Axis State: %d", axis_state);
 
-// Update the axis state sensor
-id(${this.name}_axis_state).publish_state(axis_state);
+// Update the axis state numeric sensor
+id(motor1_axis_state_numeric).publish_state(axis_state);
+
+// Map the numeric state to a string and update the text sensor
+if (axis_state == 1) {
+  id(${this.name}_axis_state).publish_state("IDLE");
+} else if (axis_state == 2) {
+  id(${this.name}_axis_state).publish_state("STARTUP_SEQUENCE");
+} else if (axis_state == 3) {
+  id(${this.name}_axis_state).publish_state("FULL_CALIBRATION_SEQUENCE");
+} else if (axis_state == 4) {
+  id(${this.name}_axis_state).publish_state("MOTOR_CALIBRATION");
+} else if (axis_state == 6) {
+  id(${this.name}_axis_state).publish_state("ENCODER_INDEX_SEARCH");
+} else if (axis_state == 7) {
+  id(${this.name}_axis_state).publish_state("ENCODER_OFFSET_CALIBRATION");
+} else if (axis_state == 8) {
+  id(${this.name}_axis_state).publish_state("CLOSED_LOOP_CONTROL");
+} else if (axis_state == 9) {
+  id(${this.name}_axis_state).publish_state("LOCKIN_SPIN");
+} else if (axis_state == 10) {
+  id(${this.name}_axis_state).publish_state("ENCODER_DIR_FIND");
+} else if (axis_state == 11) {
+  id(${this.name}_axis_state).publish_state("HOMING");
+} else if (axis_state == 12) {
+  id(${this.name}_axis_state).publish_state("ENCODER_HALL_POLARITY_CALIBRATION");
+} else if (axis_state == 13) {
+  id(${this.name}_axis_state).publish_state("ENCODER_HALL_PHASE_CALIBRATION");
+} else if (axis_state == 14) {
+  id(${this.name}_axis_state).publish_state("ANTICOGGING_CALIBRATION");
+} else {
+  id(${this.name}_axis_state).publish_state("UNKNOWN");
+}
 
 // Log Trajectory Done Flag
 bool trajectory_done_flag = x[6];
@@ -617,7 +656,6 @@ id(${this.name}_errors).publish_state(error_string.c_str());
               name: 'errors',
               label: 'Errors',
               description: 'Logs any errors from the ODrive',
-              units: 'string',
               endpoint: `/sensor/${this.name}_errors/state`,
               connectionType: 'mqtt',
             },            
