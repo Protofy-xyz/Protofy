@@ -108,6 +108,10 @@ export class Agent {
         return this.children;
     }
 
+    getInterface() {
+        return this.interface
+    }
+
     addChild(agent: Agent) {
         agent.setParent(this);
         this.children.push(agent);
