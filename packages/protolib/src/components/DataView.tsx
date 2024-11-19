@@ -253,7 +253,10 @@ const DataViewInternal = forwardRef(({
 
     useUpdateEffect(() => {
         if (search) {
-            push("search", search)
+            mergePush({
+                search: search,
+                page: 0
+            })
         } else {
             removePush("search")
         }
