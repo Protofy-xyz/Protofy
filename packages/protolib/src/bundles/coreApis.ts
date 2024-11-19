@@ -6,6 +6,7 @@ import { PagesAPI } from './pages/pagesAPI'
 import { KeysAPI } from './keys/keysAPI'
 import { APIsAPI } from './apis/api'
 import { DevicesAPI } from './devices/devices/devicesAPI'
+import { WledAPI } from './wled/api/wledApi'
 import { DeviceSdksAPI } from './devices/deviceSdks/deviceSdksAPI'
 import { DeviceCoresAPI } from './devices/devicecores/devicecoresAPI'
 import { DeviceBoardsAPI } from './devices/deviceBoards/deviceBoardsAPI'
@@ -33,6 +34,7 @@ export const AdminAPIBundles = (app, context) => {
   PagesAPI(app, context)
   APIsAPI(app, context)
   DevicesAPI(app, context)
+  WledAPI(app, context)
   AgentsAPI(app, context)
   DeviceSdksAPI(app, context)
   DeviceCoresAPI(app, context)

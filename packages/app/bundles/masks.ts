@@ -3,6 +3,7 @@ import customVisualUIMasks from '../masks/custom.masks'
 import uiBundleMasks from 'protolib/bundles/ui/masks';
 import apiMasks from 'protolib/bundles/apis/masks';
 import devicesMasks from 'protolib/bundles/devices/devices/masks';
+import wledMasks from '../../protolib/src/bundles/wled/masks';
 import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
 import baseMasks from 'protolib/bundles/basemasks';
 import customEventMasks from 'protolib/bundles/events/masks'
@@ -41,6 +42,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...keyMasks
     ]
     if (paths.apis.includes(segment)) return [
+        ...wledMasks,
         ...customMasks.api,
         ...flowMasks,
         ...flowMasks2,

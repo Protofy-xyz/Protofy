@@ -17,6 +17,7 @@ import playwright from './playwright/context'
 import automations from './automations/context'
 import network from './network/context'
 import deviceContext from './devices/devices/context'
+import wledContext from './wled/context'
 import stateMachines from './stateMachines/context'
 import agents from './agents/agents/context'
 
@@ -34,6 +35,7 @@ export const APIContext = {
     sendMailWithResend,
     executeAutomation,
     ...deviceContext,
+    ...wledContext,
     keys,
     chatGPT,
     discord,
