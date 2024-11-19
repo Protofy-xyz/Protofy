@@ -50,7 +50,7 @@ export const headerSize = 55;
 export const DeleteButton = ({ id, left = false, field, onDelete, size = 20, color = "#EF4444" }) => {
     return <div id={'deleteButton-' + id + field} style={{ display: 'flex', alignSelf: 'center', cursor: 'pointer' }} onClick={onDelete}>
         {/* @ts-ignore */}
-        <X size={size} color={color} style={{ marginRight: left ? '7px' : '2px' }} />
+        <X size={size} color={color} style={{ marginRight: left ? '7px' : '2px', marginLeft: '7px' }} />
     </div>
 }
 
@@ -188,7 +188,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 }
                 const options = param.data?.map((item, index) => {
                     var extraProps = item?.color ? { color: item.color } : {}
-                    return { label: item ?? "default", value: item, ...extraProps }
+                    return { label: item.label ?? item ?? "default", value: item.value ?? item, ...extraProps }
                 })
 
                 return <div style={{ flex: 1, zIndex: 1000 }}>
@@ -253,12 +253,12 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 const initColor = nodeData[param.field] ? pre(nodeData[param.field]) : "#404040"
 
                 return (<div style={{ cursor: "pointer" }}>
-                    <div style={{ width: "36px", height: "36px", backgroundColor: initColor, border: colorPickerVisible ? borderWidth + " solid " + borderColor : "1px #cccccc solid", borderRadius: 5 }} onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></div>
+                    <div style={{ width: "36px", height: "36px", backgroundColor: initColor.value, border: colorPickerVisible ? borderWidth + " solid " + borderColor : "1px #cccccc solid", borderRadius: 5 }}onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></div>
                     <div style={{ cursor: "pointer", position: "absolute", zIndex: 1100 }}>
                         {colorPickerVisible
                             ? <SketchPicker
                                 className="nodrag"
-                                color={initColor}
+                                color={initColor.value}
                                 onChangeComplete={(newColor) => {
                                     dataNotify({ id: id, paramField: param.field, newValue: { r: newColor.rgb.r, g: newColor.rgb.g, b: newColor.rgb.b, a: newColor.rgb.a } })
                                     setNodeData(id, { ...nodeData, [param.field]: getDataFromField(newColor.hex, param.field, nodeData) })
