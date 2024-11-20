@@ -12,6 +12,8 @@ const AgentProtocolSchema = z.object({
         serializerOptions: z.record(z.any()).optional(), // options for the serializer
         encoder: z.string().optional(), // body, query, path, arguments, return, callback...
         encoderOptions: z.record(z.any()).optional(), // options for the encoder
+        auth: z.string().optional(), // basic, bearer, apikey, oauth2, etc.
+        authOptions: z.record(z.any()).optional(), // options for the auth
         //any other protocol specific options like host, port, path, method, headers, etc.
     }).catchall(z.any()).optional(), // Allow any other properties in config
 });
@@ -71,6 +73,14 @@ export class Agent {
 
     getTags() {
         return this.data.tags
+    }
+
+    getAuth() {
+        return this.interface?.getProtocol()?.config?.auth
+    }
+
+    getAuthOptions() {
+        return this.interface?.getProtocol()?.config?.authOptions
     }
 
     getProtocol() {

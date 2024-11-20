@@ -36,6 +36,10 @@ describe('Agents basic behavior', () => {
           config: {
             fn: (user) => {
               return user.name + ', ' + user.age
+            },
+            auth: 'test',
+            authOptions: {
+              testoption: 'testoption'
             }
           }
         },
@@ -57,6 +61,8 @@ describe('Agents basic behavior', () => {
     expect(agent.getName()).toBe('getDisplayInfo');
     expect(agent.getDescription()).toBe('Get display info of a user');
     expect(agent.getTags()).toEqual(['user', 'display']);
+    expect(agent.getAuth()).toBe('test');
+    expect(agent.getAuthOptions()).toEqual({testoption: 'testoption'});
     expect(agent.getProtocol().type).toEqual('function');
     expect(agent.getProtocol().config).toHaveProperty('fn');
     expect(agent.getInputShape()).toEqual(zodToJsonSchema(paramsSchema, "params"))

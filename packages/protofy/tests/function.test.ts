@@ -6,7 +6,6 @@ import functionRunner from '../src/protocols/function';
 let paramsSchema;
 let returnSchema: z.ZodString;
 let agent: Agent;
-let childAgent: Agent;
 
 describe('Function Agents', () => {
   beforeEach(() => {
@@ -34,10 +33,7 @@ describe('Function Agents', () => {
           }
         },
         input: {
-          shape: zodToJsonSchema(paramsSchema, "params"),
-          protocol: {
-            config: {test: 'test'} 
-          }
+          shape: zodToJsonSchema(paramsSchema, "params")
         },
         output: {
           shape: zodToJsonSchema(returnSchema, "displayInfo")
