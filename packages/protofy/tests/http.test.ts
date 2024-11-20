@@ -5,7 +5,7 @@ import httpRunner from '../src/protocols/http';
 import express from 'express';
 
 const app = express();
-
+app.use(express.json());
 app.post('/displayInfo', (req, res) => {
     res.send(req.body.name + ', ' + req.body.age);
 });
@@ -56,13 +56,14 @@ describe('HTTP Agents', () => {
     server.close();
   })
 
-  it('Should be able to call the function and get the result back', () => {
-    // expect(httpRunner(agent, {
-    //     id: 1,
-    //     name: 'John Doe',
-    //     age: 30,
-    //     email: 'a@a.com'
-    // })).toBe('John Doe, 30');
+  it('Should be able to call the function and get the result back', async () => {
+    const response = await httpRunner(agent, {
+        id: 1,
+        name: 'John Doe',
+        age: 30,
+        email: 'a@a.com'
+    })
+    expect(response.result).toBe('John Doe, 30');
   });
 
 });

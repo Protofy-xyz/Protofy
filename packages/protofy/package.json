@@ -12,7 +12,8 @@
         "dist"
     ],
     "dependencies": {
-        "ajv": "8.17.1"
+        "ajv": "8.17.1",
+        "axios": "^1.7.7"
     },
     "devDependencies": {
         "@types/jest": "~29.5.5",
