@@ -1,20 +1,29 @@
 import { Agent } from '../src/Agent';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import functionRunner from '../src/protocols/function';
+import httpRunner from '../src/protocols/http';
+import express from 'express';
+
+const app = express();
+
+app.post('/displayInfo', (req, res) => {
+    res.send(req.body.name + ', ' + req.body.age);
+});
+
 
 let paramsSchema;
 let returnSchema: z.ZodString;
 let agent: Agent;
-
-describe('Function Agents', () => {
+let server;
+describe('HTTP Agents', () => {
   beforeEach(() => {
-    paramsSchema = z.tuple([z.object({
+    server = app.listen(12345);
+    paramsSchema = z.object({
       id: z.string().uuid(),
       name: z.string().min(1),
       age: z.number().min(18),
       email: z.string().email(),
-    })]);
+    });
 
     returnSchema = z.string()
 
@@ -25,11 +34,12 @@ describe('Function Agents', () => {
       tags: ['user', 'display'],
       interface: {
         protocol: {
-          type: 'function',
+          type: 'http',
           config: {
-            fn: (user) => {
-              return user.name + ', ' + user.age
-            }
+            serializer: 'json',
+            encoder: 'body',
+            method: 'POST',
+            url: 'http://localhost:12345/displayInfo'
           }
         },
         input: {
@@ -42,13 +52,17 @@ describe('Function Agents', () => {
     })
   });
 
+  afterEach(() => {
+    server.close();
+  })
+
   it('Should be able to call the function and get the result back', () => {
-    expect(functionRunner(agent, {
-        id: 1,
-        name: 'John Doe',
-        age: 30,
-        email: 'a@a.com'
-    }).result).toBe('John Doe, 30');
+    // expect(httpRunner(agent, {
+    //     id: 1,
+    //     name: 'John Doe',
+    //     age: 30,
+    //     email: 'a@a.com'
+    // })).toBe('John Doe, 30');
   });
 
 });

@@ -17,7 +17,8 @@ export default (agent: Agent, params) => {
     }
 
     //call the function
-    return agent.getProtocol().config.fn(
-        ...(Array.isArray(params) ? params : [params])
-    );
+    return {
+        status: 'ok',
+        result: agent.getProtocol().config.fn(...(Array.isArray(params) ? params : [params]))
+    }
 }
