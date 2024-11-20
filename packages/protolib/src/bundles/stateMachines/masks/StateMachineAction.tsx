@@ -39,8 +39,8 @@ export default {
         instanceName: 'input',
         emitType: 'input',
         payload: 'input',
-        done: { params: { 'param-done': { key: "result"}, 'param-output': { key: "result"}}}, 
-        error: { params: { 'param-error': { key: "err"}, 'param-output': { key: "err"}}},
+        done: { params: { 'param-done': { key: "result"}}}, 
+        error: { params: { 'param-error': { key: "err"}}},
     }}),
     getInitialData: () => {
         return {
