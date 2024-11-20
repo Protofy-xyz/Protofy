@@ -15,18 +15,14 @@
 </h4>
 
 
-<p align="center">The fastest way to create and scale agent networks</p> 
+<p align="center">
+We believe that AI agents need to be more than models. Modern products are powered by a myriad of programs and devices, and those programs and devices are also agents and should be able to communicate with each other. Protofy is the framework that allows humans, AIs and services to talk to each other.
 
-![visual-ui-gif](https://github.com/Protofy-xyz/Protofy/blob/assets/visualui/visualui-2.gif?raw=true)
+With Protofy, any doer can build agent networks that helps them create, iterate and scale digital products and services. In hours.
 
-Protofy is a Full-Stack, batteries included Low-Code enabled web/app and IoT system with an API system and real time messaging.
+The Agent Network provides a way for agents to discover, understand, and interact with each other without human intervention. Users can incorporate their own code and make it available as an agent in the network.
 
-You can use this as a base to fast prototype Apps, webs, IoT systems, automations or APIs.
-Based on: Protofy (protoflow + visualui + protolib + protodevices) + Expo + Next.js + Tamagui + Solito + Express + Aedes + Many other amazing packages
-
-You can think of **Protofy** as a Wordpress but based in **react** and **javascript** and some features from supabase, plus visual widget editors to edit source code inside the admin panel itself and a a visual editor for react pages (wysiwyg).
-
-A ultra-extensible CMS with supercharged capabilities, mobile support and IoT support (esp32 thanks to esphome).
+Our agent definition protocol, network, and platform are open source to foster a community of creators who contribute examples, templates, and connectors.
 
 Check the [getting started](docs/getting-started.md) guide to run Protofy on your computer, directly with npm or using docker.
 
