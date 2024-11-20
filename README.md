@@ -15,7 +15,7 @@
 </h4>
 
 
-<p align="center">
+<p align="center">The fastest way to create and scale agent networks</p> 
 We believe that AI agents need to be more than models. Modern products are powered by a myriad of programs and devices, and those programs and devices are also agents and should be able to communicate with each other. Protofy is the framework that allows humans, AIs and services to talk to each other.
 
 With Protofy, any doer can build agent networks that helps them create, iterate and scale digital products and services. In hours.
