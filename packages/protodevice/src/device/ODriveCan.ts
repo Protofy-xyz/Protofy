@@ -378,7 +378,7 @@ uint8_t axis_state = x[4];
 ESP_LOGD("canbus", "Axis State: %d", axis_state);
 
 // Update the axis state numeric sensor
-id(motor1_axis_state_numeric).publish_state(axis_state);
+id(${this.name}_axis_state_numeric).publish_state(axis_state);
 
 // Map the numeric state to a string and update the text sensor
 if (axis_state == 1) {
