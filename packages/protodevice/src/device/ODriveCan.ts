@@ -114,8 +114,8 @@ id(${this.name}_can_bus).send_data(0x0D, false, vel_data);  // Command ID for Se
                   then: {
                     lambda:
 `// Parse JSON payload
-if (!x.containsKey("position") || !x.containsKey("velocity") || !x.containsKey("torque")) {
-  ESP_LOGW("canbus", "Invalid payload. Expected keys: position, velocity, torque.");
+if (!x.containsKey("position")) {
+  ESP_LOGW("canbus", "Invalid payload. Expected keys: position.");
   return;
 }
 float input_pos = x["position"].as<float>();  // Desired position in revolutions
@@ -154,6 +154,48 @@ memcpy(&pos_data[6], &torque_ff, 2); // Torque feedforward
 
 ESP_LOGD("canbus", "Setting position: %.2f, Velocity: %d, Torque: %d", input_pos, vel_ff, torque_ff);
 id(${this.name}_can_bus).send_data(0x0C, false, pos_data);  // Command ID for Set_Input_Pos
+`,
+                  }
+                }
+              ]
+            }
+          },
+          {
+            name: 'mqtt',
+            config: {
+              on_json_message: [
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.name}/set_max_speed`,
+                  then: {
+                    lambda:
+`// Parse JSON payload for maximum speed
+if (!x.containsKey("max_speed")) {
+  ESP_LOGW("canbus", "Invalid payload. Expected key: max_speed.");
+  return;
+}
+float max_speed = x["max_speed"].as<float>();  // Desired max speed in rev/s
+
+ESP_LOGD("canbus", "Setting maximum speed to: %.2f", max_speed);
+
+// Prepare CAN message for RxSdo command
+std::vector<uint8_t> sdo_data(8);
+uint8_t opcode = 1;  // Write operation
+uint16_t endpoint_id = 394;  // Endpoint ID for vel_limit
+uint8_t reserved = 0;  // Reserved byte
+
+// Copy data to CAN frame
+memcpy(&sdo_data[0], &opcode, 1);             // Opcode
+memcpy(&sdo_data[1], &endpoint_id, 2);        // Endpoint ID
+memcpy(&sdo_data[3], &reserved, 1);           // Reserved byte
+memcpy(&sdo_data[4], &max_speed, 4);          // Max speed as float
+
+// Log the CAN message details
+ESP_LOGD("canbus", "Sending RxSdo command to set vel_limit: Endpoint_ID=%d, Value=%.2f", endpoint_id, max_speed);
+
+// Send the CAN message
+id(${this.name}_can_bus).send_data(0x04, false, sdo_data);
+
+ESP_LOGD("canbus", "Max speed set successfully to %.2f", max_speed);
 `,
                   }
                 }
@@ -539,6 +581,19 @@ id(${this.name}_errors).publish_state(error_string.c_str());
                 type: 'json-schema',
                 schema: {
                   position: { type: 'float', description: 'Position in revolutions' },
+                },
+              },
+            },
+            {
+              name: 'set_max_speed',
+              label: 'Set Max Speed',
+              description: 'Sets the motor max speed',
+              endpoint: `/${this.name}/set_max_speed`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'json-schema',
+                schema: {
+                  speed: { type: 'float', description: 'Max speed in rev/s' },
                 },
               },
             },
