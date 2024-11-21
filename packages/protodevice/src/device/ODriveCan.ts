@@ -374,6 +374,26 @@ id(${this.name}_can_bus).send_data(0x07, false, state_data);  // 0x07 is the CAN
             }
           },
           {
+            name: 'sensor',
+            config: {
+              platform: 'template',
+              name: `${this.name}_bus_voltage`,
+              id: `${this.name}_bus_voltage`,
+              unit_of_measurement: 'V',
+              accuracy_decimals: 2
+            }
+          },
+          {
+            name: 'sensor',
+            config: {
+              platform: 'template',
+              name: `${this.name}_bus_current`,
+              id: `${this.name}_bus_current`,
+              unit_of_measurement: 'A',
+              accuracy_decimals: 2
+            }
+          },
+          {
             name: 'text_sensor',
             config: {
               platform: 'template',
@@ -536,6 +556,25 @@ ESP_LOGD("canbus", "ODrive Errors: %s", error_string.c_str());
 id(${this.name}_errors).publish_state(error_string.c_str());
 `
 
+                    }
+                  ]
+                },
+                {
+                  can_id: 0x17,
+                  then: [
+                    {
+                      lambda:
+`// Decode the CAN message data for bus voltage and current
+float bus_voltage = *reinterpret_cast<const float *>(&x[0]);
+float bus_current = *reinterpret_cast<const float *>(&x[4]);
+
+// Log the values
+ESP_LOGD("canbus", "Bus Voltage: %.2f V, Bus Current: %.2f A", bus_voltage, bus_current);
+
+// Update the template sensors
+id(${this.name}_bus_voltage).publish_state(bus_voltage);
+id(${this.name}_bus_current).publish_state(bus_current);
+`
                     }
                   ]
                 },
@@ -710,6 +749,22 @@ id(${this.name}_errors).publish_state(error_string.c_str());
               label: 'Errors',
               description: 'Logs any errors from the ODrive',
               endpoint: `/sensor/${this.name}_errors/state`,
+              connectionType: 'mqtt',
+            },
+            {
+              name: 'bus_voltage',
+              label: 'Bus Voltage',
+              description: 'Monitors the bus voltage in volts',
+              units: 'V',
+              endpoint: `/sensor/${this.name}_bus_voltage/state`,
+              connectionType: 'mqtt',
+            },
+            {
+              name: 'bus_current',
+              label: 'Bus Current',
+              description: 'Monitors the bus current in amps',
+              units: 'A',
+              endpoint: `/sensor/${this.name}_bus_current/state`,
               connectionType: 'mqtt',
             },            
           ]
