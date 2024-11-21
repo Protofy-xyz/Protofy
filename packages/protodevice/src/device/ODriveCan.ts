@@ -119,8 +119,8 @@ if (!x.containsKey("position") || !x.containsKey("velocity") || !x.containsKey("
   return;
 }
 float input_pos = x["position"].as<float>();  // Desired position in revolutions
-int16_t vel_ff = x["velocity"].as<int16_t>();  // Velocity feedforward
-int16_t torque_ff = x["torque"].as<int16_t>();  // Torque feedforward
+int16_t vel_ff = 1000;  // Velocity feedforward
+int16_t torque_ff = 1000;  // Torque feedforward
 
 ESP_LOGD("canbus", "Parsed JSON: Position=%.2f, Velocity=%d, Torque=%d", input_pos, vel_ff, torque_ff);
 
@@ -539,8 +539,6 @@ id(${this.name}_errors).publish_state(error_string.c_str());
                 type: 'json-schema',
                 schema: {
                   position: { type: 'float', description: 'Position in revolutions' },
-                  velocity: { type: 'int', description: 'Velocity feedforward' },
-                  torque: { type: 'int', description: 'Torque feedforward' },
                 },
               },
             },
