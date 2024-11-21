@@ -593,7 +593,7 @@ id(${this.name}_errors).publish_state(error_string.c_str());
               payload: {
                 type: 'json-schema',
                 schema: {
-                  speed: { type: 'float', description: 'Max speed in rev/s' },
+                  max_speed: { type: 'float', description: 'Max speed in rev/s' },
                 },
               },
             },
