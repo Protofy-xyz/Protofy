@@ -78,7 +78,7 @@ if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   uint32_t requested_state = 8;  // CLOSED_LOOP_CONTROL
   memcpy(&state_data[0], &requested_state, 4);
   ESP_LOGD("canbus", "Setting axis state to CLOSED_LOOP_CONTROL...");
-  id(can_bus).send_data(0x07, false, state_data);
+  id(${this.name}_can_bus).send_data(0x07, false, state_data);
 
   // Set to speed control mode
   std::vector<uint8_t> mode_data(8);
@@ -87,7 +87,7 @@ if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   memcpy(&mode_data[0], &control_mode, 4);
   memcpy(&mode_data[4], &input_mode, 4);
   ESP_LOGD("canbus", "Setting speed control mode...");
-  id(can_bus).send_data(0x0B, false, mode_data);
+  id(${this.name}_can_bus).send_data(0x0B, false, mode_data);
 } else {
   ESP_LOGD("canbus", "Motor is already in CLOSED_LOOP_CONTROL.");
 }
@@ -98,7 +98,7 @@ memcpy(&vel_data[0], &input_vel, 4);   // Velocity in rev/s
 memcpy(&vel_data[4], &torque_ff, 4);  // Torque feedforward in Nm
 
 ESP_LOGD("canbus", "Setting speed: %.2f, Torque: %.2f", input_vel, torque_ff);
-id(can_bus).send_data(0x0D, false, vel_data);  // Command ID for Set_Input_Vel
+id(${this.name}_can_bus).send_data(0x0D, false, vel_data);  // Command ID for Set_Input_Vel
 `,
                   }
                 }
@@ -132,7 +132,7 @@ if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   uint32_t requested_state = 8;  // CLOSED_LOOP_CONTROL
   memcpy(&state_data[0], &requested_state, 4);
   ESP_LOGD("canbus", "Setting axis state to CLOSED_LOOP_CONTROL...");
-  id(can_bus).send_data(0x07, false, state_data);
+  id(${this.name}_can_bus).send_data(0x07, false, state_data);
 
   // Set to position control mode
   std::vector<uint8_t> mode_data(8);
@@ -141,7 +141,7 @@ if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   memcpy(&mode_data[0], &control_mode, 4);
   memcpy(&mode_data[4], &input_mode, 4);
   ESP_LOGD("canbus", "Setting position control mode...");
-  id(can_bus).send_data(0x0B, false, mode_data);
+  id(${this.name}_can_bus).send_data(0x0B, false, mode_data);
 } else {
   ESP_LOGD("canbus", "Motor is already in CLOSED_LOOP_CONTROL.");
 }
@@ -153,7 +153,7 @@ memcpy(&pos_data[4], &vel_ff, 2);    // Velocity feedforward
 memcpy(&pos_data[6], &torque_ff, 2); // Torque feedforward
 
 ESP_LOGD("canbus", "Setting position: %.2f, Velocity: %d, Torque: %d", input_pos, vel_ff, torque_ff);
-id(can_bus).send_data(0x0C, false, pos_data);  // Command ID for Set_Input_Pos
+id(${this.name}_can_bus).send_data(0x0C, false, pos_data);  // Command ID for Set_Input_Pos
 `,
                   }
                 }
@@ -179,7 +179,7 @@ std::vector<uint8_t> calib_data(4);
 memcpy(&calib_data[0], &calibration_state, 4);
 
 ESP_LOGD("canbus", "Sending calibration command for axis %d...", axis_id);
-id(can_bus).send_data(0x07, false, calib_data);
+id(${this.name}_can_bus).send_data(0x07, false, calib_data);
 
 ESP_LOGD("canbus", "Calibration sequence started for axis %d.", axis_id);
 `,                }
@@ -206,7 +206,7 @@ std::vector<uint8_t> index_data(4);
 memcpy(&index_data[0], &find_index_state, 4);
 
 ESP_LOGD("canbus", "Sending find encoder index command for axis %d...", axis_id);
-id(can_bus).send_data(0x07, false, index_data);
+id(${this.name}_can_bus).send_data(0x07, false, index_data);
 
 ESP_LOGD("canbus", "Encoder index search started for axis %d.", axis_id);
 `,                }
@@ -231,7 +231,7 @@ std::vector<uint8_t> clear_data(1);
 clear_data[0] = clear_errors_command;
 
 ESP_LOGD("canbus", "Sending clear errors command for axis %d...", axis_id);
-id(can_bus).send_data(0x18, false, clear_data);  // Command ID for Clear_Errors
+id(${this.name}_can_bus).send_data(0x18, false, clear_data);  // Command ID for Clear_Errors
 
 ESP_LOGD("canbus", "Clear errors command sent for axis %d.", axis_id);
 `,                }
@@ -267,7 +267,7 @@ std::vector<uint8_t> state_data(4);
 memcpy(&state_data[0], &requested_state, 4);
 
 // Send the CAN message to change state
-id(can_bus).send_data(0x07, false, state_data);  // 0x07 is the CAN ID for setting the axis state
+id(${this.name}_can_bus).send_data(0x07, false, state_data);  // 0x07 is the CAN ID for setting the axis state
 `,                }
                 }
               ]
@@ -343,7 +343,7 @@ id(can_bus).send_data(0x07, false, state_data);  // 0x07 is the CAN ID for setti
             name: 'canbus',
             config: {
               platform: 'esp32_can',
-              id: 'can_bus',
+              id: `${this.name}_can_bus`,
               tx_pin: this.txPin,
               rx_pin: this.rxPin,
               can_id: this.odriveCanId,
