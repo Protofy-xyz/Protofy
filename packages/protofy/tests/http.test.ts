@@ -1,7 +1,7 @@
 import { Agent } from '../src/Agent';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import httpRunner from '../src/protocols/http';
+import httpRunner from '../src/runners/http';
 import express from 'express';
 
 const app = express();

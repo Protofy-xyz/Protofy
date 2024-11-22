@@ -1,7 +1,7 @@
 import { Agent } from '../src/Agent';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import functionRunner from '../src/protocols/function';
+import functionRunner from '../src/runners/function';
 
 let paramsSchema;
 let returnSchema: z.ZodString;
