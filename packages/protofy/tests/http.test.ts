@@ -1,7 +1,7 @@
 import { Agent } from '../src/Agent';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import httpRunner from '../src/runners/http';
+import {HTTPProtocol} from '../src/protocols/http';
 import express from 'express';
 
 const app = express();
@@ -57,7 +57,8 @@ describe('HTTP Agents', () => {
   })
 
   it('Should be able to call the function and get the result back', async () => {
-    const response = await httpRunner(agent, {
+    const protocol = HTTPProtocol.create(agent);
+    const response = await protocol.send({
         id: 1,
         name: 'John Doe',
         age: 30,

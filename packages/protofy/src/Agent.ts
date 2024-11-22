@@ -135,12 +135,11 @@ export class Agent {
     setParent(agent: Agent) {
         this.parent = agent;
     }
-}
 
-export function createAgent(data: AgentData, parent?: Agent) {
-    return new Agent(data, parent);
+    static create(data: AgentData, parent?: Agent) {
+        return new Agent(data, parent);
+    }
 }
-
 export class AgentInterface {
     input: AgentIOInterface;
     output: AgentIOInterface;

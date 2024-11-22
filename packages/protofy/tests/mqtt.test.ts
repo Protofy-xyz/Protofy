@@ -3,7 +3,7 @@ import aedes from 'aedes';
 import { Agent } from '../src/Agent';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import mqttRunner from '../src/runners/mqtt';
+import mqttRunner from '../src/protocols/mqtt';
 
 const aedesInstance = new aedes();
 aedesInstance.authenticate = function (client, username, password, callback) { callback(null, true); };

@@ -1,7 +1,7 @@
 import { Agent } from '../src/Agent';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import functionRunner from '../src/runners/function';
+import {FunctionProtocol} from '../src/protocols/function';
 
 let paramsSchema;
 let returnSchema: z.ZodString;
@@ -43,11 +43,11 @@ describe('Function Agents', () => {
   });
 
   it('Should be able to call the function and get the result back', () => {
-    expect(functionRunner(agent, {
-        id: 1,
-        name: 'John Doe',
-        age: 30,
-        email: 'a@a.com'
+    expect(FunctionProtocol.create(agent).send({
+      id: 1,
+      name: 'John Doe',
+      age: 30,
+      email: 'a@a.com'
     }).result).toBe('John Doe, 30');
   });
 

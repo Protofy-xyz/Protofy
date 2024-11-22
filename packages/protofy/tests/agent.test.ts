@@ -1,4 +1,4 @@
-import { Agent, createAgent } from '../src/Agent';
+import { Agent } from '../src/Agent';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
@@ -25,7 +25,7 @@ describe('Agents basic behavior', () => {
       tags: ['child']
     });
 
-    agent = createAgent({
+    agent = Agent.create({
       id: 'getDisplayInfo',
       name: 'getDisplayInfo',
       description: 'Get display info of a user',
