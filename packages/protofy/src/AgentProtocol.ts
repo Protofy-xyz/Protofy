@@ -3,9 +3,11 @@ import { Agent } from "./Agent";
 export class AgentProtocol {
     agent: Agent;
     listeners: Function[];
-    constructor(agent: Agent) {
+    options: any
+    constructor(agent: Agent, options?: any) {
         this.agent = agent;
         this.listeners = [];
+        this.options = options;
     }
 
     onMessage(cb: Function) {
@@ -20,7 +22,7 @@ export class AgentProtocol {
         throw new Error('Not implemented');
     }
 
-    static create(agent: Agent) {
-        return new AgentProtocol(agent);
+    static create(agent: Agent, options?: any) {
+        return new AgentProtocol(agent, options);
     }
 }

@@ -3,7 +3,8 @@ import aedes from 'aedes';
 import { Agent } from '../src/Agent';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import mqttRunner from '../src/protocols/mqtt';
+import {MQTTProtocol} from '../src/protocols/mqtt';
+import * as mqtt from 'mqtt';
 
 const aedesInstance = new aedes();
 aedesInstance.authenticate = function (client, username, password, callback) { callback(null, true); };
@@ -12,15 +13,19 @@ let paramsSchema;
 let returnSchema;
 let agent;
 let server;
+let mqttClient;
 
 describe('MQTT Agents', () => {
-  beforeEach(() => {
+  beforeAll(async () => {
     server = net.createServer((socket) => {
       aedesInstance.handle(socket);
     });
 
     server.listen(12346);
-
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    mqttClient = mqtt.connect('mqtt://localhost:12346');
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    
     paramsSchema = z.object({
       id: z.string().uuid(),
       name: z.string().min(1),
@@ -52,12 +57,12 @@ describe('MQTT Agents', () => {
     });
   });
 
-  afterEach(() => {
+  afterAll(() => {
     server.close();
     aedesInstance.close();
   });
 
-  it.skip('Should be able to run the agent through mqtt', async () => {
+  it('Should be able to run the agent through mqtt', async () => {
     // Variables para almacenar el estado y el mensaje publicado
     let messagePublished = false;
     let publishedPayload = null;
@@ -76,8 +81,8 @@ describe('MQTT Agents', () => {
       age: 30,
       email: 'a@a.com',
     };
-
-    await mqttRunner(agent, payload);
+    const protocol = MQTTProtocol.create(agent, mqttClient);
+    await protocol.send(payload);
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(messagePublished).toBe(true);
     expect(() => paramsSchema.parse(JSON.parse(publishedPayload))).not.toThrow();

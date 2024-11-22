@@ -1,22 +1,27 @@
 import { Agent } from "../Agent";
-
-//options is for auth params and similar protocol-specific options
-export default async (agent: Agent, params: any, options = {}) => {
-    const protocol = agent.getProtocol();
-    if (protocol.type !== 'mqtt') {
-        throw new Error('Error: Invalid protocol type, expected http');
+import { AgentProtocol } from "../AgentProtocol";
+export class MQTTProtocol extends AgentProtocol {
+    mqttClient: any;
+    constructor(agent: Agent, mqttClient: any) {
+        super(agent);
+        this.mqttClient = mqttClient;
     }
 
-    if (!protocol.config || !protocol.config.url || !protocol.config.topic) {
-        throw new Error('Error: Missing URL or topic in protocol config');
-    }
-
-    const {
-        url,
-        topic,
-        encoder = 'body',
-        serializer = 'json',
-    } = protocol.config;
-
+    async send(params, options?) {
+        const agent = this.agent
+        const protocol = agent.getProtocol();
+        if (protocol.type !== 'mqtt') {
+            throw new Error('Error: Invalid protocol type, expected http');
+        }
     
-};
+        const {
+            topic,
+        } = protocol.config;
+
+        this.mqttClient.publish(topic, JSON.stringify(params));
+    }
+
+    static create(agent: Agent, mqttClient: any) {
+        return new MQTTProtocol(agent, mqttClient);
+    }
+}
