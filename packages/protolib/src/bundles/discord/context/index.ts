@@ -136,7 +136,7 @@ export const discord = {
 
             // Call the onMessagesRead callback with the fetched messages
             if (onMessagesRead) {
-                await onMessagesRead(messages);
+                await onMessagesRead(messages, client);
             }
         } catch (err) {
             console.error("Error fetching messages from the channel:", err);

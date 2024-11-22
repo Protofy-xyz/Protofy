@@ -78,7 +78,7 @@ if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   uint32_t requested_state = 8;  // CLOSED_LOOP_CONTROL
   memcpy(&state_data[0], &requested_state, 4);
   ESP_LOGD("canbus", "Setting axis state to CLOSED_LOOP_CONTROL...");
-  id(can_bus).send_data(0x07, false, state_data);
+  id(${this.name}_can_bus).send_data(0x07, false, state_data);
 
   // Set to speed control mode
   std::vector<uint8_t> mode_data(8);
@@ -87,7 +87,7 @@ if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   memcpy(&mode_data[0], &control_mode, 4);
   memcpy(&mode_data[4], &input_mode, 4);
   ESP_LOGD("canbus", "Setting speed control mode...");
-  id(can_bus).send_data(0x0B, false, mode_data);
+  id(${this.name}_can_bus).send_data(0x0B, false, mode_data);
 } else {
   ESP_LOGD("canbus", "Motor is already in CLOSED_LOOP_CONTROL.");
 }
@@ -98,7 +98,7 @@ memcpy(&vel_data[0], &input_vel, 4);   // Velocity in rev/s
 memcpy(&vel_data[4], &torque_ff, 4);  // Torque feedforward in Nm
 
 ESP_LOGD("canbus", "Setting speed: %.2f, Torque: %.2f", input_vel, torque_ff);
-id(can_bus).send_data(0x0D, false, vel_data);  // Command ID for Set_Input_Vel
+id(${this.name}_can_bus).send_data(0x0D, false, vel_data);  // Command ID for Set_Input_Vel
 `,
                   }
                 }
@@ -114,13 +114,13 @@ id(can_bus).send_data(0x0D, false, vel_data);  // Command ID for Set_Input_Vel
                   then: {
                     lambda:
 `// Parse JSON payload
-if (!x.containsKey("position") || !x.containsKey("velocity") || !x.containsKey("torque")) {
-  ESP_LOGW("canbus", "Invalid payload. Expected keys: position, velocity, torque.");
+if (!x.containsKey("position")) {
+  ESP_LOGW("canbus", "Invalid payload. Expected keys: position.");
   return;
 }
 float input_pos = x["position"].as<float>();  // Desired position in revolutions
-int16_t vel_ff = x["velocity"].as<int16_t>();  // Velocity feedforward
-int16_t torque_ff = x["torque"].as<int16_t>();  // Torque feedforward
+int16_t vel_ff = 1000;  // Velocity feedforward
+int16_t torque_ff = 1000;  // Torque feedforward
 
 ESP_LOGD("canbus", "Parsed JSON: Position=%.2f, Velocity=%d, Torque=%d", input_pos, vel_ff, torque_ff);
 
@@ -132,7 +132,7 @@ if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   uint32_t requested_state = 8;  // CLOSED_LOOP_CONTROL
   memcpy(&state_data[0], &requested_state, 4);
   ESP_LOGD("canbus", "Setting axis state to CLOSED_LOOP_CONTROL...");
-  id(can_bus).send_data(0x07, false, state_data);
+  id(${this.name}_can_bus).send_data(0x07, false, state_data);
 
   // Set to position control mode
   std::vector<uint8_t> mode_data(8);
@@ -141,7 +141,7 @@ if (current_axis_state != 8) {  // If not in CLOSED_LOOP_CONTROL
   memcpy(&mode_data[0], &control_mode, 4);
   memcpy(&mode_data[4], &input_mode, 4);
   ESP_LOGD("canbus", "Setting position control mode...");
-  id(can_bus).send_data(0x0B, false, mode_data);
+  id(${this.name}_can_bus).send_data(0x0B, false, mode_data);
 } else {
   ESP_LOGD("canbus", "Motor is already in CLOSED_LOOP_CONTROL.");
 }
@@ -153,7 +153,49 @@ memcpy(&pos_data[4], &vel_ff, 2);    // Velocity feedforward
 memcpy(&pos_data[6], &torque_ff, 2); // Torque feedforward
 
 ESP_LOGD("canbus", "Setting position: %.2f, Velocity: %d, Torque: %d", input_pos, vel_ff, torque_ff);
-id(can_bus).send_data(0x0C, false, pos_data);  // Command ID for Set_Input_Pos
+id(${this.name}_can_bus).send_data(0x0C, false, pos_data);  // Command ID for Set_Input_Pos
+`,
+                  }
+                }
+              ]
+            }
+          },
+          {
+            name: 'mqtt',
+            config: {
+              on_json_message: [
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.name}/set_max_speed`,
+                  then: {
+                    lambda:
+`// Parse JSON payload for maximum speed
+if (!x.containsKey("max_speed")) {
+  ESP_LOGW("canbus", "Invalid payload. Expected key: max_speed.");
+  return;
+}
+float max_speed = x["max_speed"].as<float>();  // Desired max speed in rev/s
+
+ESP_LOGD("canbus", "Setting maximum speed to: %.2f", max_speed);
+
+// Prepare CAN message for RxSdo command
+std::vector<uint8_t> sdo_data(8);
+uint8_t opcode = 1;  // Write operation
+uint16_t endpoint_id = 394;  // Endpoint ID for vel_limit
+uint8_t reserved = 0;  // Reserved byte
+
+// Copy data to CAN frame
+memcpy(&sdo_data[0], &opcode, 1);             // Opcode
+memcpy(&sdo_data[1], &endpoint_id, 2);        // Endpoint ID
+memcpy(&sdo_data[3], &reserved, 1);           // Reserved byte
+memcpy(&sdo_data[4], &max_speed, 4);          // Max speed as float
+
+// Log the CAN message details
+ESP_LOGD("canbus", "Sending RxSdo command to set vel_limit: Endpoint_ID=%d, Value=%.2f", endpoint_id, max_speed);
+
+// Send the CAN message
+id(${this.name}_can_bus).send_data(0x04, false, sdo_data);
+
+ESP_LOGD("canbus", "Max speed set successfully to %.2f", max_speed);
 `,
                   }
                 }
@@ -179,7 +221,7 @@ std::vector<uint8_t> calib_data(4);
 memcpy(&calib_data[0], &calibration_state, 4);
 
 ESP_LOGD("canbus", "Sending calibration command for axis %d...", axis_id);
-id(can_bus).send_data(0x07, false, calib_data);
+id(${this.name}_can_bus).send_data(0x07, false, calib_data);
 
 ESP_LOGD("canbus", "Calibration sequence started for axis %d.", axis_id);
 `,                }
@@ -206,7 +248,7 @@ std::vector<uint8_t> index_data(4);
 memcpy(&index_data[0], &find_index_state, 4);
 
 ESP_LOGD("canbus", "Sending find encoder index command for axis %d...", axis_id);
-id(can_bus).send_data(0x07, false, index_data);
+id(${this.name}_can_bus).send_data(0x07, false, index_data);
 
 ESP_LOGD("canbus", "Encoder index search started for axis %d.", axis_id);
 `,                }
@@ -231,7 +273,7 @@ std::vector<uint8_t> clear_data(1);
 clear_data[0] = clear_errors_command;
 
 ESP_LOGD("canbus", "Sending clear errors command for axis %d...", axis_id);
-id(can_bus).send_data(0x18, false, clear_data);  // Command ID for Clear_Errors
+id(${this.name}_can_bus).send_data(0x18, false, clear_data);  // Command ID for Clear_Errors
 
 ESP_LOGD("canbus", "Clear errors command sent for axis %d.", axis_id);
 `,                }
@@ -267,7 +309,7 @@ std::vector<uint8_t> state_data(4);
 memcpy(&state_data[0], &requested_state, 4);
 
 // Send the CAN message to change state
-id(can_bus).send_data(0x07, false, state_data);  // 0x07 is the CAN ID for setting the axis state
+id(${this.name}_can_bus).send_data(0x07, false, state_data);  // 0x07 is the CAN ID for setting the axis state
 `,                }
                 }
               ]
@@ -332,6 +374,26 @@ id(can_bus).send_data(0x07, false, state_data);  // 0x07 is the CAN ID for setti
             }
           },
           {
+            name: 'sensor',
+            config: {
+              platform: 'template',
+              name: `${this.name}_bus_voltage`,
+              id: `${this.name}_bus_voltage`,
+              unit_of_measurement: 'V',
+              accuracy_decimals: 2
+            }
+          },
+          {
+            name: 'sensor',
+            config: {
+              platform: 'template',
+              name: `${this.name}_bus_current`,
+              id: `${this.name}_bus_current`,
+              unit_of_measurement: 'A',
+              accuracy_decimals: 2
+            }
+          },
+          {
             name: 'text_sensor',
             config: {
               platform: 'template',
@@ -343,7 +405,7 @@ id(can_bus).send_data(0x07, false, state_data);  // 0x07 is the CAN ID for setti
             name: 'canbus',
             config: {
               platform: 'esp32_can',
-              id: 'can_bus',
+              id: `${this.name}_can_bus`,
               tx_pin: this.txPin,
               rx_pin: this.rxPin,
               can_id: this.odriveCanId,
@@ -497,6 +559,25 @@ id(${this.name}_errors).publish_state(error_string.c_str());
                     }
                   ]
                 },
+                {
+                  can_id: 0x17,
+                  then: [
+                    {
+                      lambda:
+`// Decode the CAN message data for bus voltage and current
+float bus_voltage = *reinterpret_cast<const float *>(&x[0]);
+float bus_current = *reinterpret_cast<const float *>(&x[4]);
+
+// Log the values
+ESP_LOGD("canbus", "Bus Voltage: %.2f V, Bus Current: %.2f A", bus_voltage, bus_current);
+
+// Update the template sensors
+id(${this.name}_bus_voltage).publish_state(bus_voltage);
+id(${this.name}_bus_current).publish_state(bus_current);
+`
+                    }
+                  ]
+                },
               ]
             }
           }
@@ -539,8 +620,19 @@ id(${this.name}_errors).publish_state(error_string.c_str());
                 type: 'json-schema',
                 schema: {
                   position: { type: 'float', description: 'Position in revolutions' },
-                  velocity: { type: 'int', description: 'Velocity feedforward' },
-                  torque: { type: 'int', description: 'Torque feedforward' },
+                },
+              },
+            },
+            {
+              name: 'set_max_speed',
+              label: 'Set Max Speed',
+              description: 'Sets the motor max speed',
+              endpoint: `/${this.name}/set_max_speed`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'json-schema',
+                schema: {
+                  max_speed: { type: 'float', description: 'Max speed in rev/s' },
                 },
               },
             },
@@ -657,6 +749,22 @@ id(${this.name}_errors).publish_state(error_string.c_str());
               label: 'Errors',
               description: 'Logs any errors from the ODrive',
               endpoint: `/sensor/${this.name}_errors/state`,
+              connectionType: 'mqtt',
+            },
+            {
+              name: 'bus_voltage',
+              label: 'Bus Voltage',
+              description: 'Monitors the bus voltage in volts',
+              units: 'V',
+              endpoint: `/sensor/${this.name}_bus_voltage/state`,
+              connectionType: 'mqtt',
+            },
+            {
+              name: 'bus_current',
+              label: 'Bus Current',
+              description: 'Monitors the bus current in amps',
+              units: 'A',
+              endpoint: `/sensor/${this.name}_bus_current/state`,
               connectionType: 'mqtt',
             },            
           ]
