@@ -22,6 +22,18 @@ export interface ChatMessageType {
   type: "text" | "image_url";
   id: string;
 }
+
+export interface ChatData {
+  id: string;
+  createdAt: string;
+  chats: ChatMessageType[];
+  title: string;
+  isTitleEdited: boolean;
+}
+
+export interface ChatHistoryType {
+  [chatName: string]: string[]; 
+}
 export interface SystemMessageType {
   message: string;
   useForAllChats: boolean;
@@ -72,17 +84,16 @@ export interface SettingsType {
   setModal: (value: ModalList) => void;
   setDalleImageSize: (value: ImageSize, type: "dall-e-3") => void;
   setApiUrl: (url: string) => void;
-}
-export interface ChatType {
+}export interface ChatType {
   chats: ChatMessageType[];
-  chatHistory: string[];
+  chatHistory: ChatHistoryType;
   addChat: (chat: ChatMessageType, index?: number) => void;
   editChatMessage: (chat: string, updateIndex: number) => void;
   addNewChat: () => void;
   saveChats: () => void;
   viewSelectedChat: (chatId: string) => void;
   resetChatAt: (index: number) => void;
-  handleDeleteChats: (chatid: string) => void;
+  handleDeleteChats: (chatId: string) => void;
   editChatsTitle: (id: string, title: string) => void;
   clearAllChats: () => void;
 }
@@ -105,13 +116,15 @@ export interface AuthType {
 const useChat = create<ChatType>((set, get) => ({
   chats: [],
   chatHistory: localStorage.getItem("chatHistory")
-    ? JSON.parse(localStorage.getItem("chatHistory") as string)
-    : [],
+    ? (JSON.parse(localStorage.getItem("chatHistory") as string) as ChatHistoryType)
+    : {},
+
   addChat: (chat, index) => {
     set(
       produce((state: ChatType) => {
-        if (index || index === 0) state.chats[index] = chat;
-        else {
+        if (index !== undefined) {
+          state.chats[index] = chat;
+        } else {
           state.chats.push(chat);
         }
       })
@@ -120,15 +133,18 @@ const useChat = create<ChatType>((set, get) => ({
       get().saveChats();
     }
   },
-  editChatMessage: (chat, updateIndex) => {
+
+  editChatMessage: (content, updateIndex) => {
     set(
       produce((state: ChatType) => {
-        state.chats[updateIndex].content = chat;
+        if (state.chats[updateIndex]) {
+          state.chats[updateIndex].content = content;
+        }
       })
     );
   },
+
   addNewChat: () => {
-    if (get().chats.length === 0) return;
     set(
       produce((state: ChatType) => {
         state.chats = [];
@@ -137,83 +153,121 @@ const useChat = create<ChatType>((set, get) => ({
   },
 
   saveChats: () => {
-    let chat_id = get().chats[0].id;
-    let title;
-    if (localStorage.getItem(chat_id)) {
-      const data = JSON.parse(localStorage.getItem(chat_id) ?? "");
-      if (data.isTitleEdited) {
-        title = data.title;
-      }
-    }
-    const data = {
-      id: chat_id,
+    const { settings } = useSettings.getState();
+    const apiUrl = settings.apiUrl;
+    const chatName = apiUrl.split("/").pop() as string;
+
+    if (!chatName) return;
+
+    const chatId = get().chats[0]?.id;
+    if (!chatId) return;
+
+    const data: ChatData = {
+      id: chatId,
       createdAt: new Date().toISOString(),
       chats: get().chats,
-      title: title ? title : get().chats[0].content,
-      isTitleEdited: Boolean(title),
+      title: get().chats[0]?.content || "Untitled",
+      isTitleEdited: false,
     };
 
-    localStorage.setItem(chat_id, JSON.stringify(data));
-    if (get().chatHistory.includes(chat_id)) return;
-    localStorage.setItem(
-      "chatHistory",
-      JSON.stringify([...get().chatHistory, chat_id])
-    );
+    localStorage.setItem(chatId, JSON.stringify(data));
+
+    const currentChatHistory = get().chatHistory;
+    const updatedChatHistory = {
+      ...currentChatHistory,
+      [chatName]: [...(currentChatHistory[chatName] || []), chatId],
+    };
+
+    localStorage.setItem("chatHistory", JSON.stringify(updatedChatHistory));
+
     set(
       produce((state: ChatType) => {
-        state.chatHistory.push(chat_id);
+        state.chatHistory = updatedChatHistory;
       })
     );
   },
+
   viewSelectedChat: (chatId) => {
     set(
       produce((state: ChatType) => {
-        if (!localStorage.getItem(chatId)) return;
-        state.chats =
-          JSON.parse(localStorage.getItem(chatId) ?? "")?.chats ?? [];
+        const chatData = localStorage.getItem(chatId);
+        if (!chatData) return;
+        state.chats = JSON.parse(chatData)?.chats || [];
       })
     );
   },
+
   resetChatAt: (index) => {
     set(
       produce((state: ChatType) => {
-        state.chats[index].content = "";
+        if (state.chats[index]) {
+          state.chats[index].content = "";
+        }
       })
     );
   },
-  handleDeleteChats: (chatid) => {
+
+  handleDeleteChats: (chatId) => {
+    const { settings } = useSettings.getState();
+    const apiUrl = settings.apiUrl;
+    const chatName = apiUrl.split("/").pop() as string;
+
+    if (!chatName) return;
+
     set(
       produce((state: ChatType) => {
-        state.chatHistory = state.chatHistory.filter((id) => id !== chatid);
-        state.chats = [];
-        localStorage.removeItem(chatid);
-        localStorage.setItem("chatHistory", JSON.stringify(state.chatHistory));
+        const currentChatHistory = { ...state.chatHistory };
+        if (currentChatHistory[chatName]) {
+          currentChatHistory[chatName] = currentChatHistory[chatName].filter(
+            (id) => id !== chatId
+          );
+          if (currentChatHistory[chatName].length === 0) {
+            delete currentChatHistory[chatName];
+          }
+        }
+
+        state.chatHistory = currentChatHistory;
+
+        localStorage.removeItem(chatId);
+        localStorage.setItem("chatHistory", JSON.stringify(currentChatHistory));
       })
     );
   },
+
   editChatsTitle: (id, title) => {
     set(
       produce((state: ChatType) => {
-        const chat = JSON.parse(localStorage.getItem(id) ?? "");
-        chat.title = title;
-        chat.isTitleEdited = true;
-        localStorage.setItem(id, JSON.stringify(chat));
+        const chatData = localStorage.getItem(id);
+        if (chatData) {
+          const parsedChat = JSON.parse(chatData) as ChatData;
+          parsedChat.title = title;
+          parsedChat.isTitleEdited = true;
+          localStorage.setItem(id, JSON.stringify(parsedChat));
+        }
       })
     );
   },
+
   clearAllChats: () => {
     set(
       produce((state: ChatType) => {
-        state.chatHistory.forEach((id) => {
-          localStorage.removeItem(id);
+        const currentChatHistory = state.chatHistory;
+
+        Object.values(currentChatHistory).forEach((chatIds) => {
+          chatIds.forEach((id) => {
+            localStorage.removeItem(id);
+          });
         });
+
+        state.chatHistory = {};
         state.chats = [];
-        state.chatHistory = [];
+
         localStorage.removeItem("chatHistory");
       })
     );
   },
 }));
+
 
 const useAuth = create<AuthType>()(
   persist(
@@ -366,14 +420,25 @@ export const priority = [
 ].concat(months);
 
 export const selectChatsHistory = (state: ChatType) => {
+  const { settings } = useSettings.getState();
   const sortedData: Record<
     string,
     { title: string; id: string; month: string; month_id: number }[]
   > = {};
-  state.chatHistory.forEach((chat_id) => {
-    const { title, id, createdAt } = JSON.parse(
-      localStorage.getItem(chat_id) as string
-    );
+
+  const apiUrl = settings.apiUrl || "";
+  const currentAssistant = apiUrl.split("/").pop();
+
+  if (!currentAssistant || !state.chatHistory[currentAssistant]) {
+    return sortedData; 
+  }
+
+  state.chatHistory[currentAssistant].forEach((chatId) => {
+    const chatData = localStorage.getItem(chatId);
+
+    if (!chatData) return;
+
+    const { title, id, createdAt } = JSON.parse(chatData);
     const myDate = moment(createdAt, "YYYY-MM-DD");
     const currentDate = moment();
     const month = myDate.toDate().getMonth();
@@ -385,32 +450,29 @@ export const selectChatsHistory = (state: ChatType) => {
       month_id: month,
     };
 
-    if (myDate.isSame(currentDate.format("YYYY-MM-DD"))) {
-      if (!sortedData.hasOwnProperty("Today")) {
+    if (myDate.isSame(currentDate, "day")) {
+      if (!sortedData["Today"]) {
         sortedData["Today"] = [];
       }
       sortedData["Today"].push(data);
-      return;
     } else if (currentDate.subtract(7, "days").isBefore(myDate)) {
-      if (!sortedData.hasOwnProperty("Previous 7 Days")) {
+      if (!sortedData["Previous 7 Days"]) {
         sortedData["Previous 7 Days"] = [];
       }
       sortedData["Previous 7 Days"].push(data);
-      return;
     } else if (currentDate.subtract(30, "days").isBefore(myDate)) {
-      if (!sortedData.hasOwnProperty("Previous 30 Days")) {
+      if (!sortedData["Previous 30 Days"]) {
         sortedData["Previous 30 Days"] = [];
       }
       sortedData["Previous 30 Days"].push(data);
-      return;
     } else {
-      if (!sortedData.hasOwnProperty(months[month])) {
+      if (!sortedData[months[month]]) {
         sortedData[months[month]] = [];
       }
       sortedData[months[month]].push(data);
     }
   });
-  // const history = Object.keys(sortedData);
+
   return sortedData;
 };
 
