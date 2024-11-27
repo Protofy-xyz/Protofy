@@ -1,12 +1,7 @@
 import classnames from "classnames";
 import ChatHistory from "./ChatHistory";
-import Avatar from "../Avatar/Avatar";
-import { X, Plus, MessageSquare, Settings as SettingsIcon, MoreHorizontal, PanelLeft } from "lucide-react";
+import { X, Plus, PanelLeft } from "lucide-react";
 import useChat, { ModalList, useAuth, useSettings } from "../../store/store";
-import Settings from "../modals/Settings";
-import Modal from "../modals/Modal";
-import SystemMessage from "../modals/SystemMessage";
-
 export default function Navbar({
   active,
   setActive,
@@ -16,18 +11,10 @@ export default function Navbar({
 }) {
   const addNewChat = useChat((state) => state.addNewChat);
   const [
-    isVisible,
-    setModalVisible,
-    isSystemMessageModalVisible,
-    setSystemMessageModalVisible,
     selectedModal,
     modalsList,
     setModal,
   ] = useSettings((state) => [
-    state.isModalVisible,
-    state.setModalVisible,
-    state.isSystemMessageModalVisible,
-    state.setSystemMessageModalVisible,
     state.settings.selectedModal,
     state.modalsList,
     state.setModal,
@@ -114,39 +101,7 @@ export default function Navbar({
               </select>
 
             </div>
-            <div className="[&>.options]:focus-within:visible">
-              <button
-                type="button"
-                className="px-2 relative py-2 inline-flex w-full items-center hover:bg-gray-100 dark:hover:bg-gray-700 transition group bg-transparent text-black dark:text-white"
-              >
-                <Avatar className="h-11 w-11" />
-                <span className="p-2">{name}</span>
-                <span className="ml-auto text-gray-400 dark:text-gray-200 text-2xl">
-                  <MoreHorizontal />
-                </span>
-              </button>
-              <div className="options absolute bottom-12 rounded-md left-0 right-0 bg-gray-100 dark:bg-gray-800 font-normal invisible transition m-2 z-30 text-gray-800 dark:text-gray-300">
-                {/* <button
-                  className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 w-full text-left flex items-center"
-                  onClick={() => setSystemMessageModalVisible(true)}
-                >
-                  <span className="mr-2 p-1 text-xl flex items-center">
-                    <MessageSquare />
-                  </span>
-                  <span>Custom instructions</span>
-                </button> */}
-                <button
-                  className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 w-full text-left flex items-center"
-                  onClick={() => setModalVisible(true)}
-                >
-                  <span className="mr-2 p-1 text-xl flex items-center">
-                    <SettingsIcon />
-                  </span>
-                  <span>Settings</span>
-                </button>
-                <div className="h-[1px] bg-gray-300 dark:bg-gray-700"></div>
-              </div>
-            </div>
+
           </div>
           <button
             type="button"
@@ -159,12 +114,6 @@ export default function Navbar({
           </button>
         </nav>
       </div>
-      <Modal visible={isVisible}>
-        <Settings />
-      </Modal>
-      <Modal visible={isSystemMessageModalVisible}>
-        <SystemMessage />
-      </Modal>
     </>
   );
 
