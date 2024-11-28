@@ -2,9 +2,6 @@ import { MessageSquare, Trash2, Pencil, Check, X } from "lucide-react";
 import useChat, { isChatSelected } from "../../store/store";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import Modal from "../modals/Modal";
-import ConfirmDelete from "../ConfirmDelete/ConfirmDelete";
-import { createPortal } from "react-dom";
 
 export default function ChatRef({
   chat,
@@ -19,7 +16,6 @@ export default function ChatRef({
   ]);
   const [editTitle, setEditTitle] = useState(chat.title);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [confirmDeleteChat, setConfirmDeleteChat] = useState(false);
   const isTitleEditeble = isSelected && isEditingTitle;
 
   useEffect(() => {
@@ -34,10 +30,6 @@ export default function ChatRef({
     setEditTitle(title);
     editChatsTitle(id, title);
   }
-  function handleDeleteChats(id: string) {
-    deleteChat(id);
-    setConfirmDeleteChat(false);
-  }
 
   return (
     <div
@@ -48,12 +40,12 @@ export default function ChatRef({
     >
       {!isTitleEditeble && (
         <button
-          className="  py-2  w-3/4 flex  items-center flex-grow  transition p-2"
+          className="py-2 w-3/4 flex items-center flex-grow transition p-2"
           onClick={() => viewSelectedChat(chat.id)}
           title={chat.title}
         >
-          <span className="mr-2  flex">
-          <MessageSquare />
+          <span className="mr-2 flex">
+            <MessageSquare />
           </span>
 
           <span className="text-sm truncate capitalize">
@@ -65,58 +57,43 @@ export default function ChatRef({
         <input
           type="text"
           value={editTitle}
-          className=" bg-inherit border border-blue-400 w-4/5 ml-2 p-1 outline-none"
+          className="bg-inherit border border-blue-400 w-4/5 ml-2 p-1 outline-none"
           autoFocus
           onChange={(e) => setEditTitle(e.target.value)}
         />
       )}
       {isSelected && !isEditingTitle && (
-        <div className=" inline-flex w-1/4 mx-2  items-center justify-between">
+        <div className="inline-flex w-1/4 mx-2 items-center justify-between">
           <button
-            className={classNames(" mr-2 flex hover:text-blue-300")}
+            className={classNames("mr-2 flex hover:text-blue-300")}
             onClick={() => setIsEditingTitle(true)}
           >
             <Pencil />
           </button>
           <button
-            className={classNames("  flex hover:text-red-300")}
-            onClick={() => setConfirmDeleteChat(true)}
+            className={classNames("flex hover:text-red-300")}
+            onClick={() => deleteChat(chat.id)}
           >
             <Trash2 />
           </button>
         </div>
       )}
       {isSelected && isEditingTitle && (
-        <div className=" inline-flex w-1/5 mx-2  items-center justify-between">
+        <div className="inline-flex w-1/5 mx-2 items-center justify-between">
           <button
-            className={classNames(" mr-2 flex hover:text-blue-300")}
+            className={classNames("mr-2 flex hover:text-blue-300")}
             onClick={() => handleEditTitle(chat.id, editTitle)}
           >
             <Check />
           </button>
           <button
-            className={classNames("  flex hover:text-red-300")}
+            className={classNames("flex hover:text-red-300")}
             onClick={() => setIsEditingTitle(false)}
           >
             <X />
           </button>
         </div>
       )}
-      {/* {createPortal(
-        <Modal visible={confirmDeleteChat}>
-          <ConfirmDelete
-            onDelete={() => handleDeleteChats(chat.id)}
-            onCancel={() => setConfirmDeleteChat(false)}
-          >
-            <p className="text-sm">
-              Are you sure you want to delete this chat? This action cannot be
-              undone.
-            </p>
-          </ConfirmDelete>
-        </Modal>,
-        document.getElementById("modal") as HTMLElement,
-        "confirm-delete-chat"
-      )} */}
     </div>
   );
 }
