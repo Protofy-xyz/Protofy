@@ -131,7 +131,7 @@ const getDB = (path, req, session) => {
       const route = value.route.startsWith('/') ? value.route : '/' + value.route
       //TODO: develop a multy system pages api, compatible with multiple app frontends
       //Fow now, we use the template name to determine the frontend
-      const pagesAppDir = template == 'admin' || template == 'adminblank' ? adminPanelPagesDir(getRoot(req)) : nextPagesDir(getRoot(req))
+      const pagesAppDir = template.startsWith("admin") ? adminPanelPagesDir(getRoot(req)) : nextPagesDir(getRoot(req))
       try {
         await fs.access(filePath, fs.constants.F_OK)
         // console.log('File: ' + filePath + ' already exists, not executing template')
