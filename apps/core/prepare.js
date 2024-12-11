@@ -6,7 +6,7 @@ if(!fs.existsSync('./../../.env')) {
 } else {
     const fileContent = fs.readFileSync('./../../.env').toString()
     if(!fileContent.includes('TOKEN_SECRET')) {
-        fs.appendFileSync(content)
+        fs.appendFileSync('./../../.env', content)
     }
 }
 
