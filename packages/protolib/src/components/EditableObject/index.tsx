@@ -16,7 +16,7 @@ import {useTint} from '../../lib/Tints'
 import { ItemMenu } from "../ItemMenu";
 import { getElement } from "./Element";
 import { EditableObjectProps } from "./types";
-export { EditableObjectProps } from "./types";
+export * from "./types";
 
 export const OpenedSectionsContext = createContext<[string[], Function]>([[], (openedSections) => { }]);
 
