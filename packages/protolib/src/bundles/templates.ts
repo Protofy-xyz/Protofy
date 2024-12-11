@@ -118,13 +118,17 @@ export const pageTemplates = {
         id: "adminblank", 
         name: "Admin blank" 
     },
-    "landing": {
-        id: "landing",
-        name: "Landing"
-    },
     "admindashboard": {
         id: "admindashboard",
         name: "Admin dashboard"
+    },
+    "dashboard": {
+        id: "dashboard",
+        name: "Dashboard"
+    },
+    "landing": {
+        id: "landing",
+        name: "Landing"
     },
     "iot": {
         id: "iot",

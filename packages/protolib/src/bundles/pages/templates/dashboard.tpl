@@ -7,22 +7,23 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 
 import { Protofy, API } from 'protobase'
 import { SSR } from 'protolib/lib/SSR';
-import { AdminPage } from 'protolib/components/AdminPage'
+import { Page } from 'protolib/components/Page'
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { withSession } from 'protolib/lib/Session';
-import { YStack } from '@my/ui';
+import { XStack, YStack } from '@my/ui';
+import { BigTitle } from 'protolib/components/BigTitle'
 import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage, TotalUsers, LastEvents, ListPages, TotalObjects, ListLatestUsers, TotalGroups, ListGroups, TotalEvents } from 'protolib/bundles/widgets';
 
 const isProtected = Protofy("protected", {{protected}})
 
-const itemsContent =  [
+const itemsContent = [
     { key: 'servicememorychart', content: <ServiceMemoryUsageChart title="Memory Usage" id={'servicememorychart'} /> },
     { key: 'totalmemory', content: <TotalMemoryUsage title='Total Memory Usage' id={'totalmemory'} /> },
     { key: 'totalcpu', content: <TotalCPUUsage title='Total CPU Usage' id={'totalcpu'} /> },
     { key: 'totalusers', content: <TotalUsers title='Total users' id={'totalusers'} /> },
     { key: 'lastevents', content: <LastEvents title='Last Events' id={'lastevents'} /> },
     { key: 'listpages', content: <ListPages title='Pages' id={'listpages'} /> },
-    { key: 'listgroups', content: <ListGroups title='Groups' id={'listgroups'} />},
+    { key: 'listgroups', content: <ListGroups title='Groups' id={'listgroups'} /> },
     { key: 'totalobjects', content: <TotalObjects title='Total objects' id={'totalobjects'} /> },
     { key: 'listlatestusers', content: <ListLatestUsers title='Latest Users' id={'listlatestusers'} /> },
     { key: 'totalgroups', content: <TotalGroups title='Total groups' id={'totalgroups'} /> },
@@ -70,18 +71,20 @@ const layouts = {
     ]
 }
 
-Protofy("pageType", "admindashboard")
-
-
+Protofy("pageType", "dashboard")
 
 export default {
     route: Protofy("route", "{{route}}"),
-    component: ({pageState, initialItems, pageSession, extraData}:any) => {
-        return (<AdminPage title="{{name}}" pageSession={pageSession}>
+    component: ({ pageState, initialItems, pageSession, extraData }: any) => {
+        return (<Page>
+            <YStack>
+                <BigTitle margin={50}>{{name}}</BigTitle>
                 <YStack flex={1} padding={20}>
                     <DashboardGrid items={itemsContent} layouts={layouts} borderRadius={10} padding={10} backgroundColor="white" />
                 </YStack>
-        </AdminPage>)
-    }, 
+            </YStack>
+
+        </Page>)
+    },
     getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined))
 }
