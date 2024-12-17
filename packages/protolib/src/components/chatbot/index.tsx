@@ -29,9 +29,10 @@ function App({ apiUrl }: AppProps) {
   const addNewChat = useChat((state) => state.addNewChat)
   let userHasApiKey = useAuth((state) => state.apikey)
   const { resolvedTheme } = useThemeSetting()
-  
+  const menu = true //toggle to show/hide the menu
+
   const setApiUrl = useSettings((state) => state.setApiUrl)
-  
+
   useEffect(() => {
     applyTheme(resolvedTheme)
   }, [resolvedTheme])
@@ -45,24 +46,52 @@ function App({ apiUrl }: AppProps) {
   return (
     <Stack backgroundColor={resolvedTheme === "light" ? "" : "#212121"} f={1} className="h-screen flex flex-col">
       <div className="App font-montserrat md:flex dark:bg-[#212121] h-full flex flex-col">
-        <Navbar active={active} setActive={setActive} />
-        <div>
-          <button
-            type="button"
-            className="fixed p-2 h-8 w-8 text-sm top-4 left-4 border-2 hidden md:inline-flex dark:text-white text-gray-700 dark:border border-gray-400 rounded-md items-center justify-center shadow"
-            onClick={() => setActive(true)}
-          >
-            <PanelLeft />
+        {
+          menu ? (
+            <>
+              <div>
+                <button
+                  type="button"
+                  className="fixed p-2 h-8 w-8 text-sm top-4 left-4 border-2 hidden md:inline-flex dark:text-white text-gray-700 dark:border border-gray-400 rounded-md items-center justify-center shadow"
+                  onClick={() => setActive(true)}
+                >
+                  <PanelLeft />
+                </button>
+              </div>
+              <Navbar active={active} setActive={setActive} />
+            </>) : <button
+              type="button"
+              className="fixed p-2 h-8 w-18 text-sm top-4 left-4 border-2 hidden md:inline-flex dark:text-white text-gray-700 dark:border border-gray-400 rounded-md items-center justify-center shadow"
+              onClick={addNewChat}
+            >
+            <span className="mr-2 text-xl">
+              <Plus />
+            </span>
+            <span>New chat</span>
           </button>
-        </div>
+        }
 
         <div className="flex-1 flex flex-col overflow-hidden mt-12 md:mt-0">
-          <div className="p-3 z-10 flex items-center justify-between bg-[#f8f8f8] dark:bg-[#212121] border-b border-gray-300 dark:border-gray-700 top-0 text-gray-800 dark:text-gray-300 md:hidden fixed w-full">
-            <button onClick={() => setActive(true)} className="text-2xl flex text-gray-800 dark:text-white">
-              <Menu />
-            </button>
-            <h2 className="text-gray-800 dark:text-white">New chat</h2>
-            <button className="text-2xl flex items-center text-gray-800 dark:text-white" onClick={addNewChat}>
+          <div
+            className={`p-3 z-10 flex items-center bg-[#f8f8f8] dark:bg-[#212121] border-b 
+    border-gray-300 dark:border-gray-700 top-0 text-gray-800 dark:text-gray-300 
+    md:hidden fixed w-full`}
+          >
+            {menu ? (
+              <button
+                onClick={() => setActive(true)}
+                className="text-2xl flex text-gray-800 dark:text-white"
+              >
+                <Menu />
+              </button>
+            ) : (
+              <div className="w-8" />
+            )}
+            <h2 className="text-gray-800 dark:text-white mx-auto">New chat</h2>
+            <button
+              className="text-2xl flex items-center text-gray-800 dark:text-white"
+              onClick={addNewChat}
+            >
               <Plus />
             </button>
           </div>
@@ -77,7 +106,6 @@ function App({ apiUrl }: AppProps) {
             </div>
           </div>
         </div>
-
         <Modal visible={!Boolean(userHasApiKey)}>
           <Apikey />
         </Modal>
