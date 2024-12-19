@@ -8,24 +8,24 @@ export default (pages) => {
         "logs": false,
         "menu": {
             "System": [
-                { "name": "Users", "icon": "users", "type": "users", "path": "/" },
-                { "name": "Groups", "icon": "groups", "type": "groups", "path": "/" },
-                { "name": "Keys", "icon": Key, "type": "keys", "path": "/" },
-                { "name": "Events", "icon": "activity", "type": "events", "path": "/" },
-                { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/" },
-                { "name": "Services", "icon": Cog, "type": "services", "path": "/" },
+                { "name": "Users", "icon": "users", "href": "/workspace/users" },
+                { "name": "Groups", "icon": "groups", "href": "/workspace/groups" },
+                { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
+                { "name": "Events", "icon": "activity", "href": "/workspace/events" },
+                { "name": "Messages", "icon": Inbox, "href": "/workspace/messages" },
+                { "name": "Services", "icon": Cog, "href": "/workspace/services" },
                 { "name": "Databases", "icon": Database, "type": "databases", "path": "/system" },
             ],
             "Content": [
-                { "name": "Files", "icon": "folder", "type": "files", "path": "?path=/" },
-                { "name": "Resources", "icon": Library, "type": "resources", "path": "/" },
-                { "name": "Public", "icon": "doorOpen", "type": "files", "path": "?path=/apps/next/public" },
-                { "name": "Databases", "icon": DatabaseBackup, "type": "databases", "path": "/" },
+                { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/" },
+                { "name": "Resources", "icon": Library, "href": "/workspace/resources" },
+                { "name": "Public", "icon": "doorOpen", "type": "/workspace/files?path=/apps/next/public"},
+                { "name": "Databases", "icon": DatabaseBackup, "href": "/workspace/databases" },
             ],
             "Fleets": [
-                { "name": "Agents", "icon": Bot, "type": "agents", "path": "/" },
-                { "name": "Devices", "icon": Router, "type": "devices", "path": "/" },
-                { "name": "Definitions", "icon": "bookOpen", "type": "deviceDefinitions", "path": "/" }
+                { "name": "Agents", "icon": Bot, "href": "/workspace/agents" },
+                { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
+                { "name": "Definitions", "icon": "bookOpen", "href": "/workspace/deviceDefinitions" }
             ]
         }
     }

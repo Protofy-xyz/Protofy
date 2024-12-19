@@ -37,15 +37,12 @@ import {
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@my/ui'
 import { usePathname, useSearchParams } from 'solito/navigation';
-import { useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { API, getPendingResult } from 'protobase';
-import { useWorkspaceRoot } from '../lib/useWorkspaceRoot';
-import { AppConfContext, SiteConfigType } from '../providers/AppConf';
 import { AlertDialog } from './AlertDialog';
 import { Link } from './Link';
 import { Tinted } from './Tinted';
 import { PanelMenuItem } from './PanelMenuItem';
-import { useThemeSetting } from '@tamagui/next-theme'
 import { SelectList } from './SelectList';
 import { useQueryState } from '../next'
 
@@ -91,8 +88,8 @@ const iconTable = {
     alert: <AlertTriangle color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
 }
 
-const replaceFirstCharIfSlash = (str) => (str.startsWith('/')? str.replace(/^./, '') : str) ;
-const healthCheckLinkRoute = (str) => (str.startsWith('/') ? str : ("/" + str)) ;
+const replaceFirstCharIfSlash = (str) => (str.startsWith('/') ? str.replace(/^./, '') : str);
+const healthCheckLinkRoute = (str) => (str.startsWith('/') ? str : ("/" + str));
 
 const getIcon = (Icon) => {
     if (typeof Icon === "string") {
@@ -153,50 +150,22 @@ const CreateDialog = ({ subtab }) => {
 
 const Subtabs = ({ tabs, subtabs }: any) => {
     const pathname = usePathname();
-    const SiteConfig = useContext<SiteConfigType>(AppConfContext);
-    const isDev = process.env.NODE_ENV === 'development';
-    //fix component not rendering correctly on the first render on client
-    const [hrefProtocol, setHrefProtocol] = useState(undefined)
-    const [hrefHost, setHrefHost] = useState(undefined)
-    const { resolvedTheme } = useThemeSetting()
-    const workspaceRoot = useWorkspaceRoot()
-
-    useEffect(() => {
-        if (isDev) {
-            setHrefProtocol(window.location.protocol)
-            setHrefHost(window.location.hostname)
-        }
-    }, [])
 
     return (
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                let href = (subtab.type + subtab.path).replace(/\/+/g, '/')
+                let href = subtab.href ?? (subtab.type + subtab.path).replace(/\/+/g, '/')
                 const originalHref = href
-                const allLinks = Object.keys(tabs).reduce((acc, tab) => {
-                    if (tabs[tab].length === undefined) {
-                        return acc
-                    }
-                    return acc.concat(tabs[tab])
-                }, [])
-
-                const maxSelectedLength = allLinks.reduce((acc, tab) => {
-                    let _href = "/" + workspaceRoot + '/' + (tab.type + tab.path).replace(/\/+/g, '/')
-                    if (pathname.startsWith(_href.replace(/\/$/, '').replace(/\?.*$/, ''))) {
-                        return _href.length > acc ? _href.length : acc;
-                    }
-                    return acc
-                }, 0)
 
                 const content = <Tinted>
                     <PanelMenuItem
-                        selected={replaceFirstCharIfSlash(pathname).startsWith(originalHref.replace(/\/$/, '').replace(/\?.*$/, ''))}
+                        selected={replaceFirstCharIfSlash(pathname).startsWith(replaceFirstCharIfSlash(originalHref.replace(/\/$/, '').replace(/\?.*$/, '')))}
                         icon={getIcon(subtab.icon)}
                         text={subtab.name}
                     />
                 </Tinted>
-                if (subtab.external) {
+                if (subtab.external || subtab.href) {
                     return <a href={href} key={index}>
                         {content}
                     </a>
