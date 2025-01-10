@@ -580,7 +580,37 @@ id(${this.name}_bus_current).publish_state(bus_current);
                 },
               ]
             }
+          },
+          {
+            name: 'interval',
+            config: {
+              interval: '1s',
+              then: [
+                {
+                  lambda:
+`float current_speed = id(${this.name}_speed).state;  // Get the current speed
+uint8_t current_axis_state = id(${this.name}_axis_state_numeric).state;  // Get the current axis state
+
+// Check if the speed is 0 and the motor is not idle
+if (current_speed == 0.0 && current_axis_state == 8) {
+
+  ESP_LOGD("canbus", "Speed is 0 and motor is not in IDLE state. Setting to IDLE...");
+
+  // Prepare CAN message to set axis state to IDLE
+  std::vector<uint8_t> state_data(4);
+  uint32_t requested_state = 1;  // IDLE state
+  memcpy(&state_data[0], &requested_state, 4);
+
+  // Send the CAN message to set the state to IDLE
+  id(${this.name}_can_bus).send_data(0x07, false, state_data);
+  
+  ESP_LOGD("canbus", "Axis state set to IDLE.");
+}`
+                }
+              ]
+            }
           }
+
 
 
 
