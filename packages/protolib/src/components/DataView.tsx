@@ -1,4 +1,4 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner } from 'tamagui'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner, useTheme, useMedia } from 'tamagui'
 import { Center } from './Center';
 import { useRemoteStateList } from '../lib/useRemoteState';
 import { AlertDialog } from './AlertDialog';
@@ -130,34 +130,34 @@ type DataViewActionButtonProps = {
 export const DataViewActionButton = ({ icon, description, id, ...props }: DataViewActionButtonProps & ButtonProps) => {
     const Icon = icon
     return <Tooltip {...props}>
-    <Tooltip.Trigger>
-        <Button id={id ?? ''} hoverStyle={{ o: 1 }} o={0.7} circular chromeless={true} {...props} >
-            <Icon color={"$color10"} />
-        </Button>
-    </Tooltip.Trigger>
-    <Tooltip.Content
-      enterStyle={{ x: 0, y: -5, opacity: 0, scale: 0.9 }}
-      exitStyle={{ x: 0, y: -5, opacity: 0, scale: 0.9 }}
-      scale={1}
-      x={0}
-      y={0}
-      opacity={1}
-      //@ts-ignore
-      animation={[
-        'quick',
-        {
-          opacity: {
-            overshootClamping: true,
-          },
-        },
-      ]}
-    >
-      <Tooltip.Arrow />
-      <Paragraph size="$2" lineHeight="$1">
-        {description}
-      </Paragraph>
-    </Tooltip.Content>
-  </Tooltip>
+        <Tooltip.Trigger>
+            <Button id={id ?? ''} hoverStyle={{ o: 1 }} o={0.7} circular chromeless={true} {...props} >
+                <Icon color={"$color10"} />
+            </Button>
+        </Tooltip.Trigger>
+        <Tooltip.Content
+            enterStyle={{ x: 0, y: -5, opacity: 0, scale: 0.9 }}
+            exitStyle={{ x: 0, y: -5, opacity: 0, scale: 0.9 }}
+            scale={1}
+            x={0}
+            y={0}
+            opacity={1}
+            //@ts-ignore
+            animation={[
+                'quick',
+                {
+                    opacity: {
+                        overshootClamping: true,
+                    },
+                },
+            ]}
+        >
+            <Tooltip.Arrow />
+            <Paragraph size="$2" lineHeight="$1">
+                {description}
+            </Paragraph>
+        </Tooltip.Content>
+    </Tooltip>
 }
 
 const DataViewInternal = forwardRef(({
@@ -215,7 +215,7 @@ const DataViewInternal = forwardRef(({
     const displayName = (entityName ?? pluralName) ?? name
     const [state, setState] = useState(pageState ?? {})
     sourceUrl = URLTransform(sourceUrl)
-    
+
     const fetch = async (fn) => {
         const data = await API.get({ url: sourceUrl, ...sourceUrlParams, ...state })
         fn(data)
@@ -231,6 +231,8 @@ const DataViewInternal = forwardRef(({
     const { search, setSearch, setSearchName } = useContext(SearchContext)
     const hasGlobalMenu = extraMenuActions && extraMenuActions.some(action => action.menus && action.menus.includes("global"));
     const filters = Object.entries(state).filter((st) => st[0].startsWith('filter'))
+
+    const isXs = useMedia().xs
 
     useQueryState(setState)
 
@@ -494,6 +496,7 @@ const DataViewInternal = forwardRef(({
                 </AlertDialog>
                 <AlertDialog
                     integratedChat
+                    disableAdapt
                     p={"$1"}
                     pt="$5"
                     pl="$5"
@@ -505,6 +508,17 @@ const DataViewInternal = forwardRef(({
                     }}
                     open={state.item}
                     description={""}
+                    dialogCloseProps={isXs ? {
+                        asChild: true,
+                        children: <Button
+                            position="absolute"
+                            top="$4"
+                            right="$4"
+                            size="$3"
+                            circular
+                            icon={X}
+                        />
+                    } : {}}
                 //bc={resolvedTheme == 'dark' ? "$background": "$color1"}
                 >
                     <YStack f={1} jc="center" ai="center">
@@ -556,7 +570,7 @@ const DataViewInternal = forwardRef(({
                                 <Text fontSize="$5" color="$color11">{displayName.charAt(0).toUpperCase() + displayName.slice(1)}</Text>
                             </Paragraph>
                             {hasGlobalMenu ? <Tinted><ItemMenu type={"global"} sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraMenuActions}></ItemMenu></Tinted> : <></>}
-                            {toolBarContent}
+                            {!isXs && toolBarContent}
                         </XStack>
 
                         <XStack ai="center" ml="$2">
@@ -591,7 +605,7 @@ const DataViewInternal = forwardRef(({
                                     </XStack>
                                 </XStack>}
                             </XStack>
-                            <XStack ai="center" marginLeft="$3" mb={"$1"}>
+                            <XStack ai="center" marginLeft="$3" mb={"$1"} $xs={{display: 'none'}}>
                                 {!disableViewSelector && <ButtonGroup marginRight="$3">
                                     {
                                         tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>

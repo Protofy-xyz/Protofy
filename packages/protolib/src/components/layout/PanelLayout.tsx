@@ -49,7 +49,7 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
         // </AppBar>
       }>
       {/* <Theme name={tint as any}> */}
-      <XStack f={1} p="$3" pl={0} bc={bgPanels}>
+      <XStack f={1} p="$3" $xs={{px: "$0"}} pl={0} bc={bgPanels}>
         {!panelBottom?panel:
         <PanelGroup direction="vertical" style={{ height: '100%', width: '100%' }}>
          {panel}

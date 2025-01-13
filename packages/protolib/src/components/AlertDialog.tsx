@@ -23,6 +23,8 @@ export const AlertDialog = forwardRef(({
     open,
     setOpen,
     disableDrag = false,
+    disableAdapt = false,
+    dialogCloseProps = {},
     integratedChat = false,
     ...props
 }: any, ref: any) => {
@@ -30,7 +32,7 @@ export const AlertDialog = forwardRef(({
     const [_open, _setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>()
-    
+
     const seter = setOpen !== undefined ? setOpen : _setOpen
     const status = setOpen !== undefined ? open : _open
 
@@ -87,7 +89,7 @@ export const AlertDialog = forwardRef(({
                                         setLoading(true)
                                         try {
                                             const keepOpen = await onAccept(setOpen !== undefined ? setOpen : _setOpen)
-                                            if(keepOpen !== true) seter(false)
+                                            if (keepOpen !== true) seter(false)
                                         } catch (e) {
                                             setError(e)
                                             console.log('e: ', e)
@@ -101,12 +103,12 @@ export const AlertDialog = forwardRef(({
                         </YStack>}
                     </YStack>
                 </YStack>
-                <Dialog.Close />
+                <Dialog.Close {...dialogCloseProps}/>
             </Dialog.Content>
 
         </Dialog.Portal>
 
-        <Dialog.Adapt when="sm" >
+        {!disableAdapt && <Dialog.Adapt when="sm" >
             <XStack position='absolute'>
                 <Dialog.Sheet disableDrag={disableDrag}>
                     {/* ml -18 because there is an bug centering the dialog on sm screen */}
@@ -118,6 +120,6 @@ export const AlertDialog = forwardRef(({
                     <Dialog.Sheet.Overlay />
                 </Dialog.Sheet>
             </XStack>
-        </Dialog.Adapt>
+        </Dialog.Adapt>}
     </Dialog>)
 })
