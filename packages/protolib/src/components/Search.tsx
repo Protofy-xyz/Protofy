@@ -121,8 +121,8 @@ export const Search = forwardRef(({ alwaysOpen = true, automatic = false, defaul
                             }}
                         />
                     </Tinted>
-                    <Dialog.Close />
                 </Dialog.Content>
+                <Dialog.Close />
             </Dialog.Portal>
         </Dialog>}
     </>
