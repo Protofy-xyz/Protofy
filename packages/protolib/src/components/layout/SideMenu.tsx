@@ -38,10 +38,10 @@ export const SideMenu = ({ sideBarColor = '$background', children, ...props }: a
             
             <Button
                 onPress={() => setOpen(!open)}
-                position="absolute"
+                position="fixed"
                 zIndex={99999}
-                left={8}
-                top="-40px"
+                left="16px"
+                top="15px"
                 icon={open ? PanelLeftClose : PanelLeftOpen}
                 scaleIcon={1.5}
                 size="$3"
