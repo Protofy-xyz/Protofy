@@ -1,13 +1,12 @@
 import { YStack, useMedia, Button } from 'tamagui'
 import { useState } from 'react'
-import { X, PanelLeftOpen } from '@tamagui/lucide-icons'
+import { X, PanelLeftOpen, PanelLeftClose } from '@tamagui/lucide-icons'
 import { Tinted } from '../Tinted'
 
 export const SideMenu = ({ sideBarColor = '$background', children, ...props }: any) => {
     const isXs = useMedia().xs
     const [open, setOpen] = useState(false)
     const width = 260
-    const xsMenuMargin = 5
 
     return <YStack bw={0} bc={sideBarColor} {...props}>
         <YStack
@@ -25,20 +24,31 @@ export const SideMenu = ({ sideBarColor = '$background', children, ...props }: a
         >
             {children}
         </YStack>
-        {isXs && <Tinted>
+        {isXs && <>
+            <YStack
+                backgroundColor="$background"
+                h="100%"
+                width='100vw'
+                display={open ? 'flex' : 'none'}
+                onPress={e => {
+                    setOpen(false)
+                    e.stopPropagation()
+                }}
+            ></YStack>
+            
             <Button
                 onPress={() => setOpen(!open)}
                 position="absolute"
-                zIndex={999}
-                left={open ? (width + xsMenuMargin) : xsMenuMargin}
-                top="$10"
-                icon={open ? X : PanelLeftOpen}
+                zIndex={99999}
+                left={8}
+                top="-40px"
+                icon={open ? PanelLeftClose : PanelLeftOpen}
                 scaleIcon={1.5}
-                size="$5"
-                theme={open ? 'red' : undefined}
+                size="$3"
+                backgroundColor="transparent"
                 circular
             >
             </Button>
-        </Tinted>}
+        </>}
     </YStack>
 }

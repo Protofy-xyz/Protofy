@@ -33,7 +33,7 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
     <XStack f={1} pt="$3" >
       <XStack ai="center" space="$4">
         {(logo || themeSwitcher || tintSwitcher) &&
-          <XStack f={1} minWidth={210}>
+          <XStack f={1} minWidth={210} $xs={{paddingLeft: "$4"}}>
             {logo && <NextLink href={logoHref}>
               <XStack py={logoSize/4} ai="center" px="$3" cur="pointer" my={-20}>
                 {logo}
