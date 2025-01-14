@@ -92,8 +92,8 @@ export const FormGroup = ({ ele, title, children, icon, simple = false, path }) 
     </FormElement>
 }
 
-export const GridElement = ({ index, data, width }) => {
-    const numColumns = data.ele._def.size || 1
+export const GridElement = ({ index, data, width, columns }) => {
+    const numColumns = data.ele._def.size <= columns ? data.ele._def.size : 1
 
     return <XStack f={1} width={(width * numColumns) + (numColumns === 1 ? data.columnMargin / 2 : ((numColumns - 1) * data.columnMargin))} key={data.x}>{getElement({
         ele: data.ele,
