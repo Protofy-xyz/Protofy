@@ -52,7 +52,9 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
     if (req.url.startsWith('/public/')) {
       logger.trace({ url: req.url }, "Serving public file: " + req.url);
       const url = decodeURIComponent(req.url.replace(/\.\.\//g, ''));
-      const filePath = join('../../data/', url);
+      const isFullDev = process.env.FULL_DEV === '1';
+      const prefixPath = isFullDev ? '../../data/' : '../../../../../data/'
+      const filePath = join(prefixPath, url);
       if (!fs.existsSync(filePath)) {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('Not Found');
