@@ -1,5 +1,5 @@
 import { z } from 'protobase'
-import { Router, Database, DatabaseZap, RefreshCcwDot, PencilRuler, MessageCircle, Sparkles } from '@tamagui/lucide-icons'
+import { Router, Database, DatabaseZap, RefreshCcwDot, PencilRuler, MessageCircle, Sparkles, FunctionSquare } from '@tamagui/lucide-icons'
 
 export const chatbotTemplates = {
     "custom-chatbot": {
@@ -55,6 +55,12 @@ export const apiTemplates = {
         name: "Python API",
         description: 'Create python automations that react to events and perform actions (when ..., do ...)',
         icon: PencilRuler
+    },
+    "php": {
+        id: "php",
+        name: "Php script",
+        description: 'Create php automations to perform actions',
+        icon: FunctionSquare
     },
     "automatic-crud-storage": {
         id: "automatic-crud-storage",

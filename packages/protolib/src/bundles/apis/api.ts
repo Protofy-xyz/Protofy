@@ -15,26 +15,44 @@ const indexFilePath = "/packages/app/apis/index.ts"
 const getAPI = (name, req, extension?) => {
   let object = "None"
   let filePath = APIDir(getRoot(req)) + name
-  let engine
+  let engine = 'typescript'
+  let apiType = 'typescript'
 
   if (extension) {
     filePath += extension
-    engine = extension === '.ts' ? 'typescript' : 'python'
+
+    switch (extension) {
+      case '.py':
+        engine = 'python'
+        apiType = 'python'
+        break
+      case '.php':
+        engine = 'php'
+        apiType = 'php'
+        break
+      default:
+        break
+    }
   } else {
     if (fsSync.existsSync(filePath + '.ts')) {
       filePath += '.ts'
       extension = '.ts'
-      engine = "typescript"
+      engine = 'typescript'
+      apiType = 'typescript'
     } else if (fsSync.existsSync(filePath + '.py')) {
       filePath += '.py'
       extension = '.py'
-      engine = "python"
+      engine = 'python'
+      apiType = 'python'
+    } else if (fsSync.existsSync(filePath + '.php')) {
+      filePath += '.php'
+      extension = '.php'
+      engine = 'php'
+      apiType = 'php'
     } else {
       throw "API file not found"
     }
   }
-
-  let apiType = filePath.endsWith('.py') ? 'python' : 'typescript'
 
   if (apiType === 'typescript') {
     const sourceFile = getSourceFile(filePath)
@@ -55,7 +73,7 @@ const getAPI = (name, req, extension?) => {
 const deleteAPI = (req, value) => {
 
   const api = getAPI(fspath.basename(value.name), req)
-  if(api.engine === 'typescript') {
+  if (api.engine === 'typescript') {
     removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req, fs);
     if (api.type === "AutoAPI") {
       const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(api.object))
@@ -68,26 +86,32 @@ const deleteAPI = (req, value) => {
 }
 
 async function checkFileExists(filePath) {
-  try {
-    await fs.access(filePath + '.ts', fs.constants.F_OK);
-    return true;
-  } catch (error) {
+  const exts = ['.ts', '.py', '.php'];
+
+  for (const ext of exts) {
     try {
-      await fs.access(filePath + '.py', fs.constants.F_OK);
+      await fs.access(filePath + ext, fs.constants.F_OK);
       return true;
-    } catch (error) {
-      return false;
+    } catch (err) {
+      // check next
     }
   }
+
+  return false;
 }
 
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const files = (await fs.readdir(APIDir(getRoot(req)))).filter(f => f != 'index.ts' && !fsSync.lstatSync(fspath.join(APIDir(getRoot(req)), f)).isDirectory() && (f.endsWith('.ts') || f.endsWith('.py')))
+      const validExtensions = ["ts", "py", "php"]
+      const files = (await fs.readdir(APIDir(getRoot(req)))).filter(f => {
+        const filenameSegments = f.split('.')
+        return f != 'index.ts' && !fsSync.lstatSync(fspath.join(APIDir(getRoot(req)), f)).isDirectory() && (validExtensions.includes(filenameSegments[filenameSegments.length - 1]))
+      })
       const apis = await Promise.all(files.map(async f => {
         const name = f.replace(/\.[^/.]+$/, "")
-        const extension = f.endsWith('.ts') ? '.ts' : '.py'
+        const segments = f.split('.')
+        const extension = '.' + segments[segments.length - 1]
         return getAPI(name, req, extension)
       }));
 
@@ -107,7 +131,17 @@ const getDB = (path, req, session) => {
       let ObjectSourceFile
 
       const template = fspath.basename(value.template ?? 'empty')
-      const extension = value.template === 'python-api' ? '.py' : '.ts'
+      let extension = ".ts"
+      switch (value.template) {
+        case 'python-api':
+          extension = '.py'
+          break
+        case 'php':
+          extension = '.php'
+          break
+        default:
+          break
+      }
 
       const filePath = getRoot(req) + 'packages/app/apis/' + fspath.basename(value.name)
       exists = await checkFileExists(filePath);
@@ -158,6 +192,7 @@ const getDB = (path, req, session) => {
         console.log('Adding feature AutoAPI to object: ', value.object)
         await addFeature(ObjectSourceFile, '"AutoAPI"', "true")
       }
+
       //link in index.ts
       if (extension == '.ts') {
         const sourceFile = getSourceFile(indexFile(getRoot(req)))
