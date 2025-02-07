@@ -30,7 +30,7 @@ import DS18B20 from './DS18B20';
 import RotaryEncoder from './RotaryEncoder';
 import I2cADC_ADS1115 from './I2cADC_ADS1115';
 import Servo from './Servo';
-import DallasBus from './DallasBus';
+import DallasBus from './OneWireBus';
 import SPIBus from './SPIBus';
 import CANBus from './CANBus';
 import MKSServo42D from './MKSServo42D';

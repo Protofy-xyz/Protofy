@@ -13,23 +13,23 @@ const DallasBus = ({ node = {}, nodeData = {}, children, color }: any) => {
     ] as Field[]
 
     return (
-        <Node node={node} isPreview={!node.id} title='Dallas Bus' color={color} id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='One wire Bus' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )
 }
 
 export default {
-    id: 'DallasBus',
+    id: 'OneWireBus',
     type: 'CallExpression',
     category: "bus",
-    keywords: ["onewire", "temperature", "dallasBus", "one", "wire", "dallas", "device"],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('dallasBus'),
-    getComponent: (node, nodeData, children) => <DallasBus color={getColor('DallasBus')} node={node} nodeData={nodeData} children={children} />,
+    keywords: ["onewire", "temperature", "one", "wire", "dallas", "device"],
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('oneWireBus'),
+    getComponent: (node, nodeData, children) => <DallasBus color={getColor('OneWireBus')} node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => { 
         return { 
-            to: 'dallasBus', 
-            "param-1": { value: "mydallasbus", kind: "StringLiteral" },
+            to: 'oneWireBus', 
+            "param-1": { value: "myonewirebus", kind: "StringLiteral" },
         } 
     }
 }

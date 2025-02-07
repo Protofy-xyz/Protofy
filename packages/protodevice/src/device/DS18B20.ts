@@ -31,7 +31,7 @@ class DS18B20 {
               name: this.type,
               config: {
                   platform: this.platform,
-                  dallas_id: this.dallasBusId,
+                  one_wire_id: this.dallasBusId,
                   name: this.name,
                   id: this.name,
                   address: this.address
@@ -72,5 +72,5 @@ class DS18B20 {
 }
 
 export function ds18b20(name,dallasBusId, address) { 
-  return new DS18B20(name, 'dallas',dallasBusId, address);
+  return new DS18B20(name, 'dallas_temp',dallasBusId, address);
 }

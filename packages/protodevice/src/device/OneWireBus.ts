@@ -1,4 +1,4 @@
-class DallasBus {
+class OneWireBus {
   name;
   type;
   constructor(name, type,) {
@@ -12,6 +12,7 @@ class DallasBus {
           {
             name: this.type,
             config:{
+                platform: "gpio",
                 id: this.name,
                 pin: pin
             }
@@ -36,6 +37,6 @@ class DallasBus {
   }
 }
 
-export function dallasBus(name) { 
-  return new DallasBus(name, 'dallas');
+export function oneWireBus(name) { 
+  return new OneWireBus(name, 'one_wire');
 }

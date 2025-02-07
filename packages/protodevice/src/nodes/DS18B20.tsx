@@ -36,7 +36,7 @@ export default {
         return { 
             to: 'ds18b20', 
             "param-1": { value: "tempsensor", kind: "StringLiteral" },
-            "param-2": { value: "mydallasbus", kind: "StringLiteral" },
+            "param-2": { value: "myonewirebus", kind: "StringLiteral" },
             "param-3": { value: "0xA40000031F055028", kind: "StringLiteral" } 
         } 
     }
