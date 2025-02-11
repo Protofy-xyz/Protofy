@@ -16,12 +16,14 @@ class DS18B20 {
   dallasBusId
   address;
   type;
-  constructor(name, platform, dallasBusId, address) {
+  updateInterval;
+  constructor(name, platform, dallasBusId, address, updateInterval) {
       this.name = name
       this.platform = platform
       this.dallasBusId = dallasBusId
       this.type = "sensor"
       this.address = address
+      this.updateInterval = updateInterval
   }
 
   attach(pin, deviceComponents) {
@@ -34,7 +36,8 @@ class DS18B20 {
                   one_wire_id: this.dallasBusId,
                   name: this.name,
                   id: this.name,
-                  address: this.address
+                  address: this.address,
+                  update_interval: this.updateInterval
               },
               subsystem: this.getSubsystem()
           }
@@ -71,6 +74,6 @@ class DS18B20 {
   }
 }
 
-export function ds18b20(name,dallasBusId, address) { 
-  return new DS18B20(name, 'dallas_temp',dallasBusId, address);
+export function ds18b20(name,dallasBusId, address, updateInterval) { 
+  return new DS18B20(name, 'dallas_temp',dallasBusId, address, updateInterval);
 }

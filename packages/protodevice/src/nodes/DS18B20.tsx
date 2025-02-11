@@ -4,6 +4,7 @@ import { getColor } from ".";
 
 const DS18B20 = ({ node = {}, nodeData = {}, children, color }: any) => {
     const [name, setName] = React.useState(nodeData['param-1'])
+    const transitionErrorMsg = 'Add units s/ms'
     const nameErrorMsg = 'Reserved name'
     const nodeParams: Field[] = [
         {
@@ -15,6 +16,10 @@ const DS18B20 = ({ node = {}, nodeData = {}, children, color }: any) => {
         },
         {
             label: 'Address', static: true, field: 'param-3', type: 'input'
+        },
+        {
+            label: 'Update Interval', static: true, field: 'param-4', type: 'input',
+            error: !['s', 'ms'].includes(nodeData['param-4']?.value?.replace(/['"0-9]+/g, '')) ? transitionErrorMsg : null
         }
     ] as Field[]
 
@@ -37,7 +42,8 @@ export default {
             to: 'ds18b20', 
             "param-1": { value: "tempsensor", kind: "StringLiteral" },
             "param-2": { value: "myonewirebus", kind: "StringLiteral" },
-            "param-3": { value: "0xA40000031F055028", kind: "StringLiteral" } 
+            "param-3": { value: "0xA40000031F055028", kind: "StringLiteral" } ,
+            "param-4": { value: "5s", kind: "StringLiteral" }
         } 
     }
 }
