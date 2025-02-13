@@ -1,31 +1,63 @@
 class UltrasonicDistanceSensor {
-    name;
-    platform;
-    echoPin;
-    updateInterval;
-    timeout ;
-    constructor(name, platform, echoPin, updateInterval, timeout) {
+    type
+    name
+    platform
+    echoPin
+    updateInterval
+    constructor(name, platform, echoPin, updateInterval) {
+        this.type = 'sensor'
         this.name = name
         this.platform = platform
         this.echoPin = echoPin
         this.updateInterval = updateInterval
-        this.timeout  = timeout 
+    }
+    attach(pin, deviceComponents) {
+        const componentObjects = [
+            {
+                name: this.type,
+                config: {
+                    platform: this.platform,
+                    name: this.name,
+                    id: this.name,
+                    trigger_pin: pin,
+                    echo_pin: this.echoPin,
+                    update_interval: this.updateInterval,
+                },
+                subsystem: this.getSubsystem(),
+            },
+        ]
+
+        componentObjects.forEach((element, j) => {
+            if (!deviceComponents[element.name]) {
+                deviceComponents[element.name] = element.config
+            } else {
+                if (!Array.isArray(deviceComponents[element.name])) {
+                    deviceComponents[element.name] = [deviceComponents[element.name]]
+                }
+                deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
+            }
+        })
+        return deviceComponents
     }
 
-    attach(pin) {
-        return {componentName: 'sensor',payload:
-`    - platform: ${this.platform}
-      id: ${this.name}
-      name: ${this.name}
-      trigger_pin: ${pin}
-      echo_pin: ${this.echoPin}
-      update_interval: ${this.updateInterval}
-      timeout : ${this.timeout }
-`
-    }
+    getSubsystem() {
+        return {
+            name: this.name,
+            type: this.type,
+            monitors: [
+                {
+                    name: 'distance',
+                    label: 'Distance',
+                    description: 'Get distance from sensor',
+                    units: 'm',
+                    endpoint: '/sensor/' + this.name + '/state',
+                    connectionType: 'mqtt',
+                }
+            ],
+        }
     }
 }
 
-export function ultrasonicDistanceSensor(name, echoPin, updateInterval, timeout) { 
-    return new UltrasonicDistanceSensor(name, 'ultrasonic', echoPin, updateInterval, timeout);
+export function ultrasonicDistanceSensor(name, echoPin, updateInterval) {
+    return new UltrasonicDistanceSensor(name, 'ultrasonic', echoPin, updateInterval)
 }

@@ -42,6 +42,7 @@ import SntpTime from './SntpTime';
 import SdOfflineLogger from './SdOfflineLogger';
 import OdriveCan from './ODriveCan'
 import GM77 from './GM77'
+import UltrasonicDistanceSensor from './UltrasonicDistanceSensor';
 
 
 const deviceMasks = [
@@ -86,7 +87,8 @@ const deviceMasks = [
   SntpTime,
   SdOfflineLogger,
   OdriveCan,
-  GM77
+  GM77,
+  UltrasonicDistanceSensor
 ]
 
 const masksLength = deviceMasks.length
