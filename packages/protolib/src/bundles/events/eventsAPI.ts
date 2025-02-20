@@ -38,7 +38,6 @@ export const EventsAPI = async (app, context) => {
         logLevel: "trace",
         defaultOrderBy: 'created',
         defaultOrderDirection: 'desc',
-        skipDatabaseInitialization: true,
         dbOptions: {
             orderedInsert: true
         }
