@@ -18,7 +18,8 @@
     "prod-standalone": "NODE_ENV=production && node -r module-alias/register dist/apps/core/src/index.js",
     "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts && shx cp ../../system.js dist/",
     "prepare-dev": "node prepare.js",
-    "clean": "shx rm -rf dist"
+    "clean": "shx rm -rf dist",
+    "prepare-test": "shx rm -rf ../../data/databases/events"
   },
   "dependencies": {
     "@my/config": "*",
