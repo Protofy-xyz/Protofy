@@ -20,7 +20,7 @@
     "prepare-dev": "node prepare.js",
     "clean": "shx rm -rf dist",
     "prepare-test": "shx rm -rf ../../data/databases/events",
-    "test": "yarn prepare-test && jest"
+    "test": "yarn prepare-test && node test.js"
   },
   "dependencies": {
     "@my/config": "*",
