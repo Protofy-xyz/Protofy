@@ -84,12 +84,18 @@ const server = http.createServer(app);
 const PORT = 3002
 server.listen(PORT, () => {
   logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
-  generateEvent({
-    path: 'services/core/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-    from: 'core', // system entity where the event was generated (next, api, cmd...)
-    user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-    payload: {}, // event payload, event-specific data
-  }, getServiceToken())
+  if (process.send) {
+    //notify potential fork parents about the service readiness
+    process.send('ready');
+  } else {
+    //if there is no fork, generate a start event
+    generateEvent({
+      path: 'services/core/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+      from: 'core', // system entity where the event was generated (next, api, cmd...)
+      user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+      payload: {}, // event payload, event-specific data
+    }, getServiceToken())
+  }
 });
 
 const isFullDev = process.env.FULL_DEV === '1';
