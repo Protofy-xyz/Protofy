@@ -43,6 +43,7 @@ import SdOfflineLogger from './SdOfflineLogger';
 import OdriveCan from './ODriveCan'
 import GM77 from './GM77'
 import UltrasonicDistanceSensor from './UltrasonicDistanceSensor';
+import MAX31865 from './MAX31865';
 
 
 const deviceMasks = [
@@ -88,7 +89,8 @@ const deviceMasks = [
   SdOfflineLogger,
   OdriveCan,
   GM77,
-  UltrasonicDistanceSensor
+  UltrasonicDistanceSensor,
+  MAX31865
 ]
 
 const masksLength = deviceMasks.length
