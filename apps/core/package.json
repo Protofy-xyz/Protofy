@@ -19,7 +19,8 @@
     "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts && shx cp ../../system.js dist/",
     "prepare-dev": "node prepare.js",
     "clean": "shx rm -rf dist",
-    "prepare-test": "shx rm -rf ../../data/databases/events"
+    "prepare-test": "shx rm -rf ../../data/databases/events",
+    "test": "yarn prepare-test && jest"
   },
   "dependencies": {
     "@my/config": "*",
@@ -49,10 +50,13 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@jest/globals": "~29.7.0",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.17",
     "@types/node": "20.6.0",
+    "jest": "~29.7.0",
     "shx": "^0.3.4",
+    "ts-jest": "~29.1.1",
     "typescript": "~5.3.3"
   }
 }
