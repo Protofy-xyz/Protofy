@@ -41,7 +41,7 @@ export class ProtoLevelDB extends ProtoDB {
         this.regeneratingIndexes = false //flag to activate while regenerating indexes
         this.tableVersion = 'a'
         this.pendingIndex = false //flag to activate when an index is pending generation, because the generation
-                                 //was skipper of an already regenerating indexes
+        //was skipper of an already regenerating indexes
     }
 
     get status() {
@@ -73,9 +73,9 @@ export class ProtoLevelDB extends ProtoDB {
             const counter = sublevel(this.rootDb, 'counter_' + this.tableVersion)
             return await counter.get('total')
         }
-        catch(e){
-            if(e?.message === "Key not found in database [total]") { 
-                return 0; 
+        catch (e) {
+            if (e?.message === "Key not found in database [total]") {
+                return 0;
             }
             throw e;
         }
@@ -292,7 +292,7 @@ export class ProtoLevelDB extends ProtoDB {
             }
         }
     }
-    
+
     static async regenerateIndexes(rootDb, db, location, tableVersion) {
         let indexData;
         let groupIndexData;
@@ -498,30 +498,43 @@ export class ProtoLevelDB extends ProtoDB {
         return new ProtoLevelDB(location, options, config)
     }
 
+    // Agrega una propiedad estática para gestionar locks por clave
+    static locks: { [key: string]: Promise<void> } = {};
+
     static async incrementKey(db, key) {
-        let lockKey = `${key}-lock`;
-        while (true) {
+        // Si no existe un lock para esta clave, inicialízalo
+        if (!ProtoLevelDB.locks[key]) {
+            ProtoLevelDB.locks[key] = Promise.resolve();
+        }
+
+        const previousLock = ProtoLevelDB.locks[key];
+        let release: () => void;
+        // Creamos una nueva promesa que se resolverá cuando se libere el lock
+        const lockPromise = new Promise<void>(resolve => {
+            release = resolve;
+        });
+        // Encadenamos la nueva promesa al lock existente
+        ProtoLevelDB.locks[key] = previousLock.then(() => lockPromise);
+
+        // Esperamos a que terminen las operaciones previas
+        await previousLock;
+        try {
+            let value;
             try {
-                await db.put(lockKey, 'locked', { sync: true });
-                let value = await db.get(key).catch(err => {
-                    if (err.notFound) return 0;
-                    throw err;
-                });
-                let newValue = parseInt(JSON.parse(value), 10) + 1;
-                await db.put(key, JSON.stringify(newValue), { sync: true });
-                await db.del(lockKey, { sync: true });
-                return newValue;
-            } catch (err) {
-                if (err.type === 'WriteError' && err.message.includes('Lock')) {
-                    console.log('Lock error, retrying...')
-                    await new Promise(resolve => setTimeout(resolve, 50));
+                value = await db.get(key);
+            } catch (err: any) {
+                if (err.notFound) {
+                    value = 0;
                 } else {
-                    await db.del(lockKey, { sync: true }).catch(() => { });
                     throw err;
                 }
-            } finally {
-                await db.del(lockKey, { sync: true }).catch(() => { });
             }
+            const newValue = parseInt(JSON.parse(value), 10) + 1;
+            await db.put(key, JSON.stringify(newValue), { sync: true });
+            return newValue;
+        } finally {
+            // Liberamos el lock para que la siguiente operación pueda continuar
+            release();
         }
     }
 }
