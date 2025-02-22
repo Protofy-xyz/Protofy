@@ -9,17 +9,17 @@ export const EventsAPI = async (app, context) => {
         modelType: EventModel,
         prefix: '/api/core/v1/',
         onAfterCreate: async (data, session, req) => {
-            // const result = await API.get('http://localhost:3002/api/core/v1/events?itemsPerPage=1&orderBy=created&orderDirection=asc&token='+getServiceToken())
-            // // console.log("result", result)
-            // const maxEvents = process.env.MAX_EVENTS || 100000
-            // if(result.data){
-            //     if(result.data.total >= maxEvents ){
-            //         const element = result.data.items[0]
-            //         // console.log("element", element)
-            //         const result2 = await API.get(`/api/core/v1/events/${element.id}/delete?token=${getServiceToken()}`)
-            //         // console.log("result2", result2)
-            //     }
-            // }
+            const result = await API.get('http://localhost:3002/api/core/v1/events?itemsPerPage=1&orderBy=created&orderDirection=asc&token='+getServiceToken())
+            // console.log("result", result)
+            const maxEvents = process.env.MAX_EVENTS || 100000
+            if(result.data){
+                if(result.data.total >= maxEvents ){
+                    const element = result.data.items[0]
+                    // console.log("element", element)
+                    const result2 = await API.get(`/api/core/v1/events/${element.id}/delete?token=${getServiceToken()}`)
+                    // console.log("result2", result2)
+                }
+            }
             return data
         },
         skipStorage: async(data,session?,req?) => {
