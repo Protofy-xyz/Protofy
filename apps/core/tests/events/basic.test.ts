@@ -130,5 +130,46 @@ describe("Basic tests", () => {
         expect(response.data.items.length).toBe(50);
         expect(response.data.total).toBe(132);
     }, 2000);
+
+    it("Reach MAX_EVENTS (500 for tests) events in parallel in under 5 seconds", async () => {
+        const requests = [];
+        for (let i = 0; i < 368; i++) {
+            requests.push(axios.post(`http://localhost:3002/api/core/v1/events?token=${token}`, {
+                path: 'test/flood_last',
+                from: 'test',
+                user: 'test user',
+                payload: { 'c': ''+i }
+            }));
+        }
     
+        // Ejecutar todas las peticiones en paralelo y capturar los resultados
+        const responses = await Promise.all(requests);
+    
+        // Verificar el contenido de las respuestas
+        // console.log('All requests done', responses.map(r => r.data));
+        // console.log(`http://localhost:3002/api/core/v1/events?token=${token}`);
+    
+        // Hacer la petición para obtener el total después de enviar los eventos
+        const response = await axios.get(`http://localhost:3002/api/core/v1/events?token=${token}`);
+        expect(response.data.items.length).toBe(50);
+        expect(response.data.total).toBe(500);
+    }, 5000);
+    
+    
+    it("Should never exceed MAX_EVENTS (500 for tests)", async () => {
+        let response = await axios.post('http://localhost:3002/api/core/v1/events?token=' + token, {
+            path: 'test/overflow',
+            from: 'test',
+            user: 'test user',
+            payload: { 'c': '0' }
+        });
+        
+        response = await axios.get('http://localhost:3002/api/core/v1/events?token=' + token) 
+        expect(response.data.total).toBe(500)
+        expect(response.data.items.length).toBe(50)
+        expect(response.data.items[0].path).toBe('test/overflow')
+        expect(response.data.items[0].from).toBe('test')
+        expect(response.data.items[0].user).toBe('test user')
+        expect(response.data.items[0].payload.c).toBe('0')
+    }, 5000);
 })
