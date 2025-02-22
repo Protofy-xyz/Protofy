@@ -3,9 +3,10 @@ const { startCore } = require('./dist/apps/core/src'); // Ajusta la ruta según 
 const { spawn, exec } = require('child_process');
 
 
-startCore((port) => {
+startCore((port, token) => {
   console.log(`Core started at ${port}. Running tests...`);
-  const testProcess = spawn('yarn', ['jest'],  { stdio: 'inherit', shell: true });
+  console.log('Token:', token);
+  const testProcess = spawn('yarn', ['jest'],  { stdio: 'inherit', shell: true, env: { ...process.env, SERVICE_TOKEN: token }});
   
   testProcess.on('close', (code) => {
     console.log(`Tests done, exit code: ${code}`);

@@ -86,7 +86,7 @@ export const startCore = (ready?) => {
   server.listen(PORT, () => {
     logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
     if(ready) {
-      ready(PORT)
+      ready(PORT, getServiceToken())
     }
     if (process.send) {
       //notify potential fork parents about the service readiness

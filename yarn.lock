@@ -14044,6 +14044,7 @@ __metadata:
     "@types/express": "npm:^4.17.17"
     "@types/node": "npm:20.6.0"
     app: "npm:*"
+    axios: "npm:^1.7.7"
     chokidar: "npm:^3.5.3"
     cookie-parser: "npm:^1.4.6"
     cors: "npm:^2.8.5"
