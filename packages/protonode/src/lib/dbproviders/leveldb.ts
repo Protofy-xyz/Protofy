@@ -58,7 +58,13 @@ export class ProtoLevelDB extends ProtoDB {
 
     async del(key: string, options?) {
         const result = await this.db.del(key, options)
-        await this.regenerateIndexes()
+        if(this.orderedInsert) {
+            //decrement counter
+            await ProtoLevelDB.decrementKey(sublevel(this.rootDb, 'counter_' + this.tableVersion), 'total')
+        } else {
+            await this.regenerateIndexes()
+        }
+
         return result
     }
 
@@ -96,7 +102,7 @@ export class ProtoLevelDB extends ProtoDB {
         return groupIndexes.every(gi => storedGroupIndexes.find(sgi => sgi.key == gi))
     }
 
-    async getPageItems(total, key, pageNumber, itemsPerPage, direction, filter) {
+    async getPageItems(total, key, pageNumber, itemsPerPage, direction, filter?) {
         let ordered
         if (filter) {
             const group = sublevel(this.rootDb, 'group_' + filter.key + '_' + this.tableVersion)
@@ -136,28 +142,66 @@ export class ProtoLevelDB extends ProtoDB {
         return await this.db.getMany(allItems)
     }
 
+
+
     async put(key: string, value: string, options?) {
         const { keyEncoding, valueEncoding, ...internalOptions } = options ?? {};
-        const result = await this.db.put(key, value, options)
-        if (this.batch) {
-            if (this.batchCounter === this.batchLimit) {
-                this.batchIndexes()
-            } else {
-                this.batchCounter++
-                if (!this.batchTimer) {
-                    this.batchTimer = setTimeout(() => {
-                        this.batchIndexes()
-                    }, this.batchTimeout);
+        const { maxEntries, action, ...dbOptions} = options ?? {};
+        let result;
+        if (maxEntries && action == 'create' && options.entityId && this.orderedInsert) {
+            // Usar un lock compartido para el mismo entity (overflow)
+            const lockKey = 'overflow_' + options.entityId;
+            if (!ProtoLevelDB.locks[lockKey]) {
+                ProtoLevelDB.locks[lockKey] = Promise.resolve();
+            }
+    
+            const previousLock = ProtoLevelDB.locks[lockKey];
+            let release: () => void;
+            const lockPromise = new Promise<void>(resolve => {
+                release = resolve;
+            });
+            // Encadenamos la nueva promesa al lock compartido
+            ProtoLevelDB.locks[lockKey] = previousLock.then(() => lockPromise);
+        
+            // Esperamos a que terminen las operaciones previas para ese entity
+            await previousLock;
+            try {
+                const total = await this.count();
+                if (parseInt(total, 10) >= parseInt(maxEntries, 10)) {
+                    const oldest = await this.getPageItems(total, options.entityId, 0, 1, 'asc');
+                    if (oldest.length) {
+                        const item = JSON.parse(oldest[0]);
+                        await ProtoLevelDB.removeFromIndexes(this.rootDb, this.db, this.location, this.tableVersion, item);
+                        await this.del(item.id);
+                    }
                 }
+                result = await this.db.put(key, value, dbOptions);
+                await ProtoLevelDB.appendToIndexes(this.rootDb, this.db, this.location, this.tableVersion, JSON.parse(value));
+            } finally {
+                release();
             }
         } else {
-            if (this.orderedInsert) {
-                await ProtoLevelDB.appendToIndexes(this.rootDb, this.db, this.location, this.tableVersion, JSON.parse(value))
+            result = await this.db.put(key, value, dbOptions);
+            if (this.batch) {
+                if (this.batchCounter === this.batchLimit) {
+                    this.batchIndexes();
+                } else {
+                    this.batchCounter++;
+                    if (!this.batchTimer) {
+                        this.batchTimer = setTimeout(() => {
+                            this.batchIndexes();
+                        }, this.batchTimeout);
+                    }
+                }
             } else {
-                await this.regenerateIndexes();
+                if (this.orderedInsert) {
+                    await ProtoLevelDB.appendToIndexes(this.rootDb, this.db, this.location, this.tableVersion, JSON.parse(value));
+                } else {
+                    await this.regenerateIndexes();
+                }
             }
         }
-        return result
+        return result;
     }
 
     private batchIndexes() {
@@ -218,6 +262,91 @@ export class ProtoLevelDB extends ProtoDB {
                 return []
             }
         } catch (e) {
+        }
+    }
+    static async removeFromIndexes(rootDb, db, location, tableVersion, value) {
+        let indexData;
+        let groupIndexData;
+        try {
+            const indexTable = sublevel(rootDb, 'indexTable')
+            indexData = JSON.parse(await indexTable.get('indexes'))
+            groupIndexData = JSON.parse(await indexTable.get('groupIndexes'))
+        } catch (e) {
+            logger.debug('Table has no indexes: ', location)
+            return
+        }
+    
+        if (!indexData && !groupIndexData) return;
+    
+        // Se obtiene la clave primaria del registro
+        const primary = value[indexData.primary];
+    
+        // Remover de índices de grupo
+        if (groupIndexData && groupIndexData.length) {
+            for (let i = 0; i < groupIndexData.length; i++) {
+                const currentIndex = groupIndexData[i];
+                const groupSubLevel = sublevel(rootDb, 'group_' + currentIndex.key + '_' + tableVersion);
+                const groupSubLevelOptions = sublevel(rootDb, 'group_' + currentIndex.key + '_options_' + tableVersion);
+    
+                let groupKeys: any[] = [];
+                if (currentIndex.fn) {
+                    const fn = new Function('data', currentIndex.fn);
+                    groupKeys = fn(value);
+                } else {
+                    groupKeys = [ value[currentIndex.key] ];
+                }
+    
+                for (const groupKey of groupKeys) {
+                    const subLevelGroupCollection = sublevel(groupSubLevel, groupKey);
+                    const list = sublevel(subLevelGroupCollection, 'list');
+    
+                    // Buscar y eliminar la entrada cuyo key termine con '_' + primary
+                    for await (const [itemKey] of list.iterator({ keys: true, values: false })) {
+                        if (itemKey.endsWith('_' + primary)) {
+                            await list.del(itemKey);
+                            break;
+                        }
+                    }
+    
+                    // Decrementar el contador del grupo utilizando decrementKey
+                    await ProtoLevelDB.decrementKey(sublevel(subLevelGroupCollection, 'counter'), 'total');
+    
+                    // Si no quedan elementos en la lista, se elimina la opción correspondiente
+                    let hasItems = false;
+                    for await (const _ of list.iterator({ keys: true, values: false, limit: 1 })) {
+                        hasItems = true;
+                        break;
+                    }
+                    if (!hasItems) {
+                        const optionKey = String(String(groupKey).length)
+                            .padStart(FIXED_PADDING_LENGTH, '0') + '_' + groupKey;
+                        try {
+                            await groupSubLevelOptions.del(optionKey);
+                        } catch (err) {
+                            // Ignorar error si no existe la opción
+                        }
+                    }
+                }
+            }
+        }
+    
+        // Remover de índices ordenados
+        if (indexData && indexData.keys && indexData.keys.length) {
+            const indexes = indexData.keys;
+            for (let i = 0; i < indexes.length; i++) {
+                const currentIndexKey = indexes[i];
+                const ordered = sublevel(rootDb, 'order_' + currentIndexKey + '_' + tableVersion);
+                for await (const [itemKey] of ordered.iterator({ keys: true, values: false })) {
+                    if (itemKey.endsWith('_' + primary)) {
+                        await ordered.del(itemKey);
+                        break;
+                    }
+                }
+            }
+            // Se elimina la línea que decrementaba el contador global,
+            // ya que la llamada a this.del (que se realiza luego)
+            // se encarga de decrementar el contador.
+            // await ProtoLevelDB.decrementKey(sublevel(rootDb, 'counter_' + tableVersion), 'total');
         }
     }
 
@@ -503,18 +632,18 @@ export class ProtoLevelDB extends ProtoDB {
 
     static async incrementKey(db, key) {
         // Si no existe un lock para esta clave, inicialízalo
-        if (!ProtoLevelDB.locks[key]) {
-            ProtoLevelDB.locks[key] = Promise.resolve();
+        if (!ProtoLevelDB.locks['increment_'+key]) {
+            ProtoLevelDB.locks['increment_'+key] = Promise.resolve();
         }
 
-        const previousLock = ProtoLevelDB.locks[key];
+        const previousLock = ProtoLevelDB.locks['increment_'+key];
         let release: () => void;
         // Creamos una nueva promesa que se resolverá cuando se libere el lock
         const lockPromise = new Promise<void>(resolve => {
             release = resolve;
         });
         // Encadenamos la nueva promesa al lock existente
-        ProtoLevelDB.locks[key] = previousLock.then(() => lockPromise);
+        ProtoLevelDB.locks['increment_'+key] = previousLock.then(() => lockPromise);
 
         // Esperamos a que terminen las operaciones previas
         await previousLock;
@@ -536,5 +665,43 @@ export class ProtoLevelDB extends ProtoDB {
             // Liberamos el lock para que la siguiente operación pueda continuar
             release();
         }
+    }
+
+    static async decrementKey(db, key) {
+        // Si no existe un lock para esta clave, inicialízalo
+        if (!ProtoLevelDB.locks['decrement_'+key]) {
+            ProtoLevelDB.locks['decrement_'+key] = Promise.resolve();
+        }
+
+        const previousLock = ProtoLevelDB.locks['decrement_'+key];
+        let release: () => void;
+        // Creamos una nueva promesa que se resolverá cuando se libere el lock
+        const lockPromise = new Promise<void>(resolve => {
+            release = resolve;
+        });
+        // Encadenamos la nueva promesa al lock existente
+        ProtoLevelDB.locks['decrement_'+key] = previousLock.then(() => lockPromise);
+
+        // Esperamos a que terminen las operaciones previas
+        await previousLock;
+        try {
+            let value;
+            try {
+                value = await db.get(key);
+            } catch (err: any) {
+                if (err.notFound) {
+                    value = 0;
+                } else {
+                    throw err;
+                }
+            }
+            const newValue = parseInt(JSON.parse(value), 10) - 1;
+            await db.put(key, JSON.stringify(newValue), { sync: true });
+            return newValue;
+        } finally {
+            // Liberamos el lock para que la siguiente operación pueda continuar
+            release();
+        }
+       
     }
 }

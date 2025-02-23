@@ -66,7 +66,8 @@ type AutoAPIOptions = {
         batch?: boolean,
         batchLimit?: number,
         batchTimeout?: number,
-        orderedInsert?: boolean
+        orderedInsert?: boolean,
+        maxEntries?: number
     }
 }
 
@@ -341,7 +342,7 @@ export const AutoAPI = ({
                     res.status(409).send({ error: "Already exists" })
                     return
                 } catch (e) {
-                    await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))))
+                    await db.put(entityModel.getId(), JSON.stringify(processLinks(entityModel.serialize(true))), {...dbOptions, action: 'create', entityId: modelType.getIdField()})
                 }
             }
         }

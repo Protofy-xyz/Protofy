@@ -172,4 +172,43 @@ describe("Basic tests", () => {
         expect(response.data.items[0].user).toBe('test user')
         expect(response.data.items[0].payload.c).toBe('0')
     }, 5000);
+
+    it("Should never exceed MAX_EVENTS (repeatedly) (500 for tests)", async () => {
+        const requests = [];
+        for (let i = 0; i < 10; i++) {
+            requests.push(await axios.post(`http://localhost:3002/api/core/v1/events?token=${token}`, {
+                path: 'test/flood_exceed',
+                from: 'test',
+                user: 'test user',
+                payload: { 'c': ''+i }
+            }));
+        }
+        
+        const response = await axios.get('http://localhost:3002/api/core/v1/events?token=' + token) 
+        expect(response.data.total).toBe(500)
+        expect(response.data.items.length).toBe(50)
+        expect(response.data.items[0].path).toBe('test/flood_exceed')
+    }, 5000);
+
+    it("Should never exceed MAX_EVENTS (parallel) (500 for tests)", async () => {
+        const requests = [];
+        for (let i = 0; i < 10; i++) {
+            requests.push(axios.post(`http://localhost:3002/api/core/v1/events?token=${token}`, {
+                path: 'test/flood_exceed',
+                from: 'test',
+                user: 'test user',
+                payload: { 'c': ''+i }
+            }));
+        }
+    
+        // Ejecutar todas las peticiones en paralelo y capturar los resultados
+        const responses = await Promise.all(requests);
+        //wait for 1 second to let the events be processed
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        const response = await axios.get('http://localhost:3002/api/core/v1/events?token=' + token) 
+        expect(response.data.total).toBe(500)
+        expect(response.data.items.length).toBe(50)
+        expect(response.data.items[0].path).toBe('test/flood_exceed')
+    }, 5000);
 })
