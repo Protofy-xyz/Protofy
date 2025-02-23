@@ -47,6 +47,24 @@ describe("Basic tests", () => {
         expect(response.data.items[0].payload.c).toBe('0')
     })
 
+    it("skips storage for ephemeral events", async () => {
+        let response = await axios.post('http://localhost:3002/api/core/v1/events?token=' + token, {
+            path: 'test/ephemeral',
+            from: 'test',
+            user: 'test user',
+            ephemeral: true,
+            payload: { 'c': '0' }
+        });
+        
+        response = await axios.get('http://localhost:3002/api/core/v1/events?token=' + token) 
+        expect(response.data.total).toBe(1)
+        expect(response.data.items.length).toBe(1)
+        expect(response.data.items[0].path).toBe('test/incremental')
+        expect(response.data.items[0].from).toBe('test')
+        expect(response.data.items[0].user).toBe('test user')
+        expect(response.data.items[0].payload.c).toBe('0')
+    })
+
     it("creates 10 events when receiving a post request with the event", async () => {
         for (let i = 1; i < 11; i++) {
             await axios.post('http://localhost:3002/api/core/v1/events?token=' + token, {
