@@ -211,4 +211,28 @@ describe("Basic tests", () => {
         expect(response.data.items.length).toBe(50)
         expect(response.data.items[0].path).toBe('test/flood_exceed')
     }, 5000);
+
+    it("Flood overflowed MAX_EVENTS (500 for tests) events in parallel in under 10 seconds", async () => {
+        const requests = [];
+        for (let i = 0; i < 368; i++) {
+            requests.push(axios.post(`http://localhost:3002/api/core/v1/events?token=${token}`, {
+                path: 'test/flood_exceed_last',
+                from: 'test',
+                user: 'test user',
+                payload: { 'c': ''+i }
+            }));
+        }
+    
+        // Ejecutar todas las peticiones en paralelo y capturar los resultados
+        const responses = await Promise.all(requests);
+    
+        // Verificar el contenido de las respuestas
+        // console.log('All requests done', responses.map(r => r.data));
+        // console.log(`http://localhost:3002/api/core/v1/events?token=${token}`);
+    
+        // Hacer la petición para obtener el total después de enviar los eventos
+        const response = await axios.get(`http://localhost:3002/api/core/v1/events?token=${token}`);
+        expect(response.data.items.length).toBe(50);
+        expect(response.data.total).toBe(500);
+    }, 10000);
 })
