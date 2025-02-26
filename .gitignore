@@ -6,6 +6,7 @@ logs/*
 !data/workspaces
 !data/templates
 !data/devices
+!data/deviceDefinitions
 !data/public/
 !data/public/fonts/
 !data/public/fonts/*
