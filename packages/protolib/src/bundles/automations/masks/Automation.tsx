@@ -2,7 +2,7 @@ import { Node, NodeOutput, NodeParams, filterObject, restoreObject, getFieldValu
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
 import { Plug } from '@tamagui/lucide-icons';
 import React from 'react';
-import { SizableText, Spinner, XStack } from 'tamagui';
+import { Fieldset, SizableText, Spinner, XStack } from 'tamagui';
 import { API } from 'protobase'
 import { SiteConfig} from '@my/config/dist/AppConfig'
 
@@ -14,11 +14,14 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
         <Node icon={Plug} node={node} isPreview={!node.id} title='Automation' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
                 { label: 'Name', field: 'mask-name', type: 'input' },
+                { label: 'Description', field: 'mask-description', type: 'input' },
+                { label: 'Params', field: 'mask-automationParams', type: 'input' },
                 { label: 'Response', field: 'mask-responseMode', type: 'select', data: ['instant', 'wait', 'manual'], static: true},
             ]} />
             <div style={{height: '30px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Run'} vars={['params']} handleId={'mask-onRun'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
+            
             <div style={{height: '0px'}} />
             <Button label={loading?<Spinner color={color} />:"Run"} onPress={async () => {
                 const params = getFieldValue('testparams', nodeData)
@@ -47,6 +50,8 @@ export default {
     getComponent: (node, nodeData, children) => <AutomationNode node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
             name: 'input',
+            description: 'input',
+            automationParams: 'input',
             responseMode: 'input',
             app: 'input',
             onRun: 'output',
@@ -54,6 +59,8 @@ export default {
     }}),
     restoreChildren: restoreObject({keys: {
         name: 'input',
+        description: 'input',
+        automationParams: 'input',
         responseMode: 'input',
         app: 'input',
         onRun: { params: {'param-params': { key: "params"}, 'param-res': { key: "res"}}},
@@ -71,12 +78,20 @@ export default {
                 value: "",
                 kind: "StringLiteral"
             },
+            "mask-description": {
+                value: "",
+                kind: "StringLiteral"
+            },
             "mask-responseMode": {
                 value: "wait",
                 kind: "StringLiteral"
             },
             "mask-app": {
                 value: 'app',
+                kind: "Identifier"
+            },
+            "mask-automationParams": {
+                value: "null",
                 kind: "Identifier"
             }
         }

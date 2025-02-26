@@ -1,11 +1,14 @@
-import { getLogger } from 'protobase';
+import { API, getLogger } from 'protobase';
 import { chromium, firefox, webkit } from 'playwright'; 
+import {getServiceToken} from 'protonode'
 
 const logger = getLogger();
 
 export const automation = async (options: {
     name: string,
     responseMode?: 'instant' | 'wait' | 'manual',
+    automationParams?: any,
+    description?: string,
     app: any,
     onRun?: (params, res) => void
     onError?: (err) => void
@@ -27,6 +30,14 @@ export const automation = async (options: {
     }
 
     try {
+        const token = getServiceToken()
+        await API.post('/api/core/v1/automations?token='+token, {
+            name: name,
+            responseMode: responseMode,
+            automationParams: options.automationParams ?? {},
+            description: options.description ?? ""
+        })
+
         const url = "/api/v1/automations/"+name;
         app.get(url, async (req,res)=>{
             logger.info({name, params: req.query}, "Automation executed: "+name)
