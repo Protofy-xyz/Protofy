@@ -4,6 +4,7 @@ import { SessionDataType } from "protonode";
 export const AutomationSchema = Schema.object({
     name: z.string().search().id(),
     params: z.any().optional(),
+    tags: z.array(z.string()).optional(),
     responseMode: z.enum(['instant', 'wait', 'manual']).optional(),
 }) 
 

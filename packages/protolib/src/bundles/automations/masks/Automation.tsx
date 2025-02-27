@@ -16,6 +16,7 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
                 { label: 'Name', field: 'mask-name', type: 'input' },
                 { label: 'Description', field: 'mask-description', type: 'input' },
                 { label: 'Params', field: 'mask-automationParams', type: 'input' },
+                { label: 'Tags', field: 'mask-tags', type: 'input' },
                 { label: 'Response', field: 'mask-responseMode', type: 'select', data: ['instant', 'wait', 'manual'], static: true},
             ]} />
             <div style={{height: '30px'}} />
@@ -52,6 +53,7 @@ export default {
             name: 'input',
             description: 'input',
             automationParams: 'input',
+            tags: 'input',
             responseMode: 'input',
             app: 'input',
             onRun: 'output',
@@ -61,6 +63,7 @@ export default {
         name: 'input',
         description: 'input',
         automationParams: 'input',
+        tags: 'input',
         responseMode: 'input',
         app: 'input',
         onRun: { params: {'param-params': { key: "params"}, 'param-res': { key: "res"}}},
@@ -91,6 +94,10 @@ export default {
                 kind: "Identifier"
             },
             "mask-automationParams": {
+                value: "null",
+                kind: "Identifier"
+            },
+            "mask-tags": {
                 value: "null",
                 kind: "Identifier"
             }

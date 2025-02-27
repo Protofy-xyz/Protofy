@@ -250,7 +250,7 @@ export const AutoAPI = ({
         const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);
 
         const filterKeys = Object.keys(filter || {})    
-        if(!search && (!filter || ((!req.query.orderBy || req.query.orderBy == modelType.getIdField()) && filterKeys.length == 1 && db.hasCapability('groupBySingle') && await db.hasGroupIndexes(filterKeys))) && !skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
+        if(!search && (!filter || ((!req.query.orderBy || req.query.orderBy == modelType.getIdField()) && filterKeys.length == 1 && db.hasCapability && db.hasCapability('groupBySingle') && await db.hasGroupIndexes(filterKeys))) && !skipDatabaseIndexes && db.hasCapability && db.hasCapability('pagination')) {
             // console.log('Using indexed retrieval: ', modelName, 'filters: ', filter)
             const indexedKeys = await db.getIndexedKeys()
             const filterData = filter ? {key: filterKeys[0], value: filter[filterKeys[0]]} : null

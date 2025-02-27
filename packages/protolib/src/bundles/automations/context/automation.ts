@@ -8,6 +8,7 @@ export const automation = async (options: {
     name: string,
     responseMode?: 'instant' | 'wait' | 'manual',
     automationParams?: any,
+    tags?: string[],
     description?: string,
     app: any,
     onRun?: (params, res) => void
@@ -35,7 +36,8 @@ export const automation = async (options: {
             name: name,
             responseMode: responseMode,
             automationParams: options.automationParams ?? {},
-            description: options.description ?? ""
+            description: options.description ?? "",
+            tags: options.tags ?? []
         })
 
         const url = "/api/v1/automations/"+name;
