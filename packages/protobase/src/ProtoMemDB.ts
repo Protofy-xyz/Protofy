@@ -9,7 +9,7 @@ export const ProtoMemDB = {
         return state[tag] && state[tag][name]
     },
     getByTag: (tag) => {
-        return state[tag]
+        return state[tag] || {}
     },
     remove: (tag, name) => {
         if(state[tag]) {
