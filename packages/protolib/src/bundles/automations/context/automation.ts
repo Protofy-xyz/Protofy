@@ -42,7 +42,7 @@ export const automation = async (options: {
 
         const url = "/api/v1/automations/"+name;
         app.get(url, async (req,res)=>{
-            logger.info({name, params: req.query}, "Automation executed: "+name)
+            logger.trace({name, params: req.query}, "Automation executed: "+name)
             try {
                 if(responseMode == 'instant') {
                     res.send({result: "started"})

@@ -183,7 +183,7 @@ export const DevicesAPI = (app, context) => {
             const monitor = deviceInfo.getMonitorByEndpoint("/"+endpoint)
             // console.log("monitor: ", monitor)
             if(!monitor){
-                logger.debug({ from: device, deviceName, endpoint }, "Device not found: "+JSON.stringify({topic, message}))
+                logger.trace({ from: device, deviceName, endpoint }, "Device not found: "+JSON.stringify({topic, message}))
                 return
             }
             // const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
