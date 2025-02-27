@@ -20,6 +20,7 @@ import deviceContext from './devices/devices/context'
 import wledContext from './wled/context'
 import stateMachines from './stateMachines/context'
 import agents from './agents/agents/context'
+import stateContext from './state/context'
 
 export const APIContext = {
     onEvent,
@@ -50,5 +51,6 @@ export const APIContext = {
     automations,
     network,
     sm: stateMachines, 
-    agents
+    agents,
+    state: stateContext
 }
