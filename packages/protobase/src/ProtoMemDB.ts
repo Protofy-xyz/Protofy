@@ -8,6 +8,9 @@ export const ProtoMemDB = {
     get: (tag, name) => {
         return state[tag] && state[tag][name]
     },
+    getTags: ()=>{
+        return Object.keys(state)
+    },
     getByTag: (tag) => {
         return state[tag] || {}
     },
