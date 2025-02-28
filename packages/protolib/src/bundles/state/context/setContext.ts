@@ -1,11 +1,13 @@
 import { API, getLogger, ProtoMemDB } from 'protobase';
-import {getServiceToken} from 'protonode'
+import {getServiceToken} from 'protonode';
+import { generateEvent } from "../../events/eventsLibrary";
 const logger = getLogger();
 
 export const setContext = async (options: {
     tag: string,
     name: string,
-    value: any
+    value: any,
+    emitEvent?: boolean
 }) => {
     const name = options.name
     const tag = options.tag
@@ -25,6 +27,13 @@ export const setContext = async (options: {
         logger.error({}, "State value is required");
         return
     }
-
+    if(options.emitEvent) {
+        generateEvent({
+            path: `states/${tag}/${name}/update`, 
+            from: "states",
+            user: 'system',
+            payload:{value: value},
+        }, getServiceToken())
+    }
     return ProtoMemDB.set(tag, name, value)
 }
