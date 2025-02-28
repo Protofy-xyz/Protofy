@@ -273,7 +273,7 @@ export const AutoAPI = ({
             }
         }
 
-        logger.trace("Using basic retrieval without indexes: ", modelName, 'filters: ', filter)
+        //logger.trace("Using basic retrieval without indexes: ", modelName, 'filters: ', filter)
 
         for await (const [key, value] of db.iterator()) {
             //console.log("***********************key", key, "value ", value)
