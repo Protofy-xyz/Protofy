@@ -9,6 +9,7 @@ export const automation = async (options: {
     responseMode?: 'instant' | 'wait' | 'manual',
     automationParams?: any,
     tags?: string[],
+    displayName?: string,
     description?: string,
     app: any,
     onRun?: (params, res) => void
@@ -34,6 +35,7 @@ export const automation = async (options: {
         const token = getServiceToken()
         await API.post('/api/core/v1/automations?token='+token, {
             name: name,
+            displayName: options.displayName ?? name,
             responseMode: responseMode,
             automationParams: options.automationParams ?? {},
             description: options.description ?? "",

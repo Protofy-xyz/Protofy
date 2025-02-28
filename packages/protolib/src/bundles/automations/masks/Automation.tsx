@@ -52,6 +52,7 @@ export default {
     filterChildren: filterObject({keys: {
             name: 'input',
             description: 'input',
+            displayName: 'input',
             automationParams: 'input',
             tags: 'input',
             responseMode: 'input',
@@ -62,6 +63,7 @@ export default {
     restoreChildren: restoreObject({keys: {
         name: 'input',
         description: 'input',
+        displayName: 'input',
         automationParams: 'input',
         tags: 'input',
         responseMode: 'input',
@@ -82,6 +84,10 @@ export default {
                 kind: "StringLiteral"
             },
             "mask-description": {
+                value: "",
+                kind: "StringLiteral"
+            },
+            "mask-displayName": {
                 value: "",
                 kind: "StringLiteral"
             },
