@@ -51,7 +51,14 @@ class Device {
             if(component) {
                 try {
                     let componentSubsystem = component.getSubsystem()
-                    this.subsystemsTree.push({generateEvent: componentSubsystem.generateEvent??true, ...componentSubsystem})
+                    if(Array.isArray(componentSubsystem)){
+                        componentSubsystem.forEach((subsystem)=>{
+                            this.subsystemsTree.push({generateEvent: subsystem.generateEvent??true, ...subsystem})
+                        })
+                    }
+                    else{
+                        this.subsystemsTree.push({generateEvent: componentSubsystem.generateEvent??true, ...componentSubsystem})
+                    }
                 } catch {
 
                 }

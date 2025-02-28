@@ -1,4 +1,5 @@
 import OutputPin from "../nodes/OutputPin";
+import { output } from "./Output";
 
 class PCA9685 {
     type;
@@ -19,17 +20,82 @@ class PCA9685 {
     getOutputComponents() {
         let outputComponents = []
         for(var i = 0; i < 16; i++){
-            const component = {
+            const outputComponent = {
                 name: "output",
                 config: {
                     platform: "pca9685",
                     pca9685_id: this.name,
                     channel: i,
-                    id: this.name+'_channel_'+i
+                    id: this.name+'_channel_'+i+'_output',
                 },
                 subsystem: {}
             }
-            outputComponents.push(component)
+            outputComponents.push(outputComponent)
+            const switchComponent = {
+                name: "switch",
+                config: {
+                    platform: "output",
+                    name: this.name+'_channel_'+i,
+                    id: this.name+'_channel_'+i,
+                    output: this.name+'_channel_'+i+'_output',
+                    restore_mode: "ALWAYS_OFF"
+                },
+                subsystem: {
+                    name: this.name+'_channel_'+i,
+                    type: this.type,
+                    config:{
+                        restoreMode: "ON"
+                    },
+                    actions: [
+                        {
+                        name: 'on',
+                        label: 'Turn on',
+                        description: 'turns on the gpio',
+                        props: {
+                            theme: "green",
+                            color: "$green10"
+                        },
+                        endpoint: "/switch/"+this.name+'_channel_'+i+"/command",
+                        connectionType: 'mqtt',
+                        payload: {
+                            type: 'str',
+                            value: 'ON',
+                        },
+                        },
+                        {
+                        name: 'off',
+                        label: 'Turn off',
+                        description: 'turns off the gpio',
+                        props: {
+                            theme: "red",
+                            color: "$red10"
+                        },
+                        endpoint: "/switch/"+this.name+'_channel_'+i+"/command",
+                        connectionType: 'mqtt',
+                        payload: {
+                            type: 'str',
+                            value: 'OFF',
+                        },
+                        },
+                        {
+                        name: 'toggle',
+                        label: 'Toggle',
+                        description: 'Toggles the gpio',
+                        props: {
+                            theme: "purple",
+                            color: "$purple10"
+                        },
+                        endpoint: "/switch/"+this.name+'_channel_'+i+"/command",
+                        connectionType: 'mqtt',
+                        payload: {
+                            type: 'str',
+                            value: 'TOGGLE',
+                        },
+                        }
+                    ]
+                }
+            }
+            outputComponents.push(switchComponent)
         }
         return outputComponents
     }
@@ -63,7 +129,13 @@ class PCA9685 {
     }
 
     getSubsystem() {
-        return {}
+        //put all the subsystems from indvividual switch components here
+        const outputComponents = this.getOutputComponents()
+        let subsystems = []
+        outputComponents.forEach((element, j) => {
+            subsystems.push(element.subsystem)
+        })
+        return subsystems
     }
 }
 
