@@ -24,6 +24,7 @@ import stateContext from './state/context'
 import lmstudio from './lmstudio/context'
 import protomemdb from './protomemdb/context'
 import autopilot from './autopilot/context'
+import chatbots from './chatbots/context'
 
 export const APIContext = {
     onEvent,
@@ -58,5 +59,6 @@ export const APIContext = {
     state: stateContext,
     lmstudio,
     protomemdb,
-    autopilot
+    autopilot,
+    chatbots
 }

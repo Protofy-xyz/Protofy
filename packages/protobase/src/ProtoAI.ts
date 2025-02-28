@@ -37,18 +37,30 @@ export class StateElement {
     }
 
     toXmlString() {
-        return '<' + this.name + '>' + this.value + '</' + this.name + '>\n';
+        let value = this.value
+        console.log('value: ', value)
+        if(value.toXmlString) {
+            value = value.toXmlString()
+        }
+        return '<' + this.name + '>' + value + '</' + this.name + '>\n';
     }
 }
 
 export class StateGroup {
     states: StateElement[];
+    skipStatesTag: boolean;
 
-    constructor(states: StateElement[]) {
+    constructor(states: StateElement[], skipStatesTag = false) {
         this.states = states;
+        this.skipStatesTag = skipStatesTag;
+    }
+
+    merge(stateGroup: StateGroup) {
+        this.states = this.states.concat(stateGroup.states);
+        return this;
     }
 
     toXmlString() {
-        return '<states>' + "\n" + this.states.map((state) => "\t" + state.toXmlString()).join("\n") + "\n</states>\n";
+        return (!this.skipStatesTag ? '<states>' : '') + "\n" + this.states.map((state) => "\t" + state.toXmlString()).join("\n") + "\n"+(!this.skipStatesTag ?"</states>\n":"");
     }
 }
