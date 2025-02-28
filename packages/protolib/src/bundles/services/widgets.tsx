@@ -10,6 +10,7 @@ import { DashboardCard } from '../../components/DashboardCard';
 import { PieChart } from '../../components/PieChart';
 
 import { LineChart, Cpu } from 'lucide-react'
+import Center from 'protolib/src/components/Center';
 
 const fetch = async (fn) => {
     const services = await API.get('/api/core/v1/services')
@@ -18,8 +19,8 @@ const fetch = async (fn) => {
 
 export const ServiceMemoryUsageChart = ({ title, id }) => {
     const [servicesData, setServicesData] = useRemoteStateList(undefined, fetch, ServiceModel.getNotificationsTopic(), ServiceModel, true);
-    const COLORS = [ "#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF", "#FF007F", "#7B00FF", "#00FF7F", "#FF4500", "#4682B4" ]
-      
+    const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF", "#FF007F", "#7B00FF", "#00FF7F", "#FF4500", "#4682B4"]
+
     if (!servicesData?.data?.items) return null;
 
     return (
@@ -36,6 +37,29 @@ export const ServiceMemoryUsageChart = ({ title, id }) => {
     );
 };
 
+export const CenterCard = ({ title, id, children }) => {
+    return (
+        <DashboardCard title={title} id={id}>
+            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
+                <YStack alignItems="center" justifyContent="center">
+                    {children}
+                </YStack>
+            </YStack>
+        </DashboardCard>
+    );
+}
+
+export const CardValue = ({ Icon, value }) => {
+    return (
+        <YStack alignItems="center" justifyContent="center">
+            <Icon color="var(--color7)" size={48} strokeWidth={1.75} />
+            <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
+                {value}
+            </Text>
+        </YStack>
+    );
+}
+
 export const TotalMemoryUsage = ({ title, id }) => {
     const [servicesData, setServicesData] = useRemoteStateList(undefined, fetch, ServiceModel.getNotificationsTopic(), ServiceModel, true);
     const [totalMemory, setTotalMemory] = useState(0);
@@ -48,20 +72,11 @@ export const TotalMemoryUsage = ({ title, id }) => {
     }, [servicesData]);
 
     return (
-        <DashboardCard title={title} id={id}>
-            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
-                <AsyncView atom={servicesData}>
-                    {servicesData?.data?.items && (
-                        <YStack alignItems="center" justifyContent="center">
-                            <LineChart color="var(--color7)" size={48} strokeWidth={1.75} />
-                            <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
-                                {(totalMemory / (1024 * 1024)).toFixed(2)} MB
-                            </Text>
-                        </YStack>
-                    )}
-                </AsyncView>
-            </YStack>
-        </DashboardCard>
+        <CenterCard title={title} id={id}>
+            <AsyncView atom={servicesData}>
+                <CardValue Icon={LineChart} value={(totalMemory / (1024 * 1024)).toFixed(2)} />
+            </AsyncView>
+        </CenterCard>
     );
 };
 
@@ -78,19 +93,10 @@ export const TotalCPUUsage = ({ title, id }) => {
     }, [servicesData]);
 
     return (
-        <DashboardCard title={title} id={id}>
-            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
-                <AsyncView atom={servicesData}>
-                    {servicesData?.data?.items && (
-                        <YStack alignItems="center" justifyContent="center">
-                            <Cpu color="var(--color7)" size={48} strokeWidth={1.75} />
-                            <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
-                                {totalCPU.toFixed(2)} %
-                            </Text>
-                        </YStack>
-                    )}
-                </AsyncView>
-            </YStack>
-        </DashboardCard>
+        <CenterCard title={title} id={id}>
+            <AsyncView atom={servicesData}>
+                <CardValue Icon={Cpu} value={totalCPU.toFixed(2)} />
+            </AsyncView>
+        </CenterCard>
     );
 };
