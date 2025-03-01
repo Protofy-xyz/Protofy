@@ -63,7 +63,7 @@ function jsonToXml(json, nodeName = '', indent = '') {
 export const getPrompt = async ({ templateName, actions, states, rules }) => {
   const templateContent = fs.readFileSync(path.join(root, "data", "prompts", templateName + '.tpl'), "utf8");
   const templateFunction = Handlebars.compile(templateContent);
-  const prompt = templateFunction({ actions: actions.toXmlString(), states: jsonToXml(states.getData()), rules: "<rules>" + rules.join("\n") + "</rules>" });
+  const prompt = templateFunction({ actions: jsonToXml(actions.getData()), states: jsonToXml(states.getData()), rules: "<rules>" + rules.join("\n") + "</rules>" });
   // console.log(prompt);
   return prompt
 }

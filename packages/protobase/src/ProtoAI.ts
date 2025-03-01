@@ -1,5 +1,8 @@
+interface DataInterface {
+    getData(): any;
+}
 
-export class Action {
+export class Action implements DataInterface {
     name: string;
     description: string;
     params: any;
@@ -10,26 +13,29 @@ export class Action {
         this.params = params;
     }
 
-    toXmlString() {
-        return '<action name="' + this.name + '" description="' + this.description + '">' + "\n" + Object.entries(this.params).map(([key, value]) => "\t\t<param name=\"" + key + "\" description=\"" + value + "\" />").join("\n") + "\n\t</action>\n";
+    getData() {
+        return {action: {
+            name: this.name,
+            description: this.description,
+            params: this.params
+        }}
     }
 }
 
-export class ActionGroup {
+export class ActionGroup implements DataInterface {
     actions: Action[];
-
-    constructor(actions: Action[]) {
+    name: string;
+    constructor(actions: Action[], name: string) {
         this.actions = actions;
+        this.name = name;
     }
 
-    toXmlString() {
-        return '<actions>' + "\n" + this.actions.map((action) => "\t" + action.toXmlString()).join("\n") + "\n</actions>\n";
+    getData() {
+        return {[this.name]: this.actions.map((action) => action.getData())}
     }
 }
 
-interface DataInterface {
-    getData(): any;
-}
+
 export class StateElement implements DataInterface {
     name: string;
     value: any;

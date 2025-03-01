@@ -7,8 +7,7 @@ export const getActionsFromAutomations = async (token, tag) => {
 
     const ag = new ActionGroup(endpoints.data.items.map((automation) => {
         return new Action(automation.name, automation.description, automation.automationParams);
-    }))
+    }), 'actions')
 
-    // console.log(ag.toXmlString());
     return ag
 };
