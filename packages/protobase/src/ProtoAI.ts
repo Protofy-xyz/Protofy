@@ -30,6 +30,10 @@ export class ActionGroup implements DataInterface {
         this.name = name;
     }
 
+    getActions() {
+        return this.actions;
+    }
+
     getData() {
         return {[this.name]: this.actions.map((action) => action.getData())}
     }
