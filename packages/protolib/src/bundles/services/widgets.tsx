@@ -51,7 +51,7 @@ export const CenterCard = ({ title, id, children }) => {
 
 export const CardValue = ({ Icon, value }) => {
     return (
-        <YStack >
+        <YStack alignItems='center' justifyContent='center'>
             <Icon color="var(--color7)" size={48} strokeWidth={1.75} />
             <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
                 {value}
