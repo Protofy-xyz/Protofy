@@ -27,7 +27,10 @@ export class ActionGroup {
     }
 }
 
-export class StateElement {
+interface DataInterface {
+    getData(): any;
+}
+export class StateElement implements DataInterface {
     name: string;
     value: any;
 
@@ -36,31 +39,29 @@ export class StateElement {
         this.value = value;
     }
 
-    toXmlString() {
+    getData() {
         let value = this.value
         console.log('value: ', value)
-        if(value.toXmlString) {
-            value = value.toXmlString()
-        }
-        return '<' + this.name + '>' + value + '</' + this.name + '>\n';
+        return {[this.name]: value};
     }
 }
 
-export class StateGroup {
-    states: StateElement[];
+export class StateGroup implements DataInterface {
+    name: string
+    states: DataInterface[];
     skipStatesTag: boolean;
 
-    constructor(states: StateElement[], skipStatesTag = false) {
+    constructor(states: DataInterface[], name: string) {
         this.states = states;
-        this.skipStatesTag = skipStatesTag;
+        this.name = name;
     }
 
-    merge(stateGroup: StateGroup) {
-        this.states = this.states.concat(stateGroup.states);
+    addState(state: DataInterface) {
+        this.states.push(state)
         return this;
     }
 
-    toXmlString() {
-        return (!this.skipStatesTag ? '<states>' : '') + "\n" + this.states.map((state) => "\t" + state.toXmlString()).join("\n") + "\n"+(!this.skipStatesTag ?"</states>\n":"");
+    getData() {
+        return {[this.name]: this.states.map((state) => state.getData())}
     }
 }
