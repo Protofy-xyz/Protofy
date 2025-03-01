@@ -1,8 +1,8 @@
 import {Action, ActionGroup, API} from "protobase";
 
-export const getActionsFromAutomations = async (token, tag) => {
+export const getActionsFromAutomations = async (tag, token?) => {
     const endpoints = await (
-        await API.get("/api/core/v1/automations?token=" + token + "&filter[tags]=" + tag)
+        await API.get("/api/core/v1/automations?"+(token ? "token=" + token + "&" : "")+"filter[tags]=" + tag)
     )
 
     const ag = new ActionGroup(endpoints.data.items.map((automation) => {
