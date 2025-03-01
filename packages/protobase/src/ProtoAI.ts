@@ -3,21 +3,18 @@ interface DataInterface {
 }
 
 export class Action implements DataInterface {
-    name: string;
-    description: string;
-    params: any;
+    automationData: any;
 
-    constructor(name: string, description: string, params: any) {
-        this.name = name;
-        this.description = description;
-        this.params = params;
+    constructor(automationData) {
+        this.automationData = automationData;
     }
 
-    getData() {
+    getData(raw?: boolean) {
+        if (raw) {
+            return this.automationData;
+        }
         return {action: {
-            name: this.name,
-            description: this.description,
-            params: this.params
+            ...this.automationData
         }}
     }
 }
