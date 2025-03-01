@@ -107,6 +107,19 @@ export const pageTemplates = {
         id: "default",
         name: "Default"
     },
+    "agent": {
+        name: "Agent Panel",
+        id: "agent",
+        extraFields: () => ({
+            agentName: z.string().label('Agent Name').after('route')
+        }),
+        extraValidation: (data) => {
+            if (!Object.keys(data).includes('agentName')) {
+                return { error: "Agent name can't be empty" }
+            }
+            return
+        }
+    },
     "admin": {
         name: "Admin panel",
         id: "admin",
@@ -115,7 +128,7 @@ export const pageTemplates = {
         }),
         extraValidation: (data) => {
             if (!Object.keys(data).includes('object')) {
-                return { error: "object cant be empty" }
+                return { error: "object can't be empty" }
             }
             return
         }
