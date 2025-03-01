@@ -41,7 +41,7 @@ export const CenterCard = ({ title, id, children }) => {
     return (
         <DashboardCard title={title} id={id}>
             <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
-                <YStack alignItems="center" justifyContent="center">
+                <YStack alignItems="center" justifyContent="center" f={1} width="100%">
                     {children}
                 </YStack>
             </YStack>
@@ -51,7 +51,7 @@ export const CenterCard = ({ title, id, children }) => {
 
 export const CardValue = ({ Icon, value }) => {
     return (
-        <YStack alignItems="center" justifyContent="center">
+        <YStack >
             <Icon color="var(--color7)" size={48} strokeWidth={1.75} />
             <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
                 {value}
