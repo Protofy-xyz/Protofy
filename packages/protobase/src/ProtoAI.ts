@@ -68,6 +68,10 @@ export class StateGroup implements DataInterface {
         return this;
     }
 
+    getDataArray() {
+        return this.states.map((state) => state.getData())
+    }
+    
     getData() {
         return {[this.name]: this.states.map((state) => state.getData())}
     }

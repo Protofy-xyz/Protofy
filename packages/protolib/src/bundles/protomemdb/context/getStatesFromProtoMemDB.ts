@@ -11,6 +11,11 @@ export const getStatesFromProtoMemDB = async (tag, useRemoteAPI?): Promise<State
     
     
     const stateGroup = new StateGroup(Object.entries(states).map(([key, value]) => {
+        if(Array.isArray(value)) {
+            return new StateGroup(value.map((state, i) => {
+                return new StateElement(key+'_'+i, state)
+            }), key)
+        }
         return new StateElement(key, value);
     }), 'states');
     return stateGroup;

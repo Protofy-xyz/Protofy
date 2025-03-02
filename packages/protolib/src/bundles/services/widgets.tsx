@@ -49,6 +49,18 @@ export const CenterCard = ({ title, id, children }) => {
     );
 }
 
+export const BasicCard = ({ title, id, children }) => {
+    return (
+        <DashboardCard title={title} id={id}>
+            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1}>
+                <YStack width="100%">
+                    {children}
+                </YStack>
+            </YStack>
+        </DashboardCard>
+    );
+}
+
 export const CardValue = ({ Icon, value }) => {
     return (
         <YStack alignItems='center' justifyContent='center'>
