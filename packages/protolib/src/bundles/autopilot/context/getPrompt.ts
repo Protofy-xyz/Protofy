@@ -5,56 +5,62 @@ import Handlebars from "handlebars"
 const root = path.join(process.cwd(), "..", "..");
 
 function jsonToXml(json, nodeName = '', indent = '') {
-  const indentStep = '    '; // 4 espacios para indentación
+  const indentStep = '    '; // 4 espacios para la indentación
   let xml = '';
 
   // Caso de valor primitivo o null
   if (typeof json !== 'object' || json === null) {
-    if (nodeName) {
-      return `${indent}<${nodeName}>${json}</${nodeName}>\n`;
-    } else {
-      return `${indent}${json}\n`;
-    }
+      if (nodeName) {
+          // Abrimos la etiqueta en una línea, añadimos indentación y cerramos la etiqueta en otra línea
+          return (
+              `${indent}<${nodeName}>\n` +
+              `${indent}${indentStep}${json}\n` +
+              `${indent}</${nodeName}>\n`
+          );
+      } else {
+          // Si no hay nodeName, simplemente devuelve el valor con su indentación
+          return `${indent}${json}\n`;
+      }
   }
 
   // Si es un array
   if (Array.isArray(json)) {
-    // Si cada elemento es un objeto con una única clave y estamos dentro de una etiqueta (nodeName definida)
-    const canMerge = json.every(
-      item => typeof item === 'object' && item !== null && Object.keys(item).length === 1
-    );
-    if (canMerge && nodeName) {
-      xml += `${indent}<${nodeName}>\n`;
-      for (const item of json) {
-        const key = Object.keys(item)[0];
-        xml += jsonToXml(item[key], key, indent + indentStep);
+      // Verificamos si cada elemento es un objeto con una única clave y además tenemos nodeName
+      const canMerge = json.every(
+          item => typeof item === 'object' && item !== null && Object.keys(item).length === 1
+      );
+      if (canMerge && nodeName) {
+          xml += `${indent}<${nodeName}>\n`;
+          for (const item of json) {
+              const key = Object.keys(item)[0];
+              xml += jsonToXml(item[key], key, indent + indentStep);
+          }
+          xml += `${indent}</${nodeName}>\n`;
+      } else {
+          // Caso general: cada elemento se procesa por separado
+          for (const item of json) {
+              xml += jsonToXml(item, nodeName, indent);
+          }
       }
-      xml += `${indent}</${nodeName}>\n`;
-    } else {
-      // Caso general: para cada elemento del array, se usa el mismo nodeName (o ninguno si no se define)
-      for (const item of json) {
-        xml += jsonToXml(item, nodeName, indent);
-      }
-    }
-    return xml;
+      return xml;
   }
 
   // Si es un objeto (no array)
   if (nodeName) {
-    xml += `${indent}<${nodeName}>\n`;
-    for (const key in json) {
-      if (json.hasOwnProperty(key)) {
-        xml += jsonToXml(json[key], key, indent + indentStep);
+      xml += `${indent}<${nodeName}>\n`;
+      for (const key in json) {
+          if (json.hasOwnProperty(key)) {
+              xml += jsonToXml(json[key], key, indent + indentStep);
+          }
       }
-    }
-    xml += `${indent}</${nodeName}>\n`;
+      xml += `${indent}</${nodeName}>\n`;
   } else {
-    // Sin nodeName, se generan bloques independientes para cada clave (útil en el objeto raíz con varias claves)
-    for (const key in json) {
-      if (json.hasOwnProperty(key)) {
-        xml += jsonToXml(json[key], key, indent);
+      // En el objeto raíz sin nodeName, generamos bloques independientes para cada clave
+      for (const key in json) {
+          if (json.hasOwnProperty(key)) {
+              xml += jsonToXml(json[key], key, indent);
+          }
       }
-    }
   }
 
   return xml;
