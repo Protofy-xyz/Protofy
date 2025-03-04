@@ -210,9 +210,7 @@ const initialData = {
                     "variant": "esp32s3",
                     "flash_size": "16Mb",
                     "framework": {
-                        "type": "esp-idf",
-                        "version": "latest",
-                        "platform_version": "6.6.0"
+                        "type": "esp-idf"
                     }
                 }
             }
@@ -338,9 +336,7 @@ const initialData = {
                     "variant": "esp32s3",
                     "flash_size": "16Mb",
                     "framework": {
-                        "type": "esp-idf",
-                        "version": "latest",
-                        "platform_version": "6.6.0"
+                        "type": "esp-idf"
                     }
                 }
             }

@@ -46,20 +46,19 @@ class NeopixelsBus {
                     pin: pin,
                     name: this.name,
                     id: this.name,
-                    variant: this.chipset,
+                    chipset: this.chipset,
                     num_leds: this.numLeds,
-                    type: this.rgb_order,
-                    method: {
-                        type: "esp32_rmt",
-                        channel: this.channel
-                    },
+                    rgb_order: this.rgb_order,
                     restore_mode: this.restoreMode,
-                    default_transition_length: this.defaultTransitionLength
+                    default_transition_length: this.defaultTransitionLength,
                 },
                 subsystem: this.getSubsystem()
 
             },
         ]
+        if(deviceComponents.esp32.framework.type == "arduino"){
+            componentObjects[0].config["channel"] = this.channel
+        }
 
         componentObjects.forEach((element, j) => {
             if (!deviceComponents[element.name]) {
@@ -392,5 +391,5 @@ class NeopixelsBus {
 }
 
 export function neopixelsBus(name, numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, channel, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11) {
-    return new NeopixelsBus(name, 'neopixelbus', numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, channel, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11)
+    return new NeopixelsBus(name, 'esp32_rmt_led_strip', numLeds, rgb_order, chipset, restoreMode, defaultTransitionLength, channel, effect1, effect2, effect3, effect4, effect5, effect6, effect7, effect8, effect9, effect10, effect11)
 }
