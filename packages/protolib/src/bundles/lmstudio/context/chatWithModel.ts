@@ -11,10 +11,10 @@ export const chatWithModel = async (prompt, model, modelParams={}, url='http://l
   const data = {
     model: model,
     messages: [{ role: "user", content: prompt }],
-    temperature: 0.1,
+    temperature: 0,
     max_tokens: -1,
-    top_k: 20,
-    top_p: 0.9,
+    top_k: 1,
+    top_p: 1,
     stream: false,
     ...modelParams
   };
