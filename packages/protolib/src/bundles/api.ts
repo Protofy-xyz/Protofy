@@ -1,6 +1,6 @@
 import { StateMachinesAPI } from './stateMachines/stateMachines/stateMachinesApi'
 import { PhpAPI } from './php/phpApi'
-import { ProtoMemDBAPI } from './protomemdb/protomemdbApi'
+import { ProtoMemDBAPI } from './protomemdb/protomemdbAPI'
 
 export const APIBundles = (app, context) => {
     StateMachinesAPI(app, context)
