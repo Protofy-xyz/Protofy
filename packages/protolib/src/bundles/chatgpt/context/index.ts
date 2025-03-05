@@ -66,9 +66,9 @@ export const chatGPTSession = async ({
             })
             await chunk(currentChunk); // Procesa el fragmento actual si lo necesitas en tiempo real
         }
-        //console.log("fullResponse", fullResponse)
-        done({choices: fullResponse}); // Procesa la respuesta completa
 
+        done({choices: fullResponse}); // Procesa la respuesta completa
+        return fullResponse;
     } catch (e) {
         logger.error({ error: e.message || e, stack: e.stack }, "Error in chatGPTSession");
         if (error) error(e);
@@ -81,7 +81,7 @@ export const chatGPTPrompt = async ({
     message,
     ...props
 
-}: ChatGPTRequest & { message: string }) => {
+}: any & { message: string }) => {
     let response = await chatGPTSession({
         messages: [
             {

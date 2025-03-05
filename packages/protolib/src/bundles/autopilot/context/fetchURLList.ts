@@ -1,7 +1,7 @@
 import { API } from "protobase";
 
 export const fetchURLList = async (urls) => {
-  urls.forEach(async (url) => {
+  for (const url of urls) {
     await API.get(url);
-  });
+  }
 }
