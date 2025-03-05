@@ -26,6 +26,10 @@ export class ActionGroup implements DataInterface {
         this.actions = actions;
         this.name = name;
     }
+    
+    getActionByName(name: string) {
+        return this.actions.find((action) => action.automationData.name === name)
+    }
 
     getActions() {
         return this.actions;
