@@ -61,10 +61,10 @@ export const BasicCard = ({ title, id, children }) => {
     );
 }
 
-export const CardValue = ({ Icon, value }) => {
+export const CardValue = ({ Icon, value, color="var(--color7)" }) => {
     return (
         <YStack alignItems='center' justifyContent='center'>
-            <Icon color="var(--color7)" size={48} strokeWidth={1.75} />
+            <Icon color={color} size={48} strokeWidth={1.75} />
             <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
                 {value}
             </Text>
