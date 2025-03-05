@@ -48,7 +48,7 @@ export const BubbleChat = ({ apiUrl }: BubleChatProps) => {
           )
         }
         onPress={toggleChat}
-        zIndex={10002}
+        zIndex={isExpanded ? 100002 : 10002}
         elevation="$5"
         backgroundColor="$color7"
         hoverStyle={{ backgroundColor: "$color7" }}
@@ -69,7 +69,7 @@ export const BubbleChat = ({ apiUrl }: BubleChatProps) => {
             )
           }
           onPress={toggleExpand}
-          zIndex={10002}
+          zIndex={isExpanded ? 100002 : 10002}
           elevation="$5"
           backgroundColor="$color7"
           hoverStyle={{ backgroundColor: "$color7" }}
@@ -79,14 +79,15 @@ export const BubbleChat = ({ apiUrl }: BubleChatProps) => {
     
         <YStack
           width={isExpanded ? "100vw" : 500}
-          height={isExpanded ? "95vh" : 800}
+          height={isExpanded ? "calc(100vh - 0px)" : "calc(100vh - 200px)"}
+          maxHeight={isExpanded ? "100vh" : 800}
           position="absolute"
           bottom={isExpanded ? 0 : 130}
           right={isExpanded ? 0 : 50}
           backgroundColor="$bgContent"
           borderRadius={isExpanded ? 0 : "$4"}
           elevation="$6"
-          zIndex={10000}
+          zIndex={100000}
           overflow="hidden"
           display={isChatVisible ? "flex" : "none"}
         >
