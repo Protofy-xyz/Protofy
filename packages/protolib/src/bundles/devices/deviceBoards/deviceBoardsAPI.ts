@@ -110,9 +110,7 @@ const initialData = {
                     "board": "seeed_xiao_esp32s3",
                     "variant": "esp32s3", 
                     "framework": { 
-                        "type": "esp-idf",
-                        "version": "latest",
-                        "platform_version": "6.5.0"
+                        "type": "esp-idf"
                     }
                 }
             }
