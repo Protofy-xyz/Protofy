@@ -9,7 +9,6 @@
     "apps/next",
     "apps/adminpanel",
     "apps/nextra",
-    "apps/jupyter",
     "apps/python",
     "packages/*",
     "scripts",

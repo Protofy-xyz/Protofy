@@ -42,12 +42,6 @@ const config = {
             }
         },
         {
-            "name": "jupyter",
-            "description": "Jupyter notebook for interactive computing",
-            "disabled": true,
-            "route": () => false
-        },
-        {
             "name": "python",
             "description": "Python integration services",
             "disabled": true,
