@@ -357,7 +357,10 @@ export const processFilesIntent = ({ action, domain, data }: IntentType) => {
   } else if (mime == 'application/javascript' || mime == 'video/mp2t') {
     return { component: <FlowsViewer {...data} />, supportIcons: true }
   } else if ((data.path).endsWith(".tsx")) {
-    return { component: <FlowsViewer {...data} />, supportIcons: true }
+    return {
+      component: <MonacoViewer path={data.path} />,
+      widget: 'text'
+    }
   } else if (mime == 'model/gltf-binary') {
     return {
       component: <GLTFViewer path={url} />,
