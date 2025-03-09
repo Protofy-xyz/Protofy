@@ -1,4 +1,5 @@
 const isFullDev = process.env.FULL_DEV === '1';
+const isAdminDev = process.env.ADMIN_DEV === '1';
 
 const path = require('path');
 const currentDir = path.dirname(__filename);
@@ -37,5 +38,5 @@ const site = {
 }
 
 module.exports = {
-    apps: isFullDev ? [siteDev] : [site],
+    apps: isFullDev || isAdminDev ? [siteDev] : [site],
 }
