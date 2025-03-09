@@ -25,7 +25,7 @@
     "coredev-fast": "FULL_DEV=1 && yarn dev-fast",
     "coredev-profiler": "PROFILER_ENABLED=true yarn coredev",
     "coredev-profiler-fast": "PROFILER_ENABLED=true yarn coredev-fast",
-    "prepare-dev": "node prepare.js && yarn build && yarn workspace api prepare-dev && yarn workspaces foreach --all --exclude api run prepare-dev",
+    "prepare-dev": "node prepare.js && yarn build && yarn workspaces foreach --all run prepare-dev",
     "prod": "NODE_ENV=production pm2 start ecosystem.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start ecosystem.config.js && yarn monit",
     "add-user": "yarn workspace core add-user",
