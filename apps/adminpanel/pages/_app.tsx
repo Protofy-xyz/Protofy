@@ -9,5 +9,5 @@ if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css')
 }
 
-const app = getApp(AppConfig)
+const app = getApp(AppConfig, {disablePreviewMode: true})
 export default app

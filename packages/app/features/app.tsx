@@ -37,7 +37,7 @@ import Workspaces from 'app/bundles/workspaces'
 import { PanelLayout } from 'app/layout/PanelLayout'
 import { useRouter } from 'next/router';
 
-const getApp = (AppConfig) => {
+const getApp = (AppConfig, options={disablePreviewMode: false}) => {
     return function MyApp({ Component, pageProps }: SolitoAppProps) {
         //@ts-ignore
         const [session] = useSession(pageProps['pageSession'])
@@ -52,7 +52,7 @@ const getApp = (AppConfig) => {
             </Head>
             <JotaiProvider>
               <Connector brokerUrl={brokerUrl} options={{ username: session?.user?.id, password: session?.token }}>
-                <ThemeProvider>
+                <ThemeProvider {...options}>
                   <AppConfContext.Provider value={{
                     ...AppConfig,
                     bundles: {
@@ -73,7 +73,7 @@ const getApp = (AppConfig) => {
 }
 
 
-function ThemeProvider({ children }: { children: React.ReactNode }) {
+function ThemeProvider({ children, disablePreviewMode }: { children: React.ReactNode }) {
   const router = useRouter();
   const [theme, setTheme] = useRootTheme()
   const forcedTheme = SiteConfig.ui.forcedTheme
@@ -91,7 +91,7 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
       <Provider disableRootThemeClass defaultTheme={theme}>
         {children}
 
-        {(isDev && !containsChatbot) && <Toast
+        {(isDev && !containsChatbot && !disablePreviewMode) && <Toast
           viewportName="warnings"
           enterStyle={{ opacity: 0, scale: 0.5, y: -25 }}
           exitStyle={{ opacity: 0, scale: 1, y: -20 }}
