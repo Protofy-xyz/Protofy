@@ -23,7 +23,7 @@
     ],
 
     "paths": {
-      "protolib/*": ["protolib/dist/*"], 
+      "protolib/*": ["protolib/src/*"], 
       "app/*": ["app/*"]
     }
   },
