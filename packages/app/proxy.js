@@ -6,7 +6,7 @@ const getLogger = protobose.getLogger;
 const protonode = require('protonode');
 const config = require('@my/config');
 const fs = require('fs');
-const mime = require('mime');
+const mrmime = require('mrmime');
 const { join } = require('path');
 
 const setupProxyHandler = (name, subscribe, handle, server) => {
@@ -61,7 +61,7 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
         return;
       }
 
-      res.writeHead(200, { 'Content-Type': mime.getType(filePath) });
+      res.writeHead(200, { 'Content-Type': mrmime.lookup(filePath) });
       fs.createReadStream(filePath).pipe(res);
       return;
     }

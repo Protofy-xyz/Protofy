@@ -52,12 +52,6 @@ const config = {
             }
         },
         {
-            "name": "expo",
-            "description": "Expo services, providing the mobile user interface based on expo",
-            "disabled": true,
-            "route": () => false
-        },
-        {
             "name": "adminpanel",
             "disabled": false,
             "description": "Admin panel UI to manage and interact with core services",
