@@ -66,18 +66,6 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
       return;
     }
 
-    //legacy urls redirector, to be removed in the future, but necessary for the transition
-    if (
-      (req.url.includes('/workspace/dev/') || req.url.includes('/workspace/prod/') ||
-       req.url === '/workspace/dev' || req.url === '/workspace/prod') &&
-      !req.url.includes('redirected=true')
-    ) {
-      const newUrl = req.url.replace('/workspace/dev/', '/workspace/').replace('/workspace/prod/', '/workspace/').replace('/workspace/dev', '/workspace').replace('/workspace/prod', '/workspace') + '?redirected=true';
-      res.writeHead(301, { Location: newUrl });
-      res.end();
-      return;
-    }
-
     const resolver = system.services.find((resolver) => resolver.route(req));
 
     if (!resolver || resolver.name === name) {
