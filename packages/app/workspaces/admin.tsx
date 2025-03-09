@@ -132,8 +132,7 @@ export default ({ pages }) => {
                 { "name": "Resources", "icon": Library, "href": "/workspace/resources" },
                 { "name": "Public", "icon": "doorOpen", "href": "/workspace/files?path=/apps/next/public" }
             ],
-            "Fleets": [
-                { "name": "Agents", "icon": Bot, "href": "/workspace/agents" },
+            "Devices": [
                 { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
                 { "name": "Definitions", "icon": "bookOpen", "href": "/workspace/deviceDefinitions" }
             ]

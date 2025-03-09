@@ -22,8 +22,7 @@ export default (pages) => {
                 { "name": "Public", "icon": "doorOpen", "type": "/workspace/files?path=/apps/next/public"},
                 { "name": "Databases", "icon": DatabaseBackup, "href": "/workspace/databases" },
             ],
-            "Fleets": [
-                { "name": "Agents", "icon": Bot, "href": "/workspace/agents" },
+            "Devices": [
                 { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
                 { "name": "Definitions", "icon": "bookOpen", "href": "/workspace/deviceDefinitions" }
             ]
