@@ -66,6 +66,12 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
       return;
     }
 
+    if ( req.url == '/') {
+      res.writeHead(301, { Location: '/workspace' });
+      res.end();
+      return;
+    }
+
     const resolver = system.services.find((resolver) => resolver.route(req));
 
     if (!resolver || resolver.name === name) {

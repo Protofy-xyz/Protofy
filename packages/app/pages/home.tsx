@@ -76,7 +76,7 @@ const Home = ({ currentView, setCurrentView, props }: any) => {
 const cw = UIWrapLib("@my/ui");
 
 export default {
-  route: Protofy("route", "/"),
+  route: Protofy("route", "/home"),
   component: (props) => {
     const [currentView, setCurrentView] = useState("default");
 
