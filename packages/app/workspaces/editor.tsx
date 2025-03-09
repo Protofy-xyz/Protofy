@@ -9,7 +9,6 @@ export default (pages) => {
         "menu": {
             "System": [
                 { "name": "Users", "icon": "users", "href": "/workspace/users" },
-                { "name": "Groups", "icon": "groups", "href": "/workspace/groups" },
                 { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
                 { "name": "Events", "icon": "activity", "href": "/workspace/events" },
                 { "name": "Messages", "icon": Inbox, "href": "/workspace/messages" },

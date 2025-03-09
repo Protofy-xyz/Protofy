@@ -6,7 +6,7 @@ import { Chip } from '../../components/Chip';
 import { DataView } from '../../components/DataView';
 import { AdminPage } from '../../components/AdminPage';
 import moment from 'moment';
-import { Mail, Tag, Key, User } from '@tamagui/lucide-icons';
+import { Mail, Tag, Key, User, Users } from '@tamagui/lucide-icons';
 import { API } from 'protobase'
 import { SelectList } from '../../components/SelectList'
 import { useState } from 'react';
@@ -16,6 +16,8 @@ import { Switch, XStack, Text } from 'tamagui';
 import { Tinted } from '../../components/Tinted';
 import { SSR } from '../../lib/SSR'
 import { withSession } from '../../lib/Session'
+import {Button} from '@my/ui'
+import { useRouter } from 'solito/navigation';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const UserIcons = { username: Mail, type: Tag, passwod: Key, repassword: Key }
@@ -28,7 +30,7 @@ export default {
         component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
             const [all, setAll] = useState(false)
             const [groups, setGroups] = useState(extraData?.groups ?? getPendingResult("pending"))
-
+            const router = useRouter()
             usePendingEffect((s) => { API.get(groupsSourceUrl, s) }, setGroups, extraData?.groups)
 
             const getValue = (data) => {
@@ -61,21 +63,12 @@ export default {
                     key={all ? 'all' : 'filtered'}
                     toolBarContent={
                         <XStack mr={"$2"} f={1} space="$1.5" ai="center" jc='flex-end'>
-                            <Text fontSize={14} color="$color11">
-                                View all
-                            </Text>
-                            <Tinted>
-                                <Switch
-                                    forceStyle='hover'
-                                    checked={all}
-                                    onCheckedChange={v => setAll(v)} size="$1"
-                                >
-                                    {/** @ts-ignore */}
-                                    <Switch.Thumb animation="quick" backgroundColor={"$color9"} />
-                                </Switch>
-                            </Tinted>
-
-
+                            <Button onPress={() => {
+                                router.push('groups')
+                            }} height={'$3'}>
+                                <Tinted><Users color="$color8" /></Tinted>
+                                Groups
+                            </Button>
                         </XStack>
                     }
                     enableAddToInitialData
