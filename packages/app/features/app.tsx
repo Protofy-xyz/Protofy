@@ -14,6 +14,7 @@ import 'protolib/styles/chat.css';
 import 'protolib/styles/chonky.css';
 import 'protolib/styles/blueprint.css';
 import 'protolib/styles/dashboard.css';
+import 'protolib/styles/dashboardcard.css';
 import 'protolib/styles/map.css';
 import 'app/styles/app.css';
 import "@blueprintjs/table/lib/css/table.css";
