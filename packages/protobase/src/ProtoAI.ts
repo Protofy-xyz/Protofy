@@ -52,7 +52,6 @@ export class StateElement implements DataInterface {
 
     getData() {
         let value = this.value
-        console.log('value: ', value)
         return {[this.name]: value};
     }
 }
@@ -74,6 +73,14 @@ export class StateGroup implements DataInterface {
 
     getDataArray() {
         return this.states.map((state) => state.getData())
+    }
+
+    getDataObject() {
+        let data = {}
+        this.states.forEach((state) => {
+            data = {...data, ...state.getData()}
+        })
+        return data;
     }
     
     getData() {
