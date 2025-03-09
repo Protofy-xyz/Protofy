@@ -3,6 +3,7 @@ import { getLogger, getConfig } from 'protobase';
 import { getConfigWithoutSecrets } from '@my/config'
 import BundleContext from 'app/bundles/apiContext'
 import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
+import { pathToFileURL } from 'url';
 
 const logger = getLogger()
 const subscriptions = {}
@@ -35,8 +36,8 @@ const mqtt = getMQTTClient(serviceName, getServiceToken(), async () => {
     }
 
     try {
-        const BundleAPI = await import('app/bundles/apis');
-        const BundleChatbotsAPI = await import('app/bundles/chatbots');
+        const BundleAPI = await import(pathToFileURL(require.resolve('app/bundles/apis')).href);
+        const BundleChatbotsAPI = await import(pathToFileURL(require.resolve('app/bundles/chatbots')).href);
          //wait for mqtt before starting API
         BundleAPI.default(app, { mqtt, topicPub, topicSub, ...BundleContext })
         BundleChatbotsAPI.default(app, { mqtt, topicPub, topicSub, ...BundleContext })

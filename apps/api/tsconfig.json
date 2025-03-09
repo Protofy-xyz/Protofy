@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2019",                 // Define ECMAScript target version
-    "module": "commonjs",              // Specify module code generation: 'commonjs' for Node.js apps
+    "module": "nodenext",              // Specify module code generation: 'commonjs' for Node.js apps
+    "moduleResolution": "nodenext",        // Resolve modules using Node.js-style module resolution
     "strict": false,                    // Enable all strict type-checking options
     "esModuleInterop": true,           // Allows default imports from modules with no default export
     "skipLibCheck": true,              // Skip type checking of declaration files
@@ -23,7 +24,7 @@
 
     "paths": {
       "protolib/*": ["protolib/dist/*"], 
-      "app/*": ["./app/*"]
+      "app/*": ["app/*"]
     }
   },
   "include": [

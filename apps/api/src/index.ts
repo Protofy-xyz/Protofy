@@ -1,23 +1,3 @@
-const moduleAlias = require('module-alias')
-import path from 'path';
-
-const resolveNodeModule = (moduleName) => {
-  try {
-    return require.resolve(moduleName);
-  } catch (e) {
-    // Handle the error if the module is not found
-    console.error(`Module ${moduleName} not found`);
-    return null;
-  }
-};
-
-const moduleConfig = {
-  "app": path.resolve(__dirname, "../../../packages/app"),
-  "protolib": path.join(resolveNodeModule("protolib"), "..")
-}
-
-moduleAlias.addAliases(moduleConfig);
-
 import dotenv from 'dotenv'
 dotenv.config({ path: '../../.env' });
 import { getServiceToken } from 'protonode'

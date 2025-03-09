@@ -7,8 +7,9 @@ module.exports = {
     apps: [
         isFullDev ? {
             name: 'core-dev',
-            script: path.join(currentDir, '..', '..', 'node_modules', 'ts-node', 'dist', 'bin.js'),
-            args: '--files --project tsconfig.json src/index.ts',
+            script: 'src/index.ts',
+            interpreter: 'node',
+            interpreter_args: '--import tsx',
             watch: false,
             autorestart: true,
             env: {
@@ -20,8 +21,9 @@ module.exports = {
             error_file: '../../logs/raw/core-dev.stderr.log'
         } : {
             name: 'core',
-            script: path.join(currentDir, 'dist', 'apps', 'core', 'src', 'index.js'),
-            node_args: "-r module-alias/register",
+            script: 'src/index.ts',
+            interpreter: 'node',
+            interpreter_args: '--import tsx',
             watch: false,
             autorestart: true,
             env: {

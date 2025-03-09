@@ -13,12 +13,10 @@
     "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
     "dev-service": "NODE_ENV=development pm2 start pm2.config.js",
-    "dev-full": "FULL_DEV=1 NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
-    "dev-standalone": "NODE_ENV=development ts-node --files --project tsconfig.json src/index.ts",
-    "prod-standalone": "NODE_ENV=production && node -r module-alias/register dist/apps/core/src/index.js",
-    "package": "tsc && shx mkdir -p dist/packages/protolib/lib && shx cp ../../packages/protolib/lib/RemoteTransport.ts dist/packages/protolib/lib/RemoteTransport.ts && shx cp ../../system.js dist/",
+    "dev-full": "FULL_DEV=1 NODE_ENV=development tsx src/index.ts",
+    "dev-standalone": "NODE_ENV=development tsx src/index.ts",
+    "prod-standalone": "NODE_ENV=production tsx src/index.ts",
     "prepare-dev": "node prepare.js",
-    "clean": "shx rm -rf dist",
     "prepare-test": "shx rm -rf ../../data/databases/events",
     "test": "yarn prepare-test && MAX_EVENTS=500 node test.js"
   },
@@ -34,7 +32,6 @@
     "level": "8.0.0",
     "level-party": "^5.1.1",
     "mime-types": "^2.1.35",
-    "module-alias": "^2.2.3",
     "moment": "2.29.4",
     "multer": "1.4.5-lts.1",
     "pino": "9.2.0",
@@ -45,8 +42,8 @@
     "protolib": "*",
     "protonode": "*",
     "subleveldown": "^6.0.1",
-    "ts-node": "10.9.1",
     "tslib": "2.6.2",
+    "tsx": "4.19.3",
     "zod": "^3.22.2"
   },
   "devDependencies": {

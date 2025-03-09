@@ -1,27 +1,8 @@
-
-import path from 'path'
-const moduleAlias = require('module-alias')
-
-const resolveNodeModule = (moduleName) => {
-  try {
-    return require.resolve(moduleName);
-  } catch (e) {
-    // Handle the error if the module is not found
-    console.error(`Module ${moduleName} not found`);
-    return null;
-  }
-};
-
-const moduleConfig = {
-  "app": path.resolve(__dirname, "../../../packages/app"),
-  "protolib": path.join(resolveNodeModule("protolib"), "..")
-}
-
-moduleAlias.addAliases(moduleConfig);
-
 import dotenv from 'dotenv'
 import { setConfig, getConfig, getLogger } from 'protobase';
 import { getBaseConfig, getConfigWithoutSecrets } from '@my/config'
+import { pathToFileURL } from 'url';
+
 // get config vars
 dotenv.config({ path: '../../.env' });
 global.defaultRoute = '/api/core/v1'
@@ -73,7 +54,8 @@ export const startCore = (ready?) => {
   }
 
   try {
-    import('app/bundles/coreApis').then((BundleAPI) => {
+    
+    import(pathToFileURL(require.resolve('app/bundles/coreApis')).href).then((BundleAPI) => {
       BundleAPI.default(app, { mqtt, topicSub, topicPub, ...BundleContext })
     })
 

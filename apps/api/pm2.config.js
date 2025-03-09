@@ -5,10 +5,12 @@ const currentDir = path.dirname(__filename);
 
 const api = {
     name: 'api',
-    script: path.join(currentDir, 'dist', 'apps', 'api', 'src', 'index.js'),
-    node_args: "-r module-alias/register",
+    script: 'src/index.ts',
+    interpreter: 'node',
+    interpreter_args: '--import tsx',
     watch: false,
     autorestart: true,
+    windowsHide: true,
     env: {
         NODE_ENV: 'production'
     },
@@ -20,10 +22,12 @@ const api = {
 
 const apiDev = {
     name: 'api-dev',
-    script: path.join(currentDir, '..', '..', 'node_modules', 'ts-node', 'dist', 'bin.js'),
-    args: '--files --project tsconfig.json src/index.ts',
+    script: 'src/index.ts',
+    interpreter: 'node',
+    interpreter_args: '--import tsx',
     watch: false,
     autorestart: true,
+    windowsHide: true,
     env: {
         NODE_ENV: 'development'
     },
