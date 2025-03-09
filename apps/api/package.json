@@ -10,7 +10,6 @@
   "scripts": {
     "dev-standalone": "NODE_ENV=development tsx src/index.ts",
     "prod-standalone": "NODE_ENV=production tsx src/index.ts",
-    "prepare-dev": "node prepare.js",
     "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
     "dev": "NODE_ENV=development pm2 start pm2.config.js --no-daemon",
     "prod-service": "NODE_ENV=production pm2 start pm2.config.js",
