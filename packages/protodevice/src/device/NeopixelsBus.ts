@@ -57,7 +57,7 @@ class NeopixelsBus {
             },
         ]
         if(deviceComponents.esp32.framework.type == "arduino"){
-            componentObjects[0].config["channel"] = this.channel
+            componentObjects[0].config["rmt_channel"] = this.channel
         }
 
         componentObjects.forEach((element, j) => {
