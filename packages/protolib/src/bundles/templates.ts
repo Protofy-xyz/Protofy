@@ -105,7 +105,7 @@ export const pageTemplates = {
     },
     "default": {
         id: "default",
-        name: "Default"
+        name: "Empty"
     },
     "agent": {
         name: "Agent Panel",
@@ -121,7 +121,7 @@ export const pageTemplates = {
         }
     },
     "adminagent": {
-        name: "Admin Agent Panel",
+        name: "Control Panel",
         id: "adminagent",
         extraFields: () => ({
             agentName: z.string().label('Agent Name').after('route')
@@ -134,7 +134,7 @@ export const pageTemplates = {
         }
     },
     "admin": {
-        name: "Admin panel",
+        name: "Object Management",
         id: "admin",
         extraFields: (objects) => ({
             object: z.union([...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route')
@@ -148,11 +148,11 @@ export const pageTemplates = {
     },
     "adminblank": {
         id: "adminblank", 
-        name: "Admin blank" 
+        name: "Admin Empty" 
     },
     "admindashboard": {
         id: "admindashboard",
-        name: "Admin dashboard"
+        name: "Admin Dashboard"
     },
     "dashboard": {
         id: "dashboard",
