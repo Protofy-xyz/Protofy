@@ -166,16 +166,8 @@ export const pageTemplates = {
         id: "iot",
         name: "IoT Panel"
     },
-    "ecomerce": {
-        id: "ecomerce",
-        name: "E-commerce"
-    },
     "about": {
         id: "about",
         name: "About"
-    },
-    "newsfeed": {
-        id: "newsfeed",
-        name: "News feed"
     }
 }
