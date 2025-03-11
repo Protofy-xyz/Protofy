@@ -99,13 +99,13 @@ export const apiTemplates = {
 }
 
 export const pageTemplates = {
-    "blank": {
-        id: "blank",
-        name: "Blank"
+    "landing": {
+        id: "landing",
+        name: "Landing"
     },
-    "default": {
-        id: "default",
-        name: "Empty"
+    "admindashboard": {
+        id: "admindashboard",
+        name: "Admin Dashboard"
     },
     "adminagent": {
         name: "Control Panel",
@@ -137,17 +137,9 @@ export const pageTemplates = {
         id: "adminblank", 
         name: "Admin Empty" 
     },
-    "admindashboard": {
-        id: "admindashboard",
-        name: "Admin Dashboard"
-    },
     "dashboard": {
         id: "dashboard",
         name: "Dashboard"
-    },
-    "landing": {
-        id: "landing",
-        name: "Landing"
     },
     "iot": {
         id: "iot",
@@ -156,5 +148,13 @@ export const pageTemplates = {
     "about": {
         id: "about",
         name: "About"
-    }
+    },
+    "blank": {
+        id: "blank",
+        name: "Blank"
+    },
+    "default": {
+        id: "default",
+        name: "Empty"
+    },
 }
