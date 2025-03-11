@@ -107,19 +107,6 @@ export const pageTemplates = {
         id: "default",
         name: "Empty"
     },
-    "agent": {
-        name: "Agent Panel",
-        id: "agent",
-        extraFields: () => ({
-            agentName: z.string().label('Agent Name').after('route')
-        }),
-        extraValidation: (data) => {
-            if (!Object.keys(data).includes('agentName')) {
-                return { error: "Agent name can't be empty" }
-            }
-            return
-        }
-    },
     "adminagent": {
         name: "Control Panel",
         id: "adminagent",
