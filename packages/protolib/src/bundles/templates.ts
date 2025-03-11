@@ -99,29 +99,16 @@ export const apiTemplates = {
 }
 
 export const pageTemplates = {
-    "blank": {
-        id: "blank",
-        name: "Blank"
+    "landing": {
+        id: "landing",
+        name: "Landing"
     },
-    "default": {
-        id: "default",
-        name: "Default"
-    },
-    "agent": {
-        name: "Agent Panel",
-        id: "agent",
-        extraFields: () => ({
-            agentName: z.string().label('Agent Name').after('route')
-        }),
-        extraValidation: (data) => {
-            if (!Object.keys(data).includes('agentName')) {
-                return { error: "Agent name can't be empty" }
-            }
-            return
-        }
+    "admindashboard": {
+        id: "admindashboard",
+        name: "Admin Dashboard"
     },
     "adminagent": {
-        name: "Admin Agent Panel",
+        name: "Control Panel",
         id: "adminagent",
         extraFields: () => ({
             agentName: z.string().label('Agent Name').after('route')
@@ -134,7 +121,7 @@ export const pageTemplates = {
         }
     },
     "admin": {
-        name: "Admin panel",
+        name: "Object Management",
         id: "admin",
         extraFields: (objects) => ({
             object: z.union([...(objects && objects.data ? objects.data?.items.filter(o => o.features && o.features['AutoAPI']).map(o => z.literal(o.name)) : [])] as any).after('route')
@@ -148,34 +135,26 @@ export const pageTemplates = {
     },
     "adminblank": {
         id: "adminblank", 
-        name: "Admin blank" 
-    },
-    "admindashboard": {
-        id: "admindashboard",
-        name: "Admin dashboard"
+        name: "Admin Empty" 
     },
     "dashboard": {
         id: "dashboard",
         name: "Dashboard"
     },
-    "landing": {
-        id: "landing",
-        name: "Landing"
-    },
     "iot": {
         id: "iot",
         name: "IoT Panel"
-    },
-    "ecomerce": {
-        id: "ecomerce",
-        name: "E-commerce"
     },
     "about": {
         id: "about",
         name: "About"
     },
-    "newsfeed": {
-        id: "newsfeed",
-        name: "News feed"
-    }
+    "blank": {
+        id: "blank",
+        name: "Blank"
+    },
+    "default": {
+        id: "default",
+        name: "Empty"
+    },
 }
