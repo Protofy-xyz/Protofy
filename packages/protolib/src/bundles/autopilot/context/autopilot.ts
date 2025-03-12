@@ -6,6 +6,7 @@ const availableModels = [
     "tq2.5-14b-aletheia-v1", //perfect score on tank v2 (fails if flash attention is used) in 1s (near best)
     "tq2.5-14b-sugarquill-v1", //perfect score on tank v2 in 1s (near best)
 ]
+const delay = (seconds: number) => new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 
 export const autopilot = ({context, app, agentName, model}) => {
     //Autopilot ------------------------------------
@@ -172,5 +173,17 @@ export const autopilot = ({context, app, agentName, model}) => {
         clearInterval(timer);
         res.send('ai control automation disabled');
       }
+    });
+
+    context.automations.automation({
+        name: agentName + "/skip",
+        displayName: "Skip",
+        description: "Execute this action to skip the current step because no action is needed",
+        tags: [agentName],
+        responseMode: "wait",
+        app: app,
+        onRun: async (params, res) => {
+            await delay(parseInt(params.delay) || 0)
+        }
     });
 }

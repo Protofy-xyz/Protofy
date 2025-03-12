@@ -1,5 +1,4 @@
 import { API, getLogger } from 'protobase';
-import { chromium, firefox, webkit } from 'playwright'; 
 import {getServiceToken} from 'protonode'
 
 const logger = getLogger();
