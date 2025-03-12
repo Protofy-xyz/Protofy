@@ -31,7 +31,9 @@ import {
 
 import { DashboardCard } from 'protolib/components/DashboardCard'
 
-export default ({ pages }) => {
+const enableBoards = false
+
+export default ({ pages, boards }) => {
     const adminPages = pages.filter(p => p.pageType == 'admin')
 
     return {
@@ -103,6 +105,11 @@ export default ({ pages }) => {
             "label": "Dashboard"
         }],
         "menu": {
+            ...(enableBoards && boards?.length) ? {
+                "Boards": boards.map((board) => {
+                    return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/'+board.name }
+                })
+            } : {},
             ...(adminPages.length ? {
                 "CMS": adminPages.map((page) => {
                     return { "name": page.name.charAt(0).toUpperCase() + page.name.slice(1), "icon": Box, "href": page.route }

@@ -52,6 +52,7 @@ export const AdminPanel = ({ children }) => {
   const {message} = useSubscription('notifications/page/#')
 
   const [pages, setPages] = useState()
+  const [boards, setBoards] = useState()
 
   const getPages = async () => {
     const pages = await API.get('/api/core/v1/pages')
@@ -60,8 +61,16 @@ export const AdminPanel = ({ children }) => {
     }
   }
 
+  const getBoards = async () => {
+    const boards = await API.get('/api/core/v1/boards')
+    if(boards.isLoaded) {
+      setBoards(boards.data.items)
+    }
+  }
+
   useEffect(() => {
     getPages()
+    getBoards()
   }, [message])
 
   const getRightWidth = () => {
@@ -76,7 +85,7 @@ export const AdminPanel = ({ children }) => {
     }
   }, [rightPanelSize])
 
-  const workspaceData = useWorkspace({pages: pages})
+  const workspaceData = useWorkspace({pages: pages, boards: boards})
   const settingsLogs = workspaceData?.logs
   const settingsLogsEnabled = settingsLogs === undefined ? true : settingsLogs
 
