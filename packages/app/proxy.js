@@ -53,7 +53,7 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
       logger.trace({ url: req.url }, "Serving public file: " + req.url);
       const url = decodeURIComponent(req.url.replace(/\.\.\//g, ''));
       const isFullDev = process.env.FULL_DEV === '1';
-      const prefixPath = isFullDev ? '../../data/' : '../../../../../data/'
+      const prefixPath = '../../data/'
       const filePath = join(prefixPath, url);
       if (!fs.existsSync(filePath)) {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
