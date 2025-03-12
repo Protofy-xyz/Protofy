@@ -7,11 +7,25 @@ import { Chip } from "../../components/Chip"
 import { DataTable2 } from "../../components/DataTable2"
 import { DataView } from "../../components/DataView"
 import { AdminPage } from "../../components/AdminPage"
-import { PaginatedData } from "../../lib/SSR"
+import { PaginatedData, SSR } from "../../lib/SSR"
 import { useSearchParams, usePathname } from 'solito/navigation'
 import { Input } from 'tamagui'
+import { withSession } from "../../lib/Session"
+import ErrorMessage from "../../components/ErrorMessage"
+import { BigTitle } from "../../components/BigTitle"
+import { YStack, XStack, Paragraph } from '@my/ui'
 
 const sourceUrl = '/api/core/v1/boards'
+
+const Board = ({ board }) => {
+  return (
+    <YStack>
+      <XStack px={"$5"} py={"$3"}>
+        <Paragraph size="$7">{board.name}</Paragraph>
+      </XStack>
+    </YStack>
+  )
+}
 
 export default {
   boards: {
@@ -36,5 +50,22 @@ export default {
       </AdminPage>)
     },
     getServerSideProps: PaginatedData(sourceUrl, ['admin'])
+  },
+  view: {
+    component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData, board }: any) => {
+      const { data } = board
+      return (<AdminPage title="Board" workspace={workspace} pageSession={pageSession}>
+        {board.status == 'error' && <ErrorMessage 
+          msg="Error loading board" 
+          details={board.error.result}  
+        />}
+        {board.status == 'loaded' && <Board board={data} />}
+      </AdminPage>)
+    },
+    getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async () => {
+      return {
+        board: await API.get(`/api/core/v1/boards/${context.params.board}`)
+      }
+    }))
   }
 }
