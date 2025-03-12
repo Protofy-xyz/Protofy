@@ -65,6 +65,10 @@ export class DeviceSubsystemMonitor{
   getValueAPIURL() {
     return "/api/core/v1/devices/"+this.device+"/subsystems/"+this.subsystem+"/monitors/"+this.data.name
   }
+
+  getName() {
+    return this.data.name
+  }
 }
 
 export class DeviceSubsystem {

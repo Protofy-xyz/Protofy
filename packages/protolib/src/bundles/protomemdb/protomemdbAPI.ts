@@ -7,7 +7,7 @@ export const ProtoMemDBAPI = (app, context) => {
             res.status(401).send({error: "Unauthorized"})
             return
         }
-        res.status(200).json({ tags:ProtoMemDB.getState() })
+        res.status(200).json(ProtoMemDB.getState())
     }))
 
     app.get('/api/v1/protomemdb/:group', handler(async (req, res, session) => {
@@ -31,6 +31,7 @@ export const ProtoMemDBAPI = (app, context) => {
             res.status(401).send({error: "Unauthorized"})
             return
         }
+        console.log('Setting value', req.body.value, 'for', req.params.group, req.params.tag, req.params.name)
         ProtoMemDB.set(req.params.group, req.params.tag, req.params.name, req.body.value)
         res.status(200).json({ success: true })
     }))

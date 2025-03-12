@@ -187,7 +187,8 @@ export const DevicesAPI = (app, context) => {
                 return
             }
             // const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
-            await generateEvent(
+            context.state.set({ group: 'devices', tag: deviceName, name: endpoint.split('/')[1], value: parsedMessage, emitEvent: true, token: getServiceToken() });
+            generateEvent(
                 {
                     ephemeral: monitor.data.ephemeral??false,
                     path: endpoint, 
