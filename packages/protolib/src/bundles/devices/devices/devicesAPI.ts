@@ -187,6 +187,7 @@ export const DevicesAPI = (app, context) => {
                 return
             }
             // const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
+            //TODO: replace endpoint.split('/')[1] with the subsystem name and use the monitor name inside the object value
             context.state.set({ group: 'devices', tag: deviceName, name: endpoint.split('/')[1], value: parsedMessage, emitEvent: true, token: getServiceToken() });
             generateEvent(
                 {
