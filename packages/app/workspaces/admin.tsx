@@ -13,7 +13,8 @@ import {
     LayoutDashboard,
     Power,
     FileCog,
-    Bot
+    Bot,
+    Plus
 } from '@tamagui/lucide-icons'
 import {
     ServiceMemoryUsageChart,
@@ -105,10 +106,10 @@ export default ({ pages, boards }) => {
             "label": "Dashboard"
         }],
         "menu": {
-            ...(enableBoards && boards?.length) ? {
-                "Boards": boards.map((board) => {
+            ...(enableBoards) ? {
+                "Boards": (boards ? boards.map((board) => {
                     return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/'+board.name }
-                })
+                }) : []).concat([{ "name": "Create Board", "icon": Plus, "href": '/workspace/boards' }])
             } : {},
             ...(adminPages.length ? {
                 "CMS": adminPages.map((page) => {

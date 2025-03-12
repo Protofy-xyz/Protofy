@@ -1,12 +1,12 @@
 import { API, StateElement, StateGroup } from "protobase";
 import { ProtoMemDB } from "protobase";
 
-export const getStatesFromProtoMemDB = async (tag, useRemoteAPI?): Promise<StateGroup> => {
+export const getStatesFromProtoMemDB = async (group, tag, useRemoteAPI?): Promise<StateGroup> => {
     let states
     if(useRemoteAPI) {
-        states = (await API.get("/api/v1/protomemdb/" + tag)).data
+        states = (await API.get("/api/v1/protomemdb/" + group + "/" + tag)).data
     } else {
-        states = await ProtoMemDB.getByTag(tag);
+        states = await ProtoMemDB.getByTag(group, tag);
     }
     
     

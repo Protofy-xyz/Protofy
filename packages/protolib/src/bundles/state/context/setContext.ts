@@ -4,11 +4,13 @@ import { generateEvent } from "../../events/eventsLibrary";
 const logger = getLogger();
 
 export const setContext = async (options: {
+    group?: string,
     tag: string,
     name: string,
     value: any,
     emitEvent?: boolean
 }) => {
+    const group = options.group || 'system'
     const name = options.name
     const tag = options.tag
     const value = options.value
@@ -29,11 +31,11 @@ export const setContext = async (options: {
     }
     if(options.emitEvent) {
         generateEvent({
-            path: `states/${tag}/${name}/update`, 
+            path: `states/${group}/${tag}/${name}/update`, 
             from: "states",
             user: 'system',
             payload:{value: value},
         }, getServiceToken())
     }
-    return ProtoMemDB.set(tag, name, value)
+    return ProtoMemDB.set(group, tag, name, value)
 }

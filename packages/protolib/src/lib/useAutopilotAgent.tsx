@@ -52,7 +52,7 @@ const getActionWidgets = (actions, onRun, confTable={}) => {
 }
 
 const readState = async (tag, setState) => {
-    const states = await getStatesFromProtoMemDB(tag, true)
+    const states = await getStatesFromProtoMemDB('boards', tag, true)
     setState(states)
 }
 
@@ -74,7 +74,7 @@ export const useAutopilotAgent = (agentName: string, confTable={}, FallbackIcon=
 
     useEventEffect((event) => {
         readState(agentName, setState)
-    }, { path: 'states/' + agentName + '/#' })
+    }, { path: 'states/boards/' + agentName + '/#' })
 
     const widgets = [
         ...getStateWidgets(state, actions, confTable, FallbackIcon),
