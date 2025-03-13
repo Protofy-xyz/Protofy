@@ -11,13 +11,15 @@ import { YStack, XStack, Paragraph, Popover, Button, AlertDialog, Dialog } from 
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { CenterCard } from '../widgets'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useUpdateEffect } from 'usehooks-ts'
 
 const sourceUrl = '/api/core/v1/boards'
 
+
 const Board = ({ board }) => {
-  let items = board.widgets || []
-  items.push({ key: 'addwidget', type: 'addWidget', width: 1, height: 5 })
+  // const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 5 }
+  const [items, setItems] = useState((board.cards? [...board.cards] : []).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
   const [addOpened, setAddOpened] = useState(false)
 
   const layouts = {
@@ -26,8 +28,15 @@ const Board = ({ board }) => {
     sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 })
   }
 
-  //fill items with react content
-  items = items.map((item) => {
+  const addWidget = async (type) => {
+    const rnd = Math.floor(Math.random() * 100000)
+    const newItems = [...items, { key: type+'_'+rnd, type }].sort((a, b) => a.key == 'addwidget' ? 1 : -1)
+    setItems(newItems)
+    API.post(`/api/core/v1/boards/${board.name}`, {...board, cards: newItems})
+  }
+
+  //fill items with react content, addWidget should be the last item
+  const cards = items.map((item) => {
     if (item.type == 'addWidget') {
       return {
         ...item,
@@ -40,9 +49,19 @@ const Board = ({ board }) => {
           </YStack>
         </CenterCard>
       }
+    } else if(item.type == 'value') {
+      return {
+        ...item,
+        content: <CenterCard title={item.title} id={item.key}>
+          <YStack alignItems="center" justifyContent="center" f={1} width="100%">
+            <Paragraph size="$5" fontWeight="400">value</Paragraph>
+          </YStack>
+        </CenterCard>
+      }
     }
     return item
   })
+
   return (
     <YStack flex={1}>
 
@@ -65,18 +84,21 @@ const Board = ({ board }) => {
             <Dialog.Description>
               {'Select the widget you want to add to the board'}
             </Dialog.Description>
-            <YStack>
-              content
+            <YStack height={300} width={600}>
+              TODO: widget type selector
             </YStack>
             <Dialog.Close displayWhenAdapted asChild>
-              <Button theme='blue' onPress={() => {}}>
+              <Button theme='blue' onPress={async () => {
+                await addWidget('value')
+                setAddOpened(false)
+              }}>
                 Add
               </Button>
             </Dialog.Close>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog >
-      <DashboardGrid items={items} layouts={layouts} borderRadius={10} padding={10} backgroundColor="white" />
+      <DashboardGrid items={cards} layouts={layouts} borderRadius={10} padding={10} backgroundColor="white" />
     </YStack>
   )
 }

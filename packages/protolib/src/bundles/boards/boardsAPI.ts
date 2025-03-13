@@ -46,9 +46,10 @@ const getDB = (path, req, session) => {
         async put(key, value) {
             // try to create the board file in the boards folder
             // console.log("Creating board: ", JSON.stringify({key,value}))
+            value = JSON.parse(value)
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
             try{
-                await fs.writeFile(filePath, value)
+                await fs.writeFile(filePath, JSON.stringify(value, null, 4))
             }catch(error){
                 console.error("Error creating file: " + filePath, error)
             }

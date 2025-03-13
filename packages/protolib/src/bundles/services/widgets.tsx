@@ -37,7 +37,7 @@ export const ServiceMemoryUsageChart = ({ title, id }) => {
     );
 };
 
-export const CenterCard = ({ title, id, children, onPress, ...props }) => {
+export const CenterCard = ({ title, id, children, onPress=()=>{}, ...props }) => {
     return (
         <DashboardCard title={title} id={id} {...props}>
             <YStack onPress={onPress} borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
