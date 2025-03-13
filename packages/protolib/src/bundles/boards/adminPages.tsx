@@ -1,4 +1,4 @@
-import { BookOpen, Plus, Save, Settings, Tag, Trash2 } from '@tamagui/lucide-icons'
+import { BookOpen, BookOpenText, ExternalLink, HelpCircle, Plus, Save, Settings, Tag, Trash2 } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API, set } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button, Dialog, Stack, Card, Input } from '@my/ui'
+import { YStack, XStack, Paragraph, Popover, Button as TamaButton, Dialog, Stack, Card, Input } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -16,27 +16,161 @@ import { useEffect, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
 import React from 'react'
+import { InputColor } from '../../components/InputColor'
+import Select from "react-select";
+
+const IconSelect = ({ icons, onSelect, selected }) => {
+  const [selectedIcon, setSelectedIcon] = useState(
+    selected ? { value: selected, label: selected } : null
+  );
+
+  // Convertimos los iconos a un formato compatible con react-select
+  const options = icons.map((icon) => ({
+    value: icon,
+    label: icon,
+  }));
+
+  return (
+    <div>
+      <Select
+        options={options}
+        components={{
+          SingleValue: ({ data }) => (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center", // 🔥 Centra verticalmente el contenido
+                gap: "8px",
+                padding: "0px 4px", // 🔥 Ajusta el padding interno
+              }}
+            >
+              <img
+                src={`/public/icons/${data.value}.svg`}
+                alt={data.value}
+                width={18}
+                height={18}
+                style={{ verticalAlign: "middle" }} // 🔥 Asegura la alineación del icono
+              />
+              {data.value}
+            </div>
+          ),
+        }}
+        onChange={(selectedOption) => {
+          setSelectedIcon(selectedOption);
+          onSelect?.(selectedOption.value);
+        }}
+        value={selectedIcon}
+        placeholder="Select an icon..."
+        menuPlacement="auto"
+        styles={{
+          control: (provided, state) => ({
+            ...provided,
+            minHeight: "36px", // 🔥 Mantiene altura de input normal
+            height: state.menuIsOpen || state.isFocused ? "auto" : "36px", // 🔥 Se expande al abrir
+            transition: "all 0.2s ease-in-out",
+            display: "flex",
+            alignItems: "center", // 🔥 Asegura que el contenido se mantenga centrado
+          }),
+          valueContainer: (provided) => ({
+            ...provided,
+            display: "flex",
+            alignItems: "center", // 🔥 Centra el contenido dentro de la caja
+            padding: "2px 8px", // 🔥 Ajusta el padding interno
+          }),
+          menu: (provided) => ({
+            ...provided,
+            zIndex: 99999,
+          }),
+        }}
+        maxMenuHeight={300}
+      />
+    </div>
+  );
+}
 
 const sourceUrl = '/api/core/v1/boards'
 
-const CardSettings = ({ card, onEdit=(data)=>{} }) => {
-  const [cardData, setCardData] = useState(card)
+const CardSettings = ({ card, icons, onEdit = (data) => { } }) => {
+  const [cardData, setCardData] = useState(card);
   useEffect(() => {
-    onEdit(cardData)
-  }, [cardData])
-  //display a table with the card data, with the label on the left and the value on the right, in a input field
-  //use display: grid
+    onEdit(cardData);
+  }, [cardData]);
 
-  return <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', padding: '10px' }}>
-      <React.Fragment>
-        <label>{'title'}</label>
-        <Input type="text" value={cardData.name} onChange={(e) => setCardData({
-          ...cardData,
-          name: e.target.value
-        })} />
-      </React.Fragment>  
-  </div>
-}
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "auto 1fr",
+        gap: "15px 15px",
+        alignItems: "center",
+        padding: "10px",
+      }}
+    >
+      {/* Title Field */}
+      <label
+        style={{
+          textAlign: "right",
+          whiteSpace: "nowrap",
+        }}
+      >
+        Title
+      </label>
+      <Input
+        value={cardData.name}
+        onChange={(e) =>
+          setCardData({
+            ...cardData,
+            name: e.target.value,
+          })
+        }
+      />
+
+      {/* Icon Field */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+          textAlign: "right",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <span>Icon</span>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+        <IconSelect
+          icons={icons}
+          onSelect={(icon) => {
+            setCardData({
+              ...cardData,
+              icon,
+            });
+          }}
+          selected={cardData.icon}
+        />
+
+        <a style={{ marginLeft: '20px' }} href="https://lucide.dev/icons/" target="_blank">
+          <BookOpenText opacity={0.6} />
+        </a>
+      </div>
+
+      {/* Color Field */}
+      <label
+        style={{
+          textAlign: "right",
+          whiteSpace: "nowrap",
+        }}
+      >
+        Color
+      </label>
+      <div style={{ zIndex: 1000 }}>
+        <InputColor color={cardData.color} onChange={(e) => setCardData({ ...cardData, color: e })} />
+      </div>
+
+    </div>
+  );
+};
 
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
@@ -59,7 +193,7 @@ const CardActions = ({ id, onEdit, onDelete }) => {
 const ValueCard = ({ id, title, value, icon = undefined, color = 'red', onDelete = () => { }, onEdit = () => { } }) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <CardValue
-      Icon={Tag}
+      Icon={icon ?? Tag}
       value={value ?? 'N/A'}
       color={'var(--blue9)'}
     />
@@ -71,7 +205,7 @@ const getCardValue = (card, states) => {
   return undefined
 }
 
-const Board = ({ board }) => {
+const Board = ({ board, icons }) => {
   const states = {} // TODO: get states from protomemdb
   const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 6 }
   const [items, setItems] = useState((board.cards ? [...board.cards] : [addCard]).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
@@ -132,7 +266,7 @@ const Board = ({ board }) => {
     } else if (item.type == 'value') {
       return {
         ...item,
-        content: <ValueCard id={item.key} title={item.name} value={getCardValue(item, states)} onDelete={() => {
+        content: <ValueCard icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} value={getCardValue(item, states)} onDelete={() => {
           setIsDeleting(true)
           setCurrentCard(item)
         }} onEdit={() => {
@@ -152,7 +286,7 @@ const Board = ({ board }) => {
         {/* <Tinted><Save color="var(--color8)" size={"$1"} strokeWidth={1.6}/></Tinted> */}
       </XStack>
       <Dialog modal open={addOpened} onOpenChange={setAddOpened}>
-        <Dialog.Portal zIndex={999999999} overflow='hidden'>
+        <Dialog.Portal zIndex={1} overflow='hidden'>
           <Dialog.Overlay />
           <Dialog.Content
             bordered
@@ -171,18 +305,18 @@ const Board = ({ board }) => {
               TODO: widget type selector
             </YStack>
             <Dialog.Close displayWhenAdapted asChild>
-              <Tinted><Button onPress={async () => {
+              <Tinted><TamaButton onPress={async () => {
                 await addWidget('value')
                 setAddOpened(false)
               }}>
                 Add
-              </Button></Tinted>
+              </TamaButton></Tinted>
             </Dialog.Close>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog>
       <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
-        <Dialog.Portal zIndex={999999999} overflow='hidden'>
+        <Dialog.Portal zIndex={1} overflow='hidden'>
           <Dialog.Overlay />
           <Dialog.Content
             bordered
@@ -194,11 +328,11 @@ const Board = ({ board }) => {
             maxWidth={600}
           >
             <Dialog.Title>Edit</Dialog.Title>
-            {currentCard && <CardSettings card={currentCard} onEdit={(data) => {
+            {currentCard && <CardSettings icons={icons} card={currentCard} onEdit={(data) => {
               setEditedCard(data)
-            }}/>}
+            }} />}
             <Dialog.Close displayWhenAdapted asChild>
-              <Tinted><Button onPress={async () => {
+              <Tinted><TamaButton onPress={async () => {
                 const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
                 setItems(newItems)
                 boardRef.current.cards = newItems
@@ -208,7 +342,7 @@ const Board = ({ board }) => {
                 setEditedCard(null)
               }}>
                 Save
-              </Button></Tinted>
+              </TamaButton></Tinted>
             </Dialog.Close>
           </Dialog.Content>
         </Dialog.Portal>
@@ -267,19 +401,20 @@ export default {
     getServerSideProps: PaginatedData(sourceUrl, ['admin'])
   },
   view: {
-    component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData, board }: any) => {
+    component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData, board, icons }: any) => {
       const { data } = board
       return (<AdminPage title="Board" workspace={workspace} pageSession={pageSession}>
         {board.status == 'error' && <ErrorMessage
           msg="Error loading board"
           details={board.error.result}
         />}
-        {board.status == 'loaded' && <Board board={data} />}
+        {board.status == 'loaded' && <Board board={data} icons={icons} />}
       </AdminPage>)
     },
     getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async () => {
       return {
-        board: await API.get(`/api/core/v1/boards/${context.params.board}`)
+        board: await API.get(`/api/core/v1/boards/${context.params.board}`),
+        icons: (await API.get('/api/core/v1/icons'))?.data?.icons ?? []
       }
     }))
   }

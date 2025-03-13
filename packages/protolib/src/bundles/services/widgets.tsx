@@ -37,7 +37,7 @@ export const ServiceMemoryUsageChart = ({ title, id }) => {
     );
 };
 
-export const CenterCard = ({ title, id, children, onPress=()=>{}, ...props }) => {
+export const CenterCard = ({ title, id, children, onPress = () => { }, ...props }) => {
     return (
         <DashboardCard title={title} id={id} {...props}>
             <YStack onPress={onPress} borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
@@ -61,10 +61,23 @@ export const BasicCard = ({ title, id, children }) => {
     );
 }
 
-export const CardValue = ({ Icon, value, color="var(--color7)" }) => {
+export const CardValue = ({ Icon, value, color = "var(--color7)" }) => {
     return (
         <YStack alignItems='center' justifyContent='center'>
-            <Icon color={color} size={48} strokeWidth={1.75} />
+            {typeof Icon === 'string' ? <div style={{
+                width: "48px",
+                height: "48px",
+                backgroundColor: color,
+                maskImage: `url(${Icon})`,
+                WebkitMaskImage: `url(${Icon})`,
+                maskRepeat: "no-repeat",
+                WebkitMaskRepeat: "no-repeat",
+                maskSize: "contain",
+                WebkitMaskSize: "contain",
+                maskPosition: "center",
+                WebkitMaskPosition: "center"
+            }} /> :
+                <Icon color={color} size={48} strokeWidth={1.75} />}
             <Text userSelect="none" mt={10} fontSize={48} fontWeight="bold" color="$primary">
                 {value}
             </Text>
