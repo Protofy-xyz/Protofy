@@ -65,7 +65,7 @@ export const CardValue = ({ Icon, value, color="var(--color7)" }) => {
     return (
         <YStack alignItems='center' justifyContent='center'>
             <Icon color={color} size={48} strokeWidth={1.75} />
-            <Text mt={10} fontSize={48} fontWeight="bold" color="$primary">
+            <Text userSelect="none" mt={10} fontSize={48} fontWeight="bold" color="$primary">
                 {value}
             </Text>
         </YStack>

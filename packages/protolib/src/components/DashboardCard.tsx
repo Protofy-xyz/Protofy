@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Tinted } from './Tinted';
 import { StackProps, XStack, YStack, Text, Paragraph } from 'tamagui';
 
@@ -8,12 +8,17 @@ interface DashboardCardProps {
     title?: string;
     titleProps?: StackProps;
     containerProps?: StackProps;
+    cardActions?: ReactNode;
 }
 
-export const DashboardCard = ({ children, id, title, titleProps = {}, containerProps = {} }: DashboardCardProps) => {
+export const DashboardCard = ({ children, id, title, cardActions = <></>, titleProps = {}, containerProps = {} }: DashboardCardProps) => {
+    const [hovered, setHovered] = useState(false);
     return (
         <Tinted>
             <YStack
+                cursor="default" 
+                onHoverIn={() => setHovered(true)}
+                onHoverOut={() => setHovered(false)}
                 key={id}
                 borderRadius={10}
                 backgroundColor="$bgPanel"
@@ -21,20 +26,25 @@ export const DashboardCard = ({ children, id, title, titleProps = {}, containerP
                 {...containerProps}
                 style={{ height: '100%', overflow: 'hidden', ...containerProps.style }}
             >
+
+                {(title || cardActions) && <XStack
+                    w="100%"
+                    btrr={9}
+                    btlr={9}
+                    ml={15}
+                    mt={10}
+                    h={20}
+                    ai="center"
+                    {...titleProps}
+                >
                 {title ? (
-                    <XStack
-                        w="100%"
-                        btrr={9}
-                        btlr={9}
-                        ml={15}
-                        mt={10}
-                        h={20}
-                        ai="center"
-                        {...titleProps}
-                    >
-                        <Paragraph fontSize={"$4"}>{title}</Paragraph>
-                    </XStack>
+                    <Paragraph fontSize={"$4"}>{title}</Paragraph>
                 ) : null}
+                <XStack className="no-drag" f={1} mr="$6" jc="flex-end" opacity={hovered? 0.75 : 0} pressStyle={{ opacity: 0.9 }}>
+                    {cardActions}
+                </XStack>
+                </XStack>}
+
                 <YStack
                     flex={1}
                     paddingHorizontal={15}
