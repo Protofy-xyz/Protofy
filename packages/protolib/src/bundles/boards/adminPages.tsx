@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button, Dialog, Stack, Card } from '@my/ui'
+import { YStack, XStack, Paragraph, Popover, Button, Dialog, Stack, Card, Input } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -18,6 +18,25 @@ import { Tinted } from '../../components/Tinted'
 import React from 'react'
 
 const sourceUrl = '/api/core/v1/boards'
+
+const CardSettings = ({ card, onEdit=(data)=>{} }) => {
+  const [cardData, setCardData] = useState(card)
+  useEffect(() => {
+    onEdit(cardData)
+  }, [cardData])
+  //display a table with the card data, with the label on the left and the value on the right, in a input field
+  //use display: grid
+
+  return <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', padding: '10px' }}>
+      <React.Fragment>
+        <label>{'title'}</label>
+        <Input type="text" value={cardData.name} onChange={(e) => setCardData({
+          ...cardData,
+          name: e.target.value
+        })} />
+      </React.Fragment>  
+  </div>
+}
 
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
@@ -58,17 +77,19 @@ const Board = ({ board }) => {
   const [items, setItems] = useState((board.cards ? [...board.cards] : [addCard]).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
   const [addOpened, setAddOpened] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
   const [currentCard, setCurrentCard] = useState(null)
+  const [editedCard, setEditedCard] = useState(null)
 
   const boardRef = React.useRef(board)
 
   const deleteCard = async (card) => {
-      const newItems = items.filter(item => item.key != card.key)
-      setItems(newItems)
-      boardRef.current.cards = newItems
-      await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-      setIsDeleting(false)
-      setCurrentCard(null)
+    const newItems = items.filter(item => item.key != card.key)
+    setItems(newItems)
+    boardRef.current.cards = newItems
+    await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+    setIsDeleting(false)
+    setCurrentCard(null)
   }
 
   const editCard = (card) => async () => {
@@ -83,7 +104,7 @@ const Board = ({ board }) => {
 
   const addWidget = async (type) => {
     const rnd = Math.floor(Math.random() * 100000)
-    const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, title: 'title' }].sort((a, b) => a.key == 'addwidget' ? 1 : -1)
+    const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, name: type }].sort((a, b) => a.key == 'addwidget' ? 1 : -1)
     setItems(newItems)
     boardRef.current.cards = newItems
     API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
@@ -111,10 +132,14 @@ const Board = ({ board }) => {
     } else if (item.type == 'value') {
       return {
         ...item,
-        content: <ValueCard id={item.key} title={item.title} value={getCardValue(item, states)} onDelete={()=> {
+        content: <ValueCard id={item.key} title={item.name} value={getCardValue(item, states)} onDelete={() => {
           setIsDeleting(true)
           setCurrentCard(item)
-        }} onEdit={editCard(item)} />
+        }} onEdit={() => {
+          setIsEditing(true)
+          setCurrentCard(item)
+          setEditedCard(item)
+        }} />
       }
     }
     return item
@@ -156,6 +181,38 @@ const Board = ({ board }) => {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog>
+      <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
+        <Dialog.Portal zIndex={999999999} overflow='hidden'>
+          <Dialog.Overlay />
+          <Dialog.Content
+            bordered
+            elevate
+            animateOnly={['transform', 'opacity']}
+            enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
+            exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
+            gap="$4"
+            maxWidth={600}
+          >
+            <Dialog.Title>Edit</Dialog.Title>
+            {currentCard && <CardSettings card={currentCard} onEdit={(data) => {
+              setEditedCard(data)
+            }}/>}
+            <Dialog.Close displayWhenAdapted asChild>
+              <Tinted><Button onPress={async () => {
+                const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
+                setItems(newItems)
+                boardRef.current.cards = newItems
+                await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                setCurrentCard(null)
+                setIsEditing(false)
+                setEditedCard(null)
+              }}>
+                Save
+              </Button></Tinted>
+            </Dialog.Close>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog>
       <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
         p="$5"
@@ -166,7 +223,7 @@ const Board = ({ board }) => {
           await deleteCard(currentCard)
         }}
         acceptTint="red"
-        title={"Delete: "+currentCard?.title}
+        title={"Delete: " + currentCard?.title}
         description={"Are you sure you want to delete this card?"}
       >
       </AlertDialog>
