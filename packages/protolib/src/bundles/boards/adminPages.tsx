@@ -1,4 +1,4 @@
-import { BookOpen, Plus, Trash2 } from '@tamagui/lucide-icons'
+import { BookOpen, Plus, Save, Trash2 } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
@@ -13,6 +13,7 @@ import { DashboardGrid } from '../../components/DashboardGrid';
 import { CenterCard } from '../widgets'
 import { useEffect, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
+import { Tinted } from '../../components/Tinted'
 
 const sourceUrl = '/api/core/v1/boards'
 
@@ -22,7 +23,7 @@ const Board = ({ board }) => {
   const [items, setItems] = useState((board.cards? [...board.cards] : []).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
   const [addOpened, setAddOpened] = useState(false)
 
-  const layouts = {
+  const layouts = board.layouts ?? {
     lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 6, doubleH: 12 }),
     md: computeLayout(items, { totalCols: 10, normalW: 5, normalH: 6, doubleW: 10, doubleH: 12 }),
     sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 })
@@ -40,12 +41,14 @@ const Board = ({ board }) => {
     if (item.type == 'addWidget') {
       return {
         ...item,
-        content: <CenterCard title={""} id={item.key} containerProps={{ className: "no-drag", style: { cursor: "pointer" } }} onPress={() => {
+        content: <CenterCard title={""} id={item.key} containerProps={{style: { cursor: "pointer" } }}>
+          <YStack alignItems="center" justifyContent="center" f={1} width="100%" opacity={0.5}>
+            <YStack alignItems='center' justifyContent='center' className="no-drag" onPress={() => {
           setAddOpened(true)
         }}>
-          <YStack alignItems="center" justifyContent="center" f={1} width="100%" opacity={0.5}>
-            <Plus size={50} />
-            <Paragraph size="$5" fontWeight="400" mt="$1">Add</Paragraph>
+              <Plus size={50} />
+              <Paragraph size="$5" fontWeight="400" mt="$1">Add</Paragraph>
+            </YStack>
           </YStack>
         </CenterCard>
       }
@@ -64,9 +67,9 @@ const Board = ({ board }) => {
 
   return (
     <YStack flex={1}>
-
       <XStack px={"$5"} py={"$3"}>
         <Paragraph size="$5" fontWeight="400">{board.name}</Paragraph>
+        {/* <Tinted><Save color="var(--color8)" size={"$1"} strokeWidth={1.6}/></Tinted> */}
       </XStack>
       <Dialog modal open={addOpened} onOpenChange={setAddOpened}>
         <Dialog.Portal zIndex={999999999} overflow='hidden'>
@@ -98,7 +101,16 @@ const Board = ({ board }) => {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog >
-      <DashboardGrid items={cards} layouts={layouts} borderRadius={10} padding={10} backgroundColor="white" />
+      <DashboardGrid 
+        items={cards} 
+        layouts={layouts} 
+        borderRadius={10} 
+        padding={10} 
+        backgroundColor="white"
+        onLayoutChange={(layout, layouts) => {
+          API.post(`/api/core/v1/boards/${board.name}`, {...board, layouts: layouts})
+        }}
+      />
     </YStack>
   )
 }
