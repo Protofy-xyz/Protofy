@@ -165,7 +165,7 @@ const CardSettings = ({ card, icons, onEdit = (data) => { } }) => {
         Color
       </label>
       <div style={{ zIndex: 1000 }}>
-        <InputColor color={cardData.color} onChange={(e) => setCardData({ ...cardData, color: e })} />
+        <InputColor color={cardData.color} onChange={(e) => setCardData({ ...cardData, color: e.hex })} />
       </div>
 
     </div>
@@ -190,12 +190,12 @@ const CardActions = ({ id, onEdit, onDelete }) => {
   </Tinted>
 }
 
-const ValueCard = ({ id, title, value, icon = undefined, color = 'red', onDelete = () => { }, onEdit = () => { } }) => {
+const ValueCard = ({ id, title, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { } }) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <CardValue
       Icon={icon ?? Tag}
       value={value ?? 'N/A'}
-      color={'var(--blue9)'}
+      color={color}
     />
   </CenterCard>
 }
@@ -266,7 +266,7 @@ const Board = ({ board, icons }) => {
     } else if (item.type == 'value') {
       return {
         ...item,
-        content: <ValueCard icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} value={getCardValue(item, states)} onDelete={() => {
+        content: <ValueCard color={item.color} icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} value={getCardValue(item, states)} onDelete={() => {
           setIsDeleting(true)
           setCurrentCard(item)
         }} onEdit={() => {
