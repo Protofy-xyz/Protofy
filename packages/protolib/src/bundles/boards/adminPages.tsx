@@ -7,13 +7,14 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button, AlertDialog, Dialog } from '@my/ui'
+import { YStack, XStack, Paragraph, Popover, Button, AlertDialog, Dialog, Stack } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { CenterCard } from '../widgets'
 import { useEffect, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
+import React from 'react'
 
 const sourceUrl = '/api/core/v1/boards'
 
@@ -23,17 +24,20 @@ const Board = ({ board }) => {
   const [items, setItems] = useState((board.cards? [...board.cards] : []).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
   const [addOpened, setAddOpened] = useState(false)
 
-  const layouts = board.layouts ?? {
-    lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 6, doubleH: 12 }),
-    md: computeLayout(items, { totalCols: 10, normalW: 5, normalH: 6, doubleW: 10, doubleH: 12 }),
-    sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 })
+  const boardRef = React.useRef(board)
+
+  const layouts = {
+    lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 6, doubleH: 12 }, {layout: board?.layouts?.lg}),
+    md: computeLayout(items, { totalCols: 10, normalW: 5, normalH: 6, doubleW: 10, doubleH: 12 }, {layout: board?.layouts?.md}),
+    sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 }, {layout: board?.layouts?.sm})
   }
 
   const addWidget = async (type) => {
     const rnd = Math.floor(Math.random() * 100000)
-    const newItems = [...items, { key: type+'_'+rnd, type }].sort((a, b) => a.key == 'addwidget' ? 1 : -1)
+    const newItems = [...items, { key: type+'_'+rnd, type, width: 2, height: 5 }].sort((a, b) => a.key == 'addwidget' ? 1 : -1)
     setItems(newItems)
-    API.post(`/api/core/v1/boards/${board.name}`, {...board, cards: newItems})
+    boardRef.current.cards = newItems
+    API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
   }
 
   //fill items with react content, addWidget should be the last item
@@ -41,13 +45,16 @@ const Board = ({ board }) => {
     if (item.type == 'addWidget') {
       return {
         ...item,
-        content: <CenterCard title={""} id={item.key} containerProps={{style: { cursor: "pointer" } }}>
-          <YStack alignItems="center" justifyContent="center" f={1} width="100%" opacity={0.5}>
-            <YStack alignItems='center' justifyContent='center' className="no-drag" onPress={() => {
+        content: <CenterCard title={""} id={item.key}>
+          <YStack alignItems="center" justifyContent="center" f={1} width="100%" opacity={1}>
+            <YStack p="$2" pressStyle={{bg: '$backgroundPress'}} borderRadius="$5" hoverStyle={{bg: '$backgroundHover'}} alignItems='center' justifyContent='center' className="no-drag" cursor="pointer" onPress={() => {
           setAddOpened(true)
         }}>
+            <Stack alignItems="center" justifyContent="center" opacity={0.5} hoverStyle={{opacity: 0.75}} pressStyle={{opacity: 0.9}}>
               <Plus size={50} />
               <Paragraph size="$5" fontWeight="400" mt="$1">Add</Paragraph>
+            </Stack>
+
             </YStack>
           </YStack>
         </CenterCard>
@@ -108,7 +115,8 @@ const Board = ({ board }) => {
         padding={10} 
         backgroundColor="white"
         onLayoutChange={(layout, layouts) => {
-          API.post(`/api/core/v1/boards/${board.name}`, {...board, layouts: layouts})
+          boardRef.current.layouts = layouts
+          API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
         }}
       />
     </YStack>
