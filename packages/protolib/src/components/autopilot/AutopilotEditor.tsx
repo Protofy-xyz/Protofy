@@ -3,29 +3,70 @@ import { YStack, ScrollView } from "@my/ui";
 import { Tinted } from "../../components/Tinted";
 import JSONViewer from "../jsonui/JSONViewer";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
+import { Rules } from "./Rules";
 
-export const AutopilotEditor = ({ data }) => {
+export const AutopilotEditor = ({ data, rules, value }) => {
     return (
         <PanelGroup direction="horizontal">
-            <Panel defaultSize={33} minSize={20} maxSize={50}>
-                <YStack 
-                    flex={1} 
-                    height="100%" 
-                    borderRadius="$3" 
-                    p="$3" 
-                    backgroundColor="$gray2" 
-                    overflow="hidden"
-                >
-                    <ScrollView flex={1} width="100%" height="100%">
-                        <Tinted>
-                            <JSONViewer collapsible data={data} />
-                        </Tinted>
-                    </ScrollView>
-                </YStack>
+            <Panel>
+                <PanelGroup direction="vertical">
+                    <Panel defaultSize={66} minSize={20} maxSize={80}>
+                        <YStack
+                            flex={1}
+                            height="100%"
+                            borderRadius="$3"
+                            p="$3"
+                            backgroundColor="$gray2"
+                            overflow="hidden"
+                        >
+                            <ScrollView
+                                flex={1}
+                                width="100%"
+                                height="100%"
+                                overflow="auto"
+                            >
+                                <Tinted>
+                                    <p>Input</p>
+                                    <div style={{ minWidth: "600px" }}>
+                                        <JSONViewer collapsible data={data} />
+                                    </div>
+                                </Tinted>
+                            </ScrollView>
+                        </YStack>
+                    </Panel>
+
+                    <CustomPanelResizeHandle direction="horizontal" />
+
+                    <Panel defaultSize={34} minSize={20} maxSize={80}>
+                        <YStack
+                            flex={1}
+                            height="100%"
+                            borderRadius="$3"
+                            p="$3"
+                            backgroundColor="$gray2"
+                            overflow="hidden"
+                        >
+                            <ScrollView
+                                flex={1}
+                                width="100%"
+                                height="100%"
+                                overflow="auto"
+                            >
+                                <Tinted>
+                                    <p>Output</p>
+                                    <div style={{ minWidth: "600px" }}>
+                                        <JSONViewer collapsible data={value} />
+                                    </div>
+                                </Tinted>
+                            </ScrollView>
+                        </YStack>
+                    </Panel>
+                </PanelGroup>
             </Panel>
 
             <CustomPanelResizeHandle direction="vertical" />
 
+            {/* Panel derecho */}
             <Panel defaultSize={67} minSize={50}>
                 <YStack
                     flex={1}
@@ -36,7 +77,14 @@ export const AutopilotEditor = ({ data }) => {
                     borderRadius="$3"
                     p="$3"
                 >
-                    {/* Content rigth panel */}
+                    <Tinted>
+                        <Rules
+                            rules={rules.rules}
+                            onAddRule={rules.onAddRule}
+                            onDeleteRule={rules.onDeleteRule}
+                            loadingIndex={rules.loadingIndex}
+                        />
+                    </Tinted>
                 </YStack>
             </Panel>
         </PanelGroup>
