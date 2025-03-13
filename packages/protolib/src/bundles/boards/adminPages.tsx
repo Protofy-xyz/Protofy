@@ -1,15 +1,16 @@
 import { BookOpen, Plus, Save, Settings, Tag, Trash2 } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
-import { API } from 'protobase'
+import { API, set } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
 import { DataView } from "../../components/DataView"
 import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button, AlertDialog, Dialog, Stack, Card } from '@my/ui'
+import { YStack, XStack, Paragraph, Popover, Button, Dialog, Stack, Card } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
+import { AlertDialog } from '../../components/AlertDialog';
 import { CardValue, CenterCard } from '../widgets'
 import { useEffect, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
@@ -20,7 +21,7 @@ const sourceUrl = '/api/core/v1/boards'
 
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
-    <XStack right={-10} hoverStyle={{bg: '$backgroundFocus'}} pressStyle={{bg: '$backgroundPress'}} borderRadius="$5" alignItems="center" justifyContent="center" cursor="pointer" p="$2" onPress={onPress}>
+    <XStack right={-10} hoverStyle={{ bg: '$backgroundFocus' }} pressStyle={{ bg: '$backgroundPress' }} borderRadius="$5" alignItems="center" justifyContent="center" cursor="pointer" p="$2" onPress={onPress}>
       <Icon size={20} onPress={onPress} />
     </XStack>
 
@@ -36,8 +37,8 @@ const CardActions = ({ id, onEdit, onDelete }) => {
   </Tinted>
 }
 
-const ValueCard = ({ id, title, value, icon = undefined, color = 'red' }) => {
-  return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={() => { }} onEdit={() => { }} />} >
+const ValueCard = ({ id, title, value, icon = undefined, color = 'red', onDelete = () => { }, onEdit = () => { } }) => {
+  return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <CardValue
       Icon={Tag}
       value={value ?? 'N/A'}
@@ -56,8 +57,23 @@ const Board = ({ board }) => {
   const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 6 }
   const [items, setItems] = useState((board.cards ? [...board.cards] : [addCard]).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
   const [addOpened, setAddOpened] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [currentCard, setCurrentCard] = useState(null)
 
   const boardRef = React.useRef(board)
+
+  const deleteCard = async (card) => {
+      const newItems = items.filter(item => item.key != card.key)
+      setItems(newItems)
+      boardRef.current.cards = newItems
+      await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+      setIsDeleting(false)
+      setCurrentCard(null)
+  }
+
+  const editCard = (card) => async () => {
+    console.log("Edit card: ", card)
+  }
 
   const layouts = {
     lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 6, doubleH: 12 }, { layout: board?.layouts?.lg }),
@@ -95,7 +111,10 @@ const Board = ({ board }) => {
     } else if (item.type == 'value') {
       return {
         ...item,
-        content: <ValueCard id={item.key} title={item.title} value={getCardValue(item, states)} />
+        content: <ValueCard id={item.key} title={item.title} value={getCardValue(item, states)} onDelete={()=> {
+          setIsDeleting(true)
+          setCurrentCard(item)
+        }} onEdit={editCard(item)} />
       }
     }
     return item
@@ -136,7 +155,21 @@ const Board = ({ board }) => {
             </Dialog.Close>
           </Dialog.Content>
         </Dialog.Portal>
-      </Dialog >
+      </Dialog>
+      <AlertDialog
+        acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
+        p="$5"
+        acceptCaption="Delete"
+        setOpen={setIsDeleting}
+        open={isDeleting}
+        onAccept={async (seter) => {
+          await deleteCard(currentCard)
+        }}
+        acceptTint="red"
+        title={"Delete: "+currentCard?.title}
+        description={"Are you sure you want to delete this card?"}
+      >
+      </AlertDialog>
       <DashboardGrid
         items={cards}
         layouts={layouts}
