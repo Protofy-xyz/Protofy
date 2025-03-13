@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Tinted } from './Tinted';
-import { StackProps, XStack, YStack, Text } from 'tamagui';
+import { StackProps, XStack, YStack, Text, Paragraph } from 'tamagui';
 
 interface DashboardCardProps {
     children: ReactNode;
@@ -32,7 +32,7 @@ export const DashboardCard = ({ children, id, title, titleProps = {}, containerP
                         ai="center"
                         {...titleProps}
                     >
-                        <Text>{title}</Text>
+                        <Paragraph fontSize={"$4"}>{title}</Paragraph>
                     </XStack>
                 ) : null}
                 <YStack

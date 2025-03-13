@@ -85,7 +85,10 @@ export function computeLayout(items, config, options:any={}) {
 
     for (const widget of items) {
         let w, h;
-        if (doubleWidgets.includes(widget.key)) {
+        if(widget.width && widget.height){
+            w = widget.width;
+            h = widget.height;
+        } else if (doubleWidgets.includes(widget.key)) {
             // Widget "doble"
             w = doubleW;
             h = doubleH;

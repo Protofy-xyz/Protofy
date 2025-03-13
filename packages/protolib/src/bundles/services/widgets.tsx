@@ -37,10 +37,10 @@ export const ServiceMemoryUsageChart = ({ title, id }) => {
     );
 };
 
-export const CenterCard = ({ title, id, children }) => {
+export const CenterCard = ({ title, id, children, onPress, ...props }) => {
     return (
-        <DashboardCard title={title} id={id}>
-            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
+        <DashboardCard title={title} id={id} {...props}>
+            <YStack onPress={onPress} borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
                 <YStack alignItems="center" justifyContent="center" f={1} width="100%">
                     {children}
                 </YStack>
