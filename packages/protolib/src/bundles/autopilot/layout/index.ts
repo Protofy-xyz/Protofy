@@ -84,7 +84,7 @@ export function computeLayout(items, config, options:any={}) {
     const newlayout = [];
 
     for (const widget of items) {
-        const prevLayout = layout.find((l) => l.i == widget.key)
+        const prevLayout = layout && layout.find && layout.find((l) => l.i == widget.key)
         if(prevLayout){
             newlayout.push(prevLayout);
             continue;
