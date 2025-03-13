@@ -26,6 +26,7 @@ import { AgentsAPI } from './agents/agents/agentsApi'
 import { ChatbotsAPI } from './chatbots/chatbotsAPI'
 import { AutomationsAPI } from './automations/automationsAPI'
 import { BoardsAPI } from './boards/boardsAPI'
+import { IconsAPI } from './icons/iconsAPI'
 
 export const AdminAPIBundles = (app, context) => {
   UsersAPI(app, context)
@@ -55,5 +56,6 @@ export const AdminAPIBundles = (app, context) => {
   FlowAPI(app, context),
   ChatbotsAPI(app, context),
   AutomationsAPI(app, context),
-  BoardsAPI(app, context)
+  BoardsAPI(app, context),
+  IconsAPI(app, context)
 }
