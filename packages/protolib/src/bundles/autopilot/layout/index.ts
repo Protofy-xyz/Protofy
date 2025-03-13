@@ -75,15 +75,20 @@ export function placeWidget(occupied, w, h) {
  * - doubleW, doubleH: ancho y alto de un widget "doble".
  */
 export function computeLayout(items, config, options:any={}) {
-    const { doubleWidgets = [] } = options;
-    console.log('doubleWidgets', doubleWidgets);
+    const { doubleWidgets = [], layout = {} } = options;
+    // console.log('doubleWidgets', doubleWidgets);
     const { totalCols, normalW, normalH, doubleW, doubleH } = config;
 
     // Iniciamos occupied con 1 sola fila (la iremos ampliando según sea necesario).
     let occupied = create2DArray(1, totalCols, false);
-    const layout = [];
+    const newlayout = [];
 
     for (const widget of items) {
+        const prevLayout = layout && layout.find && layout.find((l) => l.i == widget.key)
+        if(prevLayout){
+            newlayout.push(prevLayout);
+            continue;
+        }
         let w, h;
         if(widget.width && widget.height){
             w = widget.width;
@@ -99,7 +104,7 @@ export function computeLayout(items, config, options:any={}) {
         }
         // Obtenemos la posición donde se puede colocar
         const { x, y, w: finalW, h: finalH } = placeWidget(occupied, w, h);
-        layout.push({
+        newlayout.push({
             i: widget.key,
             x,
             y,
@@ -108,5 +113,5 @@ export function computeLayout(items, config, options:any={}) {
             isResizable: true
         });
     }
-    return layout;
+    return newlayout;
 }

@@ -1,4 +1,4 @@
-import { BookOpen, Plus, Save, Trash2 } from '@tamagui/lucide-icons'
+import { BookOpen, Plus, Save, Settings, Tag, Trash2 } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
@@ -7,33 +7,70 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button, AlertDialog, Dialog } from '@my/ui'
+import { YStack, XStack, Paragraph, Popover, Button, AlertDialog, Dialog, Stack, Card } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
-import { CenterCard } from '../widgets'
+import { CardValue, CenterCard } from '../widgets'
 import { useEffect, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
+import React from 'react'
 
 const sourceUrl = '/api/core/v1/boards'
 
+const CardIcon = ({ Icon, onPress }) => {
+  return <Tinted>
+    <XStack right={-10} hoverStyle={{bg: '$backgroundFocus'}} pressStyle={{bg: '$backgroundPress'}} borderRadius="$5" alignItems="center" justifyContent="center" cursor="pointer" p="$2" onPress={onPress}>
+      <Icon size={20} onPress={onPress} />
+    </XStack>
+
+  </Tinted>
+}
+
+const CardActions = ({ id, onEdit, onDelete }) => {
+  return <Tinted>
+    <XStack>
+      <CardIcon Icon={Trash2} onPress={onDelete} />
+      <CardIcon Icon={Settings} onPress={onEdit} />
+    </XStack>
+  </Tinted>
+}
+
+const ValueCard = ({ id, title, value, icon = undefined, color = 'red' }) => {
+  return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={() => { }} onEdit={() => { }} />} >
+    <CardValue
+      Icon={Tag}
+      value={value ?? 'N/A'}
+      color={'var(--blue9)'}
+    />
+  </CenterCard>
+}
+
+const getCardValue = (card, states) => {
+  //TODO: implement this
+  return undefined
+}
 
 const Board = ({ board }) => {
-  // const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 5 }
-  const [items, setItems] = useState((board.cards? [...board.cards] : []).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
+  const states = {} // TODO: get states from protomemdb
+  const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 6 }
+  const [items, setItems] = useState((board.cards ? [...board.cards] : [addCard]).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
   const [addOpened, setAddOpened] = useState(false)
 
-  const layouts = board.layouts ?? {
-    lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 6, doubleH: 12 }),
-    md: computeLayout(items, { totalCols: 10, normalW: 5, normalH: 6, doubleW: 10, doubleH: 12 }),
-    sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 })
+  const boardRef = React.useRef(board)
+
+  const layouts = {
+    lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 6, doubleH: 12 }, { layout: board?.layouts?.lg }),
+    md: computeLayout(items, { totalCols: 10, normalW: 5, normalH: 6, doubleW: 10, doubleH: 12 }, { layout: board?.layouts?.md }),
+    sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.sm })
   }
 
   const addWidget = async (type) => {
     const rnd = Math.floor(Math.random() * 100000)
-    const newItems = [...items, { key: type+'_'+rnd, type }].sort((a, b) => a.key == 'addwidget' ? 1 : -1)
+    const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, title: 'title' }].sort((a, b) => a.key == 'addwidget' ? 1 : -1)
     setItems(newItems)
-    API.post(`/api/core/v1/boards/${board.name}`, {...board, cards: newItems})
+    boardRef.current.cards = newItems
+    API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
   }
 
   //fill items with react content, addWidget should be the last item
@@ -41,25 +78,24 @@ const Board = ({ board }) => {
     if (item.type == 'addWidget') {
       return {
         ...item,
-        content: <CenterCard title={""} id={item.key} containerProps={{style: { cursor: "pointer" } }}>
-          <YStack alignItems="center" justifyContent="center" f={1} width="100%" opacity={0.5}>
-            <YStack alignItems='center' justifyContent='center' className="no-drag" onPress={() => {
-          setAddOpened(true)
-        }}>
-              <Plus size={50} />
-              <Paragraph size="$5" fontWeight="400" mt="$1">Add</Paragraph>
+        content: <CenterCard title={""} id={item.key}>
+          <YStack alignItems="center" justifyContent="center" f={1} width="100%" opacity={1}>
+            <YStack p="$2" pressStyle={{ bg: '$backgroundPress' }} borderRadius="$5" hoverStyle={{ bg: '$backgroundHover' }} alignItems='center' justifyContent='center' className="no-drag" cursor="pointer" onPress={() => {
+              setAddOpened(true)
+            }}>
+              <Stack alignItems="center" justifyContent="center" opacity={0.5} hoverStyle={{ opacity: 0.75 }} pressStyle={{ opacity: 0.9 }}>
+                <Plus size={50} />
+                <Paragraph size="$5" fontWeight="400" mt="$1">Add</Paragraph>
+              </Stack>
+
             </YStack>
           </YStack>
         </CenterCard>
       }
-    } else if(item.type == 'value') {
+    } else if (item.type == 'value') {
       return {
         ...item,
-        content: <CenterCard title={item.title} id={item.key}>
-          <YStack alignItems="center" justifyContent="center" f={1} width="100%">
-            <Paragraph size="$5" fontWeight="400">value</Paragraph>
-          </YStack>
-        </CenterCard>
+        content: <ValueCard id={item.key} title={item.title} value={getCardValue(item, states)} />
       }
     }
     return item
@@ -83,7 +119,7 @@ const Board = ({ board }) => {
             gap="$4"
             maxWidth={600}
           >
-            <Dialog.Title>Add widget</Dialog.Title>
+            <Dialog.Title>Add...</Dialog.Title>
             <Dialog.Description>
               {'Select the widget you want to add to the board'}
             </Dialog.Description>
@@ -91,24 +127,25 @@ const Board = ({ board }) => {
               TODO: widget type selector
             </YStack>
             <Dialog.Close displayWhenAdapted asChild>
-              <Button theme='blue' onPress={async () => {
+              <Tinted><Button onPress={async () => {
                 await addWidget('value')
                 setAddOpened(false)
               }}>
                 Add
-              </Button>
+              </Button></Tinted>
             </Dialog.Close>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog >
-      <DashboardGrid 
-        items={cards} 
-        layouts={layouts} 
-        borderRadius={10} 
-        padding={10} 
+      <DashboardGrid
+        items={cards}
+        layouts={layouts}
+        borderRadius={10}
+        padding={10}
         backgroundColor="white"
         onLayoutChange={(layout, layouts) => {
-          API.post(`/api/core/v1/boards/${board.name}`, {...board, layouts: layouts})
+          boardRef.current.layouts = layouts
+          API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
         }}
       />
     </YStack>
