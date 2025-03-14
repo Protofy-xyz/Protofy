@@ -282,8 +282,8 @@ const Board = ({ board, icons }) => {
   const reloadBoard = async () => {
     const dataData = await API.get(`/api/v1/boards/${board.name}`)
     if (dataData.status == 'loaded') {
-      const newItems = dataData.data?.cards
-      if (newItems.length == 0) newItems.push(addCard)
+      let newItems = dataData.data?.cards
+      if (!newItems || newItems.length == 0) newItems = [addCard]
       setItems(newItems)
     }
   }
