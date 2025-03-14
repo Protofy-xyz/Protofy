@@ -20,8 +20,8 @@ const FirstSlide = ({ selected, setSelected, options }) => {
                         from="boards"
                         theme={themeName}
                         template={option}
-                        isSelected={selected === option.name}
-                        onPress={() => setSelected(option.name)}
+                        isSelected={selected === option.id}
+                        onPress={() => setSelected(option.id)}
                     />
                 ))}
             </SelectGrid>
@@ -29,7 +29,7 @@ const FirstSlide = ({ selected, setSelected, options }) => {
         <Spacer marginBottom="$8" />
     </YStack>
   }
-  const SecondSlide = ({  }) => {
+  const SecondSlide = ({ selected }) => {
     return <YStack>
         <ScrollView mah={"500px"}>
             
@@ -67,7 +67,7 @@ export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish }) => {
             {
               name: "Configure your widget",
               title: "Configure your widget",
-              component: <SecondSlide />
+              component: <SecondSlide selected={selectedCard} />
             }
           ]
           }></Slides>
