@@ -11,7 +11,6 @@ const SelectGrid = ({ children }) => {
   }
 
 const FirstSlide = ({ selected, setSelected, options }) => {
-    console.log("options",options)
     const themeName = useThemeName();
     return <YStack>
         <ScrollView mah={"500px"}>
@@ -26,6 +25,14 @@ const FirstSlide = ({ selected, setSelected, options }) => {
                     />
                 ))}
             </SelectGrid>
+        </ScrollView>
+        <Spacer marginBottom="$8" />
+    </YStack>
+  }
+  const SecondSlide = ({  }) => {
+    return <YStack>
+        <ScrollView mah={"500px"}>
+            
         </ScrollView>
         <Spacer marginBottom="$8" />
     </YStack>
@@ -57,11 +64,11 @@ export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish }) => {
               title: "Select the widget",
               component: <FirstSlide options={cards} selected={selectedCard} setSelected={setSelectedCard} />
             },
-            // {
-            //   name: "Configure your page",
-            //   title: "Configure your page",
-            //   component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
-            // }
+            {
+              name: "Configure your widget",
+              title: "Configure your widget",
+              component: <SecondSlide />
+            }
           ]
           }></Slides>
       </XStack>
