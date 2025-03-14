@@ -98,7 +98,7 @@ const RuleEditor = ({ states, cardData, setCardData }) => {
   const [value, setValue] = useState()
 
   const getRulesCode = async (force?) => {
-    if (!hasCode || force) {
+    if ((!hasCode || force) && cardData.rules && cardData.rules.length > 0) {
       setHasCode(false)
       const code = await API.post('/api/v1/autopilot/getValueCode', { states, rules: cardData.rules })
       if (!code?.data?.jsCode) return
