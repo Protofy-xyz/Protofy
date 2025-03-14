@@ -185,12 +185,15 @@ export const BoardsAPI = (app, context) => {
                     `);
 
                     let value = wrapper(states);
-                    // logger.info({ card, value }, "New value for card " + card.key);
-                    card.value = value;
-                    const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
-                    if (prevValue !== value) {
-                        context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value, emitEvent: true });
+                    if (value !== states && value != states['boards'][boardId]) {
+                        // logger.info({ card, value }, "New value for card " + card.key);
+                        card.value = value;
+                        const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
+                        if (prevValue !== value) {
+                            context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value, emitEvent: true });
+                        }
                     }
+
 
                 }
             } catch (error) {
