@@ -28,7 +28,7 @@ export const getContext = async (options: {
         return
     }
 
-    if(!defaultValue) {
+    if(defaultValue === undefined) {
         logger.error({}, "State defaultValue is required");
         return
     }
