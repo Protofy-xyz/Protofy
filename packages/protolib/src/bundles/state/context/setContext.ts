@@ -4,6 +4,7 @@ import { generateEvent } from "../../events/eventsLibrary";
 const logger = getLogger();
 
 export const setContext = async (options: {
+    chunk?: string,
     group?: string,
     tag: string,
     name: string,
@@ -15,6 +16,7 @@ export const setContext = async (options: {
     const name = options.name
     const tag = options.tag
     const value = options.value
+    const chunk = options.chunk || 'states'
 
     if(!name) {
         logger.error({}, "State name is required");
@@ -32,26 +34,28 @@ export const setContext = async (options: {
     }
 
     if(options.token) {
-        console.log('Setting value using api: ', value, 'for', group, tag, name)
-        const result = await API.post(`/api/v1/protomemdb/${group}/${tag}/${name}?token=`+options.token, {value: value}) 
-        console.log('result: ', result)
+        // console.log('Setting value using api: ', value, 'for', group, tag, name)
+        const result = await API.post(`/api/v1/protomemdb/${chunk}/${group}/${tag}/${name}?token=`+options.token, {value: value}) 
+        // console.log('result: ', result)
         if(options.emitEvent) {
             generateEvent({
-                path: `states/${group}/${tag}/${name}/update`, 
+                path: `${chunk}/${group}/${tag}/${name}/update`, 
                 from: "states",
                 user: 'system',
                 payload:{value: value},
             }, getServiceToken())
         }
     } else {
+        // console.log('setting locally', value, 'for', group, tag, name)
         if(options.emitEvent) {
+            // console.log('emitting event in: '+`${chunk}/${group}/${tag}/${name}/update`)
             generateEvent({
-                path: `states/${group}/${tag}/${name}/update`, 
+                path: `${chunk}/${group}/${tag}/${name}/update`, 
                 from: "states",
                 user: 'system',
                 payload:{value: value},
             }, getServiceToken())
         }
-        return ProtoMemDB.set(group, tag, name, value)
+        return ProtoMemDB(chunk).set(group, tag, name, value)
     }
 }

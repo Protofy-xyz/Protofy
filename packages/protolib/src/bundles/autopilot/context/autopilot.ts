@@ -25,7 +25,7 @@ export const autopilot = ({context, app, agentName, model}) => {
       onRun: async (params, res) => {
         const templateName = "v2";
         const actions = await context.automations.getActionsFromAutomations(agentName, context.serviceToken);
-        const memoryStates = await context.protomemdb.getStatesFromProtoMemDB('boards', agentName);
+        const memoryStates = await context.protomemdb.getStatesFromProtoMemDB('states', 'boards', agentName);
         const chatStates = await context.chatbots.getChatState(context.serviceToken, 1);
 
         if((!lastChatMessage || chatStates.getData()?.chats[0]?.message?.message === lastChatMessage) && lastSeenState && JSON.stringify(lastSeenState) === JSON.stringify(memoryStates.getData())) {

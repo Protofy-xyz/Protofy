@@ -1,6 +1,6 @@
 import { BoardModel } from "./boardsSchemas";
 import { AutoAPI, getRoot } from 'protonode'
-import { API, getLogger, set } from 'protobase'
+import { API, getLogger, ProtoMemDB, set } from 'protobase'
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
@@ -36,6 +36,28 @@ const getBoards = async () => {
     }).map(f => {
         return f.split('.json')[0]
     })
+}
+
+const getBoard = async (boardId) => {
+    const filePath = BoardsDir(getRoot()) + boardId + ".json";
+    let fileContent = null;
+
+    await acquireLock(filePath);
+    try {
+        fileContent = await fs.readFile(filePath, 'utf8');
+    } catch (error) {
+        throw new HttpError(404, "Board not found");
+    } finally {
+        releaseLock(filePath);
+    }
+
+    try {
+        fileContent = JSON.parse(fileContent);
+    } catch (error) {
+        throw new HttpError(500, "Error parsing board file");
+    }
+
+    return fileContent;
 }
 
 const getDB = (path, req, session) => {
@@ -135,24 +157,7 @@ export const BoardsAPI = (app, context) => {
 
     const reloadBoard = async (boardId) => {
         const states = await context.state.getStateTree();
-
-        const filePath = BoardsDir(getRoot()) + boardId + ".json";
-        let fileContent = null;
-
-        await acquireLock(filePath);
-        try {
-            fileContent = await fs.readFile(filePath, 'utf8');
-        } catch (error) {
-            throw new HttpError(404, "Board not found");
-        } finally {
-            releaseLock(filePath);
-        }
-
-        try {
-            fileContent = JSON.parse(fileContent);
-        } catch (error) {
-            throw new HttpError(500, "Error parsing board file");
-        }
+        const fileContent = await getBoard(boardId);
 
         if (!fileContent.cards || !Array.isArray(fileContent.cards)) {
             return fileContent;
@@ -181,7 +186,11 @@ export const BoardsAPI = (app, context) => {
                     let value = wrapper(states);
                     // logger.info({ card, value }, "New value for card " + card.key);
                     card.value = value;
-                    context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value });
+                    const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
+                    if (prevValue !== value) {
+                        context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value, emitEvent: true });
+                    }
+
                 }
             } catch (error) {
                 // logger.error({ error }, "Error evaluating jsCode for card: " + card.key);
@@ -207,8 +216,22 @@ export const BoardsAPI = (app, context) => {
 
     app.get('/api/v1/boards/:boardId', async (req, res) => {
         try {
-            const response = await reloadBoard(req.params.boardId)
-            res.send(response);
+            const values = ProtoMemDB('states').getByTag('boards', req.params.boardId);
+            const board = await getBoard(req.params.boardId);
+            if (!board.cards || !Array.isArray(board.cards)) {
+                res.send(board);
+                return;
+            }
+
+            //iterate over values keys, find the corresponding card and set the value (card.name == key)
+            for (const key in values) {
+                const card = board.cards.find(c => c.name === key);
+                if (card) {
+                    card.value = values[key];
+                }
+            }
+
+            res.send(board)
         } catch (error) {
             if (error instanceof HttpError) {
                 res.status(error.status).send({ error: error.message });

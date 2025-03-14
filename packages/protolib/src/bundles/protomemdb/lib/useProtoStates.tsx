@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import { API } from 'protobase'
 import { useEventEffect } from '../../events/hooks/useEventEffect'
 
-export const useProtoStates = (initialState) => {
+export const useProtoStates = (initialState, filter='#') => {
   const [state, setState] = useState(initialState);
   const timer = useRef(null);
 
-  const readState = () => {
-    API.get("/api/v1/protomemdb/")
+  const readState = (chunk='states') => {
+    API.get("/api/v1/protomemdb/"+chunk)
       .then((response) => setState(response.data))
       .catch((error) => console.error("Error al obtener datos:", error));
   };
@@ -24,7 +24,8 @@ export const useProtoStates = (initialState) => {
   }, []);
 
   useEventEffect(
-    () => {
+    (payload, msg) => {
+      console.log('event: ', msg)
       if (timer.current) return;
 
       timer.current = setTimeout(() => {
@@ -32,7 +33,7 @@ export const useProtoStates = (initialState) => {
         timer.current = null;
       }, 500);
     },
-    { path: "states/#" }
+    { path: "states/"+filter }
   );
 
   return state;

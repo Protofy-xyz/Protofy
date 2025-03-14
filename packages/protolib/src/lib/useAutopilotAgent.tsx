@@ -52,7 +52,7 @@ const getActionWidgets = (actions, onRun, confTable={}) => {
 }
 
 const readState = async (tag, setState) => {
-    const states = await getStatesFromProtoMemDB('boards', tag, true)
+    const states = await getStatesFromProtoMemDB('states', 'boards', tag, true)
     setState(states)
 }
 

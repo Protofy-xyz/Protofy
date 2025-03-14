@@ -260,7 +260,7 @@ const Board = ({ board, icons }) => {
     id: 'action'
   }]
 
-  const states = useProtoStates({})
+  const states = useProtoStates({}, 'boards/' + board.name + '/#')
 
   const reloadBoard = async () => {
     const dataData = await API.get(`/api/v1/boards/${board.name}`)
