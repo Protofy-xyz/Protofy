@@ -5,7 +5,7 @@ import JSONViewer from "../jsonui/JSONViewer";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { Rules } from "./Rules";
 
-export const AutopilotEditor = ({ data, rules, value }) => {
+export const AutopilotEditor = ({ data, rules, value, onAddRule=(e,rule)=>{}, onDeleteRule=(index) => {}}) => {
     return (
         <PanelGroup direction="horizontal">
             <Panel>
@@ -67,7 +67,7 @@ export const AutopilotEditor = ({ data, rules, value }) => {
             <CustomPanelResizeHandle direction="vertical" />
 
             {/* Panel derecho */}
-            <Panel defaultSize={67} minSize={50}>
+            <Panel defaultSize={60} minSize={50}>
                 <YStack
                     flex={1}
                     height="100%"
@@ -79,10 +79,10 @@ export const AutopilotEditor = ({ data, rules, value }) => {
                 >
                     <Tinted>
                         <Rules
-                            rules={rules.rules}
-                            onAddRule={rules.onAddRule}
-                            onDeleteRule={rules.onDeleteRule}
-                            loadingIndex={rules.loadingIndex}
+                            rules={rules}
+                            onAddRule={onAddRule}
+                            onDeleteRule={onDeleteRule}
+                            loadingIndex={-1}
                         />
                     </Tinted>
                 </YStack>

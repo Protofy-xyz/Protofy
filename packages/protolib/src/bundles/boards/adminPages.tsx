@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button as TamaButton, Dialog, Stack, Card, Input } from '@my/ui'
+import { YStack, XStack, Paragraph, Popover, Button as TamaButton, Dialog, Stack, Card, Input, Spacer } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -18,6 +18,8 @@ import { Tinted } from '../../components/Tinted'
 import React from 'react'
 import { InputColor } from '../../components/InputColor'
 import Select from "react-select";
+import { AutopilotEditor } from '../../components/autopilot/AutopilotEditor'
+import {useProtoStates} from '../protomemdb/lib/useProtoStates'
 
 const IconSelect = ({ icons, onSelect, selected }) => {
   const [selectedIcon, setSelectedIcon] = useState(
@@ -31,7 +33,7 @@ const IconSelect = ({ icons, onSelect, selected }) => {
   }));
 
   return (
-    <div>
+    <div style={{flex: 1}}>
       <Select
         options={options}
         components={{
@@ -90,84 +92,102 @@ const IconSelect = ({ icons, onSelect, selected }) => {
 
 const sourceUrl = '/api/core/v1/boards'
 
-const CardSettings = ({ card, icons, onEdit = (data) => { } }) => {
+const CardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
+  
   useEffect(() => {
     onEdit(cardData);
   }, [cardData]);
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "auto 1fr",
-        gap: "15px 15px",
-        alignItems: "center",
-        padding: "10px",
-      }}
-    >
-      {/* Title Field */}
-      <label
-        style={{
-          textAlign: "right",
-          whiteSpace: "nowrap",
-        }}
-      >
-        Title
-      </label>
-      <Input
-        value={cardData.name}
-        onChange={(e) =>
-          setCardData({
-            ...cardData,
-            name: e.target.value,
-          })
-        }
-      />
+    <div>
 
-      {/* Icon Field */}
+
       <div
         style={{
-          display: "flex",
+          display: "grid",
+          gridTemplateColumns: "auto 1fr",
+          gap: "15px 15px",
           alignItems: "center",
-          gap: "6px",
-          textAlign: "right",
-          whiteSpace: "nowrap",
+          padding: "10px",
         }}
       >
-        <span>Icon</span>
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
-        <IconSelect
-          icons={icons}
-          onSelect={(icon) => {
+        {/* Title Field */}
+        <label
+          style={{
+            textAlign: "right",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Title
+        </label>
+        <Input
+          value={cardData.name}
+          onChange={(e) =>
             setCardData({
               ...cardData,
-              icon,
-            });
-          }}
-          selected={cardData.icon}
+              name: e.target.value,
+            })
+          }
         />
 
-        <a style={{ marginLeft: '20px' }} href="https://lucide.dev/icons/" target="_blank">
-          <BookOpenText opacity={0.6} />
-        </a>
-      </div>
+        {/* Icon Field */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            textAlign: "right",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <span>Icon</span>
+        </div>
 
-      {/* Color Field */}
-      <label
-        style={{
-          textAlign: "right",
-          whiteSpace: "nowrap",
-        }}
-      >
-        Color
-      </label>
-      <div style={{ zIndex: 1000 }}>
-        <InputColor color={cardData.color} onChange={(e) => setCardData({ ...cardData, color: e.hex })} />
-      </div>
+        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+          <IconSelect
+            icons={icons}
+            onSelect={(icon) => {
+              setCardData({
+                ...cardData,
+                icon,
+              });
+            }}
+            selected={cardData.icon}
+          />
 
+          <a style={{ marginLeft: '20px' }} href="https://lucide.dev/icons/" target="_blank">
+            <BookOpenText opacity={0.6} />
+          </a>
+        </div>
+
+        {/* Color Field */}
+        <label
+          style={{
+            textAlign: "right",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Color
+        </label>
+        <div style={{ zIndex: 1000 }}>
+          <InputColor color={cardData.color} onChange={(e) => setCardData({ ...cardData, color: e.hex })} />
+        </div>
+      </div>
+      <div style={{height:"600px"}}>
+        <AutopilotEditor data={states} rules={cardData.rules ?? []} value={33} onDeleteRule={(index) => {
+          setCardData({
+            ...cardData,
+            rules: cardData.rules?.filter((_, i) => i !== index)
+          });
+        }} onAddRule={(e,rule) => {
+          setCardData({
+            ...cardData,
+            rules: cardData.rules? [...cardData.rules, rule] : [rule]
+          });
+        }} />
+      </div>
+      {/* <Spacer height={900} /> */}
     </div>
   );
 };
@@ -206,7 +226,6 @@ const getCardValue = (card, states) => {
 }
 
 const Board = ({ board, icons }) => {
-  const states = {} // TODO: get states from protomemdb
   const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 6 }
   const [items, setItems] = useState((board.cards ? [...board.cards] : [addCard]).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
   const [addOpened, setAddOpened] = useState(false)
@@ -214,6 +233,8 @@ const Board = ({ board, icons }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [currentCard, setCurrentCard] = useState(null)
   const [editedCard, setEditedCard] = useState(null)
+
+  const states = useProtoStates({})
 
   const boardRef = React.useRef(board)
 
@@ -325,10 +346,12 @@ const Board = ({ board, icons }) => {
             enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
             exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
             gap="$4"
-            maxWidth={600}
+            maxWidth={1200}
+            minWidth={1100}
+            minHeight={750}
           >
             <Dialog.Title>Edit</Dialog.Title>
-            {currentCard && <CardSettings icons={icons} card={currentCard} onEdit={(data) => {
+            {currentCard && <CardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
               setEditedCard(data)
             }} />}
             <Dialog.Close displayWhenAdapted asChild>
