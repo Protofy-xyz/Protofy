@@ -99,7 +99,7 @@ const RuleEditor = ({ states, cardData, setCardData }) => {
   const getRulesCode = async (force?) => {
     if (!hasCode || force) {
       setHasCode(false)
-      const code = await API.post('/api/core/v1/autopilot/getValueCode', { states, rules: cardData.rules })
+      const code = await API.post('/api/v1/autopilot/getValueCode', { states, rules: cardData.rules })
       if (!code?.data?.jsCode) return
       setCardData({
         ...cardData,
