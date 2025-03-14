@@ -1,11 +1,12 @@
 import { BoardModel } from "./boardsSchemas";
 import { AutoAPI, getRoot } from 'protonode'
-import { API, getLogger } from 'protobase'
+import { API, getLogger, set } from 'protobase'
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
+const BOARD_REFRESH_INTERVAL = 500 //in miliseconds
 
 const writeLocks = new Map();
 const logger = getLogger()
@@ -21,33 +22,39 @@ function releaseLock(filePath) {
     writeLocks.delete(filePath);
 }
 
+const getBoards = async () => {
+    try {
+        await fs.access(BoardsDir(getRoot()), fs.constants.F_OK)
+    } catch (error) {
+        console.log("Creating boards folder")
+        await fs.mkdir(BoardsDir(getRoot()))
+    }
+    //list all .json files in the boards folder
+    return (await fs.readdir(BoardsDir(getRoot()))).filter(f => {
+        const filenameSegments = f.split('.')
+        return !fsSync.lstatSync(fspath.join(BoardsDir(getRoot()), f)).isDirectory() && (filenameSegments[filenameSegments.length - 1] === "json")
+    }).map(f => {
+        return f.split('.json')[0]
+    })
+}
+
 const getDB = (path, req, session) => {
     const db = {
         async *iterator() {
             // console.log("Iterator")
             //check if boards folder exists
-            try {
-                await fs.access(BoardsDir(getRoot(req)), fs.constants.F_OK)
-            } catch (error) {
-                console.log("Creating boards folder")
-                await fs.mkdir(BoardsDir(getRoot(req)))
-            }
-            //list all .json files in the boards folder
-            const files = (await fs.readdir(BoardsDir(getRoot(req)))).filter(f => {
-                const filenameSegments = f.split('.')
-                return !fsSync.lstatSync(fspath.join(BoardsDir(getRoot(req)), f)).isDirectory() && (filenameSegments[filenameSegments.length - 1] === "json")
-            })
+            const boards = await getBoards()
             // console.log("Files: ", files)
-            for (const file of files) {
+            for (const file of boards) {
                 //read file content
-                await acquireLock(BoardsDir(getRoot(req)) + file);
+                await acquireLock(BoardsDir(getRoot()) + file);
                 try {
-                    const fileContent = await fs.readFile(BoardsDir(getRoot(req)) + file, 'utf8')
+                    const fileContent = await fs.readFile(BoardsDir(getRoot()) + file+'.json', 'utf8')
                     yield [file.name, fileContent];
                 } catch (e) {
 
                 } finally {
-                    releaseLock(BoardsDir(getRoot(req)) + file);
+                    releaseLock(BoardsDir(getRoot()) + file);
                 }
             }
         },
@@ -128,7 +135,6 @@ export const BoardsAPI = (app, context) => {
 
     const reloadBoard = async (boardId) => {
         const states = await context.state.getStateTree();
-        console.log('states: ', states);
 
         const filePath = BoardsDir(getRoot()) + boardId + ".json";
         let fileContent = null;
@@ -158,14 +164,14 @@ export const BoardsAPI = (app, context) => {
             try {
                 if (card.type === 'value') {
                     if (!card.rulesCode) {
-                        logger.info({ card }, "No rulesCode for value card: " + card.key);
+                        // logger.info({ card }, "No rulesCode for value card: " + card.key);
                         continue;
                     }
                     if (!states) {
-                        logger.info({ card }, "No states, omitting value for card " + card.key);
+                        // logger.info({ card }, "No states, omitting value for card " + card.key);
                         continue;
                     }
-                    logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
+                    // logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
 
                     const wrapper = new Function('states', `
                         ${card.rulesCode}
@@ -173,12 +179,12 @@ export const BoardsAPI = (app, context) => {
                     `);
 
                     let value = wrapper(states);
-                    logger.info({ card, value }, "New value for card " + card.key);
+                    // logger.info({ card, value }, "New value for card " + card.key);
                     card.value = value;
                     context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value });
                 }
             } catch (error) {
-                logger.error({ error }, "Error evaluating jsCode for card: " + card.key);
+                // logger.error({ error }, "Error evaluating jsCode for card: " + card.key);
                 card.value = 'error';
                 card.error = error.message;
             }
@@ -212,5 +218,11 @@ export const BoardsAPI = (app, context) => {
         }
     })
 
-
+    setInterval(async () => {
+        const boards = await getBoards()
+        // console.log("Boards: ", boards)
+        for (const board of boards) {
+            await reloadBoard(board)
+        }
+    }, BOARD_REFRESH_INTERVAL)
 }
