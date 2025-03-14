@@ -54,6 +54,7 @@ const getBoard = async (boardId) => {
     try {
         fileContent = JSON.parse(fileContent);
     } catch (error) {
+        logger.error({ error }, "Error parsing board file: " + filePath);
         throw new HttpError(500, "Error parsing board file");
     }
 
