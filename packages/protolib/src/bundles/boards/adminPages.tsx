@@ -1,4 +1,4 @@
-import { BookOpen, BookOpenText, ExternalLink, HelpCircle, Plus, Save, Settings, Tag, Trash2 } from '@tamagui/lucide-icons'
+import { BookOpen, BookOpenText, ExternalLink, Cog, Palette, Plus, Save, Settings, Tag, Trash2, Type } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API, set } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
@@ -21,6 +21,7 @@ import Select from "react-select";
 import { AutopilotEditor } from '../../components/autopilot/AutopilotEditor'
 import { useProtoStates } from '../protomemdb/lib/useProtoStates'
 import { CardSelector } from '../../components/board/CardSelector'
+import { InteractiveIcon } from '../../components/InteractiveIcon'
 
 const IconSelect = ({ icons, onSelect, selected }) => {
   const [selectedIcon, setSelectedIcon] = useState(
@@ -152,58 +153,62 @@ export const CardSettings = ({ states, card, icons, onEdit = (data) => { } }) =>
 
   return (
     <YStack space="$4" padding="$4">
-      <XStack alignItems="center" space="$8" width="100%">
-        <YStack flex={1}>
-          <Label>Title</Label>
-          <Input
-            value={cardData.name}
-            onChange={(e) =>
-              setCardData({
-                ...cardData,
-                name: e.target.value,
-              })
-            }
+      <Tinted>
+        <XStack alignItems="center" space="$8" width="100%">
+          <YStack flex={1}>
+            <Label size={"$5"}> <Type color={"$color8"} mr="$2" />Title</Label>
+            <Input
+              value={cardData.name}
+              onChange={(e) =>
+                setCardData({
+                  ...cardData,
+                  name: e.target.value,
+                })
+              }
+            />
+          </YStack>
+          <YStack flex={1}>
+            <XStack alignItems="center" space="$2">
+              <Label size={"$5"}><BookOpenText color={"$color8"} mr="$2" />Icon</Label>
+
+            </XStack>
+            <XStack alignItems="center" space="$2">
+              <a href="https://lucide.dev/icons/" target="_blank" rel="noreferrer">
+                <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
+              </a>
+              <IconSelect
+                icons={icons}
+                onSelect={(icon) => {
+                  setCardData({
+                    ...cardData,
+                    icon,
+                  });
+                }}
+                selected={cardData.icon}
+              />
+            </XStack>
+
+          </YStack>
+          <YStack flex={1}>
+            <Label size={"$5"}><Palette color={"$color8"} mr="$2" />Color</Label>
+            <InputColor
+              color={cardData.color}
+              onChange={(e) =>
+                setCardData({ ...cardData, color: e.hex })
+              }
+            />
+          </YStack>
+        </XStack>
+
+        <YStack mt="$5" height={600}>
+          <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Value</Label>
+          <RuleEditor
+            states={states}
+            cardData={cardData}
+            setCardData={setCardData}
           />
         </YStack>
-        <YStack flex={1}>
-          <XStack alignItems="center" space="$2">
-          <a href="https://lucide.dev/icons/" target="_blank" rel="noreferrer">
-              <BookOpenText opacity={0.6} />
-            </a>
-            <Label>Icon</Label>
-
-          </XStack>
-          <IconSelect
-            icons={icons}
-            onSelect={(icon) => {
-              setCardData({
-                ...cardData,
-                icon,
-              });
-            }}
-            selected={cardData.icon}
-          />
-
-        </YStack>
-        <YStack flex={1}>
-          <Label>Color</Label>
-          <InputColor
-            color={cardData.color}
-            onChange={(e) =>
-              setCardData({ ...cardData, color: e.hex })
-            }
-          />
-        </YStack>
-      </XStack>
-
-      <YStack height={600}>
-        <Label>Value</Label>
-        <RuleEditor
-          states={states}
-          cardData={cardData}
-          setCardData={setCardData}
-        />
-      </YStack>
+      </Tinted>
     </YStack>
   );
 };
