@@ -7,6 +7,19 @@ import * as fspath from 'path';
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 
+const writeLocks = new Map();
+
+async function acquireLock(filePath) {
+    while (writeLocks.has(filePath)) {
+        await new Promise(resolve => setTimeout(resolve, 10)); // Espera 10ms antes de reintentar
+    }
+    writeLocks.set(filePath, true);
+}
+
+function releaseLock(filePath) {
+    writeLocks.delete(filePath);
+}
+
 const getDB = (path, req, session) => {
     const db = {
         async *iterator() {
@@ -48,10 +61,14 @@ const getDB = (path, req, session) => {
             // console.log("Creating board: ", JSON.stringify({key,value}))
             value = JSON.parse(value)
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
+
+            await acquireLock(filePath);
             try{
                 await fs.writeFile(filePath, JSON.stringify(value, null, 4))
             }catch(error){
                 console.error("Error creating file: " + filePath, error)
+            } finally {
+                releaseLock(filePath);
             }
         },
 
