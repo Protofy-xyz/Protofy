@@ -7,6 +7,19 @@ import * as fspath from 'path';
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 
+const writeLocks = new Map();
+
+async function acquireLock(filePath) {
+    while (writeLocks.has(filePath)) {
+        await new Promise(resolve => setTimeout(resolve, 10)); // Espera 10ms antes de reintentar
+    }
+    writeLocks.set(filePath, true);
+}
+
+function releaseLock(filePath) {
+    writeLocks.delete(filePath);
+}
+
 const getDB = (path, req, session) => {
     const db = {
         async *iterator() {
@@ -26,8 +39,15 @@ const getDB = (path, req, session) => {
             // console.log("Files: ", files)
             for (const file of files) {
                 //read file content
-                const fileContent = await fs.readFile(BoardsDir(getRoot(req)) + file, 'utf8')
-                yield [file.name, fileContent];
+                await acquireLock(BoardsDir(getRoot(req)) + file);
+                try {
+                    const fileContent = await fs.readFile(BoardsDir(getRoot(req)) + file, 'utf8')
+                    yield [file.name, fileContent];
+                } catch(e) {
+
+                } finally {
+                    releaseLock(BoardsDir(getRoot(req)) + file);
+                }
             }
         },
 
@@ -48,10 +68,14 @@ const getDB = (path, req, session) => {
             // console.log("Creating board: ", JSON.stringify({key,value}))
             value = JSON.parse(value)
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
+
+            await acquireLock(filePath);
             try{
                 await fs.writeFile(filePath, JSON.stringify(value, null, 4))
             }catch(error){
                 console.error("Error creating file: " + filePath, error)
+            } finally {
+                releaseLock(filePath);
             }
         },
 
@@ -59,6 +83,7 @@ const getDB = (path, req, session) => {
             // try to get the board file from the boards folder
             // console.log("Get function: ",key)
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
+            await acquireLock(filePath);
             try{
                 const fileContent = await fs.readFile(filePath, 'utf8')
                 // console.log("fileContent: ", fileContent)
@@ -67,6 +92,8 @@ const getDB = (path, req, session) => {
             }catch(error){
                 // console.log("Error reading file: " + filePath)
                 throw new Error("File not found")
+            } finally {
+                releaseLock(filePath);
             }                   
         }
     };
@@ -94,5 +121,9 @@ export const BoardsAPI = (app, context) => {
         console.log('REPLY: ', reply)
         const jsCode = reply.choices[0].message.content
         res.send({ jsCode })
+    })
+
+    app.get('/api/core/v1/boards/:boardId', async (req, res) => {
+
     })
 }
