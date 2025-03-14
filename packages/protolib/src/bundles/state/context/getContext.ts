@@ -3,6 +3,7 @@ import {getServiceToken} from 'protonode'
 const logger = getLogger();
 
 export const getContext = async (options: {
+    chunk?: string
     group: string,
     tag: string,
     name: string,
@@ -12,6 +13,7 @@ export const getContext = async (options: {
     const group = options.group
     const tag = options.tag
     const defaultValue = options.defaultValue
+    const chunk = options.chunk || 'states'
 
     if(!group) {
         logger.error({}, "State group is required");
@@ -33,5 +35,5 @@ export const getContext = async (options: {
         return
     }
 
-    return ProtoMemDB.get(group, tag, name) ?? defaultValue
+    return ProtoMemDB(chunk).get(group, tag, name) ?? defaultValue
 }

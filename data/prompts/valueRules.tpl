@@ -25,6 +25,8 @@ The rules are not intended to be used inside the code you generate, are instruct
 so you know what to do in reduce_state_obj.
 
 Values in states object are all strings, if you need to manipulate them as numbers, remember to parseFloat them before.
-If the rules specify the name a key inside states, make sure you write the key correctly, according to the correct spelling inside states
+If the rules specify the name a key inside states, make sure you write the key correctly, according to the correct spelling inside states.
+
+The rules are all about what to return from reduce_state_obj
 
 Do not use markup like ```javascript or other markers, just plain javascript, nothing else.

@@ -6,8 +6,8 @@ export const useProtoStates = (initialState, filter='#') => {
   const [state, setState] = useState(initialState);
   const timer = useRef(null);
 
-  const readState = () => {
-    API.get("/api/v1/protomemdb/")
+  const readState = (chunk='states') => {
+    API.get("/api/v1/protomemdb/"+chunk)
       .then((response) => setState(response.data))
       .catch((error) => console.error("Error al obtener datos:", error));
   };

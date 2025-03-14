@@ -216,7 +216,7 @@ export const BoardsAPI = (app, context) => {
 
     app.get('/api/v1/boards/:boardId', async (req, res) => {
         try {
-            const values = ProtoMemDB.getByTag('boards', req.params.boardId);
+            const values = ProtoMemDB('states').getByTag('boards', req.params.boardId);
             const board = await getBoard(req.params.boardId);
             if (!board.cards || !Array.isArray(board.cards)) {
                 res.send(board);
