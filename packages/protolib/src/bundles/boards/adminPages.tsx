@@ -269,11 +269,11 @@ const Board = ({ board, icons }) => {
   const [editedCard, setEditedCard] = useState(null)
 
   const availableCards = [{
-    name: 'value',
+    name: 'Display value',
     id: 'value'
   },
   {
-    name: 'action',
+    name: 'Invoques an action',
     id: 'action'
   }]
 
