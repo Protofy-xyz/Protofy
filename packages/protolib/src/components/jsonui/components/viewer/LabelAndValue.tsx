@@ -4,7 +4,7 @@ import { XStack } from "tamagui";
 import React from "react";
 
 const LabelAndValue = (props) => {
-  let { currentKey, marginLeft, type, value, isLastSibling, styles } = props;
+  let { currentKey, marginLeft, type, value, isLastSibling, styles, onValueSelected, onKeySelected } = props;
   const [deleted, setDeleted] = useState(false)
 
   const onChange = (action, path, value, type) => {
@@ -29,6 +29,8 @@ const LabelAndValue = (props) => {
         currentKey={currentKey}
         onChange={onChange}
         editable={props.editable}
+        onKeySelected={onKeySelected}
+        onValueSelected={onValueSelected}
       />
       <Label
         value={value}
@@ -40,6 +42,8 @@ const LabelAndValue = (props) => {
         currentKey={currentKey}
         onChange={onChange}
         editable={props.editable}
+        onKeySelected={onKeySelected}
+        onValueSelected={onValueSelected}
       />
     </XStack>
   :null)

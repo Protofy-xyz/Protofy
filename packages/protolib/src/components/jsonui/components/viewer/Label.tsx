@@ -27,7 +27,7 @@ function extractNumbers(data) {
 const Label = (props) => {
   const [editing, setEditing] = React.useState(false)
 
-  let { editable, marginLeft, value, type, isLastSibling, styles } = props;
+  let { editable, marginLeft, value, type, isLastSibling, styles, onValueSelected, onKeySelected } = props;
   let style = styles.text;
   switch (type) {
     case "number":
@@ -78,6 +78,13 @@ const Label = (props) => {
       case "number":
       default:
         return <XStack
+          onPress={() => { 
+            if (type == 'property') {
+              onKeySelected && onKeySelected(props.currentKey)
+            } else {
+              onValueSelected && onValueSelected(props.currentKey)
+            }
+          }}
           position="absolute"
           left={left + 'px'}
           marginLeft={marginLeft * 10}

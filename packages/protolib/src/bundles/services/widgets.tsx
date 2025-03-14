@@ -11,6 +11,7 @@ import { PieChart } from '../../components/PieChart';
 
 import { LineChart, Cpu } from 'lucide-react'
 import Center from 'protolib/src/components/Center';
+import React from 'react';
 
 const fetch = async (fn) => {
     const services = await API.get('/api/core/v1/services')
@@ -79,7 +80,7 @@ export const CardValue = ({ Icon, value, color = "var(--color7)" }) => {
             }} /> :
                 <Icon color={color} size={48} strokeWidth={1.75} />}
             <Text userSelect="none" mt={10} fontSize={48} fontWeight="bold" color="$primary">
-                {value}
+                {React.isValidElement(value) || typeof value === 'string' || typeof value == 'number' ? value : 'N/A'}
             </Text>
         </YStack>
     );

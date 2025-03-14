@@ -1,11 +1,11 @@
 import { Panel, PanelGroup } from "react-resizable-panels";
-import { YStack, ScrollView } from "@my/ui";
+import { YStack, ScrollView, Spinner } from "@my/ui";
 import { Tinted } from "../../components/Tinted";
 import JSONViewer from "../jsonui/JSONViewer";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { Rules } from "./Rules";
 
-export const AutopilotEditor = ({ data, rules, value, onAddRule=(e,rule)=>{}, onDeleteRule=(index) => {}}) => {
+export const AutopilotEditor = ({ data, rules, value, valueReady=true, onAddRule=(e,rule)=>{}, onDeleteRule=(index) => {}}) => {
     return (
         <PanelGroup direction="horizontal">
             <Panel>
@@ -28,7 +28,7 @@ export const AutopilotEditor = ({ data, rules, value, onAddRule=(e,rule)=>{}, on
                                 <Tinted>
                                     <p>Input</p>
                                     <div style={{ minWidth: "600px" }}>
-                                        <JSONViewer collapsible data={data} />
+                                        <JSONViewer key={JSON.stringify(data)} collapsible data={data} />
                                     </div>
                                 </Tinted>
                             </ScrollView>
@@ -54,9 +54,10 @@ export const AutopilotEditor = ({ data, rules, value, onAddRule=(e,rule)=>{}, on
                             >
                                 <Tinted>
                                     <p>Output</p>
-                                    <div style={{ minWidth: "600px" }}>
-                                        <JSONViewer collapsible data={value} />
-                                    </div>
+                                    {valueReady && <div style={{ minWidth: "600px" }}>
+                                        <JSONViewer key={JSON.stringify(value)} collapsible data={value} />
+                                    </div>}
+                                    {!valueReady && <Spinner />}
                                 </Tinted>
                             </ScrollView>
                         </YStack>

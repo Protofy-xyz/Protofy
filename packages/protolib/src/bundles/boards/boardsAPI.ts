@@ -74,7 +74,7 @@ const getDB = (path, req, session) => {
     return db;
 }
 
-export const BoardsAPI = AutoAPI({
+const BoardsAutoAPI = AutoAPI({
     modelName: 'boards',
     modelType: BoardModel,
     initialData: {},
@@ -82,3 +82,17 @@ export const BoardsAPI = AutoAPI({
     getDB: getDB,
     prefix: '/api/core/v1/'
 })
+
+export const BoardsAPI = (app, context) => {
+    BoardsAutoAPI(app, context)
+    app.post('/api/core/v1/autopilot/getValueCode', async (req, res) => {
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "valueRules",  states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
+        if(req.query.debug) {
+            console.log("Prompt: ", prompt)
+        }
+        let reply = await context.lmstudio.chatWithModel(prompt, 'arcee-ai_virtuoso-small-v2')
+        console.log('REPLY: ', reply)
+        const jsCode = reply.choices[0].message.content
+        res.send({ jsCode })
+    })
+}

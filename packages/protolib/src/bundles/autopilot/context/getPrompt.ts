@@ -74,3 +74,10 @@ export const getPrompt = async ({ templateName, actions, states }) => {
   return prompt
 }
 
+export const getPromptFromTemplate = async ({ templateName, ...vars }) => {
+    const templateContent = fs.readFileSync(path.join(root, "data", "prompts", templateName + '.tpl'), "utf8");
+    const templateFunction = Handlebars.compile(templateContent);
+    const prompt = templateFunction(vars);
+    // console.log(prompt);
+    return prompt
+}

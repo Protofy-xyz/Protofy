@@ -19,7 +19,7 @@ import React from 'react'
 import { InputColor } from '../../components/InputColor'
 import Select from "react-select";
 import { AutopilotEditor } from '../../components/autopilot/AutopilotEditor'
-import {useProtoStates} from '../protomemdb/lib/useProtoStates'
+import { useProtoStates } from '../protomemdb/lib/useProtoStates'
 
 const IconSelect = ({ icons, onSelect, selected }) => {
   const [selectedIcon, setSelectedIcon] = useState(
@@ -33,7 +33,7 @@ const IconSelect = ({ icons, onSelect, selected }) => {
   }));
 
   return (
-    <div style={{flex: 1}}>
+    <div style={{ flex: 1 }}>
       <Select
         options={options}
         components={{
@@ -92,17 +92,66 @@ const IconSelect = ({ icons, onSelect, selected }) => {
 
 const sourceUrl = '/api/core/v1/boards'
 
+const RuleEditor = ({ states, cardData, setCardData }) => {
+  const [hasCode, setHasCode] = useState(cardData.rulesCode !== undefined)
+  const [value, setValue] = useState()
+
+  const getRulesCode = async (force?) => {
+    if (!hasCode || force) {
+      setHasCode(false)
+      const code = await API.post('/api/core/v1/autopilot/getValueCode', { states, rules: cardData.rules })
+      if(!code?.data?.jsCode) return
+      setCardData({
+        ...cardData,
+        rulesCode: code.data.jsCode
+      })
+      setHasCode(true)
+    }
+  }
+
+  useEffect(() => {
+    getRulesCode()
+  }, [])
+
+  useEffect(() => {
+    if (cardData.rulesCode) {
+      console.log('new rules code, executing...', cardData.rulesCode, states)
+      const wrapper = new Function('states', `
+        ${cardData.rulesCode}
+        return reduce_state_obj(states);
+      `);
+      let value = wrapper(states);
+      console.log('got value: ', value)
+      setValue(value)
+    }
+  }, [cardData.rulesCode])
+
+  useUpdateEffect(() => {
+    getRulesCode(true)
+  }, [cardData.rules])
+
+  return <AutopilotEditor data={states} rules={cardData.rules ?? []} value={value} onDeleteRule={(index) => {
+    setCardData({
+      ...cardData,
+      rules: cardData.rules?.filter((_, i) => i !== index)
+    });
+  }} onAddRule={(e, rule) => {
+    setCardData({
+      ...cardData,
+      rules: cardData.rules ? [...cardData.rules, rule] : [rule]
+    });
+  }} valueReady={hasCode} />
+}
+
 const CardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
-  
+
   useEffect(() => {
     onEdit(cardData);
   }, [cardData]);
 
   return (
     <div>
-
-
       <div
         style={{
           display: "grid",
@@ -174,18 +223,8 @@ const CardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
           <InputColor color={cardData.color} onChange={(e) => setCardData({ ...cardData, color: e.hex })} />
         </div>
       </div>
-      <div style={{height:"600px"}}>
-        <AutopilotEditor data={states} rules={cardData.rules ?? []} value={33} onDeleteRule={(index) => {
-          setCardData({
-            ...cardData,
-            rules: cardData.rules?.filter((_, i) => i !== index)
-          });
-        }} onAddRule={(e,rule) => {
-          setCardData({
-            ...cardData,
-            rules: cardData.rules? [...cardData.rules, rule] : [rule]
-          });
-        }} />
+      <div style={{ height: "600px" }}>
+        <RuleEditor states={states} cardData={cardData} setCardData={setCardData} />
       </div>
       {/* <Spacer height={900} /> */}
     </div>
@@ -221,8 +260,24 @@ const ValueCard = ({ id, title, value, icon = undefined, color, onDelete = () =>
 }
 
 const getCardValue = (card, states) => {
+  if(!card.rulesCode) return
   //TODO: implement this
-  return undefined
+  const wrapper = new Function('states', `
+    ${card.rulesCode}
+    return reduce_state_obj(states);
+  `);
+  let value
+  try {
+    value = wrapper(states);
+    if(Object.keys(value).length == 1) {
+      value = value[Object.keys(value)[0]]
+    }
+  } catch(e) {
+    console.error('Error executing rules code: ', e)
+    console.error('Rules code: ', card.rulesCode)
+  }
+
+  return value
 }
 
 const Board = ({ board, icons }) => {
@@ -235,6 +290,12 @@ const Board = ({ board, icons }) => {
   const [editedCard, setEditedCard] = useState(null)
 
   const states = useProtoStates({})
+
+  useEffect(() => {
+    console.log('///////////////////////////////////////////////////////')
+    console.log('Board states: ', states)
+    console.log('///////////////////////////////////////////////////////')
+  }, [states])
 
   const boardRef = React.useRef(board)
 
@@ -253,7 +314,7 @@ const Board = ({ board, icons }) => {
 
   const layouts = {
     lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 6, doubleH: 12 }, { layout: board?.layouts?.lg }),
-    md: computeLayout(items, { totalCols: 10, normalW: 5, normalH: 6, doubleW: 10, doubleH: 12 }, { layout: board?.layouts?.md }),
+    md: computeLayout(items, { totalCols: 10, normalW: 10, normalH: 12, doubleW: 10, doubleH: 12 }, { layout: board?.layouts?.md }),
     sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.sm })
   }
 

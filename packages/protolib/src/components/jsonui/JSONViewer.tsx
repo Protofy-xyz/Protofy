@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { isArray, isObject, isNumber, isString, isBoolean } from "lodash";
 import {
   CollapseIcon,
@@ -19,6 +19,8 @@ type JSONViewerProps = {
   collapsedNodes?: any,
   styles?: any,
   onChange?: any,
+  onValueSelected?: any,
+  onKeySelected?: any,
   editable?: boolean,
   compact?: boolean,
   defaultCollapsed?: boolean
@@ -37,6 +39,8 @@ const JSONViewer = (_props: JSONViewerProps) => {
     collapsedNodes: {},
     styles: jsonViewerDefaultStyles, //pass to override styles
     onChange: () => { },
+    onValueSelected: (path, value) => { },
+    onKeySelected: (path) => { },
     editable: false,
     compact: false,
     defaultCollapsed: false
@@ -48,6 +52,13 @@ const JSONViewer = (_props: JSONViewerProps) => {
     data: { root: props.data },
     collapsedNodes: props.defaultCollapsed? {0:{root: true}} : props.collapsedNodes,
   })
+
+  useEffect(() => {
+    setState({
+      data: { root: props.data },
+      ...state
+    })
+  }, [props.data])
 
   const onChange = (action, path, value, type) => {
     if (!props.editable) return;
@@ -100,7 +111,7 @@ const JSONViewer = (_props: JSONViewerProps) => {
     const childs: any = []
     if (marginLeft > 0) {
       childs.push(
-        getLabelAndValue(currentKey, parentKeyPath, "[", parent, "builtin", marginLeft, true),
+        getLabelAndValue(currentKey, parentKeyPath, "[", parent, "builtin", marginLeft, true, props.onValueSelected, props.onKeySelected), 
         getCollapseIcon(marginLeft, currentKey, parentKeyPath)
       );
     } else {
@@ -146,7 +157,7 @@ const JSONViewer = (_props: JSONViewerProps) => {
     if (marginLeft > 0) {
       //special case to avoid showing root
       childs.push(
-        getLabelAndValue(currentKey, parentKeyPath, "{", parent, "builtin", marginLeft, true), //opening object tag
+        getLabelAndValue(currentKey, parentKeyPath, "{", parent, "builtin", marginLeft, true, props.onValueSelected, props.onKeySelected), //opening object tag
         getCollapseIcon(marginLeft, currentKey, parentKeyPath)
       );
     } else {
@@ -205,16 +216,16 @@ const JSONViewer = (_props: JSONViewerProps) => {
         parseObject(currentKey, parentKeyPath, data, parent, elems, marginLeft, isLastSibling);
         break;
       case "number":
-        elems.push(getLabelAndValue(currentKey, parentKeyPath, data, parent, "number", marginLeft, isLastSibling));
+        elems.push(getLabelAndValue(currentKey, parentKeyPath, data, parent, "number", marginLeft, isLastSibling, props.onValueSelected, props.onKeySelected));
         break;
       case "string":
-        elems.push(getLabelAndValue(currentKey, parentKeyPath, data, parent, "text", marginLeft, isLastSibling));
+        elems.push(getLabelAndValue(currentKey, parentKeyPath, data, parent, "text", marginLeft, isLastSibling, props.onValueSelected, props.onKeySelected));
         break;
       case "boolean":
-        elems.push(getLabelAndValue(currentKey, parentKeyPath, data, parent, "boolean", marginLeft, isLastSibling));
+        elems.push(getLabelAndValue(currentKey, parentKeyPath, data, parent, "boolean", marginLeft, isLastSibling, props.onValueSelected, props.onKeySelected));
         break;
       default:
-        elems.push(getLabelAndValue(currentKey, parentKeyPath, data, parent, "builtin", marginLeft, isLastSibling));
+        elems.push(getLabelAndValue(currentKey, parentKeyPath, data, parent, "builtin", marginLeft, isLastSibling, props.onValueSelected, props.onKeySelected));
     }
   }
 
@@ -231,7 +242,7 @@ const JSONViewer = (_props: JSONViewerProps) => {
     );
   }
 
-  const getLabelAndValue = (currentKey, parentKeyPath, value, parent, type, marginLeft, isLastSibling) => {
+  const getLabelAndValue = (currentKey, parentKeyPath, value, parent, type, marginLeft, isLastSibling, onValueSelected?, onKeySelected?) => {
     const { styles } = props;
     if (isArray(parent)) {
       //for arrays we dont show keys
@@ -250,6 +261,8 @@ const JSONViewer = (_props: JSONViewerProps) => {
           parents={parentKeyPath.split('_')}
           onChange={onChange}
           editable={props.editable}
+          onValueSelected={onValueSelected}
+          onKeySelected={onKeySelected}
         />
       );
     }
