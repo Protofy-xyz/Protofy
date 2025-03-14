@@ -1,6 +1,6 @@
 import { BoardModel } from "./boardsSchemas";
 import { AutoAPI, getRoot } from 'protonode'
-import { API } from 'protobase'
+import { API, getLogger } from 'protobase'
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
@@ -8,6 +8,7 @@ import * as fspath from 'path';
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 
 const writeLocks = new Map();
+const logger = getLogger()
 
 async function acquireLock(filePath) {
     while (writeLocks.has(filePath)) {
@@ -107,7 +108,7 @@ const BoardsAutoAPI = AutoAPI({
     initialData: {},
     skipDatabaseIndexes: true,
     getDB: getDB,
-    prefix: '/api/core/v1/'
+    prefix: '/api/v1/'
 })
 
 export const BoardsAPI = (app, context) => {
@@ -123,7 +124,64 @@ export const BoardsAPI = (app, context) => {
         res.send({ jsCode })
     })
 
-    app.get('/api/core/v1/boards/:boardId', async (req, res) => {
+    app.get('/api/v1/boards/:boardId', async (req, res) => {
+        const states = await context.state.getStateTree()
+        console.log('states: ', states)
+        const boardId = req.params.boardId
+        const filePath = BoardsDir(getRoot(req)) + boardId + ".json"
+        let fileContent = null
+        await acquireLock(filePath);
+        try{
+            fileContent = await fs.readFile(filePath, 'utf8')
+        }catch(error){
+            res.status(404).send("Board not found")
+            return
+        } finally {
+            releaseLock(filePath);
+        } 
 
+        try {
+            fileContent = JSON.parse(fileContent)
+        } catch (error) {
+            res.status(500).send("Error parsing board file")
+            return
+        }
+
+        if(!fileContent.cards || !Array.isArray(fileContent.cards)){
+            res.send(fileContent)
+            return
+        }
+
+        //iterate over cards to get the card content
+        for (let i = 0; i < fileContent.cards.length; i++) {
+            const card = fileContent.cards[i]
+            try {
+                if(card.type == 'value') {
+                    if(!card.rulesCode) {
+                        //TODO: try to get rulesCode from rules
+                        logger.info({card}, "No rulesCode for value card: "+ card.key)
+                        continue
+                    }
+                    if(!states) {
+                        logger.info({card}, "No states, omiting value for card"+ card.key)
+                        continue
+                    }
+                    logger.info({card}, "Evaluating rulesCode for card: "+ card.key)
+                    const wrapper = new Function('states', `
+                        ${card.rulesCode}
+                        return reduce_state_obj(states);
+                    `);
+
+                    let value = wrapper(states);
+                    logger.info({card, value}, "New value for card "+ card.key)
+                    card.value = value
+                }
+            } catch (error) {
+                logger.error({error}, "Error evaluating jsCode for card: "+ card.key)
+                card.value = 'error'
+                card.error = error.message
+            }
+        }
+        res.send(fileContent)     
     })
 }

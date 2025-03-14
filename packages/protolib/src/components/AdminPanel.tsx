@@ -62,7 +62,7 @@ export const AdminPanel = ({ children }) => {
   }
 
   const getBoards = async () => {
-    const boards = await API.get('/api/core/v1/boards')
+    const boards = await API.get('/api/v1/boards')
     if(boards.isLoaded) {
       setBoards(boards.data.items)
     }

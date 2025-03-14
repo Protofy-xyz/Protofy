@@ -31,7 +31,6 @@ import { IconsAPI } from './icons/iconsAPI'
 export const AdminAPIBundles = (app, context) => {
   EventsAPI(app, context)
   AutomationsAPI(app, context),
-  BoardsAPI(app, context),
   UsersAPI(app, context)
   GroupsAPI(app, context)
   ObjectsAPI(app, context)
