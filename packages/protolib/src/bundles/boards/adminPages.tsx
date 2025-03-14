@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button as TamaButton, Dialog, Stack, Card, Input, Spacer } from '@my/ui'
+import { YStack, XStack, Paragraph, Popover, Button as TamaButton, Dialog, Stack, Card, Input, Spacer, ScrollView, useThemeName } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -289,9 +289,8 @@ const Board = ({ board, icons }) => {
   const [currentCard, setCurrentCard] = useState(null)
   const [editedCard, setEditedCard] = useState(null)
 
-  const [selectedCard, setSelectedCard] = useState('value')
   const availableCards = [{
-    name: 'value'
+    name: 'value',
   },
   {
     name: 'action'
@@ -386,35 +385,9 @@ const Board = ({ board, icons }) => {
         </XStack>
 
       </XStack>
-      <Dialog modal open={addOpened} onOpenChange={setAddOpened}>
-        <Dialog.Portal zIndex={100000} overflow='hidden'>
-          <Dialog.Overlay />
-          <Dialog.Content
-            bordered
-            elevate
-            animateOnly={['transform', 'opacity']}
-            enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
-            exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
-            gap="$4"
-            maxWidth={600}
-          >
-            <Dialog.Title>Add...</Dialog.Title>
-            <Dialog.Description>
-              {'Select the widget you want to add to the board'}
-            </Dialog.Description>
-            <CardSelector cards={availableCards} selectedCard={selectedCard} onSelectCard={(card) => setSelectedCard(card)}/>
-            <Dialog.Close displayWhenAdapted asChild>
-              <Tinted><TamaButton onPress={async () => {
-                await addWidget(selectedCard)
-                setSelectedCard('value')
-                setAddOpened(false)
-              }}>
-                Add
-              </TamaButton></Tinted>
-            </Dialog.Close>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog>
+      
+      <CardSelector cards={availableCards} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} />
+
       <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
         <Dialog.Portal zIndex={100000} overflow='hidden'>
           <Dialog.Overlay />
