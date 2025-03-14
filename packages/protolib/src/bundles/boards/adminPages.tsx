@@ -27,7 +27,6 @@ const IconSelect = ({ icons, onSelect, selected }) => {
     selected ? { value: selected, label: selected } : null
   );
 
-  // Convertimos los iconos a un formato compatible con react-select
   const options = icons.map((icon) => ({
     value: icon,
     label: icon,
@@ -42,9 +41,9 @@ const IconSelect = ({ icons, onSelect, selected }) => {
             <div
               style={{
                 display: "flex",
-                alignItems: "center", // 🔥 Centra verticalmente el contenido
+                alignItems: "center",
                 gap: "8px",
-                padding: "0px 4px", // 🔥 Ajusta el padding interno
+                padding: "0px 4px",
               }}
             >
               <img
@@ -52,7 +51,7 @@ const IconSelect = ({ icons, onSelect, selected }) => {
                 alt={data.value}
                 width={18}
                 height={18}
-                style={{ verticalAlign: "middle" }} // 🔥 Asegura la alineación del icono
+                style={{ verticalAlign: "middle" }}
               />
               {data.value}
             </div>
@@ -68,17 +67,17 @@ const IconSelect = ({ icons, onSelect, selected }) => {
         styles={{
           control: (provided, state) => ({
             ...provided,
-            minHeight: "36px", // 🔥 Mantiene altura de input normal
-            height: state.menuIsOpen || state.isFocused ? "auto" : "36px", // 🔥 Se expande al abrir
+            minHeight: "36px",
+            height: state.menuIsOpen || state.isFocused ? "auto" : "36px",
             transition: "all 0.2s ease-in-out",
             display: "flex",
-            alignItems: "center", // 🔥 Asegura que el contenido se mantenga centrado
+            alignItems: "center",
           }),
           valueContainer: (provided) => ({
             ...provided,
             display: "flex",
-            alignItems: "center", // 🔥 Centra el contenido dentro de la caja
-            padding: "2px 8px", // 🔥 Ajusta el padding interno
+            alignItems: "center",
+            padding: "2px 8px",
           }),
           menu: (provided) => ({
             ...provided,

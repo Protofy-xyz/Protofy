@@ -29,9 +29,11 @@ import { BoardsAPI } from './boards/boardsAPI'
 import { IconsAPI } from './icons/iconsAPI'
 
 export const AdminAPIBundles = (app, context) => {
+  EventsAPI(app, context)
+  AutomationsAPI(app, context),
+  BoardsAPI(app, context),
   UsersAPI(app, context)
   GroupsAPI(app, context)
-  EventsAPI(app, context)
   ObjectsAPI(app, context)
   KeysAPI(app, context)
   PagesAPI(app, context)
@@ -55,7 +57,5 @@ export const AdminAPIBundles = (app, context) => {
   StateMachinesDefinitionsApi(app, context),
   FlowAPI(app, context),
   ChatbotsAPI(app, context),
-  AutomationsAPI(app, context),
-  BoardsAPI(app, context),
   IconsAPI(app, context)
 }
