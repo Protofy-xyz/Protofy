@@ -2,7 +2,7 @@ import { BookOpen, BookOpenText, ExternalLink, HelpCircle, Plus, Save, Settings,
 import { BoardModel } from './boardsSchemas'
 import { API, set } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
-import { DataView } from "../../components/DataView"
+import { DataView, DataViewActionButton } from "../../components/DataView"
 import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
@@ -283,7 +283,7 @@ const getCardValue = (card, states) => {
 
 const Board = ({ board, icons }) => {
   const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 6 }
-  const [items, setItems] = useState((board.cards ? [...board.cards] : [addCard]).sort((a, b) => a.key == 'addwidget' ? 1 : -1))
+  const [items, setItems] = useState((board.cards && board.cards.length > 1 ? [...board.cards.filter(key => key != 'addwidget')] : [addCard]))
   const [addOpened, setAddOpened] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -329,7 +329,7 @@ const Board = ({ board, icons }) => {
 
   const addWidget = async (type) => {
     const rnd = Math.floor(Math.random() * 100000)
-    const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, name: type }].sort((a, b) => a.key == 'addwidget' ? 1 : -1)
+    const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, name: type }].filter(item => item.key != 'addwidget')
     setItems(newItems)
     boardRef.current.cards = newItems
     API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
@@ -375,6 +375,16 @@ const Board = ({ board, icons }) => {
       <XStack px={"$5"} py={"$3"}>
         <Paragraph size="$5" fontWeight="400">{board.name}</Paragraph>
         {/* <Tinted><Save color="var(--color8)" size={"$1"} strokeWidth={1.6}/></Tinted> */}
+        <XStack f={1} alignItems='center' justifyContent='flex-end'>
+          <DataViewActionButton
+            icon={Plus}
+            description="Add"
+            onPress={async () => {
+              setAddOpened(true)
+            }}
+          />
+        </XStack>
+
       </XStack>
       <Dialog modal open={addOpened} onOpenChange={setAddOpened}>
         <Dialog.Portal zIndex={1} overflow='hidden'>
