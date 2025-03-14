@@ -44,7 +44,7 @@ const getDB = (path, req, session) => {
                 try {
                     const fileContent = await fs.readFile(BoardsDir(getRoot(req)) + file, 'utf8')
                     yield [file.name, fileContent];
-                } catch(e) {
+                } catch (e) {
 
                 } finally {
                     releaseLock(BoardsDir(getRoot(req)) + file);
@@ -55,7 +55,7 @@ const getDB = (path, req, session) => {
         async del(key, value) {
             // delete boards[key]
             // try to delete the board file from the boards folder
-            console.log("Deleting board: ", JSON.stringify({key,value}))
+            console.log("Deleting board: ", JSON.stringify({ key, value }))
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
             try {
                 await fs.unlink(filePath)
@@ -71,9 +71,9 @@ const getDB = (path, req, session) => {
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
 
             await acquireLock(filePath);
-            try{
+            try {
                 await fs.writeFile(filePath, JSON.stringify(value, null, 4))
-            }catch(error){
+            } catch (error) {
                 console.error("Error creating file: " + filePath, error)
             } finally {
                 releaseLock(filePath);
@@ -85,17 +85,17 @@ const getDB = (path, req, session) => {
             // console.log("Get function: ",key)
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
             await acquireLock(filePath);
-            try{
+            try {
                 const fileContent = await fs.readFile(filePath, 'utf8')
                 // console.log("fileContent: ", fileContent)
                 // console.log("filePath: ", filePath)
                 return fileContent
-            }catch(error){
+            } catch (error) {
                 // console.log("Error reading file: " + filePath)
                 throw new Error("File not found")
             } finally {
                 releaseLock(filePath);
-            }                   
+            }
         }
     };
 
@@ -111,11 +111,86 @@ const BoardsAutoAPI = AutoAPI({
     prefix: '/api/v1/'
 })
 
+class HttpError extends Error {
+    constructor(public status: number, message: string) {
+        super(message);
+        this.name = "HttpError";
+    }
+}
+
 export const BoardsAPI = (app, context) => {
+    class HttpError extends Error {
+        constructor(public status: number, message: string) {
+            super(message);
+            this.name = "HttpError";
+        }
+    }
+
+    const reloadBoard = async (boardId) => {
+        const states = await context.state.getStateTree();
+        console.log('states: ', states);
+
+        const filePath = BoardsDir(getRoot()) + boardId + ".json";
+        let fileContent = null;
+
+        await acquireLock(filePath);
+        try {
+            fileContent = await fs.readFile(filePath, 'utf8');
+        } catch (error) {
+            throw new HttpError(404, "Board not found");
+        } finally {
+            releaseLock(filePath);
+        }
+
+        try {
+            fileContent = JSON.parse(fileContent);
+        } catch (error) {
+            throw new HttpError(500, "Error parsing board file");
+        }
+
+        if (!fileContent.cards || !Array.isArray(fileContent.cards)) {
+            return fileContent;
+        }
+
+        // Iterate over cards to get the card content
+        for (let i = 0; i < fileContent.cards.length; i++) {
+            const card = fileContent.cards[i];
+            try {
+                if (card.type === 'value') {
+                    if (!card.rulesCode) {
+                        logger.info({ card }, "No rulesCode for value card: " + card.key);
+                        continue;
+                    }
+                    if (!states) {
+                        logger.info({ card }, "No states, omitting value for card " + card.key);
+                        continue;
+                    }
+                    logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
+
+                    const wrapper = new Function('states', `
+                        ${card.rulesCode}
+                        return reduce_state_obj(states);
+                    `);
+
+                    let value = wrapper(states);
+                    logger.info({ card, value }, "New value for card " + card.key);
+                    card.value = value;
+                    context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value });
+                }
+            } catch (error) {
+                logger.error({ error }, "Error evaluating jsCode for card: " + card.key);
+                card.value = 'error';
+                card.error = error.message;
+            }
+        }
+
+        return fileContent;
+    };
+
     BoardsAutoAPI(app, context)
-    app.post('/api/core/v1/autopilot/getValueCode', async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "valueRules",  states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
-        if(req.query.debug) {
+    app.post('/api/v1/autopilot/getValueCode', async (req, res) => {
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "valueRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
+        if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }
         let reply = await context.lmstudio.chatWithModel(prompt, 'arcee-ai_virtuoso-small-v2')
@@ -125,63 +200,17 @@ export const BoardsAPI = (app, context) => {
     })
 
     app.get('/api/v1/boards/:boardId', async (req, res) => {
-        const states = await context.state.getStateTree()
-        console.log('states: ', states)
-        const boardId = req.params.boardId
-        const filePath = BoardsDir(getRoot(req)) + boardId + ".json"
-        let fileContent = null
-        await acquireLock(filePath);
-        try{
-            fileContent = await fs.readFile(filePath, 'utf8')
-        }catch(error){
-            res.status(404).send("Board not found")
-            return
-        } finally {
-            releaseLock(filePath);
-        } 
-
         try {
-            fileContent = JSON.parse(fileContent)
+            const response = await reloadBoard(req.params.boardId)
+            res.send(response);
         } catch (error) {
-            res.status(500).send("Error parsing board file")
-            return
-        }
-
-        if(!fileContent.cards || !Array.isArray(fileContent.cards)){
-            res.send(fileContent)
-            return
-        }
-
-        //iterate over cards to get the card content
-        for (let i = 0; i < fileContent.cards.length; i++) {
-            const card = fileContent.cards[i]
-            try {
-                if(card.type == 'value') {
-                    if(!card.rulesCode) {
-                        //TODO: try to get rulesCode from rules
-                        logger.info({card}, "No rulesCode for value card: "+ card.key)
-                        continue
-                    }
-                    if(!states) {
-                        logger.info({card}, "No states, omiting value for card"+ card.key)
-                        continue
-                    }
-                    logger.info({card}, "Evaluating rulesCode for card: "+ card.key)
-                    const wrapper = new Function('states', `
-                        ${card.rulesCode}
-                        return reduce_state_obj(states);
-                    `);
-
-                    let value = wrapper(states);
-                    logger.info({card, value}, "New value for card "+ card.key)
-                    card.value = value
-                }
-            } catch (error) {
-                logger.error({error}, "Error evaluating jsCode for card: "+ card.key)
-                card.value = 'error'
-                card.error = error.message
+            if (error instanceof HttpError) {
+                res.status(error.status).send({ error: error.message });
+            } else {
+                res.status(500).send({ error: "Internal Server Error" });
             }
         }
-        res.send(fileContent)     
     })
+
+
 }
