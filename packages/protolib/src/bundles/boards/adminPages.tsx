@@ -20,6 +20,7 @@ import { InputColor } from '../../components/InputColor'
 import Select from "react-select";
 import { AutopilotEditor } from '../../components/autopilot/AutopilotEditor'
 import { useProtoStates } from '../protomemdb/lib/useProtoStates'
+import { CardSelector } from '../../components/board/CardSelector'
 
 const IconSelect = ({ icons, onSelect, selected }) => {
   const [selectedIcon, setSelectedIcon] = useState(
@@ -100,7 +101,7 @@ const RuleEditor = ({ states, cardData, setCardData }) => {
     if (!hasCode || force) {
       setHasCode(false)
       const code = await API.post('/api/core/v1/autopilot/getValueCode', { states, rules: cardData.rules })
-      if(!code?.data?.jsCode) return
+      if (!code?.data?.jsCode) return
       setCardData({
         ...cardData,
         rulesCode: code.data.jsCode
@@ -260,7 +261,7 @@ const ValueCard = ({ id, title, value, icon = undefined, color, onDelete = () =>
 }
 
 const getCardValue = (card, states) => {
-  if(!card.rulesCode) return
+  if (!card.rulesCode) return
   //TODO: implement this
   const wrapper = new Function('states', `
     ${card.rulesCode}
@@ -269,10 +270,10 @@ const getCardValue = (card, states) => {
   let value
   try {
     value = wrapper(states);
-    if(Object.keys(value).length == 1) {
+    if (Object.keys(value).length == 1) {
       value = value[Object.keys(value)[0]]
     }
-  } catch(e) {
+  } catch (e) {
     console.error('Error executing rules code: ', e)
     console.error('Rules code: ', card.rulesCode)
   }
@@ -288,6 +289,14 @@ const Board = ({ board, icons }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [currentCard, setCurrentCard] = useState(null)
   const [editedCard, setEditedCard] = useState(null)
+
+  const [selectedCard, setSelectedCard] = useState('value')
+  const availableCards = [{
+    name: 'value'
+  },
+  {
+    name: 'action'
+  }]
 
   const states = useProtoStates({})
 
@@ -383,12 +392,11 @@ const Board = ({ board, icons }) => {
             <Dialog.Description>
               {'Select the widget you want to add to the board'}
             </Dialog.Description>
-            <YStack height={300} width={600}>
-              TODO: widget type selector
-            </YStack>
+            <CardSelector cards={availableCards} selectedCard={selectedCard} onSelectCard={(card) => setSelectedCard(card)}/>
             <Dialog.Close displayWhenAdapted asChild>
               <Tinted><TamaButton onPress={async () => {
-                await addWidget('value')
+                await addWidget(selectedCard)
+                setSelectedCard('value')
                 setAddOpened(false)
               }}>
                 Add
