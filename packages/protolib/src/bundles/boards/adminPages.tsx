@@ -388,7 +388,7 @@ const Board = ({ board, icons }) => {
 
       </XStack>
       <Dialog modal open={addOpened} onOpenChange={setAddOpened}>
-        <Dialog.Portal zIndex={1} overflow='hidden'>
+        <Dialog.Portal zIndex={100000} overflow='hidden'>
           <Dialog.Overlay />
           <Dialog.Content
             bordered
@@ -417,7 +417,7 @@ const Board = ({ board, icons }) => {
         </Dialog.Portal>
       </Dialog>
       <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
-        <Dialog.Portal zIndex={1} overflow='hidden'>
+        <Dialog.Portal zIndex={100000} overflow='hidden'>
           <Dialog.Overlay />
           <Dialog.Content
             bordered
