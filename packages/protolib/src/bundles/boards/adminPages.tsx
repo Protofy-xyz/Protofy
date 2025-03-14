@@ -283,7 +283,7 @@ const getCardValue = (card, states) => {
 
 const Board = ({ board, icons }) => {
   const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 6 }
-  const [items, setItems] = useState((board.cards && board.cards.length > 1 ? [...board.cards.filter(key => key != 'addwidget')] : [addCard]))
+  const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(key => key != 'addwidget')] : [addCard]))
   const [addOpened, setAddOpened] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
