@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button as TamaButton, Dialog, Stack, Card, Input, Spacer, ScrollView, useThemeName } from '@my/ui'
+import { YStack, XStack, Paragraph, Popover, Button as TamaButton, Dialog, Stack, Card, Input, Spacer, ScrollView, useThemeName, Label } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -143,57 +143,36 @@ const RuleEditor = ({ states, cardData, setCardData }) => {
   }} valueReady={hasCode} />
 }
 
-const CardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
+export const CardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
 
   useEffect(() => {
     onEdit(cardData);
-  }, [cardData]);
+  }, [cardData, onEdit]);
 
   return (
-    <div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "auto 1fr",
-          gap: "15px 15px",
-          alignItems: "center",
-          padding: "10px",
-        }}
-      >
-        {/* Title Field */}
-        <label
-          style={{
-            textAlign: "right",
-            whiteSpace: "nowrap",
-          }}
-        >
-          Title
-        </label>
-        <Input
-          value={cardData.name}
-          onChange={(e) =>
-            setCardData({
-              ...cardData,
-              name: e.target.value,
-            })
-          }
-        />
+    <YStack space="$4" padding="$4">
+      <XStack alignItems="center" space="$8" width="100%">
+        <YStack flex={1}>
+          <Label>Title</Label>
+          <Input
+            value={cardData.name}
+            onChange={(e) =>
+              setCardData({
+                ...cardData,
+                name: e.target.value,
+              })
+            }
+          />
+        </YStack>
+        <YStack flex={1}>
+          <XStack alignItems="center" space="$2">
+          <a href="https://lucide.dev/icons/" target="_blank" rel="noreferrer">
+              <BookOpenText opacity={0.6} />
+            </a>
+            <Label>Icon</Label>
 
-        {/* Icon Field */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            textAlign: "right",
-            whiteSpace: "nowrap",
-          }}
-        >
-          <span>Icon</span>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+          </XStack>
           <IconSelect
             icons={icons}
             onSelect={(icon) => {
@@ -205,31 +184,30 @@ const CardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
             selected={cardData.icon}
           />
 
-          <a style={{ marginLeft: '20px' }} href="https://lucide.dev/icons/" target="_blank">
-            <BookOpenText opacity={0.6} />
-          </a>
-        </div>
+        </YStack>
+        <YStack flex={1}>
+          <Label>Color</Label>
+          <InputColor
+            color={cardData.color}
+            onChange={(e) =>
+              setCardData({ ...cardData, color: e.hex })
+            }
+          />
+        </YStack>
+      </XStack>
 
-        {/* Color Field */}
-        <label
-          style={{
-            textAlign: "right",
-            whiteSpace: "nowrap",
-          }}
-        >
-          Color
-        </label>
-        <div style={{ zIndex: 1000 }}>
-          <InputColor color={cardData.color} onChange={(e) => setCardData({ ...cardData, color: e.hex })} />
-        </div>
-      </div>
-      <div style={{ height: "600px" }}>
-        <RuleEditor states={states} cardData={cardData} setCardData={setCardData} />
-      </div>
-      {/* <Spacer height={900} /> */}
-    </div>
+      <YStack height={600}>
+        <Label>Value</Label>
+        <RuleEditor
+          states={states}
+          cardData={cardData}
+          setCardData={setCardData}
+        />
+      </YStack>
+    </YStack>
   );
 };
+
 
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
@@ -299,7 +277,7 @@ const Board = ({ board, icons }) => {
 
   const deleteCard = async (card) => {
     const newItems = items.filter(item => item.key != card.key)
-    if(newItems.length == 0) newItems.push(addCard)
+    if (newItems.length == 0) newItems.push(addCard)
     setItems(newItems)
     boardRef.current.cards = newItems
     await API.post(`/api/v1/boards/${board.name}`, boardRef.current)
@@ -376,7 +354,7 @@ const Board = ({ board, icons }) => {
         </XStack>
 
       </XStack>
-      
+
       <CardSelector cards={availableCards} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} />
 
       <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
