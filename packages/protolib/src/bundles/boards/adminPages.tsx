@@ -291,9 +291,11 @@ const Board = ({ board, icons }) => {
 
   const availableCards = [{
     name: 'value',
+    id: 'value'
   },
   {
-    name: 'action'
+    name: 'action',
+    id: 'action'
   }]
 
   const states = useProtoStates({})

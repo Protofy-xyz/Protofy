@@ -18,6 +18,7 @@ const FirstSlide = ({ selected, setSelected, options }) => {
             <SelectGrid>
                 {options.map((option) => (
                     <TemplatePreview
+                        from="boards"
                         theme={themeName}
                         template={option}
                         isSelected={selected === option.name}
