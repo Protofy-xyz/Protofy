@@ -1,13 +1,13 @@
-import { BookOpen, BookOpenText, ExternalLink, Cog, Palette, Plus, Save, Settings, Tag, Trash2, Type } from '@tamagui/lucide-icons'
+import { BookOpen, BookOpenText, ExternalLink, Cog, Palette, Plus, Settings, Tag, Trash2, Type } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
-import { API, set } from 'protobase'
+import { API } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
 import { DataView, DataViewActionButton } from "../../components/DataView"
 import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button as TamaButton, Dialog, Stack, Card, Input, Spacer, ScrollView, useThemeName, Label } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Input, Label } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -17,7 +17,6 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
 import React from 'react'
 import { InputColor } from '../../components/InputColor'
-import Select from "react-select";
 import { AutopilotEditor } from '../../components/autopilot/AutopilotEditor'
 import { useProtoStates } from '../protomemdb/lib/useProtoStates'
 import { CardSelector } from '../../components/board/CardSelector'
