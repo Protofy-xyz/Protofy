@@ -131,7 +131,12 @@ const RuleEditor = ({ states, cardData, setCardData }) => {
     getRulesCode(true)
   }, [cardData.rules])
 
-  return <AutopilotEditor data={states} rules={cardData.rules ?? []} value={value} onDeleteRule={(index) => {
+  return <AutopilotEditor setRulesCode={(rulesCode) => {
+    setCardData({
+      ...cardData,
+      rulesCode
+    })
+  }} rulesCode={cardData.rulesCode} data={states} rules={cardData.rules ?? []} value={value} onDeleteRule={(index) => {
     setCardData({
       ...cardData,
       rules: cardData.rules?.filter((_, i) => i !== index)
