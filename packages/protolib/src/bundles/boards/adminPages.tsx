@@ -255,10 +255,11 @@ const ActionCard = ({ id, name, title, params, icon = undefined, color, onRun = 
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <ActionRunner 
       name={name}
-      // description={title}
+      description={"Run action"}
       actionParams={params}
       onRun={onRun}
       icon={icon}
+      color={color}
     />
   </CenterCard>
 }

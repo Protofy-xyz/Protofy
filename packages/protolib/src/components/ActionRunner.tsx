@@ -1,7 +1,7 @@
 import { Button, Input, Paragraph, XStack, YStack, Tooltip } from '@my/ui';
 import React from 'react';
 
-export const ActionRunner = ({ name, caption="Run", description="", actionParams={}, onRun, icon }) => {
+export const ActionRunner = ({ name, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)' }) => {
     const [params, setParams] = React.useState({})
     return <XStack f={1} width="100%">
         <YStack f={1} alignItems="center" justifyContent="center">
@@ -24,22 +24,38 @@ export const ActionRunner = ({ name, caption="Run", description="", actionParams
             })}
             <Tooltip>
                 <Tooltip.Trigger width={"100%"}>
-                    <Button mt={"$3"} width="100%" className="no-drag" onPress={() => {
-                        //actionData.automationParams is a key value object where the key is the name of the parameter and the value is the description
-                        //if there are parameters, they should be included in the query parameters of the request
-                        //if a parameter is missing, remove it from the query parameters
-                        const cleanedParams = {}
-                        for (const key in params) {
-                            if (params[key] || params[key] === "0") {
-                                cleanedParams[key] = params[key]
+                    <YStack alignItems="center" justifyContent="center">
+                        {typeof icon === 'string' && <div style={{
+                            width: "48px",
+                            height: "48px",
+                            marginBottom: '15px',
+                            backgroundColor: 'var(--color)',
+                            maskImage: `url(${icon})`,
+                            WebkitMaskImage: `url(${icon})`,
+                            maskRepeat: "no-repeat",
+                            WebkitMaskRepeat: "no-repeat",
+                            maskSize: "contain",
+                            WebkitMaskSize: "contain",
+                            maskPosition: "center",
+                            WebkitMaskPosition: "center"
+                        }} />}
+                        <Button backgroundColor={color} mt={"$3"} width="100%" className="no-drag" onPress={() => {
+                            //actionData.automationParams is a key value object where the key is the name of the parameter and the value is the description
+                            //if there are parameters, they should be included in the query parameters of the request
+                            //if a parameter is missing, remove it from the query parameters
+                            const cleanedParams = {}
+                            for (const key in params) {
+                                if (params[key] || params[key] === "0") {
+                                    cleanedParams[key] = params[key]
+                                }
                             }
-                        }
-                        onRun(name, cleanedParams)
-                    }}
-                        icon={icon}
-                    >
-                        {caption}
-                    </Button>
+                            onRun(name, cleanedParams)
+                        }}
+                        // icon={icon}
+                        >
+                            {caption}
+                        </Button>
+                    </YStack>
                 </Tooltip.Trigger>
                 <Tooltip.Content>
                     <Tooltip.Arrow />
