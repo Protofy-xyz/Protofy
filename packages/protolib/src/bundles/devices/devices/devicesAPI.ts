@@ -50,13 +50,14 @@ export const DevicesAPI = (app, context) => {
                 // console.log('subsystem: ', subsystem)
                 for (const action of subsystem.actions ?? []) {
                     const endpoint = `${deviceInfo.data.name}/${subsystem.name}/${action.name}`
+                    console.log('---------------------------------- action: ', action)
                     addAction({
                         group: 'devices',
                         name: action.name, //get last path element
                         url: `/api/core/v1/devices/${deviceInfo.data.name}/subsystems/${subsystem.name}/actions/${action.name}`,
                         tag: deviceInfo.data.name,
                         description: action.description ?? "",
-                        params: {value: "value to set"},
+                        ...!action.payload?.value ? {params: {value: "value to set"}}:{},
                         emitEvent: true
                     })
                 }
