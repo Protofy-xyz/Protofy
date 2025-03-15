@@ -91,7 +91,7 @@ const IconSelect = ({ icons, onSelect, selected }) => {
   );
 }
 
-const sourceUrl = '/api/v1/boards'
+const sourceUrl = '/api/core/v1/boards'
 
 const RuleEditor = ({ states, cardData, setCardData }) => {
   const [hasCode, setHasCode] = useState(cardData.rulesCode !== undefined)
@@ -100,7 +100,7 @@ const RuleEditor = ({ states, cardData, setCardData }) => {
   const getRulesCode = async (force?) => {
     if ((!hasCode || force) && cardData.rules && cardData.rules.length > 0) {
       setHasCode(false)
-      const code = await API.post('/api/v1/autopilot/getValueCode', { states, rules: cardData.rules })
+      const code = await API.post('/api/core/v1/autopilot/getValueCode', { states, rules: cardData.rules })
       if (!code?.data?.jsCode) return
       setCardData({
         ...cardData,
@@ -271,7 +271,7 @@ const Board = ({ board, icons }) => {
   const states = useProtoStates({}, 'boards/' + board.name + '/#')
 
   const reloadBoard = async () => {
-    const dataData = await API.get(`/api/v1/boards/${board.name}`)
+    const dataData = await API.get(`/api/core/v1/boards/${board.name}`)
     if (dataData.status == 'loaded') {
       let newItems = dataData.data?.cards
       if (!newItems || newItems.length == 0) newItems = [addCard]
@@ -293,7 +293,7 @@ const Board = ({ board, icons }) => {
     if (newItems.length == 0) newItems.push(addCard)
     setItems(newItems)
     boardRef.current.cards = newItems
-    await API.post(`/api/v1/boards/${board.name}`, boardRef.current)
+    await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
     setIsDeleting(false)
     setCurrentCard(null)
   }
@@ -313,7 +313,7 @@ const Board = ({ board, icons }) => {
     const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, name: type }].filter(item => item.key != 'addwidget')
     setItems(newItems)
     boardRef.current.cards = newItems
-    API.post(`/api/v1/boards/${board.name}`, boardRef.current)
+    API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
   }
 
   //fill items with react content, addWidget should be the last item
@@ -393,7 +393,7 @@ const Board = ({ board, icons }) => {
                 const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
                 setItems(newItems)
                 boardRef.current.cards = newItems
-                await API.post(`/api/v1/boards/${board.name}`, boardRef.current)
+                await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                 setCurrentCard(null)
                 setIsEditing(false)
                 setEditedCard(null)
@@ -426,7 +426,7 @@ const Board = ({ board, icons }) => {
         backgroundColor="white"
         onLayoutChange={(layout, layouts) => {
           boardRef.current.layouts = layouts
-          API.post(`/api/v1/boards/${board.name}`, boardRef.current)
+          API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
         }}
       />
     </YStack>
@@ -470,7 +470,7 @@ export default {
     },
     getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async () => {
       return {
-        board: await API.get(`/api/v1/boards/${context.params.board}`),
+        board: await API.get(`/api/core/v1/boards/${context.params.board}`),
         icons: (await API.get('/api/core/v1/icons'))?.data?.icons ?? []
       }
     }))

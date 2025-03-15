@@ -138,7 +138,7 @@ const BoardsAutoAPI = AutoAPI({
     initialData: {},
     skipDatabaseIndexes: true,
     getDB: getDB,
-    prefix: '/api/v1/'
+    prefix: '/api/core/v1/'
 })
 
 class HttpError extends Error {
@@ -207,7 +207,7 @@ export const BoardsAPI = (app, context) => {
     };
 
     BoardsAutoAPI(app, context)
-    app.post('/api/v1/autopilot/getValueCode', async (req, res) => {
+    app.post('/api/core/v1/autopilot/getValueCode', async (req, res) => {
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "valueRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
@@ -218,7 +218,7 @@ export const BoardsAPI = (app, context) => {
         res.send({ jsCode })
     })
 
-    app.get('/api/v1/boards/:boardId', async (req, res) => {
+    app.get('/api/core/v1/boards/:boardId', async (req, res) => {
         try {
             const values = ProtoMemDB('states').getByTag('boards', req.params.boardId);
             const board = await getBoard(req.params.boardId);

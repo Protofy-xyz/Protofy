@@ -27,10 +27,13 @@ import { ChatbotsAPI } from './chatbots/chatbotsAPI'
 import { AutomationsAPI } from './automations/automationsAPI'
 import { BoardsAPI } from './boards/boardsAPI'
 import { IconsAPI } from './icons/iconsAPI'
+import { ProtoMemDBAPI } from './protomemdb/protomemdbAPI'
 
 export const AdminAPIBundles = (app, context) => {
   EventsAPI(app, context)
-  AutomationsAPI(app, context),
+  ProtoMemDBAPI(app, context, true)
+  AutomationsAPI(app, context)
+  BoardsAPI(app, context)
   UsersAPI(app, context)
   GroupsAPI(app, context)
   ObjectsAPI(app, context)
@@ -53,8 +56,8 @@ export const AdminAPIBundles = (app, context) => {
   ServicesAPI(app, context)
   TokensAPI(app, context)
   PackagesAPI(app, context)
-  StateMachinesDefinitionsApi(app, context),
-  FlowAPI(app, context),
-  ChatbotsAPI(app, context),
+  StateMachinesDefinitionsApi(app, context)
+  FlowAPI(app, context)
+  ChatbotsAPI(app, context)
   IconsAPI(app, context)
 }

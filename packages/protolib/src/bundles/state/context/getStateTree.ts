@@ -9,7 +9,7 @@ export const getStateTree = async (options: {
     const chunk = options?.chunk || 'states'
     if(options?.token) {
         try {
-            const result = await API.get(`/api/v1/protomemdb/${chunk}?token=`+options.token)
+            const result = await API.get(`/api/core/v1/protomemdb/${chunk}?token=`+options.token)
             return result.data
         } catch (error) {
             logger.error({}, "Error getting state tree: ", error)

@@ -1,8 +1,9 @@
 import { ProtoMemDB } from 'protobase';
 import {handler} from 'protonode';
 
-export const ProtoMemDBAPI = (app, context) => {
-    app.get('/api/v1/protomemdb/:chunk', handler(async (req, res, session) => {
+export const ProtoMemDBAPI = (app, context, inCore?) => {
+    const part = inCore ? '/core' : ''
+    app.get('/api'+part+'/v1/protomemdb/:chunk', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -10,7 +11,7 @@ export const ProtoMemDBAPI = (app, context) => {
         res.status(200).json(ProtoMemDB(req.params.chunk).getState())
     }))
 
-    app.get('/api/v1/protomemdb/:chunk/:group', handler(async (req, res, session) => {
+    app.get('/api'+part+'/v1/protomemdb/:chunk/:group', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -18,7 +19,7 @@ export const ProtoMemDBAPI = (app, context) => {
         res.status(200).json(ProtoMemDB(req.params.chunk).getByGroup(req.params.group))
     }))
 
-    app.get('/api/v1/protomemdb/:chunk/:group/:tag', handler(async (req, res, session) => {
+    app.get('/api'+part+'/v1/protomemdb/:chunk/:group/:tag', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -26,7 +27,7 @@ export const ProtoMemDBAPI = (app, context) => {
         res.status(200).json(ProtoMemDB(req.params.chunk).getByTag(req.params.group, req.params.tag))
     }))
     
-    app.post('/api/v1/protomemdb/:chunk/:group/:tag/:name', handler(async (req, res, session) => {
+    app.post('/api'+part+'/v1/protomemdb/:chunk/:group/:tag/:name', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return

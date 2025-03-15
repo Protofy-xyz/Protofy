@@ -4,7 +4,7 @@ import { ProtoMemDB } from "protobase";
 export const getStatesFromProtoMemDB = async (chunk, group, tag, useRemoteAPI?): Promise<StateGroup> => {
     let states
     if(useRemoteAPI) {
-        states = (await API.get("/api/v1/protomemdb/"+chunk+"/" + group + "/" + tag)).data
+        states = (await API.get("/api/core/v1/protomemdb/"+chunk+"/" + group + "/" + tag)).data
     } else {
         states = await ProtoMemDB(chunk).getByTag(group, tag);
     }

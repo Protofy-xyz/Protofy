@@ -1,4 +1,5 @@
 import { getLogger } from 'protobase';
+import {getServiceToken} from 'protonode'
 
 const logger = getLogger()
 
@@ -26,9 +27,9 @@ export const deviceController = async ({
     });
 
     sensors.forEach((sensor) => {
-        context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.initialValue });
+        context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.initialValue, token: getServiceToken() });
         context.deviceState(context, device, sensor.subsystem, sensor.monitor, (status) => {
-            context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.value(status), emitEvent: true });
+            context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.value(status), emitEvent: true, token: getServiceToken() });
         });
     });
 
@@ -36,7 +37,8 @@ export const deviceController = async ({
         context.state.set({
             group: 'boards',
             tag: device,
-            ...state
+            ...state,
+            token: getServiceToken()
         });
     });
 

@@ -16,7 +16,7 @@ export const setContext = async (options: {
     const name = options.name
     const tag = options.tag
     const value = options.value
-    const chunk = options.chunk || 'states'
+    const chunk = options.chunk || 'actions'
 
     if(!name) {
         logger.error({}, "State name is required");
