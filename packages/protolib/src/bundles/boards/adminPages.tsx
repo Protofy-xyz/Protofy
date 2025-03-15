@@ -1,13 +1,13 @@
-import { BookOpen, BookOpenText, ExternalLink, Cog, Palette, Plus, Save, Settings, Tag, Trash2, Type } from '@tamagui/lucide-icons'
+import { BookOpen, BookOpenText, ExternalLink, Cog, Palette, Plus, Settings, Tag, Trash2, Type } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
-import { API, set } from 'protobase'
+import { API } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
 import { DataView, DataViewActionButton } from "../../components/DataView"
 import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Popover, Button as TamaButton, Dialog, Stack, Card, Input, Spacer, ScrollView, useThemeName, Label } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Input, Label } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -17,116 +17,12 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
 import React from 'react'
 import { InputColor } from '../../components/InputColor'
-import Select from "react-select";
 import { AutopilotEditor } from '../../components/autopilot/AutopilotEditor'
 import { useProtoStates } from '../protomemdb/lib/useProtoStates'
 import { CardSelector } from '../../components/board/CardSelector'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
+import {IconSelect}  from '../../components/IconSelect'
 import { ActionRunner } from '../../components/ActionRunner'
-
-const IconSelect = ({ icons, onSelect, selected }) => {
-  const [selectedIcon, setSelectedIcon] = useState(
-    selected ? { value: selected, label: selected } : null
-  );
-
-  const options = icons.map((icon) => ({
-    value: icon,
-    label: icon,
-  }));
-
-  return (
-    <div style={{ flex: 1 }}>
-      <Select
-        options={options}
-        components={{
-          SingleValue: ({ data }) => (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "0px 4px",
-              }}
-            >
-              <img
-                src={`/public/icons/${data.value}.svg`}
-                alt={data.value}
-                width={18}
-                height={18}
-                style={{
-                  verticalAlign: "middle",
-                  filter: "invert(50%) sepia(100%) hue-rotate(120deg)",
-                }}
-              />
-              <span style={{ color: "var(--color)" }}>{data.value}</span>
-            </div>
-          ),
-        }}
-        onChange={(selectedOption) => {
-          setSelectedIcon(selectedOption);
-          onSelect?.(selectedOption.value);
-        }}
-        value={selectedIcon}
-        placeholder="Select an icon..."
-        menuPlacement="auto"
-        styles={{
-          control: (provided, state) => ({
-            ...provided,
-            backgroundColor: "var(--color2)",  
-            borderColor: "var(--color6)",
-            height: "44px",
-            borderRadius: "9px",
-            boxShadow: state.isFocused ? "0 0 3px var(--color6)" : "none",
-          }),
-          singleValue: (provided) => ({
-            ...provided,
-            color: "var(--color)",
-          }),
-          valueContainer: (provided) => ({
-            ...provided,
-            display: "flex",
-            alignItems: "center",
-            padding: "2px 8px",
-          }),
-          menu: (provided) => ({
-            ...provided,
-            backgroundColor: "var(--color2)",  
-            borderRadius: "9px",
-            zIndex: 99999,
-          }),
-          menuList: (provided) => ({
-            ...provided,
-            backgroundColor: "var(--color2)",  
-          }),
-          option: (provided, state) => ({
-            ...provided,
-            backgroundColor: state.isSelected
-              ? "var(--color6)"
-              : state.isFocused
-              ? "var(--color5)"
-              : "var(--color2)",
-            color: "var(--color)", 
-            cursor: "pointer",
-            borderRadius: "6px",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-          }),
-          indicatorSeparator: (provided) => ({
-            ...provided,
-            backgroundColor: "var(--color7)",
-          }),
-          dropdownIndicator: (provided) => ({
-            ...provided,
-            color: "var(--color7)",
-          }),
-        }}
-        maxMenuHeight={300}
-      />
-    </div>
-  );
-};
-
 
 const sourceUrl = '/api/core/v1/boards'
 
