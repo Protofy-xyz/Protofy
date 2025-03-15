@@ -61,7 +61,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                                 <Tinted>
                                     <p>Output</p>
                                     {valueReady && <div style={{ minWidth: "600px" }}>
-                                        <JSONView src={data} />
+                                        <JSONView style={{backgroundColor:'var(--gray3)'}} src={value} />
                                     </div>}
                                     {!valueReady && <Spinner />}
                                 </Tinted>

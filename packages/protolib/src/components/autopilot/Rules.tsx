@@ -12,15 +12,17 @@ const CustomTextArea = ({ ...props }) => (
         multiline
         size="$4"
         w="100%"
+        
         minHeight={minHeight}
         // @ts-ignore
         onMouseDown={(e) => e.stopPropagation()}
+        {...props}
         style={{
+            border: '0px',
             textAlignVertical: 'top',
             overflowX: 'hidden',
             ...props.style,
         }}
-        {...props}
     />
 )
 
@@ -129,8 +131,8 @@ export const Rules = ({
                 <Button
                     disabled={loadingIndex === rules.length || newRule.length < 3}
                     onMouseDown={(e) => e.stopPropagation()}
-                    bg={newRule.length > 2 ? '$blue9' : '$gray6'}
-                    theme="blue"
+                    bg={newRule.length > 2 ? '$color8' : '$gray6'}
+                    // theme="blue"
                     color={newRule.length > 2 ? '$background' : '$gray9'}
                     hoverStyle={{ backgroundColor: '$blue10' }}
                     circular
