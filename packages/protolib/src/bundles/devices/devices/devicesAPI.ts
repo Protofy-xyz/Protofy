@@ -51,7 +51,7 @@ export const DevicesAPI = (app, context) => {
                 for (const action of subsystem.actions ?? []) {
                     addAction({
                         group: 'devices',
-                        name: action.name, //get last path element
+                        name: subsystem.name + '_' + action.name, //get last path element
                         url: `/api/core/v1/devices/${deviceInfo.data.name}/subsystems/${subsystem.name}/actions/${action.name}`,
                         tag: deviceInfo.data.name,
                         description: action.description ?? "",
