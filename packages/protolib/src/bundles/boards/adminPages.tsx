@@ -22,6 +22,7 @@ import { AutopilotEditor } from '../../components/autopilot/AutopilotEditor'
 import { useProtoStates } from '../protomemdb/lib/useProtoStates'
 import { CardSelector } from '../../components/board/CardSelector'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
+import { ActionRunner } from '../../components/ActionRunner'
 
 const IconSelect = ({ icons, onSelect, selected }) => {
   const [selectedIcon, setSelectedIcon] = useState(
@@ -188,7 +189,7 @@ const RuleEditor = ({ states, cardData, setCardData }) => {
   }} valueReady={hasCode} />
 }
 
-export const CardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
+export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
 
   useEffect(() => {
@@ -257,6 +258,75 @@ export const CardSettings = ({ states, card, icons, onEdit = (data) => { } }) =>
   );
 };
 
+export const ActionCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
+  const [cardData, setCardData] = useState(card);
+  const actions = useProtoStates({}, null, 'actions')
+  useEffect(() => {
+    onEdit(cardData);
+  }, [cardData, onEdit]);
+
+  return (
+    <YStack space="$4" padding="$4">
+      <Tinted>
+        <XStack alignItems="center" space="$8" width="100%">
+          <YStack flex={1}>
+            <Label size={"$5"}> <Type color={"$color8"} mr="$2" />Name</Label>
+            <Input
+              value={cardData.name}
+              onChange={(e) =>
+                setCardData({
+                  ...cardData,
+                  name: e.target.value,
+                })
+              }
+            />
+          </YStack>
+          <YStack flex={1}>
+            <XStack alignItems="center" space="$2">
+              <Label size={"$5"}><BookOpenText color={"$color8"} mr="$2" />Icon</Label>
+
+            </XStack>
+            <XStack alignItems="center" space="$2">
+              <a href="https://lucide.dev/icons/" target="_blank" rel="noreferrer">
+                <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
+              </a>
+              <IconSelect
+                icons={icons}
+                onSelect={(icon) => {
+                  setCardData({
+                    ...cardData,
+                    icon,
+                  });
+                }}
+                selected={cardData.icon}
+              />
+            </XStack>
+
+          </YStack>
+          <YStack flex={1}>
+            <Label size={"$5"}><Palette color={"$color8"} mr="$2" />Color</Label>
+            <InputColor
+              color={cardData.color}
+              onChange={(e) =>
+                setCardData({ ...cardData, color: e.hex })
+              }
+            />
+          </YStack>
+        </XStack>
+
+        <YStack mt="$5" height={600}>
+          <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Actions</Label>
+          <RuleEditor
+            states={actions}
+            cardData={cardData}
+            setCardData={setCardData}
+          />
+        </YStack>
+      </Tinted>
+    </YStack>
+  );
+};
+
 
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
@@ -286,6 +356,18 @@ const ValueCard = ({ id, title, value, icon = undefined, color, onDelete = () =>
   </CenterCard>
 }
 
+const ActionCard = ({ id, name, title, params, icon = undefined, color, onRun = (name, params) => {}, onDelete = () => { }, onEdit = () => { } }) => {
+  return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
+    <ActionRunner 
+      name={name}
+      // description={title}
+      actionParams={params}
+      onRun={onRun}
+      icon={icon}
+    />
+  </CenterCard>
+}
+
 const Board = ({ board, icons }) => {
   const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 6 }
   const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(key => key != 'addwidget')] : [addCard]))
@@ -304,7 +386,7 @@ const Board = ({ board, icons }) => {
     id: 'action'
   }]
 
-  const states = useProtoStates({}, 'boards/' + board.name + '/#')
+  const states = useProtoStates({}, 'boards/' + board.name + '/#', 'states')
 
   const reloadBoard = async () => {
     const dataData = await API.get(`/api/core/v1/boards/${board.name}`)
@@ -383,6 +465,20 @@ const Board = ({ board, icons }) => {
           setEditedCard(item)
         }} />
       }
+    } else if (item.type == 'action') {
+      return {
+        ...item,
+        content: <ActionCard name={item.name} color={item.color} icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} params={item.params} onDelete={() => {
+          setIsDeleting(true)
+          setCurrentCard(item)
+        }} onEdit={() => {
+          setIsEditing(true)
+          setCurrentCard(item)
+          setEditedCard(item)
+        }} onRun={(key, params) => {
+          console.log('Running action: ', key, params);
+        }} />
+      }
     }
     return item
   })
@@ -421,7 +517,10 @@ const Board = ({ board, icons }) => {
             minHeight={750}
           >
             <Dialog.Title>Edit</Dialog.Title>
-            {currentCard && <CardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
+            {currentCard && currentCard.type == 'value' &&<ValueCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
+              setEditedCard(data)
+            }} />}
+            {currentCard && currentCard.type == 'action' &&<ActionCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
               setEditedCard(data)
             }} />}
             <Dialog.Close displayWhenAdapted asChild>

@@ -1,11 +1,11 @@
 import { Button, Input, Paragraph, XStack, YStack, Tooltip } from '@my/ui';
 import React from 'react';
 
-export const ActionRunner = ({ action, onRun, conf={} }) => {
+export const ActionRunner = ({ name, caption="Run", description="", actionParams={}, onRun, icon }) => {
     const [params, setParams] = React.useState({})
     return <XStack f={1} width="100%">
         <YStack f={1} alignItems="center" justifyContent="center">
-            {Object.keys(action.automationParams).map((key) => {
+            {Object.keys(actionParams).map((key) => {
                 return <Tooltip>
                     <Tooltip.Trigger width={"100%"}>
                         <XStack width="100%" alignItems="center">
@@ -18,13 +18,13 @@ export const ActionRunner = ({ action, onRun, conf={} }) => {
                     </Tooltip.Trigger>
                     <Tooltip.Content>
                         <Tooltip.Arrow />
-                        <Paragraph>{action.automationParams[key]}</Paragraph>
+                        <Paragraph>{actionParams[key]}</Paragraph>
                     </Tooltip.Content>
                 </Tooltip>
             })}
             <Tooltip>
                 <Tooltip.Trigger width={"100%"}>
-                    <Button mt={"$3"} width="100%" theme={conf["tint"] ? conf["tint"] : ""} className="no-drag" onPress={() => {
+                    <Button mt={"$3"} width="100%" className="no-drag" onPress={() => {
                         //actionData.automationParams is a key value object where the key is the name of the parameter and the value is the description
                         //if there are parameters, they should be included in the query parameters of the request
                         //if a parameter is missing, remove it from the query parameters
@@ -34,16 +34,16 @@ export const ActionRunner = ({ action, onRun, conf={} }) => {
                                 cleanedParams[key] = params[key]
                             }
                         }
-                        onRun(action, cleanedParams)
+                        onRun(name, cleanedParams)
                     }}
-                        icon={conf["icon"] ? conf["icon"] : undefined}
+                        icon={icon}
                     >
-                        {conf["text"] ? conf["text"] : "Run"}
+                        {caption}
                     </Button>
                 </Tooltip.Trigger>
                 <Tooltip.Content>
                     <Tooltip.Arrow />
-                    <Paragraph>{action.description}</Paragraph>
+                    <Paragraph>{description}</Paragraph>
                 </Tooltip.Content>
             </Tooltip>
         </YStack>
