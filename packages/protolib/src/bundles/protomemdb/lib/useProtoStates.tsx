@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { API } from 'protobase'
 import { useEventEffect } from '../../events/hooks/useEventEffect'
 
-export const useProtoStates = (initialState, filter='#', chunk='states') => {
+export const useProtoStates = (initialState, filter='states/#', chunk='states') => {
   const [state, setState] = useState(initialState);
   const timer = useRef(null);
 
@@ -38,7 +38,7 @@ export const useProtoStates = (initialState, filter='#', chunk='states') => {
         timer.current = null;
       }, 500);
     },
-    { path: "states/"+filter }
+    { path: filter }
   );
 
   return state;

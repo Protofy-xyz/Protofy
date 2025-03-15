@@ -154,9 +154,8 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
   );
 };
 
-export const ActionCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
+export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
-  const actions = useProtoStates({}, null, 'actions')
   useEffect(() => {
     onEdit(cardData);
   }, [cardData, onEdit]);
@@ -282,7 +281,8 @@ const Board = ({ board, icons }) => {
     id: 'action'
   }]
 
-  const states = useProtoStates({}, 'boards/' + board.name + '/#', 'states')
+  const states = useProtoStates({}, 'states/boards/' + board.name + '/#', 'states')
+  const actions = useProtoStates({}, '#', 'actions')
 
   const reloadBoard = async () => {
     const dataData = await API.get(`/api/core/v1/boards/${board.name}`)
@@ -408,15 +408,15 @@ const Board = ({ board, icons }) => {
             enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
             exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
             gap="$4"
-            maxWidth={1200}
-            minWidth={1100}
+            maxWidth={1400}
+            minWidth={1400}
             minHeight={750}
           >
             <Dialog.Title>Edit</Dialog.Title>
             {currentCard && currentCard.type == 'value' &&<ValueCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
               setEditedCard(data)
             }} />}
-            {currentCard && currentCard.type == 'action' &&<ActionCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
+            {currentCard && currentCard.type == 'action' &&<ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
               setEditedCard(data)
             }} />}
             <Dialog.Close displayWhenAdapted asChild>

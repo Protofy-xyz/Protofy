@@ -5,7 +5,7 @@ The user has defined the rules in natural language, and your mission is to gener
 
 You need to fill the following function:
 
-//userParams is are: {{{userParams}}}
+//userParams are: {{{userParams}}}
 function perform_actions(states, userParams) {
     //states: state object with the current system state. userParams: user provided params
 

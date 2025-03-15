@@ -7,6 +7,7 @@ import { Rules } from "./Rules";
 import { useState } from "react";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { Monaco } from "../Monaco";
+import {JSONView} from "../JSONView";
 
 export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, valueReady = true, onAddRule = (e, rule) => { }, onDeleteRule = (index) => { } }) => {
     const [tab, setTab] = useState("rules");
@@ -33,7 +34,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                                 <Tinted>
                                     <p>Input</p>
                                     <div style={{ minWidth: "600px" }}>
-                                        <JSONViewer key={JSON.stringify(data)} collapsible data={data} />
+                                        <JSONView style={{backgroundColor:'var(--gray3)'}} src={data} />
                                     </div>
                                 </Tinted>
                             </ScrollView>
@@ -60,7 +61,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                                 <Tinted>
                                     <p>Output</p>
                                     {valueReady && <div style={{ minWidth: "600px" }}>
-                                        <JSONViewer key={JSON.stringify(value)} collapsible data={value} />
+                                        <JSONView src={data} />
                                     </div>}
                                     {!valueReady && <Spinner />}
                                 </Tinted>
@@ -74,7 +75,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
 
 
             {/* Panel derecho */}
-            <Panel defaultSize={60} minSize={50}>
+            <Panel defaultSize={50} minSize={50}>
                 <YStack
                     flex={1}
                     height="100%"
