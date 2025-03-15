@@ -32,7 +32,6 @@ export const ProtoMemDBAPI = (app, context, inCore?) => {
             res.status(401).send({error: "Unauthorized"})
             return
         }
-        console.log('Setting value', req.body.value, 'for', req.params.group, req.params.tag, req.params.name)
         ProtoMemDB(req.params.chunk).set(req.params.group, req.params.tag, req.params.name, req.body.value)
         res.status(200).json({ success: true })
     }))
