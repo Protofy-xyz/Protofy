@@ -3,46 +3,57 @@ import {getServiceToken} from 'protonode';
 import { generateEvent } from "../../events/eventsLibrary";
 const logger = getLogger();
 
-export const setContext = async (options: {
+export const addAction = async (options: {
     chunk?: string,
     group?: string,
     tag: string,
     name: string,
-    value: any,
+    description?: string,
+    params?: any,
+    url: string,
     emitEvent?: boolean,
-    token?: boolean
+    token?: string
 }) => {
     const group = options.group || 'system'
     const name = options.name
     const tag = options.tag
-    const value = options.value
+    const description = options.description || ''
+    const params = options.params || {}
+    const url = options.url
     const chunk = options.chunk || 'actions'
 
     if(!name) {
-        logger.error({}, "State name is required");
+        logger.error({}, "Action name is required");
         return
     }
 
     if(!tag) {
-        logger.error({}, "State tag is required");
+        logger.error({}, "Action tag is required");
         return
     }
 
-    if(value === undefined) {
-        logger.error({}, "State value is required");
+    if(url === undefined) {
+        logger.error({}, "Action url is required");
         return
     }
 
+    const content = {
+        description: description,
+        params: params,
+        url: url,
+        name: name
+    }
     if(options.token) {
+        // console.log('-----------------------------------------------')
         // console.log('Setting value using api: ', value, 'for', group, tag, name)
-        const result = await API.post(`/api/core/v1/protomemdb/${chunk}/${group}/${tag}/${name}?token=`+options.token, {value: value}) 
+        const result = await API.post(`/api/core/v1/protomemdb/${chunk}/${group}/${tag}/${name}?token=`+options.token, {value:content}) 
         // console.log('result: ', result)
         if(options.emitEvent) {
             generateEvent({
                 path: `${chunk}/${group}/${tag}/${name}/update`, 
                 from: "states",
                 user: 'system',
-                payload:{value: value},
+                payload: content,
             }, getServiceToken())
         }
     } else {
@@ -53,9 +64,9 @@ export const setContext = async (options: {
                 path: `${chunk}/${group}/${tag}/${name}/update`, 
                 from: "states",
                 user: 'system',
-                payload:{value: value},
+                payload: content,
             }, getServiceToken())
         }
-        return ProtoMemDB(chunk).set(group, tag, name, value)
+        return ProtoMemDB(chunk).set(group, tag, name, content)
     }
 }

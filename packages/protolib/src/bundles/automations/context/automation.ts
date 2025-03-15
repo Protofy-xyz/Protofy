@@ -1,5 +1,6 @@
 import { API, getLogger } from 'protobase';
 import {getServiceToken} from 'protonode'
+import {addAction} from '../../actions/context/addAction';
 
 const logger = getLogger();
 
@@ -32,6 +33,7 @@ export const automation = async (options: {
 
     try {
         const token = getServiceToken()
+        //register in automations api
         await API.post('/api/core/v1/automations?token='+token, {
             name: name,
             displayName: options.displayName ?? name,
@@ -39,6 +41,18 @@ export const automation = async (options: {
             automationParams: options.automationParams ?? {},
             description: options.description ?? "",
             tags: options.tags ?? []
+        })
+
+        //register in actions api
+        addAction({
+            group: 'automations',
+            name: name.split('/').join('_'), //get last path element
+            url: "/api/v1/automations/"+name,
+            tag: options.tags && options.tags.length > 0 ? options.tags[0] : 'system',
+            description: options.description ?? "",
+            params: options.automationParams ?? {},
+            emitEvent: true,
+            token: token
         })
 
         const url = "/api/v1/automations/"+name;
@@ -62,7 +76,7 @@ export const automation = async (options: {
             }
         })
     } catch (err) {
-        logger.error({ error: err }, "Error in navigate");
-        onError(err);
+        logger.error({ error: err }, "Error in automation: "+name);
+        onError && onError(err);
     }
 }
