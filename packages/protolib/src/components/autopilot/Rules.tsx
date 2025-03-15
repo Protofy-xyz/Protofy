@@ -105,7 +105,7 @@ export const Rules = ({
                 }
             >
                 <CustomTextArea
-                    theme="blue"
+                    // theme="blue"
                     placeholder="Add new rule..."
                     onChangeText={(text) => {
                         setNewRule(text)
