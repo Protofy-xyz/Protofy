@@ -44,7 +44,7 @@ import OdriveCan from './ODriveCan'
 import GM77 from './GM77'
 import UltrasonicDistanceSensor from './UltrasonicDistanceSensor';
 import MAX31865 from './MAX31865';
-
+import BMP280 from './BMP280';
 
 const deviceMasks = [
   Wifi,
@@ -90,7 +90,8 @@ const deviceMasks = [
   OdriveCan,
   GM77,
   UltrasonicDistanceSensor,
-  MAX31865
+  MAX31865,
+  BMP280
 ]
 
 const masksLength = deviceMasks.length
