@@ -52,9 +52,12 @@ const IconSelect = ({ icons, onSelect, selected }) => {
                 alt={data.value}
                 width={18}
                 height={18}
-                style={{ verticalAlign: "middle" }}
+                style={{
+                  verticalAlign: "middle",
+                  filter: "invert(50%) sepia(100%) hue-rotate(120deg)",
+                }}
               />
-              {data.value}
+              <span style={{ color: "var(--color)" }}>{data.value}</span>
             </div>
           ),
         }}
@@ -68,11 +71,15 @@ const IconSelect = ({ icons, onSelect, selected }) => {
         styles={{
           control: (provided, state) => ({
             ...provided,
-            minHeight: "36px",
-            height: state.menuIsOpen || state.isFocused ? "auto" : "36px",
-            transition: "all 0.2s ease-in-out",
-            display: "flex",
-            alignItems: "center",
+            backgroundColor: "var(--color2)",  
+            borderColor: "var(--color6)",
+            height: "44px",
+            borderRadius: "9px",
+            boxShadow: state.isFocused ? "0 0 3px var(--color6)" : "none",
+          }),
+          singleValue: (provided) => ({
+            ...provided,
+            color: "var(--color)",
           }),
           valueContainer: (provided) => ({
             ...provided,
@@ -82,14 +89,43 @@ const IconSelect = ({ icons, onSelect, selected }) => {
           }),
           menu: (provided) => ({
             ...provided,
+            backgroundColor: "var(--color2)",  
+            borderRadius: "9px",
             zIndex: 99999,
+          }),
+          menuList: (provided) => ({
+            ...provided,
+            backgroundColor: "var(--color2)",  
+          }),
+          option: (provided, state) => ({
+            ...provided,
+            backgroundColor: state.isSelected
+              ? "var(--color6)"
+              : state.isFocused
+              ? "var(--color5)"
+              : "var(--color2)",
+            color: "var(--color)", 
+            cursor: "pointer",
+            borderRadius: "6px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }),
+          indicatorSeparator: (provided) => ({
+            ...provided,
+            backgroundColor: "var(--color7)",
+          }),
+          dropdownIndicator: (provided) => ({
+            ...provided,
+            color: "var(--color7)",
           }),
         }}
         maxMenuHeight={300}
       />
     </div>
   );
-}
+};
+
 
 const sourceUrl = '/api/core/v1/boards'
 
