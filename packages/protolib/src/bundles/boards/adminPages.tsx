@@ -323,9 +323,14 @@ const Board = ({ board, icons }) => {
     sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.sm })
   }
 
+  const iconTable = {
+    'value': 'tag',
+    'action': 'zap'
+  }
+  
   const addWidget = async (type) => {
     const rnd = Math.floor(Math.random() * 100000)
-    const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, name: type }].filter(item => item.key != 'addwidget')
+    const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, name: type, icon: iconTable[type] }].filter(item => item.key != 'addwidget')
     setItems(newItems)
     boardRef.current.cards = newItems
     API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
