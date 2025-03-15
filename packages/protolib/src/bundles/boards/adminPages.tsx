@@ -17,142 +17,15 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
 import React from 'react'
 import { InputColor } from '../../components/InputColor'
-import { AutopilotEditor } from '../../components/autopilot/AutopilotEditor'
+import { RuleEditor } from '../../components/autopilot/RuleEditor'
 import { useProtoStates } from '../protomemdb/lib/useProtoStates'
 import { CardSelector } from '../../components/board/CardSelector'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
-import {IconSelect}  from '../../components/IconSelect'
+import { IconSelect } from '../../components/IconSelect'
 import { ActionRunner } from '../../components/ActionRunner'
+import { ValueCardSettings } from '../../components/autopilot/ValueCardSettings'
 
 const sourceUrl = '/api/core/v1/boards'
-
-const RuleEditor = ({ states, cardData, setCardData }) => {
-  const [hasCode, setHasCode] = useState(cardData.rulesCode !== undefined)
-  const [value, setValue] = useState()
-
-  const getRulesCode = async (force?) => {
-    if ((!hasCode || force) && cardData.rules && cardData.rules.length > 0) {
-      setHasCode(false)
-      const code = await API.post('/api/core/v1/autopilot/getValueCode', { states, rules: cardData.rules })
-      if (!code?.data?.jsCode) return
-      setCardData({
-        ...cardData,
-        rulesCode: code.data.jsCode
-      })
-      setHasCode(true)
-    }
-  }
-
-  useEffect(() => {
-    getRulesCode()
-  }, [])
-
-  useEffect(() => {
-    if (cardData.rulesCode) {
-      try {
-        console.log('new rules code, executing...', cardData.rulesCode, states)
-        const wrapper = new Function('states', `
-          ${cardData.rulesCode}
-          return reduce_state_obj(states);
-        `);
-        let value = wrapper(states);
-        console.log('got value: ', value)
-        setValue(value)
-      } catch(e) {}
-
-    }
-  }, [cardData.rulesCode])
-
-  useUpdateEffect(() => {
-    getRulesCode(true)
-  }, [cardData.rules])
-
-  return <AutopilotEditor setRulesCode={(rulesCode) => {
-    setCardData({
-      ...cardData,
-      rulesCode
-    })
-  }} rulesCode={cardData.rulesCode} data={states} rules={cardData.rules ?? []} value={value} onDeleteRule={(index) => {
-    setCardData({
-      ...cardData,
-      rules: cardData.rules?.filter((_, i) => i !== index)
-    });
-  }} onAddRule={(e, rule) => {
-    setCardData({
-      ...cardData,
-      rules: cardData.rules ? [...cardData.rules, rule] : [rule]
-    });
-  }} valueReady={hasCode} />
-}
-
-export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
-  const [cardData, setCardData] = useState(card);
-
-  useEffect(() => {
-    onEdit(cardData);
-  }, [cardData, onEdit]);
-
-  return (
-    <YStack space="$4" padding="$4">
-      <Tinted>
-        <XStack alignItems="center" space="$8" width="100%">
-          <YStack flex={1}>
-            <Label size={"$5"}> <Type color={"$color8"} mr="$2" />Title</Label>
-            <Input
-              value={cardData.name}
-              onChange={(e) =>
-                setCardData({
-                  ...cardData,
-                  name: e.target.value,
-                })
-              }
-            />
-          </YStack>
-          <YStack flex={1}>
-            <XStack alignItems="center" space="$2">
-              <Label size={"$5"}><BookOpenText color={"$color8"} mr="$2" />Icon</Label>
-
-            </XStack>
-            <XStack alignItems="center" space="$2">
-              <a href="https://lucide.dev/icons/" target="_blank" rel="noreferrer">
-                <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
-              </a>
-              <IconSelect
-                icons={icons}
-                onSelect={(icon) => {
-                  setCardData({
-                    ...cardData,
-                    icon,
-                  });
-                }}
-                selected={cardData.icon}
-              />
-            </XStack>
-
-          </YStack>
-          <YStack flex={1}>
-            <Label size={"$5"}><Palette color={"$color8"} mr="$2" />Color</Label>
-            <InputColor
-              color={cardData.color}
-              onChange={(e) =>
-                setCardData({ ...cardData, color: e.hex })
-              }
-            />
-          </YStack>
-        </XStack>
-
-        <YStack mt="$5" height={600}>
-          <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Value</Label>
-          <RuleEditor
-            states={states}
-            cardData={cardData}
-            setCardData={setCardData}
-          />
-        </YStack>
-      </Tinted>
-    </YStack>
-  );
-};
 
 export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
@@ -251,9 +124,9 @@ const ValueCard = ({ id, title, value, icon = undefined, color, onDelete = () =>
   </CenterCard>
 }
 
-const ActionCard = ({ id, name, title, params, icon = undefined, color, onRun = (name, params) => {}, onDelete = () => { }, onEdit = () => { } }) => {
+const ActionCard = ({ id, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { } }) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
-    <ActionRunner 
+    <ActionRunner
       name={name}
       description={"Run action"}
       actionParams={params}
@@ -327,7 +200,7 @@ const Board = ({ board, icons }) => {
     'value': 'tag',
     'action': 'zap'
   }
-  
+
   const addWidget = async (type) => {
     const rnd = Math.floor(Math.random() * 100000)
     const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, name: type, icon: iconTable[type] }].filter(item => item.key != 'addwidget')
@@ -419,10 +292,10 @@ const Board = ({ board, icons }) => {
             minHeight={750}
           >
             <Dialog.Title>Edit</Dialog.Title>
-            {currentCard && currentCard.type == 'value' &&<ValueCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
+            {currentCard && currentCard.type == 'value' && <ValueCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
               setEditedCard(data)
             }} />}
-            {currentCard && currentCard.type == 'action' &&<ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
+            {currentCard && currentCard.type == 'action' && <ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
               setEditedCard(data)
             }} />}
             <Dialog.Close displayWhenAdapted asChild>
