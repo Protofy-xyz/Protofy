@@ -7,6 +7,7 @@ import { getLogger } from 'protobase';
 import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
+import { addAction } from "../../actions/context/addAction";
 
 export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
@@ -37,12 +38,40 @@ export const DevicesAPI = (app, context) => {
         devices/patata/button/relay/actions/status
         ...
     */
-    app.get('/api/core/v1/devices/:device/subsystems/:subsystem/actions/:action/:value', handler(async (req, res, session) => {
+
+    // iterate over all devices and register an action for each subsystem action
+    const registerActions = async () => {
+        const db = getDB('devices')
+        //db.iterator is yeilding
+        for await (const [key, value] of db.iterator()) {
+            console.log('device: ', value)
+            const deviceInfo = DevicesModel.load(JSON.parse(value))
+            for (const subsystem of deviceInfo.data.subsystem) {
+                console.log('subsystem: ', subsystem)
+                for (const action of subsystem.actions ?? []) {
+                    const endpoint = `${deviceInfo.data.name}/${subsystem.name}/${action.name}`
+                    addAction({
+                        group: 'devices',
+                        name: action.name, //get last path element
+                        url: `/api/core/v1/devices/${deviceInfo.data.name}/subsystems/${subsystem.name}/actions/${action.name}`,
+                        tag: deviceInfo.data.name,
+                        description: action.description ?? "",
+                        params: {value: "value to set"},
+                        emitEvent: true
+                    })
+                }
+            }
+        }
+    }
+
+    registerActions()
+
+    app.get('/api/core/v1/devices/:device/subsystems/:subsystem/actions/:action/:value?', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
         }
-
+        const value = req.params.value ?? req.query.value
         const db = getDB('devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
         const subsystem = deviceInfo.getSubsystem(req.params.subsystem)
@@ -57,7 +86,7 @@ export const DevicesAPI = (app, context) => {
             return
         }
 
-        topicPub(mqtt, action.getEndpoint(), req.params.value == "undefined" ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : req.params.value)
+        topicPub(mqtt, action.getEndpoint(), value == "undefined" ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : value)
         
         res.send({
             subsystem: req.params.subsystem,
