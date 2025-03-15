@@ -44,10 +44,10 @@ export const DevicesAPI = (app, context) => {
         const db = getDB('devices')
         //db.iterator is yeilding
         for await (const [key, value] of db.iterator()) {
-            console.log('device: ', value)
+            // console.log('device: ', value)
             const deviceInfo = DevicesModel.load(JSON.parse(value))
             for (const subsystem of deviceInfo.data.subsystem) {
-                console.log('subsystem: ', subsystem)
+                // console.log('subsystem: ', subsystem)
                 for (const action of subsystem.actions ?? []) {
                     const endpoint = `${deviceInfo.data.name}/${subsystem.name}/${action.name}`
                     addAction({
