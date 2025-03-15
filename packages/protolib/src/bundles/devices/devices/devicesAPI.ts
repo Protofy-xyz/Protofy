@@ -49,8 +49,6 @@ export const DevicesAPI = (app, context) => {
             for (const subsystem of deviceInfo.data.subsystem) {
                 // console.log('subsystem: ', subsystem)
                 for (const action of subsystem.actions ?? []) {
-                    const endpoint = `${deviceInfo.data.name}/${subsystem.name}/${action.name}`
-                    console.log('---------------------------------- action: ', action)
                     addAction({
                         group: 'devices',
                         name: action.name, //get last path element
