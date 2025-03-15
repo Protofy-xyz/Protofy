@@ -1,4 +1,4 @@
-import { BookOpen, BookOpenText, ExternalLink, Cog, Palette, Plus, Settings, Tag, Trash2, Type } from '@tamagui/lucide-icons'
+import { BookOpen, Plus, Settings, Tag, Trash2 } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
@@ -7,94 +7,22 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Input, Label } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
 import { CardValue, CenterCard } from '../widgets'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
 import React from 'react'
-import { InputColor } from '../../components/InputColor'
-import { RuleEditor } from '../../components/autopilot/RuleEditor'
 import { useProtoStates } from '../protomemdb/lib/useProtoStates'
 import { CardSelector } from '../../components/board/CardSelector'
-import { InteractiveIcon } from '../../components/InteractiveIcon'
-import { IconSelect } from '../../components/IconSelect'
 import { ActionRunner } from '../../components/ActionRunner'
 import { ValueCardSettings } from '../../components/autopilot/ValueCardSettings'
+import { ActionCardSettings } from '../../components/autopilot/ActionCardSettings'
 
 const sourceUrl = '/api/core/v1/boards'
-
-export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (data) => { } }) => {
-  const [cardData, setCardData] = useState(card);
-  useEffect(() => {
-    onEdit(cardData);
-  }, [cardData, onEdit]);
-
-  return (
-    <YStack space="$4" padding="$4">
-      <Tinted>
-        <XStack alignItems="center" space="$8" width="100%">
-          <YStack flex={1}>
-            <Label size={"$5"}> <Type color={"$color8"} mr="$2" />Name</Label>
-            <Input
-              value={cardData.name}
-              onChange={(e) =>
-                setCardData({
-                  ...cardData,
-                  name: e.target.value,
-                })
-              }
-            />
-          </YStack>
-          <YStack flex={1}>
-            <XStack alignItems="center" space="$2">
-              <Label size={"$5"}><BookOpenText color={"$color8"} mr="$2" />Icon</Label>
-
-            </XStack>
-            <XStack alignItems="center" space="$2">
-              <a href="https://lucide.dev/icons/" target="_blank" rel="noreferrer">
-                <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
-              </a>
-              <IconSelect
-                icons={icons}
-                onSelect={(icon) => {
-                  setCardData({
-                    ...cardData,
-                    icon,
-                  });
-                }}
-                selected={cardData.icon}
-              />
-            </XStack>
-
-          </YStack>
-          <YStack flex={1}>
-            <Label size={"$5"}><Palette color={"$color8"} mr="$2" />Color</Label>
-            <InputColor
-              color={cardData.color}
-              onChange={(e) =>
-                setCardData({ ...cardData, color: e.hex })
-              }
-            />
-          </YStack>
-        </XStack>
-
-        <YStack mt="$5" height={600}>
-          <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Actions</Label>
-          <RuleEditor
-            states={actions}
-            cardData={cardData}
-            setCardData={setCardData}
-          />
-        </YStack>
-      </Tinted>
-    </YStack>
-  );
-};
-
 
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>

@@ -1,10 +1,10 @@
 import { BookOpenText, ExternalLink, Cog, Palette, Type } from '@tamagui/lucide-icons'
 import { YStack, XStack, Input, Label } from '@my/ui'
 import { useEffect, useState } from 'react'
-import { Tinted } from '../../components/Tinted'
-import { InputColor } from '../../components/InputColor'
-import { InteractiveIcon } from '../../components/InteractiveIcon'
-import { IconSelect } from '../../components/IconSelect'
+import { Tinted } from '../Tinted'
+import { InputColor } from '../InputColor'
+import { InteractiveIcon } from '../InteractiveIcon'
+import { IconSelect } from '../IconSelect'
 import { RuleEditor } from './RuleEditor'
 
 
