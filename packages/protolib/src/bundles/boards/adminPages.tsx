@@ -116,14 +116,17 @@ const RuleEditor = ({ states, cardData, setCardData }) => {
 
   useEffect(() => {
     if (cardData.rulesCode) {
-      console.log('new rules code, executing...', cardData.rulesCode, states)
-      const wrapper = new Function('states', `
-        ${cardData.rulesCode}
-        return reduce_state_obj(states);
-      `);
-      let value = wrapper(states);
-      console.log('got value: ', value)
-      setValue(value)
+      try {
+        console.log('new rules code, executing...', cardData.rulesCode, states)
+        const wrapper = new Function('states', `
+          ${cardData.rulesCode}
+          return reduce_state_obj(states);
+        `);
+        let value = wrapper(states);
+        console.log('got value: ', value)
+        setValue(value)
+      } catch(e) {}
+
     }
   }, [cardData.rulesCode])
 

@@ -21,7 +21,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                             height="100%"
                             borderRadius="$3"
                             p="$3"
-                            backgroundColor="$gray2"
+                            backgroundColor="$gray3"
                             overflow="hidden"
                         >
                             <ScrollView
@@ -48,7 +48,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                             height="100%"
                             borderRadius="$3"
                             p="$3"
-                            backgroundColor="$gray2"
+                            backgroundColor="$gray3"
                             overflow="hidden"
                         >
                             <ScrollView
