@@ -181,7 +181,8 @@ const Board = ({ board, icons }) => {
           setCurrentCard(item)
           setEditedCard(item)
         }} onRun={async (name, params) => {
-          await API.post(`/api/core/v1/boards/${board.name}/actions/${name}`, params)
+          const paramsStr = Object.keys(params??{}).map(key => key + '=' + params[key]).join('&')
+          await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)
         }} />
       }
     }
