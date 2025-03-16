@@ -29,7 +29,6 @@ const CardIcon = ({ Icon, onPress }) => {
     <XStack right={-10} hoverStyle={{ bg: '$backgroundFocus' }} pressStyle={{ bg: '$backgroundPress' }} borderRadius="$5" alignItems="center" justifyContent="center" cursor="pointer" p="$2" onPress={onPress}>
       <Icon size={20} onPress={onPress} />
     </XStack>
-
   </Tinted>
 }
 
@@ -200,10 +199,9 @@ const Board = ({ board, icons }) => {
             }}
           />
         </XStack>
-
       </XStack>
 
-      <CardSelector cards={availableCards} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} />
+      <CardSelector cards={availableCards} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
       <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
         <Dialog.Portal zIndex={100000} overflow='hidden'>

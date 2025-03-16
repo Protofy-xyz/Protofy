@@ -3,6 +3,8 @@ import { AlertDialog } from '../../components/AlertDialog';
 import { Slides } from '../../components/Slides'
 import { TemplatePreview } from '../../bundles/pages/TemplatePreview';
 import { useState } from 'react';
+import { ValueCardSettings } from '../autopilot/ValueCardSettings';
+import { ActionCardSettings } from '../autopilot/ActionCardSettings';
 
 const SelectGrid = ({ children }) => {
     return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
@@ -29,16 +31,22 @@ const FirstSlide = ({ selected, setSelected, options }) => {
         <Spacer marginBottom="$8" />
     </YStack>
   }
-  const SecondSlide = ({ selected }) => {
+  const SecondSlide = ({ selected, states, icons, actions }) => {
+    const rnd = Math.floor(Math.random() * 100000)
+    const iconTable = {
+      'value': 'tag',
+      'action': 'zap'
+    }
+    const card = { key: selected + '_' + rnd, selected, width: 1, height: 6, name: selected, icon: iconTable[selected] }
     return <YStack>
         <ScrollView mah={"500px"}>
-            
+            {selected=="value" ? <ValueCardSettings states={states} icons={icons} card={card} /> : <ActionCardSettings states={states} icons={icons} card={card} actions={actions}/>}
         </ScrollView>
         <Spacer marginBottom="$8" />
     </YStack>
   }
 
-export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish }) => {
+export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
     const [selectedCard, setSelectedCard] = useState('value')
     return       <AlertDialog
     integratedChat
@@ -67,7 +75,7 @@ export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish }) => {
             {
               name: "Configure your widget",
               title: "Configure your widget",
-              component: <SecondSlide selected={selectedCard} />
+              component: <SecondSlide selected={selectedCard} states={states} icons={icons} actions={actions}/>
             }
           ]
           }></Slides>
