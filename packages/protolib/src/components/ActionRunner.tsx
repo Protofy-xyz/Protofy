@@ -1,8 +1,9 @@
-import { Button, Input, Paragraph, XStack, YStack, Tooltip } from '@my/ui';
+import { Button, Input, Paragraph, XStack, YStack, Tooltip, Spinner } from '@my/ui';
 import React from 'react';
 
 export const ActionRunner = ({ name, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)' }) => {
     const [params, setParams] = React.useState({})
+    const [loading, setLoading] = React.useState(false)
     return <XStack f={1} width="100%">
         <YStack f={1} alignItems="center" justifyContent="center">
             {Object.keys(actionParams).map((key) => {
@@ -39,7 +40,7 @@ export const ActionRunner = ({ name, caption = "Run", description = "", actionPa
                             maskPosition: "center",
                             WebkitMaskPosition: "center"
                         }} />}
-                        <Button pressStyle={{filter: "brightness(0.95)", backgroundColor: color}} hoverStyle={{backgroundColor:color, filter: "brightness(1.1)"}} backgroundColor={color} mt={"$3"} width="100%" className="no-drag" onPress={() => {
+                        <Button pressStyle={{filter: "brightness(0.95)", backgroundColor: color}} hoverStyle={{backgroundColor:color, filter: "brightness(1.1)"}} backgroundColor={color} mt={"$3"} width="100%" className="no-drag" onPress={async () => {
                             //actionData.automationParams is a key value object where the key is the name of the parameter and the value is the description
                             //if there are parameters, they should be included in the query parameters of the request
                             //if a parameter is missing, remove it from the query parameters
@@ -49,11 +50,16 @@ export const ActionRunner = ({ name, caption = "Run", description = "", actionPa
                                     cleanedParams[key] = params[key]
                                 }
                             }
-                            onRun(name, cleanedParams)
+                            setLoading(true)
+                            try {
+                                await onRun(name, cleanedParams)
+                            } catch(e) {} finally {
+                                setLoading(false)
+                            }
                         }}
                         // icon={icon}
                         >
-                            {caption}
+                            {loading? <Spinner /> : caption}
                         </Button>
                     </YStack>
                 </Tooltip.Trigger>

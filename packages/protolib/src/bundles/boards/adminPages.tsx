@@ -177,8 +177,8 @@ const Board = ({ board, icons }) => {
           setIsEditing(true)
           setCurrentCard(item)
           setEditedCard(item)
-        }} onRun={(key, params) => {
-          console.log('Running action: ', key, params);
+        }} onRun={async (name, params) => {
+          await API.post(`/api/core/v1/boards/${board.name}/actions/${name}`, params)
         }} />
       }
     }

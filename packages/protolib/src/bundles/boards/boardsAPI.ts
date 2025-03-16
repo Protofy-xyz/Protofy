@@ -4,6 +4,7 @@ import { API, getLogger, ProtoMemDB, set } from 'protobase'
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
+import { getServiceToken } from "protonode";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 500 //in miliseconds
@@ -21,6 +22,8 @@ async function acquireLock(filePath) {
 function releaseLock(filePath) {
     writeLocks.delete(filePath);
 }
+
+const token = getServiceToken()
 
 const getBoards = async () => {
     try {
@@ -216,6 +219,48 @@ export const BoardsAPI = (app, context) => {
         console.log('REPLY: ', reply)
         const jsCode = reply.choices[0].message.content
         res.send({ jsCode })
+    })
+
+    app.post('/api/core/v1/boards/:boardId/actions/:action', async (req, res) => {
+        try {
+            const board = await getBoard(req.params.boardId);
+            if (!board.cards || !Array.isArray(board.cards)) {
+                res.send({ error: "No actions found" });
+                return;
+            }
+
+            const action = board.cards.find(a => a.name === req.params.action && a.type === 'action');
+            if (!action) {
+                res.send({ error: "Action not found" });
+                return;
+            }
+
+            if (!action.rulesCode) {
+                res.send({ error: "No code found for action" });
+                return;
+            }
+
+            const states = await context.state.getStateTree();
+            const wrapper = new Function('states', 'userParams', 'token', 'API', `
+                ${action.rulesCode}
+                async function execute_action(url, params) {
+                    console.log('Executing action: ', url, params);
+                    const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
+                    const response = await API.get(url+'?token='+token+'&'+paramsStr);
+                    return response.data
+                }
+                return perform_actions(states, userParams);
+            `);
+
+            const response = await wrapper(states, req.body, token, API);
+            res.send(response);
+        } catch (error) {
+            if (error instanceof HttpError) {
+                res.status(error.status).send({ error: error.message });
+            } else {
+                res.status(500).send({ error: error.message });
+            }
+        }
     })
 
     app.get('/api/core/v1/boards/:boardId', async (req, res) => {
