@@ -5,7 +5,7 @@ import { DataView } from '../../components/DataView'
 import { AdminPage } from '../../components/AdminPage'
 import moment from 'moment'
 import { ClipboardList } from '@tamagui/lucide-icons';
-import { JSONViewer } from '../../components/jsonui'
+import { JSONView } from '../../components/JSONView'
 import { usePrompt } from '../../context/PromptAtom'
 import { SSR } from '../../lib/SSR';
 import { withSession } from '../../lib/Session';
@@ -45,13 +45,9 @@ export default {
                         DataTable2.column("user", row => row.user, "user", undefined, true, '200px'),
                         DataTable2.column("from", row => row.from, "from", (row) => <Chip key={row.rowId} text={row.from} color={'$gray5'} />, true),
                         DataTable2.column("created", row => row.created, "created", (row) => moment(row.created).format(format), true, '200px'),
-                        DataTable2.column("inspect", row => row.payload, false, (row) => <JSONViewer
-                            onChange={() => { }}
-                            editable={false}
-                            data={row.payload}
-                            collapsible
-                            compact={false}
-                            defaultCollapsed={true}
+                        DataTable2.column("inspect", row => row.payload, false, (row) => <JSONView
+                            collapsed={true}
+                            src={row.payload}
                         />)
                     )}
                     // hideAdd={true}
