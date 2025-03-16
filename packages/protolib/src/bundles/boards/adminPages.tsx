@@ -128,13 +128,16 @@ const Board = ({ board, icons }) => {
     'action': 'zap'
   }
 
-  const addWidget = async (type) => {
-    const rnd = Math.floor(Math.random() * 100000)
-    const newItems = [...items, { key: type + '_' + rnd, type, width: 1, height: 6, name: type, icon: iconTable[type] }].filter(item => item.key != 'addwidget')
-    setItems(newItems)
-    boardRef.current.cards = newItems
-    API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-  }
+  const addWidget = async (card) => {
+    setItems(prevItems => {
+      const uniqueKey = card.type + '_' + Date.now();
+      const newCard = { ...card, key: uniqueKey }
+      const newItems = [...prevItems, newCard].filter(item => item.key !== 'addwidget');
+      boardRef.current.cards = newItems;
+      API.post(`/api/core/v1/boards/${board.name}`, boardRef.current);
+      return newItems;
+    });
+  };
 
   //fill items with react content, addWidget should be the last item
   const cards = items.map((item) => {

@@ -7,48 +7,58 @@ import { ValueCardSettings } from '../autopilot/ValueCardSettings';
 import { ActionCardSettings } from '../autopilot/ActionCardSettings';
 
 const SelectGrid = ({ children }) => {
-    return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
-        {children}
-    </XStack>
-  }
+  return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
+    {children}
+  </XStack>
+}
 
 const FirstSlide = ({ selected, setSelected, options }) => {
-    const themeName = useThemeName();
-    return <YStack>
-        <ScrollView mah={"500px"}>
-            <SelectGrid>
-                {options.map((option) => (
-                    <TemplatePreview
-                        from="boards"
-                        theme={themeName}
-                        template={option}
-                        isSelected={selected === option.id}
-                        onPress={() => setSelected(option.id)}
-                    />
-                ))}
-            </SelectGrid>
-        </ScrollView>
-        <Spacer marginBottom="$8" />
-    </YStack>
-  }
-  const SecondSlide = ({ selected, states, icons, actions }) => {
-    const rnd = Math.floor(Math.random() * 100000)
-    const iconTable = {
-      'value': 'tag',
-      'action': 'zap'
-    }
-    const card = { key: selected + '_' + rnd, selected, width: 1, height: 6, name: selected, icon: iconTable[selected] }
-    return <YStack>
-        <ScrollView mah={"500px"}>
-            {selected=="value" ? <ValueCardSettings states={states} icons={icons} card={card} /> : <ActionCardSettings states={states} icons={icons} card={card} actions={actions}/>}
-        </ScrollView>
-        <Spacer marginBottom="$8" />
-    </YStack>
-  }
+  const themeName = useThemeName();
+  return <YStack>
+    <ScrollView mah={"500px"}>
+      <SelectGrid>
+        {options.map((option) => (
+          <TemplatePreview
+            from="boards"
+            theme={themeName}
+            template={option}
+            isSelected={selected === option.id}
+            onPress={() => setSelected(option.id)}
+          />
+        ))}
+      </SelectGrid>
+    </ScrollView>
+    <Spacer marginBottom="$8" />
+  </YStack>
+}
+
+const iconTable = {
+  'value': 'tag',
+  'action': 'zap'
+}
+
+const SecondSlide = ({ selected, states, icons, actions, setCard }) => {
+  const emptyCard = { key: "key", type: selected, width: 1, height: 6, name: selected, icon: iconTable[selected] }
+
+  return <YStack>
+    <ScrollView mah={"500px"}>
+      {selected == "value" ?
+        <ValueCardSettings states={states} icons={icons} card={emptyCard} onEdit={(data) => {
+          setCard(data)
+        }}/> :
+        <ActionCardSettings states={states} icons={icons} card={emptyCard} actions={actions} onEdit={(data) => {
+          setCard(data)
+        }}/>}
+    </ScrollView>
+    <Spacer marginBottom="$8" />
+  </YStack>
+}
 
 export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
-    const [selectedCard, setSelectedCard] = useState('value')
-    return       <AlertDialog
+  const [selectedCard, setSelectedCard] = useState('value')
+  const [card, setCard] = useState({ key: "key", type:selectedCard, width: 1, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
+
+  return <AlertDialog
     integratedChat
     p={"$2"}
     pt="$5"
@@ -61,10 +71,10 @@ export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states,
     <YStack f={1} jc="center" ai="center">
       <XStack mr="$5">
         <Slides
-        widthContainer={1200}
+          widthContainer={1200}
           lastButtonCaption="Create"
           onFinish={async () => {
-            await onFinish(selectedCard)
+            await onFinish(card)
             setAddOpened(false)
           }}
           slides={[
@@ -76,7 +86,7 @@ export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states,
             {
               name: "Configure your widget",
               title: "Configure your widget",
-              component: <SecondSlide selected={selectedCard} states={states} icons={icons} actions={actions}/>
+              component: <SecondSlide selected={selectedCard} states={states} icons={icons} actions={actions} card={card} setCard={setCard} />
             }
           ]
           }></Slides>
