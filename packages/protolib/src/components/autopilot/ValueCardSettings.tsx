@@ -1,11 +1,9 @@
-import { BookOpenText, ExternalLink, Cog, Palette, Type } from '@tamagui/lucide-icons'
-import { YStack, XStack, Input, Label } from '@my/ui'
+import { Cog } from '@tamagui/lucide-icons'
+import { YStack, Label } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
-import { InputColor } from '../InputColor'
-import { InteractiveIcon } from '../InteractiveIcon'
-import { IconSelect } from '../IconSelect'
 import { RuleEditor } from './RuleEditor'
+import { CardSettings } from './CardSettings'
 
 
 export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
@@ -18,52 +16,7 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
     return (
         <YStack space="$4" padding="$4">
             <Tinted>
-                <XStack alignItems="center" space="$8" width="100%">
-                    <YStack flex={1}>
-                        <Label size={"$5"}> <Type color={"$color8"} mr="$2" />Title</Label>
-                        <Input
-                            value={cardData.name}
-                            onChange={(e) =>
-                                setCardData({
-                                    ...cardData,
-                                    name: e.target.value,
-                                })
-                            }
-                        />
-                    </YStack>
-                    <YStack flex={1}>
-                        <XStack alignItems="center" space="$2">
-                            <Label size={"$5"}><BookOpenText color={"$color8"} mr="$2" />Icon</Label>
-
-                        </XStack>
-                        <XStack alignItems="center" space="$2">
-                            <a href="https://lucide.dev/icons/" target="_blank" rel="noreferrer">
-                                <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
-                            </a>
-                            <IconSelect
-                                icons={icons}
-                                onSelect={(icon) => {
-                                    setCardData({
-                                        ...cardData,
-                                        icon,
-                                    });
-                                }}
-                                selected={cardData.icon}
-                            />
-                        </XStack>
-
-                    </YStack>
-                    <YStack flex={1}>
-                        <Label size={"$5"}><Palette color={"$color8"} mr="$2" />Color</Label>
-                        <InputColor
-                            color={cardData.color}
-                            onChange={(e) =>
-                                setCardData({ ...cardData, color: e.hex })
-                            }
-                        />
-                    </YStack>
-                </XStack>
-
+            <CardSettings cardData={cardData} setCardData={setCardData} icons={icons} />
                 <YStack mt="$5" height={600}>
                     <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Value</Label>
                     <RuleEditor
