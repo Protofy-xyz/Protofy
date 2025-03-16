@@ -57,6 +57,7 @@ export const addAction = async (options: {
             }, getServiceToken())
         }
     } else {
+        ProtoMemDB(chunk).set(group, tag, name, content)
         // console.log('setting locally', value, 'for', group, tag, name)
         if(options.emitEvent) {
             // console.log('emitting event in: '+`${chunk}/${group}/${tag}/${name}/update`)
@@ -67,6 +68,5 @@ export const addAction = async (options: {
                 payload: content,
             }, getServiceToken())
         }
-        return ProtoMemDB(chunk).set(group, tag, name, content)
     }
 }

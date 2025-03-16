@@ -5,6 +5,8 @@ import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { getServiceToken } from "protonode";
+import {addAction} from '../actions/context/addAction';
+import { removeActions } from "../actions/context/removeActions";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 500 //in miliseconds
@@ -105,8 +107,26 @@ const getDB = (path, req, session) => {
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
 
             await acquireLock(filePath);
+            removeActions({ group: 'boards', tag: key })
             try {
                 await fs.writeFile(filePath, JSON.stringify(value, null, 4))
+                //register actions for each card
+                if (value.cards && Array.isArray(value.cards)) {
+                    const actionsCards = value.cards.filter(c => c.type === 'action')
+                    for (let i = 0; i < actionsCards.length; i++) {
+                        const card = actionsCards[i];
+                        console.log("Adding action: ", JSON.stringify(card, null, 4)) 
+                        addAction({
+                            group: 'boards',
+                            name: card.name,
+                            url: "/api/core/v1/boards/"+key+"/actions/"+card.name,
+                            tag: key,
+                            description: card.description ?? "",
+                            params: card.params ?? {},
+                            emitEvent: i === actionsCards.length - 1
+                        })
+                    }
+                }
             } catch (error) {
                 console.error("Error creating file: " + filePath, error)
             } finally {
@@ -275,7 +295,7 @@ export const BoardsAPI = (app, context) => {
     })
 
 
-    app.post('/api/core/v1/boards/:boardId/actions/:action', async (req, res) => {
+    app.get('/api/core/v1/boards/:boardId/actions/:action', async (req, res) => {
         try {
             const board = await getBoard(req.params.boardId);
             if (!board.cards || !Array.isArray(board.cards)) {
@@ -300,15 +320,17 @@ export const BoardsAPI = (app, context) => {
                 async function execute_action(url, params={}) {
                     console.log('Executing action: ', url, params);
                     const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
+                    console.log('url: ', url+'?token='+token+'&'+paramsStr)
                     const response = await API.get(url+'?token='+token+'&'+paramsStr);
                     return response.data
                 }
                 return perform_actions(states, userParams);
             `);
 
-            const response = await wrapper(states, req.body, token, API);
-            res.send(response);
+            const response = await wrapper(states, req.query, token, API);
+            res.send({response: response});
         } catch (error) {
+            logger.error({ error }, "Error executing action");
             if (error instanceof HttpError) {
                 res.status(error.status).send({ error: error.message });
             } else {
