@@ -1,6 +1,7 @@
 
 import { XStack, YStack, Text, ScrollView, Popover, Input } from 'tamagui'
 import { JSONViewer } from './jsonui'
+import {JSONView} from './JSONView'
 import { useTint } from '../lib/Tints'
 import { GroupButton } from './GroupButton'
 import { ButtonGroup } from './ButtonGroup'
@@ -44,15 +45,8 @@ const MessageList = React.memo(({ data, topic }: any) => {
                     <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{msg}</Text>
                 </XStack>
             </XStack>
-            <JSONViewer
-                onChange={() => { }}
-                editable={false}
-                data={cleanData}
-                key={JSON.stringify(cleanData)}
-                collapsible
-                compact={false}
-                defaultCollapsed={false}
-            //collapsedNodes={{0:{root: true}}}
+            <JSONView
+                src={cleanData}
             />
         </YStack>
     </XStack>
