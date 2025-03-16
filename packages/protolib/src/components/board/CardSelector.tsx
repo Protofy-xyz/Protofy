@@ -41,7 +41,6 @@ const SecondSlide = ({ selected, states, icons, actions, setCard }) => {
   const emptyCard = { key: "key", type: selected, width: 1, height: 6, name: selected, icon: iconTable[selected] }
 
   return <YStack>
-    <ScrollView mah={"500px"}>
       {selected == "value" ?
         <ValueCardSettings states={states} icons={icons} card={emptyCard} onEdit={(data) => {
           setCard(data)
@@ -49,7 +48,6 @@ const SecondSlide = ({ selected, states, icons, actions, setCard }) => {
         <ActionCardSettings states={states} icons={icons} card={emptyCard} actions={actions} onEdit={(data) => {
           setCard(data)
         }}/>}
-    </ScrollView>
     <Spacer marginBottom="$8" />
   </YStack>
 }
@@ -71,7 +69,7 @@ export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states,
     <YStack f={1} jc="center" ai="center">
       <XStack mr="$5">
         <Slides
-          widthContainer={1200}
+          styles={{ w: 1400, mah: 1200 }}
           lastButtonCaption="Create"
           onFinish={async () => {
             await onFinish(card)
