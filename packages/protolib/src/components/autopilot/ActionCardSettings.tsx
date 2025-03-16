@@ -65,7 +65,13 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
           <YStack mt="$5" height={600}>
             <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Actions</Label>
             <RuleEditor
-              states={actions}
+              extraCompilerData={{userParams: cardData.params, actions: actions}}
+              onCodeChange={(cardData, states) => {
+                  return "rules processed"
+              }}
+              displayInput={actions}
+              compiler='getActionCode'
+              states={states}
               cardData={cardData}
               setCardData={setCardData}
             />

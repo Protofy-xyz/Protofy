@@ -10,7 +10,7 @@ export const chatGPTSession = async ({
     done = (response, message) => { },
     chunk = (chunk:any) => { },
     error = (error) => { },
-    model = "gpt-4-turbo",
+    model = "gpt-4",
     max_tokens = 4096,
     ...props
 }: ChatGPTRequest) => {

@@ -3,18 +3,19 @@ import { useEffect, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { AutopilotEditor } from './AutopilotEditor'
 
-export const RuleEditor = ({ states, cardData, setCardData }) => {
+export const RuleEditor = ({ displayInput, states, cardData, setCardData, compiler, onCodeChange, extraCompilerData={} }) => {
     const [hasCode, setHasCode] = useState(cardData.rulesCode !== undefined)
     const [value, setValue] = useState()
   
     const getRulesCode = async (force?) => {
       if ((!hasCode || force) && cardData.rules && cardData.rules.length > 0) {
         setHasCode(false)
-        const code = await API.post('/api/core/v1/autopilot/getValueCode', { states, rules: cardData.rules })
+        const code = await API.post('/api/core/v1/autopilot/'+compiler, { states, rules: cardData.rules, ...extraCompilerData })
         if (!code?.data?.jsCode) return
         setCardData({
           ...cardData,
-          rulesCode: code.data.jsCode
+          rulesCode: code.data.jsCode,
+          rulesExplained: code.data?.explanation
         })
         setHasCode(true)
       }
@@ -27,12 +28,7 @@ export const RuleEditor = ({ states, cardData, setCardData }) => {
     useEffect(() => {
       if (cardData.rulesCode) {
         try {
-          console.log('new rules code, executing...', cardData.rulesCode, states)
-          const wrapper = new Function('states', `
-            ${cardData.rulesCode}
-            return reduce_state_obj(states);
-          `);
-          let value = wrapper(states);
+          const value = onCodeChange(cardData, states)
           console.log('got value: ', value)
           setValue(value)
         } catch(e) {}
@@ -49,7 +45,7 @@ export const RuleEditor = ({ states, cardData, setCardData }) => {
         ...cardData,
         rulesCode
       })
-    }} rulesCode={cardData.rulesCode} data={states} rules={cardData.rules ?? []} value={value} onDeleteRule={(index) => {
+    }} rulesCode={cardData.rulesCode} data={displayInput} rules={cardData.rules ?? []} value={value} onDeleteRule={(index) => {
       setCardData({
         ...cardData,
         rules: cardData.rules?.filter((_, i) => i !== index)
