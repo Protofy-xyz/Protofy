@@ -99,7 +99,7 @@ const Board = ({ board, icons }) => {
     console.log('Board states: ', states)
     console.log('///////////////////////////////////////////////////////')
     reloadBoard()
-  }, [states])
+  }, [states, actions])
 
   const boardRef = React.useRef(board)
 

@@ -43,19 +43,20 @@ export const setContext = async (options: {
                 from: "states",
                 user: 'system',
                 payload:{value: value},
+                ephemeral: true
             }, getServiceToken())
         }
     } else {
+        ProtoMemDB(chunk).set(group, tag, name, value)
         // console.log('setting locally', value, 'for', group, tag, name)
         if(options.emitEvent) {
-            // console.log('emitting event in: '+`${chunk}/${group}/${tag}/${name}/update`)
             generateEvent({
                 path: `${chunk}/${group}/${tag}/${name}/update`, 
                 from: "states",
                 user: 'system',
                 payload:{value: value},
+                ephemeral: true
             }, getServiceToken())
         }
-        return ProtoMemDB(chunk).set(group, tag, name, value)
     }
 }

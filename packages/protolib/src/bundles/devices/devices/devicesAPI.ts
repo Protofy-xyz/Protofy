@@ -201,7 +201,7 @@ export const DevicesAPI = (app, context) => {
             parsedMessage = JSON.parse(message);
         } catch (err) { }
         if (endpoint == 'debug') {
-            logger.debug({ from: device, deviceName, endpoint }, JSON.stringify({topic, message}))
+            logger.trace({ from: device, deviceName, endpoint }, JSON.stringify({topic, message}))
         } else {
             const db = getDB('devices')
             const deviceInfo = DevicesModel.load(JSON.parse(await db.get(deviceName)))
