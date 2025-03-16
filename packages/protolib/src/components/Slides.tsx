@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Tinted } from './Tinted'
 
 
-export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages" }) => {
+export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages", widthContainer=800}) => {
     const [step, setStep] = useState(0)
     const totalSlides = slides.length
     const prev_step = step > 1 ? step - 1 : 0
@@ -15,7 +15,7 @@ export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages" }) =>
         .join(" / ");
 
     return (
-        <YStack id="admin-dataview-create-dlg" w={800} mah={700} p="$3" f={1}>
+        <YStack id="admin-dataview-create-dlg" w={widthContainer} mah={700} p="$3" f={1}>
             <XStack id="admin-eo" mt="$4" justifyContent="space-between" width="100%">
                 <Stack flex={1}>
                     <Text fontWeight={"500"} fontSize={16} color="$gray9">{titlesUpToCurrentStep}</Text>
