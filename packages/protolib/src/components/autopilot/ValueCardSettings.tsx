@@ -67,6 +67,17 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                 <YStack mt="$5" height={600}>
                     <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Value</Label>
                     <RuleEditor
+                        displayInput={states}
+                        onCodeChange={(cardData, states) => {
+                            console.log('new rules code, executing...', cardData, states)
+                            const wrapper = new Function('states', `
+                              ${cardData.rulesCode}
+                              return reduce_state_obj(states);
+                            `);
+                            let value = wrapper(states);
+                            return value
+                        }}
+                        compiler='getValueCode'
                         states={states}
                         cardData={cardData}
                         setCardData={setCardData}

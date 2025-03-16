@@ -9,6 +9,7 @@ import { getServiceToken } from "protonode";
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 500 //in miliseconds
 
+const useChatGPT = true
 const writeLocks = new Map();
 const logger = getLogger()
 
@@ -215,11 +216,62 @@ export const BoardsAPI = (app, context) => {
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }
-        let reply = await context.lmstudio.chatWithModel(prompt, 'arcee-ai_virtuoso-small-v2')
+        let reply;
+        if(useChatGPT) {
+            reply = await context.chatGPT.chatGPTPrompt({
+                message: prompt
+              })
+              reply = {
+                choices: [
+                  {
+                    message: {
+                      content: reply[0]
+                    }
+                  }
+                ]
+              }
+        } else {
+            reply = await context.lmstudio.chatWithModel(prompt, 'arcee-ai_virtuoso-small-v2')
+        }
         console.log('REPLY: ', reply)
         const jsCode = reply.choices[0].message.content
         res.send({ jsCode })
     })
+
+    /*
+    async function perform_actions(states, userParams) { 
+        await execute_action('/api/v1/automations/test', userParams
+    )}
+    */
+    app.post('/api/core/v1/autopilot/getActionCode', async (req, res) => {
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "actionRulesV2", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4),  userParams: JSON.stringify(req.body.userParams, null, 4) });
+        // if (req.query.debug) {
+            console.log("Prompt: ", prompt)
+        // }
+        let reply;
+        if(useChatGPT) {
+            reply = await context.chatGPT.chatGPTPrompt({
+                message: prompt
+              })
+              reply = {
+                choices: [
+                  {
+                    message: {
+                      content: reply[0]
+                    }
+                  }
+                ]
+              }
+        } else {
+            reply = await context.lmstudio.chatWithModel(prompt, 'arcee-ai_virtuoso-small-v2')
+        }
+
+        console.log('REPLY: ', reply)
+        const jsCode = reply.choices[0].message.content
+        
+        res.send({ jsCode })
+    })
+
 
     app.post('/api/core/v1/boards/:boardId/actions/:action', async (req, res) => {
         try {
@@ -243,7 +295,7 @@ export const BoardsAPI = (app, context) => {
             const states = await context.state.getStateTree();
             const wrapper = new Function('states', 'userParams', 'token', 'API', `
                 ${action.rulesCode}
-                async function execute_action(url, params) {
+                async function execute_action(url, params={}) {
                     console.log('Executing action: ', url, params);
                     const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
                     const response = await API.get(url+'?token='+token+'&'+paramsStr);
