@@ -30,7 +30,6 @@ export const useProtoStates = (initialState, filter='states/#', chunk='states') 
 
   useEventEffect(
     (payload, msg) => {
-      console.log('event: ', msg)
       if (timer.current) return;
 
       timer.current = setTimeout(() => {

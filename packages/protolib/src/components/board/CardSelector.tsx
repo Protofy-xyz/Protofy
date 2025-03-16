@@ -38,7 +38,7 @@ const iconTable = {
 }
 
 const SecondSlide = ({ selected, states, icons, actions, setCard }) => {
-  const emptyCard = { key: "key", type: selected, width: 1, height: 6, name: selected, icon: iconTable[selected] }
+  const emptyCard = { key: "key", type: selected, width: 2, height: 6, name: selected, icon: iconTable[selected] }
 
   return <YStack>
       {selected == "value" ?
@@ -54,7 +54,7 @@ const SecondSlide = ({ selected, states, icons, actions, setCard }) => {
 
 export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
   const [selectedCard, setSelectedCard] = useState('value')
-  const [card, setCard] = useState({ key: "key", type:selectedCard, width: 1, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
+  const [card, setCard] = useState({ key: "key", type:selectedCard, width: 2, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
 
   return <AlertDialog
     integratedChat
