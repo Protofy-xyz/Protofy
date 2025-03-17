@@ -8,7 +8,7 @@ import { useState, useRef } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 
 
-export const RulesSideMenu = ({ boardRef, board }) => {
+export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
     const [tab, setTab] = useState("rules");
     const { resolvedTheme } = useThemeSetting();
     const [savedRules, setSavedRules] = useState(board.rules)

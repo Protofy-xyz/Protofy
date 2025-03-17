@@ -289,7 +289,7 @@ const Board = ({ board, icons }) => {
           />
         </YStack>
         {
-          rulesOpened && <RulesSideMenu boardRef={boardRef} board={board}></RulesSideMenu>
+          rulesOpened && <RulesSideMenu boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>
         }
       </XStack>
 
