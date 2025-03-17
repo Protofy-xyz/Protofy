@@ -255,7 +255,7 @@ export const BoardsAPI = (app, context) => {
 
         if(autopilotState[boardId] && fileContent.rulesCode) {
             //evalute board autopilot rules
-            const wrapper = new Function('states', `
+            const wrapper = new Function('states', 'token', 'API', `
                 ${fileContent.rulesCode}
                 async function execute_action(url, params={}) {
                     console.log('Executing action from board: ', url, params);
@@ -266,7 +266,7 @@ export const BoardsAPI = (app, context) => {
                 }
                 return process_board(states);
             `);
-            await wrapper(states);
+            await wrapper(states, token, API);
         }
 
         return fileContent;

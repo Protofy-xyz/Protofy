@@ -1,6 +1,6 @@
 import { BookOpen, Bot, Plus, Settings, Sparkles, Tag, Trash2 } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
-import { API } from 'protobase'
+import { API, set } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
 import { DataView, DataViewActionButton } from "../../components/DataView"
 import { AdminPage } from "../../components/AdminPage"
@@ -79,6 +79,8 @@ const Board = ({ board, icons }) => {
   const [rulesOpened, setRulesOpened] = useState(false)
   const [tab, setTab] = useState("rules");
   const { resolvedTheme } = useThemeSetting();
+  const [savedRules, setSavedRules] = useState(board.rules)
+  const [savedCode, setSavedCode] = useState(board.rulesCode)
 
   const availableCards = [{
     name: 'Display value',
@@ -304,13 +306,25 @@ const Board = ({ board, icons }) => {
               {(tab == 'rules' || !tab) && (
                 <YStack flex={1}>
                   <Rules
-                    rules={boardRef.current?.rules ?? []}
-                    onAddRule={(e, rule) => { }}
-                    onDeleteRule={(index) => { }}
+                    rules={savedRules ?? []}
+                    onAddRule={(e, rule) => {
+                      setSavedRules([...(savedRules ?? []), rule])
+                    }}
+                    onDeleteRule={(index) => {
+                      setSavedRules(savedRules.filter((_, i) => i != index))
+                    }}
                     loadingIndex={-1}
                   />
                   <YStack mt="auto" pt="$3">
                     <Button onPress={async () => {
+                      boardRef.current.rules = savedRules
+                      const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states, actions })
+                      if(rulesCode.status == 'loaded') {
+                        setSavedCode(rulesCode.data.jsCode)
+                      }
+                      boardRef.current.rulesCode = savedCode
+                      await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+
                       // boardRef.current.rules = []
                       // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                     }}>
@@ -326,11 +340,14 @@ const Board = ({ board, icons }) => {
                     path={'rules.ts'}
                     darkMode={resolvedTheme === 'dark'}
                     sourceCode={boardRef.current?.rulesCode}
-                    onChange={(index) => { }}
+                    onChange={(text) => {
+                      setSavedCode(text)
+                    }}
                   />
                   <YStack mt="auto" pt="$3">
                     <Button onPress={() => {
-                      console.log("Guardar código...")
+                      boardRef.current.rulesCode = savedCode
+                      API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                     }}>
                       Save Code
                     </Button>
