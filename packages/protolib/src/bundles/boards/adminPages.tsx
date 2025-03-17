@@ -318,7 +318,13 @@ const Board = ({ board, icons }) => {
                   <YStack mt="auto" pt="$3">
                     <Button onPress={async () => {
                       boardRef.current.rules = savedRules
+                      const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states, actions })
+                      if(rulesCode.status == 'loaded') {
+                        setSavedCode(rulesCode.data.jsCode)
+                      }
+                      boardRef.current.rulesCode = savedCode
                       await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+
                       // boardRef.current.rules = []
                       // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                     }}>
