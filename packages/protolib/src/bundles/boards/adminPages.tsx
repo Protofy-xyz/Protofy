@@ -12,7 +12,7 @@ import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
 import { CardValue, CenterCard } from '../widgets'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
 import React from 'react'
@@ -80,7 +80,7 @@ const Board = ({ board, icons }) => {
   const [tab, setTab] = useState("rules");
   const { resolvedTheme } = useThemeSetting();
   const [savedRules, setSavedRules] = useState(board.rules)
-  const [savedCode, setSavedCode] = useState(board.rulesCode)
+  const savedCode = useRef(board.rulesCode)
   const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
 
   const availableCards = [{
@@ -322,10 +322,8 @@ const Board = ({ board, icons }) => {
                       try {
                         boardRef.current.rules = savedRules
                         const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: states.boards[board.name], actions: actions.boards[board.name] })
-                        if(rulesCode.status == 'loaded') {
-                          setSavedCode(rulesCode.data.jsCode)
-                        }
-                        boardRef.current.rulesCode = savedCode
+                        boardRef.current.rulesCode = rulesCode.data.jsCode
+                        savedCode.current = rulesCode.data.jsCode
                         await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
   
                         // boardRef.current.rules = []
@@ -347,14 +345,14 @@ const Board = ({ board, icons }) => {
                   <Monaco
                     path={'rules.ts'}
                     darkMode={resolvedTheme === 'dark'}
-                    sourceCode={boardRef.current?.rulesCode}
+                    sourceCode={savedCode.current}
                     onChange={(text) => {
-                      setSavedCode(text)
+                      savedCode.current = text
                     }}
                   />
                   <YStack mt="auto" pt="$3">
                     <Button onPress={() => {
-                      boardRef.current.rulesCode = savedCode
+                      boardRef.current.rulesCode = savedCode.current
                       API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                     }}>
                       Save Code
