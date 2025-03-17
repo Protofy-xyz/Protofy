@@ -15,6 +15,13 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
         onEdit(cardData);
     }, [cardData, onEdit]);
 
+    const setHTMLCode = (code) => {
+        setCardData({
+            ...cardData,
+            html: code,
+        })
+    }
+
     return (
         <YStack space="$4" padding="$4">
             <Tinted>
@@ -44,7 +51,7 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                             cardData={cardData}
                             setCardData={setCardData}
                         />}
-                        {tab == 'view' && <HTMLEditor/>}
+                        {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html}/>}
                     </Tinted>
 
                 </YStack>
