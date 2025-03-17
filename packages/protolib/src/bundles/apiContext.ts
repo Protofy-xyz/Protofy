@@ -26,6 +26,8 @@ import lmstudio from './lmstudio/context'
 import protomemdb from './protomemdb/context'
 import autopilot from './autopilot/context'
 import chatbots from './chatbots/context'
+import twilio from './twilio/context'
+
 
 export const APIContext = {
     onEvent,
@@ -62,5 +64,6 @@ export const APIContext = {
     lmstudio,
     protomemdb,
     autopilot,
-    chatbots
+    chatbots,
+    twilio
 }

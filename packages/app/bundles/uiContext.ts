@@ -4,6 +4,7 @@ import deviceContext from 'protolib/bundles/devices/devices/uiContext'
 import object from 'protolib/bundles/objects/context'
 import os from 'protolib/bundles/os/context'
 import flow2 from 'protolib/bundles/flow/contextV2'
+import twilio from 'protolib/bundles/twilio/uiContext'
 
 export const context = {
     fetch,
@@ -14,5 +15,6 @@ export const context = {
     object,
     onRender,
     actionNavigate,
-    ...deviceContext
+    ...deviceContext,
+    twilio
 }
