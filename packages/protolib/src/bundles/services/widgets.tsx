@@ -64,11 +64,15 @@ export const BasicCard = ({ title, id, children }) => {
 
 export const CardValue = ({ Icon, value, html, color = "var(--color7)" }) => {
     const getHTML = (html) => {
-        const wrapper = new Function('value', `
-            ${html}
-            return getHTML(value);
-        `);
-        return wrapper(value);
+        try {
+            const wrapper = new Function('value', `
+                ${html}
+            `);
+            return wrapper(value);
+        } catch(e) {
+            console.error(e);
+            return '';
+        }
     }
     return (
         <YStack alignItems='center' justifyContent='center'>
