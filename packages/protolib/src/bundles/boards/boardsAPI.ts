@@ -258,9 +258,9 @@ export const BoardsAPI = (app, context) => {
             const wrapper = new Function('states', 'token', 'API', `
                 ${fileContent.rulesCode}
                 async function execute_action(url, params={}) {
-                    console.log('Executing action from board: ', url, params);
+                    // console.log('Executing action from board: ', url, params);
                     const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
-                    console.log('url: ', url+'?token='+token+'&'+paramsStr)
+                    // console.log('url: ', url+'?token='+token+'&'+paramsStr)
                     const response = await API.get(url+'?token='+token+'&'+paramsStr);
                     return response.data
                 }
@@ -335,9 +335,9 @@ export const BoardsAPI = (app, context) => {
             const wrapper = new Function('states', 'userParams', 'token', 'API', `
                 ${action.rulesCode}
                 async function execute_action(url, params={}) {
-                    console.log('Executing action: ', url, params);
+                    // console.log('Executing action: ', url, params);
                     const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
-                    console.log('url: ', url+'?token='+token+'&'+paramsStr)
+                    // console.log('url: ', url+'?token='+token+'&'+paramsStr)
                     const response = await API.get(url+'?token='+token+'&'+paramsStr);
                     return response.data
                 }
