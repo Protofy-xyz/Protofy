@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, ToggleGroup } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, ToggleGroup, Button } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -294,29 +294,52 @@ const Board = ({ board, icons }) => {
         {
           rulesOpened && <YStack height="90%" w="600px" backgroundColor="$bgPanel" p="$3" btlr={9} bblr={9}>
             <Tinted>
-              <XStack width={"100%"} pt="$0" pr="$1" pb="$2" jc="center">
+              {/* Toggle de Tabs */}
+              <XStack width="100%" pt="$0" pr="$1" pb="$2" jc="center">
                 <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
                   <ToggleGroup.Item value="rules">rules</ToggleGroup.Item>
                   <ToggleGroup.Item value="code">code</ToggleGroup.Item>
                 </ToggleGroup>
               </XStack>
-              <Tinted>
-                {(tab == 'rules' || !tab) && <Rules
-                  rules={boardRef.current?.rules ?? []}
-                  onAddRule={(e, rule) => { }}
-                  onDeleteRule={(index) => { }}
-                  loadingIndex={-1}
-                />}
-                {tab == 'code' && <Monaco
-                  path={'rules.ts'}
-                  darkMode={resolvedTheme === 'dark'}
-                  sourceCode={boardRef.current?.rulesCode}
-                  onChange={(index) => { }}
-                />}
-              </Tinted>
-              {/*  */}
+              {(tab == 'rules' || !tab) && (
+                <YStack flex={1}>
+                  <Rules
+                    rules={boardRef.current?.rules ?? []}
+                    onAddRule={(e, rule) => { }}
+                    onDeleteRule={(index) => { }}
+                    loadingIndex={-1}
+                  />
+                  <YStack mt="auto" pt="$3">
+                    <Button onPress={async () => {
+                      // boardRef.current.rules = []
+                      // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                    }}>
+                      Save
+                    </Button>
+                  </YStack>
+                </YStack>
+              )}
+
+              {tab == 'code' && (
+                <YStack flex={1}>
+                  <Monaco
+                    path={'rules.ts'}
+                    darkMode={resolvedTheme === 'dark'}
+                    sourceCode={boardRef.current?.rulesCode}
+                    onChange={(index) => { }}
+                  />
+                  <YStack mt="auto" pt="$3">
+                    <Button onPress={() => {
+                      console.log("Guardar código...")
+                    }}>
+                      Save Code
+                    </Button>
+                  </YStack>
+                </YStack>
+              )}
             </Tinted>
           </YStack>
+
         }
       </XStack>
 
