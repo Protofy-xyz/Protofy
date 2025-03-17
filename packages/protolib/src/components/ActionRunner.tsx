@@ -48,7 +48,7 @@ export const ActionRunner = ({ name, caption = "Run", description = "", actionPa
                                             ...params,
                                             [key]: text,
                                         })
-                                    }
+                                    } 
                                 />
                             </XStack>
                         </Tooltip.Trigger>
@@ -79,9 +79,7 @@ export const ActionRunner = ({ name, caption = "Run", description = "", actionPa
                             } catch (e) { } finally {
                                 setLoading(false)
                             }
-                        }}
-
-                        >
+                        }}>
                             {loading ? <Spinner /> : caption}
                         </Button>
                     </YStack>
