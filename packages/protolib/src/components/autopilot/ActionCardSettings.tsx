@@ -16,21 +16,21 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
   return (
     <YStack space="$4" padding="$4">
       <Tinted>
-      <YStack flex={1}>
-      <CardSettings cardData={cardData} setCardData={setCardData} icons={icons} />
-      <YStack flex={1}>
+        <YStack flex={1}>
+          <CardSettings cardData={cardData} setCardData={setCardData} icons={icons} />
+          <YStack flex={1}>
             <Label size={"$5"}> <Text color={"$color8"} mr="$2" />Description</Label>
             <Input
-                value={cardData.description}
-                onChange={(e) =>
-                    setCardData({
-                        ...cardData,
-                        description: e.target.value,
-                    })
-                }
+              value={cardData.description}
+              onChange={(e) =>
+                setCardData({
+                  ...cardData,
+                  description: e.target.value,
+                })
+              }
             />
+          </YStack>
         </YStack>
-    </YStack>
         <YStack mt="$5" height={600}>
           <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Actions</Label>
           <XStack width={"100%"} pt="$0" pr="$1" pb="$2" jc="center">
@@ -51,7 +51,12 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
               cardData={cardData}
               setCardData={setCardData}
             />}
-            {tab == 'params' && <ParamsEditor />}
+            {tab == 'params' && <ParamsEditor
+              params={cardData.params || []}
+              setParams={(newParams) =>
+                setCardData({ ...cardData, params: newParams })
+              }
+            />}
           </Tinted>
 
         </YStack>
