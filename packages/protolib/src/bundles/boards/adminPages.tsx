@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, ToggleGroup } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -22,6 +22,8 @@ import { ActionRunner } from '../../components/ActionRunner'
 import { ValueCardSettings } from '../../components/autopilot/ValueCardSettings'
 import { ActionCardSettings } from '../../components/autopilot/ActionCardSettings'
 import { Rules } from '../../components/autopilot/Rules'
+import { useThemeSetting } from '@tamagui/next-theme'
+import { Monaco } from '../../components/Monaco'
 
 const sourceUrl = '/api/core/v1/boards'
 
@@ -75,6 +77,8 @@ const Board = ({ board, icons }) => {
   const [editedCard, setEditedCard] = useState(null)
   const [autopilot, setAutopilot] = useState(board.autopilot)
   const [rulesOpened, setRulesOpened] = useState(false)
+  const [tab, setTab] = useState("rules");
+  const { resolvedTheme } = useThemeSetting();
 
   const availableCards = [{
     name: 'Display value',
@@ -203,7 +207,7 @@ const Board = ({ board, icons }) => {
               <Switch size="$2" checked={autopilot} onCheckedChange={async (checked) => {
                 setAutopilot(checked)
                 boardRef.current.autopilot = checked
-                await API.get(`/api/core/v1/boards/${board.name}/autopilot/${checked? 'on' : 'off'}`)
+                await API.get(`/api/core/v1/boards/${board.name}/autopilot/${checked ? 'on' : 'off'}`)
               }}>
                 <Switch.Thumb animation="bouncy" />
               </Switch>
@@ -288,16 +292,31 @@ const Board = ({ board, icons }) => {
           />
         </YStack>
         {
-          rulesOpened && <XStack height="90%" w="600px" backgroundColor="$bgPanel" p="$3" btlr={9} bblr={9}>
+          rulesOpened && <YStack height="90%" w="600px" backgroundColor="$bgPanel" p="$3" btlr={9} bblr={9}>
             <Tinted>
-              <Rules
-                rules={boardRef.current?.rules ?? []}
-                onAddRule={(e, rule) => { }}
-                onDeleteRule={(index) => { }}
-                loadingIndex={-1}
-              />
+              <XStack width={"100%"} pt="$0" pr="$1" pb="$2" jc="center">
+                <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
+                  <ToggleGroup.Item value="rules">rules</ToggleGroup.Item>
+                  <ToggleGroup.Item value="code">code</ToggleGroup.Item>
+                </ToggleGroup>
+              </XStack>
+              <Tinted>
+                {(tab == 'rules' || !tab) && <Rules
+                  rules={boardRef.current?.rules ?? []}
+                  onAddRule={(e, rule) => { }}
+                  onDeleteRule={(index) => { }}
+                  loadingIndex={-1}
+                />}
+                {tab == 'code' && <Monaco
+                  path={'rules.ts'}
+                  darkMode={resolvedTheme === 'dark'}
+                  sourceCode={boardRef.current?.rulesCode}
+                  onChange={(index) => { }}
+                />}
               </Tinted>
-          </XStack>
+              {/*  */}
+            </Tinted>
+          </YStack>
         }
       </XStack>
 
