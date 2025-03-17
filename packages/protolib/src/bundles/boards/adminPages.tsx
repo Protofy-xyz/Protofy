@@ -72,7 +72,7 @@ const Board = ({ board, icons }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [currentCard, setCurrentCard] = useState(null)
   const [editedCard, setEditedCard] = useState(null)
-  const [autopilot, setAutopilot] = useState(false)
+  const [autopilot, setAutopilot] = useState(board.autopilot)
   const [rulesOpened, setRulesOpened] = useState(false)
 
   const availableCards = [{
@@ -200,7 +200,7 @@ const Board = ({ board, icons }) => {
           <Tinted>
             <XStack ai="center" jc="center" mr="$5">
               <XStack mr="$3">
-                <XStack opacity={rulesOpened? 1.0: 0.6} hoverStyle={{ opacity: 1 }} pressStyle={{ opacity: 0.8 }} cursor="pointer" onPress={() => {
+                <XStack opacity={rulesOpened ? 1.0 : 0.6} hoverStyle={{ opacity: 1 }} pressStyle={{ opacity: 0.8 }} cursor="pointer" onPress={() => {
                   setRulesOpened(!rulesOpened)
                 }}>
                   <Sparkles size={25} color={autopilot ? "var(--color9)" : "var(--gray8)"} />
@@ -208,7 +208,11 @@ const Board = ({ board, icons }) => {
 
               </XStack>
               <Paragraph size="$3" fontWeight="400" mr="$4">Autopilot</Paragraph>
-              <Switch size="$2" checked={autopilot} onCheckedChange={(checked) => setAutopilot(checked)}>
+              <Switch size="$2" checked={autopilot} onCheckedChange={async (checked) => {
+                setAutopilot(checked)
+                boardRef.current.autopilot = checked
+                await API.get(`/api/core/v1/boards/${board.name}/autopilot/${checked? 'on' : 'off'}`)
+              }}>
                 <Switch.Thumb animation="bouncy" />
               </Switch>
             </XStack>

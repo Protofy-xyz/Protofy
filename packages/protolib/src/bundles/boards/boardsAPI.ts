@@ -9,11 +9,14 @@ import {addAction} from '../actions/context/addAction';
 import { removeActions } from "../actions/context/removeActions";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
-const BOARD_REFRESH_INTERVAL = 500 //in miliseconds
+const BOARD_REFRESH_INTERVAL = 1000 //in miliseconds
 
 const useChatGPT = true
 const writeLocks = new Map();
 const logger = getLogger()
+
+const processTable = {}
+const autopilotState = {}
 
 async function acquireLock(filePath) {
     while (writeLocks.has(filePath)) {
@@ -229,6 +232,22 @@ export const BoardsAPI = (app, context) => {
             }
         }
 
+        if(autopilotState[boardId] && fileContent.rulesCode) {
+            //evalute board autopilot rules
+            const wrapper = new Function('states', `
+                ${fileContent.rulesCode}
+                async function execute_action(url, params={}) {
+                    console.log('Executing action from board: ', url, params);
+                    const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
+                    console.log('url: ', url+'?token='+token+'&'+paramsStr)
+                    const response = await API.get(url+'?token='+token+'&'+paramsStr);
+                    return response.data
+                }
+                return process_board(states);
+            `);
+            await wrapper(states);
+        }
+
         return fileContent;
     };
 
@@ -356,6 +375,7 @@ export const BoardsAPI = (app, context) => {
                 }
             }
 
+            board.autopilot = autopilotState[req.params.boardId] ?? false;
             res.send(board)
         } catch (error) {
             if (error instanceof HttpError) {
@@ -366,11 +386,34 @@ export const BoardsAPI = (app, context) => {
         }
     })
 
+    app.get('/api/core/v1/boards/:boardId/autopilot/on', async (req, res) => {
+        const boardId = req.params.boardId;
+        autopilotState[boardId] = true;
+        res.send({ message: "Autopilot enabled for board: " + boardId });
+    })
+
+    app.get('/api/core/v1/boards/:boardId/autopilot/off', async (req, res) => {
+        const boardId = req.params.boardId;
+        autopilotState[boardId] = false;
+        res.send({ message: "Autopilot disabled for board: " + boardId });
+    })
+
     setInterval(async () => {
         const boards = await getBoards()
         // console.log("Boards: ", boards)
         for (const board of boards) {
-            await reloadBoard(board)
+            if(processTable[board]) {
+                console.log("Board already being processed: ", board)
+                continue;
+            }
+            processTable[board] = true
+            try {
+                await reloadBoard(board)
+            } catch (error) {
+                console.error("Error reloading board: ", board, error)
+            } finally {
+                processTable[board] = false
+            }
         }
     }, BOARD_REFRESH_INTERVAL)
 }
