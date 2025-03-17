@@ -25,8 +25,6 @@ import { Rules } from '../../components/autopilot/Rules'
 
 const sourceUrl = '/api/core/v1/boards'
 
-const rules = ["rule1", "rule2", "rule3"]
-
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
     <XStack right={-10} hoverStyle={{ bg: '$backgroundFocus' }} pressStyle={{ bg: '$backgroundPress' }} borderRadius="$5" alignItems="center" justifyContent="center" cursor="pointer" p="$2" onPress={onPress}>
@@ -293,7 +291,7 @@ const Board = ({ board, icons }) => {
           rulesOpened && <XStack height="90%" w="600px" backgroundColor="$bgPanel" p="$3" btlr={9} bblr={9}>
             <Tinted>
               <Rules
-                rules={rules}
+                rules={boardRef.current?.rules ?? []}
                 onAddRule={(e, rule) => { }}
                 onDeleteRule={(index) => { }}
                 loadingIndex={-1}
