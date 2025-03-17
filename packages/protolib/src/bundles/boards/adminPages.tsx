@@ -1,4 +1,4 @@
-import { BookOpen, Plus, Settings, Tag, Trash2 } from '@tamagui/lucide-icons'
+import { BookOpen, Bot, Plus, Settings, Sparkles, Tag, Trash2 } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -72,6 +72,8 @@ const Board = ({ board, icons }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [currentCard, setCurrentCard] = useState(null)
   const [editedCard, setEditedCard] = useState(null)
+  const [autopilot, setAutopilot] = useState(false)
+  const [rulesOpened, setRulesOpened] = useState(false)
 
   const availableCards = [{
     name: 'Display value',
@@ -181,7 +183,7 @@ const Board = ({ board, icons }) => {
           setCurrentCard(item)
           setEditedCard(item)
         }} onRun={async (name, params) => {
-          const paramsStr = Object.keys(params??{}).map(key => key + '=' + params[key]).join('&')
+          const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&')
           await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)
         }} />
       }
@@ -195,13 +197,32 @@ const Board = ({ board, icons }) => {
         <Paragraph size="$5" fontWeight="400">{board.name}</Paragraph>
         {/* <Tinted><Save color="var(--color8)" size={"$1"} strokeWidth={1.6}/></Tinted> */}
         <XStack f={1} alignItems='center' justifyContent='flex-end'>
-          <DataViewActionButton
-            icon={Plus}
-            description="Add"
-            onPress={async () => {
-              setAddOpened(true)
-            }}
-          />
+          <Tinted>
+            <XStack ai="center" jc="center" mr="$5">
+              <XStack mr="$3">
+                <XStack opacity={rulesOpened? 1.0: 0.6} hoverStyle={{ opacity: 1 }} pressStyle={{ opacity: 0.8 }} cursor="pointer" onPress={() => {
+                  setRulesOpened(!rulesOpened)
+                }}>
+                  <Sparkles size={25} color={autopilot ? "var(--color9)" : "var(--gray8)"} />
+                </XStack>
+
+              </XStack>
+              <Paragraph size="$3" fontWeight="400" mr="$4">Autopilot</Paragraph>
+              <Switch size="$2" checked={autopilot} onCheckedChange={(checked) => setAutopilot(checked)}>
+                <Switch.Thumb animation="bouncy" />
+              </Switch>
+            </XStack>
+
+
+
+            <DataViewActionButton
+              icon={(props) => <Plus {...props} color="var(--color10)" />}
+              description="Add"
+              onPress={async () => {
+                setAddOpened(true)
+              }}
+            />
+          </Tinted>
         </XStack>
       </XStack>
 
@@ -258,17 +279,27 @@ const Board = ({ board, icons }) => {
         description={"Are you sure you want to delete this card?"}
       >
       </AlertDialog>
-      <DashboardGrid
-        items={cards}
-        layouts={layouts}
-        borderRadius={10}
-        padding={10}
-        backgroundColor="white"
-        onLayoutChange={(layout, layouts) => {
-          boardRef.current.layouts = layouts
-          API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-        }}
-      />
+      <XStack f={1}>
+        <YStack f={1}>
+          <DashboardGrid
+            items={cards}
+            layouts={layouts}
+            borderRadius={10}
+            padding={10}
+            backgroundColor="white"
+            onLayoutChange={(layout, layouts) => {
+              boardRef.current.layouts = layouts
+              API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+            }}
+          />
+        </YStack>
+        {
+          rulesOpened && <XStack>
+            <Paragraph>Rules</Paragraph>
+          </XStack>
+        }
+      </XStack>
+
     </YStack>
   )
 }
