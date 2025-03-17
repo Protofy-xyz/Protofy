@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, ToggleGroup, Button } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, ToggleGroup, Button, Spinner } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -81,6 +81,7 @@ const Board = ({ board, icons }) => {
   const { resolvedTheme } = useThemeSetting();
   const [savedRules, setSavedRules] = useState(board.rules)
   const [savedCode, setSavedCode] = useState(board.rulesCode)
+  const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
 
   const availableCards = [{
     name: 'Display value',
@@ -317,18 +318,25 @@ const Board = ({ board, icons }) => {
                   />
                   <YStack mt="auto" pt="$3">
                     <Button onPress={async () => {
-                      boardRef.current.rules = savedRules
-                      const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states, actions })
-                      if(rulesCode.status == 'loaded') {
-                        setSavedCode(rulesCode.data.jsCode)
+                      setGeneratingBoardCode(true)
+                      try {
+                        boardRef.current.rules = savedRules
+                        const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: states.boards[board.name], actions: actions.boards[board.name] })
+                        if(rulesCode.status == 'loaded') {
+                          setSavedCode(rulesCode.data.jsCode)
+                        }
+                        boardRef.current.rulesCode = savedCode
+                        await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+  
+                        // boardRef.current.rules = []
+                        // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                      } catch(e) {
+                        console.error(e)
+                      } finally {
+                        setGeneratingBoardCode(false)
                       }
-                      boardRef.current.rulesCode = savedCode
-                      await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-
-                      // boardRef.current.rules = []
-                      // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                     }}>
-                      Save
+                      {generatingBoardCode ? <Spinner /> : 'Apply Rules'}
                     </Button>
                   </YStack>
                 </YStack>

@@ -9,7 +9,7 @@ import {addAction} from '../actions/context/addAction';
 import { removeActions } from "../actions/context/removeActions";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
-const BOARD_REFRESH_INTERVAL = 1000 //in miliseconds
+const BOARD_REFRESH_INTERVAL = 100 //in miliseconds
 
 const useChatGPT = true
 const writeLocks = new Map();
@@ -266,7 +266,7 @@ export const BoardsAPI = (app, context) => {
                 }
                 return process_board(states);
             `);
-            await wrapper(states, token, API);
+            await wrapper(states.boards[boardId] ?? {}, token, API);
         }
 
         return fileContent;
@@ -414,4 +414,29 @@ export const BoardsAPI = (app, context) => {
             }
         }
     }, BOARD_REFRESH_INTERVAL)
+
+    const registerActions = async () => {
+        //register actions for each board
+        const boards = await getBoards()
+        for (const board of boards) {
+            const boardContent = await getBoard(board)
+            if (boardContent.cards && Array.isArray(boardContent.cards)) {
+                const actionsCards = boardContent.cards.filter(c => c.type === 'action')
+                for (let i = 0; i < actionsCards.length; i++) {
+                    const card = actionsCards[i];
+                    console.log("Adding action: ", JSON.stringify(card, null, 4)) 
+                    addAction({
+                        group: 'boards',
+                        name: card.name,
+                        url: "/api/core/v1/boards/"+board+"/actions/"+card.name,
+                        tag: board,
+                        description: card.description ?? "",
+                        params: card.params ?? {},
+                        emitEvent: i === actionsCards.length - 1
+                    })
+                }
+            }
+        }
+    } 
+    registerActions()
 }
