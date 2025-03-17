@@ -31,6 +31,27 @@ function releaseLock(filePath) {
 
 const token = getServiceToken()
 
+const callModel = async (prompt, context) => {
+    let reply;
+    if(useChatGPT) {
+        reply = await context.chatGPT.chatGPTPrompt({
+            message: prompt
+          })
+          reply = {
+            choices: [
+              {
+                message: {
+                  content: reply[0]
+                }
+              }
+            ]
+          }
+    } else {
+        reply = await context.lmstudio.chatWithModel(prompt, 'arcee-ai_virtuoso-small-v2')
+    }
+    return reply
+}
+
 const getBoards = async () => {
     try {
         await fs.access(BoardsDir(getRoot()), fs.constants.F_OK)
@@ -257,23 +278,7 @@ export const BoardsAPI = (app, context) => {
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }
-        let reply;
-        if(useChatGPT) {
-            reply = await context.chatGPT.chatGPTPrompt({
-                message: prompt
-              })
-              reply = {
-                choices: [
-                  {
-                    message: {
-                      content: reply[0]
-                    }
-                  }
-                ]
-              }
-        } else {
-            reply = await context.lmstudio.chatWithModel(prompt, 'arcee-ai_virtuoso-small-v2')
-        }
+        let reply = await callModel(prompt, context)
         console.log('REPLY: ', reply)
         const jsCode = reply.choices[0].message.content
         res.send({ jsCode })
@@ -286,30 +291,23 @@ export const BoardsAPI = (app, context) => {
     */
     app.post('/api/core/v1/autopilot/getActionCode', async (req, res) => {
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "actionRulesV2", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4),  userParams: JSON.stringify(req.body.userParams, null, 4) });
-        // if (req.query.debug) {
+        if (req.query.debug) {
             console.log("Prompt: ", prompt)
-        // }
-        let reply;
-        if(useChatGPT) {
-            reply = await context.chatGPT.chatGPTPrompt({
-                message: prompt
-              })
-              reply = {
-                choices: [
-                  {
-                    message: {
-                      content: reply[0]
-                    }
-                  }
-                ]
-              }
-        } else {
-            reply = await context.lmstudio.chatWithModel(prompt, 'arcee-ai_virtuoso-small-v2')
         }
-
+        let reply = await callModel(prompt, context)
         console.log('REPLY: ', reply)
         const jsCode = reply.choices[0].message.content
-        
+        res.send({ jsCode })
+    })
+
+    app.post('/api/core/v1/autopilot/getBoardCode', async (req, res) => {
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "boardRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4) });
+        if (req.query.debug) {
+            console.log("Prompt: ", prompt)
+        }
+        let reply = await callModel(prompt, context)
+        console.log('REPLY: ', reply)
+        const jsCode = reply.choices[0].message.content
         res.send({ jsCode })
     })
 
