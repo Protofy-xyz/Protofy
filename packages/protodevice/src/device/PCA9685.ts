@@ -1,5 +1,4 @@
-import OutputPin from "../nodes/OutputPin";
-import { output } from "./Output";
+import {extractComponent} from './utils'
 
 class PCA9685 {
     type;
@@ -17,85 +16,57 @@ class PCA9685 {
         this.address = address
         this.i2cBusId = i2cBusId
     }
-    getOutputComponents() {
+    getOutputComponents(deviceComponents={}) {
         let outputComponents = []
         for(var i = 0; i < 16; i++){
-            const outputComponent = {
+            const component = {
                 name: "output",
                 config: {
                     platform: "pca9685",
                     pca9685_id: this.name,
                     channel: i,
-                    id: this.name+'_channel_'+i+'_output',
+                    id: this.name+'_channel_'+i
                 },
-                subsystem: {}
-            }
-            outputComponents.push(outputComponent)
-            const switchComponent = {
-                name: "switch",
-                config: {
-                    platform: "output",
-                    name: this.name+'_channel_'+i,
-                    id: this.name+'_channel_'+i,
-                    output: this.name+'_channel_'+i+'_output',
-                    restore_mode: "ALWAYS_OFF"
-                },
+                // subsystem:{}
                 subsystem: {
                     name: this.name+'_channel_'+i,
                     type: this.type,
                     config:{
-                        restoreMode: "ON"
                     },
                     actions: [
-                        {
-                        name: 'on',
-                        label: 'Turn on',
-                        description: 'turns on the gpio',
-                        props: {
-                            theme: "green",
-                            color: "$green10"
-                        },
-                        endpoint: "/switch/"+this.name+'_channel_'+i+"/command",
+                      {
+                        name: 'ch_'+i+'_pwm_lvl',
+                        label: 'Channel '+i +' pwm level',
+                        description: 'Set the pwm level in normalized range (0-1), Examples: 0.4, 0.5,...',
+                        endpoint: "/"+this.type+"/"+this.name+'_channel_'+i+"/command",
                         connectionType: 'mqtt',
                         payload: {
-                            type: 'str',
-                            value: 'ON',
+                          type: 'str',
                         },
-                        },
+                      },
+                    ]
+                  }
+            }
+            outputComponents.push(component)
+
+            if(deviceComponents.esphome){
+                const mqttComponent = {
+                    name: 'mqtt',
+                    config: {
+                    on_message: [
                         {
-                        name: 'off',
-                        label: 'Turn off',
-                        description: 'turns off the gpio',
-                        props: {
-                            theme: "red",
-                            color: "$red10"
+                        topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name+'_channel_'+i}/command`,
+                        then: [
+                            {
+                            lambda: `float value = atof(x.c_str()); id(${this.name+'_channel_'+i}).set_level(value);ESP_LOGD("Pwm output ${this.name+'_channel_'+i}", "Received value: %f", value);`
                         },
-                        endpoint: "/switch/"+this.name+'_channel_'+i+"/command",
-                        connectionType: 'mqtt',
-                        payload: {
-                            type: 'str',
-                            value: 'OFF',
-                        },
-                        },
-                        {
-                        name: 'toggle',
-                        label: 'Toggle',
-                        description: 'Toggles the gpio',
-                        props: {
-                            theme: "purple",
-                            color: "$purple10"
-                        },
-                        endpoint: "/switch/"+this.name+'_channel_'+i+"/command",
-                        connectionType: 'mqtt',
-                        payload: {
-                            type: 'str',
-                            value: 'TOGGLE',
-                        },
+                        ]
                         }
                     ]
+                    }
                 }
+                outputComponents.push(mqttComponent)
             }
-            outputComponents.push(switchComponent)
         }
         return outputComponents
     }
@@ -113,29 +84,37 @@ class PCA9685 {
                 subsystem: this.getSubsystem()
             },
         ]
-        const outputComponents = this.getOutputComponents()
+        const outputComponents = this.getOutputComponents(deviceComponents)
         componentObjects = componentObjects.concat(outputComponents)
+        // componentObjects.forEach((element, j) => {
+        //     if (!deviceComponents[element.name]) {
+        //         deviceComponents[element.name] = element.config
+        //     } else {
+        //         if (!Array.isArray(deviceComponents[element.name])) {
+        //             deviceComponents[element.name] = [deviceComponents[element.name]]
+        //         }
+        //         deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
+        //     }
+        // })
         componentObjects.forEach((element, j) => {
-            if (!deviceComponents[element.name]) {
-                deviceComponents[element.name] = element.config
-            } else {
-                if (!Array.isArray(deviceComponents[element.name])) {
-                    deviceComponents[element.name] = [deviceComponents[element.name]]
-                }
-                deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
-            }
-        })
+            deviceComponents = extractComponent(element, deviceComponents, [{ key: 'mqtt', nestedKey: 'on_message' }])
+          })
         return deviceComponents
     }
 
     getSubsystem() {
-        //put all the subsystems from indvividual switch components here
         const outputComponents = this.getOutputComponents()
-        let subsystems = []
-        outputComponents.forEach((element, j) => {
-            subsystems.push(element.subsystem)
+        const actions = []
+        outputComponents.forEach((outputComponent) => {
+            actions.push(outputComponent.subsystem.actions[0])
         })
-        return subsystems
+        const subsystem = {
+            name: this.name,
+            type: this.type,
+            config:{},
+            actions: actions
+        }
+        return subsystem
     }
 }
 
