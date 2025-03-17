@@ -19,6 +19,7 @@ class I2cADC_ADS1115 {
                 name: "sensor",
                 config: {
                     platform: this.type,
+                    ads1115_id : this.name,
                     name: this.name+'_channel_'+i,
                     id: this.name+'_channel_'+i,
                     multiplexer: `A${i}_GND`,
@@ -37,7 +38,8 @@ class I2cADC_ADS1115 {
                 name: this.type,
                 config: {
                     address: this.address,
-                    i2c_id: this.i2cBusId
+                    i2c_id: this.i2cBusId,
+                    id: this.name
                 },
                 subsystem: this.getSubsystem()
             },
