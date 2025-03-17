@@ -62,26 +62,36 @@ export const BasicCard = ({ title, id, children }) => {
     );
 }
 
-export const CardValue = ({ Icon, value, color = "var(--color7)" }) => {
+export const CardValue = ({ Icon, value, html, color = "var(--color7)" }) => {
+    const getHTML = (html) => {
+        const wrapper = new Function('value', `
+            ${html}
+            return getHTML(value);
+        `);
+        return wrapper(value);
+    }
     return (
         <YStack alignItems='center' justifyContent='center'>
-            {typeof Icon === 'string' ? <div style={{
-                width: "48px",
-                height: "48px",
-                backgroundColor: color,
-                maskImage: `url(${Icon})`,
-                WebkitMaskImage: `url(${Icon})`,
-                maskRepeat: "no-repeat",
-                WebkitMaskRepeat: "no-repeat",
-                maskSize: "contain",
-                WebkitMaskSize: "contain",
-                maskPosition: "center",
-                WebkitMaskPosition: "center"
-            }} /> :
-                <Icon color={color} size={48} strokeWidth={1.75} />}
-            <Text userSelect="none" mt={10} fontSize={48} fontWeight="bold" color="$primary">
-                {React.isValidElement(value) || typeof value === 'string' || typeof value == 'number' ? value : 'N/A'}
-            </Text>
+            {html?.length > 0 && <div dangerouslySetInnerHTML={{ __html: getHTML(html) }} />}
+            {!html?.length && <>
+                {typeof Icon === 'string' ? <div style={{
+                    width: "48px",
+                    height: "48px",
+                    backgroundColor: color,
+                    maskImage: `url(${Icon})`,
+                    WebkitMaskImage: `url(${Icon})`,
+                    maskRepeat: "no-repeat",
+                    WebkitMaskRepeat: "no-repeat",
+                    maskSize: "contain",
+                    WebkitMaskSize: "contain",
+                    maskPosition: "center",
+                    WebkitMaskPosition: "center"
+                }} /> :
+                    <Icon color={color} size={48} strokeWidth={1.75} />}
+                <Text userSelect="none" mt={10} fontSize={48} fontWeight="bold" color="$primary">
+                    {React.isValidElement(value) || typeof value === 'string' || typeof value == 'number' ? value : 'N/A'}
+                </Text>
+            </>}
         </YStack>
     );
 }

@@ -43,12 +43,13 @@ const CardActions = ({ id, onEdit, onDelete }) => {
   </Tinted>
 }
 
-const ValueCard = ({ id, title, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { } }) => {
+const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { } }) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <CardValue
       Icon={icon ?? Tag}
       value={value ?? 'N/A'}
       color={color}
+      html={html}
     />
   </CenterCard>
 }
@@ -156,7 +157,7 @@ const Board = ({ board, icons }) => {
     } else if (item.type == 'value') {
       return {
         ...item,
-        content: <ValueCard color={item.color} icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
+        content: <ValueCard html={item.html} color={item.color} icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
           setIsDeleting(true)
           setCurrentCard(item)
         }} onEdit={() => {
