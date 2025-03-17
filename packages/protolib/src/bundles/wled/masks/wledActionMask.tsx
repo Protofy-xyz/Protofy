@@ -92,7 +92,7 @@ export default {
     check: (node, nodeData) => {
         return node.type === 'CallExpression' && nodeData.to === 'context.wledAction';
     },
-    category: 'IoT',
+    category: 'ioT',
     keywords: ['action', 'automation', 'esp32', 'device', 'iot', 'wled'],
     getComponent: WledAction,
     filterChildren: (node, childScope, edges, nodeData, setNodeData) => {
