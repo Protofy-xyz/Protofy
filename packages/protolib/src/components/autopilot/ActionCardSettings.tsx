@@ -52,7 +52,7 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
               setCardData={setCardData}
             />}
             {tab == 'params' && <ParamsEditor
-              params={cardData.params || []}
+              params={cardData.params || {}}
               setParams={(newParams) =>
                 setCardData({ ...cardData, params: newParams })
               }
