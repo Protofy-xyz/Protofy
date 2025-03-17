@@ -76,7 +76,7 @@ export const CardValue = ({ Icon, value, html, color = "var(--color7)" }) => {
     }
     return (
         <YStack alignItems='center' justifyContent='center'>
-            {html?.length > 0 && <div dangerouslySetInnerHTML={{ __html: getHTML(html) }} />}
+            {html?.length > 0 && <div style={{width: "100%", height: '100%'}} dangerouslySetInnerHTML={{ __html: getHTML(html) }} />}
             {!html?.length && <>
                 {typeof Icon === 'string' ? <div style={{
                     width: "48px",
