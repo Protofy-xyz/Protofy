@@ -21,8 +21,11 @@ import { CardSelector } from '../../components/board/CardSelector'
 import { ActionRunner } from '../../components/ActionRunner'
 import { ValueCardSettings } from '../../components/autopilot/ValueCardSettings'
 import { ActionCardSettings } from '../../components/autopilot/ActionCardSettings'
+import { Rules } from '../../components/autopilot/Rules'
 
 const sourceUrl = '/api/core/v1/boards'
+
+const rules = ["rule1", "rule2", "rule3"]
 
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
@@ -115,19 +118,10 @@ const Board = ({ board, icons }) => {
     setCurrentCard(null)
   }
 
-  const editCard = (card) => async () => {
-    console.log("Edit card: ", card)
-  }
-
   const layouts = {
     lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 6, doubleH: 12 }, { layout: board?.layouts?.lg }),
     md: computeLayout(items, { totalCols: 10, normalW: 10, normalH: 12, doubleW: 10, doubleH: 12 }, { layout: board?.layouts?.md }),
     sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.sm })
-  }
-
-  const iconTable = {
-    'value': 'tag',
-    'action': 'zap'
   }
 
   const addWidget = async (card) => {
@@ -217,8 +211,6 @@ const Board = ({ board, icons }) => {
               </Switch>
             </XStack>
 
-
-
             <DataViewActionButton
               icon={(props) => <Plus {...props} color="var(--color10)" />}
               description="Add"
@@ -298,8 +290,15 @@ const Board = ({ board, icons }) => {
           />
         </YStack>
         {
-          rulesOpened && <XStack>
-            <Paragraph>Rules</Paragraph>
+          rulesOpened && <XStack height="90%" w="600px" backgroundColor="$bgPanel" p="$3" btlr={9} bblr={9}>
+            <Tinted>
+              <Rules
+                rules={rules}
+                onAddRule={(e, rule) => { }}
+                onDeleteRule={(index) => { }}
+                loadingIndex={-1}
+              />
+              </Tinted>
           </XStack>
         }
       </XStack>
