@@ -12,7 +12,7 @@ import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
 import { CardValue, CenterCard } from '../widgets'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
 import React from 'react'

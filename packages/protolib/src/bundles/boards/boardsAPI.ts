@@ -47,7 +47,7 @@ const callModel = async (prompt, context) => {
             ]
           }
     } else {
-        reply = await context.lmstudio.chatWithModel(prompt, 'arcee-ai_virtuoso-small-v2')
+        reply = await context.lmstudio.chatWithModel(prompt, 'gemma-3-12b-it')
     }
     return reply
 }

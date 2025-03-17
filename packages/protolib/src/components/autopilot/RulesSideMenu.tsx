@@ -4,15 +4,15 @@ import { YStack, XStack, ToggleGroup, Button, Spinner } from '@my/ui'
 import { Tinted } from '../../components/Tinted'
 import { Rules } from '../../components/autopilot/Rules'
 import { Monaco } from '../../components/Monaco'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 
 
-export const RulesSideMenu = ({boardRef, board}) => {
+export const RulesSideMenu = ({ boardRef, board }) => {
     const [tab, setTab] = useState("rules");
     const { resolvedTheme } = useThemeSetting();
     const [savedRules, setSavedRules] = useState(board.rules)
-    const [savedCode, setSavedCode] = useState(board.rulesCode)
+    const savedCode = useRef(board.rulesCode)
     const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
 
     return <YStack height="90%" w="600px" backgroundColor="$bgPanel" p="$3" btlr={9} bblr={9}>
@@ -42,10 +42,8 @@ export const RulesSideMenu = ({boardRef, board}) => {
                             try {
                                 boardRef.current.rules = savedRules
                                 const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: states.boards[board.name], actions: actions.boards[board.name] })
-                                if (rulesCode.status == 'loaded') {
-                                    setSavedCode(rulesCode.data.jsCode)
-                                }
-                                boardRef.current.rulesCode = savedCode
+                                boardRef.current.rulesCode = rulesCode.data.jsCode
+                                savedCode.current = rulesCode.data.jsCode
                                 await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
 
                                 // boardRef.current.rules = []
@@ -67,14 +65,14 @@ export const RulesSideMenu = ({boardRef, board}) => {
                     <Monaco
                         path={'rules.ts'}
                         darkMode={resolvedTheme === 'dark'}
-                        sourceCode={boardRef.current?.rulesCode}
+                        sourceCode={savedCode.current}
                         onChange={(text) => {
-                            setSavedCode(text)
+                            savedCode.current = text
                         }}
                     />
                     <YStack mt="auto" pt="$3">
                         <Button onPress={() => {
-                            boardRef.current.rulesCode = savedCode
+                            boardRef.current.rulesCode = savedCode.current
                             API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                         }}>
                             Save Code
