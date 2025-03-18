@@ -5,6 +5,7 @@ import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
 import { ParamsEditor } from './ParamsEditor'
 import { CardSettings } from './CardSettings'
+import { HTMLEditor } from './HTMLEditor'
 
 export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
@@ -13,6 +14,12 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
     onEdit(cardData);
   }, [cardData, onEdit]);
 
+  const setHTMLCode = (code) => {
+    setCardData({
+      ...cardData,
+      html: code,
+    })
+  }
   return (
     <YStack space="$4" padding="$4">
       <Tinted>
@@ -28,6 +35,7 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
             <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
               <ToggleGroup.Item value="rules">rules</ToggleGroup.Item>
               <ToggleGroup.Item value="params">params</ToggleGroup.Item>
+              <ToggleGroup.Item value="view">view</ToggleGroup.Item>
             </ToggleGroup>
           </XStack>
           <Tinted>
@@ -48,19 +56,20 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
                 setCardData({ ...cardData, params: newParams })
               }
             />}
+            {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ icon: cardData.icon, color: cardData.color, value: card.value }} />}
           </Tinted>
 
         </YStack>
         <Label size={"$5"}> <Text color={"$color8"} mr="$2" />Description</Label>
-            <Input
-              value={cardData.description}
-              onChange={(e) =>
-                setCardData({
-                  ...cardData,
-                  description: e.target.value,
-                })
-              }
-            />
+        <Input
+          value={cardData.description}
+          onChange={(e) =>
+            setCardData({
+              ...cardData,
+              description: e.target.value,
+            })
+          }
+        />
       </Tinted>
     </YStack>
   );
