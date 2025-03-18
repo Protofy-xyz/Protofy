@@ -1,4 +1,4 @@
-import { BookOpen, Plus, Settings, Sparkles, Tag, Trash2 } from '@tamagui/lucide-icons'
+import { ArrowLeft, BookOpen, Plus, Settings, Sparkles, Tag, Trash2 } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
@@ -23,6 +23,7 @@ import { ValueCardSettings } from '../../components/autopilot/ValueCardSettings'
 import { ActionCardSettings } from '../../components/autopilot/ActionCardSettings'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
+import { useRouter } from 'solito/navigation';
 
 const sourceUrl = '/api/core/v1/boards'
 
@@ -69,6 +70,7 @@ const ActionCard = ({ id, name, title, params, icon = undefined, color, onRun = 
 
 const Board = ({ board, icons }) => {
   const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 6 }
+  const router = useRouter()
   const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(key => key != 'addwidget')] : [addCard]))
   const [addOpened, setAddOpened] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -188,7 +190,17 @@ const Board = ({ board, icons }) => {
   return (
     <YStack flex={1}>
       <XStack px={"$5"} py={"$3"}>
-        <Paragraph size="$5" fontWeight="400">{board.name}</Paragraph>
+        <XStack f={1} alignItems='center' >
+          <Tinted>
+            <DataViewActionButton
+              icon={(props) => <ArrowLeft {...props} color="var(--color10)" />}
+              description="Back"
+              onPress={() => router.push("/boards")}
+              mr="$5"
+            />
+          </Tinted>
+          <Paragraph size="$5" fontWeight="400">{board.name}</Paragraph>
+        </XStack>
         {/* <Tinted><Save color="var(--color8)" size={"$1"} strokeWidth={1.6}/></Tinted> */}
         <XStack f={1} alignItems='center' justifyContent='flex-end'>
           <Tinted>
@@ -301,6 +313,8 @@ const Board = ({ board, icons }) => {
 export default {
   boards: {
     component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData }: any) => {
+      const router = useRouter()
+
       return (<AdminPage title="Boards" workspace={workspace} pageSession={pageSession}>
         <DataView
           entityName={"boards"}
@@ -311,6 +325,7 @@ export default {
           numColumnsForm={1}
           name="Board"
           onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
+          onSelectItem={(item) => router.push(`/boards/${item.data.name}`)}
           columns={DataTable2.columns(
             DataTable2.column("name", row => row.name, "name")
           )}
