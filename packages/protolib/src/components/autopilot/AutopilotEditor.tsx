@@ -16,7 +16,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                 <PanelGroup direction="vertical">
                     <Panel defaultSize={66} minSize={20} maxSize={80}>
                         <YStack flex={1} height="100%" borderRadius="$3" p="$3" backgroundColor="$gray3" overflow="hidden" >
-                            <p>¡Input</p>
+                            <p>Input</p>
                             <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
                                 <Tinted>
                                     <div style={{ minWidth: "600px" }}>
