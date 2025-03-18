@@ -16,9 +16,9 @@ function process_board(states) {
 </function_structure>
 
 <parameters_explanation>
-    perform_actions parameters:
+    process_board parameters:
 
-    states: the current state of the system when the perform_actions is called
+    states: the current state of the system when the process_board is called
 </parameters_explanation>
 
 The state object has the following shape:
@@ -32,7 +32,7 @@ The rules array is:
     if no other rule apply or dont know what to do, just return and do nothing
 </rules>
 
-Remember: the rules are not avilable at runtime, while executing perform_actions, are just for you to read and decide what code to generate.
+Remember: the rules are not avilable at runtime, while executing process_board, are just for you to read and decide what code to generate.
 The available action list to execute is:
 
 <actions>
@@ -45,7 +45,7 @@ Try to keep it simple, write simple code as described by the rules. Most rules w
 Always use literal actions urls to execute the actions with execute_action.
 
 <expected_output>
-answer only with the javascript implementation of perform_actions. Do not explain anything and anser just with javascript.
+answer only with the javascript implementation of process_board. Do not explain anything and anser just with javascript.
 </expected_output>
 
 <very_important>

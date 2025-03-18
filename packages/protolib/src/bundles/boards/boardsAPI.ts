@@ -271,6 +271,11 @@ export const BoardsAPI = (app, context) => {
         return fileContent;
     };
 
+    const cleanCode = (code) => {
+        //remove ```(plus anything is not an space) from the beginning of the code
+        //remove ``` from the end of the code
+        return code.replace(/^```[^\s]+/g, '').replace(/```/g, '').trim()
+    }
     BoardsAutoAPI(app, context)
     app.post('/api/core/v1/autopilot/getValueCode', async (req, res) => {
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "valueRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
@@ -280,23 +285,18 @@ export const BoardsAPI = (app, context) => {
         let reply = await callModel(prompt, context)
         console.log('REPLY: ', reply)
         const jsCode = reply.choices[0].message.content
-        res.send({ jsCode })
+        res.send({ jsCode: cleanCode(jsCode) })
     })
 
-    /*
-    async function perform_actions(states, userParams) { 
-        await execute_action('/api/v1/automations/test', userParams
-    )}
-    */
     app.post('/api/core/v1/autopilot/getActionCode', async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "actionRulesV2", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4),  userParams: JSON.stringify(req.body.userParams, null, 4) });
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "actionRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4),  userParams: JSON.stringify(req.body.userParams, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }
         let reply = await callModel(prompt, context)
         console.log('REPLY: ', reply)
         const jsCode = reply.choices[0].message.content
-        res.send({ jsCode })
+        res.send({ jsCode: cleanCode(jsCode) })
     })
 
     app.post('/api/core/v1/autopilot/getBoardCode', async (req, res) => {
@@ -307,7 +307,7 @@ export const BoardsAPI = (app, context) => {
         let reply = await callModel(prompt, context)
         console.log('REPLY: ', reply)
         const jsCode = reply.choices[0].message.content
-        res.send({ jsCode })
+        res.send({ jsCode: cleanCode(jsCode) })
     })
 
 
@@ -332,7 +332,7 @@ export const BoardsAPI = (app, context) => {
 
             const states = await context.state.getStateTree();
             const wrapper = new Function('states', 'userParams', 'token', 'API', `
-                ${action.rulesCode}
+
                 async function execute_action(url, params={}) {
                     // console.log('Executing action: ', url, params);
                     const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
@@ -340,7 +340,7 @@ export const BoardsAPI = (app, context) => {
                     const response = await API.get(url+'?token='+token+'&'+paramsStr);
                     return response.data
                 }
-                return perform_actions(states, userParams);
+                ${action.rulesCode}
             `);
 
             const response = await wrapper(states, req.query, token, API);
