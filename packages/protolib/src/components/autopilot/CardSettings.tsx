@@ -6,7 +6,7 @@ import { IconSelect } from '../IconSelect'
 
 export const CardSettings = ({ cardData, setCardData, icons }) => {
 
-    return <XStack alignItems="center" space="$8" width="100%">
+    return <XStack alignItems="center" space="$8" width="100%" mt="$-7">
             <YStack flex={1}>
                 <Label size={"$5"}> <Type color={"$color8"} mr="$2" />Title</Label>
                 <Input

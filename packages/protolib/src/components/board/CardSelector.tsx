@@ -48,7 +48,6 @@ const SecondSlide = ({ selected, states, icons, actions, setCard }) => {
         <ActionCardSettings states={states} icons={icons} card={emptyCard} actions={actions} onEdit={(data) => {
           setCard(data)
         }}/>}
-    <Spacer marginBottom="$8" />
   </YStack>
 }
 
@@ -66,8 +65,8 @@ export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states,
     hideAccept={true}
     description={""}
   >
-    <YStack f={1} jc="center" ai="center">
-      <XStack mr="$5">
+    <YStack f={1} jc="center" ai="center" >
+      <XStack mr="$5" >
         <Slides
           styles={{ w: 1400, mah: 1200 }}
           lastButtonCaption="Create"
