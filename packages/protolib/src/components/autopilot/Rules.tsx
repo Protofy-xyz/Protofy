@@ -50,12 +50,13 @@ export const AutoHeightTextArea = ({
 }
 
 
-export const RuleItem = ({ value, loading, onDelete }) => {
+export const RuleItem = ({ value, loading, onDelete, onEdit }) => {
   return (
     <XStack ai="center" gap="$2" mb="$2" width="100%">
       <AutoHeightTextArea
-        readOnly
+        readOnly={!onEdit}
         value={value}
+        onChange={(e) => onEdit(e.target.value)}
         placeholder="Rule Value..."
         style={{ width: '100%' }}
       />
@@ -74,7 +75,7 @@ export const RuleItem = ({ value, loading, onDelete }) => {
   )
 }
 
-export const Rules = ({ rules, onAddRule, onDeleteRule, loadingIndex }) => {
+export const Rules = ({ rules, onAddRule, onDeleteRule, onEditRule, loadingIndex }) => {
   const [newRule, setNewRule] = useState('')
 
   const addRule = (e) => {
@@ -96,13 +97,14 @@ export const Rules = ({ rules, onAddRule, onDeleteRule, loadingIndex }) => {
   return (
     <YStack height="100%" f={1} w="100%">
 
-      <YStack style={{ overflowY: 'auto', flex: 1, width: '100%' }}>
+      <YStack style={{ overflowY: 'auto', flex: 1, width: '100%', padding: "2px" }}>
         {rules.map((rule, i) => (
           <RuleItem
             key={i}
             value={rule}
             loading={loadingIndex === i}
             onDelete={() => onDeleteRule(i)}
+            onEdit={onEditRule ? (r) => onEditRule(i, r) : null}
           />
         ))}
       </YStack>

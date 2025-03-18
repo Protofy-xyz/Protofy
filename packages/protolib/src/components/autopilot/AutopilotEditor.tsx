@@ -1,40 +1,26 @@
 import { Panel, PanelGroup } from "react-resizable-panels";
-import { YStack, ScrollView, Spinner, Tabs, SizableText, H5, ToggleGroup, XStack } from "@my/ui";
+import { YStack, ScrollView, Spinner , Text } from "@my/ui";
 import { Tinted } from "../../components/Tinted";
-import JSONViewer from "../jsonui/JSONViewer";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { Rules } from "./Rules";
-import { useState } from "react";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { Monaco } from "../Monaco";
-import {JSONView} from "../JSONView";
+import { JSONView } from "../JSONView";
 
 export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, valueReady = true, onAddRule = (e, rule) => { }, onDeleteRule = (index) => { } }) => {
-    const [tab, setTab] = useState("rules");
-    const { resolvedTheme } = useThemeSetting();
+    const { resolvedTheme } = useThemeSetting()
+
     return (
         <PanelGroup direction="horizontal">
-            <Panel>
+            <Panel defaultSize={30}>
                 <PanelGroup direction="vertical">
                     <Panel defaultSize={66} minSize={20} maxSize={80}>
-                        <YStack
-                            flex={1}
-                            height="100%"
-                            borderRadius="$3"
-                            p="$3"
-                            backgroundColor="$gray3"
-                            overflow="hidden"
-                        >
-                            <ScrollView
-                                flex={1}
-                                width="100%"
-                                height="100%"
-                                overflow="auto"
-                            >
+                        <YStack flex={1} height="100%" borderRadius="$3" p="$3" backgroundColor="$gray3" overflow="hidden" >
+                            <p>¡Input</p>
+                            <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
                                 <Tinted>
-                                    <p>Input</p>
                                     <div style={{ minWidth: "600px" }}>
-                                        <JSONView style={{backgroundColor:'var(--gray3)'}} src={data} />
+                                        <JSONView style={{ backgroundColor: 'var(--gray3)' }} src={data} />
                                     </div>
                                 </Tinted>
                             </ScrollView>
@@ -44,28 +30,22 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                     <CustomPanelResizeHandle direction="horizontal" />
 
                     <Panel defaultSize={34} minSize={20} maxSize={80}>
-                        <YStack
-                            flex={1}
-                            height="100%"
-                            borderRadius="$3"
-                            p="$3"
-                            backgroundColor="$gray3"
-                            overflow="hidden"
-                        >
-                            <ScrollView
-                                flex={1}
-                                width="100%"
-                                height="100%"
-                                overflow="auto"
-                            >
+                        <YStack flex={1} height="100%" borderRadius="$3" p="$3" backgroundColor="$gray3" overflow="hidden" >
+                            
+                            <p>Output</p>
+                            {!valueReady && rules.length !== 0 && <YStack f={1} jc="center" ><Spinner /></YStack>}
+                            {!valueReady && rules.length === 0 && <Text opacity={0.6}>No output available. Create a rule to get started.</Text>}
+                            {valueReady && <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
+                                
                                 <Tinted>
-                                    <p>Output</p>
                                     {valueReady && <div style={{ minWidth: "600px" }}>
-                                        <JSONView style={{backgroundColor:'var(--gray3)'}} src={value} />
+                                        <JSONView style={{ backgroundColor: 'var(--gray3)' }} src={value} />
                                     </div>}
                                     {!valueReady && <Spinner />}
                                 </Tinted>
+                            
                             </ScrollView>
+                            }
                         </YStack>
                     </Panel>
                 </PanelGroup>
@@ -73,39 +53,32 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
 
             <CustomPanelResizeHandle direction="vertical" />
 
-
-            {/* Panel derecho */}
-            <Panel defaultSize={50} minSize={50}>
-                <YStack
-                    flex={1}
-                    height="100%"
-                    alignItems="center"
-                    justifyContent="center"
-                    backgroundColor="$gray3"
-                    borderRadius="$3"
-                    p="$3"
-                >
-                    <XStack width={"100%"} pt="$0" pr="$1" pb="$2" jc="center">
-                        <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
-                            <ToggleGroup.Item value="rules">rules</ToggleGroup.Item>
-                            <ToggleGroup.Item value="code">code</ToggleGroup.Item>
-                        </ToggleGroup>
-                    </XStack>
-                    <Tinted>
-                        {(tab == 'rules' || !tab) && <Rules
-                            rules={rules}
-                            onAddRule={onAddRule}
-                            onDeleteRule={onDeleteRule}
-                            loadingIndex={-1}
-                        />}
-                        {tab == 'code' && <Monaco
-                            path={'rules.ts'}
-                            darkMode={resolvedTheme === 'dark'}
-                            sourceCode={rulesCode}
-                            onChange={setRulesCode}
-                        />}
-                    </Tinted>
-                </YStack>
+            {/* Rigth panel */}
+            <Panel defaultSize={70} minSize={50}>
+                <PanelGroup direction="vertical">
+                    <Panel defaultSize={66} minSize={20} maxSize={80}>
+                        <YStack
+                            flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
+                            <Rules
+                                rules={rules}
+                                onAddRule={onAddRule}
+                                onDeleteRule={onDeleteRule}
+                                loadingIndex={-1}
+                            />
+                        </YStack>
+                    </Panel>
+                    <CustomPanelResizeHandle direction="horizontal" />
+                    <Panel defaultSize={34} minSize={20} maxSize={80}>
+                        <YStack flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
+                            <Monaco
+                                path={'rules.ts'}
+                                darkMode={resolvedTheme === 'dark'}
+                                sourceCode={rulesCode}
+                                onChange={setRulesCode}
+                            />
+                        </YStack>
+                    </Panel>
+                </PanelGroup>
             </Panel>
         </PanelGroup>
     );

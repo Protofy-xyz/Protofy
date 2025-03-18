@@ -1,5 +1,5 @@
 import { Cog } from '@tamagui/lucide-icons'
-import { YStack, XStack, Label, ToggleGroup, Input } from '@my/ui'
+import { YStack, XStack, Label, ToggleGroup, ScrollView } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
@@ -22,11 +22,11 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
     }
 
     return (
-        <YStack space="$4" padding="$4">
+        <ScrollView space="$4" padding="$4" mah={"70vh"}>
             <Tinted>
                 <CardSettings cardData={cardData} setCardData={setCardData} icons={icons} />
-                <YStack mt="$5" height={600}>
-                    <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Value</Label>
+                <YStack mt="$5" height={650} pb="$-5">
+                    <Label mt="$-2" mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Value</Label>
                     <XStack width={"100%"} pt="$0" pr="$1" pb="$2" jc="center">
                         <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
                             <ToggleGroup.Item value="rules">rules</ToggleGroup.Item>
@@ -55,6 +55,6 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
 
                 </YStack>
             </Tinted>
-        </YStack>
+        </ScrollView>
     );
 };
