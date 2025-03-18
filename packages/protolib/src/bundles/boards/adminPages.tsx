@@ -26,6 +26,14 @@ import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
 import { useRouter } from 'solito/navigation';
 
 const sourceUrl = '/api/core/v1/boards'
+const defaultValueHTML = `
+return card({
+    content: \`
+        \${icon({ name: data.icon, size: '48' })}    
+        \${cardValue({ value: data.value })}
+    \`
+});
+`
 
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
@@ -47,7 +55,7 @@ const CardActions = ({ id, onEdit, onDelete }) => {
 const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { } }) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <CardValue
-      Icon={icon ?? Tag}
+      Icon={icon ?? 'tag'}
       value={value ?? 'N/A'}
       color={color}
       html={html}
@@ -159,7 +167,7 @@ const Board = ({ board, icons }) => {
     } else if (item.type == 'value') {
       return {
         ...item,
-        content: <ValueCard html={item.html} color={item.color} icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
+        content: <ValueCard html={item.html??defaultValueHTML} color={item.color} icon={item.icon} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
           setIsDeleting(true)
           setCurrentCard(item)
         }} onEdit={() => {
@@ -234,7 +242,7 @@ const Board = ({ board, icons }) => {
         </XStack>
       </XStack>
 
-      <CardSelector cards={availableCards} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
+      <CardSelector defaults={{value: {html: defaultValueHTML}}} cards={availableCards} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
       <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
         <Dialog.Portal zIndex={100000} overflow='hidden'>
@@ -251,7 +259,7 @@ const Board = ({ board, icons }) => {
             minHeight={750}
           >
             <Dialog.Title>Edit</Dialog.Title>
-            {currentCard && currentCard.type == 'value' && <ValueCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
+            {currentCard && currentCard.type == 'value' && <ValueCardSettings defaultHTML={defaultValueHTML} states={states} icons={icons} card={currentCard} onEdit={(data) => {
               setEditedCard(data)
             }} />}
             {currentCard && currentCard.type == 'action' && <ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {

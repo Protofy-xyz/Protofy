@@ -6,7 +6,6 @@ import { RuleEditor } from './RuleEditor'
 import { CardSettings } from './CardSettings'
 import { HTMLEditor } from './HTMLEditor'
 
-
 export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
     const [cardData, setCardData] = useState(card);
     const [tab, setTab] = useState("rules");
@@ -51,7 +50,7 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                             cardData={cardData}
                             setCardData={setCardData}
                         />}
-                        {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html}/>}
+                        {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{icon: cardData.icon, color: cardData.color, value: card.value}}/>}
                     </Tinted>
 
                 </YStack>

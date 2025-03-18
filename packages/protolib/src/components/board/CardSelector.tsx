@@ -37,22 +37,20 @@ const iconTable = {
   'action': 'zap'
 }
 
-const SecondSlide = ({ selected, states, icons, actions, setCard }) => {
-  const emptyCard = { key: "key", type: selected, width: 2, height: 6, name: selected, icon: iconTable[selected] }
-
+const SecondSlide = ({ defaults, card, selected, states, icons, actions, setCard }) => {
   return <YStack>
       {selected == "value" ?
-        <ValueCardSettings states={states} icons={icons} card={emptyCard} onEdit={(data) => {
+        <ValueCardSettings states={states} icons={icons} card={{...defaults[card.type], ...card}} onEdit={(data) => {
           setCard(data)
         }}/> :
-        <ActionCardSettings states={states} icons={icons} card={emptyCard} actions={actions} onEdit={(data) => {
+        <ActionCardSettings states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
           setCard(data)
         }}/>}
     <Spacer marginBottom="$8" />
   </YStack>
 }
 
-export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
+export const CardSelector = ({ defaults={}, cards, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
   const [selectedCard, setSelectedCard] = useState('value')
   const [card, setCard] = useState({ key: "key", type:selectedCard, width: 2, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
 
@@ -84,7 +82,7 @@ export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states,
             {
               name: "Configure your widget",
               title: "Configure your widget",
-              component: <SecondSlide selected={selectedCard} states={states} icons={icons} actions={actions} card={card} setCard={setCard} />
+              component: <SecondSlide defaults={defaults} selected={selectedCard} states={states} icons={icons} actions={actions} card={card} setCard={setCard} />
             }
           ]
           }></Slides>

@@ -13,6 +13,57 @@ import { LineChart, Cpu } from 'lucide-react'
 import Center from 'protolib/src/components/Center';
 import React from 'react';
 
+export const viewLib = `
+const icon = ({ name, size, color = 'var(--color7)', style = '' }) => {
+    return \`
+        <div style="
+            width: \${size}px;
+            height: \${size}px;
+            background-color: \${color};
+            mask-image: url(/public/icons/\${name}.svg);
+            -webkit-mask-image: url(/public/icons/\${name}.svg);
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            mask-position: center;
+            -webkit-mask-position: center;
+            \${style}
+        "></div>
+    \`;
+};
+
+const card = ({ content, style = '' }) => {
+    return \`
+        <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            \${style}
+        ">
+            \${content}
+        </div>
+    \`;
+};
+
+const cardValue = ({ value, style = '' }) => {
+    return \`
+        <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold
+            \${style}           
+        ">
+            \${value}
+        </div>
+    \`;
+};`
+
+
 const fetch = async (fn) => {
     const services = await API.get('/api/core/v1/services')
     fn(services)
@@ -62,21 +113,23 @@ export const BasicCard = ({ title, id, children }) => {
     );
 }
 
-export const CardValue = ({ Icon, value, html, color = "var(--color7)" }) => {
-    const getHTML = (html) => {
-        try {
-            const wrapper = new Function('value', `
-                ${html}
-            `);
-            return wrapper(value);
-        } catch(e) {
-            console.error(e);
-            return '';
-        }
+export const getHTML = (html, data) => {
+    try {
+        const wrapper = new Function('data', `
+            ${viewLib}
+            ${html}
+        `);
+        return wrapper(data);
+    } catch(e) {
+        console.error(e);
+        return '';
     }
+}
+
+export const CardValue = ({ Icon, value, html, color = "var(--color7)" }) => {
     return (
         <YStack alignItems='center' justifyContent='center'>
-            {html?.length > 0 && <div style={{width: "100%", height: '100%'}} dangerouslySetInnerHTML={{ __html: getHTML(html) }} />}
+            {html?.length > 0 && <div style={{width: "100%", height: '100%'}} dangerouslySetInnerHTML={{ __html: getHTML(html, {icon: Icon, value: value, color: color}) }} />}
             {!html?.length && <>
                 {typeof Icon === 'string' ? <div style={{
                     width: "48px",
