@@ -38,12 +38,13 @@ const iconTable = {
 }
 
 const SecondSlide = ({ defaults, card, selected, states, icons, actions, setCard }) => {
+  const emptyCard = { key: "key", type: selected, width: 2, height: 6, name: selected, icon: iconTable[selected] }
   return <YStack>
       {selected == "value" ?
-        <ValueCardSettings states={states} icons={icons} card={{...defaults[card.type], ...card}} onEdit={(data) => {
+        <ValueCardSettings states={states} icons={icons} card={{...defaults[card.type], ...emptyCard}} onEdit={(data) => {
           setCard(data)
         }}/> :
-        <ActionCardSettings states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
+        <ActionCardSettings states={states} icons={icons} card={emptyCard} actions={actions} onEdit={(data) => {
           setCard(data)
         }}/>}
   </YStack>
