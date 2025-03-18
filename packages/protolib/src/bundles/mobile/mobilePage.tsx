@@ -7,18 +7,22 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 
 import { withSession } from '../../lib/Session';
 import { Page } from '../../components/Page';
-import { Protofy } from 'protobase';
+import { API, Protofy } from 'protobase';
 import { SSR } from '../../lib/SSR';
 import { Center } from '../../components/Center';
 import dynamic from "next/dynamic";
 import ReactAccelorometerValue from 'reactaccelerometervalue'
-
+import useCompass from "react-world-compass"
+import { useInterval } from 'usehooks-ts';
 const ActiveFullScreen = dynamic(() =>
     import('./components/ActiveFullScreen').then(module => module.ActiveFullScreen),
     { ssr: false }
 );
 
-const Accelerometer = ({ state }) => {
+const Accelerometer = ({ state, degrees }) => {
+    useInterval(() => {
+        API.get("/api/core/v1/mobile/data?degrees=" + degrees + "&x=" + state.x + "&y=" + state.y + "&z=" + state.z + "&alpha=" + state.rotation.alpha + "&beta=" + state.rotation.beta + "&gamma=" + state.rotation.gamma)
+    }, 250)
     return <div>
         <p>
             <div>x:{Math.trunc(state.x)}</div>
@@ -32,12 +36,16 @@ const Accelerometer = ({ state }) => {
 }
 
 const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
+    const degree = useCompass(20)
+
+    
     return (
         <Page height="99vh">
             <Center>
                 <ActiveFullScreen>
                     <ReactAccelorometerValue>
-                        <Accelerometer />
+                        {degree && <Accelerometer degrees={degree?.degree.toFixed(0)} />}
+                        {degree && <div>Compass: {degree.degree}</div>}
                     </ReactAccelorometerValue>
                 </ActiveFullScreen>
             </Center>
