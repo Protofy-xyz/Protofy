@@ -1,5 +1,5 @@
 import { Panel, PanelGroup } from "react-resizable-panels";
-import { YStack, ScrollView, Spinner, Tabs, SizableText, H5, ToggleGroup, XStack } from "@my/ui";
+import { YStack, ScrollView, Spinner, ToggleGroup, XStack, Text } from "@my/ui";
 import { Tinted } from "../../components/Tinted";
 import JSONViewer from "../jsonui/JSONViewer";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
@@ -25,6 +25,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                             backgroundColor="$gray3"
                             overflow="hidden"
                         >
+                            <Text >Input</Text>
                             <ScrollView
                                 flex={1}
                                 width="100%"
@@ -32,7 +33,6 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                                 overflow="auto"
                             >
                                 <Tinted>
-                                    <p>Input</p>
                                     <div style={{ minWidth: "600px" }}>
                                         <JSONView style={{backgroundColor:'var(--gray3)'}} src={data} />
                                     </div>
@@ -52,20 +52,22 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                             backgroundColor="$gray3"
                             overflow="hidden"
                         >
-                            <ScrollView
+                            <Text >Output</Text>
+                            {!valueReady && rules.length !== 0 && <YStack f={1} jc="center" ><Spinner /></YStack>}
+                            {!valueReady && rules.length === 0 && <Text opacity={0.6}>No output available. Create a rule to get started.</Text>}
+                            {valueReady && <ScrollView
                                 flex={1}
                                 width="100%"
                                 height="100%"
                                 overflow="auto"
                             >
-                                <Tinted>
-                                    <p>Output</p>
-                                    {valueReady && <div style={{ minWidth: "600px" }}>
+                                <Tinted height="100%">
+                                    <div style={{ minWidth: "600px" }}>
                                         <JSONView style={{backgroundColor:'var(--gray3)'}} src={value} />
-                                    </div>}
-                                    {!valueReady && <Spinner />}
+                                    </div>
                                 </Tinted>
                             </ScrollView>
+                            }
                         </YStack>
                     </Panel>
                 </PanelGroup>
