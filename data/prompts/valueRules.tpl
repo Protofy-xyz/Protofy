@@ -4,8 +4,10 @@ Your mission is to generate a small javascript code to reduce a states object in
 
 You need to fill the following code:
 
+<code_to_fill>
 //TODO: return a reduced version of the "states" object, based on the rules described
 //example if a rule request to read the name from board hexagon: return states.board.name
+</code_to_fill>
 
 The state object has the following shape:
 <states_object>
@@ -29,4 +31,6 @@ If the rules specify the name a key inside states, make sure you write the key c
 The rules are all about what to return from the code
 
 Do not use markup like ```javascript or other markers, just plain javascript, nothing else.
-The code should end with a return statement.
+The code should end with a return statement in the last statement.
+Do not wrap the code into a function, just give me the lines of code.
+Most of the time, it will be just one line of code, like: "return states.tag.value" or "return state.sometag.somevalue + 10" or whatever, according to the rules.

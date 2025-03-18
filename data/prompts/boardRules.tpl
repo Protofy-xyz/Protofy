@@ -8,10 +8,12 @@ The function receives states and should call the corresponding actions based on 
 
 <function_structure>
 function process_board(states) {
-    //states: state object with the current system state. userParams: user provided params
+    //states: state object with the current system state
 
-    //TODO: call actions with: execute_action(action_url, actionParams)
+    //call actions with: execute_action(action_url, actionParams)
     //actionParams is a key->value object, where the key is the name of the parameter and the value is the value for the parameter
+
+    //FILL_HERE
 }
 </function_structure>
 
@@ -51,4 +53,7 @@ answer only with the javascript implementation of process_board. Do not explain 
 <very_important>
 NEVER CHECK FOR STATES LIKE THE STATE OF A BUTTON OR A LOCK IF THE RULES DON'T ASK FOR IT EXPLICITLY.
 MOST RULES ARE RESOLVED TO ONE LINERS EXECUTING execute_action. DOING MORE THAN THAT SHOULD BE REQUESTED IN THE RULES.
+RULES ARE ONLY TO BE USED BY YOU TO UNDERSTAND WHAT CODE GENERATE, BUT RULE STRINGS ARE NOT PART OF THE RUNTIME.
 </very_important>
+
+Please, generate the code, filling the function.

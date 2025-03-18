@@ -47,7 +47,7 @@ const callModel = async (prompt, context) => {
             ]
           }
     } else {
-        reply = await context.lmstudio.chatWithModel(prompt, 'gemma-3-12b-it')
+        reply = await context.lmstudio.chatWithModel(prompt, 'qwen2.5-coder-32b-instruct')
     }
     return reply
 }
