@@ -1,6 +1,6 @@
 
 import { API } from 'protobase'
-import { YStack, XStack, ToggleGroup, Button, Spinner } from '@my/ui'
+import { YStack, XStack, ToggleGroup, Button, Spinner, useToastController } from '@my/ui'
 import { Tinted } from '../../components/Tinted'
 import { Rules } from '../../components/autopilot/Rules'
 import { Monaco } from '../../components/Monaco'
@@ -14,6 +14,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
     const [savedRules, setSavedRules] = useState(board.rules)
     const savedCode = useRef(board.rulesCode)
     const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
+    const toast = useToastController()
 
     return <YStack height="90%" w="600px" backgroundColor="$bgPanel" p="$3" btlr={9} bblr={9}>
         <Tinted>
@@ -34,6 +35,11 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                         onDeleteRule={(index) => {
                             setSavedRules(savedRules.filter((_, i) => i != index))
                         }}
+                        onEditRule={(index, rule) => {
+                            const newRules = [...savedRules]
+                            newRules[index] = rule
+                            setSavedRules(newRules)
+                        }}
                         loadingIndex={-1}
                     />
                     <YStack mt="auto" pt="$3">
@@ -48,7 +54,9 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
 
                                 // boardRef.current.rules = []
                                 // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                                toast.show(`Rules applied successfully!`)
                             } catch (e) {
+                                toast.show(`Error generating board code: ${e.message}`)
                                 console.error(e)
                             } finally {
                                 setGeneratingBoardCode(false)
