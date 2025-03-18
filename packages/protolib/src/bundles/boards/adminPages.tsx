@@ -27,6 +27,7 @@ import { useRouter } from 'solito/navigation';
 
 const sourceUrl = '/api/core/v1/boards'
 const defaultValueHTML = `
+//data contains: data.value, data.icon and data.color
 return card({
     content: \`
         \${icon({ name: data.icon, size: '48' })}    
