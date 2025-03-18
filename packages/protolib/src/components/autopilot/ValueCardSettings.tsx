@@ -40,7 +40,6 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                                 console.log('new rules code, executing...', cardData, states)
                                 const wrapper = new Function('states', `
                               ${cardData.rulesCode}
-                              return reduce_state_obj(states);
                             `);
                                 let value = wrapper(states);
                                 return value

@@ -28,14 +28,9 @@ export const setContext = async (options: {
         return
     }
 
-    if(value === undefined) {
-        logger.error({}, "State value is required");
-        return
-    }
-
     if(options.token) {
         // console.log('Setting value using api: ', value, 'for', group, tag, name)
-        const result = await API.post(`/api/core/v1/protomemdb/${chunk}/${group}/${tag}/${name}?token=`+options.token, {value: value}) 
+        const result = await API.post(`/api/core/v1/protomemdb/${chunk}/${group}/${tag}/${name}?token=`+options.token, {value: value??''}) 
         // console.log('result: ', result)
         if(options.emitEvent) {
             generateEvent({

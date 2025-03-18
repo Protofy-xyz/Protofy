@@ -230,7 +230,6 @@ export const BoardsAPI = (app, context) => {
 
                     const wrapper = new Function('states', `
                         ${card.rulesCode}
-                        return reduce_state_obj(states);
                     `);
 
                     let value = wrapper(states);
