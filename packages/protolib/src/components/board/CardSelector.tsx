@@ -68,7 +68,7 @@ export const CardSelector = ({ cards, addOpened, setAddOpened, onFinish, states,
     <YStack f={1} jc="center" ai="center" >
       <XStack mr="$5" >
         <Slides
-          styles={{ w: 1400, mah: 1200 }}
+          styles={{ w: 1400, mah: "100vh" }}
           lastButtonCaption="Create"
           onFinish={async () => {
             await onFinish(card)
