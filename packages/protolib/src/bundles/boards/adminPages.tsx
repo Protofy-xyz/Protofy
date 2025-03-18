@@ -21,9 +21,9 @@ import { CardSelector } from '../../components/board/CardSelector'
 import { ActionRunner } from '../../components/ActionRunner'
 import { ValueCardSettings } from '../../components/autopilot/ValueCardSettings'
 import { ActionCardSettings } from '../../components/autopilot/ActionCardSettings'
-import { useThemeSetting } from '@tamagui/next-theme'
 import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
 import { useRouter } from 'solito/navigation';
+import { useThemeSetting } from '@tamagui/next-theme'
 
 const sourceUrl = '/api/core/v1/boards'
 const defaultValueHTML = `
@@ -88,7 +88,8 @@ const Board = ({ board, icons }) => {
   const [editedCard, setEditedCard] = useState(null)
   const [autopilot, setAutopilot] = useState(board.autopilot)
   const [rulesOpened, setRulesOpened] = useState(false)
-
+  const { resolvedTheme } = useThemeSetting()
+  const darkMode = resolvedTheme == 'dark'
   const availableCards = [{
     name: 'Display value',
     id: 'value'
@@ -312,7 +313,7 @@ const Board = ({ board, icons }) => {
         </YStack>
         {
           <XStack position="fixed" animation="quick" right={rulesOpened ? 0 : -1000} top={60} width={810} height="80vh">
-            <XStack width="100%" br={9} height={"100%"} position="absolute" top="0" left="0" backgroundColor={'white'} opacity={0.9}></XStack>
+            <XStack width="100%" br={9} height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode?'black':'white'} opacity={0.9}></XStack>
             <RulesSideMenu boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>
 
           </XStack>
