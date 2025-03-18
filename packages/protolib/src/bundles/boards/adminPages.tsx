@@ -213,7 +213,7 @@ const Board = ({ board, icons }) => {
         {/* <Tinted><Save color="var(--color8)" size={"$1"} strokeWidth={1.6}/></Tinted> */}
         <XStack f={1} alignItems='center' justifyContent='flex-end'>
           <Tinted>
-            <XStack ai="center" jc="center" mr="$5">
+            <XStack userSelect="none" ai="center" jc="center" mr="$5">
               <XStack mr="$3">
                 <XStack opacity={rulesOpened ? 1.0 : 0.6} hoverStyle={{ opacity: 1 }} pressStyle={{ opacity: 0.8 }} cursor="pointer" onPress={() => {
                   setRulesOpened(!rulesOpened)
@@ -311,7 +311,11 @@ const Board = ({ board, icons }) => {
           />
         </YStack>
         {
-          rulesOpened && <RulesSideMenu boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>
+          <XStack position="fixed" animation="quick" right={rulesOpened ? 0 : -1000} top={60} width={810} height="80vh">
+            <XStack width="100%" br={9} height={"100%"} position="absolute" top="0" left="0" backgroundColor={'white'} opacity={0.9}></XStack>
+            <RulesSideMenu boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>
+
+          </XStack>
         }
       </XStack>
 

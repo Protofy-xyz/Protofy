@@ -16,7 +16,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
     const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
     const toast = useToastController()
 
-    return <YStack height="90%" w="600px" backgroundColor="$bgPanel" p="$3" btlr={9} bblr={9}>
+    return <YStack w="100%" backgroundColor="transparent" p="$3" br={9} boxShadow="0 0 10px rgba(0,0,0,0.1)">
         <Tinted>
             {/* Toggle de Tabs */}
             <XStack width="100%" pt="$0" pr="$1" pb="$2" jc="center">
