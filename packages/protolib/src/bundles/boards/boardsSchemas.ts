@@ -15,9 +15,9 @@ export const CardModel = AutoModel.createDerived<CardType>("CardModel", CardSche
 
 export const BoardSchema = Schema.object({
     name: z.string().hint("room, system, controller, ...").regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").static().id(),
-    layouts: z.any().optional(),
-    cards: z.array(CardSchema).optional(),
-    rules: z.array(z.string()).optional(),
+    layouts: z.any().optional().hidden(),
+    cards: z.array(CardSchema).optional().hidden(),
+    rules: z.array(z.string()).optional().hidden(),
 })
 
 export type BoardType = z.infer<typeof BoardSchema>;
