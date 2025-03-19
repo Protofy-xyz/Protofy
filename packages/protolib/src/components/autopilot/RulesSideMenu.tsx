@@ -4,7 +4,7 @@ import { YStack, XStack, Button, Spinner, useToastController } from '@my/ui'
 import { Tinted } from '../../components/Tinted'
 import { Rules } from '../../components/autopilot/Rules'
 import { Monaco } from '../../components/Monaco'
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from '../MainPanel/CustomPanelResizeHandle'
@@ -14,8 +14,25 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
     const { resolvedTheme } = useThemeSetting();
     const [savedRules, setSavedRules] = useState(board.rules)
     const savedCode = useRef(board.rulesCode)
+    const editedCode = useRef(board.rulesCode)
     const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
     const toast = useToastController()
+
+
+    //useMemo to keep monaco editor from re-rendering
+    const monacoEditor = useMemo(() => {
+        return <Monaco
+            path={'rules.ts'}
+            darkMode={resolvedTheme === 'dark'}
+            sourceCode={savedCode.current}
+            onChange={(text) => {
+                editedCode.current = text
+            }}
+            onMount={(editor) => {
+                editedCode.current = savedCode.current
+            }}
+        />
+    }, [resolvedTheme, savedCode.current])
 
     return <YStack w="100%" backgroundColor="transparent" p="$3" br={9} boxShadow="0 0 10px rgba(0,0,0,0.1)">
         <Tinted>
@@ -46,14 +63,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                 <CustomPanelResizeHandle direction="horizontal" />
                 <Panel defaultSize={34} minSize={20} maxSize={80}>
                     <YStack flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
-                        <Monaco
-                            path={'rules.ts'}
-                            darkMode={resolvedTheme === 'dark'}
-                            sourceCode={savedCode.current}
-                            onChange={(text) => {
-                                savedCode.current = text
-                            }}
-                        />
+                        {monacoEditor}
                         <XStack mt="auto" pt="$3" gap={30}>
                             <Button onPress={async () => {
                                 setGeneratingBoardCode(true)
@@ -77,7 +87,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                                 {generatingBoardCode ? <Spinner /> : 'Apply Rules'}
                             </Button>
                             <Button onPress={() => {
-                                boardRef.current.rulesCode = savedCode.current
+                                boardRef.current.rulesCode = editedCode.current
                                 API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                             }}>
                                 Save
