@@ -14,15 +14,18 @@ import dynamic from "next/dynamic";
 import ReactAccelorometerValue from 'reactaccelerometervalue'
 import useCompass from "react-world-compass"
 import { useInterval } from 'usehooks-ts';
+import { useMqttState } from '../../lib/mqtt';
 const ActiveFullScreen = dynamic(() =>
     import('./components/ActiveFullScreen').then(module => module.ActiveFullScreen),
     { ssr: false }
 );
 
 const Accelerometer = ({ state, degrees }) => {
+    const {client} = useMqttState()
     useInterval(() => {
-        API.get("/api/core/v1/mobile/data?degrees=" + degrees + "&x=" + state.x + "&y=" + state.y + "&z=" + state.z + "&alpha=" + state.rotation.alpha + "&beta=" + state.rotation.beta + "&gamma=" + state.rotation.gamma)
-    }, 250)
+        // API.get("/api/core/v1/mobile/data?degrees=" + degrees + "&x=" + state.x + "&y=" + state.y + "&z=" + state.z + "&alpha=" + state.rotation.alpha + "&beta=" + state.rotation.beta + "&gamma=" + state.rotation.gamma)
+        client.publish("mobile/data", JSON.stringify({degrees: degrees, x: state.x, y: state.y, z: state.z, alpha: state.rotation.alpha, beta: state.rotation.beta, gamma: state.rotation.gamma}))
+    }, 100)
     return <div>
         <p>
             <div>x:{Math.trunc(state.x)}</div>
